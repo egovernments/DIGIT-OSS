@@ -1,4 +1,18 @@
-package org.egov.waterconnection.repository.rowmapper;
+package org.egov.wscalculation.repository.rowmapper;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.lang3.StringUtils;
+import org.egov.tracer.model.CustomException;
+import org.egov.wscalculation.constants.WSCalculationConstant;
+import org.egov.wscalculation.web.models.*;
+import org.egov.wscalculation.web.models.workflow.ProcessInstance;
+import org.postgresql.util.PGobject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -8,41 +22,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-import org.egov.tracer.model.CustomException;
-import org.egov.waterconnection.constants.WCConstants;
-import org.egov.waterconnection.web.models.*;
-import org.egov.waterconnection.web.models.Connection.StatusEnum;
-import org.egov.waterconnection.web.models.workflow.ProcessInstance;
-import org.postgresql.util.PGobject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 @Component
 public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>> {
 
 	@Autowired
 	private ObjectMapper mapper;
 
-	private int full_count=0;
-
-	public int getFull_count() {
-		return full_count;
-	}
-
-	public void setFull_count(int full_count) {
-		this.full_count = full_count;
-	}
-	
 	@Override
 	public List<WaterConnection> extractData(ResultSet rs) throws SQLException, DataAccessException {
 		Map<String, WaterConnection> connectionListMap = new HashMap<>();
@@ -60,7 +45,7 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 				currentWaterConnection.setId(rs.getString("connection_Id"));
 				currentWaterConnection.setApplicationNo(rs.getString("applicationNo"));
 				currentWaterConnection.setApplicationStatus(rs.getString("applicationstatus"));
-				currentWaterConnection.setStatus(StatusEnum.fromValue(rs.getString("status")));
+				currentWaterConnection.setStatus(Connection.StatusEnum.fromValue(rs.getString("status")));
 				currentWaterConnection.setConnectionNo(rs.getString("connectionNo"));
 				currentWaterConnection.setOldConnectionNo(rs.getString("oldConnectionNo"));
 				currentWaterConnection.setPipeSize(rs.getDouble("pipeSize"));
@@ -70,7 +55,6 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 				currentWaterConnection.setRoadCuttingArea(rs.getFloat("roadcuttingarea"));
 				currentWaterConnection.setRoadType(rs.getString("roadtype"));
 				PGobject pgObj = (PGobject) rs.getObject("additionaldetails");
-				this.setFull_count(rs.getInt("full_count"));
 				ObjectNode additionalDetails = null;
 				if (pgObj != null) {
 
@@ -84,19 +68,19 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 					additionalDetails = mapper.createObjectNode();
 				}
 				// HashMap<String, Object> additionalDetails = new HashMap<>();
-				additionalDetails.put(WCConstants.ADHOC_PENALTY, rs.getBigDecimal("adhocpenalty"));
-				additionalDetails.put(WCConstants.ADHOC_REBATE, rs.getBigDecimal("adhocrebate"));
-				additionalDetails.put(WCConstants.ADHOC_PENALTY_REASON, rs.getString("adhocpenaltyreason"));
-				additionalDetails.put(WCConstants.ADHOC_PENALTY_COMMENT, rs.getString("adhocpenaltycomment"));
-				additionalDetails.put(WCConstants.ADHOC_REBATE_REASON, rs.getString("adhocrebatereason"));
-				additionalDetails.put(WCConstants.ADHOC_REBATE_COMMENT, rs.getString("adhocrebatecomment"));
-				additionalDetails.put(WCConstants.INITIAL_METER_READING_CONST, rs.getBigDecimal("initialmeterreading"));
-				additionalDetails.put(WCConstants.APP_CREATED_DATE, rs.getBigDecimal("appCreatedDate"));
-				additionalDetails.put(WCConstants.DETAILS_PROVIDED_BY, rs.getString("detailsprovidedby"));
-				additionalDetails.put(WCConstants.ESTIMATION_FILESTORE_ID, rs.getString("estimationfileStoreId"));
-				additionalDetails.put(WCConstants.SANCTION_LETTER_FILESTORE_ID, rs.getString("sanctionfileStoreId"));
-				additionalDetails.put(WCConstants.ESTIMATION_DATE_CONST, rs.getBigDecimal("estimationLetterDate"));
-				additionalDetails.put(WCConstants.LOCALITY, rs.getString("locality"));
+				additionalDetails.put(WSCalculationConstant.ADHOC_PENALTY, rs.getBigDecimal("adhocpenalty"));
+				additionalDetails.put(WSCalculationConstant.ADHOC_REBATE, rs.getBigDecimal("adhocrebate"));
+				additionalDetails.put(WSCalculationConstant.ADHOC_PENALTY_REASON, rs.getString("adhocpenaltyreason"));
+				additionalDetails.put(WSCalculationConstant.ADHOC_PENALTY_COMMENT, rs.getString("adhocpenaltycomment"));
+				additionalDetails.put(WSCalculationConstant.ADHOC_REBATE_REASON, rs.getString("adhocrebatereason"));
+				additionalDetails.put(WSCalculationConstant.ADHOC_REBATE_COMMENT, rs.getString("adhocrebatecomment"));
+				additionalDetails.put(WSCalculationConstant.INITIAL_METER_READING_CONST, rs.getBigDecimal("initialmeterreading"));
+				additionalDetails.put(WSCalculationConstant.APP_CREATED_DATE, rs.getBigDecimal("appCreatedDate"));
+				additionalDetails.put(WSCalculationConstant.DETAILS_PROVIDED_BY, rs.getString("detailsprovidedby"));
+				additionalDetails.put(WSCalculationConstant.ESTIMATION_FILESTORE_ID, rs.getString("estimationfileStoreId"));
+				additionalDetails.put(WSCalculationConstant.SANCTION_LETTER_FILESTORE_ID, rs.getString("sanctionfileStoreId"));
+				additionalDetails.put(WSCalculationConstant.ESTIMATION_DATE_CONST, rs.getBigDecimal("estimationLetterDate"));
+				additionalDetails.put(WSCalculationConstant.LOCALITY, rs.getString("locality"));
 
 				currentWaterConnection.setAdditionalDetails(additionalDetails);
 				currentWaterConnection
@@ -105,7 +89,6 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 				// Add documents id's
 				currentWaterConnection.setConnectionExecutionDate(rs.getLong("connectionExecutionDate"));
 				currentWaterConnection.setApplicationType(rs.getString("applicationType"));
-				currentWaterConnection.setChannel(rs.getString("channel"));
 				currentWaterConnection.setDateEffectiveFrom(rs.getLong("dateEffectiveFrom"));
 
 				AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("ws_createdBy"))
