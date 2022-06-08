@@ -152,7 +152,7 @@ const SearchFormFieldsComponent = ({ formState, Controller, register, control, t
           control={control}
           name="serviceType"
           render={(props) => (
-            <Dropdown selected={userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0 ? props.value : ServiceTypes[0]} select={props.onChange} onBlur={props.onBlur} option={ServiceTypes} optionKey="i18nKey" t={t} />
+            <Dropdown selected={ServiceTypes && ServiceTypes?.length > 0 ? props.value : ServiceTypes[0]} select={props.onChange} onBlur={props.onBlur} option={ServiceTypes} optionKey="i18nKey" t={t} isBPAREG={ServiceTypes && ServiceTypes?.length > 0? true : false} />
           )}
         />
       </SearchField>
