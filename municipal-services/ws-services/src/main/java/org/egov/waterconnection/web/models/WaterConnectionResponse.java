@@ -37,9 +37,6 @@ public class WaterConnectionResponse {
 	@Valid
 	private List<WaterConnection> waterConnection = null;
 
-	@JsonProperty("TotalCount")
-	private Integer totalCount = 0;
-	
 	public WaterConnectionResponse responseInfo(ResponseInfo responseInfo) {
 		this.responseInfo = responseInfo;
 		return this;
@@ -102,25 +99,9 @@ public class WaterConnectionResponse {
 				&& Objects.equals(this.waterConnection, waterConnectionResponse.waterConnection);
 	}
 
-	/**
-	 * Get totalCount
-	 * 
-	 * @return totalCount
-	 **/
-	@ApiModelProperty(value = "")
-
-	@Valid
-	public Integer getTotalCount() {
-		return totalCount;
-	}
-
-	public void setTotalCount(Integer totalCount) {
-		this.totalCount = totalCount;
-	}
-	
 	@Override
 	public int hashCode() {
-		return Objects.hash(responseInfo, waterConnection,totalCount);
+		return Objects.hash(responseInfo, waterConnection);
 	}
 
 	@Override
@@ -130,7 +111,6 @@ public class WaterConnectionResponse {
 
 		sb.append("    responseInfo: ").append(toIndentedString(responseInfo)).append("\n");
 		sb.append("    waterConnection: ").append(toIndentedString(waterConnection)).append("\n");
-		sb.append("    totalCount: ").append(toIndentedString(totalCount)).append("\n");
 		sb.append("}");
 		return sb.toString();
 	}

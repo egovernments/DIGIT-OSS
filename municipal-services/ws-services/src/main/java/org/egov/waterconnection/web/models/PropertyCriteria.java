@@ -41,6 +41,4 @@ public class PropertyCriteria {
 	private Long limit;
 
 	private String locality;	
-	
-	private String doorNo;
 }

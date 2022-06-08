@@ -32,9 +32,6 @@ public class WaterConnectionRequest {
 
 	@JsonProperty("WaterConnection")
 	private WaterConnection waterConnection = null;
-	
-	@JsonProperty("disconnectRequest")
-	private boolean disconnectRequest;
 
 	public WaterConnectionRequest requestInfo(RequestInfo requestInfo) {
 		this.requestInfo = requestInfo;
@@ -59,11 +56,6 @@ public class WaterConnectionRequest {
 
 	public WaterConnectionRequest waterConnection(WaterConnection waterConnection) {
 		this.waterConnection = waterConnection;
-		return this;
-	}
-	
-	public WaterConnectionRequest disconnectionRequest(boolean isDisconnectionRequest) {
-		this.disconnectRequest = isDisconnectionRequest;
 		return this;
 	}
 
