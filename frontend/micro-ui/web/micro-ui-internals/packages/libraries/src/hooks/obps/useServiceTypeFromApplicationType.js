@@ -20,7 +20,7 @@ const useServiceTypeFromApplicationType = ({Applicationtype, tenantId}) => {
             code: "BPA_STAKEHOLDER_REGISTRATION",
             i18nKey: "BPA_SERVICETYPE_BPA_STAKEHOLDER_REGISTRATION",
         } */]
-        if(Applicationtype === "BPA_STAKEHOLDER_REGISTRATION" && uniqueBPAREGserviceTypes && userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0)
+        if(Applicationtype === "BPA_STAKEHOLDER_REGISTRATION"  && uniqueBPAREGserviceTypes && userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 /* && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0 */)
         return [...uniqueBPAREGserviceTypes]
         else
         return serviceTypesWithStakeholer?.filter((e) => e.applicationType.includes(Applicationtype)).map(e => ({ code:e.code, i18nKey:e.i18nKey }))
