@@ -1,7 +1,5 @@
 package org.egov.pt.calculator.repository;
 
-import java.io.IOException;
-import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.Map;
 

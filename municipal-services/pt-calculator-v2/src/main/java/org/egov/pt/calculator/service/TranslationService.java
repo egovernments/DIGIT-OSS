@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -34,7 +35,6 @@ public class TranslationService {
     private ObjectMapper mapper;
 
     private Repository repository;
-
 
     @Autowired
     public TranslationService(ObjectMapper mapper, Repository repository) {
@@ -107,10 +107,16 @@ public class TranslationService {
         propertyDetail.put("usageCategoryMinor", usageCategoryMinor);
         propertyDetail.put("ownershipCategory", ownershipCategory);
         propertyDetail.put("subOwnershipCategory", subOwnershipCategory);
+        propertyDetail.put("source", assessment.getSource().toString());
+        propertyDetail.put("additionalDetails", property.getAdditionalDetails());
 
-        // propertyDetail.put("adhocExemption", );
-        // propertyDetail.put("adhocPenalty",);
-
+        if(assessment.getAdditionalDetails()!=null) {
+        propertyDetail.put("adhocExemption", assessment.getAdditionalDetails().get("adhocExemption"));
+        propertyDetail.put("adhocPenalty",assessment.getAdditionalDetails().get("adhocPenalty"));
+        }
+        LinkedHashMap additionalDetails = (LinkedHashMap) property.getAdditionalDetails();
+		String constructionYear = additionalDetails ==null ? null : (String) additionalDetails.get("constructionYear");
+		long constructionDate = constructionYear == null ? 0 : Instant.parse(constructionYear).toEpochMilli();
         List<Map<String, Object>> owners = new LinkedList<>();
 
         property.getOwners().forEach(ownerInfo -> {
@@ -128,6 +134,8 @@ public class TranslationService {
                 unitMap.put("unitArea", unit.getConstructionDetail().getBuiltUpArea());
                 unitMap.put("arv", unit.getArv());
                 unitMap.put("occupancyType", unit.getOccupancyType());
+                unitMap.put("constructionType", unit.getConstructionDetail().getConstructionType());
+                //unitMap.put("constructionType", );
 
                 String[] masterData = unit.getUsageCategory().split("\\.");
 
@@ -139,39 +147,73 @@ public class TranslationService {
 
                 if(masterData.length >= 3)
                     unitMap.put("usageCategorySubMinor", masterData[2]);
-
+                    
                 if(masterData.length >= 4)
                     unitMap.put("usageCategoryDetail",masterData[3]);
 
-                unitMap.put("additionalDetails", unit.getAdditionalDetails());
+            
+                    Map<String, Object> unitAdditionalMap = new HashMap<>();
+                    
+                    Object unitAdditionalDetails = unit.getAdditionalDetails();
+				if (unitAdditionalDetails != null) {
+					LinkedHashMap unitAdditionalDetailsMap = (LinkedHashMap) unitAdditionalDetails;
+
+					boolean innerDimensionKnown = Boolean
+							.parseBoolean(unitAdditionalDetailsMap.get("innerDimensionsKnown").toString());
+					unitAdditionalMap.put("innerDimensionsKnown", innerDimensionKnown);
+					if (innerDimensionKnown) {
+						if (unitAdditionalDetailsMap.get("bathroomArea") != null) {
+							unitAdditionalMap.put("bathroomArea",
+									new BigDecimal(unitAdditionalDetailsMap.get("bathroomArea").toString()));
+						}
+						if (unitAdditionalDetailsMap.get("garageArea") != null) {
+							unitAdditionalMap.put("garageArea",
+									new BigDecimal(unitAdditionalDetailsMap.get("garageArea").toString()));
+						}
+						if (unitAdditionalDetailsMap.get("commonArea") != null) {
+							unitAdditionalMap.put("commonArea",
+									new BigDecimal(unitAdditionalDetailsMap.get("commonArea").toString()));
+						}
+						if (unitAdditionalDetailsMap.get("roomsArea") != null) {
+							unitAdditionalMap.put("roomsArea",
+									new BigDecimal(unitAdditionalDetailsMap.get("roomsArea").toString()));
+						}
+					}
+				}
+                
+				unitAdditionalMap.put("constructionDate",constructionDate);
+
+
+                unitMap.put("additionalDetails", unitAdditionalMap);
                 units.add(unitMap);
 
             });
 
-        if(assessment.getAdditionalDetails()!=null){
-            // propertyDetail.put("adhocPenalty",);
-            try{
-                if(assessment.getAdditionalDetails().get(ADHOC_REBATE_KEY)!=null && !assessment.getAdditionalDetails().get(ADHOC_REBATE_KEY).isNull()){
-                    BigDecimal adhocExemption = new BigDecimal(assessment.getAdditionalDetails().get(ADHOC_REBATE_KEY).doubleValue());
-                    propertyDetail.put("adhocExemption",adhocExemption);
-                }
+        // if(assessment.getAdditionalDetails()!=null){
+        //     // propertyDetail.put("adhocPenalty",);
+        //     try{
+        //         if(assessment.getAdditionalDetails().get(ADHOC_REBATE_KEY)!=null){
+        //             BigDecimal adhocExemption = new BigDecimal(assessment.getAdditionalDetails().get(ADHOC_REBATE_KEY).doubleValue());
+        //             propertyDetail.put("adhocExemption",adhocExemption);
+        //         }
 
-                if(assessment.getAdditionalDetails().get(ADHOC_REBATE_REASON_KEY)!=null)
-                    propertyDetail.put("adhocExemptionReason",assessment.getAdditionalDetails().get(ADHOC_REBATE_REASON_KEY).asText());
+        //         if(assessment.getAdditionalDetails().get(ADHOC_REBATE_REASON_KEY)!=null)
+        //             propertyDetail.put("adhocExemptionReason",assessment.getAdditionalDetails().get(ADHOC_REBATE_REASON_KEY).asText());
 
 
-                if(assessment.getAdditionalDetails().get(ADHOC_PENALTY_KEY)!=null && !assessment.getAdditionalDetails().get(ADHOC_PENALTY_KEY).isNull()){
-                    BigDecimal adhocPenalty = new BigDecimal(assessment.getAdditionalDetails().get(ADHOC_PENALTY_KEY).doubleValue());
-                    propertyDetail.put("adhocPenalty",adhocPenalty);
-                }
+        //         if(assessment.getAdditionalDetails().get(ADHOC_PENALTY_KEY)!=null){
+        //             BigDecimal adhocPenalty = new BigDecimal(assessment.getAdditionalDetails().get(ADHOC_PENALTY_KEY).doubleValue());
+        //             propertyDetail.put("adhocPenalty",adhocPenalty);
+        //         }
 
-                if(assessment.getAdditionalDetails().get(ADHOC_PENALTY_REASON_KEY)!=null)
-                    propertyDetail.put("adhocPenaltyReason", assessment.getAdditionalDetails().get(ADHOC_PENALTY_REASON_KEY).asText());
-            } catch (Exception e){
-                throw new CustomException("PARSING_ERROR","Failed to parse additional details in translation");
-            }
+        //         if(assessment.getAdditionalDetails().get(ADHOC_PENALTY_REASON_KEY)!=null)
+        //             propertyDetail.put("adhocPenaltyReason", assessment.getAdditionalDetails().get(ADHOC_PENALTY_REASON_KEY).asText());
+        //     } catch (Exception e){
+        //         e.printStackTrace();
+        //         throw new CustomException("PARSING_ERROR","Failed to parse additional details in translation");
+        //     }
 
-        }
+        // }
 
 
         propertyDetail.put("owners", owners);

@@ -56,9 +56,13 @@ public class PropertyDetail   {
 
 
         public enum SourceEnum {
-    MUNICIPAL_RECORDS("MUNICIPAL_RECORDS"),
+          MUNICIPAL_RECORDS("MUNICIPAL_RECORDS"),
     
-    FIELD_SURVEY("FIELD_SURVEY");
+          FIELD_SURVEY("FIELD_SURVEY"),
+ 
+          LEGACY_RECORD("LEGACY_RECORD"),
+ 
+          SYSTEM("SYSTEM");
 
     private String value;
 
@@ -95,10 +99,10 @@ public class PropertyDetail   {
         private Long noOfFloors;
 
         @JsonProperty("landArea")
-        private Double landArea;
+        private BigDecimal landArea;
 
         @JsonProperty("buildUpArea")
-        private Double buildUpArea;
+        private BigDecimal buildUpArea;
 
         @JsonProperty("units")
         @Valid

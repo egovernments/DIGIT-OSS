@@ -28,17 +28,18 @@ public class BillingSlabController {
 	
 	@Autowired
 	private BillingSlabService service;
+	
 
 	@Autowired
 	private MutationBillingSlabService mutationService;
 	
 	@Autowired
 	private BillingSlabValidator billingSlabValidator;
-
+	
 	@Autowired
 	private MutationBillingSlabValidator mutationbillingSlabValidator;
 	
-
+	
 	/**
 	 * endpoint to create billing-slabs
 	 * 
@@ -92,7 +93,7 @@ public class BillingSlabController {
 		log.debug(" the time taken for create in ms: {}", endTime - startTime);
 		return new ResponseEntity<>(billingSlabRes, HttpStatus.OK);
 	}
-
+	
 	/**
 	 * endpoint to create mutation billing-slabs
 	 *
@@ -143,5 +144,4 @@ public class BillingSlabController {
 		log.debug(" the time taken for create in ms: {}", endTime - startTime);
 		return new ResponseEntity<>(billingSlabRes, HttpStatus.OK);
 	}
-
 }

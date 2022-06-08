@@ -64,30 +64,12 @@ public class BillingSlabService {
 		for(BillingSlab billingSlab: billingSlabReq.getBillingSlab()) {
 			billingSlab.setId(UUID.randomUUID().toString());
 			billingSlab.setAuditDetails(billingSlabUtils.getAuditDetails(billingSlabReq.getRequestInfo()));
-			if(null == billingSlab.getToFloor()) {
-				billingSlab.setToFloor((null == maxToFloor) ? Double.POSITIVE_INFINITY : maxToFloor);
-			}
-			if(null == billingSlab.getToPlotSize()) {
-				billingSlab.setToPlotSize((null == maxToPlotSize) ? Double.POSITIVE_INFINITY : maxToPlotSize);
-			}
-			if(null == billingSlab.getFromFloor()) {
-				billingSlab.setFromFloor((null == minFromFloor) ? Double.NEGATIVE_INFINITY : minFromFloor);
-			}
 		}
 	}
 	
 	public void enrichBillingSlabForUpdate(BillingSlabReq billingSlabReq) {
 		for(BillingSlab billingSlab: billingSlabReq.getBillingSlab()) {
 			billingSlab.setAuditDetails(billingSlabUtils.getAuditDetails(billingSlabReq.getRequestInfo()));
-			if(null == billingSlab.getToFloor()) {
-				billingSlab.setToFloor((null == maxToFloor) ? Double.POSITIVE_INFINITY : maxToFloor);
-			}
-			if(null == billingSlab.getToPlotSize()) {
-				billingSlab.setToPlotSize((null == maxToPlotSize) ? Double.POSITIVE_INFINITY : maxToPlotSize);
-			}
-			if(null == billingSlab.getFromFloor()) {
-				billingSlab.setFromFloor((null == minFromFloor) ? Double.NEGATIVE_INFINITY : minFromFloor);
-			}
 		}
 	}
 	
