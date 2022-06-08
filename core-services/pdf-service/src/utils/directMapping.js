@@ -54,7 +54,7 @@ export const directMapping = async (
       jPath: item.variable,
       val:
         item.value &&
-        getValue(jp.query(req, item.value.path), "NA", item.value.path),
+        getValue(jp.query(req, item.value.path), "", item.value.path),
       valJsonPath: item.value && item.value.path,
       type: item.type,
       url: item.url,
@@ -67,7 +67,7 @@ export const directMapping = async (
   for (var i = 0; i < directArr.length; i++) {
     //for array type direct mapping
     if (directArr[i].type == "citizen-employee-title") {
-      if (get(requestInfo, "userInfo.type", "NA").toUpperCase() == "EMPLOYEE") {
+      if (get(requestInfo, "userInfo.type", "").toUpperCase() == "EMPLOYEE") {
         variableTovalueMap[directArr[i].jPath] = "Employee Copy";
       } else {
         variableTovalueMap[directArr[i].jPath] = "Citizen Copy";
@@ -76,7 +76,7 @@ export const directMapping = async (
     if (directArr[i].type == "selectFromRequestInfo") {
       directArr[i].val = getValue(
         jp.query(requestInfo, directArr[i].valJsonPath),
-        "NA",
+        "",
         directArr[i].valJsonPath
       );
 
@@ -120,12 +120,12 @@ export const directMapping = async (
         // var x = 1;
         let ownerObject = {};
         for (let k = 0; k < scema.length; k++) {
-          let fieldValue = get(val[j], scema[k].value, "NA");
-          fieldValue = fieldValue == null ? "NA" : fieldValue;
+          let fieldValue = get(val[j], scema[k].value, "");
+          fieldValue = fieldValue == null ? "" : fieldValue;
           if (scema[k].type == "date") {
             let myDate = new Date(fieldValue);
             if (isNaN(myDate) || fieldValue === 0) {
-              ownerObject[scema[k].variable] = "NA";
+              ownerObject[scema[k].variable] = "";
             } else {
               let replaceValue = getDateInRequiredFormat(fieldValue,scema[k].format);
               // set(formatconfig,externalAPIArray[i].jPath[j].variable,replaceValue);
@@ -133,7 +133,7 @@ export const directMapping = async (
             }
           } else {
             if (
-              fieldValue !== "NA" &&
+              fieldValue !== "" &&
               scema[k].localisation &&
               scema[k].localisation.required
             ) {
@@ -183,12 +183,12 @@ export const directMapping = async (
       for (let j = 0; j < val.length; j++) {
         let arrayOfItems = [];
         for (let k = 0; k < scema.length; k++) {
-          let fieldValue = get(val[j], scema[k].value, "NA");
-          fieldValue = fieldValue == null ? "NA" : fieldValue;
+          let fieldValue = get(val[j], scema[k].value, "");
+          fieldValue = fieldValue == null ? "" : fieldValue;
           if (scema[k].type == "date") {
             let myDate = new Date(fieldValue);
             if (isNaN(myDate) || fieldValue === 0) {
-              arrayOfItems.push("NA");
+              arrayOfItems.push("");
             } else {
               let replaceValue = getDateInRequiredFormat(fieldValue,scema[k].format);
               // set(formatconfig,externalAPIArray[i].jPath[j].variable,replaceValue);
@@ -202,7 +202,7 @@ export const directMapping = async (
            * to display the array of string in order list.
            */
           else if (scema[k].type == "array-orderedlist" && Array.isArray(fieldValue)) {
-            if(fieldValue !== "NA") {
+            if(fieldValue !== "") {
               for (var p = 0; p < fieldValue.length; p++) {
                 let orderedList = [];
                 orderedList.push(fieldValue[p]);
@@ -212,7 +212,7 @@ export const directMapping = async (
             }
           } else {
             if (
-              fieldValue !== "NA" &&
+              fieldValue !== "" &&
               scema[k].localisation &&
               scema[k].localisation.required
             ) {
@@ -275,7 +275,7 @@ export const directMapping = async (
     else if (directArr[i].type == "date") {
       let myDate = new Date(directArr[i].val[0]);
       if (isNaN(myDate) || directArr[i].val[0] === 0) {
-        variableTovalueMap[directArr[i].jPath] = "NA";
+        variableTovalueMap[directArr[i].jPath] = "";
       } else {
         let replaceValue = getDateInRequiredFormat(directArr[i].val[0],directArr[i].format);
         variableTovalueMap[directArr[i].jPath] = replaceValue;
@@ -289,7 +289,12 @@ export const directMapping = async (
         directArr[i].valJsonPath
       );
       if (
-        directArr[i].val !== "NA" &&
+        directArr[i].val == "NA" &&
+        directArr[i].valJsonPath.includes("billAccountDetails")
+      )
+        directArr[i].val = 0;
+      if (
+        directArr[i].val !== "" &&
         directArr[i].localisation &&
         directArr[i].localisation.required
       ){

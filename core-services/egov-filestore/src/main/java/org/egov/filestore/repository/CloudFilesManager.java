@@ -28,4 +28,6 @@ public interface CloudFilesManager {
 	 */
 	public Map<String, String> getFiles(List<org.egov.filestore.persistence.entity.Artifact> artifacts);
 
+	public Map<String, String> getFiles(Map<String, String> mapOfIdAndFilePath);
+
 }

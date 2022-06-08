@@ -1,27 +1,28 @@
 package org.egov.pg.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import lombok.extern.slf4j.Slf4j;
-import org.egov.common.contract.request.RequestInfo;
-import org.egov.pg.constants.PgConstants;
-import org.egov.pg.constants.TransactionAdditionalFields;
-import org.egov.pg.models.AuditDetails;
-import org.egov.pg.models.BankAccount;
-import org.egov.pg.models.Transaction;
-import org.egov.pg.repository.BankAccountRepository;
-import org.egov.pg.web.models.TransactionRequest;
-import org.egov.pg.web.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.web.util.UriComponentsBuilder;
+import static java.util.Collections.singletonMap;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-import static java.util.Collections.singletonMap;
+import org.egov.common.contract.request.RequestInfo;
+import org.egov.pg.constants.PgConstants;
+//import org.egov.pg.constants.TransactionAdditionalFields;
+import org.egov.pg.models.AuditDetails;
+//import org.egov.pg.models.BankAccount;
+import org.egov.pg.models.Transaction;
+import org.egov.pg.repository.BankAccountRepository;
+import org.egov.pg.web.models.TransactionRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -44,8 +45,8 @@ public class EnrichmentService {
         Transaction transaction = transactionRequest.getTransaction();
         RequestInfo requestInfo = transactionRequest.getRequestInfo();
 
-        BankAccount bankAccount = bankAccountRepository.getBankAccountsById(requestInfo, transaction.getTenantId());
-        transaction.setAdditionalFields(singletonMap(TransactionAdditionalFields.BANK_ACCOUNT_NUMBER, bankAccount.getAccountNumber()));
+        // BankAccount bankAccount = bankAccountRepository.getBankAccountsById(requestInfo, transaction.getTenantId());
+        // transaction.setAdditionalFields(singletonMap(TransactionAdditionalFields.BANK_ACCOUNT_NUMBER, bankAccount.getAccountNumber()));
 
         // Generate ID from ID Gen service and assign to txn object
         String txnId = idGenService.generateTxnId(transactionRequest);
@@ -56,15 +57,15 @@ public class EnrichmentService {
 
         if(Objects.isNull(transaction.getAdditionalDetails())){
             transaction.setAdditionalDetails(objectMapper.createObjectNode());
-            ((ObjectNode) transaction.getAdditionalDetails()).set("taxAndPayments",
-                    objectMapper.valueToTree(transaction.getTaxAndPayments()));
+        ((ObjectNode) transaction.getAdditionalDetails()).set("taxAndPayments",
+                objectMapper.valueToTree(transaction.getTaxAndPayments()));
         }
         else{
             Map<String, Object> additionDetailsMap = objectMapper.convertValue(transaction.getAdditionalDetails(), Map.class);
             additionDetailsMap.put("taxAndPayments",(Object) transaction.getTaxAndPayments());
             transaction.setAdditionalDetails(objectMapper.convertValue(additionDetailsMap,Object.class));
         }
-        
+
         String uri = UriComponentsBuilder
                 .fromHttpUrl(transaction.getCallbackUrl())
                 .queryParams(new LinkedMultiValueMap<>(singletonMap(PgConstants.PG_TXN_IN_LABEL,

@@ -1,6 +1,14 @@
 package org.egov.access.domain.service;
 
-import lombok.extern.slf4j.Slf4j;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.egov.access.domain.criteria.ActionSearchCriteria;
 import org.egov.access.domain.criteria.ValidateActionCriteria;
 import org.egov.access.domain.model.Action;
@@ -22,9 +30,7 @@ import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
-import java.util.*;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -86,7 +92,35 @@ public class ActionService {
 	}
 	public List<Action> getAllMDMSActions(final ActionRequest actionRequest) throws JSONException, UnsupportedEncodingException{
         
-		return actionRepository.getAllMDMSActions(actionRequest);
+		//return actionRepository.getAllMDMSActions(actionRequest);
+		Map<String, Map<Boolean, List<Action>>> data = mdmsRepository.fetchRoleActionMapping(actionRequest.getTenantId());
+		List<Action> actions = getActionsForRole(data, actionRequest.getRoleCodes(), actionRequest.getEnabled());
+		return actions;
+	}
+	private List<Action> getActionsForRole(Map<String, Map<Boolean, List<Action>>> data, List<String> roleCodes, Boolean enabled) {
+		List<Action> actions = new LinkedList<>();
+		List<Long> actionIds = new LinkedList<>();
+
+		for (String role: roleCodes) {
+			if (data.containsKey(role)) {
+				List<Action> currentActions = new LinkedList<>();
+				if (enabled == null) {
+					currentActions.addAll(data.get(role).get(false));
+					currentActions.addAll(data.get(role).get(true));
+				} else {
+					currentActions.addAll(data.get(role).get(enabled));
+				}
+
+				for (Action a: currentActions) {
+					if (!actionIds.contains(a.getId())) {
+						actionIds.add(a.getId());
+						actions.add(a);
+					}
+				}
+			}
+		}
+
+		return actions;
 	}
 
     /**

@@ -74,7 +74,7 @@ export const externalAPIMapping = async function (
         ) {
           if (flag == 1) {
             temp2 = temp1;
-            var temp3 = getValue(jp.query(req, temp1), "NA", temp1);
+            var temp3 = getValue(jp.query(req, temp1), "", temp1);
             externalAPIArray[i].queryParams = externalAPIArray[
               i
             ].queryParams.replace(temp2, temp3);
@@ -91,7 +91,7 @@ export const externalAPIMapping = async function (
         }
         if (j == externalAPIArray[i].queryParams.length - 1 && flag == 1) {
           temp2 = temp1;
-          var temp3 = getValue(jp.query(req, temp1), "NA", temp1);
+          var temp3 = getValue(jp.query(req, temp1), "", temp1);
 
           externalAPIArray[i].queryParams = externalAPIArray[
             i
@@ -123,7 +123,7 @@ export const externalAPIMapping = async function (
           if (flag == 1) {
             temp2 = temp1;
 
-            var temp3 = getValue(jp.query(req, temp1), "NA", temp1);
+            var temp3 = getValue(jp.query(req, temp1), "", temp1);
             externalAPIArray[i].queryParams = externalAPIArray[
               i
             ].queryParams.replace(temp2, temp3);
@@ -145,7 +145,7 @@ export const externalAPIMapping = async function (
         }
         if (j == externalAPIArray[i].queryParams.length - 1 && flag == 1) {
           temp2 = temp1;
-          var temp3 = getValue(jp.query(req, temp1), "NA", temp1);
+          var temp3 = getValue(jp.query(req, temp1), "", temp1);
 
           externalAPIArray[i].queryParams = externalAPIArray[
             i
@@ -194,7 +194,7 @@ export const externalAPIMapping = async function (
     for (let j = 0; j < externalAPIArray[i].jPath.length; j++) {
       let replaceValue = getValue(
         jp.query(res, externalAPIArray[i].jPath[j].value),
-        "NA",
+        "",
         externalAPIArray[i].jPath[j].value
       );
       let loc = externalAPIArray[i].jPath[j].localisation;
@@ -202,7 +202,7 @@ export const externalAPIMapping = async function (
         // default empty image
         var imageData =
           "data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=";
-        if (replaceValue != "NA") {
+        if (replaceValue != "") {
           try {
             var len = replaceValue[0].split(",").length;
             var response = await axios.get(
@@ -226,7 +226,7 @@ export const externalAPIMapping = async function (
       } else if (externalAPIArray[i].jPath[j].type == "date") {
         let myDate = new Date(replaceValue[0]);
         if (isNaN(myDate) || replaceValue[0] === 0) {
-          variableTovalueMap[externalAPIArray[i].jPath[j].variable] = "NA";
+          variableTovalueMap[externalAPIArray[i].jPath[j].variable] = "";
         } else {
           replaceValue = getDateInRequiredFormat(replaceValue[0], externalAPIArray[i].jPath[j].format);
           variableTovalueMap[
@@ -243,7 +243,7 @@ export const externalAPIMapping = async function (
         let {
           scema = []
         } = format;
-        let val = getValue(jp.query(res, value), "NA", value);
+        let val = getValue(jp.query(res, value), "", value);
 
 
         //taking values about owner from request body
@@ -251,12 +251,12 @@ export const externalAPIMapping = async function (
           // var x = 1;
           let ownerObject = {};
           for (let k = 0; k < scema.length; k++) {
-            let fieldValue = get(val[l], scema[k].value, "NA");
-            fieldValue = fieldValue == null ? "NA" : fieldValue;
+            let fieldValue = get(val[l], scema[k].value, "");
+            fieldValue = fieldValue == null ? "" : fieldValue;
             if (scema[k].type == "date") {
               let myDate = new Date(fieldValue);
               if (isNaN(myDate) || fieldValue === 0) {
-                ownerObject[scema[k].variable] = "NA";
+                ownerObject[scema[k].variable] = "";
               } else {
                 let replaceValue = getDateInRequiredFormat(fieldValue, scema[k].format);
                 // set(formatconfig,externalAPIArray[i].jPath[j].variable,replaceValue);
@@ -264,7 +264,7 @@ export const externalAPIMapping = async function (
               }
             } else {
               if (
-                fieldValue !== "NA" &&
+                fieldValue !== "" &&
                 scema[k].localisation &&
                 scema[k].localisation.required
               ) {
@@ -306,7 +306,7 @@ export const externalAPIMapping = async function (
 
       } else {
         if (
-          replaceValue !== "NA" &&
+          replaceValue !== "" &&
           externalAPIArray[i].jPath[j].localisation &&
           externalAPIArray[i].jPath[j].localisation.required &&
           externalAPIArray[i].jPath[j].localisation.prefix

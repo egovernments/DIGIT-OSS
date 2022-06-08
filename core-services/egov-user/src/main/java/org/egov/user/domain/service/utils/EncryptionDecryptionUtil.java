@@ -64,7 +64,7 @@ public class EncryptionDecryptionUtil {
     }
 
     public <E, P> P decryptObject(Object objectToDecrypt, String key, Class<E> classType, RequestInfo requestInfo) {
-
+        log.info("objectToDecryptt ",objectToDecrypt);
         try {
             boolean objectToDecryptNotList = false;
             if (objectToDecrypt == null) {
@@ -79,6 +79,7 @@ public class EncryptionDecryptionUtil {
             }
             final User encrichedUserInfo = getEncrichedandCopiedUserInfo(requestInfo.getUserInfo());
             key = getKeyToDecrypt(objectToDecrypt, encrichedUserInfo);
+            log.info("Decrypt Key ",key);
             P decryptedObject = (P) encryptionService.decryptJson(objectToDecrypt, key, encrichedUserInfo, classType);
             if (decryptedObject == null) {
                 throw new CustomException("DECRYPTION_NULL_ERROR", "Null object found on performing decryption");

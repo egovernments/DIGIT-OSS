@@ -130,6 +130,7 @@ public class WorkflowValidator {
                 throw new CustomException("INVALID_ACTION", "Rating can be given only upon taking RATE action.");
             }
 
+            System.out.println("roles -------- "+roles+", action roles ------------ "+action.getRoles());
             Boolean isRoleAvailable = util.isRoleAvailable(roles,action.getRoles());
             Boolean isStateChanging = (action.getCurrentState().equalsIgnoreCase( action.getNextState())) ? false : true;
             List<String> transitionRoles = getRolesFromState(processStateAndAction.getCurrentState());
@@ -137,6 +138,7 @@ public class WorkflowValidator {
             Boolean isAssigneeUserInfo = false;
 
             /*Checks if the user has role to take action*/
+            System.out.println("isStateChanging -------- "+isStateChanging+", isRoleAvailable ---------- "+isRoleAvailable);
             if(action!=null && isStateChanging && !isRoleAvailable)
                 throw new CustomException("INVALID ROLE","User is not authorized to perform action");
             if(action!=null && !isStateChanging && !util.isRoleAvailable(roles,util.rolesAllowedInService(businessService)))

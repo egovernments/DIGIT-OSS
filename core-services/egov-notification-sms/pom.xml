@@ -24,6 +24,7 @@
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-properties-migrator</artifactId>
@@ -34,20 +35,24 @@
             <artifactId>spring-kafka</artifactId>
             <version>2.4.5.RELEASE</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
         </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
@@ -65,6 +70,7 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.3</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -135,6 +141,7 @@
                         </goals>
                         <configuration>
                             <rules>
+
                                 <rule>
                                     <element>CLASS</element>
                                     <excludes>
@@ -158,6 +165,7 @@
                                         </limit>
                                     </limits>
                                 </rule>
+
                                 <rule>
                                     <element>BUNDLE</element>
                                     <limits>
@@ -168,6 +176,7 @@
                                         </limit>
                                     </limits>
                                 </rule>
+
                             </rules>
                         </configuration>
                     </execution>

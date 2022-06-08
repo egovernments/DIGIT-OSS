@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @ConditionalOnProperty(value = "isAzureStorageEnabled", havingValue = "true")
-public class AzureBlobStorageImpl implements CloudFilesManager {
+public abstract class AzureBlobStorageImpl implements CloudFilesManager {
 
 	private CloudBlobClient azureBlobClient;
 	
@@ -192,12 +192,6 @@ public class AzureBlobStorageImpl implements CloudFilesManager {
 		}catch(Exception e) {
 			throw new CustomException("WG_WF_UPLOAD_ERROR",e.getMessage());
 		}
-	}
-
-	@Override
-	public Map<String, String> getFiles(List<org.egov.filestore.persistence.entity.Artifact> artifacts) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	

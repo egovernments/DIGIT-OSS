@@ -29,6 +29,11 @@ public class Artifact {
 
     private Long createdTime;
 
-    private Long lastModifiedTime; 
+    private Long lastModifiedTime;
+
+	public String getFileName() {
+		// TODO Auto-generated method stub
+		return null;
+	} 
 }
 
