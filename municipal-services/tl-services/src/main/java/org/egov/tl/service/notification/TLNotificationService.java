@@ -5,7 +5,6 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -14,6 +13,7 @@ import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.repository.ServiceRequestRepository;
 import org.egov.tl.util.*;
 import org.egov.tl.web.models.*;
+import org.egov.tl.web.models.property.Property;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,7 @@ import static com.jayway.jsonpath.Criteria.where;
 import static com.jayway.jsonpath.Filter.filter;
 import static org.egov.tl.util.BPAConstants.BUSINESS_SERVICE_BPAREG;
 import static org.egov.tl.util.TLConstants.*;
+import static org.egov.tl.util.TLConstants.PROPERTY_ID;
 
 
 @Slf4j
@@ -45,7 +46,7 @@ public class TLNotificationService {
 
 	private TLRenewalNotificationUtil tlRenewalNotificationUtil;
 
-	private MultiStateInstanceUtil centralInstanceUtil;
+	private PropertyUtil propertyUtil;
 
 	@Value("${egov.mdms.host}")
 	private String mdmsHost;
@@ -57,13 +58,13 @@ public class TLNotificationService {
 	private RestTemplate restTemplate;
 
 	@Autowired
-	public TLNotificationService(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, NotificationUtil util, BPANotificationUtil bpaNotificationUtil, TLRenewalNotificationUtil tlRenewalNotificationUtil, MultiStateInstanceUtil centralInstanceUtil) {
+	public TLNotificationService(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, NotificationUtil util, BPANotificationUtil bpaNotificationUtil, TLRenewalNotificationUtil tlRenewalNotificationUtil, PropertyUtil propertyUtil) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.util = util;
 		this.bpaNotificationUtil = bpaNotificationUtil;
 		this.tlRenewalNotificationUtil = tlRenewalNotificationUtil;
-		this.centralInstanceUtil = centralInstanceUtil;
+		this.propertyUtil = propertyUtil;
 	}
 
 	/**
@@ -75,7 +76,7 @@ public class TLNotificationService {
 		Map<String, String> mobileNumberToOwner = new HashMap<>();
 		String tenantId = request.getLicenses().get(0).getTenantId();
 		String action = request.getLicenses().get(0).getAction();
-		Map<Object, Object> configuredChannelList = fetchChannelList(new RequestInfo(), tenantId, TL_BUSINESSSERVICE, action);
+		Map<Object, Object> configuredChannelList = new HashMap<>();
 //		List<String> configuredChannelNames = Arrays.asList(new String[]{"SMS","EVENT","EMAIL"});
 		Set<String> mobileNumbers = new HashSet<>();
 
@@ -86,6 +87,12 @@ public class TLNotificationService {
 		});
 		}
 
+		String propertyId = "";
+		if(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null)
+			propertyId = request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID).asText();
+		Property property = propertyUtil.getPropertyDetails(request.getLicenses().get(0), propertyId, requestInfo);
+		String source = property.getSource().name();
+
 		String businessService = request.getLicenses().isEmpty() ? null : request.getLicenses().get(0).getBusinessService();
 		if (businessService == null)
 			businessService = businessService_TL;
@@ -93,31 +100,59 @@ public class TLNotificationService {
 		switch (businessService) {
 			case businessService_TL:
 				List<SMSRequest> smsRequestsTL = new LinkedList<>();
-					if (null != config.getIsTLSMSEnabled()) {
-						if (config.getIsTLSMSEnabled()) {
-							enrichSMSRequest(request, smsRequestsTL,configuredChannelList);
-							if (!CollectionUtils.isEmpty(smsRequestsTL))
-								util.sendSMS(smsRequestsTL, true,request.getLicenses().get(0).getTenantId());
-						}
-					}
+				if (config.getIsTLSMSEnabled()) {
+					if (!propertyId.isEmpty()) {
+						List<SMSRequest> smsRequestsPT = new ArrayList<>();
+						String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
+						String message = propertyUtil.getPropertySearchMsg(request.getLicenses().get(0), localizationMessages, CHANNEL_NAME_SMS, propertyId, source);
+						log.info("Message to be sent: ", message);
+						smsRequestsPT.addAll(propertyUtil.createPropertySMSRequest(message, property));
+						if (!CollectionUtils.isEmpty(smsRequestsPT))
+							util.sendSMS(smsRequestsPT, true);
 
-					if (null != config.getIsUserEventsNotificationEnabledForTL()) {
-						if (config.getIsUserEventsNotificationEnabledForTL()) {
-							EventRequest eventRequest = getEventsForTL(request,configuredChannelList);
-							if (null != eventRequest)
-								util.sendEventNotification(eventRequest);
-						}
 					}
-				List<EmailRequest> emailRequests = new LinkedList<>();
-				if (null != config.getIsEmailNotificationEnabled()) {
-					if (config.getIsEmailNotificationEnabled()) {
-						Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
-						enrichEmailRequest(request, emailRequests, mapOfPhnoAndEmail, configuredChannelList);
-
-						if (!CollectionUtils.isEmpty(emailRequests))
-							util.sendEmail(emailRequests, config.getIsEmailNotificationEnabled(), tenantId);
-					}
+					enrichSMSRequest(request, smsRequestsTL, configuredChannelList);
+					if (!CollectionUtils.isEmpty(smsRequestsTL))
+						util.sendSMS(smsRequestsTL, true);
 				}
+
+				if (config.getIsUserEventsNotificationEnabledForTL()) {
+					if (!propertyId.isEmpty()) {
+						String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
+						String message = propertyUtil.getPropertySearchMsg(request.getLicenses().get(0), localizationMessages, CHANNEL_NAME_EVENT, propertyId, source);
+						log.info("Message to be sent: ", message);
+						EventRequest eventRequest = propertyUtil.getEventsForPropertyOwner(property, message, request);
+						if (null != eventRequest)
+							util.sendEventNotification(eventRequest);
+					}
+					EventRequest eventRequest = getEventsForTL(request);
+					if (null != eventRequest)
+						util.sendEventNotification(eventRequest);
+				}
+
+				List<EmailRequest> emailRequests = new LinkedList<>();
+				if (config.getIsEmailNotificationEnabled()) {
+					if (!propertyId.isEmpty()) {
+						List<EmailRequest> emailRequestsPT = new LinkedList<>();
+						String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
+						Set<String> propertyMobileNumbers = new HashSet<>();
+						property.getOwners().forEach(owner -> {
+							if (owner.getMobileNumber() != null)
+								propertyMobileNumbers.add(owner.getMobileNumber());
+						});
+						Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(propertyMobileNumbers, request.getRequestInfo(), tenantId);
+						String message = propertyUtil.getPropertySearchMsg(request.getLicenses().get(0), localizationMessages, CHANNEL_NAME_EMAIL, String.valueOf(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID)), source);
+						emailRequestsPT.addAll(propertyUtil.createPropertyEmailRequest(request.getRequestInfo(), message, mapOfPhnoAndEmail, property));
+						if (!CollectionUtils.isEmpty(emailRequestsPT))
+							util.sendEmail(emailRequestsPT, config.getIsEmailNotificationEnabled());
+					}
+					Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
+					enrichEmailRequest(request, emailRequests, mapOfPhnoAndEmail, configuredChannelList);
+
+					if (!CollectionUtils.isEmpty(emailRequests))
+						util.sendEmail(emailRequests, config.getIsEmailNotificationEnabled());
+				}
+
 				break;
 
 			case businessService_BPA:
@@ -127,7 +162,7 @@ public class TLNotificationService {
 					if (config.getIsBPASMSEnabled()) {
 						enrichSMSRequest(request, smsRequestsBPA,configuredChannelList);
 						if (!CollectionUtils.isEmpty(smsRequestsBPA))
-							util.sendSMS(smsRequestsBPA, true, request.getLicenses().get(0).getTenantId());
+							util.sendSMS(smsRequestsBPA, true);
 					}
 				}
 				if (null != config.getIsUserEventsNotificationEnabledForBPA()) {
@@ -143,7 +178,7 @@ public class TLNotificationService {
 						Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
 						enrichEmailRequest(request, emailRequestsForBPA, mapOfPhnoAndEmail, configuredChannelList);
 					if (!CollectionUtils.isEmpty(emailRequestsForBPA))
-						util.sendEmail(emailRequestsForBPA, config.getIsEmailNotificationEnabledForBPA(), tenantId);
+						util.sendEmail(emailRequestsForBPA, config.getIsEmailNotificationEnabledForBPA());
 					}
 				}
 			break;
@@ -155,17 +190,13 @@ public class TLNotificationService {
 	 * @param request The tradeLicenseRequest from kafka topic
 	 * @param emailRequests List of SMSRequests
 	 * @param mapOfPhnoAndEmail Map of Phone Numbers and Emails
-	 * @param configuredChannelList Map of actions mapped to configured channels for this business service
+	 * @param configuredChannelList Map of actions mapped to configured channels for BPAREG flow
 	 */
 
 	public void enrichEmailRequest(TradeLicenseRequest request,List<EmailRequest> emailRequests, Map<String, String> mapOfPhnoAndEmail,Map<Object,Object> configuredChannelList) {
 		String tenantId = request.getLicenses().get(0).getTenantId();
 
 		for(TradeLicense license : request.getLicenses()){
-			String action = license.getAction();
-			List<String> configuredChannelNames = (List<String>) configuredChannelList.get(action);
-			if(!CollectionUtils.isEmpty(configuredChannelNames) && configuredChannelNames.contains(CHANNEL_NAME_EMAIL))
-			{
 			String businessService = license.getBusinessService();
 			if (businessService == null)
 				businessService = businessService_TL;
@@ -186,34 +217,34 @@ public class TLNotificationService {
 				message = tlRenewalNotificationUtil.getEmailCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
 			}
 			if (businessService.equals(businessService_BPA)) {
+				String action = license.getAction();
+				List<String> configuredChannelNames = (List<String>) configuredChannelList.get(action);
+				if(!CollectionUtils.isEmpty(configuredChannelNames) && configuredChannelNames.contains(CHANNEL_NAME_EMAIL))
+				{
 					String localizationMessages = bpaNotificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo());
 					message = bpaNotificationUtil.getEmailCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+				}
 			}
 			if(message==null || message == "") continue;
 
 				license.getTradeLicenseDetail().getOwners().forEach(owner -> {
-					if (owner.getMobileNumber() != null)
+					if (owner.getMobileNumber() != null && !StringUtils.isEmpty(owner.getEmailId()))
 						mapOfPhnoAndEmail.put(owner.getMobileNumber(), owner.getEmailId());
 				});
-
 			emailRequests.addAll(util.createEmailRequest(request.getRequestInfo(),message,mapOfPhnoAndEmail));
 			}
 		}
-	}
 
 		/**
          * Enriches the smsRequest with the customized messages
          * @param request The tradeLicenseRequest from kafka topic
          * @param smsRequests List of SMSRequests
-		 * @param configuredChannelList Map of actions mapped to configured channels for this business service
+		 * @param configuredChannelList Map of actions mapped to configured channels for this business service for BPAREG flow
          */
     private void enrichSMSRequest(TradeLicenseRequest request,List<SMSRequest> smsRequests,Map<Object,Object> configuredChannelList){
         String tenantId = request.getLicenses().get(0).getTenantId();
         for(TradeLicense license : request.getLicenses()) {
-			String action = license.getAction();
-			List<String> configuredChannelNames = (List<String>) configuredChannelList.get(action);
-			if (!CollectionUtils.isEmpty(configuredChannelNames) && configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
-				String businessService = license.getBusinessService();
+			String businessService = license.getBusinessService();
 				if (businessService == null)
 					businessService = businessService_TL;
 				String message = null;
@@ -229,8 +260,12 @@ public class TLNotificationService {
 
 				}
 				if (businessService.equals(businessService_BPA)) {
-					String localizationMessages = bpaNotificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo());
-					message = bpaNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+					String action = license.getAction();
+					List<String> configuredChannelNames = (List<String>) configuredChannelList.get(action);
+					if (!CollectionUtils.isEmpty(configuredChannelNames) && configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+						String localizationMessages = bpaNotificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo());
+						message = bpaNotificationUtil.getCustomizedMsg(request.getRequestInfo(), license, localizationMessages);
+					}
 				}
 				if (businessService.equals(businessService_DIRECT_RENEWAL) || businessService.equals(businessService_EDIT_RENEWAL)) {
 					String localizationMessages = tlRenewalNotificationUtil.getLocalizationMessages(tenantId, request.getRequestInfo());
@@ -244,9 +279,7 @@ public class TLNotificationService {
 					if (owner.getMobileNumber() != null)
 						mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
 				});
-
 				smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
-			}
 		}
     }
     
@@ -256,17 +289,13 @@ public class TLNotificationService {
      * Assumption - The TradeLicenseRequest received will always contain only one TradeLicense.
      * 
      * @param request
-	 * @param configuredChannelList
      * @return
      */
-    private EventRequest getEventsForTL(TradeLicenseRequest request,Map<Object,Object> configuredChannelList) {
+    private EventRequest getEventsForTL(TradeLicenseRequest request) {
     	List<Event> events = new ArrayList<>();
         String tenantId = request.getLicenses().get(0).getTenantId();
 		String localizationMessages = util.getLocalizationMessages(tenantId,request.getRequestInfo());
         for(TradeLicense license : request.getLicenses()){
-			String licenseAction = license.getAction();
-			List<String> configuredChannelNames = (List<String>) configuredChannelList.get(licenseAction);
-			if (!CollectionUtils.isEmpty(configuredChannelNames) && configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
 			String message = null;
 			String applicationType = String.valueOf(license.getApplicationType());
 			String businessService = license.getBusinessService();
@@ -308,7 +337,7 @@ public class TLNotificationService {
         						.replace("$applicationNo", license.getApplicationNumber())
         						.replace("$tenantId", license.getTenantId())
         						.replace("$businessService", license.getBusinessService());
-        			actionLink = util.getHost(license.getTenantId()) + actionLink;
+        			actionLink = config.getUiAppHost() + actionLink;
         			ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
         			items.add(item);
         			action = Action.builder().actionUrls(items).build();
@@ -318,7 +347,7 @@ public class TLNotificationService {
 					String actionLink = config.getViewApplicationLink().replace("$mobile", mobile)
 							.replace("$applicationNo", license.getApplicationNumber())
 							.replace("$tenantId", license.getTenantId());
-					actionLink = util.getHost(license.getTenantId()) + actionLink;
+					actionLink = config.getUiAppHost() + actionLink;
 					ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getViewApplicationCode()).build();
 					items.add(item);
 					action = Action.builder().actionUrls(items).build();
@@ -333,7 +362,6 @@ public class TLNotificationService {
     			
     		}
         }
-		}
         if(!CollectionUtils.isEmpty(events)) {
     		return EventRequest.builder().requestInfo(request.getRequestInfo()).events(events).build();
         }else {
@@ -390,7 +418,7 @@ public class TLNotificationService {
 							.replace("$applicationNo", license.getApplicationNumber())
 							.replace("$tenantId", license.getTenantId())
 					        .replace("$businessService", license.getBusinessService());;
-					actionLink = util.getHost(license.getTenantId()) + actionLink;
+					actionLink = config.getUiAppHost() + actionLink;
 					ActionItem item = ActionItem.builder().actionUrl(actionLink).code(config.getPayCode()).build();
 					items.add(item);
 					action = Action.builder().actionUrls(items).build();
@@ -411,7 +439,8 @@ public class TLNotificationService {
 		}
 
 	}
-    
+
+
 
 
 
@@ -434,7 +463,7 @@ public class TLNotificationService {
 
 		if(StringUtils.isEmpty(tenantId))
 			return map;
-		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, centralInstanceUtil.getStateLevelTenant(tenantId));
+		MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, tenantId.split("\\.")[0]);
 
         Filter masterDataFilter = filter(
                 where(MODULENAME).is(moduleName)

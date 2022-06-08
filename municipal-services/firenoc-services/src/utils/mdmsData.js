@@ -1,20 +1,7 @@
 import { httpRequest } from "./api";
 import envVariables from "../envVariables";
 
-export default async (requestInfo = {},tenantId, header) => {
-  let headers;
-  var isCentralInstance  = envVariables.IS_ENVIRONMENT_CENTRAL_INSTANCE;
-  if(typeof isCentralInstance =="string")
-    isCentralInstance = (isCentralInstance.toLowerCase() == "true");
-
-  if(isCentralInstance){
-    header['tenantId']=header.tenantid;
-  }
-  else
-    header['tenantId'] = tenantId;
-
-  headers = header;
- 
+export default async (requestInfo = {},tenantId) => {
   var requestBody = {
     RequestInfo: requestInfo,
     MdmsCriteria: {
@@ -46,8 +33,7 @@ export default async (requestInfo = {},tenantId, header) => {
     endPoint: `${envVariables.EGOV_MDMS_CONTEXT_PATH}${
       envVariables.EGOV_MDMS_SEARCH_ENPOINT
     }`,
-    requestBody,
-    headers
+    requestBody
   });
   return mdmsResponse;
 };

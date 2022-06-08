@@ -188,10 +188,13 @@ public class CalculationService {
 		TaxHeadEstimate estimate = new TaxHeadEstimate();
 		
 		BigDecimal amount = null;
-		String capacity = getAmountForVehicleType(fsm.getVehicleType(), mdmsData);
-		if (capacity ==null || !NumberUtils.isCreatable(capacity)) {
-			throw new CustomException(CalculatorConstants.INVALID_CAPACITY, "Capacity is Invalid for the given vehicleType");
-		}
+		
+		/*
+		 * String capacity = getAmountForVehicleType(fsm.getVehicleType(), mdmsData); if
+		 * (capacity ==null || !NumberUtils.isCreatable(capacity)) { throw new
+		 * CustomException(CalculatorConstants.INVALID_CAPACITY,
+		 * "Capacity is Invalid for the given vehicleType"); }
+		 */
 		
 		List<Map<String,Object>> slumNameAllowed = JsonPath.read(mdmsData, CalculatorConstants.FSM_SLUM_OVERRIDE_ALLOWED);
 		List<Map<String,Object>> tripAountAllowed = JsonPath.read(mdmsData, CalculatorConstants.FSM_TRIP_AMOUNT_OVERRIDE_ALLOWED);
@@ -212,14 +215,18 @@ public class CalculationService {
 			if(  oldAdditionalDetails != null || oldAdditionalDetails.get("tripAmount") != null) {
 				amount = BigDecimal.valueOf(Double.valueOf((String)oldAdditionalDetails.get("tripAmount")));
 			}else {
-				List<BillingSlab> billingSlabs = billingSlabRepository.getBillingSlabData(BillingSlabSearchCriteria.builder().capacity(NumberUtils.toDouble(capacity)).slum(slumName).propertyType(fsm.getPropertyUsage()).tenantId(fsm.getTenantId()).build());
+				List<BillingSlab> billingSlabs = billingSlabRepository.getBillingSlabData(BillingSlabSearchCriteria
+						.builder().capacity(NumberUtils.toDouble(fsm.getVehicleCapacity())).slum(slumName)
+						.propertyType(fsm.getPropertyUsage()).tenantId(fsm.getTenantId()).build());
 				if(billingSlabs.size() >0) {
 					amount = billingSlabs.get(0).getPrice();
 				}
 			}
 			
 		}else {
-			List<BillingSlab> billingSlabs = billingSlabRepository.getBillingSlabData(BillingSlabSearchCriteria.builder().capacity(NumberUtils.toDouble(capacity)).slum(slumName).propertyType(fsm.getPropertyUsage()).tenantId(fsm.getTenantId()).build());
+			List<BillingSlab> billingSlabs = billingSlabRepository
+					.getBillingSlabData(BillingSlabSearchCriteria.builder().capacity(NumberUtils.toDouble(fsm.getVehicleCapacity()))
+							.slum(slumName).propertyType(fsm.getPropertyUsage()).tenantId(fsm.getTenantId()).build());
 			if(billingSlabs.size() >0) {
 				amount = billingSlabs.get(0).getPrice();
 			}
