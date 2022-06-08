@@ -100,7 +100,6 @@ export const propertySearchApiCall = async (state, dispatch) => {
       }
     } catch (err) {
       showHideFields(dispatch, false);
-      console.log(err)
     }
   }
 }

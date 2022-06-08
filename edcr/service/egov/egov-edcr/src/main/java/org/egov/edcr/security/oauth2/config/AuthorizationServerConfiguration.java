@@ -51,7 +51,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -82,7 +83,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-    private static final Logger LOGGER = Logger.getLogger(AuthorizationServerConfiguration.class);
+    private static final Logger LOGGER = LogManager.getLogger(AuthorizationServerConfiguration.class);
     private static final String CLIENTS_CONFIG = "config/restapi-secured-clients-config.json";
     private static final String CLIENTS_CONFIG_OVERRIDE = "config/restapi-secured-clients-config-override.json";
     private static final String SCOPE_WRITE = "write";

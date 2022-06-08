@@ -23,9 +23,6 @@ router.post(
     var tenantId = req.query.tenantId;
     var applicationNumber = req.query.applicationNumber;
     var requestinfo = req.body;
-    var headers = JSON.parse(JSON.stringify(req.headers));
-    headers['tenantId']=headers.tenantid;
-
     if (requestinfo == undefined) {
       return renderError(res, "requestinfo can not be null", 400);
     }
@@ -42,8 +39,7 @@ router.post(
           applicationNumber,
           tenantId,
           requestinfo,
-          false,
-          headers
+          false
         );
       } catch (ex) {
         if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -64,8 +60,7 @@ router.post(
             applicationNumber,
             tenantId,
             requestinfo,
-            bussinessService,
-            headers
+            bussinessService
           );
         } catch (ex) {
           if (ex.response && ex.response.data) console.log(ex.response.data);
@@ -84,8 +79,7 @@ router.post(
               tenantId,
               pdfkey,
               payments,
-              requestinfo,
-              headers
+              requestinfo
             );
           } catch (ex) {
             
@@ -124,9 +118,6 @@ router.post(
     var tenantId = req.query.tenantId;
     var applicationNumber = req.query.applicationNumber;
     var requestinfo = req.body;
-    var headers = JSON.parse(JSON.stringify(req.headers));
-    headers['tenantId']=headers.tenantid;
-
     if (requestinfo == undefined) {
       return renderError(res, "requestinfo can not be null", 400);
     }
@@ -144,8 +135,7 @@ router.post(
           applicationNumber,
           tenantId,
           requestinfo,
-          false,
-          headers
+          false
         );
       } catch (ex) {
         
@@ -173,8 +163,7 @@ router.post(
             tenantId,
             pdfkey,
             tradelicenses,
-            requestinfo,
-            headers
+            requestinfo
           );
         } catch (ex) {
           
@@ -210,9 +199,6 @@ router.post(
     var tenantId = req.query.tenantId;
     var applicationNumber = req.query.applicationNumber;
     var requestinfo = req.body;
-    var headers = JSON.parse(JSON.stringify(req.headers));
-    headers['tenantId']=headers.tenantid;
-
     if (requestinfo == undefined) {
       return renderError(res, "requestinfo can not be null", 400);
     }
@@ -230,8 +216,7 @@ router.post(
           applicationNumber,
           tenantId,
           requestinfo,
-          false,
-          headers
+          false
         );
       } catch (ex) {
         
@@ -266,8 +251,7 @@ router.post(
             tenantId,
             pdfkey,
             tradelicenses,
-            requestinfo,
-            headers
+            requestinfo
           );
         } catch (ex) {
           
@@ -304,9 +288,6 @@ router.post(
      var applicationNumber = req.query.applicationNumber;
      var bussinessService = req.query.bussinessService;
      var requestinfo = req.body;
-     var headers = JSON.parse(JSON.stringify(req.headers));
-     headers['tenantId']=headers.tenantid;
-
      if (requestinfo == undefined) {
        return renderError(res, "requestinfo can not be null");
      }
@@ -323,8 +304,7 @@ router.post(
            applicationNumber,
            tenantId,
            requestinfo,
-           true,
-           headers
+           true
          );
        } catch (ex) {
          
@@ -346,8 +326,7 @@ router.post(
              tenantId,
              applicationNumber,
              bussinessService,
-             requestinfo,
-             headers
+             requestinfo
            );
          } catch (ex) {
            
@@ -365,8 +344,7 @@ router.post(
                tenantId,
                pdfkey,
                billArray,
-               requestinfo,
-               headers
+               requestinfo
              );
            } catch (ex) {
              

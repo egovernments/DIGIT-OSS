@@ -19,6 +19,10 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class TripDetailRowMapper implements ResultSetExtractor<List<VehicleTripDetail>> {
 
@@ -42,22 +46,36 @@ public class TripDetailRowMapper implements ResultSetExtractor<List<VehicleTripD
 			Long itemstarttime = rs.getLong("itemstarttime");
 			Long itemendtime = rs.getLong("itemendtime");
 			Double volume = rs.getDouble("volume");
-			
-			String createdBy = rs.getString("createdby");
-			String lastModifiedBy = rs.getString("lastmodifiedby");
-			Long createdTime = rs.getLong("createdtime");
-			Long lastModifiedTime = rs.getLong("lastmodifiedtime");
-			
-			AuditDetails audit = AuditDetails.builder().createdBy(createdBy).lastModifiedBy(lastModifiedBy).createdTime(createdTime)
-					.lastModifiedTime(lastModifiedTime).build();
-			tripDetailMap.put(id, VehicleTripDetail.builder().id(id).tenantId(tenantId).referenceNo(referenceno).referenceStatus(referencestatus)
-					.additionalDetails(additionaldetails).status(VehicleTripDetail.StatusEnum.fromValue(status)).itemStartTime(itemstarttime)
-					.itemEndTime(itemendtime).volume(volume).auditDetails(audit).build());
-		
-			
+			if( isColumnExist(rs, "createdby")) {
+				String createdBy = rs.getString("createdby");
+				String lastModifiedBy = rs.getString("lastmodifiedby");
+				Long createdTime = rs.getLong("createdtime");
+				Long lastModifiedTime = rs.getLong("lastmodifiedtime");
+				AuditDetails audit = AuditDetails.builder().createdBy(createdBy).lastModifiedBy(lastModifiedBy).createdTime(createdTime)
+						.lastModifiedTime(lastModifiedTime).build();
+				tripDetailMap.put(id, VehicleTripDetail.builder().id(id).tenantId(tenantId).referenceNo(referenceno).referenceStatus(referencestatus)
+						.additionalDetails(additionaldetails).status(VehicleTripDetail.StatusEnum.fromValue(status)).itemStartTime(itemstarttime)
+						.itemEndTime(itemendtime).volume(volume).auditDetails(audit).build());
+			}else {
+				tripDetailMap.put(id, VehicleTripDetail.builder().id(id).tenantId(tenantId).referenceNo(referenceno).referenceStatus(referencestatus)
+						.additionalDetails(additionaldetails).status(VehicleTripDetail.StatusEnum.fromValue(status)).itemStartTime(itemstarttime)
+						.itemEndTime(itemendtime).volume(volume).build());
+			}
 		}
 		return new ArrayList<>(tripDetailMap.values());
 	}
+	
+	
+	private boolean isColumnExist(ResultSet rs, String column){
+	    try{
+	        rs.findColumn(column);
+	        return true;
+	    } catch (SQLException sqlex){
+	        log.info("column doesn't exist {}", column);
+	    }
+	    return false;
+	}
+	
 	
 	  private JsonNode getAdditionalDetail(String columnName, ResultSet rs){
 

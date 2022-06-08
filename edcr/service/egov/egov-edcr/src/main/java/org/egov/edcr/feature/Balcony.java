@@ -54,7 +54,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Floor;
 import org.egov.common.entity.edcr.Plan;
@@ -66,7 +67,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Balcony extends FeatureProcess {
-    private static final Logger LOG = Logger.getLogger(Balcony.class);
+    private static final Logger LOG = LogManager.getLogger(Balcony.class);
     private static final String FLOOR = "Floor";
     private static final String RULE45_IV = "45-iv";
     private static final String WIDTH_BALCONY_DESCRIPTION = "Minimum width for balcony %s";

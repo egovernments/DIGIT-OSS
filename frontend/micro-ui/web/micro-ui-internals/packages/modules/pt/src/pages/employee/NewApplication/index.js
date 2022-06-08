@@ -84,7 +84,7 @@ const NewApplication = () => {
           };
         }
 
-        if (!__owner.correspondenceAddress) __owner.correspondenceAddress = "";
+        if (!__owner?.correspondenceAddress) __owner.correspondenceAddress = "";
 
         const _owner = {
           ...__owner,

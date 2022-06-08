@@ -5,9 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.egov.common.utils.MultiStateInstanceUtil;
-import org.egov.swservice.config.SWConfiguration;
-import org.egov.swservice.web.models.SearchCriteria;
+import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.SewerageConnectionRequest;
 import org.egov.swservice.web.models.ValidatorResult;
@@ -27,13 +25,6 @@ public class SewerageConnectionValidator {
 	
 	@Autowired
 	private SewerageFieldValidator sewerageFieldValidator;
-
-	@Autowired
-	private SWConfiguration configs;
-
-	@Autowired
-	private MultiStateInstanceUtil centralInstanceUtil;
-
 
 	/**Used strategy pattern for avoiding multiple if else condition
 	 * 
@@ -57,6 +48,17 @@ public class SewerageConnectionValidator {
 		}
 		if(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction().equalsIgnoreCase("PAY"))
 			errorMap.put("INVALID_ACTION","Pay action cannot perform directly");
+
+		String channel = sewerageConnectionRequest.getSewerageConnection().getChannel();
+		if(channel != null){
+			if(!SWConstants.CHANNEL_VALUES.contains(channel))
+				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid");
+			if(reqType == SWConstants.CREATE_APPLICATION && sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") && channel.equalsIgnoreCase("CITIZEN"))
+				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid for employee role");
+			if(reqType == SWConstants.CREATE_APPLICATION && sewerageConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && !channel.equalsIgnoreCase("CITIZEN"))
+				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid for citizen role");
+
+		}
 		
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
@@ -120,13 +122,5 @@ public class SewerageConnectionValidator {
 	 */
 	private void setFieldsFromSearch(SewerageConnectionRequest request, SewerageConnection searchResult) {
 		request.getSewerageConnection().setConnectionNo(searchResult.getConnectionNo());
-	}
-
-	public void validateSearch(SearchCriteria criteria){
-		if(centralInstanceUtil.getIsEnvironmentCentralInstance() && criteria.getTenantId() == null)
-			throw new CustomException("EG_SW_INVALID_SEARCH"," TenantId is mandatory for search ");
-		else if(centralInstanceUtil.getIsEnvironmentCentralInstance() && criteria.getTenantId().split("\\.").length < centralInstanceUtil.getStateLevelTenantIdLength())
-			throw new CustomException("EG_SW_INVALID_SEARCH"," TenantId should be mandatorily " + centralInstanceUtil.getStateLevelTenantIdLength() + " levels for search");
-
 	}
 }

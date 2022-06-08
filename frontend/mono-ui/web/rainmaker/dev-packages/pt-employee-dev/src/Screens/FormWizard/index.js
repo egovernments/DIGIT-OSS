@@ -131,7 +131,6 @@ class FormWizard extends Component {
           );
         });
       }
-      // console.log(searchPropertyResponse);
       let propertyResponse = {
         ...searchPropertyResponse,
         Properties: [
@@ -261,7 +260,6 @@ class FormWizard extends Component {
         }
       );
     } catch (e) {
-      console.log(e);
     }
   };
 
@@ -1050,7 +1048,6 @@ class FormWizard extends Component {
       );
       return billResponse;
     } catch (e) {
-      console.log(e);
       this.props.history.push(
         `payment-failure/${propertyId}/${tenantId}/${assessmentNumber}/${assessmentYear}`
       );
@@ -1089,7 +1086,6 @@ class FormWizard extends Component {
       // }
       // updateIndex(4);
     } catch (e) {
-      console.log(e);
     }
   };
 
@@ -1252,7 +1248,6 @@ class FormWizard extends Component {
       } else {
       }
     } catch (e) {
-      console.log(e);
       set(prepareFormData, "Receipt[0].Bill", []);
       set(prepareFormData, "Receipt[0].instrument", {});
       hideSpinner();

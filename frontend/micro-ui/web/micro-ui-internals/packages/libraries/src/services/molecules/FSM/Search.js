@@ -48,6 +48,7 @@ export const Search = {
     let dsoDetails = {};
     let vehicle = {};
     const response = await Search.application(tenantId, filter);
+    let receivedPayment = response?.additionalDetails?.receivedPayment;
     if (response?.dsoId) {
       const dsoFilters = { ids: response.dsoId, vehicleIds: response?.vehicleId };
       [dsoDetails] = await DsoDetails(tenantId, dsoFilters);
@@ -56,6 +57,8 @@ export const Search = {
         vehicle = dsoDetails.vehicles.find((vehicle) => vehicle.id === response.vehicleId);
       }
     }
+
+    let paymentPreference = response?.paymentPreference;
 
     let slumLabel = "";
     if (response?.address?.slumName && response?.address?.locality?.code && response?.tenantId) {
@@ -102,6 +105,7 @@ export const Search = {
         values: [
           { title: "ES_APPLICATION_DETAILS_APPLICANT_NAME", value: response?.citizen?.name },
           { title: "ES_APPLICATION_DETAILS_APPLICANT_MOBILE_NO", value: response?.citizen?.mobileNumber },
+          { title: "ES_FSM_PAYMENT_PREFERENCE", value: `ES_ACTION_${response?.paymentPreference}` },
         ],
       },
       {
@@ -134,9 +138,9 @@ export const Search = {
             child:
               response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude
                 ? {
-                    element: "img",
-                    src: Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude),
-                  }
+                  element: "img",
+                  src: Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude),
+                }
                 : null,
           },
         ],
@@ -178,6 +182,7 @@ export const Search = {
           { title: "ES_APPLICATION_DETAILS_VEHICLE_NO", value: vehicle?.registrationNumber || "N/A" },
           { title: "ES_APPLICATION_DETAILS_VEHICLE_CAPACITY", value: response?.vehicleCapacity || "N/A" },
           { title: "ES_APPLICATION_DETAILS_POSSIBLE_SERVICE_DATE", value: displayServiceDate(response?.possibleServiceDate) || "N/A" },
+          { title: "ES_APPLICATION_DETAILS_AMOUNT_RECEIVED", value: receivedPayment || "N/A" },
         ],
       },
     ];
@@ -238,10 +243,10 @@ export const Search = {
 
   combineResponse: (vehicleTrip, vendorOwnerKey) => {
     return vehicleTrip.map((trip) => {
-      if (vendorOwnerKey[trip.tripOwnerId]){
+      if (vendorOwnerKey[trip.tripOwnerId]) {
         return { ...trip, dsoName: vendorOwnerKey[trip.tripOwnerId].name };
       } else return {}
-    }).filter( e => e.tripOwnerId);
+    }).filter(e => e.tripOwnerId);
 
   },
 

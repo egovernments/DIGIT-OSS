@@ -256,7 +256,7 @@ export const NOCApplication = getCommonCard({
           callBack: searchApiCall
         }
       }
-    })
+    },{className:"firenoc-btn-search-reset"})
   })
 }, {
   style: { overflow: "visible" }

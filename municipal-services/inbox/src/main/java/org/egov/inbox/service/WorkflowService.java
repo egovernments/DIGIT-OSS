@@ -73,6 +73,30 @@ public class WorkflowService {
 		return processCount;
 	}
 	
+	public Integer getNearingSlaProcessCount(String tenantId, RequestInfo requestInfo, ProcessInstanceSearchCriteria criteria) {
+		List<String> listOfBusinessServices = new ArrayList<>(criteria.getBusinessService());
+		Integer processCount = 0;
+		for(String businessSrv : listOfBusinessServices) {
+			criteria.setBusinessService(Collections.singletonList(businessSrv));
+			StringBuilder url = new StringBuilder(config.getWorkflowHost());
+			url.append(config.getNearingSlaProcessCountPath());
+			criteria.setIsProcessCountCall(true);
+			url = this.buildWorkflowUrl(criteria, url, Boolean.FALSE);
+
+			RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+			Object result = serviceRequestRepository.fetchIntResult(url, requestInfoWrapper);
+			Integer response = null;
+			try {
+				response = mapper.convertValue(result, Integer.class);
+			} catch (IllegalArgumentException e) {
+				throw new CustomException(ErrorConstants.PARSING_ERROR, "Failed to parse response of ProcessInstance Count");
+			}
+			processCount += response;
+		}
+		criteria.setBusinessService(listOfBusinessServices);
+		return processCount;
+	}
+	
         public List<HashMap<String, Object>> getProcessStatusCount(RequestInfo requestInfo,
                 ProcessInstanceSearchCriteria criteria) {
             List<String> listOfBusinessServices = new ArrayList<>(criteria.getBusinessService());

@@ -8,12 +8,12 @@ export const TLList = () => {
   const { t } = useTranslation();
   const userInfo = Digit.UserService.getUser();
   const tenantId = userInfo?.info?.permanentCity;
-  const { mobileNumber: mobileno, LicenseNumber: licenseno, tenantId:tenantID } = Digit.Hooks.useQueryParams();
+  const { mobileNumber: mobileno, LicenseNumber: licenseno, tenantId: tenantID } = Digit.Hooks.useQueryParams();
   let filter1 = {};
   if (licenseno) filter1.licenseNumbers = licenseno;
   if (licenseno) filter1.tenantId = tenantID;
   if (!licenseno) filter1.mobileNumber = userInfo?.info?.mobileNumber;
-  if (!licenseno) filter1.RenewalPending = true;
+  filter1 = {...filter1, tenantId:tenantId||tenantID, status:"APPROVED,CANCELLED,EXPIRED,MANUALEXPIRED"}
   const { isLoading, isError, error, data } = Digit.Hooks.tl.useTradeLicenseSearch({ filters: filter1 }, {});
   if (isLoading) {
     return <Loader />;
@@ -26,7 +26,7 @@ export const TLList = () => {
         <CardHeader>{`${t("TL_RENEW_TRADE_HEADER")}`}</CardHeader>
         <CardText>{`${t("TL_RENEW_TRADE_TEXT")}`}</CardText>
       </Card>
-      <div >
+      <div>
         {newapplicationlist?.length > 0 &&
           newapplicationlist.map((application, index) => (
             <div key={index}>

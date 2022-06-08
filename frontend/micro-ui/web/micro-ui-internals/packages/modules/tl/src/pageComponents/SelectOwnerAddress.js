@@ -1,33 +1,67 @@
 import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, CheckBox, CardLabel, LabelFieldPair, TextArea, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
   const [permanentAddress, setPermanentAddress] = useState(formData?.owners?.permanentAddress || "");
-  const [isCorrespondenceAddress, setIsCorrespondenceAddress] = useState(formData.owners.isCorrespondenceAddress);
+  const [isCorrespondenceAddress, setIsCorrespondenceAddress] = useState(formData?.owners?.isCorrespondenceAddress);
   let isedittrade = window.location.href.includes("edit-application");
   let isrenewtrade = window.location.href.includes("renew-trade");
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
   let ismultiple = formData?.ownershipCategory?.code.includes("SINGLEOWNER") ? false : true;
 
-  function setOwnerPermanentAddress(e) {
-    setPermanentAddress(e.target.value);
-  }
-  function setCorrespondenceAddress(e) {
-    if (e.target.checked == true) {
+  useEffect(() => {
+    if (formData?.owners?.permanentAddress == null && isrenewtrade && permanentAddress === "") {
       let obj = {
         doorNo: formData?.address?.doorNo,
-        street: formData?.address?.street,
+        street: formData?.address?.street || formData?.address?.buildingName,
         landmark: formData?.address?.landmark,
-        locality: formData?.address?.locality?.i18nkey,
-        city: formData?.address?.city?.code,
+        locality: formData?.address?.locality?.name,
+        city: formData?.address?.city?.code?.split(".")[1],
         pincode: formData?.address?.pincode,
       };
       let addressDetails = "";
       for (const key in obj) {
-        if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
-        else addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
+        if (key == "pincode" || (!obj["pincode"] && key =="city")) addressDetails += obj[key] ? obj[key] : "";
+        else if(obj[key]) addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
+      }
+      setPermanentAddress(addressDetails);
+    }
+  }, [formData]);
+  function setOwnerPermanentAddress(e) {
+    setPermanentAddress(e.target.value);
+  }
+  function setCorrespondenceAddress(e) {
+    if (formData?.cpt?.details && Object.keys(formData?.cpt?.details).length > 0 && e.target.checked == true) {
+      let obj = {
+        doorNo: formData?.cpt?.details?.address?.doorNo,
+        street: formData?.cpt?.details?.address?.street || formData?.cpt?.details?.address?.buildingName,
+        landmark: formData?.cpt?.details?.address?.landmark,
+        locality: formData?.cpt?.details?.address?.locality?.name,
+        city: formData?.cpt?.details?.address?.city,
+        pincode: formData?.address?.pincode,
+      };
+      let addressDetails = "";
+      for (const key in obj) {
+        if (key == "pincode" || (!obj["pincode"] && key =="city")) addressDetails += obj[key] ? obj[key] : "";
+        else if(obj[key]) addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
+      }
+      setPermanentAddress(addressDetails);
+    } else if (e.target.checked == true) {
+      let obj = {
+        doorNo: formData?.address?.doorNo,
+        street: formData?.address?.street || formData?.address?.buildingName,
+        landmark: formData?.address?.landmark,
+        locality: formData?.address?.locality?.i18nkey,
+        city: formData?.address?.city?.name,
+        pincode: formData?.address?.pincode,
+      };
+      let addressDetails = "";
+      for (const key in obj) {
+        if (key == "pincode" || (!obj["pincode"] && key =="city")) addressDetails += obj[key] ? obj[key] : "";
+        else if(obj[key]) addressDetails += obj[key] ? t(`${obj[key]}`) + ", " : "";
       }
       setPermanentAddress(addressDetails);
     } else {
@@ -68,7 +102,8 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
 
   return (
     <React.Fragment>
-      <FormStep config={config} t={t} onSelect={goNext} isDisabled={(isedittrade || isrenewtrade)?false:!permanentAddress}>
+      {window.location.href.includes("/citizen") ? <Timeline currentStep={2} /> : null}
+      <FormStep config={config} t={t} onSelect={goNext} isDisabled={isedittrade || isrenewtrade ? false : !permanentAddress}>
         <TextArea
           isMandatory={false}
           optionKey="i18nKey"

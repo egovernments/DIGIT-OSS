@@ -13,7 +13,7 @@ const PTCard = () => {
     filters: { limit: 10, offset: 0, services: ["PT.CREATE", "PT.MUTATION", "PT.UPDATE"] },
     config: {
       select: (data) => {
-        return data?.totalCount || "-";
+        return {totalCount:data?.totalCount,nearingSlaCount:data?.nearingSlaCount} || "-";
       },
       enabled: Digit.Utils.ptAccess(),
     },
@@ -26,41 +26,45 @@ const PTCard = () => {
   if (!Digit.Utils.ptAccess()) {
     return null;
   }
-
+  const links=[
+    {
+      count: isLoading ? "-" : total?.totalCount,
+      label: t("ES_COMMON_INBOX"),
+      link: `/digit-ui/employee/pt/inbox`,
+    },
+    {
+      label: t("ES_TITLE_NEW_REGISTRATION"),
+      link: `/digit-ui/employee/pt/new-application`,
+      role: "PT_CEMP"
+    },
+    {
+      label: t("SEARCH_PROPERTY"),
+      link: `/digit-ui/employee/pt/search`,
+    },
+    {
+      label: t("ES_COMMON_APPLICATION_SEARCH"),
+      link: `/digit-ui/employee/pt/application-search`,
+    },
+  ]
+  const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
   const propsForModuleCard = {
     Icon: <PropertyHouse />,
     moduleName: t("ES_TITLE_PROPERTY_TAX"),
     kpis: [
       {
-        count: total,
+        count: total?.totalCount,
         label: t("ES_TITLE_INBOX"),
         link: `/digit-ui/employee/pt/inbox`,
       },
-    ],
-    links: [
       {
-        count: isLoading ? "-" : total,
-        label: t("ES_COMMON_INBOX"),
+        
+        count: total?.nearingSlaCount,
+        label: t("TOTAL_NEARING_SLA"),
         link: `/digit-ui/employee/pt/inbox`,
-      },
-      {
-        label: t("SEARCH_PROPERTY"),
-        link: `/digit-ui/employee/pt/search`,
-      },
+      }
     ],
+    links:links.filter(link=>!link?.role||PT_CEMP),
   };
-
-  const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
-  if (PT_CEMP && !propsForModuleCard.links?.[1]) {
-    propsForModuleCard.links.push({
-      label: t("ES_TITLE_NEW_REGISTRATION"),
-      link: `/digit-ui/employee/pt/new-application`,
-    });
-    propsForModuleCard.links.push({
-      label: t("ES_COMMON_APPLICATION_SEARCH"),
-      link: `/digit-ui/employee/pt/application-search`,
-    });
-  }
 
   return <EmployeeModuleCard {...propsForModuleCard} />;
 };

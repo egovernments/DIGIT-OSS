@@ -33,16 +33,11 @@ import {
 import { Close } from "../../Icons";
 import { useTranslation } from "react-i18next";
 import { isError, useQueryClient } from "react-query";
+import StarRated from "../../components/timelineInstances/StarRated";
 
 const MapView = (props) => {
   return (
     <div onClick={props.onClick}>
-      {/* <iframe
-        width="600"
-        height="450"
-        frameBorder="0"
-        style={{ border: 0 }}
-        src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDdKOqX6EPEX9djPm-vL_8zv0HBF8z0Qjg&q=Space+Needle,Seattle+WA"></iframe> */}
       <img src="https://via.placeholder.com/640x280" />
     </div>
   );
@@ -79,9 +74,15 @@ const TLCaption = ({ data, comments }) => {
 };
 
 const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup, selectedAction, onAssign, tenantId, t }) => {
-  const employeeRoles = workflowDetails?.data?.nextActions ? workflowDetails?.data?.nextActions : null;
-  const roles = employeeRoles.filter((role) => role.action === selectedAction);
-  const useEmployeeData = Digit.Hooks.pgr.useEmployeeFilter(tenantId, roles[0]?.roles, complaintDetails);
+  
+  // RAIN-5692 PGR : GRO is assigning complaint, Selecting employee and assign. Its not getting assigned.
+  // Fix for next action  assignee dropdown issue
+  const stateArray = workflowDetails?.data?.initialActionState?.nextActions?.filter( ele => ele?.action == selectedAction );  
+  const useEmployeeData = Digit.Hooks.pgr.useEmployeeFilter(
+    tenantId, 
+    stateArray?.[0]?.assigneeRoles?.length > 0 ? stateArray?.[0]?.assigneeRoles?.join(",") : "",
+    complaintDetails
+    );
   const employeeData = useEmployeeData
     ? useEmployeeData.map((departmentData) => {
       return { heading: departmentData.department, options: departmentData.employees };
@@ -112,7 +113,6 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
               setError(t("CS_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
             setError(t("CS_FILE_UPLOAD_ERROR"));
           }
         }
@@ -216,6 +216,14 @@ export const ComplaintDetails = (props) => {
   const { isLoading, complaintDetails, revalidate: revalidateComplaintDetails } = Digit.Hooks.pgr.useComplaintDetails({ tenantId, id });
   const workflowDetails = Digit.Hooks.useWorkflowDetails({ tenantId, id, moduleCode: "PGR", role: "EMPLOYEE" });
   const [imagesToShowBelowComplaintDetails, setImagesToShowBelowComplaintDetails] = useState([])
+  
+  // RAIN-5692 PGR : GRO is assigning complaint, Selecting employee and assign. Its not getting assigned.
+  // Fix for next action  assignee dropdown issue
+  if (workflowDetails && workflowDetails?.data){
+    workflowDetails.data.initialActionState=workflowDetails?.data?.initialActionState || {...workflowDetails?.data?.actionState } || {} ;
+      workflowDetails.data.actionState = { ...workflowDetails.data };
+    }
+
   useEffect(()=>{
     if(workflowDetails){
       const {data:{timeline: complaintTimelineData}={}} = workflowDetails
@@ -273,7 +281,6 @@ export const ComplaintDetails = (props) => {
         setPopup(!popup);
         break;
       default:
-        console.debug(state);
         break;
     }
   }
@@ -282,7 +289,7 @@ export const ComplaintDetails = (props) => {
     setImageZoom(imageSource);
   }
   function zoomImageWrapper(imageSource, index){
-    zoomImage(imagesToShowBelowComplaintDetails?.fullImage[index-1]);
+    zoomImage(imagesToShowBelowComplaintDetails?.fullImage[index]);
   }
   function onCloseImageZoom() {
     setImageZoom(null);
@@ -312,7 +319,6 @@ export const ComplaintDetails = (props) => {
         setDisplayMenu(false);
         break;
       default:
-        console.debug("action not known");
         setDisplayMenu(false);
     }
   }
@@ -354,11 +360,30 @@ export const ComplaintDetails = (props) => {
       } : {}
     }
     const isFirstPendingForAssignment = arr.length - (index + 1) === 1 ? true : false
-    if (checkpoint.status === "PENDINGFORASSIGNMENT" && complaintDetails?.audit && isFirstPendingForAssignment) {
-      const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
-      };
-      return <TLCaption data={caption} comments={checkpoint?.wfComment}/>;
+    if (checkpoint.status === "PENDINGFORASSIGNMENT" && complaintDetails?.audit) {
+      if(isFirstPendingForAssignment){
+        const caption = {
+          date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
+        };
+        return <TLCaption data={caption} comments={checkpoint?.wfComment}/>;
+      } else {
+        const caption = {
+          date: Digit.DateUtils.ConvertTimestampToDate(complaintDetails.audit.details.createdTime),
+        };
+        return <>
+          {checkpoint?.wfComment ? <div>{checkpoint?.wfComment?.map( e => 
+            <div className="TLComments">
+              <h3>{t("WF_COMMON_COMMENTS")}</h3>
+              <p>{e}</p>
+            </div>
+          )}</div> : null}
+          {checkpoint.status !== "COMPLAINT_FILED" && thumbnailsToShow?.thumbs?.length > 0 ? <div className="TLComments">
+            <h3>{t("CS_COMMON_ATTACHMENTS")}</h3>
+            <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => zoomImageTimeLineWrapper(src, index,thumbnailsToShow)} />
+          </div> : null}
+          {caption?.date ? <TLCaption data={caption}/> : null}
+        </>
+      }
     }
     // return (checkpoint.caption && checkpoint.caption.length !== 0) || checkpoint?.wfComment?.length > 0 ? <TLCaption data={checkpoint?.caption?.[0]} comments={checkpoint?.wfComment} /> : null;
     return <>
@@ -368,11 +393,12 @@ export const ComplaintDetails = (props) => {
           <p>{e}</p>
         </div>
       )}</div> : null}
-      {thumbnailsToShow?.thumbs?.length > 0 ? <div className="TLComments">
+      {checkpoint.status !== "COMPLAINT_FILED" && thumbnailsToShow?.thumbs?.length > 0 ? <div className="TLComments">
         <h3>{t("CS_COMMON_ATTACHMENTS")}</h3>
         <DisplayPhotos srcs={thumbnailsToShow.thumbs} onClick={(src, index) => zoomImageTimeLineWrapper(src, index,thumbnailsToShow)} />
       </div> : null}
       {captionForOtherCheckpointsInTL?.date ? <TLCaption data={captionForOtherCheckpointsInTL}/> : null}
+      {(checkpoint.status == "CLOSEDAFTERRESOLUTION" && complaintDetails.workflow.action == "RATE" && index <= 1) && complaintDetails.audit.rating ? <StarRated text={t("CS_ADDCOMPLAINT_YOU_RATED")} rating={complaintDetails.audit.rating} />: null}
     </>
   }
 

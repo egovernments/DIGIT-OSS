@@ -28,29 +28,40 @@ public class VendorQueryBuilder {
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY vendor_lastModifiedTime DESC) offset_ FROM " + "({})"
 			+ " result) result_offset " + "WHERE offset_ > ? AND offset_ <= ?";
 
-	private static final String DRIVER_VEHICLE_QUERY = "SELECT %s FROM %s where %s = ?";
+	private static final String DRIVER_VEHICLE_QUERY = "SELECT %s FROM %s where %s = ? AND %s = ?";
 	private static final String VEHICLE_EXISTS = "SELECT vendor_id FROM eg_vendor_vehicle where vechile_id IN ";
 
 	private static final String DRIVER_ID = "driver_id";
 	private static final String VEHICLE_ID = "vechile_id";
 	private static final String VENDOR_ID = "vendor_id";
+	private static final String VENDOR_DRIVER_STATUS = "vendorDriverStatus";
+	private static final String VENDOR_VEHICLE_STATUS ="vendorVehicleStatus";
 	private static final String VENDOR_DRIVER = "eg_vendor_driver";
 	private static final String VENDOR_VEHICLE = "eg_vendor_vehicle";
 	
 	public static final String VENDOR_COUNT="select count(*) from eg_vendor where owner_id IN ";
 
 	public String getDriverSearchQuery() {
-		return String.format(DRIVER_VEHICLE_QUERY, DRIVER_ID, VENDOR_DRIVER, VENDOR_ID);
+		return String.format(DRIVER_VEHICLE_QUERY, DRIVER_ID, VENDOR_DRIVER, VENDOR_ID,VENDOR_DRIVER_STATUS);
 	}
 
 	public String getVehicleSearchQuery() {
-		return String.format(DRIVER_VEHICLE_QUERY, VEHICLE_ID, VENDOR_VEHICLE, VENDOR_ID);
+		return String.format(DRIVER_VEHICLE_QUERY, VEHICLE_ID, VENDOR_VEHICLE, VENDOR_ID,VENDOR_VEHICLE_STATUS );
 	}
 	
-	public String vendorsForVehicles(List<String> vehicleIds, List<Object> preparedStmtList) {
+	public String vendorsForVehicles(VendorSearchCriteria vendorSearchCriteria, List<Object> preparedStmtList) {
+		
 		StringBuilder builder = new StringBuilder(VEHICLE_EXISTS);		
-		builder.append("(").append(createQuery(vehicleIds)).append(")");
-		addToPreparedStatement(preparedStmtList, vehicleIds);
+		builder.append("(").append(createQuery(vendorSearchCriteria.getVehicleIds())).append(")");
+		addToPreparedStatement(preparedStmtList, vendorSearchCriteria.getVehicleIds());
+		
+		List<String> status=vendorSearchCriteria.getStatus();
+		if (!CollectionUtils.isEmpty(status)) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" vendorVehicleStatus IN (").append(createQuery(status)).append(")");
+			addToPreparedStatement(preparedStmtList, status);
+		}
+		
 		return builder.toString();
 	}
 
@@ -97,6 +108,13 @@ public class VendorQueryBuilder {
 				builder.append(" vendor.id IN (").append(createQuery(ids)).append(")");
 				addToPreparedStatement(preparedStmtList, ids);
 			}
+			List<String> status=criteria.getStatus();
+			if (!CollectionUtils.isEmpty(status)) {
+				addClauseIfRequired(preparedStmtList, builder);
+				builder.append(" vendor.status IN (").append(createQuery(status)).append(")");
+				addToPreparedStatement(preparedStmtList, status);
+			}
+			
 		}
 		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 	}

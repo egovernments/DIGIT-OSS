@@ -60,7 +60,6 @@ export const searchApiCall = async (state, dispatch) => {
     dispatch(handleField("search", "components.div.children.searchResults", "props.rows", data.length));
   } catch (error) {
     dispatch(toggleSnackbar(true, error.message, "error"));
-    console.log(error);
   }
 };
 

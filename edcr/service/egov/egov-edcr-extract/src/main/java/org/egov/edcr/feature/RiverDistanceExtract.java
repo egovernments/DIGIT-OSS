@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.River;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.egov.edcr.service.LayerNames;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RiverDistanceExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(RiverDistanceExtract.class);
+    private static final Logger LOG = LogManager.getLogger(RiverDistanceExtract.class);
     @Autowired
     private LayerNames layerNames;
 

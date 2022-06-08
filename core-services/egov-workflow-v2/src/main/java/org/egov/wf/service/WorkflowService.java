@@ -1,17 +1,20 @@
 package org.egov.wf.service;
 
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.tracer.model.CustomException;
 import org.egov.wf.config.WorkflowConfig;
 import org.egov.wf.repository.BusinessServiceRepository;
 import org.egov.wf.repository.WorKflowRepository;
+import org.egov.wf.util.WorkflowConstants;
 import org.egov.wf.util.WorkflowUtil;
 import org.egov.wf.validator.WorkflowValidator;
 import org.egov.wf.web.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.egov.tracer.model.CustomException;
 import org.springframework.util.ObjectUtils;
+
+import static java.util.Objects.isNull;
 
 import java.util.*;
 
@@ -34,6 +37,12 @@ public class WorkflowService {
     private WorkflowUtil util;
 
     private BusinessServiceRepository businessServiceRepository;
+    
+    @Autowired
+    private MDMSService mdmsService;
+
+    @Autowired
+    private BusinessMasterService businessMasterService;
 
 
     @Autowired
@@ -76,10 +85,6 @@ public class WorkflowService {
      */
     public List<ProcessInstance> search(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
         List<ProcessInstance> processInstances;
-
-        if(ObjectUtils.isEmpty(criteria.getTenantId()))
-            throw new CustomException("EG_WF_CRITERIA_ERR", "TenantId is mandatory for searching workflow");
-
         if(criteria.isNull())
             processInstances = getUserBasedProcessInstances(requestInfo, criteria);
         else processInstances = workflowRepository.getProcessInstances(criteria);
@@ -96,10 +101,18 @@ public class WorkflowService {
 
     public Integer count(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
         Integer count;
+        
+     // Enrich slot sla limit in case of nearingSla count
+        if(criteria.getIsNearingSlaCount()){
 
-        if(ObjectUtils.isEmpty(criteria.getTenantId()))
-            throw new CustomException("EG_WF_CRITERIA_ERR", "TenantId is mandatory for count workflow call");
+            if(ObjectUtils.isEmpty(criteria.getBusinessService()))
+                throw new CustomException("EG_WF_BUSINESSSRV_ERR", "Providing business service is mandatory for nearing escalation count");
 
+            Integer slotPercentage = mdmsService.fetchSlotPercentageForNearingSla(requestInfo);
+            Long maxBusinessServiceSla = businessMasterService.getMaxBusinessServiceSla(criteria);
+            criteria.setSlotPercentageSlaLimit(maxBusinessServiceSla - slotPercentage * (maxBusinessServiceSla/100));
+        }
+        
         if(criteria.isNull()){
             enrichSearchCriteriaFromUser(requestInfo, criteria);
             count = workflowRepository.getInboxCount(criteria);
@@ -130,7 +143,11 @@ public class WorkflowService {
         return processInstances;
 
     }
-
+    public Integer getUserBasedProcessInstancesCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
+        Integer count;
+        count = workflowRepository.getProcessInstancesForUserInboxCount(criteria);
+        return count;
+    }
 
     /**
      * Removes duplicate businessId which got created due to simultaneous request
@@ -153,11 +170,7 @@ public class WorkflowService {
     
     public List statusCount(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
         List result;
-
-        if(ObjectUtils.isEmpty(criteria.getTenantId()))
-            throw new CustomException("EG_WF_CRITERIA_ERR", "TenantId is mandatory for status count workflow call");
-
-        if(criteria.isNull()){
+        if(criteria.isNull() && !isNull(criteria.getBusinessService()) && !criteria.getBusinessService().equalsIgnoreCase(WorkflowConstants.FSM_MODULE)){
         	enrichSearchCriteriaFromUser(requestInfo, criteria);
             result = workflowRepository.getInboxStatusCount(criteria);
         }
@@ -213,13 +226,10 @@ public class WorkflowService {
     public List<ProcessInstance> escalatedApplicationsSearch(RequestInfo requestInfo, ProcessInstanceSearchCriteria criteria) {
         List<String> escalatedApplicationsBusinessIds;
         List<ProcessInstance> escalatedApplications = new ArrayList<>();
-
-        if(ObjectUtils.isEmpty(criteria.getTenantId()))
-            throw new CustomException("EG_WF_CRITERIA_ERR", "TenantId is mandatory for escalated applications search");
-
-        Set<String> autoEscalationEmployeesUuids = enrichmentService.enrichUuidsOfAutoEscalationEmployees(requestInfo, criteria);
+        criteria.setIsEscalatedCount(false);
+//        Set<String> autoEscalationEmployeesUuids = enrichmentService.enrichUuidsOfAutoEscalationEmployees(requestInfo, criteria);
         //Set<String> statesToIgnore = enrichmentService.fetchStatesToIgnoreFromMdms(requestInfo, criteria.getTenantId());
-        escalatedApplicationsBusinessIds = workflowRepository.fetchEscalatedApplicationsBusinessIdsFromDb(criteria);
+        escalatedApplicationsBusinessIds = workflowRepository.fetchEscalatedApplicationsBusinessIdsFromDb(requestInfo,criteria);
         if(CollectionUtils.isEmpty(escalatedApplicationsBusinessIds)){
             return escalatedApplications;
         }
@@ -227,39 +237,47 @@ public class WorkflowService {
         ProcessInstanceSearchCriteria searchCriteria =  new ProcessInstanceSearchCriteria();
         searchCriteria.setBusinessIds(escalatedApplicationsBusinessIds);
         searchCriteria.setTenantId(criteria.getTenantId());
-        searchCriteria.setHistory(true);
-        List<ProcessInstance> escalatedApplicationsWithHistory = search(requestInfo, searchCriteria);
+        searchCriteria.setBusinessService(criteria.getBusinessService());
+//        searchCriteria.setHistory(true);
+        escalatedApplications = search(requestInfo, searchCriteria);
 
         // Only last but one applications in history needs to show up where the employee failed to take action
 
-        HashMap<String, List<ProcessInstance>> businessIdsVsProcessInstancesMap = new HashMap<>();
-        HashMap<String, Integer> occurenceMap = new HashMap<>();
-        for(ProcessInstance processInstance : escalatedApplicationsWithHistory){
-            if(businessIdsVsProcessInstancesMap.containsKey(processInstance.getBusinessId())){
-                occurenceMap.put(processInstance.getBusinessId(), occurenceMap.get(processInstance.getBusinessId()) + 1);
-                businessIdsVsProcessInstancesMap.get(processInstance.getBusinessId()).add(processInstance);
-            }else{
-                occurenceMap.put(processInstance.getBusinessId(), 1);
-                List<ProcessInstance> processInstanceList = new ArrayList<>();
-                processInstanceList.add(processInstance);
-                businessIdsVsProcessInstancesMap.put(processInstance.getBusinessId(), processInstanceList);
-            }
-        }
-        criteria.setAssignee(requestInfo.getUserInfo().getUuid());
-        for(String businessId : occurenceMap.keySet()){
-            if(occurenceMap.get(businessId) >= 2){
-                Set<String> uuidsOfAssignees = new HashSet<>();
-                if(!CollectionUtils.isEmpty(businessIdsVsProcessInstancesMap.get(businessId).get(1).getAssignes())) {
-                    businessIdsVsProcessInstancesMap.get(businessId).get(1).getAssignes().forEach(user -> {
-                        uuidsOfAssignees.add(user.getUuid());
-                    });
-                }
-                if(autoEscalationEmployeesUuids.contains(businessIdsVsProcessInstancesMap.get(businessId).get(0).getAuditDetails().getCreatedBy()) && uuidsOfAssignees.contains(criteria.getAssignee())){
-                    //if(!statesToIgnore.contains(businessIdsVsProcessInstancesMap.get(businessId).get(1).getState().getState()))
-                        escalatedApplications.add(businessIdsVsProcessInstancesMap.get(businessId).get(0));
-                }
-            }
-        }
+//        HashMap<String, List<ProcessInstance>> businessIdsVsProcessInstancesMap = new HashMap<>();
+//        HashMap<String, Integer> occurenceMap = new HashMap<>();
+//        for(ProcessInstance processInstance : escalatedApplicationsWithHistory){
+//            if(businessIdsVsProcessInstancesMap.containsKey(processInstance.getBusinessId())){
+//                occurenceMap.put(processInstance.getBusinessId(), occurenceMap.get(processInstance.getBusinessId()) + 1);
+//                businessIdsVsProcessInstancesMap.get(processInstance.getBusinessId()).add(processInstance);
+//            }else{
+//                occurenceMap.put(processInstance.getBusinessId(), 1);
+//                List<ProcessInstance> processInstanceList = new ArrayList<>();
+//                processInstanceList.add(processInstance);
+//                businessIdsVsProcessInstancesMap.put(processInstance.getBusinessId(), processInstanceList);
+//            }
+//        }
+//        criteria.setAssignee(requestInfo.getUserInfo().getUuid());
+//        for(String businessId : occurenceMap.keySet()){
+//            if(occurenceMap.get(businessId) >= 2){
+//                Set<String> uuidsOfAssignees = new HashSet<>();
+//                if(!CollectionUtils.isEmpty(businessIdsVsProcessInstancesMap.get(businessId).get(1).getAssignes())) {
+//                    businessIdsVsProcessInstancesMap.get(businessId).get(1).getAssignes().forEach(user -> {
+//                        uuidsOfAssignees.add(user.getUuid());
+//                    });
+//                }
+//                if(autoEscalationEmployeesUuids.contains(businessIdsVsProcessInstancesMap.get(businessId).get(0).getAuditDetails().getCreatedBy()) && uuidsOfAssignees.contains(criteria.getAssignee())){
+                   //if(!statesToIgnore.contains(businessIdsVsProcessInstancesMap.get(businessId).get(1).getState().getState()))
+//                        escalatedApplications.add(businessIdsVsProcessInstancesMap.get(businessId).get(0));
+//                }
+//            }
+//        }
         return escalatedApplications;
+    }
+
+    public Integer countEscalatedApplications(RequestInfo requestInfo,ProcessInstanceSearchCriteria criteria){
+        Integer count;
+        criteria.setIsEscalatedCount(true);
+        count = workflowRepository.getEscalatedApplicationsCount(requestInfo,criteria);
+        return count;
     }
 }

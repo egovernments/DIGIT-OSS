@@ -13,7 +13,7 @@ const styles = {
     backgroundColor: "rgba(250, 250, 250, var(--bg-opacity))",
   },
   cell: {
-    maxWidth: "4em",
+    maxWidth: "7em",
     minWidth: "1em",
     border: "1px solid #e8e7e6",
     padding: "4px 5px",
@@ -42,7 +42,7 @@ const ArrearTable = ({ className = "table", headers = [], values = [], arrears =
   return (
     <React.Fragment>
       <div style={styles.root}>
-        <table className={className} style={styles.table}>
+        <table className={"table-fixed-column-common-pay"} style={styles.table}>
           <thead>
             <tr>
               <th style={{ ...styles.cell, ...styles.cellLeft, ...styles.cellHeader }}>{t("CS_BILL_PERIOD")}</th>
@@ -66,7 +66,8 @@ const ArrearTable = ({ className = "table", headers = [], values = [], arrears =
                   let styleRight = headers.length == i + 1 ? styles.cellRight : {};
                   return (
                     <td style={{ ...styles.cell, textAlign: "left", ...styleRight, whiteSpace: "pre" }} key={i} numeric>
-                      ₹{(row[header] && row[header]["value"]) || "0"}
+                      {i > 1 && "₹"}
+                      {(row[header] && row[header]["value"]) || "0"}
                     </td>
                   );
                 })}

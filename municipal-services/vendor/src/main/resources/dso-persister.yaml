@@ -7,12 +7,16 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: INSERT INTO eg_vendor( id, name, tenantid, additionaldetails, owner_id, description, source, status,createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );
+       - query: INSERT INTO eg_vendor( id, name, agencyType, paymentPreference, tenantid, additionaldetails, owner_id, description, source, status,createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? );
          basePath: vendor
          jsonMaps:
           - jsonPath: $.vendor.id
 
           - jsonPath: $.vendor.name
+
+          - jsonPath: $.vendor.agencyType
+                    
+          - jsonPath: $.vendor.paymentPreference
           
           - jsonPath: $.vendor.tenantId
 

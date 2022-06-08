@@ -7,18 +7,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.common.exception.InvalidTenantIdException;
-import org.egov.common.utils.MultiStateInstanceUtil;
-import org.egov.hrms.model.Employee;
 import org.egov.hrms.utils.HRMSUtils;
 import org.egov.hrms.web.contract.EmployeeSearchCriteria;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import lombok.extern.slf4j.Slf4j;
+
+import org.egov.hrms.model.Employee;
+import org.springframework.util.CollectionUtils;
 
 @Repository
 @Slf4j
@@ -26,9 +24,6 @@ public class EmployeeRepository {
 	
 	@Autowired
 	private EmployeeQueryBuilder queryBuilder;
-	
-	@Autowired
-	private MultiStateInstanceUtil centralInstanceUtil;
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -41,7 +36,7 @@ public class EmployeeRepository {
 
 	@Autowired
 	private HRMSUtils hrmsUtils;
-
+	
 	/**
 	 * DB Repository that makes jdbc calls to the db and fetches employees.
 	 * 
@@ -49,11 +44,11 @@ public class EmployeeRepository {
 	 * @param requestInfo
 	 * @return
 	 */
-	public List<Employee> fetchEmployees(EmployeeSearchCriteria criteria, RequestInfo requestInfo, String headerTenantId){
+	public List<Employee> fetchEmployees(EmployeeSearchCriteria criteria, RequestInfo requestInfo){
 		List<Employee> employees = new ArrayList<>();
 		List<Object> preparedStmtList = new ArrayList<>();
 		if(hrmsUtils.isAssignmentSearchReqd(criteria)) {
-			List<String> empUuids = fetchEmployeesforAssignment(criteria, requestInfo, headerTenantId);
+			List<String> empUuids = fetchEmployeesforAssignment(criteria, requestInfo);
 			if (CollectionUtils.isEmpty(empUuids))
 				return employees;
 			else {
@@ -63,37 +58,20 @@ public class EmployeeRepository {
 					criteria.setUuids(empUuids);
 			}
 		}
-		
 		String query = queryBuilder.getEmployeeSearchQuery(criteria, preparedStmtList);
-		String finalQuery;
 		try {
-			finalQuery = centralInstanceUtil.replaceSchemaPlaceholder(query, headerTenantId);
-		} catch (InvalidTenantIdException e1) {
-			throw new CustomException("HRMS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");		
-		}
-
-		try {
-			employees = jdbcTemplate.query(finalQuery, preparedStmtList.toArray(),rowMapper);
+			employees = jdbcTemplate.query(query, preparedStmtList.toArray(),rowMapper);
 		}catch(Exception e) {
 			log.error("Exception while making the db call: ",e);
-			log.error("query; "+ finalQuery);
+			log.error("query; "+query);
 		}
 		return employees;
 	}
 
-	private List<String> fetchEmployeesforAssignment(EmployeeSearchCriteria criteria, RequestInfo requestInfo, String headerTenantId) {
+	private List<String> fetchEmployeesforAssignment(EmployeeSearchCriteria criteria, RequestInfo requestInfo) {
 		List<String> employeesIds = new ArrayList<>();
 		List <Object> preparedStmtList = new ArrayList<>();
 		String query = queryBuilder.getAssignmentSearchQuery(criteria, preparedStmtList);
-
-		try {
-			query = centralInstanceUtil.replaceSchemaPlaceholder(query, headerTenantId);
-		} catch (InvalidTenantIdException e1) {
-			throw new CustomException("HRMS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
-
 		try {
 
 			employeesIds = jdbcTemplate.queryForList(query, preparedStmtList.toArray(),String.class);
@@ -102,6 +80,7 @@ public class EmployeeRepository {
 			log.error("query; "+query);
 		}
 		return employeesIds;
+
 	}
 
 	/**
@@ -132,21 +111,12 @@ public class EmployeeRepository {
 		List<Object> preparedStmtList = new ArrayList<>();
 
 		String query = queryBuilder.getEmployeeCountQuery(tenantId, preparedStmtList);
-		String finalQuery;
+		log.info("query; "+query);
 		try {
-			finalQuery = centralInstanceUtil.replaceSchemaPlaceholder(query, centralInstanceUtil.getStateLevelTenant(tenantId));
-		} catch (InvalidTenantIdException e1) {
-			throw new CustomException("HRMS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
-
-
-		log.info("query; "+finalQuery);
-		try {
-			response=jdbcTemplate.query(finalQuery, preparedStmtList.toArray(),countRowMapper);
+			response=jdbcTemplate.query(query, preparedStmtList.toArray(),countRowMapper);
 		}catch(Exception e) {
 			log.error("Exception while making the db call: ",e);
-			log.error("query; "+ finalQuery);
+			log.error("query; "+query);
 		}
 		return response;
 	}

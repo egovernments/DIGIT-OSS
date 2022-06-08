@@ -2,13 +2,17 @@ import Download from "../atoms/Download";
 import { UploadServices } from "../atoms/UploadServices";
 import UrlShortener from "../elements/UrlShortener";
 
+const isMobileOrTablet = () => {
+  return (/(android|iphone|ipad|mobile)/i.test(navigator.userAgent));
+}
+
 const ShareFiles = {
   targetLink: (target, shortUrl) => {
     switch (target) {
       case "mail":
-        return window.open(`mailto:?body=${shortUrl}`, "_blank");
+        return window.open(`mailto:?body=${encodeURIComponent(shortUrl)}`, "_blank");
       case "whatsapp":
-        return window.open(`https://web.whatsapp.com/send?text=${shortUrl}`, "_blank");
+        return window.open('https://' + (isMobileOrTablet() ? 'api' : 'web') + '.whatsapp.com/send?text=' + encodeURIComponent(shortUrl), "_blank");
       default:
         return window.open(shortUrl, "_blank");
     }
@@ -17,7 +21,7 @@ const ShareFiles = {
   getShortener: async (tenantId, data) => {
     const fileUploadId = await UploadServices.Filestorage("DSS", data, tenantId);
     const fileUrl = await UploadServices.Filefetch([fileUploadId.data.files[0].fileStoreId], fileUploadId.data.files[0].tenantId);
-    return UrlShortener(fileUrl.data[fileUploadId.data.files[0].fileStoreId].split(",")[0]);
+    return UrlShortener(Digit.Utils.getFileUrl(fileUrl.data[fileUploadId.data.files[0].fileStoreId]));
   },
 
   PDF: async (tenantId, node, filename, target) => {
@@ -29,7 +33,7 @@ const ShareFiles = {
       });
     }
     const shortUrl = await ShareFiles.getShortener(tenantId, pdfData);
-    ShareFiles.targetLink(target, shortUrl);
+    return ShareFiles.targetLink(target, shortUrl);
   },
 
   Image: async (tenantId, node, filename, target) => {
@@ -41,7 +45,30 @@ const ShareFiles = {
       });
     }
     const shortUrl = await ShareFiles.getShortener(tenantId, imageData);
-    ShareFiles.targetLink(target, shortUrl);
+    return ShareFiles.targetLink(target, shortUrl);
+  },
+
+  IndividualChartImage: async (tenantId, node, filename, target) => {
+    const imageData = await new Promise((resolve) => Download.IndividualChartImage(node, filename, true, resolve));
+    if (!target && navigator.share) {
+      return navigator.share({
+        files: [imageData],
+        title: filename,
+      });
+    }
+    const shortUrl = await ShareFiles.getShortener(tenantId, imageData);
+    return ShareFiles.targetLink(target, shortUrl);
+  },
+  DownloadImage: async (tenantId, node, filename, target) => {
+    const imageData = await new Promise((resolve) => Download.PDF(node, filename, true, resolve));
+    if (!target && navigator.share) {
+      return navigator.share({
+        files: [imageData],
+        title: filename,
+      });
+    }
+    const shortUrl = await ShareFiles.getShortener(tenantId, imageData);
+    return ShareFiles.targetLink(target, shortUrl);
   },
 };
 

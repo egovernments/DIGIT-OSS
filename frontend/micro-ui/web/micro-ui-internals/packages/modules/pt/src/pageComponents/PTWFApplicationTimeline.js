@@ -13,14 +13,30 @@ const PTWFApplicationTimeline = (props) => {
     moduleCode: businessService,
   });
 
+  function OpenImage(imageSource, index, thumbnailsToShow) {
+    window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
+  }
+
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state === "OPEN") {
+    if (checkpoint.state === "OPEN")
+    {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(props.application?.auditDetails?.createdTime),
+        date: checkpoint?.auditDetails?.lastModified,
         source: props.application?.channel || "",
       };
       return <PTWFCaption data={caption} />;
-    } else if (checkpoint.status === "ACTIVE") {
+    }
+    else if (checkpoint.state) {
+      const caption = {
+        date: checkpoint?.auditDetails?.lastModified,
+        name: checkpoint?.assignes?.[0]?.name,
+        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
+        comment: t(checkpoint?.comment),
+        wfComment: checkpoint.wfComment,
+        thumbnailsToShow: checkpoint?.thumbnailsToShow,
+      };
+      return <PTWFCaption data={caption} OpenImage={OpenImage} />;
+    } else if (checkpoint.status === "ACTIVE" && props?.userType === 'citizen') {
       return (
         <div>
           <Link to={`/digit-ui/citizen/pt/property/properties/${props?.application?.propertyId}`}>
@@ -59,13 +75,16 @@ const PTWFApplicationTimeline = (props) => {
     switch (nextAction?.action) {
       case "PAY":
         return (
+          props?.userType === 'citizen'
+          ? (
           <div style={{ marginTop: "1em", bottom: "0px", width: "100%", marginBottom: "1.2em" }}>
             <Link
-              to={{ pathname: `/digit-ui/citizen/payment/collect/${businessService}/${props.id}`, state: { tenantId: props.application.tenantId } }}
+              to={{ pathname: `/digit-ui/citizen/payment/my-bills/${businessService}/${props.id}`, state: { tenantId: props.application.tenantId } }}
             >
               <SubmitBar label={t("CS_APPLICATION_DETAILS_MAKE_PAYMENT")} />
             </Link>
           </div>
+          ) : null
         );
       case "EDIT":
         return (
@@ -90,6 +109,8 @@ const PTWFApplicationTimeline = (props) => {
             </Link>
           </div>
         );
+      default:
+        return null;
     }
   };
 

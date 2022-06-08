@@ -77,7 +77,7 @@ export const FSMService = {
       auth: true,
     }),
   vehicleUpdate: (details) => {
-    Request({
+    return Request({
       url: Urls.fsm.vehilceUpdate,
       data: details,
       useCache: false,
@@ -86,4 +86,34 @@ export const FSMService = {
       auth: true,
     });
   },
+  vehicleCreate: (details) => {
+    return Request({
+      url: Urls.fsm.vehicleCreate,
+      data: details,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      auth: true,
+    });
+  },
+  createVendor: (details, tenantId) =>
+    Request({
+      url: Urls.fsm.createVendor,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
+  updateVendor: (details, tenantId) =>
+    Request({
+      url: Urls.fsm.updateVendor,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
 };

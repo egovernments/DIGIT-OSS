@@ -28,10 +28,16 @@ const removeSpaceInLocalisationKey = (key = "") => {
 }
 
 export const getTenantId = () => {
-    return `${localStorage.getItem('tenant-id')}`;
+    let tenant=sessionStorage.getItem('Digit.Employee.tenantId');
+    return `${JSON.parse(tenant)?.value||localStorage.getItem('tenant-id')}`;
+}
+export const getToken = () => {
+    let user=sessionStorage.getItem('Digit.User');
+    return `${JSON.parse(user)?.value?.access_token||localStorage.getItem('Employee.token')}`;
 }
 export const stateTenant= () => {
-    return window&&window.globalConfigs&&window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID")?window.globalConfigs.getConfig("STATE_LEVEL_TENANT_ID"):getTenantId();
+    let globalConfigs=window&&window.globalConfigs?window.globalConfigs : window.parent&&window.parent.globalConfigs;
+    return globalConfigs&&globalConfigs.getConfig("STATE_LEVEL_TENANT_ID")?globalConfigs.getConfig("STATE_LEVEL_TENANT_ID"):getTenantId().split('.')[0];
 }
 
 export const fetchLocalisationRequest = (language) => {
@@ -51,3 +57,5 @@ export const convertLabelValue=(label='',strings={})=>{
             return getLocaleLabels(`DSS_TB_${label}`,strings);
     }
 }
+
+export const isNurtDashboard=()=>window.location.pathname.toLowerCase().includes("nurt_dashboard")

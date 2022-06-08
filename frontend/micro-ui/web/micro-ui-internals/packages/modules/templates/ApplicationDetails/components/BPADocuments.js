@@ -6,7 +6,7 @@ import {
     MultiUploadWrapper,
     CardSubHeader
 } from "@egovernments/digit-ui-react-components";
-import PropertyDocuments from "./PropertyDocuments";
+import DocumentsPreview from "./DocumentsPreview";
 
 const BPADocuments = ({ t, formData, applicationData, docs, bpaActionsDetails }) => {
     const applicationStatus = applicationData?.status || "";
@@ -130,6 +130,7 @@ function SelectDocument({
     const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
     const [selectArrayFiles, SetSelectArrayFiles] = useState([]);
     const handleSelectDocument = (value) => setSelectedDocument(value);
+    const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf)$/i;
 
     function selectfiles(e) {
         e && setFile(e.file);
@@ -193,7 +194,7 @@ function SelectDocument({
     return (
         <div style={{ marginBottom: "24px", maxWidth: "950px", minWidth: "280px", background: "#FAFAFA", borderRadius: "4px", border: "1px solid #D6D5D4", padding: "8px" }}>
             <CardSubHeader style={{ marginBottom: "8px", paddingBottom: "9px", color: "#0B0C0C", fontSize: "16px", lineHeight: "19px" }}>{`${t(doc?.code)}`}</CardSubHeader>
-            {doc?.uploadedDocuments?.length && <PropertyDocuments documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
+            {doc?.uploadedDocuments?.length && <DocumentsPreview documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
             {
                 checkEnablingDocs ?
                     <div style={{ marginTop: "20px" }}>
@@ -218,6 +219,9 @@ function SelectDocument({
                                     tenantId={tenantId}
                                     getFormState={e => getData(index, e)}
                                     t={t}
+                                    allowedFileTypesRegex={allowedFileTypes}
+                                    allowedMaxSizeInMB={5}
+                                    acceptFiles= "image/*, .pdf, .png, .jpeg, .jpg"
                                 />
                             </div>
                         </LabelFieldPair>

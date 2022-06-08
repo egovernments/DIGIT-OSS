@@ -34,7 +34,7 @@ export const directMapping = async (
   variableTovalueMap,
   requestInfo,
   unregisteredLocalisationCodes,
-  headers
+  pdfKey
 ) => {
   var directArr = [];
   var localisationCodes = [];
@@ -343,7 +343,7 @@ export const directMapping = async (
       requestInfo,
       localisationModules,
       localisationCodes,
-      headers
+      pdfKey+'-directMapping'
     );
   
     resposnseMap.messages.map((item) => {

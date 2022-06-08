@@ -20,6 +20,7 @@ const TLBreadCrumb = ({ location }) => {
   const isApplicationDetails = location?.pathname?.includes("tl/application-details");
   const isNewApplication = location?.pathname?.includes("tl/new-application");
   const isResponse = location?.pathname?.includes("tl/response");
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const [search, setSearch] = useState(false);
 
@@ -140,7 +141,7 @@ const TLBreadCrumb = ({ location }) => {
     }
   ];
 
-  return <BreadCrumb crumbs={crumbs} />;
+  return <BreadCrumb style={isMobile?{display:"flex"}:{}}  spanStyle={{maxWidth:"min-content"}} crumbs={crumbs} />;
 };
 
 
@@ -149,7 +150,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   const location = useLocation();
   const mobileView = innerWidth <= 640;
 
-  const locationCheck = window.location.href.includes("employee/tl/new-application") || window.location.href.includes("employee/tl/response") || window.location.href.includes("employee/tl/application-details") || window.location.href.includes("employee/tl/edit-application-details") || window.location.href.includes("employee/tl/renew-application-details");
+  const locationCheck = window.location.href.includes("employee/tl/new-application") || window.location.href.includes("employee/tl/response") || window.location.href.includes("employee/tl/edit-application-details") || window.location.href.includes("employee/tl/renew-application-details");
 
   const NewApplication = Digit?.ComponentRegistryService?.getComponent('TLNewApplication');
   const ReNewApplication = Digit?.ComponentRegistryService?.getComponent('TLReNewApplication');
@@ -159,7 +160,7 @@ const EmployeeApp = ({ path, url, userType }) => {
   return (
     <Switch>
       <React.Fragment>
-        <div className="ground-container" style={locationCheck ? {width: "100%"} : {}}>
+      <div className="ground-container" style={locationCheck ? {width: "100%", marginLeft: "0px"} : {marginLeft: "0px"}}>
           <div style={locationCheck ? {marginLeft: "15px"} : {}}>
             <TLBreadCrumb location={location} />
           </div>

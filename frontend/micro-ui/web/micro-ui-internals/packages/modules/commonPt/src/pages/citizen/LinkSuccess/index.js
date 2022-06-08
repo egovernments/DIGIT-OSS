@@ -9,10 +9,16 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useParams } from "react-router-dom";
 
-const PropertyLinkSuccess = () => {
+const PropertyLinkSuccess = ({ onSelect }) => {
   const { t } = useTranslation();
   const { propertyIds } = useParams();
   const history = useHistory();
+
+  const onSubmit = () => {
+    if(onSelect) {
+      onSelect('propertyId', propertyIds);
+    }
+  }
 
   const { 
     isLoading,
@@ -31,17 +37,25 @@ const PropertyLinkSuccess = () => {
 
   return (
     <React.Fragment>
-      <Header>{t("PT_PROPERTY_LINKED")}</Header>
+      <Header>{t("PT_PROPERTY_DETAILS")}</Header>
       <div>
         <Card>
           <StatusTable>
             <Row label={t("PT_PROPERTY_PTUID")} text={`${property.propertyId || t("CS_NA")}`} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
-          <SubmitBar
-            submit={false}
-            label={t("PT_PROPERTY_CREATE")}
-            onSubmit={() => history.push('/digit-ui/citizen/commonPt/property/create')}
-          />
+          { onSelect ?
+            <SubmitBar
+              submit={false}
+              label={t("CS_COMMONS_NEXT")}
+              onSubmit={onSubmit}
+            />
+          : 
+            <SubmitBar
+              submit={false}
+              label={t("PT_PROPERTY_CREATE")}
+              onSubmit={() => history.push('/digit-ui/citizen/commonPt/property/new-application')}
+            />
+          }
         </Card>
       </div>
     </React.Fragment>

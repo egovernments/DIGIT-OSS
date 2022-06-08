@@ -124,11 +124,13 @@ public class VehicleUtil {
 		masterDtls = new ArrayList<>();
 		masterDtls.add(MasterDetail.builder().name(Constants.VEHICLE_SUCTION_TYPE).filter(filterCode).build());
 		masterDtls.add(MasterDetail.builder().name(Constants.VEHICLE_MAKE_MODEL).filter(activeFilter).build());
+		masterDtls.add(MasterDetail.builder().name(Constants.VEHICLE_OWNER_TYPE).filter(activeFilter).build());
+		masterDtls.add(MasterDetail.builder().name(Constants.VEHICLE_DECLINE_REASON).filter(activeFilter).build());
 		moduleDtls.add(ModuleDetail.builder().masterDetails(masterDtls)
 				.moduleName(Constants.VEHICLE_MODULE_CODE).build());
 		
 		return moduleDtls;
 
-	}
+	} 
 
  }

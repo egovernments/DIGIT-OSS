@@ -12,6 +12,8 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
 import PropertyDocuments from "../../../templates/ApplicationDetails/components/PropertyDocuments";
+import DocumentsPreview from "../../../templates/ApplicationDetails/components/DocumentsPreview";
+import cloneDeep from "lodash/cloneDeep";
 
 
 const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
@@ -22,7 +24,7 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
     const [nocTaxDocuments, setNocTaxDocuments] = useState([]);
     const [enableSubmit, setEnableSubmit] = useState(true)
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
-    const [PrevStateNocDocuments, setPrevStateNocDocuments] = useState(formData?.PrevStateNocDocuments || []);
+    let [beforeUploadNocDocuments, setBeforeUploadNocDocuments] = useState(formData?.PrevStateNocDocuments ? cloneDeep(formData?.PrevStateNocDocuments) : []);
     const checkingFlow = formData?.uiFlow?.flow;
 
     const [sourceRefId, setSourceRefId] = useState(formData?.applicationNo);
@@ -33,6 +35,14 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
     const { data, isLoading, refetch } = Digit.Hooks.obps.useNocDetails(formData?.tenantId, { sourceRefId: sourceRefId });
     const { isLoading: nocDocsLoading, data: nocDocs } = Digit.Hooks.obps.useMDMS(stateId, "NOC", ["DocumentTypeMapping"]);
     const { isLoading: commonDocsLoading, data: commonDocs } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["DocumentType"]);
+    const { data: pdfDetails, isLoading: pdfLoading } = Digit.Hooks.useDocumentSearch( beforeUploadNocDocuments, { enabled: beforeUploadNocDocuments?.length > 0 ? true : false});
+
+    useEffect(() => {
+        if (pdfDetails?.pdfFiles?.length > 0) {
+            pdfDetails?.pdfFiles?.forEach(resDoc => resDoc.title = resDoc?.documentType);
+            setBeforeUploadNocDocuments(pdfDetails?.pdfFiles);
+        } 
+    }, [pdfDetails?.pdfFiles]);
 
     useEffect(() => {
         setNocDetails(data);
@@ -80,7 +90,7 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
                     });
                     doc.uploadedDocuments[0] = {};
                     doc.uploadedDocuments[0].values = [];
-                    PrevStateNocDocuments.map(upDocs => {
+                    beforeUploadNocDocuments.map(upDocs => {
                         if (code === `${upDocs?.documentType?.split('.')[0]}.${upDocs?.documentType?.split('.')[1]}`) {
                         doc.uploadedDocuments[0].values.push(upDocs)
                     }
@@ -96,7 +106,7 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
             })
             setNocTaxDocuments(documentsList);
         }
-    }, [nocDatils, nocDocumentTypeMaping, commonDocMaping]);
+    }, [nocDatils, nocDocumentTypeMaping, commonDocMaping, beforeUploadNocDocuments]);
 
     const handleSubmit = () => {
         let nocDocument = formData.nocDocuments;
@@ -121,7 +131,6 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
                     config={config}
                     onSelect={handleSubmit}
                     onSkip={onSkip}
-                    // isDisabled={enableSubmit}
                     onAdd={onAdd}
                 >
                     {nocTaxDocuments?.map((document, index) => {
@@ -136,7 +145,8 @@ const NOCDetails = ({ t, config, onSelect, userType, formData, setError: setForm
                                 nocDocuments={nocDocuments}
                                 setCheckRequiredFields={setCheckRequiredFields}
                                 formData={formData}
-                                PrevStateNocDocuments={PrevStateNocDocuments}
+                                beforeUploadNocDocuments={beforeUploadNocDocuments}
+                                pdfLoading={pdfLoading}
                             />
                         );
                     })}
@@ -155,18 +165,18 @@ function SelectDocument({
     nocDocuments,
     setCheckRequiredFields,
     formData,
-    PrevStateNocDocuments
+    beforeUploadNocDocuments,
+    pdfLoading
 }) {
 
-    const filteredDocument = nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0] || PrevStateNocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
+    const filteredDocument = nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0] || beforeUploadNocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
     const tenantId = Digit.ULBService.getCurrentTenantId(doc);
     const [selectedDocument, setSelectedDocument] = useState(doc?.dropdownData?.[0]);
     const [file, setFile] = useState(null);
     const [uploadedFile, setUploadedFile] = useState(() => ({fileStoreId: nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0]?.fileStoreId,fileName:nocDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0]?.fileName}) || null);
     const [newArray, setnewArray ] = useState([]);
-
     const handleSelectDocument = (value) => setSelectedDocument(value);
-
+    const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf)$/i;
 
     function selectfile(e, key) {
         e && setSelectedDocument({ documentType: key });
@@ -253,9 +263,11 @@ function SelectDocument({
             getFormState={e => getData(e,/* doc?.documentType?.replaceAll(".", "_") */doc.dropdownData[0].code)}
             setuploadedstate={uploadedFilesPreFill}
             t={t}
+            allowedFileTypesRegex={allowedFileTypes}
+            allowedMaxSizeInMB={5}
+            acceptFiles= "image/*, .pdf, .png, .jpeg, .jpg"
           />}
-        {doc?.uploadedDocuments?.length && <PropertyDocuments isSendBackFlow={true} documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
-
+        {doc?.uploadedDocuments?.length && !pdfLoading && <DocumentsPreview documents={doc?.uploadedDocuments} svgStyles = {{}} isSendBackFlow = {false} isHrLine = {true} titleStyles ={{fontSize: "18px", lineHeight: "24px", "fontWeight": 700, marginBottom: "10px"}}/>}
         </div>
     );
 }

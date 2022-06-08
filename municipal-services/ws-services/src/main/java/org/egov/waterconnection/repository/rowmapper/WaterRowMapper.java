@@ -33,6 +33,16 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 	@Autowired
 	private ObjectMapper mapper;
 
+	private int full_count=0;
+
+	public int getFull_count() {
+		return full_count;
+	}
+
+	public void setFull_count(int full_count) {
+		this.full_count = full_count;
+	}
+	
 	@Override
 	public List<WaterConnection> extractData(ResultSet rs) throws SQLException, DataAccessException {
 		Map<String, WaterConnection> connectionListMap = new HashMap<>();
@@ -60,6 +70,7 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 				currentWaterConnection.setRoadCuttingArea(rs.getFloat("roadcuttingarea"));
 				currentWaterConnection.setRoadType(rs.getString("roadtype"));
 				PGobject pgObj = (PGobject) rs.getObject("additionaldetails");
+				this.setFull_count(rs.getInt("full_count"));
 				ObjectNode additionalDetails = null;
 				if (pgObj != null) {
 
@@ -94,6 +105,7 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 				// Add documents id's
 				currentWaterConnection.setConnectionExecutionDate(rs.getLong("connectionExecutionDate"));
 				currentWaterConnection.setApplicationType(rs.getString("applicationType"));
+				currentWaterConnection.setChannel(rs.getString("channel"));
 				currentWaterConnection.setDateEffectiveFrom(rs.getLong("dateEffectiveFrom"));
 
 				AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("ws_createdBy"))

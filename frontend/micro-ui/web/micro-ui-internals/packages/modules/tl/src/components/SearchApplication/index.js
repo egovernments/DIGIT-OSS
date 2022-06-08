@@ -1,19 +1,20 @@
 import React, { useCallback, useMemo, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form";
-import { SearchForm, Table, Card } from "@egovernments/digit-ui-react-components";
+import { SearchForm, Table, Card, Header } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY } from  "../../utils";
 import SearchFields from "./SearchFields";
 import MobileSearchApplication from "./MobileSearchApplication";
 
 const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
+  const initialValues = Digit.SessionStorage.get("SEARCH_APPLICATION_DETAIL")|| {
+    offset: 0,
+    limit: 10,
+    sortBy: "commencementDate",
+    sortOrder: "DESC"
+};
     const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
-        defaultValues: {
-            offset: 0,
-            limit: 10,
-            sortBy: "commencementDate",
-            sortOrder: "DESC"
-        }
+        defaultValues: initialValues
     })
 
     useEffect(() => {
@@ -99,6 +100,11 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
           disableSortBy: true,
         },
         {
+          Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
+          accessor: (row) => GetCell(row.CurrentOwners[0].currentOwner || ""),
+          disableSortBy: true,
+        },
+        {
           Header: t("TL_COMMON_TABLE_COL_STATUS"),
           accessor: (row) =>GetCell(t( row?.workflowCode&&row?.status&&`WF_${row?.workflowCode?.toUpperCase()}_${row.status}`|| "NA") ),
           disableSortBy: true,
@@ -106,8 +112,9 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
       ]), [] )
 
     return <React.Fragment>
+                <Header>{t("TL_SEARCH_APPLICATIONS")}</Header>
                 <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-                  <SearchFields {...{register, control, reset, tenantId, t}} />
+                  <SearchFields {...{register, control, reset, tenantId, t, previousPage}} />
                 </SearchForm>
             {data?.display ? <Card style={{ marginTop: 20 }}>
                 {
@@ -120,7 +127,7 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
                     ))
                 }
             </Card>
-            : <Table
+            : data !== "" && <Table
                 t={t}
                 data={data}
                 totalRecords={count}

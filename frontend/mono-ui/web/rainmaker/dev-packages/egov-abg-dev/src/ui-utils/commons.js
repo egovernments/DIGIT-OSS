@@ -233,32 +233,7 @@ export const getBoundaryData = async (
     dispatch(
       prepareFinalObject("searchScreenMdmsData.localities", mohallaData)
     );
-
-    // dispatch(
-    //   handleField(
-    //     "apply",
-    //     "components.div.children.formwizardFirstStep.children.tradeLocationDetails.children.cardContent.children.tradeDetailsConatiner.children.tradeLocMohalla",
-    //     "props.suggestions",
-    //     mohallaData
-    //   )
-    // );
-    // if (code) {
-    //   let data = payload.TenantBoundary[0].boundary;
-    //   let messageObject =
-    //     data &&
-    //     data.find(item => {
-    //       return item.code == code;
-    //     });
-    //   if (messageObject)
-    //     dispatch(
-    //       prepareFinalObject(
-    //         "Licenses[0].tradeLicenseDetail.address.locality.name",
-    //         messageObject.name
-    //       )
-    //     );
-    // }
   } catch (e) {
-    console.log(e);
   }
 };
 
@@ -530,7 +505,6 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
     return true;
   } catch (error) {
     dispatch(toggleSnackbar(true, { labelName: error.message }, "error"));
-    console.log(error);
     return false;
   }
 };
@@ -635,7 +609,7 @@ export const getSearchResultsForCurrentBill = async (queryObject, filter = false
       result.WaterConnection[0].waterSubSource = waterSubSource;
       result.WaterConnection = await getPropertyObj(result.WaterConnection);
       return result;
-  } catch (error) { console.log(error) }
+  } catch (error) {  }
 };
 
 export const getSearchResultsForSewerage = async (queryObject, dispatch, filter = false) => {
@@ -662,7 +636,6 @@ export const getSearchResultsForSewerage = async (queryObject, dispatch, filter 
       return result;
   } catch (error) {
       dispatch(toggleSpinner());
-      console.log(error)
   }
 };
 
@@ -821,7 +794,6 @@ export const getPropertyResultsWODispatch = async (queryObject) => {
       );
       return findAndReplace(response, null, "NA");
   } catch (error) {
-      console.log(error);
   }
 
 };

@@ -28,6 +28,7 @@ const FilterFormFieldsComponent = ({ controlFilterForm }) => {
                 <RadioButtons
                   onSelect={(e) => {
                     props.onChange(e.code);
+                    Digit.SessionStorage.set("EDCR_BACK", "");
                   }}
                   selectedOption={availableOptions.filter((option) => option.code === props.value)[0]}
                   optionsKey="name"
@@ -58,6 +59,7 @@ const FilterFormFieldsComponent = ({ controlFilterForm }) => {
                   optionKey={"i18nKey"}
                   select={(e) => {
                     props.onChange(e.code);
+                    Digit.SessionStorage.set("EDCR_BACK", "");
                   }}
                 />
               </>

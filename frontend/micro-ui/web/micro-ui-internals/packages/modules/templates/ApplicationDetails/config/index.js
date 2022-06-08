@@ -9,6 +9,7 @@ import { configTLApproverApplication } from "./TLApproverApplication";
 import { configBPAREGApproverApplication } from "./BPAREGApproverApplication";
 import { configBPAApproverApplication } from "./BPAApproverApplication";
 import { configNOCApproverApplication } from "./NOCApproverApplication";
+import { configWSApproverApplication } from "./WSApproverApplication";
 
 export {
   configAssignDso,
@@ -21,5 +22,6 @@ export {
   configTLApproverApplication,
   configBPAREGApproverApplication,
   configBPAApproverApplication,
-  configNOCApproverApplication
+  configNOCApproverApplication,
+  configWSApproverApplication
 };

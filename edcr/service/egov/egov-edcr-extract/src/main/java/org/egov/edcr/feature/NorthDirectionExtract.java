@@ -3,7 +3,8 @@ package org.egov.edcr.feature;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.NorthDirection;
 import org.egov.edcr.entity.blackbox.MeasurementDetail;
 import org.egov.edcr.entity.blackbox.PlanDetail;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class NorthDirectionExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(NorthDirectionExtract.class);
+    private static final Logger LOG = LogManager.getLogger(NorthDirectionExtract.class);
     @Autowired
     private LayerNames layerNames;
 

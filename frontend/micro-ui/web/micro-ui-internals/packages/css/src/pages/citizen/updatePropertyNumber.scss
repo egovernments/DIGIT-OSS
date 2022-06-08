@@ -1,3 +1,7 @@
+.updatenumber-warper-citizen{
+  min-height: 95vh;
+  height: unset;
+}
 .updatePropertyNumber {
   .pt-update-no-popup-wrapper {
     @apply m-md;
@@ -19,6 +23,10 @@
 }
 
 @screen dt {
+  .updatenumber-warper-citizen{
+    min-height: 100vh;
+    height: unset;
+  }
   .updatePropertyNumber {
     .h1 {
       @apply m-md;

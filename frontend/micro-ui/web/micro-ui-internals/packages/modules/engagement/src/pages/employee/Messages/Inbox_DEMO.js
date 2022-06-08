@@ -22,8 +22,8 @@ const Inbox = () => {
           Digit.SessionStorage.set("ENGAGEMENT.MESSAGES.INBOX", {...state, filterForm: payload.data})
           return {...state, filterForm: payload.data};
         default:
-          console.warn("dispatched action has nothing to reduce")
-      }
+          break;
+              }
     }
     const formInitValue = Digit.SessionStorage.get("ENGAGEMENT.MESSAGES.INBOX") || {
       filterForm: filterFormDefaultValues,

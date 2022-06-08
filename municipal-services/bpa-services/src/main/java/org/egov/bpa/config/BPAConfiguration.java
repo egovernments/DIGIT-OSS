@@ -337,6 +337,10 @@ public class BPAConfiguration {
 	@Value("${egov.download.receipt.link}")
 	private String receiptDownloadLink;
 
+	// url shortner
+	@Value("${egov.url.shortner.host}")
+	private String urlShortnerHost;
+
 	@Value("${egov.shortener.url}")
 	private String shortenerURL;
 }

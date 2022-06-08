@@ -79,7 +79,6 @@ const getFilters = (tableObj) => {
             root.appendChild(t);
             return resolve()
         } catch (ex) {
-            console.log(ex)
             return reject();
         }
     })
@@ -132,7 +131,6 @@ const addPages = (elem, cityLogo, pdfHeader) => {
                                 try {
                                     pdf.addImage(body, 'PNG', 5, 5, 50, 48)
                                 } catch (e) {
-                                    console.log(e);
                                 }
                             }
                             if (dataUrl) {
@@ -167,7 +165,6 @@ const addPages = (elem, cityLogo, pdfHeader) => {
 
 
                 }.bind(this)).catch((err) => {
-                    console.log(err);
                     return reject(null)
                 })
 
@@ -196,9 +193,7 @@ const addPages = (elem, cityLogo, pdfHeader) => {
                     return getImageData(dataUrl).then(function (hw) {
                         if (cityLogo) {
                             base64Img.requestBase64(cityLogo, function (err, res, body) {
-                                if (err) {
-                                    console.log(err)
-                                }
+                              
 
                                 var imgWidth = 210;
                                 var pageHeight = 295;
@@ -229,7 +224,6 @@ const addPages = (elem, cityLogo, pdfHeader) => {
 
                                         doc.addImage(logo, 'PNG', 194, 1, 15, 8);
                                     } catch (e) {
-                                        console.log(e, 'LOGO NOT FOUND');
                                         if (isLogoRequired) {
                                             doc.addImage(logoNotFound, 'PNG', 1, 1, 10, 8);
                                         }
@@ -308,11 +302,9 @@ const addPages = (elem, cityLogo, pdfHeader) => {
                         }
 
                     }.bind(this)).catch((err) => {
-                        console.log(err);
                         return reject(null)
                     })
                 }.bind(this)).catch((err) => {
-                    console.log(err);
                     return reject(null)
                 })
         }
@@ -332,7 +324,6 @@ export const printDocument = (cityLogo, pdfHeader, name) => {
             return resolve(response);
 
         }.bind(this)).catch(function (error) {
-            console.log(error);
             return reject(false);
         })
     })
@@ -346,7 +337,6 @@ export const printDocumentShare = (cityLogo, pdfHeader) => {
             return resolve(response);
 
         }.bind(this)).catch(function (error) {
-            console.log(error);
             return reject(false);
         })
     })
@@ -371,7 +361,6 @@ export const loadUlbLogo = tenantid => {
         img.src = `/${tenant}-egov-assets/${tenantid}/logo.png`;
     } catch (e) {
         localStorage.setItem("IsUlbLogoLoading", 'FAILED');
-        console.log(e, 'LOGO IMAGE ERROR');
     }
 
 };

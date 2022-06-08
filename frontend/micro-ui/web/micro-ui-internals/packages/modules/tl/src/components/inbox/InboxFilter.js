@@ -48,7 +48,7 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
                   />
                 </svg>
               </span>
-              <span style={{ marginLeft: "8px", fontWeight: "normal" }}>{t("ES_COMMON_FILTER_BY")}:</span>
+              <span style={{ marginLeft: "8px", fontWeight: "normal" }}>{t("ES_COMMON_FILTER_BY")}</span>
             </div>
             <div className="clearAll" onClick={clearAll}>
               {t("ES_COMMON_CLEAR_ALL")}
@@ -104,7 +104,7 @@ const Filter = ({ searchParams, onFilterChange, defaultSearchParams, statuses, .
               <div className="filter-label" style={{ fontWeight: "normal" }}>
                 {t("CS_INBOX_STATUS_FILTER")}
               </div>
-              {statuses.map((e, index) => {
+              {statuses?.map((e, index) => {
                 const checked = _searchParams?.applicationStatus?.includes(e.statusid);
                 return (
                   <CheckBox
