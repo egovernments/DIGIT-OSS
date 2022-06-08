@@ -54,11 +54,7 @@ public class SWQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_sw_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id"
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno"
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
+			+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id";
 	
 	private final static String SEARCH_COUNT_QUERY = " FROM eg_sw_connection conn "
 			+  INNER_JOIN_STRING 
@@ -70,11 +66,7 @@ public class SWQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_sw_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id"
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno"
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
+			+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id";
 	
 	private final String paginationWrapper = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
@@ -229,12 +221,7 @@ public class SWQueryBuilder {
 				addToPreparedStatement(preparedStatement, criteria.getApplicationStatus());
 			}
 		}
-		// Added clause to support assignee search
-		if (!StringUtils.isEmpty(criteria.getAssignee())) {
-			addClauseIfRequired(preparedStatement, query);
-			query.append(" assg.assignee= ? ");
-			preparedStatement.add(criteria.getAssignee());
-		}
+		
 		if (criteria.getFromDate() != null) {
 			addClauseIfRequired(preparedStatement, query);
 			query.append("  sc.appCreatedDate >= ? ");
