@@ -121,7 +121,6 @@ public class UserRequest {
     @SafeHtml
     @Size(max = 300)
     private String identificationMark;
-
     private Long createdBy;
 
     @Size(max = 64)

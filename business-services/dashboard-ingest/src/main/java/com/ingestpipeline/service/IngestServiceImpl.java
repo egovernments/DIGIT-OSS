@@ -4,7 +4,6 @@ import com.ingestpipeline.model.TopicContextConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,9 +44,6 @@ public class IngestServiceImpl implements IngestService {
 	@Autowired
 	private ObjectMapper mapper;
 
-	@Value("${kafka.topic.error.data}")
-	String errorTopic;
-
 	private Map<String, TopicContext> topicContextMap = new HashMap<>();
 	public void loadTopicsConfig(){
 		TopicContextConfig topicContextConf = null;
@@ -83,7 +79,7 @@ public class IngestServiceImpl implements IngestService {
 		} catch (Exception e) { 
 			LOGGER.error("Encountered an Exception while Pushing the Data to pipeline on Ingest Service " + e.getMessage());
 			ErrorWrapper errorWrapper = errorHandover(incomingData); 
-			ingestProducer.pushToPipeline(errorWrapper, errorTopic, null);
+			ingestProducer.pushToPipeline(errorWrapper, Constants.KafkaTopics.ERROR_INTENT, null);
 		}
 		ingestProducer.pushToPipeline(incomingData, topic, null);
 		return true;

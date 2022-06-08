@@ -135,7 +135,7 @@ public class AmendmentService {
 		/*
 		 * amendment update 
 		 */
-		amendmentRepository.updateAmendment(Arrays.asList(amendmentUpdate), amendmentUpdate.getTenantId());
+		amendmentRepository.updateAmendment(Arrays.asList(amendmentUpdate));
 		
 		if (amendmentUpdate.getStatus().equals(AmendmentStatus.ACTIVE)) {
 			updateDemandWithAmendmentTax(requestInfo, amendmentFromSearch);
@@ -188,7 +188,7 @@ public class AmendmentService {
 					.auditDetails(auditDetails)
 					.build();
 			
-			amendmentRepository.updateAmendment(Arrays.asList(amendmentUpdate), amendment.getTenantId());
+			amendmentRepository.updateAmendment(Arrays.asList(amendmentUpdate));
 			
 			Set<String> consumerCodes = demands.stream().map(Demand::getConsumerCode).collect(Collectors.toSet());
 			String businessService = demands.get(0).getBusinessService();

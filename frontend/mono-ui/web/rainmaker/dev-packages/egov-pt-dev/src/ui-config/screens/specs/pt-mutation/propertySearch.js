@@ -55,48 +55,7 @@ const getMDMSData = async (action, dispatch) => {
       const tenants = get(payload, 'payload.MdmsRes.tenant.tenants', []).sort((t1, t2) => t1.code.localeCompare(t2.code))
       dispatch(prepareFinalObject("searchScreenMdmsData.tenant.tenants", tenants));
     })
-    // const payload = await httpRequest(
-    //   "post",
-    //   "/egov-mdms-service/v1/_search",
-    //   "_search",
-    //   [],
-    //   mdmsBody
-    // );
-    // payload.MdmsRes.tenant.tenants = payload.MdmsRes.tenant.citymodule[1].tenants;
-
-
-    // let documents = get(
-    //   payload.MdmsRes,
-    //   "PropertyTax.Documents",
-    //   []
-    // );
-
-    // let documentUi = getRequiredDocuments(documents);
-    // set(documentUi, 'children.header.children.header.children.key.props.labelKey', 'PT_REQ_DOCS_HEADER')
-    // set(documentUi, 'children.footer.children.footer.children.applyButton.children.applyButtonLabel.props.labelKey', 'PT_COMMON_BUTTON_APPLY')
-    // set(documentUi, 'children.footer.children.footer.children.applyButton.onClickDefination', {
-    //   action: "condition",
-    //   callBack: startApplyFlow
-    // })
-    // set(
-    //   action,
-    //   "screenConfig.components.adhocDialog.children.popup",
-    //   documentUi
-    // );
-
-
-
-    // console.log("payload--", payload)
-    // dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
-    //   if (process.env.REACT_APP_NAME != "Citizen") {
-    //     dispatch(
-    //       prepareFinalObject(
-    //         "ptSearchScreen.tenantId",
-    //         tenant
-    //       )
-    //     );
-    //   }
-    // }
+    
   } catch (e) {
     console.log(e);
   }

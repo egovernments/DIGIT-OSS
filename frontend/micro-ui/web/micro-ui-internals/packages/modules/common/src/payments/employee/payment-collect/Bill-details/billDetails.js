@@ -1,16 +1,5 @@
-import React, { useState, useEffect, useMemo } from "react";
-import {
-  CardHeader,
-  CardLabel,
-  Loader,
-  CardCaption,
-  CardSubHeader,
-  CardSectionHeader,
-  Row,
-  StatusTable,
-  RadioButtons,
-  TextInput,
-} from "@egovernments/digit-ui-react-components";
+import { CardSectionHeader, Loader, RadioButtons, Row, StatusTable, TextInput } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { BillDetailsKeyNoteConfig } from "./billDetailsConfig";
 
@@ -47,6 +36,22 @@ export const BillDetailsFormConfig = (props, t) => ({
       ],
     },
   ],
+  "PT.MUTATION": [
+    {
+      head: t("COMMON_PAY_SCREEN_HEADER"),
+      body: [
+        {
+          withoutLabel: true,
+          type: "custom",
+          populators: {
+            name: "amount",
+            customProps: { businessService: props.businessService, consumerCode: props.consumerCode },
+            component: (props, customProps) => <BillDetails onChange={props.onChange} amount={props.value} {...customProps} />,
+          },
+        },
+      ],
+    },
+  ],
   TL: [
     {
       body: [
@@ -56,6 +61,70 @@ export const BillDetailsFormConfig = (props, t) => ({
           populators: {
             name: "amount",
             customProps: { businessService: "TL", consumerCode: props.consumerCode },
+            component: (props, customProps) => <BillDetails onChange={props.onChange} amount={props.value} {...customProps} />,
+          },
+        },
+      ],
+    },
+  ],
+  WS: [
+    {
+      head: t("COMMON_PAY_SCREEN_HEADER"),
+      body: [
+        {
+          withoutLabel: true,
+          type: "custom",
+          populators: {
+            name: "amount",
+            customProps: { businessService: "WS", consumerCode: props.consumerCode },
+            component: (props, customProps) => <BillDetails onChange={props.onChange} amount={props.value} {...customProps} />,
+          },
+        },
+      ],
+    },
+  ],
+  "WS.ONE_TIME_FEE": [
+    {
+      head: t("COMMON_PAY_SCREEN_HEADER"),
+      body: [
+        {
+          withoutLabel: true,
+          type: "custom",
+          populators: {
+            name: "amount",
+            customProps: { businessService: "WS.ONE_TIME_FEE", consumerCode: props.consumerCode },
+            component: (props, customProps) => <BillDetails onChange={props.onChange} amount={props.value} {...customProps} />,
+          },
+        },
+      ],
+    },
+  ],
+  "SW.ONE_TIME_FEE": [
+    {
+      head: t("COMMON_PAY_SCREEN_HEADER"),
+      body: [
+        {
+          withoutLabel: true,
+          type: "custom",
+          populators: {
+            name: "amount",
+            customProps: { businessService: "SW.ONE_TIME_FEE", consumerCode: props.consumerCode },
+            component: (props, customProps) => <BillDetails onChange={props.onChange} amount={props.value} {...customProps} />,
+          },
+        },
+      ],
+    },
+  ],
+  SW: [
+    {
+      head: t("COMMON_PAY_SCREEN_HEADER"),
+      body: [
+        {
+          withoutLabel: true,
+          type: "custom",
+          populators: {
+            name: "amount",
+            customProps: { businessService: "SW", consumerCode: props.consumerCode },
             component: (props, customProps) => <BillDetails onChange={props.onChange} amount={props.value} {...customProps} />,
           },
         },
@@ -167,14 +236,62 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
     return from + "-" + to;
   };
 
+  const getBillingPeriod = (_bill) => {
+    const { fromPeriod, toPeriod } = _bill;
+    let from = new Date(fromPeriod).toLocaleDateString();
+    let to = new Date(toPeriod).toLocaleDateString();
+    return from + "-" + to;
+  };
+
   const thStyle = { textAlign: "left", borderBottom: "#D6D5D4 1px solid", padding: "16px 12px", whiteSpace: "break-spaces" };
   const tdStyle = { textAlign: "left", borderBottom: "#D6D5D4 1px solid", padding: "8px 10px", breakWord: "no-break" };
 
   const config = BillDetailsKeyNoteConfig()[ModuleWorkflow ? ModuleWorkflow : businessService];
 
+  const renderArrearDetailsForWNS = () => {
+    return (
+      <table className="table-fixed-column-common-pay">
+        <thead>
+          <tr>
+            <th style={thStyle}>{t("CS_BILL_NO")}</th>
+            <th style={{ ...thStyle }}>{t("CS_PAYMENT_BILLING_PERIOD")}</th>
+            <th style={{ ...thStyle }}>{t("CS_BILL_DUEDATE")}</th>
+            {yearWiseBills
+              ?.filter((e, ind) => ind > 0)?.[0]
+              ?.billAccountDetails?.sort((a, b) => a.order - b.order)
+              ?.map((head, index) => (
+                <th style={{ ...thStyle }} key={index}>
+                  {t(head.taxHeadCode)}
+                </th>
+              ))}
+            <th style={thStyle}>{t("TOTAL_TAX")}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {yearWiseBills
+            ?.filter((e, ind) => ind > 0)
+            ?.map((year_bill, index) => {
+              const sorted_tax_heads = year_bill?.billAccountDetails?.sort((a, b) => a.order - b.order);
+              return (
+                <tr key={index}>
+                  <td style={tdStyle}>{year_bill?.billNumber}</td>
+                  <td style={tdStyle}>{getBillingPeriod(year_bill)}</td>
+                  <td style={tdStyle}>{year_bill?.expiryDate && new Date(year_bill?.expiryDate).toLocaleDateString()}</td>
+                  {sorted_tax_heads.map((e, i) => (
+                    <td style={tdStyle} key={i}>
+                      {e.amount}
+                    </td>
+                  ))}
+                  <td style={tdStyle}>{year_bill.amount}</td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+    );
+  };
   return (
     <React.Fragment>
-      {/* <CardSectionHeader>{t(config.heading)}</CardSectionHeader> */}
       <StatusTable>
         {bill &&
           config.details.map((obj, index) => {
@@ -216,106 +333,86 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
           textStyle={{ fontWeight: "bold", textAlign: "right", maxWidth: "100px" }}
           text={"₹ " + getTotal()}
         />
-        {!showDetails &&
-        !ModuleWorkflow &&
-        businessService !== "TL" &&
-        yearWiseBills?.length > 1 && (
-          <div className="row last">
-            <h2></h2>
-            <div style={{textAlign: "right", maxWidth: "100px" }} onClick={() => setShowDetails(true)} className="filter-button value">
-              {t("ES_COMMON_VIEW_DETAILS")}
-            </div>
-          </div>
-        )
-        }
+
+        {!showDetails && !ModuleWorkflow && businessService !== "TL" && yearWiseBills?.length > 1 && (
+          <Fragment>
+            {businessService === "WS" || "SW" ? (
+              <div className="row last">
+                <div style={{ maxWidth: "100px" }} onClick={() => setShowDetails(true)} className="filter-button value">
+                  {t("ES_COMMON_VIEW_DETAILS")}
+                </div>
+              </div>
+            ) : (
+              <div className="row last">
+                <h2></h2>
+                <div style={{ textAlign: "right", maxWidth: "100px" }} onClick={() => setShowDetails(true)} className="filter-button value">
+                  {t("ES_COMMON_VIEW_DETAILS")}
+                </div>
+              </div>
+            )}
+          </Fragment>
+        )}
       </StatusTable>
       {showDetails && yearWiseBills?.length > 1 && !ModuleWorkflow && businessService !== "TL" && (
         <React.Fragment>
           <div style={{ maxWidth: "95%", display: "inline-block", textAlign: "right" }}>
             <div style={{ display: "flex", padding: "10px", paddingLeft: "unset", maxWidth: "95%" }}>
-              <div style={{ backgroundColor: "#EEEEEE", boxShadow: "2px 0px 3px 2px #D6D5D4", position: "relative" }}>
-                <table>
-                  <thead>
-                    <tr>
-                      <th style={thStyle}>{t("FINANCIAL_YEAR")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {yearWiseBills
-                      ?.filter((e, ind) => ind > 0)
-                      ?.map((year_bill, index) => (
-                        <tr key={index}>
-                          <td style={tdStyle}>{getFinancialYear(year_bill)}</td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
               <div style={{ backgroundColor: "#EEEEEE", overflowX: "auto" }}>
-                <table>
-                  <thead>
-                    <tr>
+                {businessService === "WS" || "SW" ? (
+                  renderArrearDetailsForWNS()
+                ) : (
+                  <table className="table-fixed-column-common-pay">
+                    <thead>
+                      <tr>
+                        <th style={thStyle}>{t("FINANCIAL_YEAR")}</th>
+                        <th style={{ ...thStyle }}>{t("CS_BILL_NO")}</th>
+                        <th style={{ ...thStyle }}>{t("CS_BILL_DUEDATE")}</th>
+                        {yearWiseBills
+                          ?.filter((e, ind) => ind > 0)?.[0]
+                          ?.billAccountDetails?.sort((a, b) => a.order - b.order)
+                          ?.map((head, index) => (
+                            <th style={{ ...thStyle }} key={index}>
+                              {t(head.taxHeadCode)}
+                            </th>
+                          ))}
+                        <th style={thStyle}>{t("TOTAL_TAX")}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
                       {yearWiseBills
-                        ?.filter((e, ind) => ind > 0)?.[0]
-                        ?.billAccountDetails?.sort((a, b) => a.order - b.order)
-                        ?.map((head, index) => (
-                          <th style={{ ...thStyle }} key={index}>
-                            {t(head.taxHeadCode)}
-                          </th>
-                        ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {yearWiseBills
-                      ?.filter((e, ind) => ind > 0)
-                      ?.map((year_bill, index) => {
-                        const sorted_tax_heads = year_bill?.billAccountDetails?.sort((a, b) => a.order - b.order);
-                        return (
-                          <tr key={index}>
-                            {sorted_tax_heads.map((e, i) => (
-                              <td style={tdStyle} key={i}>
-                                {e.amount}
-                              </td>
-                            ))}
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
-              </div>
-              <div style={{ backgroundColor: "#EEEEEE", boxShadow: "-2px 0px 3px 2px #D6D5D4", position: "relative" }}>
-                <table>
-                  <thead>
-                    <tr>
-                      <th style={thStyle}>{t("TOTAL_TAX")}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {yearWiseBills
-                      ?.filter((e, ind) => ind > 0)
-                      ?.map((year_bill, index) => {
-                        return (
-                          <tr key={index}>
-                            <td style={tdStyle}>{year_bill.amount}</td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
+                        ?.filter((e, ind) => ind > 0)
+                        ?.map((year_bill, index) => {
+                          const sorted_tax_heads = year_bill?.billAccountDetails?.sort((a, b) => a.order - b.order);
+                          return (
+                            <tr key={index}>
+                              <td style={tdStyle}>{getFinancialYear(year_bill)}</td>
+                              <td style={tdStyle}>{year_bill?.billNumber}</td>
+                              <td style={tdStyle}>{year_bill?.expiryDate && new Date(year_bill?.expiryDate).toLocaleDateString()}</td>
+                              {sorted_tax_heads.map((e, i) => (
+                                <td style={tdStyle} key={i}>
+                                  {e.amount}
+                                </td>
+                              ))}
+                              <td style={tdStyle}>{year_bill.amount}</td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
-            <div style={{ float: "right" }} onClick={() => setShowDetails(false)} className="filter-button">
-              {t("ES_COMMON_HIDE_DETAILS")}
-            </div>
-          </div>{" "}
+            {businessService === "WS" || "SW" ? (
+              <div style={{ float: "left" }} onClick={() => setShowDetails(false)} className="filter-button">
+                {t("ES_COMMON_HIDE_DETAILS")}
+              </div>
+            ) : (
+              <div style={{ float: "right" }} onClick={() => setShowDetails(false)} className="filter-button">
+                {t("ES_COMMON_HIDE_DETAILS")}
+              </div>
+            )}
+          </div>
         </React.Fragment>
-      //   !ModuleWorkflow &&
-      //   businessService !== "TL" &&
-      //   yearWiseBills?.length > 1 && (
-      //     <div style={{}} onClick={() => setShowDetails(true)} className="filter-button">
-      //       {t("ES_COMMON_VIEW_DETAILS")}
-      //     </div>
-      //   )
       )}
       {paymentRules?.partPaymentAllowed && (
         <div style={{ marginTop: "50px" }} className="bill-payment-amount">

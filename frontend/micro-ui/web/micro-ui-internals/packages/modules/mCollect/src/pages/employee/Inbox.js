@@ -26,7 +26,7 @@ const Inbox = ({
   const [pageOffset, setPageOffset] = useState(initialStates.pageOffset || 0);
   const [pageSize, setPageSize] = useState(initialStates.pageSize || 10);
   const [sortParams, setSortParams] = useState(initialStates.sortParams || [{ id: "createdTime", desc: false }]);
-  const { isLoading, isError: isCountError, error : counterror, data: countData } = Digit.Hooks.mcollect.useMCollectCount(tenantId);
+  const { isLoading, isError: isCountError, error: counterror, data: countData } = Digit.Hooks.mcollect.useMCollectCount(tenantId);
 
   const [searchParams, setSearchParams] = useState(() => {
     return initialStates.searchParams || {};
@@ -60,8 +60,8 @@ const Inbox = ({
   });
 
   useEffect(() => {
-    if(!hookLoading && !data?.challans?.length > 0) setIsLoader(false);
-    else if(hookLoading || data?.challans?.length) setIsLoader(true);
+    if (!hookLoading && !data?.challans?.length > 0) setIsLoader(false);
+    else if (hookLoading || data?.challans?.length) setIsLoader(true);
   }, [hookLoading, data]);
 
   let formedData = [];
@@ -116,6 +116,7 @@ const Inbox = ({
       totalAmount: businessIdToOwnerMappings[data.challanNo]?.totalAmount || 0,
       dueDate: businessIdToOwnerMappings[data.challanNo]?.dueDate || "NA",
       tenantId: data?.tenantId,
+      receiptNumber:data?.receiptNumber
     });
   });
 
@@ -182,6 +183,10 @@ const Inbox = ({
         pattern: "[6-9][0-9]{9}",
         title: t("ES_SEARCH_APPLICATION_MOBILE_INVALID"),
         componentInFront: "+91",
+      },
+      {
+        label: t("UC_RECIEPT_NUMBER_LABEL"),
+        name: "receiptNumber",
       },
     ];
   };

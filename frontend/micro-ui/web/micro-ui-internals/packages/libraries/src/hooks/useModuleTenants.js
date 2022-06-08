@@ -14,7 +14,7 @@ const useModuleTenants = (module, config = {}) => {
           ulbKey: t(`TENANT_TENANTS_${tenant?.code?.toUpperCase?.()?.replace(".", "_")}`),
           ddrKey: t(
             `DDR_${data.tenants
-              .filter((t) => t.code === tenant.code)[0]
+              .filter((t) => t.code === tenant.code)?.[0]
               .city?.districtTenantCode?.toUpperCase?.()
               .replace(".", "_")}`
           ),
@@ -27,7 +27,7 @@ const useModuleTenants = (module, config = {}) => {
           ulbKey: t(`TENANT_TENANTS_${tenant?.code?.toUpperCase?.()?.replace(".", "_")}`),
           ddrKey: t(
             `DDR_${data.tenants
-              .filter((t) => t.code === tenant.code)[0]
+              .filter((t) => t.code === tenant.code)?.[0]
               .city?.districtTenantCode?.toUpperCase?.()
               .replace(".", "_")}`
           ),

@@ -5,21 +5,32 @@ import FilterFormFieldsComponent from "./FilterFieldsComponent";
 import SearchFormFieldsComponents from "./SearchFieldsComponents";
 import useInboxTableConfig from "./useInboxTableConfig";
 import useInboxMobileCardsData from "./useInboxMobileDataCard";
-
+// import { useHistory } from "react-router-dom";
 const Inbox = ({ parentRoute }) => {
 
   const { t } = useTranslation()
-
+  // const history = useHistory()
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
+  const userInfo = Digit.UserService.getUser().info;
+  const userUlbs = ulbs
+    .filter((ulb) => userInfo?.roles?.some((role) => role?.tenantId === ulb?.code))
+    
+  const statuses = [
+    { code: "ALL", name: `${t("ES_COMMON_ALL")}` },
+    { code: "ACTIVE", name: `${t("ES_COMMON_ACTIVE")}` },
+    { code: "INACTIVE", name: `${t("ES_COMMON_INACTIVE")}` }
+  ]
 
   const searchFormDefaultValues = {
-    tenantIds: tenantId,
+    // tenantIds: tenantId,
+    tenantIds:userUlbs[0],
     postedBy: "",
     title: ""
   }
 
   const filterFormDefaultValues = {
-    status: ""
+    status: statuses[0]
   }
   const tableOrderFormDefaultValues = {
     sortBy: "",
@@ -27,12 +38,6 @@ const Inbox = ({ parentRoute }) => {
     offset: 0,
     sortOrder: "DESC"
   }
-
-  const statuses = [
-    { code: "ALL", name: `${t("ES_COMMON_ALL")}` },
-    { code: "ACTIVE", name: `${t("ES_COMMON_ACTIVE")}` },
-    { code: "INACTIVE", name: `${t("ES_COMMON_INACTIVE")}` }
-  ]
 
   function formReducer(state, payload) {
     switch (payload.action) {
@@ -46,20 +51,21 @@ const Inbox = ({ parentRoute }) => {
         Digit.SessionStorage.set("CITIZENSURVEY.INBOX", { ...state, tableForm: payload.data })
         return { ...state, tableForm: payload.data };
       default:
-        console.warn("dispatched action has nothing to reduce")
+        break;
     }
   }
   const InboxObjectInSessionStorage = Digit.SessionStorage.get("CITIZENSURVEY.INBOX")
-
+  
   const onSearchFormReset = (setSearchFormValue) => {
     setSearchFormValue("postedBy", "")
     setSearchFormValue("title", "")
     setSearchFormValue("tenantIds", tenantId)
+    dispatch({ action: "mutateSearchForm", data: searchFormDefaultValues })
   }
 
   const onFilterFormReset = (setFilterFormValue) => {
-    setFilterFormValue("status", "")
-
+    setFilterFormValue("status", statuses[0])
+    dispatch({ action: "mutateFilterForm", data: filterFormDefaultValues })
   }
 
   const formInitValue = useMemo(() => {
@@ -101,6 +107,7 @@ const Inbox = ({ parentRoute }) => {
       }} />
     , [statuses])
 
+    
   const onSearchFormSubmit = (data) => {
     data.hasOwnProperty("") ? delete data?.[""] : null
     dispatch({ action: "mutateSearchForm", data })
@@ -120,6 +127,7 @@ const Inbox = ({ parentRoute }) => {
   const propsForInboxMobileCards = useInboxMobileCardsData({parentRoute, table:Surveys})
   
   return <InboxComposer {...{ isInboxLoading, PropsForInboxLinks, ...propsForSearchForm, ...propsForFilterForm, propsForInboxMobileCards, propsForInboxTable, formState }}></InboxComposer>
+
 }
 
 export default Inbox

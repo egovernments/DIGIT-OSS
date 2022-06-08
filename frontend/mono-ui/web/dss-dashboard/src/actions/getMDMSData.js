@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { getTenantId } from '../utils/commons';
 
 export default function getMDMSData(tenants){
 let tempDRRsObj = {},tempDDRs=[],tempULBS=[],tenantId = "",tenantLogo ={},tenantName='',corpName = '';
@@ -6,17 +7,17 @@ _.each(tenants,(v,k) => {
 
     if(v.code){
         tenantLogo[v.code] = v.logoId;
-        tempULBS.push(v.name);
+        tempULBS.push(v.code);
     }
-    if(v.code === localStorage.getItem('tenant-id'))
-        tenantName = v.name;
+    if(v.code === getTenantId())
+        tenantName = v.code;
     if(v.city.ddrName){     
         tenantId = v.code;
-        if(!_.isEmpty(tempDRRsObj,true) && typeof tempDRRsObj[v.city.ddrName] != 'undefined'){
-            tempDRRsObj[v.city.ddrName].push(tenantId);
+        if(!_.isEmpty(tempDRRsObj,true) && typeof tempDRRsObj[v.city.districtTenantCode] != 'undefined'){
+            tempDRRsObj[v.city.districtTenantCode].push(tenantId);
         }else{
-            tempDRRsObj[v.city.ddrName] = [tenantId]
-            tempDDRs.push(v.city.ddrName);
+            tempDRRsObj[v.city.districtTenantCode] = [tenantId]
+            tempDDRs.push(v.city.districtTenantCode);
         }
     }
 })

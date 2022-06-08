@@ -1,7 +1,6 @@
 import { Loader, Modal, FormComposer } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
-
 import { configBPAApproverApplication } from "../config";
 import * as predefinedConfig from "../config";
 
@@ -37,18 +36,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     },
     { enabled: !action?.isTerminateState }
   );
-  const { isLoading: financialYearsLoading, data: financialYearsData } = Digit.Hooks.pt.useMDMS(
-    tenantId,
-    businessService,
-    "FINANCIAL_YEARLS",
-    {},
-    {
-      details: {
-        tenantId: Digit.ULBService.getStateId(),
-        moduleDetails: [{ moduleName: "egf-master", masterDetails: [{ name: "FinancialYear", filter: "[?(@.module == 'TL')]" }] }],
-      },
-    }
-  );
 
   const queryClient = useQueryClient();
   const [config, setConfig] = useState({});
@@ -58,15 +45,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [error, setError] = useState(null);
-  const [financialYears, setFinancialYears] = useState([]);
   const [selectedFinancialYear, setSelectedFinancialYear] = useState(null);
   const mobileView = Digit.Utils.browser.isMobile() ? true : false;
-
-  useEffect(() => {
-    if (financialYearsData && financialYearsData["egf-master"]) {
-      setFinancialYears(financialYearsData["egf-master"]?.["FinancialYear"]);
-    }
-  }, [financialYearsData]);
 
   useEffect(() => {
     setApprovers(approverData?.Employees?.map((employee) => ({ uuid: employee?.uuid, name: employee?.user?.name })));
@@ -80,18 +60,20 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     (async () => {
       setError(null);
       if (file) {
+        const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i
         if (file.size >= 5242880) {
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+        } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
+          setError(t(`NOT_SUPPORTED_FILE_TYPE`))
         } else {
           try {
-            const response = await Digit.UploadServices.Filestorage("PT", file, tenantId?.split(".")[0]);
+            const response = await Digit.UploadServices.Filestorage("OBPS", file, Digit.ULBService.getStateId() || tenantId?.split(".")[0]);
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {
               setError(t("CS_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
             setError(t("CS_FILE_UPLOAD_ERROR"));
           }
         }
@@ -173,13 +155,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     return result;
   }
 
-
-  const onSuccess = () => {
-    //clearParams();
-    queryClient.invalidateQueries("PT_CREATE_PROPERTY");
-  };
-
-
   function submit(data) {
     let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
     applicationData = {
@@ -228,14 +203,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         }
       }
     })
-    // try{
-    //   mutation1.mutate({BPA:applicationData}, {
-    //     onSuccess,
-    //   });
-    // }
-    // catch (err) {
-    //   console.error(err, "inside ack");
-    // }
+
     submitAction({
       BPA:applicationData
     }, nocDetails, {isStakeholder: false, bpa: true});
@@ -255,11 +223,12 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           uploadedFile,
           setUploadedFile,
           businessService,
-          assigneeLabel: "WF_ASSIGNEE_NAME_LABEL"
+          assigneeLabel: "WF_ASSIGNEE_NAME_LABEL",
+          error
         })
       );
     }
-  }, [action, approvers, financialYears, selectedFinancialYear, uploadedFile]);
+  }, [action, approvers, selectedFinancialYear, uploadedFile, error]);
 
   return action && config.form ? (
     <Modal
@@ -272,10 +241,10 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       formId="modal-action"
       isOBPSFlow={true}
       popupStyles={mobileView?{width:"720px"}:{}}
-      style={!mobileView?{height: "45px", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{height:"45px",width:"44%"}}
+      style={!mobileView?{minHeight: "45px", height: "auto", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{minHeight: "45px", height: "auto",width:"44%"}}
       popupModuleMianStyles={mobileView?{paddingLeft:"5px"}: {}}
     >
-      {financialYearsLoading ? (
+      {PTALoading ? (
         <Loader />
       ) : (
         <FormComposer

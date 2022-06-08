@@ -38,7 +38,11 @@ import {
 } from "./utils/commons";
 import {
   getFileStoreIds,
-  insertStoreIds
+  insertStoreIds,
+  insertRecords,
+  mergePdf,
+  getBulkPdfRecordsDetails,
+  cancelBulkPdfProcess
 } from "./queries";
 import {
   listenConsumer
@@ -48,6 +52,15 @@ import {
   findLocalisation
 } from "./utils/commons";
 
+
+let v8 = require("v8");
+let totalHeapSizeInGB = (((v8.getHeapStatistics().total_available_size) / 1024 / 1024 / 1024).toFixed(2));
+console.log(`*******************************************`);
+console.log(`Total Heap Size ~ ${totalHeapSizeInGB} GB`);
+console.log(`*******************************************`);
+
+
+
 var jp = require("jsonpath");
 //create binary
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -56,12 +69,13 @@ var pdfMakePrinter = require("pdfmake/src/printer");
 let app = express();
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json({
-  limit: "10mb",
+  limit: "200mb",
   extended: true
 }));
 app.use(bodyParser.urlencoded({
-  limit: "10mb",
-  extended: true
+  limit: "200mb",
+  extended: true,
+  parameterLimit:50000
 }));
 
 let maxPagesAllowed = envVariables.MAX_NUMBER_PAGES;
@@ -148,8 +162,7 @@ const createPdfBinary = async (
   totalobjectcount,
   userid,
   documentType,
-  moduleName,
-  headers
+  moduleName
 ) => {
   try {
     let noOfDefinitions = listDocDefinition.length;
@@ -183,8 +196,7 @@ const createPdfBinary = async (
             totalobjectcount,
             userid,
             documentType,
-            moduleName,
-            headers
+            moduleName
           ),
           uploadFiles(
             dbInsertSingleRecords,
@@ -203,8 +215,7 @@ const createPdfBinary = async (
             totalobjectcount,
             userid,
             documentType,
-            moduleName,
-            headers
+            moduleName
           )
       });
     }
@@ -235,8 +246,7 @@ const uploadFiles = async (
   totalobjectcount,
   userid,
   documentType,
-  moduleName,
-  headers
+  moduleName
 ) => {
   let convertedListDocDefinition = [];
   let listOfFilestoreIds = [];
@@ -278,7 +288,7 @@ const uploadFiles = async (
     doc.on("end", function () {
       // console.log("enddddd "+cr++);
       var data = Buffer.concat(chunks);
-      fileStoreAPICall(filename, tenantId, data, headers)
+      fileStoreAPICall(filename, tenantId, data)
         .then((result) => {
           listOfFilestoreIds.push(result);
           if (!isconsolidated) {
@@ -412,9 +422,6 @@ app.post(
       let tenantId = req.query.tenantId;
       var formatconfig = formatConfigMap[key];
       var dataconfig = dataConfigMap[key];
-      var headers = JSON.parse(JSON.stringify(req.headers));
-      headers['tenantId']=headers.tenantid;
-
       logger.info("received createnosave request on key: " + key);
       requestInfo = get(req.body, "RequestInfo");
       //
@@ -432,8 +439,7 @@ app.post(
           requestInfo,
           true,
           formatconfig,
-          dataconfig,
-          headers
+          dataconfig
         );
         // restoring footer function
         formatConfigByFile[0].footer = convertFooterStringtoFunctionIfExist(formatconfig.footer);
@@ -480,24 +486,6 @@ app.post(
       let isconsolidated = req.query.isconsolidated;
       let entityid = req.query.entityid;
       requestInfo = get(req.body, "RequestInfo");
-
-      if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE && tenantid == null){
-        let error = {"PDF_INVALID_SEARCH":" TenantId is mandatory for search "};
-        res.status(400);
-        res.json({
-          ResponseInfo: requestInfo,
-          message: error,
-        });
-      }
-      else if(envVariables.IS_ENVVIRONMENT_CENTRAL_INSTANCE && tenantid.split('.').length < envVariables.STATE_LEVEL_TENANTID_LENGTH){
-        let error = {"PDF_INVALID_SEARCH":" TenantId should be mandatorily " + envVariables.STATE_LEVEL_TENANTID_LENGTH + " levels for search"};
-        res.status(400);
-        res.json({
-          ResponseInfo: requestInfo,
-          message: error,
-        });
-      }
-
       if (
         (jobid == undefined || jobid.trim() == "") &&
         (entityid == undefined || entityid.trim() == "")
@@ -570,16 +558,13 @@ app.post(
   "/pdf-service/v1/_clearUnrigesteredCodes",
   asyncHandler(async (req, res) => {
     let requestInfo;
-    var headers = JSON.parse(JSON.stringify(req.headers));
-    headers['tenantId']=headers.tenantid;
-
     try {
       requestInfo = get(req.body, "RequestInfo");
       let resposnseMap = await findLocalisation(
         requestInfo,
         [],
         unregisteredLocalisationCodes,
-        headers
+        null
       );
 
       resposnseMap.messages.map((item) => {
@@ -605,6 +590,133 @@ app.post(
 
 );
 
+app.post(
+  "/pdf-service/v1/_getBulkPdfRecordsDetails",
+  asyncHandler(async (req, res) => {
+    let requestInfo, uuid, offset, limit, jobId;
+    try {
+      requestInfo = get(req.body, "RequestInfo");
+      uuid = requestInfo.userInfo.uuid;
+      offset = get(req.query, "offset");
+      limit = get(req.query, "limit");
+      jobId = get(req.query, "jobId");
+
+      let data = await getBulkPdfRecordsDetails(uuid, offset, limit, jobId);
+      if(data.length<=0){
+        res.status(500);
+        res.json({
+            ResponseInfo: requestInfo,
+            message: `Group bill pdf records details are not present for the employee ${requestInfo.userInfo.name}`,
+          });
+      }
+      else{
+        res.status(200);
+        res.json({
+            ResponseInfo: requestInfo,
+            groupBillrecords: data,
+          });
+      }
+
+      
+    } catch (error) {
+      logger.error(error.stack || error);
+      res.status(400);
+      res.json({
+        ResponseInfo: requestInfo,
+        message: "Error while retreving the details",
+      });
+    }
+  })
+
+);
+
+app.post(
+  "/pdf-service/v1/_deleteBulkPdfRecordsDetails",
+  asyncHandler(async (req, res) => {
+    let requestInfo = get(req.body, "RequestInfo");
+    try {
+      let pdfDirectory = envVariables.SAVE_PDF_DIR;
+      let folderNames = fs.readdirSync(pdfDirectory);
+
+      for(let folder of folderNames){
+        if(folder == 'lost+found')
+          continue;
+        let baseFolder = pdfDirectory + folder + '/';
+        if( fs.existsSync(baseFolder) ) {
+          fs.readdirSync(baseFolder).forEach(function(file,index){
+            var curPath = baseFolder + file;
+            if(fs.lstatSync(curPath).isDirectory()) { // recurse
+              deleteFolderRecursive(curPath);
+            } else { // delete file
+              fs.unlinkSync(curPath);
+            }
+          });
+          fs.rmdirSync(baseFolder);
+        }
+      }
+      
+      res.status(200);
+      res.json({
+            ResponseInfo: requestInfo,
+            Message: "Bulk PDF records details are clear",
+      });
+    } catch (error) {
+      logger.error(error.stack || error);
+      res.status(400);
+      res.json({
+        ResponseInfo: requestInfo,
+        message: "Error while clearing the Bulk PDF records details",
+      });
+    }
+  })
+
+);
+
+app.post(
+  "/pdf-service/v1/_cancelProcess",
+  asyncHandler(async (req, res) => {
+    let requestInfo = get(req.body, "RequestInfo");
+    let jobId = get(req.query, "jobId");
+    let uuid = requestInfo.userInfo.uuid;
+    try {
+
+      if( !jobId || !uuid){
+        res.status(400);
+        res.json({
+          ResponseInfo: requestInfo,
+          message: "jobid or userid can not be empty",
+        });
+      }
+      else{
+        let errorMap = await cancelBulkPdfProcess(requestInfo, jobId, uuid);
+        if(errorMap != undefined && errorMap.length>=1){
+          res.status(400);
+          res.json({
+              ResponseInfo: requestInfo,
+              errorMessage: errorMap,
+        });
+        }
+        else{
+          res.status(200);
+          res.json({
+                ResponseInfo: requestInfo,
+                Message: `Bulk PDF process with job id: ${jobId} is cancel`,
+          });
+        }
+        
+      }
+    } catch (error) {
+      logger.error(error.stack || error);
+      res.status(400);
+      res.json({
+        ResponseInfo: requestInfo,
+        message: "Error while clearing the Bulk PDF records details",
+      });
+    }
+  })
+
+);
+
 var i = 0;
 dataConfigUrls &&
   dataConfigUrls.split(",").map((item) => {
@@ -621,14 +733,15 @@ dataConfigUrls &&
           } else {
             data = JSON.parse(data);
             dataConfigMap[data.key] = data;
-            if (data.fromTopic != null) {
+            /*if (data.fromTopic != null) {
               topicKeyMap[data.fromTopic] = data.key;
               topic.push(data.fromTopic);
-            }
+            }*/
             i++;
-            if (i == datafileLength) {
-              listenConsumer(topic);
-            }
+            // if (i == datafileLength) {
+            //   topic.push(envVariables.KAFKA_RECEIVE_CREATE_JOB_TOPIC)
+            //   listenConsumer(topic);
+            // }
             logger.info("loaded dataconfig: file:///" + item);
           }
         } catch (error) {
@@ -690,6 +803,9 @@ app.listen(serverport, () => {
   logger.info(`Server running at http:${serverport}/`);
 });
 
+topic.push(envVariables.KAFKA_RECEIVE_CREATE_JOB_TOPIC)
+listenConsumer(topic);
+
 /**
  *
  * @param {*} formatconfig - format config read from formatconfig file
@@ -707,34 +823,21 @@ export const createAndSave = async (
 ) => {
   var starttime = new Date().getTime();
 
-  let topic = get(req, "topic");
+  let topic = get(req, "pdfKey");
   let key;
-  if (topic != null && topicKeyMap[topic] != null) {
-    key = topicKeyMap[topic];
+  if (topic != null) {
+    key = topic;
   } else {
     key = get(req.query || req, "key");
   }
   //let key = get(req.query || req, "key");
   let tenantId = get(req.query || req, "tenantId");
-  var formatconfigNew = formatConfigMap[key];
+  var formatconfig = formatConfigMap[key];
   var dataconfig = dataConfigMap[key];
   var userid = get(req.body || req, "RequestInfo.userInfo.id");
   var requestInfo = get(req.body || req, "RequestInfo");
   var documentType = get(dataconfig, "documentType", "");
   var moduleName = get(dataconfig, "DataConfigs.moduleName", "");
-  var formatconfig =JSON.parse(JSON.stringify(formatconfigNew))
-
-  var headers;
-  if(req.headers){
-    headers = JSON.parse(JSON.stringify(req.headers));
-    headers['tenantId']=headers.tenantid;
-  }
-  else{
-    headers = {
-      tenantId:tenantId
-    };
-  }
-
 
   var valid = validateRequest(req, res, key, tenantId, requestInfo);
   if (valid) {
@@ -744,8 +847,7 @@ export const createAndSave = async (
       requestInfo,
       false,
       formatconfig,
-      dataconfig,
-      headers
+      dataconfig
     );
 
     // logger.info(`Applied templating engine on ${moduleObjectsArray.length} objects output will be in ${formatConfigByFile.length} files`);
@@ -759,13 +861,8 @@ export const createAndSave = async (
     if(!locale)
       locale = envVariables.DEFAULT_LOCALISATION_LOCALE;
 
-    if(defaultFontMapping[locale] != 'default'){
+    if(defaultFontMapping[locale] != 'default')
       formatconfig.defaultStyle.font = defaultFontMapping[locale];
-    }
-     
-
-      console.log(" Font type selected :::: " + formatconfig.defaultStyle.font);
-      console.log("Locale passed:::::::"+locale);
 
     createPdfBinary(
       key,
@@ -779,8 +876,7 @@ export const createAndSave = async (
       totalobjectcount,
       userid,
       documentType,
-      moduleName,
-      headers
+      moduleName
     ).catch((err) => {
       logger.error(err.stack || err);
       errorCallback({
@@ -791,6 +887,103 @@ export const createAndSave = async (
     });
   }
 };
+
+export const createNoSave = async (
+  req,
+  res,
+  successCallback,
+  errorCallback
+) => {
+  try {
+    var starttime = new Date().getTime();
+    var topic = get(req, "pdfKey");
+    var key;
+    if (topic != null) {
+      key = topic;
+    } else {
+      key = get(req.query || req, "key");
+    }
+
+    var tenantId = get(req.query || req, "tenantId");
+    var formatconfig = formatConfigMap[key];
+    var dataconfig = dataConfigMap[key];
+    var totalPdfRecords = get(req, "totalPdfRecords");
+    var currentPdfRecords = get(req, "currentPdfRecords");
+    var bulkPdfJobId = get(req, "pdfJobId");
+    var numberOfFiles = get(req, "numberOfFiles");
+    var requestInfo = get(req.body || req, "RequestInfo");
+    var userid = get(req.body || req, "RequestInfo.userInfo.uuid");
+    var mobileNumber = get(req, "RequestInfo.userInfo.mobileNumber");
+    var billd = get(req, "Bill");
+    var locality = get(req, "locality");
+    var bussinessService = get(req, "service");
+    var isConsolidated = get(req, "isConsolidated");
+    var consumerCode = get(req, "consumerCode");
+    
+
+    logger.info("received createnosave request on key: " + key + " for job id:" + bulkPdfJobId +" totalPdfRecords: "+totalPdfRecords+" currentPdfRecords: "+currentPdfRecords + " size: "+billd.length);
+
+    var valid = validateRequest(req, res, key, tenantId, requestInfo);
+
+    if (valid) {
+      let [
+        formatConfigByFile,
+        totalobjectcount,
+        entityIds,
+      ] = await prepareBegin(
+        key,
+        req,
+        requestInfo,
+        true,
+        formatconfig,
+        dataconfig
+      );
+      // restoring footer function
+      formatConfigByFile[0].footer = convertFooterStringtoFunctionIfExist(formatconfig.footer);
+      const doc = printer.createPdfKitDocument(formatConfigByFile[0]);
+      let fileNameAppend = "-" + new Date().getTime();
+      let directory = envVariables.SAVE_PDF_DIR + bulkPdfJobId
+      //let directory = bulkPdfJobId;
+
+      if(!fs.existsSync(directory))
+        fs.mkdirSync(directory, { recursive: true });
+
+      let filename = directory + "/"  + key + "" + fileNameAppend + ".pdf";
+
+      var chunks = [];
+      doc.on("data", function (chunk) {
+        chunks.push(chunk);
+      });
+      doc.on("end", function () {
+        var data = Buffer.concat(chunks);
+         //fs.createWriteStream(filename).write(data);
+         var tempFile = fs.createWriteStream(filename);
+         tempFile.on('error', function(e) { console.error(e); });
+         tempFile.on('open', function(fd) {
+           tempFile.write(data);
+           tempFile.end();
+         });
+        logger.info(
+          `createnosave success for pdf creation with job id: ${bulkPdfJobId} with key: ${key}, entityId ${entityIds}`
+        );
+        (async () => {
+          await insertRecords(bulkPdfJobId, totalPdfRecords, currentPdfRecords, userid, tenantId, locality, bussinessService, consumerCode, isConsolidated);
+          await mergePdf(bulkPdfJobId, tenantId, userid, numberOfFiles, mobileNumber);
+        })();
+      });
+      doc.end();
+
+    }
+  } catch (error) {
+    logger.error(error.stack || error);
+    // res.json({
+    //   message: "some unknown error while creating: " + error.message,
+    // });
+  }
+
+};
+
+
 const updateBorderlayout = (formatconfig) => {
   formatconfig.content = formatconfig.content.map((item) => {
     if (
@@ -911,8 +1104,7 @@ const prepareBegin = async (
   requestInfo,
   returnFileInResponse,
   formatconfig,
-  dataconfig,
-  headers
+  dataconfig
 ) => {
   var baseKeyPath = get(dataconfig, "DataConfigs.baseKeyPath");
   var entityIdPath = get(dataconfig, "DataConfigs.entityIdPath");
@@ -930,8 +1122,7 @@ const prepareBegin = async (
     baseKeyPath,
     requestInfo,
     returnFileInResponse,
-    entityIdPath,
-    headers
+    entityIdPath
   );
 };
 
@@ -941,8 +1132,7 @@ const handlelogic = async (
   moduleObject,
   dataconfig,
   isCommonTableBorderRequired,
-  requestInfo,
-  headers
+  requestInfo
 ) => {
   let variableTovalueMap = {};
   //direct mapping service
@@ -953,7 +1143,7 @@ const handlelogic = async (
       variableTovalueMap,
       requestInfo,
       unregisteredLocalisationCodes,
-      headers
+      key
     ),
     //external API mapping
     externalAPIMapping(
@@ -962,8 +1152,7 @@ const handlelogic = async (
       dataconfig,
       variableTovalueMap,
       requestInfo,
-      unregisteredLocalisationCodes,
-      headers
+      unregisteredLocalisationCodes
     ),
   ]);
   await generateQRCodes(moduleObject, dataconfig, variableTovalueMap);
@@ -986,8 +1175,7 @@ const prepareBulk = async (
   baseKeyPath,
   requestInfo,
   returnFileInResponse,
-  entityIdPath,
-  headers
+  entityIdPath
 ) => {
   let isCommonTableBorderRequired = get(
     dataconfig,
@@ -1031,8 +1219,7 @@ const prepareBulk = async (
         moduleObject,
         dataconfig,
         isCommonTableBorderRequired,
-        requestInfo,
-        headers
+        requestInfo
       );
 
       formatObjectArrayObject.push(formatObject["content"]);
@@ -1048,9 +1235,8 @@ const prepareBulk = async (
         if(!locale)
           locale = envVariables.DEFAULT_LOCALISATION_LOCALE;
 
-        if(defaultFontMapping[locale] != 'default'){
-          formatconfigCopy.defaultStyle.font = defaultFontMapping[locale];
-        }
+        if(defaultFontMapping[locale] != 'default')
+         formatconfigCopy.defaultStyle.font = defaultFontMapping[locale];
 
         formatconfigCopy["content"] = formatObjectArrayObject;
         formatConfigByFile.push(formatconfigCopy);

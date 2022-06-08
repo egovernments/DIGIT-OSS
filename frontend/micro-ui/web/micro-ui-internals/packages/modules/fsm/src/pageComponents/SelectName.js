@@ -92,7 +92,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
                   option={input.options}
                   optionKey="i18nKey"
                   id="dropdown"
-                  selected={dropdownValue}
+                  selected={formData && formData[config.key] ? input.options.find((data)=> data.code === formData[config.key][input.name]) : null}
                   select={selectDropdown}
                   t={t}
                   disable={editScreen}

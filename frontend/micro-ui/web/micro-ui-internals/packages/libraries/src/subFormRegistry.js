@@ -35,7 +35,6 @@ export class SubformRegistry {
     else if (exceedingIndex) setExceedingIndex(exceedingIndex);
     else if (preceedingName) {
       let element = middlewares.filter((e) => Object.keys(e)[0] === preceedingName)[0] || null;
-      if (!element) console.error(`no middleware with ${preceedingName} found in ${key} subForm `);
     } else if (exceedingName) {
     }
   };

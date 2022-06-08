@@ -34,7 +34,12 @@ export const MyBills = ({ stateCode }) => {
 
   const getPaymentRestrictionDetails = () => {
     const payRestrictiondetails = mdmsBillingData?.MdmsRes?.BillingService?.BusinessService;
-    if (payRestrictiondetails?.length) return payRestrictiondetails.filter((e) => e.code == businessService)[0];
+    if (payRestrictiondetails?.length) return payRestrictiondetails.filter((e) => e.code == businessService)?.[0]||{
+      isAdvanceAllowed: false,
+      isVoucherCreationEnabled: true,
+      minAmountPayable: 100,
+      partPaymentAllowed: false,
+    };
     else
       return {
         // isAdvanceAllowed: false,

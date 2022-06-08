@@ -216,7 +216,7 @@ const OwnerForm1 = (_props) => {
         <div>
           <CardLabelError style={errorStyle}>{localFormState.touched.mobileNumber ? errors?.mobileNumber?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("UC_DOOR_NO_LABEL")} :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("UC_DOOR_NO_LABEL")} `}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -243,7 +243,7 @@ const OwnerForm1 = (_props) => {
             </div>
           </LabelFieldPair>
           <LabelFieldPair>
-            <CardLabel className={isMobile?"card-label-APK":"card-label-smaller"}>{`${t("UC_BLDG_NAME_LABEL")} :`}</CardLabel>
+            <CardLabel className={isMobile?"card-label-APK":"card-label-smaller"}>{`${t("UC_BLDG_NAME_LABEL")} `}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -270,7 +270,7 @@ const OwnerForm1 = (_props) => {
             </div>
           </LabelFieldPair>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("UC_SRT_NAME_LABEL")} :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("UC_SRT_NAME_LABEL")} `}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -297,7 +297,7 @@ const OwnerForm1 = (_props) => {
             </div>
           </LabelFieldPair>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("UC_PINCODE_LABEL")} :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("UC_PINCODE_LABEL")} `}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -326,7 +326,7 @@ const OwnerForm1 = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.pincode ? errors?.pincode?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel  style={{paddingTop:"10px"}} className="card-label-smaller">{`${t("UC_MOHALLA_LABEL")} * :`}</CardLabel>
+            <CardLabel  style={{paddingTop:"10px"}} className="card-label-smaller">{`${t("UC_MOHALLA_LABEL")} * `}</CardLabel>
             <Controller
               name="mohalla"
               rules={{ required: t("REQUIRED_FIELD") }}
@@ -355,5 +355,4 @@ const OwnerForm1 = (_props) => {
     </div>
   );
 };
-
 export default AddressDetails;

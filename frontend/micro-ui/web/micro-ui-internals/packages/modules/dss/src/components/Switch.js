@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { useContext ,Fragment} from "react";
 import FilterContext from "./FilterContext";
 
 const denominations = ["Cr", "Lac", "Unit"];
@@ -19,7 +19,7 @@ const Switch = ({ onSelect, t }) => {
               checked={label === value?.denomination}
               onClick={() => onSelect({ denomination: label })}
             />
-            <label className="cursorPointer" htmlFor={label}>{label}</label>
+            <label className="cursorPointer" htmlFor={label}>{t(Digit.Utils.locale.getTransformedLocale(`ES_DSS_${label}`))}</label>
           </div>
         ))}
       </div>

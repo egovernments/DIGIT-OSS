@@ -83,7 +83,6 @@ export const searchApplications = {
 							const mohallaData = getMohallaData(payload, action.value);
 							applyMohallaData(mohallaData, action.value, dispatch);
 						} catch (e) {
-							console.log(e);
 						}
 					}
 				}

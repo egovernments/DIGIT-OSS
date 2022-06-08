@@ -14,7 +14,7 @@
   <name>egov-common-masters</name>
   <description>eGov project</description>
   <properties>
-    <log4j2.version>2.16.0</log4j2.version>
+    <log4j2.version>2.17.1</log4j2.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>1.8</java.version>
     <joda-time-version>2.9.6</joda-time-version>
@@ -85,10 +85,10 @@
   </dependencies>
   <repositories>
     <repository>
-			<id>repo.egovernments.org</id>
-			<name>eGov DIGIT Releases Repository</name>
-			<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
-		</repository>
+      <id>repo.egovernments.org</id>
+      <name>eGov ERP Releases Repository</name>
+      <url>https://nexus-repo.egovernments.org/nexus/content/repositories/releases/</url>
+    </repository>
   </repositories>
   <build>
     <plugins>

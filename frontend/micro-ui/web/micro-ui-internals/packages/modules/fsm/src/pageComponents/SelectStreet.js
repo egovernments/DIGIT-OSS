@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import _ from "lodash";
+import Timeline from "../components/TLTimelineInFSM";
 
 const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setError, clearErrors }) => {
   const onSkip = () => onSelect();
@@ -19,6 +20,8 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
     inputs = config.inputs;
     config.inputs[0].disable = window.location.href.includes("edit-application");
     config.inputs[1].disable = window.location.href.includes("edit-application");
+    inputs[0].validation = { minLength : 0, maxLength:256};
+    inputs[1].validation = { minLength : 0, maxLength:256};
   } else {
     inputs = [
       {
@@ -65,6 +68,14 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
   };
 
   useEffect(() => {
+    if(window.location.href.includes("employee/tl/"))
+    {
+      setValue("doorNo", formData?.cpt?.details?.address?.doorNo);
+      setValue("street", formData?.cpt?.details?.address?.street);
+    }
+  },[formData])
+  
+  useEffect(() => {
     trigger();
   }, []);
 
@@ -97,7 +108,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
           <div className="field">
             <Controller
               control={control}
-              defaultValue={formData?.address?.[input.name]}
+              defaultValue={formData?.cpt?.details?.address?.[input?.name] || formData?.address?.[input.name]}
               name={input.name}
               rules={{ validate: convertValidationToRules(input) }}
               render={(_props) => (
@@ -110,9 +121,9 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
                     _props.onChange(e.target.value);
                   }}
                   onBlur={_props.onBlur}
-                  // disable={isRenewal}
+                  disable={formData?.cpt?.details}
                   autoFocus={focusIndex?.index == index}
-                  {...input.validation}
+                  {...input?.validation}
                 />
               )}
             />
@@ -122,6 +133,8 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
     });
   }
   return (
+    <React.Fragment>
+    {window.location.href.includes("/tl") ? <Timeline currentStep={2}/> : <Timeline currentStep={1} flow="APPLY" />}
     <FormStep
       config={{ ...config, inputs }}
       _defaultValues={{ street: formData?.address.street, doorNo: formData?.address.doorNo }}
@@ -129,6 +142,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
       onSkip={onSkip}
       t={t}
     />
+    </React.Fragment>
   );
 };
 

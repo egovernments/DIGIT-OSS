@@ -43,7 +43,7 @@ const useInboxMobileCardsData = ({parentRoute, table, getRedirectionLink}) => {
         </SearchField>
     }
 
-    return ({ data:dataForMobileInboxCards,isTwoDynamicPrefix:true, linkPrefix: `/digit-ui/employee/obps/`,getRedirectionLink:getRedirectionLink, serviceRequestIdKey: "applicationNo", MobileSortFormValues})
+    return ({ data:dataForMobileInboxCards,isTwoDynamicPrefix:true, linkPrefix: window.location.href.includes("/citizen") ?  `/digit-ui/citizen/obps/` : `/digit-ui/employee/obps/`,getRedirectionLink:getRedirectionLink, serviceRequestIdKey: "applicationNo", MobileSortFormValues})
 
 }
 

@@ -14,7 +14,6 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl,history,
 
   
   const tick =(leftTime) => {
-  //  console.log(leftTime);
   }
 
 
@@ -23,11 +22,11 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl,history,
       className="col-sm-offset-4 col-sm-4  user-screens-card"
       textChildren={
         <div>
-          <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
-            <div style={{ marginBottom: "24px" }}>
-              <Image className="mseva-logo" source={`${logo}`} />
+          <div className="rainmaker-displayInline" style={{ justifyContent: "center"  ,alignItems:"center",marginBottom: "24px"}}>
+            <div style={{ }}>
+              <Image className="mseva-logo" source={logoUrl?logoUrl:`${logo}`} />
             </div >
-          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
+          <div style={{marginLeft:"7px" }}>
           <Label bold={true}  fontSize= "23px" label="|" />
           </div>
            <div style={{marginLeft:"7px" }}>

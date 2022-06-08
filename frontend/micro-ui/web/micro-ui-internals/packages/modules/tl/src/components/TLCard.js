@@ -61,6 +61,7 @@ const TLCard = () => {
                 link: `/digit-ui/employee/tl/inbox`
             },
             {
+                count : isLoading ? "-" : inboxData?.nearingSlaCount,
                 label: t("TOTAL_NEARING_SLA"),
                 link: `/digit-ui/employee/tl/inbox`
             }

@@ -25,7 +25,7 @@ export const nocSummaryDetail={
       labelKey: "NOC_PROVISIONAL_FIRE_NOC_NO_LABEL"
     },
     {
-      jsonPath: "FireNOCs[0].provisionFireNOCNumber",
+      jsonPath: "FireNOCs[0].fireNOCNumber", //"FireNOCs[0].provisionFireNOCNumber"
       callBack: checkValueForNA
     }
   )

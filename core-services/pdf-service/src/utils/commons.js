@@ -1,7 +1,10 @@
 import axios from "axios";
 import envVariables from "../EnvironmentVariables";
 import get from "lodash/get";
+const NodeCache = require("node-cache");
 var moment = require("moment-timezone");
+
+const cache = new NodeCache({ stdTTL: 300 });
 
 let datetimezone = envVariables.DATE_TIMEZONE;
 let egovLocHost = envVariables.EGOV_LOCALISATION_HOST;
@@ -25,13 +28,21 @@ export const getTransformedLocale = (label) => {
  * @param {*} isMainTypeRequired  - ex:- "GOODS_RETAIL_TST-1" = get localisation for "RETAIL"
  * @param {*} isSubTypeRequired  - - ex:- "GOODS_RETAIL_TST-1" = get localisation for "GOODS_RETAIL_TST-1"
  */
-export const findLocalisation = async (
+ export const findLocalisation = async (
   requestInfo,
   moduleList,
   codeList,
-  header
+  pdfKey
 ) => {
-  let locale = requestInfo.msgId;
+  let cacheData = null;
+  if(pdfKey!=null)
+    cacheData = await verifyCache(pdfKey);
+
+  if(cacheData!= null && Object.keys(cacheData).length>=1){
+    return cacheData;
+  }
+  else{
+    let locale = requestInfo.msgId;
   if (null != locale) {
     locale = locale.split("|");
     locale = locale.length > 1 ? locale[1] : defaultLocale;
@@ -50,7 +61,7 @@ export const findLocalisation = async (
   let request = { 
     RequestInfo: requestInfo,
     messageSearchCriteria:{
-      tenantId: defaultTenant,
+      tenantId: statetenantid,
       locale: locale,
       codes: []
     }
@@ -59,13 +70,40 @@ export const findLocalisation = async (
   request.messageSearchCriteria.module = moduleList.toString();
   request.messageSearchCriteria.codes = codeList.toString().split(",");
 
-  let headers = { header };
+  let headers = {
+    headers:{
+      "content-type": "application/json;charset=UTF-8",
+      accept: "application/json, text/plain, */*"
+    }
+  };
 
-  let responseBody = await axios.post(url,request, headers)
-  .catch((error) => {throw error.response.data });
-  
+  let responseBody = await axios.post(url,request,headers)
+  .then(function (response) {
+    return response;
+  })
+  .catch((error) => {
+    throw error
+   });
+
+  if(pdfKey!=null)
+    cache.set(pdfKey, responseBody.data);
+
+
   return responseBody.data;
+  }
 }
+
+export const verifyCache = async (pdfKey) => {
+  let cacheData = null;
+  if (cache.has(pdfKey)) {
+    cacheData = cache.get(pdfKey);
+
+    return Promise.resolve(cacheData);
+  }
+  else
+    return cacheData;
+}
+
 export const getLocalisationkey = async (
   prefix,
   key,
