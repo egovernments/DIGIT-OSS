@@ -66,7 +66,7 @@ public class TLValidator {
     public void validateCreate(TradeLicenseRequest request, Object mdmsData) {
         List<TradeLicense> licenses = request.getLicenses();
         String businessService = request.getLicenses().isEmpty()?null:request.getLicenses().get(0).getBusinessService();
-        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getLicenseNumber() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
             validateRenewal(request);
         }
         if (businessService == null)
@@ -292,7 +292,7 @@ public class TLValidator {
             throw new CustomException("INVALID UPDATE", "The license to be updated is not in database");
         validateAllIds(searchResult, licenses);
         String businessService = request.getLicenses().isEmpty()?null:licenses.get(0).getBusinessService();
-        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
+        if(licenses.get(0).getApplicationType() != null && licenses.get(0).getLicenseNumber() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
             validateRenewal(request);
         }        
         if (businessService == null)
@@ -550,14 +550,6 @@ public class TLValidator {
         if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
             throw new CustomException("INVALID SEARCH","Search based only on tenantId is not allowed");
 
-        if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& !criteria.tenantIdOnly()
-                && criteria.getTenantId()==null)
-            throw new CustomException("INVALID SEARCH","TenantId is mandatory in search");
-
-        if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" ) && !criteria.isEmpty()
-                && !criteria.tenantIdOnly() && criteria.getTenantId()==null)
-            throw new CustomException("INVALID SEARCH","TenantId is mandatory in search");
-
         if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
             throw new CustomException("INVALID SEARCH","Search only on tenantId is not allowed");
 
@@ -633,6 +625,12 @@ public class TLValidator {
     private void validateDuplicateDocuments(TradeLicenseRequest request){
         List<String> documentFileStoreIds = new LinkedList();
         request.getLicenses().forEach(license -> {
+            
+//              if(license.getTradeLicenseDetail().getApplicationDocuments()==null) {
+//         		throw new CustomException("NO_DOCUMENT_PRESENT","No document present "); 
+//         	 }
+            
+            
             if(license.getTradeLicenseDetail().getApplicationDocuments()!=null){
                 license.getTradeLicenseDetail().getApplicationDocuments().forEach(
                         document -> {

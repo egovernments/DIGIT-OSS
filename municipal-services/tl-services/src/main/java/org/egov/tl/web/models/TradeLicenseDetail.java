@@ -85,7 +85,6 @@ public class TradeLicenseDetail   {
 
         @NotNull
         @JsonProperty("owners")
-        @Valid
         private List<OwnerInfo> owners = new ArrayList<>();
 
               /**
