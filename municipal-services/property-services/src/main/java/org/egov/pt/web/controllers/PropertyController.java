@@ -10,6 +10,7 @@ import org.egov.common.contract.response.ResponseInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
+import org.egov.pt.models.oldProperty.OldPropertyCriteria;
 import org.egov.pt.service.FuzzySearchService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.ResponseInfoFactory;
@@ -80,10 +81,26 @@ public class PropertyController {
             propertyValidator.validatePropertyCriteria(propertyCriteria, requestInfoWrapper.getRequestInfo());
         }
         List<Property> properties = propertyService.searchProperty(propertyCriteria,requestInfoWrapper.getRequestInfo());
-        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
+        PropertyResponse response = PropertyResponse.builder().properties(properties).count(properties.size()).responseInfo(
                 responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/_migration")
+    public ResponseEntity<?> propertyMigration(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                               @Valid @ModelAttribute OldPropertyCriteria propertyCriteria) {
+        long startTime = System.nanoTime();
+        Map<String, String> resultMap = null;
+        Map<String, String> errorMap = new HashMap<>();
+
+        resultMap = migrationService.initiateProcess(requestInfoWrapper,propertyCriteria,errorMap);
+
+        long endtime = System.nanoTime();
+        long elapsetime = endtime - startTime;
+        System.out.println("Elapsed time--->"+elapsetime);
+
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)

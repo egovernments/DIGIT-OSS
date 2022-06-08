@@ -18,11 +18,9 @@ import static org.egov.pt.util.PTConstants.NOTIFICATION_STATUS;
 import static org.egov.pt.util.PTConstants.PT_BUSINESSSERVICE;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.utils.MultiStateInstanceUtil;
@@ -88,12 +86,43 @@ public class AssessmentNotificationService {
         BillResponse billResponse = billingService.fetchBill(property, requestInfo);
         BigDecimal dueAmount = billResponse.getBill().get(0).getTotalAmount();
 
-        List<SMSRequest> smsRequests = enrichSMSRequest(topicName, assessmentRequest, property);
-        util.sendSMS(smsRequests, tenantId);
+        List<String> configuredChannelNamesForAssessment =  util.fetchChannelList(new RequestInfo(), tenantId, PT_BUSINESSSERVICE, ACTION_FOR_ASSESSMENT);
 
-        Boolean isActionReq = false;
-        if(topicName.equalsIgnoreCase(config.getCreateAssessmentTopic()) && assessment.getWorkflow() == null)
-            isActionReq=true;
+        List<SMSRequest> smsRequests = enrichSMSRequest(topicName, assessmentRequest, property);
+
+        if(configuredChannelNamesForAssessment.contains(CHANNEL_NAME_SMS)) {
+             util.sendSMS(smsRequests, tenantId);
+        }
+
+        if(configuredChannelNamesForAssessment.contains(CHANNEL_NAME_EVENT)) {
+            Boolean isActionReq = false;
+            if (topicName.equalsIgnoreCase(config.getCreateAssessmentTopic()) && assessment.getWorkflow() == null)
+                isActionReq = true;
+
+            List<Event> events = util.enrichEvent(smsRequests, requestInfo, tenantId, property, isActionReq);
+            util.sendEventNotification(new EventRequest(requestInfo, events));
+        }
+
+        if(configuredChannelNamesForAssessment.contains(CHANNEL_NAME_EMAIL) ){
+            List<EmailRequest> emailRequests = util.createEmailRequestFromSMSRequests(requestInfo,smsRequests,tenantId);
+            util.sendEmail(emailRequests);
+        }
+
+        if (dueAmount!=null && dueAmount.compareTo(BigDecimal.ZERO)>0) {
+
+            List<String> configuredChannelNames =  util.fetchChannelList(new RequestInfo(), tenantId, PT_BUSINESSSERVICE, ACTION_FOR_DUES);
+            List<SMSRequest> smsRequestsList = new ArrayList<>();
+            enrichSMSRequestForDues(smsRequestsList, assessmentRequest, property);
+
+            if(configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
+                util.sendSMS(smsRequestsList);
+            }
+
+            if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
+                Boolean isActionRequired = true;
+                List<Event> eventsList = util.enrichEvent(smsRequestsList, requestInfo, tenantId, property, isActionRequired);
+                util.sendEventNotification(new EventRequest(requestInfo, eventsList));
+            }
 
         List<Event> events = util.enrichEvent(smsRequests, requestInfo, tenantId, property, isActionReq);
         util.sendEventNotification(new EventRequest(requestInfo, events), tenantId);
@@ -117,6 +146,7 @@ public class AssessmentNotificationService {
             if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL) ){
                 List<EmailRequest> emailRequests = util.createEmailRequestFromSMSRequests(requestInfo,smsRequests,tenantId);
                 util.sendEmail(emailRequests, tenantId);
+
             }
             }
     }

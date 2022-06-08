@@ -115,7 +115,7 @@ public class NotificationService {
 		ProcessInstance wf = property.getWorkflow();
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
 		state = getStateFromWf(wf, configs.getIsMutationWorkflowEnabled());
-		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
+		String localisedState = getLocalisedState(wf, completeMsgs);
 
 		switch (state) {
 
@@ -172,7 +172,7 @@ public class NotificationService {
 		Boolean isCreate =  CreationReason.CREATE.equals(property.getCreationReason());
 		String state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
-		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
+		String localisedState = getLocalisedState(wf, completeMsgs);
 		switch (state) {
 
 		case WF_NO_WORKFLOW:
@@ -235,7 +235,7 @@ public class NotificationService {
 	 */
 	private String getMsgForMutation (Property property, String CompleteMsgs, String statusCode, String urlCode) {
 
-		String url = statusCode.equalsIgnoreCase(WF_STATUS_PAYMENT_PENDING) ? getPayUrl(property) : getMutationUrl(property);
+		String url = statusCode.equalsIgnoreCase(WF_STATUS_PAYMENT_PENDING) ? notifUtil.getPayUrl(property) : notifUtil.getMutationUrl(property);
 		return notifUtil.getMessageTemplate(statusCode, CompleteMsgs).replace(urlCode, url);
 	}
 
@@ -286,7 +286,12 @@ public class NotificationService {
 		return msg;
 	}
 	
-	private String getLocalisedState(String state, String completeMsgs) {
+	private String getLocalisedState(ProcessInstance workflow, String completeMsgs) {
+		
+		String state ="";
+		if(configs.getIsWorkflowEnabled()) {
+			state = workflow.getState().getState();
+		}
 		
 		switch (state) {
 			
@@ -380,6 +385,9 @@ public class NotificationService {
 		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
 		notifUtil.sendSMS(smsRequests, property.getTenantId());
 
+
+		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
+
 		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
 			notifUtil.sendSMS(smsRequests, tenantId);
 		}
@@ -387,6 +395,7 @@ public class NotificationService {
 			Boolean isActionReq = false;
 			if(state.equalsIgnoreCase(PT_CORRECTION_PENDING))
 				isActionReq = true;
+
 			List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
 			notifUtil.sendEventNotification(new EventRequest(requestInfo, events), tenantId);
 		}

@@ -28,16 +28,11 @@ import static org.egov.pt.util.PTConstants.VIEW_PROPERTY;
 import static org.egov.pt.util.PTConstants.VIEW_PROPERTY_CODE;
 import static org.egov.pt.util.PTConstants.VIEW_PROPERTY_STRING;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.jayway.jsonpath.Filter;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.utils.MultiStateInstanceUtil;
@@ -56,9 +51,11 @@ import org.egov.pt.models.event.Recepient;
 import org.egov.pt.models.event.Source;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.ServiceRequestRepository;
-import org.egov.pt.web.contracts.Email;
+
+import org.egov.pt.service.NotificationService;
+import org.egov.pt.web.contracts.*;
 import org.egov.pt.web.contracts.EmailRequest;
-import org.egov.pt.web.contracts.SMSRequest;
+
 import org.egov.tracer.model.CustomException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +68,10 @@ import com.jayway.jsonpath.Filter;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static com.jayway.jsonpath.Criteria.where;
+import static com.jayway.jsonpath.Filter.filter;
+import static org.egov.pt.util.PTConstants.*;
 
 
 @Slf4j
@@ -315,33 +316,41 @@ public class NotificationUtil {
      * @return List of EmailRequests
      */
 
-	public List<EmailRequest> createEmailRequestFromSMSRequests(RequestInfo requestInfo, List<SMSRequest> smsRequests,
-			String tenantId) {
-		
-		Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest::getMobileNumber).collect(Collectors.toSet());
-		Map<String, String> mobileNumberToEmailId = fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
-		if (CollectionUtils.isEmpty(mobileNumberToEmailId.keySet())) {
-			log.error("Email Ids Not found for Mobilenumbers");
-		}
+    public List<EmailRequest> createEmailRequestFromSMSRequests(RequestInfo requestInfo,List<SMSRequest> smsRequests,String tenantId) {
+        
+      Set<String> mobileNumbers = smsRequests.stream().map(SMSRequest :: getMobileNumber).collect(Collectors.toSet());
+        Map<String, String> mobileNumberToEmailId = fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
+        if (CollectionUtils.isEmpty(mobileNumberToEmailId.keySet())) {
+            log.error("Email Ids Not found for Mobilenumbers");
+        }
 
-		Map<String, String> mobileNumberToMsg = smsRequests.stream()
-				.collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
-		List<EmailRequest> emailRequest = new LinkedList<>();
-		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
-			String customizedMsg = "";
-			String message = mobileNumberToMsg.get(entryset.getKey());
-			if (message.contains(NOTIFICATION_EMAIL))
-				customizedMsg = message.replace(NOTIFICATION_EMAIL, entryset.getValue());
+        Map<String,String > mobileNumberToMsg = smsRequests.stream().collect(Collectors.toMap(SMSRequest::getMobileNumber, SMSRequest::getMessage));
+        List<EmailRequest> emailRequest = new LinkedList<>();
+        for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
+            String message = mobileNumberToMsg.get(entryset.getKey());
+            String customizedMsg = message;
+          
+            if(StringUtils.isEmpty(message))
+                log.info("Email ID is empty, no notification will be sent ");
 
-			String subject = "";
-			String body = customizedMsg;
-			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false)
-					.body(body).subject(subject).build();
-			EmailRequest email = new EmailRequest(requestInfo, emailobj);
-			emailRequest.add(email);
-		}
-		return emailRequest;
-	}
+            if(message.contains(NOTIFICATION_EMAIL))
+                customizedMsg = customizedMsg.replace(NOTIFICATION_EMAIL, entryset.getValue());
+
+            //removing lines to match Email Templates
+            if(message.contains(PT_TAX_PARTIAL))
+                customizedMsg = customizedMsg.replace(PT_TAX_PARTIAL,"");
+
+            if(message.contains(PT_TAX_FULL))
+                customizedMsg = customizedMsg.replace(PT_TAX_FULL,"");
+
+            String subject = "";
+            String body = customizedMsg;
+            Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(false).body(body).subject(subject).build();
+            EmailRequest email = new EmailRequest(requestInfo,emailobj);
+            emailRequest.add(email);
+        }
+        return emailRequest;
+    }
 
     /**
      * Send the EmailRequest on the EmailNotification kafka topic
@@ -354,11 +363,16 @@ public class NotificationUtil {
         if (config.getIsEmailNotificationEnabled()) {
             if (CollectionUtils.isEmpty(emailRequestList))
                 log.info("Messages from localization couldn't be fetched!");
-            for (EmailRequest emailRequest : emailRequestList) {
-                producer.push(tenantId, config.getEmailNotifTopic(), emailRequest);
-                log.info("Sending EMAIL notification! ");
-                log.info("Email Id: " + emailRequest.getEmail().toString());
+            for (EmailRequest emailRequest: emailRequestList) {
+                if (!StringUtils.isEmpty(emailRequest.getEmail().getBody())) {
+                    producer.push(tenantId, config.getEmailNotifTopic(), emailRequest);
+                    log.info("Sending EMAIL notification! ");
+                    log.info("Email Id: " + emailRequest.getEmail().toString());
+                } else {
+                    log.info("Email body is empty, hence no email notification will be sent.");
+                }
             }
+
         }
     }
 
@@ -425,7 +439,6 @@ public class NotificationUtil {
     *
     * @param requestInfo
     * @param smsRequests
-    * @param events
     */
 	public List<Event> enrichEvent(List<SMSRequest> smsRequests, RequestInfo requestInfo, String tenantId,
 			Property property, Boolean isActionReq) {
@@ -496,6 +509,33 @@ public class NotificationUtil {
                    ActionItem item = ActionItem.builder().actionUrl(actionLink).code(VIEW_PROPERTY_CODE).build();
                    items.add(item);
                }
+
+               if(msg.contains(TRACK_APPLICATION) && msg.contains("{MTURL}")){
+                   actionLink = getMutationUrl(property);
+                   ActionItem item = ActionItem.builder().actionUrl(actionLink).code(TRACK_APPLICATION_CODE).build();
+                   items.add(item);
+               }
+
+               if(msg.contains(NOTIFICATION_PAY_LINK)){
+                   actionLink = getPayUrl(property);
+                   ActionItem item = ActionItem.builder().actionUrl(actionLink).code(NOTIFICATION_PAY_LINK).build();
+                   items.add(item);
+               }
+
+               if(msg.contains(MT_RECEIPT_STRING))
+               {
+                   actionLink = getMutationUrl(property);
+                   ActionItem item = ActionItem.builder().actionUrl(actionLink).code(DOWNLOAD_MUTATION_RECEIPT_CODE).build();
+                   items.add(item);
+               }
+
+               if(msg.contains(MT_CERTIFICATE_STRING))
+               {
+                   actionLink = getMutationUrl(property);
+                   ActionItem item = ActionItem.builder().actionUrl(actionLink).code(DOWNLOAD_MUTATION_CERTIFICATE_CODE).build();
+                   items.add(item);
+               }
+               
                action = Action.builder().actionUrls(items).build();
            }
 
@@ -526,6 +566,16 @@ public class NotificationUtil {
         if(message.contains(PT_ONLINE_STRING))
             message = message.replace(PT_ONLINE_STRING,"");
 
+        //mutation notification
+        if(message.contains(MT_TRACK_APPLICATION_STRING))
+            message = message.replace(MT_TRACK_APPLICATION_STRING,"");
+        if(message.contains(MT_PAYLINK_STRING))
+            message = message.replace(MT_PAYLINK_STRING,"");
+        if(message.contains(MT_CERTIFICATE_STRING))
+            message = message.replace(MT_CERTIFICATE_STRING,"");
+        if(message.contains(MT_RECEIPT_STRING))
+            message = message.replace(MT_RECEIPT_STRING,"");
+
         return message;
     }
 
@@ -544,6 +594,7 @@ public class NotificationUtil {
         uri.append(mdmsHost).append(mdmsUrl);
         if(StringUtils.isEmpty(tenantId))
             return masterData;
+
         MdmsCriteriaReq mdmsCriteriaReq = getMdmsRequestForChannelList(requestInfo, centralInstanceUtil.getStateLevelTenant(tenantId));
 
         Filter masterDataFilter = filter(
@@ -588,4 +639,32 @@ public class NotificationUtil {
 		String stateLevelTenantId = centralInstanceUtil.getStateLevelTenant(tenantId);
 		return config.getUiAppHostMap().get(stateLevelTenantId);
 	}
+
+    /**
+     * Prepares and return url for mutation view screen
+     *
+     * @param property
+     * @return
+     */
+    public String getMutationUrl(Property property) {
+
+        return getShortenedUrl(
+                config.getHost(property.getTenantId()).concat(config.getViewMutationLink()
+                        .replace(NOTIFICATION_APPID, property.getAcknowldgementNumber())
+                        .replace(NOTIFICATION_TENANTID, centralInstanceUtil.getStateLevelTenant(property.getTenantId()))));
+    }
+
+    /**
+     * Prepares and return url for property view screen
+     *
+     * @param property
+     * @return
+     */
+    public String getPayUrl(Property property) {
+        return getShortenedUrl(
+                config.getHost(property.getTenantId()).concat(config.getPayLink().replace(EVENT_PAY_BUSINESSSERVICE,MUTATION_BUSINESSSERVICE)
+                        .replace(EVENT_PAY_PROPERTYID, property.getAcknowldgementNumber())
+                        .replace(EVENT_PAY_TENANTID, centralInstanceUtil.getStateLevelTenant(property.getTenantId()))));
+    }
+
 }

@@ -1,5 +1,6 @@
 package org.egov.pt.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.OwnerInfo;
@@ -376,6 +378,7 @@ public class PropertyService {
 				return Collections.emptyList();
 
 			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
+			filterPropertiesForUser(properties, criteria.getOwnerIds());
 		} else {
 			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
 		}
@@ -385,6 +388,27 @@ public class PropertyService {
 		});
 
 		return properties;
+	}
+
+	private void filterPropertiesForUser(List<Property> properties, Set<String> ownerIds) {
+
+		List<Property> propertiesToBeRemoved = new ArrayList<>();
+
+		for (Property property : properties) {
+
+			boolean isOwnerPresent = false;
+
+			for (OwnerInfo owner : property.getOwners()) {
+
+				if (ownerIds.contains(owner.getUuid())) {
+					isOwnerPresent = true;
+					break;
+				}
+			}
+			if (!isOwnerPresent)
+				propertiesToBeRemoved.add(property);
+		}
+		properties.removeAll(propertiesToBeRemoved);
 	}
 
 	public List<Property> searchPropertyPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
@@ -463,5 +487,10 @@ public class PropertyService {
 		return request.getProperty();
 	}
 	
+	public Integer count(RequestInfo requestInfo, @Valid PropertyCriteria propertyCriteria) {
+		propertyCriteria.setIsInboxSearch(false);
+        Integer count = repository.getCount(propertyCriteria, requestInfo);
+        return count;
+	}
 	
 }
