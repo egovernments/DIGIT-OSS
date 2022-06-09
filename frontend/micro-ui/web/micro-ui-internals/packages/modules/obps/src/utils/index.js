@@ -731,7 +731,7 @@ export const showHidingLinksForStakeholder = (roles = []) => {
   let checkedRoles = [];
   const rolearray = roles?.map((role) => {
     userInfo?.value?.info?.roles?.map((item) => {
-      if (item.code == role.code && item.tenantId === role.tenantId) {
+      if (item.code === role.code && item.tenantId === role.tenantId) {
         checkedRoles.push(item);
       }
     });
