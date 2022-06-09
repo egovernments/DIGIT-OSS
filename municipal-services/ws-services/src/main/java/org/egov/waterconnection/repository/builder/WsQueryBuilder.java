@@ -1,10 +1,13 @@
 package org.egov.waterconnection.repository.builder;
 
+import static org.egov.waterconnection.constants.WCConstants.SEARCH_TYPE_CONNECTION;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.service.UserService;
 import org.egov.waterconnection.util.WaterServicesUtil;
@@ -14,10 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.egov.common.utils.MultiStateInstanceUtil;
-
-
-import static org.egov.waterconnection.constants.WCConstants.SEARCH_TYPE_CONNECTION;
 
 @Component
 public class WsQueryBuilder {
@@ -367,7 +366,7 @@ public class WsQueryBuilder {
 	public StringBuilder applyFiltersForPlaneSearch(StringBuilder query, List<Object> preparedStatement, SearchCriteria criteria) {
 		if (!StringUtils.isEmpty(criteria.getTenantId())) {
 			addClauseIfRequired(preparedStatement, query);
-			if (criteria.getTenantId().equalsIgnoreCase(config.getStateLevelTenantId())) {
+			if (centralInstanceUtil.isTenantIdStateLevel(criteria.getTenantId())) {
 				query.append(" conn.tenantid LIKE ? ");
 				preparedStatement.add('%' + criteria.getTenantId() + '%');
 			} else {

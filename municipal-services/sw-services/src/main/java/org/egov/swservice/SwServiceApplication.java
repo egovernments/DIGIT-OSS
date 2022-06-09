@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootApplication(scanBasePackages = "org.egov.swservice")
+@SpringBootApplication(scanBasePackages = "org.egov")
 @EnableAutoConfiguration
 @Import({ TracerConfiguration.class, MultiStateInstanceUtil.class })
 public class SwServiceApplication{

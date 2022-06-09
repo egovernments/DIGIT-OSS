@@ -1,6 +1,8 @@
 package org.egov.waterconnection.service;
 
 
+import static org.egov.waterconnection.constants.WCConstants.APPROVE_CONNECTION;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -31,8 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-
-import static org.egov.waterconnection.constants.WCConstants.APPROVE_CONNECTION;
 
 @Component
 public class WaterServiceImpl implements WaterService {
@@ -261,7 +261,7 @@ public class WaterServiceImpl implements WaterService {
 		validateProperty.validatePropertyFields(property,waterConnectionRequest.getRequestInfo());
 		BusinessService businessService = workflowService.getBusinessService(waterConnectionRequest.getWaterConnection().getTenantId(), 
 				waterConnectionRequest.getRequestInfo(), config.getDisconnectBusinessServiceName());
-		WaterConnection searchResult = getConnectionForUpdateRequest(waterConnectionRequest.getWaterConnection().getId(), waterConnectionRequest.getRequestInfo());
+		WaterConnection searchResult = getConnectionForUpdateRequest(waterConnectionRequest.getWaterConnection().getTenantId(), waterConnectionRequest.getWaterConnection().getId(), waterConnectionRequest.getRequestInfo());
 		String previousApplicationStatus = workflowService.getApplicationStatus(waterConnectionRequest.getRequestInfo(),
 				waterConnectionRequest.getWaterConnection().getApplicationNo(),
 				waterConnectionRequest.getWaterConnection().getTenantId(),

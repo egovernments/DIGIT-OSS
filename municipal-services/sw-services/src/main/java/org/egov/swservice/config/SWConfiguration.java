@@ -1,5 +1,7 @@
 package org.egov.swservice.config;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -8,8 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Map;
 
 @Getter
 @Setter
@@ -30,10 +30,9 @@ public class SWConfiguration {
 	@Value("${egov.idgen.scid.name}")
 	private String sewerageIdGenName;
 
-	@Value("${egov.idgen.scid.format}")	// central-instance configs
-
-	@Value("#{${egov.ui.app.host.map}}")
-	private Map<String, String> uiAppHostMap;	private String sewerageIdGenFormat;
+	@Value("${egov.idgen.scid.format}")
+	private String sewerageIdGenFormat;
+	
     
 	@Value("${egov.idgen.scapid.name}")
 	private String sewerageApplicationIdGenName;
@@ -100,16 +99,6 @@ public class SWConfiguration {
 	@Value("${egov.user.event.notification.enabled}")
 	private Boolean isUserEventsNotificationEnabled;
 
-  // Email
-	@Value("${kafka.topics.notification.email}")
-	private String emailNotifTopic;
-
-	@Value("${notification.email.enabled}")
-	private Boolean isEmailNotificationEnabled;
-
-  //User Configuration
-  @Value("${egov.user.host}")
-   private String userHost;
 
 	// Email
 	@Value("${kafka.topics.notification.email}")

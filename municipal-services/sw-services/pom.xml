@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.example</groupId>
@@ -70,8 +69,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.egov.services</groupId>
-			<artifactId>services-common</artifactId>
-			<version>1.1.0-SNAPSHOT</version>
+			<artifactId>tracer</artifactId>
+			<version>2.1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -112,8 +111,8 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	<repositories> 
- 		<repository>
+	<repositories>
+		<repository>
 			<id>repo.digit.org</id>
 			<name>eGov DIGIT Releases Repository</name>
 			<url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>

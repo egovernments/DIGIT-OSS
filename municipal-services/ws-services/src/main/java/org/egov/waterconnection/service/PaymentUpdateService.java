@@ -1,5 +1,6 @@
 package org.egov.waterconnection.service;
 
+import static org.egov.waterconnection.constants.WCConstants.CHANNEL_NAME_EMAIL;
 import static org.egov.waterconnection.constants.WCConstants.CHANNEL_NAME_EVENT;
 import static org.egov.waterconnection.constants.WCConstants.CHANNEL_NAME_SMS;
 import static org.egov.waterconnection.constants.WCConstants.TENANTID_MDC_STRING;
@@ -14,17 +15,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
@@ -36,7 +35,19 @@ import org.egov.waterconnection.repository.WaterDao;
 import org.egov.waterconnection.util.NotificationUtil;
 import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.validator.ValidateProperty;
-import org.egov.waterconnection.web.models.*;
+import org.egov.waterconnection.web.models.Action;
+import org.egov.waterconnection.web.models.Category;
+import org.egov.waterconnection.web.models.Email;
+import org.egov.waterconnection.web.models.EmailRequest;
+import org.egov.waterconnection.web.models.Event;
+import org.egov.waterconnection.web.models.EventRequest;
+import org.egov.waterconnection.web.models.Property;
+import org.egov.waterconnection.web.models.Recepient;
+import org.egov.waterconnection.web.models.SMSRequest;
+import org.egov.waterconnection.web.models.SearchCriteria;
+import org.egov.waterconnection.web.models.Source;
+import org.egov.waterconnection.web.models.WaterConnection;
+import org.egov.waterconnection.web.models.WaterConnectionRequest;
 import org.egov.waterconnection.web.models.collection.PaymentDetail;
 import org.egov.waterconnection.web.models.collection.PaymentRequest;
 import org.egov.waterconnection.workflow.WorkflowIntegrator;
@@ -46,15 +57,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
 
-import static org.egov.waterconnection.constants.WCConstants.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -260,12 +268,16 @@ public class PaymentUpdateService {
 				}
 			}
 		}
+		
 		if (configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
 			if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 				List<SMSRequest> smsRequests = getSmsRequest(waterConnectionRequest, property, paymentDetail);
 				if (!CollectionUtils.isEmpty(smsRequests)) {
 					notificationUtil.sendSMS(smsRequests, tenantId);
 				}
+
+			}
+		}
 
 
 		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
@@ -276,7 +288,7 @@ public class PaymentUpdateService {
 				}
 			}
 		}
-
+		
 	}
 
 	/**

@@ -1,12 +1,11 @@
 package org.egov.swservice.producer;
 
-import lombok.extern.slf4j.Slf4j;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.egov.common.utils.MultiStateInstanceUtil;
 
-import static org.egov.swservice.util.SWConstants.TOPICS_TO_AVOID;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
