@@ -16,6 +16,7 @@ const createAccessoriesDetails = () => ({
     key: Date.now(),
 });
 
+
 const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
     const { t } = useTranslation();
     const { pathname } = useLocation();
@@ -31,7 +32,10 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
     if(window.location.href.includes("edit-application-details")) isRenewal = true;
 
 
-    const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId, filters: {} });
+    const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId, filters: {} }, {
+        select: (data) => {
+        return data?.billingSlab.filter((e) => e.accessoryCategory && e.applicationType === "NEW");
+    }});
 
     const addAccessories = () => {
         const newAccessor = createAccessoriesDetails();
@@ -153,10 +157,10 @@ const AccessoriersForm = (_props) => {
     }, [accessor?.accessoryCategory?.uom, formData?.accessories]);
 
     useEffect(() => {
-        if (billingSlabData && billingSlabData?.billingSlab && billingSlabData?.billingSlab?.length > 0) {
+        if (billingSlabData &&  billingSlabData?.length > 0) {
             const processedData =
-                billingSlabData.billingSlab &&
-                billingSlabData.billingSlab.reduce(
+                billingSlabData &&
+                billingSlabData.reduce(
                     (acc, item) => {
                         let accessory = { active: true };
                         let tradeType = { active: true };
@@ -266,7 +270,7 @@ const AccessoriersForm = (_props) => {
                         </div>
                     ) : null}
                     <LabelFieldPair>
-                        <CardLabel className="card-label-smaller">{`${t("TL_NEW_TRADE_DETAILS_ACC_LABEL")} :`}</CardLabel>
+                        <CardLabel className="card-label-smaller">{`${t("TL_NEW_TRADE_DETAILS_ACC_LABEL")} `}</CardLabel>
                         <Controller
                             control={control}
                             name={"accessoryCategory"}
@@ -293,7 +297,7 @@ const AccessoriersForm = (_props) => {
                     </LabelFieldPair>
                     {/* <CardLabelError style={errorStyle}>{localFormState.touched.accessoryCategory ? errors?.name?.message : ""}</CardLabelError> */}
                     <LabelFieldPair>
-                        <CardLabel className="card-label-smaller">{getValues("uom") ? `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")} * :` : `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")} :`}</CardLabel>
+                        <CardLabel className="card-label-smaller">{getValues("uom") ? `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")} * ` : `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")} `}</CardLabel>
                         <div className="field">
                             <Controller
                                 control={control}
@@ -320,7 +324,7 @@ const AccessoriersForm = (_props) => {
                     </LabelFieldPair>
                     {/* <CardLabelError style={errorStyle}>{localFormState.touched.uom ? errors?.uom?.message : ""}</CardLabelError> */}
                     <LabelFieldPair>
-                        <CardLabel className="card-label-smaller">{accessor?.accessoryCategory?.uom ? `${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")} * : ` : `${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")} : `}</CardLabel>
+                        <CardLabel className="card-label-smaller">{accessor?.accessoryCategory?.uom ? `${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")} *  ` : `${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}  `}</CardLabel>
                         <div className="field">
                             <Controller
                                 control={control}
@@ -347,7 +351,7 @@ const AccessoriersForm = (_props) => {
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.uomValue ? errors?.uomValue?.message : ""}</CardLabelError>
                     <LabelFieldPair>
-                        <CardLabel className="card-label-smaller">{accessor?.accessoryCategory?.code ? `${t("TL_ACCESSORY_COUNT_LABEL")} * :` : `${t("TL_ACCESSORY_COUNT_LABEL")} : `}</CardLabel>
+                        <CardLabel className="card-label-smaller">{accessor?.accessoryCategory?.code ? `${t("TL_ACCESSORY_COUNT_LABEL")} * ` : `${t("TL_ACCESSORY_COUNT_LABEL")} `}</CardLabel>
                         <div className="field">
                             <Controller
                                 control={control}

@@ -29,7 +29,7 @@ let MODULE_LEVEL=JSON.parse(sessionStorage.getItem('MODULE_LEVEL'))
 
         for (var i = 0; i < newGFilterData['ULBS'].length; i++) {
             let tenent = stateTenant() || "";
-            tempValue.push(tenent + '.' + newGFilterData['ULBS'][i].toLowerCase());
+            tempValue.push( newGFilterData['ULBS'][i].toLowerCase());
         }
         filters['tenantId'] = tempValue;
     }

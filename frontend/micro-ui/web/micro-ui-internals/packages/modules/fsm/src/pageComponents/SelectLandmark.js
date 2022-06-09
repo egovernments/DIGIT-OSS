@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FormStep, TextArea, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/TLTimelineInFSM";
 
 const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
   const [landmark, setLandmark] = useState();
@@ -51,15 +52,19 @@ const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
   const onSkip = () => onSelect();
 
   return (
-    <FormStep
-      config={{ ...config, inputs }}
-      value={landmark}
-      onChange={onChange}
-      onSelect={(data) => onSelect(config.key, { ...formData[config.key], ...data })}
-      onSkip={onSkip}
-      t={t}
-      forcedError={t(error)}
-    ></FormStep>
+    <React.Fragment>
+    
+    {window.location.href.includes("/pt") ?  <Timeline currentStep={1} flow ="PT_APPLY"/> : window.location.href.includes("/tl") ? <Timeline currentStep={2} /> : <Timeline currentStep={1} flow="APPLY" />}
+      <FormStep
+        config={{ ...config, inputs }}
+        value={landmark}
+        onChange={onChange}
+        onSelect={(data) => onSelect(config.key, { ...formData[config.key], ...data })}
+        onSkip={onSkip}
+        t={t}
+        forcedError={t(error)}
+      ></FormStep>
+    </React.Fragment>
   );
 };
 

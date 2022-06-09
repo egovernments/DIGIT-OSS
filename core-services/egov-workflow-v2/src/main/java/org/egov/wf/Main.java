@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.cache2k.Cache2kBuilder;
 import org.cache2k.extra.spring.SpringCache2kCacheManager;
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -24,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 @EnableCaching
-@Import({ TracerConfiguration.class, MultiStateInstanceUtil.class })
+@Import({ TracerConfiguration.class })
 public class Main {
 
     @Value("${app.timezone}")

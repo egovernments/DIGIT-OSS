@@ -86,6 +86,7 @@ public class SewerageRowMapper implements ResultSetExtractor<List<SewerageConnec
                 sewarageConnection.setAdditionalDetails(addtionalDetails);
                 sewarageConnection.processInstance(ProcessInstance.builder().action((rs.getString("action"))).build());
                 sewarageConnection.setApplicationType(rs.getString("applicationType"));
+                sewarageConnection.setChannel(rs.getString("channel"));
                 sewarageConnection.setDateEffectiveFrom(rs.getLong("dateEffectiveFrom"));
                 sewarageConnection.setPropertyId(rs.getString("property_id"));
 

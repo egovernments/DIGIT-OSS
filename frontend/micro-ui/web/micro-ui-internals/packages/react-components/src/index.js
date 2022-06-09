@@ -15,6 +15,7 @@ import CardLabel from "./atoms/CardLabel";
 import CardLabelDesc from "./atoms/CardLabelDesc";
 import CardLabelError from "./atoms/CardLabelError";
 import CardSectionHeader from "./atoms/CardSectionHeader";
+import CardSectionSubText from "./atoms/CardSectionSubText";
 import CardSubHeader from "./atoms/CardSubHeader";
 import CardText from "./atoms/CardText";
 import CardTextButton from "./atoms/CardTextButton";
@@ -30,7 +31,7 @@ import DisplayPhotos from "./atoms/DisplayPhotos";
 import Dropdown from "./atoms/Dropdown";
 import EllipsisMenu from "./atoms/EllipsisMenu";
 import EmployeeAppContainer from "./atoms/EmployeeAppContainer";
-import EmployeeModuleCard from "./atoms/EmployeeModuleCard";
+import { EmployeeModuleCard, ModuleCardFullWidth } from "./atoms/EmployeeModuleCard";
 import GreyOutText from "./atoms/GreyOutText";
 import Hamburger from "./atoms/Hamburger";
 import Header from "./atoms/Header";
@@ -133,7 +134,37 @@ import {
   SurveyIconSolid,
   DustbinIcon,
   InfoBannerIcon,
-  WSICon
+  WSICon,
+  ArrowForward,
+  ArrowVectorDown,
+  ArrowDirection,
+  CameraIcon,
+  EditPencilIcon,
+  GalleryIcon,
+  RemoveIcon,
+  CheckSvg,
+  AddressBookIcon,
+  LocationIcon,
+  CollectionsBookmarIcons,
+  FinanceChartIcon,
+  CollectionIcon,
+  FSMIcon,
+  MCollectIcon,
+  PGRIcon,
+  TLIcon,
+  BillsIcon,
+  ErrorIcon,
+  PrintBtnCommon,
+  WhatsappIconGreen,
+  HelpLineIcon,
+  ServiceCenterIcon,
+  TimerIcon,
+  RupeeSymbol,
+  ValidityTimeIcon,
+  AddIcon,
+  AddNewIcon,
+  InboxIcon,
+  ViewReportIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -148,7 +179,7 @@ import CardBasedOptions from "./atoms/CardBasedOptions";
 import WhatsNewCard from "./atoms/WhatsNewCard";
 import EventCalendarView from "./atoms/EventCalendarView";
 import InboxLinks from "./atoms/InboxLinks";
-import PopupHeadingLabel from "./atoms/PopupHeadingLabel"
+import PopupHeadingLabel from "./atoms/PopupHeadingLabel";
 
 import { FormComposer } from "./hoc/FormComposer";
 import Modal from "./hoc/Modal";
@@ -179,6 +210,8 @@ import MultiUploadWrapper from "./molecules/MultiUploadWrapper";
 import { FilterForm, FilterFormField } from "./molecules/FilterForm";
 import OpenLinkContainer from "./atoms/OpenLinkContainer";
 import UploadPitPhoto from "./molecules/UploadPitPhoto";
+import { DownloadBtnCommon } from "./atoms/svgindex";
+import ToggleSwitch from "./atoms/ToggleSwitch";
 export {
   Phone,
   Body,
@@ -210,6 +243,7 @@ export {
   Banner,
   CardSubHeader,
   CardSectionHeader,
+  CardSectionSubText,
   SubmitBar,
   ButtonSelector,
   LinkButton,
@@ -260,6 +294,7 @@ export {
   EventCalendarView,
   InboxLinks,
   PopupHeadingLabel,
+  ToggleSwitch,
   // Icons
   GetApp,
   ArrowLeft,
@@ -366,6 +401,37 @@ export {
   SearchIcon,
   DeleteIcon,
   WSICon,
-  UploadPitPhoto
+  CameraIcon,
+  EditPencilIcon,
+  GalleryIcon,
+  RemoveIcon,
+  UploadPitPhoto,
+  CheckSvg,
+  ModuleCardFullWidth,
+  ArrowForward,
+  ArrowVectorDown,
+  ArrowDirection,
+  AddressBookIcon,
+  LocationIcon,
+  CollectionsBookmarIcons,
+  FinanceChartIcon,
+  CollectionIcon,
+  FSMIcon,
+  MCollectIcon,
+  PGRIcon,
+  TLIcon,
+  BillsIcon,
+  ErrorIcon,
+  DownloadBtnCommon,
+  PrintBtnCommon,
+  WhatsappIconGreen,
+  HelpLineIcon,
+  ServiceCenterIcon,
+  TimerIcon,
+  RupeeSymbol,
+  ValidityTimeIcon,
+  AddIcon,
+  AddNewIcon,
+  ViewReportIcon,
+  InboxIcon,
 };
-

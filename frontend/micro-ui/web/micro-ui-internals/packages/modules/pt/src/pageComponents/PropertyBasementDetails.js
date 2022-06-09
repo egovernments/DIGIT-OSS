@@ -1,5 +1,6 @@
 import { CitizenInfoLabel, FormStep, RadioButtons } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
+import Timeline from "../components/TLTimeline";
 
 const PropertyBasementsDetails = ({ t, config, onSelect, userType, formData }) => {
   const [BasementDetails, setBasementDetails] = useState(formData?.noOofBasements);
@@ -29,14 +30,15 @@ const PropertyBasementsDetails = ({ t, config, onSelect, userType, formData }) =
   }
 
   function goNext() {
-    let index = window.location.href.charAt(window.location.href.length - 1);
+    // let index = window.location.href.charAt(window.location.href.length - 1);
     //let index = window.location.href.split("/").pop();
     sessionStorage.setItem("noOofBasements", BasementDetails.i18nKey);
-    onSelect(config.key, BasementDetails, "", index);
+    onSelect(config.key, BasementDetails,);
   }
 
   return (
     <React.Fragment>
+          {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!BasementDetails} isMultipleAllow={true}>
         <RadioButtons
           t={t}

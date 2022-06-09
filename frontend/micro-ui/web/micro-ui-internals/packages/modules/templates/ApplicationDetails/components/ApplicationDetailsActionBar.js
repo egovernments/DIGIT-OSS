@@ -4,16 +4,22 @@ import { SubmitBar, ActionBar, Menu } from "@egovernments/digit-ui-react-compone
 
 function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix,ActionBarStyle={},MenuStyle={} }) {
   const { t } = useTranslation();
-  const user = Digit.UserService.getUser();
+  let user = Digit.UserService.getUser();
+  if (window.location.href.includes("/obps") || window.location.href.includes("/noc")) {
+    const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+    const userInfo = userInfos ? JSON.parse(userInfos) : {};
+    user = userInfo?.value;
+  }
   const userRoles = user?.info?.roles?.map((e) => e.code);
   let isSingleButton = false;
   let isMenuBotton = false;
-
   let actions = workflowDetails?.data?.actionState?.nextActions?.filter((e) => {
+    return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
+  }) || workflowDetails?.data?.nextActions?.filter((e) => {
     return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
   });
 
-  if ((window.location.href.includes("/obps") || window.location.href.includes("/noc")) && actions?.length == 1) {
+  if (((window.location.href.includes("/obps") || window.location.href.includes("/noc")) && actions?.length == 1) || (actions?.[0]?.redirectionUrl?.pathname.includes("/pt/property-details/")) && actions?.length == 1) {
     isMenuBotton = false;
     isSingleButton = true; 
   } else if (actions?.length > 0) {
@@ -25,7 +31,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
     <React.Fragment>
       {!workflowDetails?.isLoading && isMenuBotton && !isSingleButton && (
         <ActionBar style={{...ActionBarStyle}}>
-          {displayMenu && workflowDetails?.data?.actionState?.nextActions ? (
+          {displayMenu && (workflowDetails?.data?.actionState?.nextActions || workflowDetails?.data?.nextActions) ? (
             <Menu
               localeKeyPrefix={forcedActionPrefix || `WF_EMPLOYEE_${businessService?.toUpperCase()}`}
               options={actions}

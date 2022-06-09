@@ -109,7 +109,15 @@ export const httpRequest = async (
       : (endPoint && endPoint.includes("mdms")
           ? commonConfig.tenantId
           : getTenantId()) || commonConfig.tenantId;
-  if (!some(queryObject, ["key", "tenantId"]) && commonConfig.singleInstance) {
+          
+  let isTenantId = true;
+  if (queryObject && queryObject.length > 0) {
+    queryObject.forEach(valueData => {
+      if (valueData && isTenantId && valueData.key == "tenantId") isTenantId = false
+    })
+  }
+
+  if (!some(queryObject, ["key", "tenantId"]) && commonConfig.singleInstance && isTenantId && endPoint && !endPoint.includes("tenantId")) {
     queryObject &&
       queryObject.push({
         key: "tenantId",

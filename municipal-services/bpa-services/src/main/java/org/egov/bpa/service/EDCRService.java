@@ -127,9 +127,29 @@ public class EDCRService {
 		LinkedList<String> permitNumber = context.read("edcrDetail.*.permitNumber");
 		additionalDetails.put(BPAConstants.SERVICETYPE, serviceType.get(0));
 		additionalDetails.put(BPAConstants.APPLICATIONTYPE, applicationType.get(0));
-		if(permitNumber.size()>0){
-			additionalDetails.put(BPAConstants.PERMIT_NO, permitNumber.get(0));
-		}
+                if (!permitNumber.isEmpty()) {
+                    /*
+                     * Validating OC application, with submitted permit number is any OC
+                     * submitted without rejection. Using a permit number only one OC
+                     * application submission should allowed otherwise needs to throw
+                     * validation message for more one submission.
+                     * If the OC application is rejected for a permit then we need allow.
+                     */
+                    BPASearchCriteria ocCriteria = new BPASearchCriteria();
+                    ocCriteria.setPermitNumber(permitNumber.get(0));
+                    ocCriteria.setTenantId(bpa.getTenantId());
+                    List<BPA> ocApplns = bpaRepository.getBPAData(ocCriteria, null);
+                    if (!ocApplns.isEmpty()) {
+                        for (int i = 0; i < ocApplns.size(); i++) {
+                            if (!ocApplns.get(i).getStatus().equalsIgnoreCase(BPAConstants.STATUS_REJECTED)) {
+                                throw new CustomException(BPAErrorConstants.DUPLICATE_OC,
+                                        "Occupancy certificate application is already exists with permit approval Number "
+                                                + permitNumber.get(0));
+                            }
+                        }
+                    }
+                    additionalDetails.put(BPAConstants.PERMIT_NO, permitNumber.get(0));
+                }
 		List<Double> plotAreas = context.read("edcrDetail.*.planDetail.plot.area", typeRef);
 		List<Double> buildingHeights = context.read("edcrDetail.*.planDetail.blocks.*.building.buildingHeight",
 				typeRef);

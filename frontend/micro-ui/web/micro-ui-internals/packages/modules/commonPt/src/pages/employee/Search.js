@@ -1,6 +1,6 @@
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Header, Localities, Toast } from "@egovernments/digit-ui-react-components";
+import { Header, Loader, Localities, Toast } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
 const PTSearchFields = {
@@ -11,7 +11,7 @@ const PTSearchFields = {
       placeHolder: "PT_PROPERTY_UNIQUE_ID_PLACEHOLDER",
       validation: {
         pattern: {
-          value: /^[a-zA-Z0-9-]*$/i,
+          value: "[A-Za-z]{2}\-[A-Za-z]{2}\-[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-[0-9]{6}",
           message: "ERR_INVALID_PROPERTY_ID",
         },
       },
@@ -22,7 +22,7 @@ const PTSearchFields = {
       placeholder: "PT_EXISTING_PROPERTY_ID_PLACEHOLDER",
       validation: {
         pattern: {
-          value: /^[a-zA-Z0-9-]*$/i,
+          value: "[A-Za-z]{2}\-[A-Za-z]{2}\-[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-[0-9]{6}",
           message: "ERR_INVALID_PROPERTY_ID",
         },
       },
@@ -41,7 +41,7 @@ const PTSearchFields = {
           message: "CORE_COMMON_MOBILE_ERROR",
         },
         pattern: {
-          value: /[789][0-9]{9}/,
+          value: /[6789][0-9]{9}/,
           message: "CORE_COMMON_MOBILE_ERROR",
         },
       },
@@ -118,9 +118,16 @@ const Search = ({ path }) => {
       return data?.["DIGIT-UI"]?.["HelpText"]?.[0]?.PT;
     },
   });
+
+  useEffect (() =>{
+    if(sessionStorage.getItem("searchDetailValue") == 1 && searchBy === "searchId"){
+      setSearchBy("searchDetail")
+    }
+  },[searchBy])
+
   const onReset = useCallback(() => {
     setFormData(defaultValues);
-    // setPayload({});
+     setPayload({});
     setShowToast(null);
   });
 
@@ -137,6 +144,10 @@ const Search = ({ path }) => {
       setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
     }
   });
+
+
+  if(isLoading) return <Loader></Loader>;
+
   return (
     <React.Fragment>
       <Header>{t("SEARCH_PROPERTY")}</Header>

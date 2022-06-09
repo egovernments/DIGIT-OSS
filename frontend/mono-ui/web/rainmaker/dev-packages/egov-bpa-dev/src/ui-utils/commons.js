@@ -33,14 +33,14 @@ export const downloadReceiptFromFilestoreID = (fileStoreId, mode, tenantId) => {
   });
 }
 
-export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state) => {
+export const download = (receiptQueryString, mode = "download", configKey = "consolidatedreceipt", state, businessService) => {
   if (state && process.env.REACT_APP_NAME === "Citizen" && configKey === "consolidatedreceipt") {
     const uiCommonPayConfig = get(state.screenConfiguration.preparedFinalObject, "commonPayInfo");
     configKey = get(uiCommonPayConfig, "receiptKey", "consolidatedreceipt")
   }
   const FETCHRECEIPT = {
     GET: {
-      URL: "/collection-services/payments/_search",
+      URL: businessService ? `/collection-services/payments/${businessService}_search`  :"/collection-services/payments/_search",
       ACTION: "_get",
     },
   };

@@ -34,7 +34,7 @@ const MobileInbox = ({
       [t("WF_INBOX_HEADER_LOCALITY")]:t(Digit.Utils.locale.getRevenueLocalityCode(e?.["locality"], e?.["tenantId"])),
       [t("WF_INBOX_HEADER_STATUS")]:t(e?.["businessService"]?`WF_${e["businessService"]?.toUpperCase()}_${e?.["status"]}`:`NA`),
       [t("WF_INBOX_HEADER_CURRENT_OWNER")]:t(e?.owner),
-      [t("WF_INBOX_HEADER_SLA_DAYS_REMAINING")]:e?.["sla"]}))
+      [t("WF_INBOX_HEADER_SLA_DAYS_REMAINING")]:t(e?.["sla"])}))
 
   return (
     <div style={{ padding: 0 }}>

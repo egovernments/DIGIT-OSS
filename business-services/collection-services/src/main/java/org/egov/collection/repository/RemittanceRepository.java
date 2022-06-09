@@ -12,8 +12,6 @@ import org.egov.collection.web.contract.RemittanceDetail;
 import org.egov.collection.web.contract.RemittanceInstrument;
 import org.egov.collection.web.contract.RemittanceReceipt;
 import org.egov.collection.web.contract.RemittanceSearchRequest;
-import org.egov.common.exception.InvalidTenantIdException;
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -31,9 +29,6 @@ public class RemittanceRepository {
 
     @Autowired
     private RemittanceResultSetExtractor remittanceResultSetExtractor;
-    
-	@Autowired
-	private MultiStateInstanceUtil centralUtil;
 
     public void saveRemittance(Remittance remittance) {
         try {
@@ -76,13 +71,6 @@ public class RemittanceRepository {
     public List<Remittance> fetchRemittances(RemittanceSearchRequest remittanceSearchRequest) {
         Map<String, Object> preparedStatementValues = new HashMap<>();
         String query = RemittanceQueryBuilder.getRemittanceSearchQuery(remittanceSearchRequest, preparedStatementValues);
-        try {
-        query = centralUtil.replaceSchemaPlaceholder(query, remittanceSearchRequest.getTenantId());
-        }catch (InvalidTenantIdException e) {
-        	
-        	throw new CustomException("EG_CL_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
         log.debug(query);
         List<Remittance> remittances = namedParameterJdbcTemplate.query(query, preparedStatementValues,
                 remittanceResultSetExtractor);

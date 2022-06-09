@@ -1,24 +1,20 @@
 package org.egov.filters.pre;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import com.netflix.zuul.context.RequestContext;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 
-import com.netflix.zuul.context.RequestContext;
+import java.util.HashSet;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
 
 public class RbacPreCheckFilterTest {
     private MockHttpServletRequest request = new MockHttpServletRequest();
 
-    private List<String> openEndpointsWhitelist = new ArrayList<>();
-    private List<String> anonymousEndpointsWhitelist = new ArrayList<>();
+    private HashSet<String> openEndpointsWhitelist = new HashSet<>();
+    private HashSet<String> anonymousEndpointsWhitelist = new HashSet<>();
 
     private RbacPreCheckFilter rbacPreCheckFilter;
 

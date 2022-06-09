@@ -5,7 +5,10 @@ import { useWatch } from "react-hook-form";
 const SearchFormFieldsComponent = ({ formState, Controller, register, control, t, reset, previousPage }) => {
   const stateTenantId = Digit.ULBService.getStateId();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const userInformation = Digit.UserService.getUser()?.info;
+  // const userInformation = Digit.UserService.getUser()?.info;
+  const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+  const userInfo = userInfos ? JSON.parse(userInfos) : {};
+  const userInformation = userInfo?.value?.info;
   const applicationType = useWatch({ control, name: "applicationType" });
   const oldApplicationType = sessionStorage.getItem("search_application") || "";
   if (oldApplicationType && oldApplicationType != "undefined" && JSON.parse(oldApplicationType)?.code !== applicationType?.code)
@@ -186,19 +189,26 @@ const SearchFormFieldsComponent = ({ formState, Controller, register, control, t
               limit: 10,
               sortBy: "commencementDate",
               sortOrder: "DESC",
-              applicationType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_") ).length>0 &&  userInformation?.roles?.filter((ob) => ob.code.includes("BPA_") ).length<=0?{
+              applicationType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length > 0 ? {
+                code: "BUILDING_PLAN_SCRUTINY",
+                i18nKey: "WF_BPA_BUILDING_PLAN_SCRUTINY",
+              } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0 ? {
                 code: "BPA_STAKEHOLDER_REGISTRATION",
                 i18nKey: "WF_BPA_BPA_STAKEHOLDER_REGISTRATION",
-              }:{
+              } : {
                 code: "BUILDING_PLAN_SCRUTINY",
                 i18nKey: "WF_BPA_BUILDING_PLAN_SCRUTINY",
               },
-              serviceType:userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_") ).length>0 &&  userInformation?.roles?.filter((ob) => ob.code.includes("BPA_") ).length<=0?{
+              serviceType: userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length > 0 ? {
+                applicationType: ["BUILDING_PLAN_SCRUTINY", "BUILDING_OC_PLAN_SCRUTINY"],
+                code: "NEW_CONSTRUCTION",
+                i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",
+              } : userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0 ? {
                 code: "BPA_STAKEHOLDER_REGISTRATION",
                 applicationType:["BPA_STAKEHOLDER_REGISTRATION"],
                 roles: ["BPAREG_APPROVER","BPAREG_DOC_VERIFIER"],
                 i18nKey: "BPA_SERVICETYPE_BPA_STAKEHOLDER_REGISTRATION"
-              }:{
+              } : {
                 applicationType: ["BUILDING_PLAN_SCRUTINY", "BUILDING_OC_PLAN_SCRUTINY"],
                 code: "NEW_CONSTRUCTION",
                 i18nKey: "BPA_SERVICETYPE_NEW_CONSTRUCTION",

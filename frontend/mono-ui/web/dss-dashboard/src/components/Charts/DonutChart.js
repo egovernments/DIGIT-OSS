@@ -104,7 +104,6 @@ class DonutChart extends React.Component {
 						})
 					})
 					.catch(error => {
-						console.log(error.response)
 					});
 			}
 

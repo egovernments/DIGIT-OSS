@@ -33,7 +33,7 @@ export const Row = (props) => {
         {value}
         {props.caption && <div className="caption">{props.caption}</div>}
       </div>
-      {props.actionButton ? <div className="action-button">{props.actionButton}</div> : null}
+      {props.actionButton ? <div style={props.actionButtonStyle} className="action-button">{props.actionButton}</div> : null}
     </div>
   );
 };

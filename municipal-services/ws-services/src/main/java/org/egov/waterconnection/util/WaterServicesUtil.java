@@ -11,7 +11,6 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
-import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.web.models.AuditDetails;
 import org.egov.waterconnection.web.models.Property;
 import org.egov.waterconnection.web.models.PropertyCriteria;
@@ -68,7 +67,8 @@ public class WaterServicesUtil {
 	private String locality = "locality=";
 	private String URL = "url";
 	private String localityCode = "locality";
-
+	private String doorNo = "doorNo=";
+	private String name = "name=";
 	
 
 	/**
@@ -116,10 +116,6 @@ public class WaterServicesUtil {
 			propertyCriteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
 			propertyCriteria.setLocality(addDetail.get(localityCode).toString());
 		}
-		if (waterConnectionRequest.getRequestInfo().getUserInfo() != null
-				&& "CITIZEN".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getType())) {
-			propertyCriteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
-		}
 		Object result = serviceRequestRepository.fetchResult(
 				getPropertyURL(propertyCriteria),
 				RequestInfoWrapper.builder().requestInfo(waterConnectionRequest.getRequestInfo()).build());
@@ -141,6 +137,8 @@ public class WaterServicesUtil {
 	public List<Property> propertySearchOnCriteria(SearchCriteria waterConnectionSearchCriteria,
 			RequestInfo requestInfo) {
 		if (StringUtils.isEmpty(waterConnectionSearchCriteria.getMobileNumber())
+				&& StringUtils.isEmpty(waterConnectionSearchCriteria.getDoorNo())
+				&& StringUtils.isEmpty(waterConnectionSearchCriteria.getOwnerName())
 				&& StringUtils.isEmpty(waterConnectionSearchCriteria.getPropertyId())) {
 			return Collections.emptyList();
 		}
@@ -150,6 +148,12 @@ public class WaterServicesUtil {
 		}
 		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getMobileNumber())) {
 			propertyCriteria.setMobileNumber(waterConnectionSearchCriteria.getMobileNumber());
+		}
+		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getDoorNo())) {
+			propertyCriteria.setDoorNo(waterConnectionSearchCriteria.getDoorNo());
+		}
+		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getOwnerName())) {
+			propertyCriteria.setName(waterConnectionSearchCriteria.getOwnerName());
 		}
 		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getPropertyId())) {
 			HashSet<String> propertyIds = new HashSet<>();
@@ -236,6 +240,16 @@ public class WaterServicesUtil {
 			isanyparametermatch = true;
 			url.append(mobileNumber).append(criteria.getMobileNumber());
 		}
+		if (!StringUtils.isEmpty(criteria.getDoorNo())) {
+			if (isanyparametermatch)url.append("&");
+			isanyparametermatch = true;
+			url.append(doorNo).append(criteria.getDoorNo());
+		}
+		if (!StringUtils.isEmpty(criteria.getName())) {
+			if (isanyparametermatch)url.append("&");
+			isanyparametermatch = true;
+			url.append(name).append(criteria.getName());
+		}
 		if (!StringUtils.isEmpty(criteria.getLocality())) {
 			if (isanyparametermatch)url.append("&");
 			isanyparametermatch = true;
@@ -291,7 +305,7 @@ public class WaterServicesUtil {
 	public String getShortnerURL(String actualURL) {
 		JSONObject obj = new JSONObject();
 		obj.put(URL, actualURL);
-		String url = config.getUrlShortnerHost() + config.getShortenerURL();
+		String url = config.getNotificationUrl() + config.getShortenerURL();
 		
 		Object response = serviceRequestRepository.getShorteningURL(new StringBuilder(url), obj);
 		return response.toString();

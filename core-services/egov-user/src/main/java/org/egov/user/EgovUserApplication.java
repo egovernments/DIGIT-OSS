@@ -1,15 +1,25 @@
 package org.egov.user;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
-
-import javax.annotation.PostConstruct;
-
-import org.egov.common.utils.MultiStateInstanceUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.egov.encryption.EncryptionService;
 import org.egov.encryption.config.EncryptionConfiguration;
 import org.egov.tracer.config.TracerConfiguration;
+import org.egov.tracer.model.CustomException;
+import org.egov.user.domain.model.Address;
+import org.egov.user.domain.model.Role;
+import org.egov.user.domain.model.User;
+import org.egov.user.domain.model.enums.*;
+import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
+import org.apache.commons.lang3.StringUtils;
+
+import org.apache.commons.lang3.StringUtils;
+import org.egov.tracer.config.TracerConfiguration;
+import org.egov.tracer.model.CustomException;
 import org.egov.user.security.CustomAuthenticationKeyGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,19 +34,24 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.JedisShardInfo;
+
+import javax.annotation.PostConstruct;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SpringBootApplication
 @Slf4j
-@Import({MultiStateInstanceUtil.class, TracerConfiguration.class, EncryptionConfiguration.class})
+@Import({TracerConfiguration.class, EncryptionConfiguration.class})
 public class EgovUserApplication {
 
 

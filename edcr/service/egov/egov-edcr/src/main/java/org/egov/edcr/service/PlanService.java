@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -51,7 +52,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Service
 public class PlanService {
-    private static final Logger LOG = Logger.getLogger(PlanService.class);
+    private static final Logger LOG = LogManager.getLogger(PlanService.class);
     @Autowired
     private PlanFeatureService featureService;
     @Autowired
@@ -128,13 +129,16 @@ public class PlanService {
             ByteArrayInputStream dcrReport = new ByteArrayInputStream(convertedDigitDcr);
             pdfs.add(dcrReport);
 
-            if (plan.getMainDcrPassed()) {
+            if (Boolean.TRUE.equals(plan.getMainDcrPassed())) {
                 OcComparisonDetail ocComparisonE = ocComparisonService.processCombined(processCombinedStatus,
                         edcrApplicationDetail);
 
-                final String fileName = ocComparisonE.getOcdcrNumber() + "-" + ocComparisonE.getDcrNumber()
-                        + "-comparison"
-                        + ".pdf";
+                String fileName;
+                if(StringUtils.isBlank(ocComparisonE.getOcdcrNumber()))
+                    fileName = ocComparisonE.getDcrNumber() + "-comparison" + ".pdf";
+                else
+                    fileName = ocComparisonE.getOcdcrNumber() + "-" + ocComparisonE.getDcrNumber() +
+                        "-comparison" + ".pdf";
                 final FileStoreMapper fileStoreMapper = fileStoreService.store(ocComparisonE.getOutput(), fileName,
                         "application/pdf",
                         DcrConstants.FILESTORE_MODULECODE);

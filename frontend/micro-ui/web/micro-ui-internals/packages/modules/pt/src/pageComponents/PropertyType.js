@@ -11,6 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { stringReplaceAll } from "../utils";
+import Timeline from "../components/TLTimeline";
 
 const PropertyType = ({ t, config, onSelect, userType, formData, setError, clearErrors, formState, onBlur }) => {
   const [BuildingType, setBuildingType] = useState(formData?.PropertyType);
@@ -111,6 +112,7 @@ const PropertyType = ({ t, config, onSelect, userType, formData, setError, clear
 
   return (
     <React.Fragment>
+          {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!BuildingType}>
         <RadioButtons
           t={t}

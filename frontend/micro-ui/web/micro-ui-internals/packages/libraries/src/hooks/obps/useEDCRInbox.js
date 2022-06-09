@@ -16,7 +16,7 @@ const useEDCRInbox = ({ tenantId, filters, config = { retry: false, retryOnMount
     ...(edcrNumber ? { edcrNumber } : {}),
     ...(applicationNumber ? { applicationNumber } : {}),
     ...(status ? { status } : {}),
-    ...(sortOrder ? { sortBy:sortOrder } : {}),
+    ...(sortOrder ? { orderBy: sortOrder } : {}),
     // ...(sortBy ? { sortBy } : {}),
     ...(appliactionType ? { appliactionType} : {}),
     limit,

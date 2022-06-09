@@ -14,7 +14,7 @@ enableButton = hasButton && hasButton === "false" ? false : true;
 
 const pageResetAndChange = (state, dispatch) => {
   dispatch(prepareFinalObject("events", []));
-  dispatch(setRoute("/notifications/create"));
+  window.location.href="./create";
 };
 
 const header = getCommonHeader({

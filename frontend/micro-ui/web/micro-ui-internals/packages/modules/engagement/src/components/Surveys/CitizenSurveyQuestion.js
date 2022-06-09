@@ -2,35 +2,52 @@ import { Card, CardLabelError, CheckBox, RadioButtons, TextArea, TextInput } fro
 import React, { Fragment } from "react";
 import { Controller } from "react-hook-form";
 
-const CitizenSurveyQuestion = ({ t, question, control, register, values, formState }) => {
+const CitizenSurveyQuestion = ({ t, question, control, register, values, formState,formDisabled }) => {
   const formErrors = formState?.errors;
   if (!question) return;
   const displayAnswerField = (answerType) => {
     switch (answerType) {
       case "SHORT_ANSWER_TYPE":
         return (
-          <TextInput
-            name={question.uuid}
-            type="text"
-            inputRef={register({
-              maxLength: {
-                value: 60,
-                message: t("EXCEEDS_60_CHAR_LIMIT"),
-              },
-            })}
-          />
+          <>
+            <TextInput
+              name={question.uuid}
+              disabled={formDisabled}
+              type="text"
+              inputRef={register({
+                maxLength: {
+                  value: 200,
+                 message: t("EXCEEDS_200_CHAR_LIMIT"),
+                },
+                required:question.required,
+              })}
+            />
+            {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "required" && (
+              <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>)}
+            {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "maxLength" && (
+              <CardLabelError>{t(`EXCEEDS_200_CHAR_LIMIT`)}</CardLabelError>)} 
+          </>
         );
       case "LONG_ANSWER_TYPE":
         return (
-          <TextArea
-            name={question.uuid}
-            inputRef={register({
-              maxLength: {
-                value: 160,
-                message: t("EXCEEDS_160_CHAR_LIMIT"),
-              },
-            })}
-          />
+          <>
+            <TextArea
+              name={question.uuid}
+              disabled={formDisabled}
+              inputRef={register({
+                maxLength: {
+
+                  value: 500,
+                  message: t("EXCEEDS_500_CHAR_LIMIT"),
+                },
+                required:question.required
+              })}
+            />
+            {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "required" && (
+              <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>)} 
+            {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "maxLength" && (
+              <CardLabelError>{t(`EXCEEDS_500_CHAR_LIMIT`)}</CardLabelError>)}
+          </>
         );
       case "MULTIPLE_ANSWER_TYPE":
         return (
@@ -39,9 +56,10 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               control={control}
               name={question.uuid}
               //defaultValue={surveyFormState?.collectCitizenInfo}
-              rules={{ required: true }}
+              rules={{ required: question.required }}
               render={({ onChange, value }) => (
                 <RadioButtons
+                  disabled={formDisabled}
                   onSelect={onChange}
                   selectedOption={value}
                   optionsKey=""
@@ -62,22 +80,23 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               control={control}
               name={question.uuid}
               //defaultValue={surveyFormState?.collectCitizenInfo}
-              //rules={{ required: true }}
+              //rules={{required:true}}
+              //rules={{ required:question.required }}
               render={({ onChange, value }) => (
                 <div className="align-columns">
                   {question.options.map((option) => {
                     return (
                       <CheckBox
+                        disabled={formDisabled}
                         key={option}
                         onChange={(e) => {
-                          //console.log("onChange", {e, value});
-                          if (e.target.checked ) {
-                            value && onChange([...value, option]);
+                          if (e.target.checked) {
+                            onChange([option,...value?value:[]]);             
                           } else {
                             value && onChange(value.filter((item) => item !== option));
                           }
                         }}
-                        checked={value}
+                        checked={!!value?.find(e=> e===option)}
                         label={option}
                       />
                     );
@@ -85,11 +104,37 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
                 </div>
               )}
             />
-            {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "required" && (
-              <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_REQUIRED`)}</CardLabelError>
+            {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type ==="required" && (
+              <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>
             )}
           </>
         );
+      // case "CHECKBOX_ANSWER_TYPE":
+      //   return (
+      //     <>
+      //     {question.options.map((option,index) => (
+      //     <div>
+      //       <label for="checkbox">
+      //         <input
+      //         control={control}
+      //         id={option}
+      //         type="checkbox"
+      //         name={option}
+      //         value={option}
+      //         ref={register({
+      //           required:false,
+      //         })}
+      //       />
+      //         {option}</label>
+            
+      //     </div>
+      //     ))}
+          
+      //       {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type ==="required" && (
+      //         <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>
+      //       )}
+      //     </>
+      //   );
       case "DATE_ANSWER_TYPE":
         return (
           <>
@@ -98,10 +143,11 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               name={question.uuid}
               //defaultValue=
               rules={{
-                required: true,
+                required: question.required,
                 // validate: { isValidToDate }
               }}
-              render={({ onChange, value }) => <TextInput type="date" isRequired={true} onChange={onChange} defaultValue={value} />}
+
+              render={({ onChange, value }) => <TextInput disabled={formDisabled} type="date"  onChange={onChange} defaultValue={value} />}
             />
             {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "required" && (
               <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_REQUIRED`)}</CardLabelError>
@@ -116,10 +162,10 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               name={question.uuid}
               //defaultValue={surveyFormState?.toTime}
               rules={{
-                required: true,
+                required: question.required,
                 // validate: { isValidToTime }
               }}
-              render={({ onChange, value }) => <TextInput type="time" isRequired={true} onChange={onChange} defaultValue={value} />}
+              render={({ onChange, value }) => <TextInput type="time" disabled={formDisabled}  onChange={onChange} defaultValue={value} />}
             />
             {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type === "required" && (
               <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_REQUIRED`)}</CardLabelError>
@@ -131,18 +177,19 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
         return (
           <TextInput
             name={question.uuid}
+            disabled={formDisabled}
             type="text"
             inputRef={register({
               maxLength: {
                 value: 60,
                 message: t("EXCEEDS_60_CHAR_LIMIT"),
               },
+              required:question.required
             })}
           />
         );
     }
   };
-  //console.log("<<<<what >>>", { question });
   return (
     <Card>
       <div className="surveyQuestion-wrapper">

@@ -38,13 +38,13 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action, applicat
     switch (action) {
       case "APPROVE": {
         setConfig(
-          configAcceptApplication({ t, action, selectFile, uploadedFile, error, isCommentRequired: false, setUploadedFile,file })
+          configAcceptApplication({ t, action, selectFile, uploadedFile, error, isCommentRequired: false, setUploadedFile,file, error })
         )
         break;
       }
       case "SEND_TO_ARCHITECT":
         setConfig(
-          configAcceptApplication({ t, action, selectFile, uploadedFile, error, setUploadedFile,file })
+          configAcceptApplication({ t, action, selectFile, uploadedFile, error, setUploadedFile,file, error })
         );
         break;
       case "TERMS_AND_CONDITIONS":
@@ -53,18 +53,21 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action, applicat
         break;  
       default:
         setConfig(
-          configAcceptApplication({ t, action, selectFile, uploadedFile, error, isCommentRequired: false , setUploadedFile,file})
+          configAcceptApplication({ t, action, selectFile, uploadedFile, error, isCommentRequired: false , setUploadedFile,file, error})
         )
     }
-  }, [action, uploadedFile]);
+  }, [action, uploadedFile, error]);
 
   useEffect(() => {
     (async () => {
         setError(null);
         if (file) {
-            if (file.size >= 5242880) {
+              const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i
+              if (file.size >= 5242880) {
                 setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
-            } else {
+              } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
+                setError(t(`NOT_SUPPORTED_FILE_TYPE`))
+              } else {
                 try {
                     setUploadedFile(null);
                     const response = await Digit.UploadServices.Filestorage("BPA", file, Digit.ULBService.getStateId());
@@ -109,7 +112,7 @@ const ActionModal = ({ t, closeModal, submitAction, actionData, action, applicat
       //style={{height: "auto", padding: "10px"}}
       isOBPSFlow={true}
       popupStyles={mobileView?{width:"720px"}:{}}
-      style={!mobileView?{height: "45px", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{height:"45px",width:"160px"}}
+      style={!mobileView?{minHeight: "45px", height: "auto", width:"107px",paddingLeft:"0px",paddingRight:"0px"}:{minHeight: "45px", height: "auto",width:"160px"}}
       hideSubmit={config?.label?.hideSubmit ? true : false}
       popupModuleMianStyles={action == "TERMS_AND_CONDITIONS" ? {height : "92%", boxSizing: "border-box"}: mobileView?{paddingLeft:"0px"}: {}}
       headerBarMainStyle={action == "TERMS_AND_CONDITIONS" ? {margin: "0px", height: "35px"}: {}}

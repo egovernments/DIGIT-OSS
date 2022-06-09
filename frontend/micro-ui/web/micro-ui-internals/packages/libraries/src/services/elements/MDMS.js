@@ -51,7 +51,7 @@ const initRequestBody = (tenantId) => ({
     moduleDetails: [
       {
         moduleName: "common-masters",
-        masterDetails: [{ name: "Department" }, { name: "Designation" }, { name: "StateInfo" }, { name: "wfSlaConfig" }],
+        masterDetails: [{ name: "Department" }, { name: "Designation" }, { name: "StateInfo" }, { name: "wfSlaConfig" }, { name: "uiHomePage" }],
       },
       {
         moduleName: "tenant",
@@ -99,6 +99,16 @@ export const getMultipleTypes = (tenantId, moduleCode, types) => ({
     ],
   },
 });
+export const getMultipleTypesWithFilter = (moduleCode, masterDetails) => ({
+  details: {
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: masterDetails,
+      },
+    ],
+  },
+});
 
 const getReceiptKey = (tenantId, moduleCode) => ({
   details: {
@@ -112,6 +122,30 @@ const getReceiptKey = (tenantId, moduleCode) => ({
           },
         ],
       },
+    ],
+  },
+});
+
+const getBillsGenieKey = (tenantId, moduleCode) => ({
+  details: {
+    tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "BusinessService",
+          },
+        ],
+      },
+      {
+        moduleName: "tenant",
+        masterDetails: [{ name: "tenants" }, { name: "citymodule" }],
+      },
+      {
+      moduleName: "common-masters",
+      masterDetails: [{name: "uiCommonPay"}]
+      }
     ],
   },
 });
@@ -571,6 +605,21 @@ const getRentalDetailsCategoryCriteria = (tenantId, moduleCode) => ({
   },
 });
 
+const getChargeSlabsCategoryCriteria = (tenantId, moduleCode) => ({
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "ChargeSlabs",
+          },
+        ],
+      },
+    ],
+  },
+});
 
 const getGenderTypeList = (tenantId, moduleCode, type) => ({
   type,
@@ -589,6 +638,34 @@ const getGenderTypeList = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getMeterStatusTypeList = (tenantId) => ({
+    moduleDetails: [
+      {
+        moduleName: "ws-services-calculation",
+        masterDetails: [
+          {
+            name: "MeterStatus",
+            filter: `$.*.name`
+          },
+        ],
+      },
+    ],
+
+});
+
+const getBillingPeriodValidation = (tenantId) => ({
+    moduleDetails: [
+      {
+        moduleName: "ws-services-masters",
+        masterDetails: [
+          {
+            name: "billingPeriod",
+            filter: "*"
+          },
+        ],
+      },
+    ],
+});
 
 const getDssDashboardCriteria = (tenantId, moduleCode) => ({
   details: {
@@ -708,7 +785,7 @@ const getCancelReceiptReasonAndStatus = (tenantId, moduleCode, type) => ({
     moduleDetails: [
       {
         moduleName: moduleCode,
-        masterDetails: [{ name: "ReceiptStatus" },{ name: "uiCommonPay" }],
+        masterDetails: [{ name: "ReceiptStatus" }, { name: "uiCommonPay" }],
       },
     ],
   },
@@ -723,14 +800,13 @@ const getDocumentTypesCriteria = (tenantId, moduleCode, type) => ({
         moduleName: moduleCode,
         masterDetails: [
           {
-            name: "DocTypeMapping"
-          }
-        ]
-      }
-    ]
-  }
-})
-
+            name: "DocTypeMapping",
+          },
+        ],
+      },
+    ],
+  },
+});
 
 const getTradeTypeRoleCriteria = (tenantId, moduleCode, type) => ({
   type,
@@ -741,13 +817,166 @@ const getTradeTypeRoleCriteria = (tenantId, moduleCode, type) => ({
         moduleName: moduleCode,
         masterDetails: [
           {
-            name: "TradeTypetoRoleMapping"
-          }
-        ]
-      }
-    ]
-  }
-})
+            name: "TradeTypetoRoleMapping",
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getFSTPORejectionReasonCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "FSTPORejectionReason",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getFSMPaymentTypeCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "PaymentType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getFSMTripNumberCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "TripNumber",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getFSMReceivedPaymentTypeCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "ReceivedPaymentType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getWSTaxHeadMasterCritera = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: "BillingService",
+        masterDetails: [
+          {
+            name: "TaxHeadMaster",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
+
+const getHowItWorksJSON = (tenantId) => ({
+      moduleDetails: [
+      {
+        moduleName: "common-masters",
+        masterDetails: [
+          {
+            name: "howItWorks",
+          },
+        ],
+      },
+    ],
+});
+
+const getFAQsJSON = (tenantId) => ({
+  moduleDetails: [
+  {
+    moduleName: "common-masters",
+    masterDetails: [
+      {
+        name: "faqs",
+      },
+    ],
+  },
+],
+});
+const getDSSFAQsJSON = (tenantId) => ({
+  moduleDetails: [
+  {
+    moduleName: "dss-dashboard",
+    masterDetails: [
+      {
+        name: "FAQs",
+      },
+    ],
+  },
+],
+});
+const getDSSAboutJSON = (tenantId) => ({
+  moduleDetails: [
+  {
+    moduleName: "dss-dashboard",
+    masterDetails: [
+      {
+        name: "About",
+      },
+    ],
+  },
+],
+});
+
+const getStaticData = () => ({
+  moduleDetails: [
+    {
+      moduleName: "common-masters",
+      masterDetails: [
+        {
+          name: "StaticData",
+        },
+      ],
+    },
+  ],
+});
 
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
@@ -910,13 +1139,13 @@ const getTLAccessoriesType = (MdmsRes) =>
     };
   });
 
-  const getTLFinancialYear = (MdmsRes) =>
+const getTLFinancialYear = (MdmsRes) =>
   MdmsRes["egf-master"].FinancialYear.filter((FinancialYear) => FinancialYear.active && FinancialYear.module === "TL").map((FinancialYearList) => {
     return {
       ...FinancialYearList,
       //i18nKey: `TRADELICENSE_ACCESSORIESCATEGORY_${stringReplaceAll(TLAccessoryTypeList.code, ".", "_")}`,
     };
-  });  
+  });
 const getFloorList = (MdmsRes) =>
   MdmsRes["PropertyTax"].Floor.filter((PTFloor) => PTFloor.active).map((PTFloorlist) => {
     return {
@@ -947,9 +1176,17 @@ const getRentalDetailsCategory = (MdmsRes) => {
   });
 };
 
+const getChargeSlabsCategory = (MdmsRes) => {
+  MdmsRes["PropertyTax"].ChargeSlabs.filter((category) => category.active).map((ChargeSlabsInfo) => {
+    return {
+      ...ChargeSlabsInfo,
+    };
+  });
+};
+
 const getGenderType = (MdmsRes) => {
   return MdmsRes["common-masters"].GenderType.filter((GenderType) => GenderType.active).map((genderDetails) => {
-    return{
+    return {
       ...genderDetails,
       i18nKey: `PT_COMMON_GENDER_${genderDetails.code}`,
     };
@@ -1002,17 +1239,54 @@ const GetMCollectApplicationStatus = (MdmsRes) =>
 
 const getFSMGenderType = (MdmsRes) => {
   return MdmsRes["common-masters"].GenderType.map((genderDetails) => {
-    return{
+    return {
       ...genderDetails,
       i18nKey: `COMMON_GENDER_${genderDetails.code}`,
     };
   });
 };
 
-const getDssDashboard = () => MdmsRes["dss-dashboard"]["dashboard-config"];
+const GetFSTPORejectionReason = (MdmsRes) => {
+  return MdmsRes["Vehicle"].FSTPORejectionReason.filter((reason) => reason.active).map((reasonDetails) => {
+    return {
+      ...reasonDetails,
+      i18nKey: `ES_ACTION_REASON_${reasonDetails.code}`,
+    };
+  });
+};
+
+const GetPaymentType = (MdmsRes) => {
+  return MdmsRes["FSM"].PaymentType.filter((option) => option.active).map((reasonDetails) => {
+    return {
+      ...reasonDetails,
+      i18nKey: `ES_ACTION_${reasonDetails.code}`,
+    };
+  });
+};
+
+const GetTripNumber = (MdmsRes) => {
+  return MdmsRes["FSM"].TripNumber.filter((option) => option.active).map((reasonDetails) => {
+    return {
+      ...reasonDetails,
+      i18nKey: `ES_ACTION_TRIP_${reasonDetails.code}`,
+    };
+  });
+};
+
+const GetReceivedPaymentType = (MdmsRes) => {
+  return MdmsRes["FSM"].ReceivedPaymentType.filter((option) => option.active).map((reasonDetails) => {
+    return {
+      ...reasonDetails,
+      i18nKey: `ES_ACTION_${reasonDetails.code}`,
+    };
+  });
+};
+
+const getDssDashboard = (MdmsRes) => MdmsRes["dss-dashboard"]["dashboard-config"];
 
 const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;
-const GetCommonFields = (MdmsRes,moduleCode) => moduleCode.toUpperCase()==="PROPERTYTAX"?MdmsRes["PropertyTax"].CommonFieldsConfig:MdmsRes["FSM"].CommonFieldsConfig;
+const GetCommonFields = (MdmsRes, moduleCode) =>
+  moduleCode.toUpperCase() === "PROPERTYTAX" ? MdmsRes["PropertyTax"].CommonFieldsConfig : MdmsRes["FSM"].CommonFieldsConfig;
 
 const GetPreFields = (MdmsRes) => MdmsRes["FSM"].PreFieldsConfig;
 
@@ -1077,13 +1351,15 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
     case "RoleStatusMapping":
       return GetRoleStatusMapping(MdmsRes);
     case "CommonFieldsConfig":
-      return GetCommonFields(MdmsRes,moduleCode);
+      return GetCommonFields(MdmsRes, moduleCode);
     case "PreFieldsConfig":
       return GetPreFields(MdmsRes);
     case "PostFieldsConfig":
       return GetPostFields(MdmsRes);
     case "RentalDeatils":
       return getRentalDetailsCategory(MdmsRes);
+    case "ChargeSlabs":
+      return getChargeSlabsCategory(MdmsRes);
     case "DssDashboard":
       return getDssDashboard(MdmsRes);
     case "BusinessService":
@@ -1106,6 +1382,14 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return GetChecklist(MdmsRes);
     case "FSMGenderType":
       return getFSMGenderType(MdmsRes);
+    case "FSTPORejectionReason":
+      return GetFSTPORejectionReason(MdmsRes);
+    case "PaymentType":
+      return GetPaymentType(MdmsRes);
+    case "TripNumber":
+      return GetTripNumber(MdmsRes);
+    case "ReceivedPaymentType":
+      return GetReceivedPaymentType(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -1311,6 +1595,9 @@ export const MdmsService = {
   getRentalDetails: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getRentalDetailsCategoryCriteria(tenantId, moduleCode), moduleCode);
   },
+  getChargeSlabs: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getChargeSlabsCategoryCriteria(tenantId, moduleCode), moduleCode);
+  },
   getDssDashboard: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getDssDashboardCriteria(tenantId, moduleCode), moduleCode);
   },
@@ -1341,22 +1628,24 @@ export const MdmsService = {
   getMultipleTypes: (tenantId, moduleCode, types) => {
     return MdmsService.getDataByCriteria(tenantId, getMultipleTypes(tenantId, moduleCode, types), moduleCode);
   },
+  getMultipleTypesWithFilter: (tenantId, moduleCode, types) => {
+    return MdmsService.getDataByCriteria(tenantId, getMultipleTypesWithFilter(moduleCode, types), moduleCode);
+  },
   getFSTPPlantInfo: (tenantId, moduleCode, types) => {
     return MdmsService.getDataByCriteria(tenantId, getFSTPPlantCriteria(tenantId, moduleCode, types), moduleCode);
   },
-  getCancelReceiptReason: (tenantId,moduleCode) => {
+  getCancelReceiptReason: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getCancelReceiptReason(tenantId, moduleCode), moduleCode);
   },
-  getReceiptStatus: (tenantId,moduleCode) => {
+  getReceiptStatus: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getReceiptStatus(tenantId, moduleCode), moduleCode);
   },
-  getCancelReceiptReasonAndStatus: (tenantId,moduleCode) => {
+  getCancelReceiptReasonAndStatus: (tenantId, moduleCode) => {
     return MdmsService.getDataByCriteria(tenantId, getCancelReceiptReasonAndStatus(tenantId, moduleCode), moduleCode);
   },
 
-  getGenderType: (tenantId,moduleCode, type) => {
-    return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId,moduleCode, type), moduleCode);
-
+  getGenderType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId, moduleCode, type), moduleCode);
   },
 
   TLGenderType: (tenantId, moduleCode, type) => {
@@ -1374,12 +1663,58 @@ export const MdmsService = {
   getDocumentTypes: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getDocumentTypesCriteria(tenantId, moduleCode, type), moduleCode);
   },
-  
+
   getTradeTypeRoleTypes: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getTradeTypeRoleCriteria(tenantId, moduleCode, type), moduleCode);
   },
 
-  getFSMGenderType: (tenantId,moduleCode, type) => {
-    return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId,moduleCode, type), moduleCode);
+  getFSMGenderType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId, moduleCode, type), moduleCode);
+  },
+
+  getFSTPORejectionReason: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getFSTPORejectionReasonCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+
+  getFSMPaymentType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getFSMPaymentTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+  getBillsGenieKey: (tenantId, moduleCode) => {
+    return MdmsService.getDataByCriteria(tenantId, getBillsGenieKey(tenantId, moduleCode), moduleCode);
+  },
+
+  getFSMTripNumber: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getFSMTripNumberCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+
+  getFSMReceivedPaymentType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getFSMReceivedPaymentTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  },
+  getWSTaxHeadMaster: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getWSTaxHeadMasterCritera(tenantId, moduleCode, type), moduleCode);
+  },
+
+  getMeterStatusType: (tenantId) => {
+    return MdmsService.call(tenantId, getMeterStatusTypeList(tenantId));
+  },
+
+  getBillingPeriod: (tenantId) => {
+    return MdmsService.call(tenantId, getBillingPeriodValidation(tenantId));
+  },
+  getHowItWorksJSONData: (tenantId) => {
+    return MdmsService.call(tenantId, getHowItWorksJSON(tenantId));
+  },
+  getFAQsJSONData: (tenantId) => {
+    return MdmsService.call(tenantId, getFAQsJSON(tenantId));
+  },
+  getDSSFAQsJSONData: (tenantId) => {
+    return MdmsService.call(tenantId, getDSSFAQsJSON(tenantId));
+  },
+  
+  getDSSAboutJSONData: (tenantId) => {
+    return MdmsService.call(tenantId, getDSSAboutJSON(tenantId));
+  },
+  getStaticDataJSON: (tenantId) => {
+    return MdmsService.call(tenantId, getStaticData());
   }
 };

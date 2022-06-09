@@ -5,8 +5,6 @@ import java.util.Arrays;
 
 import org.springframework.stereotype.Component;
 
-import com.jayway.jsonpath.Configuration;
-
 @Component
 public class FSMConstants {
 
@@ -61,7 +59,8 @@ public class FSMConstants {
 	public static final String MDMS_SLUM_NAME = "Slum";
 	public static final String MDMS_VEHICLE_TYPE = "VehicleType";
 	public static final String MDMS_APPLICATION_TYPE = "ApplicationType";
-
+	public static final String MDMS_PAYMENT_PREFERENCE = "PaymentType";
+	public static final String MDMS_RECEIVED_PAYMENT = "ReceivedPaymentType";
 
 	// FINANCIAL YEAR
 
@@ -127,6 +126,8 @@ public class FSMConstants {
 
 	public static final String WF_ACTION_DSO_REJECT = "DSO_REJECT";
 	
+	public static final String WF_ACTION_SCHEDULE = "SCHEDULE";
+	
 
 
 	public static final String WF_STATUS_CREATED = "CREATED";
@@ -143,6 +144,8 @@ public class FSMConstants {
 	public static final String TRIP_READY_FOR_DISPOSAL = "READY_FOR_DISPOSAL";
 	
 	public static final String PIT_DETAIL = "pitDetail";
+	public static final String APPLICATION_STATUS = "status";
+	public static final String NO_OF_TRIPS = "noOfTrips";
 	
 	public static final ArrayList<String> pitDetailList= new ArrayList<String>( Arrays.asList("height", "length", "width", "diameter", "distanceFromRoad") );
 
@@ -161,11 +164,36 @@ public class FSMConstants {
 	public static final String PERIODIC_SERVICE = "PERIODIC";
 
 	public static final String SYSTEM ="SYSTEM";
-
-
-
-
 	
+	public static final String FSM_POST_PAY_BusinessService = "FSM_POST_PAY_SERVICE";
+
+ 	public static final String FSM_PAYMENT_PREFERENCE_POST_PAY = "POST_PAY";
+	
+	public static final String SMS_NOTIFICATION_POST_PAY_PREFIX="FSM_POST_PAY_SMS_";
+	
+	public static final String FSM_SMS_DSO_INPROGRESS_DSO_ACCEPT="FSM_SMS_DSO_INPROGRESS_DSO_ACCEPT";
+	
+	public static final String FSM_SMS_PENDING_DSO_APPROVAL_ASSIGN="FSM_SMS_PENDING_DSO_APPROVAL_ASSIGN";
+	
+	public static final String FSM_SMS_PENDING_APPL_FEE_PAYMENT_SCHEDULE="FSM_SMS_PENDING_APPL_FEE_PAYMENT_SCHEDULE";
+	
+	public static final String FSM_SMS_DISPOSAL_IN_PROGRESS_PAY = "FSM_SMS_DISPOSAL_IN_PROGRESS_PAY";
+
+	public static final String FSM_SMS_CREATED_CREATE="FSM_SMS_CREATED_CREATE";
+
+	// Received Payment type
+
+	public static final String PAYED_IN_CASH = "Citizen Payed in Cash";
+
+	public static final String PAYED_IN_CHEQUE = "Citizen Payed in Cheque";
+	
+	public static final String UPDATE_ONLY_VEHICLE_TRIP_RECORD = "UPDATE_ONLY_VEHICLE_TRIP_RECORD";
+	
+	public static final String WF_DISPOSAL_IN_PROGRESS = "DISPOSAL_IN_PROGRESS";
+	
+	public static final String VEHICLE_CAPACITY = "vehicleCapacity";
+
+	public static final String FSM_SMS_CITIZEN_NO_OF_TRIPS_VEHICLE_CAPACITY_CHANGE="FSM_SMS_CITIZEN_NO_OF_TRIPS_VEHICLE_CAPACITY_CHANGE";
 
 
 }

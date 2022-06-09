@@ -6,6 +6,8 @@ import AssignComplaintForm from "./components/AssignComplaintForm";
 import { fetchEmployeeToAssign } from "egov-ui-kit/redux/common/actions";
 import filter from "lodash/filter";
 import isEmpty from "lodash/isEmpty";
+import { getTenantId } from "egov-ui-kit/utils/localStorageUtils";
+
 
 const AssignComplaintFormHOC = formHoc({
   formKey: "assignComplaint",
@@ -16,7 +18,10 @@ const AssignComplaintFormHOC = formHoc({
 class AssignComplaint extends Component {
   componentDidMount = () => {
     let { fetchEmployeeToAssign } = this.props;
-    const queryParams = [{ key: "roles", value: "EMPLOYEE" }];
+    const queryParams = [
+      { key: "roles", value: "EMPLOYEE" }, 
+      { key: "tenantId", value: getTenantId()}
+    ];
     fetchEmployeeToAssign(queryParams);
   };
   render() {

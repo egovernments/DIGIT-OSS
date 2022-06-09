@@ -1,5 +1,6 @@
 package org.egov.pt.service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
@@ -84,7 +87,6 @@ public class PropertyService {
 
 		propertyValidator.validateCreateRequest(request);
 		enrichmentService.enrichCreateRequest(request);
-		String tenantId = request.getProperty().getTenantId();
 		userService.createUser(request);
 		if (config.getIsWorkflowEnabled()
 				&& !request.getProperty().getCreationReason().equals(CreationReason.DATA_UPLOAD)) {
@@ -95,7 +97,7 @@ public class PropertyService {
 			request.getProperty().setStatus(Status.ACTIVE);
 		}
 
-		producer.push(tenantId, config.getSavePropertyTopic(), request);
+		producer.push(config.getSavePropertyTopic(), request);
 		request.getProperty().setWorkflow(null);
 		return request.getProperty();
 	}
@@ -172,7 +174,7 @@ public class PropertyService {
 				
 				enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 				util.mergeAdditionalDetails(request, propertyFromSearch);
-				producer.push(request.getProperty().getTenantId(), config.getUpdatePropertyTopic(), request);		
+				producer.push(config.getUpdatePropertyTopic(), request);		
 	}
 
 	/**
@@ -183,7 +185,6 @@ public class PropertyService {
 	 */
 	private void processPropertyUpdate(PropertyRequest request, Property propertyFromSearch) {
 
-		String tenantId = request.getProperty().getTenantId();
 		propertyValidator.validateRequestForUpdate(request, propertyFromSearch);
 		if (CreationReason.CREATE.equals(request.getProperty().getCreationReason())) {
 			userService.createUser(request);
@@ -214,9 +215,9 @@ public class PropertyService {
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
-				producer.push(tenantId, config.getUpdatePropertyTopic(), OldPropertyRequest);
+				producer.push(config.getUpdatePropertyTopic(), OldPropertyRequest);
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
-				producer.push(tenantId, config.getSavePropertyTopic(), request);
+				producer.push(config.getSavePropertyTopic(), request);
 
 			} else if (state.getIsTerminateState()
 					&& !state.getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString())) {
@@ -226,7 +227,7 @@ public class PropertyService {
 				/*
 				 * If property is In Workflow then continue
 				 */
-				producer.push(tenantId, config.getUpdatePropertyTopic(), request);
+				producer.push(config.getUpdatePropertyTopic(), request);
 			}
 
 		} else {
@@ -234,7 +235,7 @@ public class PropertyService {
 			/*
 			 * If no workflow then update property directly with mutation information
 			 */
-			producer.push(tenantId, config.getUpdatePropertyTopic(), request);
+			producer.push(config.getUpdatePropertyTopic(), request);
 		}
 	}
 	
@@ -264,7 +265,6 @@ public class PropertyService {
 	 */
 	private void processOwnerMutation(PropertyRequest request, Property propertyFromSearch) {
 
-		String tenantId = request.getProperty().getTenantId();
 		propertyValidator.validateMutation(request, propertyFromSearch);
 		userService.createUserForMutation(request, !propertyFromSearch.getStatus().equals(Status.INWORKFLOW));
 		enrichmentService.enrichAssignes(request.getProperty());
@@ -292,11 +292,11 @@ public class PropertyService {
 					&& !propertyFromSearch.getStatus().equals(Status.INWORKFLOW)) {
 
 				propertyFromSearch.setStatus(Status.INACTIVE);
-				producer.push(tenantId, config.getUpdatePropertyTopic(), oldPropertyRequest);
+				producer.push(config.getUpdatePropertyTopic(), oldPropertyRequest);
 
 				util.saveOldUuidToRequest(request, propertyFromSearch.getId());
 				/* save new record */
-				producer.push(tenantId, config.getSavePropertyTopic(), request);
+				producer.push(config.getSavePropertyTopic(), request);
 
 			} else if (state.getIsTerminateState()
 					&& !state.getApplicationStatus().equalsIgnoreCase(Status.ACTIVE.toString())) {
@@ -306,7 +306,7 @@ public class PropertyService {
 				/*
 				 * If property is In Workflow then continue
 				 */
-				producer.push(tenantId, config.getUpdatePropertyTopic(), request);
+				producer.push(config.getUpdatePropertyTopic(), request);
 			}
 
 		} else {
@@ -314,15 +314,14 @@ public class PropertyService {
 			/*
 			 * If no workflow then update property directly with mutation information
 			 */
-			producer.push(tenantId, config.getUpdatePropertyTopic(), request);
+			producer.push(config.getUpdatePropertyTopic(), request);
 		}
 	}
 
 	private void terminateWorkflowAndReInstatePreviousRecord(PropertyRequest request, Property propertyFromSearch) {
 
-		String tenantId = request.getProperty().getTenantId();
 		/* current record being rejected */
-		producer.push(tenantId, config.getUpdatePropertyTopic(), request);
+		producer.push(config.getUpdatePropertyTopic(), request);
 
 		/* Previous record set to ACTIVE */
 		@SuppressWarnings("unchecked")
@@ -341,7 +340,7 @@ public class PropertyService {
 		previousPropertyToBeReInstated.setStatus(Status.ACTIVE);
 		request.setProperty(previousPropertyToBeReInstated);
 
-		producer.push(tenantId, config.getUpdatePropertyTopic(), request);
+		producer.push(config.getUpdatePropertyTopic(), request);
 	}
 
 	/**
@@ -376,6 +375,7 @@ public class PropertyService {
 				return Collections.emptyList();
 
 			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
+			filterPropertiesForUser(properties, criteria.getOwnerIds());
 		} else {
 			properties = repository.getPropertiesWithOwnerInfo(criteria, requestInfo, false);
 		}
@@ -385,6 +385,27 @@ public class PropertyService {
 		});
 
 		return properties;
+	}
+
+	private void filterPropertiesForUser(List<Property> properties, Set<String> ownerIds) {
+
+		List<Property> propertiesToBeRemoved = new ArrayList<>();
+
+		for (Property property : properties) {
+
+			boolean isOwnerPresent = false;
+
+			for (OwnerInfo owner : property.getOwners()) {
+
+				if (ownerIds.contains(owner.getUuid())) {
+					isOwnerPresent = true;
+					break;
+				}
+			}
+			if (!isOwnerPresent)
+				propertiesToBeRemoved.add(property);
+		}
+		properties.removeAll(propertiesToBeRemoved);
 	}
 
 	public List<Property> searchPropertyPlainSearch(PropertyCriteria criteria, RequestInfo requestInfo) {
@@ -455,7 +476,7 @@ public class PropertyService {
 		//enrichmentService.enrichUpdateRequest(request, propertyFromSearch);
 		util.mergeAdditionalDetails(request, propertyFromSearch);
 		
-		producer.push(request.getProperty().getTenantId() , config.getUpdatePropertyTopic(), request);
+		producer.push(config.getUpdatePropertyTopic(), request);
 		
 		request.getProperty().setWorkflow(null);
 		
@@ -463,5 +484,10 @@ public class PropertyService {
 		return request.getProperty();
 	}
 	
+	public Integer count(RequestInfo requestInfo, @Valid PropertyCriteria propertyCriteria) {
+		propertyCriteria.setIsInboxSearch(false);
+        Integer count = repository.getCount(propertyCriteria, requestInfo);
+        return count;
+	}
 	
 }
