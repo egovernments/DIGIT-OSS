@@ -62,7 +62,7 @@ public class CalculatorController {
 		switch(servicename)
 		{
 			case businessService_TL:
-				calculations = calculationService.calculate(calculationReq);
+				calculations = calculationService.calculate(calculationReq, false);
 				break;
 
 			case businessService_BPA:
@@ -92,6 +92,32 @@ public class CalculatorController {
 			servicename = businessService_TL;
 		BillAndCalculations response = demandService.getBill(requestInfoWrapper.getRequestInfo(), generateBillCriteria, servicename);
 		return new ResponseEntity<BillAndCalculations>(response, HttpStatus.OK);
+	}
+
+
+	/**
+	 * Calulates the tradeLicense fee and returns estimate
+	 * @param calculationReq The calculation Request
+	 * @return Calculation Response
+	 */
+	@RequestMapping(value = {"/{servicename}/_estimate","/_estimate"}, method = RequestMethod.POST)
+	public ResponseEntity<CalculationRes> estimate(@Valid @RequestBody CalculationReq calculationReq,@PathVariable(required = false) String servicename) {
+
+		if(servicename==null)
+			servicename = businessService_TL;
+		List<Calculation> calculations = null;
+		switch(servicename)
+		{
+			case businessService_TL:
+				calculations = calculationService.calculate(calculationReq, true);
+				break;
+
+			default:
+				throw new CustomException("UNKNOWN_BUSINESSSERVICE", " Business Service not supported");
+		}
+
+		CalculationRes calculationRes = CalculationRes.builder().calculations(calculations).build();
+		return new ResponseEntity<CalculationRes>(calculationRes, HttpStatus.OK);
 	}
 
 }

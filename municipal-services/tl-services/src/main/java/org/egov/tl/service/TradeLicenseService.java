@@ -290,6 +290,15 @@ public class TradeLicenseService {
     	
     	return licenseCount;
     }
+
+	public Map<String,Integer> countApplications(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath, HttpHeaders headers){
+	
+		criteria.setBusinessService(serviceFromPath);
+		
+		Map<String,Integer> licenseCount = repository.getApplicationsCount(criteria);
+	
+		return licenseCount;
+	}
     
 
     public void checkEndStateAndAddBPARoles(TradeLicenseRequest tradeLicenseRequest) {
@@ -462,11 +471,6 @@ public class TradeLicenseService {
             enrichmentService.postStatusEnrichment(tradeLicenseRequest,endStates,mdmsData);
             userService.createUser(tradeLicenseRequest, false);
             calculationService.addCalculation(tradeLicenseRequest);
-            switch (businessServicefromPath) {
-                case businessService_TL:
-                    editNotificationService.sendEditNotification(tradeLicenseRequest, diffMap);
-                    break;
-            }
             repository.update(tradeLicenseRequest, idToIsStateUpdatableMap);
             licenceResponse=  tradeLicenseRequest.getLicenses();
         }
@@ -562,5 +566,13 @@ public class TradeLicenseService {
         
         return false;
     }
+
+
+
+
+
+	public int getApplicationValidity() {
+		return Integer.valueOf(config.getApplicationValidity());
+	}
 
 }

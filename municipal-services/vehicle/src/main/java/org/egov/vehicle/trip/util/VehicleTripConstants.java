@@ -32,4 +32,10 @@ public class VehicleTripConstants {
 	public static final String ACTION_SCHEDULE = "SCHEDULE";
 	public static final String VOLUME_GRT_CAPACITY ="VOLUME_GRT_CAPACITY";
 	public static final String EMPLOYEE_FSTP_MAP_NOT_EXISTS ="EMPLOYEE_FSTP_MAP_NOT_EXISTS";
+	public static final String DECLINEVEHICLE ="DECLINEVEHICLE";
+	public static final String INVALID_VEHICLE_DECLINE_REQUEST ="INVALID_VEHICLE_DECLINE_REQUEST";
+	public static final String VEHICLE_COMMENT_NOT_EXIST ="VEHICLE_COMMENT_NOT_EXIST";
+	public static final String VEHICLE_DECLINE_REASON_OTHERS ="OTHERS";
+	public static final String VEHICLE_LOG_APPLICATION_DISPOSED = "DISPOSED";
+	public static final String UPDATE_ONLY_VEHICLE_TRIP_RECORD = "UPDATE_ONLY_VEHICLE_TRIP_RECORD";
 }

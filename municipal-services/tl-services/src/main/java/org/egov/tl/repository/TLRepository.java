@@ -18,6 +18,8 @@ import org.egov.tl.web.models.TradeLicenseRequest;
 import org.egov.tl.web.models.TradeLicenseSearchCriteria;
 import org.egov.tl.web.models.TradeUnit;
 import org.egov.tl.web.models.User;
+import org.egov.tl.util.TLConstants;
+import org.egov.tl.web.models.*;
 import org.egov.tl.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +102,22 @@ public class TLRepository {
         int licenseCount = jdbcTemplate.queryForObject(query,preparedStmtList.toArray(),Integer.class);
         return licenseCount;
     }
+    
+    public Map<String,Integer> getApplicationsCount(TradeLicenseSearchCriteria criteria) {
+    	List<Object> preparedStmtListIssued = new ArrayList<>();
+        String query = queryBuilder.getApplicationsCountQuery(criteria, preparedStmtListIssued, TLConstants.APPLICATION_TYPE_NEW);
+        int issuedCount = jdbcTemplate.queryForObject(query,preparedStmtListIssued.toArray(),Integer.class);
+        
+        List<Object> preparedStmtListRenewal = new ArrayList<>();
+        query = queryBuilder.getApplicationsCountQuery(criteria, preparedStmtListRenewal, TLConstants.APPLICATION_TYPE_RENEWAL);
+        int renewedCount = jdbcTemplate.queryForObject(query,preparedStmtListRenewal.toArray(),Integer.class);
+        
+        Map<String,Integer> countsMap = new HashMap<String,Integer>();
+        countsMap.put(TLConstants.ISSUED_COUNT, issuedCount);
+        countsMap.put(TLConstants.RENEWED_COUNT, renewedCount);
+        
+        return countsMap;
+    }
 
     /**
      * Pushes the request on save topic
@@ -160,6 +178,7 @@ public class TLRepository {
             license.getTradeLicenseDetail().getTradeUnits().sort(Comparator.comparing(TradeUnit::getId));
             if(!CollectionUtils.isEmpty(license.getTradeLicenseDetail().getAccessories()))
                 license.getTradeLicenseDetail().getAccessories().sort(Comparator.comparing(Accessory::getId));
+
             List<Document> applnDocuments = license.getTradeLicenseDetail().getApplicationDocuments();
             if(!CollectionUtils.isEmpty(applnDocuments)) {
                 Collections.reverse(applnDocuments);

@@ -589,19 +589,20 @@ public class TLValidator {
         if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.isEmpty())
             throw new CustomException("INVALID SEARCH","Search without any paramters is not allowed");
 
-        if(!requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
+        if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE" )&& criteria.tenantIdOnly())
             throw new CustomException("INVALID SEARCH","Search based only on tenantId is not allowed");
 
         /*if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" )&& criteria.tenantIdOnly())
             throw new CustomException("INVALID SEARCH","Search only on tenantId is not allowed");*/
-
 
         String allowedParamStr = null;
 
         if(requestInfo.getUserInfo().getType().equalsIgnoreCase("CITIZEN" ))
             allowedParamStr = configs.getAllowedCitizenSearchParameters();
         else if(requestInfo.getUserInfo().getType().equalsIgnoreCase("EMPLOYEE" ))
-            allowedParamStr = configs.getAllowedEmployeeSearchParameters();
+            allowedParamStr = config.getAllowedEmployeeSearchParameters();
+        else if(requestInfo.getUserInfo().getType().equalsIgnoreCase("SYSTEM" ))
+            allowedParamStr = config.getAllowedSystemSearchParameters();
         else throw new CustomException("INVALID SEARCH","The userType: "+requestInfo.getUserInfo().getType()+
                     " does not have any search config");
 
