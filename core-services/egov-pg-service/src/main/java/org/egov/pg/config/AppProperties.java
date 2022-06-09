@@ -79,6 +79,10 @@ public class AppProperties {
     private final String notificationHost;
 
     private final String egovPgReconciliationSystemUserUuid;
+    
+    private final String pgDetailHost;
+
+	private final String pgDetailPath;
 
     @Autowired
     public AppProperties(Environment environment){
@@ -115,6 +119,8 @@ public class AppProperties {
         this.billingServiceSearchEndpoint = environment.getRequiredProperty("egov.bill.searchendpoint");
         this.notificationHost = environment.getRequiredProperty("notification.url");
         this.egovPgReconciliationSystemUserUuid = environment.getRequiredProperty("egov.pg.reconciliation.system.user.uuid");
+        this.pgDetailHost = environment.getRequiredProperty("egov.pgdetail.host");
+        this.pgDetailPath = environment.getRequiredProperty("egov.pgdetail.path");
     }
 
 }

@@ -55,4 +55,6 @@ public interface Gateway {
      * @return Transaction ID
      */
     String transactionIdKeyInResponse();
+    
+    String generateRedirectFormData(Transaction transaction );
 }

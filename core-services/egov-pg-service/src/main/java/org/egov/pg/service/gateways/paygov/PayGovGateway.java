@@ -85,7 +85,11 @@ public class PayGovGateway implements Gateway {
     private String TX_DATE_FORMAT;
     private  final RequestInfo requestInfo;
     private PgDetailRepository pgDetailRepository;
-
+    private final String PAYGOV_MERCHENT_ID;
+    private final String PAYGOV_MERCHENT_SECERET_KEY;
+    private final String PAYGOV_MERCHENT_USER;
+    private final String PAYGOV_MERCHENT_PASSWORD;
+    
     /**
      * Initialize by populating all required config parameters
      *
@@ -98,6 +102,11 @@ public class PayGovGateway implements Gateway {
         ACTIVE = Boolean.valueOf(environment.getRequiredProperty("paygov.active"));
         MESSAGE_TYPE = environment.getRequiredProperty("paygov.messagetype");
         CURRENCY_CODE = environment.getRequiredProperty("paygov.currency");
+        PAYGOV_MERCHENT_ID = environment.getRequiredProperty("paygov.merchant.id");
+        PAYGOV_MERCHENT_SECERET_KEY = environment.getRequiredProperty("paygov.merchant.secret.key");
+        PAYGOV_MERCHENT_USER = environment.getRequiredProperty("paygov.merchant.user");
+        PAYGOV_MERCHENT_PASSWORD = environment.getRequiredProperty("paygov.merchant.pwd");
+        
         REDIRECT_URL = environment.getRequiredProperty("paygov.redirect.url");
         ORIGINAL_RETURN_URL_KEY = environment.getRequiredProperty("paygov.original.return.url.key");
         GATEWAY_TRANSACTION_STATUS_URL = environment.getRequiredProperty("paygov.gateway.status.url");
@@ -119,7 +128,7 @@ public class PayGovGateway implements Gateway {
     }
 
     @Override
-    public String generateRedirectFormData(Transaction transaction,Environment environment) {
+    public String generateRedirectFormData(Transaction transaction) {
         PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, transaction.getTenantId());
 
     	/*
@@ -131,7 +140,7 @@ public class PayGovGateway implements Gateway {
         String urlData =null;
         HashMap<String, String> queryMap = new HashMap<>();
         queryMap.put(MESSAGE_TYPE_KEY, MESSAGE_TYPE);
-        queryMap.put(MERCHANT_ID_KEY, environment.getRequiredProperty("paygov.merchant.id"));
+        queryMap.put(MERCHANT_ID_KEY, PAYGOV_MERCHENT_ID);
         queryMap.put(SERVICE_ID_KEY, transaction.getTenantId());
         queryMap.put(ORDER_ID_KEY, transaction.getTxnId());
         queryMap.put(CUSTOMER_ID_KEY, transaction.getUser().getUuid());
@@ -198,7 +207,7 @@ public class PayGovGateway implements Gateway {
         fields.add(queryMap.get(ADDITIONAL_FIELD5_KEY));
 
         String message = String.join("|", fields);
-        queryMap.put("checksum", PayGovUtils.generateCRC32Checksum(message,environment.getRequiredProperty("paygov.merchant.secret.key")));
+        queryMap.put("checksum", PayGovUtils.generateCRC32Checksum(message, PAYGOV_MERCHENT_SECERET_KEY));
         queryMap.put("txURL",GATEWAY_URL);
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -262,12 +271,12 @@ public class PayGovGateway implements Gateway {
     }
 
     @Override
-    public Transaction fetchStatus(Transaction currentStatus,Environment environment, Map<String, String> param) {
+    public Transaction fetchStatus(Transaction currentStatus, Map<String, String> param) {
         PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, currentStatus.getTenantId());
         log.debug("tx input "+ currentStatus);
         try {
             // create auth credentials
-            String authStr = environment.getRequiredProperty("paygov.merchant.user")+":"+environment.getRequiredProperty("paygov.merchant.pwd");
+            String authStr = PAYGOV_MERCHENT_USER+":"+PAYGOV_MERCHENT_PASSWORD;
             String base64Creds = Base64.getEncoder().encodeToString(authStr.getBytes());
 
             // create headers
@@ -276,7 +285,7 @@ public class PayGovGateway implements Gateway {
 
             // create request
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-            String requestmsg =SEPERATOR+ environment.getRequiredProperty("paygov.merchant.id") +SEPERATOR+currentStatus.getTxnId();
+            String requestmsg =SEPERATOR+ PAYGOV_MERCHENT_ID +SEPERATOR+currentStatus.getTxnId();
             params.add("requestMsg", requestmsg);
             HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
             log.debug("Auth Info : "+ authStr);
@@ -285,7 +294,7 @@ public class PayGovGateway implements Gateway {
             ResponseEntity<String> response = new RestTemplate().exchange(GATEWAY_TRANSACTION_STATUS_URL, HttpMethod.POST, entity, String.class);
             HttpStatus statusCode = response.getStatusCode();
             if(statusCode.equals(HttpStatus.OK)) {
-                Transaction resp = transformRawResponse(response.getBody(), currentStatus, environment.getRequiredProperty("paygov.merchant.secret.key"));
+                Transaction resp = transformRawResponse(response.getBody(), currentStatus, PAYGOV_MERCHENT_SECERET_KEY);
                 log.debug("RESPONSE ON SUCCESS "+resp);
                 return resp;
             }else {
@@ -518,8 +527,5 @@ public class PayGovGateway implements Gateway {
             throw new CustomException("UNABLE_TO_FETCH_STATUS", "Unable to fetch status from PayGov gateway");
         }
     }
-
-
-
 
 }
