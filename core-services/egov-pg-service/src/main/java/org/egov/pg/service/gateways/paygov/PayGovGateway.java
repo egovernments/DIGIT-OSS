@@ -49,7 +49,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PayGovGateway implements Gateway {
 
-    private static final String GATEWAY_NAME = "PayGov";
+    private static final String GATEWAY_NAME = "paygov";
     private final String MESSAGE_TYPE;
 
     private final String CURRENCY_CODE;
@@ -120,7 +120,7 @@ public class PayGovGateway implements Gateway {
 
     @Override
     public String generateRedirectFormData(Transaction transaction) {
-        PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, transaction.getTenantId());
+        //PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, transaction.getTenantId());
 
     	/*
 		 *
@@ -131,7 +131,7 @@ public class PayGovGateway implements Gateway {
         String urlData =null;
         HashMap<String, String> queryMap = new HashMap<>();
         queryMap.put(MESSAGE_TYPE_KEY, MESSAGE_TYPE);
-        queryMap.put(MERCHANT_ID_KEY, pgDetail.getMerchantId());
+        queryMap.put(MERCHANT_ID_KEY, "paygov.merchant.id");
         queryMap.put(SERVICE_ID_KEY, pgDetail.getMerchantServiceId());
         queryMap.put(ORDER_ID_KEY, transaction.getTxnId());
         queryMap.put(CUSTOMER_ID_KEY, transaction.getUser().getUuid());
@@ -198,7 +198,7 @@ public class PayGovGateway implements Gateway {
         fields.add(queryMap.get(ADDITIONAL_FIELD5_KEY));
 
         String message = String.join("|", fields);
-        queryMap.put("checksum", PayGovUtils.generateCRC32Checksum(message, pgDetail.getMerchantSecretKey()));
+        queryMap.put("checksum", PayGovUtils.generateCRC32Checksum(message,"paygov.secret.key"));
         queryMap.put("txURL",GATEWAY_URL);
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -263,11 +263,11 @@ public class PayGovGateway implements Gateway {
 
     @Override
     public Transaction fetchStatus(Transaction currentStatus, Map<String, String> param) {
-        PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, currentStatus.getTenantId());
+        //PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, currentStatus.getTenantId());
         log.debug("tx input "+ currentStatus);
         try {
             // create auth credentials
-            String authStr = pgDetail.getMerchantUserName()+":"+pgDetail.getMerchantPassword();
+            String authStr = "paygov.merchant.id"+":"+"paygov.password";
             String base64Creds = Base64.getEncoder().encodeToString(authStr.getBytes());
 
             // create headers
@@ -276,7 +276,7 @@ public class PayGovGateway implements Gateway {
 
             // create request
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-            String requestmsg =SEPERATOR+ pgDetail.getMerchantId() +SEPERATOR+currentStatus.getTxnId();
+            String requestmsg =SEPERATOR+ "paygov.merchant.id" +SEPERATOR+currentStatus.getTxnId();
             params.add("requestMsg", requestmsg);
             HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
             log.debug("Auth Info : "+ authStr);
@@ -285,13 +285,13 @@ public class PayGovGateway implements Gateway {
             ResponseEntity<String> response = new RestTemplate().exchange(GATEWAY_TRANSACTION_STATUS_URL, HttpMethod.POST, entity, String.class);
             HttpStatus statusCode = response.getStatusCode();
             if(statusCode.equals(HttpStatus.OK)) {
-                Transaction resp = transformRawResponse(response.getBody(), currentStatus, pgDetail.getMerchantSecretKey());
+                Transaction resp = transformRawResponse(response.getBody(), currentStatus, "paygov.secret.key");
                 log.debug("RESPONSE ON SUCCESS "+resp);
                 return resp;
             }else {
                 log.error("tx input "+ currentStatus);
                 log.error("NOT A SUCCESSFUL TX "+response);
-                throw new CustomException("UNABLE_TO_FETCH_STATUS", "Unable to fetch status from NIC gateway");
+                throw new CustomException("UNABLE_TO_FETCH_STATUS", "Unable to fetch status from PayGov gateway");
             }
         }catch (HttpStatusCodeException ex) {
             log.error("tx input "+ currentStatus);
