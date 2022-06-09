@@ -23,7 +23,6 @@ export const loadDashboardConfigData = () => dispatch => {
         }).then(data => {
             dispatch(receiveDashBoardConfigData(data["responseData"]))
         }).catch(err => {
-            console.log("Error Reading data " + err);
         });
 
 }

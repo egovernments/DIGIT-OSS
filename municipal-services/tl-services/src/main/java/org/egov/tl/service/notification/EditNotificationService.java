@@ -40,7 +40,7 @@ public class EditNotificationService {
         switch(businessService)
         {
             case businessService_TL:
-                util.sendSMS(smsRequests,config.getIsTLSMSEnabled(), request.getLicenses().get(0).getTenantId());
+                util.sendSMS(smsRequests,config.getIsTLSMSEnabled());
                 break;
 
 //            case businessService_BPA:

@@ -162,7 +162,6 @@ const formConfig = {
       // }
       return action;
     } catch (e) {
-      console.log(e);
     }
   },
   action: "_create",

@@ -1,5 +1,5 @@
 import { Header, Localities, Toast } from "@egovernments/digit-ui-react-components";
-import React, { memo, useCallback, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const PTSearchFields = {
@@ -10,7 +10,7 @@ const PTSearchFields = {
       placeHolder: "PT_PROPERTY_UNIQUE_ID_PLACEHOLDER",
       validation: {
         pattern: {
-          value: /^[a-zA-Z0-9-]*$/i,
+          value: /[A-Za-z]{2}\-[A-Za-z]{2}\-[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-[0-9]{6}/,
           message: "ERR_INVALID_PROPERTY_ID",
         },
       },
@@ -21,7 +21,7 @@ const PTSearchFields = {
       placeholder: "PT_EXISTING_PROPERTY_ID_PLACEHOLDER",
       validation: {
         pattern: {
-          value: /^[a-zA-Z0-9-]*$/i,
+          value: /[A-Za-z]{2}\-[A-Za-z]{2}\-[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-[0-9]{6}/,
           message: "ERR_INVALID_PROPERTY_ID",
         },
       },
@@ -40,7 +40,7 @@ const PTSearchFields = {
           message: "CORE_COMMON_MOBILE_ERROR",
         },
         pattern: {
-          value: /[789][0-9]{9}/,
+          value: /[6789][0-9]{9}/,
           message: "CORE_COMMON_MOBILE_ERROR",
         },
       },
@@ -126,10 +126,15 @@ const Search = () => {
   });
   const onReset = useCallback(() => {
     setFormData(defaultValues);
-    // setPayload({});
+     setPayload({});
     setShowToast(null);
   });
 
+  useEffect (() =>{
+    if(sessionStorage.getItem("searchDetailValue") == 1 && searchBy === "searchId"){
+      setSearchBy("searchDetail")
+    }
+  },[searchBy])
   const onSubmit = useCallback((_data) => {
     setFormData(_data);
     if (Object.keys(_data).filter((k) => _data[k] && typeof _data[k] !== "object").length > 0) {

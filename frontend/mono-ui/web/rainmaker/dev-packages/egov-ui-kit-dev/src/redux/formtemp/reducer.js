@@ -139,11 +139,6 @@ function validate2(isRequired, pattern, name, value, validatePropertyOwner) {
   if (!isRequired && value === "") {
     errorText = "";
   }
-  // console.log(validationData.required.required)
-  // console.log(validationData.required.current)
-  // var isFormValid=false;
-  // (validationData.required.required.length == validationData.required.current.length) && (validationData.pattern.required.length == validationData.pattern.current.length)
-  console.log(validatePropertyOwner.required.required.length, validatePropertyOwner.required.current.length, errorText);
   return {
     errorText: errorText,
     validatePropertyOwner: validatePropertyOwner,
@@ -193,12 +188,6 @@ function validate3(isRequired, pattern, name, value, validatePropertyFloor, floo
   if (!isRequired && value === "") {
     errorText = "";
   }
-
-  // console.log(validationData.required.required)
-  // console.log(validationData.required.current)
-  // var isFormValid=false;
-  // (validationData.required.required.length == validationData.required.current.length) && (validationData.pattern.required.length == validationData.pattern.current.length)
-  console.log(validatePropertyFloor.required.required.length, validatePropertyFloor.required.current.length);
   return {
     errorText: errorText,
     validatePropertyFloor: validatePropertyFloor,
@@ -400,7 +389,6 @@ export default (state = defaultState, action) => {
       var a = state.validatePropertyFloor.required.required.indexOf(action.property);
       var b = state.validatePropertyFloor.required.current.indexOf(action.property);
 
-      console.log("isthere", a);
       if (a !== -1) {
         state.validatePropertyFloor.required.required.splice(a, 1);
       }
@@ -532,7 +520,6 @@ export default (state = defaultState, action) => {
       };
 
     case "SET_FLOOR_NUMBER":
-      console.log("noOfFloors", action.noOfFloors);
       return {
         ...state,
         noOfFloors: action.noOfFloors,
@@ -689,9 +676,7 @@ export default (state = defaultState, action) => {
 
     case "HANDLE_CHANGE_OWNER":
       let validatePropertyOwner;
-      console.log("state", state);
       validatePropertyOwner = validate2(action.isRequired, action.pattern, action.propertyOne, action.value, state.validatePropertyOwner);
-      console.log(validatePropertyOwner);
       return {
         ...state,
         form: {
@@ -714,9 +699,7 @@ export default (state = defaultState, action) => {
 
     case "HANDLE_CHANGE_FLOOR":
       let validatePropertyFloor;
-      console.log("state", state);
       validatePropertyFloor = validate3(action.isRequired, action.pattern, action.propertyOne, action.value, state.validatePropertyFloor, state.form);
-      console.log(validatePropertyFloor);
       return {
         ...state,
         form: {
@@ -880,7 +863,6 @@ export default (state = defaultState, action) => {
         state.form[action.formObject][action.formArray] = [];
       } else if (!state.form[action.formObject][action.formArray]) {
         state.form[action.formObject][action.formArray] = [];
-        //console.log(state.form[action.formObject]);
       }
 
       return {

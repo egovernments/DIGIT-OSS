@@ -1,6 +1,7 @@
 import { FormStep, TextInput, CardLabel, LabelFieldPair } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const TLSelectPincode = ({ t, config, onSelect, formData = {}, userType, register, errors, props }) => {
   const tenants = Digit.Hooks.tl.useTenants();
@@ -63,13 +64,13 @@ const TLSelectPincode = ({ t, config, onSelect, formData = {}, userType, registe
     return inputs?.map((input, index) => {
       return (
         <LabelFieldPair key={index}>
-          <CardLabel className="card-label-smaller">{`${t(input.label)}:`}</CardLabel>
+          <CardLabel className="card-label-smaller">{`${t(input.label)}`}</CardLabel>
           <div className="field">
             <TextInput 
               key={input.name} 
-              value={pincode} 
+              value={formData?.cpt?.details?.address?.pincode || pincode} 
               onChange={onChange}
-              disable={isRenewal}
+              disable={formData?.cpt?.details || isRenewal}
               {...input.validation} 
               autoFocus={presentInModifyApplication} 
             />
@@ -80,6 +81,8 @@ const TLSelectPincode = ({ t, config, onSelect, formData = {}, userType, registe
   }
   const onSkip = () => onSelect();
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep
       t={t}
       config={{ ...config, inputs }}
@@ -90,6 +93,7 @@ const TLSelectPincode = ({ t, config, onSelect, formData = {}, userType, registe
       forcedError={t(pincodeServicability)}
       isDisabled={!pincode || isEdit}
     ></FormStep>
+    </React.Fragment>
   );
 };
 

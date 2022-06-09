@@ -45,8 +45,8 @@ const Inbox = ({parentRoute}) => {
           Digit.SessionStorage.set("NOC.INBOX", {...state, tableForm: payload.data})
           return {...state, tableForm: payload.data};
         default:
-          console.warn("dispatched action has nothing to reduce")
-      }
+          break;      
+        }
     }
     const InboxObjectInSessionStorage = Digit.SessionStorage.get("NOC.INBOX")
     
@@ -108,10 +108,13 @@ const Inbox = ({parentRoute}) => {
     const PropsForInboxLinks = {
         logoIcon: <ComplaintIcon />,
         headerText: "ACTION_TEST_NOC",
-        links: []
+        links: [{
+          text: t("ES_COMMON_APPLICATION_SEARCH"),
+          link: "/digit-ui/employee/noc/search",
+        }]
     }
 
-    const SearchFormFields = useCallback(({registerRef, searchFormState}) => <SearchFormFieldsComponents {...{registerRef, searchFormState}} />,[])
+    const SearchFormFields = useCallback(({registerRef, searchFormState, searchFieldComponents}) => <SearchFormFieldsComponents {...{registerRef, searchFormState, searchFieldComponents}} />,[])
 
     const FilterFormFields = useCallback(
       ({registerRef, controlFilterForm, setFilterFormValue, getFilterFormValue}) => <FilterFormFieldsComponent {...{statuses, isInboxLoading, registerRef, controlFilterForm, setFilterFormValue, filterFormState: formState?.filterForm, getFilterFormValue, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant}} />
@@ -119,12 +122,14 @@ const Inbox = ({parentRoute}) => {
 
 
     const onSearchFormSubmit = (data) => {
-      data.hasOwnProperty("") ? delete data?.[""] : null
+      data.hasOwnProperty("") && delete data?.[""] ;
+      dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
       dispatch({action: "mutateSearchForm", data})
     }
     
     const onFilterFormSubmit = (data) => {
-      data.hasOwnProperty("") ? delete data?.[""] : null
+      data.hasOwnProperty("") && delete data?.[""] ;
+      dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
       dispatch({action: "mutateFilterForm", data})
     }
 

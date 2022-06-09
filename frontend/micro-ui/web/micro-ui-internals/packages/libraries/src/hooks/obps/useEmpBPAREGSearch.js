@@ -24,7 +24,6 @@ const convertMillisecondsToDays = (milliseconds) => {
 
 const useEmpBPAREGSearch = (tenantId, filters, params, config = {}) => {
   return useQuery(['BPA_REG_WORK_SEARCH', tenantId, filters, params], async () => {
-    const userInfo = Digit.UserService.getUser();
     const response = await Digit.OBPSService.BPAREGSearch(tenantId, filters, params);
     const businessIds = response?.Licenses.map(application => application.applicationNumber);
     const workflowRes = await Digit.WorkflowService.getAllApplication(Digit.ULBService.getStateId(), { businessIds: businessIds.join()  });

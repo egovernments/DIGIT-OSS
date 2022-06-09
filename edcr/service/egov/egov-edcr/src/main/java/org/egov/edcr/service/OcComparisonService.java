@@ -8,7 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.dcr.helper.ErrorDetail;
 import org.egov.edcr.contract.ComparisonDetail;
 import org.egov.edcr.contract.ComparisonRequest;
@@ -29,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OcComparisonService {
-    private static final Logger LOG = Logger.getLogger(OcComparisonService.class);
+    private static final Logger LOG = LogManager.getLogger(OcComparisonService.class);
     
     public static final String FILE_DOWNLOAD_URL = "%s/edcr/rest/dcr/downloadfile";
 
@@ -320,7 +321,11 @@ public class OcComparisonService {
     
     @Transactional
     public void saveComparisonReport(OcComparisonDetail detail, InputStream reportOutputStream) {
-        final String fileName = detail.getOcdcrNumber() + "-" + detail.getDcrNumber() +
+        String fileName;
+        if(StringUtils.isBlank(detail.getOcdcrNumber()))
+            fileName = detail.getDcrNumber() + "-comparison" + ".pdf";
+        else
+            fileName = detail.getOcdcrNumber() + "-" + detail.getDcrNumber() +
                 "-comparison" + ".pdf";
         final FileStoreMapper fileStoreMapper = fileStoreService.store(reportOutputStream, fileName, "application/pdf",
                 DcrConstants.FILESTORE_MODULECODE);

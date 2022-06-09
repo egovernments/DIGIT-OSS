@@ -10,7 +10,7 @@ const MyBill = ({ bill, currentPath, businessService, getKeyNotesConfig }) => {
   const history = useHistory();
 
   const onSubmit = () => {
-    history.push(`${currentPath}/${bill.consumerCode}`, { bill });
+    history.push(`${currentPath}/${bill.consumerCode}`, { tenantId:bill?.tenantId });
   };
 
   return (

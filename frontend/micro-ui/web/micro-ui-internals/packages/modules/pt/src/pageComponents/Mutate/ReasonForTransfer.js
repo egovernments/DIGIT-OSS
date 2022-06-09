@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Dropdown, FormStep, LabelFieldPair, CardLabel, RadioOrSelect } from "@egovernments/digit-ui-react-components";
+import Timeline from "../../components/TLTimeline";
 
 const ReasonForTransfer = (props) => {
   const { t, config, onSelect, userType, formData, setError, clearErrors, errors } = props;
@@ -46,9 +47,9 @@ const ReasonForTransfer = (props) => {
       </React.Fragment>
     );
   }
-
   return (
     <React.Fragment>
+      <Timeline currentStep={2} flow="PT_MUTATE" />
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!reasonForTransfer}>
         <div>
           <RadioOrSelect

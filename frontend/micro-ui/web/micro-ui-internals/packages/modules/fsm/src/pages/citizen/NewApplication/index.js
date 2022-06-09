@@ -25,7 +25,7 @@ const FileComplaint = ({ parentRoute }) => {
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
   useEffect(() => {
-    if(!pathname?.includes('new-application/response')){
+    if (!pathname?.includes('new-application/response')) {
       setMutationHappened(false);
       clearSuccessData();
       clearError();
@@ -54,7 +54,7 @@ const FileComplaint = ({ parentRoute }) => {
     goNext(skipStep);
   }
 
-  const handleSkip = () => {};
+  const handleSkip = () => { };
 
   const handleSUccess = () => {
     clearParams();
@@ -65,29 +65,13 @@ const FileComplaint = ({ parentRoute }) => {
   if (isLoading) {
     return <Loader />;
   }
+
   commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
 
-  const genderConfig = {
-    "label": "a",
-    "isMandatory": false,
-    "type": "component",
-    "route": "select-gender",
-    "key": "selectGender",
-    "component": "SelectGender",
-    "texts": {
-      "headerCaption": "",
-      "header": "CS_COMMON_CHOOSE_GENDER",
-      "cardText": "CS_COMMON_SELECT_GENDER",
-      "submitBarLabel": "CS_COMMON_NEXT",
-      "skipText": "CORE_COMMON_SKIP_CONTINUE"
-    },
-    "nextStep": "property-type"
-  }
-
-  configs = [ genderConfig,...config]
-  configs.indexRoute = "select-gender";
+  configs = [...config]
+  configs.indexRoute = "select-trip-number";
 
   return (
     <Switch>

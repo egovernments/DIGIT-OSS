@@ -1,5 +1,6 @@
 .info-banner-wrap {
   @apply bg-link-normal bg-opacity-25 m-sm p-md;
+  max-width: 960px;
 
   svg {
     margin-top: 5px;
@@ -21,8 +22,6 @@
 
 @screen dt {
   .info-banner-wrap {
-    margin: 0;
-
     h2 {
       @apply text-heading-m-dt;
     }

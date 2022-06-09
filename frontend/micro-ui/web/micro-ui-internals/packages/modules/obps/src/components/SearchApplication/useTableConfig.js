@@ -6,6 +6,9 @@ const useSearchApplicationTableConfig = ({t}) => {
 
     const getRedirectionLink = (bService) => {
         let redirectBS = bService === "BPAREG"?"search/application/stakeholder":"search/application/bpa";
+        if (window.location.href.includes("/citizen")) {
+          redirectBS = bService === "BPAREG"?"stakeholder":"bpa";
+        }
         return redirectBS;
     }
     const GetCell = (value) => <span className="cell-text">{value}</span>;
@@ -19,7 +22,7 @@ const useSearchApplicationTableConfig = ({t}) => {
             return (
               <div>
                 <span className="link">
-                  <Link to={`/digit-ui/employee/obps/${getRedirectionLink(row.original["businessService"]) || "--"}/${row.original["applicationNo"] || row.original["applicationNumber"]}`}>
+                  <Link to={window.location.href.includes("/citizen")  ? `/digit-ui/citizen/obps/${getRedirectionLink(row.original["businessService"]) || "--"}/${row.original["applicationNo"] || row.original["applicationNumber"]}` : `/digit-ui/employee/obps/${getRedirectionLink(row.original["businessService"]) || "--"}/${row.original["applicationNo"] || row.original["applicationNumber"]}`}>
                     {row.original["applicationNo"] || row.original["applicationNumber"]}
                   </Link>
                 </span>
@@ -53,7 +56,8 @@ const useSearchApplicationTableConfig = ({t}) => {
         },
         {
           Header: t("BPA_CURRENT_OWNER_HEAD"),
-          accessor: (row) => GetCell(row.businessService === "BPAREG"?row?.tradeLicenseDetail?.owners.map( o => o.name ). join(",") || "" : row?.landInfo?.owners.map( o => o.name ). join(",") || ""),
+          accessor: (row) => GetCell(row?.assignee || "-"),
+          // accessor: (row) => GetCell(row.businessService === "BPAREG"?row?.tradeLicenseDetail?.owners.map( o => o.name ). join(",") || "-" : row?.landInfo?.owners.map( o => o.name ). join(",") || "-"),
           disableSortBy: true,
         },
         {

@@ -78,7 +78,7 @@ const EditForm = ({ tenantId, data }) => {
           code: ele.hierarchy,
           name: ele.hierarchy,
         },
-        boundaryType: { label: ele.boundaryType },
+        boundaryType: { label: ele.boundaryType, i18text:`EGOV_LOCATION_BOUNDARYTYPE_${ele.boundaryType.toUpperCase()}` },
         boundary: { code: ele.boundary },
         roles: data?.user?.roles.filter((item) => item.tenantId == ele.boundary),
       });
@@ -191,7 +191,7 @@ const EditForm = ({ tenantId, data }) => {
     requestdata.user.mobileNumber = input?.SelectEmployeePhoneNumber?.mobileNumber;
     requestdata["user"]["name"] = input?.SelectEmployeeName?.employeeName;
     requestdata.user.correspondenceAddress = input?.SelectEmployeeCorrespondenceAddress?.correspondenceAddress;
-    requestdata.user.roles = roles;
+    requestdata.user.roles = roles.filter(role=>role&&role.name);
     let Employees = [requestdata];
 
     /* use customiseUpdateFormData hook to make some chnages to the Employee object */

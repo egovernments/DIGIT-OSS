@@ -54,7 +54,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Plan;
 import org.egov.common.entity.edcr.Result;
@@ -65,7 +66,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MonumentDistance extends FeatureProcess {
 
-	private static final Logger LOG = Logger.getLogger(MonumentDistance.class);
+	private static final Logger LOG = LogManager.getLogger(MonumentDistance.class);
 	private static final String RULE_20 = "20";
 	public static final String MONUMENT_DESCRIPTION = "Distance from monument";
 

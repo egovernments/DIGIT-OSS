@@ -206,7 +206,7 @@ const InspectionReportForm = (_props) => {
     const getOptions = (option) => {
         let fieldoptions = []
         option.split("/").map((op) => {
-            fieldoptions.push({ i18nKey: op, code: op });
+            fieldoptions.push({ i18nKey: `SCORE_${op}`, code: op });
         })
         return fieldoptions;
     }

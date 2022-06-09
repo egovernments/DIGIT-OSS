@@ -32,6 +32,8 @@ export const CreateComplaint = ({ parentUrl }) => {
   const [localities, setLocalities] = useState(fetchedLocalities);
   const [selectedLocality, setSelectedLocality] = useState(null);
   const [canSubmit, setSubmitValve] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
   const [pincodeNotValid, setPincodeNotValid] = useState(false);
   const [params, setParams] = useState({});
   const tenantId = window.Digit.SessionStorage.get("Employee.tenantId");
@@ -98,6 +100,12 @@ export const CreateComplaint = ({ parentUrl }) => {
   function selectLocality(locality) {
     setSelectedLocality(locality);
   }
+
+  const wrapperSubmit = (data) => {
+    if (!canSubmit) return;
+    setSubmitted(true);
+    !submitted && onSubmit(data);
+  };
 
   //On SUbmit
   const onSubmit = async (data) => {
@@ -241,13 +249,12 @@ export const CreateComplaint = ({ parentUrl }) => {
       ],
     },
   ];
-
   return (
     <FormComposer
       heading={t("ES_CREATECOMPLAINT_NEW_COMPLAINT")}
       config={config}
-      onSubmit={onSubmit}
-      isDisabled={!canSubmit}
+      onSubmit={wrapperSubmit}
+      isDisabled={!canSubmit && !submitted}
       label={t("CS_ADDCOMPLAINT_ADDITIONAL_DETAILS_SUBMIT_COMPLAINT")}
     />
   );

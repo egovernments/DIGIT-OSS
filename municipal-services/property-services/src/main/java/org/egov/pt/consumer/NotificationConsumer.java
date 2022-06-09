@@ -10,7 +10,6 @@ import org.egov.pt.service.NotificationService;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -20,8 +19,6 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
-
-import static org.egov.pt.util.PTConstants.TENANTID_MDC_STRING;
 
 @Component
 @Slf4j
@@ -39,31 +36,23 @@ public class NotificationConsumer {
 	@Autowired
 	private NotificationService notifService;
 	
-    @KafkaListener(topicPattern = "${pt.kafka.notification.topic.pattern}")
+    @KafkaListener(topics = {"${egov.pt.assessment.create.topic}",
+    						 "${egov.pt.assessment.update.topic}",
+    						 "${persister.update.property.topic}",
+    						 "${persister.save.property.topic}"})
     public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
 
 		try {
 
-			if (topic.contains(configs.getCreateAssessmentTopic()) || topic.contains(configs.getUpdateAssessmentTopic())) {
+			if (topic.equalsIgnoreCase(configs.getCreateAssessmentTopic()) || topic.equalsIgnoreCase(configs.getUpdateAssessmentTopic())) {
 
 				AssessmentRequest request = mapper.convertValue(record, AssessmentRequest.class);
-
-				String tenantId = request.getAssessment().getTenantId();
-
-				// Adding in MDC so that tracer can add it in header
-				MDC.put(TENANTID_MDC_STRING, tenantId);
-
 				assessmentNotificationService.process(topic, request);
-
-			} else if (topic.contains(configs.getSavePropertyTopic()) || topic.contains(configs.getUpdatePropertyTopic())) {
+			} else if (topic.equalsIgnoreCase(configs.getSavePropertyTopic()) || topic.equalsIgnoreCase(configs.getUpdatePropertyTopic())) {
 
 				PropertyRequest request = mapper.convertValue(record, PropertyRequest.class);
-				String tenantId = request.getProperty().getTenantId();
-
-				// Adding in MDC so that tracer can add it in header
-				MDC.put(TENANTID_MDC_STRING, tenantId);
 				
-				if (PTConstants.MUTATION_PROCESS_CONSTANT.contains(request.getProperty().getCreationReason().toString())) {
+				if (PTConstants.MUTATION_PROCESS_CONSTANT.equalsIgnoreCase(request.getProperty().getCreationReason().toString())) {
 
 					notifService.sendNotificationForMutation(request);
 				} else {

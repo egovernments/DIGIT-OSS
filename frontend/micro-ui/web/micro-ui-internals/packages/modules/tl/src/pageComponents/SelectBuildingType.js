@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { TypeSelectCard } from "@egovernments/digit-ui-react-components";
+import { Loader, TypeSelectCard } from "@egovernments/digit-ui-react-components";
 import { FormStep, RadioOrSelect, RadioButtons, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/TLTimeline";
 
 const SelectBuildingType = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -34,8 +35,9 @@ const SelectBuildingType = ({ t, config, onSelect, userType, formData }) => {
   }
   return (
     <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline /> : null}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!BuildingType}>
-        <RadioButtons
+      {!isLoading ? <RadioButtons
           t={t}
           optionsKey="i18nKey"
           isMandatory={config.isMandatory}
@@ -43,6 +45,7 @@ const SelectBuildingType = ({ t, config, onSelect, userType, formData }) => {
           selectedOption={BuildingType}
           onSelect={selectBuildingType}
         />
+      :<Loader />}
       </FormStep>
       {<CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("TL_BUILDING_TYPE_INFO_MSG")} />}
       {isEdit && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("Structure type cant be modified")} />}

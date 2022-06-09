@@ -58,7 +58,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.OccupancyTypeHelper;
 import org.egov.common.entity.edcr.Plan;
@@ -74,7 +75,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AdditionalFeature extends FeatureProcess {
-    private static final Logger LOG = Logger.getLogger(AdditionalFeature.class);
+    private static final Logger LOG = LogManager.getLogger(AdditionalFeature.class);
 
     private static final String RULE_38 = "38";
     private static final String RULE_39 = "39";

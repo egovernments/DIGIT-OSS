@@ -4,6 +4,7 @@ package org.egov.waterconnection.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.tracer.model.CustomException;
@@ -19,6 +20,8 @@ import org.egov.waterconnection.web.models.Idgen.IdResponse;
 import org.egov.waterconnection.web.models.users.User;
 import org.egov.waterconnection.web.models.users.UserDetailResponse;
 import org.egov.waterconnection.web.models.users.UserSearchRequest;
+import org.egov.waterconnection.web.models.workflow.ProcessInstance;
+import org.egov.waterconnection.workflow.WorkflowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -27,6 +30,7 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -57,7 +61,8 @@ public class EnrichmentService {
 	@Autowired
 	private ServiceRequestRepository serviceRequestRepository;
 
-
+	@Autowired
+	private WorkflowService wfService;
 	/**
 	 * Enrich water connection
 	 * 
@@ -70,6 +75,16 @@ public class EnrichmentService {
 		waterConnectionRequest.getWaterConnection().setAuditDetails(auditDetails);
 		waterConnectionRequest.getWaterConnection().setId(UUID.randomUUID().toString());
 		waterConnectionRequest.getWaterConnection().setStatus(StatusEnum.ACTIVE);
+
+		if(waterConnectionRequest.getWaterConnection().getChannel() == null){
+			if(waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") )
+				waterConnectionRequest.getWaterConnection().setChannel("CFC_COUNTER");
+			if(waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") )
+				waterConnectionRequest.getWaterConnection().setChannel("CITIZEN");
+			if(waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("SYSTEM") )
+				waterConnectionRequest.getWaterConnection().setChannel("SYSTEM");
+		}
+
 		//Application creation date
 		HashMap<String, Object> additionalDetail = new HashMap<>();
 		if (waterConnectionRequest.getWaterConnection().getAdditionalDetails() == null) {
@@ -83,8 +98,21 @@ public class EnrichmentService {
 		additionalDetail.put(WCConstants.APP_CREATED_DATE, BigDecimal.valueOf(System.currentTimeMillis()));
 		waterConnectionRequest.getWaterConnection().setAdditionalDetails(additionalDetail);
 	    //Setting ApplicationType
-	  	waterConnectionRequest.getWaterConnection().setApplicationType(
-	  			reqType == WCConstants.MODIFY_CONNECTION ? WCConstants.MODIFY_WATER_CONNECTION :  WCConstants.NEW_WATER_CONNECTION);
+		String applicationType=null;
+		
+		
+		if(reqType==WCConstants.CREATE_APPLICATION) {
+			applicationType=WCConstants.NEW_WATER_CONNECTION;
+		}
+		else if(reqType==WCConstants.DISCONNECT_CONNECTION) {
+			applicationType=WCConstants.DISCONNECT_WATER_CONNECTION;
+		}
+		else {
+			applicationType=WCConstants.MODIFY_WATER_CONNECTION;
+		}
+		
+		waterConnectionRequest.getWaterConnection().setApplicationType(applicationType);
+		
 		setApplicationIdGenIds(waterConnectionRequest);
 		setStatusForCreate(waterConnectionRequest);
 
@@ -235,7 +263,8 @@ public class EnrichmentService {
 					equals(waterConnectionrequest.getWaterConnection().getProcessInstance().getAction())) {
 				SearchCriteria criteria = SearchCriteria.builder()
 						.tenantId(waterConnectionrequest.getWaterConnection().getTenantId())
-						.connectionNumber(waterConnectionrequest.getWaterConnection().getConnectionNo()).build();
+						.connectionNumber(Stream.of(waterConnectionrequest.getWaterConnection().getConnectionNo().toString()).collect(Collectors.toSet())).isCountCall(false)
+						.build();
 				List<WaterConnection> connections = waterService.search(criteria, waterConnectionrequest.getRequestInfo());
 				if (!CollectionUtils.isEmpty(connections)) {
 					WaterConnection connection = connections.get(connections.size() - 1);
@@ -456,4 +485,24 @@ public class EnrichmentService {
 		return finalConnectionList;
 	}
 
+	public void enrichProcessInstance(List<WaterConnection> waterConnectionList, SearchCriteria criteria,
+			RequestInfo requestInfo) {
+		if (CollectionUtils.isEmpty(waterConnectionList))
+			return;
+		ProcessInstance processInstance=null;
+		for (WaterConnection waterConnection : waterConnectionList) {
+			if(criteria.getTenantId()!=null)
+				processInstance=wfService.getProcessInstance(requestInfo, waterConnection.getApplicationNo(), 
+					criteria.getTenantId(), null);
+			else
+				processInstance=wfService.getProcessInstance(requestInfo, waterConnection.getApplicationNo(), 
+						waterConnection.getTenantId(), null);
+			if(!ObjectUtils.isEmpty(processInstance)) {
+				waterConnection.getProcessInstance().setBusinessService(processInstance.getBusinessService());
+				waterConnection.getProcessInstance().setModuleName(processInstance.getModuleName());
+				if(!ObjectUtils.isEmpty(processInstance.getAssignes()))
+					waterConnection.getProcessInstance().setAssignes(processInstance.getAssignes());
+			}
+		}
+	}
 }

@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Measurement;
 import org.egov.edcr.feature.FarExtract;
@@ -21,7 +22,7 @@ import org.mockito.runners.MockitoJUnit44Runner;
 
 public class OpenStair extends BaseTest {
 
-	private static final Logger LOG = Logger.getLogger(OpenStair.class);
+	private static final Logger LOG = LogManager.getLogger(OpenStair.class);
 	FarExtract far = new FarExtract();
 	OpenStairServiceExtract openStairExtract = new OpenStairServiceExtract();
 

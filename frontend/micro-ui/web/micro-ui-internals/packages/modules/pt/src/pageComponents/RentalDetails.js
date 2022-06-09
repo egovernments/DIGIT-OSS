@@ -1,5 +1,6 @@
 import { CardLabel, CitizenInfoLabel, FormStep, TextInput } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
+import Timeline from "../components/TLTimeline";
 
 const RentalDetails = ({ t, config, onSelect, value, userType, formData }) => {
   //let index = window.location.href.charAt(window.location.href.length - 1);
@@ -93,6 +94,7 @@ const RentalDetails = ({ t, config, onSelect, value, userType, formData }) => {
 
   return (
     <React.Fragment>
+          {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
       <FormStep
         config={((config.texts.headerCaption = getheaderCaption()), config)}
         onSelect={goNext}

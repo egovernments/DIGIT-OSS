@@ -19,6 +19,5 @@ export const fetchData = async (action, state, dispatch) => {
             dispatch(prepareFinalObject("myConnectionCount", response.WaterConnection.length));
         }
     } catch (error) {
-        console.log(error);
     }
 };

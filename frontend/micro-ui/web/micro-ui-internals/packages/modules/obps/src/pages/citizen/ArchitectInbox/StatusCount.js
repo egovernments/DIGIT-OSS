@@ -7,6 +7,8 @@ const StatusCount = ({ status, searchParams, onAssignmentChange }) => {
   const count = status?.count;
   return (
     <CheckBox
+      styles={{marginBottom: "21px"}}
+      style={{marginTop: "4px"}}
       onChange={(e) => onAssignmentChange(e, status?.statusid)}
       checked={searchParams?.applicationStatus?.filter((e) => e === status.statusid).length !== 0 ? true : false}
       // label={`${t(`CS_COMMON_INBOX_${status?.businessservice}`)} - ${t(status.applicationstatus)} (${count || 0})`}

@@ -1,41 +1,23 @@
 package org.egov.tracer.http.filters;
 
-import static java.util.Objects.isNull;
-import static org.egov.tracer.constants.TracerConstants.CORRELATION_ID_FIELD_NAME;
-import static org.egov.tracer.constants.TracerConstants.CORRELATION_ID_HEADER;
-import static org.egov.tracer.constants.TracerConstants.CORRELATION_ID_MDC;
-import static org.egov.tracer.constants.TracerConstants.REQUEST_INFO_FIELD_NAME_IN_JAVA_CLASS_CASE;
-import static org.egov.tracer.constants.TracerConstants.REQUEST_INFO_IN_CAMEL_CASE;
-import static org.egov.tracer.constants.TracerConstants.TENANTID_MDC;
-import static org.egov.tracer.constants.TracerConstants.TENANT_ID_HEADER;
-import static org.springframework.util.StringUtils.isEmpty;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.regex.Pattern;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.egov.tracer.config.ObjectMapperFactory;
 import org.egov.tracer.config.TracerProperties;
 import org.slf4j.MDC;
 import org.springframework.http.MediaType;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
+import java.util.regex.Pattern;
 
-import lombok.extern.slf4j.Slf4j;
+import static java.util.Objects.isNull;
+import static org.egov.tracer.constants.TracerConstants.*;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Slf4j
 public class TracerFilter implements Filter {
@@ -86,6 +68,7 @@ public class TracerFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
         throws IOException, ServletException {
+        String correlationId = null;
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
 
         if (!this.isTraced(httpRequest)) {
@@ -95,11 +78,8 @@ public class TracerFilter implements Filter {
 
             if (isBodyCompatibleForParsing(httpRequest)) {
                 final MultiReadRequestWrapper wrappedRequest = new MultiReadRequestWrapper(httpRequest);
-
-                Map<String, String> headerParamMap = getCorrelationId(wrappedRequest);
-                MDC.put(CORRELATION_ID_MDC, headerParamMap.get(CORRELATION_ID_MDC));
-                MDC.put(TENANTID_MDC, headerParamMap.get(TENANTID_MDC));
-                
+                correlationId = getCorrelationId(wrappedRequest);
+                MDC.put(CORRELATION_ID_MDC, correlationId);
                 logRequestURI(httpRequest);
 
                 if (tracerProperties.isRequestLoggingEnabled()) {
@@ -109,10 +89,8 @@ public class TracerFilter implements Filter {
                 filterChain.doFilter(wrappedRequest, servletResponse);
 
             } else {
-                
-            	Map<String, String> headerParamMap = getCorrelationId(httpRequest);
-                MDC.put(CORRELATION_ID_MDC, headerParamMap.get(CORRELATION_ID_MDC));
-                MDC.put(TENANTID_MDC, headerParamMap.get(TENANTID_MDC));
+                correlationId = getCorrelationId(httpRequest);
+                MDC.put(CORRELATION_ID_MDC, correlationId);
                 logRequestURI(httpRequest);
                 filterChain.doFilter(httpRequest, servletResponse);
             }
@@ -145,10 +123,19 @@ public class TracerFilter implements Filter {
         log.info(REQUEST_URI_LOG_MESSAGE, url);
     }
 
-	private Map<String, String> getCorrelationId(HttpServletRequest httpRequest) {
-		return getParamMapFromHeader(httpRequest);
+    private String getCorrelationId(HttpServletRequest httpRequest) {
+        String correlationId = getCorrelationIdFromHeader(httpRequest);
 
-	}
+        if (isNull(correlationId) && httpRequest instanceof MultiReadRequestWrapper) {
+            correlationId = getCorrelationIdFromBody(httpRequest);
+        }
+
+        if(isNull(correlationId))
+            correlationId = getRandomCorrelationId();
+
+        return correlationId;
+
+    }
 
     private boolean isBodyCompatibleForParsing(HttpServletRequest httpRequest) {
         return POST.equals(httpRequest.getMethod())
@@ -172,22 +159,10 @@ public class TracerFilter implements Filter {
         }
     }
 
-	private Map<String, String> getParamMapFromHeader(HttpServletRequest httpRequest) {
+    private String getCorrelationIdFromHeader(HttpServletRequest httpRequest) {
+        return httpRequest.getHeader(CORRELATION_ID_HEADER);
+    }
 
-		Map<String, String> keyMap = new HashMap<>();
-		String correlationId = httpRequest.getHeader(CORRELATION_ID_HEADER);
-
-		if (isNull(correlationId) && httpRequest instanceof MultiReadRequestWrapper) {
-			correlationId = getCorrelationIdFromBody(httpRequest);
-		}
-
-		if (isNull(correlationId))
-			correlationId = getRandomCorrelationId();
-
-		keyMap.put(CORRELATION_ID_MDC, correlationId);
-		keyMap.put(TENANTID_MDC, httpRequest.getHeader(TENANT_ID_HEADER));
-		return keyMap;
-	}
 
     @SuppressWarnings("unchecked")
     private String getCorrelationIdFromBody(HttpServletRequest httpServletRequest) {

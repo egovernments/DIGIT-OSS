@@ -81,13 +81,24 @@ public class Vendor {
 	@Size(max=64)
 	private String ownerId = null;
 
+	@JsonProperty("agencyType")
+	@SafeHtml
+	@Size(max=128)
+	private String agencyType = null;
+	
+	@JsonProperty("paymentPreference")
+	@SafeHtml
+	@Size(max=128)
+	private String paymentPreference = null;
+	
+		
 	/**
 	 * Inactive records will be consider as soft deleted
 	 */
 	public enum StatusEnum {
 		ACTIVE("ACTIVE"),
-
-		INACTIVE("INACTIVE");
+		INACTIVE("INACTIVE"),
+		DISABLED("DISABLED");
 
 		private String value;
 

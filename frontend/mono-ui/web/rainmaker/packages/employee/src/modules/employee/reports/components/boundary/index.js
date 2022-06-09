@@ -62,7 +62,6 @@ class UiBoundary extends Component {
         boundaryData = JSON.parse(boundaryData);
       } catch (error) {
         boundaryData = [];
-        console.log(error);
       }
     } else {
       const queryObj = [

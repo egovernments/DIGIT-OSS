@@ -35,7 +35,12 @@ const TLTradeUnitsEmployee = ({ config, onSelect, userType, formData, setError, 
     const [previousLicenseDetails, setPreviousLicenseDetails] = useState(formData?.tradedetils1 || []);
     let isRenewal = window.location.href.includes("tl/renew-application-details");
     if (window.location.href.includes("tl/renew-application-details")) isRenewal = true;
-    const { data: tradeMdmsData,isLoading } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TradeUnits", "[?(@.type=='TL')]");
+    const applicationType = isRenewal ? "RENEWAL" : "NEW";
+    // const { data: tradeMdmsData,isLoading } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TradeUnits", "[?(@.type=='TL')]");
+    const { data: billingSlabTradeTypeData, isLoading } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId, filters: {} }, {
+        select: (data) => {
+        return data?.billingSlab.filter((e) => e.tradeType && e.applicationType === applicationType && e.licenseType === "PERMANENT");
+    }});
 
     const addNewUnits = () => {
         const newUnit = createUnitDetails();
@@ -83,7 +88,7 @@ const TLTradeUnitsEmployee = ({ config, onSelect, userType, formData, setError, 
         setTradeSubTypeOptionsList,
         setTradeTypeMdmsData,
         setTradeCategoryValues,
-        tradeMdmsData,
+        billingSlabTradeTypeData,
         isErrors,
         setIsErrors,
         previousLicenseDetails, 
@@ -130,7 +135,7 @@ const TradeUnitForm = (_props) => {
         setTradeSubTypeOptionsList,
         setTradeTypeMdmsData,
         setTradeCategoryValues,
-        tradeMdmsData,
+        billingSlabTradeTypeData,
         isErrors,
         setIsErrors,
         previousLicenseDetails, 
@@ -146,19 +151,20 @@ const TradeUnitForm = (_props) => {
     const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
 
     useEffect(() => {
-        if (tradeMdmsData?.TradeLicense?.TradeType?.length > 0 && formData?.tradedetils?.["0"]?.structureType?.code) {
-            setTradeTypeMdmsData(tradeMdmsData?.TradeLicense?.TradeType);
-            let tradeType = cloneDeep(tradeMdmsData?.TradeLicense?.TradeType);
+        if (billingSlabTradeTypeData?.length > 0 && formData?.tradedetils?.["0"]?.structureType?.code && formData?.tradedetils?.["0"]?.structureSubType?.code) {
+            let filteredTradeDetails = billingSlabTradeTypeData.filter(data => data?.structureType === formData?.tradedetils?.["0"]?.structureSubType?.code.toString())
+            setTradeTypeMdmsData(filteredTradeDetails);
+            let tradeType = cloneDeep(filteredTradeDetails);
             let tradeCatogoryList = [];
             tradeType.map(data => {
-                data.code = data?.code?.split('.')[0];
-                data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.code?.split('.')[0]}`);
+                data.code = data?.tradeType?.split('.')[0];
+                data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.tradeType?.split('.')[0]}`);
                 tradeCatogoryList.push(data);
             });
             const filterTradeCategoryList = getUniqueItemsFromArray(tradeCatogoryList, "code");
             setTradeCategoryValues(filterTradeCategoryList);
         }
-    }, [formData?.tradedetils?.[0]?.structureType?.code, !isLoading, tradeMdmsData]);
+    }, [formData?.tradedetils?.[0]?.structureType?.code, !isLoading, billingSlabTradeTypeData, formData?.tradedetils?.["0"]?.structureSubType?.code]);
 
     useEffect(() => {
         trigger();
@@ -197,33 +203,33 @@ const TradeUnitForm = (_props) => {
     useEffect(() => {
         if (tradeTypeMdmsData?.length > 0 && ckeckingLocation && !isLoading) {
             let tradeType = cloneDeep(tradeTypeMdmsData);
-            let filteredTradeType = tradeType.filter(data => data?.code?.split('.')[0] === unit?.tradeCategory?.code)
+            let filteredTradeType = tradeType.filter(data => data?.tradeType?.split('.')[0] === unit?.tradeCategory?.code)
             let tradeTypeOptions = [];
             filteredTradeType.map(data => {
-                data.code = data?.code?.split('.')[1];
-                data.code = data?.code?.split('.')[0];
-                data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.code?.split('.')[0]}`);
+                data.code = data?.tradeType?.split('.')[1];
+                data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.tradeType?.split('.')[1]}`);
                 tradeTypeOptions.push(data);
             });
             const filterTradeCategoryList = getUniqueItemsFromArray(filteredTradeType, "code");
             setTradeTypeOptionsList(filterTradeCategoryList);
         }
-    }, [tradeTypeMdmsData, !isLoading, tradeMdmsData]);
+    }, [tradeTypeMdmsData, !isLoading, billingSlabTradeTypeData]);
 
     useEffect(() => {
         if (tradeTypeMdmsData?.length > 0 && ckeckingLocation && !isLoading) {
             let tradeType = cloneDeep(tradeTypeMdmsData);
-            let filteredTradeSubType = tradeType.filter(data => data?.code?.split('.')[1] === unit?.tradeType?.code)
+            let filteredTradeSubType = tradeType.filter(data => data?.tradeType?.split('.')[1] === unit?.tradeType?.code)
             let tradeSubTypeOptions = [];
             filteredTradeSubType.map(data => {
-                let code = stringReplaceAll(data?.code, "-", "_");
+                let code = stringReplaceAll(data?.tradeType, "-", "_");
+                data.code = data?.tradeType;
                 data.i18nKey = t(`TRADELICENSE_TRADETYPE_${stringReplaceAll(code, ".", "_")}`);
                 tradeSubTypeOptions.push(data);
             });
             const filterTradeSubTypeList = getUniqueItemsFromArray(tradeSubTypeOptions, "code");
             setTradeSubTypeOptionsList(filterTradeSubTypeList);
         }
-    }, [tradeTypeMdmsData, !isLoading, tradeMdmsData]);
+    }, [tradeTypeMdmsData, !isLoading, billingSlabTradeTypeData]);
 
 
     const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
@@ -243,7 +249,7 @@ const TradeUnitForm = (_props) => {
                         </div>
                     ) : null}
                     <LabelFieldPair>
-                        <CardLabel className="card-label-smaller">{`${t("TRADELICENSE_TRADECATEGORY_LABEL")} * :`}</CardLabel>
+                        <CardLabel className="card-label-smaller">{`${t("TRADELICENSE_TRADECATEGORY_LABEL")} * `}</CardLabel>
                         <Controller
                             control={control}
                             name={"tradeCategory"}
@@ -262,12 +268,11 @@ const TradeUnitForm = (_props) => {
                                         let selectedOption = e?.code;
                                         if (tradeTypeMdmsData?.length > 0) {
                                             let tradeType = cloneDeep(tradeTypeMdmsData);
-                                            let filteredTradeType = tradeType.filter(data => data?.code?.split('.')[0] === selectedOption)
+                                            let filteredTradeType = tradeType.filter(data => data?.tradeType?.split('.')[0] === selectedOption)
                                             let tradeTypeOptions = [];
                                             filteredTradeType.map(data => {
-                                                data.code = data?.code?.split('.')[1];
-                                                data.code = data?.code?.split('.')[0];
-                                                data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.code?.split('.')[0]}`);
+                                                data.code = data?.tradeType?.split('.')[1];
+                                                data.i18nKey = t(`TRADELICENSE_TRADETYPE_${data?.tradeType?.split('.')[1]}`);
                                                 tradeTypeOptions.push(data);
                                             });
                                             const filterTradeCategoryList = getUniqueItemsFromArray(filteredTradeType, "code");
@@ -291,7 +296,7 @@ const TradeUnitForm = (_props) => {
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.tradeCategory ? errors?.tradeCategory?.message : ""}</CardLabelError>
                     <LabelFieldPair>
-                        <CardLabel className="card-label-smaller">{`${t("TRADELICENSE_TRADETYPE_LABEL")} * :`}</CardLabel>
+                        <CardLabel className="card-label-smaller">{`${t("TRADELICENSE_TRADETYPE_LABEL")} * `}</CardLabel>
                         <Controller
                             control={control}
                             name={"tradeType"}
@@ -310,10 +315,11 @@ const TradeUnitForm = (_props) => {
                                         let selectedOption = e?.code;
                                         if (tradeTypeMdmsData?.length > 0) {
                                             let tradeType = cloneDeep(tradeTypeMdmsData);
-                                            let filteredTradeSubType = tradeType.filter(data => data?.code?.split('.')[1] === selectedOption)
+                                            let filteredTradeSubType = tradeType.filter(data => data?.tradeType?.split('.')[1] === selectedOption)
                                             let tradeSubTypeOptions = [];
                                             filteredTradeSubType.map(data => {
-                                                let code = stringReplaceAll(data?.code, "-", "_");
+                                                let code = stringReplaceAll(data?.tradeType, "-", "_");
+                                                data.code = data?.tradeType;
                                                 data.i18nKey = t(`TRADELICENSE_TRADETYPE_${stringReplaceAll(code, ".", "_")}`);
                                                 tradeSubTypeOptions.push(data);
                                             });
@@ -334,7 +340,7 @@ const TradeUnitForm = (_props) => {
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.tradeType ? errors?.tradeType?.message : ""}</CardLabelError>
                     <LabelFieldPair>
-                        <CardLabel className="card-label-smaller">{`${t("TL_NEW_TRADE_SUB_TYPE_LABEL")} * :`}</CardLabel>
+                        <CardLabel className="card-label-smaller">{`${t("TL_NEW_TRADE_SUB_TYPE_LABEL")} * `}</CardLabel>
                         <Controller
                             control={control}
                             name={"tradeSubType"}
@@ -363,7 +369,7 @@ const TradeUnitForm = (_props) => {
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}> {localFormState.touched.tradeSubType ? errors?.tradeSubType?.message : ""} </CardLabelError>
                     <LabelFieldPair>
-                        <CardLabel className="card-label-smaller">{unit?.tradeSubType?.uom ? `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")} * :` : `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")}:`}</CardLabel>
+                        <CardLabel className="card-label-smaller">{unit?.tradeSubType?.uom ? `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")} * ` : `${t("TL_NEW_TRADE_DETAILS_UOM_UOM_PLACEHOLDER")}`}</CardLabel>
                         <div className="field">
                             <Controller
                                 control={control}
@@ -390,7 +396,7 @@ const TradeUnitForm = (_props) => {
                     </LabelFieldPair>
                     <CardLabelError style={errorStyle}>{localFormState.touched.uom ? errors?.uom?.message : ""}</CardLabelError>
                     <LabelFieldPair>
-                        <CardLabel className="card-label-smaller">{unit?.tradeSubType?.uom ? `${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")} * :` : `${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")} :`}</CardLabel>
+                        <CardLabel className="card-label-smaller">{unit?.tradeSubType?.uom ? `${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")} * ` : `${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")} `}</CardLabel>
                         <div className="field">
                             <Controller
                                 control={control}

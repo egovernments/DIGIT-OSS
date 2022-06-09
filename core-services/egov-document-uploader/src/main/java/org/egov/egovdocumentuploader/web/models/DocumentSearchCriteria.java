@@ -27,11 +27,20 @@ public class DocumentSearchCriteria {
     @JsonProperty("category")
     private String category;
 
+    @JsonProperty("fromDate")
+    private Long fromDate;
+
+    @JsonProperty("toDate")
+    private Long toDate;
+
     @JsonProperty("offset")
     private Integer offset;
 
     @JsonProperty("limit")
     private Integer limit;
+
+    @JsonProperty("viewDeletedDocuments")
+    private Boolean viewDeletedDocuments = false;
 
     @JsonIgnore
     private String uuid;

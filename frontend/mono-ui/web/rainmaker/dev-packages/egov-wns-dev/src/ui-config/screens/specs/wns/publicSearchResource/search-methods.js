@@ -152,7 +152,7 @@ const searchApiCall = async (state, dispatch) => {
             let combinedSearchResults = waterFinalResponse || waterFinalResponse ? sewerageConnections.concat(waterConnections) : [];
             finalArray = combinedSearchResults;
             showResults(finalArray, tenantId, dispatch)
-        } catch (err) { console.log(err) }
+        } catch (err) {  }
     }
 };
 const showHideTable = (booleanHideOrShow, dispatch) => {
