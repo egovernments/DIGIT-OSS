@@ -8,8 +8,6 @@ import static org.egov.demand.repository.querybuilder.AmendmentQueryBuilder.DOCU
 import java.util.ArrayList;
 import java.util.List;
 
-import org.egov.common.exception.InvalidTenantIdException;
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.demand.amendment.model.Amendment;
 import org.egov.demand.amendment.model.AmendmentCriteria;
 import org.egov.demand.amendment.model.AmendmentRequest;
@@ -18,10 +16,8 @@ import org.egov.demand.amendment.model.Document;
 import org.egov.demand.model.AuditDetails;
 import org.egov.demand.model.DemandDetail;
 import org.egov.demand.repository.querybuilder.AmendmentQueryBuilder;
-import org.egov.demand.repository.querybuilder.BillQueryBuilder;
 import org.egov.demand.repository.rowmapper.AmendmentRowMapper;
 import org.egov.demand.util.Util;
-import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -34,9 +30,6 @@ public class AmendmentRepository {
 
 	@Autowired
 	private Util util;
-	
-	@Autowired
-	private MultiStateInstanceUtil centralInstanceUtil;
 	
 	@Autowired
 	private NamedParameterJdbcTemplate namedJdbcTemplate;
@@ -52,30 +45,15 @@ public class AmendmentRepository {
 		
 		Amendment amendment = amendmentRequest.getAmendment();
 
-		String sqlBill;
-		try {
-			sqlBill = centralInstanceUtil.replaceSchemaPlaceholder(AMENDMENT_INSERT_QUERY, amendment.getTenantId());
-		} catch (InvalidTenantIdException e) {
-			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
-
-		namedJdbcTemplate.update(sqlBill, getAmendmentSqlParameter(amendmentRequest));
-		saveTaxDetail(amendment.getDemandDetails(), amendment.getId(), amendment.getTenantId());
+		namedJdbcTemplate.update(AMENDMENT_INSERT_QUERY, getAmendmentSqlParameter(amendmentRequest));
+		saveTaxDetail(amendment.getDemandDetails(), amendment.getId());
 		savedocs(amendment.getDocuments(), amendment.getId());
 	}
 	
-	private void saveTaxDetail(List<DemandDetail> demandDetails, String amendmentId, String tenantId) {
+	private void saveTaxDetail(List<DemandDetail> demandDetails, String amendmentId) {
 
 		List<MapSqlParameterSource> sqlParameterSources = getSqlParameterListForTaxDetails(demandDetails, amendmentId);
-		String sqlBill;
-		try {
-			sqlBill = centralInstanceUtil.replaceSchemaPlaceholder(AMENDMENT_TAXDETAIL_INSERT_QUERY, tenantId);
-		} catch (InvalidTenantIdException e) {
-			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
-		namedJdbcTemplate.batchUpdate(sqlBill, sqlParameterSources.toArray(new MapSqlParameterSource[0]));
+		namedJdbcTemplate.batchUpdate(AMENDMENT_TAXDETAIL_INSERT_QUERY, sqlParameterSources.toArray(new MapSqlParameterSource[0]));
 	}
 	
 	private void savedocs(List<Document> documents, String amendmentId) {
@@ -88,28 +66,14 @@ public class AmendmentRepository {
 
 		MapSqlParameterSource searchParamMap = new MapSqlParameterSource();
 		String searchQuery = amendmentQueryBuilder.getSearchQuery(amendmentCriteria, searchParamMap);
-		try {
-			searchQuery = centralInstanceUtil.replaceSchemaPlaceholder(searchQuery, amendmentCriteria.getTenantId());
-		} catch (InvalidTenantIdException e) {
-			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
 		return namedJdbcTemplate.query(searchQuery, searchParamMap, amendmentRowMapper);
 	}
 
 	@Transactional
-	public void updateAmendment(List<AmendmentUpdate> amendmentUpdates, String tenantId) {
-
-		String amenndmentUpdateQuery;
-		try {
-			amenndmentUpdateQuery = centralInstanceUtil.replaceSchemaPlaceholder(AMENDMENT_UPDATE_QUERY, tenantId);
-		} catch (InvalidTenantIdException e) {
-			throw new CustomException("EG_PT_AS_TENANTID_ERROR",
-					"TenantId length is not sufficient to replace query schema in a multi state instance");
-		}
+	public void updateAmendment(List<AmendmentUpdate> amendmentUpdates) {
 
 		List<MapSqlParameterSource> sqlParameterSources = getSqlParameterListForAmendmentUpdate(amendmentUpdates);
-		namedJdbcTemplate.batchUpdate(amenndmentUpdateQuery, sqlParameterSources.toArray(new MapSqlParameterSource[0]));
+		namedJdbcTemplate.batchUpdate(AMENDMENT_UPDATE_QUERY, sqlParameterSources.toArray(new MapSqlParameterSource[0]));
 	}
 
 	/*

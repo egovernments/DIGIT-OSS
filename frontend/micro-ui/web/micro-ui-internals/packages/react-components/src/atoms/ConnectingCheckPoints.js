@@ -31,7 +31,6 @@ export const ConnectingCheckPoints = (props) => {
       </React.Fragment>
     );
   } else {
-    console.warn("ConnectingCheckPoints Components need atleast 2 CheckPoint Components as children");
     return null;
   }
 };

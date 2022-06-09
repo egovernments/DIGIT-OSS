@@ -4,16 +4,27 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
+import com.ingestpipeline.repository.ElasticSearchRepository;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+@Service
 public class JSONUtil {
 	@Autowired
 	public ObjectMapper mapper;
 	@Autowired
 	public Gson gson;
+	@Autowired
+	private ElasticSearchRepository elasticRepository;
 
 	/**
 	 * Field value to replace by new text. Replace node by given text to Parent's
@@ -90,5 +101,25 @@ public class JSONUtil {
 	public void setGson(Gson gsonn)
 	{
 		gson = gsonn;
+	}
+	
+	public List<String> fetchMCollectCategories (String tenantId) {
+		
+		String mdmsRequestString = Constants.MDMS_MCOLLECT_SEARCH.replace(Constants.TENANTID_PLACEHOLDER, tenantId);
+		Object mdmsRequestObject = mdmsRequestString;
+		
+		ResponseEntity<Map> result = elasticRepository.fetchMDMSResponse(mdmsRequestObject);
+		
+		Map<String,JSONObject> body = result.getBody();
+		JSONObject jsonObj = new JSONObject(body);
+		JSONArray jsonArray = jsonObj.getJSONObject(Constants.MDMS_RES).getJSONObject(Constants.BILLING_SERVICE).getJSONArray(Constants.BUSINESS_SERVICE);
+		List<String> categoriesList = new ArrayList<String>();
+		
+		for(int i = 0 ; i < jsonArray.length() ; i++){
+		    categoriesList.add(jsonArray.getJSONObject(i).getString(Constants.CATEGORY_CODE));
+		}
+		
+		return categoriesList;
+		
 	}
 }

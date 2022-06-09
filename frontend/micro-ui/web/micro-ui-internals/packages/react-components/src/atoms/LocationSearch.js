@@ -232,11 +232,7 @@ const setLocationText = (location, onChange, isPlaceRequired=false) => {
             else
             onChange(pincode, { longitude: location.lng, latitude: location.lat });
           }
-        } else {
-          console.debug("No results found");
         }
-      } else {
-        console.error("Geocoder failed due to: " + status);
       }
     }
   );
@@ -356,7 +352,6 @@ const LocationSearch = (props) => {
         initAutocomplete(props.onChange, { lat: position.coords.latitude, lng: position.coords.longitude }, props.isPlaceRequired);
       };
       const getLatLngError = (error) => {
-        console.error("geo location error", error);
         let defaultLatLong = {};
         if (props?.isPTDefault) {
           defaultLatLong = props?.PTdefaultcoord?.defaultConfig || { lat: 31.6160638, lng: 74.8978579 };

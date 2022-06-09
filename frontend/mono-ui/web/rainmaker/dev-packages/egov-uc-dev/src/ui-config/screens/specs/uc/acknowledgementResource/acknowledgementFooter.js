@@ -73,10 +73,8 @@ export const acknowledgementSuccesFooter = getCommonApplyFooter({
         callBack: (state, dispatch) => {
           const challanData = generateMiniChallan(state, dispatch);
           try {
-            console.log("printData",JSON.stringify(challanData));
             window.Android && window.Android.sendPrintData("printData",JSON.stringify(challanData));
           } catch (e) {
-            console.log(e);
           }
         }
     },

@@ -1,3 +1,4 @@
+import { getTenantId, getToken } from '../../utils/commons';
 import CONFIGS from '../config/configs';
 
 export default function getChartOptions(code, filters) {
@@ -12,15 +13,15 @@ export default function getChartOptions(code, filters) {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'auth-token': `${localStorage.getItem('Employee.token')}`
+                'auth-token': `${getToken()}`
             }
         };
         let dataoption = {
             "RequestInfo":{
-                "authToken": `${localStorage.getItem('Employee.token')}`
+                "authToken": `${getToken()}`
             },
             "headers": {
-                "tenantId": `${localStorage.getItem('tenant-id')}`
+                "tenantId": `${getTenantId()}`
             },
 
             "aggregationRequestDto": {

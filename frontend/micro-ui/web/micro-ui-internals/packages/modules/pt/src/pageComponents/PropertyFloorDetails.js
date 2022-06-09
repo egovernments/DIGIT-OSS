@@ -1,10 +1,9 @@
 import { CardLabel, CitizenInfoLabel, Dropdown, FormStep, LabelFieldPair, RadioButtons } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
+import Timeline from "../components/TLTimeline";
 
 const PropertyFloorsDetails = ({ t, config, onSelect, formData, userType }) => {
   const [FloorDetails, setFloorDetails] = useState(formData?.noOfFloors);
-
-  const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const { data: Menu = {} } = Digit.Hooks.pt.usePropertyMDMS(stateId, "PropertyTax", "Floor") || {};
 
@@ -39,7 +38,8 @@ const PropertyFloorsDetails = ({ t, config, onSelect, formData, userType }) => {
   }
 
   function goNext() {
-    onSelect(config.key, FloorDetails);
+    let index = window.location.href.charAt(window.location.href.length - 1);
+    onSelect(config.key, FloorDetails,"", index);
   }
 
   useEffect(() => {
@@ -48,38 +48,13 @@ const PropertyFloorsDetails = ({ t, config, onSelect, formData, userType }) => {
     }
   }, [FloorDetails]);
 
-  const inputs = [
-    {
-      label: "BPA_SCRUTINY_DETAILS_NUMBER_OF_FLOORS_LABEL",
-      type: "text",
-      name: "noOfFloors",
-      validation: {},
-    },
-  ];
-
   if (userType === "employee") {
     return null;
-    return inputs?.map((input, index) => {
-      return (
-        <LabelFieldPair key={index}>
-          <CardLabel className="card-label-smaller">{t(input.label)}</CardLabel>
-          <Dropdown
-            className="form-field"
-            isMandatory={config.isMandatory}
-            selected={employeeMenu?.length === 1 ? employeeMenu[0] : FloorDetails}
-            disable={employeeMenu?.length === 1}
-            option={employeeMenu}
-            select={selectFloorDetails}
-            optionKey="code"
-            t={t}
-          />
-        </LabelFieldPair>
-      );
-    });
   }
 
   return (
     <React.Fragment>
+          {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!FloorDetails} isMultipleAllow={true}>
         <RadioButtons
           t={t}
@@ -90,7 +65,7 @@ const PropertyFloorsDetails = ({ t, config, onSelect, formData, userType }) => {
           onSelect={selectFloorDetails}
         />
       </FormStep>
-      {/* {<CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("PT_FLOOR_NUMBER_INFO_MSG", FloorDetails)} />} */}
+      {<CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("PT_USAGE_TYPE_INFO_MSG")} />}
     </React.Fragment>
   );
 };

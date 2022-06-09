@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { Card, Banner, CardText, SubmitBar, Loader, LinkButton } from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Card, Banner, CardText, SubmitBar, Loader, LinkButton, Toast } from "@egovernments/digit-ui-react-components";
+import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import getPDFData from "../getPDFData";
 import { getVehicleType } from "../utils";
 
-const GetMessage = (type, action, isSuccess, isEmployee, t) => {
-  return t(`${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action ? action : "CREATE"}_${type}${isSuccess ? "" : "_ERROR"}`);
+const GetMessage = (type, action, isSuccess, isEmployee, t, paymentPreference) => {
+  return t(`${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action ? action : "CREATE"}_${type}${isSuccess ? "" : "_ERROR"}${paymentPreference === 'POST_PAY' ? "_POST_PAY" : ""}`);
 };
 
 const GetActionMessage = (action, isSuccess, isEmployee, t) => {
@@ -18,22 +18,32 @@ const GetLabel = (action, isSuccess, isEmployee, t) => {
   return GetMessage("LABEL", action, isSuccess, isEmployee, t);
 };
 
-const DisplayText = (action, isSuccess, isEmployee, t) => {
-  return GetMessage("DISPLAY", action, isSuccess, isEmployee, t);
+const DisplayText = (action, isSuccess, isEmployee, t, paymentPreference) => {
+  return GetMessage("DISPLAY", action, isSuccess, isEmployee, t, paymentPreference);
 };
 
 const BannerPicker = (props) => {
+  let actionMessage = props.data?.fsm?.[0].applicationStatus
+  if (props.data?.fsm?.[0].applicationStatus === 'ASSIGN_DSO') {
+    actionMessage = props.action === 'SUBMIT' ? props.action : props.data?.fsm?.[0].applicationStatus
+  }
+  let labelMessage = GetLabel(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)
+  if (props.errorInfo && props.errorInfo !== null && props.errorInfo !== '' && typeof props.errorInfo === 'string') {
+    labelMessage = props.errorInfo
+  }
   return (
     <Banner
-      message={GetActionMessage(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
+      message={GetActionMessage(actionMessage || props.action, props.isSuccess, props.isEmployee, props.t)}
       applicationNumber={props.data?.fsm?.[0].applicationNo}
-      info={GetLabel(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
+      info={labelMessage}
       successful={props.isSuccess}
     />
   );
 };
 
 const Response = (props) => {
+  const history = useHistory()
+  const [showToast, setShowToast] = useState(null);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
@@ -51,7 +61,7 @@ const Response = (props) => {
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
   const onError = (error, variables) => {
-    setErrorInfo(error?.response?.data?.Errors[0]?.code || 'ERROR');
+    setErrorInfo(error?.response?.data?.Errors[0]?.code || error?.message || 'ERROR');
     setMutationHappened(true);
   };
   useEffect(() => {
@@ -77,6 +87,21 @@ const Response = (props) => {
     Digit.Utils.pdf.generate(data);
   };
 
+  const handleResponse = () => {
+    if (Data?.fsm?.[0].paymentPreference === "POST_PAY") {
+      setShowToast({ key: "error", action: `ES_FSM_PAYMENT_BEFORE_SCHEDULE_FAILURE` });
+      setTimeout(() => {
+        closeToast();
+      }, 5000);
+    } else {
+      history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`);
+    }
+  }
+
+  const closeToast = () => {
+    setShowToast(null);
+  };
+
   useEffect(() => {
     const onSuccess = () => {
       queryClient.clear();
@@ -84,34 +109,34 @@ const Response = (props) => {
       // window.history.replaceState({}, "FSM_CREATE_RESPONSE")
     };
     if (!mutationHappened && !errorInfo) {
-    if (state.key === "update") {
-      mutation.mutate(
-        {
-          fsm: state.applicationData,
-          workflow: {
-            action: state.action,
-            ...state.actionData,
+      if (state.key === "update") {
+        mutation.mutate(
+          {
+            fsm: state.applicationData,
+            workflow: {
+              action: state.action,
+              ...state.actionData,
+            },
           },
-        },
-        {
+          {
+            onError,
+            onSuccess,
+          }
+        );
+      } else {
+        mutation.mutate(state, {
           onError,
           onSuccess,
-        }
-      );
-    } else {
-      mutation.mutate(state, {
-        onError,
-        onSuccess,
-      });
+        });
+      }
     }
-  }
   }, []);
 
   if (mutation.isLoading || (mutation.isIdle && !mutationHappened)) {
     return <Loader />;
   }
   const isSuccess = !successData ? mutation?.isSuccess : true;
-    return (
+  return (
     <Card>
       <BannerPicker
         t={t}
@@ -120,8 +145,9 @@ const Response = (props) => {
         isSuccess={isSuccess}
         isLoading={(mutation.isIdle && !mutationHappened) || mutation?.isLoading}
         isEmployee={props.parentRoute.includes("employee")}
+        errorInfo={errorInfo}
       />
-      <CardText>{DisplayText(state.action, isSuccess, props.parentRoute.includes("employee"), t)}</CardText>
+      <CardText>{DisplayText(state.action, isSuccess, props.parentRoute.includes("employee"), t, state?.fsm?.paymentPreference)}</CardText>
       {isSuccess && (
         <LinkButton
           label={
@@ -142,17 +168,24 @@ const Response = (props) => {
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
       {props.parentRoute.includes("employee") &&
-      (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
-      paymentAccess &&
-      isSuccess ? (
+        (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
+        paymentAccess &&
+        isSuccess ? (
         <div className="secondary-action">
-          <Link
+          {/* <Link
             to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`}
-          >
-            <SubmitBar label={t("ES_COMMON_PAY")} />
-          </Link>
+          > */}
+          <SubmitBar onSubmit={handleResponse} label={t("ES_COMMON_PAY")} />
+          {/* </Link> */}
         </div>
       ) : null}
+      {showToast && (
+        <Toast
+          error={showToast.key === "error" ? true : false}
+          label={t(showToast.key === "success" ? showToast.action : `ES_FSM_PAYMENT_BEFORE_SCHEDULE_FAILURE`)}
+          onClose={closeToast}
+        />
+      )}
     </Card>
   );
 };

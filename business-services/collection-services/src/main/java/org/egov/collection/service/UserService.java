@@ -11,7 +11,6 @@ import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.web.contract.Bill;
 import org.egov.collection.web.contract.UserResponse;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -22,9 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 public class UserService {
-	
-	@Autowired
-	private MultiStateInstanceUtil centralUtil;
 	
     @Autowired
     private RestTemplate restTemplate; 
@@ -47,7 +43,7 @@ public class UserService {
 		request.put("RequestInfo", requestInfo);
 		request.put("userName", phoneNo);
 		request.put("type", "CITIZEN");
-		request.put("tenantid", centralUtil.getStateLevelTenant(tenantId));
+		request.put("tenantid", tenantId.split("\\.")[0]);
 		StringBuilder url = new StringBuilder();
 		url.append(properties.getUserHost()).append(properties.getUserSearchEnpoint());
 		try {

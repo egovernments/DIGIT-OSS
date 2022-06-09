@@ -10,9 +10,7 @@ import { constants } from "../config/constants";
 const update = async (req, res, next) => {
   console.log("update");
   let errors = validateBillingSlabReq(req.body);
-  var header = JSON.parse(JSON.stringify(req.headers));
-
-  if (errors.length <= 0) errors = await updateValidate(req.body, errors, header);
+  if (errors.length <= 0) errors = await updateValidate(req.body, errors);
 
   if (errors.length > 0) {
     next({
@@ -49,11 +47,11 @@ const enrichUpdateData = reqBody => {
   return reqBody.BillingSlabs;
 };
 
-const updateValidate = async (body, errors, header) => {
+const updateValidate = async (body, errors) => {
   let BillingSlabs = body.BillingSlabs;
   for (let i = 0; i < BillingSlabs.length; i++) {
     let billingSlab = BillingSlabs[i];
-    let mdms = await mdmsData(body.RequestInfo, billingSlab.tenantId, header);
+    let mdms = await mdmsData(body.RequestInfo, billingSlab.tenantId);
     let Buildingtypes = get(
       mdms,
       `MdmsRes.${constants.MDMS_MODULENAME_FIRENOC}.${

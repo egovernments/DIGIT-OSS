@@ -115,7 +115,7 @@ public class EmployeeValidator {
 	public void validateSearchRequest(RequestInfo requestInfo, EmployeeSearchCriteria criteria) {
 		Map<String, String> errorMap = new HashMap<>();
 
-		if(requestInfo.getUserInfo().getType().equalsIgnoreCase(CITIZEN_TYPE_CODE) && !CollectionUtils.isEmpty(criteria.getIds()))
+		if(requestInfo.getUserInfo() != null && requestInfo.getUserInfo().getType().equalsIgnoreCase(CITIZEN_TYPE_CODE) && !CollectionUtils.isEmpty(criteria.getIds()))
 			errorMap.put(ErrorConstants.HRMS_INVALID_SEARCH_CITIZEN_CODE, ErrorConstants.HRMS_INVALID_SEARCH_CITIZEN_MSG);
 
 		if(criteria.isCriteriaEmpty(criteria)) {
@@ -559,7 +559,7 @@ public class EmployeeValidator {
 		Map<String, List<String>> boundaryMap = getBoundaryList(request.getRequestInfo(),request.getEmployees().get(0));
 		Map<String, List<String>> mdmsData = mdmsService.getMDMSData(request.getRequestInfo(), request.getEmployees().get(0).getTenantId());
 		List <String> uuidList = request.getEmployees().stream().map(Employee :: getUuid).collect(Collectors.toList()); 
-		EmployeeResponse existingEmployeeResponse = employeeService.search(EmployeeSearchCriteria.builder().uuids(uuidList).tenantId(request.getEmployees().get(0).getTenantId()).build(),request.getRequestInfo(), request.getEmployees().get(0).getTenantId());
+		EmployeeResponse existingEmployeeResponse = employeeService.search(EmployeeSearchCriteria.builder().uuids(uuidList).build(),request.getRequestInfo());
 		List <Employee> existingEmployees = existingEmployeeResponse.getEmployees();
 		for(Employee employee: request.getEmployees()){
 			if(validateEmployeeForUpdate(employee, errorMap)){

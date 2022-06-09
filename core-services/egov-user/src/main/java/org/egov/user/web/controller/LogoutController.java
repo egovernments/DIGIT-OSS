@@ -8,10 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 
 @RestController
 public class LogoutController {
@@ -25,7 +24,7 @@ public class LogoutController {
     /**
      * End-point to logout the session.
      *
-     * @param accessToken
+     * @param
      * @return
      * @throws Exception
      */

@@ -5,7 +5,8 @@
 
   .row {
     @apply flex justify-between;
-    height: 68px;
+    height: 80px;
+    width: 100%;
   }
 
   .lower_red {
@@ -17,4 +18,10 @@
     @apply inline;
     color: #00703C;
   }
+}
+
+.chart-metric-wrapper{
+  display: flex;
+    flex-wrap: wrap;
+    margin-top: 15px;
 }

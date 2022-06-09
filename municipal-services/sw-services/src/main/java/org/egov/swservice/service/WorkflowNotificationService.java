@@ -101,7 +101,7 @@ public class WorkflowNotificationService {
 				if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 					EventRequest eventRequest = getEventRequest(request, topic, property, applicationStatus);
 					if (eventRequest != null) {
-						notificationUtil.sendEventNotification(eventRequest, property.getTenantId());
+						notificationUtil.sendEventNotification(eventRequest);
 					}
 				}
 			}
@@ -110,7 +110,7 @@ public class WorkflowNotificationService {
 				if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 				List<SMSRequest> smsRequests = getSmsRequest(request, topic, property, applicationStatus);
 				if (!CollectionUtils.isEmpty(smsRequests)) {
-					notificationUtil.sendSMS(smsRequests, property.getTenantId());
+					notificationUtil.sendSMS(smsRequests);
 				}
 			}
 			}
@@ -118,7 +118,7 @@ public class WorkflowNotificationService {
 				if (config.getIsEmailNotificationEnabled() != null && config.getIsEmailNotificationEnabled()) {
 					List<EmailRequest> emailRequests = getEmailRequest(request, topic, property, applicationStatus);
 					if (!CollectionUtils.isEmpty(emailRequests)) {
-						notificationUtil.sendEmail(emailRequests, property.getTenantId());
+						notificationUtil.sendEmail(emailRequests);
 					}
 				}}
 
@@ -252,13 +252,13 @@ public class WorkflowNotificationService {
 			messageTemplate = messageTemplate.replace(code, "");
 			String actionLink = "";
 			if (code.equalsIgnoreCase("Download Application")) {
-				actionLink = notificationUtil.getHost(property.getTenantId()) + config.getViewHistoryLink();
+				actionLink = config.getNotificationUrl() + config.getViewHistoryLink();
 				actionLink = actionLink.replace(mobileNoReplacer, mobileNumber);
 				actionLink = actionLink.replace(applicationNumberReplacer, sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
 				actionLink = actionLink.replace(tenantIdReplacer, property.getTenantId());
 			}
 			if (code.equalsIgnoreCase("PAY NOW")) {
-				actionLink = notificationUtil.getHost(property.getTenantId()) + config.getUserEventApplicationPayLink();
+				actionLink = config.getNotificationUrl() + config.getUserEventApplicationPayLink();
 				actionLink = actionLink.replace(mobileNoReplacer, mobileNumber);
 				actionLink = actionLink.replace(consumerCodeReplacer, sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
 				actionLink = actionLink.replace(tenantIdReplacer, property.getTenantId());
@@ -274,7 +274,7 @@ public class WorkflowNotificationService {
 					consumerCode = sewerageConnectionRequest.getSewerageConnection().getConnectionNo();
 					service = "SW";
 				}
-				actionLink = notificationUtil.getHost(property.getTenantId()) + config.getUserEventReceiptDownloadLink();
+				actionLink = config.getNotificationUrl() + config.getUserEventReceiptDownloadLink();
 				actionLink = actionLink.replace("$consumerCode", consumerCode);
 				actionLink = actionLink.replace("$tenantId", property.getTenantId());
 				actionLink = actionLink.replace("$businessService", service);
@@ -282,14 +282,14 @@ public class WorkflowNotificationService {
 				actionLink = actionLink.replace("$mobile", mobileNumber);
 			}
 			if (code.equalsIgnoreCase("View History Link")) {
-				actionLink = notificationUtil.getHost(property.getTenantId()) + config.getViewHistoryLink();
+				actionLink = config.getNotificationUrl() + config.getViewHistoryLink();
 				actionLink = actionLink.replace(mobileNoReplacer, mobileNumber);
 				actionLink = actionLink.replace(applicationNumberReplacer,
 						sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
 				actionLink = actionLink.replace(tenantIdReplacer, property.getTenantId());
 			}
 			if (code.equalsIgnoreCase("Connection Detail Page")) {
-				actionLink = notificationUtil.getHost(property.getTenantId()) + config.getConnectionDetailsLink();
+				actionLink = config.getNotificationUrl() + config.getConnectionDetailsLink();
 				actionLink = actionLink.replace(connectionNoReplacer, sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
 				actionLink = actionLink.replace(tenantIdReplacer, property.getTenantId());
 				actionLink = actionLink.replace(mobileNoReplacer, mobileNumber);
@@ -455,8 +455,8 @@ public class WorkflowNotificationService {
 
 			if (messageToReplace.contains("{mseva URL}"))
 				messageToReplace = messageToReplace.replace("{mseva URL}",
-						sewerageServicesUtil.getShortenedURL(notificationUtil.getHost(property.getTenantId())));
-
+						sewerageServicesUtil.getShortenedURL(config.getNotificationUrl()));
+			
 			if (messageToReplace.contains("{Plumber Info}"))
 				messageToReplace = getMessageForPlumberInfo(sewerageConnectionRequest.getSewerageConnection(), messageToReplace);
 			
@@ -469,8 +469,7 @@ public class WorkflowNotificationService {
 						sewerageServicesUtil.getShortenedURL(config.getMSevaAppLink()));
 
 			if (messageToReplace.contains("{View History Link}")) {
-
-				String historyLink = notificationUtil.getHost(property.getTenantId()) + config.getViewHistoryLink();
+				String historyLink = config.getNotificationUrl() + config.getViewHistoryLink();
 				historyLink = historyLink.replace(mobileNoReplacer, mobileAndName.getKey());
 				historyLink = historyLink.replace(applicationNumberReplacer,
 						sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
@@ -479,7 +478,7 @@ public class WorkflowNotificationService {
 						sewerageServicesUtil.getShortenedURL(historyLink));
 			}
 			if (messageToReplace.contains("{payment link}")) {
-				String paymentLink = notificationUtil.getHost(property.getTenantId()) + config.getApplicationPayLink();
+				String paymentLink = config.getNotificationUrl() + config.getApplicationPayLink();
 				paymentLink = paymentLink.replace(mobileNoReplacer, mobileAndName.getKey());
 				paymentLink = paymentLink.replace(consumerCodeReplacer,
 						sewerageConnectionRequest.getSewerageConnection().getApplicationNo());
@@ -492,8 +491,7 @@ public class WorkflowNotificationService {
 						sewerageServicesUtil.getShortenedURL(config.getNotificationUrl()));*/
 
 			if (messageToReplace.contains("{connection details page}")) {
-
-				String connectionDetaislLink = notificationUtil.getHost(property.getTenantId()) + config.getConnectionDetailsLink();
+				String connectionDetaislLink = config.getNotificationUrl() + config.getConnectionDetailsLink();
 				connectionDetaislLink = connectionDetaislLink.replace(connectionNoReplacer,
 						sewerageConnectionRequest.getSewerageConnection().getConnectionNo());
 				connectionDetaislLink = connectionDetaislLink.replace(tenantIdReplacer, property.getTenantId());
@@ -732,7 +730,7 @@ public class WorkflowNotificationService {
 					consumerCode = sewerageConnectionRequest.getSewerageConnection().getConnectionNo();
 					service = "SW";
 				}
-				String link = notificationUtil.getHost(property.getTenantId()) + config.getReceiptDownloadLink();
+				String link = config.getNotificationUrl() + config.getReceiptDownloadLink();
 				link = link.replace("$consumerCode", consumerCode);
 				link = link.replace("$tenantId", property.getTenantId());
 				link = link.replace("$businessService", service);

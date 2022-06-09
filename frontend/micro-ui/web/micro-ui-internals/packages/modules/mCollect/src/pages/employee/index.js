@@ -9,7 +9,6 @@ import { useTranslation } from "react-i18next";
 // import MCollectAcknowledgement from "../employee/EmployeeChallanAcknowledgement";
 // import EditChallan from "../employee/EditChallan/index";
 // import NewChallan from "./NewChallan";
-
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();

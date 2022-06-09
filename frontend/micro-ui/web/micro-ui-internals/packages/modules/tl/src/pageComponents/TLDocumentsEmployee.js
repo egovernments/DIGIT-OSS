@@ -96,6 +96,7 @@ function SelectDocument({
   const [selectedDocument, setSelectedDocument] = useState("");
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
+  const acceptFormat = doc?.documentType === "OWNERPHOTO"?".jpg,.png,.jpeg":".jpg,.png,.pdf,.jpeg"
 
   function selectfile(e, key) {
     e.target.files[0].documentType = key;
@@ -178,7 +179,11 @@ function SelectDocument({
     (async () => {
       setError(null);
       if (file) {
-        if (file.size >= 5242880) {
+        if(!(acceptFormat?.split(",")?.includes(`.${file?.type?.split("/")?.pop()}`)))
+        {
+          setError(t("PT_UPLOAD_FORMAT_NOT_SUPPORTED"));
+        }
+        else if (file.size >= 5242880) {
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
           // if (!formState.errors[config.key]) setFormError(config.key, { type: doc?.code });
         } else {
@@ -191,7 +196,6 @@ function SelectDocument({
               setError(t("CS_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
             setError(t("CS_FILE_UPLOAD_ERROR"));
           }
         }

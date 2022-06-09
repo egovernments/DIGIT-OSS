@@ -4,7 +4,8 @@ export const setAddressDetailsLW = (data) => {
   let propAddress = {
     city: locationDet?.cityCode?.name,
     doorNo: locationDet?.houseDoorNo,
-    buildingName: locationDet?.buildingColonyName,
+    street: locationDet?.buildingColonyName,
+    landmark: locationDet?.landmarkName,
     locality: {
       code: locationDet?.locality?.code || "NA",
     },
@@ -111,18 +112,20 @@ export const setOwnerDetailsLW = (data) => {
     data.institution = institution;
     data.owners = owner;
   } else {
+    owners.map(own=>{
       owner.push({
-        emailId: owners?.emailId,
-        fatherOrHusbandName: owners?.fatherOrHusbandName,
-        gender: owners?.gender?.value,
-        sameAsPropertyAddress: owners?.isCorrespondenceAddress,
-        mobileNumber: owners?.mobileNumber,
-        name: owners?.name,
-        ownerType: owners?.ownerType?.code || "NONE",
-        permanentAddress: owners?.permanentAddress,
-        relationship: owners?.relationship?.code,
+        emailId: own?.emailId,
+        fatherOrHusbandName: own?.fatherOrHusbandName,
+        gender: own?.gender?.value,
+        sameAsPropertyAddress: own?.isCorrespondenceAddress,
+        mobileNumber: own?.mobileNumber,
+        name: own?.name,
+        ownerType: own?.ownerType?.code || "NONE",
+        permanentAddress: own?.permanentAddress,
+        relationship: own?.relationship?.code,
         documents: document,
       });
+    })
     data.owners = owner;
   }
   return data;
@@ -157,7 +160,7 @@ export const convertToPropertyLightWeight = (data = {}) => {
   let propertyType = data.PropertyType;
   // let subusagetype = data.subusagetype || null;
   let noOfFloors = 1; // data?.noOfFloors;
-
+  let ownershipCategory= data?.owners?.[0]?.ownershipCategory;
   data = setOwnerDetailsLW(data);
   data = setAddressDetailsLW(data);
   data = setPropertyDetailsLW(data);
@@ -168,7 +171,8 @@ export const convertToPropertyLightWeight = (data = {}) => {
       address: data.address,
       propertyType: propertyType,
       ...data.propertyDetails,
-      ownershipCategory: data?.ownershipCategory,
+      ownershipCategory: ownershipCategory,
+      usageCategory: data?.assemblyDet?.usageCategoryMajor?.code,
       owners: data.owners,
       noOfFloors: noOfFloors,
       additionalDetails: {
@@ -181,6 +185,58 @@ export const convertToPropertyLightWeight = (data = {}) => {
   };
   return formdata;
 };
+
+export const convertToUpdatePropertyLightWeight = (data = {}) => {
+  let propertyType = data.PropertyType;
+  let noOfFloors = 1;
+
+  data = setOwnerDetailsLW(data);
+  data = setAddressDetailsLW(data);
+  data = setPropertyDetailsLW(data);
+
+  const formdata = {
+    Property: {
+      id: data.id,
+      accountId: data.accountId,
+      acknowldgementNumber: data.acknowldgementNumber,
+      propertyId: data.propertyId,
+      status: data.status || "INWORKFLOW",
+      tenantId: data.tenantId,
+      address: data.address,
+      propertyType: propertyType,
+      ownershipCategory: data?.ownershipCategory,
+      owners: data.owners,
+      noOfFloors: noOfFloors,
+      additionalDetails: {
+        isRainwaterHarvesting: false,
+      },
+      ...data.propertyDetails,
+      creationReason: getCreationReason(data),
+      source: "MUNICIPAL_RECORDS",
+      channel: "CITIZEN",
+      workflow: getWorkflow(data),
+    },
+  };
+
+  let propertyInitialObject = JSON.parse(sessionStorage.getItem("propertyInitialObject"));
+  if (checkArrayLength(propertyInitialObject?.units) && checkIsAnArray(formdata.Property?.units) && data?.isEditProperty) {
+    propertyInitialObject.units = propertyInitialObject.units.filter((unit) => unit.active);
+    let oldUnits = propertyInitialObject.units.map((unit) => {
+      return { ...unit, active: false };
+    });
+    formdata.Property?.units.push(...oldUnits);
+  }
+
+  if (checkArrayLength(propertyInitialObject?.owners) && checkIsAnArray(formdata.Property?.owners)) {
+    formdata.Property.owners = [...propertyInitialObject.owners];
+  }
+  if (propertyInitialObject?.auditDetails) {
+    formdata.Property["auditDetails"] = { ...propertyInitialObject.auditDetails };
+  }
+
+  return formdata;
+};
+
 export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   if (searcher == "") return str;
   while (str.includes(searcher)) {

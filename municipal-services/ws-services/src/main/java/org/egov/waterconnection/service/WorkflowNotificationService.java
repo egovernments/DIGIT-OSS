@@ -1,26 +1,11 @@
 package org.egov.waterconnection.service;
 
-import static org.egov.waterconnection.constants.WCConstants.CHANNEL_NAME_EMAIL;
-import static org.egov.waterconnection.constants.WCConstants.CHANNEL_NAME_EVENT;
-import static org.egov.waterconnection.constants.WCConstants.CHANNEL_NAME_SMS;
-import static org.egov.waterconnection.constants.WCConstants.WATER_SERVICE_BUSINESS_ID;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
@@ -30,23 +15,7 @@ import org.egov.waterconnection.repository.ServiceRequestRepository;
 import org.egov.waterconnection.util.NotificationUtil;
 import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.validator.ValidateProperty;
-import org.egov.waterconnection.web.models.Action;
-import org.egov.waterconnection.web.models.ActionItem;
-import org.egov.waterconnection.web.models.CalculationCriteria;
-import org.egov.waterconnection.web.models.CalculationReq;
-import org.egov.waterconnection.web.models.CalculationRes;
-import org.egov.waterconnection.web.models.Category;
-import org.egov.waterconnection.web.models.Email;
-import org.egov.waterconnection.web.models.EmailRequest;
-import org.egov.waterconnection.web.models.Event;
-import org.egov.waterconnection.web.models.EventRequest;
-import org.egov.waterconnection.web.models.Property;
-import org.egov.waterconnection.web.models.Recepient;
-import org.egov.waterconnection.web.models.RequestInfoWrapper;
-import org.egov.waterconnection.web.models.SMSRequest;
-import org.egov.waterconnection.web.models.Source;
-import org.egov.waterconnection.web.models.WaterConnection;
-import org.egov.waterconnection.web.models.WaterConnectionRequest;
+import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.web.models.collection.PaymentResponse;
 import org.egov.waterconnection.web.models.workflow.BusinessService;
 import org.egov.waterconnection.web.models.workflow.State;
@@ -55,13 +24,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
-import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
+import static org.egov.waterconnection.constants.WCConstants.*;
 
 @Service
 @Slf4j
@@ -113,9 +84,7 @@ public class WorkflowNotificationService {
      * @param topic topic is bill generation topic for water.
      */
     public void process(WaterConnectionRequest request, String topic) {
-    	
         try {
-        	String tenantId = request.getWaterConnection().getTenantId();
             String applicationStatus = request.getWaterConnection().getApplicationStatus();
             List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getWaterConnection().getTenantId(), WATER_SERVICE_BUSINESS_ID, request.getWaterConnection().getProcessInstance().getAction());
             if (!WCConstants.NOTIFICATION_ENABLE_FOR_STATUS.contains(request.getWaterConnection().getProcessInstance().getAction()+"_"+applicationStatus)) {
@@ -128,21 +97,21 @@ public class WorkflowNotificationService {
                 if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
                     EventRequest eventRequest = getEventRequest(request, topic, property, applicationStatus);
                     if (eventRequest != null) {
-                        notificationUtil.sendEventNotification(eventRequest, tenantId);
+                        notificationUtil.sendEventNotification(eventRequest);
                     }
                 }}
             if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
                 if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
                     List<SMSRequest> smsRequests = getSmsRequest(request, topic, property, applicationStatus);
                     if (!CollectionUtils.isEmpty(smsRequests)) {
-                        notificationUtil.sendSMS(smsRequests, tenantId);
+                        notificationUtil.sendSMS(smsRequests);
                     }
                 }}
             if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
                 if (config.getIsEmailNotificationEnabled() != null && config.getIsEmailNotificationEnabled()) {
                     List<EmailRequest> emailRequests = getEmailRequest(request, topic, property, applicationStatus);
                     if (!CollectionUtils.isEmpty(emailRequests)) {
-                        notificationUtil.sendEmail(emailRequests, tenantId);
+                        notificationUtil.sendEmail(emailRequests);
                     }
                 }}
 
@@ -483,8 +452,7 @@ public class WorkflowNotificationService {
                 messageToReplace = messageToReplace.replace("{payment link}",
                         waterServiceUtil.getShortnerURL(paymentLink));
             }
-            
-            /*if (messageToReplace.contains("{receipt download link}")){
+			/*if (messageToReplace.contains("{receipt download link}")){
 				messageToReplace = messageToReplace.replace("{receipt download link}",
 						waterServiceUtil.getShortnerURL(config.getNotificationUrl()));
 			}*/
@@ -581,7 +549,8 @@ public class WorkflowNotificationService {
     }
 
 
-    /** Fetches UUIDs of CITIZEN based on the phone number.
+    /**
+     * Fetches UUIDs of CITIZEN based on the phone number.
      *
      * @param mobileNumbers - List of Mobile Numbers
      * @param requestInfo - Request Information
@@ -705,7 +674,7 @@ public class WorkflowNotificationService {
         }
     }
 
-	public Map<String, String> setRecepitDownloadLink(Map<String, String> mobileNumberAndMessage,
+    public Map<String, String> setRecepitDownloadLink(Map<String, String> mobileNumberAndMessage,
                                                       WaterConnectionRequest waterConnectionRequest, String message, Property property) {
 
         Map<String, String> messageToReturn = new HashMap<>();

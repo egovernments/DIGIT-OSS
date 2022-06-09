@@ -11,7 +11,8 @@ const defaultFinancialYear = () => {
   const data = convertEpochToDate(Date.now());
   const splitData = data.split("-")[0];
   const year = splitData.slice(2, 4);
-  const currentFinancialYear = `${Number(splitData)}-${Number(year) + 1}`;
+  let monthNo = Number(data.split("-")[1]);
+  const currentFinancialYear = monthNo < 4?`${Number(splitData)-1}-${Number(year)}`:`${Number(splitData)}-${Number(year) + 1}`;
   return { 
     code: currentFinancialYear, 
     i18nKey: `FY${currentFinancialYear}`, 
@@ -298,7 +299,7 @@ const OwnerForm1 = (_props) => {
       <div style={{ marginBottom: "16px" }}>
         <div>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_FINANCIAL_YEAR_LABEL")} * :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_FINANCIAL_YEAR_LABEL")} * `}</CardLabel>
             <Controller
               name="financialYear"
               rules={{ required: t("REQUIRED_FIELD") }}
@@ -322,7 +323,7 @@ const OwnerForm1 = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.financialYear ? errors?.financialYear?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL")} * :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_NEW_TRADE_DETAILS_LIC_TYPE_LABEL")} * `}</CardLabel>
             <Controller
               name="licenseType"
               defaultValue={tradedetail?.licenseType}
@@ -344,7 +345,7 @@ const OwnerForm1 = (_props) => {
           </LabelFieldPair>
 
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_COMMON_TABLE_COL_TRD_NAME")} * :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_COMMON_TABLE_COL_TRD_NAME")} * `}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -372,7 +373,7 @@ const OwnerForm1 = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.tradeName ? errors?.tradeName?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_NEW_TRADE_DETAILS_STRUCT_TYPE_LABEL")} * :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_NEW_TRADE_DETAILS_STRUCT_TYPE_LABEL")} * `}</CardLabel>
             <Controller
               name="structureType"
               rules={{ required: t("REQUIRED_FIELD") }}
@@ -409,7 +410,7 @@ const OwnerForm1 = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.structureType ? errors?.structureType?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL")} * :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL")} * `}</CardLabel>
             <Controller
               name="structureSubType"
               rules={{ required: t("REQUIRED_FIELD") }}
@@ -435,7 +436,7 @@ const OwnerForm1 = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.structureSubType ? errors?.structureSubType?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL")} * :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL")} * `}</CardLabel>
             <div className="field">
               <Controller
                 name="commencementDate"
@@ -456,7 +457,7 @@ const OwnerForm1 = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.commencementDate ? errors?.commencementDate?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_NEW_GST_NUMBER_LABEL")} :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_NEW_GST_NUMBER_LABEL")} `}</CardLabel>
             <div className="field">
               <Controller
                 control={control}
@@ -482,7 +483,7 @@ const OwnerForm1 = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.gstNo ? errors?.gstNo?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_NEW_OPERATIONAL_SQ_FT_AREA_LABEL")} :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_NEW_OPERATIONAL_SQ_FT_AREA_LABEL")} `}</CardLabel>
             <div className="field">
               <Controller
                 name="operationalArea"
@@ -507,7 +508,7 @@ const OwnerForm1 = (_props) => {
           </LabelFieldPair>
           <CardLabelError style={errorStyle}>{localFormState.touched.operationalArea ? errors?.operationalArea?.message : ""}</CardLabelError>
           <LabelFieldPair>
-            <CardLabel className="card-label-smaller">{`${t("TL_NEW_NUMBER_OF_EMPLOYEES_LABEL")} :`}</CardLabel>
+            <CardLabel className="card-label-smaller">{`${t("TL_NEW_NUMBER_OF_EMPLOYEES_LABEL")} `}</CardLabel>
             <div className="field">
               <Controller
                 name="noOfEmployees"

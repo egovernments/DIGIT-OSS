@@ -103,13 +103,14 @@ public class AggregateRequestDto {
 	}
 	public void setInterval(String interval) {
 		this.interval = interval;
-	} 
+	}
 	public ResponseRecorder getResponseRecorder() {
-        return responseRecorder;
+		return responseRecorder;
 	}
 	public void setResponseRecorder(ResponseRecorder responseRecorder) {
-        this.responseRecorder = responseRecorder;
-	}
+		this.responseRecorder = responseRecorder;
+	} 
+	
 	
 
 }

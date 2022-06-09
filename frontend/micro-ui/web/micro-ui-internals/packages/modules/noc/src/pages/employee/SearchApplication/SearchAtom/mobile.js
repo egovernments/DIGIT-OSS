@@ -11,10 +11,13 @@ import {
   Loader,
   Toast,
 } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 
-const SearchApplicationMobileView = ({ SearchFormFieldsComponent, propsMobileInboxCards }) => {
+const SearchApplicationMobileView = ({ SearchFormFieldsComponent, propsMobileInboxCards, isLoading, data, getRedirectionLink, onSubmit }) => {
+    const { t } = useTranslation();
+    const { handleSubmit, setValue, getValues } = useFormContext();
 
-    const {} = useFormContext()
+    // const {} = useFormContext()
 
     function activateModal(state, action) {
         switch (action.type) {
@@ -23,7 +26,7 @@ const SearchApplicationMobileView = ({ SearchFormFieldsComponent, propsMobileInb
         case "remove":
             return false;
         default:
-            console.warn("no such action defined");
+            break;        
         }
     }
 
@@ -47,9 +50,9 @@ const SearchApplicationMobileView = ({ SearchFormFieldsComponent, propsMobileInb
             <SearchForm {...props}>
                 <MobilePopUpCloseButton />
                 <div className="MobilePopupHeadingWrapper">
-                <h2>{t("ES_COMMON_SEARCH")}:</h2>
+                <h2>{t("ACTION_TEST_SEARCH_NOC_APPLICATION")}:</h2>
                 </div>
-                <SearchFormFieldsComponent {...{ closeMobilePopupModal }} />
+                <SearchFormFieldsComponent onSubmit={onSubmit} handleSubmit={handleSubmit} isMobileView={true} {...{ closeMobilePopupModal }} />
                 {/* <SearchField className="submit">
                         <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
                         <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>
@@ -108,10 +111,9 @@ const SearchApplicationMobileView = ({ SearchFormFieldsComponent, propsMobileInb
             <DetailsCard
             {...{
                 data: propsMobileInboxCards,
-                isTwoDynamicPrefix: true,
-                linkPrefix: `/digit-ui/employee/obps/`,
-                getRedirectionLink: getRedirectionLink,
-                serviceRequestIdKey: "applicationNo",
+                isTwoDynamicPrefix: false,
+                linkPrefix: `/digit-ui/employee/noc/search/application-overview/`,
+                serviceRequestIdKey: t("NOC_APP_NO_LABEL"),
             }}
             />
         )}

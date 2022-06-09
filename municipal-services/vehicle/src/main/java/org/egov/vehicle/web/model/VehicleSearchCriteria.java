@@ -52,6 +52,14 @@ public class VehicleSearchCriteria {
 	@JsonProperty("suctionType")
 	private List<String> suctionType;
 
+	@JsonProperty("vehicleOwner")
+	private List<String> vehicleOwner;
+	
+	@JsonProperty("applicationStatus")
+    private List<String> applicationStatus;   
+	
+	@JsonProperty("status")
+    private List<String> status;   
 
 	  @JsonProperty("sortBy")
 	    private SortBy sortBy;
@@ -68,6 +76,7 @@ public class VehicleSearchCriteria {
 	        type,
 	        model,
 	        suctionType,
+	        vehicleOwner,
 	        pollutionCertiValidTill,
 	        InsuranceCertValidTill,
 	        fitnessValidTill,
@@ -82,7 +91,7 @@ public class VehicleSearchCriteria {
 		return (this.tenantId == null && this.offset == null && this.limit == null && this.mobileNumber == null && this.tankCapacity ==null
 				&&  CollectionUtils.isEmpty(this.ownerId)  && CollectionUtils.isEmpty(this.type)
 				&& CollectionUtils.isEmpty(this.ids) && CollectionUtils.isEmpty(this.registrationNumber)
-				&& CollectionUtils.isEmpty(this.model) && CollectionUtils.isEmpty(this.suctionType));
+				&& CollectionUtils.isEmpty(this.model) && CollectionUtils.isEmpty(this.suctionType) && CollectionUtils.isEmpty(this.vehicleOwner));
 	}
 
 	public boolean tenantIdOnly() {
@@ -90,6 +99,6 @@ public class VehicleSearchCriteria {
 		return (this.tenantId != null && this.mobileNumber == null && this.tankCapacity ==null
 				&&  CollectionUtils.isEmpty(this.ownerId)  && CollectionUtils.isEmpty(this.type)
 				&& CollectionUtils.isEmpty(this.ids) && CollectionUtils.isEmpty(this.registrationNumber)
-				&& CollectionUtils.isEmpty(this.model) && CollectionUtils.isEmpty(this.suctionType));
+				&& CollectionUtils.isEmpty(this.model) && CollectionUtils.isEmpty(this.suctionType) && CollectionUtils.isEmpty(this.vehicleOwner));
 	}
 }

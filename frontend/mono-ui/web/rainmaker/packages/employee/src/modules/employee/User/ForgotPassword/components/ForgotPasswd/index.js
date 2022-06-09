@@ -6,7 +6,7 @@ import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
 import { CityPicker } from "modules/common";
 
-const ForgotPasswd = ({ form, handleFieldChange }) => {
+const ForgotPasswd = ({ form, handleFieldChange,logoUrl }) => {
   const fields = form.fields || {};
   const submit = form.submit;
 
@@ -15,11 +15,11 @@ const ForgotPasswd = ({ form, handleFieldChange }) => {
       className="user-screens-card forgot-passwd-card col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4"
       textChildren={
         <div>
-          <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
-            <div style={{ marginBottom: "24px" }}>
-              <Image className="mseva-logo" source={`${logo}`} />
+          <div className="rainmaker-displayInline" style={{ justifyContent: "center" ,alignItems:"center",marginBottom: "24px"}}>
+            <div style={{ }}>
+              <Image className="mseva-logo" source={logoUrl?logoUrl:`${logo}`} />
             </div >
-          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
+          <div style={{marginLeft:"7px" }}>
           <Label bold={true}  fontSize= "23px" label="|" />
           </div>
            <div style={{marginLeft:"7px" }}>

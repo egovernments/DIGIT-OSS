@@ -1,27 +1,9 @@
 package org.egov.wscalculation.service;
 
-import static org.egov.wscalculation.constants.WSCalculationConstant.ACTION_FOR_BILL;
-import static org.egov.wscalculation.constants.WSCalculationConstant.BILL_FAILURE_MESSAGE_EMAIL;
-import static org.egov.wscalculation.constants.WSCalculationConstant.BILL_FAILURE_MESSAGE_SMS;
-import static org.egov.wscalculation.constants.WSCalculationConstant.BILL_SUCCESS_MESSAGE_EMAIL;
-import static org.egov.wscalculation.constants.WSCalculationConstant.BILL_SUCCESS_MESSAGE_SMS;
-import static org.egov.wscalculation.constants.WSCalculationConstant.CHANNEL_NAME_EMAIL;
-import static org.egov.wscalculation.constants.WSCalculationConstant.CHANNEL_NAME_EVENT;
-import static org.egov.wscalculation.constants.WSCalculationConstant.CHANNEL_NAME_SMS;
-import static org.egov.wscalculation.constants.WSCalculationConstant.SERVICE_FIELD_VALUE_WS;
-import static org.egov.wscalculation.constants.WSCalculationConstant.TENANTID_MDC_STRING;
-import static org.springframework.util.StringUtils.capitalize;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
@@ -31,23 +13,10 @@ import org.egov.wscalculation.repository.ServiceRequestRepository;
 import org.egov.wscalculation.util.CalculatorUtil;
 import org.egov.wscalculation.util.NotificationUtil;
 import org.egov.wscalculation.util.WSCalculationUtil;
-import org.egov.wscalculation.web.models.Action;
-import org.egov.wscalculation.web.models.ActionItem;
-import org.egov.wscalculation.web.models.Category;
-import org.egov.wscalculation.web.models.Email;
-import org.egov.wscalculation.web.models.EmailRequest;
-import org.egov.wscalculation.web.models.Event;
-import org.egov.wscalculation.web.models.EventRequest;
-import org.egov.wscalculation.web.models.Property;
-import org.egov.wscalculation.web.models.Recipient;
-import org.egov.wscalculation.web.models.SMSRequest;
-import org.egov.wscalculation.web.models.Source;
-import org.egov.wscalculation.web.models.WaterConnection;
-import org.egov.wscalculation.web.models.WaterConnectionRequest;
+import org.egov.wscalculation.web.models.*;
 import org.egov.wscalculation.web.models.users.User;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -58,6 +27,10 @@ import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.wscalculation.constants.WSCalculationConstant.*;
+import static org.egov.wscalculation.constants.WSCalculationConstant.ACTION_FOR_DEMAND;
+import static org.springframework.util.StringUtils.capitalize;
 
 @Component
 @Slf4j
@@ -103,17 +76,8 @@ public class PaymentNotificationService {
 			RequestInfo requestInfo = mapper.convertValue(info, RequestInfo.class);
 			List<WaterConnection> waterConnectionList = calculatorUtil.getWaterConnection(requestInfo,
 					mappedRecord.get(consumerCode), mappedRecord.get(tenantId));
-			
-			if (CollectionUtils.isEmpty(waterConnectionList)) {
-				throw new CustomException("EG_WS_WATER_CONNECTION_NOT_FOUND",
-						"Water Connection are not present for " + mappedRecord.get(consumerCode) + " connection no");
-			}
 			int size = waterConnectionList.size();
 			WaterConnection waterConnection = waterConnectionList.get(size - 1);
-			String tenantId = waterConnection.getTenantId();
-			
-			// Adding in MDC so that tracer can add it in header
-			MDC.put(TENANTID_MDC_STRING, tenantId);
 			WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder()
 					.waterConnection(waterConnection).requestInfo(requestInfo).build();
 			Property property = wSCalculationUtil.getProperty(waterConnectionRequest);
@@ -123,6 +87,11 @@ public class PaymentNotificationService {
 			if (configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
 				if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
 					if (mappedRecord.get(serviceName).equalsIgnoreCase(WSCalculationConstant.SERVICE_FIELD_VALUE_WS)) {
+						if (waterConnection == null) {
+							throw new CustomException("EG_WS_WATER_CONNECTION_NOT_FOUND",
+									"Water Connection are not present for " + mappedRecord.get(consumerCode)
+											+ " connection no");
+						}
 						EventRequest eventRequest = getEventRequest(mappedRecord, waterConnectionRequest, topic, property);
 						if (eventRequest != null) {
 							log.info("In App Notification :: -> " + mapper.writeValueAsString(eventRequest));
@@ -135,6 +104,11 @@ public class PaymentNotificationService {
 			if (configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
 				if (config.getIsSMSEnabled() != null && config.getIsSMSEnabled()) {
 					if (mappedRecord.get(serviceName).equalsIgnoreCase(WSCalculationConstant.SERVICE_FIELD_VALUE_WS)) {
+						if (waterConnection == null) {
+							throw new CustomException("EG_WS_WATER_CONNECTION_NOT_FOUND",
+									"Water Connection are not present for " + mappedRecord.get(consumerCode)
+											+ " connection no");
+						}
 						List<SMSRequest> smsRequests = getSmsRequest(mappedRecord, waterConnectionRequest, topic, property);
 						if (!CollectionUtils.isEmpty(smsRequests)) {
 							log.info("SMS Notification :: -> " + mapper.writeValueAsString(smsRequests));
@@ -374,8 +348,10 @@ public class PaymentNotificationService {
 		if (message.contains("{ULB}"))
 			message = message.replace("{ULB}", capitalize(user.getTenantId().split("\\.")[1]));
 		if (message.contains("{billing cycle}"))
-		{String billingCycle = (String) masterMap.get(WSCalculationConstant.Billing_Cycle_String);
-			message = message.replace("{billing cycle}",billingCycle);}
+		{
+			String billingCycle = calculatorUtil.getBillingCycle(masterMap);
+			message = message.replace("{billing cycle}",billingCycle);
+		}
 
 		return message;
 
@@ -392,7 +368,7 @@ public class PaymentNotificationService {
 	 *
 	 */
 	public void sendBillNotification(RequestInfo requestInfo, String uuid, String tenantId, Map<String, Object> masterMap, Boolean isSuccess) {
-
+log.info("Sending Bill Notification");
 		List<String> configuredChannelNames = notificationUtil.fetchChannelList(requestInfo, tenantId, SERVICE_FIELD_VALUE_WS, ACTION_FOR_BILL);
 
 		User user = notificationUtil.fetchUserByUUID(uuid, requestInfo, tenantId);

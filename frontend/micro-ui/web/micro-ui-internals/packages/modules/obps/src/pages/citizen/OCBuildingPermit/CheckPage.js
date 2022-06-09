@@ -17,15 +17,14 @@ import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import Timeline from "../../../components/Timeline";
-import OBPSDocument from "../../../pageComponents/OBPSDocuments";
-import { convertEpochToDateDMY, stringReplaceAll } from "../../../utils";
+import { convertEpochToDateDMY, stringReplaceAll, getOrderDocuments } from "../../../utils";
+import DocumentsPreview from "../../../../../templates/ApplicationDetails/components/DocumentsPreview";
 
 const CheckPage = ({ onSubmit, value }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const match = useRouteMatch();
   let user = Digit.UserService.getUser();
-  const tenantId = user.info.permanentCity;
   let BusinessService;
   if (value.businessService === "BPA_LOW")
     BusinessService = "BPA.LOW_RISK_PERMIT_FEE";
@@ -35,30 +34,33 @@ const CheckPage = ({ onSubmit, value }) => {
     BusinessService = "BPA.NC_OC_APP_FEE"
 
   const { data, address, owners, nocDocuments, documents, additionalDetails, PrevStateDocuments, PrevStateNocDocuments, applicationNo, uiFlow } = value;
+  const tenantId = user?.info?.permanentCity || value?.tenantId ||Digit.ULBService.getCurrentTenantId() ;
+
   let isEditApplication = window.location.href.includes("editApplication");
-  let val;
-  var i;
-  let improvedDoc =isEditApplication?[...PrevStateDocuments , ...documents.documents]: [...documents.documents];
-  improvedDoc.map((ob) => { ob["isNotDuplicate"] = false; })
-  // improvedDoc.map((ob,index) => {
-  //   val = ob.documentType;
-  //   if(ob.isNotDuplicate == true)
-  //   for(i=index+1; i<improvedDoc.length;i++)
-  //   {
-  //     if(val === improvedDoc[i].documentType || val?.includes(improvedDoc[i].documentType.split(".")[1]) )
-  //     improvedDoc[i].isNotDuplicate=false;
-  //   }
-  // })
-  improvedDoc.filter((ele,ind)=>improvedDoc.findIndex((elee)=>elee.documentType===ele.documentType)===ind).map(obj=>obj.isNotDuplicate=true);
+
+      // for application documents
+      let improvedDoc = [];
+      PrevStateDocuments?.map(preDoc => { improvedDoc.push({...preDoc, module: "OBPS"}) });
+      documents?.documents?.map(appDoc => { improvedDoc.push({...appDoc, module: "OBPS"}) });
+
+      //for NOC documents 
+      PrevStateNocDocuments?.map(preNocDoc => { improvedDoc.push({...preNocDoc, module: "NOC"}) });
+      nocDocuments?.nocDocuments?.map(nocDoc => { improvedDoc.push({...nocDoc, module: "NOC"}) });
+
+      const { data: pdfDetails, isLoading:pdfLoading, error } = Digit.Hooks.useDocumentSearch( improvedDoc, { enabled: improvedDoc?.length > 0 ? true : false});
+      
+      let applicationDocs = [], nocAppDocs = [];
+      if (pdfDetails?.pdfFiles?.length > 0) {  
+        pdfDetails?.pdfFiles?.map(pdfAppDoc => {
+          if (pdfAppDoc?.module == "OBPS") applicationDocs.push(pdfAppDoc);
+          if (pdfAppDoc?.module == "NOC") nocAppDocs.push(pdfAppDoc);
+        });
+      }
 
   const { data: datafromAPI, isLoading, refetch } = Digit.Hooks.obps.useScrutinyDetails(tenantId, value?.data?.scrutinyNumber, {
     enabled: value?.data?.scrutinyNumber?true:false,
   })
-  
-  if(isLoading)
-  {
-    return <Loader />
-  }
+
   
   let consumerCode = value?.applicationNo;
   const fetchBillParams = { consumerCode };
@@ -66,7 +68,7 @@ const CheckPage = ({ onSubmit, value }) => {
 
 
   const { data: paymentDetails } = Digit.Hooks.useFetchBillsForBuissnessService(
-    { businessService: BusinessService, ...fetchBillParams, tenantId: tenantId },
+    { businessService: BusinessService, ...fetchBillParams, tenantId: tenantId || value?.tenantId},
     {
       enabled: consumerCode ? true : false,
       retry: false,
@@ -163,6 +165,10 @@ const CheckPage = ({ onSubmit, value }) => {
     let newdate = Date.parse(date);
     return `${new Date(newdate).getDate().toString() + "/" + (new Date(newdate).getMonth() + 1).toString() + "/" + new Date(newdate).getFullYear().toString()
       }`;
+  }
+
+  if (pdfLoading || isLoading) {
+    return <Loader />
   }
 
   return (
@@ -267,16 +273,7 @@ const CheckPage = ({ onSubmit, value }) => {
           style={{ width: "100px", display: "inline" }}
           onClick={() => routeTo(`${routeLink}/document-details`)}
         />
-        {improvedDoc.map((doc, index) => (
-          <div key={index}>
-            {doc.isNotDuplicate && <div><CardSectionHeader>{`${t(doc?.documentType?.split('.').slice(0,2).join('_'))}`}</CardSectionHeader>
-            <StatusTable>
-              <OBPSDocument value={isEditApplication?[...PrevStateDocuments,...documents.documents]:value} Code={doc?.documentType} index={index} />
-              <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
-            </StatusTable>
-          </div>}
-          </div>
-        ))}
+        {<DocumentsPreview documents={getOrderDocuments(applicationDocs)} svgStyles = {{}} isSendBackFlow = {false} isHrLine = {true} titleStyles ={{fontSize: "18px", lineHeight: "24px", "fontWeight": 700, marginBottom: "10px"}}/>}
       </Card>
       <Card style={{paddingRight:"16px"}}>
         <CardHeader>{t("BPA_NOC_DETAILS_SUMMARY")}</CardHeader>
@@ -295,12 +292,11 @@ const CheckPage = ({ onSubmit, value }) => {
               {noc?.nocNo ? <Row className="border-none" label={`${t("BPA_APPROVAL_NUMBER_LABEL")}`} text={noc?.nocNo || "NA"} /> : null }
               {(noc?.applicationStatus === "APPROVED" || noc?.applicationStatus === "REJECTED" || noc?.applicationStatus === "AUTO_APPROVED" || noc?.applicationStatus === "AUTO_REJECTED") ? <Row className="border-none" label={`${t("BPA_APPROVED_REJECTED_ON_LABEL")}`} text= {convertEpochToDateDMY(Number(noc?.auditDetails?.lastModifiedTime))} /> : null }
               <Row className="border-none" label={t(`BPA_DOCUMENT_DETAILS_LABEL`)} text={""} />
-              <OBPSDocument value={isEditApplication?[...PrevStateNocDocuments,...nocDocuments.nocDocuments]:value} Code={noc?.nocType?.split("_")[0]} index={index} isNOC={true}/>
+              {<DocumentsPreview documents={getOrderDocuments(nocAppDocs?.filter(data => data?.documentType?.includes(noc?.nocType?.split("_")?.[0])), true)} svgStyles = {{}} isSendBackFlow = {false} isHrLine = {true} titleStyles ={{fontSize: "18px", lineHeight: "24px", "fontWeight": 700, marginBottom: "10px"}}/>}
             </StatusTable>
           </div>
         ))}
         </Card>
-        {/* <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} /> */}
         <Card style={{paddingRight:"16px"}}>
         <CardSubHeader>{`${t("BPA_SUMMARY_FEE_EST")}`}</CardSubHeader>
         <StatusTable>

@@ -296,7 +296,6 @@ export const getCurrentAddress = async () => {
       }
     });
   } catch (error) {
-    console.log(error);
   }
 };
 
@@ -687,7 +686,6 @@ export const fetchDropdownData = async (dispatch, dataFetchConfig, formKey, fiel
     }
   } catch (error) {
     const { message } = error;
-    console.log(error);
     if (fieldKey === "mohalla") {
       dispatch(
         toggleSnackbarAndSetText(
@@ -936,7 +934,6 @@ export const getApplicationType = async (applicationNumber, tenantId, creationRe
       }
     }
   } catch (e) {
-    console.log(e);
   }
 };
 
@@ -1024,6 +1021,25 @@ export const openPdf = async (link, openIn = "_blank") => {
   }
 };
 
+
+export const downloadFromLink = async (link,filename="help.pdf") => {
+  if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp()) {
+    downloadPdf(link, "_self");
+  } else {
+    const link = document.createElement("a");
+    // create a blobURI pointing to our Blob
+    link.href = link
+    link.download = filename;
+    // some browser needs the anchor to be in the doc
+    document.body.append(link);
+    link.click();
+    link.remove();
+    // in case the Blob uses a lot of memory
+    setTimeout(() => URL.revokeObjectURL(link.href), 7000)
+  }
+};
+
+
 export const getModuleName = () => {
   const pathName = window.location.pathname;
   if (pathName.indexOf("inbox") > -1) {
@@ -1087,7 +1103,13 @@ export const getModuleName = () => {
     return "rainmaker-bpa,rainmaker-bpareg";
   } else if (pathName.indexOf("noc") > -1) {
     return "rainmaker-common-noc";
-  } else {
+  } else if (
+    pathName.indexOf("birth") > -1 ||
+    pathName.indexOf("death") > -1 ||
+    pathName.indexOf("bnd") > -1 
+  ) {
+    return "rainmaker-bnd";
+  }else {
     return "rainmaker-common";
   }
 };
@@ -1132,7 +1154,6 @@ export const getBusinessServiceMdmsData = async (dispatch, tenantId, businessSer
     const businessServiceItem = await businessServiceInfo(mdmsBody, businessService);
     dispatch(prepareFinalObject("businessServiceInfo", businessServiceItem));
   } catch (e) {
-    console.log(e);
   }
 };
 

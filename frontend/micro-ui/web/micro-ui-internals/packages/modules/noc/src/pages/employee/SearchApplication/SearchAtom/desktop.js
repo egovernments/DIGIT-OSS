@@ -1,23 +1,22 @@
-import React, { Fragment, useCallback, useMemo, useEffect, useState, useReducer } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-  CloseSvg,
   SearchForm,
   Table,
   Card,
-  SearchAction,
-  PopUp,
-  DetailsCard,
   Loader,
-  Toast,
 } from "@egovernments/digit-ui-react-components";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 
 const SearchApplicationDesktopView = ({columns, SearchFormFieldsComponent, onSubmit, data, error, isLoading, Count}) => {
-    const { handleSubmit, setValue, getValues } = useFormContext()
-    const [currPage, setCurrPage] = useState(getValues("offset") / getValues("limit"));
-    const { t } = useTranslation()
+    const { handleSubmit, setValue, getValues } = useFormContext();
+
+    if (getValues("offset") == undefined) setValue("offset", 0);
+    if (getValues("limit") == undefined) setValue("limit", 10);
+
+    const [currPage, setCurrPage] = useState(Number(getValues("offset")) / Number(getValues("limit")));
+    const { t } = useTranslation();
 
     const fetchLastPage = () => {
       setValue("offset", Count && Math.ceil(Count / 10) * 10 - getValues("limit"));
@@ -41,17 +40,17 @@ const SearchApplicationDesktopView = ({columns, SearchFormFieldsComponent, onSub
     }
   
     function nextPage() {
-      setValue("offset", getValues("offset") + getValues("limit"));
+      setValue("offset", Number(getValues("offset")) + Number(getValues("limit")));
       handleSubmit(onSubmit)();
     }
     function previousPage() {
-      setValue("offset", getValues("offset") - getValues("limit"));
+      setValue("offset", Number(getValues("offset")) - Number(getValues("limit")));
       handleSubmit(onSubmit)();
     }
   
     useEffect(() => {
       if(!(getValues("offset") == undefined || getValues("limit") == undefined))
-      setCurrPage(getValues("offset") / getValues("limit"));
+      setCurrPage(Number(getValues("offset")) / Number(getValues("limit")));
     }, [getValues("offset"), getValues("limit")]);
   
     const TableComponent = () => {
@@ -80,11 +79,10 @@ const SearchApplicationDesktopView = ({columns, SearchFormFieldsComponent, onSub
                         };
                     }}
                     onPageSizeChange={onPageSizeChange}
-                    //currentPage={getValues("offset")/getValues("limit")}
                     currentPage={currPage}
                     onNextPage={nextPage}
                     onPrevPage={previousPage}
-                    pageSizeLimit={getValues("limit")}
+                    pageSizeLimit={Number(getValues("limit"))}
                     onSort={onSort}
                     totalRecords={Count}
                     disableSort={false}
@@ -98,7 +96,7 @@ const SearchApplicationDesktopView = ({columns, SearchFormFieldsComponent, onSub
 
     return <React.Fragment>
     <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-      <SearchFormFieldsComponent />
+      <SearchFormFieldsComponent onSubmit={onSubmit} handleSubmit={handleSubmit} isMobileView={false}/>
     </SearchForm>
     <TableComponent/>
   </React.Fragment>

@@ -7,17 +7,21 @@ import CheckSlum from "./pageComponents/CheckSlum";
 import SelectAddress from "./pageComponents/SelectAddress";
 import SelectChannel from "./pageComponents/SelectChannel";
 import SelectGender from "./pageComponents/SelectGender";
+import SelectPaymentType from "./pageComponents/SelectPaymentType";
 import SelectGeolocation from "./pageComponents/SelectGeolocation";
 import SelectLandmark from "./pageComponents/SelectLandmark";
 import SelectName from "./pageComponents/SelectName";
 import SelectPincode from "./pageComponents/SelectPincode";
 import SelectPitType from "./pageComponents/SelectPitType";
+import SelectTripNo from "./pageComponents/SelectTripNo";
 import SelectPropertySubtype from "./pageComponents/SelectPropertySubtype";
 import SelectPropertyType from "./pageComponents/SelectPropertyType";
 import SelectSlumName from "./pageComponents/SelectSlumName";
 import SelectStreet from "./pageComponents/SelectStreet";
 import SelectTankSize from "./pageComponents/SelectTankSize";
 import SelectTripData from "./pageComponents/SelectTripData";
+// import SelectTripNo from "./pageComponents/SelectTripNo";
+import SelectPaymentPreference from "./pageComponents/SelectPaymentPreference";
 import CitizenApp from "./pages/citizen";
 import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import { MyApplications } from "./pages/citizen/MyApplications";
@@ -34,6 +38,13 @@ import FstpOperatorDetails from "./pages/employee/FstpOperatorDetails";
 import Inbox from "./pages/employee/Inbox";
 import { NewApplication } from "./pages/employee/NewApplication";
 import Response from "./pages/Response";
+import FSMRegistry from "./pages/employee/FSMRegistry";
+import VendorDetails from "./pages/employee/FSMRegistry/VendorDetails";
+import AddVendor from "./pages/employee/FSMRegistry/AddVendor";
+import EditVendor from "./pages/employee/FSMRegistry/EditVendor";
+import VehicleDetails from "./pages/employee/FSMRegistry/VehicleDetails";
+import AddVehicle from "./pages/employee/FSMRegistry/AddVehicle";
+import {FsmBreadCrumb} from "./pages/employee";
 
 const FSMModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "FSM";
@@ -140,6 +151,7 @@ const componentsToRegister = {
   SelectPincode,
   SelectTankSize,
   SelectPitType,
+  SelectTripNo,
   SelectGeolocation,
   SelectSlumName,
   CheckSlum,
@@ -150,6 +162,8 @@ const componentsToRegister = {
   SelectName,
   SelectTripData,
   SelectGender,
+  SelectPaymentType,
+  SelectPaymentPreference,
   FSMEmpInbox: Inbox,
   FSMFstpInbox: FstpInbox,
   FSMNewApplicationEmp: NewApplication,
@@ -164,6 +178,13 @@ const componentsToRegister = {
   FSMCitizenApplicationDetails: ApplicationDetails,
   FSMSelectRating: SelectRating,
   FSMDsoDashboard: DsoDashboard,
+  FSMRegistry,
+  VendorDetails,
+  AddVendor,
+  EditVendor,
+  VehicleDetails,
+  AddVehicle,
+  FsmBreadCrumb
 };
 
 export const initFSMComponents = () => {

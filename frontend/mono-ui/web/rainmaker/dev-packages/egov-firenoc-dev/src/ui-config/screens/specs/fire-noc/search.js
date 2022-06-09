@@ -21,6 +21,7 @@ import {
   unMountScreen,
   handleScreenConfigurationFieldChange as handleField
 } from "egov-ui-framework/ui-redux/screen-configuration/actions";
+import './index.css';
 // import { getRequiredDocuments } from "./requiredDocuments/reqDocs";
 
 const hasButton = getQueryArg(window.location.href, "hasButton");

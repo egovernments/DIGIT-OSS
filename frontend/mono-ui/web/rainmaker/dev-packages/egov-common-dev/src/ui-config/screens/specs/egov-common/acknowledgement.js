@@ -6,6 +6,7 @@ import { generateBill, ifUserRoleExists } from "../utils";
 import acknowledgementCard from "./acknowledgementResource/acknowledgementUtils";
 import { paymentFooter } from "./acknowledgementResource/paymentFooter";
 import "./index.css";
+import {postPaymentSuccess} from "egov-bnd/ui-config/screens/specs/utils";
 import { getHeader } from "./pay";
 
 const downloadprintMenu = (
@@ -238,7 +239,11 @@ const screenConfig = {
       window.location.href,
       "businessService"
     );
-
+    if(businessService=="BIRTH_CERT" || businessService=="DEATH_CERT")
+    {
+        //Only for birth and death certificate.
+        postPaymentSuccess({consumerCode:consumerCode, tenantId:tenant, businessService: businessService});
+    }
     // Calling the Bill so that payer information can be set in the PDF for Citizen application
     if (process.env.REACT_APP_NAME === "Citizen") {
       if ((status == 'success'||status == 'failure') && localStorage.getItem('pay-channel')=="whatsapp" && localStorage.getItem('pay-redirectNumber')) {

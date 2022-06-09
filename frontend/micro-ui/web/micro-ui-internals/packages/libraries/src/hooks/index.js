@@ -2,6 +2,7 @@ import { useInitStore } from "./store";
 import useWorkflowDetails from "./workflow";
 import useSessionStorage from "./useSessionStorage";
 import useQueryParams from "./useQueryParams";
+import useDocumentSearch from "./useDocumentSearch";
 import useClickOutside from "./useClickOutside";
 import {
   useFetchPayment,
@@ -11,11 +12,13 @@ import {
   useGetPaymentRulesForBusinessServices,
   useDemandSearch,
   useRecieptSearch,
+  usePaymentSearch,
 } from "./payment";
 import { useUserSearch } from "./userSearch";
 import { useApplicationsForBusinessServiceSearch } from "./useApplicationForBillSearch";
 import useBoundaryLocalities from "./useLocalities";
 import useCommonMDMS from "./useMDMS";
+import useCustomMDMS from "./useCustomMDMS";
 import useInboxGeneral from "./useInboxGeneral/useInboxGeneral";
 import useApplicationStatusGeneral from "./useStatusGeneral";
 import useModuleTenants from "./useModuleTenants";
@@ -26,6 +29,7 @@ import { useEvents, useClearNotifications, useNotificationCount } from "./events
 import useCreateEvent from "./events/useCreateEvent";
 import useUpdateEvent from "./events/useUpdateEvent";
 import useNewInboxGeneral from "./useInboxGeneral/useNewInbox";
+import useDynamicData from "./useDynamicData";
 
 import useComplaintDetails from "./pgr/useComplaintDetails";
 import { useComplaintsList, useComplaintsListByMobile } from "./pgr/useComplaintList";
@@ -48,12 +52,14 @@ import useSearch from "./fsm/useSearch";
 import useSearchAll from "./fsm/useSearchAll";
 import useVehicleSearch from "./fsm/useVehicleSearch";
 import useVehicleUpdate from "./fsm/useVehicleUpdate";
+import useVehicleCreate from "./fsm/useVehicleCreate";
 import useFSMInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
 import useRouteSubscription from "./fsm/useRouteSubscription";
 import useDsoSearch from "./fsm/useDsoSearch";
 import usePropertySearch from "./pt/usePropertySearch";
+import usePropertySearchNew from "./pt/usePropertySearchNew";
 import usePropertySearchWithDue from "./pt/usePropertySearchWithDue";
 import usePropertyPayment from "./pt/usePropertyPayment";
 import useApplicationDetail from "./fsm/useApplicationDetail";
@@ -65,6 +71,9 @@ import useConfig from "./fsm/useConfig";
 import useVendorDetail from "./fsm/useVendorDetail";
 import useSlum from "./fsm/useSlum";
 import usePaymentHistory from "./fsm/usePaymentHistory";
+import useVendorCreate from "./fsm/useVendorCreate";
+import useVendorUpdate from "./fsm/useVendorUpdate";
+import useVehicleDetails from "./fsm/useVehicleDetails";
 
 import useEmployeeSearch from "./useEmployeeSearch";
 
@@ -81,6 +90,7 @@ import usePtCalculationEstimate from "./pt/usePtCalculationEstimate";
 import useGenderMDMS from "./pt/useGenderMDMS";
 import usePTGenderMDMS from "./pt/usePTGenderMDMS";
 import useMyPropertyPayments from "./pt/useMyPropertyPayments";
+import useGenericViewProperty from "./pt/useGenericViewProperty";
 
 import useDssMdms from "./dss/useMDMS";
 import useDashboardConfig from "./dss/useDashboardConfig";
@@ -93,7 +103,7 @@ import useMcollectSearchBill from "./mcollect/useMcollectSearchBill";
 import usemcollectTenants from "./mcollect/useTenants";
 import useMCollectCount from "./mcollect/useMCollectCount";
 import useMCollectCategory from "./mcollect/useMcollectCategory";
-import useMCollectCategoryTypes from './mcollect/useMcollectCategoryTypes';
+import useMCollectCategoryTypes from "./mcollect/useMcollectCategoryTypes";
 import useMCollectTaxHeads from "./mcollect/useMcollectTaxHeads";
 import useMcollectFormConfig from "./mcollect/useMcollectFormConfig";
 
@@ -113,6 +123,7 @@ import useTLInbox from "./tl/useInbox";
 import useTradeLicenseBillingslab from "./tl/useTradeLicenseBillingslab";
 import useTLMDMS from "./tl/useMDMS";
 import useTLSearch from "./tl/useSearch";
+import useTLWorkflowData from "./tl/useTLWorkflowData";
 
 import useHRMSSearch from "./hrms/useHRMSsearch";
 import useHrmsMDMS from "./hrms/useHRMSMDMS";
@@ -144,12 +155,12 @@ import useBPAREGApplicationActions from "./obps/useBPAREGApplicationActions";
 import useBPADetailsPage from "./obps/useBPADetailsPage";
 import useBPAInbox from "./obps/useBPAInbox";
 import useEDCRInbox from "./obps/useEDCRInbox";
-import useBPAApplicationActions from "./obps/useApplicationActions"
+import useBPAApplicationActions from "./obps/useApplicationActions";
 import useArchitectInbox from "./obps/useArchitectInbox";
 import useBPAREGSearch from "./obps/useBPAREGSearch";
 import useEmpBPAREGSearch from "./obps/useEmpBPAREGSearch";
-import useServiceTypeFromApplicationType from "./obps/useServiceTypeFromApplicationType"
-import useBusinessServiceBasedOnServiceType from "./obps/useBusinessServiceBasedOnServiceType"
+import useServiceTypeFromApplicationType from "./obps/useServiceTypeFromApplicationType";
+import useBusinessServiceBasedOnServiceType from "./obps/useBusinessServiceBasedOnServiceType";
 import useBusinessServiceData from "./obps/useBusinessServiceData";
 import useBPATaxDocuments from "./obps/useBPATaxDocuments";
 
@@ -177,6 +188,43 @@ import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
 import usewsTenants from "./ws/useTenants";
 import useWaterSearch from "./ws/useWaterSearch";
 import useSewarageSearch from "./ws/useSewarageSearch";
+import useMyBillsWaterSearch from "./ws/useMyBillsWaterSearch";
+import useMyBillsSewarageSearch from "./ws/useMyBillsSewarageSearch";
+import useMyApplicationSearch from "./ws/useMyApplicationSearch";
+import useWSDocumentSearch from "./ws/useWSDocumentSearch";
+import useWSMDMSWS from "./ws/useWSMDMSWS";
+import WSuseSearch from "./ws/useSearch";
+import useOldValue from "./ws/useOldValue";
+import useSewSearch from "./ws/useSewSearch";
+import useSearchWS from "./ws/useSearchWS";
+import useMypaymentWS from "./ws/useMypaymentWS";
+import useWSDetailsPage from "./ws/useWSDetailsPage";
+import useWSApplicationActions from "./ws/useApplicationActions";
+import useApplicationActionsBillAmendUpdate from "./ws/useApplicationActionsBillAmendUpdate";
+import useWSConsumptionSearch from "./ws/useConsumptionSearch";
+import useWSMDMS from "./ws/useWSMDMS";
+import useAccessControl from "./useAccessControl";
+import useConnectionDetail from "./ws/useConnectionDetail";
+import useBillSearch from "./bills/useBillSearch";
+import useWaterCreateAPI from "./ws/useWaterCreateAPI";
+import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
+import useWSUpdateAPI from "./ws/useWSUpdateAPI";
+import useCreateBillAmendment from "./ws/useCreateBillAmendment";
+import useWSApplicationDetailsBillAmendment from "./ws/useWSApplicationDetailsBillAmendment";
+import useWSInbox from "./ws/useInbox";
+import useTenantsBills from "./bills/useTenants";
+import useMeterReadingCreateAPI from "./ws/useMeterConnectionCreateAPI";
+import useGetMeterStatusList from "./ws/useGetMeterStatusList";
+import useGetBillingPeriodValidation from "./ws/useBillingPeriodValidation";
+import useReportMeta from "./reports/useReport";
+import useWaterPropertySearch from "./ws/useWaterPropertySearch";
+
+import useGetHowItWorksJSON from "./useHowItWorksJSON";
+import useGetFAQsJSON from "./useGetFAQsJSON";
+import useGetDSSFAQsJSON from "./useGetDSSFAQsJSON";
+import useGetDSSAboutJSON from "./useGetDSSAboutJSON";
+import useStaticData from "./useStaticData";
+import useBillAmendmentInbox from "./billAmendment/useInbox";
 
 const pgr = {
   useComplaintDetails,
@@ -219,10 +267,15 @@ const fsm = {
   useConfig,
   useSlum,
   usePaymentHistory,
+  useVendorCreate,
+  useVendorUpdate,
+  useVehicleDetails,
+  useVehicleCreate,
 };
 
 const pt = {
   usePropertySearch,
+  usePropertySearchNew,
   usePropertyPayment,
   usePropertyMDMS,
   usePropertySearchWithDue,
@@ -238,6 +291,7 @@ const pt = {
   useGenderMDMS,
   usePTGenderMDMS,
   useMyPropertyPayments,
+  useGenericViewProperty,
 };
 
 const dss = {
@@ -285,6 +339,7 @@ const tl = {
   useApplicationActions: useTLApplicationActions,
   useFetchBill: useTLFetchBill,
   useTLApplicationDetails,
+  useTLWorkflowData,
 };
 
 const receipts = {
@@ -319,14 +374,14 @@ const obps = {
   useOBPSSearch,
   useBusinessServiceBasedOnServiceType,
   useBusinessServiceData,
-  useBPATaxDocuments
+  useBPATaxDocuments,
 };
 
 const events = {
   useInbox: useEventInbox,
   useCreateEvent,
   useEventDetails,
-  useUpdateEvent
+  useUpdateEvent,
 };
 
 const engagement = {
@@ -345,21 +400,51 @@ const survey = {
   useSubmitResponse: useSurveySubmitResponse,
   useShowResults: useSurveyShowResults,
   useSurveyInbox,
-}
+};
 
 const noc = {
   useNOCDetails,
   useNOCApplicationActions,
   useInbox: useNOCInbox,
-  useNOCSearchApplication
-}
+  useNOCSearchApplication,
+};
 
 const ws = {
   WSSearchMdmsTypes,
   usewsTenants,
   useWaterSearch,
-  useSewarageSearch
-}
+  useSewarageSearch,
+  useMyBillsWaterSearch,
+  useMyBillsSewarageSearch,
+  useMyApplicationSearch,
+  useWSDocumentSearch,
+  useWSMDMSWS,
+  WSuseSearch,
+  useSewSearch,
+  useSearchWS,
+  useWSDetailsPage,
+  useWSApplicationActions,
+  useApplicationActionsBillAmendUpdate,
+  useWSConsumptionSearch,
+  useConnectionDetail,
+  useMDMS: useWSMDMS,
+  useWaterCreateAPI,
+  useSewerageCreateAPI,
+  useWSUpdateAPI,
+  useMypaymentWS,
+  useCreateBillAmendment,
+  useWSApplicationDetailsBillAmendment,
+  useInbox: useWSInbox,
+  useOldValue,
+  useMeterReadingCreateAPI,
+  useGetMeterStatusList,
+  useGetBillingPeriodValidation,
+  useWaterPropertySearch,
+};
+
+const reports = {
+  useReportMeta,
+};
 
 const Hooks = {
   useSessionStorage,
@@ -382,13 +467,18 @@ const Hooks = {
   useApplicationStatusGeneral,
   useModuleTenants,
   useRecieptSearch,
+  usePaymentSearch,
   useNewInboxGeneral,
   useEvents,
   useClearNotifications,
   useNotificationCount,
   useStore,
+  useDocumentSearch,
   useTenants,
   useInbox: useTLInbox,
+  useAccessControl,
+  useBillSearch,
+  useTenantsBills,
   pgr,
   fsm,
   pt,
@@ -402,7 +492,16 @@ const Hooks = {
   engagement,
   survey,
   noc,
-  ws
+  ws,
+  useCustomMDMS,
+  reports,
+  useGetHowItWorksJSON,
+  useGetFAQsJSON,
+  useGetDSSFAQsJSON,
+  useGetDSSAboutJSON,
+  useStaticData,
+  useDynamicData,
+  useBillAmendmentInbox,
 };
 
 export default Hooks;

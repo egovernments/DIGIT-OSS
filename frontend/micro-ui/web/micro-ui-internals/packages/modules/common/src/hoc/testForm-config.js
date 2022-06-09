@@ -22,7 +22,6 @@ const middleWare_3 = async (data, _break, _next) => {
         data.BANKFROMMiddleWare = BANK;
       } else alert("Wrong IFSC Code");
     } catch (er) {
-      console.error(er);
       alert("Something Went Wrong !");
     }
   }
@@ -107,7 +106,6 @@ export const testForm = {
               props.setValue("branch", BRANCH);
             } else alert("Wrong IFSC Code");
           } catch (er) {
-            console.error(er);
             alert("Something Went Wrong !");
           }
         },

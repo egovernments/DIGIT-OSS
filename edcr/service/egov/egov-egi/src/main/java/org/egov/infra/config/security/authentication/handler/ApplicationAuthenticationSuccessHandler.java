@@ -65,7 +65,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -74,7 +75,7 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 
 public class ApplicationAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private static final Logger LOG = Logger.getLogger(ApplicationAuthenticationSuccessHandler.class);
+    private static final Logger LOG = LogManager.getLogger(ApplicationAuthenticationSuccessHandler.class);
 
     private RequestCache requestCache = new HttpSessionRequestCache();
 

@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PaymentBackUpdateAudit {
-	
-	private String tenantId;
 
 	private String paymentId;
 	

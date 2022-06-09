@@ -110,7 +110,6 @@ export const createPropertyPayload = (properties, documentsUploadRedux) => {
   delete properties[0].subOwnershipCategory;
   delete properties[0].propertySubType;
   delete properties[0].buildUpArea;
-  // console.log("PT Info------", properties[0]);
   return properties[0];
 };
 

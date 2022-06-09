@@ -24,12 +24,26 @@ const ReceiptsService = {
             useCache: true,
             method: "POST",
             params: { ...newParam},
-            auth: true,
+            auth: window.location.href.includes("pt/property/my-payments")? false : true,
             locale: true,
-            userService: true,
+            userService: window.location.href.includes("pt/property/my-payments")? false : true,
             userDownload: true,
             })
         },
+        bill_download: (bussinessService, consumerCode, tenantId,pdfKey) =>{
+            let newParam={ bussinessService,tenantId ,consumerCode};
+                return Request({
+                url: Urls.mcollect.bill_download,
+                data: {},
+                useCache: true,
+                method: "POST",
+                params: { ...newParam},
+                auth:  true,
+                locale: true,
+                userService:true,
+                userDownload: true,
+                })
+            },
     update: (data, tenantId, businessService) =>
         Request({
             data: data,

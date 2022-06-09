@@ -6,14 +6,15 @@ import PropertySearchResults from "./searchResults";
 import { loginSteps } from "../Otp/config";
 
 const SearchResultsComponent = (props) => {
-  const { config: propConfig, onSelect, clearParams } = props;
+  const { config: propConfig, onSelect, clearParams, formData, stateCode } = props;
   const { t } = useTranslation();
   const { path } = useRouteMatch();
 
   const search = useLocation().search;
   const redirectToUrl = new URLSearchParams(search).get('redirectToUrl');
 
-  let config = propConfig ? [propConfig] : defaultConfig;
+  // let config = propConfig ? [propConfig] : defaultConfig;
+  let config = defaultConfig;
 
   const params = useMemo(() => {
     return config?.map?.((step) => {
@@ -37,8 +38,9 @@ const SearchResultsComponent = (props) => {
           onSelect={onSelect}
           config={propConfig}
           clearParams={clearParams}
-          stateCode= {props.stateCode}
+          stateCode= {stateCode}
           redirectToUrl={redirectToUrl}
+          searchQuery={formData?.cptSearchQuery}
         />
       </Route>
     </Switch>

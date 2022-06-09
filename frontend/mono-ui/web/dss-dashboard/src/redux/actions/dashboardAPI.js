@@ -1,6 +1,7 @@
 /**
  * Dashboard API
  */
+import { getToken } from '../../utils/commons';
 import API from './apis/api';
 import C from './constants';
 
@@ -42,7 +43,7 @@ export default class DashboardAPI extends API {
         return {
             headers: {
                 'Content-Type': 'application/json',
-                'auth-token': `${localStorage.getItem('Employee.token')}`
+                'auth-token': `${getToken()}`
                     // 'Authorization': `Bearer ${sessionStorage.getItem('token')}`
             }
         }

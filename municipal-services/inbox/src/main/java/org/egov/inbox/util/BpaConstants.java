@@ -25,5 +25,7 @@ public class BpaConstants {
 	public static final String BPAREG = "BPAREG";
 	public static final String APPLICATION_TYPE = "applicationType";
 	public static final String SERVICE_TYPE = "serviceType";
+	public static final String  COUNT = "count";
+	public static final String  STATUS_ID = "statusid";
 
 }
