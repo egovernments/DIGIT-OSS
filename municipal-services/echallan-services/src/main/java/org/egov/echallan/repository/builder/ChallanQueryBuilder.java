@@ -46,6 +46,10 @@ public class ChallanQueryBuilder {
       public static final String CANCEL_RECEIPT_UPDATE_SQL = "UPDATE {schema}.eg_echallan SET applicationStatus='ACTIVE' WHERE challanNo=? and businessService=?";
 
       public static final String CHALLAN_COUNT_QUERY = "SELECT applicationstatus, count(*)  FROM {schema}.eg_echallan WHERE tenantid ";
+      
+      public static final String TOTAL_COLLECTION_QUERY = "SELECT sum(amountpaid) FROM {schema}.egbs_billdetail_v1 INNER JOIN egcl_paymentdetail ON egbs_billdetail_v1.billid=egcl_paymentdetail.billid INNER JOIN eg_echallan ON consumercode=challanno WHERE eg_echallan.tenantid=? AND eg_echallan.applicationstatus='PAID' AND egcl_paymentdetail.createdtime>? ";
+      
+      public static final String TOTAL_SERVICES_QUERY = "SELECT count(distinct(businessservice)) FROM {schema}.eg_echallan WHERE tenantid=? AND createdtime>? ";
 
 
 
@@ -193,6 +197,51 @@ public class ChallanQueryBuilder {
         builder.append("GROUP BY applicationstatus");
         return builder.toString();
     }
+
+
+	public String getTotalCollectionQuery(String tenantId, List<Object> preparedStmtListTotalCollection) {
+		
+		StringBuilder query = new StringBuilder("");
+		query.append(TOTAL_COLLECTION_QUERY);
+		
+		preparedStmtListTotalCollection.add(tenantId);
+		
+		// In order to get data of last 12 months, the months variables is pre-configured in application properties
+    	int months = Integer.valueOf(config.getNumberOfMonths()) ;
+
+    	Calendar calendar = Calendar.getInstance();
+
+    	// To subtract 12 months from current time, we are adding -12 to the calendar instance, as subtract function is not in-built
+    	calendar.add(Calendar.MONTH, -1*months);
+
+    	// Converting the timestamp to milliseconds and adding it to prepared statement list
+    	preparedStmtListTotalCollection.add(calendar.getTimeInMillis());
+		
+		return query.toString();
+	}
+
+
+	public String getTotalServicesQuery(String tenantId, List<Object> preparedStmtListTotalServices) {
+		
+		StringBuilder query = new StringBuilder("");
+		query.append(TOTAL_SERVICES_QUERY);
+		
+		preparedStmtListTotalServices.add(tenantId);
+		
+		// In order to get data of last 12 months, the months variables is pre-configured in application properties
+    	int months = Integer.valueOf(config.getNumberOfMonths()) ;
+
+    	Calendar calendar = Calendar.getInstance();
+
+    	// To subtract 12 months from current time, we are adding -12 to the calendar instance, as subtract function is not in-built
+    	calendar.add(Calendar.MONTH, -1*months);
+
+    	// Converting the timestamp to milliseconds and adding it to prepared statement list
+    	preparedStmtListTotalServices.add(calendar.getTimeInMillis());
+		
+		return query.toString();
+		
+	}
 
 
 

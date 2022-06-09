@@ -71,8 +71,12 @@ public class ChallanValidator {
             errorMap.put("NULL_Fromdate", " From date cannot be null");
 		if (challan.getTaxPeriodTo() == null)
             errorMap.put("NULL_Todate", " To date cannot be null");
+
+		/*This valication will be handled at Zuul level. If a employee doesn't have access to that tenant the
+		create API wont be called
+
 		if(!challan.getTenantId().equalsIgnoreCase(request.getRequestInfo().getUserInfo().getTenantId()))
-        	 errorMap.put("Invalid Tenant", "Invalid tenant id");
+        	 errorMap.put("Invalid Tenant", "Invalid tenant id");*/
 
 		Boolean validFinancialYear = false;
 		if(challan.getTaxPeriodTo() != null && challan.getTaxPeriodFrom() != null){

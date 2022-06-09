@@ -2,8 +2,11 @@ package org.egov.echallan.service;
 
 import java.util.*;
 
+import javax.validation.Valid;
+
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.response.ResponseInfo;
+import org.egov.echallan.config.ChallanConfiguration;
 import org.egov.echallan.model.Challan;
 import org.egov.echallan.model.ChallanRequest;
 import org.egov.echallan.model.SearchCriteria;
@@ -37,15 +40,18 @@ public class ChallanService {
 
     private CommonUtils utils;
     
+    private ChallanConfiguration config;
+    
     @Autowired
     public ChallanService(EnrichmentService enrichmentService, UserService userService,ChallanRepository repository,CalculationService calculationService,
-    		ChallanValidator validator, CommonUtils utils) {
+    		ChallanValidator validator, CommonUtils utils, ChallanConfiguration config) {
         this.enrichmentService = enrichmentService;
         this.userService = userService;
         this.repository = repository;
         this.calculationService = calculationService;
         this.validator = validator;
         this.utils = utils;
+        this.config = config;
     }
     
     
@@ -149,6 +155,17 @@ public class ChallanService {
 		 response.put("ChallanCount",results);
 		 return  response;
 	 }
+
+
+	public Map<String, Integer> getDynamicData(String tenantId) {
+		Map<String,Integer> dynamicData = repository.fetchDynamicData(tenantId);
+		
+		return dynamicData;
+	}
+	
+	public int getChallanValidity() {
+		return Integer.valueOf(config.getChallanValidity());
+	}
 
 	
 }

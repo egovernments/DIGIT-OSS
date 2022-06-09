@@ -144,7 +144,6 @@ public class Challan {
   @JsonProperty("applicationStatus")
   private StatusEnum applicationStatus = null;
 
-    @JsonProperty("receiptNumber")
-    @SafeHtml
-    private String receiptNumber = null;
+  @JsonProperty("receiptNumber")
+  private String receiptNumber = null;
 }
