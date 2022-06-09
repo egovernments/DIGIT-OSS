@@ -267,7 +267,7 @@ public class PayGovGateway implements Gateway {
         log.debug("tx input "+ currentStatus);
         try {
             // create auth credentials
-            String authStr = environment.getRequiredProperty("paygov.merchant.id")+":"+environment.getRequiredProperty("paygov.password");
+            String authStr = environment.getRequiredProperty("paygov.merchant.user")+":"+environment.getRequiredProperty("paygov.password");
             String base64Creds = Base64.getEncoder().encodeToString(authStr.getBytes());
 
             // create headers
