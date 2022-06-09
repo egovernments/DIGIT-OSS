@@ -198,7 +198,7 @@ public class PayGovGateway implements Gateway {
         fields.add(queryMap.get(ADDITIONAL_FIELD5_KEY));
 
         String message = String.join("|", fields);
-        queryMap.put("checksum", PayGovUtils.generateCRC32Checksum(message,environment.getRequiredProperty("paygov.secret.key")));
+        queryMap.put("checksum", PayGovUtils.generateCRC32Checksum(message,environment.getRequiredProperty("paygov.merchant.secret.key")));
         queryMap.put("txURL",GATEWAY_URL);
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -267,7 +267,7 @@ public class PayGovGateway implements Gateway {
         log.debug("tx input "+ currentStatus);
         try {
             // create auth credentials
-            String authStr = environment.getRequiredProperty("paygov.merchant.user")+":"+environment.getRequiredProperty("paygov.password");
+            String authStr = environment.getRequiredProperty("paygov.merchant.user")+":"+environment.getRequiredProperty("paygov.merchant.pwd");
             String base64Creds = Base64.getEncoder().encodeToString(authStr.getBytes());
 
             // create headers
@@ -285,7 +285,7 @@ public class PayGovGateway implements Gateway {
             ResponseEntity<String> response = new RestTemplate().exchange(GATEWAY_TRANSACTION_STATUS_URL, HttpMethod.POST, entity, String.class);
             HttpStatus statusCode = response.getStatusCode();
             if(statusCode.equals(HttpStatus.OK)) {
-                Transaction resp = transformRawResponse(response.getBody(), currentStatus, environment.getRequiredProperty("paygov.secret.key"));
+                Transaction resp = transformRawResponse(response.getBody(), currentStatus, environment.getRequiredProperty("paygov.merchant.secret.key"));
                 log.debug("RESPONSE ON SUCCESS "+resp);
                 return resp;
             }else {
