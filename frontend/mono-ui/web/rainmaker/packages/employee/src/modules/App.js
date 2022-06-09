@@ -87,7 +87,9 @@ class App extends Component {
     let sourceUrl = `${window.location.origin}/employee`;
     sourceUrl="https://s3.ap-south-1.amazonaws.com/egov-qa-assets";  // changes for the image configured in s3 bucket
     let isFixedFooter=false;
-    let otherScreensUrls = ['/employee/integration/dss/home', '/employee/integration/dss/propertytax','/employee/integration/dss/tradelicense','/employee/integration/dss/overview','/employee/integration/dss/pgr'];
+    let otherScreensUrls = []
+    /*    DSS Module fixed footer removed since it is already shown in dashboard app internally
+    ['/employee/integration/dss/home', '/employee/integration/dss/propertytax','/employee/integration/dss/tradelicense','/employee/integration/dss/overview','/employee/integration/dss/pgr'];*/
     if (otherScreensUrls.includes(window.location.pathname)) {
       isFixedFooter = true;
     }

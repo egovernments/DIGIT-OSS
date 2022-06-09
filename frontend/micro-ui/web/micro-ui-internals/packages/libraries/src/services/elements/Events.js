@@ -3,7 +3,11 @@ import { Request } from "../atoms/Utils/Request";
 
 const Events = {
     Search: ({tenantId, data, filter= {}, auth = false}) => {
-        return Request({
+      // const userType = Digit.UserService.getType();
+      // if(userType==="employee") auth = true 
+      // else auth = false 
+      //reverting these changes as it is working fine without sending authToken
+      return Request({
             url: Urls.events.search,
             useCache: false,
             data: data,
@@ -40,7 +44,7 @@ const Events = {
       }),
     Update: (data) =>
       Request({
-        url: Urls.events.updateEvent,
+        url: window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE") ? Urls.events.updateEventCDG : Urls.events.updateEvent ,
         useCache: false,
         method: "POST",
         auth: true,

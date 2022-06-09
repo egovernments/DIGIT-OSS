@@ -10,8 +10,9 @@ import {
     CitizenInfoLabel
 } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/Timeline";
-import PropertyDocuments from "../../../templates/ApplicationDetails/components/PropertyDocuments";
+import DocumentsPreview from "../../../templates/ApplicationDetails/components/DocumentsPreview";
 import { stringReplaceAll } from "../utils";
+import cloneDeep from "lodash/cloneDeep";
 
 const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState }) => {
     const stateId = Digit.ULBService.getStateId();
@@ -20,7 +21,8 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
     const [enableSubmit, setEnableSubmit] = useState(true)
     const [checkRequiredFields, setCheckRequiredFields] = useState(false);
     const checkingFlow = formData?.uiFlow?.flow;
-    const {data: bpaTaxDocuments, isLoading} = Digit.Hooks.obps.useBPATaxDocuments(stateId, formData, formData?.PrevStateDocuments || []);
+    const beforeUploadDocuments = cloneDeep(formData?.PrevStateDocuments || []);
+    const {data: bpaTaxDocuments, isLoading} = Digit.Hooks.obps.useBPATaxDocuments(stateId, formData, beforeUploadDocuments || []);
     const handleSubmit = () => {
         let document = formData.documents;
         let documentStep;
@@ -78,7 +80,7 @@ const DocumentDetails = ({ t, config, onSelect, userType, formData, setError: se
                                 documents={documents}
                                 setCheckRequiredFields={setCheckRequiredFields}
                                 formData={formData}
-                                PrevStateDocuments={formData?.PrevStateDocuments || []}
+                                beforeUploadDocuments={beforeUploadDocuments || []}
                             />
                             </div>
                         );
@@ -99,10 +101,9 @@ const SelectDocument = React.memo(function MyComponent({
     documents,
     setCheckRequiredFields,
     formData,
-    PrevStateDocuments
+    beforeUploadDocuments
 }) {
-
-    const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0] || PrevStateDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
+    const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0] || beforeUploadDocuments?.filter((item) => item?.documentType?.includes(doc?.code))[0];
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const [selectedDocument, setSelectedDocument] = useState(
         filteredDocument
@@ -118,7 +119,7 @@ const SelectDocument = React.memo(function MyComponent({
     const [fileArray, setfileArray] = useState([] || formData?.documents?.documents.filter((ob) => ob.documentType === selectedDocument.code) );
 
     const handleSelectDocument = (value) => {
-        if(filteredDocument?.documentType && !(doc?.uploadedDocuments?.length)){
+        if(filteredDocument?.documentType){
             filteredDocument.documentType=value?.code;
             let currDocs=documents?.filter((item) => item?.documentType?.includes(doc?.code));
             currDocs.map(doc=>doc.documentType=value?.code);
@@ -213,6 +214,17 @@ const SelectDocument = React.memo(function MyComponent({
                 //const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
 
                 if (uploadedFile === null|| uploadedFile?.fileStoreId === undefined || uploadedFile?.fileStoreId === null) {
+                    if (prev?.length > 0) {
+                        prev?.forEach(data => {
+                            const normalDocumentType = `${data?.documentType?.split('.')[0]}.${data?.documentType?.split('.')[1]}`;
+                            const selectedDocumentType = `${selectedDocument?.code?.split('.')[0]}.${selectedDocument?.code?.split('.')[1]}`;
+                            if (normalDocumentType == selectedDocumentType) {
+                                if (data?.documentType) data.documentType = selectedDocument?.code;
+                                if (data?.file?.documentType) data.file.documentType = selectedDocument?.code;
+                                
+                            }
+                        });
+                    }
                     return prev;
                 }
                 const filteredDocumentsByFileStoreId = prev?.filter((item) => item?.fileStoreId !== uploadedFile.fileStoreId);
@@ -235,7 +247,7 @@ const SelectDocument = React.memo(function MyComponent({
         setuploadedfileArray([...uploadedfileArray,uploadedFile])
     },[uploadedFile]);
 
-    const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf|msword|openxmlformats)$/i;
+    const allowedFileTypes = /(.*?)(jpg|jpeg|png|image|pdf)$/i;
 
     const uploadedFilesPreFill = useMemo(()=>{
         let selectedUplDocs=[];
@@ -251,7 +263,7 @@ const SelectDocument = React.memo(function MyComponent({
             <Dropdown
                 t={t}
                 isMandatory={false}
-                option={doc?.dropdownData}
+                option={Digit.Utils.locale.sortDropdownNames(doc?.dropdownData,'i18nKey',t)}
                 selected={selectedDocument}
                 optionKey="i18nKey"
                 select={handleSelectDocument}
@@ -260,12 +272,14 @@ const SelectDocument = React.memo(function MyComponent({
                 module="BPA"
                 tenantId={tenantId}
                 getFormState={getData}
-                allowedFileTypesRegex={allowedFileTypes}
-                allowedMaxSizeInMB={5}
                 setuploadedstate={uploadedFilesPreFill}
                 t={t}
+                extraStyleName={"OBPS"}
+                allowedFileTypesRegex={allowedFileTypes}
+                allowedMaxSizeInMB={5}
+                acceptFiles= "image/*, .pdf, .png, .jpeg, .jpg"
             /> 
-        {doc?.uploadedDocuments?.length && <PropertyDocuments isSendBackFlow={true} documents={doc?.uploadedDocuments} svgStyles={{ width: "100px", height: "100px", viewBox: "0 0 25 25", minWidth: "100px" }} />}
+        {doc?.uploadedDocuments?.length && <DocumentsPreview isSendBackFlow={true} documents={doc?.uploadedDocuments} />}
         </div>
     );
     });

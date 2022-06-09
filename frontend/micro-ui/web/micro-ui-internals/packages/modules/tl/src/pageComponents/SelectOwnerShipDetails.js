@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { FormStep, RadioOrSelect, RadioButtons, LabelFieldPair, Dropdown, CardLabel, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
 import { useLocation } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlur, formState, setError, clearErrors }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -48,7 +49,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
       <React.Fragment>
         <LabelFieldPair>
           <CardLabel className="card-label-smaller" style={editScreen ? { color: "#B1B4B6" } : {}}>
-            {`${t("TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL")} * :`}
+            {`${t("TL_NEW_OWNER_DETAILS_OWNERSHIP_TYPE_LABEL")} * `}
           </CardLabel>
           <Dropdown
             className="form-field"
@@ -72,6 +73,8 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   }
 
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownershipCategory}>
       <RadioButtons
         isMandatory={config.isMandatory}
@@ -85,6 +88,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
         disabled={isEdit}
       />
     </FormStep>
+    </React.Fragment>
   );
 };
 

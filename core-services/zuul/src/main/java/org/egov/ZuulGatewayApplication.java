@@ -1,19 +1,16 @@
 package org.egov;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.RateLimitUtils;
+import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.properties.RateLimitProperties;
+import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.support.SecuredRateLimitUtils;
 import org.egov.Utils.CustomRateLimitUtils;
 import org.egov.Utils.UserUtils;
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.filters.pre.AuthFilter;
 import org.egov.filters.pre.AuthPreCheckFilter;
-import org.egov.filters.pre.CorrelationIdFilter;
 import org.egov.filters.pre.RbacFilter;
 import org.egov.filters.pre.RbacPreCheckFilter;
-import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -25,14 +22,11 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.cloud.netflix.zuul.filters.ProxyRequestHelper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.RateLimitUtils;
-import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.config.properties.RateLimitProperties;
-import com.marcosbarbero.cloud.autoconfigure.zuul.ratelimit.support.SecuredRateLimitUtils;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import javax.annotation.PostConstruct;
 
@@ -40,7 +34,6 @@ import javax.annotation.PostConstruct;
 @EnableCaching
 @SpringBootApplication
 @PropertySource({"${zuul.routes.filepath}","${zuul.limiter.filepath}"})
-@Import({TracerConfiguration.class, MultiStateInstanceUtil.class})
 public class ZuulGatewayApplication {
     public static void main(String[] args) {
         SpringApplication.run(ZuulGatewayApplication.class, args);
@@ -48,10 +41,6 @@ public class ZuulGatewayApplication {
 
     @Autowired
     CacheManager cacheManager;
-
-    
-    @Autowired
-    private MultiStateInstanceUtil multiStateInstanceUtil;
 
     @PostConstruct
     public void evictUserCaches() {
@@ -62,27 +51,11 @@ public class ZuulGatewayApplication {
     @Value("${egov.user-info-header}")
     private String userInfoHeader;
 
-    
-    private List<String> encryptedUrlSet;
-    
-    private List<String> openEndpointsWhitelist;
+    @Value("#{'${egov.open-endpoints-whitelist}'.split(',')}")
+    private String[] openEndpointsWhitelist;
 
-    private List<String> mixedModeEndpointsWhitelist;
-    
-	@Value("${egov.encrypted-endpoints-list}")
-	public void setEncrytpedUrlListValues(List<String> EcryptedListFromProperties) {
-		this.encryptedUrlSet = Collections.unmodifiableList(EcryptedListFromProperties);
-	}
-
-	@Value("${egov.open-endpoints-whitelist}")
-	public void setOpenEndpointsWhitelistValues(List<String> openUrlListFromProperties) {
-		this.openEndpointsWhitelist = Collections.unmodifiableList(openUrlListFromProperties);
-	}
-
-	@Value("${egov.mixed-mode-endpoints-whitelist}")
-	public void setMixModeEndpointListVaaues(List<String> mixModeUrlListFromProperties) {
-		this.mixedModeEndpointsWhitelist = Collections.unmodifiableList(mixModeUrlListFromProperties);
-	}
+    @Value("#{'${egov.mixed-mode-endpoints-whitelist}'.split(',')}")
+    private String[] mixedModeEndpointsWhitelist;
 
     @Value("${egov.auth-service-host}")
     private String authServiceHost;
@@ -101,35 +74,32 @@ public class ZuulGatewayApplication {
 
     @Autowired
     private UserUtils userUtils;
-    
+
     @Autowired
     private CustomRateLimitUtils customRateLimitUtils;
 
-    
-	@Bean
-	public CorrelationIdFilter correlationIdFilter() {
-		return new CorrelationIdFilter(openEndpointsWhitelist, mixedModeEndpointsWhitelist, this.objectMapper);
-	}
-    
     @Bean
     public AuthPreCheckFilter authCheckFilter() {
-        return new AuthPreCheckFilter(openEndpointsWhitelist, mixedModeEndpointsWhitelist,userUtils, multiStateInstanceUtil);
+        return new AuthPreCheckFilter(new HashSet<>(Arrays.asList(openEndpointsWhitelist)),
+            new HashSet<>(Arrays.asList(mixedModeEndpointsWhitelist)),userUtils);
     }
 
     @Bean
     public AuthFilter authFilter() {
         final ProxyRequestHelper proxyRequestHelper = new ProxyRequestHelper();
-        return new AuthFilter(proxyRequestHelper, restTemplate, authServiceHost, authServiceUri, multiStateInstanceUtil);
+        return new AuthFilter(proxyRequestHelper, restTemplate, authServiceHost, authServiceUri);
     }
 
     @Bean
     public RbacFilter rbacFilter() {
-        return new RbacFilter(restTemplate, authorizationUrl);
+        return new RbacFilter(restTemplate, authorizationUrl, objectMapper);
     }
 
     @Bean
     public RbacPreCheckFilter rbacCheckFilter() {
-        return new RbacPreCheckFilter(openEndpointsWhitelist, mixedModeEndpointsWhitelist);
+        return new RbacPreCheckFilter(new HashSet<>(Arrays.asList(openEndpointsWhitelist)),
+            new HashSet<>(Arrays.asList(mixedModeEndpointsWhitelist))
+        );
     }
 
     @Configuration
@@ -146,4 +116,5 @@ public class ZuulGatewayApplication {
             return new CustomRateLimitUtils(rateLimitProperties);
         }
     }
+
 }

@@ -89,12 +89,6 @@ public class WorkflowConfig {
     @Value("${egov.wf.escalation.batch.size}")
     private Integer escalationBatchSize;
 
-    // Central instance configs
-    @Value("${state.level.tenantid.length}")
-    private Integer stateLevelTenantIdLength;
-
-    @Value("${is.environment.central.instance}")
-    private Boolean isEnvironmentCentralInstance;
 
 
 

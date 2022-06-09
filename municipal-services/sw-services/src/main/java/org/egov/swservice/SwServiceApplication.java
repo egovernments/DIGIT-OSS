@@ -2,7 +2,6 @@ package org.egov.swservice;
 
 import java.util.TimeZone;
 
-import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication(scanBasePackages = "org.egov.swservice")
 @EnableAutoConfiguration
-@Import({ TracerConfiguration.class, MultiStateInstanceUtil.class })
+@Import({ TracerConfiguration.class })
 public class SwServiceApplication{
 	@Value("${app.timezone}")
 	private String timeZone;

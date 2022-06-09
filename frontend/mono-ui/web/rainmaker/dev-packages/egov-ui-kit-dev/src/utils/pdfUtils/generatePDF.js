@@ -777,8 +777,7 @@ export const generatePDF = (logo, applicationData = {}, fileName, isCustomforBil
             // data && pdfMake.createPdf(data).open();
         }
     } catch (e) {
-        console.log(JSON.stringify(data), 'pdfdata');
-        console.log('error in generating pdf', e);
+    
     }
 
 };

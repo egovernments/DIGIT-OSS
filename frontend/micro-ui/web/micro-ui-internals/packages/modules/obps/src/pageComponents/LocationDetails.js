@@ -31,14 +31,19 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
   useEffect(() => {
     if (!selectedCity || !localities) {
       cities =
-        userType === "employee"
+      userType && userType === "employee"
           ? allCities.filter((city) => city.code === tenantId)
           : pincode
-            ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
+            ? allCities.filter((city) => city?.pincode?.some((pin) => pin == Number(pincode)))
             : allCities;
       setcitiesopetions(cities);
-      if((cities && cities.length==0 || (cities.length == 1 && cities?.[0].code !== selectedCity?.code))){
-      setPinerror("BPA_PIN_NOT_VALID_ERROR");
+      if (cities?.length == 0) {
+        setPinerror("BPA_PIN_NOT_VALID_ERROR");
+      } else if ( cities.length == 1) {
+        let selectCity = selectedCity?.code ? selectedCity?.code : selectedCity ? selectedCity : "";
+        if (cities?.[0].code != selectCity) {
+          setPinerror("BPA_PIN_NOT_VALID_ERROR")
+        }
       }
     }
 
@@ -256,7 +261,7 @@ const LocationDetails = ({ t, config, onSelect, userType, formData, ownerIndex =
         <span className={"form-pt-dropdown-only"}>
           <CardLabel>{`${t("BPA_LOC_MOHALLA_LABEL")}*`}</CardLabel>
           <RadioOrSelect
-            optionCardStyles={{ maxHeight:"20vmax" }}
+            optionCardStyles={{ maxHeight:"20vmax", overflow:"scroll" }}
             isMandatory={config.isMandatory}
             options={localities.sort((a, b) => a.name.localeCompare(b.name))}
             selectedOption={selectedLocality}

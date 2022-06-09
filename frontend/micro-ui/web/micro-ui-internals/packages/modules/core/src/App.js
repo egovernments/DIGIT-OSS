@@ -3,7 +3,7 @@ import { Redirect, Route, Switch, useHistory, useLocation } from "react-router-d
 import EmployeeApp from "./pages/employee"
 import CitizenApp from "./pages/citizen"
 
-export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
+export const DigitApp = ({ stateCode, modules, appTenants, logoUrl ,initData}) => {
   const history = useHistory();
   const { pathname } = useLocation();
 
@@ -12,8 +12,10 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const userDetails = Digit.UserService.getUser();
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
-  const CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
+  let CITIZEN = userDetails?.info?.type === "CITIZEN" || !window.location.pathname.split("/").includes("employee") ? true : false;
+
+  if (window.location.pathname.split("/").includes("employee")) CITIZEN = false;
 
   useEffect(() => {
     if (!pathname?.includes("application-details")) {
@@ -26,6 +28,9 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
     }
     if (!pathname?.includes("dss")) {
       Digit.SessionStorage.del("DSS_FILTERS");
+    }
+    if( pathname?.toString() === "/digit-ui/employee"){
+      Digit.SessionStorage.del("SEARCH_APPLICATION_DETAIL");
     }
   }, [pathname]);
 
@@ -52,7 +57,8 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
     modules,
     appTenants,
     sourceUrl,
-    pathname
+    pathname,
+    initData
   }
   return (
     <Switch>

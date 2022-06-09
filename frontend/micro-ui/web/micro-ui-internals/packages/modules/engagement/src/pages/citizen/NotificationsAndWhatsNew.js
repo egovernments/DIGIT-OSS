@@ -1,7 +1,7 @@
-import { Header, Loader, WhatsNewCard, OnGroundEventCard, Card, CardCaption } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useCallback } from "react";
+import { Card, CardCaption, Header, Loader, OnGroundEventCard, WhatsNewCard } from "@egovernments/digit-ui-react-components";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Redirect, useLocation, useHistory } from "react-router-dom";
+import { Redirect, useHistory, useLocation } from "react-router-dom";
 import BroadcastWhatsNewCard from "../../components/Messages/BroadcastWhatsNewCard";
 
 const NotificationsAndWhatsNew = ({ variant, parentRoute }) => {
@@ -9,7 +9,7 @@ const NotificationsAndWhatsNew = ({ variant, parentRoute }) => {
   const location = useLocation();
   const history = useHistory();
 
-  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+  const tenantId = Digit.ULBService.getCitizenCurrentTenant();
   const {
     data: { unreadCount: preVisitUnseenNotificationCount } = {},
     isSuccess: preVisitUnseenNotificationCountLoaded,

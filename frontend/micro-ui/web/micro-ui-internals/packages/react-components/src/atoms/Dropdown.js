@@ -6,7 +6,11 @@ const TextField = (props) => {
   const [value, setValue] = useState(props.selectedVal ? props.selectedVal : "");
 
   useEffect(() => {
-    if (!props.keepNull) props.selectedVal ? setValue(props.selectedVal) : setValue("");
+    if (!props.keepNull)
+      if( props.selectedVal)
+        setValue(props.selectedVal)
+      else
+      { setValue(""); props.setFilter("") } 
     else setValue("");
   }, [props.selectedVal, props.forceSet]);
 
@@ -139,7 +143,7 @@ const Dropdown = (props) => {
   }
 
   let filteredOption =
-    (props.option && props.option.filter((option) => t(option[props.optionKey]).toUpperCase().indexOf(filterVal.toUpperCase()) > -1)) || [];
+    (props.option && props.option?.filter((option) => t(option[props.optionKey])?.toUpperCase()?.indexOf(filterVal?.toUpperCase()) > -1)) || [];
   function selectOption(ind) {
     onSelect(filteredOption[ind]);
   }
@@ -197,7 +201,7 @@ const Dropdown = (props) => {
           <div
             id="jk-dropdown-unique"
             className={`${hasCustomSelector ? "margin-top-10 display: table" : ""} options-card`}
-            style={{ ...props.optionCardStyles, overflow: "scroll" }}
+            style={{ ...props.optionCardStyles }}
             ref={optionRef}
           >
             {filteredOption &&
@@ -217,12 +221,15 @@ const Dropdown = (props) => {
                     onClick={() => onSelect(option)}
                   >
                     {option.icon && <span className="icon"> {option.icon} </span>}
-                    {<span> {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</span>}
+                    {props.isPropertyAssess? <div>{props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</div>:
+                    <span> {props.t ? props.t(option[props.optionKey]) : option[props.optionKey]}</span>} 
                   </div>
                 );
               })}
             {filteredOption && filteredOption.length === 0 && (
-              <div className={`cp profile-dropdown--item display: flex `} style={{ cursor: "not-allowed" }} key={"-1"}>
+              <div className={`cp profile-dropdown--item display: flex `} key={"-1"} onClick={()=>{
+                
+              }}>
                 {<span> {props.t ? props.t("CMN_NOOPTION") : "CMN_NOOPTION"}</span>}
               </div>
             )}
@@ -235,7 +242,7 @@ const Dropdown = (props) => {
             ref={optionRef}
           >
             {props.option
-              .filter((option) => option.toUpperCase().indexOf(filterVal.toUpperCase()) > -1)
+              .filter((option) => option?.toUpperCase().indexOf(filterVal?.toUpperCase()) > -1)
               .map((option, index) => {
                 return (
                   <p

@@ -172,7 +172,6 @@ export const getEventsByType = async (queryObj) => {
       return payload.events;
     }
   } catch (e) {
-    console.log(e.message);
   }
 };
 
@@ -266,7 +265,6 @@ export const getMdmsData = async (action, state, dispatch) => {
     const localities = get(state.screenConfiguration, "preparedFinalObject.applyScreenMdmsData.tenant.localities", []);
     dispatch(prepareFinalObject("applyScreenMdmsData", payload.MdmsRes));
   } catch (e) {
-    console.log(e);
   }
 };
 

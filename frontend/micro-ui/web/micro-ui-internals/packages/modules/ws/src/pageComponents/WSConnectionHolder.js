@@ -1,10 +1,9 @@
-import { BackButton, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, TextInput, UploadFile, Dropdown, CheckBox } from "@egovernments/digit-ui-react-components";
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { stringReplaceAll } from "../utils";
+import { CardLabel, CheckBox, Dropdown, FormStep, Loader, MobileNumber, RadioButtons, TextInput, UploadFile } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useState } from "react";
 import Timeline from "../components/Timeline";
+import { stringReplaceAll } from "../utils";
 
-const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
+const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const [name, setName] = useState(formData?.ConnectionHolderDetails?.name || formData?.formData?.ConnectionHolderDetails?.name || "");
   const [guardian, setguardian] = useState(formData?.ConnectionHolderDetails?.guardian || formData?.formData?.ConnectionHolderDetails?.guardian || "");
@@ -13,12 +12,13 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
   const [mobileNumber, setMobileNumber] = useState(formData?.ConnectionHolderDetails?.mobileNumber || formData?.formData?.ConnectionHolderDetails?.mobileNumber || "");
   const [address, setaddress] = useState(formData?.ConnectionHolderDetails?.address || formData?.formData?.ConnectionHolderDetails?.address || "");
   const [documentId, setdocumentId] = useState(formData?.ConnectionHolderDetails?.documentId || formData?.formData?.ConnectionHolderDetails?.documentId || "");
-  const [isOwnerSame, setisOwnerSame] = useState(!(formData?.ConnectionHolderDetails?.isOwnerSame || formData?.formData?.ConnectionHolderDetails?.isOwnerSame) ? false : true);
+  const [isOwnerSame, setisOwnerSame] = useState((formData?.ConnectionHolderDetails?.isOwnerSame == false || formData?.formData?.ConnectionHolderDetails?.isOwnerSame == false) ? false : true);
   const [uploadedFile, setUploadedFile] = useState(formData?.[config.key]?.fileStoreId || null);
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
   const [dropdownValue, setDropdownValue] = useState(formData?.ConnectionHolderDetails?.documentType || "");
   const [ownerType, setOwnerType] = useState( formData?.ConnectionHolderDetails?.specialCategoryType || {});
+  let isMobile = window.Digit.Utils.browser.isMobile();
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
@@ -38,8 +38,8 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
   }
 
   const GuardianOptions = [
-    { name: "HUSBAND", code: "HUSBAND", i18nKey: "COMMON_MASTERS_OWNERTYPE_HUSBAND" },
     { name: "Father", code: "FATHER", i18nKey: "COMMON_MASTERS_OWNERTYPE_FATHER" },
+    { name: "HUSBAND", code: "HUSBAND", i18nKey: "COMMON_MASTERS_OWNERTYPE_HUSBAND" },
   ];
 
   const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
@@ -69,8 +69,8 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
               setError(t("PT_FILE_UPLOAD_ERROR"));
             }
           } catch (err) {
-            console.error("Modal -> err ", err);
-            // setError(t("PT_FILE_UPLOAD_ERROR"));
+            // console.error("Modal -> err ", err);
+            setError(t("PT_FILE_UPLOAD_ERROR"));
           }
         }
       }
@@ -118,7 +118,20 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
     if(isOwnerSame == true)
     {
       //need to add property data here from previous screen
-      onSelect(config.key, {"property ID":"PT-23-45-677903", isOwnerSame:isOwnerSame});
+      let ConnectionDet = {
+      isOwnerSame:isOwnerSame,
+      name: formData?.cpt?.details?.owners?.[0]?.name,
+      mobileNumber: formData?.cpt?.details?.owners?.[0]?.mobileNumber,
+      gender: {code:formData?.cpt?.details?.owners?.[0]?.gender, i18nKey:`COMMON_GENDER_${formData?.cpt?.details?.owners?.[0]?.gender}`},
+      guardian: formData?.cpt?.details?.owners?.[0]?.fatherOrHusbandName, 
+      address: formData?.cpt?.details?.owners?.[0]?.permanentAddress,
+      relationship:{code : formData?.cpt?.details?.owners?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${formData?.cpt?.details?.owners?.[0]?.relationship}`},
+      specialCategoryType:ownerType,
+      documentId:documentId,
+      fileStoreId:uploadedFile,
+      documentType:dropdownValue   
+    }
+      onSelect(config.key, ConnectionDet);
     }
     else
     {
@@ -131,7 +144,7 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
 
   return (
     <div>
-       <Timeline currentStep={2} />
+       {userType === "citizen" && (<Timeline currentStep={2} />)}
         {!isLoading ? 
         <FormStep
           config={config}
@@ -144,9 +157,9 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
         <CheckBox
         label={t("WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS")}
         onChange={(e) => selectChecked(e)}
-        //value={field.isPrimaryOwner}
+        // value={field.isPrimaryOwner}
         checked={isOwnerSame}
-        style={{ paddingBottom: "10px", paddingTop: "10px" }}
+        style={{ paddingBottom: "10px", paddingTop: "3px" }}
         />  
         </div>
         {!isOwnerSame  && <div style={{border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA"}}>
@@ -202,7 +215,7 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
               onChange={selectguardian}
               //disable={editScreen}
               {...(validation = {
-                isRequired: true,
+                isRequired: false,
                 pattern: "^[a-zA-Z-.`' ]*$",
                 type: "text",
                 title: t("WS_NAME_ERROR_MESSAGE"),
@@ -235,6 +248,7 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
             <Dropdown
                 className="form-field"
                 selected={ownerType}
+                style={isMobile ? {} : {width:"540px"}}
                 //disable={Menu?.length === 1 || editScreen}
                 option={Menu}
                 select={setTypeOfOwner}
@@ -261,6 +275,7 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
                     selected={dropdownValue}
                     optionKey="i18nKey"
                     select={setTypeOfDropdownValue}
+                    style={isMobile ? {} : {width:"540px"}}
                     //placeholder={t(`PT_MUTATION_SELECT_DOC_LABEL`)}
                     //disable={isUpdateProperty || isEditProperty}
                 />
@@ -283,4 +298,4 @@ const ConnectionHolder = ({ t, config, onSelect, userType, formData, ownerIndex 
   );
 };
 
-export default ConnectionHolder;
+export default WSConnectionHolder;

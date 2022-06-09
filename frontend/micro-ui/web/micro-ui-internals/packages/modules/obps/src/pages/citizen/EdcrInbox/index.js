@@ -34,7 +34,7 @@ const Inbox = ({ parentRoute }) => {
         Digit.SessionStorage.set("EDCR.INBOX", { ...state, tableForm: payload.data });
         return { ...state, tableForm: payload.data };
       default:
-        console.warn("dispatched action has nothing to reduce");
+        break;
     }
   }
   const InboxObjectInSessionStorage = Digit.SessionStorage.get("EDCR.INBOX");
@@ -57,6 +57,17 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const formInitValue = useMemo(() => {
+    const inboxFromhomePage = Digit.SessionStorage.get("EDCR_BACK");
+    if (inboxFromhomePage === "IS_EDCR_BACK") {
+      return (
+        {
+          filterForm: filterFormDefaultValues,
+          searchForm: searchFormDefaultValues,
+          tableForm: tableOrderFormDefaultValues,
+        }
+      );
+    }
+
     return (
       InboxObjectInSessionStorage || {
         filterForm: filterFormDefaultValues,
@@ -111,7 +122,7 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const SearchFormFields = useCallback(
-    ({ registerRef, searchFormState }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState }} />,
+    ({ registerRef, searchFormState, searchFieldComponents }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState, searchFieldComponents }} />,
     []
   );
 
@@ -133,11 +144,13 @@ const Inbox = ({ parentRoute }) => {
 
   const onSearchFormSubmit = (data) => {
     data.hasOwnProperty("") && delete data?.[""];
+    dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateSearchForm", data });
   };
 
   const onFilterFormSubmit = (data) => {
     data.hasOwnProperty("") && delete data?.[""];
+    dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateFilterForm", data });
   };
 

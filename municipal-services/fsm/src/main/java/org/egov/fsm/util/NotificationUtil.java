@@ -3,6 +3,7 @@ package org.egov.fsm.util;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -23,6 +24,7 @@ import org.egov.fsm.web.model.FSM;
 import org.egov.fsm.web.model.FSMRequest;
 import org.egov.fsm.web.model.RequestInfoWrapper;
 import org.egov.fsm.web.model.dso.Vendor;
+import org.egov.fsm.web.model.dso.VendorSearchCriteria;
 import org.egov.fsm.web.model.notification.EventRequest;
 import org.egov.fsm.web.model.notification.SMSRequest;
 import org.egov.fsm.web.model.vehicle.Vehicle;
@@ -85,10 +87,20 @@ public class NotificationUtil {
 		String message = null, messageTemplate;
 
 			FSM fsm = fsmRequest.getFsm();
-			Vendor vendor = this.dsoSerevice.getVendor(fsm.getDsoId(), fsm.getTenantId(), null, null,null, fsmRequest.getRequestInfo());
+			
+			VendorSearchCriteria vendorSearchCriteria=new VendorSearchCriteria();
+			vendorSearchCriteria = VendorSearchCriteria.builder()
+					.ids(Arrays.asList(fsm.getDsoId()))
+					.tenantId(fsm.getTenantId()).build();
+					
+			Vendor vendor = this.dsoSerevice.getVendor(vendorSearchCriteria,fsmRequest.getRequestInfo());
+			
+			// Vendor vendor = this.dsoSerevice.getVendor(fsm.getDsoId(), fsm.getTenantId(),
+			// null, null,null,null, fsmRequest.getRequestInfo());
+			
 			messageTemplate = getMessageTemplate(messageCode, localizationMessage);
 			
-			if (!StringUtils.isEmpty(messageTemplate)) {
+			if (null != messageTemplate && !StringUtils.isEmpty(messageTemplate)) {
 				message = getInitiatedMsg(fsm, messageTemplate);
 
 				if (message.contains("{SLA_HOURS}")) {
@@ -152,6 +164,10 @@ public class NotificationUtil {
     			
 					message = message.replace("{PAY_LINK}", getShortenedUrl(actionLink));
 				}
+				
+				if(message.contains("{APPLICATION_ID}") ) {
+					message = message.replace("{APPLICATION_ID}", fsm.getApplicationNo());
+				}
 
 				
 				if (message.contains("{RECEIPT_LINK}") ) {
@@ -176,6 +192,10 @@ public class NotificationUtil {
 				if (message.contains("{NEW_FSM_LINK}") ) {
 					message = message.replace("{NEW_FSM_LINK}", getShortenedUrl(config.getUiAppHost()+config.getNewFsmLink())); 
 
+				}
+				if (message.contains("{NO_OF_TRIPS}") && fsm.getNoOfTrips() != null) {
+					
+					message = message.replace("{NO_OF_TRIPS}", fsm.getNoOfTrips().toString());
 				}
 					
 			}
@@ -254,16 +274,19 @@ public class NotificationUtil {
 	@SuppressWarnings("rawtypes")
 	public String getMessageTemplate(String notificationCode, String localizationMessage) {
 		String path = "$..messages[?(@.code==\"{}\")].message";
-		path = path.replace("{}", notificationCode);
 		String message = null;
-		try {
-			List data = JsonPath.parse(localizationMessage).read(path);
-			if (!CollectionUtils.isEmpty(data))
-				message = data.get(0).toString();
-			else
-				log.error("Fetching from localization failed with code " + notificationCode);
-		} catch (Exception e) {
-			log.warn("Fetching from localization failed", e);
+		log.info("notificationCode :::  {} "+notificationCode);
+		if(null != notificationCode) {
+			try {
+				path = path.replace("{}", notificationCode.trim());
+				List data = JsonPath.parse(localizationMessage).read(path);
+				if (!CollectionUtils.isEmpty(data))
+					message = data.get(0).toString();
+				else
+					log.error("Fetching from localization failed with code " + notificationCode);
+			} catch (Exception e) {
+				log.warn("Fetching from localization failed", e);
+			}
 		}
 		return message;
 	}

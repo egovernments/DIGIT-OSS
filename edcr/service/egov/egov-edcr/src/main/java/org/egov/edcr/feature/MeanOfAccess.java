@@ -59,7 +59,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.OccupancyType;
 import org.egov.common.entity.edcr.Plan;
@@ -72,7 +73,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MeanOfAccess extends FeatureProcess {
-    private static final Logger LOG = Logger.getLogger(MeanOfAccess.class);
+    private static final Logger LOG = LogManager.getLogger(MeanOfAccess.class);
 
     public static final BigDecimal VAL_4000 = BigDecimal.valueOf(4000);
     private static final String ACCESS_WIDTH = "Access Width";

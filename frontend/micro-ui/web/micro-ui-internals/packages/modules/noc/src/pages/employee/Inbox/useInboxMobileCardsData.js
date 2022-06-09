@@ -11,11 +11,11 @@ const useInboxMobileCardsData = ({parentRoute, table }) => {
     const dataForMobileInboxCards = table?.map(({ applicationId, date, source, locality, status, owner, sla, businessService}) => ({
             [t("NOC_APP_NO_LABEL")]: applicationId,
             [t("TL_COMMON_TABLE_COL_APP_DATE")]:  format(new Date(date), 'dd/MM/yyyy'),
-            [t("NOC_MODULE_SOURCE_LABEL")]: t(source),
+            [t("NOC_MODULE_SOURCE_LABEL")]: t(`MODULE_${source}`),
             // [t("ES_INBOX_LOCALITY")]: locality,
             [t("NOC_STATUS_LABEL")]: t(status),
             [t("WF_INBOX_HEADER_CURRENT_OWNER")]: owner,
-            [t("ES_INBOX_SLA_DAYS_REMAINING")]: sla
+            [t("ES_INBOX_SLA_DAYS_REMAINING")]: t(sla)
     }))
 
     const MobileSortFormValues = () => {

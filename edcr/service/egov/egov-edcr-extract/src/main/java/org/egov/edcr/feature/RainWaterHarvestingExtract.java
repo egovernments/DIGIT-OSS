@@ -4,7 +4,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Building;
 import org.egov.common.entity.edcr.Floor;
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RainWaterHarvestingExtract extends FeatureExtract {
-    private static final Logger LOG = Logger.getLogger(RainWaterHarvestingExtract.class);
+    private static final Logger LOG = LogManager.getLogger(RainWaterHarvestingExtract.class);
     @Autowired
     private LayerNames layerNames;
 

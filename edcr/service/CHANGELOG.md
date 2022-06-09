@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 2.1.1
+
+- Data push for edcr
+
 ## 2.1.0
 
 - Dimension validation feature

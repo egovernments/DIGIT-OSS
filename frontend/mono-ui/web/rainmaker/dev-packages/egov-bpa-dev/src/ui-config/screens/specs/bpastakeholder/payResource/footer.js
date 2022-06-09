@@ -79,10 +79,8 @@ export const callPGService = async (state, dispatch) => {
       const redirectionUrl = get(goToPaymentGateway, "Transaction.redirectUrl");
       window.location = redirectionUrl;
     } catch (e) {
-      console.log(e);
     }
   } catch (e) {
-    console.log(e);
   }
 };
 
@@ -236,7 +234,6 @@ const callBackForPay = async (state, dispatch) => {
     } catch (e) {
       dispatch(toggleSnackbar(true, { labelName: e.message }, "error"));
       dispatch(toggleSpinner());
-      console.log(e);
     }
   } else {
     dispatch(

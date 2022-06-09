@@ -2,24 +2,7 @@ package org.egov.user.persistence.repository;
 
 import lombok.extern.slf4j.Slf4j;
 
-import static java.util.Objects.isNull;
-import static org.egov.user.repository.builder.UserTypeQueryBuilder.SELECT_FAILED_ATTEMPTS_BY_USER_SQL;
-import static org.egov.user.repository.builder.UserTypeQueryBuilder.SELECT_NEXT_SEQUENCE_USER;
-import static org.springframework.util.StringUtils.isEmpty;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import org.egov.common.utils.MultiStateInstanceUtil;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.user.domain.model.Address;
 import org.egov.user.domain.model.Role;
@@ -29,7 +12,6 @@ import org.egov.user.domain.model.enums.BloodGroup;
 import org.egov.user.domain.model.enums.Gender;
 import org.egov.user.domain.model.enums.GuardianRelation;
 import org.egov.user.domain.model.enums.UserType;
-import org.egov.user.domain.service.utils.UserUtils;
 import org.egov.user.persistence.dto.FailedLoginAttempt;
 import org.egov.user.repository.builder.RoleQueryBuilder;
 import org.egov.user.repository.builder.UserTypeQueryBuilder;
@@ -42,17 +24,17 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Objects.isNull;
+import static org.egov.user.repository.builder.UserTypeQueryBuilder.SELECT_FAILED_ATTEMPTS_BY_USER_SQL;
+import static org.egov.user.repository.builder.UserTypeQueryBuilder.SELECT_NEXT_SEQUENCE_USER;
+import static org.springframework.util.StringUtils.isEmpty;
 
 @Repository
 @Slf4j
 public class UserRepository {
-	
-	@Autowired
-	private UserUtils userUtils;
-	
-	@Autowired
-	private MultiStateInstanceUtil multiStateInstanceUtil;
 
     private AddressRepository addressRepository;
     private AuditRepository auditRepository;
@@ -171,11 +153,6 @@ public class UserRepository {
         user.setLastModifiedDate(new Date());
         user.setCreatedBy(user.getLoggedInUserId());
         user.setLastModifiedBy(user.getLoggedInUserId());
-		/*
-		 * for central 'in' will be returned and for states state level will be returned
-		 * like pb for pb.amritsar
-		 */
-        user.setTenantId(userUtils.getStateLevelTenantForCitizen(user.getTenantId(), user.getType()));
         final User savedUser = save(user);
         if (user.getRoles().size() > 0) {
             saveUserRoles(user);
@@ -204,12 +181,7 @@ public class UserRepository {
 
         updateuserInputs.put("username", oldUser.getUsername());
         updateuserInputs.put("type", oldUser.getType().toString());
-        
-        String tenantId = oldUser.getTenantId();
-        if(UserType.CITIZEN.equals(oldUser.getType()) && tenantId.contains("."))
-        		tenantId = tenantId.split("//.")[0];
-        	
-        updateuserInputs.put("tenantid", tenantId);
+        updateuserInputs.put("tenantid", oldUser.getTenantId());
         updateuserInputs.put("AadhaarNumber", user.getAadhaarNumber());
 
         if (isNull(user.getAccountLocked()))
@@ -330,7 +302,7 @@ public class UserRepository {
             updateRoles(user);
         }
         if (user.getPermanentAndCorrespondenceAddresses() != null) {
-            addressRepository.update(user.getPermanentAndCorrespondenceAddresses(), user.getId(), tenantId);
+            addressRepository.update(user.getPermanentAndCorrespondenceAddresses(), user.getId(), user.getTenantId());
         }
     }
 
@@ -447,8 +419,7 @@ public class UserRepository {
         if (roleCodes.isEmpty())
             return Collections.emptyMap();
 
-		Set<Role> validatedRoles = fetchRolesByCode(roleCodes,
-				multiStateInstanceUtil.getStateLevelTenant(users.get(0).getTenantId()));
+        Set<Role> validatedRoles = fetchRolesByCode(roleCodes, getStateLevelTenant(users.get(0).getTenantId()));
 
         Map<String, Role> roleCodeMap = new HashMap<>();
 
@@ -611,11 +582,14 @@ public class UserRepository {
         saveUserRoles(user);
     }
 
+    private String getStateLevelTenant(String tenantId) {
+        return tenantId.split("\\.")[0];
+    }
+
 	
 	private void updateAuditDetails(User oldUser, long userId, String uuid) {
 		auditRepository.auditUser(oldUser,userId,uuid);
 		
 	}
-
 
 }

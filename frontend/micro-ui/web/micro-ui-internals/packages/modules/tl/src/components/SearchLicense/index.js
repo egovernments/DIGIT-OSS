@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useEffect } from "react"
 import { useForm, Controller } from "react-hook-form";
-import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Table, Card } from "@egovernments/digit-ui-react-components";
+import { TextInput, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, Header, SearchField, Dropdown, Table, Card } from "@egovernments/digit-ui-react-components";
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY, stringReplaceAll } from "../../utils";
 import SearchFields from "./SearchFields";
@@ -8,15 +8,14 @@ import MobileSearchApplication from "./MobileSearchApplication";
 
 const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
 
+  const initialValues = Digit.SessionStorage.get("SEARCH_APPLICATION_DETAIL")|| {
+    offset: 0,
+    limit: 10,
+    sortBy: "commencementDate",
+    sortOrder: "DESC"
+};
     const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
-        defaultValues: {
-            offset: 0,
-            limit: 10,
-            sortBy: "commencementDate",
-            sortOrder: "DESC",
-            status: "",
-            RenewalPending: true
-        }
+        defaultValues: initialValues
     })
     useEffect(() => {
       register("offset", 0)
@@ -24,7 +23,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
       register("sortBy", "commencementDate")
       register("sortOrder", "DESC")
       register("status", "")
-      register("RenewalPending", true)
+      //register("RenewalPending", true)
     },[register])
 
     const onSort = useCallback((args) => {
@@ -64,9 +63,9 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
             return (
               <div>
                 <span className="link">
-                  <Link to={`/digit-ui/employee/tl/application-details/${row.original["applicationNumber"]}?renewalPending=true`}>
+                  <a href={`/digit-ui/employee/tl/application-details/${row.original["applicationNumber"]}`}>
                     {row.original["licenseNumber"]}
-                  </Link>
+                  </a>
                 </span>
               </div>
             );
@@ -101,8 +100,9 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
       ]), [] )
 
     return <React.Fragment>
+        <Header>{t("TL_SEARCH_LICENSE")}</Header>
         <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-          <SearchFields {...{register, control, reset, tenantId, t}} />
+          <SearchFields {...{register, control, reset, tenantId, t, previousPage}} />
         </SearchForm>
         {data?.display ?<Card style={{ marginTop: 20 }}>
             {
@@ -115,7 +115,7 @@ const SearchLicense = ({tenantId, t, onSubmit, data, count }) => {
                 ))
             }
         </Card>
-        : <Table
+        : data !== "" && <Table
             t={t}
             data={data} 
             totalRecords={count}

@@ -56,7 +56,8 @@ export const StoreService = {
   },
   digitInitData: async (stateCode, enabledModules) => {
     const { MdmsRes } = await MdmsService.init(stateCode);
-    const stateInfo = MdmsRes["common-masters"].StateInfo[0];
+    const stateInfo = MdmsRes["common-masters"]?.StateInfo?.[0]||{};
+    const uiHomePage = MdmsRes["common-masters"]?.uiHomePage?.[0]||{};
     const localities = {};
     const revenue_localities = {};
     const initData = {
@@ -70,17 +71,10 @@ export const StoreService = {
         bannerUrl: stateInfo.bannerUrl,
       },
       localizationModules: stateInfo.localizationModules,
-      modules: MdmsRes?.tenant?.citymodule.filter((module) => module.active).filter((module) => enabledModules.includes(module.code)),
+      modules: MdmsRes?.tenant?.citymodule.filter((module) => module?.active).filter((module) => enabledModules?.includes(module?.code))?.sort((x,y)=>x?.order-y?.order),
+      uiHomePage: uiHomePage
     };
 
-    //TODO SHOULD BE INTEGRAETED WITH MDMS NOT HARDCODED 
-    initData.modules.push({active: true,
-    code: "CommonPT",
-    module: "CommonPT",
-    tenants:[{code: 'pb.jalandhar'},
-    {code: 'pb.nawanshahr'},
-    {code: 'pb.amritsar'}]
-  })
   
     initData.selectedLanguage = Digit.SessionStorage.get("locale") || initData.languages[0].value;
 
@@ -91,8 +85,9 @@ export const StoreService = {
       .flat()
       .reduce((unique, ele) => (unique.find((item) => item.code === ele.code) ? unique : [...unique, ele]), []);
     initData.tenants = MdmsRes?.tenant?.tenants
-      .filter((item) => !!moduleTenants.find((mt) => mt.code === item.code))
-      .map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant }));
+         .map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant }));
+      // .filter((item) => !!moduleTenants.find((mt) => mt.code === item.code))
+      // .map((tenant) => ({ i18nKey: `TENANT_TENANTS_${tenant.code.replace(".", "_").toUpperCase()}`, ...tenant }));
 
     await LocalizationService.getLocale({
       modules: [

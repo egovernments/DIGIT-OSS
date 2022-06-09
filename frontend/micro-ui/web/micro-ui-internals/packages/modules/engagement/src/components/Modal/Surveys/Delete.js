@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Card, CardText } from "@egovernments/digit-ui-react-components";
 
 const Heading = (props) => {
-  return <h1 className="heading-m">{props.label}</h1>;
+  return <h1 className="heading-m">{props.t(props.heading)}</h1>;
 };
 
 const Close = () => (
@@ -19,12 +19,12 @@ const CloseBtn = (props) => {
     </div>
   );
 };
-
+// {`${t("CONFIRM_DELETE_MSG")} `}
 const ConfirmationQuestion = ({ t, title }) => (
   <div className="confirmation_box">
     <span>
       {" "}
-      {`${t("CONFIRM_DELETE_MSG")} `} <b>{` ${title}`}</b>{" "}
+      {t("CONFIRM_DELETE_MSG_NEW")} <b>{` ${title}`}</b>{t("COMPLETELY_DELETE")} <br/><br />{t("COMPLETELY_DELETE_WARN_MSG")} 
     </span>
   </div>
 );

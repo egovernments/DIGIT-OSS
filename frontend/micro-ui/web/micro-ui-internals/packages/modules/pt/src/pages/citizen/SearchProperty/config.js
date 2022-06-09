@@ -10,7 +10,7 @@ export const config = [
         label: "PT_HOME_SEARCH_RESULTS_OWN_MOB_LABEL",
         type: "mobileNumber",
         name: "mobileNumber",
-        validation:{pattern:{  value: /[789][0-9]{9}/,
+        validation:{pattern:{  value: /[6789][0-9]{9}/,
         message: "CORE_COMMON_MOBILE_ERROR",}},
         error: "CORE_COMMON_MOBILE_ERROR",
       },
@@ -22,7 +22,7 @@ export const config = [
         error: "ERR_INVALID_PROPERTY_ID",
         validation: {
           pattern: {
-            value: /^[a-zA-Z0-9-]*$/i,
+            value: "[A-Za-z]{2}\-[A-Za-z]{2}\-[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-[0-9]{6}",
             message: "ERR_INVALID_PROPERTY_ID",
           },
         },
@@ -34,7 +34,7 @@ export const config = [
         error: "ERR_INVALID_PROPERTY_ID",
         validation: {
           pattern: {
-            value: /^[a-zA-Z0-9-]*$/i,
+            value: "[A-Za-z]{2}\-[A-Za-z]{2}\-[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-[0-9]{6}",
             message: "ERR_INVALID_PROPERTY_ID",
           },
         },

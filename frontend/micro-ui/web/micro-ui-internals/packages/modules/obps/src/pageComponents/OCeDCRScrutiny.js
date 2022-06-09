@@ -64,8 +64,10 @@ const OCeDCRScrutiny = ({ t, config, onSelect, userType, formData, ownerIndex = 
                                         architectName = License.Licenses[i].tradeLicenseDetail.owners[0].name;
                                     }
                                 }
+                                if (!architectName) architectName = userInfo?.info?.name;
+                                if (!architectName) architectName = License.Licenses[0].tradeLicenseDetail.owners[0].name;
                                 if (response?.edcrDetail?.length > 0) {
-                                    const isPrimaryOwner = result?.BPA?.[0]?.landInfo?.owners?.filter(data => data.isPrimaryOwner);
+                                    const isPrimaryOwner = result?.BPA?.[0]?.landInfo?.owners?.filter(data => (data.isPrimaryOwner && data.isPrimaryOwner != "false"));
                                     response.edcrDetail[0].applicantName = isPrimaryOwner?.[0]?.name;
                                     response.edcrDetail[0].ocPermitNumber = permitNumber;
                                     response.edcrDetail[0].ocPermitdate = permitDate;

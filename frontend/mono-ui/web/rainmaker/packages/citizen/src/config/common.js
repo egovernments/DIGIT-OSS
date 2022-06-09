@@ -8,6 +8,7 @@ const commonConfig = {
       ? process.env.REACT_APP_DEFAULT_WHATSAPP_NUMBER
       : 918744060444,
   singleInstance: globalConfigExists() ? window.globalConfigs.getConfig("ENABLE_SINGLEINSTANCE") || false : false,
+  S3BUCKET: globalConfigExists() ? window.globalConfigs.getConfig("S3BUCKET") :"egov-qa-assets",
   // forgotPasswordTenant: "pb.amritsar",
 };
 

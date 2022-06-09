@@ -2,6 +2,7 @@
   .pt-search-action {
     @apply w-full;
     display: flex;
+    margin-right: 10px;
     justify-content: end;
     align-items: center;
     .pt-search-action-submit button {
@@ -38,8 +39,18 @@
     width: 30% !important;
     margin-bottom: 20px;
   }
+  @media (min-width: 780px) {
+    .pt-form-field{
+      width: 30% !important;
+      margin-bottom: 20px;
+    }
+  }
   @media (max-width: 780px) {
   .form-field{
+    width: 100% !important;
+    margin-bottom: 15px;
+  }
+  .pt-form-field{
     width: 100% !important;
     margin-bottom: 15px;
   }

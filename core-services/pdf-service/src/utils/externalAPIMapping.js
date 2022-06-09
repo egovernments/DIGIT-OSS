@@ -25,13 +25,12 @@ function escapeRegex(string) {
 }
 
 export const externalAPIMapping = async function (
-  key,
+  pdfKey,
   req,
   dataconfig,
   variableTovalueMap,
   requestInfo,
-  unregisteredLocalisationCodes,
-  header
+  unregisteredLocalisationCodes
 ) {
   var jp = require("jsonpath");
   var objectOfExternalAPI = getValue(
@@ -64,7 +63,7 @@ export const externalAPIMapping = async function (
     //to convert queryparam and uri into properURI
 
     //for PT module
-    if (key == "pt-receipt") {
+    if (pdfKey == "pt-receipt") {
       for (let j = 0; j < externalAPIArray[i].queryParams.length; j++) {
         if (externalAPIArray[i].queryParams[j] == "$") {
           flag = 1;
@@ -162,13 +161,9 @@ export const externalAPIMapping = async function (
       /,/g,
       "&"
     );
-    /*let headers = {
+    let headers = {
       "content-type": "application/json;charset=UTF-8",
-      accept: "application/json, text/plain"
-    };*/
-
-    let headerConfig = {
-      headers: header
+      accept: "application/json, text/plain, */*"
     };
 
     var resPromise;
@@ -176,7 +171,9 @@ export const externalAPIMapping = async function (
       resPromise = axios.post(
         externalAPIArray[i].uri + "?" + externalAPIArray[i].queryParams, {
           RequestInfo: requestInfo
-        }, headerConfig
+        }, {
+          headers: headers
+        }
       );
     } else {
       resPromise = axios.get(
@@ -373,9 +370,8 @@ export const externalAPIMapping = async function (
       requestInfo,
       localisationModules,
       localisationCodes,
-      header
+      pdfKey+'-externalMapping'
     );
-  
     resposnseMap.messages.map((item) => {
       localisationMap[item.code + "_" + item.module] = item.message;
     });
