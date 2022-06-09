@@ -1,4 +1,4 @@
-package org.egov.pg.service.gateways.nic;
+package org.egov.pg.service.gateways.paygov;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
