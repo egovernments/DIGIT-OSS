@@ -30,8 +30,10 @@ public class SWConfiguration {
 	@Value("${egov.idgen.scid.name}")
 	private String sewerageIdGenName;
 
-	@Value("${egov.idgen.scid.format}")
-	private String sewerageIdGenFormat;
+	@Value("${egov.idgen.scid.format}")	// central-instance configs
+
+	@Value("#{${egov.ui.app.host.map}}")
+	private Map<String, String> uiAppHostMap;	private String sewerageIdGenFormat;
     
 	@Value("${egov.idgen.scapid.name}")
 	private String sewerageApplicationIdGenName;
@@ -97,6 +99,17 @@ public class SWConfiguration {
 	
 	@Value("${egov.user.event.notification.enabled}")
 	private Boolean isUserEventsNotificationEnabled;
+
+  // Email
+	@Value("${kafka.topics.notification.email}")
+	private String emailNotifTopic;
+
+	@Value("${notification.email.enabled}")
+	private Boolean isEmailNotificationEnabled;
+
+  //User Configuration
+  @Value("${egov.user.host}")
+   private String userHost;
 
 	// Email
 	@Value("${kafka.topics.notification.email}")
@@ -193,20 +206,21 @@ public class SWConfiguration {
 	@Value("${egov.usr.events.pay.link}")
 	private String userEventApplicationPayLink;
 
-	/*@Value("${state.level.tenant.id}")
-	private String stateLevelTenantId;*/
-
 	//mdms
 	@Value("${egov.mdms.host}")
 	private String mdmsHost;
 
 	@Value("${egov.mdms.search.endpoint}")
 	private String mdmsUrl;
-	// central-instance configs
-
-	@Value("#{${egov.ui.app.host.map}}")
-	private Map<String, String> uiAppHostMap;
 
 	@Value("${egov.url.shortner.host}")
 	private String urlShortnerHost;
+	
+	@Value("${egov.disconnect.businessservice}")
+	private String disconnectBusinessServiceName;
+
+  // central-instance configs
+	@Value("#{${egov.ui.app.host.map}}")
+	private Map<String, String> uiAppHostMap;
+  
 }

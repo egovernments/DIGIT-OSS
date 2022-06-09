@@ -51,7 +51,6 @@ public class NotificationUtil {
 	@Autowired
 	private MultiStateInstanceUtil centralInstanceUtil;
 
-
 	/**
 	 * Returns the uri for the localization call
 	 * 
@@ -307,6 +306,5 @@ public class NotificationUtil {
 		}
 		return host;
 	}
-
 
 }

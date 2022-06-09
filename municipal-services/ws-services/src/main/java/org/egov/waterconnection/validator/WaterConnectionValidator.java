@@ -68,6 +68,16 @@ public class WaterConnectionValidator {
 		if(waterConnectionRequest.getWaterConnection().getProcessInstance().getAction().equalsIgnoreCase("PAY"))
 			errorMap.put("INVALID_ACTION","Pay action cannot be perform directly");
 
+		String channel = waterConnectionRequest.getWaterConnection().getChannel();
+		if(channel != null){
+			if(!WCConstants.CHANNEL_VALUES.contains(channel))
+				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid");
+			if( reqType == WCConstants.CREATE_APPLICATION && waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("EMPLOYEE") && channel.equalsIgnoreCase("CITIZEN"))
+				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid for employee role");
+			if( reqType == WCConstants.CREATE_APPLICATION && waterConnectionRequest.getRequestInfo().getUserInfo().getType().equalsIgnoreCase("CITIZEN") && !channel.equalsIgnoreCase("CITIZEN"))
+				errorMap.put("INVALID_CHANNEL","The value given for channel field is invalid for citizen role");
+		}
+
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
 	}

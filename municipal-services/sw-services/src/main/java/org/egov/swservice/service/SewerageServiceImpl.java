@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.swservice.config.SWConfiguration;
@@ -87,7 +89,13 @@ public class SewerageServiceImpl implements SewerageService {
 	@Override
 	public List<SewerageConnection> createSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {
 		int reqType = SWConstants.CREATE_APPLICATION;
-		if (sewerageServicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)) {
+		
+		if (sewerageConnectionRequest.isDisconnectRequest()) {
+			reqType = SWConstants.DISCONNECT_CONNECTION;
+			validateDisconnectionRequest(sewerageConnectionRequest);
+		}
+		
+		else if (sewerageServicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)) {
 			List<SewerageConnection> sewerageConnectionList = getAllSewerageApplications(sewerageConnectionRequest);
 			if (!CollectionUtils.isEmpty(sewerageConnectionList)) {
 				workflowService.validateInProgressWF(sewerageConnectionList, sewerageConnectionRequest.getRequestInfo(),
@@ -108,6 +116,23 @@ public class SewerageServiceImpl implements SewerageService {
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
 	}
 
+	private void validateDisconnectionRequest(SewerageConnectionRequest sewerageConnectionRequest) {
+		if (!sewerageConnectionRequest.getSewerageConnection().getStatus().toString().equalsIgnoreCase(SWConstants.ACTIVE)) {
+			throw new CustomException("INVALID_REQUEST",
+					"Sewerage connection must be active for disconnection request");
+		}
+		
+		List<SewerageConnection> previousConnectionsList = getAllSewerageApplications(sewerageConnectionRequest);
+		
+		for(SewerageConnection connection : previousConnectionsList) {
+			if(!(connection.getApplicationStatus().equalsIgnoreCase(SWConstants.STATUS_APPROVED) || connection.getApplicationStatus().equalsIgnoreCase(SWConstants.MODIFIED_FINAL_STATE))) {
+				throw new CustomException("INVALID_REQUEST",
+						"No application should be in progress while applying for disconnection");
+			}
+		}
+		
+	}
+
 	/**
 	 * 
 	 * @param criteria
@@ -122,13 +147,17 @@ public class SewerageServiceImpl implements SewerageService {
 		if(!StringUtils.isEmpty(criteria.getSearchType()) &&
 				criteria.getSearchType().equals(SWConstants.SEARCH_TYPE_CONNECTION)){
 			sewerageConnectionList = enrichmentService.filterConnections(sewerageConnectionList);
-			if(criteria.getIsPropertyDetailsRequired()){
+			/*if(criteria.getIsPropertyDetailsRequired()){
 				sewerageConnectionList = enrichmentService.enrichPropertyDetails(sewerageConnectionList, criteria, requestInfo);
 
-			}
+			}*/
+		}
+		if ((criteria.getIsPropertyDetailsRequired() != null) && criteria.getIsPropertyDetailsRequired()) {
+			sewerageConnectionList = enrichmentService.enrichPropertyDetails(sewerageConnectionList, criteria, requestInfo);
 		}
 		validateProperty.validatePropertyForConnection(sewerageConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
+		enrichmentService.enrichProcessInstance(sewerageConnectionList, criteria, requestInfo);
 		return sewerageConnectionList;
 	}
 
@@ -138,13 +167,38 @@ public class SewerageServiceImpl implements SewerageService {
 	 *            SewerageConnectionSearchCriteria contains search criteria on
 	 *            sewerage connection
 	 * @param requestInfo - Request Info Object
-	 * @return List of matching water connection
+	 * @return List of matching sewerage connection
 	 */
 
 	public List<SewerageConnection> getSewerageConnectionsList(SearchCriteria criteria, RequestInfo requestInfo) {
 		return sewerageDao.getSewerageConnectionList(criteria, requestInfo);
 	}
 
+	/**
+	 * 
+	 * @param criteria
+	 *            SewerageConnectionSearchCriteria contains search criteria on
+	 *            sewerage connection
+	 * @param requestInfo - Request Info
+	 * @return Count of List of matching sewerage connection
+	 */
+	public Integer countAllSewerageApplications(SearchCriteria criteria, RequestInfo requestInfo) {
+		criteria.setIsCountCall(Boolean.TRUE);
+		return getSewerageConnectionsCount(criteria, requestInfo);
+	}
+
+	/**
+	 * 
+	 * @param criteria    SewerageConnectionSearchCriteria contains search criteria
+	 *                    on sewerage connection
+	 * @param requestInfo - Request Info Object
+	 * @return Count of List of matching sewerage connection
+	 */
+
+	public Integer getSewerageConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
+		return sewerageDao.getSewerageConnectionsCount(criteria, requestInfo);
+	}
+	
 	/**
 	 * 
 	 * @param sewerageConnectionRequest
@@ -154,6 +208,12 @@ public class SewerageServiceImpl implements SewerageService {
 	 */
 	@Override
 	public List<SewerageConnection> updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {
+		
+		if(sewerageConnectionRequest.isDisconnectRequest()) {
+			return updateSewerageConnectionForDisconnectFlow(sewerageConnectionRequest);
+		}
+		
+		SearchCriteria criteria = new SearchCriteria();
 		if(sewerageServicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)){
 			return modifySewerageConnection(sewerageConnectionRequest);
 		}
@@ -184,7 +244,45 @@ public class SewerageServiceImpl implements SewerageService {
 		enrichmentService.postStatusEnrichment(sewerageConnectionRequest);
 		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
 				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
+		if (!StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getTenantId()))
+			criteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
+		enrichmentService.enrichProcessInstance(Arrays.asList(sewerageConnectionRequest.getSewerageConnection()), criteria, sewerageConnectionRequest.getRequestInfo());
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
+	}
+
+	private List<SewerageConnection> updateSewerageConnectionForDisconnectFlow(SewerageConnectionRequest sewerageConnectionRequest) {
+		SearchCriteria criteria = new SearchCriteria();
+		
+		sewerageConnectionValidator.validateSewerageConnection(sewerageConnectionRequest, SWConstants.DISCONNECT_CONNECTION);
+		mDMSValidator.validateMasterData(sewerageConnectionRequest, SWConstants.DISCONNECT_CONNECTION);
+		Property property = validateProperty.getOrValidateProperty(sewerageConnectionRequest);
+		validateProperty.validatePropertyFields(property,sewerageConnectionRequest.getRequestInfo());
+		String previousApplicationStatus = workflowService.getApplicationStatus(
+				sewerageConnectionRequest.getRequestInfo(),
+				sewerageConnectionRequest.getSewerageConnection().getApplicationNo(),
+				sewerageConnectionRequest.getSewerageConnection().getTenantId(),config.getDisconnectBusinessServiceName() );
+		BusinessService businessService = workflowService.getBusinessService(config.getDisconnectBusinessServiceName(),
+				sewerageConnectionRequest.getSewerageConnection().getTenantId(),
+				sewerageConnectionRequest.getRequestInfo());
+		SewerageConnection searchResult = getConnectionForUpdateRequest(
+				sewerageConnectionRequest.getSewerageConnection().getId(), sewerageConnectionRequest.getRequestInfo());
+		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest);
+		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
+		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
+		
+		userService.updateUser(sewerageConnectionRequest, searchResult);
+		// Call workflow
+		wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
+		// Enrich file store Id After payment
+		enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
+		enrichmentService.postStatusEnrichment(sewerageConnectionRequest);
+		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
+				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
+		if (!StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getTenantId()))
+			criteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
+		enrichmentService.enrichProcessInstance(Arrays.asList(sewerageConnectionRequest.getSewerageConnection()), criteria, sewerageConnectionRequest.getRequestInfo());
+		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
+		
 	}
 
 	/**
@@ -215,8 +313,8 @@ public class SewerageServiceImpl implements SewerageService {
 	 */
 	private List<SewerageConnection> getAllSewerageApplications(SewerageConnectionRequest sewerageConnectionRequest) {
 		SearchCriteria criteria = SearchCriteria.builder()
-				.connectionNumber(sewerageConnectionRequest.getSewerageConnection().getConnectionNo())
-				.tenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId()).build();
+				.connectionNumber(Stream.of(sewerageConnectionRequest.getSewerageConnection().getConnectionNo().toString()).collect(Collectors.toSet())).isCountCall(false)
+				.build();
 		return search(criteria, sewerageConnectionRequest.getRequestInfo());
 	}
 
@@ -268,4 +366,24 @@ public class SewerageServiceImpl implements SewerageService {
 			}
 		}
 	}
+	
+	public List<SewerageConnection> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
+		List<SewerageConnection> sewerageConnectionList = getSewerageConnectionsPlainSearchList(criteria, requestInfo);
+		if(!StringUtils.isEmpty(criteria.getSearchType()) &&
+				criteria.getSearchType().equals(SWConstants.SEARCH_TYPE_CONNECTION)){
+			sewerageConnectionList = enrichmentService.filterConnections(sewerageConnectionList);
+			if(criteria.getIsPropertyDetailsRequired()){
+				sewerageConnectionList = enrichmentService.enrichPropertyDetails(sewerageConnectionList, criteria, requestInfo);
+
+			}
+		}
+		validateProperty.validatePropertyForConnection(sewerageConnectionList);
+		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
+		return sewerageConnectionList;
+	}
+	
+	public List<SewerageConnection> getSewerageConnectionsPlainSearchList(SearchCriteria criteria, RequestInfo requestInfo) {
+		return sewerageDao.getSewerageConnectionPlainSearchList(criteria, requestInfo);
+	}
+
 }

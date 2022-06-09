@@ -20,6 +20,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
@@ -31,17 +36,7 @@ import org.egov.waterconnection.repository.WaterDao;
 import org.egov.waterconnection.util.NotificationUtil;
 import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.validator.ValidateProperty;
-import org.egov.waterconnection.web.models.Action;
-import org.egov.waterconnection.web.models.Category;
-import org.egov.waterconnection.web.models.Event;
-import org.egov.waterconnection.web.models.EventRequest;
-import org.egov.waterconnection.web.models.Property;
-import org.egov.waterconnection.web.models.Recepient;
-import org.egov.waterconnection.web.models.SMSRequest;
-import org.egov.waterconnection.web.models.SearchCriteria;
-import org.egov.waterconnection.web.models.Source;
-import org.egov.waterconnection.web.models.WaterConnection;
-import org.egov.waterconnection.web.models.WaterConnectionRequest;
+import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.web.models.collection.PaymentDetail;
 import org.egov.waterconnection.web.models.collection.PaymentRequest;
 import org.egov.waterconnection.workflow.WorkflowIntegrator;
@@ -51,12 +46,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.waterconnection.constants.WCConstants.*;
 
 @Slf4j
 @Service
@@ -124,7 +122,7 @@ public class PaymentUpdateService {
 				if (paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptBusinessservice())) {
 					SearchCriteria criteria = SearchCriteria.builder()
 							.tenantId(paymentRequest.getPayment().getTenantId())
-							.applicationNumber(paymentDetail.getBill().getConsumerCode()).build();
+							.applicationNumber(Stream.of(paymentDetail.getBill().getConsumerCode().toString()).collect(Collectors.toSet())).build();
 					List<WaterConnection> waterConnections = waterService.search(criteria,
 							paymentRequest.getRequestInfo());
 					if (CollectionUtils.isEmpty(waterConnections)) {
@@ -213,11 +211,13 @@ public class PaymentUpdateService {
 						|| config.getReceiptBusinessservice().equals(paymentDetail.getBusinessService())) {
 					SearchCriteria criteria = new SearchCriteria();
 					if (WCConstants.WATER_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService())) {
-						criteria = SearchCriteria.builder().tenantId(paymentRequest.getPayment().getTenantId())
-								.connectionNumber(paymentDetail.getBill().getConsumerCode()).build();
+						criteria = SearchCriteria.builder()
+								.tenantId(paymentRequest.getPayment().getTenantId())
+								.connectionNumber(Stream.of(paymentDetail.getBill().getConsumerCode()).collect(Collectors.toSet())).build();
 					} else {
-						criteria = SearchCriteria.builder().tenantId(paymentRequest.getPayment().getTenantId())
-								.applicationNumber(paymentDetail.getBill().getConsumerCode()).build();
+						criteria = SearchCriteria.builder()
+								.tenantId(paymentRequest.getPayment().getTenantId())
+								.applicationNumber(Stream.of(paymentDetail.getBill().getConsumerCode()).collect(Collectors.toSet())).build();
 					}
 					List<WaterConnection> waterConnections = waterService.search(criteria,
 							paymentRequest.getRequestInfo());
@@ -267,6 +267,13 @@ public class PaymentUpdateService {
 					notificationUtil.sendSMS(smsRequests, tenantId);
 				}
 
+
+		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
+			if (config.getIsEmailNotificationEnabled() != null && config.getIsEmailNotificationEnabled()) {
+				List<EmailRequest> emailRequests = getEmailRequest(waterConnectionRequest, property, paymentDetail);
+				if (!CollectionUtils.isEmpty(emailRequests)) {
+					notificationUtil.sendEmail(emailRequests, tenantId);
+				}
 			}
 		}
 
@@ -382,6 +389,73 @@ public class PaymentUpdateService {
 			smsRequest.add(req);
 		});
 		return smsRequest;
+	}
+
+
+	/**
+	 * Creates email request for each owner
+	 *
+	 * @param waterConnectionRequest Water Connection Request
+	 * @param property Property Object
+	 * @param paymentDetail Payment Detail Object
+	 * @return List of EmailRequest
+	 */
+	private List<EmailRequest> getEmailRequest(WaterConnectionRequest waterConnectionRequest,
+											   Property property, PaymentDetail paymentDetail) {
+		String localizationMessage = notificationUtil.getLocalizationMessages(property.getTenantId(),
+				waterConnectionRequest.getRequestInfo());
+		String message = notificationUtil.getMessageTemplate(WCConstants.PAYMENT_NOTIFICATION_EMAIL, localizationMessage);
+		if (message == null) {
+			log.info("No message template found for, {} " + WCConstants.PAYMENT_NOTIFICATION_EMAIL);
+			return Collections.emptyList();
+		}
+
+		Map<String, String> mobileNumbersAndNames = new HashMap<>();
+		Set<String> mobileNumbers = new HashSet<>();
+
+		//Send the notification to all owners
+		property.getOwners().forEach(owner -> {
+			if (owner.getMobileNumber() != null)
+				mobileNumbersAndNames.put(owner.getMobileNumber(), owner.getName());
+			mobileNumbers.add(owner.getMobileNumber());
+		});
+
+		//send the notification to the connection holders
+		if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
+			waterConnectionRequest.getWaterConnection().getConnectionHolders().forEach(holder -> {
+				if (!org.apache.commons.lang.StringUtils.isEmpty(holder.getMobileNumber())) {
+					mobileNumbersAndNames.put(holder.getMobileNumber(), holder.getName());
+					mobileNumbers.add(holder.getMobileNumber());
+
+				}
+			});
+		}
+		//Send the notification to applicant
+		if(!org.apache.commons.lang.StringUtils.isEmpty(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber()))
+		{
+			mobileNumbersAndNames.put(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber(), waterConnectionRequest.getRequestInfo().getUserInfo().getName());
+			mobileNumbers.add(waterConnectionRequest.getRequestInfo().getUserInfo().getMobileNumber());
+
+		}
+
+		Map<String, String> getReplacedMessage = workflowNotificationService.getMessageForMobileNumber(mobileNumbersAndNames,
+				waterConnectionRequest, message, property);
+
+		Map<String, String> mobileNumberAndMessage =replacePaymentInfo(getReplacedMessage, paymentDetail);
+
+		Map<String,String> mobileNumberAndEmailId = notificationUtil.fetchUserEmailIds(mobileNumbers,waterConnectionRequest.getRequestInfo(),waterConnectionRequest.getWaterConnection().getTenantId());
+
+		List<EmailRequest> emailRequest = new LinkedList<>();
+		for (Map.Entry<String, String> entryset : mobileNumberAndEmailId.entrySet()) {
+			String customizedMsg = mobileNumberAndMessage.get(entryset.getKey());
+			String subject = customizedMsg.substring(customizedMsg.indexOf("<h2>")+4,customizedMsg.indexOf("</h2>"));
+			String body = customizedMsg.substring(customizedMsg.indexOf("</h2>")+4);
+			Email emailobj = Email.builder().emailTo(Collections.singleton(entryset.getValue())).isHTML(true).body(body).subject(subject).build();
+			EmailRequest email = new EmailRequest(waterConnectionRequest.getRequestInfo(),emailobj);
+			emailRequest.add(email);
+		}
+		return emailRequest;
+
 	}
 
 	/**

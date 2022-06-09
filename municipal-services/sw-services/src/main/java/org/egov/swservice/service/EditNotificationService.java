@@ -58,7 +58,6 @@ public class EditNotificationService {
 	public void sendEditNotification(SewerageConnectionRequest request) {
 		try {
 			Property property = validateProperty.getOrValidateProperty(request);
-
 			List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getSewerageConnection().getTenantId(), SEWERAGE_SERVICE_BUSINESS_ID, request.getSewerageConnection().getProcessInstance().getAction());
 
 			if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {

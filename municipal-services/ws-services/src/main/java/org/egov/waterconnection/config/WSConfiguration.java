@@ -206,15 +206,13 @@ public class WSConfiguration {
 	@Value("${egov.collection.host}")
 	private String collectionHost;
 
-	/*@Value("${state.level.tenant.id}")
-	private String stateLevelTenantId;*/
-
 	//mdms
 	@Value("${egov.mdms.host}")
 	private String mdmsHost;
 
 	@Value("${egov.mdms.search.endpoint}")
 	private String mdmsUrl;
+
 	// central-instance configs
 
 	@Value("#{${egov.ui.app.host.map}}")
@@ -222,4 +220,8 @@ public class WSConfiguration {
 
 	@Value("${egov.url.shortner.host}")
 	private String urlShortnerHost;
+	
+	@Value("${egov.disconnect.businessservice}")
+	private String disconnectBusinessServiceName;
+
 }
