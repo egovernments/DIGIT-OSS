@@ -31,6 +31,27 @@ const useServiceTypeFromApplicationType = ({Applicationtype, tenantId}) => {
         i18nKey: "WF_BPA_BPA_STAKEHOLDER_REGISTRATION",
     }]
 
+    const showHidingLinksForStakeholder = (roles = []) => {
+        let userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+        const userInfo = userInfos ? JSON.parse(userInfos) : {};
+        let checkedRoles = [];
+        const rolearray = roles?.map((role) => {
+            userInfo?.value?.info?.roles?.map((item) => {
+                if (item.code === role.code && item.tenantId === role.tenantId) {
+                    checkedRoles.push(item);
+                }
+            });
+        });
+        return checkedRoles?.length;
+    };
+
+    const stateCode = Digit.ULBService.getStateId();
+    const stakeholderEmployeeRoles = [ { code: "BPAREG_DOC_VERIFIER", tenantId: stateCode }, { code: "BPAREG_APPROVER", tenantId: stateCode }];
+    const checkingForStakeholderRoles = showHidingLinksForStakeholder(stakeholderEmployeeRoles);
+    if (!checkingForStakeholderRoles && applicationTypesWithStakeholder?.length > 0) {
+        applicationTypesWithStakeholder.pop();
+    }
+
     const filteredapplicationTypes = useMemo(() => {
         return applicationTypesWithStakeholder.filter(function (curr){
         let temp = 0;
