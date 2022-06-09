@@ -34,15 +34,18 @@ router.post(
         "tenantId is mandatory to generate the receipt",
         400
       );
-    } else if (!receiptNumbers && !consumerCode) {
+    }
+    else if (!receiptNumbers && !consumerCode) {
       return renderError(
         res,
         "consumerCode or receiptNumbers are mandatory to generate the receipt",
         400
       );
     }
+
     try {
       try {
+
         resProperty = await search_payment(
           consumerCode,
           tenantId,
@@ -51,7 +54,9 @@ router.post(
           receiptNumbers,
           headers
         );
+
       } catch (ex) {
+        
         if (ex.response && ex.response.data) console.log(ex.response.data);
         return renderError(res, "Failed to query details of the payment", 500);
       }
@@ -68,6 +73,7 @@ router.post(
             headers
           );
         } catch (ex) {
+          
           if (ex.response && ex.response.data) console.log(ex.response.data);
           return renderError(res, "Failed to generate PDF for payment", 500);
         }
