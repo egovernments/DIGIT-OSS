@@ -89,7 +89,7 @@ const DesktopInbox = (props) => {
           {
             Header: t("CS_COMMON_CITIZEN_NAME"),
             accessor: "applicationNo",
-            disableSortBy: true,
+            // disableSortBy: true,
             Cell: ({ row }) => {
               // fetching out citizen info
               let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo)
@@ -102,7 +102,6 @@ const DesktopInbox = (props) => {
               );
             },
           },
-
           {
             Header: t("CS_COMMON_CITIZEN_NUMBER"),
             disableSortBy: true,

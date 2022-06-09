@@ -377,7 +377,7 @@ export const convertToEditWSUpdate = (data) => {
       wfDocuments: [],
       assignee: [],
       action: data?.isEditApplication ? "RESUBMIT_APPLICATION" : "SUBMIT_APPLICATION",
-      assignees: [],
+      assignes: [],
     },
   };
   return formdata;
@@ -477,7 +477,7 @@ export const convertToEditSWUpdate = (data) => {
       wfDocuments: [],
       assignee: [],
       action: data?.isEditApplication ? "RESUBMIT_APPLICATION" : "SUBMIT_APPLICATION",
-      assignees: [],
+      assignes: [],
     },
   };
   return formdata;
@@ -942,6 +942,7 @@ export const convertEditApplicationDetails = async (data, appData, actionData) =
 
   let payload = {
     ...appData.applicationData,
+    propertyId: data?.cpt?.details?.propertyId,
     proposedTaps: data?.ConnectionDetails?.[0]?.proposedTaps && Number(data?.ConnectionDetails?.[0]?.proposedTaps),
     proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size && Number(data?.ConnectionDetails?.[0]?.proposedPipeSize?.size),
     proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),

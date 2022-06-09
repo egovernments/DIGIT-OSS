@@ -12,6 +12,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
 
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   const isFstpOperator = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
+  const isFstpOperatorRequest = (Digit.UserService.hasAccess("FSM_EMP_FSTPO") && location.pathname.includes("fstp-fsm-request")) || false;
 
   // const hideLocalityFilter = Digit.UserService.hasAccess(["FSM_CREATOR_EMP", "FSM_VIEW_EMP"]);
 
@@ -53,7 +54,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
 
   return (
     <React.Fragment>
-      {((!DSO && !isFstpOperator && searchParams) || (mergedRoleDetails?.statuses?.length > 0)) && <div className="filter" style={{ marginTop: isFstpOperator ? "-0px" : "revert" }}>
+      {((!DSO && !isFstpOperator && searchParams) || (mergedRoleDetails?.statuses?.length > 0) || (isFstpOperatorRequest)) && <div className="filter" style={{ marginTop: isFstpOperator ? "-0px" : "revert" }}>
         <div className="filter-card">
           <div className="heading">
             <div className="filter-label">{t("ES_COMMON_FILTER_BY")}:</div>
@@ -81,7 +82,7 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
             {/* <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} fsmfilters={searchParams} /> */}
           </div>
 
-          {mergedRoleDetails?.statuses?.length > 0 ? (
+          {mergedRoleDetails?.statuses?.length > 0 || isFstpOperatorRequest ? (
             <div>
               <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
               {/* <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} /> */}

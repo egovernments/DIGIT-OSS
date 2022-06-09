@@ -28,7 +28,7 @@ const FstpServiceRequest = () => {
     const [searchParams, setSearchParams] = useState({ applicationStatus: "WAITING_FOR_DISPOSAL" });
     const [searchParamsApplication, setSearchParamsApplication] = useState({});
     const [filterParam, setFilterParam] = useState();
-    const [sortParams, setSortParams] = useState([{ "id": "createdTime", "desc": true }]);
+    const [sortParams, setSortParams] = useState([{ "id": "applicationNo", "desc": true }]);
     const [pageOffset, setPageOffset] = useState(0);
     const [pageSize, setPageSize] = useState(100);
     const [isVehicleSearchCompleted, setIsVehicleSearchCompleted] = useState(false);
@@ -56,23 +56,26 @@ const FstpServiceRequest = () => {
         options: { searchWithDSO: true },
     });
 
-    useEffect(() => {
-        if (isSuccess) {
-            const applicationNos = vehicleLog?.map((i) => i?.tripDetails[0]?.referenceNo).join(",");
-            setSearchParamsApplication(applicationNos ? { applicationNos } : { applicationNos: "null" });
-            setIsVehicleSearchCompleted(true);
-        }
-    }, [isSuccess, vehicleLog, isLoading]);
-
     const { isLoading: isSearchLoading, isIdle, data: { data: { table: tripDetails } = {} } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParamsApplication, null, {
         enabled: !!isVehicleSearchCompleted,
     });
 
     useEffect(() => {
+        if (isSuccess || isIdle) {
+            const applicationNos = vehicleLog?.map((i) => i?.tripDetails[0]?.referenceNo).join(",");
+            setSearchParamsApplication({
+                applicationNos: applicationNos ? applicationNos : "null",
+                sortOrder: sortParams[0]?.desc === false ? "ASC" : "DESC",
+            });
+            setIsVehicleSearchCompleted(true);
+        }
+    }, [isSuccess, vehicleLog, isIdle, isLoading, sortParams]);
+
+    useEffect(() => {
         if (tripDetails) {
             setTripDetail(tripDetails)
         }
-    }, [isIdle, isSearchLoading]);
+    }, [isIdle, isSearchLoading, sortParams]);
 
     let applicationNoList = []
     vehicleLog?.map((i) => {

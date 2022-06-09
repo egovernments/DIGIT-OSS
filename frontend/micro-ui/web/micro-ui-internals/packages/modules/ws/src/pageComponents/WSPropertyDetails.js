@@ -46,7 +46,7 @@ const WSPropertyDetails = ({ t, config, onSelect, userType, formData, setError, 
             }}
             style={{ width: "65%", float: "left", marginRight: "20px" }}
           />
-          <button className="submit-bar" type="button" onClick={() => setSearchPropertyId(propertyId)}>
+          <button className="submit-bar" type="button" onClick={() => setPropertyId(propertyId)}>
             {`${t("PT_SEARCH")}`}
           </button>
         </div>
