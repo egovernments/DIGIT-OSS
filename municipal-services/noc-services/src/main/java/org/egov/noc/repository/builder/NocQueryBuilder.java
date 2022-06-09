@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class NocQueryBuilder {
+
 	@Autowired
 	private NOCConfiguration nocConfig;
 	
@@ -94,11 +95,13 @@ public class NocQueryBuilder {
 			preparedStmtList.add(criteria.getSource());
 			log.info(criteria.getSource());
 		}
-		
+
 		String sourceRefId = criteria.getSourceRefId();
                 if (sourceRefId != null) {
-                    List<String> sourceRefIds = Arrays.asList(sourceRefId.split(","));
-                    addClauseIfRequired(builder);
+					sourceRefId = sourceRefId.replace("[","");
+					sourceRefId = sourceRefId.replace("]","");
+					List<String> sourceRefIds = Arrays.asList(sourceRefId.split(","));
+					addClauseIfRequired(builder);
                     if (isFuzzyEnabled) {
                         builder.append(" noc.sourceRefId LIKE ANY(ARRAY[ ").append(createQuery(sourceRefIds)).append("])");
                         addToPreparedStatementForFuzzySearch(preparedStmtList, sourceRefIds);
@@ -114,15 +117,16 @@ public class NocQueryBuilder {
 			addClauseIfRequired(builder);
 			builder.append(" noc.nocType IN (").append(createQuery(nocTypes)).append(")");
                         addToPreparedStatement(preparedStmtList, nocTypes);
-			log.info(nocType);
-		}
-		
-		List<String> status = criteria.getStatus();
+                        log.info(nocType);
+                }
+                
+                List<String> status = criteria.getStatus();
                 if (status!=null) {
                         addClauseIfRequired(builder);
                         builder.append(" noc.status IN (").append(createQuery(status)).append(")");
                         addToPreparedStatement(preparedStmtList, status);
                 }
+
 		
 		log.info(criteria.toString());
 		log.info("Final Query");
@@ -182,7 +186,8 @@ public class NocQueryBuilder {
 	}
 	
 	private void addToPreparedStatementForFuzzySearch(List<Object> preparedStmtList, List<String> ids) {
-	    ids.forEach(id -> preparedStmtList.add("%"+id+"%"));
+
+	    ids.forEach(id -> preparedStmtList.add("%"+id.trim()+"%"));
 	}
 
 	private Object createQuery(List<String> ids) {

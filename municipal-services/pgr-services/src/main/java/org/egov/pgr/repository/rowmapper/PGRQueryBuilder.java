@@ -9,13 +9,20 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 @Repository
 public class PGRQueryBuilder {
+	
+	private PGRConfiguration config;
 
+	@Autowired
+    public PGRQueryBuilder(PGRConfiguration config) {
+        this.config = config;
+	}
 
     private PGRConfiguration config;
 
@@ -38,6 +45,11 @@ public class PGRQueryBuilder {
                                         " ON ads.parentId = ser.id ";
 
     private static final String COUNT_WRAPPER = "select count(*) from ({INTERNAL_QUERY}) as count";
+    
+    private static final String RESOLVED_COMPLAINTS_QUERY = "select count(*) from eg_pgr_service_v2 where applicationstatus='CLOSEDAFTERRESOLUTION' and tenantid=? and lastmodifiedtime>? ";
+    
+    private static final String AVERAGE_RESOLUTION_TIME_QUERY = "select round(avg(lastmodifiedtime-createdtime)/86400000) from eg_pgr_service_v2 where applicationstatus='CLOSEDAFTERRESOLUTION' and tenantid=? ";
+    
 
 
     public String getPGRSearchQuery(RequestSearchCriteria criteria, List<Object> preparedStmtList) {
@@ -213,5 +225,37 @@ public class PGRQueryBuilder {
     {
         ids.forEach(id ->{ preparedStmtList.add(id);});
     }
+
+
+	public String getResolvedComplaints(String tenantId, List<Object> preparedStmtListComplaintsResolved) {
+		
+		StringBuilder query = new StringBuilder("");
+		query.append(RESOLVED_COMPLAINTS_QUERY);
+
+		preparedStmtListComplaintsResolved.add(tenantId);
+
+		// In order to get data of last 12 months, the months variables is pre-configured in application properties
+    	int days = Integer.valueOf(config.getNumberOfDays()) ;
+
+    	Calendar calendar = Calendar.getInstance();
+
+    	// To subtract 12 months from current time, we are adding -12 to the calendar instance, as subtract function is not in-built
+    	calendar.add(Calendar.DATE, -1*days);
+
+    	// Converting the timestamp to milliseconds and adding it to prepared statement list
+    	preparedStmtListComplaintsResolved.add(calendar.getTimeInMillis());
+
+		return query.toString();
+	}
+
+
+	public String getAverageResolutionTime(String tenantId, List<Object> preparedStmtListAverageResolutionTime) {
+		StringBuilder query = new StringBuilder("");
+		query.append(AVERAGE_RESOLUTION_TIME_QUERY);
+
+		preparedStmtListAverageResolutionTime.add(tenantId);
+
+		return query.toString();
+	}
 
 }

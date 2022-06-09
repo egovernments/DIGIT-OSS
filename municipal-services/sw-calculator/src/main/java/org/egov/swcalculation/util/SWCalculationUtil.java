@@ -141,11 +141,13 @@ public class SWCalculationUtil {
 	}
 
 
-	public List<Property> propertySearch(RequestInfo requestInfo, Set<String> propertyIds, String tenantId) {
+
+	public List<Property> propertySearch(RequestInfo requestInfo, Set<String> propertyIds, String tenantId, Long limit) {
 
 		PropertyCriteria propertyCriteria = PropertyCriteria.builder()
 				.propertyIds(propertyIds)
 				.tenantId(tenantId)
+				.limit(limit)
 				.build();
 
 		StringBuilder url = getPropertyURL(propertyCriteria);
@@ -445,6 +447,12 @@ public class SWCalculationUtil {
 			String uuidString = criteria.getUuids().stream().map(uuid -> uuid).collect(Collectors.toSet()).stream()
 					.collect(Collectors.joining(","));
 			url.append(uuids).append(uuidString);
+		}
+		if ((criteria.getLimit()) != null) {
+			if (isAnyParameterMatch)
+				url.append("&");
+			isAnyParameterMatch = true;
+			url.append("limit=").append(criteria.getLimit());
 		}
 		return url;
 	}

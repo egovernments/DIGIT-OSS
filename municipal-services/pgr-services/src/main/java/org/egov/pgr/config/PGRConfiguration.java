@@ -202,6 +202,12 @@ public class PGRConfiguration {
 
     @Value("${pgr.business.level.sla}")
     private Long businessLevelSla;
+    
+    @Value("${egov.dynamicdata.period}")
+    private String numberOfDays;
+    
+    @Value("${egov.complaints.category}")
+    private String complaintTypes;
 
 
     // central-instance configs
