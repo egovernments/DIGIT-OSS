@@ -120,7 +120,7 @@ public class PayGovGateway implements Gateway {
 
     @Override
     public String generateRedirectFormData(Transaction transaction,Environment environment) {
-        //PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, transaction.getTenantId());
+        PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, transaction.getTenantId());
 
     	/*
 		 *
@@ -263,7 +263,7 @@ public class PayGovGateway implements Gateway {
 
     @Override
     public Transaction fetchStatus(Transaction currentStatus,Environment environment, Map<String, String> param) {
-        //PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, currentStatus.getTenantId());
+        PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, currentStatus.getTenantId());
         log.debug("tx input "+ currentStatus);
         try {
             // create auth credentials
