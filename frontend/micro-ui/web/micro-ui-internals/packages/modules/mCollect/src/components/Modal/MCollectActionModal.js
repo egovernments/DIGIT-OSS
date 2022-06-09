@@ -52,7 +52,6 @@ const ActionModal = ({ t, action, tenantId, closeModal, submitAction, applicatio
           })
         );
       default:
-        console.debug("default case");
         break;
     }
   }, [action]);

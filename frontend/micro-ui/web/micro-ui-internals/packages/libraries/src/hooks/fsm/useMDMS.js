@@ -68,8 +68,29 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
   };
 
   const useGenderDetails = () => {
-    return useQuery("FSM_GENDER_DETAILS", () => MdmsService.getFSMGenderType(tenantId, moduleCode ,type), config);
+    return useQuery("FSM_GENDER_DETAILS", () => MdmsService.getFSMGenderType(tenantId, moduleCode, type), config);
   };
+
+  const useFSTPORejectionReason = () => {
+    return useQuery("FSM_FSTPO_REJECTION", () => MdmsService.getFSTPORejectionReason(tenantId, moduleCode, type), queryConfig);
+  };
+
+  const usePaymentType = () => {
+    return useQuery("FSM_PAYMENT_TYPE", () => MdmsService.getFSMPaymentType(tenantId, moduleCode, type), queryConfig);
+  };
+
+  const useTripNumber = () => {
+    return useQuery("FSM_TRIP_NUMBER", () => MdmsService.getFSMTripNumber(tenantId, moduleCode, type), queryConfig);
+  };
+
+  const useReceivedPaymentType = () => {
+    return useQuery("FSM_RECEIVED_PAYMENT_TYPE", () => MdmsService.getFSMReceivedPaymentType(tenantId, moduleCode, type), queryConfig);
+  };
+
+  const useWSTaxHeadMaster = () => {
+    return useQuery("FSM_RECEIVED_PAYMENT_TYPE", () => MdmsService.getWSTaxHeadMaster(tenantId, moduleCode, type), queryConfig);
+  };
+
 
   switch (type) {
     case "SanitationType":
@@ -113,6 +134,18 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
       return usePostFieldsConfig();
     case "FSMGenderType":
       return useGenderDetails();
+    case "FSTPORejectionReason":
+      return useFSTPORejectionReason();
+    case "PaymentType":
+      return usePaymentType();
+    case "TripNumber":
+      return useTripNumber();
+    case "ReceivedPaymentType":
+      return useReceivedPaymentType();
+    case "WSTaxHeadMaster":
+      return useWSTaxHeadMaster()
+    default:
+      return null;
   }
 };
 

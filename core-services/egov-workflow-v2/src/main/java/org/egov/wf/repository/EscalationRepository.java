@@ -2,7 +2,6 @@ package org.egov.wf.repository;
 
 
 import org.egov.wf.repository.querybuilder.EscalationQueryBuilder;
-import org.egov.wf.util.CommonUtil;
 import org.egov.wf.web.models.EscalationSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,16 +21,11 @@ public class EscalationRepository {
 
     private EscalationQueryBuilder queryBuilder;
 
-    private CommonUtil commonUtil;
-
     @Autowired
-    public EscalationRepository(JdbcTemplate jdbcTemplate, EscalationQueryBuilder queryBuilder, CommonUtil commonUtil) {
+    public EscalationRepository(JdbcTemplate jdbcTemplate, EscalationQueryBuilder queryBuilder) {
         this.jdbcTemplate = jdbcTemplate;
         this.queryBuilder = queryBuilder;
-        this.commonUtil = commonUtil;
     }
-
-
 
 
     /**
@@ -43,7 +37,6 @@ public class EscalationRepository {
 
         List<Object> preparedStmtList = new ArrayList<>();
         String query = queryBuilder.getEscalationQuery(criteria, preparedStmtList);
-        query = commonUtil.replaceSchemaPlaceholder(query, criteria.getTenantId());
         List<String> businessIds = jdbcTemplate.query(query, preparedStmtList.toArray(),  new SingleColumnRowMapper<>(String.class));
         return  businessIds;
 

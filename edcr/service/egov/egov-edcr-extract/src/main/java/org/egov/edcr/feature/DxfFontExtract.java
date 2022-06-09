@@ -6,7 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.edcr.entity.blackbox.PlanDetail;
 import org.kabeja.dxf.DXFBlock;
 import org.kabeja.dxf.DXFConstants;
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DxfFontExtract extends FeatureExtract {
 
-    private static final Logger LOG = Logger.getLogger(DxfFontExtract.class);
+    private static final Logger LOG = LogManager.getLogger(DxfFontExtract.class);
 
     @Override
     public PlanDetail extract(PlanDetail planDetail) {

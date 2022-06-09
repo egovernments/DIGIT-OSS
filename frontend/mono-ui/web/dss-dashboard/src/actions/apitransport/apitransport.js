@@ -37,7 +37,6 @@ export default function dispatchAPI(api, page) {
                 })
         }
     } else if (api.status === 401) {
-        console.log('====================== logout    ==========================')            
     } else {
         return dispatch => {
             dispatch(apiStatusAsync(true, false, ''))

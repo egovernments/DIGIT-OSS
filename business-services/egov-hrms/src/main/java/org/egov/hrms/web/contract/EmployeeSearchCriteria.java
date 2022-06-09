@@ -2,8 +2,6 @@ package org.egov.hrms.web.contract;
 
 import java.util.List;
 
-import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -13,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.validation.constraints.Size;
 
 
 @AllArgsConstructor
@@ -55,7 +55,8 @@ public class EmployeeSearchCriteria {
 	public Integer offset;
 	
 	public Integer limit;
-
+	
+	
 	public boolean isCriteriaEmpty(EmployeeSearchCriteria criteria) {
 		if(CollectionUtils.isEmpty(criteria.getCodes()) && CollectionUtils.isEmpty(criteria.getNames()) 
 				&& CollectionUtils.isEmpty(criteria.getDepartments()) && CollectionUtils.isEmpty(criteria.getDesignations())

@@ -1,72 +1,17 @@
 package org.egov.pt.service;
 
-import static org.egov.pt.util.PTConstants.ACTION_PAY;
-import static org.egov.pt.util.PTConstants.ACTION_UPDATE_MOBILE;
-import static org.egov.pt.util.PTConstants.CHANNEL_NAME_EMAIL;
-import static org.egov.pt.util.PTConstants.CHANNEL_NAME_EVENT;
-import static org.egov.pt.util.PTConstants.CHANNEL_NAME_SMS;
-import static org.egov.pt.util.PTConstants.CREATED_STRING;
-import static org.egov.pt.util.PTConstants.CREATE_STRING;
-import static org.egov.pt.util.PTConstants.EVENT_PAY_BUSINESSSERVICE;
-import static org.egov.pt.util.PTConstants.EVENT_PAY_PROPERTYID;
-import static org.egov.pt.util.PTConstants.EVENT_PAY_TENANTID;
-import static org.egov.pt.util.PTConstants.LOCALIZATION_CODES_JSONPATH;
-import static org.egov.pt.util.PTConstants.LOCALIZATION_MSGS_JSONPATH;
-import static org.egov.pt.util.PTConstants.MT_NO_WORKFLOW;
-import static org.egov.pt.util.PTConstants.MUTATION_BUSINESSSERVICE;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_AMOUNT;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_APPID;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_MUTATION_LINK;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PAY_LINK;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTYID;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_PROPERTY_LINK;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_STATUS;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_TENANTID;
-import static org.egov.pt.util.PTConstants.NOTIFICATION_UPDATED_CREATED_REPLACE;
-import static org.egov.pt.util.PTConstants.PT_ALTERNATE_NUMBER;
-import static org.egov.pt.util.PTConstants.PT_CORRECTION_PENDING;
-import static org.egov.pt.util.PTConstants.PT_NEW_MOBILENUMBER;
-import static org.egov.pt.util.PTConstants.PT_OLD_MOBILENUMBER;
-import static org.egov.pt.util.PTConstants.PT_OWNER_NAME;
-import static org.egov.pt.util.PTConstants.PT_UPDATE_ALTERNATE_NUMBER;
-import static org.egov.pt.util.PTConstants.PT_UPDATE_OWNER_NUMBER;
-import static org.egov.pt.util.PTConstants.UPDATED_STRING;
-import static org.egov.pt.util.PTConstants.UPDATE_NO_WORKFLOW;
-import static org.egov.pt.util.PTConstants.UPDATE_STRING;
-import static org.egov.pt.util.PTConstants.VIEW_PROPERTY_CODE;
-import static org.egov.pt.util.PTConstants.WF_MT_STATUS_APPROVED_CODE;
-import static org.egov.pt.util.PTConstants.WF_MT_STATUS_CHANGE_CODE;
-import static org.egov.pt.util.PTConstants.WF_MT_STATUS_OPEN_CODE;
-import static org.egov.pt.util.PTConstants.WF_MT_STATUS_PAID_CODE;
-import static org.egov.pt.util.PTConstants.WF_MT_STATUS_PAYMENT_PENDING_CODE;
-import static org.egov.pt.util.PTConstants.WF_NO_WORKFLOW;
-import static org.egov.pt.util.PTConstants.WF_STATUS_APPROVED;
-import static org.egov.pt.util.PTConstants.WF_STATUS_DOCVERIFIED;
-import static org.egov.pt.util.PTConstants.WF_STATUS_DOCVERIFIED_LOCALE;
-import static org.egov.pt.util.PTConstants.WF_STATUS_FIELDVERIFIED;
-import static org.egov.pt.util.PTConstants.WF_STATUS_FIELDVERIFIED_LOCALE;
-import static org.egov.pt.util.PTConstants.WF_STATUS_OPEN;
-import static org.egov.pt.util.PTConstants.WF_STATUS_OPEN_LOCALE;
-import static org.egov.pt.util.PTConstants.WF_STATUS_PAID;
-import static org.egov.pt.util.PTConstants.WF_STATUS_PAYMENT_PENDING;
-import static org.egov.pt.util.PTConstants.WF_STATUS_REJECTED;
-import static org.egov.pt.util.PTConstants.WF_STATUS_REJECTED_LOCALE;
-import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_APPROVED_CODE;
-import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_CHANGE_CODE;
-import static org.egov.pt.util.PTConstants.WF_UPDATE_STATUS_OPEN_CODE;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.jayway.jsonpath.Filter;
+import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.mdms.model.MasterDetail;
+import org.egov.mdms.model.MdmsCriteria;
+import org.egov.mdms.model.MdmsCriteriaReq;
+import org.egov.mdms.model.ModuleDetail;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.enums.CreationReason;
@@ -85,11 +30,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import static com.jayway.jsonpath.Criteria.where;
+import static com.jayway.jsonpath.Filter.filter;
+import static org.egov.pt.util.PTConstants.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
 
-import com.jayway.jsonpath.JsonPath;
-
-import lombok.extern.slf4j.Slf4j;
+import static org.egov.pt.util.PTConstants.*;
 @Slf4j
 @Service
 public class NotificationService {
@@ -115,7 +63,7 @@ public class NotificationService {
 		ProcessInstance wf = property.getWorkflow();
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
 		state = getStateFromWf(wf, configs.getIsMutationWorkflowEnabled());
-		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
+		String localisedState = getLocalisedState(wf, completeMsgs);
 
 		switch (state) {
 
@@ -172,7 +120,7 @@ public class NotificationService {
 		Boolean isCreate =  CreationReason.CREATE.equals(property.getCreationReason());
 		String state = getStateFromWf(wf, configs.getIsWorkflowEnabled());
 		String completeMsgs = notifUtil.getLocalizationMessages(property.getTenantId(), propertyRequest.getRequestInfo());
-		String localisedState = getLocalisedState(wf.getState().getState(), completeMsgs);
+		String localisedState = getLocalisedState(wf, completeMsgs);
 		switch (state) {
 
 		case WF_NO_WORKFLOW:
@@ -213,7 +161,7 @@ public class NotificationService {
 	private String getMsgForUpdate(Property property, String msgCode, String completeMsgs, String createUpdateReplaceString) {
 
 		String url = notifUtil.getShortenedUrl(
-					   notifUtil.getHost(property.getTenantId()).concat(configs.getViewPropertyLink()
+					   configs.getUiAppHost().concat(configs.getViewPropertyLink()
 					  .replace(NOTIFICATION_PROPERTYID, property.getPropertyId())
 					  .replace(NOTIFICATION_TENANTID, property.getTenantId())));
 		
@@ -235,39 +183,9 @@ public class NotificationService {
 	 */
 	private String getMsgForMutation (Property property, String CompleteMsgs, String statusCode, String urlCode) {
 
-		String url = statusCode.equalsIgnoreCase(WF_STATUS_PAYMENT_PENDING) ? getPayUrl(property) : getMutationUrl(property);
+		String url = statusCode.equalsIgnoreCase(WF_STATUS_PAYMENT_PENDING) ? notifUtil.getPayUrl(property) : notifUtil.getMutationUrl(property);
 		return notifUtil.getMessageTemplate(statusCode, CompleteMsgs).replace(urlCode, url);
 	}
-
-	/**
-	 * Prepares and return url for mutation view screen
-	 * 
-	 * @param property
-	 * @return
-	 */
-	private String getMutationUrl(Property property) {
-		
-		return notifUtil.getShortenedUrl(
-				 notifUtil.getHost(property.getTenantId()).concat(configs.getViewMutationLink()
-				.replace(NOTIFICATION_APPID, property.getAcknowldgementNumber())
-				.replace(NOTIFICATION_TENANTID, property.getTenantId())));
-	}
-	
-	/**
-	 * Prepares and return url for property view screen
-	 * 
-	 * @param property
-	 * @return
-	 */
-	private String getPayUrl(Property property) {
-		
-		return notifUtil.getShortenedUrl(notifUtil.getHost(property.getTenantId())
-						.concat(configs.getPayLink()
-						.replace(EVENT_PAY_BUSINESSSERVICE, MUTATION_BUSINESSSERVICE)
-						.replace(EVENT_PAY_PROPERTYID, property.getAcknowldgementNumber())
-						.replace(EVENT_PAY_TENANTID, property.getTenantId())));
-	}
-
 
 	/**
 	 * replaces common variable for all messages
@@ -286,7 +204,12 @@ public class NotificationService {
 		return msg;
 	}
 	
-	private String getLocalisedState(String state, String completeMsgs) {
+	private String getLocalisedState(ProcessInstance workflow, String completeMsgs) {
+		
+		String state ="";
+		if(configs.getIsWorkflowEnabled()) {
+			state = workflow.getState().getState();
+		}
 		
 		switch (state) {
 			
@@ -371,33 +294,28 @@ public class NotificationService {
 			if (owner.getMobileNumber() != null)
 				mobileNumberToOwner.put(owner.getMobileNumber(), owner.getName());
 			    mobileNumbers.add(owner.getMobileNumber());
-		});		//EMAIL block TBD
-//			Map<String, String> mapOfPhnoAndEmail = notifUtil.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
-//			String messageTemplate = fetchContentFromLocalization(request.getRequestInfo(), tenantId, "rainmaker-pt", "PT_NOTIFICATION_EMAIL");
-//			messageTemplate = messageTemplate.replace("{MESSAGE}",msg);
-//			messageTemplate = messageTemplate.replace(NOTIFICATION_OWNERNAME,NOTIFICATION_EMAIL);
+		});
+
 
 		List<SMSRequest> smsRequests = notifUtil.createSMSRequest(msg, mobileNumberToOwner);
-		notifUtil.sendSMS(smsRequests, property.getTenantId());
 
 		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
-			notifUtil.sendSMS(smsRequests, tenantId);
-		}
-		if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
+			notifUtil.sendSMS(smsRequests);
+
 			Boolean isActionReq = false;
 			if(state.equalsIgnoreCase(PT_CORRECTION_PENDING))
 				isActionReq = true;
+
 			List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
-			notifUtil.sendEventNotification(new EventRequest(requestInfo, events), tenantId);
+			notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
 		}
 		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
 			List<EmailRequest> emailRequests = notifUtil.createEmailRequestFromSMSRequests(requestInfo,smsRequests, tenantId);
-			notifUtil.sendEmail(emailRequests, tenantId);
+			notifUtil.sendEmail(emailRequests);
 		}
 	}
 
-	private String fetchContentFromLocalization(RequestInfo requestInfo, String tenantId, String module, String code) {
-
+	private String fetchContentFromLocalization(RequestInfo requestInfo, String tenantId, String module, String code){
 		String message = null;
 		List<String> codes = new ArrayList<>();
 		List<String> messages = new ArrayList<>();
@@ -463,7 +381,6 @@ public class NotificationService {
 			String msg, Map<String, String> uuidToMobileNumber) {
 		
 		Property property = request.getProperty();
-		String tenantId = property.getTenantId();
 		RequestInfo requestInfo = request.getRequestInfo();
 		List<String> configuredChannelNames =  notifUtil.fetchChannelList(requestInfo, request.getProperty().getTenantId(), PTConstants.PT_BUSINESSSERVICE, ACTION_UPDATE_MOBILE);
 		Set<String> mobileNumbers = new HashSet<>();
@@ -482,20 +399,20 @@ public class NotificationService {
 
 				if(configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
 					List<SMSRequest> smsRequests = notifUtil.createSMSRequest(customizedMsg, mobileNumberToOwner);
-					notifUtil.sendSMS(smsRequests, tenantId);
+					notifUtil.sendSMS(smsRequests);
 				}
 
 				if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
 					Boolean isActionReq = true;
 					List<SMSRequest> smsRequests = notifUtil.createSMSRequest(customizedMsg, mobileNumberToOwner);
 					List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
-					notifUtil.sendEventNotification(new EventRequest(requestInfo, events), tenantId);
+					notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
 				}
 
 				if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
 					Map<String, String> mapOfPhnoAndEmail = notifUtil.fetchUserEmailIds(mobileNumbers, requestInfo, request.getProperty().getTenantId());
 					List<EmailRequest> emailRequests = notifUtil.createEmailRequest(requestInfo, customizedMsg, mapOfPhnoAndEmail);
-					notifUtil.sendEmail(emailRequests, tenantId);
+					notifUtil.sendEmail(emailRequests);
 				}
 				}
 		});
@@ -519,7 +436,6 @@ public class NotificationService {
 			Map<String, String> uuidToAlternateMobileNumber) {
 		
 		Property property = request.getProperty();
-		String tenantId = property.getTenantId();
 		RequestInfo requestInfo = request.getRequestInfo();
 		List<String> configuredChannelNames =  notifUtil.fetchChannelList(request.getRequestInfo(), request.getProperty().getTenantId(), PTConstants.PT_BUSINESSSERVICE, PTConstants.ACTION_ALTERNATE_MOBILE);
 		Set<String> mobileNumbers = new HashSet<>();
@@ -535,20 +451,20 @@ public class NotificationService {
 
 				if(configuredChannelNames.contains(CHANNEL_NAME_SMS)) {
 					List<SMSRequest> smsRequests = notifUtil.createSMSRequest(customizedMsg, mobileNumberToOwner);
-					notifUtil.sendSMS(smsRequests, tenantId);
+					notifUtil.sendSMS(smsRequests);
 				}
 
 				if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)) {
 					Boolean isActionReq = true;
 					List<SMSRequest> smsRequests = notifUtil.createSMSRequest(customizedMsgForApp, mobileNumberToOwner);
 					List<Event> events = notifUtil.enrichEvent(smsRequests, requestInfo, property.getTenantId(), property, isActionReq);
-					notifUtil.sendEventNotification(new EventRequest(requestInfo, events), tenantId);
+					notifUtil.sendEventNotification(new EventRequest(requestInfo, events));
 				}
 
 				if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)) {
 					Map<String, String> mapOfPhnoAndEmail = notifUtil.fetchUserEmailIds(mobileNumbers, requestInfo, request.getProperty().getTenantId());
 					List<EmailRequest> emailRequests = notifUtil.createEmailRequest(requestInfo, customizedMsg, mapOfPhnoAndEmail);
-				 	notifUtil.sendEmail(emailRequests, tenantId);
+				 	notifUtil.sendEmail(emailRequests);
 				}
 			}
 		});

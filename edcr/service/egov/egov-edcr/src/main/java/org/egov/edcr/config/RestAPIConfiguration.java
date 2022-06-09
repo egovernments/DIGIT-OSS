@@ -54,6 +54,7 @@ import org.egov.infra.rest.support.DefaultAPIRequestEnricher;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class RestAPIConfiguration {
@@ -67,4 +68,9 @@ public class RestAPIConfiguration {
     public APIRequestEnricherFilter apiFilter() {
         return new APIRequestEnricherFilter();
     }
+    
+    @Bean
+	public RestTemplate restTemplate() {
+    	return new RestTemplate();
+	}
 }

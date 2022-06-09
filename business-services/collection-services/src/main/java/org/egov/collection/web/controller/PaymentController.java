@@ -51,6 +51,7 @@ import org.egov.collection.model.Payment;
 import org.egov.collection.model.PaymentRequest;
 import org.egov.collection.model.PaymentResponse;
 import org.egov.collection.model.PaymentSearchCriteria;
+import org.egov.collection.service.MigrationService;
 import org.egov.collection.service.PaymentService;
 import org.egov.collection.service.PaymentWorkflowService;
 import org.egov.collection.web.contract.PaymentWorkflowRequest;
@@ -70,8 +71,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 @RequestMapping("/payments")
@@ -82,6 +86,9 @@ public class PaymentController {
 
     @Autowired
     private PaymentWorkflowService workflowService;
+
+    @Autowired
+    private MigrationService migrationService;
 
     @RequestMapping(path = {"/_search","/{moduleName}/_search"}, method = RequestMethod.POST)
     @ResponseBody
@@ -155,6 +162,19 @@ public class PaymentController {
 
         PaymentResponse paymentResponse = new PaymentResponse(responseInfo, payments);
         return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/_migrate", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<?> workflow(@RequestBody @Valid RequestInfoWrapper requestInfoWrapper,@RequestParam(required = false) Integer offset,
+                                      @RequestParam(required = false) String tenantId, @RequestParam(required = true) Integer batchSize) throws JsonProcessingException {
+
+        if(null == offset)
+            offset = 0;
+
+        migrationService.migrate(requestInfoWrapper.getRequestInfo(), offset, batchSize, tenantId);
+        return new ResponseEntity<>(HttpStatus.OK );
+
     }
 
     @RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)

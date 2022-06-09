@@ -68,7 +68,8 @@ import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.infra.filestore.service.FileStoreService;
 import org.egov.infra.reporting.engine.ReportService;
 import org.egov.infra.reporting.engine.jasper.JasperReportService;
@@ -89,7 +90,7 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class ApplicationConfiguration {
 
-    private static final Logger LOG = Logger.getLogger(ApplicationConfiguration.class);
+    private static final Logger LOG = LogManager.getLogger(ApplicationConfiguration.class);
 
     @Resource(name = "tenants")
     private List<String> tenants;

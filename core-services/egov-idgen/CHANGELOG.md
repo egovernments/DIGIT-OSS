@@ -1,5 +1,8 @@
 All notable changes to this module will be documented in this file.
 
+## 1.2.3 - 2022-01-13
+- Updated to log4j2 version 2.17.1
+
 ## 1.2.2 - 2021-05-11
 
 - TimeZone is now made configurable

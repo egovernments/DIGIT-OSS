@@ -37,7 +37,9 @@ import DocumentDetails from "./components/Documents/DocumentDetails";
 import Surveys from "./pages/employee/CitizenSurveys";
 import FillSurvey from './pages/citizen/CitizenSurvey/FillSurvey'
 import CitizenSurveyForm from './components/Surveys/CitizenSurveyForm';
+import ShowSurvey from './pages/citizen/CitizenSurvey/ShowSurvey'
  
+import SurveyResults from "./pages/employee/CitizenSurveys/SurveyResults";
 const EventsBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
   const crumbs = [
@@ -295,6 +297,8 @@ const componentsToRegister = {
   SurveyList,
   FillSurvey,
   CitizenSurveyForm,
+  ShowSurvey,
+  SurveyResults
 };
 
 export const initEngagementComponents = () => {

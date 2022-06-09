@@ -17,6 +17,7 @@ const CreateOCEDCR = ({ parentRoute }) => {
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("OC_EDCR_CREATE", {});
   const [isShowToast, setIsShowToast] = useState(null);
   const [isSubmitBtnDisable, setIsSubmitBtnDisable] = useState(false);
+  Digit.SessionStorage.set("EDCR_BACK", "IS_EDCR_BACK");
 
   const stateId = Digit.ULBService.getStateId();
   let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);

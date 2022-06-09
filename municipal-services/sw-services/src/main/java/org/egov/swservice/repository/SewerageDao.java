@@ -10,9 +10,12 @@ import org.egov.swservice.web.models.SewerageConnectionRequest;
 public interface SewerageDao {
 	void saveSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest);
 
-	List<SewerageConnection> getSewerageConnectionList(SearchCriteria criteria,
-			RequestInfo requestInfo);
-
+	List<SewerageConnection> getSewerageConnectionList(SearchCriteria criteria, RequestInfo requestInfo);
+	
+	Integer getSewerageConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo);
+	
 	void updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest, boolean isStateUpdatable);
 
+	List<SewerageConnection> getSewerageConnectionPlainSearchList(SearchCriteria criteria,
+			RequestInfo requestInfo);
 }

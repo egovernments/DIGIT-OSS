@@ -8,7 +8,7 @@ import UpdateResponse from './responses/update'
 import DeleteResponse from "./responses/delete"
 //import EditSurvey from "./EditSurvey"
 import SurveyDetails from "./SurveyDetails"
-
+import SurveyResults from "./SurveyResults"
 
 const Surveys = ({match:{path} = {}, tenants, parentRoute}) => {
     return <Switch>
@@ -16,6 +16,7 @@ const Surveys = ({match:{path} = {}, tenants, parentRoute}) => {
         <PrivateRoute path={`${path}/create`} component={props => <NewSurvey {...props} />} />
         <PrivateRoute path={`${path}/inbox/details/:id`} component={props => <SurveyDetails {...props} />} />
         {/* <PrivateRoute path={`${path}/inbox/edit/:id`} component={props => <EditSurvey {...props} />} /> */}
+        <PrivateRoute path={`${path}/inbox/results/:id`} component={(props) => <SurveyResults {...props} />} />
         <PrivateRoute path={`${path}/inbox`} component={props => <Inbox {...props} tenants={tenants} parentRoute={parentRoute} />} />
         <PrivateRoute path={`${path}/create-response`} component={(props) => <CreateResponse {...props} />} />
         <PrivateRoute path={`${path}/update-response`} component={(props) => <UpdateResponse {...props} />} />

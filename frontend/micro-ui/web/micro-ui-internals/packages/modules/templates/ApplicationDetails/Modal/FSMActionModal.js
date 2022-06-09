@@ -264,7 +264,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       case "FSM_PAY":
         return history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${applicationNumber}`);
       default:
-        console.debug("default case");
         break;
     }
   }, [action, isDsoLoading, dso, vehicleMenu, rejectionReason, vehicleNo, vehicleNoList, Reason]);

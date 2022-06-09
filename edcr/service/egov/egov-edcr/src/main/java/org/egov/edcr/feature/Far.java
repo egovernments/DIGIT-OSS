@@ -97,7 +97,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.egov.common.entity.dcr.helper.OccupancyHelperDetail;
 import org.egov.common.entity.edcr.Block;
 import org.egov.common.entity.edcr.Building;
@@ -118,7 +119,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class Far extends FeatureProcess {
 
-    private static final Logger LOG = Logger.getLogger(Far.class);
+    private static final Logger LOG = LogManager.getLogger(Far.class);
 
     private static final String VALIDATION_NEGATIVE_FLOOR_AREA = "msg.error.negative.floorarea.occupancy.floor";
     private static final String VALIDATION_NEGATIVE_EXISTING_FLOOR_AREA = "msg.error.negative.existing.floorarea.occupancy.floor";

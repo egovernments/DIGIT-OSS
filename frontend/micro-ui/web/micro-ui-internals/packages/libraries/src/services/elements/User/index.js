@@ -13,7 +13,7 @@ export const UserService = {
       url: Urls.Authenticate,
       data,
       headers: {
-        authorization: "Basic ZWdvdi11c2VyLWNsaWVudDo=",
+        authorization: `Basic ${window?.globalConfigs?.getConfig("JWT_TOKEN")||"ZWdvdi11c2VyLWNsaWVudDo="}`,
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
@@ -44,6 +44,9 @@ export const UserService = {
     const userType = UserService.getType();
     try {
       await UserService.logoutUser();
+    } catch (e) {
+    }
+    finally{
       window.localStorage.clear();
       window.sessionStorage.clear();
       if (userType === "citizen") {
@@ -51,8 +54,6 @@ export const UserService = {
       } else {
         window.location.replace("/digit-ui/employee/user/language-selection");
       }
-    } catch (e) {
-      console.error(e);
     }
   },
   sendOtp: (details, stateCode) =>
@@ -102,10 +103,11 @@ export const UserService = {
   changePassword: (details, stateCode) =>
     ServiceRequest({
       serviceName: "changePassword",
-      url: Urls.ChangePassword,
+      url: Urls.ChangePassword1,
       data: {
         ...details,
       },
+      auth: true,
       params: { tenantId: stateCode },
     }),
 

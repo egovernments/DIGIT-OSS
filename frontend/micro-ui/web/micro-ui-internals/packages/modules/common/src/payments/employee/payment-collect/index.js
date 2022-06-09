@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { RadioButtons, FormComposer, Dropdown, CardSectionHeader, Loader, Toast, Card, Header } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import { useHistory, useParams, useRouteMatch } from "react-router-dom";
+import { useHistory, useParams, useRouteMatch, useLocation } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { useCashPaymentDetails } from "./ManualReciept";
 import { useCardPaymentDetails } from "./card";
@@ -12,14 +12,17 @@ import { BillDetailsFormConfig } from "./Bill-details/billDetails";
 export const CollectPayment = (props) => {
   // const { formData, addParams } = props;
   const { workflow: ModuleWorkflow } = Digit.Hooks.useQueryParams();
-  console.debug(ModuleWorkflow);
   const { t } = useTranslation();
   const history = useHistory();
   const queryClient = useQueryClient();
 
   const { path: currentPath } = useRouteMatch();
-  const { consumerCode, businessService } = useParams();
+  let { consumerCode, businessService } = useParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const search = useLocation().search;
+  if (window.location.href.includes("ISWSAPP")) consumerCode = new URLSearchParams(search).get("applicationNumber");
+  if (window.location.href.includes("ISWSCON")) consumerCode = decodeURIComponent(consumerCode);
+
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
 
@@ -35,6 +38,12 @@ export const CollectPayment = (props) => {
 
   const [formState, setFormState] = useState({});
   const [toast, setToast] = useState(null);
+
+  useEffect(() => {
+    if (paymentdetails?.Bill && paymentdetails.Bill.length === 0) {
+      setToast({ key: "error", action: "CS_BILL_NOT_FOUND" });
+    }
+  }, [paymentdetails]);
 
   const defaultPaymentModes = [
     { code: "CASH", label: t("COMMON_MASTERS_PAYMENTMODE_CASH") },
@@ -248,7 +257,7 @@ export const CollectPayment = (props) => {
       head: t("PAYMENT_MODE_HEAD"),
       body: [
         {
-          withoutLabel: true,
+          label: t("PAYMENT_MODE_LABEL"),
           type: "custom",
           populators: {
             name: "paymentMode",
@@ -283,7 +292,8 @@ export const CollectPayment = (props) => {
     if (
       BillDetailsFormConfig({ consumerCode, businessService }, t)[ModuleWorkflow ? ModuleWorkflow : businessService] ||
       ModuleWorkflow ||
-      businessService === "TL"
+      businessService === "TL" ||
+      businessService.includes("ONE_TIME_FEE")
     ) {
       config.splice(0, 1);
     }
@@ -300,10 +310,9 @@ export const CollectPayment = (props) => {
 
   return (
     <React.Fragment>
-      <Header>{t("PAYMENT_COLLECT")}</Header>
+      <Header styles={{ marginLeft: "15px" }}>{t("PAYMENT_COLLECT")}</Header>
       <FormComposer
         cardStyle={{ paddingBottom: "100px" }}
-        //heading={t("PAYMENT_COLLECT")}
         label={t("PAYMENT_COLLECT_LABEL")}
         config={getFormConfig()}
         onSubmit={onSubmit}
@@ -318,7 +327,6 @@ export const CollectPayment = (props) => {
           }
         }}
       ></FormComposer>
-
       {toast && (
         <Toast
           error={toast.key === "error"}

@@ -94,7 +94,7 @@ const EDCRAcknowledgement = (props) => {
             {t("EDCR_DOWNLOAD_SCRUTINY_REPORT_LABEL")}
           </div>
           <div style={{padding: "0px 10px"}}>
-            <Link to={{pathname: `/digit-ui/citizen/obps/${bpaLinks?.linkData?.flow?.toLowerCase()}/${edcrData?.appliactionType?.toLowerCase()}/${edcrData?.applicationSubType?.toLowerCase()}/docs-required`, state: bpaLinks}} >
+            <Link to={{pathname: `/digit-ui/citizen/obps/${bpaLinks?.linkData?.flow?.toLowerCase()}/${edcrData?.appliactionType?.toLowerCase()}/${edcrData?.applicationSubType?.toLowerCase()}/docs-required`, state: bpaLinks}} replace>
               <SubmitBar label={t("BPA_APPLY_FOR_BPA_LABEL")} />
               <CardText className="button-sub-text"  style={{fontSize: "14px", lineHeight: "16px", textAlign: "center", margin: "0px", marginTop: "4px", fontWeight: "400", color: "#0B0C0C"}}>{t("BPA_FOR_NEW_CONSTRUCTION_LABEL")}</CardText>
             </Link>

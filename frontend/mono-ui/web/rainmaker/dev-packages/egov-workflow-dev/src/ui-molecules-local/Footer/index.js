@@ -203,7 +203,6 @@ class Footer extends React.Component {
       );
     } catch (exception) {
       this.props.hideSpinner();
-      console.log(exception);
       toggleSnackbar(
         true,
         {

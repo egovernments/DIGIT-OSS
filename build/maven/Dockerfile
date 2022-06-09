@@ -1,3 +1,4 @@
+
 #FROM egovio/alpine-maven-builder-jdk-8:1-master-NA-6036091e AS build
 FROM ghcr.io/egovernments/alpine-maven-builder-jdk-8:1-master-na-6036091e AS build
 ARG WORK_DIR

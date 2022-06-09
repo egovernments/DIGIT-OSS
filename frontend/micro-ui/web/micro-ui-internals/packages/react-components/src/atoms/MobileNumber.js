@@ -20,7 +20,7 @@ const MobileNumber = (props) => {
             +91
           </span>
         ) : null}
-        <div className={`text-input ${props.className}`}>
+        <div className={`text-input ${user_type === "employee"? "" : "text-mobile-input-width"} ${props.className}`}>
           <input
             type={"text"}
             name={props.name}

@@ -8,12 +8,13 @@ const SearchFormFieldsComponents = ({ registerRef, controlSearchForm, searchForm
     const { t } = useTranslation()
     const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
     const tenantId = Digit.ULBService.getCurrentTenantId();
-    const userInfo = Digit.UserService.getUser().info;
-    const userUlbs = ulbs.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(alphabeticalSortFunctionForTenantsBasedOnName);
+    const userInfo = Digit.SessionStorage.get("citizen.userRequestObject")
+    const userUlbs = ulbs.filter(ulb => userInfo?.info?.roles?.some(role => role?.tenantId === ulb?.code)).sort(alphabeticalSortFunctionForTenantsBasedOnName);
     const selectedTenat = useMemo(() => {
         const filtered = ulbs.filter((item) => item.code === tenantId)
         return filtered;
     }, [ulbs])
+    
     /**
      * ToDo how to display default value correctly ask @egov-saurabh
      */

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 const BPACitizenHomeScreen = ({ parentRoute }) => {
   const userInfo = Digit.UserService.getUser();
-  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const userRoles = userInfo?.info?.roles?.map((roleData) => roleData.code);
   const stateCode = Digit.ULBService.getStateId();
   const [stakeHolderRoles, setStakeholderRoles] = useState(false);
   const { data: stakeHolderDetails, isLoading: stakeHolderDetailsLoading } = Digit.Hooks.obps.useMDMS(
@@ -82,10 +82,10 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
           roles.push(role);
         });
       });
-      const uniqueRoles = roles.filter((item, i, ar) => ar.indexOf(item) === i);
+      const uniqueRoles = roles?.filter((item, i, ar) => ar.indexOf(item) === i);
       let isRoute = false;
       uniqueRoles?.map((unRole) => {
-        if (userRoles.includes(unRole) && !isRoute) {
+        if (userRoles?.includes(unRole) && !isRoute) {
           isRoute = true;
         }
       });
@@ -116,6 +116,8 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
   useEffect(() => {
     clearParams();
   }, []);
+
+  Digit.SessionStorage.set("EDCR_BACK", "IS_EDCR_BACK");
 
   if (showToast) return <Toast error={true} label={t(showToast?.message)} isDleteBtn={true} onClose={closeToast} />;
 
@@ -149,7 +151,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
         },
       ],
       className: "CitizenHomeCard",
-      styles: {padding: "0px", minWidth: "90%", minHeight: "90%"}
+      styles: { padding: "0px", minWidth: "90%", minHeight: "90%" },
     },
     {
       title: t("ACTION_TEST_EDCR_SCRUTINY"),
@@ -164,28 +166,31 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
           i18nKey: t("BPA_OC_PLAN_SCRUTINY_FOR_NEW_CONSTRUCTION_LABEL"),
         },
       ],
-      styles: {minWidth: "90%", minHeight: "90%"}
+      styles: { minWidth: "90%", minHeight: "90%" },
     },
     {
       title: t("ACTION_TEST_BPA_STAKE_HOLDER_HOME"),
       Icon: <BPAIcon className="fill-path-primary-main" />,
       links: bpaLinks,
-      styles: {minWidth: "90%", minHeight: "90%"}
+      styles: { minWidth: "90%", minHeight: "90%" },
     },
   ];
 
   const homeScreen = (
-    <div className="mainContent citizenAllServiceGrid">
+    <div className="mainContent">
       {homeDetails.map((data) => {
         return (
           <div>
-            {data.name === "employeeCard" ? <EmployeeModuleCard {...data} /> :
-              <CitizenHomeCard header={data.title} links={data.links} Icon={() => data.Icon} styles={data?.styles} />}
+            {data.name === "employeeCard" ? (
+              <EmployeeModuleCard {...data} />
+            ) : (
+              <CitizenHomeCard header={data.title} links={data.links} Icon={() => data.Icon} styles={data?.styles} />
+            )}
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
   sessionStorage.setItem("isPermitApplication", true);
   sessionStorage.setItem("isEDCRDisable", JSON.stringify(false));
   return homeScreen;

@@ -120,7 +120,6 @@ const fetchMDMSForBillPeriod = async (action, state, dispatch) => {
     let response = await getDescriptionFromMDMS(requestBody, dispatch);
     dispatch(prepareFinalObject("billingPeriodMDMS", response.MdmsRes))
   } catch (error) {
-    console.log(error);
   }
 }
 const searchResults = async (action, state, dispatch, consumerCode) => {

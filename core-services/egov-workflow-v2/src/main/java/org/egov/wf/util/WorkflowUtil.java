@@ -14,8 +14,6 @@ import org.springframework.util.CollectionUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.egov.wf.util.WorkflowConstants.SCHEMA_REPLACE_STRING;
-
 
 @Component
 public class WorkflowUtil {
@@ -240,7 +238,7 @@ public class WorkflowUtil {
      */
     public void enrichStatusesInSearchCriteria(RequestInfo requestInfo, ProcessInstanceSearchCriteria criteria){
 
-        Map<String, Map<String,List<String>>> roleTenantAndStatusMapping = businessServiceRepository.getRoleTenantAndStatusMapping(criteria.getTenantId());
+        Map<String, Map<String,List<String>>> roleTenantAndStatusMapping = businessServiceRepository.getRoleTenantAndStatusMapping();
         Map<String,List<String>> roleToTenantIdMap = getRoleToTenantId(requestInfo);
 
         List<String> tenantSpecificStatuses = new LinkedList<>();
@@ -266,7 +264,7 @@ public class WorkflowUtil {
             Boolean isStatelevelRolePresent = false;
 
             for (String tenantId : tenantIds) {
-                if (isTenantStateLevel(tenantId)){
+                if (tenantId.equalsIgnoreCase(config.getStateLevelTenantId())){
                     isStatelevelRolePresent = true;
                     break;
                 }
@@ -296,7 +294,7 @@ public class WorkflowUtil {
                  * applications having tenantId either pb.amritsar or pb.jalandhar and status in the list statuses
                  *
                  */
-                if(!isStatelevelRolePresent && isTenantStateLevel(tenantKey)){
+                if(!isStatelevelRolePresent && tenantKey.equalsIgnoreCase(config.getStateLevelTenantId())){
                     for (String tenantId : tenantIds){
                         tenantSpecificStatuses.addAll(statuses.stream().map(s -> tenantId+":"+s).collect(Collectors.toList()));
                     }
@@ -317,8 +315,10 @@ public class WorkflowUtil {
         if(!CollectionUtils.isEmpty(tenantSpecificStatuses))
             criteria.setTenantSpecifiStatus(tenantSpecificStatuses);
 
-        if(!CollectionUtils.isEmpty(statusIrrespectiveOfTenant))
+        if(!CollectionUtils.isEmpty(statusIrrespectiveOfTenant)) {
             criteria.setStatus(statusIrrespectiveOfTenant);
+            criteria.setStatusesIrrespectiveOfTenant(statusIrrespectiveOfTenant);
+        }
 
 
     }
@@ -467,12 +467,17 @@ public class WorkflowUtil {
     }
 
 
-    private Boolean isTenantStateLevel(String tenantId){
 
-        if(tenantId.split("\\.").length == 2)
-            return true;
-        else return false;
 
-    }
+
+
+
+
+
+
+
+
+
+
 
 }

@@ -19,7 +19,7 @@ public class MetricsInsightsHandler implements InsightsHandler {
 //	private ResponseRecorder responseRecorder; 
 
 	@Override
-	public AggregateDto getInsights(AggregateDto aggregateDto, String visualizationCode, String moduleLevel, InsightsConfiguration insightsConfig, ResponseRecorder responseRecorder) {
+	public AggregateDto getInsights(AggregateDto aggregateDto, String visualizationCode, String moduleLevel, InsightsConfiguration insightsConfig , ResponseRecorder responseRecorder) {
 		String internalVisualizationCode = visualizationCode.substring(1);  
 		Data currentData = (Data) responseRecorder.get(internalVisualizationCode, moduleLevel);
 		Data pastData = (Data) responseRecorder.get(visualizationCode, moduleLevel);

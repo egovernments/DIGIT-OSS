@@ -71,3 +71,18 @@
         @apply shadow-card rounded-sm;
     }
 }
+
+.reports-download-btn{
+    justify-content: flex-end;
+    position: unset;
+}
+
+.reports-options-download{
+    position: absolute;
+    justify-content: flex-end;
+    float: right;
+    right:0%;
+    display: flex;
+    flex-direction: row;
+    top:2rem;
+}

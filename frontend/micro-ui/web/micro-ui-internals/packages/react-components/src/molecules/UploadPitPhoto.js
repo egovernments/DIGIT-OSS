@@ -61,9 +61,7 @@ const UploadPitPhoto = (props) => {
         if (uploadedImagesIds === null || uploadedImagesIds.length < 3) {
             const response = await Digit.UploadServices.Filestorage("FSM", image, props.tenantId);
             setUploadedImagesIds(addUploadedImageIds(response));
-        } else {
-            console.log("disabled")
-        }
+        } 
     }, [addUploadedImageIds, image]);
 
     function addImageThumbnails(thumbnailsData) {
@@ -107,9 +105,7 @@ const UploadPitPhoto = (props) => {
     const handleUpload = (event) => {
         if (uploadedImagesIds === null || uploadedImagesIds.length < 3) {
             hiddenFileInput.current.click();
-        } else {
-            console.log("disabled button")
-        }
+        } 
     }
     const hiddenFileInput = React.useRef(null);
 
