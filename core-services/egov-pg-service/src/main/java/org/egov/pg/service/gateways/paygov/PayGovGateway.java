@@ -34,6 +34,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -124,7 +125,105 @@ public class PayGovGateway implements Gateway {
 
     @Override
     public URI generateRedirectURI(Transaction transaction) {
-        return null;
+    	//PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, transaction.getTenantId());
+
+    	/*
+		 *
+		 messageType|merchantId|serviceId|orderId|customerId|transactionAmount|currencyCode|r
+		equestDateTime|successUrl|failUrl|additionalField1| additionalField2| additionalField3|
+		additionalField4| additionalField5
+		 */
+        String urlData =null;
+        HashMap<String, String> queryMap = new HashMap<>();
+        queryMap.put(MESSAGE_TYPE_KEY, MESSAGE_TYPE);
+        queryMap.put(MERCHANT_ID_KEY, PAYGOV_MERCHENT_ID);
+        queryMap.put(SERVICE_ID_KEY, transaction.getTenantId());
+        queryMap.put(ORDER_ID_KEY, transaction.getTxnId());
+        queryMap.put(CUSTOMER_ID_KEY, transaction.getUser().getUuid());
+        queryMap.put(TRANSACTION_AMOUNT_KEY, String.valueOf( transaction.getTxnAmount()));
+        queryMap.put(CURRENCY_CODE_KEY,CURRENCY_CODE);
+        SimpleDateFormat format = new SimpleDateFormat(TX_DATE_FORMAT);
+        queryMap.put(REQUEST_DATE_TIME_KEY, format.format(new Date()));
+        String returnUrl = transaction.getCallbackUrl().replace(CITIZEN_URL, "");
+
+
+        String moduleCode ="------";
+        if(!StringUtils.isEmpty(transaction.getModule())) {
+            if(transaction.getModule().length() < 6) {
+                moduleCode= transaction.getModule() + moduleCode.substring(transaction.getModule().length()-1);
+            }else {
+                moduleCode =transaction.getModule();
+            }
+        }
+
+
+
+        queryMap.put(SUCCESS_URL_KEY, getReturnUrl(returnUrl, REDIRECT_URL));
+        queryMap.put(FAIL_URL_KEY, getReturnUrl(returnUrl, REDIRECT_URL));
+        StringBuffer userDetail = new StringBuffer();
+        if( transaction.getUser()!=null) {
+            if(!StringUtils.isEmpty(transaction.getUser().getMobileNumber())) {
+                userDetail.append(transaction.getUser().getMobileNumber());
+            }
+
+            if(!StringUtils.isEmpty(transaction.getUser().getEmailId())) {
+                if(userDetail.length()>0) {
+                    userDetail.append("^");
+                }
+                userDetail.append(transaction.getUser().getEmailId());
+            }
+        }
+        if(userDetail.length() == 0) {
+            userDetail.append(ADDITIONAL_FIELD_VALUE);
+        }
+        queryMap.put(ADDITIONAL_FIELD1_KEY, userDetail.toString());
+        queryMap.put(ADDITIONAL_FIELD2_KEY, ADDITIONAL_FIELD_VALUE); //Not in use
+        queryMap.put(ADDITIONAL_FIELD3_KEY, ADDITIONAL_FIELD_VALUE); //Not in use
+        queryMap.put(ADDITIONAL_FIELD4_KEY, transaction.getConsumerCode());
+        queryMap.put(ADDITIONAL_FIELD5_KEY, moduleCode);
+
+
+
+        //Generate Checksum for params
+        ArrayList<String> fields = new ArrayList<String>();
+        fields.add(queryMap.get(MESSAGE_TYPE_KEY));
+        fields.add(queryMap.get(MERCHANT_ID_KEY));
+        fields.add(queryMap.get(SERVICE_ID_KEY));
+        fields.add(queryMap.get(ORDER_ID_KEY));
+        fields.add(queryMap.get(CUSTOMER_ID_KEY));
+        fields.add(queryMap.get(TRANSACTION_AMOUNT_KEY));
+        fields.add(queryMap.get(CURRENCY_CODE_KEY));
+        fields.add(queryMap.get(REQUEST_DATE_TIME_KEY));
+        fields.add(queryMap.get(SUCCESS_URL_KEY));
+        fields.add(queryMap.get(FAIL_URL_KEY));
+        fields.add(queryMap.get(ADDITIONAL_FIELD1_KEY));
+        fields.add(queryMap.get(ADDITIONAL_FIELD2_KEY));
+        fields.add(queryMap.get(ADDITIONAL_FIELD3_KEY));
+        fields.add(queryMap.get(ADDITIONAL_FIELD4_KEY));
+        fields.add(queryMap.get(ADDITIONAL_FIELD5_KEY));
+
+        String message = String.join("|", fields);
+        queryMap.put("checksum", PayGovUtils.generateCRC32Checksum(message, PAYGOV_MERCHENT_SECERET_KEY));
+        queryMap.put("txURL",GATEWAY_URL);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            urlData= mapper.writeValueAsString(queryMap);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            log.error("PAYGOV URL generation failed", e);
+            throw new CustomException("URL_GEN_FAILED",
+                    "PAYGOV URL generation failed, gateway redirect URI cannot be generated");
+        }
+        
+        
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        queryMap.forEach(params::add);
+        UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(GATEWAY_URL).queryParams
+                (params).build().encode();
+
+        return uriComponents.toUri();
+        
+        //return urlData;
     }
 
     @Override
