@@ -216,6 +216,7 @@ const ConnectionDetails = () => {
           </StatusTable>
           <CardHeader styles={{ fontSize: "28px" }}>{t("WS_COMMON_CONNECTION_DETAIL")}</CardHeader>
           <StatusTable>
+            {state?.applicationType?.includes("WATER") && <div>
             <Row
               className="border-none"
               label={t("WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL")}
@@ -224,7 +225,23 @@ const ConnectionDetails = () => {
             />
             <Row className="border-none" label={t("WS_SERV_DETAIL_NO_OF_TAPS")} text={state?.noOfTaps} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_SERV_DETAIL_PIPE_SIZE")} text={state?.pipeSize || "NA"} textStyle={{ whiteSpace: "pre" }} />
-            {state?.connectionType?.includes("WATER") && (
+            </div>}
+            {state?.applicationType?.includes("SEWERAGE") && <div>
+            <Row
+                className="border-none"
+                label={t("WS_NO_OF_WATER_CLOSETS_LABEL")}
+                text={state?.proposedWaterClosets}
+                textStyle={{ whiteSpace: "pre" }}
+              />
+              <Row
+                className="border-none"
+                label={t("WS_SERV_DETAIL_NO_OF_TOILETS")}
+                text={state?.proposedToilets || t("CS_NA")}
+                textStyle={{ whiteSpace: "pre" }}
+              />
+              <Row className="border-none" label={t("WS_SERV_DETAIL_CONN_EXECUTION_DATE")} text={state?.connectionExecutionDate ? Digit.DateUtils.ConvertEpochToDate(state?.connectionExecutionDate) : t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+            </div>}
+            {state?.applicationType?.includes("WATER") && (
               <div>
                 <Row
                   className="border-none"

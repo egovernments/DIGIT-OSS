@@ -21,6 +21,9 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.tracer.model.CustomException;
 import org.egov.vendor.config.VendorConfiguration;
+import org.egov.vendor.driver.web.model.Driver;
+import org.egov.vendor.driver.web.model.DriverResponse;
+import org.egov.vendor.driver.web.model.DriverSearchCriteria;
 import org.egov.vendor.repository.ServiceRequestRepository;
 import org.egov.vendor.repository.VendorRepository;
 import org.egov.vendor.util.VendorConstants;
@@ -146,8 +149,8 @@ public class UserService {
 		Vendor vendor = vendorRequest.getVendor();
 		RequestInfo requestInfo = vendorRequest.getRequestInfo();
 
-		List<User> drivers = vendor.getDrivers();
-		List<User> newDrivers = new ArrayList<User>();
+		List<Driver> drivers = vendor.getDrivers();
+		List<Driver> newDrivers = new ArrayList<Driver>();
 		HashMap<String, String> errorMap = new HashMap<String, String>();
 
 		if (!CollectionUtils.isEmpty(drivers)) {
@@ -155,9 +158,9 @@ public class UserService {
 
 				UserDetailResponse userDetailResponse = null;
 
-				if (driver.getMobileNumber() != null) {
+				if (driver.getOwner() != null && driver.getOwner().getMobileNumber()!=null) {
 
-					userDetailResponse = userExists(driver, requestInfo);
+					userDetailResponse = userExists(driver.getOwner(), requestInfo);
 					User foundDriver = null;
 					if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
 
@@ -188,10 +191,12 @@ public class UserService {
 						}
 
 					} else {
-						foundDriver = createDriver(driver, requestInfo);
+						foundDriver = createDriver(driver.getOwner(), requestInfo);
 					}
-					foundDriver.setVendorDriverStatus(driver.getVendorDriverStatus());
-					newDrivers.add(foundDriver);
+					driver.setOwner(foundDriver);
+					//foundDriver.setVendorDriverStatus(driver.getVendorDriverStatus());
+					
+					newDrivers.add(driver);
 
 				} else {
 					log.debug("MobileNo is not existed in Application.");
@@ -200,6 +205,7 @@ public class UserService {
 				}
 			});
 			vendor.setDrivers(newDrivers);
+			
 			if (!errorMap.isEmpty()) {
 				throw new CustomException(errorMap);
 			}

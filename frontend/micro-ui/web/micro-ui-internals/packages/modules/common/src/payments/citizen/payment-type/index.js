@@ -73,7 +73,7 @@ export const SelectPaymentType = (props) => {
         // success
         callbackUrl: window.location.href.includes("mcollect")
           ? `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}/${tenantId}?workflow=mcollect`
-          : `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}/${tenantId}`,
+          : `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${wrkflow === "WNS"? encodeURIComponent(consumerCode):consumerCode}/${tenantId}`,
         additionalDetails: {
           isWhatsapp: false,
         },

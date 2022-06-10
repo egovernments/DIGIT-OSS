@@ -55,7 +55,7 @@ const useMyBillsWaterSearch = ({tenantId, filters = {}, BusinessService="WS", t 
   , config)
   const billData = useQuery(['BILL_SEARCH', tenantId, consumercodes,BusinessService ], async () => await Digit.PaymentService.fetchBill(tenantId, {
     businessService: BusinessService,
-    consumerCode: consumercodes.substring(0, propertyids.length-1),
+    consumerCode: consumercodes.substring(0, consumercodes.length-1),
   })
   , config)
 

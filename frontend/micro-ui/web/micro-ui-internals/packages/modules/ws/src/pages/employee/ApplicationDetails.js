@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect, useRef } from "react";
 import {
   FormComposer,
   Header,
@@ -41,6 +41,7 @@ const ApplicationDetails = () => {
   let filters = func.getQueryStringParams(location.search);
   const applicationNumber = filters?.applicationNumber;
   const serviceType = filters?.service;
+  const menuRef = useRef();
 
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
   sessionStorage.removeItem("IsDetailsExists");
@@ -304,6 +305,11 @@ const ApplicationDetails = () => {
       break;
   }
 
+  const closeMenu = () => {
+    setShowOptions(false);
+  }
+  Digit.Hooks.useClickOutside(menuRef, closeMenu, showOptions );
+
   dowloadOptions.sort(function (a, b) {
     return a.order - b.order;
   });
@@ -322,6 +328,7 @@ const ApplicationDetails = () => {
               options={dowloadOptions}
               downloadBtnClassName={"employee-download-btn-className"}
               optionsClassName={"employee-options-btn-className"}
+              ref={menuRef}
             />
           )}
         </div>

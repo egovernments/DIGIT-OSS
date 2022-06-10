@@ -1,12 +1,16 @@
 package org.egov.vendor.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.vendor.config.VendorConfiguration;
+import org.egov.vendor.driver.service.DriverService;
+import org.egov.vendor.driver.web.model.DriverResponse;
+import org.egov.vendor.driver.web.model.DriverSearchCriteria;
 import org.egov.vendor.repository.VendorRepository;
 import org.egov.vendor.util.VendorErrorConstants;
 import org.egov.vendor.util.VendorUtil;
@@ -21,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,6 +50,9 @@ public class EnrichmentService {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private DriverService driverService;
 	
 	/**
 	 * enriches the request object for create, assigns random ids for vedor, vehicles and drivers and audit details
@@ -85,6 +93,19 @@ public class EnrichmentService {
 				}
 			});
 		}
+		//Enrich the driver info in the request
+		if(vendorRequest.getVendor().getDrivers() != null 
+				&& vendorRequest.getVendor().getDrivers().size() >0) {
+			AuditDetails finalAuditDetails = auditDetails;
+			vendorRequest.getVendor().getDrivers().forEach(driver->{
+				if(StringUtils.isEmpty(driver.getId())) {
+					driver.setId(UUID.randomUUID().toString());
+					driver.setTenantId(vendorRequest.getVendor().getTenantId());
+					driver.setAuditDetails(finalAuditDetails);
+				}
+			});
+		}
+
 		
 		
 	}
@@ -124,6 +145,18 @@ public class EnrichmentService {
 				}
 			});
 		}
+		
+		if(vendorRequest.getVendor().getDrivers() != null 
+				&& vendorRequest.getVendor().getDrivers().size() >0) {
+			AuditDetails finalAuditDetails = auditDetails;
+			vendorRequest.getVendor().getDrivers().forEach(driver->{
+				if(StringUtils.isEmpty(driver.getId())) {
+					driver.setId(UUID.randomUUID().toString());
+					driver.setTenantId(vendorRequest.getVendor().getTenantId());
+					driver.setAuditDetails(finalAuditDetails);
+				}
+			});
+		}
 	}
 	
 	public void enrichVendorSearch(List<Vendor> vendorList, RequestInfo requestInfo, String tenantId) {
@@ -149,15 +182,27 @@ public class EnrichmentService {
 		List<String> driverIds = vendorRepository.getDrivers(vendor.getId(),"ACTIVE");
 		
 		if(!CollectionUtils.isEmpty(driverIds)) {
-			VendorSearchCriteria vendorDriverSearchCriteria = new VendorSearchCriteria();
-			vendorDriverSearchCriteria.setIds(driverIds);
-			vendorDriverSearchCriteria.setTenantId(tenantId);
-			UserDetailResponse  userDetailResponse = userService.getUsers(vendorDriverSearchCriteria, requestInfo);
-			vendor.setDrivers(userDetailResponse.getUser());
 			
-			vendor.getDrivers().forEach(driver->{
-				driver.setVendorDriverStatus(StatusEnum.ACTIVE);
-			});
+			DriverSearchCriteria driverSearchCriteria = DriverSearchCriteria.builder()
+					.ids(driverIds)
+					.status(Arrays.asList("ACTIVE"))
+					.tenantId(tenantId).build();
+			DriverResponse driverResponse= driverService.search(driverSearchCriteria, requestInfo);
+			
+			vendor.setDrivers(driverResponse.getDriver());
+			
+			if(!CollectionUtils.isEmpty(vendor.getDrivers())) {
+				
+				vendor.getDrivers().forEach(driver->{
+					driverSearchCriteria.setOwnerIds(Arrays.asList(driver.getOwnerId()));
+					UserDetailResponse  userDetailResponse = userService.getUsers(
+							VendorSearchCriteria.builder().tenantId(tenantId).
+							ids(Arrays.asList(driver.getOwnerId())).build(), requestInfo);
+					driver.setOwner(userDetailResponse.getUser().get(0));
+					driver.setVendorDriverStatus(org.egov.vendor.driver.web.model.Driver.StatusEnum.ACTIVE);
+				});
+			}
+						
 		}
 		
 	}
@@ -169,6 +214,7 @@ public class EnrichmentService {
 			VehicleSearchCriteria vehicleSearchCriteria=new VehicleSearchCriteria();
 			vehicleSearchCriteria = VehicleSearchCriteria.builder()
 					.ids(vehicleIds)
+					.status(Arrays.asList("ACTIVE"))
 					.tenantId(tenantId).build();
 			
 			vendor.setVehicles(vehicleService.getVehicles(vehicleSearchCriteria, requestInfo));
@@ -177,7 +223,6 @@ public class EnrichmentService {
 				vehicle.setVendorVehicleStatus(StatusEnum.ACTIVE);
 			});
 			
-			//vendor.setVehicles(vehicleService.getVehicles(vehicleIds, null, null, null, requestInfo, tenantId));
 		}
 		
 	}

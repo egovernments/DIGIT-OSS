@@ -25,6 +25,9 @@ const ConsumptionDetails = ({ view }) => {
   const [selectedConsumtion, setConsumption] = useState("");
   const [currentBillingPeriod, setBillingPeriod] = useState("");
   
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const isUserAllowedToAddMeterReading = userRoles.filter(role=>(role==="WS_CEMP" || role==="SW_CEMP")).length > 0
 
   const { isLoading, isError, data: response } = Digit.Hooks.ws.useWSConsumptionSearch({ filters: filter1 }, { filters: filter1 });
 
@@ -80,13 +83,13 @@ const ConsumptionDetails = ({ view }) => {
     let selectedDate = parseInt(convertDateToEpoch(data?.currentReadingDate));
     let toDate = parseInt(convertDateToEpoch(Digit.Utils.date.getDate()));
     if(!data?.currentReading || data?.currentReading == null || data?.currentReading === ""){
-      setShowToast({ key: "error" });
+      setShowToast({ key: "error", message: t("ERR_CURRENT_READING_REQUIRED") });
       setError(t("ERR_CURRENT_READING_REQUIRED"));
       setTimeout(closeToast, 5000);
       return;
     }
     if(selectedDate < fromDate || selectedDate > toDate){
-      setShowToast({ key: "error" });
+      setShowToast({ key: "error", message: t("ERR_CURRENT_READING_DATE_SHOULD_NOT_BE_LESS_THAN_FROM_DATE_AND_NOT_GREATER_THAN_TO_DATE") });
       setError(t("ERR_CURRENT_READING_DATE_SHOULD_NOT_BE_LESS_THAN_FROM_DATE_AND_NOT_GREATER_THAN_TO_DATE"));
       setTimeout(closeToast, 5000);
       return;
@@ -286,7 +289,7 @@ const ConsumptionDetails = ({ view }) => {
             ))}
       {!meterReadings?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("WS_NO_CONSUMPTION_FOUND")}</p>}
     </div>
-    {isLoading || meterStatusLoading || billingPeriodLoading ? null :
+        {isLoading || meterStatusLoading || billingPeriodLoading || !isUserAllowedToAddMeterReading ? null :
         <ActionBar>
         <SubmitBar label={t("WS_CONSUMPTION_BUTTON_METER_READING_LABEL")} onSubmit={popUp} />
         </ActionBar> }
@@ -321,7 +324,7 @@ const ConsumptionDetails = ({ view }) => {
           )}
         </Modal>
         )}
-        {showToast && <Toast error={showToast?.key === "error" ? true : false} label={t(showToast?.message)} onClose={closeToast} />}
+        {showToast && <Toast style={{zIndex:"10000"}} error={showToast?.key === "error" ? true : false} label={t(showToast?.message)} onClose={closeToast} />}
         
   </React.Fragment>
   );

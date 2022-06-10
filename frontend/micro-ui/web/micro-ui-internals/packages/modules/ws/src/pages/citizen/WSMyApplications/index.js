@@ -8,7 +8,7 @@ import { propertyCardBodyStyle } from "../../../utils";
 export const WSMyApplications = () => {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
-  const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   let filter = window.location.href.split("/").pop();
   let t1;
   let off;

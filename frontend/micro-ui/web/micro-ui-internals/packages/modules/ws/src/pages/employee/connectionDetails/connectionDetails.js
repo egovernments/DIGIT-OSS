@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
 import { useHistory } from "react-router-dom";
@@ -23,6 +23,7 @@ const GetConnectionDetails = () => {
   const stateCode = Digit.ULBService.getStateId();
   const actionConfig = ["MODIFY_CONNECTION_BUTTON", "BILL_AMENDMENT_BUTTON", "DISCONNECTION_BUTTON"];
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useConnectionDetail(t, tenantId, applicationNumber, serviceType);
+  const menuRef = useRef();
 
   const { isLoading: isLoadingDemand, data: demandData } = Digit.Hooks.useDemandSearch(
     { consumerCode: applicationDetails?.applicationData?.connectionNo, businessService: serviceType === "WATER" ? "WS" : "SW", tenantId }, { enabled: !!(applicationDetails?.applicationData?.applicationNo) }
@@ -155,6 +156,11 @@ const GetConnectionDetails = () => {
     history.push(`/digit-ui/employee/ws/required-documents?connectionNumber=${applicationDetails?.applicationData?.connectionNo}&tenantId=${getTenantId}&service=${serviceType}`, { data: applicationDetails });
   };
 
+  const closeMenu = () => {
+    setShowOptions(false);
+  }
+  Digit.Hooks.useClickOutside(menuRef, closeMenu, showOptions );
+
   const getDisconnectionButton = () => {
     let pathname = `/digit-ui/employee/ws/disconnection-application`;
     if (billData[0]?.status === "ACTIVE" || due === "0") {
@@ -239,6 +245,7 @@ const GetConnectionDetails = () => {
               options={dowloadOptions}
               downloadBtnClassName={"employee-download-btn-className"}
               optionsClassName={"employee-options-btn-className"}
+              ref={menuRef}
             />
           )}
         </div>
