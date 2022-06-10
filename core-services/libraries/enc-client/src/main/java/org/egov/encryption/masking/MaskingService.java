@@ -3,9 +3,11 @@ package org.egov.encryption.masking;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.config.EncProperties;
+import org.egov.encryption.config.ErrorConstants;
 import org.egov.encryption.models.Attribute;
 import org.egov.encryption.models.UniqueIdentifier;
 import org.egov.encryption.util.JSONBrowseUtil;
@@ -18,8 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.*;
 
+@Slf4j
 @Service
 public class MaskingService {
 
@@ -43,7 +47,8 @@ public class MaskingService {
                 maskingPatternMap.put(obj.get("patternId"), obj.get("pattern"));
             }
         } catch (Exception e) {
-            throw new CustomException("MDMS_ERROR", "Error in retrieving MDMS data");
+            log.error(ErrorConstants.MASKING_PATTER_READING_ERROR_MESSAGE, e);
+            throw new CustomException(ErrorConstants.MASKING_PATTERN_READING_ERROR, ErrorConstants.MASKING_PATTER_READING_ERROR_MESSAGE);
         }
     }
 

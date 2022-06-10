@@ -68,7 +68,8 @@ public class DecryptionPolicyConfiguration {
                     SecurityPolicy.class));
             securityPolicyList = reader.readValue(securityPolicyJson.toString());
         } catch (IOException e) {
-            log.error("Error while fetching security policy from MDMS", e);
+            log.error(ErrorConstants.SECURITY_POLICY_READING_ERROR_MESSAGE, e);
+            throw new CustomException(ErrorConstants.SECURITY_POLICY_READING_ERROR, ErrorConstants.SECURITY_POLICY_READING_ERROR_MESSAGE);
         }
 
         initializeModelAttributeAccessMap(securityPolicyList);
