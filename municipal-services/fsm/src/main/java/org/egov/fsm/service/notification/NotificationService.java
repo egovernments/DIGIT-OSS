@@ -182,10 +182,15 @@ public class NotificationService {
 				fsm.getApplicationStatus().equalsIgnoreCase(FSMConstants.WF_STATUS_PENDING_APPL_FEE_PAYMENT) && 
 				fsm.getSource() != null && fsm.getSource().equalsIgnoreCase(FSMConstants.APPLICATION_CHANNEL_TELEPONE)) {
 			messageCode=FSMConstants.SMS_NOTIFICATION_PREFIX +FSMConstants.WF_STATUS_CREATED+"_"+FSMConstants.WF_ACTION_CREATE;
-			String message = util.getCustomizedMsg(fsmRequest, localizationMessages,messageCode);
-			Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
 			
-			smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
+			/*
+			 * bug SAN-1088- Getting 2 sms for pay now application creation
+			 */
+			
+			//String message = util.getCustomizedMsg(fsmRequest, localizationMessages,messageCode);
+			//Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
+			
+			//smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
 		}
 		
 		String localizationMessageKey = FSMConstants.SMS_NOTIFICATION_PREFIX + fsm.getApplicationStatus()
