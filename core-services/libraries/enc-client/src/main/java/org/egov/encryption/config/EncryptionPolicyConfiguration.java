@@ -7,11 +7,11 @@ import net.minidev.json.JSONArray;
 import org.egov.encryption.models.Attribute;
 import org.egov.encryption.models.SecurityPolicy;
 import org.egov.encryption.util.MdmsFetcher;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,8 +36,13 @@ public class EncryptionPolicyConfiguration {
                 .collect(Collectors.toMap(SecurityPolicy::getModel, SecurityPolicy::getAttributes));
     }
 
-    public List<Attribute> getAttributeDetailsForModel(String modelName) throws IOException {
-        return encryptionPolicyAttributesMap.get(modelName);
+    public List<Attribute> getAttributeDetailsForModel(String modelName){
+        try {
+            return encryptionPolicyAttributesMap.get(modelName);
+        }catch(Exception e) {
+            throw new CustomException("DECRYPTION_ERROR","Error in retrieving MDMS data");
+        }
+
     }
 
 }

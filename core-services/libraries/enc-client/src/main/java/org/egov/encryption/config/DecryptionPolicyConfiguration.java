@@ -94,8 +94,6 @@ public class DecryptionPolicyConfiguration {
                 throw new CustomException("DECRYPTION_NULL_ERROR", "Attribute list is empty");
             }
 
-            /*if (!isAttributeListEmpty && isRoleAttributeAccessMapEmpty)
-                mapping = getDefaultVisibilityMapping(attributesList);*/
 
             if(!isAttributeListEmpty && !isRoleAttributeAccessMapEmpty) {
                 Map<String, Attribute> attributesMap = makeAttributeMap(attributesList);
@@ -135,7 +133,7 @@ public class DecryptionPolicyConfiguration {
                     requestInfo.getPlainAccessRequest().setPlainRequestFields(secondLevelVisibility);
             }
 
-            List<Attribute> mappingAttributesList = new ArrayList<Attribute>(mapping.keySet());
+            List<Attribute> mappingAttributesList = new ArrayList<>(mapping.keySet());
             List<String> attributesToAvoidlist = new ArrayList<>();
             for(Attribute attribute: mappingAttributesList)
                 attributesToAvoidlist.add(attribute.getName());

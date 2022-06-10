@@ -12,6 +12,7 @@ import org.egov.encryption.util.JSONBrowseUtil;
 import org.egov.encryption.util.JacksonUtils;
 import org.egov.encryption.util.JsonPathConverter;
 import org.egov.encryption.util.MdmsFetcher;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -42,6 +43,7 @@ public class MaskingService {
                 maskingPatternMap.put(obj.get("patternId"), obj.get("pattern"));
             }
         } catch (Exception e) {
+            throw new CustomException("MDMS_ERROR", "Error in retrieving MDMS data");
         }
     }
 

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.encryption.config.EncProperties;
 import org.egov.encryption.web.contract.EncReqObject;
 import org.egov.encryption.web.contract.EncryptionRequest;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -38,10 +39,15 @@ class EncryptionServiceRestConnection {
         return objectMapper.readTree(response.getBody()).get(0);
     }
 
-    JsonNode callDecrypt(Object ciphertext) throws IOException {
-        ResponseEntity<JsonNode> response = restTemplate.postForEntity(
-                encProperties.getEgovEncHost() + encProperties.getEgovEncDecryptPath(), ciphertext, JsonNode.class);
-        return response.getBody();
+    JsonNode callDecrypt(Object ciphertext){
+        try {
+            ResponseEntity<JsonNode> response = restTemplate.postForEntity(
+                    encProperties.getEgovEncHost() + encProperties.getEgovEncDecryptPath(), ciphertext, JsonNode.class);
+            return response.getBody();
+        }catch(Exception e) {
+            throw new CustomException("DECRYPTION_ERROR","Error occured in decryption process");
+        }
+
     }
 
 }
