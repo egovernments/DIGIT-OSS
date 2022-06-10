@@ -48,6 +48,7 @@ const SearchFields = ({ register, control, reset, tenantId, t }) => {
         <p
           onClick={() => {
             reset({
+              searchType:"CONNECTION",
               mobileNumber: "",
               offset: 0,
               limit: 10,
