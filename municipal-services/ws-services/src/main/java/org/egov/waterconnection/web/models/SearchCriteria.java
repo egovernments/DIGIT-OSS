@@ -74,7 +74,7 @@ public class SearchCriteria {
 	private String applicationType;
 
 	@JsonProperty("locality")
-	private String locality;
+	private Set<String> locality;
 
 	@JsonProperty("isPropertyDetailsRequired")
 	private Boolean isPropertyDetailsRequired = false;
@@ -96,6 +96,9 @@ public class SearchCriteria {
 	
 	@JsonProperty("sortOrder")
 	private SortOrder sortOrder;
+
+	@JsonProperty("sortBy")
+	private String sortBy;
 
 	@JsonIgnore
 	private Boolean isCountCall = false;

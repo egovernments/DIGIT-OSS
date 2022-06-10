@@ -36,7 +36,7 @@ public class WsQueryBuilder {
     private static String holderSelectValues = "connectionholder.tenantid as holdertenantid, connectionholder.connectionid as holderapplicationId, userid, connectionholder.status as holderstatus, isprimaryholder, connectionholdertype, holdershippercentage, connectionholder.relationship as holderrelationship, connectionholder.createdby as holdercreatedby, connectionholder.createdtime as holdercreatedtime, connectionholder.lastmodifiedby as holderlastmodifiedby, connectionholder.lastmodifiedtime as holderlastmodifiedtime";
 
     
-	private static final String WATER_SEARCH_QUERY = "SELECT count(*) OVER() AS full_count, conn.*, wc.*, document.*, plumber.*, wc.connectionCategory, wc.connectionType, wc.waterSource,"
+	private static final String WATER_SEARCH_QUERY = " count(*) OVER() AS full_count, conn.*, wc.*, document.*, plumber.*, wc.connectionCategory, wc.connectionType, wc.waterSource,"
 			+ " wc.meterId, wc.meterInstallationDate, wc.pipeSize, wc.noOfTaps, wc.proposedPipeSize, wc.proposedTaps, wc.connection_id as connection_Id, wc.connectionExecutionDate, wc.initialmeterreading, wc.appCreatedDate,"
 			+ " wc.detailsprovidedby, wc.estimationfileStoreId , wc.sanctionfileStoreId , wc.estimationLetterDate,"
 			+ " conn.id as conn_id, conn.tenantid, conn.applicationNo, conn.applicationStatus, conn.status, conn.connectionNo, conn.oldConnectionNo, conn.property_id, conn.roadcuttingarea,"
@@ -46,7 +46,7 @@ public class WsQueryBuilder {
 			+ " conn.locality, conn.isoldapplication, conn.roadtype, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id,"
 			+ " plumber.name as plumber_name, plumber.licenseno, roadcuttingInfo.id as roadcutting_id, roadcuttingInfo.roadtype as roadcutting_roadtype, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea,"
 			+ " roadcuttingInfo.active as roadcutting_active, plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress,"
-			+ " plumber.relationship, " + holderSelectValues
+			+ " plumber.relationship, pi.createdTime as pi_createdTime, " + holderSelectValues
 			+ " FROM eg_ws_connection conn "
 			+  INNER_JOIN_STRING 
 			+" eg_ws_service wc ON wc.connection_id = conn.id"
@@ -71,8 +71,24 @@ public class WsQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id";
 	
+	private static final String WATER_SEARCH_BASE_QUERY = "SELECT ";
+
+	private static final String WATER_SEARCH_INBOX_BASE_QUERY = "SELECT distinct(conn.applicationno), ";
+
 	private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
+            "({})" +
+            " result) result_offset " +
+            "WHERE offset_ > ? AND offset_ <= ?";
+	
+	private static final String PAGINATION_INBOX_WRAPPER = "SELECT * FROM "
+			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY pi_createdTime ASC) offset_ FROM " +
+            "({})" +
+            " result) result_offset " +
+            "WHERE offset_ > ? AND offset_ <= ?";
+
+	private static final String PAGINATION_INBOX_DESC_WRAPPER = "SELECT * FROM "
+			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY pi_createdTime DESC) offset_ FROM " +
             "({})" +
             " result) result_offset " +
             "WHERE offset_ > ? AND offset_ <= ?";
@@ -82,6 +98,15 @@ public class WsQueryBuilder {
 	private static final String ORDER_BY_CLAUSE= " ORDER BY wc.appCreatedDate DESC";
 	
 	private static final String ORDER_BY_COUNT_CLAUSE= " ORDER BY appCreatedDate DESC";
+	
+	private static final String ORDER_BY_INBOX_DESC_CLAUSE = " AND pi.createdtime IN (select max(createdtime) "
+			+ " from eg_wf_processinstance_v2 wf where wf.businessid = conn.applicationno GROUP BY wf.businessid)"
+			+ " order by pi.createdtime DESC";
+
+	private static final String ORDER_BY_INBOX_ASC_CLAUSE = " AND pi.createdtime IN (select max(createdtime) "
+			+ " from eg_wf_processinstance_v2 wf where wf.businessid = conn.applicationno GROUP BY wf.businessid)"
+			+ " order by pi.createdtime ASC";
+	
 	/**
 	 * 
 	 * @param criteria
@@ -101,12 +126,17 @@ public class WsQueryBuilder {
 			criteria.setIsCountCall(Boolean.FALSE);
 
 		StringBuilder query;
-		if (!criteria.getIsCountCall())
-			query = new StringBuilder(WATER_SEARCH_QUERY);
-		else if (criteria.getIsCountCall() && !StringUtils.isEmpty(criteria.getSearchType())
+		if (!criteria.getIsCountCall()
+				&& (criteria.getSortBy() == null || !(criteria.getSortBy()).equalsIgnoreCase("createdtime"))) {
+			query = new StringBuilder(WATER_SEARCH_BASE_QUERY);
+			query.append(WATER_SEARCH_QUERY);
+		} else if (!criteria.getIsCountCall() && criteria.getSortBy() != null
+				&& (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
+			query = new StringBuilder(WATER_SEARCH_INBOX_BASE_QUERY);
+			query.append(WATER_SEARCH_QUERY);
+		} else if (criteria.getIsCountCall() && !StringUtils.isEmpty(criteria.getSearchType())
 				&& criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION)) {
-			query = new StringBuilder(
-					"SELECT DISTINCT(conn.connectionno),max(wc.appCreatedDate) appCreatedDate");
+			query = new StringBuilder("SELECT DISTINCT(conn.connectionno),max(wc.appCreatedDate) appCreatedDate");
 			query.append(SEARCH_COUNT_QUERY);
 		} else {
 			query = new StringBuilder("SELECT DISTINCT(conn.applicationNo),max(wc.appCreatedDate) appCreatedDate");
@@ -252,19 +282,34 @@ public class WsQueryBuilder {
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.applicationstatus in ('APPROVED','CONNECTION_ACTIVATED') ");
 		}
-		if (!StringUtils.isEmpty(criteria.getLocality())) {
+		
+		// Added clause to support multiple locality search
+		if (!CollectionUtils.isEmpty(criteria.getApplicationNumber())) {
 			addClauseIfRequired(preparedStatement, query);
-			query.append(" conn.locality = ? ");
-			preparedStatement.add(criteria.getLocality());
+			query.append("  conn.locality IN (").append(createQuery(criteria.getLocality())).append(")");
+			addToPreparedStatement(preparedStatement, criteria.getLocality());
+		}
+		
+		// Added clause to support assignee search
+		if (!StringUtils.isEmpty(criteria.getAssignee())) {
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" conn.assignee = ? ");
+			preparedStatement.add(criteria.getAssignee());
 		}
 		
 		//Add group by and order by clause as per the search scenario
-		if(criteria.getIsCountCall() && !StringUtils.isEmpty(criteria.getSearchType())
+		if (criteria.getIsCountCall() != null && criteria.getIsCountCall()
+				&& !StringUtils.isEmpty(criteria.getSearchType())
 				&& criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION))
 			query.append("GROUP BY conn.connectionno ").append(ORDER_BY_COUNT_CLAUSE);
-		else if(criteria.getIsCountCall())
+		else if (criteria.getIsCountCall() != null && criteria.getIsCountCall())
 			query.append("GROUP BY conn.applicationno ").append(ORDER_BY_COUNT_CLAUSE);
-		else
+		else if (criteria.getSortBy() != null && (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
+			if (criteria.getSortOrder() != null && (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
+				query.append(ORDER_BY_INBOX_DESC_CLAUSE);
+			else
+				query.append(ORDER_BY_INBOX_ASC_CLAUSE);
+		} else
 			query.append(ORDER_BY_CLAUSE);
 		
 		// Pagination to limit results, do not paginate query in case of count call.
@@ -336,6 +381,14 @@ public class WsQueryBuilder {
 
 		preparedStmtList.add(offset);
 		preparedStmtList.add(limit + offset);
+		
+		if (criteria.getSortBy() != null && (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
+			if (criteria.getSortOrder() != null && (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
+				return PAGINATION_INBOX_DESC_WRAPPER.replace("{}", query);
+			else
+				return PAGINATION_INBOX_WRAPPER.replace("{}", query);
+		}
+		
 		return PAGINATION_WRAPPER.replace("{}",query);
 	}
 	
