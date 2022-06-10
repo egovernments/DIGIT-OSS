@@ -44,7 +44,12 @@ const Urls = {
     vehilceUpdate: "/vehicle/trip/v1/_update",
     createVendor: "/vendor/v1/_create",
     updateVendor: "/vendor/v1/_update",
-    vehicleCreate: "/vehicle/trip/v1/_create",
+    createVehicle: "/vehicle/v1/_create",
+    updateVehicle: "/vehicle/v1/_update",
+    driverSearch: "/vendor/driver/v1/_search",
+    createDriver: "/vendor/driver/v1/_create",
+    updateDriver: "/vendor/driver/v1/_update",
+    vehicleTripCreate: "/vehicle/trip/v1/_create",
   },
 
   payment: {

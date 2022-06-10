@@ -18,6 +18,10 @@ export const FsmBreadCrumb = ({ location }) => {
   const isRegistry = location?.pathname?.includes("registry");
   const isVendorDetails = location?.pathname?.includes("vendor-details");
   const isVendorEdit = location?.pathname?.includes("modify-vendor");
+  const isVehicleDetails = location?.pathname?.includes("vehicle-details");
+  const isVehicleEdit = location?.pathname?.includes("modify-vehicle");
+  const isDriverDetails = location?.pathname?.includes("driver-details");
+  const isDriverEdit = location?.pathname?.includes("modify-driver");
   const [search, setSearch] = useState(false);
   const [id, setId] = useState(false);
 
@@ -57,7 +61,17 @@ export const FsmBreadCrumb = ({ location }) => {
       content: t("ES_TITLE_VENDOR_DETAILS"),
       show: isRegistry && (isVendorDetails || isVendorEdit)
     },
-    { content: t("ES_TITLE_VENDOR_EDIT"), show: isRegistry && isVendorEdit },
+    {
+      path: "/digit-ui/employee/fsm/registry/vehicle-details/" + id,
+      content: t("ES_TITLE_VEHICLE_DETAILS"),
+      show: isRegistry && (isVehicleDetails || isVehicleEdit)
+    },
+    {
+      path: "/digit-ui/employee/fsm/registry/driver-details/" + id,
+      content: t("ES_TITLE_DRIVER_DETAILS"),
+      show: isRegistry && (isDriverDetails || isDriverEdit)
+    },
+    { content: t("ES_TITLE_VENDOR_EDIT"), show: isRegistry && (isVendorEdit || isVehicleEdit || isDriverEdit) },
   ];
 
   return <BreadCrumb crumbs={crumbs} />;
@@ -94,6 +108,10 @@ const EmployeeApp = ({ path, url, userType }) => {
   const EditVendor = Digit.ComponentRegistryService.getComponent("EditVendor");
   const VehicleDetails = Digit.ComponentRegistryService.getComponent("VehicleDetails");
   const AddVehicle = Digit.ComponentRegistryService.getComponent("AddVehicle");
+  const EditVehicle = Digit.ComponentRegistryService.getComponent("EditVehicle");
+  const DriverDetails = Digit.ComponentRegistryService.getComponent("DriverDetails");
+  const AddDriver = Digit.ComponentRegistryService.getComponent("AddDriver");
+  const EditDriver = Digit.ComponentRegistryService.getComponent("EditDriver");
   const BreadCrumbComp = Digit.ComponentRegistryService.getComponent("FsmBreadCrumb");
 
   return (
@@ -119,6 +137,10 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/registry/modify-vendor/:id`} component={() => <EditVendor parentRoute={path} />} />
           <PrivateRoute path={`${path}/registry/vehicle-details/:id`} component={() => <VehicleDetails parentRoute={path} />} />
           <PrivateRoute path={`${path}/registry/new-vehicle`} component={() => <AddVehicle parentRoute={path} />} />
+          <PrivateRoute path={`${path}/registry/modify-vehicle/:id`} component={() => <EditVehicle parentRoute={path} />} />
+          <PrivateRoute path={`${path}/registry/driver-details/:id`} component={() => <DriverDetails parentRoute={path} />} />
+          <PrivateRoute path={`${path}/registry/new-driver`} component={() => <AddDriver parentRoute={path} />} />
+          <PrivateRoute path={`${path}/registry/modify-driver/:id`} component={() => <EditDriver parentRoute={path} />} />
           <PrivateRoute exact path={`${path}/fstp-operations`} component={() => <FstpOperations />} />
           <PrivateRoute exact path={`${path}/fstp-add-vehicle`} component={() => <FstpAddVehicle />} />
           <PrivateRoute exact path={`${path}/fstp-fsm-request/:id`} component={() => <FstpServiceRequest />} />

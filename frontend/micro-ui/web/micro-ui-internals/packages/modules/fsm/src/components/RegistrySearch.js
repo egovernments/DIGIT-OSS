@@ -65,6 +65,8 @@ const SearchApplication = ({ onSearch, type, onClose, onTabChange, isFstpOperato
         return history.push("/digit-ui/employee/fsm/registry/new-vendor");
       case "VEHICLE":
         return history.push("/digit-ui/employee/fsm/registry/new-vehicle");
+        case "DRIVER":
+          return history.push("/digit-ui/employee/fsm/registry/new-driver")
       default:
         break;
     }
@@ -113,43 +115,43 @@ const SearchApplication = ({ onSearch, type, onClose, onTabChange, isFstpOperato
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmitInput)}>
-      <React.Fragment>
-        <div className="search-container" style={{ width: "auto" }}>
-          <div className="search-complaint-container">
-            {(type === "mobile" || mobileView) && (
-              <div className="complaint-header">
-                <h2>{t("ES_COMMON_SEARCH_BY")}</h2>
-                <span style={{
-                  position: "absolute",
-                  top: "2%",
-                  right: "8px",
-                }} onClick={onClose}>
-                  <CloseSvg />
-                </span>
-              </div>
-            )}
-            <div className="search-tabs-container" >
-              <div>
-                <button className={selectedTab === 'VENDOR' ? 'search-tab-head-selected' : 'search-tab-head'} onClick={() => onTabChange('VENDOR')}>{t('ES_FSM_REGISTRY_INBOX_TAB_VENDOR')}</button>
-                <button className={selectedTab === 'VEHICLE' ? 'search-tab-head-selected' : 'search-tab-head'} onClick={() => onTabChange('VEHICLE')}>{t('ES_FSM_REGISTRY_INBOX_TAB_VEHICLE')}</button>
-                <button className={selectedTab === 'DRIVER' ? 'search-tab-head-selected' : 'search-tab-head'} onClick={() => onTabChange('DRIVER')}>{t('ES_FSM_REGISTRY_INBOX_TAB_DRIVER')}</button>
-              </div>
-              <div className="action-bar-wrap-registry">
-                <div className="search-add" onClick={onAddClick}>
-                  {t('ES_FSM_REGISTRY_INBOX_HEADER_ADD')}
-                  <div className="search-add-icon">
-                    <AddIcon className="" />
-                  </div>
-                </div>
-                {showAddMenu && <Menu
-                  localeKeyPrefix={"ES_FSM_ACTION_CREATE"}
-                  options={['VENDOR', 'DRIVER', 'VEHICLE']}
-                  t={t}
-                  onSelect={onActionSelect}
-                />}
-              </div>
+    <React.Fragment>
+      <div className="search-container" style={{ width: "auto" }}>
+        <div className="search-complaint-container">
+          {(type === "mobile" || mobileView) && (
+            <div className="complaint-header">
+              <h2>{t("ES_COMMON_SEARCH_BY")}</h2>
+              <span style={{
+                position: "absolute",
+                top: "2%",
+                right: "8px",
+              }} onClick={onClose}>
+                <CloseSvg />
+              </span>
             </div>
+          )}
+          <div className="search-tabs-container" >
+            <div>
+              <button className={selectedTab === 'VENDOR' ? 'search-tab-head-selected' : 'search-tab-head'} onClick={() => { clearSearch({}); onTabChange('VENDOR') }}>{t('ES_FSM_REGISTRY_INBOX_TAB_VENDOR')}</button>
+              <button className={selectedTab === 'VEHICLE' ? 'search-tab-head-selected' : 'search-tab-head'} onClick={() => { clearSearch({}); onTabChange('VEHICLE') }}>{t('ES_FSM_REGISTRY_INBOX_TAB_VEHICLE')}</button>
+              <button className={selectedTab === 'DRIVER' ? 'search-tab-head-selected' : 'search-tab-head'} onClick={() => { clearSearch({}); onTabChange('DRIVER') }}>{t('ES_FSM_REGISTRY_INBOX_TAB_DRIVER')}</button>
+            </div>
+            <div className="action-bar-wrap-registry">
+              <div className="search-add" onClick={onAddClick}>
+                {t('ES_FSM_REGISTRY_INBOX_HEADER_ADD')}
+                <div className="search-add-icon">
+                  <AddIcon className="" />
+                </div>
+              </div>
+              {showAddMenu && <Menu
+                localeKeyPrefix={"ES_FSM_ACTION_CREATE"}
+                options={['VENDOR', 'DRIVER', 'VEHICLE']}
+                t={t}
+                onSelect={onActionSelect}
+              />}
+            </div>
+          </div>
+          <form onSubmit={handleSubmit(onSubmitInput)}>
             <div className={FSTP ? "complaint-input-container for-pt for-search" : "complaint-input-container"} style={{ width: "100%", gridTemplateColumns: '33.33% 66.66% 0%' }}>
               {searchFields?.map((input, index) => (
                 <span key={index} className={index === 0 ? "complaint-input" : "mobile-input"}>
@@ -163,18 +165,10 @@ const SearchApplication = ({ onSearch, type, onClose, onTabChange, isFstpOperato
               </div>
             </div>
             {error ? <CardLabelError className="search-error-label">{t("ES_SEARCH_APPLICATION_ERROR")}</CardLabelError> : null}
-          </div>
+          </form>
         </div>
-        {(type === "mobile" || mobileView) && (
-          <ActionBar className="clear-search-container">
-            <button className="clear-search" style={{ flex: 1 }}>
-              {clearAll(mobileView)}
-            </button>
-            <SubmitBar label={t("ES_COMMON_SEARCH")} style={{ flex: 1 }} submit={true} />
-          </ActionBar>
-        )}
-      </React.Fragment>
-    </form>
+      </div>
+    </React.Fragment>
   );
 };
 

@@ -16,7 +16,8 @@ import {
   DeleteIcon,
   Modal,
   Close,
-  CardText
+  CardText,
+  Dropdown
 } from "@egovernments/digit-ui-react-components";
 
 import { useQueryClient } from "react-query";
@@ -47,12 +48,30 @@ const VendorDetails = (props) => {
   const [config, setCurrentConfig] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
+  const [vehicles, setVehicles] = useState([]);
+  const [drivers, setDrivers] = useState([]);
+  const [selectedOption, setSelectedOption] = useState({});
 
   const { data: dsoData, isLoading: isLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(
     tenantId,
     { ids: dsoId },
     { staleTime: Infinity }
   );
+
+  const { data: vehicleData, isLoading: isVehicleDataLoading, isSuccess: isVehicleSuccess, error: vehicleError } = Digit.Hooks.fsm.useVehiclesSearch({
+    tenantId,
+    filters: {
+      vendorVehicleStatus: 'ACTIVE',
+      vehicleWithNoVendor: true
+    },
+  })
+
+  const { data: driverData, isLoading: isDriverDataLoading, isSuccess: isDriverSuccess, error: driverError } = Digit.Hooks.fsm.useDriverSearch({
+    tenantId,
+    filters: {
+      status: 'ACTIVE'
+    },
+  })
 
   const {
     isLoading: isUpdateLoading,
@@ -70,6 +89,8 @@ const VendorDetails = (props) => {
   useEffect(() => {
     switch (selectedAction) {
       case "DELETE":
+      case "ADD_VEHICLE":
+      case "ADD_DRIVER":
         return setShowModal(true);
       case "EDIT":
         return history.push("/digit-ui/employee/fsm/registry/modify-vendor/" + dsoId);
@@ -77,6 +98,14 @@ const VendorDetails = (props) => {
         break;
     }
   }, [selectedAction]);
+
+  useEffect(() => {
+    if (vehicleData) setVehicles(vehicleData?.vehicle || [])
+  }, [vehicleData])
+
+  useEffect(() => {
+    if (driverData) setDrivers(driverData?.driver || [])
+  }, [driverData])
 
   const closeToast = () => {
     setShowToast(null);
@@ -87,15 +116,43 @@ const VendorDetails = (props) => {
     setShowModal(false);
   };
 
-  const handleDelete = () => {
+  const handleVendorUpdate = () => {
     let dsoDetails = dsoData?.[0]?.dsoDetails;
-    // const name = data?.vendorName;
-    const formData = {
-      vendor: {
-        ...dsoDetails,
-        status: "INACTIVE"
-      }
-    };
+    let formData = {}
+    if (selectedAction === 'DELETE') {
+      formData = {
+        vendor: {
+          ...dsoDetails,
+          status: "INACTIVE"
+        }
+      };
+    }
+    if (selectedAction === 'ADD_VEHICLE') {
+      let selectedVehicle = selectedOption
+      selectedVehicle.vendorVehicleStatus = 'ACTIVE'
+      formData = {
+        vendor: {
+          ...dsoDetails,
+          vehicles: dsoDetails.vehicles ? [
+            ...dsoDetails.vehicles,
+            selectedVehicle
+          ] : [selectedVehicle]
+        }
+      };
+    }
+    if (selectedAction === 'ADD_DRIVER') {
+      let selectedDriver = selectedOption
+      selectedDriver.vendorDriverStatus = 'ACTIVE'
+      formData = {
+        vendor: {
+          ...dsoDetails,
+          drivers: dsoDetails.drivers ? [
+            ...dsoDetails.drivers,
+            selectedDriver
+          ] : [selectedDriver]
+        }
+      };
+    }
 
     mutate(formData, {
       onError: (error, variables) => {
@@ -103,16 +160,98 @@ const VendorDetails = (props) => {
         setTimeout(closeToast, 5000);
       },
       onSuccess: (data, variables) => {
-        setShowToast({ key: "success", action: 'DELETE_VENDOR' });
+        setShowToast({ key: "success", action: selectedAction === 'DELETE' ? 'DELETE_VENDOR' : selectedAction });
         queryClient.invalidateQueries("DSO_SEARCH");
         setTimeout(() => {
           closeToast
-          history.push(`/digit-ui/employee/fsm/registry`)
+          if (selectedAction === 'DELETE') history.push(`/digit-ui/employee/fsm/registry`)
         }, 5000);
       },
     });
     setShowModal(false)
   };
+
+  const onEdit = (details, type, id) => {
+    if (type === "ES_FSM_REGISTRY_DETAILS_TYPE_DRIVER") {
+      history.push("/digit-ui/employee/fsm/registry/modify-driver/" + id);
+    } else {
+      let registrationNumber = details?.values?.find((ele) => ele.title === "ES_FSM_REGISTRY_VEHICLE_NUMBER")?.value
+      history.push("/digit-ui/employee/fsm/registry/modify-vehicle/" + registrationNumber);
+    }
+  }
+
+  const onDelete = (details, type, id) => {
+    let formData = {}
+    if (type === "ES_FSM_REGISTRY_DETAILS_TYPE_DRIVER") {
+      let dsoDetails = dsoData?.[0]?.dsoDetails;
+      let drivers = dsoDetails?.drivers
+      drivers = drivers.map((data) => {
+        if (data.id === id) {
+          data.vendorDriverStatus = 'INACTIVE'
+        }
+        return data
+      })
+      formData = {
+        vendor: {
+          ...dsoDetails,
+          drivers: drivers
+        }
+      };
+    } else {
+      let dsoDetails = dsoData?.[0]?.dsoDetails;
+      let vehicles = dsoDetails?.vehicles
+      let registrationNumber = details?.values?.find((ele) => ele.title === "ES_FSM_REGISTRY_VEHICLE_NUMBER")?.value
+      vehicles = vehicles.map((data) => {
+        if (data.registrationNumber === registrationNumber) {
+          data.vendorVehicleStatus = 'INACTIVE'
+        }
+        return data
+      })
+      formData = {
+        vendor: {
+          ...dsoDetails,
+          vehicles: vehicles
+        }
+      };
+    }
+    mutate(formData, {
+      onError: (error, variables) => {
+        setShowToast({ key: "error", action: error });
+        setTimeout(closeToast, 5000);
+      },
+      onSuccess: (data, variables) => {
+        setShowToast({ key: "success", action: type === "ES_FSM_REGISTRY_DETAILS_TYPE_DRIVER" ? 'DELETE_DRIVER' : 'DELETE_VEHICLE' });
+        queryClient.invalidateQueries("DSO_SEARCH");
+        setTimeout(() => {
+          closeToast
+        }, 5000);
+      },
+    });
+  }
+
+  const renderModalContent = () => {
+    if (selectedAction === 'DELETE') {
+      return (
+        <CardText>{t(`ES_FSM_REGISTRY_DELETE_TEXT`)}</CardText>
+      )
+    }
+    if (selectedAction === 'ADD_VEHICLE') {
+      return (
+        <>
+          <CardText>{t(`ES_FSM_REGISTRY_SELECT_VEHICLE`)}</CardText>
+          <Dropdown t={t} option={vehicles} value={selectedOption} selected={selectedOption} select={setSelectedOption} optionKey={"registrationNumber"} />
+        </>
+      )
+    }
+    if (selectedAction === 'ADD_DRIVER') {
+      return (
+        <>
+          <CardText>{t(`ES_FSM_REGISTRY_SELECT_DRIVER`)}</CardText>
+          <Dropdown t={t} option={drivers} value={selectedOption} selected={selectedOption} select={setSelectedOption} optionKey={"name"} />
+        </>
+      )
+    }
+  }
 
   if (isLoading) {
     return <Loader />;
@@ -146,8 +285,8 @@ const VendorDetails = (props) => {
                         <div className="card-head">
                           <h2>{t(detail.type)} {index + 1}</h2>
                           <div style={{ display: 'flex' }}>
-                            <EditIcon className="edit" fill="#f47738" />
-                            <DeleteIcon className="delete" fill="#f47738" />
+                            <span onClick={() => onEdit(data, detail.type, data.id)}><EditIcon style={{ cursor: 'pointer', marginRight: '20px' }} className="edit" fill="#f47738" /></span>
+                            <span onClick={() => onDelete(data, detail.type, data.id)}><DeleteIcon style={{ cursor: 'pointer' }} className="delete" fill="#f47738" /></span>
                           </div>
                         </div>
                         {data?.values?.map((value, index) => (
@@ -163,7 +302,7 @@ const VendorDetails = (props) => {
                       </Card>
                     );
                   })}
-                  {detail.type && <div style={{ color: '#f47738', cursor: 'pointer', marginLeft: '16px' }}>{t(`${detail.type}_ADD`)}</div>}
+                  {detail.type && <div style={{ color: '#f47738', cursor: 'pointer', marginLeft: '16px' }} onClick={() => onActionSelect(detail.type === 'ES_FSM_REGISTRY_DETAILS_TYPE_DRIVER' ? 'ADD_DRIVER' : 'ADD_VEHICLE')} >{t(`${detail.type}_ADD`)}</div>}
                 </StatusTable>
               </React.Fragment>
             ))}
@@ -171,15 +310,15 @@ const VendorDetails = (props) => {
           </Card>
           {showModal &&
             <Modal
-              headerBarMain={<Heading label={t('ES_FSM_REGISTRY_DELETE_POPUP_HEADER')} />}
+              headerBarMain={<Heading label={t(selectedAction === 'DELETE' ? 'ES_FSM_REGISTRY_DELETE_POPUP_HEADER' : selectedAction === 'ADD_VEHICLE' ? 'ES_FSM_REGISTRY_ADD_VEHICLE_POPUP_HEADER' : 'ES_FSM_REGISTRY_ADD_DRIVER_POPUP_HEADER')} />}
               headerBarEnd={<CloseBtn onClick={closeModal} />}
               actionCancelLabel={t("CS_COMMON_CANCEL")}
               actionCancelOnSubmit={closeModal}
-              actionSaveLabel={t('ES_EVENT_DELETE')}
-              actionSaveOnSubmit={handleDelete}
+              actionSaveLabel={t(selectedAction === 'DELETE' ? 'ES_EVENT_DELETE' : 'CS_COMMON_SUBMIT')}
+              actionSaveOnSubmit={handleVendorUpdate}
             >
               <Card style={{ boxShadow: "none" }}>
-                <CardText>{t(`ES_FSM_REGISTRY_DELETE_TEXT`)}</CardText>
+                {renderModalContent()}
               </Card>
             </Modal>
           }

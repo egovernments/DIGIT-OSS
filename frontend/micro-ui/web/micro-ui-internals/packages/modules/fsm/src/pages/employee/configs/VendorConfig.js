@@ -1,5 +1,5 @@
 import React from "react";
-const { DatePicker } = require("@egovernments/digit-ui-react-components")
+const { DatePicker, Dropdown } = require("@egovernments/digit-ui-react-components")
 
 const VendorConfig = (t, disabled = false) => {
   return [
@@ -25,7 +25,7 @@ const VendorConfig = (t, disabled = false) => {
       ]
     },
     {
-      "head": "ES_FSM_REGISTRY_NEW_OWNER_DETAILS",
+      "head": "ES_FSM_REGISTRY_PERSONAL_DETAILS",
       "body": [
         {
           "label": "ES_FSM_REGISTRY_NEW_GENDER",

@@ -22,6 +22,7 @@ import SelectTankSize from "./pageComponents/SelectTankSize";
 import SelectTripData from "./pageComponents/SelectTripData";
 // import SelectTripNo from "./pageComponents/SelectTripNo";
 import SelectPaymentPreference from "./pageComponents/SelectPaymentPreference";
+import SelectVehicle from "./pageComponents/SelectVehicleType";
 import CitizenApp from "./pages/citizen";
 import ApplicationDetails from "./pages/citizen/ApplicationDetails";
 import { MyApplications } from "./pages/citizen/MyApplications";
@@ -39,11 +40,15 @@ import Inbox from "./pages/employee/Inbox";
 import { NewApplication } from "./pages/employee/NewApplication";
 import Response from "./pages/Response";
 import FSMRegistry from "./pages/employee/FSMRegistry";
-import VendorDetails from "./pages/employee/FSMRegistry/VendorDetails";
-import AddVendor from "./pages/employee/FSMRegistry/AddVendor";
-import EditVendor from "./pages/employee/FSMRegistry/EditVendor";
-import VehicleDetails from "./pages/employee/FSMRegistry/VehicleDetails";
-import AddVehicle from "./pages/employee/FSMRegistry/AddVehicle";
+import VendorDetails from "./pages/employee/FSMRegistry/Vendor/VendorDetails";
+import AddVendor from "./pages/employee/FSMRegistry/Vendor/AddVendor";
+import EditVendor from "./pages/employee/FSMRegistry/Vendor/EditVendor";
+import VehicleDetails from "./pages/employee/FSMRegistry/Vehicle/VehicleDetails";
+import AddVehicle from "./pages/employee/FSMRegistry/Vehicle/AddVehicle";
+import EditVehicle from "./pages/employee/FSMRegistry/Vehicle/EditVehicle";
+import DriverDetails from "./pages/employee/FSMRegistry/Driver/DriverDetails";
+import AddDriver from "./pages/employee/FSMRegistry/Driver/AddDriver";
+import EditDriver from "./pages/employee/FSMRegistry/Driver/EditDriver";
 import {FsmBreadCrumb} from "./pages/employee";
 
 const FSMModule = ({ stateCode, userType, tenants }) => {
@@ -184,6 +189,11 @@ const componentsToRegister = {
   EditVendor,
   VehicleDetails,
   AddVehicle,
+  EditVehicle,
+  SelectVehicle,
+  AddDriver,
+  DriverDetails,
+  EditDriver,
   FsmBreadCrumb
 };
 

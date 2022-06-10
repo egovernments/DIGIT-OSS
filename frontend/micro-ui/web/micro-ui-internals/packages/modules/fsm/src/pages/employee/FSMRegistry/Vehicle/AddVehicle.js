@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FormComposer, Toast } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
-import VehicleConfig from "../configs/VehicleConfig";
+import VehicleConfig from "../../configs/VehicleConfig";
 import { useQueryClient } from "react-query";
 
 const AddVehicle = ({ parentUrl, heading }) => {
@@ -22,7 +22,7 @@ const AddVehicle = ({ parentUrl, heading }) => {
     data: updateResponse,
     error: updateError,
     mutate,
-  } = Digit.Hooks.fsm.useVendorCreate(tenantId);
+  } = Digit.Hooks.fsm.useVehicleCreate(tenantId);
 
   useEffect(() => {
     setMutationHappened(false);
@@ -46,11 +46,11 @@ const AddVehicle = ({ parentUrl, heading }) => {
 
   const onFormValueChange = (setValue, formData) => {
     if (
-      formData?.vendorName &&
-      formData?.phone &&
-      formData?.address?.locality &&
+      formData?.registrationNumber &&
       formData?.ownerName &&
-      formData?.selectGender
+      formData?.phone && 
+      formData?.vehicle?.modal &&
+      formData?.vehicle?.type
     ) {
       setSubmitValve(true);
     } else {
@@ -63,76 +63,45 @@ const AddVehicle = ({ parentUrl, heading }) => {
   };
 
   const onSubmit = (data) => {
-    const name = data?.vendorName;
-    const pincode = data?.pincode;
-    const street = data?.street?.trim();
-    const doorNo = data?.doorNo?.trim();
-    const plotNo = data?.plotNo?.trim();
-    const landmark = data?.landmark?.trim();
-    const city = data?.address?.city?.name;
-    const state = data?.address?.city?.state;
-    const district = data?.address?.city?.name;
-    const region = data?.address?.city?.name;
-    const buildingName = data?.buildingName?.trim();
-    const localityCode = data?.address?.locality?.code;
-    const localityName = data?.address?.locality?.name;
-    const localityArea = data?.address?.locality?.area;
+    const registrationNumber = data?.registrationNumber;
+    const vehicleType = data?.vehicle?.type?.code;
+    const vehicleModal = data?.vehicle?.modal?.code;
+    const tankCapacity = data?.vehicle?.type?.capacity;
+    const pollutionCert = new Date(`${data?.pollutionCert}`).getTime();
+    const insurance = new Date(`${data?.insurance}`).getTime();
+    const roadTax = new Date(`${data?.roadTax}`).getTime();
+    const fitnessValidity = new Date(`${data?.fitnessValidity}`).getTime();
     const ownerName = data?.ownerName;
-    const fatherOrHusbandName = data?.fatherOrHusbandName;
-    const relationship = data?.relationship;
-    const gender = data?.selectGender?.code;
-    const emailId = data?.emailId;
-    const correspondenceAddress = data?.correspondenceAddress;
     const phone = data?.phone;
-    const dob = new Date(`${data.dob}`).getTime();
     const additionalDetails = data?.additionalDetails;
     const formData = {
-      vendor: {
+      vehicle: {
         tenantId: tenantId,
-        name,
-        agencyType: "ULB",
-        paymentPreference: "pre-service",
-        address: {
-          tenantId: tenantId,
-          landmark,
-          doorNo,
-          plotNo,
-          street,
-          city,
-          district,
-          region,
-          state,
-          country: 'in',
-          pincode,
-          buildingName,
-          locality: {
-            code: localityCode || '',
-            name: localityName || '',
-            label: "Locality",
-            area: localityArea || ''
-          },
-          geoLocation: {
-            latitude: data?.address?.latitude || 0,
-            longitude: data?.address?.longitude || 0,
-          },
-        },
+        registrationNumber: registrationNumber,
+        model: vehicleModal,
+        type: vehicleType,
+        tankCapacity: tankCapacity,
+        suctionType: "SEWER_SUCTION_MACHINE",
+        pollutionCertiValidTill: pollutionCert,
+        InsuranceCertValidTill: insurance,
+        fitnessValidTill: fitnessValidity,
+        roadTaxPaidTill: roadTax,
+        gpsEnabled: true,
+        source: "Municipal records",
         owner: {
-          tenantId: stateId || '',
-          name: ownerName || '',
-          fatherOrHusbandName: fatherOrHusbandName || '',
-          relationship: relationship || '',
-          gender: gender || '',
-          dob: dob,
-          emailId: emailId || '',
-          correspondenceAddress: correspondenceAddress || '',
-          mobileNumber: phone || ''
-      },
-      additionalDetails: {
-        description: additionalDetails,
-      },
-      vehicle: [],
-      drivers: [],
-      source: "WhatsApp"
+          tenantId: stateId,
+          name: ownerName,
+          fatherOrHusbandName: ownerName,
+          relationship: 'OTHER',
+          gender: 'OTHERS',
+          dob: new Date(`1/1/1970`).getTime(),
+          emailId: 'abc@egov.com',
+          correspondenceAddress: '',
+          mobileNumber: phone
+        },
+        additionalDetails: {
+          description: additionalDetails,
+        }
       }
     };
 
@@ -142,9 +111,9 @@ const AddVehicle = ({ parentUrl, heading }) => {
         setTimeout(closeToast, 5000);
       },
       onSuccess: (data, variables) => {
-        setShowToast({ key: "success", action: 'ADD_VENDOR' });
+        setShowToast({ key: "success", action: 'ADD_VEHICLE' });
         setTimeout(closeToast, 5000);
-        queryClient.invalidateQueries("DSO_SEARCH");
+        queryClient.invalidateQueries("FSM_VEICLES_SEARCH");
         setTimeout(() => {
           closeToast();
           history.push(`/digit-ui/employee/fsm/registry`);

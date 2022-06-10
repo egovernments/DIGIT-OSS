@@ -48,20 +48,25 @@ const VehicleDetails = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
 
-  const { data: vehicleData, isLoading: isLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useVehicleDetails(
+  const { data: vehicleData, isLoading: isLoading, isSuccess: isVehicleSuccess, error: vehicleError } = Digit.Hooks.fsm.useVehicleDetails(
     tenantId,
-    { registrationNumber: 'TS 09 PA 2584' },
+    { registrationNumber: vehicleId },
     { staleTime: Infinity }
   );
 
+  const { data: dsoData, isLoading: isVendorLoading, isSuccess: isVendorSuccess, error: vendorError } = Digit.Hooks.fsm.useDsoSearch(
+    tenantId,
+    { vehicleIds: vehicleId },
+    { staleTime: Infinity }
+  );
 
   const {
     isLoading: isUpdateLoading,
-    isError: vendorCreateError,
+    isError: vehicleUpdatError,
     data: updateResponse,
     error: updateError,
     mutate,
-  } = Digit.Hooks.fsm.useVendorUpdate(tenantId);
+  } = Digit.Hooks.fsm.useUpdateVehicle(tenantId);
 
   function onActionSelect(action) {
     setDisplayMenu(false);
@@ -89,11 +94,10 @@ const VehicleDetails = (props) => {
   };
 
   const handleDelete = () => {
-    let dsoDetails = vehicleData?.[0]?.dsoDetails;
-    // const name = data?.vendorName;
+    let vehicleDetails = vehicleData?.[0]?.vehicleData;
     const formData = {
-      vendor: {
-        ...dsoDetails,
+      vehicle: {
+        ...vehicleDetails,
         status: "INACTIVE"
       }
     };
@@ -104,8 +108,8 @@ const VehicleDetails = (props) => {
         setTimeout(closeToast, 5000);
       },
       onSuccess: (data, variables) => {
-        setShowToast({ key: "success", action: 'DELETE_VENDOR' });
-        queryClient.invalidateQueries("DSO_SEARCH");
+        setShowToast({ key: "success", action: 'DELETE_VEHICLE' });
+        queryClient.invalidateQueries("FSM_VEICLES_SEARCH");
         setTimeout(() => {
           closeToast
           history.push(`/digit-ui/employee/fsm/registry`)
@@ -123,7 +127,7 @@ const VehicleDetails = (props) => {
     <React.Fragment>
       {!isLoading ? (
         <React.Fragment>
-          <Header style={{ marginBottom: "16px" }}>{t("ES_FSM_REGISTRY_VENDOR_DETAILS")}</Header>
+          <Header style={{ marginBottom: "16px" }}>{t("ES_FSM_REGISTRY_VEHICLE_DETAILS")}</Header>
           <Card style={{ position: "relative" }}>
             {vehicleData?.[0]?.employeeResponse?.map((detail, index) => (
               <React.Fragment key={index}>
@@ -139,29 +143,6 @@ const VehicleDetails = (props) => {
                         caption={value.caption}
                         className="border-none"
                       />
-                    );
-                  })}
-                  {detail?.child?.map((data, index) => {
-                    return (
-                      <Card className="card-with-background">
-                        <div className="card-head">
-                          <h2>{t(detail.type)} {index + 1}</h2>
-                          <div style={{ display: 'flex' }}>
-                            <EditIcon className="edit" fill="#f47738" />
-                            <DeleteIcon className="delete" fill="#f47738" />
-                          </div>
-                        </div>
-                        {data?.values?.map((value, index) => (
-                          <Row
-                            key={t(value.title)}
-                            label={t(value.title)}
-                            text={t(value.value) || "N/A"}
-                            last={index === detail?.values?.length - 1}
-                            caption={value.caption}
-                            className="border-none"
-                          />
-                        ))}
-                      </Card>
                     );
                   })}
                 </StatusTable>

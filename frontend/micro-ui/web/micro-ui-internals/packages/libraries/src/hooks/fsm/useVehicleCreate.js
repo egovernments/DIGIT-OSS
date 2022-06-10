@@ -1,8 +1,17 @@
 import { useMutation } from "react-query";
 import { FSMService } from "../../services/elements/FSM";
 
-const useVehicleUpdate = () => {
-    return useMutation((details) => FSMService.vehicleCreate(details));
+const useVehicleCreate = (tenantId) => {
+  return useMutation((vendorData) => VehicleCreateActions(vendorData, tenantId));
 };
 
-export default useVehicleUpdate;
+const VehicleCreateActions = async (vendorData, tenantId) => {
+  try {
+    const response = await FSMService.createVehicle(vendorData, tenantId);
+    return response;
+  } catch (error) {
+    throw new Error(error?.response?.data?.Errors[0].message);
+  }
+};
+
+export default useVehicleCreate;

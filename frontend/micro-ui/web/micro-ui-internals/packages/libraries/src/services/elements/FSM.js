@@ -86,9 +86,9 @@ export const FSMService = {
       auth: true,
     });
   },
-  vehicleCreate: (details) => {
+  vehicleTripCreate: (details) => {
     return Request({
-      url: Urls.fsm.vehicleCreate,
+      url: Urls.fsm.vehicleTripCreate,
       data: details,
       useCache: false,
       userService: true,
@@ -109,6 +109,55 @@ export const FSMService = {
   updateVendor: (details, tenantId) =>
     Request({
       url: Urls.fsm.updateVendor,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
+  createVehicle: (details, tenantId) =>
+    Request({
+      url: Urls.fsm.createVehicle,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
+  updateVehicle: (details, tenantId) =>
+    Request({
+      url: Urls.fsm.updateVehicle,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
+  driverSearch: (tenantId, filters) =>
+    Request({
+      url: Urls.fsm.driverSearch,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId, ...filters },
+      auth: true,
+    }),
+  createDriver: (details, tenantId) =>
+    Request({
+      url: Urls.fsm.createDriver,
+      data: details,
+      useCache: true,
+      userService: true,
+      method: "POST",
+      params: { tenantId },
+      auth: true,
+    }),
+  updateDriver: (details, tenantId) =>
+    Request({
+      url: Urls.fsm.updateDriver,
       data: details,
       useCache: true,
       userService: true,

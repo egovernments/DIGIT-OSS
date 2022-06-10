@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FormComposer, Toast } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
-import VendorConfig from "../configs/VendorConfig";
+import VendorConfig from "../../configs/VendorConfig";
 import { useQueryClient } from "react-query";
 
 const AddVendor = ({ parentUrl, heading }) => {
@@ -86,7 +86,7 @@ const AddVendor = ({ parentUrl, heading }) => {
         tenantId: tenantId,
         name,
         agencyType: "ULB",
-        paymentPreference: "pre-service",
+        paymentPreference: "post-service",
         address: {
           tenantId: tenantId,
           landmark,
@@ -118,7 +118,7 @@ const AddVendor = ({ parentUrl, heading }) => {
           relationship: 'OTHER',
           gender: gender,
           dob: dob,
-          emailId: emailId || 'abc@eGov.com',
+          emailId: emailId || 'abc@egov.com',
           mobileNumber: phone
       },
       additionalDetails: {

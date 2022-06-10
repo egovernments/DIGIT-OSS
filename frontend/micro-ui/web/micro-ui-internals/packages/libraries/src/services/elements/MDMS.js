@@ -1022,6 +1022,15 @@ const GetVehicleType = (MdmsRes) =>
       };
     });
 
+const GetVehicleMakeModel = (MdmsRes) =>
+  MdmsRes["Vehicle"].VehicleMakeModel.filter((vehicle) => vehicle.active)
+    .map((vehicleDetails) => {
+      return {
+        ...vehicleDetails,
+        i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code}`,
+      };
+  });
+
 const GetSlumLocalityMapping = (MdmsRes, tenantId) =>
   MdmsRes["FSM"].Slum.filter((type) => type.active).reduce((prev, curr) => {
     return prev[curr.locality]
@@ -1318,6 +1327,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return GetPitType(MdmsRes);
     case "VehicleType":
       return GetVehicleType(MdmsRes);
+    case "VehicleMakeModel":
+      return GetVehicleMakeModel(MdmsRes);
     case "Slum":
       return GetSlumLocalityMapping(MdmsRes, tenantId);
     case "OwnerShipCategory":

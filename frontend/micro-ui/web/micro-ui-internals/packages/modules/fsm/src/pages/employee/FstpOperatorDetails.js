@@ -106,7 +106,7 @@ const FstpOperatorDetails = () => {
   });
 
   const mutation = Digit.Hooks.fsm.useVehicleUpdate(tenantId);
-  const create_mutation = Digit.Hooks.fsm.useVehicleCreate(tenantId);
+  const create_mutation = Digit.Hooks.fsm.useVehicleTripCreate(tenantId);
 
   useEffect(() => {
     if (isSuccess) {

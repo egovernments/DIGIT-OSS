@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FormComposer, Loader, Toast } from "@egovernments/digit-ui-react-components";
 import { useHistory, useParams } from "react-router-dom";
-import VendorConfig from "../configs/VendorConfig";
+import VendorConfig from "../../configs/VendorConfig";
 import { useQueryClient } from "react-query";
 
 const EditVendor = ({ parentUrl, heading }) => {
@@ -63,7 +63,7 @@ const EditVendor = ({ parentUrl, heading }) => {
         fatherOrHusbandName: dsoDetails?.dsoDetails?.owner?.fatherOrHusbandName,
         relationship: dsoDetails?.dsoDetails?.owner?.relationship,
         selectGender: dsoDetails?.dsoDetails?.owner?.gender,
-        dob: dsoDetails?.dsoDetails?.owner?.dob && new Date(dsoDetails?.dsoDetails?.owner?.dob),
+        dob: dsoDetails?.dsoDetails?.owner?.dob && Digit.DateUtils.ConvertTimestampToDate(dsoDetails?.dsoDetails?.owner?.dob, 'yyyy-MM-dd'),
         emailId: dsoDetails?.dsoDetails?.owner?.emailId,
         correspondenceAddress: dsoDetails?.dsoDetails?.owner?.correspondenceAddress,
         additionalDetails: dsoDetails?.dsoDetails?.additionalDetails?.description
@@ -110,7 +110,7 @@ const EditVendor = ({ parentUrl, heading }) => {
     const additionalDetails = data?.additionalDetails;
     const gender = data?.selectGender?.code;
     const emailId = data?.emailId;
-    const dob = new Date(`${data.dob}`).getTime() || dsoDetails.owner?.dob || new Date(`1/1/1970`).getTime();
+    const dob = new Date(`${data.dob}`).getTime() || new Date(`1/1/1970`).getTime();
     const formData = {
       vendor: {
         ...dsoDetails,
@@ -146,7 +146,7 @@ const EditVendor = ({ parentUrl, heading }) => {
           gender: gender || dsoDetails.owner?.gender || 'OTHER',
           dob: dob,
           emailId: emailId || 'abc@egov.com',
-          relationship: dsoDetails?.owner?.relationship || 'OTHER'
+          relationship: dsoDetails.owner?.relationship || 'OTHER'
         },
         additionalDetails: {
           ...dsoDetails.additionalDetails,
