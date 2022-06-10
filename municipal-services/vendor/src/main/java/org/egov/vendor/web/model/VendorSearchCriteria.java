@@ -53,6 +53,10 @@ public class VendorSearchCriteria {
 	
 	@JsonProperty("status")
 	private List<String> status; 
+	
+
+	@JsonProperty("driverIds")
+	private List<String> driverIds; 
 
 
 	public boolean isEmpty() {

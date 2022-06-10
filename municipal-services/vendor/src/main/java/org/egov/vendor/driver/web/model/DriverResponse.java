@@ -1,4 +1,4 @@
-package org.egov.vendor.web.model;
+package org.egov.vendor.driver.web.model;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Response of Vendor detail
+ * Response of Driver detail
  */
-//@Schema(description = "Response of Vendor detail")
+
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-01-06T05:34:12.238Z[GMT]")
 @AllArgsConstructor
@@ -26,17 +26,14 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class VendorResponse {
+public class DriverResponse {
 
 	@JsonProperty("responseInfo")
 	private ResponseInfo responseInfo = null;
 
-	//@JsonProperty("vendor")
-	//private Vendor vendor = null;
-	
-	 @JsonProperty("vendor")
+	 @JsonProperty("driver")
 	 @Valid
-	 private List<Vendor> vendor = null;
+	 private List<Driver> driver = null;
 	 
 	 @JsonProperty("totalCount")
 	 private Integer totalCount = null;

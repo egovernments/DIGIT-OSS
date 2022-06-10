@@ -1,15 +1,12 @@
-package org.egov.vendor.web.model;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.egov.vendor.driver.web.model;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
-import org.egov.vendor.driver.web.model.Driver;
-import org.egov.vendor.web.model.location.Address;
+import org.egov.vendor.web.model.AuditDetails;
+import org.egov.vendor.web.model.Vendor;
 import org.egov.vendor.web.model.user.User;
-import org.egov.vendor.web.model.vehicle.Vehicle;
+import org.egov.vendor.web.model.vehicle.Vehicle.StatusEnum;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
@@ -26,7 +23,7 @@ import lombok.Setter;
 
 
 /**
- * Capture the vendor information in the system.
+ * Capture the Driver information in the system.
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-01-06T05:34:12.238Z[GMT]")
@@ -35,7 +32,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class Vendor {
+public class Driver {
 
 	@SafeHtml
 	@JsonProperty("id")
@@ -51,48 +48,31 @@ public class Vendor {
 	@Size(max=128)
 	private String name = null;
 
-	@JsonProperty("address")
-	private Address address = null;
-
 	@JsonProperty("owner")
 	@Valid
 	private User owner = null;
-
-	@JsonProperty("vehicles")
-	@Valid
-	private List<Vehicle> vehicles = new ArrayList<Vehicle>();
-
-	@JsonProperty("drivers")
-	@Valid
-	private List<Driver> drivers = null;
+	
+	@JsonProperty("ownerId")
+	@SafeHtml  
+	@Size(max=64)
+	private String ownerId = null;
 
 	@JsonProperty("additionalDetails")
 	private Object additionalDetails = null;
 
 	@SafeHtml
-	@JsonProperty("source")
-	private String source = null;
-
-	@SafeHtml
 	@JsonProperty("description")
 	private String description = null;
 	
-	@JsonProperty("ownerId")
 	@SafeHtml
-	@Size(max=64)
-	private String ownerId = null;
-
-	@JsonProperty("agencyType")
-	@SafeHtml
-	@Size(max=128)
-	private String agencyType = null;
+	@JsonProperty("licenseNumber")
+	private String licenseNumber = null;
 	
-	@JsonProperty("paymentPreference")
-	@SafeHtml
-	@Size(max=128)
-	private String paymentPreference = null;
-	
-		
+	/*
+	 * @JsonProperty("vendor")
+	 * 
+	 * @Valid private Vendor vendor = null;
+	 */	
 	/**
 	 * Inactive records will be consider as soft deleted
 	 */
@@ -130,5 +110,8 @@ public class Vendor {
 
 	@JsonProperty("auditDetails")
 	private AuditDetails auditDetails = null;
+	
+	@JsonProperty("vendorDriverStatus")
+	private StatusEnum vendorDriverStatus = null;
 
 }

@@ -1,10 +1,8 @@
 package org.egov.vehicle.trip.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -57,7 +55,6 @@ public class VehicleLogEnrichmentService {
 		request.getVehicleTrip().forEach(vehicleTrip->{
 			vehicleTrip.setId(UUID.randomUUID().toString());
 			vehicleTrip.setStatus(VehicleTrip.StatusEnum.ACTIVE);
-			vehicleTrip.setStatus(VehicleTrip.StatusEnum.ACTIVE);
 			AuditDetails auditDetails = vehicleLogUtil.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid(),
 					true,null);
 			vehicleTrip.setAuditDetails(auditDetails);
@@ -67,58 +64,39 @@ public class VehicleLogEnrichmentService {
 				tripDetail.setTrip_id(vehicleTrip.getId());
 				tripDetail.setStatus(VehicleTripDetail.StatusEnum.ACTIVE);
 			});
-			if(vehicleTrip.getTripOwner() != null) {
-				vehicleTrip.setTripOwnerId(vehicleTrip.getTripOwner().getUuid());
-			}else {
-				addTripOwner(vehicleTrip, request.getRequestInfo());
-			}
-			if(vehicleTrip.getDriver() != null) {
-				vehicleTrip.setDriverId(vehicleTrip.getDriver().getUuid());
-			}else {
-				addTripDriverr(vehicleTrip,  request.getRequestInfo());
-			}
-			if(vehicleTrip.getVehicle() != null ) {
+			
+			if(vehicleTrip.getTripDetails().get(0).getReferenceNo()!=null) {
+				if(vehicleTrip.getTripOwner() != null) {
+					vehicleTrip.setTripOwnerId(vehicleTrip.getTripOwner().getUuid());
+				}else {
+					addTripOwner(vehicleTrip, request.getRequestInfo());
+				}
+				if(vehicleTrip.getDriver() != null) {
+					vehicleTrip.setDriverId(vehicleTrip.getDriver().getUuid());
+				}else {
+					addTripDriverr(vehicleTrip,  request.getRequestInfo());
+				}
+				if(vehicleTrip.getVehicle() != null ) {
 
-				vehicleTrip.setVehicleId(vehicleTrip.getVehicle().getId());
-			}else {
-				addVehicle(vehicleTrip);
-			}
-
+					vehicleTrip.setVehicleId(vehicleTrip.getVehicle().getId());
+				}else {
+					addVehicle(vehicleTrip);
+				}
+			}		
+			
 		});
 		setIdgenIds(request);
 		
-	//		VehicleTrip vehicleTrip =request.getVehicleTrip();
-	//		vehicleTrip.setId(UUID.randomUUID().toString());
-	//		vehicleTrip.setStatus(VehicleTrip.StatusEnum.ACTIVE);
-	//		setIdgenIds(request);
-	//		vehicleTrip.setStatus(VehicleTrip.StatusEnum.ACTIVE);
-	//		AuditDetails auditDetails = vehicleLogUtil.getAuditDetails(request.getRequestInfo().getUserInfo().getUuid(),
-	//				true,null);
-	//		vehicleTrip.setAuditDetails(auditDetails);
-	//		vehicleTrip.getTripDetails().forEach(tripDetail->{
-	//			tripDetail.setAuditDetails(auditDetails);
-	//			tripDetail.setId(UUID.randomUUID().toString());
-	//			tripDetail.setStatus(VehicleTripDetail.StatusEnum.ACTIVE);
-	//		});
-	//		if(vehicleTrip.getTripOwner() != null) {
-	//			vehicleTrip.setTripOwnerId(vehicleTrip.getTripOwner().getUuid());
-	//		}else {
-	//			addTripOwner(vehicleTrip, request.getRequestInfo());
-	//		}
-	//		if(vehicleTrip.getDriver() != null) {
-	//			vehicleTrip.setDriverId(vehicleTrip.getDriver().getUuid());
-	//		}else {
-	//			addTripDriverr(vehicleTrip,  request.getRequestInfo());
-	//		}
-	//		if(vehicleTrip.getVehicle() != null ) {
-	//
-	//			vehicleTrip.setVehicleId(vehicleTrip.getVehicle().getId());
-	//		}else {
-	//			addVehicle(vehicleTrip);
-	//		}
-		
-		if(request.getWorkflow() == null) {
-			request.setWorkflow(Workflow.builder().action(VehicleTripConstants.ACTION_SCHEDULE).build());
+		if (request.getWorkflow() == null) {
+			request.getVehicleTrip().forEach(vehicleTrip -> {
+				if (vehicleTrip.getTripDetails().get(0).getReferenceNo() == null
+						|| vehicleTrip.getTripDetails().get(0).getReferenceNo().isEmpty()) {
+					request.setWorkflow(Workflow.builder().action(VehicleTripConstants.CREATE_FSTPO_LOG).build());
+				} else {
+					request.setWorkflow(Workflow.builder().action(VehicleTripConstants.ACTION_SCHEDULE).build());
+				}
+			});
+
 		}
 	}
 
