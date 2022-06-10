@@ -71,6 +71,10 @@ public class OwnerInfo {
 	@SafeHtml
 	@JsonProperty("institutionId")
 	private String institutionId = null;
+	
+	
+	@JsonProperty("status")
+	private Boolean status = null;
 
 	@JsonProperty("documents")
 	@Valid
@@ -1077,6 +1081,15 @@ public class OwnerInfo {
 	public void setAuditDetails(AuditDetails auditDetails) {
 		this.auditDetails = auditDetails;
 	}
+	
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
 
 	
 	@Override
@@ -1126,7 +1139,8 @@ public class OwnerInfo {
 				&& Objects.equals(this.identificationMark, ownerInfo.identificationMark)
 				&& Objects.equals(this.photo, ownerInfo.photo)
 				&& Objects.equals(this.otpReference, ownerInfo.otpReference)
-				&& Objects.equals(this.auditDetails, ownerInfo.auditDetails);
+				&& Objects.equals(this.auditDetails, ownerInfo.auditDetails)
+		        && Objects.equals(this.status, ownerInfo.status);
 	}
 
 	@Override
@@ -1135,7 +1149,7 @@ public class OwnerInfo {
 				ownerShipPercentage, ownerType, institutionId, documents, relationship, additionalDetails, id, uuid, salutation, altContactNumber, pan, 
 				aadhaarNumber, permanentAddress, permanentCity, permanentPincode, correspondenceCity, correspondencePincode, 
 				active, dob, pwdExpiryDate, locale, type, signature, accountLocked, roles, bloodGroup, identificationMark,
-				photo, otpReference, auditDetails);
+				photo, otpReference, auditDetails,status);
 	}
 
 	@Override
@@ -1182,6 +1196,7 @@ public class OwnerInfo {
 		sb.append("    photo: ").append(toIndentedString(photo)).append("\n");
 		sb.append("    otpReference: ").append(toIndentedString(otpReference)).append("\n");
 		sb.append("    auditDetails: ").append(toIndentedString(auditDetails)).append("\n");
+		sb.append("    status: ").append(toIndentedString(status)).append("\n");
 		sb.append("}");
 		return sb.toString();
 	}
@@ -1278,6 +1293,8 @@ public class OwnerInfo {
                 Objects.equals(fatherOrHusbandName, ownerInfo.fatherOrHusbandName) &&
                 Objects.equals(correspondenceAddress, ownerInfo.correspondenceAddress);
 	}
+
+
 
 	/*@Override
 	public boolean equals(Object obj) {

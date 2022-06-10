@@ -374,7 +374,7 @@ public class EnrichmentService {
 
 			// Adding owners to assignes list
 			bpa.getLandInfo().getOwners().forEach(ownerInfo -> {
-			        if(ownerInfo.getUuid() != null && ownerInfo.getActive() )
+			        if(ownerInfo.getUuid() != null  )
 			            assignes.add(ownerInfo.getUuid());
 			});
 

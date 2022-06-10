@@ -62,6 +62,9 @@ public class OwnerInfo {
 
 	@JsonProperty("isPrimaryOwner")
 	private Boolean isPrimaryOwner = null;
+	
+	@JsonProperty("status")
+	private Boolean status = null;
 
 	@JsonProperty("ownerShipPercentage")
 	private BigDecimal ownerShipPercentage = null;
@@ -1128,7 +1131,8 @@ public class OwnerInfo {
 				&& Objects.equals(this.identificationMark, ownerInfo.identificationMark)
 				&& Objects.equals(this.photo, ownerInfo.photo)
 				&& Objects.equals(this.otpReference, ownerInfo.otpReference)
-				&& Objects.equals(this.auditDetails, ownerInfo.auditDetails);
+				&& Objects.equals(this.auditDetails, ownerInfo.auditDetails)
+		        && Objects.equals(this.status, ownerInfo.status);
 	}
 
 	@Override
@@ -1137,7 +1141,7 @@ public class OwnerInfo {
 				ownerShipPercentage, ownerType, institutionId, documents, relationship, additionalDetails, id, uuid, salutation, altContactNumber, pan, 
 				aadhaarNumber, permanentAddress, permanentCity, permanentPincode, correspondenceCity, correspondencePincode, 
 				active, dob, pwdExpiryDate, locale, type, signature, accountLocked, roles, bloodGroup, identificationMark,
-				photo, otpReference, auditDetails);
+				photo, otpReference, auditDetails,status);
 		}
 
 	@Override
@@ -1184,6 +1188,7 @@ public class OwnerInfo {
 		sb.append("    photo: ").append(toIndentedString(photo)).append("\n");
 		sb.append("    otpReference: ").append(toIndentedString(otpReference)).append("\n");
 		sb.append("    auditDetails: ").append(toIndentedString(auditDetails)).append("\n");
+		sb.append("    status: ").append(toIndentedString(status)).append("\n");
 		sb.append("}");
 		return sb.toString();
 	}
@@ -1314,4 +1319,12 @@ public class OwnerInfo {
          commonUser.setUuid(this.getUuid());
          return commonUser;
  }
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 }

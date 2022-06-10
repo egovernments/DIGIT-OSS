@@ -188,8 +188,8 @@ public class UserService {
     public Set<String> getUUidFromUserName(BPA bpa){
 
         String tenantId = bpa.getTenantId();
-      //  List<OwnerInfo> ownerInfos = bpa.getLandInfo().getOwners();
-        List<OwnerInfo> ownerInfos = bpa.getLandInfo().getOwners().stream().filter(ow -> ow.getActive()).collect(Collectors.toList());
+        List<OwnerInfo> ownerInfos = bpa.getLandInfo().getOwners();
+       // List<OwnerInfo> ownerInfos = bpa.getLandInfo().getOwners().stream().filter(ow -> ow.getActive()).collect(Collectors.toList());
         Set<String> mobileNumbers = new HashSet<>();
 
         // Get all unique mobileNumbers in the license
