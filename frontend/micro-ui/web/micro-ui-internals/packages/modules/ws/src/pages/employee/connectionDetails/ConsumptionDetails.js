@@ -250,6 +250,14 @@ const ConsumptionDetails = ({ view }) => {
     );
   };
 
+  const consumption = (currentReading, lastReading) => {
+    if (currentReading && lastReading) {
+      return Number(currentReading - lastReading);
+    }
+    else
+      return t("NA");
+  }
+  
   if (isLoading) {
     return <Loader />;
   }
@@ -271,7 +279,7 @@ const ConsumptionDetails = ({ view }) => {
                         <Row key={t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")} label={`${t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")}:`} text={application?.lastReadingDate ? Digit.DateUtils.ConvertEpochToDate(application?.lastReadingDate) : t("NA")} className="border-none" />
                         <Row key={t("WS_SERV_DETAIL_CUR_METER_READ")} label={`${t("WS_SERV_DETAIL_CUR_METER_READ")}:`} text={application?.currentReading || t("NA")} className="border-none" />
                         <Row key={t("WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL")} label={`${t("WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL")}:`} text={application?.currentReadingDate ? Digit.DateUtils.ConvertEpochToDate(application?.currentReadingDate) : t("NA")} className="border-none" />
-                        <Row key={t("WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL")} label={`${t("WS_CONSUMPTION_DETAILS_CURRENT_READING_LABEL")}:`} text={application?.consumption || t("NA")} className="border-none" />
+                        <Row key={t("WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL")} label={`${t("WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL")}:`} text={consumption(application?.currentReading, application?.lastReading)} className="border-none" />
                       </StatusTable>
                 </Card>
               </div>
