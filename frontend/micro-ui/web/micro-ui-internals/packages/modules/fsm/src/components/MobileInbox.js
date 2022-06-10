@@ -85,7 +85,7 @@ const MobileInbox = ({
           <ApplicationCard
             t={t}
             data={!data ? (isFstpOperator && isFSMRequest) ? fstp_citizen_data : fstpOperatorData : getData()}
-            onFilterChange={isFSMRequest ? onFilterChange : null}
+            onFilterChange={(isFSMRequest || !isFstpOperator) ? onFilterChange : false}
             serviceRequestIdKey={isFstpOperator ? t("ES_INBOX_VEHICLE_LOG") : DSO ? t("ES_INBOX_APPLICATION_NO") : t("ES_INBOX_APPLICATION_NO")}
             isFstpOperator={isFstpOperator}
             isLoading={isLoading}

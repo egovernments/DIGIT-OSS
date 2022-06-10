@@ -61,7 +61,7 @@ const FstpServiceRequest = () => {
     });
 
     useEffect(() => {
-        if (isSuccess || isIdle) {
+        if (isSuccess || isIdle || isSearchLoading || isLoading || isVehiclesLoading) {
             const applicationNos = vehicleLog?.map((i) => i?.tripDetails[0]?.referenceNo).join(",");
             setSearchParamsApplication({
                 applicationNos: applicationNos ? applicationNos : "null",
@@ -69,7 +69,7 @@ const FstpServiceRequest = () => {
             });
             setIsVehicleSearchCompleted(true);
         }
-    }, [isSuccess, vehicleLog, isIdle, isLoading, sortParams]);
+    }, [isSuccess, isSearchLoading, isVehiclesLoading, vehicleLog, isIdle, isLoading, sortParams]);
 
     useEffect(() => {
         if (tripDetails) {
@@ -126,7 +126,7 @@ const FstpServiceRequest = () => {
         return <Loader />;
     }
 
-    if (vehicleLog?.length === 0 && tripDetails?.length === 0) {
+    if (vehicleLog?.length === 0 && tripDetails?.length === 0 && isSuccess && !isSearchLoading && tripDetail?.length === 0 && !isVehiclesLoading) {
         history.push("/digit-ui/employee/fsm/fstp/new-vehicle-entry")
     }
 

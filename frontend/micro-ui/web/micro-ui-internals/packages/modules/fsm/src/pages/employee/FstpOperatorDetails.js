@@ -70,9 +70,9 @@ const FstpOperatorDetails = () => {
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(Array);
   const [error, setError] = useState(null);
-  const [newVehicleNumber, setNewVehicleNumber] = useState("");
-  const [newLocality, setNewLocality] = useState("");
-  const [newDsoName, setNewDsoName] = useState("");
+  const [newVehicleNumber, setNewVehicleNumber] = useState(null);
+  const [newLocality, setNewLocality] = useState(null);
+  const [newDsoName, setNewDsoName] = useState(null);
   const [comments, setComments] = useState();
 
   const onChangeVehicleNumber = (value) => {
@@ -201,9 +201,38 @@ const FstpOperatorDetails = () => {
   };
 
   const handleCreate = () => {
+    if (newVehicleNumber === null || newVehicleNumber?.trim()?.length === 0) {
+      setShowToast({ key: "error", action: `ES_FSTP_INVALID_VEHICLE_NUMBER` });
+      setTimeout(() => {
+        closeToast();
+      }, 2000);
+      return;
+    }
+    if (newDsoName === null || newDsoName?.trim()?.length === 0) {
+      setShowToast({ key: "error", action: `ES_FSTP_INVALID_DSO_NAME` });
+      setTimeout(() => {
+        closeToast();
+      }, 2000);
+      return;
+    }
+    if (newLocality === null || newLocality?.trim()?.length === 0) {
+      setShowToast({ key: "error", action: `ES_FSTP_INVALID_LOCALITY` });
+      setTimeout(() => {
+        closeToast();
+      }, 2000);
+      return;
+    }
     if (tripStartTime === null) {
       setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
       tripStartTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+      return;
+    }
+
+    if (wasteCollected === null || wasteCollected?.trim()?.length === 0) {
+      setShowToast({ key: "error", action: `ES_FSTP_INVALID_WASTE_AMOUNT` });
+      setTimeout(() => {
+        closeToast();
+      }, 2000);
       return;
     }
 
@@ -312,7 +341,7 @@ const FstpOperatorDetails = () => {
 
   const vehicleData = [
     {
-      title: t("ES_INBOX_VEHICLE_NO"),
+      title: `${t("ES_INBOX_VEHICLE_NO")} *`,
       value: vehicle?.vehicle?.registrationNumber || <TextInput
         //style={{ width: "40%" }}
         onChange={(e) => onChangeVehicleNumber(e.target.value)}
@@ -320,7 +349,7 @@ const FstpOperatorDetails = () => {
       />,
     },
     {
-      title: t("ES_INBOX_DSO_NAME"),
+      title: `${t("ES_INBOX_DSO_NAME")} *`,
       value: vehicle?.tripOwner?.name || <TextInput
         //style={{ width: "40%" }}
         onChange={(e) => onChangeDsoName(e.target.value)}
@@ -328,7 +357,7 @@ const FstpOperatorDetails = () => {
       />,
     },
     {
-      title: `${t("ES_INBOX_LOCALITY")}`,
+      title: `${t("ES_INBOX_LOCALITY")} *`,
       value: tripDetails && tripDetails[0]?.address?.locality?.name || <TextInput
         //style={{ width: "40%" }}
         onChange={(e) => onChangeLocality(e.target.value)}
@@ -537,7 +566,7 @@ const FstpOperatorDetails = () => {
       {showToast && (
         <Toast
           error={showToast.key === "error" ? true : false}
-          label={t(showToast.key === "success" ? showToast.action : `ES_FSM_DISPOSE_UPDATE_FAILURE`)}
+          label={t(showToast.key === "success" ? showToast.action : showToast.action)}
           onClose={closeToast}
         />
       )}
