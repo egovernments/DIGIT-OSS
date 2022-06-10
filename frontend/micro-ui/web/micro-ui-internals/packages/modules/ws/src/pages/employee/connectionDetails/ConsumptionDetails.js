@@ -25,6 +25,9 @@ const ConsumptionDetails = ({ view }) => {
   const [selectedConsumtion, setConsumption] = useState("");
   const [currentBillingPeriod, setBillingPeriod] = useState("");
   
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+  const isUserAllowedToAddMeterReading = userRoles.filter(role=>(role==="WS_CEMP" || role==="SW_CEMP")).length > 0
 
   const { isLoading, isError, data: response } = Digit.Hooks.ws.useWSConsumptionSearch({ filters: filter1 }, { filters: filter1 });
 
@@ -286,7 +289,7 @@ const ConsumptionDetails = ({ view }) => {
             ))}
       {!meterReadings?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("WS_NO_CONSUMPTION_FOUND")}</p>}
     </div>
-    {isLoading || meterStatusLoading || billingPeriodLoading ? null :
+        {isLoading || meterStatusLoading || billingPeriodLoading || !isUserAllowedToAddMeterReading ? null :
         <ActionBar>
         <SubmitBar label={t("WS_CONSUMPTION_BUTTON_METER_READING_LABEL")} onSubmit={popUp} />
         </ActionBar> }
