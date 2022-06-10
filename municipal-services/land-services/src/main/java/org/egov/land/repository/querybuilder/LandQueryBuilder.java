@@ -22,13 +22,13 @@ public class LandQueryBuilder {
 			+ "landInfo.lastModifiedTime as landinfo_lastmodifiedtime, landInfo.createdBy as landInfo_createdBy,landInfo.lastModifiedBy as landInfo_lastModifiedBy,"
 			+ "landInfo.createdTime as landInfo_createdTime,landInfo.additionalDetails, "
 			+ "landInfoaddress.id as landInfo_ad_id,landInfogeolocation.id as landInfo_geo_loc,"
-			+ "landInfoowner.id as landInfoowner_id,landInfoowner.uuid as landInfoowner_uuid, landInfo.landuniqueregno as land_regno,"
+			+ "landInfoowner.id as landInfoowner_id,landInfoowner.uuid as landInfoowner_uuid,landInfoowner.status as ownerstatus,landInfo.landuniqueregno as land_regno,"
 			+ "landInstitution.type as land_inst_type, landInstitution.id as land_inst_id, "
 			+ "landInfounit.id as landInfo_un_id, landInfodoc.id as landInfo_doc_id,landInfodoc.documenttype as landInfo_doc_documenttype,landInfodoc.filestoreid as landInfo_doc_filestore"
 			+ " FROM eg_land_landInfo landInfo" + INNER_JOIN_STRING
 			+ "eg_land_Address landInfoaddress ON landInfoaddress.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
 			+ "eg_land_institution landInstitution ON landInstitution.landInfoId = landInfo.id" + INNER_JOIN_STRING
-			+ "eg_land_ownerInfo landInfoowner ON landInfoowner.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
+			+ "eg_land_ownerInfo landInfoowner ON landInfoowner.landInfoId = landInfo.id AND landInfoowner.status = true " + LEFT_OUTER_JOIN_STRING
 			+ "eg_land_unit landInfounit ON landInfounit.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
 			+ "eg_land_document landInfodoc ON landInfodoc.landInfoId = landInfo.id" + LEFT_OUTER_JOIN_STRING
 			+ "eg_land_GeoLocation landInfogeolocation ON landInfogeolocation.addressid = landInfoaddress.id";;
