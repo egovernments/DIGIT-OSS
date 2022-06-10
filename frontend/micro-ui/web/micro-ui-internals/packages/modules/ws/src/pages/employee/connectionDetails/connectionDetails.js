@@ -111,7 +111,7 @@ const GetConnectionDetails = () => {
   const checkApplicationStatus = applicationDetails?.applicationData?.status === "Active" ? true : false;
 
   const getModifyConnectionButton = () => {
-    if (checkApplicationStatus) {
+    if (!checkApplicationStatus) {
       setshowActionToast({
         type: "error",
         label: "CONN_NOT_ACTIVE",
