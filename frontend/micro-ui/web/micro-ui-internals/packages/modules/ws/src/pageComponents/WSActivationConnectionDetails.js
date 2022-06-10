@@ -210,6 +210,16 @@ const ConnectionDetails = (_props) => {
         <div >
             <div style={{ marginBottom: "16px" }}>
                 <div>
+                    <LabelFieldPair>
+                        <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_ACK_COMMON_APP_NO_LABEL")}*:`}</CardLabel>
+                        <div className="field">
+                            <TextInput 
+                                disabled={true} 
+                                value={filters?.applicationNumber}>
+                            </TextInput>
+                        </div>
+                        
+                    </LabelFieldPair>
                     {filters?.service === "WATER" ? <div>
                         <LabelFieldPair>
                             <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_TYPE")}*:`}</CardLabel>
