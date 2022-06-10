@@ -80,13 +80,13 @@ const ConsumptionDetails = ({ view }) => {
     let selectedDate = parseInt(convertDateToEpoch(data?.currentReadingDate));
     let toDate = parseInt(convertDateToEpoch(Digit.Utils.date.getDate()));
     if(!data?.currentReading || data?.currentReading == null || data?.currentReading === ""){
-      setShowToast({ key: "error" });
+      setShowToast({ key: "error", message: t("ERR_CURRENT_READING_REQUIRED") });
       setError(t("ERR_CURRENT_READING_REQUIRED"));
       setTimeout(closeToast, 5000);
       return;
     }
     if(selectedDate < fromDate || selectedDate > toDate){
-      setShowToast({ key: "error" });
+      setShowToast({ key: "error", message: t("ERR_CURRENT_READING_DATE_SHOULD_NOT_BE_LESS_THAN_FROM_DATE_AND_NOT_GREATER_THAN_TO_DATE") });
       setError(t("ERR_CURRENT_READING_DATE_SHOULD_NOT_BE_LESS_THAN_FROM_DATE_AND_NOT_GREATER_THAN_TO_DATE"));
       setTimeout(closeToast, 5000);
       return;
@@ -321,7 +321,7 @@ const ConsumptionDetails = ({ view }) => {
           )}
         </Modal>
         )}
-        {showToast && <Toast error={showToast?.key === "error" ? true : false} label={t(showToast?.message)} onClose={closeToast} />}
+        {showToast && <Toast style={{zIndex:"10000"}} error={showToast?.key === "error" ? true : false} label={t(showToast?.message)} onClose={closeToast} />}
         
   </React.Fragment>
   );
