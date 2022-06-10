@@ -93,8 +93,7 @@ const WSEditApplicationByConfig = () => {
 
   const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { enabled: propertyId ? true : false }
+    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId && propertyId != "" ? true : false }
   );
 
   useEffect(() => {
@@ -107,7 +106,7 @@ const WSEditApplicationByConfig = () => {
   });
 
   useEffect(() => {
-    !propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
+    !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
   }, [sessionFormData?.cpt]);
 
   useEffect(async () => {
@@ -125,7 +124,7 @@ const WSEditApplicationByConfig = () => {
   }, [propertyDetails]);
 
   useEffect(() => {
-    if (sessionFormData?.DocumentsRequired?.documents?.length > 0) {
+    if (sessionFormData?.DocumentsRequired?.documents?.length > 0 || sessionFormData?.ConnectionDetails?.[0]?.water || sessionFormData?.ConnectionDetails?.[0]?.sewerage) {
       setEnabledLoader(false);
     }
   }, [propertyDetails, sessionFormData, sessionFormData?.cpt]);
@@ -133,7 +132,7 @@ const WSEditApplicationByConfig = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details?applicationNumber=${sessionFormData?.ConnectionDetails?.[0]?.applicationNo}&service=${sessionFormData?.ConnectionDetails?.[0]?.serviceName?.toUpperCase()}`
-    }, 3000);
+    }, 5000);
     return () => clearTimeout(timer);
   }, [isAppDetailsPage]);
 
@@ -154,17 +153,16 @@ const WSEditApplicationByConfig = () => {
   };
 
   const onSubmit = async (data) => {
-    if (!canSubmit) return;
-
-    const applicationDetails = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : details;
-    let convertAppData = await convertEditApplicationDetails1(data, applicationDetails?.applicationData);
-    const reqDetails = (serviceType || data?.ConnectionDetails?.[0]?.serviceName) == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
-
+    const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
+    let convertAppData = await convertEditApplicationDetails1(data, details);
+    const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
+    setSubmitValve(false);
     if (mutate) {
       mutate(reqDetails, {
         onError: (error, variables) => {
           setShowToast({ key: "error", message: error?.message ? error.message : error });
           setTimeout(closeToastOfError, 5000);
+          setSubmitValve(true);
         },
         onSuccess: (data, variables) => {
           setShowToast({ key: false, message: "WS_APPLICATION_SUBMITTED_SUCCESSFULLY_LABEL" });
