@@ -46,7 +46,7 @@ public class WsQueryBuilder {
 			+ " conn.locality, conn.isoldapplication, conn.roadtype, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id,"
 			+ " plumber.name as plumber_name, plumber.licenseno, roadcuttingInfo.id as roadcutting_id, roadcuttingInfo.roadtype as roadcutting_roadtype, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea,"
 			+ " roadcuttingInfo.active as roadcutting_active, plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress,"
-			+ " plumber.relationship, pi.createdTime as pi_createdTime, " + holderSelectValues
+			+ " plumber.relationship, conn.lastmodifiedtime as conn_lastmodifiedtime, " + holderSelectValues
 			+ " FROM eg_ws_connection conn "
 			+  INNER_JOIN_STRING 
 			+" eg_ws_service wc ON wc.connection_id = conn.id"
@@ -82,13 +82,13 @@ public class WsQueryBuilder {
             "WHERE offset_ > ? AND offset_ <= ?";
 	
 	private static final String PAGINATION_INBOX_WRAPPER = "SELECT * FROM "
-			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY pi_createdTime ASC) offset_ FROM " +
+			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_lastmodifiedtime ASC) offset_ FROM " +
             "({})" +
             " result) result_offset " +
             "WHERE offset_ > ? AND offset_ <= ?";
 
 	private static final String PAGINATION_INBOX_DESC_WRAPPER = "SELECT * FROM "
-			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY pi_createdTime DESC) offset_ FROM " +
+			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_lastmodifiedtime DESC) offset_ FROM " +
             "({})" +
             " result) result_offset " +
             "WHERE offset_ > ? AND offset_ <= ?";
@@ -99,13 +99,15 @@ public class WsQueryBuilder {
 	
 	private static final String ORDER_BY_COUNT_CLAUSE= " ORDER BY appCreatedDate DESC";
 	
-	private static final String ORDER_BY_INBOX_DESC_CLAUSE = " AND pi.createdtime IN (select max(createdtime) "
-			+ " from eg_wf_processinstance_v2 wf where wf.businessid = conn.applicationno GROUP BY wf.businessid)"
-			+ " order by pi.createdtime DESC";
+	private static final String ORDER_BY_INBOX_DESC_CLAUSE = " order by conn.lastmodifiedtime DESC";
+//			" AND pi.createdtime IN (select max(createdtime) "
+//			+ " from eg_wf_processinstance_v2 wf where wf.businessid = conn.applicationno GROUP BY wf.businessid)"
+//			+ " order by pi.createdtime DESC";
 
-	private static final String ORDER_BY_INBOX_ASC_CLAUSE = " AND pi.createdtime IN (select max(createdtime) "
-			+ " from eg_wf_processinstance_v2 wf where wf.businessid = conn.applicationno GROUP BY wf.businessid)"
-			+ " order by pi.createdtime ASC";
+	private static final String ORDER_BY_INBOX_ASC_CLAUSE = " order by conn.lastmodifiedtime ASC";
+//			" AND pi.createdtime IN (select max(createdtime) "
+//			+ " from eg_wf_processinstance_v2 wf where wf.businessid = conn.applicationno GROUP BY wf.businessid)"
+//			+ " order by pi.createdtime ASC";
 	
 	/**
 	 * 
