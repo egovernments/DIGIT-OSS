@@ -128,13 +128,14 @@ public class DashboardController {
 
 		//Getting the request information only from the Full Request
 		AggregateRequestDto requestInfo = requestDto.getAggregationRequestDto();
-		String jsonString = objectMapper.writeValueAsString(requestInfo);
-		String jsonString2 = objectMapper.writeValueAsString(requestDto.getHeaders());
-		StringBuilder finalString = new StringBuilder(jsonString).append(jsonString2);
-		//System.out.println(finalString.toString().hashCode());
+
+		// For performance enhancement, this creates a key which will cache the response
+		String requestBodyString = objectMapper.writeValueAsString(requestInfo);
+		String headersString = objectMapper.writeValueAsString(requestDto.getHeaders());
+		StringBuilder finalString = new StringBuilder(requestBodyString).append(headersString);
 		requestInfo.setHashKey(finalString.toString().hashCode());
+
 		Map<String, Object> headers = requestDto.getHeaders();
-		//requestInfo.getFilters().putAll(headers);
 		String response = "";
 		try {
 			if (headers.isEmpty()) {

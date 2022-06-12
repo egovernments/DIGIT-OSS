@@ -69,7 +69,6 @@ public class TarentoServiceImpl implements ClientService {
 	@Override
 	@Cacheable(value="versions", key="#request.hashKey")
 	public AggregateDto getAggregatedData(AggregateRequestDto request, List<RoleDto> roles) throws AINException, IOException {
-		//System.out.println("TARENTO SERVICE IMPL");
 		// Read visualization Code
 		String internalChartId = request.getVisualizationCode();
 		ObjectNode aggrObjectNode = JsonNodeFactory.instance.objectNode();
