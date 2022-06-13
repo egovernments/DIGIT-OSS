@@ -366,6 +366,7 @@ public class EnrichmentService {
 	 */
 	public void enrichAssignes(BPA bpa) {
 		Workflow wf = bpa.getWorkflow();
+		Map<String,String> mobilenumberToUUIDs = new HashMap<>();
 		Set<String> assignes = new HashSet<>();
 		if (wf != null && wf.getAssignes() != null)
 			assignes.addAll(wf.getAssignes());
@@ -374,11 +375,16 @@ public class EnrichmentService {
 
 			// Adding owners to assignes list
 			bpa.getLandInfo().getOwners().forEach(ownerInfo -> {
-			        if(ownerInfo.getUuid() != null  )
-			            assignes.add(ownerInfo.getUuid());
+			        if(ownerInfo.getUuid() != null && ownerInfo.getActive()) {
+						if (!mobilenumberToUUIDs.containsKey(ownerInfo.getMobileNumber()))
+						{
+							assignes.add(ownerInfo.getUuid());
+							mobilenumberToUUIDs.put(ownerInfo.getMobileNumber(),ownerInfo.getUuid());
+					}
+					}
 			});
 
-			Set<String> registeredUUIDS = userService.getUUidFromUserName(bpa);
+			Set<String> registeredUUIDS = userService.getUUidFromUserName(bpa,mobilenumberToUUIDs);
 
 			if (!CollectionUtils.isEmpty(registeredUUIDS))
 				assignes.addAll(registeredUUIDS);
