@@ -24,7 +24,7 @@ const combineResponse = (WaterConnections, properties, billData, t) => {
     return WaterConnections.map((app) => ({
       ConsumerNumber : app?.connectionNo,
       ConsumerName : app?.connectionHolders ? app?.connectionHolders.map((owner) => owner?.name).join(",") : properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.owners?.map((ow) => ow.name).join(","),
-      Address: getAddress((properties.filter((prop) => prop.propertyId === app?.propertyId)[0]).address, t),
+      Address: getAddress((properties.filter((prop) => prop.propertyId === app?.propertyId)[0])?.address, t),
       AmountDue : billData ? (billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.amount ? billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0].billDetails?.[0]?.amount : "NA")  : "NA",
       DueDate : billData ? getDate(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.expiryDate) : "NA",
       }))
@@ -52,7 +52,7 @@ const useSewarageSearch = ({tenantId, filters = {}, BusinessService="WS", t}, co
     consumerCode: consumercodes.substring(0, propertyids.length-2),
   })
   , config)
-  return combineResponse(response?.data?.SewerageConnections,properties?.data?.Properties,billData?.data?.Bill, t);
+  return {isLoading:response?.isLoading || properties?.isLoading || billData?.isLoading, data : combineResponse(response?.data?.SewerageConnections,properties?.data?.Properties,billData?.data?.Bill, t)};
 
 
 }

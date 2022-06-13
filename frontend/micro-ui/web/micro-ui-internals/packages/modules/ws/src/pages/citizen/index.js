@@ -42,7 +42,7 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
           <PrivateRoute path={`${path}/disconnect-application`} component={WSDisconnection} />
           <Route path={`${path}/search`} component={SearchConnectionComponent} />
-          <Route path={`${path}/my-bills`} component={WNSMyBillsComponent} />
+          <PrivateRoute path={`${path}/my-bills`} component={WNSMyBillsComponent} />
           <Route path={`${path}/search-results`} component={SearchResultsComponent} />
           <Route path={`${path}/test-acknowledgment`} component={TestAcknowledgment} />
           <PrivateRoute path={`${path}/my-payments`} component={WSMyPayments} />

@@ -123,8 +123,8 @@ const EditApplication = ({ parentRoute }) => {
   if (tenantId) filter1.tenantId = tenantId;
 
   //filter1 = {tenantId: tenantId, applicationNumber: applicationNobyData }
-  const Waterresult =  Digit.Hooks.ws.useWaterSearch({ tenantId, filters:{...filter1},BusinessService:"WS", t },{enabled:applicationNumber && applicationNumber.includes("WS") ? true : false});
-  const Sewarageresult = Digit.Hooks.ws.useSewarageSearch({ tenantId, filters:{...filter1},BusinessService:"SW",t },{enabled:applicationNumber && applicationNumber.includes("SW") ? true : false});
+  const {data : Waterresult} =  Digit.Hooks.ws.useWaterSearch({ tenantId, filters:{...filter1},BusinessService:"WS", t },{enabled:applicationNumber && applicationNumber.includes("WS") ? true : false});
+  const {data : Sewarageresult} = Digit.Hooks.ws.useSewarageSearch({ tenantId, filters:{...filter1},BusinessService:"SW",t },{enabled:applicationNumber && applicationNumber.includes("SW") ? true : false});
   let isModifyEdit = window.location.href.includes("/modify-connection/") || window.location.href.includes("/edit-application/")
 
   useEffect(() => {
