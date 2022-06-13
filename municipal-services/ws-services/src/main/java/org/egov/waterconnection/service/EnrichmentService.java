@@ -173,7 +173,7 @@ public class EnrichmentService {
 	private void setApplicationIdGenIds(WaterConnectionRequest request) {
 		WaterConnection waterConnection = request.getWaterConnection();
 		List<String> applicationNumbers = new ArrayList<>();
-		if (request.getWaterConnection().getApplicationStatus().equals(WCConstants.DISCONNECT_WATER_CONNECTION)) {
+		if (request.getWaterConnection().getApplicationStatus() != null && request.getWaterConnection().getApplicationStatus().equals(WCConstants.DISCONNECT_WATER_CONNECTION)) {
 			applicationNumbers = getIdList(request.getRequestInfo(),
 					request.getWaterConnection().getTenantId(), config.getWaterDisconnectionIdGenName(),
 					config.getWaterDisconnectionIdGenFormat());
