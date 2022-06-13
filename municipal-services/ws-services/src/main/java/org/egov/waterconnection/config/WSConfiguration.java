@@ -216,4 +216,10 @@ public class WSConfiguration {
 	
 	@Value("${egov.disconnect.businessservice}")
 	private String disconnectBusinessServiceName;
+
+	@Value("${egov.idgen.wdcid.name}")
+	private String waterDisconnectionIdGenName;
+
+	@Value("${egov.idgen.wdcid.format}")
+	private String waterDisconnectionIdGenFormat;
 }

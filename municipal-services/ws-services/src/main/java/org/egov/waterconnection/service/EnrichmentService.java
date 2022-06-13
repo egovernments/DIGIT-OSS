@@ -172,9 +172,16 @@ public class EnrichmentService {
 	 */
 	private void setApplicationIdGenIds(WaterConnectionRequest request) {
 		WaterConnection waterConnection = request.getWaterConnection();
-		List<String> applicationNumbers = getIdList(request.getRequestInfo(),
-				request.getWaterConnection().getTenantId(), config.getWaterApplicationIdGenName(),
-				config.getWaterApplicationIdGenFormat());
+		List<String> applicationNumbers = new ArrayList<>();
+		if (request.getWaterConnection().getApplicationStatus().equals(WCConstants.DISCONNECT_WATER_CONNECTION)) {
+			applicationNumbers = getIdList(request.getRequestInfo(),
+					request.getWaterConnection().getTenantId(), config.getWaterDisconnectionIdGenName(),
+					config.getWaterDisconnectionIdGenFormat());
+		} else {
+			applicationNumbers = getIdList(request.getRequestInfo(),
+					request.getWaterConnection().getTenantId(), config.getWaterApplicationIdGenName(),
+					config.getWaterApplicationIdGenFormat());
+		}
 		if (applicationNumbers.size() != 1) {
 			Map<String, String> errorMap = new HashMap<>();
 			errorMap.put("IDGEN_ERROR",

@@ -271,8 +271,10 @@ public class WaterServiceImpl implements WaterService {
 		userService.updateUser(waterConnectionRequest, searchResult);
 		//Call workflow
 		wfIntegrator.callWorkFlow(waterConnectionRequest, property);
-		
-		
+		//call calculator service to generate the demand for one time fee
+		calculationService.calculateFeeAndGenerateDemand(waterConnectionRequest, property);
+		//check for edit and send edit notification
+		waterDaoImpl.pushForEditNotification(waterConnectionRequest);
 		//Enrich file store Id After payment
 		enrichmentService.enrichFileStoreIds(waterConnectionRequest);
 		userService.createUser(waterConnectionRequest);
