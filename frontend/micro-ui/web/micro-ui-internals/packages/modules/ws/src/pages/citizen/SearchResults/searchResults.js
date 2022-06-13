@@ -17,13 +17,13 @@ const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
   if (propertyId) filters.propertyId = propertyId;
   if (locality !== "undefined") filters.locality = locality;
   if (doorNumber) filters.doorNumber = doorNumber;
-  if (consumerName) filters.consumerName = consumerName;
+  if (consumerName) filters.ownerName = consumerName;
 
   filters = {...filters , searchType:"CONNECTION"}
-  const Waterresult = Digit.Hooks.ws.useWaterSearch({ tenantId, filters:{...filters},BusinessService:"WS", t });
-  const Sewarageresult = Digit.Hooks.ws.useSewarageSearch({ tenantId, filters:{...filters},BusinessService:"SW",t });
+  const {isLoading:isWSLoading, data:Waterresult} = Digit.Hooks.ws.useWaterSearch({ tenantId, filters:{...filters},BusinessService:"WS", t });
+  const {isLoading:isSWLoading, data:Sewarageresult} = Digit.Hooks.ws.useSewarageSearch({ tenantId, filters:{...filters},BusinessService:"SW",t });
 
-  if (Waterresult?.isLoading || Sewarageresult?.isLoading || Waterresult == undefined || Sewarageresult == undefined) {
+  if (isWSLoading || isSWLoading ) {
     return <Loader />;
   }
 
@@ -33,7 +33,7 @@ const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
 
   const payment = {};
 
-  const searchResults = Waterresult && Sewarageresult ? Waterresult.concat(Sewarageresult) : [];
+  const searchResults = Waterresult && Sewarageresult ? Waterresult.concat(Sewarageresult) : (Waterresult? Waterresult : (Sewarageresult? Sewarageresult : []));
 
   return (
     <div style={{ marginTop: "16px" }}>

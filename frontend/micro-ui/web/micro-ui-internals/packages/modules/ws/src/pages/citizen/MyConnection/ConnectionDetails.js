@@ -291,7 +291,7 @@ const ConnectionDetails = () => {
             <Row
               className="border-none"
               label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")}
-              text={state?.property?.owners?.[0]?.name}
+              text={state?.property?.owners?.map((owner) => owner.name).join(",")}
               textStyle={{ whiteSpace: "pre" }}
             />
             <Row
