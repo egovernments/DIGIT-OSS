@@ -68,6 +68,7 @@ import org.egov.demand.model.DemandCriteria;
 import org.egov.demand.model.DemandDetail;
 import org.egov.demand.model.PaymentBackUpdateAudit;
 import org.egov.demand.model.UpdateBillCriteria;
+import org.egov.demand.producer.Producer;
 import org.egov.demand.repository.AmendmentRepository;
 import org.egov.demand.repository.BillRepositoryV2;
 import org.egov.demand.repository.DemandRepository;
@@ -127,6 +128,9 @@ public class DemandService {
 
 	@Autowired
 	private DemandValidatorV1 demandValidatorV1;
+
+	@Autowired
+	private Producer producer;
 	
 	/**
 	 * Method to create new demand 
@@ -285,7 +289,7 @@ public class DemandService {
 			updateBillCriteria.setStatusToBeUpdated(BillStatus.PAID);
 			billRepoV2.updateBillStatus(updateBillCriteria);
 		}
-		// producer.push(applicationProperties.getDemandIndexTopic(), demandRequest);
+		 producer.push(applicationProperties.getDemandIndexTopic(), demandRequest);
 		return new DemandResponse(responseInfoFactory.getResponseInfo(requestInfo, HttpStatus.CREATED), demands);
 	}
 
