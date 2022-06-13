@@ -82,7 +82,8 @@ const WSEditApplicationByConfig = () => {
   tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
 
   const applicationNumber = filters?.applicationNumber;
-  const serviceType = filters?.service;
+  const editApplicationDetails = JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS"));
+  const serviceType = filters?.service || editApplicationDetails?.applicationData?.serviceType;
 
   const details = cloneDeep(state?.data?.applicationDetails);
   const actionData = cloneDeep(state?.data?.action);
@@ -142,7 +143,7 @@ const WSEditApplicationByConfig = () => {
     data: updateResponse,
     error: updateError,
     mutate,
-  } = Digit.Hooks.ws.useWSApplicationActions(filters?.service);
+  } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
 
   const onFormValueChange = (setValue, formData, formState) => {
     if (!_.isEqual(sessionFormData, formData)) {

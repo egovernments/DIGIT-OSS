@@ -444,10 +444,8 @@ const ApplicationBillAmendment = () => {
                     onUpload={(d) => functionToHandleFileUpload(d, e?.documentType, props)}
                     onDelete={() => dispatch({ type: "remove", payload: { id: e?.documentType } })}
                     style={{ width: "640px" }}
-                    accept="image/*, .pdf, .png, .jpeg, .doc"
-                    showHintBelow={true}
-                    hintText={t("WS_DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
                     message={functionToDisplayTheMessage}
+                    accept="image/*, .pdf, .png, .jpeg, .doc"
                     textStyles={{ width: "100%" }}
                     inputStyles={{ width: "280px" }}
                   />
