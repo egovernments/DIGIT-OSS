@@ -24,6 +24,7 @@ const GetConnectionDetails = () => {
   const actionConfig = ["MODIFY_CONNECTION_BUTTON", "BILL_AMENDMENT_BUTTON", "DISCONNECTION_BUTTON"];
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useConnectionDetail(t, tenantId, applicationNumber, serviceType);
   const menuRef = useRef();
+  const actionMenuRef = useRef();
 
   const { isLoading: isLoadingDemand, data: demandData } = Digit.Hooks.useDemandSearch(
     { consumerCode: applicationDetails?.applicationData?.connectionNo, businessService: serviceType === "WATER" ? "WS" : "SW", tenantId }, { enabled: !!(applicationDetails?.applicationData?.applicationNo) }
@@ -161,6 +162,12 @@ const GetConnectionDetails = () => {
   }
   Digit.Hooks.useClickOutside(menuRef, closeMenu, showOptions );
 
+  const closeActionMenu = () => {
+    setDisplayMenu(false);
+  }
+  Digit.Hooks.useClickOutside(actionMenuRef, closeActionMenu, displayMenu );
+
+
   const getDisconnectionButton = () => {
     let pathname = `/digit-ui/employee/ws/disconnection-application`;
     if (billData[0]?.status === "ACTIVE" || due === "0") {
@@ -266,7 +273,7 @@ const GetConnectionDetails = () => {
           <ActionBar>
             {displayMenu ? <Menu options={showAction} localeKeyPrefix={"WS"} t={t} onSelect={onActionSelect} /> : null}
 
-            <SubmitBar label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+            <SubmitBar ref={actionMenuRef} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
           </ActionBar>
         ) : null}
         {showModal ? (

@@ -50,7 +50,7 @@ import WSInbox from "./components/WSInbox";
 import WSEditApplicationByConfig from './pages/employee/EditApplication/WSEditApplicationByConfig';
 
 const WSModule = ({ stateCode, userType, tenants }) => {
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || Digit.ULBService.getCurrentTenantId();
   const moduleCode = ["ws", "pt", "common", tenantId];
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
