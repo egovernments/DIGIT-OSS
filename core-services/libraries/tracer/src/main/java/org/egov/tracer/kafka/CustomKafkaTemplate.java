@@ -12,12 +12,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class CustomKafkaTemplate<K, V> {
 
-    private KafkaTemplate<K, V> kafkaTemplate;
-
     private static final String KAFKA_SEND_ERROR_CODE = "EVENT_BUS_FAILURE";
     private static final String KAFKA_SEND_ERROR_MSG = "Failed to push event onto the event bus";
-
     private static final String KAFKA_ERROR_LOG = "Failed to push data to kafka queue";
+    private KafkaTemplate<K, V> kafkaTemplate;
 
     @Autowired
     public CustomKafkaTemplate(KafkaTemplate<K, V> kafkaTemplate) {

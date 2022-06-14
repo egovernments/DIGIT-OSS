@@ -13,14 +13,14 @@ import org.springframework.util.ObjectUtils;
 @Slf4j
 public class KafkaConsumerErrorHandler extends LoggingErrorHandler {
 
-	@Autowired
-	private ExceptionAdvise exceptionAdvise;
+    @Autowired
+    private ExceptionAdvise exceptionAdvise;
 
     @Value("${tracer.errorsPublish}")
     private boolean sendErrorsToKafka;
 
     @Override
-	public void handle(Exception thrownException, ConsumerRecord<?, ?> record) {
+    public void handle(Exception thrownException, ConsumerRecord<?, ?> record) {
         if (sendErrorsToKafka) {
             log.error("Error while processing1: " + ObjectUtils.nullSafeToString(record), thrownException);
             ObjectMapper objectMapper = new ObjectMapper();

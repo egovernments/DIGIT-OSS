@@ -41,11 +41,11 @@ public class KafkaListenerLoggingAspectTest {
 
     @Autowired
     private KafkaListenerWithoutPayloadAnnotationAndWithoutTopicHeaderAnnotation
-        kafkaListenerWithoutPayloadAnnotationAndWithoutTopicHeaderAnnotation;
+            kafkaListenerWithoutPayloadAnnotationAndWithoutTopicHeaderAnnotation;
 
     @Autowired
     private KafkaListenerStringPayloadWithNonTopicHeaderAnnotation
-        kafkaListenerStringPayloadWithNonTopicHeaderAnnotation;
+            kafkaListenerStringPayloadWithNonTopicHeaderAnnotation;
 
     @Autowired
     private TracerProperties tracerProperties;

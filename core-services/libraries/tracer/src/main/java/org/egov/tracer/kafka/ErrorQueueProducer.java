@@ -30,7 +30,7 @@ public class ErrorQueueProducer {
             log.info("SerializationException exception occurred while sending exception to error queue");
             try {
                 kafkaTemplate.send(tracerProperties.getErrorsTopic(), objectMapperFactory.getObjectMapper().writeValueAsString
-                    (errorQueueContract));
+                        (errorQueueContract));
             } catch (JsonProcessingException e) {
                 log.info("exception occurred while converting ErrorQueueContract to json string");
             }

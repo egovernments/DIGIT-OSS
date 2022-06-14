@@ -23,7 +23,7 @@ import static org.springframework.util.StringUtils.isEmpty;
 public class TracerFilter implements Filter {
 
     private static final List<String> JSON_MEDIA_TYPES =
-        Arrays.asList(MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE);
+            Arrays.asList(MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE);
     private static final String POST = "POST";
     private static final String REQUEST_BODY_LOG_MESSAGE = "Request body - {}";
     private static final String FAILED_TO_LOG_REQUEST_MESSAGE = "Failed to log request body";
@@ -40,7 +40,7 @@ public class TracerFilter implements Filter {
         this.tracerProperties = tracerProperties;
         this.objectMapper = objectMapperFactory.getObjectMapper();
         this.skipPattern = isNull(tracerProperties.getFilterSkipPattern()) ? null :
-            Pattern.compile(tracerProperties.getFilterSkipPattern());
+                Pattern.compile(tracerProperties.getFilterSkipPattern());
     }
 
     @Override
@@ -49,32 +49,30 @@ public class TracerFilter implements Filter {
     }
 
     /**
-     *
      * Cache the request for future body reads in case the body is compatible [json]
      * Retrieves correlation id
-     *  - From header
-     *  - if not exists, attempt to retrieve from body RequestInfo
-     *  - if not exists, generate a uuid
-     *
+     * - From header
+     * - if not exists, attempt to retrieve from body RequestInfo
+     * - if not exists, generate a uuid
+     * <p>
      * Set correlation id in MDC for future use, like logging etc
      * Log Request and Response depending on configuration
      *
-     * @param servletRequest HTTP request
+     * @param servletRequest  HTTP request
      * @param servletResponse HTTP response
-     * @param filterChain pass control to the chain
+     * @param filterChain     pass control to the chain
      * @throws IOException
      * @throws ServletException
      */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-        throws IOException, ServletException {
+            throws IOException, ServletException {
         String correlationId = null;
         HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
 
         if (!this.isTraced(httpRequest)) {
             filterChain.doFilter(httpRequest, servletResponse);
-        }
-        else {
+        } else {
 
             if (isBodyCompatibleForParsing(httpRequest)) {
                 final MultiReadRequestWrapper wrappedRequest = new MultiReadRequestWrapper(httpRequest);
@@ -130,7 +128,7 @@ public class TracerFilter implements Filter {
             correlationId = getCorrelationIdFromBody(httpRequest);
         }
 
-        if(isNull(correlationId))
+        if (isNull(correlationId))
             correlationId = getRandomCorrelationId();
 
         return correlationId;
@@ -139,7 +137,7 @@ public class TracerFilter implements Filter {
 
     private boolean isBodyCompatibleForParsing(HttpServletRequest httpRequest) {
         return POST.equals(httpRequest.getMethod())
-            && JSON_MEDIA_TYPES.contains(httpRequest.getContentType());
+                && JSON_MEDIA_TYPES.contains(httpRequest.getContentType());
     }
 
 
@@ -148,10 +146,10 @@ public class TracerFilter implements Filter {
             final String requestBody = IOUtils.toString(requestWrapper.getInputStream(), UTF_8);
             String requestParams = requestWrapper.getQueryString();
 
-            if(!isEmpty(requestParams))
+            if (!isEmpty(requestParams))
                 log.info(REQUEST_PARAMS_LOG_MESSAGE, requestParams);
 
-            if(!isEmpty(requestBody))
+            if (!isEmpty(requestBody))
                 log.info(REQUEST_BODY_LOG_MESSAGE, requestBody);
 
         } catch (IOException e) {
@@ -169,9 +167,9 @@ public class TracerFilter implements Filter {
         String correlationId = null;
         try {
             final HashMap<String, Object> requestMap = (HashMap<String, Object>)
-                objectMapper.readValue(httpServletRequest.getInputStream(), HashMap.class);
+                    objectMapper.readValue(httpServletRequest.getInputStream(), HashMap.class);
             Object requestInfo = requestMap.containsKey(REQUEST_INFO_FIELD_NAME_IN_JAVA_CLASS_CASE) ? requestMap.get
-                (REQUEST_INFO_FIELD_NAME_IN_JAVA_CLASS_CASE) : requestMap.get(REQUEST_INFO_IN_CAMEL_CASE);
+                    (REQUEST_INFO_FIELD_NAME_IN_JAVA_CLASS_CASE) : requestMap.get(REQUEST_INFO_IN_CAMEL_CASE);
 
             if (isNull(requestInfo))
                 return null;
@@ -180,7 +178,8 @@ public class TracerFilter implements Filter {
                     correlationId = (String) ((Map) requestInfo).get(CORRELATION_ID_FIELD_NAME);
                 }
             }
-        } catch (IOException ignored){}
+        } catch (IOException ignored) {
+        }
 
         return correlationId;
     }

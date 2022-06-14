@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
-    <springProperty scope="context" name="rootLoggingLevel" source="logging.level.root" defaultValue="INFO"/>
-    <springProperty scope="context" name="egovLoggingLevel" source="logging.level.org.egov" defaultValue="INFO"/>
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+  <springProperty scope="context" name="rootLoggingLevel" source="logging.level.root" defaultValue="INFO"/>
+  <springProperty scope="context" name="egovLoggingLevel" source="logging.level.org.egov" defaultValue="INFO"/>
 
-    <springProfile name="production">
+  <springProfile name="production">
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder" >
-            <providers>
-                <timestamp/>
-                <pattern>
-                    <pattern>
-                        {
-                        "logger": "%logger{30}",
-                        "message": "%message",
-                        "level": "%level",
-                        "thread": "%thread{10}"
-                        }
-                    </pattern>
-                </pattern>
-                <mdc/>
-                <stackTrace>
-                    <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
-                        <maxDepthPerThrowable>30</maxDepthPerThrowable>
-                        <maxLength>2048</maxLength>
-                        <shortenedClassNameLength>20</shortenedClassNameLength>
-                        <exclude>^sun\.reflect\..*\.invoke</exclude>
-                        <exclude>^net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
-                        <rootCauseFirst>true</rootCauseFirst>
-                    </throwableConverter>
-                </stackTrace>
-            </providers>
-        </encoder>
+      <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+        <providers>
+          <timestamp/>
+          <pattern>
+            <pattern>
+              {
+              "logger": "%logger{30}",
+              "message": "%message",
+              "level": "%level",
+              "thread": "%thread{10}"
+              }
+            </pattern>
+          </pattern>
+          <mdc/>
+          <stackTrace>
+            <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+              <maxDepthPerThrowable>30</maxDepthPerThrowable>
+              <maxLength>2048</maxLength>
+              <shortenedClassNameLength>20</shortenedClassNameLength>
+              <exclude>^sun\.reflect\..*\.invoke</exclude>
+              <exclude>^net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
+              <rootCauseFirst>true</rootCauseFirst>
+            </throwableConverter>
+          </stackTrace>
+        </providers>
+      </encoder>
     </appender>
-    </springProfile>
+  </springProfile>
 
 
-    <springProfile name="!production">
-        <property name="CONSOLE_LOG_PATTERN"
-                  value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSSZZ}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(---){faint} %clr([%10.10t]){faint} %clr(%-40.40logger{30}){cyan} %clr(--){faint} %mdc %clr(:){faint} %m %n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
-        <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
-    </springProfile>
+  <springProfile name="!production">
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSSZZ}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(---){faint} %clr([%10.10t]){faint} %clr(%-40.40logger{30}){cyan} %clr(--){faint} %mdc %clr(:){faint} %m %n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+  </springProfile>
 
-    <root level="${rootLoggingLevel}">
-        <appender-ref ref="CONSOLE" />
-    </root>
+  <root level="${rootLoggingLevel}">
+    <appender-ref ref="CONSOLE"/>
+  </root>
 
-    <logger name="org.egov" additivity="false" level="${egovLoggingLevel}">
-        <appender-ref ref="CONSOLE" />
-    </logger>
+  <logger name="org.egov" additivity="false" level="${egovLoggingLevel}">
+    <appender-ref ref="CONSOLE"/>
+  </logger>
 
 </configuration>

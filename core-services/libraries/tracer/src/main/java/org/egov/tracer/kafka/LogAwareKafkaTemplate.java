@@ -18,16 +18,16 @@ public class LogAwareKafkaTemplate<K, V> {
 
     private static final String EMPTY_BODY = "<EMPTY BODY>";
     private static final String SEND_SUCCESS_MESSAGE =
-        "Sending of message to topic: {}, partition: {} with key: {} succeeded.";
+            "Sending of message to topic: {}, partition: {} with key: {} succeeded.";
     private static final String BODY_JSON_SERIALIZATION_ERROR = "Serialization of body failed";
     private static final String SEND_SUCCESS_MESSAGE_WITH_BODY =
-        "Sending of message to topic: {}, partition: {}, body: {} with key: {} succeeded.";
+            "Sending of message to topic: {}, partition: {}, body: {} with key: {} succeeded.";
     private static final String SEND_FAILURE_MESSAGE_WITH_TOPIC =
-        "Sending of message to topic: %s failed.";
+            "Sending of message to topic: %s failed.";
     private static final String SEND_FAILURE_MESSAGE_WITH_TOPIC_KEY =
-        "Sending of message to topic: %s, key: %s failed.";
+            "Sending of message to topic: %s, key: %s failed.";
     private static final String SEND_FAILURE_MESSAGE_WITH_TOPIC_KEY_PARTITION =
-        "Sending of message to topic: %s, partition: %s, key: %s failed.";
+            "Sending of message to topic: %s, partition: %s, key: %s failed.";
     private TracerProperties tracerProperties;
     private KafkaTemplate<K, V> kafkaTemplate;
     private ObjectMapper objectMapper;
@@ -78,11 +78,11 @@ public class LogAwareKafkaTemplate<K, V> {
         final Integer partition = result.getProducerRecord().partition();
         final String key = ObjectUtils.nullSafeToString(result.getProducerRecord().key());
         if (tracerProperties.isKafkaMessageLoggingEnabled()) {
-			final String bodyAsJsonString = getMessageBodyAsJsonString(message);
-			log.info(SEND_SUCCESS_MESSAGE_WITH_BODY, topic, partition, bodyAsJsonString, key);
-		} else {
-			log.info(SEND_SUCCESS_MESSAGE, topic, partition, key);
-		}
+            final String bodyAsJsonString = getMessageBodyAsJsonString(message);
+            log.info(SEND_SUCCESS_MESSAGE_WITH_BODY, topic, partition, bodyAsJsonString, key);
+        } else {
+            log.info(SEND_SUCCESS_MESSAGE, topic, partition, key);
+        }
     }
 
     private String getMessageBodyAsJsonString(Object value) {

@@ -32,7 +32,7 @@ public class TracerConfiguration {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setOutputStreaming(false);
         RestTemplate restTemplate =
-            new RestTemplate(new BufferingClientHttpRequestFactory(requestFactory));
+                new RestTemplate(new BufferingClientHttpRequestFactory(requestFactory));
         restTemplate.setInterceptors(Collections.singletonList(new RestTemplateLoggingInterceptor(tracerProperties)));
         return restTemplate;
     }
@@ -41,14 +41,14 @@ public class TracerConfiguration {
      * Configure tracer filter with order one
      *
      * @param objectMapperFactory Object mapper
-     * @param tracerProperties configuration for the filter
+     * @param tracerProperties    configuration for the filter
      * @return Filter
      */
     @Bean
     @ConditionalOnProperty(name = "tracer.filter.enabled",
-        havingValue = "true", matchIfMissing = true)
+            havingValue = "true", matchIfMissing = true)
     public FilterRegistrationBean tracerFilter(ObjectMapperFactory objectMapperFactory,
-                                                      TracerProperties tracerProperties) {
+                                               TracerProperties tracerProperties) {
         final TracerFilter tracerFilter = new TracerFilter(tracerProperties, objectMapperFactory);
         FilterRegistrationBean registration = new FilterRegistrationBean(tracerFilter);
         registration.addUrlPatterns("/*");
@@ -64,9 +64,9 @@ public class TracerConfiguration {
      */
     @Bean
     @ConditionalOnProperty(
-        name = {"tracer.opentracing.enabled"},
-        havingValue = "false",
-        matchIfMissing = true
+            name = {"tracer.opentracing.enabled"},
+            havingValue = "false",
+            matchIfMissing = true
     )
     public io.opentracing.Tracer tracer() {
         return NoopTracerFactory.create();

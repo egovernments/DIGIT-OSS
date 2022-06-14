@@ -30,7 +30,7 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
     private static final String RESPONSE_BODY_ERROR_MESSAGE = "Error reading response body";
     private static final String EMPTY_BODY = "<NOT-AVAILABLE>";
     private static final List<String> JSON_MEDIA_TYPES =
-        Arrays.asList(MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE);
+            Arrays.asList(MediaType.APPLICATION_JSON_UTF8_VALUE, MediaType.APPLICATION_JSON_VALUE);
 
     private TracerProperties tracerProperties;
 
@@ -40,11 +40,11 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 
     /**
      * Intercept all rest template calls
-     *  - Add correlation id header from MDC
-     *  - Log request and responses based on config
+     * - Add correlation id header from MDC
+     * - Log request and responses based on config
      *
-     * @param request being made
-     * @param body of the request
+     * @param request   being made
+     * @param body      of the request
      * @param execution execute the rest template call
      * @return response of the rest call
      * @throws IOException
@@ -57,9 +57,9 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 
             final ClientHttpResponse rawResponse = execution.execute(request, body);
 
-            if(tracerProperties.isRestTemplateDetailedLoggingEnabled() && isBodyCompatibleForParsing(request)){
+            if (tracerProperties.isRestTemplateDetailedLoggingEnabled() && isBodyCompatibleForParsing(request)) {
                 logResponse(rawResponse, request);
-            } else{
+            } else {
                 log.info(RESPONSE_MESSAGE, request.getURI());
             }
             return rawResponse;
@@ -71,20 +71,19 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 
     private void logResponse(ClientHttpResponse response, HttpRequest httpRequest) throws IOException {
 
-        if(tracerProperties.isRestTemplateDetailedLoggingEnabled() && isBodyCompatibleForParsing(httpRequest)){
+        if (tracerProperties.isRestTemplateDetailedLoggingEnabled() && isBodyCompatibleForParsing(httpRequest)) {
             String body = getBodyString(response);
             log.info(RESPONSE_MESSAGE_WITH_BODY, httpRequest.getURI(), response.getStatusCode(), body);
-        } else{
+        } else {
             log.info(RESPONSE_MESSAGE, httpRequest.getURI());
         }
 
     }
 
     private void logRequest(HttpRequest httpRequest, byte[] body) {
-        if(tracerProperties.isRestTemplateDetailedLoggingEnabled() && isBodyCompatibleForParsing(httpRequest)){
+        if (tracerProperties.isRestTemplateDetailedLoggingEnabled() && isBodyCompatibleForParsing(httpRequest)) {
             log.info(REQUEST_MESSAGE_WITH_BODY, httpRequest.getURI(), httpRequest.getMethod().name(), getBody(body));
-        }
-        else {
+        } else {
             log.info(REQUEST_MESSAGE, httpRequest.getURI(), httpRequest.getMethod().name());
         }
     }

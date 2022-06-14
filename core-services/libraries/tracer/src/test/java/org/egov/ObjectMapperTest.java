@@ -19,9 +19,8 @@ public class ObjectMapperTest {
 
         assertNotNull(hashMap);
         assertEquals("value1", hashMap.get("bar1"));
-        @SuppressWarnings("unchecked")
-        final HashMap<String, Object> subFoo =
-            (HashMap<String, Object>)hashMap.get("subFoo");
+        @SuppressWarnings("unchecked") final HashMap<String, Object> subFoo =
+                (HashMap<String, Object>) hashMap.get("subFoo");
         assertNotNull(subFoo);
         assertEquals("value2", subFoo.get("bar2"));
     }
@@ -37,9 +36,8 @@ public class ObjectMapperTest {
 
         assertNotNull(hashMap);
         assertEquals("value1", hashMap.get("bar1"));
-        @SuppressWarnings("unchecked")
-        final HashMap<String, Object> subFooMap =
-            (HashMap<String, Object>)hashMap.get("subFoo");
+        @SuppressWarnings("unchecked") final HashMap<String, Object> subFooMap =
+                (HashMap<String, Object>) hashMap.get("subFoo");
         assertNotNull(subFooMap);
         assertEquals("value2", subFooMap.get("bar2"));
     }

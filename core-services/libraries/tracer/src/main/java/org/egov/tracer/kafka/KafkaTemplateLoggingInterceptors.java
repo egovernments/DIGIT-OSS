@@ -21,15 +21,15 @@ import static org.egov.tracer.constants.TracerConstants.*;
 import static org.springframework.util.StringUtils.isEmpty;
 
 @Slf4j
-public class KafkaTemplateLoggingInterceptors<K,V> implements ConsumerInterceptor<K,V>, ProducerInterceptor<K,V> {
+public class KafkaTemplateLoggingInterceptors<K, V> implements ConsumerInterceptor<K, V>, ProducerInterceptor<K, V> {
 
     private static final String EMPTY_BODY = "<EMPTY BODY>";
     private static final String SEND_SUCCESS_MESSAGE =
-        "Sending message to topic: {}, partition: {} with key: {} .";
+            "Sending message to topic: {}, partition: {} with key: {} .";
     private static final String BODY_JSON_SERIALIZATION_ERROR = "Serialization of body failed while attempting to log" +
-        " the body";
+            " the body";
     private static final String SEND_SUCCESS_MESSAGE_WITH_BODY =
-        "Sending message to topic: {}, partition: {}, body: {} with key: {} .";
+            "Sending message to topic: {}, partition: {}, body: {} with key: {} .";
     private static final String SEND_FAILURE_MESSAGE = "Sending of message to topic: %s, partition %s failed.";
 
     private static final String RECEIVED_MESSAGE_WITH_BODY = "Received message from topic: {}, partition: {}, body: {} with key: {}";
@@ -46,13 +46,13 @@ public class KafkaTemplateLoggingInterceptors<K,V> implements ConsumerIntercepto
             final String keyAsString = ObjectUtils.nullSafeToString(consumerRecord.key());
             String correlationId = getCorrelationIdFromBody(consumerRecord.value());
 
-            if(!isEmpty(correlationId))
+            if (!isEmpty(correlationId))
                 MDC.put(CORRELATION_ID_MDC, correlationId);
 
             if (log.isDebugEnabled()) {
                 final String bodyAsJsonString = getMessageBodyAsJsonString(consumerRecord.value());
                 log.debug(RECEIVED_MESSAGE_WITH_BODY, consumerRecord.topic(), consumerRecord.partition(), bodyAsJsonString,
-                    keyAsString);
+                        keyAsString);
             } else {
                 log.info(RECEIVED_MESSAGE, consumerRecord.topic(), consumerRecord.topic(), consumerRecord.key());
             }
@@ -72,7 +72,7 @@ public class KafkaTemplateLoggingInterceptors<K,V> implements ConsumerIntercepto
         if (log.isDebugEnabled()) {
             final String bodyAsJsonString = getMessageBodyAsJsonString(producerRecord.value());
             log.debug(SEND_SUCCESS_MESSAGE_WITH_BODY, producerRecord.topic(), producerRecord.partition(), bodyAsJsonString,
-                keyAsString);
+                    keyAsString);
         } else {
             log.info(SEND_SUCCESS_MESSAGE, producerRecord.topic(), producerRecord.partition(), keyAsString);
         }
@@ -83,7 +83,7 @@ public class KafkaTemplateLoggingInterceptors<K,V> implements ConsumerIntercepto
     public void onAcknowledgement(RecordMetadata recordMetadata, Exception e) {
         if (!isNull(e)) {
             final String message =
-                String.format(SEND_FAILURE_MESSAGE, recordMetadata.topic(), recordMetadata.partition());
+                    String.format(SEND_FAILURE_MESSAGE, recordMetadata.topic(), recordMetadata.partition());
             log.error(message, e);
         }
     }
@@ -114,7 +114,7 @@ public class KafkaTemplateLoggingInterceptors<K,V> implements ConsumerIntercepto
             Map<String, Object> requestMap = objectMapper.convertValue(value, Map.class);
 
             Object requestInfo = requestMap.containsKey(REQUEST_INFO_FIELD_NAME_IN_JAVA_CLASS_CASE) ? requestMap.get
-                (REQUEST_INFO_FIELD_NAME_IN_JAVA_CLASS_CASE) : requestMap.get(REQUEST_INFO_IN_CAMEL_CASE);
+                    (REQUEST_INFO_FIELD_NAME_IN_JAVA_CLASS_CASE) : requestMap.get(REQUEST_INFO_IN_CAMEL_CASE);
 
             if (isNull(requestInfo))
                 return null;
@@ -123,7 +123,8 @@ public class KafkaTemplateLoggingInterceptors<K,V> implements ConsumerIntercepto
                     correlationId = (String) ((Map) requestInfo).get(CORRELATION_ID_FIELD_NAME);
                 }
             }
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
 
         return correlationId;
     }

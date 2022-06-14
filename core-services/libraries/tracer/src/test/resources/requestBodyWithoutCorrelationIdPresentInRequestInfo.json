@@ -1,6 +1,6 @@
 {
-    "RequestInfo": {
-        "foo": "bar"
-    },
+  "RequestInfo": {
     "foo": "bar"
+  },
+  "foo": "bar"
 }

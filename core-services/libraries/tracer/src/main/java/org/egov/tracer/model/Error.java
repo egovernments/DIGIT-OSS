@@ -1,19 +1,14 @@
 package org.egov.tracer.model;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.util.List;
 
 /**
  * Error object will be returned as a part of reponse body in conjunction with
  * ResponseInfo as part of ErrorResponse whenever the request processing status
- * in the ResponseInfo is FAILED. 
+ * in the ResponseInfo is FAILED.
  */
 @Setter
 @Getter
@@ -21,16 +16,16 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class Error {
-	@JsonProperty("code")
-	private String code = null;
+    @JsonProperty("code")
+    private String code = null;
 
-	@JsonProperty("message")
-	private String message = null;
+    @JsonProperty("message")
+    private String message = null;
 
-	@JsonProperty("description")
-	private String description = null;
+    @JsonProperty("description")
+    private String description = null;
 
-	@JsonProperty("params")
-	private List<String> params = null;
+    @JsonProperty("params")
+    private List<String> params = null;
 
 }
