@@ -9,6 +9,7 @@ import {
   StatusTable,
   SubmitBar,
   Header,
+  EditIcon,
 } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -102,6 +103,13 @@ const CheckPage = ({ onSubmit, value = {} }) => {
     documentDate = `${date.getDate()} ${month} ${date.getFullYear()}`;
   }
   
+  const routeTo = (jumpTo) => location.href=jumpTo;
+
+  const [agree, setAgree] = useState(false);
+  const setdeclarationhandler = () => {
+    setAgree(!agree);
+  };
+  
   return (
     <React.Fragment>
     {window.location.href.includes("/citizen") ? <Timeline currentStep={4}/> : null}
@@ -149,6 +157,10 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       </div>
 
       <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_MUTATION_TRANSFEREE_DETAILS")}</CardSubHeader>
+      <LinkButton
+        label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
+        onClick={() => routeTo(`/digit-ui/citizen/pt/property/property-mutation/owner-ship-details@0`)}
+      />
       {
         ownershipCategory?.code?.includes("INSTITUTIONAL") ? (
           <div>
@@ -209,6 +221,10 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       }
 
       <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_MUTATION_DETAILS")}</CardSubHeader>
+      <LinkButton
+        label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
+        onClick={() => routeTo(`/digit-ui/citizen/pt/property/property-mutation/is-mutatation-pending`)}
+      />
       <StatusTable>
         <Row
           className="border-none"
@@ -225,6 +241,10 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       </StatusTable>
 
       <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_REGISTRATION_DETAILS")}</CardSubHeader>
+      <LinkButton
+        label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
+        onClick={() => routeTo(`/digit-ui/citizen/pt/property/property-mutation/reason`)}
+      />
       <StatusTable>
         <Row
           className="border-none"
@@ -239,6 +259,10 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       </StatusTable>
 
       <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_COMMON_DOCS")}</CardSubHeader>
+      <LinkButton
+        label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
+        onClick={() => routeTo(`/digit-ui/citizen/pt/property/property-mutation/transfer-reason-doc`)}
+      />
       <div>
         {Array.isArray(property?.documents) ? (
           property?.documents.length > 0 && <PropertyDocument property={property}></PropertyDocument>
@@ -248,7 +272,12 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           </StatusTable>
         )}
       </div>
-      <SubmitBar label={t("PT_COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} />
+      <CheckBox
+        label={t("PT_MUTATION_FINAL_DECLARATION_MESSAGE")}
+        onChange={setdeclarationhandler}
+        styles={{ height: "auto", margin: '2rem 0' }}
+      />
+      <SubmitBar label={t("PT_COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} disabled={!agree} />
     </Card>
    </React.Fragment>
   );
