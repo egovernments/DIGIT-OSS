@@ -219,7 +219,6 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination }
     const name = t(`DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`);
     return (originalRow, rowIndex, columns) => {
       const cellValue = originalRow?.[name];
-      console.log(plot, "plot");
       if (plot?.symbol === "amount" || plot?.symbol === "number" || plot?.symbol === "percentage") {
         return typeof cellValue === "object"
           ? { value: Digit.Utils.dss.formatter(convertDenomination(cellValue?.value), "number", "Lac", true, t), insight: cellValue?.insight }

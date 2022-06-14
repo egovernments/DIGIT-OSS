@@ -13,7 +13,7 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
     sortBy: "commencementDate",
     sortOrder: "DESC"
 };
-    const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
+    const { register, control, handleSubmit, setValue, getValues, reset,formState, } = useForm({
         defaultValues: initialValues
     })
 
@@ -114,7 +114,7 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
     return <React.Fragment>
                 <Header>{t("TL_SEARCH_APPLICATIONS")}</Header>
                 <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>
-                  <SearchFields {...{register, control, reset, tenantId, t, previousPage}} />
+                  <SearchFields {...{register, control, reset, tenantId,formState, t, previousPage}} />
                 </SearchForm>
             {data?.display ? <Card style={{ marginTop: 20 }}>
                 {

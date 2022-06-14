@@ -61,7 +61,7 @@ const enabledModules = [
 ];
 
 const initTokens = (stateCode) => {
-  const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
+  const userType ="CITIZEN";
 
   const token = window.localStorage.getItem("token")|| process.env[`REACT_APP_${userType}_TOKEN`];
  

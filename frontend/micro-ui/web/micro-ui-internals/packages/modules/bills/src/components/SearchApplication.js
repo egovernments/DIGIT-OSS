@@ -60,10 +60,9 @@ const PTSearchApplication = ({ t, onSubmit, data, count, setShowToast, searchPar
     const FormData=watch()
     useEffect(() => {
       if (FormData) {
-        setSearchParams({ ...FormData });
+        // setSearchParams({ ...FormData });
       }
     }, [FormData]);
-    console.log(FormData,"test1")
     useEffect(() => {
       register("offset", 0)
       register("limit", 10)

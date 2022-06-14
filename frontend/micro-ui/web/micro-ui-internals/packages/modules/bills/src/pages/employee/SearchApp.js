@@ -1,79 +1,94 @@
-import React, { useState } from "react"
-import { TextInput, Label, SubmitBar, LinkLabel, ActionBar, CloseSvg, DatePicker, CardLabelError, SearchForm, SearchField, Dropdown, Toast } from "@egovernments/digit-ui-react-components";
-import { useForm, Controller } from "react-hook-form";
-import { useParams } from "react-router-dom"
+
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import PTSearchApplication from "../../components/SearchApplication";
+import PTSearchApplication from "../../components/Search";
 
-const SearchApp = ({path, initialStates, businessService,}) => {
-    const { variant } = useParams();
-    const { t } = useTranslation();
-    const tenantId = Digit.ULBService.getCurrentTenantId();
-    const [payload, setPayload] = useState({})
-    const [showToast, setShowToast] = useState(null);
-    const [pageSize, setPageSize] = useState(10);
-    const [pageOffset, setPageOffset] = useState(0);
-    const [totalRecords, setTotalRecords] = useState(0);
-    const [sortParams, setSortParams] = useState(initialStates?.sortParams || [{ id: "applicationDate", desc: false }]);
-    const [setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState] = useState(false);
-    const [searchParams, setSearchParams] = useState(() => {
-      return initialStates?.searchParams || {};
+const Search = ({ path }) => {
+  const { t } = useTranslation();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const [payload, setPayload] = useState({});
+
+  function onSubmit(_data) {
+    Digit.SessionStorage.set("BILL_SEARCH_APPLICATION_DETAIL", {
+      serviceCategory: _data?.serviceCategory,
+      consumerCode: _data?.consumerCode,
+      billNumber: _data?.billNumber,
+      mobileNumber: _data?.mobileNumber,
+      offset: 0,
+      limit: 10,
+      sortBy: "commencementDate",
+      sortOrder: "DESC",
     });
-    let isMobile = window.Digit.Utils.browser.isMobile();
-  let paginationParams = isMobile
-    ? { limit: 10, offset: 0, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" }
-    : { limit: pageSize, offset: pageOffset, sortBy: sortParams?.[0]?.id, sortOrder: sortParams?.[0]?.desc ? "DESC" : "ASC" };
 
-  const { isFetching,isLoading,isSuccess,count, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.useBillSearch({
+    const data = {
+      ..._data,
+    };
+
+    setPayload(
+      Object.keys(data)
+        .filter((k) => data[k])
+        .reduce((acc, key) => ({ ...acc, [key]: typeof data[key] === "object" ? data[key] : data[key] }), {})
+    );
+  }
+  useEffect(() => {
+    const storedPayload = Digit.SessionStorage.get("BILL_SEARCH_APPLICATION_DETAIL") || {};
+    if (storedPayload) {
+      const data = {
+        ...storedPayload,
+      };
+
+      setPayload(
+        Object.keys(data)
+          .filter((k) => data[k])
+          .reduce((acc, key) => ({ ...acc, [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {})
+      );
+    }
+  }, []);
+  const config = {
+    enabled: !!(payload && Object.keys(payload).length > 0),
+  };
+
+  const newObj = { ...payload };
+  const service = payload?.serviceCategory;
+  delete newObj.serviceCategory;
+  const {
+    isFetching,
+    isLoading,
+    isSuccess,
+    count,
+    isLoading: hookLoading,
+    searchResponseKey,
+    data: billsResp,
+    searchFields,
+    ...rest
+  } = Digit.Hooks.useBillSearch({
     tenantId,
-    filters: { ...searchParams, businessService, ...paginationParams, sortParams },
+    filters: {
+      ...newObj,
+      url: service?.url,
+      businesService: service?.businesService,
+    },
     config: {},
   });
- 
-    function onSubmit (_data) {
-      console.log(_data,"test")
-        var fromDate = new Date(_data?.fromDate)
-        fromDate?.setSeconds(fromDate?.getSeconds() - 19800 )
-        var toDate = new Date(_data?.toDate)
-        toDate?.setSeconds(toDate?.getSeconds() + 86399 - 19800)
-        const data = {
-            ..._data,
-            ...(_data.toDate ? {toDate: toDate?.getTime()} : {}),
-            ...(_data.fromDate ? {fromDate: fromDate?.getTime()} : {})
-        }
-        let payload = Object.keys(data).filter( k => data[k] ).reduce( (acc, key) => ({...acc,  [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {} );
-        if(Object.entries(payload).length>0 && !payload.serviceCategory && !payload.billNumber && !payload.consumerCode && !payload.mobileNumber)
-        setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
-        else if(Object.entries(payload).length>0 && (!payload.serviceCategory ) && (!payload.consumerCode && !payload.billNumber && !payload.mobileNumber))
-        setShowToast({ warning: true, label: "ERR_PROVIDE_MORE_PARAM_WITH_TYPE_STATUS" });
-        else
-        setPayload(payload)
-    }
 
-    const config = {
-        enabled: !!( payload && Object.keys(payload).length > 0 )
-    }
-    const FilterChange=(filterParam)=>{
-      console.log("Filter change called")
-      console.log(filterParam)
-      
 
-    }
-    return <React.Fragment>
-        <PTSearchApplication t={t} isLoading={isLoading} tenantId={tenantId} setShowToast={setShowToast} onSubmit={onSubmit} onFilterChange={FilterChange} data={  isSuccess && !isLoading ? (searchReult.length>0? searchReult : { display: "ES_COMMON_NO_DATA" } ):""} count={count} /> 
-        {showToast && (
-        <Toast
-          error={showToast.error}
-          warning={showToast.warning}
-          label={t(showToast.label)}
-          isDleteBtn={true}
-          onClose={() => {
-            setShowToast(null);
-          }}
-        />
-      )}
-    </React.Fragment>
+  return (
+    <PTSearchApplication
+      t={t}
+      tenantId={tenantId}
+      onSubmit={onSubmit}
+      data={
+        !isLoading && isSuccess
+          ? billsResp?.Bills?.length > 0
+            ? billsResp?.Bills?.map((obj) => ({
+                ...obj,
+              }))
+            : { display: "ES_COMMON_NO_DATA" }
+          : ""
+      }
+      count={billsResp?.Bills?.length}
+    />
+  );
+};
 
-}
-
-export default SearchApp
+export default Search;
