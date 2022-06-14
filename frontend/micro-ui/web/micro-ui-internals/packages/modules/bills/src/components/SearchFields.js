@@ -6,17 +6,21 @@ const SearchFields = ({register, control, reset, tenantId, t, formState, setShow
 
     return <>
          <SearchField>
-         <div className="filter-label">{t("ABG_SERVICE_CATEGORY_LABEL")}</div>
-              <Dropdown name="Dropdown" t={t} option={serviceTypeList} value={service} selected={service} select={setService} optionKey={"name"} />
-                    <label>{t("PT_APPLICATION_NO_LABEL")}</label>
-                    <TextInput name="acknowledgementIds" inputRef={register({})} />
+                <div style={{width:"180px"}}>
+              <div className="filter-label">{t("ABG_SERVICE_CATEGORY_LABEL")}</div>
+              <Dropdown name="serviceCategory" t={t} option={serviceTypeList} value={service} selected={service} select={setService} optionKey={"name"} />
+            </div>
+            </SearchField>
+                <SearchField>
+                    <label>{t("ABG_BILL_NUMBER_LABEL")}</label>
+                    <TextInput name="billNumber" inputRef={register({})} />
                 </SearchField>
                 <SearchField>
-                    <label>{t("PT_SEARCHPROPERTY_TABEL_PID")}</label>
-                    <TextInput name="propertyIds" inputRef={register({})} />
+                    <label>{t("ABG_PT_CONSUMER_CODE_LABEL")}</label>
+                    <TextInput name="consumerCode" inputRef={register({})} />
                 </SearchField>
                 <SearchField>
-                <label>{t("PT_OWNER_MOBILE_NO")}</label>
+                <label>{t("ABG_MOBILE_NO_LABEL")}</label>
                 <MobileNumber
                     name="mobileNumber"
                     inputRef={register({
@@ -40,70 +44,15 @@ const SearchFields = ({register, control, reset, tenantId, t, formState, setShow
                 />
                  <CardLabelError>{formState?.errors?.["mobileNumber"]?.message}</CardLabelError>
                 </SearchField>
-                <SearchField>
-                    <label>{t("PT_SEARCHPROPERTY_TABEL_APPLICATIONTYPE")}</label>
-                    <Controller
-                            control={control}
-                            name="creationReason"
-                            render={(props) => (
-                                <Dropdown
-                                selected={props.value}
-                                select={props.onChange}
-                                onBlur={props.onBlur}
-                                optionKey="i18nKey"
-                                t={t}
-                                disable={false}
-                                />
-                            )}
-                            />
-                </SearchField>
-                <SearchField>
-                    <label>{t("ES_SEARCH_PROPERTY_STATUS")}</label>
-                    <Controller
-                            control={control}
-                            name="status"
-                            render={(props) => (
-                                <Dropdown
-                                selected={props.value}
-                                select={props.onChange}
-                                onBlur={props.onBlur}
-                                option={applicationStatuses}
-                                optionKey="i18nKey"
-                                t={t}
-                                disable={false}
-                                />
-                            )}
-                            />
-                </SearchField>
-                {/* <SearchField>
-                    <label>{t("PT_FROM_DATE")}</label>
-                    <Controller
-                        render={(props) => <DatePicker date={props.value} disabled={false} onChange={props.onChange} />}
-                        name="fromDate"
-                        control={control}
-                        />
-                </SearchField>
-                <SearchField>
-                    <label>{t("PT_TO_DATE")}</label>
-                    <Controller
-                        render={(props) => <DatePicker date={props.value} disabled={false} onChange={props.onChange} />}
-                        name="toDate"
-                        control={control}
-                        />
-                </SearchField> */}
                 <SearchField className="submit">
                     <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
                     <p style={{marginTop:"10px"}}
                      onClick={() => {
                         reset({ 
-                            acknowledgementIds: "", 
-                            fromDate: "", 
-                            toDate: "",
-                            propertyIds: "",
-                            Dropdown:"",
+                            consumerCode: "", 
+                            billNumber:"",
                             mobileNumber:"",
-                            status: "",
-                            creationReason: "",
+                            serviceCategory:"",
                             offset: 0,
                             limit: 10,
                             sortBy: "commencementDate",

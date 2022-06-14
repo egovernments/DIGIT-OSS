@@ -29,8 +29,9 @@ const SearchApp = ({path, initialStates, businessService,}) => {
     filters: { ...searchParams, businessService, ...paginationParams, sortParams },
     config: {},
   });
-  
+ 
     function onSubmit (_data) {
+      console.log(_data,"test")
         var fromDate = new Date(_data?.fromDate)
         fromDate?.setSeconds(fromDate?.getSeconds() - 19800 )
         var toDate = new Date(_data?.toDate)
@@ -41,12 +42,10 @@ const SearchApp = ({path, initialStates, businessService,}) => {
             ...(_data.fromDate ? {fromDate: fromDate?.getTime()} : {})
         }
         let payload = Object.keys(data).filter( k => data[k] ).reduce( (acc, key) => ({...acc,  [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {} );
-        if(Object.entries(payload).length>0 && !payload.acknowledgementIds && !payload.creationReason && !payload.fromDate && !payload.mobileNumber && !payload.propertyIds && !payload.status && !payload.toDate)
+        if(Object.entries(payload).length>0 && !payload.serviceCategory && !payload.billNumber && !payload.consumerCode && !payload.mobileNumber)
         setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
-        else if(Object.entries(payload).length>0 && (payload.creationReason || payload.status ) && (!payload.acknowledgementIds && !payload.fromDate && !payload.mobileNumber && !payload.propertyIds && !payload.toDate))
+        else if(Object.entries(payload).length>0 && (!payload.serviceCategory ) && (!payload.consumerCode && !payload.billNumber && !payload.mobileNumber))
         setShowToast({ warning: true, label: "ERR_PROVIDE_MORE_PARAM_WITH_TYPE_STATUS" });
-        else if(Object.entries(payload).length>0 && (payload.fromDate && !payload.toDate) || (!payload.fromDate && payload.toDate))
-        setShowToast({ warning: true, label: "ERR_PROVIDE_BOTH_FORM_TO_DATE" });
         else
         setPayload(payload)
     }
@@ -54,8 +53,14 @@ const SearchApp = ({path, initialStates, businessService,}) => {
     const config = {
         enabled: !!( payload && Object.keys(payload).length > 0 )
     }
+    const FilterChange=(filterParam)=>{
+      console.log("Filter change called")
+      console.log(filterParam)
+      
+
+    }
     return <React.Fragment>
-        <PTSearchApplication t={t} isLoading={isLoading} tenantId={tenantId} setShowToast={setShowToast} onSubmit={onSubmit} data={  isSuccess && !isLoading ? (searchReult.length>0? searchReult : { display: "ES_COMMON_NO_DATA" } ):""} count={count} /> 
+        <PTSearchApplication t={t} isLoading={isLoading} tenantId={tenantId} setShowToast={setShowToast} onSubmit={onSubmit} onFilterChange={FilterChange} data={  isSuccess && !isLoading ? (searchReult.length>0? searchReult : { display: "ES_COMMON_NO_DATA" } ):""} count={count} /> 
         {showToast && (
         <Toast
           error={showToast.error}

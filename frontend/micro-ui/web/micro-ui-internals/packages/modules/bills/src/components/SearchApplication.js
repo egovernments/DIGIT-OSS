@@ -28,7 +28,6 @@ const PTSearchApplication = ({ t, onSubmit, data, count, setShowToast, searchPar
     const filterServiceType = generateServiceType?.BillingService?.BusinessService?.filter((element) => element.billGineiURL);
   
     const getUlbLists = generateServiceType?.tenant?.tenants?.filter((element) => element.code === tenantId);
-  
     let serviceTypeList = [];
     if (filterServiceType) {
       serviceTypeList = filterServiceType.map((element) => {
@@ -39,7 +38,6 @@ const PTSearchApplication = ({ t, onSubmit, data, count, setShowToast, searchPar
         };
       });
     }
-  
     useEffect(() => {
       if (getUlbLists) {
         setulbLists(getUlbLists[0]);
@@ -51,7 +49,7 @@ const PTSearchApplication = ({ t, onSubmit, data, count, setShowToast, searchPar
       return <Loader />;
     }
   
-    const { register, control, handleSubmit, setValue, getValues, reset, formState } = useForm({
+    const { register, control, handleSubmit, setValue, getValues, reset, formState, watch } = useForm({
         defaultValues: {
             offset: 0,
             limit: !isMobile && 10,
@@ -59,6 +57,13 @@ const PTSearchApplication = ({ t, onSubmit, data, count, setShowToast, searchPar
             sortOrder: "DESC"
         }
     })
+    const FormData=watch()
+    useEffect(() => {
+      if (FormData) {
+        setSearchParams({ ...FormData });
+      }
+    }, [FormData]);
+    console.log(FormData,"test1")
     useEffect(() => {
       register("offset", 0)
       register("limit", 10)
@@ -170,17 +175,19 @@ const PTSearchApplication = ({ t, onSubmit, data, count, setShowToast, searchPar
                     <span style={{color:"#505A5F"}}>{t("Provide at least one parameter to search for an application")}</span>
                 </Card>
                 <SearchForm className="ws-custom-wrapper" onSubmit={onSubmit} handleSubmit={handleSubmit}>
+                <SearchField>
                 <div style={{width:"180px"}}>
               <div className="filter-label">{t("ABG_SERVICE_CATEGORY_LABEL")}</div>
-              <Dropdown name="Dropdown" t={t} option={serviceTypeList} value={service} selected={service} select={setService} optionKey={"name"} />
+              <Dropdown name="serviceCategory" t={t} option={serviceTypeList} value={service} selected={service} select={setService} optionKey={"name"} />
             </div>
+            </SearchField>
                 <SearchField>
                     <label>{t("ABG_BILL_NUMBER_LABEL")}</label>
-                    <TextInput name="propertyIds" inputRef={register({})} />
+                    <TextInput name="billNumber" inputRef={register({})} />
                 </SearchField>
                 <SearchField>
                     <label>{t("ABG_PT_CONSUMER_CODE_LABEL")}</label>
-                    <TextInput name="acknowledgementIds" inputRef={register({})} />
+                    <TextInput name="consumerCode" inputRef={register({})} />
                 </SearchField>
                 <SearchField>
                 <label>{t("ABG_MOBILE_NO_LABEL")}</label>
@@ -208,18 +215,16 @@ const PTSearchApplication = ({ t, onSubmit, data, count, setShowToast, searchPar
                  <CardLabelError>{formState?.errors?.["mobileNumber"]?.message}</CardLabelError>
                 </SearchField>
                 <div className="submit" style={{marginTop:"0px", marginRight:"15px"}}>
-                    <SubmitBar   onSubmit={() => onFilterChange(_searchParams)} label={t("ES_COMMON_SEARCH")} submit />
+                    <SubmitBar onSubmit={() => onSubmit(_searchParams)} label={t("ES_COMMON_SEARCH")}
+                    
+                     />
                     <p 
                      onClick={() => {
                         reset({ 
-                            acknowledgementIds: "", 
-                            fromDate: "", 
-                            toDate: "",
-                            propertyIds: "",
+                          consumerCode: "", 
+                            billNumber:"",
                             mobileNumber:"",
-                            Dropdown:"",
-                            status: "",
-                            creationReason: "",
+                           serviceCategory:"",
                             offset: 0,
                             limit: 10,
                             sortBy: "commencementDate",
