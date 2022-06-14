@@ -189,7 +189,7 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
   }, [billDetails?.billAccountDetails]);
 
   useEffect(() => {
-    const allowPayment = minAmountPayable && amount >= minAmountPayable && !isAdvanceAllowed && amount <= getTotal() && !formError;
+    const allowPayment = minAmountPayable && amount >= minAmountPayable && amount <= getTotal() && !formError;
     if (paymentType != t("CS_PAYMENT_FULL_AMOUNT")) setPaymentAllowed(allowPayment);
     else setPaymentAllowed(true);
   }, [paymentType, amount]);

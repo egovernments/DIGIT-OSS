@@ -114,6 +114,22 @@ const Inbox = ({ parentRoute }) => {
     filters: { ...formState },
   });
 
+  const { data: statusData, isLoading } = Digit.Hooks.useApplicationStatusGeneral({ businessServices: ["BS.AMENDMENT"], tenantId }, { enabled: statuses?.length>0});
+  
+  statuses?.map(status => {
+    statusData?.otherRoleStates?.map(state=>{
+      if(state?.uuid===status?.statusid){
+        status["applicationstatus"] = t(state?.state)
+      }
+    })
+    statusData?.userRoleStates?.map(state => {
+      if (state?.uuid === status?.statusid) {
+        status["applicationstatus"] = t(state?.state)
+      }
+    })
+  } )
+
+
   const PropsForInboxLinks = {
     logoIcon: <CollectionIcon />,
     headerText: "ACTION_TEST_BILLAMENDMENT",
@@ -156,7 +172,7 @@ const Inbox = ({ parentRoute }) => {
         }}
       />
     ),
-    [statuses, isInboxLoading, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant]
+    [statuses, isInboxLoading, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant,statusData]
   );
 
   const onSearchFormSubmit = (data) => {

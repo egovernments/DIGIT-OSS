@@ -160,6 +160,10 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
   );
 
   const getActionItem = (status, row) => {
+    const userInfo = Digit.UserService.getUser();
+    const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+    const isUserAllowedToAddMeterReading = userRoles.filter(role => (role === "WS_CEMP" || role === "SW_CEMP")).length > 0
+    if(!isUserAllowedToAddMeterReading) return null
     switch (status) {
       case "Active":
         return (
