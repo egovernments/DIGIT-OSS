@@ -26,13 +26,13 @@ const FstpServiceRequest = () => {
     const vehicleNumber = location.pathname.split('/').at(-1)
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const [searchParams, setSearchParams] = useState({ applicationStatus: "WAITING_FOR_DISPOSAL" });
-    const [searchParamsApplication, setSearchParamsApplication] = useState({});
+    const [searchParamsApplication, setSearchParamsApplication] = useState(null);
     const [filterParam, setFilterParam] = useState();
     const [sortParams, setSortParams] = useState([{ "id": "applicationNo", "desc": true }]);
     const [pageOffset, setPageOffset] = useState(0);
     const [pageSize, setPageSize] = useState(100);
     const [isVehicleSearchCompleted, setIsVehicleSearchCompleted] = useState(false);
-    const [tripDetail, setTripDetail] = useState();
+    const [tripDetail, setTripDetail] = useState(null);
     const userInfo = Digit.UserService.getUser();
     let isMobile = window.Digit.Utils.browser.isMobile();
 
@@ -61,21 +61,22 @@ const FstpServiceRequest = () => {
     });
 
     useEffect(() => {
-        if (isSuccess || isIdle || isSearchLoading || isLoading || isVehiclesLoading) {
-            const applicationNos = vehicleLog?.map((i) => i?.tripDetails[0]?.referenceNo).join(",");
-            setSearchParamsApplication({
-                applicationNos: applicationNos ? applicationNos : "null",
-                sortOrder: sortParams[0]?.desc === false ? "ASC" : "DESC",
-            });
-            setIsVehicleSearchCompleted(true);
-        }
-    }, [isSuccess, isSearchLoading, isVehiclesLoading, vehicleLog, isIdle, isLoading, sortParams]);
+        // if (isSuccess || isIdle || isSearchLoading || isLoading || isVehiclesLoading) {
+        const applicationNos = vehicleLog?.map((i) => i?.tripDetails[0]?.referenceNo).join(",");
+        setSearchParamsApplication({
+            applicationNos: applicationNos ? applicationNos : "null",
+            sortOrder: sortParams[0]?.desc === false ? "ASC" : "DESC",
+        });
+        setIsVehicleSearchCompleted(true);
+        // }
+    }, [isSuccess, isSearchLoading, isVehiclesLoading, vehicleLog, isIdle, isLoading, sortParams, vehicles]);
+
 
     useEffect(() => {
         if (tripDetails) {
             setTripDetail(tripDetails)
         }
-    }, [isIdle, isSearchLoading, sortParams]);
+    }, [tripDetails, isSearchLoading, isIdle]);
 
     let applicationNoList = []
     vehicleLog?.map((i) => {
