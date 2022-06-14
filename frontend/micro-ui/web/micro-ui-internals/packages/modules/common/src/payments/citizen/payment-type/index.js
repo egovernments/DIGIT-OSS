@@ -56,7 +56,7 @@ export const SelectPaymentType = (props) => {
         billId: billDetails.id,
         consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode,
         productInfo: "Common Payment",
-        gateway: d.paymentType,
+        gateway: "PAYGOV",
         taxAndPayments: [
           {
             billId: billDetails.id,
@@ -81,7 +81,30 @@ export const SelectPaymentType = (props) => {
     try {
       const data = await Digit.PaymentService.createCitizenReciept(tenantId, filterData);
       const redirectUrl = data?.Transaction?.redirectUrl;
-      window.location = redirectUrl;
+      //window.location = redirectUrl;
+      try{
+                const gatewayParam = JSON.parse(redirectionUrl);
+
+                var newForm = $('<form>', {
+                  action: gatewayParam.txURL,
+                  method: 'post',
+                  target: '_top',
+                });
+                for (var key in gatewayParam) {
+                  newForm.append(
+                    $('<input>', {
+                      name: key,
+                      value: gatewayParam[key],
+                      type: 'hidden',
+                    }))
+                }
+
+                $(document.body).append(newForm);
+               newForm.submit();
+              }catch (e) {
+                console.log("Error in payment redirect ",e);
+                //window.location = redirectionUrl;
+              }
     } catch (error) {
       let messageToShow = "CS_PAYMENT_UNKNOWN_ERROR_ON_SERVER";
       if (error.response?.data?.Errors?.[0]) {
