@@ -14,7 +14,7 @@ const convertEditApplicationDetails1 = (data, appData) => {
   });
 
   let payload = {
-    ...appData,
+    ...appData.applicationData,
     proposedTaps: data?.ConnectionDetails?.[0]?.proposedTaps && Number(data?.ConnectionDetails?.[0]?.proposedTaps),
     proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size && Number(data?.ConnectionDetails?.[0]?.proposedPipeSize?.size),
     proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),
@@ -30,6 +30,7 @@ const convertEditApplicationDetails1 = (data, appData) => {
       sameAsPropertyAddress: data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails
     }] : null,
     property: data?.cpt?.details,
+    propertyId: data?.cpt?.details?.propertyId,
     processInstance: {
       ...appData?.processInstance,
       action: "VERIFY_AND_FORWARD"
