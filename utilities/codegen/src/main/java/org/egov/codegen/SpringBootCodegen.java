@@ -24,6 +24,7 @@ public class SpringBootCodegen extends AbstractJavaCodegen
     public static final String TITLE = "title";
     public static final String CONFIG_PACKAGE = "configPackage";
     public static final String BASE_PACKAGE = "basePackage";
+    public static final String REPO_PACKAGE = "repositoryPackage";
     public static final String INTERFACE_ONLY = "interfaceOnly";
     public static final String DELEGATE_PATTERN = "delegatePattern";
     public static final String SINGLE_CONTENT_TYPES = "singleContentTypes";
@@ -39,6 +40,7 @@ public class SpringBootCodegen extends AbstractJavaCodegen
     protected String title = "eGov App";
     protected String basePackage;
     protected String configPackage;
+    protected String repositoryPackage;
     protected boolean interfaceOnly = false;
     protected boolean delegatePattern = false;
     protected boolean delegateMethod = false;
@@ -101,11 +103,12 @@ public class SpringBootCodegen extends AbstractJavaCodegen
         apiPackage = basePackage + ".web.controllers";
         modelPackage = basePackage + ".web.models";
         invokerPackage = basePackage + ".web";
+        repositoryPackage = basePackage + ".repository";
         dateLibrary = "";
 
         additionalProperties.put(CONFIG_PACKAGE, configPackage);
         additionalProperties.put(BASE_PACKAGE, basePackage);
-
+        additionalProperties.put(REPO_PACKAGE, repositoryPackage);
         additionalProperties.put("jackson", true);
 
 
@@ -173,6 +176,10 @@ public class SpringBootCodegen extends AbstractJavaCodegen
 
         if (additionalProperties.containsKey(BASE_PACKAGE)) {
             this.setBasePackage((String) additionalProperties.get(BASE_PACKAGE));
+        }
+
+        if (additionalProperties.containsKey(REPO_PACKAGE)) {
+            this.setBasePackage((String) additionalProperties.get(REPO_PACKAGE));
         }
 
         if (additionalProperties.containsKey(INTERFACE_ONLY)) {
@@ -253,6 +260,10 @@ public class SpringBootCodegen extends AbstractJavaCodegen
                 "MainConfiguration.java"));
         supportingFiles.add(new SupportingFile("application.mustache",
                 ("src.main.resources").replace(".", java.io.File.separator), "application.properties"));
+
+        supportingFiles.add(new SupportingFile("serviceRequestRepository.mustache",
+                (sourceFolder + File.separator + repositoryPackage).replace(".", java.io.File.separator),
+                "ServiceRequestRepository.java"));
 
         if(config.isUseTracer()) {
             supportingFiles.add(new SupportingFile("testConfiguration.mustache",
