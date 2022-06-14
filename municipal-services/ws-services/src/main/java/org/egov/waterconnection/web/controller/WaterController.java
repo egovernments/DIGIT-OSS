@@ -88,7 +88,7 @@ public class WaterController {
 
 	}
 
-	@RequestMapping(value = "/WS/_search", method = RequestMethod.POST)
+	@RequestMapping(value = "/_opensearch", method = RequestMethod.POST)
 	public ResponseEntity<Map<String,BigDecimal>> plainsearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 															  @Valid @ModelAttribute SearchCriteria criteria) {
 		Map<String,BigDecimal> response = new HashMap<>();
