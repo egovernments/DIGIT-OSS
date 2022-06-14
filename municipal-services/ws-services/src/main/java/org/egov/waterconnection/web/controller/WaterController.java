@@ -1,6 +1,10 @@
 package org.egov.waterconnection.web.controller;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 
 import org.egov.waterconnection.web.models.RequestInfoWrapper;
@@ -82,5 +86,16 @@ public class WaterController {
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
+	}
+
+	@RequestMapping(value = "/WS/_search", method = RequestMethod.POST)
+	public ResponseEntity<Map<String,BigDecimal>> plainsearch(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+															  @Valid @ModelAttribute SearchCriteria criteria) {
+		Map<String,BigDecimal> response = new HashMap<>();
+		BigDecimal totalAmount = waterService.getPaidConnections(criteria, requestInfoWrapper.getRequestInfo());
+		int count = waterService.getActiveConnections(criteria, requestInfoWrapper.getRequestInfo());
+		response.put("totalAmountPaid", totalAmount);
+		response.put("activeCOnnections", BigDecimal.valueOf(count));
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

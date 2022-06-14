@@ -1,5 +1,6 @@
 package org.egov.waterconnection.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -20,4 +21,7 @@ public interface WaterService {
 	
 	WaterConnectionResponse planeSearch(SearchCriteria criteria, RequestInfo requestInfo);
 
+    BigDecimal getPaidConnections(SearchCriteria criteria, RequestInfo requestInfo);
+
+	int getActiveConnections(SearchCriteria criteria, RequestInfo requestInfo);
 }

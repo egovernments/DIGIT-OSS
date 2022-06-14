@@ -1,17 +1,17 @@
 package org.egov.waterconnection.service;
 
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
+import org.egov.waterconnection.repository.ServiceRequestRepository;
 import org.egov.waterconnection.repository.WaterDao;
 import org.egov.waterconnection.repository.WaterDaoImpl;
 import org.egov.waterconnection.util.WaterServicesUtil;
@@ -19,11 +19,8 @@ import org.egov.waterconnection.validator.ActionValidator;
 import org.egov.waterconnection.validator.MDMSValidator;
 import org.egov.waterconnection.validator.ValidateProperty;
 import org.egov.waterconnection.validator.WaterConnectionValidator;
-import org.egov.waterconnection.web.models.Property;
-import org.egov.waterconnection.web.models.SearchCriteria;
-import org.egov.waterconnection.web.models.WaterConnection;
-import org.egov.waterconnection.web.models.WaterConnectionRequest;
-import org.egov.waterconnection.web.models.WaterConnectionResponse;
+import org.egov.waterconnection.web.models.*;
+import org.egov.waterconnection.web.models.collection.Payment;
 import org.egov.waterconnection.web.models.workflow.BusinessService;
 import org.egov.waterconnection.workflow.WorkflowIntegrator;
 import org.egov.waterconnection.workflow.WorkflowService;
@@ -32,7 +29,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import static org.egov.waterconnection.constants.WCConstants.APPROVE_CONNECTION;
+import static org.egov.waterconnection.constants.WCConstants.*;
 
 @Component
 public class WaterServiceImpl implements WaterService {
@@ -78,6 +75,12 @@ public class WaterServiceImpl implements WaterService {
 
 	@Autowired
 	private WaterServicesUtil wsUtil;
+
+	@Autowired
+	private ServiceRequestRepository serviceRequestRepository;
+
+	@Autowired
+	private ObjectMapper mapper;
 
 	/**
 	 * 
@@ -361,7 +364,31 @@ public class WaterServiceImpl implements WaterService {
 		enrichmentService.enrichConnectionHolderDeatils(waterConnection.getWaterConnection(), criteria, requestInfo);
 		return waterConnection;
 	}
-	
+
+	@Override
+	public BigDecimal getPaidConnections(SearchCriteria criteria, RequestInfo requestInfo) {
+		StringBuilder URL = waterServiceUtil.getcollectionURL();
+		URL.append("WS").append("/_plainsearch").append("?").append("fromDate=").append(criteria.getFromDate())
+				.append("&").append("toDate=").append(criteria.getToDate());
+		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+		Object response = serviceRequestRepository.fetchResult(URL,requestInfoWrapper);
+		List<Payment> payments = (List<Payment>) mapper.convertValue(response, Payment.class);
+		BigDecimal totalAmountPaid = null;
+		for(Payment payment : payments) {
+			totalAmountPaid = totalAmountPaid.add(payment.getTotalAmountPaid());
+		}
+		return totalAmountPaid;
+	}
+
+	@Override
+	public int getActiveConnections(SearchCriteria criteria, RequestInfo requestInfo) {
+		if(criteria.getStatus().isEmpty()){
+			criteria.setStatus(STATUS_ACTIVE);
+		}
+		List<WaterConnection> waterConnections = waterDao.getWaterConnectionList(criteria, requestInfo);
+		return waterConnections.size();
+	}
+
 	public WaterConnectionResponse getWaterConnectionsListForPlaneSearch(SearchCriteria criteria,
 			RequestInfo requestInfo) {
 		return waterDao.getWaterConnectionListForPlaneSearch(criteria, requestInfo);

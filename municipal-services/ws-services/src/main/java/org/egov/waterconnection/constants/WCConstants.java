@@ -273,4 +273,6 @@ public class WCConstants {
 	
 	public static final String ACTIVE = "ACTIVE";
 
+	public static final String STATUS_ACTIVE = "Active";
+
 }
