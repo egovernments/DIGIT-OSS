@@ -32,7 +32,7 @@ const CustomLabel = ({ x, y, name, stroke, value, maxValue }) => {
         width="35"
         style={{ fontSize: "medium", textAlign: "right", fontVariantNumeric: "proportional-nums" }}
       >
-        {`${maxValue?.[t(name)]}%`}
+        {`${Digit.Utils.dss.formatter(maxValue?.[t(name)], 'number', 'Lac', true, t)}%`}
       </text>
       <text x={x} y={y} dx={-200} dy={10}>
         {t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(name)}`)}
