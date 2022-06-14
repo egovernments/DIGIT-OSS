@@ -5,7 +5,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.egov.vehicle.config.VehicleConfiguration;
-import org.egov.vehicle.trip.web.model.VehicleTripSearchCriteria;
 import org.egov.vehicle.web.model.Vehicle;
 import org.egov.vehicle.web.model.VehicleRequest;
 import org.egov.vehicle.web.model.VehicleSearchCriteria;
@@ -26,7 +25,10 @@ public class QueryBuilder {
 	
 	private final String paginationWrapper = "{} {orderby} {pagination}";
 	private static final String Query = " SELECT count(*) OVER() AS full_count, * FROM eg_vehicle ";
-	private static final String VEH_EXISTS_QUERY=" SELECT COUNT(*) FROM eg_vehicle WHERE tenantid=? AND registrationNumber=?";
+	private static final String VEH_EXISTS_QUERY=" SELECT COUNT(*) FROM eg_vehicle WHERE tenantid=? AND registrationNumber=? AND STATUS= ?";
+	
+	private static final String VEHICLE_NO_VENDOR_QUERY=" SELECT DISTINCT (vehicle.id) FROM EG_VEHICLE vehicle LEFT JOIN eg_vendor_vehicle vendor_vehicle ON vehicle.id=vendor_vehicle.vechile_id";
+	
 	
 	/**
 	 * 
@@ -212,8 +214,13 @@ public class QueryBuilder {
 			builder.append(" id IN (").append(createQuery(ids)).append(")");
 			addToPreparedStatement(preparedStmtList, ids);
 		}
-		
-		
+		//Added search criteria on status 
+		List<String> status=criteria.getStatus();
+		if (!CollectionUtils.isEmpty(status)) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" status IN (").append(createQuery(status)).append(")");
+			addToPreparedStatement(preparedStmtList, status);
+		}
 		
 		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 	}
@@ -257,6 +264,28 @@ public class QueryBuilder {
 		return builder.toString();
 	}
 
+	public String getVehicleIdsWithNoVendorQuery(@Valid VehicleSearchCriteria criteria, List<Object> preparedStmtList) {
 
+		StringBuilder builder = new StringBuilder(VEHICLE_NO_VENDOR_QUERY);
+		
+		if (criteria.getTenantId() != null) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" vehicle.tenantid=? ");
+			preparedStmtList.add(criteria.getTenantId());
 
+		}
+
+		List<String> status = criteria.getStatus();
+		if (!CollectionUtils.isEmpty(status)) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" vendor_vehicle.vendorvehiclestatus IN (").append(createQuery(status)).append(")");
+			addToPreparedStatement(preparedStmtList, status);
+		}
+
+		addClauseIfRequired(preparedStmtList, builder);
+		builder.append(" vendor_vehicle.vendor_id IS NULL OR vendorvehiclestatus='INACTIVE'");
+
+		return builder.toString();
+	}
+	
 }

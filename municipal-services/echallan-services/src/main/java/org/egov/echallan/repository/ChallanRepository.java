@@ -20,6 +20,7 @@ import org.egov.echallan.repository.rowmapper.ChallanRowMapper;
 import org.egov.echallan.web.models.collection.Bill;
 import org.egov.echallan.web.models.collection.PaymentDetail;
 import org.egov.echallan.web.models.collection.PaymentRequest;
+import org.egov.echallan.util.ChallanConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -169,5 +170,27 @@ public class ChallanRepository {
         }
         return response;
     }
+
+
+
+	public Map<String,Integer> fetchDynamicData(String tenantId) {
+		
+		List<Object> preparedStmtListTotalCollection = new ArrayList<>();
+		String query = queryBuilder.getTotalCollectionQuery(tenantId, preparedStmtListTotalCollection);
+		
+		int totalCollection = jdbcTemplate.queryForObject(query,preparedStmtListTotalCollection.toArray(),Integer.class);
+		
+		List<Object> preparedStmtListTotalServices = new ArrayList<>();
+		query = queryBuilder.getTotalServicesQuery(tenantId, preparedStmtListTotalServices);
+		
+		int totalServices = jdbcTemplate.queryForObject(query,preparedStmtListTotalServices.toArray(),Integer.class);
+		
+		Map<String, Integer> dynamicData = new HashMap<String,Integer>();
+		dynamicData.put(ChallanConstants.TOTAL_COLLECTION, totalCollection);
+		dynamicData.put(ChallanConstants.TOTAL_SERVICES, totalServices);
+		
+		return dynamicData;
+		
+	}
     
 }

@@ -1,7 +1,6 @@
 import { Loader, Modal, FormComposer } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
-
 import { configBPAApproverApplication } from "../config";
 import * as predefinedConfig from "../config";
 
@@ -61,11 +60,14 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     (async () => {
       setError(null);
       if (file) {
+        const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i
         if (file.size >= 5242880) {
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+        } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
+          setError(t(`NOT_SUPPORTED_FILE_TYPE`))
         } else {
           try {
-            const response = await Digit.UploadServices.Filestorage("PT", file, tenantId?.split(".")[0]);
+            const response = await Digit.UploadServices.Filestorage("OBPS", file, Digit.ULBService.getStateId() || tenantId?.split(".")[0]);
             if (response?.data?.files?.length > 0) {
               setUploadedFile(response?.data?.files[0]?.fileStoreId);
             } else {
@@ -153,13 +155,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     return result;
   }
 
-
-  const onSuccess = () => {
-    //clearParams();
-    queryClient.invalidateQueries("PT_CREATE_PROPERTY");
-  };
-
-
   function submit(data) {
     let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
     applicationData = {
@@ -228,11 +223,12 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           uploadedFile,
           setUploadedFile,
           businessService,
-          assigneeLabel: "WF_ASSIGNEE_NAME_LABEL"
+          assigneeLabel: "WF_ASSIGNEE_NAME_LABEL",
+          error
         })
       );
     }
-  }, [action, approvers, selectedFinancialYear, uploadedFile]);
+  }, [action, approvers, selectedFinancialYear, uploadedFile, error]);
 
   return action && config.form ? (
     <Modal

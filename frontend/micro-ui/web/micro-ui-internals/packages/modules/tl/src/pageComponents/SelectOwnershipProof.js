@@ -92,7 +92,7 @@ const SelectOwnershipProof = ({ t, config, onSelect, userType, formData }) => {
       <UploadFile
         id={"tl-doc"}
         extraStyleName={"propertyCreate"}
-        accept=".jpg,.png,.pdf"
+        accept=".jpg,.png,.pdf,.jpeg"
         onUpload={selectfile}
         onDelete={() => {
           setUploadedFile(null);

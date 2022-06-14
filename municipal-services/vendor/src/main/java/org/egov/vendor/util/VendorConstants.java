@@ -43,4 +43,8 @@ public class VendorConstants {
 	
 	public static final String VENDOR_MODULE = "Vendor";
 	
+	public static final String UPDATE_ERROR = "Update Error";
+	
+	public static final String UPDATE_VEHICLE_ERROR = "UPDATE_VEHICLE_ERROR";
+	
 }

@@ -108,29 +108,26 @@ public class VendorValidator {
 	 * 
 	 * @param vendorRequest
 	 */
-	public void validateCreate(VendorRequest vendorRequest, Object mdmsData) {
+	public void validateCreateOrUpdateRequest(VendorRequest vendorRequest, Object mdmsData,boolean isCreate) {
 
-		RequestInfo requestInfo = vendorRequest.getRequestInfo();
-		Vendor vendor = vendorRequest.getVendor();
+		//RequestInfo requestInfo = vendorRequest.getRequestInfo();
+		//Vendor vendor = vendorRequest.getVendor();
 		mdmsValidator.validateMdmsData(mdmsData);
 		mdmsValidator.validateAgencyType(vendorRequest);
 		mdmsValidator.validatePaymentPreference(vendorRequest);
 		boundaryService.getAreaType(vendorRequest, config.getHierarchyTypeCode());
+		
 		vehicleService.manageVehicle(vendorRequest);
-		ownerService.manageOwner(vendorRequest);
+		
+		if(isCreate) {
+			ownerService.manageOwner(vendorRequest);
+		}
+		
 		ownerService.manageDrivers(vendorRequest);
 		
 		
 
 	}
 	
-	public void manageVehicles(VendorRequest vendorRequest) {
-		RequestInfo requestInfo = vendorRequest.getRequestInfo();
-		Vendor vendor = vendorRequest.getVendor();
-		List<Vehicle> vehicles = vendor.getVehicles();
 	
-		vehicles.forEach(vehicle->{
-			
-		});
-	}
 }

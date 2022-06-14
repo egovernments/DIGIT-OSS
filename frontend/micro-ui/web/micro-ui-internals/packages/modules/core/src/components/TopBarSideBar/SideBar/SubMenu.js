@@ -17,11 +17,14 @@ import {
   FinanceChartIcon,
   CollectionIcon,
 } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
+import ReactTooltip from "react-tooltip";
 
 const SubMenu = ({ item }) => {
   const [subnav, setSubnav] = useState(false);
   const location = useLocation();
   const { pathname } = location;
+  const { t } = useTranslation();
   const showSubnav = () => setSubnav(!subnav);
   const IconsObject = {
     home: <HomeIcon />,
@@ -38,48 +41,133 @@ const SubMenu = ({ item }) => {
     edcr: <CollectionIcon />,
     collections: <CollectionIcon />,
   };
-
-  const leftIconArray = item.icon.leftIcon.split(":")[1] || item.leftIcon.split(":")[1];
+  const leftIconArray = item?.icon?.leftIcon?.split?.(":")?.[1] || item?.leftIcon?.split?.(":")[1];
   const leftIcon = IconsObject[leftIconArray] || IconsObject.collections;
+  const getModuleName = item?.moduleName?.replace(/[ -]/g, "_");
+  const appendTranslate = t(`ACTION_TEST_${getModuleName}`);
+  const trimModuleName = t(appendTranslate?.length > 20 ? appendTranslate.substring(0, 20) + "..." : appendTranslate);
 
-  return (
-    <React.Fragment>
+  if (item.type === "single") {
+    const getOrigin = window.location.origin;
+    return (
       <div className="submenu-container">
-        <div onClick={item.links && showSubnav} className={`sidebar-link ${subnav === true ? "active" : ""}`}>
+        <div className={`sidebar-link  ${pathname === item?.navigationURL ? "active" : ""}`}>
           <div className="actions">
             {leftIcon}
-            <span>{item.moduleName || item.displayName}</span>
+            {item.navigationURL?.indexOf("/digit-ui") === -1 ? (
+              <a
+                data-tip="React-tooltip"
+                data-for={`jk-side-${getModuleName}`}
+                className="custom-link"
+                href={getOrigin + "/employee/" + item.navigationURL}
+              >
+                <span> {trimModuleName} </span>
+
+                <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
+                  {t(`ACTION_TEST_${getModuleName}`)}
+                </ReactTooltip>
+              </a>
+            ) : (
+              // <a className="custom-link" href={getOrigin + "/employee/" + item.navigationURL}>
+              //   <div className="tooltip">
+              //     <p className="p1">{trimModuleName}</p>
+              //     <span className="tooltiptext">{t(`ACTION_TEST_${getModuleName}`)}</span>
+              //   </div>
+              // </a>
+              <Link className="custom-link" to={item.navigationURL}>
+                <div data-tip="React-tooltip" data-for={`jk-side-${getModuleName}`}>
+                  <span> {trimModuleName} </span>
+
+                  <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
+                    {t(`ACTION_TEST_${getModuleName}`)}
+                  </ReactTooltip>
+                </div>
+                {/* <div className="tooltip">
+                  <p className="p1">{trimModuleName}</p>
+                  <span className="tooltiptext">{t(`ACTION_TEST_${getModuleName}`)}</span>
+                </div>{" "} */}
+              </Link>
+            )}
           </div>
-          <div> {item.links && subnav ? <ArrowVectorDown /> : item.links ? <ArrowForward /> : null} </div>
         </div>
       </div>
+    );
+  } else {
+    return (
+      <React.Fragment>
+        <div className="submenu-container">
+          <div onClick={item.links && showSubnav} className={`sidebar-link`}>
+            <div className="actions">
+              {leftIcon}
+              <div data-tip="React-tooltip" data-for={`jk-side-${getModuleName}`}>
+                <span> {trimModuleName} </span>
 
-      {subnav &&
-        item.links
-          .filter((item) => item.url === "url" || item.url !== "")
-          .map((item, index) => {
-            if (item.navigationURL.indexOf("/digit-ui") === -1) {
-              const getOrigin = window.location.origin;
+                <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
+                  {t(`ACTION_TEST_${getModuleName}`)}
+                </ReactTooltip>
+              </div>
+              {/* <div className="tooltip">
+                <p className="p1">{trimModuleName}</p>
+                <span className="tooltiptext">{t(`ACTION_TEST_${getModuleName}`)}</span>
+              </div>{" "} */}
+            </div>
+            <div> {item.links && subnav ? <ArrowVectorDown /> : item.links ? <ArrowForward /> : null} </div>
+          </div>
+        </div>
+
+        {subnav &&
+          item.links
+            .filter((item) => item.url === "url" || item.url !== "")
+            .map((item, index) => {
+              const getChildName = item?.displayName?.toUpperCase()?.replace(/[ -]/g, "_");
+              const appendTranslate = t(`ACTION_TEST_${getChildName}`);
+              const trimModuleName = t(appendTranslate?.length > 20 ? appendTranslate.substring(0, 20) + "..." : appendTranslate);
+
+              if (item.navigationURL.indexOf("/digit-ui") === -1) {
+                const getOrigin = window.location.origin;
+                return (
+                  <a
+                    key={index}
+                    className={`dropdown-link ${pathname === item.link ? "active" : ""}`}
+                    href={getOrigin + "/employee/" + item.navigationURL}
+                  >
+                    <div className="actions" data-tip="React-tooltip" data-for={`jk-side-${index}`}>
+                      <span> {trimModuleName} </span>
+                      <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${index}`}>
+                        {t(`ACTION_TEST_${getChildName}`)}
+                      </ReactTooltip>
+                    </div>
+                    {/* <div className="actions">
+                      <div className="tooltip">
+                        <p className="p1">{trimModuleName}</p>
+                        <span className="tooltiptext">{t(`ACTION_TEST_${getChildName}`)}</span>
+                      </div>{" "}
+                    </div> */}
+                  </a>
+                );
+              }
               return (
-                <a className={`dropdown-link ${pathname === item.link ? "active" : ""}`} href={getOrigin + "/employee/" + item.navigationURL}>
-                  <div className="actions">
-                    <ArrowDirection className="icon" />
-                    <span>{item.label || item.displayName}</span>
+                <Link
+                  to={item?.link || item.navigationURL}
+                  key={index}
+                  className={`dropdown-link ${pathname === item?.link || pathname === item?.navigationURL ? "active" : ""}`}
+                >
+                  <div className="actions" data-tip="React-tooltip" data-for={`jk-side-${index}`}>
+                    <span> {trimModuleName} </span>
+                    <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${index}`}>
+                      {t(`ACTION_TEST_${getChildName}`)}
+                    </ReactTooltip>
+                    {/* <div className="tooltip">
+                      <p className="p1">{trimModuleName}</p>
+                      <span className="tooltiptext">{t(`ACTION_TEST_${getChildName}`)}</span>
+                    </div>{" "} */}
                   </div>
-                </a>
+                </Link>
               );
-            }
-            return (
-              <Link to={item.link} key={index} className={`dropdown-link ${pathname === item.link ? "active" : ""}`}>
-                <div className="actions">
-                  <ArrowDirection className="icon" />
-                  <span>{item.label || item.displayName}</span>
-                </div>
-              </Link>
-            );
-          })}
-    </React.Fragment>
-  );
+            })}
+      </React.Fragment>
+    );
+  }
 };
 
 export default SubMenu;

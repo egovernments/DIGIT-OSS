@@ -33,8 +33,7 @@ const ModifyApplication = () => {
 
   const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { enabled: propertyId ? true : false }
+    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId && propertyId != "" ? true : false }
   );
 
   useEffect(() => {
@@ -48,13 +47,13 @@ const ModifyApplication = () => {
   });
 
   useEffect(() => {
-    !propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
+    !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
   }, [sessionFormData?.cpt]);
 
   useEffect(async () => {
     const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
     if (details?.applicationData?.id && !IsDetailsExists) {
-      const convertAppData = await convertApplicationData(details, serviceType, true, t);
+      const convertAppData = await convertApplicationData(details, serviceType, true, undefined,t);
       setSessionFormData({ ...sessionFormData, ...convertAppData });
       setAppData({ ...convertAppData })
       sessionStorage.setItem("IsDetailsExists", JSON.stringify(true));
@@ -119,6 +118,19 @@ const ModifyApplication = () => {
   };
 
   const onSubmit = async (data) => {
+    if(!data?.cpt?.id && !propertyDetails?.Properties?.[0]){
+      if (!data?.cpt?.details || !propertyDetails) {
+          setShowToast({ key: "error", message: "ERR_INVALID_PROPERTY_ID" });
+          return;
+        }
+    }
+
+    if (!data?.cpt?.details) {
+      data.cpt = {
+        details: propertyDetails?.Properties?.[0]
+      };
+    }
+
     const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
     let convertAppData = await convertModifyApplicationDetails(data, details);
     const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
@@ -129,21 +141,22 @@ const ModifyApplication = () => {
         await waterMutation(reqDetails, {
           onError: (error, variables) => {
             setIsEnableLoader(false);
-            setShowToast({ key: "error", message: error?.message ? error.message : error });
+            setShowToast({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
             setTimeout(closeToastOfError, 5000);
           },
           onSuccess: async (data, variables) => {
-            let response = await updatePayloadOfWS(data?.WaterConnection?.[0]);
+            let response = await updatePayloadOfWS(data?.WaterConnection?.[0], "WATER");
             let waterConnectionUpdate = { WaterConnection: response };
             waterUpdateMutation(waterConnectionUpdate, {
               onError: (error, variables) => {
                 setIsEnableLoader(false);
-                setShowToast({ key: "error", message: error?.message ? error.message : error });
+                setShowToast({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
                 setTimeout(closeToastOfError, 5000);
               },
               onSuccess: (data, variables) => {
                 clearSessionFormData();
-                window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
+                history.push(`/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`);
+                // window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
               },
             })
           },
@@ -161,7 +174,7 @@ const ModifyApplication = () => {
             setTimeout(closeToastOfError, 5000);
           },
           onSuccess: async (data, variables) => {
-            let response = await updatePayloadOfWS(data?.SewerageConnections?.[0]);
+            let response = await updatePayloadOfWS(data?.SewerageConnections?.[0], "SEWERAGE");
             let sewerageConnectionUpdate = { SewerageConnection: response };
             await sewerageUpdateMutation(sewerageConnectionUpdate, {
               onError: (error, variables) => {
@@ -171,7 +184,8 @@ const ModifyApplication = () => {
               },
               onSuccess: (data, variables) => {
                 clearSessionFormData();
-                window.location.href = `${window.location.origin}/digit-ui/employee/ws/response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`;
+                history.push(`/digit-ui/employee/ws/ws-response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`);
+                // window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`;
               }
             });
           },
@@ -204,7 +218,8 @@ const ModifyApplication = () => {
         defaultValues={sessionFormData}
       // noBreakLine={true}
       ></FormComposer>
-      {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />}
+      {showToast && <Toast isDleteBtn={true} error={showToast?.key === "error" ? true : false} label={t(showToast?.message)} onClose={closeToast} />}
+      {/* {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />} */}
     </React.Fragment>
   );
 };

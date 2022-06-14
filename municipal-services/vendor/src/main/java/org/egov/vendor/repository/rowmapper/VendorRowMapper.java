@@ -11,6 +11,7 @@ import java.util.Map;
 import org.egov.tracer.model.CustomException;
 import org.egov.vendor.web.model.AuditDetails;
 import org.egov.vendor.web.model.Vendor;
+import org.egov.vendor.web.model.Vendor.StatusEnum;
 import org.egov.vendor.web.model.location.Address;
 import org.egov.vendor.web.model.location.Boundary;
 import org.postgresql.util.PGobject;
@@ -27,12 +28,23 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 
 	@Autowired
 	private ObjectMapper mapper;
+	
+	private int fullCount=0;
 
+	public int getFullCount() {
+		return fullCount;
+	}
+
+	public void setFullCount(int fullCount) {
+		this.fullCount = fullCount;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Vendor> extractData(ResultSet rs) throws SQLException, DataAccessException {
 		Map<String, Vendor> vendorMap = new LinkedHashMap<String, Vendor>();
-
+		this.setFullCount(0);
+		
 		while (rs.next()) {
 			Vendor currentvendor = new Vendor();
 			String id = rs.getString("vendor_id");
@@ -46,15 +58,14 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 			String status = rs.getString("status");
 			String agencytype = rs.getString("agencytype");
 			String paymentpreference = rs.getString("paymentpreference");
+			this.setFullCount(rs.getInt("full_count"));
+			
 			if (currentvendor == null) {
-				Long lastModifiedTime = rs.getLong("lastmodifiedtime");
-
-				if (rs.wasNull()) {
-					lastModifiedTime = null;
+				if(status==null) {
+					status="ACTIVE";
 				}
-
 				currentvendor = Vendor.builder().id(id).name(name).tenantId(tenantId).agencyType(agencytype).paymentPreference(paymentpreference).additionalDetails(additionalDetail)
-						.description(description).source(source).ownerId(owner_id).build();
+						.description(description).source(source).status(StatusEnum.valueOf(status)).ownerId(owner_id).build();
 
 				vendorMap.put(id, currentvendor);
 			}
@@ -74,7 +85,7 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 
 		Boundary locality = Boundary.builder().code(rs.getString("locality")).build();
 
-		Address address = Address.builder().id(rs.getString("id")).tenantId(rs.getString("tenantid")).doorNo(rs.getString("doorno"))
+		Address address = Address.builder().id(rs.getString("vendor_address_id")).tenantId(rs.getString("tenantid")).doorNo(rs.getString("doorno"))
 				.plotNo(rs.getString("plotno")).landmark(rs.getString("landmark")).city(rs.getString("city"))
 				.district(rs.getString("district")).region(rs.getString("region")).state(rs.getString("state"))
 				.country(rs.getString("country")).pincode(rs.getString("pincode"))

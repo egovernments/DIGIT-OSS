@@ -1,5 +1,5 @@
-import { EmployeeModuleCard, PTIcon } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import { EmployeeModuleCard, WSICon } from "@egovernments/digit-ui-react-components";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { checkForEmployee } from "../utils";
 
@@ -9,32 +9,87 @@ const WSCard = () => {
   }
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const [totalCount, setTotalCount] = useState(0);
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
   sessionStorage.removeItem("IsDetailsExists");
 
+  const filterFormDefaultValues = {
+    businessService: ["NewWS1", "ModifyWSConnection"],
+    moduleName: "ws-services",
+    locality: [],
+    assignee: "ASSIGNED_TO_ALL",
+    applicationStatus: [],
+    applicationType: [],
+  };
+
+  const tableOrderFormDefaultValues = {
+    sortBy: "",
+    limit: 10,
+    offset: 0,
+    sortOrder: "DESC",
+  };
+
+  const searchFormDefaultValues = {};
+
+  const formInitValue = {
+    filterForm: filterFormDefaultValues,
+    searchForm: searchFormDefaultValues,
+    tableForm: tableOrderFormDefaultValues,
+  };
+
+  const filterFormDefaultBillAmendmentValues = {
+    applicationStatus: [],
+    businessService: ["BS.AMENDMENT"],
+    moduleName: "bsWs-service",
+    locality: [],
+    assignee: "ASSIGNED_TO_ALL",
+  };
+  const formInitBilAmendmentValue = {
+    filterForm: filterFormDefaultBillAmendmentValues,
+    searchForm: searchFormDefaultValues,
+    tableForm: tableOrderFormDefaultValues,
+  };
+
+  const { isLoading: isWSInboxLoading, data: wsData } = Digit.Hooks.ws.useInbox({
+    tenantId,
+    filters: { ...formInitValue },
+  });
+
+  const { isLoading: isLoading, data } = Digit.Hooks.useBillAmendmentInbox({
+    tenantId,
+    filters: { ...formInitBilAmendmentValue },
+  });
+
+  useEffect(() => {
+    if (!isWSInboxLoading) {
+      const waterCount = wsData?.totalCount ? wsData?.totalCount : 0;
+      setTotalCount(waterCount);
+    }
+  }, [wsData]);
+
   let links = [
-     
-    {
-      label: t("WS_SEARCH_APP"),
-      link: `/digit-ui/employee/ws/search-application`
-    },
     {
       label: t("WS_APPLY_NEW_CONNECTION_HOME_CARD_LABEL"),
       link: `/digit-ui/employee/ws/create-application`,
-      roles: ["WS_CEMP", "SW_CEMP"]
-    }
-
+      roles: ["WS_CEMP", "SW_CEMP"],
+    },
   ];
 
-  links = links.filter(link => link.roles ? checkForEmployee(link.roles) : true);
+  links = links.filter((link) => (link.roles ? checkForEmployee(link.roles) : true));
 
   const propsForModuleCard = {
-    Icon: <PTIcon />,
-    moduleName: t("ACTION_TEST_WATER_AND_SEWERAGE"),
+    Icon: <WSICon />,
+    moduleName: t("ACTION_TEST_WATER"),
     kpis: [
       {
-        count: "-",
-        label: t("TOTAL_CONNECTIONS"),
+        count: isWSInboxLoading ? "-" : totalCount,
+        label: t("TOTAL_WS"),
+        link: `/digit-ui/employee/ws/water/inbox`,
+      },
+      {
+        count: isWSInboxLoading ? "-" : wsData?.slaCount,
+        label: t("TOTAL_NEARING_SLA"),
+        link: `/digit-ui/employee/ws/water/inbox`,
       },
       // {
       //     label: t(""),
@@ -42,21 +97,36 @@ const WSCard = () => {
       // }
     ],
     links: [
+      // {    commented until api is integrated
+      //   label: t("ES_COMMON_INBOX"),
+      //   link: `/digit-ui/employee/ws/bill-amend/inbox`,
+      // },
       {
-        label: t("WS_SEARCH_APP"),
-        link: `/digit-ui/employee/ws/search-application`,
+        count: isWSInboxLoading ? "-" : wsData?.totalCount,
+        label: t("WS_WATER_INBOX"),
+        link: `/digit-ui/employee/ws/water/inbox`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
       {
-        label: t("WS_NEW_APP"),
-        link: `/digit-ui/employee/ws/create-application`,
+        count: isLoading ? "-" : data?.totalCount,
+        label: t("ACTION_TEST_BILLAMENDMENT"),
+        link: `/digit-ui/employee/ws/water/bill-amendment/inbox`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
+      },
+      ...links,
+      {
+        label: t("WS_WATER_CONNECTION_SEARCH_LABEL"),
+        link: `/digit-ui/employee/ws/water/search-connection`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
       {
-        label: t("WS_SEARCH_CONNECTION"),
-        link: `/digit-ui/employee/ws/search`,
+        label: t("WS_WATER_APPLICATION_SEARCH"),
+        link: `/digit-ui/employee/ws/water/search-application`,
+        roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },
     ],
   };
-  return <EmployeeModuleCard {...propsForModuleCard} />
+  return <EmployeeModuleCard {...propsForModuleCard} />;
 };
 
 export default WSCard;

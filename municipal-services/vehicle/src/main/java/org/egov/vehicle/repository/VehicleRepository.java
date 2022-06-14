@@ -56,7 +56,11 @@ public class VehicleRepository {
         public void save(VehicleRequest vehicleRequest) {
             vehicleProducer.push(config.getSaveTopic(), vehicleRequest);
         }
-
+        
+        public void update(VehicleRequest vehicleRequest) {
+            vehicleProducer.push(config.getUpdateTopic(), vehicleRequest);
+        }
+        
 		public VehicleResponse getVehicleData(@Valid VehicleSearchCriteria criteria) {
 			
 			List<Object> preparedStmtList = new ArrayList<>();
@@ -65,10 +69,11 @@ public class VehicleRepository {
 			VehicleResponse response = VehicleResponse.builder().vehicle(vehicles).totalCount(Integer.valueOf(rowMapper.getFullCount())).build();
 			return response;
 		}
-
-		public Integer getVehicleCount(VehicleRequest vehicleRequest) {
+		
+		public Integer getVehicleCount(VehicleRequest vehicleRequest, String status) {
 			List<Object> preparedStmtList = new ArrayList<>();
 			String query = queryBuilder.vehicleExistsQuery(vehicleRequest, preparedStmtList);
+			preparedStmtList.add(status);
 			Integer count = null;
 			try {
 				count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
@@ -78,6 +83,7 @@ public class VehicleRepository {
 			return count;
 		}
 
+		
 		public List<String> fetchVehicleIds(@Valid VehicleSearchCriteria criteria) {
 
 			List<Object> preparedStmtList = new ArrayList<>();
@@ -89,6 +95,14 @@ public class VehicleRepository {
 							"limit ? ",
 					preparedStmtList.toArray(),
 					new SingleColumnRowMapper<>(String.class));
+			return ids;
+		}
+		
+		public List<String> fetchVehicleIdsWithNoVendor(@Valid VehicleSearchCriteria criteria) {
+
+			List<Object> preparedStmtList = new ArrayList<>();
+			String query = queryBuilder.getVehicleIdsWithNoVendorQuery(criteria, preparedStmtList);
+			List<String> ids = jdbcTemplate.query(query,preparedStmtList.toArray(),	new SingleColumnRowMapper<>(String.class));
 			return ids;
 		}
 

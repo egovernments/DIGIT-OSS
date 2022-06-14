@@ -17,7 +17,8 @@ function TLDocument({ value = {} }) {
     },
     { value }
   );
-  let documents = [];
+  let documents = window.location.href.includes("/tl/tradelicence/application/") ? value?.tradeLicenseDetail?.applicationDocuments : [];
+  if(value?.workflowDocs) documents = value?.workflowDocs;
   if(value?.owners?.documents["ProofOfIdentity"]) documents.push(value.owners.documents["ProofOfIdentity"]);
   if(value?.owners?.documents["ProofOfOwnership"]) documents.push(value.owners.documents["ProofOfOwnership"]);
   if(value?.owners?.documents["OwnerPhotoProof"]) documents.push(value.owners.documents["OwnerPhotoProof"]);
@@ -36,7 +37,7 @@ function TLDocument({ value = {} }) {
             return (
               <a target="_" href={documentLink} style={{ minWidth: "100px",marginRight:"10px" }} key={index}>
                 <PDFSvg width={85} height={100} style={{ background: "#f6f6f6", padding: "8px" }} />
-                <p style={{ marginTop: "8px",textAlign:"center" }}>{t(`TL_${document?.documentType}_LABEL`)}</p>
+                <p style={{ marginTop: "8px",textAlign:"center" }}>{value?.workflowDocs ? t(`${document?.documentType}`) : t(`TL_${document?.documentType}_LABEL`)}</p>
               </a>
             );
           })}

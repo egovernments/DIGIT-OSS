@@ -239,7 +239,7 @@ export const gettradeupdateunits = (data) => {
 export const getaccessories = (data) => {
   let tradeaccessories = [];
   data?.TradeDetails?.accessories.map((ob) => {
-    tradeaccessories.push({ uom: ob.unit, accessoryCategory: ob.accessory.code, uomValue: ob.uom, count: ob.accessorycount });
+    tradeaccessories.push({ uom: ob.unit, accessoryCategory: ob.accessory.code, uomValue: ob.uom ? ob.uom : null, count: ob.accessorycount });
   });
   return tradeaccessories;
 };
@@ -283,7 +283,7 @@ export const gettradeupdateaccessories = (data) => {
   data.TradeDetails.accessories.map((ob) => {
     if(!ob.id)
     {
-      TLaccessories.push({ uom: ob.unit, accessoryCategory: ob.accessory.code, uomValue: ob.uom, count: ob.accessorycount });
+      TLaccessories.push({ uom: ob.unit, accessoryCategory: ob.accessory.code, uomValue: ob.uom ? ob.uom : null, count: ob.accessorycount });
     }
   })
 }
@@ -517,9 +517,8 @@ export const stringToBoolean = (value) => {
 
 //FinancialYear
 export const convertToEditTrade = (data, fy = []) => {
-  const currrentFYending = fy.filter(item => item.code === data?.financialYear)[0]
-    .endingDate;
-  const nextFinancialYearForRenewal = fy.filter(item => item.startingDate === currrentFYending)[0].code;
+  const currrentFYending = fy?.filter(item => item?.code === data?.financialYear)?.[0]?.endingDate;
+  const nextFinancialYearForRenewal = fy?.filter(item => item?.startingDate === currrentFYending)?.[0]?.code;
   let isDirectrenewal = stringToBoolean(sessionStorage.getItem("isDirectRenewal"));
   let formdata = {
     Licenses: [

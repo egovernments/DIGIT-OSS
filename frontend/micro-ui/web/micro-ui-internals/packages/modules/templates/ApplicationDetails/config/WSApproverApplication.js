@@ -12,6 +12,7 @@ export const configWSApproverApplication = ({
   setUploadedFile,
   assigneeLabel,
   businessService,
+  error
 }) => {
   let checkCondtions = true;
   if (action?.action?.includes("SEND_BACK") || action?.action == "APPROVE_FOR_CONNECTION") checkCondtions = false;
@@ -54,12 +55,14 @@ export const configWSApproverApplication = ({
             populators: (
               <UploadFile
                 id={"workflow-doc"}
-                // accept=".jpg"
+                accept=".jpg,.pdf,.png,.jpeg"
                 onUpload={selectFile}
                 onDelete={() => {
                   setUploadedFile(null);
                 }}
                 message={uploadedFile ? `1 ${t(`ES_PT_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
+                error={error}
+                iserror={error}
               />
             )
           },

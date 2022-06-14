@@ -318,11 +318,12 @@ class ActionMenuComp extends Component {
             );
           } else {
             if (item.navigationURL && item.navigationURL !== "newTab") {
+              let url=item.navigationURL.startsWith('/')?item.navigationURL:`/${item.navigationURL}`;
               return (
                 <Link
                   style={{ textDecoration: "none" }}
                   key={index}
-                  to={item.navigationURL === "/" ? `${item.navigationURL}` : `/${item.navigationURL}`}
+                  to={url}
                 >
                   <div className={`sideMenuItem ${activeItmem == item.name ? "selected" : ""}`}>
                     {/* <Tooltip
@@ -335,7 +336,7 @@ class ActionMenuComp extends Component {
                       style={{ whiteSpace: "initial" }}
                       key={index}
                       id={item.name.toUpperCase().replace(/[\s]/g, "-") + "-" + index}
-                      onClick={() => {
+                      onClick={(e) => {
                         //  localStorageSet("menuPath", item.path);
                         if (item.navigationURL === "tradelicence/apply") {
                           this.props.setRequiredDocumentFlag()
@@ -344,12 +345,12 @@ class ActionMenuComp extends Component {
                         document.title = item.name;
                         if (item.navigationURL && item.navigationURL.includes('digit-ui')) {
                           window.location.href = item.navigationURL
+                          e.preventDefault()
                           return;
                         }
                         else {
                           updateActiveRoute(item.path, item.name);
                         }
-
                         toggleDrawer && toggleDrawer();
                         if (window.location.href.indexOf(item.navigationURL) > 0 && item.navigationURL.startsWith("integration")) {
                           window.location.reload();
@@ -414,11 +415,12 @@ class ActionMenuComp extends Component {
             }
             if (item.path && item.url && item.displayName.toLowerCase().indexOf(searchText.toLowerCase()) > -1) {
               if (item.navigationURL) {
+                let url=item.navigationURL.startsWith('/')?item.navigationURL:`/${item.navigationURL}`;
                 return (
                   <Link
                     style={{ textDecoration: "none" }}
                     key={index}
-                    to={item.navigationURL === "/" ? `${item.navigationURL}` : `/${item.navigationURL}`}
+                    to={url}
                   >
                     <div className="sideMenuItem">
                       {/* <Tooltip
@@ -430,10 +432,17 @@ class ActionMenuComp extends Component {
                         innerDivStyle={styles.defaultMenuItemStyle}
                         style={{ whiteSpace: "initial" }}
                         id={item.name.toUpperCase().replace(/[\s]/g, "-") + "-" + index}
-                        onClick={() => {
+                        onClick={(e) => {
                           document.title = item.displayName;
+                          if (item.navigationURL && item.navigationURL.includes('digit-ui')) {
+                            window.location.href = item.navigationURL
+                            e.preventDefault()
+                            return;
+                          }
+                          else {
+                            updateActiveRoute(item.path, item.displayName);
+                          }
                           toggleDrawer && toggleDrawer();
-                          updateActiveRoute(item.path, item.displayName);
                         }}
                         leftIcon={this.renderLeftIcon(iconLeft, item)}
                         primaryText={

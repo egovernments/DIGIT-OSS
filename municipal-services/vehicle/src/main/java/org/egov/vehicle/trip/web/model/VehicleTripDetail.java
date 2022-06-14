@@ -41,15 +41,11 @@ public class VehicleTripDetail {
 	  @JsonProperty("tenantId")
 	  private String tenantId = null;
 	  
-	  @NotNull
 	  @SafeHtml
-	  @NotBlank
 	  @JsonProperty("referenceNo")
 	  private String referenceNo = null;
 	  
-	  @NotBlank
-	  @NotNull
-	  @SafeHtml
+	   @SafeHtml
 	  @JsonProperty("referenceStatus")
 	  private String referenceStatus = null;
 	  

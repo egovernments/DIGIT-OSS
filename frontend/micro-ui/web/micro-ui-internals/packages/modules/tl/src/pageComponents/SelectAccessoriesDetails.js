@@ -32,13 +32,16 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
 
   const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "AccessoryCategory");
   const [accessories, SetAccessories] = useState([]);
-  const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: TenantId, filters: {} });
+  const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: TenantId, filters: {} }, {
+    select: (data) => {
+    return data?.billingSlab.filter((e) => e.accessoryCategory && e.applicationType === "NEW");
+    }});
 
   useEffect(() => {
-    if (billingSlabData && billingSlabData?.billingSlab && billingSlabData?.billingSlab?.length > 0) {
+    if (billingSlabData  && billingSlabData?.length > 0) {
       const processedData =
-        billingSlabData.billingSlab &&
-        billingSlabData.billingSlab.reduce(
+        billingSlabData &&
+        billingSlabData.reduce(
           (acc, item) => {
             let accessory = { active: true };
             let tradeType = { active: true };
@@ -111,15 +114,17 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     acc[i].accessory = value;
     setAccessory(value);
     setFeilds(acc);
-    acc[i].unit = null;
+    acc[i].accessorycount = "";
+    acc[i].uom = "";
+    acc[i].unit = value?.uom != null ?  value.uom : "";
     Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
-    setUnitOfMeasure(null);
-    Data?.TradeLicense?.AccessoriesCategory.map((ob) => {
-      if (value.code === ob.code && ob.uom != null) {
-        acc[i].unit = ob.uom;
-        setUnitOfMeasure(ob.uom);
-      }
-    });
+    setUnitOfMeasure(value?.uom != null ? value.uom : null);
+    // Data?.TradeLicense?.AccessoriesCategory.map((ob) => {
+    //   if (value.code === ob.code && ob.uom != null) {
+    //     acc[i].unit = ob.uom;
+    //     setUnitOfMeasure(ob.uom);
+    //   }
+    // });
   }
   function selectAccessoryCount(i, e) {
     setAccCountError(null);
@@ -145,15 +150,21 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   }
 
   const goNext = () => {
-    let data = formData.TradeDetails.Units;
+    let data = formData.TradeDetails;
     let formdata;
     sessionStorage.setItem("VisitedAccessoriesDetails", true);
     formdata = { ...data, accessories: fields };
     onSelect(config.key, formdata);
   };
 
-  const onSkip = () => onSelect();
+  function canMoveNext(){
+    if(!fields?.[0]?.accessory || !fields?.[0]?.accessorycount || (fields?.[0]?.unit && !fields?.[0]?.uom) || AccCountError || AccUOMError)
+    return true
+    else 
+    return false
+  }
 
+  const onSkip = () => onSelect();
   return (
     <React.Fragment>
       {window.location.href.includes("/citizen") ? <Timeline /> : null}
@@ -166,7 +177,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
           onSkip={onSkip}
           t={t}
           forcedError={t(AccCountError) || t(AccUOMError)}
-          isDisabled={!fields?.[0]?.accessory || !fields?.[0]?.accessorycount || !fields?.[0]?.uom || AccCountError || AccUOMError}
+          isDisabled={canMoveNext()}
         >
           {fields.map((field, index) => {
             return (
@@ -182,7 +193,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                     background: "#FAFAFA",
                   }}
                 >
-                  <CardLabel>{`${t("TL_ACCESSORY_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_ACCESSORY_LABEL")}*`}</CardLabel>
                   <LinkButton
                     label={
                       <div>
@@ -212,14 +223,15 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                       optionKey="i18nKey"
                       isMandatory={config.isMandatory}
                       //options={[{ i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }]}
-                      options={sortDropdownNames(accessories.length !== 0 ? accessories : getAccessoryCategoryDropDown(), "i18nKey", t)}
+                      options={sortDropdownNames( accessories, "i18nKey", t) || []}
                       selectedOption={field.accessory}
                       onSelect={(e) => selectAccessory(index, e)}
+                      isPTFlow={true}
                     />
                   ) : (
                     <Loader />
                   )}
-                  <CardLabel>{`${t("TL_ACCESSORY_COUNT_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_ACCESSORY_COUNT_LABEL")}*`}</CardLabel>
                   <TextInput
                     style={{ background: "#FAFAFA" }}
                     t={t}
@@ -255,7 +267,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
             title: t("PT_NAME_ERROR_MESSAGE"),
           })} */
                   />
-                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}*`}</CardLabel>
                   <TextInput
                     style={{ background: "#FAFAFA" }}
                     t={t}

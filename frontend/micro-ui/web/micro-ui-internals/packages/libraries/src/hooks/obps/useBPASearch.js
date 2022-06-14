@@ -19,13 +19,17 @@ const combineResponse = (applications, workflowData) => {
   return applications.map(application => ({
     ...application,
     assignee: workflowInstances[application?.applicationNo]?.assignes?.[0]?.name,
-    sla: convertMillisecondsToDays(workflowInstances[application?.applicationNo].businesssServiceSla),
+    sla: application?.status.match(/^(APPROVED)$/) ? "CS_NA" : convertMillisecondsToDays(workflowInstances[application?.applicationNo].businesssServiceSla),
     state: workflowInstances[application?.applicationNo]?.state?.state,
     action: workflowInstances[application?.applicationNo]?.action
   }))
 }
 
 const useBPASearch = (tenantId, filters = {}, config = {}) => {
+  if (window.location.href.includes("search/application")) {
+    if (!filters?.limit) filters.limit = 10;
+    if (!filters?.offset) filters.offset = 0;
+  }
   const client = useQueryClient();
   return {...useQuery(['BPA_SEARCH', tenantId, filters], async () => {
     const response = await OBPSService.BPASearch(tenantId, { ...filters });

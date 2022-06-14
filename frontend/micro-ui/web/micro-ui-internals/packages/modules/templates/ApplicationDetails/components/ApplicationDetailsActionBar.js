@@ -1,10 +1,16 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import { useTranslation } from "react-i18next";
 import { SubmitBar, ActionBar, Menu } from "@egovernments/digit-ui-react-components";
 
 function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix,ActionBarStyle={},MenuStyle={} }) {
   const { t } = useTranslation();
-  const user = Digit.UserService.getUser();
+  let user = Digit.UserService.getUser();
+  const menuRef = useRef();
+  if (window.location.href.includes("/obps") || window.location.href.includes("/noc")) {
+    const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+    const userInfo = userInfos ? JSON.parse(userInfos) : {};
+    user = userInfo?.value;
+  }
   const userRoles = user?.info?.roles?.map((e) => e.code);
   let isSingleButton = false;
   let isMenuBotton = false;
@@ -13,6 +19,11 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
   }) || workflowDetails?.data?.nextActions?.filter((e) => {
     return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
   });
+
+    const closeMenu = () => {
+          setDisplayMenu(false);
+      }
+    Digit.Hooks.useClickOutside(menuRef, closeMenu, displayMenu );
 
   if (((window.location.href.includes("/obps") || window.location.href.includes("/noc")) && actions?.length == 1) || (actions?.[0]?.redirectionUrl?.pathname.includes("/pt/property-details/")) && actions?.length == 1) {
     isMenuBotton = false;
@@ -36,7 +47,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
               style={MenuStyle}
             />
           ) : null}
-          <SubmitBar label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+          <SubmitBar ref={menuRef} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
         </ActionBar>
       )}
       {!workflowDetails?.isLoading && !isMenuBotton && isSingleButton && (

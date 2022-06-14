@@ -19,6 +19,7 @@ const ScruntinyDetails = ({ scrutinyDetails, paymentsList=[] }) => {
             {scrutinyDetails?.values?.map((value, index) => {
               if (value?.isUnit) return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:(value?.value === "Unpaid"?{color:"red"}:{})} key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.value ? `${getTextValues(value)} ${t(value?.isUnit)}` : t("NA")} labelStyle={value?.isHeader ? {fontSize: "20px"} : {}}/>
               else if (value?.isHeader && !value?.isUnit) return <CardSubHeader style={{fontSize: "20px", paddingBottom: "10px"}}>{t(value?.title)}</CardSubHeader>
+              else if (value?.isSubTitle && !value?.isUnit) return <CardSubHeader style={{fontSize: "20px", paddingBottom: "10px", margin: "0px"}}>{t(value?.title)}</CardSubHeader>
               else return <Row className="border-none" textStyle={value?.value === "Paid"?{color:"darkgreen"}:(value?.value === "Unpaid"?{color:"red"}:{})} key={`${value.title}`} label={`${t(`${value.title}`)}`} text={getTextValues(value)} labelStyle={value?.isHeader ? {fontSize: "20px"} : {}}/>
             })}
             {scrutinyDetails?.permit?.map((value,ind) => {

@@ -153,7 +153,18 @@ import {
   PGRIcon,
   TLIcon,
   BillsIcon,
-  ErrorIcon
+  ErrorIcon,
+  PrintBtnCommon,
+  WhatsappIconGreen,
+  HelpLineIcon,
+  ServiceCenterIcon,
+  TimerIcon,
+  RupeeSymbol,
+  ValidityTimeIcon,
+  AddIcon,
+  AddNewIcon,
+  InboxIcon,
+  ViewReportIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -199,6 +210,8 @@ import MultiUploadWrapper from "./molecules/MultiUploadWrapper";
 import { FilterForm, FilterFormField } from "./molecules/FilterForm";
 import OpenLinkContainer from "./atoms/OpenLinkContainer";
 import UploadPitPhoto from "./molecules/UploadPitPhoto";
+import { DownloadBtnCommon } from "./atoms/svgindex";
+import ToggleSwitch from "./atoms/ToggleSwitch";
 export {
   Phone,
   Body,
@@ -281,6 +294,7 @@ export {
   EventCalendarView,
   InboxLinks,
   PopupHeadingLabel,
+  ToggleSwitch,
   // Icons
   GetApp,
   ArrowLeft,
@@ -407,5 +421,17 @@ export {
   PGRIcon,
   TLIcon,
   BillsIcon,
-  ErrorIcon
+  ErrorIcon,
+  DownloadBtnCommon,
+  PrintBtnCommon,
+  WhatsappIconGreen,
+  HelpLineIcon,
+  ServiceCenterIcon,
+  TimerIcon,
+  RupeeSymbol,
+  ValidityTimeIcon,
+  AddIcon,
+  AddNewIcon,
+  ViewReportIcon,
+  InboxIcon,
 };

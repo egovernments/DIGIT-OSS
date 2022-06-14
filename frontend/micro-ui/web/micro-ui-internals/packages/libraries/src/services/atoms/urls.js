@@ -42,6 +42,14 @@ const Urls = {
     vehicleTripSearch: "/vehicle/trip/v1/_search",
     billingSlabSearch: "/fsm-calculator/v1/billingSlab/_search",
     vehilceUpdate: "/vehicle/trip/v1/_update",
+    createVendor: "/vendor/v1/_create",
+    updateVendor: "/vendor/v1/_update",
+    createVehicle: "/vehicle/v1/_create",
+    updateVehicle: "/vehicle/v1/_update",
+    driverSearch: "/vendor/driver/v1/_search",
+    createDriver: "/vendor/driver/v1/_create",
+    updateDriver: "/vendor/driver/v1/_update",
+    vehicleTripCreate: "/vehicle/trip/v1/_create",
   },
 
   payment: {
@@ -149,6 +157,7 @@ const Urls = {
     sw_payment_search: "/collection-services/payments/SW/_search",
     ws_payment_search: "/collection-services/payments/WS/_search",
     billAmendmentCreate: "/billing-service/amendment/_create",
+    billAmendmentUpdate: "/billing-service/amendment/_update",
     ws_meter_conncetion_create: "/ws-calculator/meterConnection/_create",
     sw_meter_conncetion_create: "/sw-calculator/meterConnection/_create",
   },

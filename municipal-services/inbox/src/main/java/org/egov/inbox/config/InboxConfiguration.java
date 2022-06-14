@@ -74,5 +74,8 @@ public class InboxConfiguration {
 
 	@Value("${egov.fsm.fetchApplicationIds.path}")
 	private String fetchApplicationIds;
+	
+	@Value("#{${bs.businesscode.service.search}}")
+	private Map<String, Map<String, String>> bsServiceSearchMapping;
 
 }

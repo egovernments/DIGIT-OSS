@@ -92,6 +92,24 @@ body {
 
   .app-container {
     width: 100%;
+    form {
+      .card {
+        max-width: 960px;
+        h2 {
+          text-align: left;
+        }
+        .field-container {
+          max-width: 540px;
+        }
+        button {
+          max-width: 240px;
+        }
+        .input-otp-wrap,
+        .card-text-button {
+          text-align: left;
+        }
+      }
+    }
   }
 
   .h1 {

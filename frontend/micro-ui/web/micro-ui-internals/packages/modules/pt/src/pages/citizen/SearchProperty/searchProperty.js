@@ -12,6 +12,8 @@ const description = {
     color: "#505A5F",
     marginTop: "0px",
     textAlign: "center",
+    marginBottom: "20px",
+    maxWidth: "540px",
   },
 };
 
@@ -32,6 +34,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
     configs: { enabled: Object.keys(searchData).length > 0, retry: false, retryOnMount: false, staleTime: Infinity },
   });
 
+  const isMobile = window.Digit.Utils.browser.isMobile();
 
   useEffect(() => {
     if ( !(searchData?.filters?.mobileNumber && Object.keys(searchData?.filters)?.length == 1) && 
@@ -57,6 +60,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
         el.style.padding = "8px 0";
         el.style.boxShadow = "none";
         el.style.marginBottom = "16px";
+        el.style.textAlign = "left";
       } else {
         setTimeout(() => {
           getActionBar();
@@ -437,7 +441,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
   }
 
   return (
-    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white"}}>
+    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white", maxWidth:"960px"}}>
       <FormComposer
         onSubmit={onPropertySearch}
         noBoxShadow
@@ -450,7 +454,7 @@ const SearchProperty = ({ config: propsConfig, onSelect }) => {
         onFormValueChange={onFormValueChange}
         cardStyle={{marginBottom:"0"}}
       ></FormComposer>
-      <span className="link" style={{display:"flex", justifyContent:"center",paddingBottom:"16px"}}>
+      <span className="link" style={{display:"flex", justifyContent: isMobile ? "center" : "left", paddingBottom:"16px", paddingLeft: "24px", marginTop: "-24px"}}>
         <Link to={"/digit-ui/citizen/pt/property/new-application"}>{t("CPT_REG_NEW_PROPERTY")}</Link>
       </span>
       {showToast && (

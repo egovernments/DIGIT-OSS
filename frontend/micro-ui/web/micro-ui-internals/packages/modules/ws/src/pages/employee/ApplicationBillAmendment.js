@@ -16,29 +16,36 @@ import {
   ActionBar,
   SubmitBar,
   CardLabelError,
+  InfoBannerIcon
 } from "@egovernments/digit-ui-react-components";
-import React, { Fragment, useEffect, useMemo, useReducer } from "react";
+import React, { Fragment, useEffect, useMemo, useReducer,useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
+
 const ApplicationBillAmendment = () => {
+  
   //connectionNumber=WS/107/2021-22/227166&tenantId=pb.amritsar&service=WATER&connectionType=Metered
   const { t } = useTranslation();
   const { connectionNumber, tenantId, service, connectionType } = Digit.Hooks.useQueryParams();
   const stateId = Digit.ULBService.getStateId();
+
   const { isLoading: BillAmendmentMDMSLoading, data: BillAmendmentMDMS } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSMDMSBillAmendment({
     tenantId: stateId,
   });
+
   const servicev1 = connectionNumber.includes("WS") ? "WS" : "SW";
   const billSearchFilters = { tenantId, consumerCode: connectionNumber, service: servicev1 };
   const { data: preBillSearchData, isLoading: isBillSearchLoading } = Digit.Hooks.usePaymentSearch(tenantId, billSearchFilters);
+  
   const { data, isFetched } = Digit.Hooks.fsm.useMDMS(stateId, "DIGIT-UI", "WSTaxHeadMaster");
   const availableBillAmendmentTaxHeads = data?.BillingService?.TaxHeadMaster?.filter((w) => w.IsBillamend);
+  
   const billSearchData = preBillSearchData?.filter((e) =>
     availableBillAmendmentTaxHeads?.find((taxHeadMaster) => taxHeadMaster.code === e.taxHeadCode)
   );
-
+  const rebateAndPenaltyTaxHeads = data?.BillingService?.TaxHeadMaster?.filter(e=> e.code.includes("ADHOC") && e.IsBillamend && e.service===servicev1)
   const {
     register,
     control,
@@ -49,6 +56,8 @@ const ApplicationBillAmendment = () => {
     formState: { errors },
     ...methods
   } = useForm();
+  
+  const fromDateVal = watch("effectivefrom");
   const amendmentReason = watch("amendmentReason");
   const WS_REDUCED_AMOUNT = watch("WS_REDUCED_AMOUNT");
   const WS_ADDITIONAL_AMOUNT = watch("WS_ADDITIONAL_AMOUNT");
@@ -119,27 +128,43 @@ const ApplicationBillAmendment = () => {
 
   const getDemandDetailsComparingUpdates = (d) => {
     let actionPerformed;
+    const action = d?.[`${servicev1}_REDUCED_AMOUNT?`]?.VALUE ? "rebate":"penalty";
     if (servicev1 === "WS")
       actionPerformed = JSON.parse(JSON.stringify(d?.WS_REDUCED_AMOUNT?.VALUE ? d?.WS_REDUCED_AMOUNT : d?.WS_ADDITIONAL_AMOUNT));
     else actionPerformed = JSON.parse(JSON.stringify(d?.SW_REDUCED_AMOUNT?.VALUE ? d?.SW_REDUCED_AMOUNT : d?.SW_ADDITIONAL_AMOUNT));
     delete actionPerformed?.VALUE;
     const actionPerformedInArray = Object.entries(actionPerformed);
+    if (d?.[`${servicev1}_REBATE`]) {
+      actionPerformedInArray.push([`${servicev1}_TIME_ADHOC_REBATE`, d?.[`${servicev1}_REBATE`]])
+    } else if (d?.[`${servicev1}_PENALTY`]) {
+      actionPerformedInArray.push([`${servicev1}_TIME_ADHOC_PENALTY`, d?.[`${servicev1}_PENALTY`]])
+    }
     return actionPerformedInArray.map((e) => {
       const preUpdateDataAmount = billSearchData.find((a) => a.taxHeadCode === e[0])?.amount;
       return {
         taxHeadMasterCode: e[0],
-        taxAmount: e[1] - preUpdateDataAmount,
+        //taxAmount: e[1] - preUpdateDataAmount,
+        taxAmount:action==="rebate"? -e[1] : e[1]
       };
     });
+    
   };
 
   const getTotalDetailsOfUpdatedData = (d) => {
+    const action = d?.[`${servicev1}_REDUCED_AMOUNT`]?.VALUE ? "REBATE" : "PENALTY";
+    const originalDemand = {}
+     billSearchData.map(el => {
+      originalDemand[el.taxHeadCode] = el.amount
+    })
+
     let actionPerformed;
     if (servicev1 === "WS")
       actionPerformed = JSON.parse(JSON.stringify(d?.WS_REDUCED_AMOUNT?.VALUE ? d?.WS_REDUCED_AMOUNT : d?.WS_ADDITIONAL_AMOUNT));
     else actionPerformed = JSON.parse(JSON.stringify(d?.SW_REDUCED_AMOUNT?.VALUE ? d?.SW_REDUCED_AMOUNT : d?.SW_ADDITIONAL_AMOUNT));
     delete actionPerformed?.VALUE;
-    return { ...actionPerformed, TOTAL: Object.values(actionPerformed).reduce((a, b) => parseInt(a) + parseInt(b), 0) };
+    actionPerformed[`${servicev1}_${action}`] = d?.[`${servicev1}_${action}`] ? d?.[`${servicev1}_${action}`]: 0;
+   
+    return { ...actionPerformed,actionPerformed, TOTAL: Object.values(actionPerformed).reduce((a, b) => parseInt(a) + parseInt(b), 0),originalDemand,action };
   };
 
   const onFormSubmit = (d) => {
@@ -171,6 +196,16 @@ const ApplicationBillAmendment = () => {
     history.push("/digit-ui/employee/ws/response", data);
   };
 
+ 
+  const isValidToDate = (enteredValue) => {
+    const enteredTs = new Date(enteredValue).getTime()
+    const fromDate = fromDateVal ? new Date(fromDateVal).getTime() : new Date().getTime()
+    // return ( toDate > enteredTs && enteredTs >= currentTs ) ? true : false 
+    return (enteredTs>fromDate) ? true : "Invalid format"
+
+  };
+
+  
   return (
     <form onSubmit={handleSubmit(onFormSubmit)}>
       <Header>{t("WS_BILL_AMENDMENT_BUTTON")}</Header>
@@ -190,23 +225,23 @@ const ApplicationBillAmendment = () => {
               <th>
                 <>
                   <Controller
-                    name="WS_REDUCED_AMOUNT.VALUE"
-                    key="WS_REDUCED_AMOUNT.VALUE"
+                    name={`${servicev1}_REDUCED_AMOUNT.VALUE`}
+                    key={`${servicev1}_REDUCED_AMOUNT.VALUE`}
                     control={control}
                     rules={{
                       validate: (value) => {
-                        return !!value || !!WS_ADDITIONAL_AMOUNT?.VALUE;
+                        return !!value || (servicev1 === "WS" ? !!WS_ADDITIONAL_AMOUNT?.VALUE : !!SW_ADDITIONAL_AMOUNT?.VALUE);
                       },
                     }}
                     render={(props) => {
                       return (
                         <CheckBox
                           // className="form-field"
-                          label={t("WS_REDUCED_AMOUNT")}
+                          label={t(`${servicev1}_REDUCED_AMOUNT`)}
                           onChange={(e) => {
                             if (e.target.checked) {
                               props.onChange(true);
-                              setOtherTextFieldsAndActionToNull("WS_ADDITIONAL_AMOUNT", false);
+                              setOtherTextFieldsAndActionToNull(`${servicev1}_ADDITIONAL_AMOUNT`, false);
                             } else {
                               props.onChange(false);
                             }
@@ -222,23 +257,23 @@ const ApplicationBillAmendment = () => {
               <th>
                 <>
                   <Controller
-                    name="WS_ADDITIONAL_AMOUNT.VALUE"
-                    key="WS_ADDITIONAL_AMOUNT.VALUE"
+                    name={`${servicev1}_ADDITIONAL_AMOUNT.VALUE`}
+                    key={`${servicev1}_ADDITIONAL_AMOUNT.VALUE`}
                     control={control}
                     rules={{
                       validate: (value) => {
-                        return !!value || !!WS_REDUCED_AMOUNT?.VALUE;
+                        return !!value || (servicev1 === "WS" ? !!WS_REDUCED_AMOUNT?.VALUE : !!SW_REDUCED_AMOUNT?.VALUE);
                       },
                     }}
                     render={(props) => {
                       return (
                         <CheckBox
                           // className="form-field"
-                          label={t("WS_ADDITIONAL_AMOUNT")}
+                          label={t(`${servicev1}_ADDITIONAL_AMOUNT`)}
                           onChange={(e) => {
                             if (e.target.checked) {
                               props.onChange(true);
-                              setOtherTextFieldsAndActionToNull("WS_REDUCED_AMOUNT", false);
+                              setOtherTextFieldsAndActionToNull(`${servicev1}_REDUCED_AMOUNT`, false);
                             } else {
                               props.onChange(false);
                             }
@@ -259,8 +294,8 @@ const ApplicationBillAmendment = () => {
                 <td style={{ paddingRight: "60px" }}>
                   <>
                     <TextInput
-                      disabled={servicev1 === "WS" ? !WS_REDUCED_AMOUNT?.VALUE : !SW_REDUCED_AMOUNT}
-                      name={`${servicev1}_REDUCED_AMOUNT.${servicev1}_CHARGE`}
+                      disabled={servicev1 === "WS" ? !WS_REDUCED_AMOUNT?.VALUE : !SW_REDUCED_AMOUNT?.VALUE}
+                      name={`${servicev1}_REDUCED_AMOUNT.${node.taxHeadCode}`}
                       inputRef={register({
                         max: {
                           value: node.amount,
@@ -269,31 +304,66 @@ const ApplicationBillAmendment = () => {
                       })}
                     />
                     {servicev1 === "WS"
-                      ? errors?.WS_REDUCED_AMOUNT?.WS_CHARGE && <CardLabelError>{errors?.WS_REDUCED_AMOUNT?.WS_CHARGE?.message}</CardLabelError>
-                      : errors?.SW_REDUCED_AMOUNT?.SW_CHARGE && <CardLabelError>{errors?.SW_REDUCED_AMOUNT?.SW_CHARGE?.message}</CardLabelError>}
+                      ? errors?.WS_REDUCED_AMOUNT?.[node.taxHeadCode] && <CardLabelError>{errors?.WS_REDUCED_AMOUNT?.[node.taxHeadCode]?.message}</CardLabelError>
+                      : errors?.SW_REDUCED_AMOUNT?.[node.taxHeadCode] && <CardLabelError>{errors?.SW_REDUCED_AMOUNT?.[node.taxHeadCode].message}</CardLabelError>}
                   </>
                 </td>
                 <td style={{ paddingRight: "60px" }}>
                   <>
                     <TextInput
                       disabled={servicev1 === "WS" ? !WS_ADDITIONAL_AMOUNT?.VALUE : !SW_ADDITIONAL_AMOUNT?.VALUE}
-                      name={`${servicev1}_ADDITIONAL_AMOUNT.${servicev1}_CHARGE`}
-                      inputRef={register({
-                        min: {
-                          value: node.amount,
-                          message: t(`${servicev1}_ERROR_ENTER_MORE_THAN_MIN_VALUE`),
-                        },
-                      })}
+                      name={`${servicev1}_ADDITIONAL_AMOUNT.${node.taxHeadCode}`}
+                      inputRef={register()}
+                      // inputRef={register({
+                      //   min: {
+                      //     value: node.amount,
+                      //     message: t(`${servicev1}_ERROR_ENTER_MORE_THAN_MIN_VALUE`),
+                      //   },
+                      // })}
                     />
-                    {servicev1 === "WS"
+                    {/* {servicev1 === "WS"
                       ? errors?.WS_ADDITIONAL_AMOUNT?.WS_CHARGE && <CardLabelError>{errors?.WS_ADDITIONAL_AMOUNT?.WS_CHARGE?.message}</CardLabelError>
                       : errors?.SW_ADDITIONAL_AMOUNT?.SW_CHARGE && (
                           <CardLabelError>{errors?.SW_ADDITIONAL_AMOUNT?.SW_CHARGE?.message}</CardLabelError>
-                        )}
+                        )} */}
                   </>
                 </td>
               </tr>
             ))}
+            {<tr>
+              <td colSpan={2} style={{ paddingRight: "60px" }}>{t("WS_REBATE_PENALTY  ")}
+                <div className="tooltip">
+                  <InfoBannerIcon fill="#0b0c0c" style/>
+                  <span className="tooltiptext" style={{
+                    whiteSpace: "nowrap",
+                    fontSize: "medium"
+                  }}>
+                    {`${t(`WS_ADHOC_REBATE_TOOLTIP`)}`}
+                    <br/><br/>
+                    {`${t(`WS_ADHOC_PENALTY_TOOLTIP`)}`}
+                  </span>
+                </div>
+              </td>
+              
+              <td style={{ paddingRight: "60px" }}>
+                <>
+                  <TextInput
+                    disabled={servicev1 === "WS" ? !WS_REDUCED_AMOUNT?.VALUE : !SW_REDUCED_AMOUNT?.VALUE}
+                    name={`${servicev1}_REBATE`}
+                    inputRef={register()}
+                  />
+                </>
+              </td>
+              <td style={{ paddingRight: "60px" }}>
+                <>
+                  <TextInput
+                    disabled={servicev1 === "WS" ? !WS_ADDITIONAL_AMOUNT?.VALUE : !SW_ADDITIONAL_AMOUNT?.VALUE}
+                    name={`${servicev1}_PENALTY`}
+                    inputRef={register()}
+                  />
+                </>
+              </td>
+            </tr>}
           </table>
         ) : (
           <Loader />
@@ -316,7 +386,7 @@ const ApplicationBillAmendment = () => {
                       style={{ width: "640px" }}
                       option={BillAmendmentMDMS}
                       selected={props?.value}
-                      optionKey={"i18nKey"}
+                      optionKey={"code"}
                       t={t}
                       select={props?.onChange}
                     />
@@ -333,10 +403,7 @@ const ApplicationBillAmendment = () => {
               {errors?.reasonDocumentNumber ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             </LabelFieldPair>
             <LabelFieldPair>
-              <CardLabel style={{ fontWeight: "500" }}>{t("WS_GOVERNMENT_NOTIFICATION_NUMBER")}</CardLabel>
-              {/* <div className="field"> */}
-              {/* <TextInput style={{width: "640px"}}  inputRef={register({})} /> */}
-              {/* </div> */}
+              <CardLabel style={{ fontWeight: "500" }}>{t("WS_BILL_AMEND_EFFECTIVE_FROM")}</CardLabel>
               <Controller
                 render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveFrom"
@@ -346,17 +413,16 @@ const ApplicationBillAmendment = () => {
               {errors?.effectiveFrom ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             </LabelFieldPair>
             <LabelFieldPair>
-              <CardLabel style={{ fontWeight: "500" }}>{t("WS_GOVERNMENT_NOTIFICATION_NUMBER")}</CardLabel>
-              {/* <div className="field">
-						<TextInput style={{width: "640px"}} name="effectiveTill" inputRef={register({})} />
-					</div> */}
+                <CardLabel style={{ fontWeight: "500" }}>{t("WS_BILL_AMEND_EFFECTIVE_TILL")}</CardLabel>
               <Controller
                 render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveTill"
-                rules={{ required: true }}
+                rules={{ required: true,validate:{isValidToDate}}}
                 control={control}
               />
-              {errors?.effectiveTill ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
+              {errors?.effectiveTill?.type==="required" && <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError>}
+              {errors?.effectiveTill?.message === "Invalid format" && <CardLabelError>{t("ERR_DEFAULT_INPUT_FIELD_MSG")}</CardLabelError>}
+
             </LabelFieldPair>
           </>
         )}
@@ -364,7 +430,7 @@ const ApplicationBillAmendment = () => {
         {requiredDocuments?.map((e) => (
           <LabelFieldPair>
             <CardLabel style={{ fontWeight: "500" }}>
-              {t(`WS_${e?.documentType}`)}
+              {t(`${e?.documentType}`)}
               {e?.required ? `*` : null}
             </CardLabel>
             <div className="field">
@@ -378,18 +444,14 @@ const ApplicationBillAmendment = () => {
                     onUpload={(d) => functionToHandleFileUpload(d, e?.documentType, props)}
                     onDelete={() => dispatch({ type: "remove", payload: { id: e?.documentType } })}
                     style={{ width: "640px" }}
-                    accept="image/*, .pdf, .png, .jpeg, .doc"
-                    showHintBelow={true}
-                    hintText={t("WS_DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
                     message={functionToDisplayTheMessage}
+                    accept="image/*, .pdf, .png, .jpeg, .doc"
                     textStyles={{ width: "100%" }}
                     inputStyles={{ width: "280px" }}
                   />
                 )}
               />
-              {/* {fileSize ? `${getFileSize(fileSize)}` : null}
-					{imageUploadError ? <CardLabelError>{t(imageUploadError)}</CardLabelError> : null} */}
-              {errors?.[e?.documentType] ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
+              {errors?.["DOCUMENTS"]?.[e?.documentType] ? <CardLabelError>{t("WS_NO_FILE_SELECTED")}</CardLabelError> : null}
             </div>
           </LabelFieldPair>
         ))}

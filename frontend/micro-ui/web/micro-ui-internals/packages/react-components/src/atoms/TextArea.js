@@ -13,7 +13,7 @@ const TextArea = (props) => {
       id={props.id}
       value={props.value}
       onChange={props.onChange}
-      className={`${user_type ? "employee-card-textarea" : "card-textarea"} ${props.disable && "disabled"} ${
+      className={`${user_type !== "citizen" ? "employee-card-textarea" : "card-textarea"} ${props.disable && "disabled"} ${
         props?.className ? props?.className : ""
       }`}
       minLength={props.minLength}

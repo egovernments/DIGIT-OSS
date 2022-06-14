@@ -43,7 +43,7 @@ export const useTLSearchApplication = (params, config = {}, t) => {
               index == 0 ? (multiownername = ele.name) : (multiownername = multiownername + " , " + ele.name)
             ),
         TL_COMMON_TABLE_COL_STATUS: `WF_NEWTL_${i?.status}`,
-        TL_COMMON_TABLE_COL_SLA_NAME: `${Math.round(i?.SLA / (1000 * 60 * 60 * 24))} ${t("TL_SLA_DAYS")}`,
+        TL_COMMON_TABLE_COL_SLA_NAME: i?.status.match(/^(EXPIRED|APPROVED|CANCELLED)$/)? "CS_NA" : `${Math.round(i?.SLA / (1000 * 60 * 60 * 24))} ${t("TL_SLA_DAYS")}`,
         TL_COMMON_TABLE_COL_TRD_NAME: i?.tradeName,
         TL_INSTITUTION_TYPE_LABEL: i?.tradeLicenseDetail?.subOwnerShipCategory.includes("INSTITUTION")
           ? `TL_${i?.tradeLicenseDetail?.subOwnerShipCategory}`

@@ -28,6 +28,8 @@ import TLTradeAccessories from "./TLTradeAccessories";
 import TLTradeUnits from "./TLTradeUnits";
 import WSAdditonalDetails from "./WSAdditonalDetails";
 import WSFeeEstimation from "./WSFeeEstimation";
+import WSInfoLabel from "../../../ws/src/pageComponents/WSInfoLabel";
+import DocumentsPreview from "./DocumentsPreview";
 
 function ApplicationDetailsContent({
   applicationDetails,
@@ -46,10 +48,23 @@ function ApplicationDetailsContent({
   function OpenImage(imageSource, index, thumbnailsToShow) {
     window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
   }
+
+  const convertEpochToDateDMY = (dateEpoch) => {
+    if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
+      return "NA";
+    }
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${day}/${month}/${year}`;
+  };
   const getTimelineCaptions = (checkpoint) => {
     if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
       const caption = {
-        date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
+        date: convertEpochToDateDMY(applicationData?.auditDetails?.createdTime),
         source: applicationData?.channel || "",
       };
       return <TLCaption data={caption} />;
@@ -88,6 +103,7 @@ function ApplicationDetailsContent({
     window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc");
   const isNocLocation = window.location.href.includes("employee/noc");
   const isBPALocation = window.location.href.includes("employee/obps");
+  const isWS = window.location.href.includes("employee/ws");
 
   const getRowStyles = () => {
     if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
@@ -151,6 +167,17 @@ function ApplicationDetailsContent({
               </React.Fragment>
             )}
             {/* TODO, Later will move to classes */}
+            {/* Here Render the table for adjustment amount details detail.isTable is true for that table*/}
+            {detail?.isTable && (
+              <table style={{tableLayout:"fixed",width:"100%",borderCollapse:"collapse"}}>
+                <tr style={{ textAlign: "left" }}>
+                  {detail?.headers.map(header =><th style={{padding:"10px"}}>{t(header)}</th>)}
+                </tr>
+                {detail?.tableRows.map(row=><tr>
+                  {row.map(element => <td style={{ paddingRight: "60px",paddingTop:"20px",textAlign:"center" }}>{t(element)}</td>)}
+                </tr>)}
+              </table>
+            )}
             <StatusTable style={getTableStyles()}>
               {detail?.title &&
                 !detail?.title.includes("NOC") &&
@@ -196,7 +223,7 @@ function ApplicationDetailsContent({
                   return (
                     <Row
                       key={t(value.title)}
-                      label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
+                      label={isWS ? `${t(value.title)}:` : t(value.title)}
                       text={getTextValue(value)}
                       last={index === detail?.values?.length - 1}
                       caption={value.caption}
@@ -257,12 +284,13 @@ function ApplicationDetailsContent({
           {detail?.additionalDetails?.subOccupancyTableDetails && (
             <SubOccupancyTable edcrDetails={detail?.additionalDetails} applicationData={applicationDetails?.applicationData} />
           )}
+          {detail?.additionalDetails?.documentsWithUrl && <DocumentsPreview documents={detail?.additionalDetails?.documentsWithUrl} />}
           {detail?.additionalDetails?.documents && <PropertyDocuments documents={detail?.additionalDetails?.documents} />}
           {detail?.additionalDetails?.taxHeadEstimatesCalculation && (
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />
           )}
           {detail?.isWaterConnectionDetails && <WSAdditonalDetails wsAdditionalDetails={detail} oldValue={oldValue} />}
-
+          {detail?.isLabelShow ? <WSInfoLabel t={t}/> : null}
           {detail?.additionalDetails?.redirectUrl && (
             <div style={{ fontSize: "16px", lineHeight: "24px", fontWeight: "400", padding: "10px 0px" }}>
               <Link to={detail?.additionalDetails?.redirectUrl?.url}>

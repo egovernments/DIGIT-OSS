@@ -44,7 +44,7 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
       if (otherData?.edcrDetails?.[0]?.tenantId != ocData?.tenantId) {
         setShowToast({ key: "true", message: "BPA_INVALID_PERMIT_CITY" });
         return;
-      } else if (otherData?.bpaResponse?.[0]?.edcrNumber === ocData?.edcrNumber && ((otherData?.bpaResponse?.[0]?.status != "REJECTED") && (otherData?.bpaResponse?.[0]?.status != "PERMIT REVOCATION") || (otherData?.bpaResponse?.[0]?.status != "INITIATED"))) {
+      } else if (otherData?.bpaApprovalResponse?.[0]?.edcrNumber === ocData?.edcrNumber && ((otherData?.bpaResponse?.[0]?.status != "REJECTED") && (otherData?.bpaResponse?.[0]?.status != "PERMIT REVOCATION") || (otherData?.bpaResponse?.[0]?.status != "INITIATED"))) {
         setShowToast({ key: "true", message: "APPLICATION_NUMBER_ALREADY_EXISTS" });
         return;
       } else {
@@ -177,7 +177,7 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
         <Label>{t(`OBPS_SEARCH_EDCR_NUMBER`)}</Label>
         <TextInput className="searchInput"
           onKeyPress={handleKeyPress}
-          onChange={event => setScrutinyNumber({ edcrNumber: event.target.value })} value={scrutinyNumber?.edcrNumber} signature={true} signatureImg={<SearchIconSvg className="signature-img" onClick={!disableVlaue ? () => handleSearch() : null} />}
+          onChange={event => setScrutinyNumber({ edcrNumber: event.target.value })} value={scrutinyNumber?.edcrNumber} signature={true} signatureImg={<SearchIconSvg className="signature-img" onClick={!disableVlaue && scrutinyNumber?.edcrNumber ? () => handleSearch() : null} />}
           disable={isDisabled}
           style={{ marginBottom: "10px" }}
         />

@@ -2,40 +2,61 @@ import Urls from "../atoms/urls";
 import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 
-const getThumbnails = async (ids, tenantId) => {
-  tenantId = window.location.href.includes("/obps/") ? Digit.ULBService.getStateId() : tenantId;
-  const res = await Digit.UploadServices.Filefetch(ids, tenantId);
-  if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
-    return { thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]), images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)) };
+const getThumbnails = async (ids, tenantId, documents = []) => {
+  tenantId = window.location.href.includes("/obps/") || window.location.href.includes("/pt/") ? Digit.ULBService.getStateId() : tenantId;
+  
+  if (window.location.href.includes("/obps/")) {
+    if (documents?.length > 0) {
+      let workflowsDocs = [];
+      documents?.map(doc => {
+        if (doc?.url) {
+          const thumbs = doc?.url?.split(",")?.[3] || doc?.url?.split(",")?.[0]
+          workflowsDocs.push({
+            thumbs: [thumbs],
+            images: [Digit.Utils.getFileUrl(doc.url)]
+          }) 
+        }
+      })
+      return workflowsDocs?.[0];
+    } else {
+      return null;
+    }
   } else {
-    return null;
+    const res = await Digit.UploadServices.Filefetch(ids, tenantId);
+    if (res.data.fileStoreIds && res.data.fileStoreIds.length !== 0) {
+      return { 
+        thumbs: res.data.fileStoreIds.map((o) => o.url.split(",")[3] || o.url.split(",")[0]), 
+        images: res.data.fileStoreIds.map((o) => Digit.Utils.getFileUrl(o.url)) };
+    } else {
+      return null;
+    }
   }
 };
 
 const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
-  // const {info: { type: userType } = {}} = Digit.UserService.getUser()
   const TimelineMap = new Map();
-  // if(userType === "CITIZEN"){
-  //   for (const eventHappened of wf ){
-  //     if(eventHappened.action === "APPLY" && eventHappened?.documents){
-  //       eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId)
-  //     }
-  //     if( eventHappened.action === "COMMENT" ){
-  //       const commentAccumulator = TimelineMap.get("tlCommentStack") || []
-  //       TimelineMap.set("tlCommentStack", [...commentAccumulator, eventHappened])
-  //     }
-  //     else{
-  //       const eventAccumulator = TimelineMap.get("tlActions") || []
-  //       const commentAccumulator = TimelineMap.get("tlCommentStack") || []
-  //       eventHappened.wfComments = [...commentAccumulator]
-  //       TimelineMap.set("tlActions", [...eventAccumulator, eventHappened])
-  //       TimelineMap.delete("tlCommentStack")
-  //     }
-  //   }
-  // } else{
+  const tenantId = window.location.href.includes("/obps/") ? Digit.ULBService.getStateId() : wf?.[0]?.tenantId;
+  let fileStoreIdsList = [];
+  let res = {};
+
+  if (window.location.href.includes("/obps/")) {
+    wf?.map(wfData => {
+      wfData?.documents?.map(wfDoc => {
+        if (wfDoc?.fileStoreId) fileStoreIdsList.push(wfDoc?.fileStoreId);
+      })
+    })
+    if (fileStoreIdsList?.length > 0) {
+      res = await Digit.UploadServices.Filefetch(fileStoreIdsList, tenantId);
+    }
+    wf?.forEach(wfData => {
+      wfData?.documents?.forEach(wfDoc => {
+        if (wfDoc?.fileStoreId) wfDoc.url = res.data[wfDoc?.fileStoreId];
+      })
+    });
+  }
   for (const eventHappened of wf) {
     if (eventHappened?.documents) {
-      eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId)
+      eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId, eventHappened?.documents)
     }
     if (eventHappened.action === "COMMENT") {
       const commentAccumulator = TimelineMap.get("tlCommentStack") || []
@@ -49,9 +70,22 @@ const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
       TimelineMap.delete("tlCommentStack")
     }
   }
-  // }
   const response = TimelineMap.get("tlActions")
   return response
+}
+
+const getAssignerDetails = (instance, nextStep, moduleCode) => {
+  let assigner = instance?.assigner
+  if (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE") {
+    if (instance.state.applicationStatus === "CREATED") {
+      assigner = instance?.assigner
+    } else {
+      assigner = nextStep?.assigner || instance?.assigner
+    }
+  } else {
+    assigner = instance?.assigner
+  }
+  return assigner
 }
 
 export const WorkflowService = {
@@ -123,7 +157,7 @@ export const WorkflowService = {
             performedAction: instance.action,
             status: instance.state.applicationStatus,
             state: instance.state.state,
-            assigner: instance?.assigner,
+            assigner: getAssignerDetails(instance, TLEnrichedWithWorflowData[ind - 1], moduleCode),
             rating: instance?.rating,
             wfComment: instance?.wfComments.map(e => e?.comment),
             wfDocuments: instance?.documents,

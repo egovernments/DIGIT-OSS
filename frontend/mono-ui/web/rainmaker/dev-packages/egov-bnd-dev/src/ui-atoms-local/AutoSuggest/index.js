@@ -7,9 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import "./index.css";
-import cloneDeep from "lodash/cloneDeep";
-
-
+import { sortDropdownLabels, sortDropdownNames } from "egov-ui-framework/ui-utils/commons";
 const getSuggestions = suggestions => {
   return (
     suggestions &&
@@ -17,10 +15,9 @@ const getSuggestions = suggestions => {
     suggestions.map(suggestion => ({
       value: suggestion.code,
       label: suggestion.name
-    }))
+    })).sort(sortDropdownLabels)
   );
 };
-
 
 const styles = theme => ({
   ac_root: {
@@ -28,12 +25,14 @@ const styles = theme => ({
     height: 250
   },
   ac_input: {
+    marginTop:"-5px",
     display: "flex",
     padding: 0
   },
   ac_valueContainer: {
     display: "flex",
     // flexWrap: "wrap",
+    // marginTop:'-2px',
     flex: 1,
     alignItems: "center"
   },
@@ -46,7 +45,7 @@ const styles = theme => ({
   },
   ac_placeholder: {
     position: "absolute",
-    left: 2,
+    top: 4,
     fontSize: 16,
     color: "rgba(162, 162, 162, 0.77)"
   },
@@ -82,6 +81,7 @@ function Control(props) {
   return (
     <TextField
       fullWidth
+      disabled={props.isDisabled}
       InputProps={{
         inputComponent,
         inputProps: {
@@ -199,7 +199,6 @@ class IntegrationReactSelect extends React.Component {
       required = true,
       value,
       className,
-      disabled = false,
       inputLabelProps = {
         shrink: true
       },
@@ -214,17 +213,6 @@ class IntegrationReactSelect extends React.Component {
         }
       })
     };
-    let suggestionArray = getSuggestions(suggestions)|| [] ;
-    try{
-      if(this.props.sort){
-        let suggs = cloneDeep(suggestionArray).sort((a,b) =>  a['label'].localeCompare(b['label']));
-        suggestionArray=suggs;   
-      }
-    } catch (error) {
-      console.error("Error in Sorting data",error);
-    }
-
-     
     return (
       <div className={classes.root}>
         <Select
@@ -239,11 +227,10 @@ class IntegrationReactSelect extends React.Component {
           menuProps={{
             className: className
           }}
-          options={suggestionArray || []}
+          options={getSuggestions(suggestions) || []}
           components={components}
-          value={value }
+          value={value}
           placeholder={placeholder}
-          isDisabled={disabled}
           {...rest}
           onChange={this.handleChange("single")}
         />

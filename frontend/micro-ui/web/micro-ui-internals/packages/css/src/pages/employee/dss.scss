@@ -53,6 +53,15 @@ padding: 8px 24px;
     font-weight: 400;
     color: rgba(80, 90, 95, 1);
 }
+
+.dss-pie-subheader{
+  position: relative;
+    top: -7px;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(80, 90, 95, 1);
+}
+
 .recharts-legend-item{
   margin-bottom: 20px !important;
   white-space: pre;
@@ -141,7 +150,7 @@ border-color: rgba(244, 119, 56, var(--border-opacity));
 
 
 .dss-insight-card {
-  margin: 20px 0;
+  margin: 10px 0;
 
   p {
     font-family: "Roboto", sans-serif;

@@ -83,12 +83,12 @@ public class EncryptionDecryptionUtil {
 
             if(key == null)
                 key = keyPurposeMap.get("key");
-            
+
             P decryptedObject = (P) encryptionService.decryptJson(requestInfo,objectToDecrypt, key, purpose, classType);
             if (decryptedObject == null) {
                 throw new CustomException("DECRYPTION_NULL_ERROR", "Null object found on performing decryption");
             }
-            auditTheDecryptRequest(objectToDecrypt, key, encrichedUserInfo);
+
             if (objectToDecryptNotList) {
                 decryptedObject = (P) ((List<E>) decryptedObject).get(0);
             }
@@ -153,29 +153,6 @@ public class EncryptionDecryptionUtil {
         }
 
         return keyPurposeMap;
-    }
-
-    public void auditTheDecryptRequest(Object objectToDecrypt, String key, User userInfo) {
-        String purpose;
-        if (!abacEnabled)
-            purpose = "AbacDisabled";
-        else if (isUserDecryptingForSelf(objectToDecrypt, userInfo))
-            purpose = "Self";
-        else if (isDecryptionForIndividualUser(objectToDecrypt))
-            purpose = "SingleSearchResult";
-        else
-            purpose = "BulkSearchResult";
-
-        ObjectNode abacParams = objectMapper.createObjectNode();
-        abacParams.set("key", TextNode.valueOf(key));
-
-        List<String> decryptedUserUuid = (List<String>) ((List) objectToDecrypt).stream()
-                .map(user -> ((org.egov.user.domain.model.User) user).getUuid()).collect(Collectors.toList());
-
-        ObjectNode auditData = objectMapper.createObjectNode();
-        auditData.set("entityType", TextNode.valueOf(User.class.getName()));
-        auditData.set("decryptedEntityIds", objectMapper.valueToTree(decryptedUserUuid));
-        auditService.audit(userInfo.getUuid(), System.currentTimeMillis(), purpose, abacParams, auditData);
     }
 
     private User getEncrichedandCopiedUserInfo(User userInfo) {

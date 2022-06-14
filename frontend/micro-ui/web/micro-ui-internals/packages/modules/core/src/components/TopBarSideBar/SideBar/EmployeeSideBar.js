@@ -1,42 +1,13 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import SubMenu from "./SubMenu";
-import {
-  Loader,
-  HomeIcon,
-  ComplaintIcon,
-  BPAHomeIcon,
-  PropertyHouse,
-  CaseIcon,
-  ReceiptIcon,
-  PersonIcon,
-  DocumentIconSolid,
-  DropIcon,
-  CollectionsBookmarIcons,
-  FinanceChartIcon,
-  CollectionIcon,
-} from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
+import { Loader, SearchIcon } from "@egovernments/digit-ui-react-components";
+import { useTranslation } from "react-i18next";
 
-const IconsObject = {
-  home: <HomeIcon />,
-  announcement: <ComplaintIcon />,
-  business: <BPAHomeIcon />,
-  store: <PropertyHouse />,
-  assignment: <CaseIcon />,
-  receipt: <ReceiptIcon />,
-  "business-center": <PersonIcon />,
-  description: <DocumentIconSolid />,
-  "water-tap": <DropIcon />,
-  "collections-bookmark": <CollectionsBookmarIcons />,
-  "insert-chart": <FinanceChartIcon />,
-  edcr: <CollectionIcon />,
-  collections: <CollectionIcon />,
-  "open-complaints": <ComplaintIcon />,
-};
 const EmployeeSideBar = () => {
   const sidebarRef = useRef(null);
   const { isLoading, data } = Digit.Hooks.useAccessControl();
-
+  const [search, setSearch] = useState("");
+  const { t } = useTranslation();
   useEffect(() => {
     if (isLoading) {
       return <Loader />;
@@ -66,12 +37,11 @@ const EmployeeSideBar = () => {
   };
 
   const configEmployeeSideBar = {};
-  const singleItem = [];
+
   data?.actions
     .filter((e) => e.url === "url")
-    .sort((a, b) => a.orderNumber - b.orderNumber)
     .forEach((item) => {
-      if (item.path !== "" && item.path.indexOf(".") !== -1) {
+      if (search == "" && item.path !== "") {
         let index = item.path.split(".")[0];
         if (index === "TradeLicense") index = "Trade License";
         if (!configEmployeeSideBar[index]) {
@@ -79,81 +49,82 @@ const EmployeeSideBar = () => {
         } else {
           configEmployeeSideBar[index].push(item);
         }
-      } else {
-        if (item.displayName === "Home") {
-          item.navigationURL = "/digit-ui/employee";
-          singleItem.unshift({
-            displayName: item.displayName,
-            navigationURL: item.navigationURL,
-            icon: item.leftIcon,
-            orderNumber: item.orderNumber,
-          });
-        }
-        if (item.path !== "" && item.displayName !== "Home") {
-          singleItem.push({
-            displayName: item.displayName,
-            navigationURL: item.navigationURL,
-            icon: item.leftIcon,
-            orderNumber: item.orderNumber,
-          });
+      } else if (item.path !== "" && item?.displayName?.toLowerCase().includes(search.toLowerCase())) {
+        let index = item.path.split(".")[0];
+        if (index === "TradeLicense") index = "Trade License";
+        if (!configEmployeeSideBar[index]) {
+          configEmployeeSideBar[index] = [item];
+        } else {
+          configEmployeeSideBar[index].push(item);
         }
       }
     });
-
+  let res = [];
   const splitKeyValue = () => {
     const keys = Object.keys(configEmployeeSideBar);
-    const res = [];
+    keys.sort((a, b) => a.orderNumber - b.orderNumber);
     for (let i = 0; i < keys.length; i++) {
-      res.push({
-        moduleName: keys[i],
-        links: configEmployeeSideBar[keys[i]],
-        icon: configEmployeeSideBar[keys[i]][0],
-        orderNumber: configEmployeeSideBar[keys[i]][0].orderNumber,
-      });
+      if (configEmployeeSideBar[keys[i]][0].path.indexOf(".") === -1) {
+        if (configEmployeeSideBar[keys[i]][0].displayName === "Home") {
+          const homeURL = "/digit-ui/employee";
+          res.unshift({
+            moduleName: keys[i].toUpperCase(),
+            icon: configEmployeeSideBar[keys[i]][0],
+            navigationURL: homeURL,
+            type: "single",
+          });
+        } else {
+          res.push({
+            moduleName: configEmployeeSideBar[keys[i]][0]?.displayName.toUpperCase(),
+            type: "single",
+            icon: configEmployeeSideBar[keys[i]][0],
+            navigationURL: configEmployeeSideBar[keys[i]][0].navigationURL,
+          });
+        }
+      } else {
+        res.push({
+          moduleName: keys[i].toUpperCase(),
+          links: configEmployeeSideBar[keys[i]],
+          icon: configEmployeeSideBar[keys[i]][0],
+          orderNumber: configEmployeeSideBar[keys[i]][0].orderNumber,
+        });
+      }
     }
-    return res
-      .sort((a, b) => a.orderNumber - b.orderNumber)
-      .map((item, index) => {
-        return <SubMenu item={item} key={index} />;
-      });
+    return res.map((item, index) => {
+      return <SubMenu item={item} key={index + 1} />;
+    });
   };
 
   if (isLoading) {
     return <Loader />;
   }
+  if (!res) {
+    return "";
+  }
 
-  const renderSingleItem = () => {
-    return singleItem
-      .sort((a, b) => a.orderNumber - b.orderNumber)
-      .map((item) => {
-        const leftIconArray = item.icon.split(":")[1];
-        const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.collections;
-        const getOrigin = window.location.origin;
-        return (
-          <div className="submenu-container">
-            <div className={`sidebar-link`}>
-              <div className="actions">
-                {leftIcon}
-                {item.navigationURL.indexOf("/digit-ui") === -1 ? (
-                  <a className="custom-link" href={getOrigin + "/employee/" + item.navigationURL}>
-                    {item.displayName}
-                  </a>
-                ) : (
-                  <Link className="custom-link" to={item.navigationURL}>
-                    {item.displayName}
-                  </Link>
-                )}
-              </div>
-            </div>
+  const renderSearch = () => {
+    return (
+      <div className="submenu-container">
+        <div className="sidebar-link">
+          <div className="actions search-icon-wrapper">
+            <SearchIcon className="search-icon" />
+            <input
+              className="employee-search-input"
+              type="text"
+              placeholder={t(`ACTION_TEST_SEARCH`)}
+              name="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
-        );
-      });
+        </div>
+      </div>
+    );
   };
 
   return (
     <div className="sidebar" ref={sidebarRef} onMouseOver={expandNav} onMouseLeave={collapseNav}>
-      {renderSingleItem()}
-
+      {renderSearch()}
       {splitKeyValue()}
     </div>
   );

@@ -153,15 +153,8 @@ const NOCAccess = () => {
   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
 
   const NOC_ROLES = [
-    "NOC_CEMP",
-    "NOC_DOC_VERIFIER",
-    "NOC_FIELD_INSPECTOR",
-    "NOC_APPROVER",
-    "BPA_NOC_VERIFIER",
-    "AIRPORT_AUTHORITY_APPROVER",
-    "FIRE_NOC_APPROVER",
-    "NOC_DEPT_APPROVER",
-  ];
+    "FIRE_NOC_APPROVER"
+  ]
 
   const NOC_ACCESS = userRoles?.filter((role) => NOC_ROLES?.includes(role));
 
@@ -256,11 +249,20 @@ const wsAccess = () => {
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
   const waterRoles = ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER","WS_CLERK"];
-  const sewerageRoles = ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER","SW_CLERK"];
 
-  const WS_ACCESS = userRoles?.filter((role) => waterRoles?.includes(role)||sewerageRoles?.includes(role));
+  const WS_ACCESS = userRoles?.filter((role) => waterRoles?.includes(role));
 
   return WS_ACCESS?.length > 0;
+};
+
+const swAccess = () => {
+  const userInfo = Digit.UserService.getUser();
+  const userRoles = userInfo?.info?.roles?.map((roleData) => roleData?.code);
+  const sewerageRoles = ["SW_CEMP", "SW_APPROVER", "SW_FIELD_INSPECTOR", "SW_DOC_VERIFIER","SW_CLERK"];
+
+  const SW_ACCESS = userRoles?.filter((role) => sewerageRoles?.includes(role));
+
+  return SW_ACCESS?.length > 0;
 };
 
 export default {
@@ -295,5 +297,6 @@ export default {
   hrmsRoles,
   getUnique,
   tlAccess,
-  wsAccess
+  wsAccess,
+  swAccess
 };

@@ -8,7 +8,7 @@ import { propertyCardBodyStyle } from "../../../utils";
 export const WSMyApplications = () => {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
-  const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   let filter = window.location.href.split("/").pop();
   let t1;
   let off;
@@ -37,20 +37,32 @@ export const WSMyApplications = () => {
       enabled: !!applicationNos
     }
   });
-  if (isLoading || isSWLoading) {
+  let propertyWS = (data && data?.WaterConnection?.map((ob) => ob?.propertyId).join(",")) || "";
+  let propertySW = (SWdata && SWdata?.SewerageConnections?.map((ob) => ob?.propertyId).join(",")) || "";
+  let propertyNos = propertyWS.concat(propertySW);
+  const { isLoading: PTisLoading, isError: PTisError, error: PTerror, data: PTdata } = Digit.Hooks.pt.usePropertySearch(
+    { filters: { propertyIds: propertyNos } },
+    { filters: { propertyIds: propertyNos }, enabled: propertyNos ? true : false }
+  );
+  if (isLoading || isSWLoading || PTisLoading) {
     return <Loader />;
   }
   let { WaterConnection: WSapplicationsList } = data || {};
   let { SewerageConnections: SWapplicationsList } = SWdata || {};
   WSapplicationsList = WSapplicationsList?.map((ob) => {return ({...ob,"sla":workflowDetails?.data?.processInstances?.filter((pi) => pi.businessId == ob.applicationNo)[0]?.businesssServiceSla})})
   SWapplicationsList = SWapplicationsList?.map((ob) => {return ({...ob,"sla":workflowDetails?.data?.processInstances?.filter((pi) => pi.businessId == ob.applicationNo)[0]?.businesssServiceSla})})
-  const applicationsList =WSapplicationsList.concat(SWapplicationsList)
+  let applicationsList =WSapplicationsList.concat(SWapplicationsList)
+  applicationsList =
+  applicationsList &&
+  applicationsList.map((ob) => {
+      return { ...ob, property: PTdata?.Properties?.filter((pt) => pt?.propertyId === ob?.propertyId)[0] };
+    });
   return (
     <React.Fragment>
       <Header>{`${t("CS_HOME_MY_APPLICATIONS")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
       <div>
         {applicationsList?.length > 0 &&
-          applicationsList.map((application, index) => (
+          applicationsList.sort((a, b) => b.auditDetails?.lastModifiedTime - a.auditDetails?.lastModifiedTime ).map((application, index) => (
             <div key={index}>
               <WSApplication application={application} />
             </div>

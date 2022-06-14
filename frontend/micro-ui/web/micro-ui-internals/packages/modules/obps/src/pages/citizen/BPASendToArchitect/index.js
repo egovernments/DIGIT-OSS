@@ -11,7 +11,7 @@ const getPath = (path, params) => {
   return path;
 }
 
-const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
+const getBPAEditDetails = async (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
 
   const getBlockIds = (unit) => {
     let blocks = {};
@@ -26,7 +26,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
     let subBlocks = [];
     let subOcc = {};
     unit && unit.map((un, index) => {
-      arr = un?.usageCategory.split(",");
+      arr = un?.usageCategory?.split(",");
       subBlocks=[];
       arr && arr.map((ob, ind) => {
         subBlocks.push({
@@ -44,7 +44,7 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
 
   data.BlockIds=getBlockIds(data?.landInfo?.unit);
   data.address = data?.landInfo?.address;
-  data.address.city = { code:data?.landInfo?.address?.city, name:data?.landInfo?.address?.city.split(".")[1]}
+  data.address.city = { code:data?.landInfo?.address?.city, name:data?.landInfo?.address?.city?.split(".")[1]}
   data.address.locality = {...data?.landInfo?.address?.locality, "i18nkey":data?.landInfo?.address?.locality?.name}
   data.data = {
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
@@ -97,11 +97,11 @@ const getBPAEditDetails = (data, APIScrutinyDetails,mdmsData,nocdata,t) => {
   data.riskType = Digit.Utils.obps.calculateRiskType(mdmsData?.BPA?.RiskTypeComputation, APIScrutinyDetails?.planDetail?.plot?.area, APIScrutinyDetails?.planDetail?.blocks)
   data.subOccupancy = getBlocksforFlow(data?.landInfo?.unit);
   data.uiFlow = {
-    flow:data?.businessService.split(".")[0],
+    flow:data?.businessService?.split(".")?.[0],
     applicationType:data?.additionalDetails?.applicationType || APIScrutinyDetails?.appliactionType,
     serviceType:data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType
   }
-
+  sessionStorage.setItem("BPA_IS_ALREADY_WENT_OFF_DETAILS", JSON.stringify(true));
   return data;
 }
 
@@ -141,22 +141,26 @@ const BPASendToArchitect = ({ parentRoute }) => {
 
   const editApplication = window.location.href.includes("editApplication");
 
-  useEffect(() => {
-     application = bpaData ? bpaData[0]:{};
-     if (data1 && nocdata) {
-      application = bpaData[0];
-       if (editApplication) {
-         application.isEditApplication = true;
-       }
-       sessionStorage.setItem("bpaInitialObject", JSON.stringify({ ...application }));
-       let bpaEditDetails = getBPAEditDetails(application,data1,mdmsData,nocdata,t);
-       setParams({ ...params, ...bpaEditDetails });
-     }
+  useEffect(async () => {
+    let isAlready = sessionStorage.getItem("BPA_IS_ALREADY_WENT_OFF_DETAILS");
+    isAlready = isAlready ? JSON.parse(isAlready) : true;
+    if (!isAlready && !isNocLoading && !isBpaSearchLoading && !isLoading) {
+      application = bpaData ? bpaData[0]:{};
+      if (data1 && nocdata) {
+       application = bpaData[0];
+        if (editApplication) {
+          application.isEditApplication = true;
+        }
+        sessionStorage.setItem("bpaInitialObject", JSON.stringify({ ...application }));
+        let bpaEditDetails = await getBPAEditDetails(application,data1,mdmsData,nocdata,t);
+        setParams({ ...params, ...bpaEditDetails });
+      }
+    }
   }, [bpaData,data1,mdmsData,nocdata]);
 
 
   const goNext = (skipStep) => {
-    const currentPath = pathname.split("/").pop();
+    const currentPath = pathname?.split("/")?.pop();
     const { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
     let redirectWithHistory = history.push;
     if (nextStep === null) {
@@ -195,6 +199,10 @@ const BPASendToArchitect = ({ parentRoute }) => {
 
   const CheckPage = Digit?.ComponentRegistryService?.getComponent('BPACheckPage') ;
   const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('BPAAcknowledgement');
+
+  if (isNocLoading || isBpaSearchLoading || isLoading) {
+    return <Loader />
+  }
 
   return (
     <Switch>

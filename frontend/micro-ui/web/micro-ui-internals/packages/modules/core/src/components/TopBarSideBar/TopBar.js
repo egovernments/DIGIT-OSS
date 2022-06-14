@@ -6,7 +6,7 @@ import ChangeLanguage from "../ChangeLanguage";
 
 const TextToImg = (props) => (
   <span className="user-img-txt" onClick={props.toggleMenu} title={props.name}>
-    {props.name[0].toUpperCase()}
+    {props?.name?.[0]?.toUpperCase()}
   </span>
 );
 const TopBar = ({

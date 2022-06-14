@@ -9,7 +9,11 @@ const SearchWater = ({ path }) => {
   const [payload, setPayload] = useState({});
   const [setLoading, setLoadingState] = useState(false);
   const SWater = Digit.ComponentRegistryService.getComponent("WSSearchWaterConnection");
-  const [businessServ, setBusinessServ] = useState([]);
+  // const [businessServ, setBusinessServ] = useState([]);
+  const getUrlPathName = window.location.pathname;
+  const checkPathName = getUrlPathName.includes("water/search-connection");
+  const businessServ = checkPathName ? "WS" : "SW";
+
   const [showToast, setShowToast] = useState(null);
   const serviceConfig = {
     WATER: "WATER",
@@ -17,18 +21,18 @@ const SearchWater = ({ path }) => {
   };
 
   const onSubmit = useCallback((_data) => {
-    if (Object.keys(_data).filter((k) => _data[k] && typeof _data[k] !== "object").length > 4) {
+    const { connectionNumber, oldConnectionNumber, mobileNumber, propertyId } = _data;
+    if (!connectionNumber && !oldConnectionNumber && !mobileNumber && !propertyId) {
+      setShowToast({ error: true, label: "WS_HOME_SEARCH_CONN_RESULTS_DESC" });
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    } else {
       setPayload(
         Object.keys(_data)
           .filter((k) => _data[k])
           .reduce((acc, key) => ({ ...acc, [key]: typeof _data[key] === "object" ? _data[key].code : _data[key] }), {})
       );
-      setShowToast(null);
-    } else {
-      setShowToast({ warning: true, label: "ERR_PT_FILL_VALID_FIELDS" });
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
     }
   });
 
@@ -37,15 +41,16 @@ const SearchWater = ({ path }) => {
   };
 
   let result = Digit.Hooks.ws.useSearchWS({ tenantId, filters: payload, config, bussinessService: businessServ, t });
-
-  result = result?.map((item) => {
-    if (item?.connectionNo?.includes("WS")) {
-      item.service = serviceConfig.WATER;
-    } else if (item?.connectionNo?.includes("SW")) {
-      item.service = serviceConfig.SEWERAGE;
-    }
-    return item;
-  });
+  
+  if(!result?.isLoading)
+    result.data = result?.data?.map((item) => {
+      if (item?.connectionNo?.includes("WS")) {
+        item.service = serviceConfig.WATER;
+      } else if (item?.connectionNo?.includes("SW")) {
+        item.service = serviceConfig.SEWERAGE;
+      }
+      return item;
+    });
 
   return (
     <Fragment>
@@ -53,9 +58,10 @@ const SearchWater = ({ path }) => {
         t={t}
         tenantId={tenantId}
         onSubmit={onSubmit}
-        data={result ? result : { display: "ES_COMMON_NO_DATA" }}
-        count={result?.TotalCount}
-        resultOk={isBothCallsFinished}
+        data={result?.data ? result?.data : { display: "ES_COMMON_NO_DATA" }}
+        count={result?.count}
+        resultOk={!result?.isLoading}
+        businessService={businessServ}
       />
 
       {showToast && (

@@ -8,6 +8,7 @@ import { convertDateToEpoch } from "../../../utils";
 
 const NewApplication = () => {
   let tenantId = Digit.ULBService.getCurrentTenantId() || Digit.ULBService.getCitizenCurrentTenant();
+  const tenants = Digit.Hooks.tl.useTenants();
   const { t } = useTranslation();
   const [canSubmit, setSubmitValve] = useState(false);
   const history = useHistory();
@@ -56,16 +57,30 @@ const NewApplication = () => {
     }
   };
   const onSubmit = (data) => {
-    if (!data?.cpt?.details || !propertyDetails) {
+    if(data?.cpt?.id){
+      if (!data?.cpt?.details || !propertyDetails) {
+          setShowToast({ key: "error" });
+          setError(t("ERR_INVALID_PROPERTY_ID"));
+          return;
+        }
+    }
+    const foundValue = tenants?.find((obj) => obj.pincode?.find((item) => item.toString() === data?.address?.pincode));
+    if(!foundValue && data?.address?.pincode)
+    {
       setShowToast({ key: "error" });
-      setError(t("TL_PROPERTY_ID_REQUIRED"));
+      setError(t("TL_COMMON_PINCODE_NOT_SERVICABLE"));
       return;
     }
-    if (propertyId == null) {
-      setShowToast({ key: "error" });
-      setError(t("TL_PROPERTY_ID_REQUIRED"));
-      return;
-    }
+    // if (!data?.cpt?.details || !propertyDetails) {
+    //   setShowToast({ key: "error" });
+    //   setError(t("TL_PROPERTY_ID_REQUIRED"));
+    //   return;
+    // }
+    // if (propertyId == null) {
+    //   setShowToast({ key: "error" });
+    //   setError(t("TL_PROPERTY_ID_REQUIRED"));
+    //   return;
+    // }
 
     let accessories = [];
     if (data?.accessories?.length > 0) {
@@ -189,7 +204,7 @@ const NewApplication = () => {
           Digit.TLService.update({ Licenses: [licenses] }, tenantId)
             .then((response) => {
               if (response?.Licenses?.length > 0) {
-                setTimeout(() => window.location.reload());
+                // setTimeout(() => window.location.reload());
                 history.replace(`/digit-ui/employee/tl/response`, { data: response?.Licenses });
                 clearSessionFormData();
               }

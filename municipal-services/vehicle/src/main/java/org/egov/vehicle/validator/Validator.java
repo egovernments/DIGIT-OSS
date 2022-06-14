@@ -40,14 +40,17 @@ public class Validator {
 	@Autowired
 	private VehicleRepository repository;
 	
-	public void validateCreate(VehicleRequest vehicleRequest, Object mdmsData) {
+	public void validateCreateOrUpdate(VehicleRequest vehicleRequest, Object mdmsData,boolean isUpdate) {
 
-		RequestInfo requestInfo = vehicleRequest.getRequestInfo();
 		Vehicle vehicle = vehicleRequest.getVehicle();
-		if( StringUtils.isEmpty( vehicle.getRegistrationNumber())) {
+		if(StringUtils.isEmpty( vehicle.getRegistrationNumber())) {
 			throw new CustomException(VehicleErrorConstants.INVALID_REGISTRATION_NUMBER,"Registation is mandatory");
 		}
-		validateVehicle(vehicleRequest);
+		if(isUpdate && StringUtils.isEmpty(vehicle.getId())) {
+			throw new CustomException(VehicleErrorConstants.UPDATE_ERROR,"Vehicle id cannot be null in update request");
+		}
+		
+		validateVehicle(vehicleRequest,isUpdate);
 		mdmsValidator.validateMdmsData(vehicleRequest, mdmsData);
 		if(!StringUtils.isEmpty(vehicle.getVehicleOwner())) {
 			mdmsValidator.validateVehicleOwner(vehicleRequest.getVehicle().getVehicleOwner());	
@@ -60,11 +63,11 @@ public class Validator {
 
 	}
 	
-	private void validateVehicle(VehicleRequest vehicleRequest) {
-		Integer count = repository.getVehicleCount(vehicleRequest);
-		if(count >0 ) {
+	private void validateVehicle(VehicleRequest vehicleRequest,boolean isUpdate) {
+		Integer count = repository.getVehicleCount(vehicleRequest,"ACTIVE");
+		if(count >0  && !isUpdate) {
 			throw new CustomException(VehicleErrorConstants.INVALID_REGISTRATION_NUMBER,"Vehicle already exists ");
-		}
+		 }
 		
 	}
 
@@ -81,13 +84,17 @@ public class Validator {
 		if (!requestInfo.getUserInfo().getType().equalsIgnoreCase(Constants.CITIZEN) && criteria.isEmpty())
 			throw new CustomException(VehicleErrorConstants.INVALID_SEARCH, "Search without any paramters is not allowed");
 
-		if (!requestInfo.getUserInfo().getType().equalsIgnoreCase(Constants.CITIZEN) && !criteria.tenantIdOnly()
+		if (!requestInfo.getUserInfo().getType().equalsIgnoreCase(Constants.CITIZEN) /* && !criteria.tenantIdOnly() */
 				&& criteria.getTenantId() == null)
 			throw new CustomException(VehicleErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
 
-		if (requestInfo.getUserInfo().getType().equalsIgnoreCase(Constants.CITIZEN) && !criteria.isEmpty()
-				&& !criteria.tenantIdOnly() && criteria.getTenantId() == null) 
-			throw new CustomException(VehicleErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
+		/*
+		 * if (requestInfo.getUserInfo().getType().equalsIgnoreCase(Constants.CITIZEN)
+		 * && !criteria.isEmpty() && !criteria.tenantIdOnly() && criteria.getTenantId()
+		 * == null) throw new CustomException(VehicleErrorConstants.INVALID_SEARCH,
+		 * "TenantId is mandatory in search");
+		 */
+		
 		if(criteria.getTenantId() == null)
 			throw new CustomException(VehicleErrorConstants.INVALID_SEARCH, "TenantId is mandatory in search");
 			

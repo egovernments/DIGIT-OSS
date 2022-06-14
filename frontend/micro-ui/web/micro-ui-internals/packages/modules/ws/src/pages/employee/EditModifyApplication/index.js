@@ -30,8 +30,7 @@ const EditModifyApplication = () => {
 
   const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { enabled: propertyId ? true : false }
+    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId && propertyId != "" ? true : false }
   );
 
   useEffect(() => {
@@ -45,7 +44,7 @@ const EditModifyApplication = () => {
   });
 
   useEffect(() => {
-    !propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
+    !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
   }, [sessionFormData?.cpt]);
 
   useEffect(async () => {
@@ -103,7 +102,7 @@ const EditModifyApplication = () => {
           setTimeout(closeToastOfError, 5000);
         },
         onSuccess: (data, variables) => {
-          setShowToast({ key: false, message: "CS_PROPERTY_APPLICATION_SUCCESS" });
+          setShowToast({ key: false, message: "WS_APPLICATION_SUBMITTED_SUCCESSFULLY_LABEL" });
           setIsAppDetailsPage(true);
         },
       });

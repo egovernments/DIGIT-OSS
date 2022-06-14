@@ -52,8 +52,9 @@ public class WaterController {
 	public ResponseEntity<WaterConnectionResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute SearchCriteria criteria) {
 		List<WaterConnection> waterConnectionList = waterService.search(criteria, requestInfoWrapper.getRequestInfo());
+		Integer count = waterService.countAllWaterApplications(criteria, requestInfoWrapper.getRequestInfo());
 		WaterConnectionResponse response = WaterConnectionResponse.builder().waterConnection(waterConnectionList)
-				.totalCount(waterConnectionList.size())
+				.totalCount(count)
 				.responseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(),
 						true))
 				.build();

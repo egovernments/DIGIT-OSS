@@ -15,7 +15,7 @@ const getBillingPeriod = (fromPeriod, toPeriod) => {
 const getAddress = (address, t) => {
   return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`
+  }${t(address?.locality.code)}, ${t(address?.city.code || address?.city)}${t(address?.pincode) ? `, ${address.pincode}` : " "}`
 } 
 
 const combineResponse = (WaterConnections, properties, billData, t) => {
@@ -27,7 +27,7 @@ const combineResponse = (WaterConnections, properties, billData, t) => {
     AmountDue : billData ? (billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.amount ? billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.amount : "NA")  : "NA",
     DueDate : billData ? getDate(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.expiryDate) : "NA",
     BillingPeriod : billData ?  getBillingPeriod(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.fromPeriod , billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.toPeriod) : "NA",
-    ServiceName: billData ?  (billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.businessService) : "NA",
+    ServiceName: billData ?  (t(`WS_SERVICE_TYPE_${billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.businessService}`)) : "NA",
     }))
   else
   return [];
@@ -55,7 +55,7 @@ const useMyBillsWaterSearch = ({tenantId, filters = {}, BusinessService="WS", t 
   , config)
   const billData = useQuery(['BILL_SEARCH', tenantId, consumercodes,BusinessService ], async () => await Digit.PaymentService.fetchBill(tenantId, {
     businessService: BusinessService,
-    consumerCode: consumercodes.substring(0, propertyids.length-1),
+    consumerCode: consumercodes.substring(0, consumercodes.length-1),
   })
   , config)
 

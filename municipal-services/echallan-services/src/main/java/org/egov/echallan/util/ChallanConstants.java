@@ -83,6 +83,10 @@ public class ChallanConstants {
     public static final String PAYMENT_CODE_EMAIL = "echallan.payment.email";
 
     public static final String DOWNLOAD_RECEIPT_CODE = "DOWNLOAD RECEIPT";
+    
+    public static final String TOTAL_COLLECTION = "totalCollection";
+
+    public static final String TOTAL_SERVICES = "totalServices";
 
     public ChallanConstants() {}
 

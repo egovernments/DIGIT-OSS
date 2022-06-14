@@ -13,7 +13,7 @@ const PTCard = () => {
     filters: { limit: 10, offset: 0, services: ["PT.CREATE", "PT.MUTATION", "PT.UPDATE"] },
     config: {
       select: (data) => {
-        return data?.totalCount || "-";
+        return {totalCount:data?.totalCount,nearingSlaCount:data?.nearingSlaCount} || "-";
       },
       enabled: Digit.Utils.ptAccess(),
     },
@@ -28,7 +28,7 @@ const PTCard = () => {
   }
   const links=[
     {
-      count: isLoading ? "-" : total,
+      count: isLoading ? "-" : total?.totalCount,
       label: t("ES_COMMON_INBOX"),
       link: `/digit-ui/employee/pt/inbox`,
     },
@@ -44,7 +44,7 @@ const PTCard = () => {
     {
       label: t("ES_COMMON_APPLICATION_SEARCH"),
       link: `/digit-ui/employee/pt/application-search`,
-    }
+    },
   ]
   const PT_CEMP = Digit.UserService.hasAccess(["PT_CEMP"]) || false;
   const propsForModuleCard = {
@@ -52,10 +52,16 @@ const PTCard = () => {
     moduleName: t("ES_TITLE_PROPERTY_TAX"),
     kpis: [
       {
-        count: total,
+        count: total?.totalCount,
         label: t("ES_TITLE_INBOX"),
         link: `/digit-ui/employee/pt/inbox`,
       },
+      {
+        
+        count: total?.nearingSlaCount,
+        label: t("TOTAL_NEARING_SLA"),
+        link: `/digit-ui/employee/pt/inbox`,
+      }
     ],
     links:links.filter(link=>!link?.role||PT_CEMP),
   };

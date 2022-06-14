@@ -84,7 +84,7 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
         </div>
       ),
       [t("WS_APPLICATION_TYPE_LABEL")]: data?.applicationType ? replaceUnderscore(data.applicationType) : "-",
-      [t("WS_COMMON_TABLE_COL_OWN_NAME_LABEL")]: data?.owner || "-",
+      [t("WS_COMMON_TABLE_COL_OWN_NAME_LABEL")]: data?.ownerNames || "-",
       [t("WS_COMMON_TABLE_COL_APPLICATION_STATUS_LABEL")]: t(data?.applicationStatus || "NA"),
       [t("WS_COMMON_TABLE_COL_ADDRESS")]: data?.address || "-",
       // [t("TL_LOCALIZATION_TRADE_OWNER_NAME")]: data?.tradeLicenseDetail?.owners?.map( o => o.name ). join(",") || "" ,

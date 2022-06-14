@@ -94,7 +94,7 @@ const ActivateConnection = () => {
       }, [isAppDetailsPage]);
 
     const onFormValueChange = (setValue, formData, formState) => {
-        if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0) setSubmitValve(true);
+        if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0 && Object.getPrototypeOf(formState.errors) === Object.prototype) setSubmitValve(true);
         else setSubmitValve(!(Object.keys(formState.errors).length));
     };
 

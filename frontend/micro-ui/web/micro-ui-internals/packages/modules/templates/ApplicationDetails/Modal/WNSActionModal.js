@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { configWSApproverApplication } from "../config";
 import * as predefinedConfig from "../config";
 
+
 const Heading = (props) => {
   return <h1 className="heading-m">{props.label}</h1>;
 };
@@ -52,8 +53,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     (async () => {
       setError(null);
       if (file) {
+        const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i
         if (file.size >= 5242880) {
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+        } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
+          setError(t(`NOT_SUPPORTED_FILE_TYPE`))
         } else {
           try {
             const response = await Digit.UploadServices.Filestorage("WS", file, Digit.ULBService.getCurrentTenantId());
@@ -72,13 +76,27 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   }, [file]);
 
   function submit(data) {
+    if(applicationData?.isBillAmend){
+     const amendment = {
+       ...applicationData?.billAmendmentDetails,
+        workflow:{
+          businessId:applicationData?.billAmendmentDetails?.amendmentId,
+          action:action?.action,
+          tenantId:tenantId,
+          businessService:"BS.AMENDMENT",
+          moduleName:"BS"
+        },
+      }
+      submitAction({AmendmentUpdate:amendment})
+      return
+    }
     let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
     applicationData = {
       ...applicationData,
       action: action?.action,
       comment: data?.comments || "",
       assignee: !selectedApprover?.uuid ? [] : [selectedApprover?.uuid],
-      assignees: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
+      assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
       wfDocuments: uploadedFile
         ? [
           {
@@ -90,7 +108,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         : null,
       processInstance: {
         action: action?.action,
-        assignees: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
+        assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
         comment: data?.comments || "",
         documents: uploadedFile
           ? [
@@ -103,6 +121,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           : []
       }
     };
+    
 
     applicationData?.serviceType == "WATER" ?
       submitAction({ WaterConnection: applicationData }) :
@@ -122,10 +141,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           uploadedFile,
           setUploadedFile,
           businessService,
+          error
         })
       );
     }
-  }, [action, approvers, uploadedFile]);
+  }, [action, approvers, uploadedFile, error]);
 
   return action && config.form ? (
     <Modal

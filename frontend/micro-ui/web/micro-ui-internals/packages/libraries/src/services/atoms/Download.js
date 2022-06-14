@@ -50,12 +50,13 @@ const Download = {
   },
 
   Excel: (data, filename) => {
+    const file = filename.substring(0,30);
     const wb = XLSX.utils.book_new();
     let ws = null;
     ws = XLSX.utils.json_to_sheet(data)
-    wb.SheetNames.push(filename);
-    wb.Sheets[filename] = ws;
-    XLSX.writeFile(wb, `${filename}.xlsx`);
+    wb.SheetNames.push(file);
+    wb.Sheets[file] = ws;
+    XLSX.writeFile(wb, `${file}.xlsx`);
   },
 
   PDF: (node, fileName, share, resolve = null) => {

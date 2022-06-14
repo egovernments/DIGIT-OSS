@@ -4,35 +4,60 @@ import { useTranslation } from "react-i18next";
 import SubMenu from "./SubMenu";
 import {
   HomeIcon,
-  CollectionIcon,
   BPAHomeIcon,
-  PropertyHouse,
-  CaseIcon,
   PersonIcon,
   DocumentIconSolid,
   DropIcon,
   CollectionsBookmarIcons,
   FinanceChartIcon,
   ComplaintIcon,
+  SearchIcon,
+  CollectionIcon,
+  PropertyHouse,
+  CaseIcon,
+  PTIcon,
+  PGRIcon,
+  MCollectIcon,
+  OBPSIcon,
+  WSICon,
+  FSMIcon,
+  Phone,
+  LogoutIcon,
+  EditPencilIcon,
+  LanguageIcon,
 } from "./svgindex";
 
 const IconsObject = {
-  home: <HomeIcon />,
-  announcement: <ComplaintIcon />,
-  business: <BPAHomeIcon />,
-  store: <PropertyHouse />,
-  assignment: <CaseIcon />,
-  receipt: <CollectionIcon />,
-  "business-center": <PersonIcon />,
-  description: <DocumentIconSolid />,
-  "water-tap": <DropIcon />,
-  "collections-bookmark": <CollectionsBookmarIcons />,
-  "insert-chart": <FinanceChartIcon />,
-  edcr: <CollectionIcon />,
-  collections: <CollectionIcon />,
-  "open-complaints": <ComplaintIcon />,
+  CommonPTIcon: <PTIcon className="icon" />,
+  OBPSIcon: <OBPSIcon className="icon" />,
+  propertyIcon: <PropertyHouse className="icon" />,
+  TLIcon: <CaseIcon className="icon" />,
+  PGRIcon: <PGRIcon className="icon" />,
+  FSMIcon: <FSMIcon className="icon" />,
+  WSIcon: <WSICon className="icon" />,
+  MCollectIcon: <MCollectIcon className="icon" />,
+  BillsIcon: <CollectionIcon className="icon" />,
+  home: <HomeIcon className="icon" />,
+  announcement: <ComplaintIcon className="icon" />,
+  business: <BPAHomeIcon className="icon" />,
+  store: <PropertyHouse className="icon" />,
+  assignment: <CaseIcon className="icon" />,
+  receipt: <CollectionIcon className="icon" />,
+  "business-center": <PersonIcon className="icon" />,
+  description: <CollectionIcon className="icon" />,
+  "water-tap": <DropIcon className="icon" />,
+  "collections-bookmark": <CollectionsBookmarIcons className="icon" />,
+  "insert-chart": <FinanceChartIcon className="icon" />,
+  edcr: <CollectionIcon className="icon" />,
+  collections: <CollectionIcon className="icon" />,
+  "open-complaints": <ComplaintIcon className="icon" />,
+  HomeIcon: <HomeIcon className="icon" />,
+  EditPencilIcon: <EditPencilIcon className="icon" />,
+  LogoutIcon: <LogoutIcon className="icon" />,
+  Phone: <Phone className="icon" />,
+  LanguageIcon: <LanguageIcon className="icon" />,
 };
-const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, isEmployee }) => {
+const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, isEmployee, search, setSearch }) => {
   const node = useRef();
   const location = useLocation();
   const { pathname } = location;
@@ -46,11 +71,11 @@ const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, 
     } else {
       itemComponent = item.text;
     }
-    const leftIconArray = item.icon;
-    const leftIcon = IconsObject[leftIconArray] || IconsObject.collections;
+    const leftIconArray = item.icon || item.icon?.type?.name;
+    const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.BillsIcon;
     const Item = () => (
       <span className="menu-item" {...item.populators}>
-        {item?.icon || leftIcon}
+        {leftIcon}
         <div className="menu-label">{itemComponent}</div>
       </span>
     );
@@ -79,11 +104,34 @@ const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, 
     }
 
     if (item.type === "dynamic") {
-      return <SubMenu item={item} t={t} toggleSidebar={toggleSidebar} isEmployee={isEmployee} />;
+      if (isEmployee) {
+        return <SubMenu item={item} t={t} toggleSidebar={toggleSidebar} isEmployee={isEmployee} />;
+      }
     }
     return <Item />;
   };
 
+  const renderSearch = () => {
+    return (
+      <div className="sidebar-list">
+        <div className="submenu-container">
+          <div className="sidebar-link">
+            <div className="actions">
+              <SearchIcon className="icon" />
+              <input
+                className="employee-search-input"
+                type="text"
+                placeholder={t(`ACTION_TEST_SEARCH`)}
+                name="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
   return (
     <React.Fragment>
       <div>
@@ -123,7 +171,8 @@ const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, 
         >
           {profileItem}
           <div className="drawer-list">
-            {menuItems.map((item, index) => (
+            {isEmployee ? renderSearch() : null}
+            {menuItems?.map((item, index) => (
               <div className={`sidebar-list ${pathname === item.link ? "active" : ""}`} key={index}>
                 <MenuItem item={item} />
               </div>

@@ -86,6 +86,7 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
         [t("TL_LICENSE_YEAR_LABEL")]: data.financialYear || "",
         [t("TL_COMMON_TABLE_COL_TRD_NAME")]: data.tradeName || "",
         [t("TL_LOCALIZATION_TRADE_OWNER_NAME")]: data?.tradeLicenseDetail?.owners?.map( o => o.name ). join(",") || "" ,
+        [t("WF_INBOX_HEADER_CURRENT_OWNER")]: data?.CurrentOwners[0].currentOwner || "",
         [t("TL_COMMON_TABLE_COL_STATUS")]: data.workflowCode && data.state ? t(`WF_${data.workflowCode}_${data.state}`) : "NA",
       }))
     },

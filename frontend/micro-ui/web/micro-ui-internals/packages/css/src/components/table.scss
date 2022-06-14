@@ -165,3 +165,14 @@
     }
   }
 }
+
+.reports-table {
+  margin-top: 2rem;
+  thead {
+    th {      
+      &:first-child {
+        min-width: unset;
+      }
+    }
+  }
+}

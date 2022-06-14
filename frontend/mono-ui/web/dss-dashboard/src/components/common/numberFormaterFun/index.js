@@ -15,10 +15,10 @@ export default function NFormatterTest(value, type, symbol, commaSeparated = fal
             switch (symbol) {
 
                 case SI_SYMBOL[1]:
-                    return `${Rformatter.format((value / 100000).toFixed(2) || 0)}`
+                    return `${Rformatter.format((value / 100000).toFixed() || 0)}`
 
                 case SI_SYMBOL[2]:
-                    return `${Rformatter.format((value / 10000000).toFixed(2) || 0)}`
+                    return `${Rformatter.format((value / 10000000).toFixed() || 0)}`
 
                 case SI_SYMBOL[0]:
                     if (value <= 9999999) {

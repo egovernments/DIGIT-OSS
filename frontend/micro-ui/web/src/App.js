@@ -17,12 +17,12 @@ import { initEngagementComponents } from "@egovernments/digit-ui-module-engageme
 import { initWSComponents } from "@egovernments/digit-ui-module-ws"; 
 import {initCustomisationComponents} from "./Customisations";
 import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonPt";
-import { initBillsComponents, BillsModule } from "@egovernments/digit-ui-module-bills";
-import { initReportsComponents } from "@egovernments/digit-ui-module-reports";
+import { initBillsComponents } from "@egovernments/digit-ui-module-bills";
+// import { initReportsComponents } from "@egovernments/digit-ui-module-reports";
 
 initLibraries();
 
-const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "NDSS", "MCollect","HRMS", "TL","Receipts" ,"OBPS","NOC","Engagement", "CommonPT","WS", "Reports"];
+const enabledModules = ["PGR", "FSM", "Payment", "PT", "QuickPayLinks", "DSS", "NDSS", "MCollect","HRMS", "TL","Receipts" ,"OBPS","NOC","Engagement", "CommonPT","WS", "Reports","Bills","SW" ];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PTModule,
@@ -35,8 +35,7 @@ window.Digit.ComponentRegistryService.setupRegistry({
   HRMSModule,
   TLModule,
   TLLinks,
-  ReceiptsModule,
-  BillsModule
+  ReceiptsModule
 });
 
 
@@ -53,7 +52,7 @@ initEngagementComponents();
 initWSComponents();
 initCommonPTComponents();
 initBillsComponents();
-initReportsComponents();
+// initReportsComponents();
 initCustomisationComponents();
 
 const moduleReducers = (initData) => ({

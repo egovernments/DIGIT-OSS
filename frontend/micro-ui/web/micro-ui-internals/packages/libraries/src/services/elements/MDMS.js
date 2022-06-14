@@ -913,7 +913,70 @@ const getWSTaxHeadMasterCritera = (tenantId, moduleCode, type) => ({
       },
     ],
   },
-})
+});
+
+const getHowItWorksJSON = (tenantId) => ({
+      moduleDetails: [
+      {
+        moduleName: "common-masters",
+        masterDetails: [
+          {
+            name: "howItWorks",
+          },
+        ],
+      },
+    ],
+});
+
+const getFAQsJSON = (tenantId) => ({
+  moduleDetails: [
+  {
+    moduleName: "common-masters",
+    masterDetails: [
+      {
+        name: "faqs",
+      },
+    ],
+  },
+],
+});
+const getDSSFAQsJSON = (tenantId) => ({
+  moduleDetails: [
+  {
+    moduleName: "dss-dashboard",
+    masterDetails: [
+      {
+        name: "FAQs",
+      },
+    ],
+  },
+],
+});
+const getDSSAboutJSON = (tenantId) => ({
+  moduleDetails: [
+  {
+    moduleName: "dss-dashboard",
+    masterDetails: [
+      {
+        name: "About",
+      },
+    ],
+  },
+],
+});
+
+const getStaticData = () => ({
+  moduleDetails: [
+    {
+      moduleName: "common-masters",
+      masterDetails: [
+        {
+          name: "StaticData",
+        },
+      ],
+    },
+  ],
+});
 
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
@@ -958,6 +1021,15 @@ const GetVehicleType = (MdmsRes) =>
         i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code}`,
       };
     });
+
+const GetVehicleMakeModel = (MdmsRes) =>
+  MdmsRes["Vehicle"].VehicleMakeModel.filter((vehicle) => vehicle.active)
+    .map((vehicleDetails) => {
+      return {
+        ...vehicleDetails,
+        i18nKey: `COMMON_MASTER_VEHICLE_${vehicleDetails.code}`,
+      };
+  });
 
 const GetSlumLocalityMapping = (MdmsRes, tenantId) =>
   MdmsRes["FSM"].Slum.filter((type) => type.active).reduce((prev, curr) => {
@@ -1255,6 +1327,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return GetPitType(MdmsRes);
     case "VehicleType":
       return GetVehicleType(MdmsRes);
+    case "VehicleMakeModel":
+      return GetVehicleMakeModel(MdmsRes);
     case "Slum":
       return GetSlumLocalityMapping(MdmsRes, tenantId);
     case "OwnerShipCategory":
@@ -1637,5 +1711,21 @@ export const MdmsService = {
 
   getBillingPeriod: (tenantId) => {
     return MdmsService.call(tenantId, getBillingPeriodValidation(tenantId));
+  },
+  getHowItWorksJSONData: (tenantId) => {
+    return MdmsService.call(tenantId, getHowItWorksJSON(tenantId));
+  },
+  getFAQsJSONData: (tenantId) => {
+    return MdmsService.call(tenantId, getFAQsJSON(tenantId));
+  },
+  getDSSFAQsJSONData: (tenantId) => {
+    return MdmsService.call(tenantId, getDSSFAQsJSON(tenantId));
+  },
+  
+  getDSSAboutJSONData: (tenantId) => {
+    return MdmsService.call(tenantId, getDSSAboutJSON(tenantId));
+  },
+  getStaticDataJSON: (tenantId) => {
+    return MdmsService.call(tenantId, getStaticData());
   }
 };

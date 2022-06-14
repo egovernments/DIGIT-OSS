@@ -24,7 +24,13 @@ const convertEpochToDate = (dateEpoch) => {
     return null;
   }
 };
-
+const getAddress = (address, t) => {
+  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+    address?.landmark ? `${address?.landmark}, ` : ""
+  }${t(Digit.Utils.pt.getMohallaLocale(address?.locality.code, address?.tenantId))}, ${t(Digit.Utils.pt.getCityLocale(address?.tenantId))}${
+    address?.pincode && t(address?.pincode) ? `, ${address.pincode}` : " "
+  }`;
+};
 export const TLSearch = {
   all: async (tenantId, filters = {}) => {
     const response = await TLService.TLsearch({ tenantId, filters });
@@ -53,42 +59,20 @@ export const TLSearch = {
       numOfApplications = await TLSearch.numberOfApplications(tenantId, filters);
     }
     let propertyAddress = "";
-    if (propertyDetails && propertyDetails?.Properties?.length) {
-      if (propertyDetails?.Properties[0]?.address?.doorNo) {
-        propertyAddress += propertyDetails?.Properties[0]?.address?.doorNo;
-        if (propertyDetails?.Properties[0]?.address?.street) {
-          propertyAddress += ", ";
-        }
-      }
-      if (propertyDetails?.Properties[0]?.address?.street) {
-        propertyAddress += propertyDetails?.Properties[0]?.address?.street;
-        if (propertyDetails?.Properties[0]?.address?.landmark) {
-          propertyAddress += ", ";
-        }
-      }
-      if (propertyDetails?.Properties[0]?.address?.landmark) {
-        propertyAddress += propertyDetails?.Properties[0]?.address?.landmark;
-        if (propertyDetails?.Properties[0]?.address?.locality?.name) {
-          propertyAddress += ", ";
-        }
-      }
-      if (propertyDetails?.Properties[0]?.address?.locality?.name) {
-        propertyAddress += propertyDetails?.Properties[0]?.address?.locality?.name;
-        if (propertyDetails?.Properties[0]?.address?.city) {
-          propertyAddress += ", ";
-        }
-      }
-      if (propertyDetails?.Properties[0]?.address?.city) {
-        propertyAddress += propertyDetails?.Properties[0]?.address?.city;
-        if (propertyDetails?.Properties[0]?.address?.pincode) {
-          propertyAddress += ", ";
-        }
-      }
-      if (propertyDetails?.Properties[0]?.address?.pincode) {
-        propertyAddress += propertyDetails?.Properties[0]?.address?.pincode;
-      }
+    if (propertyDetails && propertyDetails?.Properties.length) {
+      propertyAddress = getAddress(propertyDetails?.Properties[0]?.address, t);
     }
     let employeeResponse = [];
+
+    const applicationNoAndChannel = {
+      title: " ",
+      asSectionHeader: false,
+      values: [
+        { title: "TL_LOCALIZATION_APPLICATION_NO", value: response?.applicationNumber ? `${response?.applicationNumber}` : "NA" },
+        { title: "TL_APPLICATION_CHALLAN_LABEL", value: response?.tradeLicenseDetail?.channel ? `TL_CHANNEL_${response?.tradeLicenseDetail?.channel}` : "NA" },
+      ]
+    }
+
     const tradedetails = {
       title: "TL_COMMON_TR_DETAILS",
       asSectionHeader: true,
@@ -105,7 +89,7 @@ export const TLSearch = {
         {
           title: "TL_NEW_TRADE_DETAILS_STRUCT_SUB_TYPE_LABEL",
           value: response?.tradeLicenseDetail?.structureType
-            ? `COMMON_MASTERS_STRUCTURETYPE_${stringReplaceAll(response?.tradeLicenseDetail?.structureType, ".", "_")}`
+            ? `TL_${response?.tradeLicenseDetail?.tradeType}`
             : "NA",
         },
         {
@@ -172,7 +156,7 @@ export const TLSearch = {
         { title: "PROPERTY_ADDRESS", value: propertyAddress || "NA" },
         {
           title: "TL_VIEW_PROPERTY_DETAIL",
-          to: `/digit-ui/employee/commonpt/view-property?propertyId=${propertyDetails?.Properties?.[0]?.propertyId}&tenantId=${propertyDetails?.Properties?.[0]?.tenantId}`,
+          to: `/digit-ui/employee/commonpt/view-property?propertyId=${propertyDetails?.Properties?.[0]?.propertyId}&tenantId=${propertyDetails?.Properties?.[0]?.tenantId}&from=TL_APPLICATION_DETAILS_LABEL`,
           value: "",
           isLink: true,
         },
@@ -287,6 +271,7 @@ export const TLSearch = {
       response && employeeResponse.push(details);
     }
 
+    response && employeeResponse.push(applicationNoAndChannel);
     response && employeeResponse.push(tradedetails);
     response?.tradeLicenseDetail?.tradeUnits && employeeResponse.push(tradeUnits);
     response?.tradeLicenseDetail?.accessories && employeeResponse.push(accessories);

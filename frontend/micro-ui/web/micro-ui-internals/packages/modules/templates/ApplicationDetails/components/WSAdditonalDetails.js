@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { getQueryStringParams } from "../../../ws/src/utils";
 
 const cardSubHeaderStyles = () => {
-  return { fontSize: "24px", padding: "0px", margin: "0px", color: "#505A5F" };
+  // return { fontSize: "24px", padding: "0px", margin: "0px", color: "#505A5F" };
+  return { fontSize: "24px", marginBottom: "16px", marginTop: "32px" };
 };
 
 const cardDivStyles = () => {
@@ -52,18 +53,18 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
     return (
       <div className="connection-details-old-value-wrapper">
         {oldValueData?.connectionType ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.connectionType} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.connectionType} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
 
         {oldValueData?.noOfWaterClosets ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.noOfWaterClosets} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.noOfWaterClosets} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.noOfToilets ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.noOfToilets} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.noOfToilets} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
@@ -75,28 +76,28 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
     return (
       <div className="connection-details-old-value-wrapper">
         {oldValueData?.connectionType ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.connectionType} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.connectionType} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
 
         {oldValueData?.noOfTaps ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.noOfTaps} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.noOfTaps} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.waterSource ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={t(oldValueData?.waterSource?.toUpperCase()?.split(".")[0])} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={t(oldValueData?.waterSource?.toUpperCase()?.split(".")[0])} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.pipeSize ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.pipeSize} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.pipeSize} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.waterSource ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={t(oldValueData?.waterSource?.toUpperCase()?.split(".")[1])} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={t(oldValueData?.waterSource?.toUpperCase()?.split(".")[1])} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
@@ -109,22 +110,22 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
       <div className="plumber-details-old-value-wrapper">
         {oldValueData?.additionalDetails?.detailsProvidedBy !== wsAdditionalDetails?.additionalDetails?.plumberDetails[0]?.value &&
         oldValueData?.additionalDetails?.detailsProvidedBy !== null ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.additionalDetails?.detailsProvidedBy} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.additionalDetails?.detailsProvidedBy} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.plumberInfo ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.plumberInfo[0]?.licenseNo} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.plumberInfo[0]?.licenseNo} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.plumberInfo ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.plumberInfo[0]?.name} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.plumberInfo[0]?.name} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.plumberInfo ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.plumberInfo[0]?.mobileNumber} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.plumberInfo[0]?.mobileNumber} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
@@ -136,7 +137,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
     return (
       <div className="plumber-details-old-value-wrapper">
         {oldValueData?.additionalDetails?.detailsProvidedBy !== wsAdditionalDetails?.additionalDetails?.plumberDetails[0]?.value ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.additionalDetails?.detailsProvidedBy || "NA"} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.additionalDetails?.detailsProvidedBy || "NA"} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
@@ -149,8 +150,8 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
       oldValueData?.roadCuttingInfo?.map((info) => {
         return (
           <div className="plumber-details-old-value-wrapper">
-            <Row label={t("WS_OLD_LABEL_NAME")} text={t(`WS_ROADTYPE_${info?.roadType}`) || "NA"} />
-            <Row label={t("WS_OLD_LABEL_NAME")} text={info?.roadCuttingArea || "NA"} />
+            <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={t(`WS_ROADTYPE_${info?.roadType}`) || "NA"} />
+            <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={info?.roadCuttingArea || "NA"} />
           </div>
         );
       });
@@ -161,7 +162,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
     return (
       <div className="plumber-details-old-value-wrapper">
         {oldValueData?.connectionExecutionDate ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={convertEpochToDate(oldValueData?.connectionExecutionDate)} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={convertEpochToDate(oldValueData?.connectionExecutionDate)} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
@@ -173,22 +174,22 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
     return (
       <div className="plumber-details-old-value-wrapper">
         {oldValueData?.meterId ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.meterId} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.meterId} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.additionalDetails?.initialMeterReading ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={oldValueData?.additionalDetails?.initialMeterReading} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.additionalDetails?.initialMeterReading} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.meterInstallationDate ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={convertEpochToDate(oldValueData?.meterInstallationDate)} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={convertEpochToDate(oldValueData?.meterInstallationDate)} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.connectionExecutionDate ? (
-          <Row label={t("WS_OLD_LABEL_NAME")} text={convertEpochToDate(oldValueData?.connectionExecutionDate)} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={convertEpochToDate(oldValueData?.connectionExecutionDate)} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
@@ -202,12 +203,12 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
         {wsAdditionalDetails?.additionalDetails?.connectionDetails && (
           <StatusTable>
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_COMMON_CONNECTION_DETAIL")}</CardSubHeader>
-            <div style={cardDivStyles()}>
+            <div>
               <div className="connection-details-new-value-wrapper">
                 {wsAdditionalDetails?.additionalDetails?.connectionDetails?.map((value, index) => {
                   return (
                     <div>
-                      <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.value ? value?.value : ""} />
+                      <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />
                     </div>
                   );
                 })}
@@ -224,10 +225,10 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
         {wsAdditionalDetails?.additionalDetails?.plumberDetails && (
           <StatusTable>
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_COMMON_PLUMBER_DETAILS")}</CardSubHeader>
-            <div style={cardDivStyles()}>
+            <div>
               <div className="plumber-details-new-value-wrapper">
                 {wsAdditionalDetails?.additionalDetails?.plumberDetails?.map((value, index) => {
-                  return <Row key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.value ? value?.value : ""} />;
+                  return <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />;
                 })}
               </div>
               {serviceType === "SEWERAGE" && isModify === "MODIFY"
@@ -241,7 +242,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
         {wsAdditionalDetails?.additionalDetails?.roadCuttingDetails && (
           <StatusTable>
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_ROAD_CUTTING_DETAILS")}</CardSubHeader>
-            <div style={cardDivStyles()}>
+            <div>
               <div className="plumber-details-new-value-wrapper">
                 {wsAdditionalDetails?.additionalDetails?.roadCuttingDetails?.map((value) => {
                   return (
@@ -262,7 +263,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
                         <Row
                           className="border-none"
                           key={`${roadValue.title}`}
-                          label={`${t(`${roadValue.title}`)}`}
+                          label={`${t(`${roadValue.title}`)}:`}
                           text={roadValue?.value ? roadValue?.value : ""}
                         />
                       ))}
@@ -281,11 +282,11 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
         {wsAdditionalDetails?.additionalDetails?.activationDetails && (
           <StatusTable>
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_ACTIVATION_DETAILS")}</CardSubHeader>
-            <div style={cardDivStyles()}>
+            <div>
               <div className="plumber-details-new-value-wrapper">
                 {wsAdditionalDetails?.additionalDetails?.activationDetails?.map((value, index) => {
                   return (
-                    <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.value ? value?.value : ""} />
+                    <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />
                   );
                 })}
               </div>

@@ -1,7 +1,4 @@
-import {
-  CardLabel, Dropdown, FormStep, LinkButton,
-  Loader, RadioButtons, TextInput
-} from "@egovernments/digit-ui-react-components";
+import { CardLabel, Dropdown, FormStep, LinkButton, Loader, RadioButtons, TextInput } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/TLTimeline";
@@ -35,28 +32,40 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     }
   }
 
-  const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TradeUnits", "[?(@.type=='TL')]");
+  // const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TradeUnits", "[?(@.type=='TL')]");
+  const { data: billingSlabTradeTypeData, isLoading } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: tenantId, filters: {} }, {
+    select: (data) => {
+    return data?.billingSlab.filter((e) => e.tradeType && e.applicationType === "NEW" && e.licenseType === "PERMANENT");
+    }});
   let TradeCategoryMenu = [];
   //let TradeTypeMenu = [];
 
-  Data &&
-    Data.TradeLicense &&
-    Data.TradeLicense.TradeType.map((ob) => {
-      if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.code.split(".")[0]}`)) {
-        TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.code.split(".")[0]}`, code: `${ob.code.split(".")[0]}` });
-      }
-    });
+  // Data &&
+  //   Data.TradeLicense &&
+  //   Data.TradeLicense.TradeType.map((ob) => {
+  //     if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.code.split(".")[0]}`)) {
+  //       TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.code.split(".")[0]}`, code: `${ob.code.split(".")[0]}` });
+  //     }
+  //   });
+
+    billingSlabTradeTypeData &&
+    billingSlabTradeTypeData.length > 0 &&
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+        if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.tradeType.split(".")[0]}`)) {
+          TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` });
+        }
+      });
 
   function getTradeTypeMenu(TradeCategory) {
     let TradeTypeMenu = [];
-    Data &&
-      Data.TradeLicense &&
-      Data.TradeLicense.TradeType.map((ob) => {
+    billingSlabTradeTypeData &&
+    billingSlabTradeTypeData.length > 0 &&
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
         if (
-          ob.code.split(".")[0] === TradeCategory.code &&
-          !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.code.split(".")[1]}`)
+          ob.tradeType.split(".")[0] === TradeCategory.code &&
+          !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.tradeType.split(".")[1]}`)
         ) {
-          TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.code.split(".")[1]}`, code: `${ob.code.split(".")[1]}` });
+          TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[1]}`, code: `${ob.tradeType.split(".")[1]}` });
         }
       });
     return TradeTypeMenu;
@@ -65,11 +74,11 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   function getTradeSubTypeMenu(TradeType) {
     let TradeSubTypeMenu = [];
     TradeType &&
-      Data &&
-      Data.TradeLicense &&
-      Data.TradeLicense.TradeType.map((ob) => {
-        if (ob.code.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.code}`)) {
-          TradeSubTypeMenu.push({ i18nKey: `TL_${ob.code}`, code: `${ob.code}` });
+    billingSlabTradeTypeData &&
+    billingSlabTradeTypeData.length > 0 &&
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+        if (ob.tradeType.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.tradeType}`)) {
+          TradeSubTypeMenu.push({ i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` });
         }
       });
     return TradeSubTypeMenu;
@@ -105,10 +114,10 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     }
     Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
     value &&
-      Data &&
-      Data.TradeLicense &&
-      Data.TradeLicense.TradeType.map((ob) => {
-        if (value.code === ob.code) {
+    billingSlabTradeTypeData &&
+    billingSlabTradeTypeData?.length > 0 &&
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+        if (value.code === ob.tradeType) {
           units[i].unit = ob.uom;
           setUnitOfMeasure(ob.uom);
           // setFeilds(units);
@@ -138,8 +147,6 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   };
 
   const onSkip = () => onSelect();
-
-  console.log(isLoading, Data, "sasas");
   return (
     <React.Fragment>
       {window.location.href.includes("/citizen") ? <Timeline /> : null}
@@ -167,7 +174,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                     background: "#FAFAFA",
                   }}
                 >
-                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_CAT_LABEL")}*`}</CardLabel>
                   <LinkButton
                     label={
                       <div>
@@ -206,32 +213,25 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                   ) : (
                     <Loader />
                   )}
-                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_TYPE_LABEL")}*`}</CardLabel>
                   <Dropdown
                     t={t}
                     optionKey="i18nKey"
                     isMandatory={config.isMandatory}
-                    //options={[{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"}]}
-                    //option={TradeTypeMenu}
                     option={getTradeTypeMenu(field?.tradecategory)}
-                    //selected={TradeType}
                     selected={field?.tradetype}
                     select={(e) => selectTradeType(index, e)}
                   />
-                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL")}`}</CardLabel>
-                  <div className={"form-pt-dropdown-only"}>
+                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_TRADE_SUBTYPE_LABEL")}*`}</CardLabel>
                     <Dropdown
                       t={t}
                       optionKey="i18nKey"
                       isMandatory={config.isMandatory}
-                      //option={[{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"},{i18nKey : "a"}]}
-                      //option={TradeSubTypeMenu}
                       option={sortDropdownNames(getTradeSubTypeMenu(field?.tradetype), "i18nKey", t)}
-                      //selected={TradeSubType}
                       selected={field?.tradesubtype}
+                      optionCardStyles={{maxHeight:"125px",overflow:"scroll"}}
                       select={(e) => selectTradeSubType(index, e)}
                     />
-                  </div>
                   <CardLabel>{`${t("TL_UNIT_OF_MEASURE_LABEL")}`}</CardLabel>
                   <TextInput
                     style={{ background: "#FAFAFA" }}
@@ -244,14 +244,8 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                     value={field?.unit}
                     onChange={(e) => selectUnitOfMeasure(index, e)}
                     disable={true}
-                    /* {...(validation = {
-            isRequired: true,
-            pattern: "^[a-zA-Z-.`' ]*$",
-            type: "text",
-            title: t("PT_NAME_ERROR_MESSAGE"),
-          })} */
                   />
-                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}`}</CardLabel>
+                  <CardLabel>{`${t("TL_NEW_TRADE_DETAILS_UOM_VALUE_LABEL")}${!field.unit ? "" : "*"}`}</CardLabel>
                   <TextInput
                     style={{ background: "#FAFAFA" }}
                     t={t}

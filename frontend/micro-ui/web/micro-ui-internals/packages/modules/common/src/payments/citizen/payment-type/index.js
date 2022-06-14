@@ -11,7 +11,7 @@ import {
   InfoBanner,
   Loader,
   Toast,
-  CardText
+  CardText,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
@@ -26,7 +26,6 @@ export const SelectPaymentType = (props) => {
   const paymentAmount = state?.paymentAmount;
   const { t } = useTranslation();
   const history = useHistory();
-
   const { pathname, search } = useLocation();
   // const menu = ["AXIS"];
   const { consumerCode, businessService } = useParams();
@@ -43,6 +42,9 @@ export const SelectPaymentType = (props) => {
       setShowToast({ key: true, label: "CS_BILL_NOT_FOUND" });
     }
   }, [paymentdetails]);
+  useEffect(() => {
+    localStorage.setItem("BillPaymentEnabled", "true");
+  }, []);
   const { name, mobileNumber } = state;
 
   const billDetails = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};
@@ -50,7 +52,7 @@ export const SelectPaymentType = (props) => {
   const onSubmit = async (d) => {
     const filterData = {
       Transaction: {
-        tenantId: tenantId,
+        tenantId: billDetails?.tenantId,
         txnAmount: paymentAmount || billDetails.totalAmount,
         module: businessService,
         billId: billDetails.id,
@@ -64,14 +66,14 @@ export const SelectPaymentType = (props) => {
           },
         ],
         user: {
-          name: name || userInfo?.info?.name,
-          mobileNumber: mobileNumber || userInfo?.info?.mobileNumber,
-          tenantId: tenantId,
+          name: name || userInfo?.info?.name || billDetails?.payerName,
+          mobileNumber: mobileNumber || userInfo?.info?.mobileNumber || billDetails?.mobileNumber,
+          tenantId: billDetails?.tenantId,
         },
         // success
         callbackUrl: window.location.href.includes("mcollect")
           ? `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}/${tenantId}?workflow=mcollect`
-          : `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}/${tenantId}`,
+          : `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${wrkflow === "WNS"? encodeURIComponent(consumerCode):consumerCode}/${tenantId}`,
         additionalDetails: {
           isWhatsapp: false,
         },
@@ -79,25 +81,23 @@ export const SelectPaymentType = (props) => {
     };
 
     try {
-      const data = await Digit.PaymentService.createCitizenReciept(tenantId, filterData);
+      const data = await Digit.PaymentService.createCitizenReciept(billDetails?.tenantId, filterData);
       const redirectUrl = data?.Transaction?.redirectUrl;
       window.location = redirectUrl;
     } catch (error) {
       let messageToShow = "CS_PAYMENT_UNKNOWN_ERROR_ON_SERVER";
       if (error.response?.data?.Errors?.[0]) {
         const { code, message } = error.response?.data?.Errors?.[0];
-        messageToShow = t(message);
+        messageToShow = code;
       }
-      window.alert(messageToShow);
-
-      // TODO: add error toast for error.response.data.Errors[0].message
+      setShowToast({ key: true, label: t(messageToShow) });
     }
   };
 
   if (authorization === "true" && !userInfo.access_token) {
     localStorage.clear();
     sessionStorage.clear();
-     return <Redirect to={`/digit-ui/citizen/login?from=${encodeURIComponent(pathname + search)}`} />;
+    return <Redirect to={`/digit-ui/citizen/login?from=${encodeURIComponent(pathname + search)}`} />;
   }
 
   if (isLoading || paymentLoading) {
@@ -110,7 +110,7 @@ export const SelectPaymentType = (props) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Header>{t("PAYMENT_CS_HEADER")}</Header>
         <Card>
-          <div className="payment-amount-info" style={{marginBottom: "26px"}}>
+          <div className="payment-amount-info" style={{ marginBottom: "26px" }}>
             <CardLabel className="dark">{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</CardLabel>
             <CardSectionHeader> ₹ {paymentAmount || billDetails?.totalAmount}</CardSectionHeader>
           </div>

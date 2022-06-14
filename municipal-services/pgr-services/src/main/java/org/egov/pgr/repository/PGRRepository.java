@@ -3,6 +3,7 @@ package org.egov.pgr.repository;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.pgr.repository.rowmapper.PGRQueryBuilder;
 import org.egov.pgr.repository.rowmapper.PGRRowMapper;
+import org.egov.pgr.util.PGRConstants;
 import org.egov.pgr.web.models.ServiceWrapper;
 import org.egov.pgr.web.models.RequestSearchCriteria;
 import org.egov.pgr.web.models.Service;
@@ -77,6 +78,25 @@ public class PGRRepository {
         Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
     }
+
+
+	public Map<String, Integer> fetchDynamicData(String tenantId) {
+		List<Object> preparedStmtListCompalintsResolved = new ArrayList<>();
+		String query = queryBuilder.getResolvedComplaints(tenantId,preparedStmtListCompalintsResolved );
+
+		int complaintsResolved = jdbcTemplate.queryForObject(query,preparedStmtListCompalintsResolved.toArray(),Integer.class);
+
+		List<Object> preparedStmtListAverageResolutionTime = new ArrayList<>();
+		query = queryBuilder.getAverageResolutionTime(tenantId, preparedStmtListAverageResolutionTime);
+
+		int averageResolutionTime = jdbcTemplate.queryForObject(query, preparedStmtListAverageResolutionTime.toArray(),Integer.class);
+
+		Map<String, Integer> dynamicData = new HashMap<String,Integer>();
+		dynamicData.put(PGRConstants.COMPLAINTS_RESOLVED, complaintsResolved);
+		dynamicData.put(PGRConstants.AVERAGE_RESOLUTION_TIME, averageResolutionTime);
+
+		return dynamicData;
+	}
 
 
 

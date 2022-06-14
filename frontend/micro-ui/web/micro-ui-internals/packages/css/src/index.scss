@@ -76,6 +76,10 @@
 @import "./components/PopupHeadingLabel.scss";
 @import "./components/staticSideBar.scss";
 @import "./components/hoc/index.scss";
+@import "./components/FAQ.scss";
+@import "./components//howItWorks.scss";
+@import "./components/staticDynamicMessages.scss";
+@import "./components/toggleSwitch.scss";
 
 @import "./pages/employee/index.scss";
 @import "./pages/employee/cardfix.scss";
@@ -431,6 +435,14 @@ input[type="number"] {
   }
 }
 
+.text-input-width{
+  max-width: 540px;
+}
+
+.text-mobile-input-width{
+  max-width: 500px;
+}
+
 .custom-time-picker {
   @apply w-full;
   max-width: 200px;
@@ -503,26 +515,26 @@ input[type="number"] {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  .error-container{
-  display: flex;
-  width: 400px;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  h1{
-    font-size: 32px;
-    font-weight: bold;
+  .error-container {
+    display: flex;
+    width: 400px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    h1 {
+      font-size: 32px;
+      font-weight: bold;
+    }
+    button {
+      height: 40px;
+      width: 153px;
+      border-radius: 0px;
+      padding: 8px 24px;
+      color: white;
+      cursor: pointer;
+      background-color: #f47738;
+    }
   }
-  button{
-    height: 40px;
-width: 153px;
-border-radius: 0px;
-padding: 8px 24px;
-color: white;
-cursor: pointer;
-background-color:  #F47738;
-  }
-}
 }
 
 .error-boundary summary,
@@ -576,8 +588,6 @@ background-color:  #F47738;
     padding-left: 16px;
     padding-right: 16px;
   }
-  
-
 }
 @media (min-width: 780px) {
   .citizen-card-container {
@@ -599,17 +609,17 @@ background-color:  #F47738;
   .engagement-citizen-wrapper,
   .citizen-all-services-wrapper,
   .mcollect-citizen,
-  .ws-citizen-wrapper {
+  .ws-citizen-wrapper,
+  .tl-citizen {
     width: calc(100% - 219px);
     padding-left: 16px;
     padding-right: 16px;
     margin-top: 1rem;
   }
-
 }
 @media only screen and (max-width: 768px) {
   /* For mobile phones: */
-  .error-boundary{
+  .error-boundary {
     height: 75vh;
   }
 }
@@ -678,4 +688,16 @@ background-color:  #F47738;
     font-weight: 700;
     font-size: 16px;
   }
+}
+
+.modal-header-ws {
+  padding: 1rem;
+  font-weight: 400;
+}
+.modal-body-ws {
+  padding: 1rem;
+  font-weight: 700;
+  color: #0b0c0c;
+  font-size: 24px;
+  margin-bottom: 1rem;
 }

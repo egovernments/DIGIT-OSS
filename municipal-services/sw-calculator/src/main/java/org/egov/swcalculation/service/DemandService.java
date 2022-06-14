@@ -84,6 +84,11 @@ public class DemandService {
 
 	@Autowired
 	private PaymentNotificationService paymentNotificationService;
+	
+	@Autowired
+	private EnrichmentService enrichmentService;
+
+
 
 	/**
 	 * Creates or updates Demand
@@ -118,7 +123,7 @@ public class DemandService {
 						.collect(Collectors.toSet());
 			}
 			
-			List<Demand> demands = searchDemand(tenantId, consumerCodes, fromDateSearch, toDateSearch, requestInfo);
+			List<Demand> demands = searchDemand(tenantId, consumerCodes, fromDateSearch, toDateSearch, requestInfo, null);
 			Set<String> connectionNumbersFromDemands = new HashSet<>();
 			if (!CollectionUtils.isEmpty(demands))
 				connectionNumbersFromDemands = demands.stream().map(Demand::getConsumerCode)
@@ -163,7 +168,7 @@ public class DemandService {
 				throw new CustomException("EG_SW_INVALID_SEWERAGE_CONNECTION",
 						"Demand cannot be generated for "
 								+ (isForConnectionNO ? calculation.getConnectionNo() : calculation.getApplicationNO())
-								+ " Water Connection with this number does not exist ");
+								+ " Sewerage Connection with this number does not exist ");
 			
 			SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
 					.sewerageConnection(connection).requestInfo(requestInfo).build();
@@ -259,7 +264,7 @@ public class DemandService {
 	 * @param demandDetails
 	 *            The list of demandDetail
 	 */
-	private void addRoundOffTaxHead(String tenantId, List<DemandDetail> demandDetails) {
+	public void addRoundOffTaxHead(String tenantId, List<DemandDetail> demandDetails) {
 		BigDecimal totalTax = BigDecimal.ZERO;
 		
 		BigDecimal previousRoundOff = BigDecimal.ZERO;
@@ -325,9 +330,9 @@ public class DemandService {
 	 *            The RequestInfo of the incoming request
 	 * @return List of demands for the given consumerCode
 	 */
-	private List<Demand> searchDemand(String tenantId, Set<String> consumerCodes, Long taxPeriodFrom, Long taxPeriodTo,
-			RequestInfo requestInfo) {
-		Object result = serviceRequestRepository.fetchResult(getDemandSearchURL(tenantId, consumerCodes, taxPeriodFrom, taxPeriodTo),
+	public List<Demand> searchDemand(String tenantId, Set<String> consumerCodes, Long taxPeriodFrom, Long taxPeriodTo,
+			RequestInfo requestInfo, Boolean isDemandPaid) {
+		Object result = serviceRequestRepository.fetchResult(getDemandSearchURL(tenantId, consumerCodes, taxPeriodFrom, taxPeriodTo, isDemandPaid),
 				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
 		DemandResponse response;
 		try {
@@ -347,7 +352,7 @@ public class DemandService {
 	 * 
 	 * @return demand search url
 	 */
-	public StringBuilder getDemandSearchURL(String tenantId, Set<String> consumerCodes, Long taxPeriodFrom, Long taxPeriodTo) {
+	public StringBuilder getDemandSearchURL(String tenantId, Set<String> consumerCodes, Long taxPeriodFrom, Long taxPeriodTo, Boolean isDemandPaid) {
 		StringBuilder url = new StringBuilder(configs.getBillingServiceHost());
 		url.append(configs.getDemandSearchEndPoint());
 		url.append("?");
@@ -368,6 +373,11 @@ public class DemandService {
 			url.append("&");
 			url.append("periodTo=");
 			url.append(taxPeriodTo.toString());
+		}
+		if (isDemandPaid != null) {
+			url.append("&");
+			url.append("isPaymentCompleted=");
+			url.append(isDemandPaid);
 		}
 		return url;
 	}
@@ -394,7 +404,7 @@ public class DemandService {
 					? Collections.singleton(calculation.getSewerageConnection().getConnectionNo())
 					: Collections.singleton(calculation.getSewerageConnection().getApplicationNo());
 			List<Demand> searchResult = searchDemand(calculation.getTenantId(), consumerCodes, fromDateSearch,
-					toDateSearch, requestInfo);
+					toDateSearch, requestInfo, null);
 			if (CollectionUtils.isEmpty(searchResult))
 				throw new CustomException("EG_SW_INVALID_DEMAND_UPDATE", "No demand exists for Number: "
 						+ consumerCodes.toString());
@@ -488,7 +498,7 @@ public class DemandService {
 	 * @param requestInfoWrapper contains request info wrapper
 	 * @return updated demand response
 	 */
-	public DemandResponse updateDemands(GetBillCriteria getBillCriteria, RequestInfoWrapper requestInfoWrapper) {
+	public List<Demand> updateDemands(GetBillCriteria getBillCriteria, RequestInfoWrapper requestInfoWrapper, Boolean isCallFromBulkGen) {
 
 		if (getBillCriteria.getAmountExpected() == null)
 			getBillCriteria.setAmountExpected(BigDecimal.ZERO);
@@ -505,9 +515,7 @@ public class DemandService {
 				repository.fetchResult(utils.getDemandSearchUrl(getBillCriteria), requestInfoWrapper),
 				DemandResponse.class);
 		if (CollectionUtils.isEmpty(res.getDemands())) {
-			Map<String, String> map = new HashMap<>();
-			map.put(SWCalculationConstant.EMPTY_DEMAND_ERROR_CODE, SWCalculationConstant.EMPTY_DEMAND_ERROR_MESSAGE);
-			throw new CustomException(map);
+			return Collections.emptyList();
 		}
 
 
@@ -526,9 +534,11 @@ public class DemandService {
 			demandsToBeUpdated.add(demand);
 		});
 		// Call demand update in bulk to update the interest or penalty
-		repository.fetchResult(utils.getUpdateDemandUrl(), 
-				DemandRequest.builder().demands(demandsToBeUpdated).requestInfo(requestInfoWrapper.getRequestInfo()).build());
-		return res;
+		if(!isCallFromBulkGen)
+			repository.fetchResult(utils.getUpdateDemandUrl(),
+					DemandRequest.builder().demands(demandsToBeUpdated).requestInfo(requestInfoWrapper.getRequestInfo()).build());
+
+		return demandsToBeUpdated;
 	}
 
 	
@@ -646,11 +656,10 @@ public class DemandService {
 	 * 
 	 * @param tenantId TenantId for getting master data.
 	 */
-	public void generateDemandForTenantId(String tenantId, RequestInfo requestInfo) {
+	public void generateDemandForTenantId(String tenantId, RequestInfo requestInfo, BulkBillCriteria bulkBillCriteria) {
 		requestInfo.getUserInfo().setTenantId(tenantId);
 		Map<String, Object> billingMasterData = calculatorUtils.loadBillingFrequencyMasterData(requestInfo, tenantId);
-		generateDemandForULB(billingMasterData, requestInfo,
-				tenantId);
+		generateDemandForULB(requestInfo, tenantId, bulkBillCriteria);
 	}
 	
 	/**
@@ -658,24 +667,83 @@ public class DemandService {
 	 * @param master - List of MDMS master data
 	 * @param requestInfo - Request Info Object
 	 * @param tenantId - Tenant Id
+	 * @param bulkBillCriteria - Critera for bulk bill generation
 	 */
 	@SuppressWarnings("unchecked")
-	public void generateDemandForULB(Map<String, Object> master, RequestInfo requestInfo, String tenantId) {
-		log.info("Billing master data values for non metered connection:: {}", master);
-		long startDay = (((int) master.get(SWCalculationConstant.Demand_Generate_Date_String)) / 86400000);
-		if (isCurrentDateIsMatching((String) master.get(SWCalculationConstant.BILLING_CYCLE_CONST), startDay)) {
-			List<String> connectionNos = sewerageCalculatorDao.getConnectionsNoList(tenantId,
-					SWCalculationConstant.nonMeterdConnection);
-			Set<String> sewerageConnetionIds = new HashSet<String>();
-			for (String connectionNo : connectionNos) {
-				CalculationCriteria calculationCriteria = CalculationCriteria.builder().tenantId(tenantId)
-						.assessmentYear(estimationService.getAssessmentYear()).connectionNo(connectionNo).build();
-				List<CalculationCriteria> calculationCriteriaList = new ArrayList<>();
-				calculationCriteriaList.add(calculationCriteria);
-				CalculationReq calculationReq = CalculationReq.builder().calculationCriteria(calculationCriteriaList)
-						.requestInfo(requestInfo).isconnectionCalculation(true).build();
-				kafkaTemplate.send(configs.getCreateDemand(), calculationReq);
-				sewerageConnetionIds.add(connectionNo);
+	public void generateDemandForULB(RequestInfo requestInfo, String tenantId, BulkBillCriteria bulkBillCriteria) {
+
+		Map<String, Object> billingMasterData = calculatorUtils.loadBillingFrequencyMasterData(requestInfo, tenantId);
+
+		long startDay = (((int) billingMasterData.get(SWCalculationConstant.Demand_Generate_Date_String)) / 86400000);
+		if(isCurrentDateIsMatching((String) billingMasterData.get(SWCalculationConstant.Billing_Cycle_String), startDay)) {
+
+			Integer batchsize = configs.getBulkbatchSize();
+			Integer batchOffset = configs.getBatchOffset();
+
+			if(bulkBillCriteria.getLimit() != null)
+				batchsize = Math.toIntExact(bulkBillCriteria.getLimit());
+
+			if(bulkBillCriteria.getOffset() != null)
+				batchOffset = Math.toIntExact(bulkBillCriteria.getOffset());
+
+			Map<String, Object> masterMap = masterDataService.loadMasterData(requestInfo, tenantId);
+
+			ArrayList<?> billingFrequencyMap = (ArrayList<?>) masterMap
+					.get(SWCalculationConstant.Billing_Period_Master);
+			masterDataService.enrichBillingPeriod(null, billingFrequencyMap, masterMap, SWCalculationConstant.nonMeterdConnection);
+
+			Map<String, Object> financialYearMaster =  (Map<String, Object>) masterMap
+					.get(SWCalculationConstant.BILLING_PERIOD);
+
+			Long fromDate = (Long) financialYearMaster.get(SWCalculationConstant.STARTING_DATE_APPLICABLES);
+			Long toDate = (Long) financialYearMaster.get(SWCalculationConstant.ENDING_DATE_APPLICABLES);
+
+			long count = sewerageCalculatorDao.getConnectionCount(tenantId, fromDate, toDate);
+			
+			log.info("Count: "+count);
+
+			if(count > 0) {
+				while (batchOffset < count) {
+					List<SewerageConnection> connections = sewerageCalculatorDao.getConnectionsNoList(tenantId,
+							SWCalculationConstant.nonMeterdConnection, batchOffset, batchsize, fromDate, toDate);
+					log.info("Size of the connection list for batch : "+ batchOffset + " is " + connections.size());
+					connections = enrichmentService.filterConnections(connections);
+					
+					if(connections.size()>0){
+						List<CalculationCriteria> calculationCriteriaList = new ArrayList<>();
+
+						for (SewerageConnection connection : connections) {
+							CalculationCriteria calculationCriteria = CalculationCriteria.builder().tenantId(tenantId)
+									.assessmentYear(estimationService.getAssessmentYear()).connectionNo(connection.getConnectionNo())
+									.sewerageConnection(connection).build();
+							calculationCriteriaList.add(calculationCriteria);
+						}
+
+						/*MigrationCount migrationCount = MigrationCount.builder().id(UUID.randomUUID().toString()).offset(Long.valueOf(batchOffset)).limit(Long.valueOf(batchsize)).recordCount(Long.valueOf(connectionNos.size()))
+								.tenantid(tenantId).createdTime(System.currentTimeMillis()).businessService("SW").build();*/
+
+						MigrationCount migrationCount = MigrationCount.builder()
+								.tenantid(tenantId)
+								.businessService("SW")
+								.limit(Long.valueOf(batchsize))
+								.id(UUID.randomUUID().toString())
+								.offset(Long.valueOf(batchOffset))
+								.createdTime(System.currentTimeMillis())
+								.recordCount(Long.valueOf(connections.size()))
+								.build();
+
+						CalculationReq calculationReq = CalculationReq.builder()
+								.calculationCriteria(calculationCriteriaList)
+								.requestInfo(requestInfo)
+								.isconnectionCalculation(true)
+								.migrationCount(migrationCount).build();
+						
+						kafkaTemplate.send(configs.getCreateDemand(), calculationReq);
+						log.info("Bulk bill Gen batch info : " + migrationCount);
+						calculationCriteriaList.clear();
+					}
+					batchOffset = batchOffset + batchsize;
+				}
 			}
 		}
 	}

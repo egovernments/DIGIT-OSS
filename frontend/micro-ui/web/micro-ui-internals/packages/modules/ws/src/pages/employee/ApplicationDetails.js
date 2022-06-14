@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect, useRef } from "react";
 import {
   FormComposer,
   Header,
@@ -20,8 +20,10 @@ import orderBy from "lodash/orderBy";
 import cloneDeep from "lodash/cloneDeep";
 import * as func from "../../utils";
 import getPDFData from "../../utils/getWSAcknowledgementData";
+import getModifyPDFData from "../../utils/getWsAckDataForModifyPdfs"
 import { getFiles, getBusinessService } from "../../utils";
 import _ from "lodash";
+import { ifUserRoleExists } from "../../utils";
 
 const ApplicationDetails = () => {
   const { id } = useParams();
@@ -39,6 +41,7 @@ const ApplicationDetails = () => {
   let filters = func.getQueryStringParams(location.search);
   const applicationNumber = filters?.applicationNumber;
   const serviceType = filters?.service;
+  const menuRef = useRef();
 
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
   sessionStorage.removeItem("IsDetailsExists");
@@ -46,6 +49,7 @@ const ApplicationDetails = () => {
   //for common receipt key.
   const { isBillingServiceLoading, data: mdmsBillingServiceData } = Digit.Hooks.obps.useMDMS(stateCode, "BillingService", ["BusinessService"]);
   const { isCommonmastersLoading, data: mdmsCommonmastersData } = Digit.Hooks.obps.useMDMS(stateCode, "common-masters", ["uiCommonPay"]);
+  const { isServicesMasterLoading, data: servicesMasterData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["WSEditApplicationByConfigUser"]);
   const commonPayDetails = mdmsCommonmastersData?.["common-masters"]?.uiCommonPay || [];
   const index = commonPayDetails && commonPayDetails.findIndex((item) => { return item.code == "WS.ONE_TIME_FEE"; });
   let commonPayInfo = "";
@@ -79,7 +83,9 @@ const ApplicationDetails = () => {
   const { data: oldData } = Digit.Hooks.ws.useOldValue({
     tenantId,
     filters: { connectionNumber: applicationDetails?.applicationData?.connectionNo, isConnectionSearch: true },
-    businessService: serviceType,
+    businessService: serviceType
+  },{
+    enabled: applicationDetails?.applicationData?.applicationType?.includes("MODIFY_") ? true : false
   });
 
   const oldValueWC = oldData?.WaterConnection;
@@ -94,7 +100,7 @@ const ApplicationDetails = () => {
     const pairs = Object.entries(o).filter(([k, v]) => currentValue?.[k] !== v);
     return pairs?.length ? Object.fromEntries(pairs) : [];
   });
-
+  
   const {
     isLoading: updatingApplication,
     isError: updateApplicationError,
@@ -108,6 +114,9 @@ const ApplicationDetails = () => {
     // setError(null);
   };
 
+  let dowloadOptions = [],
+  appStatus = applicationDetails?.applicationData?.applicationStatus || "";
+
   workflowDetails?.data?.actionState?.nextActions?.forEach((action) => {
     if (action?.action === "ACTIVATE_CONNECTION") {
       action.redirectionUrll = {
@@ -117,10 +126,30 @@ const ApplicationDetails = () => {
       };
     }
     if (action?.action === "RESUBMIT_APPLICATION") {
+      let pathName = `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+
+      const userConfig = servicesMasterData?.["ws-services-masters"]?.WSEditApplicationByConfigUser || [];
+      const editApplicationUserRole = userConfig?.[0]?.roles || [];
+      const mdmsApplicationStatus = userConfig?.[0]?.status;
+
+      let isFieldInspector = false;
+      editApplicationUserRole.every((role, index) => {
+        isFieldInspector = ifUserRoleExists(role);
+        if(isFieldInspector) return false;
+        else return true;
+      })
+
+      if(isFieldInspector && appStatus === mdmsApplicationStatus) {
+        pathName = `/digit-ui/employee/ws/edit-application-by-config?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+      }
+
       action.redirectionUrll = {
         action: "ACTIVATE_CONNECTION",
-        pathname: `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`,
-        state: applicationDetails,
+        pathname: pathName,
+        state: {
+          applicationDetails: applicationDetails,
+          action: "RESUBMIT_APPLICATION"
+        },
       };
     }
     if (action?.action === "SUBMIT_APPLICATION") {
@@ -145,6 +174,36 @@ const ApplicationDetails = () => {
     });
   }
 
+  workflowDetails?.data?.actionState?.nextActions?.forEach((action) => {
+    if (action?.action === "EDIT") {
+      let pathName = `/digit-ui/employee/ws/edit-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+
+      const userConfig = servicesMasterData?.["ws-services-masters"]?.WSEditApplicationByConfigUser || [];
+      const editApplicationUserRole = userConfig?.[0]?.roles || [];
+      const mdmsApplicationStatus = userConfig?.[0]?.status;
+
+      let isFieldInspector = false;
+      editApplicationUserRole.every((role, index) => {
+        isFieldInspector = ifUserRoleExists(role);
+        if(isFieldInspector) return false;
+        else return true;
+      })
+
+      if(isFieldInspector && appStatus === mdmsApplicationStatus) {
+        pathName = `/digit-ui/employee/ws/edit-application-by-config?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+      }
+
+      action.redirectionUrll = {
+        action: "ACTIVATE_CONNECTION",
+        pathname: pathName,
+        state: {
+          applicationDetails: applicationDetails,
+          action: "VERIFY_AND_FORWARD"
+        },
+      };
+    }
+  });
+
   workflowDetails?.data?.nextActions?.forEach((action) => {
     if (action?.action === "PAY") {
       action.redirectionUrll = {
@@ -167,11 +226,19 @@ const ApplicationDetails = () => {
     }
   });
 
+  const oldApplication = serviceType === "WATER" ? oldData?.WaterConnection?.[oldData?.WaterConnection?.length - 1] : oldData?.SewerageConnections?.[oldData?.SewerageConnections?.length - 1]
+
   const handleDownloadPdf = async () => {
     const tenantInfo = applicationDetails?.applicationData?.tenantId;
-    let res = applicationDetails?.applicationData;
-    const PDFdata = getPDFData({ ...res }, { ...applicationDetails?.propertyDetails }, tenantInfo, t);
-    PDFdata.then((ress) => Digit.Utils.pdf.generate(ress));
+    let result = applicationDetails?.applicationData;
+  
+    if (applicationDetails?.applicationData?.applicationType?.includes("MODIFY_")){
+      const PDFdata = getModifyPDFData({ ...result }, { ...applicationDetails?.propertyDetails }, tenantInfo, t, oldApplication)
+      PDFdata.then((ress) => Digit.Utils.pdf.generateModifyPdf(ress))
+      return
+    }
+    const PDFdata = getPDFData({ ...result }, { ...applicationDetails?.propertyDetails }, tenantInfo, t);
+    PDFdata.then((ress) => Digit.Utils.pdf.generatev1(ress));
   };
 
   async function getRecieptSearch(tenantId, payments, consumerCodes, receiptKey) {
@@ -179,10 +246,6 @@ const ApplicationDetails = () => {
     const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
-
-
-  let dowloadOptions = [],
-    appStatus = applicationDetails?.applicationData?.applicationStatus || "";
 
   const wsEstimateDownloadObject = {
     order: 1,
@@ -242,6 +305,11 @@ const ApplicationDetails = () => {
       break;
   }
 
+  const closeMenu = () => {
+    setShowOptions(false);
+  }
+  Digit.Hooks.useClickOutside(menuRef, closeMenu, showOptions );
+
   dowloadOptions.sort(function (a, b) {
     return a.order - b.order;
   });
@@ -260,17 +328,18 @@ const ApplicationDetails = () => {
               options={dowloadOptions}
               downloadBtnClassName={"employee-download-btn-className"}
               optionsClassName={"employee-options-btn-className"}
+              ref={menuRef}
             />
           )}
         </div>
         <ApplicationDetailsTemplate
           applicationDetails={applicationDetails}
-          isLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading}
-          isDataLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading}
+          isLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading || isServicesMasterLoading }
+          isDataLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading || isServicesMasterLoading }
           applicationData={applicationDetails?.applicationData}
           mutate={mutate}
           workflowDetails={workflowDetails}
-          businessService={applicationDetails?.processInstancesDetails?.[0]?.businessService}
+          businessService={applicationDetails?.processInstancesDetails?.[0]?.businessService?.toUpperCase()}
           moduleCode="WS"
           showToast={showToast}
           setShowToast={setShowToast}

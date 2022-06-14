@@ -26,6 +26,7 @@ import EditApplication from "./pages/citizen/EditApplication";
 import SearchApplication from "./components/SearchApplication";
 import SearchWaterConnection from "./components/SearchWaterConnection";
 import WSCard from "./components/WSCard";
+import SWCard from "./components/SWCard";
 import MyConnections from "./pages/citizen/MyConnection";
 import ConnectionDetails from "./pages/citizen/MyConnection/ConnectionDetails";
 
@@ -38,9 +39,19 @@ import WSDocumentsEmployee from "./pageComponents/WSDocumentsEmployee";
 import WSAcknowledgement from "./pages/citizen/WSCreate/WSAcknowledgement";
 import WSPayments from "./pages/citizen/MyPayment/WSPayments";
 import WSEditConnectionDetails from"./pageComponents/WSEditConnectionDetails";
-import ConsumptionDetails from "./pages/employee/connectionDetails/ConsumptionDetails"
+import ConsumptionDetails from "./pages/employee/connectionDetails/ConsumptionDetails";
+import WSDisconnectionDocsRequired from "./pageComponents/WSDisconnectionDocsRequired";
+import WSDisconnectionForm from "./pageComponents/WSDisconnectionForm";
+import WSDisconnectionDocumentsForm from "./pageComponents/WSDisconnectionDocumentsForm";
+import WSDisconnectionCheckPage from "./pages/citizen/WSDisconnection/CheckPage";
+import WSDisconnectAcknowledgement from "./pageComponents/WSDisconnectAcknowledgement";
+
+import WSInbox from "./components/WSInbox";
+import WSEditApplicationByConfig from './pages/employee/EditApplication/WSEditApplicationByConfig';
+
 const WSModule = ({ stateCode, userType, tenants }) => {
-  const moduleCode = "ws";
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || Digit.ULBService.getCurrentTenantId();
+  const moduleCode = ["ws", "pt", "common", tenantId];
   const { path, url } = useRouteMatch();
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({
@@ -131,7 +142,15 @@ const componentsToRegister = {
   WSPayments,
   WSEditConnectionDetails,
   ConsumptionDetails,
-  EditApplication
+  EditApplication,
+  WSDisconnectionDocsRequired,
+  WSInbox,
+  WSEditApplicationByConfig,
+  SWCard,
+  WSDisconnectionForm,
+  WSDisconnectionDocumentsForm,
+  WSDisconnectionCheckPage,
+  WSDisconnectAcknowledgement
 };
 
 export const initWSComponents = () => {

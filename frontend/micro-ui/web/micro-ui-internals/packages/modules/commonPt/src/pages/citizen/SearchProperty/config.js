@@ -3,7 +3,7 @@ export const config = [
     texts: {
       header: "SEARCH_PROPERTY",
       submitButtonLabel: "PT_HOME_SEARCH_RESULTS_BUTTON_SEARCH",
-      text: "Provide atleast one search parameter",
+      text: "",
     },
     inputs: [
       {
@@ -22,7 +22,7 @@ export const config = [
         error: "ERR_INVALID_PROPERTY_ID",
         validation: {
           pattern: {
-            value: /^[a-zA-Z0-9-]*$/i,
+            value: "[A-Za-z]{2}\-[A-Za-z]{2}\-[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-[0-9]{6}",
             message: "ERR_INVALID_PROPERTY_ID",
           },
         },
@@ -34,7 +34,7 @@ export const config = [
         error: "ERR_INVALID_PROPERTY_ID",
         validation: {
           pattern: {
-            value: /^[a-zA-Z0-9-]*$/i,
+            value: "[A-Za-z]{2}\-[A-Za-z]{2}\-[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-[0-9]{6}",
             message: "ERR_INVALID_PROPERTY_ID",
           },
         },

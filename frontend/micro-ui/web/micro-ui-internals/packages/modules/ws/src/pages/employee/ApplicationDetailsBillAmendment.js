@@ -2,12 +2,15 @@ import { Header, MultiLink, Toast } from "@egovernments/digit-ui-react-component
 import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
+import  getPDFData  from "../../utils/getWsAckDataForBillAmendPdf";
 
 const ApplicationDetailsBillAmendment = () => {
   const { applicationNumber } = Digit.Hooks.useQueryParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
-  const serviceType = "WATER";
+  let serviceType = "WATER";
+  if(applicationNumber.includes("SW"))
+  serviceType = "SEWERAGE"
   const [showToast, setShowToast] = useState(false);
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSApplicationDetailsBillAmendment(
     t,
@@ -27,7 +30,7 @@ const ApplicationDetailsBillAmendment = () => {
     error: updateError,
     isSuccess,
     mutate,
-  } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
+  } = Digit.Hooks.ws.useApplicationActionsBillAmendUpdate();
 
   useEffect(() => {
     isSuccess && !updateApplicationError ? setShowToast(isSuccess) : null;
@@ -43,21 +46,37 @@ const ApplicationDetailsBillAmendment = () => {
   const [showOptions, setShowOptions] = useState(false);
 
   async function getCouponPDF({ tenantId, Amendments }) {
-    const response = await Digit.PaymentService.generatePdf(tenantId, { Amendments: { ...Amendments.Amendments } }, "bill-amendment-credit-note");
-    const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
+    const stateId = Digit.ULBService.getStateId();
+    const response = await Digit.PaymentService.generatePdf(stateId, { Amendments:[Amendments] }, "bill-amendment-credit-note");
+    const fileStore = await Digit.PaymentService.printReciept(stateId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
+  const getAckPdf = async (amendment,tenantId,t,tableData,app) => {
+    const PDFdata = getPDFData(amendment,tenantId,t,tableData,app);
+    PDFdata.then((ress) => Digit.Utils.pdf.generateBillAmendPDF(ress));
+  };
   const dowloadOptions =
-    applicationDetails?.applicationData?.applicationStatus === "APPROVED"
+    applicationDetails?.amendment?.status === "CONSUMED"
       ? [
           {
-            order: 1,
+            order: 2,
             label: t("WS_DOWNLOAD_COUPON_PDF"),
-            onClick: () => getCouponPDF({ tenantId, Amendments: applicationDetails?.billAmendmentSearch }),
+            onClick: () => getCouponPDF({ tenantId, Amendments: applicationDetails?.amendment }),
+          },
+          {
+          order: 1,
+          label: t("WS_ACK_PDF"),
+            onClick: () => getAckPdf(applicationDetails?.amendment, tenantId, t, applicationDetails?.applicationDetails,applicationDetails),
           },
         ]
-      : [];
+      : [
+        {
+          order: 1,
+          label: t("WS_ACK_PDF"),
+          onClick: () => getAckPdf(applicationDetails?.amendment, tenantId, t, applicationDetails?.applicationDetails,applicationDetails ),
+        },
+      ];
 
   return (
     <Fragment>

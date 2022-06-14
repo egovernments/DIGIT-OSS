@@ -290,6 +290,15 @@ public class TradeLicenseService {
     	
     	return licenseCount;
     }
+
+	public Map<String,Integer> countApplications(TradeLicenseSearchCriteria criteria, RequestInfo requestInfo, String serviceFromPath, HttpHeaders headers){
+	
+		criteria.setBusinessService(serviceFromPath);
+		
+		Map<String,Integer> licenseCount = repository.getApplicationsCount(criteria);
+	
+		return licenseCount;
+	}
     
 
     public void checkEndStateAndAddBPARoles(TradeLicenseRequest tradeLicenseRequest) {
@@ -542,5 +551,13 @@ public class TradeLicenseService {
         
         return false;
     }
+
+
+
+
+
+	public int getApplicationValidity() {
+		return Integer.valueOf(config.getApplicationValidity());
+	}
 
 }

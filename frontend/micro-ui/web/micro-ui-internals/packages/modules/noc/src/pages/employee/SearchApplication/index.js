@@ -24,16 +24,22 @@ const Search = ({ path }) => {
     nocType: availableNocTypes[0]
   })
 
+  const defaultFilters = {
+    offset: 0,
+    limit: 10,
+    tenantId,
+    nocType: availableNocTypes[0]
+  }
+
   function onSubmit(__data, isFromClear = false) {
     let details = cloneDeep(__data);
-    let __filters = filters
+    let __filters = defaultFilters;
     for (const [key, value] of Object.entries(__data)) {
       if(value != undefined && value != null && value != ""){
         __filters = {...__filters, [key]:value}        
       }
     }
     setfilters(isFromClear == true ? details : __filters)
-    // debugger
     // setSearchData(_data);
     // var fromDate = new Date(_data?.fromDate);
     // fromDate?.setSeconds(fromDate?.getSeconds() - 19800);

@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
@@ -98,7 +99,7 @@ public class PaymentUpdateService {
 				if (paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptBusinessservice())) {
 					SearchCriteria criteria = SearchCriteria.builder()
 							.tenantId(paymentRequest.getPayment().getTenantId())
-							.applicationNumber(paymentDetail.getBill().getConsumerCode()).build();
+							.applicationNumber(Stream.of(paymentDetail.getBill().getConsumerCode().toString()).collect(Collectors.toSet())).build();
 					List<SewerageConnection> sewerageConnections = sewerageService.search(criteria,
 							paymentRequest.getRequestInfo());
 					if (CollectionUtils.isEmpty(sewerageConnections)) {
@@ -183,11 +184,11 @@ public class PaymentUpdateService {
 					if (SEWERAGE_SERVICE_BUSINESS_ID.equals(paymentDetail.getBusinessService())) {
 						criteria = SearchCriteria.builder()
 								.tenantId(paymentRequest.getPayment().getTenantId())
-								.connectionNumber(paymentDetail.getBill().getConsumerCode()).build();
+								.connectionNumber(Stream.of(paymentDetail.getBill().getConsumerCode().toString()).collect(Collectors.toSet())).build();
 					} else {
 						criteria = SearchCriteria.builder()
 								.tenantId(paymentRequest.getPayment().getTenantId())
-								.applicationNumber(paymentDetail.getBill().getConsumerCode()).build();
+								.applicationNumber(Stream.of(paymentDetail.getBill().getConsumerCode().toString()).collect(Collectors.toSet())).build();
 					}
 					List<SewerageConnection> sewerageConnections = sewerageService.search(criteria,
 							paymentRequest.getRequestInfo());

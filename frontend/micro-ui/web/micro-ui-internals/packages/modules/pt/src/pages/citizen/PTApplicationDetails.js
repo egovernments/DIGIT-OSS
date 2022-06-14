@@ -446,9 +446,8 @@ const PTApplicationDetails = () => {
                               label={t("PT_ASSESSMENT_UNIT_USAGE_TYPE")}
                               text={
                                 `${t(
-                                  (property?.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                                    (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property?.usageCategory) +
-                                    (property?.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
+                                  (property?.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPUSGTYPE_") +
+                                    (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property?.usageCategory)
                                 )}` || t("CS_NA")
                               }
                             />

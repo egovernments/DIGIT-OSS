@@ -24,9 +24,11 @@ const EditApplication = () => {
   tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
 
   const applicationNumber = filters?.applicationNumber;
-  const serviceType = filters?.service;
+  const editApplicationDetails = JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS"));
+  const serviceType = filters?.service || editApplicationDetails?.applicationData?.serviceType;
 
-  const details = cloneDeep(state?.data);
+  const details = cloneDeep(state?.data?.applicationDetails);
+  const actionData = cloneDeep(state?.data?.action);
 
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
 
@@ -34,8 +36,7 @@ const EditApplication = () => {
 
   const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { enabled: propertyId ? true : false }
+    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId && propertyId != "" ? true : false }
   );
 
   useEffect(() => {
@@ -48,13 +49,13 @@ const EditApplication = () => {
   });
 
   useEffect(() => {
-    !propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
+    !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
   }, [sessionFormData?.cpt]);
 
   useEffect(async () => {
     const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
     if (details?.applicationData?.id && !IsDetailsExists) {
-      const convertAppData = await convertApplicationData(details, serviceType);
+      const convertAppData = await convertApplicationData(details, serviceType, false, false, t);
       setSessionFormData({ ...sessionFormData, ...convertAppData });
       setAppData({ ...convertAppData })
       sessionStorage.setItem("IsDetailsExists", JSON.stringify(true));
@@ -66,7 +67,7 @@ const EditApplication = () => {
   }, [propertyDetails]);
 
   useEffect(() => {
-    if (sessionFormData?.DocumentsRequired?.documents?.length > 0) {
+    if (sessionFormData?.DocumentsRequired?.documents?.length > 0 || sessionFormData?.ConnectionDetails?.[0]?.water || sessionFormData?.ConnectionDetails?.[0]?.sewerage) {
       setEnabledLoader(false);
     }
   }, [propertyDetails, sessionFormData, sessionFormData?.cpt]);
@@ -74,7 +75,7 @@ const EditApplication = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details?applicationNumber=${sessionFormData?.ConnectionDetails?.[0]?.applicationNo}&service=${sessionFormData?.ConnectionDetails?.[0]?.serviceName?.toUpperCase()}`
-    }, 3000);
+    }, 5000);
     return () => clearTimeout(timer);
   }, [isAppDetailsPage]);
 
@@ -84,7 +85,7 @@ const EditApplication = () => {
     data: updateResponse,
     error: updateError,
     mutate,
-  } = Digit.Hooks.ws.useWSApplicationActions(filters?.service);
+  } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
 
   const onFormValueChange = (setValue, formData, formState) => {
     if (!_.isEqual(sessionFormData, formData)) {
@@ -96,17 +97,18 @@ const EditApplication = () => {
 
   const onSubmit = async (data) => {
     const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
-    let convertAppData = await convertEditApplicationDetails(data, details);
+    let convertAppData = await convertEditApplicationDetails(data, details, actionData);
     const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
-
+    setSubmitValve(false);
     if (mutate) {
       mutate(reqDetails, {
         onError: (error, variables) => {
           setShowToast({ key: "error", message: error?.message ? error.message : error });
           setTimeout(closeToastOfError, 5000);
+          setSubmitValve(true);
         },
         onSuccess: (data, variables) => {
-          setShowToast({ key: false, message: "CS_PROPERTY_APPLICATION_SUCCESS" });
+          setShowToast({ key: false, message: "WS_APPLICATION_SUBMITTED_SUCCESSFULLY_LABEL" });
           setIsAppDetailsPage(true);
           // setTimeout(closeToast(), 5000);
         },

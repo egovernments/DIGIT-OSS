@@ -1,9 +1,9 @@
-import { BackButton } from "@egovernments/digit-ui-react-components";
+import { BackButton, WhatsappIcon, Card, CitizenHomeCard, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { Route, Switch, useRouteMatch, useHistory } from "react-router-dom";
+import { Route, Switch, useRouteMatch, useHistory, Link } from "react-router-dom";
 import ErrorBoundary from "../../components/ErrorBoundaries";
-import { AppHome } from "../../components/Home";
+import { AppHome, processLinkData } from "../../components/Home";
 import TopBarSideBar from "../../components/TopBarSideBar";
 import StaticCitizenSideBar from "../../components/TopBarSideBar/SideBar/StaticCitizenSideBar";
 import CitizenHome from "./Home";
@@ -12,6 +12,17 @@ import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
 import UserProfile from "./Home/UserProfile";
 import ErrorComponent from "../../components/ErrorComponent";
+import FAQsSection from "./FAQs/FAQs";
+import HowItWorks from "./HowItWorks/howItWorks";
+import StaticDynamicCard from "./StaticDynamicComponent/StaticDynamicCard";
+
+const sidebarHiddenFor = [
+  "digit-ui/citizen/register/name",
+  "/digit-ui/citizen/select-language",
+  "/digit-ui/citizen/select-location",
+  "/digit-ui/citizen/login",
+  "/digit-ui/citizen/register/otp",
+];
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -31,7 +42,7 @@ const Home = ({
   appTenants,
   sourceUrl,
   pathname,
-  initData
+  initData,
 }) => {
   const { isLoading: islinkDataLoading, data: linkData, isFetched: isLinkDataFetched } = Digit.Hooks.useCustomMDMS(
     Digit.ULBService.getStateId(),
@@ -59,29 +70,68 @@ const Home = ({
   const { t } = useTranslation();
   const { path } = useRouteMatch();
   const history = useHistory();
+  const handleClickOnWhatsApp = (obj) => {
+    window.open(obj);
+  };
 
+  const hideSidebar = sidebarHiddenFor.some((e) => window.location.href.includes(e));
   const appRoutes = modules.map(({ code, tenants }, index) => {
     const Module = Digit.ComponentRegistryService.getComponent(`${code}Module`);
-    return (
-      Module?<Route key={index} path={`${path}/${code.toLowerCase()}`}>
+    return Module ? (
+      <Route key={index} path={`${path}/${code.toLowerCase()}`}>
         <Module stateCode={stateCode} moduleCode={code} userType="citizen" tenants={getTenants(tenants, appTenants)} />
-      </Route>:null
-    );
+      </Route>
+    ) : null;
   });
 
   const ModuleLevelLinkHomePages = modules.map(({ code, bannerImage }, index) => {
     let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
+    let mdmsDataObj = isLinkDataFetched ? processLinkData(linkData, code, t) : undefined;
+
+    if (mdmsDataObj?.header === "ACTION_TEST_WS") {
+      mdmsDataObj?.links.sort((a, b) => {
+        return b.orderNumber - a.orderNumber;
+      });
+    }
     return (
-      <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
-        <div className="moduleLinkHomePage">
-          <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
-          <BackButton className="moduleLinkHomePageBackButton" />
-          <h1>{t("MODULE_" + code.toUpperCase())}</h1>
-          <div className="moduleLinkHomePageModuleLinks">
-            <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} />
+      <React.Fragment>
+        <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>
+          <div className="moduleLinkHomePage">
+            <img src={bannerImage || stateInfo?.bannerUrl} alt="noimagefound" />
+            <BackButton className="moduleLinkHomePageBackButton" />
+            <h1>{t("MODULE_" + code.toUpperCase())}</h1>
+            <div className="moduleLinkHomePageModuleLinks">
+              {mdmsDataObj && (
+                <CitizenHomeCard
+                  header={t(mdmsDataObj?.header)}
+                  links={mdmsDataObj?.links}
+                  Icon={() => <span />}
+                  Info={
+                    code === "OBPS"
+                      ? () => (
+                          <CitizenInfoLabel
+                            style={{ margin: "0px", padding: "10px" }}
+                            info={t("CS_FILE_APPLICATION_INFO_LABEL")}
+                            text={t(`BPA_CITIZEN_HOME_STAKEHOLDER_INCLUDES_INFO_LABEL`)}
+                          />
+                        )
+                      : null
+                  }
+                  isInfo={code === "OBPS" ? true : false}
+                />
+              )}
+              {/* <Links key={index} matchPath={`/digit-ui/citizen/${code.toLowerCase()}`} userType={"citizen"} /> */}
+            </div>
+            <StaticDynamicCard moduleCode={code?.toUpperCase()}/>
           </div>
-        </div>
-      </Route>
+        </Route>
+        <Route key={"faq" + index} path={`${path}/${code.toLowerCase()}-faq`}>
+          <FAQsSection module={code?.toUpperCase()} />
+        </Route>
+        <Route key={"hiw" + index} path={`${path}/${code.toLowerCase()}-how-it-works`}>
+          <HowItWorks module={code?.toUpperCase()} />
+        </Route>
+      </React.Fragment>
     );
   });
 
@@ -102,9 +152,12 @@ const Home = ({
       />
 
       <div className={`main center-container citizen-home-container mb-25`}>
-        <div className="SideBarStatic">
-          <StaticCitizenSideBar linkData={linkData} islinkDataLoading={islinkDataLoading} />
-        </div>
+        {hideSidebar ? null : (
+          <div className="SideBarStatic">
+            <StaticCitizenSideBar linkData={linkData} islinkDataLoading={islinkDataLoading} />
+          </div>
+        )}
+
         <Switch>
           <Route exact path={path}>
             <CitizenHome />
@@ -119,7 +172,7 @@ const Home = ({
           </Route>
           <Route path={`${path}/error`}>
             <ErrorComponent
-            initData={initData}
+              initData={initData}
               goToHome={() => {
                 history.push("/digit-ui/citizen");
               }}

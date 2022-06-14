@@ -89,7 +89,7 @@ export const getBPAFormData = async (data, mdmsData, history, t) => {
       unit.map((un, index) => {
         arr = un?.usageCategory?.split(",");
         subBlocks = [];
-        arr &&
+        arr && arr?.length > 0 && arr != "" &&
           arr.map((ob, ind) => {
             subBlocks.push({
               code: ob,
@@ -106,6 +106,7 @@ export const getBPAFormData = async (data, mdmsData, history, t) => {
   data.BlockIds = getBlockIds(data?.landInfo?.unit);
   data.address = data?.landInfo?.address;
   data.address.locality["i18nkey"] = `${t(`${stringReplaceAll(data?.landInfo?.address?.tenantId,".","_").toUpperCase()}_REVENUE_${data?.landInfo?.address?.locality?.code}`)}`;
+  data.placeName = data?.additionalDetails?.GISPlaceName || "";
   data.data = {
     scrutinyNumber: { edcrNumber: APIScrutinyDetails?.edcrNumber },
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
@@ -396,6 +397,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
       auditDetails: data?.auditDetails,
       additionalDetails: {
         ...data?.additionalDetails,
+        GISPlaceName : data?.address?.placeName,
         holdingNo: data?.data?.holdingNumber ? data?.data?.holdingNumber : data?.additionalDetails?.holdingNo,
         registrationDetails: data?.data?.registrationDetails ? data?.data?.registrationDetails : data?.additionalDetails?.registrationDetails,
       },
@@ -503,7 +505,7 @@ export const convertEpochToDateDMY = (dateEpoch) => {
   return `${day}/${month}/${year}`;
 };
 
-export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t) => {
+export const getBPAEditDetails = async (data, APIScrutinyDetails, mdmsData, nocdata, t) => {
   const getBlockIds = (unit) => {
     let blocks = {};
     unit &&
@@ -613,6 +615,8 @@ export const getBPAEditDetails = (data, APIScrutinyDetails, mdmsData, nocdata, t
     applicationType: data?.additionalDetails?.applicationType || APIScrutinyDetails?.appliactionType,
     serviceType: data?.additionalDetails?.serviceType || APIScrutinyDetails?.applicationSubType,
   };
+
+  sessionStorage.setItem("BPA_IS_ALREADY_WENT_OFF_DETAILS", JSON.stringify(true));
   return data;
 };
 
@@ -721,10 +725,11 @@ export const getOrderedDocs = (docs) => {
 };
 
 export const showHidingLinksForStakeholder = (roles = []) => {
-  const userInfo = Digit.UserService.getUser();
+  let userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
+  const userInfo = userInfos ? JSON.parse(userInfos) : {};
   let checkedRoles = [];
   const rolearray = roles?.map((role) => {
-    userInfo?.info?.roles?.map((item) => {
+    userInfo?.value?.info?.roles?.map((item) => {
       if (item.code == role.code && item.tenantId === role.tenantId) {
         checkedRoles.push(item);
       }
@@ -804,4 +809,20 @@ export const ocScrutinyDetailsData = async (edcrNumber, tenantId) => {
   } else {
     return {type: "ERROR", message: "BPA_NO_RECORD_FOUND"}
   }
+}
+
+export const getOrderDocuments = (appUploadedDocumnets, isNoc = false) => {
+  let finalDocs = [];
+  if (appUploadedDocumnets?.length > 0) {
+    let uniqueDocmnts = appUploadedDocumnets.filter((elem, index) => appUploadedDocumnets.findIndex((obj) => obj?.documentType?.split(".")?.slice(0, 2)?.join("_") === elem?.documentType?.split(".")?.slice(0, 2)?.join("_")) === index);
+    uniqueDocmnts?.map(uniDoc => {
+      const resultsDocs = appUploadedDocumnets?.filter(appDoc => uniDoc?.documentType?.split(".")?.slice(0, 2)?.join("_") == appDoc?.documentType?.split(".")?.slice(0, 2)?.join("_"));
+      resultsDocs?.forEach(resDoc => resDoc.title = resDoc.documentType);
+      finalDocs.push({
+        title: !isNoc ? resultsDocs?.[0]?.documentType?.split(".")?.slice(0, 2)?.join("_") : "",
+        values: resultsDocs
+      })
+    });
+  }
+  return finalDocs;
 }

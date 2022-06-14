@@ -195,7 +195,7 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
                 {type === "desktop" && !mobileView && (
                   <SubmitBar
                     style={{ marginTop: "unset" }}
-                    disabled={!!Object.keys(formState.errors).length || formValueEmpty()}
+                    // disabled={!!Object.keys(formState.errors).length || Object.keys(form).every((key) => !form?.[key])}
                     className="submit-bar-search"
                     label={t("ABG_SEARCH_BUTTON")}
                     submit

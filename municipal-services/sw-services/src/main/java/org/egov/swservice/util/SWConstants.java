@@ -201,11 +201,14 @@ public class SWConstants {
 	public static final int UPDATE_APPLICATION = 1;
 
 	public static final int MODIFY_CONNECTION = 2;
+	
+	public static final int DISCONNECT_CONNECTION =  3;
 
 	public static final String APPROVE_CONNECTION = "APPROVE_CONNECTION";
 
 	public static final String NEW_SEWERAGE_CONNECTION ="NEW_SEWERAGE_CONNECTION";
 	public static final String MODIFY_SEWERAGE_CONNECTION = "MODIFY_SEWERAGE_CONNECTION";
+	public static final String DISCONNECT_SEWERAGE_CONNECTION = "DISCONNECT_SEWERAGE_CONNECTION";
 	
 	public static final String SEWERAGE_SERVICE_BUSINESS_ID = "SW";
 
@@ -241,4 +244,6 @@ public class SWConstants {
 	public static final String CHANNEL_LIST = "channelList";
 
 	public static final String CHANNEL = "Channel";
+	
+	public static final String ACTIVE = "ACTIVE";
 }

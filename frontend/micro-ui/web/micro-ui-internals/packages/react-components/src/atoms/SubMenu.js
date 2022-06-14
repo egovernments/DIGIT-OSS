@@ -52,7 +52,8 @@ const SubMenu = ({ item, t, isEmployee }) => {
   const leftIconCitizenArray = item.icon;
   const leftIconCitizen = IconsObject[leftIconCitizenArray] || IconsObject.BillsIcon;
 
-  const leftIconEmployeeItems = item.icon.split(":")[1];
+  const leftIconEmployeeItems = item?.icon?.split?.(":")?.[1] || "";
+
   const leftIconEmployee = IconsObject[leftIconEmployeeItems] || IconsObject.collections;
 
   return (
@@ -74,7 +75,11 @@ const SubMenu = ({ item, t, isEmployee }) => {
             if (item.navigationURL.indexOf("/digit-ui") === -1) {
               const getOrigin = window.location.origin;
               return (
-                <a className={`dropdown-link ${pathname === item.link ? "active" : ""}`} href={getOrigin + "/employee/" + item.navigationURL}>
+                <a
+                  key={index + 1}
+                  className={`dropdown-link ${pathname === item.link ? "active" : ""}`}
+                  href={getOrigin + "/employee/" + item.navigationURL}
+                >
                   <div className="actions">
                     <span>{item.label || item.displayName}</span>
                   </div>
@@ -82,7 +87,11 @@ const SubMenu = ({ item, t, isEmployee }) => {
               );
             }
             return (
-              <Link to={item.link || item.navigationURL} key={index} className={`dropdown-link ${pathname === item.navigationURL ? "active" : ""}`}>
+              <Link
+                to={item.link || item.navigationURL}
+                key={index + 1}
+                className={`dropdown-link ${pathname === item.navigationURL ? "active" : ""}`}
+              >
                 <div className="actions">
                   <span>{item.label || item.displayName}</span>
                 </div>

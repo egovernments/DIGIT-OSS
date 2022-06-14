@@ -77,15 +77,15 @@ const FSMCard = () => {
   const propsForFSTPO = {
     Icon: <ShippingTruck />,
     moduleName: t("ES_TITLE_VEHICLE_LOG"),
-    kpis: isSuccess ? Object.keys(info).map((key, index) => ({
-                label: t(key),
-                count: t(info[key]),
-                link: "/digit-ui/employee/fsm/fstp-inbox"
-            })): [],
+    // kpis: isSuccess ? Object.keys(info).map((key, index) => ({
+    //             label: t(key),
+    //             count: t(info[key]),
+    //             link: "/digit-ui/employee/fsm/fstp-inbox"
+    //         })): [],
     links: [
       {
-          label: t("ES_COMMON_INBOX"),
-          link: "/digit-ui/employee/fsm/fstp-inbox"
+          label: t("ES_COMMON_HOME"),
+          link: "/digit-ui/employee/fsm/fstp-operations"
       }
     ]
 
@@ -95,6 +95,13 @@ const FSMCard = () => {
     return  <EmployeeModuleCard {...propsForFSTPO} />
   }
 
+  const linksForSomeFSMAdmin = FSM_ADMIN ? [
+    {
+      label: t("ES_TITLE_FSM_REGISTRY"),
+      link: `/digit-ui/employee/fsm/registry`
+    }
+  ] : []
+
   const linksForSomeFSMEmployees = !DSO && !COLLECTOR && !FSM_EDITOR ? [
     {
       label: t("ES_TITLE_NEW_DESULDGING_APPLICATION"),
@@ -102,11 +109,28 @@ const FSMCard = () => {
     }
   ] : []
 
-  const propsForModuleCard = {
-    Icon: <ShippingTruck />,
-    moduleName: t("ES_TITLE_FAECAL_SLUDGE_MGMT"),
-    kpis:[
-      {
+  const propsForModuleCard = isFSTPOperator ?
+    {
+      Icon: <ShippingTruck />,
+      moduleName: t("ES_TITLE_VEHICLE_LOG"),
+      // kpis: isSuccess ? Object.keys(info).map((key, index) => ({
+      //             label: t(key),
+      //             count: t(info[key]),
+      //             link: "/digit-ui/employee/fsm/fstp-inbox"
+      //         })): [],
+      links: [
+        {
+          label: t("ES_COMMON_HOME"),
+          link: "/digit-ui/employee/fsm/fstp-operations"
+        }
+      ]
+
+    } :
+    {
+      Icon: <ShippingTruck />,
+      moduleName: t("ES_TITLE_FAECAL_SLUDGE_MGMT"),
+      kpis:[
+        {
           count: total,
           label: t("TOTAL_FSM"),
           link: `/digit-ui/employee/fsm/inbox`
@@ -122,7 +146,8 @@ const FSMCard = () => {
         label: t("ES_COMMON_INBOX"),
         link: `/digit-ui/employee/fsm/inbox`
       },
-      ...linksForSomeFSMEmployees
+      ...linksForSomeFSMEmployees,
+      ...linksForSomeFSMAdmin
     ]
   }
 

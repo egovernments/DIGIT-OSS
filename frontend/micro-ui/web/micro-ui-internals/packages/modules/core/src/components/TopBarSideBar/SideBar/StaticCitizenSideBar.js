@@ -1,11 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { HomeIcon, EditPencilIcon, LogoutIcon, Loader, AddressBookIcon } from "@egovernments/digit-ui-react-components";
+import {
+  HomeIcon,
+  EditPencilIcon,
+  LogoutIcon,
+  Loader,
+  AddressBookIcon,
+  PropertyHouse,
+  CaseIcon,
+  CollectionIcon,
+  PTIcon,
+  OBPSIcon,
+  PGRIcon,
+  FSMIcon,
+  WSICon,
+  MCollectIcon,
+  Phone,
+} from "@egovernments/digit-ui-react-components";
 import { Link, useLocation } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import { Phone } from "@egovernments/digit-ui-react-components";
-import CitizenSubMenuSideBar from "./CitizenSubMenuSideBar";
 import LogoutDialog from "../../Dialog/LogoutDialog";
 
 const defaultImage =
@@ -53,6 +67,21 @@ const Profile = ({ info, stateName, t }) => (
       !window.location.href.includes("employee/user/language-selection") && <ChangeCity t={t} mobileView={true} />}
   </div>
 );
+const IconsObject = {
+  CommonPTIcon: <PTIcon className="icon" />,
+  OBPSIcon: <OBPSIcon className="icon" />,
+  propertyIcon: <PropertyHouse className="icon" />,
+  TLIcon: <CaseIcon className="icon" />,
+  PGRIcon: <PGRIcon className="icon" />,
+  FSMIcon: <FSMIcon className="icon" />,
+  WSIcon: <WSICon className="icon" />,
+  MCollectIcon: <MCollectIcon className="icon" />,
+  BillsIcon: <CollectionIcon className="icon" />,
+  HomeIcon: <HomeIcon className="icon" />,
+  EditPencilIcon: <EditPencilIcon className="icon" />,
+  LogoutIcon: <LogoutIcon className="icon" />,
+  Phone: <Phone className="icon" />,
+};
 const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -61,6 +90,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
+  let isMobile = window.Digit.Utils.browser.isMobile();
 
   const [isEmployee, setisEmployee] = useState(false);
   const [isSidebarOpen, toggleSidebar] = useState(false);
@@ -97,6 +127,8 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const MenuItem = ({ item }) => {
+    const leftIconArray = item?.icon || item.icon?.type?.name;
+    const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.BillsIcon;
     let itemComponent;
     if (item.type === "component") {
       itemComponent = item.action;
@@ -105,7 +137,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
     }
     const Item = () => (
       <span className="menu-item" {...item.populators}>
-        {item?.icon && item.icon}
+        {leftIcon}
         <div className="menu-label">{itemComponent}</div>
       </span>
     );
@@ -119,14 +151,12 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
     }
     if (item.type === "link") {
       return (
-        <Link to={item.link}>
+        <Link to={item?.link}>
           <Item />
         </Link>
       );
     }
-    if (item.type === "dynamic") {
-      return <CitizenSubMenuSideBar item={item} />;
-    }
+
     return <Item />;
   };
   let profileItem;
@@ -139,7 +169,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
       {
         text: t("EDIT_PROFILE"),
         element: "PROFILE",
-        icon: <EditPencilIcon className="icon" />,
+        icon: "EditPencilIcon",
         populators: {
           onClick: showProfilePage,
         },
@@ -147,7 +177,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
       {
         text: t("CORE_COMMON_LOGOUT"),
         element: "LOGOUT",
-        icon: <LogoutIcon className="icon" />,
+        icon: "LogoutIcon",
         populators: { onClick: handleLogout },
       },
       {
@@ -173,13 +203,21 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
           </React.Fragment>
         ),
         element: "Helpline",
-        icon: <Phone className="icon" />,
+        icon: "Phone",
       },
     ];
   }
 
-  Object.keys(linkData).map((key) => {
-    menuItems.splice(1, 0, { type: "dynamic", moduleName: key, links: linkData[key], icon: linkData[key][0]?.leftIcon });
+  Object.keys(linkData)?.map((key) => {
+    if (linkData[key][0]?.sidebar === "digit-ui-links") {
+      menuItems.splice(1, 0, {
+        type: "link",
+        text: key,
+        links: linkData[key],
+        icon: linkData[key][0]?.leftIcon,
+        link: linkData[key][0]?.sidebarURL,
+      });
+    }
   });
 
   return (
@@ -198,14 +236,14 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
           style={{
             display: "flex",
             flexDirection: "column",
-            height: "calc(100vh - 56px)",
+            height: isMobile ? "calc(100vh - 56px)" : "auto",
             zIndex: "99",
           }}
         >
           {profileItem}
           <div className="drawer-desktop">
-            {menuItems.map((item, index) => (
-              <div className={`sidebar-list ${pathname === item.link ? "active" : ""}`} key={index}>
+            {menuItems?.map((item, index) => (
+              <div className={`sidebar-list ${pathname === item?.link || pathname === item?.sidebarURL ? "active" : ""}`} key={index}>
                 <MenuItem item={item} />
               </div>
             ))}

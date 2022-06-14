@@ -99,7 +99,7 @@ const OBPSAcknowledgement = ({ data, onSuccess }) => {
     <Card>
       <BannerPicker t={t} data={mutation1.data} isSuccess={mutation1.isSuccess} isLoading={mutation1.isIdle || mutation1.isLoading} />
       {mutation1.isSuccess && <CardText>{getCardText(t,mutation1.data)}</CardText>}
-      {!mutation1.isSuccess && <CardText>{t("CS_FILE_PROPERTY_FAILED_RESPONSE")}</CardText>}
+      {!mutation1.isSuccess && <CardText>{t(Digit.Utils.locale.getTransformedLocale(mutation1.error.message))}</CardText>}
       <Link to={{
         pathname: `/digit-ui/citizen`,
       }}>

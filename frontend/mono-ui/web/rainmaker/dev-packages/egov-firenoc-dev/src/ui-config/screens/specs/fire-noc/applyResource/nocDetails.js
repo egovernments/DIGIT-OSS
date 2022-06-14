@@ -24,7 +24,7 @@ const loadProvisionalNocData = async (state, dispatch) => {
     "screenConfiguration.preparedFinalObject.FireNOCs[0].provisionFireNOCNumber",
     ""
   );
-
+  fireNOCNumber = fireNOCNumber && fireNOCNumber.trim();
   if (!fireNOCNumber.match(getPattern("FireNOCNo"))) {
     dispatch(
       toggleSnackbar(
@@ -36,64 +36,78 @@ const loadProvisionalNocData = async (state, dispatch) => {
         "error"
       )
     );
-    return;
+    // return;
+  } else {
+
+    let response = await getSearchResults([
+      { key: "fireNOCNumber", value: fireNOCNumber },
+    ]);
+
+    if ((response && response.FireNOCs && response.FireNOCs.length == 0) || (!response)) {
+      dispatch(
+        toggleSnackbar(
+          true,
+          {
+            labelName: "Incorrect FireNOC Number!",
+            labelKey: "ERR_FIRENOC_NUMBER_INCORRECT",
+          },
+          "error"
+        )
+      );
   }
+  
+    response = await furnishNocResponse(response);
 
-  let response = await getSearchResults([
-    { key: "fireNOCNumber", value: fireNOCNumber },
-  ]);
-
-  response = furnishNocResponse(response);
-
-  let firenoc = get(response, "FireNOCs[0]", {});
-  set(
-    firenoc,
-    "fireNOCDetails.fireNOCType",
-    get(
-      state.screenConfiguration.screenConfig,
-      "apply.components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup.props.value",
-      "NEW"
-    )
-  );
-  dispatch(prepareFinalObject("FireNOCs", [firenoc]));
-  const tenantId = get(response, "FireNOCs[0].tenantId", getTenantIdCommon());
-  await onchangeOfTenant({ value: tenantId }, state, dispatch);
-  // Set no of buildings radiobutton and eventually the cards
-  let noOfBuildings =
-    get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "SINGLE") ===
-    "MULTIPLE"
-      ? "MULTIPLE"
-      : "SINGLE";
-  dispatch(
-    handleField(
-      "apply",
-      "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingRadioGroup",
-      "props.value",
-      noOfBuildings
-    )
-  );
-
-  // // Set noc type radiobutton to NEW
-  // dispatch(
-  //   handleField(
-  //     "apply",
-  //     "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup",
-  //     "props.value",
-  //     "NEW"
-  //   )
-  // );
-
-  // Set provisional fire noc number
-  dispatch(
-    prepareFinalObject(
-      "FireNOCs[0].provisionFireNOCNumber",
-      get(response, "FireNOCs[0].fireNOCNumber", "")
-    )
-  );
-
-  // Set fire noc id to null
-  dispatch(prepareFinalObject("FireNOCs[0].id", undefined));
-  dispatch(prepareFinalObject("DYNAMIC_MDMS_Trigger", true));
+    let firenoc = get(response, "FireNOCs[0]", {});
+    set(
+      firenoc,
+      "fireNOCDetails.fireNOCType",
+      get(
+        state.screenConfiguration.screenConfig,
+        "apply.components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup.props.value",
+        "NEW"
+      )
+    );
+    dispatch(prepareFinalObject("FireNOCs", [firenoc]));
+    const tenantId = get(response, "FireNOCs[0].tenantId", getTenantIdCommon());
+    await onchangeOfTenant({ value: tenantId }, state, dispatch);
+    // Set no of buildings radiobutton and eventually the cards
+    let noOfBuildings =
+      get(response, "FireNOCs[0].fireNOCDetails.noOfBuildings", "SINGLE") ===
+      "MULTIPLE"
+        ? "MULTIPLE"
+        : "SINGLE";
+    dispatch(
+      handleField(
+        "apply",
+        "components.div.children.formwizardSecondStep.children.propertyDetails.children.cardContent.children.propertyDetailsConatiner.children.buildingRadioGroup",
+        "props.value",
+        noOfBuildings
+      )
+    );
+  
+    // // Set noc type radiobutton to NEW
+    // dispatch(
+    //   handleField(
+    //     "apply",
+    //     "components.div.children.formwizardFirstStep.children.nocDetails.children.cardContent.children.nocDetailsContainer.children.nocRadioGroup",
+    //     "props.value",
+    //     "NEW"
+    //   )
+    // );
+  
+    // Set provisional fire noc number
+    dispatch(
+      prepareFinalObject(
+        "FireNOCs[0].provisionFireNOCNumber",
+        get(response, "FireNOCs[0].fireNOCNumber", "")
+      )
+    );
+  
+    // Set fire noc id to null
+    dispatch(prepareFinalObject("FireNOCs[0].id", undefined));
+    dispatch(prepareFinalObject("DYNAMIC_MDMS_Trigger", true));
+  }
 };
 
 export const nocDetails = getCommonCard({

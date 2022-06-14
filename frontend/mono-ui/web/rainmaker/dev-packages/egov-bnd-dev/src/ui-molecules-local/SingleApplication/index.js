@@ -51,7 +51,6 @@ class SingleApplication extends React.Component {
   };
 
   onCardClick = async (item) => {
-    console.log("The item is ", item);
     const { moduleName, toggleSnackbar, setRoute } = this.props;
     if(moduleName === "BIRTH")
     {
@@ -147,14 +146,13 @@ class SingleApplication extends React.Component {
           } else if (businessService == 'PT.CREATE') {
             setRoute("/property-tax/application-preview?propertyId=" + item.propertyId + "&applicationNumber=" + item.acknowldgementNumber + "&tenantId=" + item.tenantId + "&type=property");
           } else {
-            console.log('Navigation Error');
           }
         } else {
           toggleSnackbar(
             true,
             {
               labelName: "Business service returns empty response!",
-              labelKey: "Business service returns empty response!",
+              labelKey: "BND_NO_BUSINESS_SERVICE",
             },
             "error"
           );
@@ -291,19 +289,10 @@ class SingleApplication extends React.Component {
                                 color: "#fe7a51",
                                 fontSize: 14,
                                 textTransform: "uppercase",
-                                borderBottom: "1px solid"
                               }}
                             />
                           </div>
-                          <Label
-                              labelKey={"BND_DOWNLOAD_NOTE2"}
-                              textTransform={"uppercase"}
-                              style={{
-                                color: "#fe7a51",
-                                fontSize: 12,
-                                padding:2,
-                              }}
-                            />
+                     
                         </div>
                         }
                         { (item.status == "PAID" || item.status == "PAID_DOWNLOAD" || item.status == "PAID_PDF_GENERATED") &&
@@ -319,19 +308,10 @@ class SingleApplication extends React.Component {
                                 color: "#fe7a51",
                                 fontSize: 14,
                                 textTransform: "uppercase",
-                                borderBottom: "1px solid"
                               }}
                             />
                           </div>
-                          <Label
-                              labelKey={"BND_DOWNLOAD_NOTE2"}
-                              textTransform={"uppercase"}
-                              style={{
-                                color: "#fe7a51",
-                                fontSize: 12,
-                                padding:2,
-                              }}
-                            />
+                
                         </div>
                         }
                         { (item.status == "PAID" || item.status == "PAID_DOWNLOAD" || item.status == "PAID_PDF_GENERATED") &&
@@ -345,12 +325,11 @@ class SingleApplication extends React.Component {
                             style={{
                               color: "#ff6f6f",
                               fontSize: 14,
-                              borderBottom: "1px solid #fe7a51"
                             }}
                           />
                         </div>}
                         { (item.status == "PAID" || item.status == "PAID_DOWNLOAD" || item.status == "PAID_PDF_GENERATED" ) && /* <Link to={this.onCardClick(item)}> */
-                        <div style={{ cursor: "pointer" , paddingLeft:"10px !important", padding: "5px", marginLeft: "5px"}} onClick={() => {
+                        <div style={{ cursor: "pointer" , paddingLeft:"10px !important", padding: "2px", marginLeft: "5px"}} onClick={() => {
                           const url = this.onDownloadReceiptClicked(item);
                           // setRoute(url);
                         }}>
@@ -361,7 +340,6 @@ class SingleApplication extends React.Component {
                               color: "#fe7a51",
                               fontSize: 14,
                               textTransform: "uppercase",
-                              borderBottom: "1px solid #fe7a51"
                             }}
                           />
                         </div>}
@@ -379,7 +357,7 @@ class SingleApplication extends React.Component {
                 labelKey={"No results Found!"}
                 style={{ marginBottom: 10 }}
               />
-              <Button
+              {/* <Button
                 style={{
                   height: 36,
                   lineHeight: "auto",
@@ -391,7 +369,7 @@ class SingleApplication extends React.Component {
                 onClick={this.onButtonCLick}
               >
                 <Label labelKey={`BND_NEW_APPLICATION`} />
-              </Button>
+              </Button> */}
             </div>
           )}
       </div>

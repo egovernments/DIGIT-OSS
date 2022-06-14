@@ -11,13 +11,14 @@ const EyeSvgINdex = ({ style }) => {
 
 }
 const WSInfoLabel = ({ t, config, onSelect, userType, formData }) => {
+  userType = userType || Digit.SessionStorage.get("userType");
   return (
     <React.Fragment>
-      <div style={{ width: "80%" }}>
-        <div className="info-banner-wrap">
+      <div style={userType === "citizen" ? {maxWidth:"970px"} : { width: "80%"}}>
+        <div className="info-banner-wrap" style={window.location.href.includes("/connection-details") ? { color: "#3498DB", margin: "0px" } : { color: "#3498DB" }}>
           <div>
             <InfoBannerIcon />
-            <h2>{t("CS_FILE_APPLICATION_INFO_LABEL")}</h2>
+            <h2 style={{ color: "#3498DB" }}>{t("CS_FILE_APPLICATION_INFO_LABEL")}</h2>
           </div>
           {`${t("WS_CLICK_ON_LABEL")} `}
           <EyeSvgINdex style={{ display: "inline", marginBottom: "5px" }} />

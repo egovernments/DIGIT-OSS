@@ -71,5 +71,5 @@ public class AmendmentCriteria {
 	@NotNull
 	private String businessService;
 
-	private AmendmentStatus status;
+	private Set<String> status = new HashSet<>();
 }

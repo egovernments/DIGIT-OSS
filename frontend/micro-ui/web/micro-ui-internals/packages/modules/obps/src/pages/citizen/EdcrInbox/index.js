@@ -122,7 +122,7 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const SearchFormFields = useCallback(
-    ({ registerRef, searchFormState }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState }} />,
+    ({ registerRef, searchFormState, searchFieldComponents }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState, searchFieldComponents }} />,
     []
   );
 
@@ -144,11 +144,13 @@ const Inbox = ({ parentRoute }) => {
 
   const onSearchFormSubmit = (data) => {
     data.hasOwnProperty("") && delete data?.[""];
+    dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateSearchForm", data });
   };
 
   const onFilterFormSubmit = (data) => {
     data.hasOwnProperty("") && delete data?.[""];
+    dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateFilterForm", data });
   };
 

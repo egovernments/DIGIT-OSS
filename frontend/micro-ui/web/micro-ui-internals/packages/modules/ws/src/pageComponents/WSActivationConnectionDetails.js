@@ -210,9 +210,19 @@ const ConnectionDetails = (_props) => {
         <div >
             <div style={{ marginBottom: "16px" }}>
                 <div>
+                    <LabelFieldPair>
+                        <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_ACK_COMMON_APP_NO_LABEL")}*:`}</CardLabel>
+                        <div className="field">
+                            <TextInput 
+                                disabled={true} 
+                                value={filters?.applicationNumber}>
+                            </TextInput>
+                        </div>
+                        
+                    </LabelFieldPair>
                     {filters?.service === "WATER" ? <div>
                         <LabelFieldPair>
-                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_TYPE")}*:`}</CardLabel>
+                            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_TYPE")}*:`}</CardLabel>
                             <Controller
                                 control={control}
                                 name={"connectionType"}
@@ -238,7 +248,7 @@ const ConnectionDetails = (_props) => {
                         </LabelFieldPair>
                         <CardLabelError style={errorStyle}>{localFormState.touched.connectionType ? errors?.connectionType?.message : ""}</CardLabelError>
                         <LabelFieldPair>
-                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_WATER_SOURCE")}*:`}</CardLabel>
+                            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_WATER_SOURCE")}*:`}</CardLabel>
                             <Controller
                                 control={control}
                                 name={"waterSource"}
@@ -273,7 +283,7 @@ const ConnectionDetails = (_props) => {
                         </LabelFieldPair>
                         <CardLabelError style={errorStyle}>{localFormState.touched.waterSource ? errors?.waterSource?.message : ""}</CardLabelError>
                         <LabelFieldPair>
-                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_WATER_SUB_SOURCE")}*:`}</CardLabel>
+                            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_WATER_SUB_SOURCE")}*:`}</CardLabel>
                             <Controller
                                 control={control}
                                 name={"sourceSubData"}
@@ -299,7 +309,7 @@ const ConnectionDetails = (_props) => {
                         </LabelFieldPair>
                         <CardLabelError style={errorStyle}>{localFormState.touched.sourceSubData ? errors?.sourceSubData?.message : ""}</CardLabelError>
                         <LabelFieldPair>
-                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_PIPE_SIZE")}*:`}</CardLabel>
+                            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_PIPE_SIZE")}*:`}</CardLabel>
                             <Controller
                                 control={control}
                                 name={"pipeSize"}
@@ -325,7 +335,7 @@ const ConnectionDetails = (_props) => {
                         </LabelFieldPair>
                         <CardLabelError style={errorStyle}>{localFormState.touched.pipeSize ? errors?.pipeSize?.message : ""}</CardLabelError>
                         <LabelFieldPair>
-                            <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_NO_OF_TAPS")}*:`}</CardLabel>
+                            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_NO_OF_TAPS")}*:`}</CardLabel>
                             <div className="field">
                                 <Controller
                                     control={control}
@@ -355,7 +365,7 @@ const ConnectionDetails = (_props) => {
                     </div>
                         : <div>
                             <LabelFieldPair>
-                                <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_NUMBER_WATER_CLOSETS_LABEL")}*:`}</CardLabel>
+                                <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_NUMBER_WATER_CLOSETS_LABEL")}*:`}</CardLabel>
                                 <div className="field">
                                     <Controller
                                         control={control}
@@ -383,7 +393,7 @@ const ConnectionDetails = (_props) => {
                             </LabelFieldPair>
                             <CardLabelError style={errorStyle}>{localFormState.touched.noOfWaterClosets ? errors?.noOfWaterClosets?.message : ""}</CardLabelError>
                             <LabelFieldPair>
-                                <CardLabel style={{ marginTop: "-5px" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_NO_OF_TOILETS")}*:`}</CardLabel>
+                                <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_NO_OF_TOILETS")}*:`}</CardLabel>
                                 <div className="field">
                                     <Controller
                                         control={control}

@@ -27,7 +27,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
   const [floorData, setfloorData] = useState([]);
   let scrutinyNumber = `DCR82021WY7QW`;
   let user = Digit.UserService.getUser();
-  const tenantId = user.info.permanentCity || Digit.ULBService.getCurrentTenantId();
+  const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   const checkingFlow = formData?.uiFlow?.flow;
   const [showToast, setShowToast] = useState(null);
   const stateCode = Digit.ULBService.getStateId();
@@ -60,7 +60,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
         mdmsData?.BPA?.SubOccupancyType?.map((ob) => {
         suboccoption.push({ code: ob.code, name: ob.name, i18nKey: `BPA_SUBOCCUPANCYTYPE_${stringReplaceAll(ob?.code?.toUpperCase(), "-", "_")}` });
       });
-    return suboccoption;
+    return Digit.Utils.locale.sortDropdownNames(suboccoption,'i18nKey',t);
   }
 
   const ActionButton = ({ label, jumpTo }) => {
@@ -155,7 +155,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
         const userInfo = Digit.UserService.getUser();
         const accountId = userInfo?.info?.uuid;
         payload.tenantId = formData?.data?.bpaData?.bpaApprovalResponse?.[0]?.landInfo?.tenantId;
-        payload.workflow = { action: "INITIATE" };
+        payload.workflow = { action: "INITIATE", assignes : [userInfo?.info?.uuid] };
         payload.accountId = accountId;
         payload.documents = null;
 
@@ -293,6 +293,7 @@ const ScrutinyDetails = ({ onSelect, userType, formData, config }) => {
                 onSelect={(e) => selectOccupancy(e, data, block.number)}
                 isOBPSMultiple={true}
                 optionsKey="i18nKey"
+                ServerStyle={{ width: "100%", overflowX: "hidden"}}
                 t={t}
               />
             ) : null}

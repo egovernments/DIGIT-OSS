@@ -87,8 +87,8 @@ const BillInbox = ({ parentRoute, initialStates, businessService, filterComponen
         name: "billNo",
       },
       {
-        label: "Unique Property ID",
-        name: "propertyId",
+        label: t("ABG_PT_CONSUMER_CODE_LABEL"),
+        name: "consumerCode",
       },
       {
         label: t("ABG_MOBILE_NO_LABEL"),

@@ -52,7 +52,7 @@ export const PTSearch = {
       title: "PT_DETAILS",
       values: [
         { title: "TL_PROPERTY_ID", value: property?.propertyId || "NA" },
-        { title: "PT_OWNER_NAME", value: property?.owners[0]?.name || "NA" },
+        { title: "PT_OWNER_NAME", value: property?.owners?.map((owner) => owner.name).join(",") || "NA" },
         { title: "PT_SEARCHPROPERTY_TABEL_STATUS", value: Digit.Utils.locale.getTransformedLocale(`WF_PT_${property?.status}`) || "NA" },
       ],
     };
@@ -73,7 +73,7 @@ export const PTSearch = {
                 { title: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", value: owner?.fatherOrHusbandName },
                 { title: "PT_FORM3_OWNERSHIP_TYPE", value: property?.ownershipCategory },
                 { title: "PT_OWNERSHIP_INFO_EMAIL_ID", value: owner?.emailId },
-                { title: "PT_OWNERSHIP_INFO_CORR_ADDR", value: owner?.correspondenceAddress },
+                { title: "PT_OWNERSHIP_INFO_CORR_ADDR", value: owner?.permanentAddress },
               ],
             };
           }),

@@ -68,7 +68,9 @@
   }
 
   .card-textarea {
-    width: 480px;
+   /* //width: 480px; */
+    @apply w-full;
+    max-width:540px;
   }
 
   .employee-card-textarea {

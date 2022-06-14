@@ -33,7 +33,7 @@ const SearchCitizenFilter = ({ searchParams, onFilterChange, defaultSearchParams
   if (filterServiceType) {
     serviceTypeList = filterServiceType.map((element) => {
       return {
-        name: element.businessService,
+        name: Digit.Utils.locale.getTransformedLocale(`BILLINGSERVICE_BUSINESSSERVICE_${element.code}`),
         url: element.billGineiURL,
         businesService: element.code,
       };

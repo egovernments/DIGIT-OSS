@@ -204,5 +204,11 @@ public class ChallanConfiguration {
 
     @Value("${egov.download.receipt.link}")
     private String receiptDownloadLink;
+    
+    @Value("${egov.dynamicdata.period}")
+    private String numberOfMonths;
+    
+    @Value("${egov.challan.validity}")
+    private String challanValidity;
 
 }

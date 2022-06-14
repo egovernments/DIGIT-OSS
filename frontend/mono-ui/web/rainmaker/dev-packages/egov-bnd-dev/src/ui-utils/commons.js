@@ -31,6 +31,13 @@ export const acceptedFiles = acceptedExt => {
   }, []);
   return acceptedFileTypes;
 };
+export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (conditionCheckerFn(arr[i])) {
+      return arr[i];
+    }
+  }
+};
 
 export const getFileSize = file => {
   const size = parseFloat(file.size / 1024).toFixed(2);
@@ -134,7 +141,6 @@ export const postXlsxFile = async (state, dispatch, module, file) => {
     return resp;
   }
   catch(e){
-    console.error(e);
     store.dispatch(
       toggleSnackbar(
         true,
@@ -187,7 +193,6 @@ export const deleteAllRecords = async (state, dispatch, module) => {
         "error"
       )
     );
-    console.error(e);
   }
   return payload;
 }
@@ -206,7 +211,6 @@ export const searchForBirth = async (dispatch,queryParams,queryObject) => {
     return response;
   } catch (error) {
     dispatch(toggleSpinner());
-    console.error(error);
     store.dispatch(
       toggleSnackbar(
         true,
@@ -231,7 +235,6 @@ export const searchForDeath = async (dispatch,queryParams,queryObject) => {
     return response;
   } catch (error) {
     dispatch(toggleSpinner());
-    console.error(error);
     store.dispatch(
       toggleSnackbar(
         true,

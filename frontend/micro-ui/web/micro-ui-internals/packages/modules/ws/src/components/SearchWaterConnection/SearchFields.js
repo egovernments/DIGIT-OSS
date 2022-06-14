@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Controller, useWatch } from "react-hook-form";
-import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
+import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, Loader, MobileNumber } from "@egovernments/digit-ui-react-components";
 
 const SearchFields = ({ register, control, reset, tenantId, t }) => {
   const propsForMobileNumber = {
@@ -11,15 +11,24 @@ const SearchFields = ({ register, control, reset, tenantId, t }) => {
   };
 
   const propsForOldConnectionNumberNpropertyId = {
-    pattern: /^[a-zA-Z0-9-]*$/i,
+    pattern: "[A-Za-z]{2}\-[A-Za-z]{2}\-[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-[0-9]{6}",
     title: t("ERR_DEFAULT_INPUT_FIELD_MSG"),
   };
-
+  let validation = {}
   return (
     <>
       <SearchField>
         <label>{t("WS_MYCONNECTIONS_CONSUMER_NO")}</label>
-        <TextInput name="connectionNumber" inputRef={register({})} />
+        <TextInput 
+          name="connectionNumber" 
+          inputRef={register({})} 
+          {...(validation = {
+            isRequired: false,
+            pattern: "^[a-zA-Z0-9\/-]*$",
+            type: "text",
+            title: t("ERR_INVALID_CONSUMER_NO"),
+          })}
+          />
       </SearchField>
       <SearchField>
         <label>{t("WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL")}</label>
@@ -27,7 +36,7 @@ const SearchFields = ({ register, control, reset, tenantId, t }) => {
       </SearchField>
       <SearchField>
         <label>{t("WS_HOME_SEARCH_RESULTS_OWN_MOB_LABEL")}</label>
-        <TextInput name="mobileNumber" inputRef={register({})} {...propsForMobileNumber} />
+        <MobileNumber name="mobileNumber" inputRef={register({})} {...propsForMobileNumber} />
       </SearchField>
 
       <SearchField>
@@ -39,6 +48,7 @@ const SearchFields = ({ register, control, reset, tenantId, t }) => {
         <p
           onClick={() => {
             reset({
+              searchType:"CONNECTION",
               mobileNumber: "",
               offset: 0,
               limit: 10,

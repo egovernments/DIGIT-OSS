@@ -61,7 +61,7 @@ const WSActivationSupportingDocuments = ({ t, config, userType, formData, onSele
     return (
         <div>
             <LabelFieldPair>
-                <CardLabel className="card-label-smaller">{t(`WF_APPROVAL_UPLOAD_HEAD`)}:</CardLabel>
+                <CardLabel className="card-label-smaller" style={{ fontWeight: "700"}}>{t(`WF_APPROVAL_UPLOAD_HEAD`)}:</CardLabel>
                 <div className="field">
                     <UploadFile
                         // id={id}
@@ -71,7 +71,6 @@ const WSActivationSupportingDocuments = ({ t, config, userType, formData, onSele
                         textStyles={{ width: "100%" }}
                         inputStyles={{ width: "280px" }}
                         buttonType="button"
-                        accept={"image/*,.jpg,.png,.pdf"}
                     />
                 </div>
             </LabelFieldPair>

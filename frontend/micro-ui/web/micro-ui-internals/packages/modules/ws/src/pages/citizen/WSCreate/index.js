@@ -48,12 +48,22 @@ const WSCreate = () => {
     { 
       nextStep = "property-details";
     }
+    if(nextStep === "docsrequired" && sessionStorage.getItem("changePropertySelected") === "yes")
+    {
+      nextStep = "property-details";
+    }
     let redirectWithHistory = history.push;
     if (nextStep === null) {
       return redirectWithHistory(`${getPath(match.path, match.params)}/check`);
     }
     redirectWithHistory(`${getPath(match.path, match.params)}/${nextStep}`);
   }
+
+  if(params && Object.keys(params).length>0 && window.location.href.includes("/citizen/ws/create-application/search-property"))
+    {
+      clearParams();
+      queryClient.invalidateQueries("WS_CREATE");
+    }
 
   const onSuccess = () => {
     queryClient.invalidateQueries("WS_CREATE");
@@ -76,7 +86,7 @@ const WSCreate = () => {
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.indexRoute = "docs-required";
+  config.indexRoute = "search-property";
 
   // const CheckPage = Digit?.ComponentRegistryService?.getComponent('BPACheckPage') ;
   // const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('BPAAcknowledgement');

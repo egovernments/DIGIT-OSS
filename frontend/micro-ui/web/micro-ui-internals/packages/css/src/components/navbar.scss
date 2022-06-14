@@ -98,6 +98,9 @@
     }
     .icon + .menu-label {
       margin-left: 36px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   .sidebar-list {
@@ -140,6 +143,13 @@
           color: #5f5c62;
           overflow: hidden;
           text-overflow: ellipsis;
+        }
+        input {
+          border: none;
+          outline: none;
+          margin-left: 16px;
+          padding: 0.5em;
+          color: #5f5c62;
         }
       }
     }
@@ -184,8 +194,8 @@
       display: block;
       color: rgb(117, 117, 117);
       fill: rgb(117, 117, 117);
-      height: 21px;
-      width: 21px;
+      height: 21px !important;
+      width: 21px !important;
       float: left;
       margin-top: 12px;
     }
@@ -196,6 +206,9 @@
     }
     .icon + .menu-label {
       margin-left: 36px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   @media (min-width: 780px) {
@@ -204,6 +217,7 @@
       padding-left: 16px;
       &.active {
         border-left: 5px solid #f47738;
+        padding-left: 11px;
         .menu-label {
           color: #f47738;
         }
@@ -225,6 +239,11 @@
             height: 21px;
             color: rgb(117, 117, 117);
             fill: rgb(117, 117, 117);
+          }
+          .actions {
+            .tooltip {
+              margin-left: 16px;
+            }
           }
         }
         .actions {

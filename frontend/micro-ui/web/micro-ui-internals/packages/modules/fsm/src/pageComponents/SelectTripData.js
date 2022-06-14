@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { getVehicleType } from "../utils";
 import { LabelFieldPair, CardLabel, TextInput, Dropdown, Loader, CardLabelError } from "@egovernments/digit-ui-react-components";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
+  let { id: applicationNumber } = useParams();
+  const userInfo = Digit.UserService.getUser();
+  const { isLoading: applicationLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
+    tenantId,
+    { applicationNos: applicationNumber, uuid: userInfo.uuid },
+    { staleTime: Infinity }
+  );
 
   const [vehicle, setVehicle] = useState({ label: formData?.tripData?.vehicleCapacity });
   const [billError, setError] = useState(false);
 
   const { isLoading: isVehicleMenuLoading, data: vehicleData } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
 
-  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: -1 });
+  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: -1, status: 'ACTIVE' });
 
   const [vehicleMenu, setVehicleMenu] = useState([]);
 
@@ -136,7 +143,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           selected={vehicle}
           select={selectVehicle}
           t={t}
-          disable={formData?.tripData?.vehicleCapacity ? true : false}
+          disable={editScreen && applicationData?.applicationStatus != "CREATED" ? true : false}
         />
       </LabelFieldPair>
       {inputs?.map((input, index) => (
