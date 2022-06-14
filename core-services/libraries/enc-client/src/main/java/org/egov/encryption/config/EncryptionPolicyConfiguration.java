@@ -44,11 +44,11 @@ public class EncryptionPolicyConfiguration {
         }
     }
 
-    public List<Attribute> getAttributeDetailsForModel(String modelName){
+    public List<Attribute> getAttributeDetailsForModel(String modelName) {
         try {
             return encryptionPolicyAttributesMap.get(modelName);
-        }catch(Exception e) {
-            throw new CustomException("DECRYPTION_ERROR","Error in retrieving MDMS data");
+        } catch (Exception e) {
+            throw new CustomException("DECRYPTION_ERROR", "Error in retrieving MDMS data");
         }
 
     }

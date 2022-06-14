@@ -99,7 +99,7 @@ public class EncryptionServiceImpl implements EncryptionService {
             decryptNode = arrayNode;
         }
 
-        if(attributesVisibilityMap.containsValue(Visibility.NONE)){
+        if (attributesVisibilityMap.containsValue(Visibility.NONE)) {
             List<Attribute> attributesToBeRemoved = attributesVisibilityMap.keySet().stream()
                     .filter(attribute -> attributesVisibilityMap.get(attribute) == Visibility.NONE).collect(Collectors.toList());
             List<String> pathToBeRemoved = attributesToBeRemoved.stream().map(Attribute::getJsonPath).collect(Collectors.toList());
@@ -115,12 +115,12 @@ public class EncryptionServiceImpl implements EncryptionService {
         pathsToBeDecrypted = JsonPathConverter.convertToArrayJsonPaths(pathsToBeDecrypted);
         JsonNode jsonNode = JacksonUtils.filterJsonNodeForPaths(ciphertextNode, pathsToBeDecrypted);
 
-        if(! jsonNode.isEmpty(objectMapper.getSerializerProvider())) {
+        if (!jsonNode.isEmpty(objectMapper.getSerializerProvider())) {
             JsonNode returnedDecryptedNode = encryptionServiceRestConnection.callDecrypt(jsonNode);
             decryptNode = JacksonUtils.merge(returnedDecryptedNode, decryptNode);
         }
 
-        if(attributesVisibilityMap.containsValue(Visibility.MASKED)) {
+        if (attributesVisibilityMap.containsValue(Visibility.MASKED)) {
             List<Attribute> attributesToBeMasked = attributesVisibilityMap.keySet().stream()
                     .filter(attribute -> attributesVisibilityMap.get(attribute) == Visibility.MASKED).collect(Collectors.toList());
             decryptNode = maskingService.maskData(decryptNode, attributesToBeMasked, uniqueIdentifier, requestInfo);
@@ -128,7 +128,7 @@ public class EncryptionServiceImpl implements EncryptionService {
 
         auditService.audit(decryptNode, model, purpose, requestInfo);
 
-        return  decryptNode;
+        return decryptNode;
     }
 
     @Override

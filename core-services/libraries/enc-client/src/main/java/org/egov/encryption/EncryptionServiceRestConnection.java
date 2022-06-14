@@ -35,7 +35,7 @@ class EncryptionServiceRestConnection {
         encryptionRequest.setEncryptionRequests(new ArrayList<>(Collections.singleton(encReqObject)));
 
         try {
-            ResponseEntity<String> response = restTemplate.postForEntity(encProperties.getEgovEncHost() + encProperties.getEgovEncEncryptPath() ,
+            ResponseEntity<String> response = restTemplate.postForEntity(encProperties.getEgovEncHost() + encProperties.getEgovEncEncryptPath(),
                     encryptionRequest, String.class);
             return objectMapper.readTree(response.getBody()).get(0);
         } catch (Exception e) {
@@ -44,12 +44,12 @@ class EncryptionServiceRestConnection {
         }
     }
 
-    JsonNode callDecrypt(Object ciphertext){
+    JsonNode callDecrypt(Object ciphertext) {
         try {
             ResponseEntity<JsonNode> response = restTemplate.postForEntity(
                     encProperties.getEgovEncHost() + encProperties.getEgovEncDecryptPath(), ciphertext, JsonNode.class);
             return response.getBody();
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new CustomException(ErrorConstants.ENCRYPTION_SERVICE_ERROR, ErrorConstants.ENCRYPTION_SERVICE_ERROR_MESSAGE);
         }
     }

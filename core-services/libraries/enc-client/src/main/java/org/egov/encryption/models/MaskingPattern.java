@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 public class MaskingPattern {
 
-  private String id = null;
+    private String id = null;
 
-  private String pattern = null;
+    private String pattern = null;
 
 }

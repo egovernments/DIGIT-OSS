@@ -36,7 +36,7 @@ public class MdmsFetcher {
         MasterDetail masterDetail = MasterDetail.builder().name(masterName)
                 .filter(filter).build();
         ModuleDetail moduleDetail = ModuleDetail.builder().moduleName(EncClientConstants.MDMS_MODULE_NAME)
-                .masterDetails(Arrays.asList(masterDetail)) .build();
+                .masterDetails(Arrays.asList(masterDetail)).build();
         MdmsCriteria mdmsCriteria = MdmsCriteria.builder().tenantId(encProperties.getStateLevelTenantId())
                 .moduleDetails(Arrays.asList(moduleDetail)).build();
 

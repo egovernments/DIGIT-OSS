@@ -15,26 +15,26 @@ import java.util.List;
 public class JacksonUtils {
 
     public static JsonNode merge(JsonNode newNode, JsonNode originalNode) {
-        if(newNode == null || newNode.isNull())
+        if (newNode == null || newNode.isNull())
             return originalNode;
-        else if(originalNode == null || originalNode.isNull())
+        else if (originalNode == null || originalNode.isNull())
             return newNode;
 
-        if(newNode.isObject())
-            newNode = mergeObjectNodes( (ObjectNode) newNode, (ObjectNode) originalNode);
-        else if(newNode.isArray())
-            newNode = mergeArrayNode( (ArrayNode) newNode, (ArrayNode) originalNode);
+        if (newNode.isObject())
+            newNode = mergeObjectNodes((ObjectNode) newNode, (ObjectNode) originalNode);
+        else if (newNode.isArray())
+            newNode = mergeArrayNode((ArrayNode) newNode, (ArrayNode) originalNode);
 
         return newNode;
     }
 
     static ArrayNode mergeArrayNode(ArrayNode newNode, ArrayNode originalNode) {
         int size = newNode.size();
-        if(newNode.size() < originalNode.size())
+        if (newNode.size() < originalNode.size())
             size = originalNode.size();
         for (int i = 0; i < size; i++) {
             JsonNode jsonNode = merge(newNode.get(i), originalNode.get(i));
-            if(i < newNode.size())
+            if (i < newNode.size())
                 newNode.set(i, jsonNode);
             else
                 newNode.add(jsonNode);
@@ -67,14 +67,14 @@ public class JacksonUtils {
         ObjectMapper mapper = new ObjectMapper(new JsonFactory());
 
         JsonNode filteredNode;
-        if(jsonNode instanceof ArrayNode)
+        if (jsonNode instanceof ArrayNode)
             filteredNode = mapper.createArrayNode();
-        else if(jsonNode instanceof ObjectNode)
+        else if (jsonNode instanceof ObjectNode)
             filteredNode = mapper.createObjectNode();
         else
             return null;
 
-        for(String path : filterPaths) {
+        for (String path : filterPaths) {
             JsonNode singlePathFilterNode = filterJsonNodeForPath(jsonNode, path);
             filteredNode = merge(singlePathFilterNode, filteredNode);
         }
@@ -85,9 +85,9 @@ public class JacksonUtils {
     static JsonNode filterJsonNodeForPath(JsonNode jsonNode, String filterPath) {
         ObjectMapper objectMapper = new ObjectMapper(new JsonFactory());
 
-        if(filterPath == null)
+        if (filterPath == null)
             return jsonNode;
-        else if(jsonNode == null)
+        else if (jsonNode == null)
             return null;
 
         String key = getFirstJsonKeyForPath(filterPath);
@@ -99,7 +99,7 @@ public class JacksonUtils {
                 newNode = objectMapper.createArrayNode();
                 for (JsonNode value : arrayNode) {
                     JsonNode filteredNode = filterJsonNodeForPath(value, getRemainingJsonKeyForPath(filterPath));
-                    if(filteredNode != null && ! filteredNode.isNull())
+                    if (filteredNode != null && !filteredNode.isNull())
                         ((ArrayNode) newNode).add(filteredNode);
                 }
             } else {                                                                        //ObjectNode
@@ -107,7 +107,7 @@ public class JacksonUtils {
                 newNode = objectMapper.createObjectNode();
                 JsonNode value = objectNode.get(key);
                 JsonNode filteredNode = filterJsonNodeForPath(value, getRemainingJsonKeyForPath(filterPath));
-                if(filteredNode != null && ! filteredNode.isNull())
+                if (filteredNode != null && !filteredNode.isNull())
                     ((ObjectNode) newNode).set(key, filteredNode);
             }
         } catch (ClassCastException e) {
@@ -124,46 +124,46 @@ public class JacksonUtils {
 
     static String getRemainingJsonKeyForPath(String path) {
         String keys[] = path.split("/", 2);
-        if(keys.length == 1)
+        if (keys.length == 1)
             return null;
         return keys[1];
     }
 
 
     public static JsonNode filterJsonNodeWithFields(JsonNode jsonNode, List<String> filterFields) {
-        if(checkIfNoFieldExistsInJsonNode(jsonNode, filterFields))
+        if (checkIfNoFieldExistsInJsonNode(jsonNode, filterFields))
             return null;
 
         ObjectMapper mapper = new ObjectMapper(new JsonFactory());
 
 
-        if(jsonNode.isObject()) {
+        if (jsonNode.isObject()) {
             ObjectNode objectNode = (ObjectNode) jsonNode;
             ObjectNode filteredObjectNode = mapper.createObjectNode();
             Iterator<String> fieldIterator = objectNode.fieldNames();
             while (fieldIterator.hasNext()) {
                 String field = fieldIterator.next();
-                if(filterFields.contains(field) && !objectNode.get(field).isNull()) {
+                if (filterFields.contains(field) && !objectNode.get(field).isNull()) {
                     filteredObjectNode.set(field, objectNode.get(field));
                 } else {
                     JsonNode filteredJsonNode = filterJsonNodeWithFields(objectNode.get(field), filterFields);
-                    if(filteredJsonNode != null) {
+                    if (filteredJsonNode != null) {
                         filteredObjectNode.set(field, filteredJsonNode);
                     }
                 }
             }
-            if(filteredObjectNode.isEmpty(mapper.getSerializerProvider()))
+            if (filteredObjectNode.isEmpty(mapper.getSerializerProvider()))
                 return null;
             return filteredObjectNode;
-        } else if(jsonNode.isArray()) {
+        } else if (jsonNode.isArray()) {
             ArrayNode arrayNode = (ArrayNode) jsonNode;
             ArrayNode filteredArrayNode = mapper.createArrayNode();
-            for(int i = 0; i < arrayNode.size(); i++) {
+            for (int i = 0; i < arrayNode.size(); i++) {
                 JsonNode filteredJsonNode = filterJsonNodeWithFields(arrayNode.get(i), filterFields);
-                if(filteredJsonNode == null) {
-                    if(arrayNode.get(i).isArray())
+                if (filteredJsonNode == null) {
+                    if (arrayNode.get(i).isArray())
                         filteredJsonNode = mapper.createArrayNode();
-                    else if(arrayNode.get(i).isObject())
+                    else if (arrayNode.get(i).isObject())
                         filteredJsonNode = mapper.createObjectNode();
                     else
                         filteredJsonNode = NullNode.getInstance();
@@ -178,8 +178,8 @@ public class JacksonUtils {
 
 
     static boolean checkIfNoFieldExistsInJsonNode(JsonNode jsonNode, List<String> fields) {
-        for(String field : fields) {
-            if(! String.valueOf(jsonNode.findPath(field)).isEmpty())
+        for (String field : fields) {
+            if (!String.valueOf(jsonNode.findPath(field)).isEmpty())
                 return false;
         }
         return true;

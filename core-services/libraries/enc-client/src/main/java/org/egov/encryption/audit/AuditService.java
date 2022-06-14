@@ -38,14 +38,14 @@ public class AuditService {
         auditObject.setModel(model);
         auditObject.setPurpose(purpose);
 
-        if(requestInfo.getPlainAccessRequest() != null) {
+        if (requestInfo.getPlainAccessRequest() != null) {
             auditObject.setPlainAccessRequest(requestInfo.getPlainAccessRequest());
         }
 
         UniqueIdentifier uniqueIdentifier =
                 decryptionPolicyConfiguration.getUniqueIdentifierForModel(model);
         List<String> entityIds = new ArrayList<>();
-        for(JsonNode node : json) {
+        for (JsonNode node : json) {
             entityIds.add(node.get(uniqueIdentifier.getJsonPath()).asText());
         }
         auditObject.setEntityIds(entityIds);

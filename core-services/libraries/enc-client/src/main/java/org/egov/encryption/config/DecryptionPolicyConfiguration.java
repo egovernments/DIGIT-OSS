@@ -15,7 +15,10 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -96,7 +99,7 @@ public class DecryptionPolicyConfiguration {
             }
 
 
-            if(!isAttributeListEmpty && !isRoleAttributeAccessMapEmpty) {
+            if (!isAttributeListEmpty && !isRoleAttributeAccessMapEmpty) {
                 Map<String, Attribute> attributesMap = makeAttributeMap(attributesList);
 
                 List<String> secondLevelVisibility = new ArrayList<>();
@@ -118,13 +121,12 @@ public class DecryptionPolicyConfiguration {
                         String firstLevelVisibility = attributeAccess.getFirstLevelVisibility() != null ?
                                 String.valueOf(attributeAccess.getFirstLevelVisibility()) : String.valueOf(attribute.getDefaultVisibility());
                         Visibility visibility = Visibility.valueOf(firstLevelVisibility);
-                        if(mapping.containsKey(attribute)){
-                            if(mapping.get(attribute).ordinal() > visibility.ordinal()){
+                        if (mapping.containsKey(attribute)) {
+                            if (mapping.get(attribute).ordinal() > visibility.ordinal()) {
                                 mapping.remove(attribute);
                                 mapping.put(attribute, visibility);
                             }
-                        }
-                        else{
+                        } else {
                             mapping.put(attribute, visibility);
                         }
                     }
@@ -136,11 +138,11 @@ public class DecryptionPolicyConfiguration {
 
             List<Attribute> mappingAttributesList = new ArrayList<>(mapping.keySet());
             List<String> attributesToAvoidlist = new ArrayList<>();
-            for(Attribute attribute: mappingAttributesList)
+            for (Attribute attribute : mappingAttributesList)
                 attributesToAvoidlist.add(attribute.getName());
 
 
-            if(!isAttributeListEmpty)
+            if (!isAttributeListEmpty)
                 getDefaultVisibilityMapping(attributesList, mapping, attributesToAvoidlist);
 
 
@@ -152,10 +154,10 @@ public class DecryptionPolicyConfiguration {
 
     private Map<String, List<AttributeAccess>> makeRoleAttributeAccessMapping(List<RoleBasedDecryptionPolicy> roleBasedDecryptionPolicyList) {
         Map<String, List<AttributeAccess>> roleAttributeAccessMap = new HashMap<>();
-        for(RoleBasedDecryptionPolicy roleBasedDecryptionPolicy : roleBasedDecryptionPolicyList) {
+        for (RoleBasedDecryptionPolicy roleBasedDecryptionPolicy : roleBasedDecryptionPolicyList) {
             List<String> roles = roleBasedDecryptionPolicy.getRoles();
             List<AttributeAccess> attributeAccessList = roleBasedDecryptionPolicy.getAttributeAccessList();
-            for(String role : roles) {
+            for (String role : roles) {
                 roleAttributeAccessMap.put(role, attributeAccessList);
             }
         }
@@ -176,12 +178,12 @@ public class DecryptionPolicyConfiguration {
         return uniqueIdentifierMap.get(model);
     }
 
-    private void getDefaultVisibilityMapping(List<Attribute> attributesList, Map<Attribute, Visibility> mapping, List<String> attributesToAvoidlist){
+    private void getDefaultVisibilityMapping(List<Attribute> attributesList, Map<Attribute, Visibility> mapping, List<String> attributesToAvoidlist) {
 
         for (Attribute attribute : attributesList) {
             String defaultVisibility = String.valueOf(attribute.getDefaultVisibility());
             Visibility visibility = Visibility.valueOf(defaultVisibility);
-            if(!attributesToAvoidlist.contains(attribute.getName())){
+            if (!attributesToAvoidlist.contains(attribute.getName())) {
                 if (mapping.containsKey(attribute)) {
                     if (mapping.get(attribute).ordinal() > visibility.ordinal()) {
                         mapping.remove(attribute);

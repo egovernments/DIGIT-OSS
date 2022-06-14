@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 public class UniqueIdentifier {
 
-  private String name = null;
+    private String name = null;
 
-  private String jsonPath = null;
+    private String jsonPath = null;
 
 }

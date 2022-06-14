@@ -20,13 +20,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.*;
 
 @Slf4j
 @Service
 public class MaskingService {
 
+    Map<String, String> maskingPatternMap = new HashMap<>();
     @Autowired
     private EncProperties encProperties;
     @Autowired
@@ -35,8 +35,6 @@ public class MaskingService {
     private ObjectMapper objectMapper;
     @Autowired
     private MdmsFetcher mdmsFetcher;
-
-    Map<String, String> maskingPatternMap = new HashMap<>();
 
     @PostConstruct
     private void initMaskingPatternMap() {
@@ -81,10 +79,10 @@ public class MaskingService {
                                                  RequestInfo requestInfo) {
         String recordId = requestInfo.getPlainAccessRequest().getRecordId();
         List<String> plainRequestFields = requestInfo.getPlainAccessRequest().getPlainRequestFields();
-        for(int i = 0; i < maskedArray.size(); i++) {
+        for (int i = 0; i < maskedArray.size(); i++) {
             JsonNode maskedNode = maskedArray.get(i);
             JsonNode decryptedNode = decryptedArray.get(i);
-            if(recordId.equals(maskedNode.get(uniqueIdentifier.getJsonPath()).asText())) {
+            if (recordId.equals(maskedNode.get(uniqueIdentifier.getJsonPath()).asText())) {
                 JsonNode plainNode = createPlainNode(decryptedNode, plainRequestFields, attributes);
                 plainNode = JacksonUtils.merge(plainNode, maskedNode);
                 maskedArray.remove(i);

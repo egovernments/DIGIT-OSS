@@ -10,16 +10,15 @@ import java.util.List;
 
 public class ConvertClass {
 
-    public static <E,P> P convertTo(JsonNode jsonNode, Class<E> valueType) throws IOException {
+    public static <E, P> P convertTo(JsonNode jsonNode, Class<E> valueType) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper(new JsonFactory());
 
-        if(jsonNode.isArray())
-        {
+        if (jsonNode.isArray()) {
             ObjectReader reader =
                     objectMapper.readerFor(objectMapper.getTypeFactory().constructCollectionType(List.class, valueType));
             return reader.readValue(jsonNode);
         } else {
-            return (P)objectMapper.treeToValue(jsonNode, valueType);
+            return (P) objectMapper.treeToValue(jsonNode, valueType);
         }
     }
 
