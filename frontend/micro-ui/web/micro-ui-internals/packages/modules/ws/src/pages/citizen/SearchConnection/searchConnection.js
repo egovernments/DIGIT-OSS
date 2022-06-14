@@ -43,7 +43,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
       }
       else {
         history.push(
-          `/digit-ui/citizen/ws/search-results?mobileNumber=${mobileNumber}&consumerNumber=${consumerNumber}&oldconsumerNumber=${oldconsumerNumber}&propertyId=${propertyId}&tenantId=${city.code}&locality=${locality.code}`
+          `/digit-ui/citizen/ws/search-results?mobileNumber=${mobileNumber}&consumerNumber=${consumerNumber}&oldconsumerNumber=${oldconsumerNumber}&propertyId=${propertyId}&tenantId=${city.code}&locality=${undefined}`
         );
       }
     }
@@ -164,8 +164,8 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
                 title: t("UC_CITY_MANDATORY"),
               })}
           />
-        {city && !logginedUser && <CardLabel>{`${t("WS_PROP_DETAIL_LOCALITY_LABEL")}*`}</CardLabel>}
-        {city && !logginedUser && <Localities
+        {city && searchType && searchType?.code == "CONNECTION_DETAILS"  && <CardLabel>{`${t("WS_PROP_DETAIL_LOCALITY_LABEL")}*`}</CardLabel>}
+        {city && searchType && searchType?.code == "CONNECTION_DETAILS"  && <Localities
                 selectLocality={selectLocality}
                 tenantId={city?.code}
                 boundaryType="revenue"
@@ -223,17 +223,18 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
             title: t("ERR_INVALID_CONSUMER_NO"),
           })}
         />
-        {logginedUser && <CardLabel style={{textAlign:"center",color:"#505A5F"}}>{`${t("(or)")}`}</CardLabel>}
-        {logginedUser && 
+        {<CardLabel style={{textAlign:"center",color:"#505A5F"}}>{`${t("(or)")}`}</CardLabel>}
+        {
         <div className="tooltip">
-        <div style={{display: "flex", gap: "0 4px"}}></div>
+        <div style={{display: "flex", gap: "0 4px"}}>
         <CardLabel>{`${t("WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL")}`}</CardLabel>
         <InfoBannerIcon fill="#0b0c0c" />
         <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
         {t("WS_CONSUMER_NO_DESCRIPTION") + " " + "WS_CONSUMER_NO_FORMAT"}
         </span>
+        </div>
         </div>}
-        {logginedUser && <TextInput
+        {<TextInput
           t={t}
           type={"any"}
           isMandatory={false}

@@ -10,7 +10,7 @@ new Date(epochdate).getDate() + "/" + (new Date(epochdate).getMonth() + 1) + "/"
 const getAddress = (address, t) => {
   return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`
+  }${t(address?.locality.code)}, ${t(address?.city.code || address?.city)}${t(address?.pincode) ? `, ${address.pincode}` : " "}`
 } 
 
 const combineResponse = (WaterConnections, properties, billData, t) => {
