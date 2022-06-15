@@ -42,19 +42,23 @@ const EditApplication = () => {
   useEffect(() => {
     const config = newConfigLocal.find((conf) => conf.hideInCitizen);
     config.head = "WS_APP_FOR_WATER_AND_SEWERAGE_EDIT_LABEL";
+    console.log("Effect 1 ");
     let bodyDetails = [];
     config?.body?.forEach(data => { if (data?.isEditConnection) bodyDetails.push(data); })
     config.body = bodyDetails;
     setConfig(config);
-  });
+  },[]);
+
 
   useEffect(() => {
     !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
+    console.log("Effect 2");
   }, [sessionFormData?.cpt]);
 
   useEffect(async () => {
     const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
     if (details?.applicationData?.id && !IsDetailsExists) {
+      console.log("Effect 3");
       const convertAppData = await convertApplicationData(details, serviceType, false, false, t);
       setSessionFormData({ ...sessionFormData, ...convertAppData });
       setAppData({ ...convertAppData })
@@ -64,18 +68,21 @@ const EditApplication = () => {
 
   useEffect(() => {
     setSessionFormData({ ...sessionFormData, cpt: { details: propertyDetails?.Properties?.[0] } });
+    console.log("Effect 4");
   }, [propertyDetails]);
 
   useEffect(() => {
+    console.log("Effect 5");
     if (sessionFormData?.DocumentsRequired?.documents?.length > 0 || sessionFormData?.ConnectionDetails?.[0]?.water || sessionFormData?.ConnectionDetails?.[0]?.sewerage) {
       setEnabledLoader(false);
     }
-  }, [propertyDetails, sessionFormData, sessionFormData?.cpt]);
+  }, [sessionFormData?.DocumentsRequired, sessionFormData?.ConnectionDetails ]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details?applicationNumber=${sessionFormData?.ConnectionDetails?.[0]?.applicationNo}&service=${sessionFormData?.ConnectionDetails?.[0]?.serviceName?.toUpperCase()}`
     }, 5000);
+    console.log("Effect 6");
     return () => clearTimeout(timer);
   }, [isAppDetailsPage]);
 

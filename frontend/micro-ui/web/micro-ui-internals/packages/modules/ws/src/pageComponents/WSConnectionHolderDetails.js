@@ -66,6 +66,7 @@ const WSConnectionHolderDetails = ({ config, onSelect, userType, formData, setEr
   Menu ? Menu.sort((a, b) => a.name.localeCompare(b.name)) : "";
 
   useEffect(() => {
+    console.log("Con 1");
     const data = connectionHolderDetails.map((e) => {
       return e;
     });
@@ -74,12 +75,14 @@ const WSConnectionHolderDetails = ({ config, onSelect, userType, formData, setEr
 
 
   useEffect(() => {
+    console.log("Con 2");
     if (userType === "employee") {
       onSelect(config.key, { ...formData[config.key], ...connectionHolderDetails });
     }
   }, [connectionHolderDetails]);
 
   useEffect(() => {
+    console.log("Con 3");
     if (!formData?.ConnectionHolderDetails) {
       setConnectionHolderDetails([createConnectionHolderDetails()]);
     }
@@ -143,10 +146,12 @@ const ConnectionDetails = (_props) => {
   const { errors } = localFormState;
 
   useEffect(() => {
+    console.log("Con 4");
     trigger();
   }, []);
 
   useEffect(() => {
+    console.log("Con 5");
     if (Object.entries(formValue).length > 0) {
       const keys = Object.keys(formValue);
       const part = {};
@@ -169,6 +174,7 @@ const ConnectionDetails = (_props) => {
 
 
   useEffect(() => {
+    console.log("Con 6");
     let isClear = true;
     Object.keys(connectionHolderDetails?.[0])?.map(data => {
       if (!connectionHolderDetails[0][data] && connectionHolderDetails[0][data] != false && isClear) isClear = false
@@ -182,6 +188,7 @@ const ConnectionDetails = (_props) => {
 
 
   useEffect(() => {
+    console.log("Con 7");
     if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) {
       setError(config.key, { type: errors });
     }
