@@ -218,8 +218,8 @@ public class PayGovGateway implements Gateway {
         
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         queryMap.forEach(params::add);
-        UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(GATEWAY_URL).queryParams
-                (params).build().encode();
+        UriComponents uriComponents = UriComponentsBuilder.fromHttpUrl(GATEWAY_URL).query(urlData)
+                .build().encode();
 
         return uriComponents.toUri();
         
