@@ -24,7 +24,7 @@ const PTSelectStreet = ({ t, config, onSelect, userType, formData, formState, se
         type: "text",
         name: "street",
         validation: {
-          pattern: "[a-zA-Z0-9 ]{1,255}",
+          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
           // maxlength: 256,
           title: t("CORE_COMMON_STREET_INVALID"),
         },
@@ -34,7 +34,7 @@ const PTSelectStreet = ({ t, config, onSelect, userType, formData, formState, se
         type: "text",
         name: "doorNo",
         validation: {
-          pattern: "[A-Za-z0-9#,/ -()]{1,63}",
+          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
           // maxlength: 256,
           title: t("CORE_COMMON_DOOR_INVALID"),
         },
