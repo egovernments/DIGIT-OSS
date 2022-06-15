@@ -1,5 +1,5 @@
-import { BreadCrumb, ShippingTruck, EmployeeModuleCard, PrivateRoute, BackButton } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useState } from "react";
+import { BreadCrumb, ShippingTruck, EmployeeModuleCard, PrivateRoute, BackButton, AddNewIcon, ViewReportIcon, InboxIcon, ULBHomeCard } from "@egovernments/digit-ui-react-components";
+import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation } from "react-router-dom";
 import FstpAddVehicle from "./FstpAddVehicle";
@@ -18,6 +18,7 @@ export const FsmBreadCrumb = ({ location }) => {
   const isRegistry = location?.pathname?.includes("registry");
   const isVendorDetails = location?.pathname?.includes("vendor-details");
   const isVendorEdit = location?.pathname?.includes("modify-vendor");
+  const isNewApplication = location?.pathname?.includes("new-application");
   const isVehicleDetails = location?.pathname?.includes("vehicle-details");
   const isVehicleEdit = location?.pathname?.includes("modify-vehicle");
   const isDriverDetails = location?.pathname?.includes("driver-details");
@@ -45,9 +46,19 @@ export const FsmBreadCrumb = ({ location }) => {
       show: isFsm,
     },
     {
-      path: isRegistry ? "/digit-ui/employee/fsm/registry" : FSTPO ? "/digit-ui/employee/fsm/fstp-inbox" : "/digit-ui/employee/fsm/inbox",
-      content: isInbox || isApplicationDetails || search || isVehicleLog ? t("ES_TITLE_INBOX") : "FSM",
+      path: isRegistry ? "/digit-ui/employee/fsm/registry" : FSTPO ? "/digit-ui/employee/fsm/fstp-inbox" : "/digit-ui/employee/fsm/home",
+      content: isApplicationDetails || search || isVehicleLog ? t("ES_TITLE_INBOX") : "FSM",
       show: isFsm,
+    },
+    {
+      path: isNewApplication ? "/digit-ui/employee/fsm/new-application" : "",
+      content: t("FSM_NEW_DESLUDGING_APPLICATION"),
+      show: isFsm && isNewApplication,
+    },
+    {
+      path: isInbox ? "/digit-ui/employee/fsm/inbox" : "",
+      content: t("ES_TITLE_INBOX"),
+      show: isFsm && isInbox,
     },
     {
       path: "/digit-ui/employee/fsm/search",
@@ -80,6 +91,42 @@ export const FsmBreadCrumb = ({ location }) => {
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
+  const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
+  const COLLECTOR = Digit.UserService.hasAccess("FSM_COLLECTOR") || false;
+  const FSM_ADMIN = Digit.UserService.hasAccess("FSM_ADMIN") || false;
+  const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
+  const FSM_CREATOR = Digit.UserService.hasAccess("FSM_CREATOR_EMP") || false;
+
+  const moduleForSomeFSMEmployees = !DSO && !COLLECTOR && !FSM_EDITOR ? [
+    {
+      link: "/digit-ui/employee/fsm/new-application",
+      name: "FSM_NEW_DESLUDGING_APPLICATION",
+      icon: <AddNewIcon />
+    },
+  ] : []
+
+  const moduleForSomeFSMAdmin = FSM_ADMIN ? [
+    {
+      link: "/digit-ui/employee/fsm/registry",
+      name: "ES_TITLE_FSM_REGISTRY",
+      icon: <AddNewIcon />
+    },
+  ] : []
+
+  const module = [
+    ...moduleForSomeFSMEmployees,
+    {
+      link: "/digit-ui/employee/fsm/inbox",
+      name: "ES_COMMON_INBOX",
+      icon: <InboxIcon />
+    },
+    {
+      locate: "/employee/report/fsm/FSMDailyDesludingReport",
+      name: "ES_FSM_VIEW_REPORTS_BUTTON",
+      icon: <ViewReportIcon />
+    },
+    ...moduleForSomeFSMAdmin,
+  ]
 
   useEffect(() => {
     if (!location?.pathname?.includes("application-details")) {
@@ -144,6 +191,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute exact path={`${path}/fstp-operations`} component={() => <FstpOperations />} />
           <PrivateRoute exact path={`${path}/fstp-add-vehicle`} component={() => <FstpAddVehicle />} />
           <PrivateRoute exact path={`${path}/fstp-fsm-request/:id`} component={() => <FstpServiceRequest />} />
+          <PrivateRoute exact path={`${path}/home`} component={() => <ULBHomeCard module={module} />} />
           <PrivateRoute path={`${path}/fstp/new-vehicle-entry`} component={FstpOperatorDetails} />
         </div>
       </React.Fragment>
