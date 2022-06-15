@@ -134,8 +134,8 @@ const generateNextFinancialYear = state => {
     "applyScreenMdmsData.egf-master.FinancialYear",
     []
   );
-  const data = financialYears && financialYears.filter(item => item.code === currentFY);
-  const currrentFYending = data && data[0] && data[0].endingDate;
+  const currrentFYending = financialYears.filter(item => item.code === currentFY)[0]
+    .endingDate;
 
     const nectYearObject = financialYears.filter(item => item.startingDate === currrentFYending+1000)[0];
   return nectYearObject ? nectYearObject.code : getCurrentFinancialYear();
@@ -515,6 +515,9 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
       let searchResponse = updateResponse;
       if (isEditFlow || (isRenewal && queryObject[0].status === "INITIATED" && queryObject[0].action === "INITIATE")) {
         searchResponse = { Licenses: queryObject };
+      } 
+      else if (queryObject[0].applicationType === "RENEWAL" && queryObject[0].status === "INITIATED" && queryObject[0].action === "INITIATE") {
+        searchResponse = { Licenses: queryObject };
       } else {
         dispatch(prepareFinalObject("Licenses", searchResponse.Licenses));
       }
@@ -522,7 +525,7 @@ export const applyTradeLicense = async (state, dispatch, activeIndex) => {
         searchResponse,
         "Licenses[0].tradeLicenseDetail.tradeUnits"
       );
-      const tradeTemp = updatedtradeUnits.map((item, index) => {
+      const tradeTemp = updatedtradeUnits && updatedtradeUnits.map((item, index) => {
         return {
           tradeSubType: item.tradeType.split(".")[1],
           tradeType: item.tradeType.split(".")[0]
