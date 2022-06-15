@@ -368,16 +368,19 @@ public class WaterServiceImpl implements WaterService {
 	@Override
 	public BigDecimal getPaidConnections(SearchCriteria criteria, RequestInfo requestInfo) {
 		StringBuilder URL = waterServiceUtil.getcollectionURL();
-		URL.append("WS").append("/_plainsearch").append("?").append("fromDate=").append(criteria.getFromDate())
-				.append("&").append("toDate=").append(criteria.getToDate());
+		URL.append("/_plainsearch").append("?").append("fromDate=").append(criteria.getFromDate())
+				.append("&").append("toDate=").append(criteria.getToDate()).append("&").append("businessServices=").append(criteria.getBusinessServices());
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
-		Object response = serviceRequestRepository.fetchResult(URL,requestInfoWrapper);
-		List<Payment> payments = (List<Payment>) mapper.convertValue(response, Payment.class);
+		Object response = serviceRequestRepository.fetchResult(URL, requestInfoWrapper);
+		List<Payment> payments = Arrays.asList(mapper.convertValue(response, Payment.class));
 		BigDecimal totalAmountPaid = null;
-		for(Payment payment : payments) {
-			totalAmountPaid = totalAmountPaid.add(payment.getTotalAmountPaid());
+		for (Payment payment : payments) {
+			if (payment.getTotalAmountPaid() != null) {
+				totalAmountPaid = totalAmountPaid.add(payment.getTotalAmountPaid());
+			}
 		}
 		return totalAmountPaid;
+
 	}
 
 	@Override

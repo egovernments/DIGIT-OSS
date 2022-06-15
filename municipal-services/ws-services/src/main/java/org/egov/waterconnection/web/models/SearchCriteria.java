@@ -100,6 +100,9 @@ public class SearchCriteria {
 	@JsonIgnore
 	private Boolean isCountCall = false;
 
+	@JsonProperty("businessServices")
+	private String businessServices;
+
 	public enum SortOrder {
 	    ASC,
 	    DESC

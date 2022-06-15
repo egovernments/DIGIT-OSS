@@ -94,8 +94,10 @@ public class WaterController {
 		Map<String,BigDecimal> response = new HashMap<>();
 		BigDecimal totalAmount = waterService.getPaidConnections(criteria, requestInfoWrapper.getRequestInfo());
 		int count = waterService.getActiveConnections(criteria, requestInfoWrapper.getRequestInfo());
-		response.put("totalAmountPaid", totalAmount);
-		response.put("activeCOnnections", BigDecimal.valueOf(count));
+		if(totalAmount != null) {
+			response.put("totalAmountPaid", totalAmount);
+		}
+		response.put("activeConnections", BigDecimal.valueOf(count));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }
