@@ -85,7 +85,12 @@ export const SelectPaymentType = (props) => {
       const redirectUrl = data?.Transaction?.redirectUrl;
       //window.location = redirectUrl;
       try{
-                const gatewayParam = JSON.parse(redirectUrl);
+                   const gatewayParam = redirectUrl?.split("?")?.[1]?.split("&")?.reduce((curr,acc)=>{
+      var d=acc.split('=')
+curr[d[0]]=d[1]
+      return curr
+  },{}); 
+
                 console.log("gateway parameter",gatewayParam);
                 var newForm = $('<form>', {
                   action: gatewayParam.txURL,
