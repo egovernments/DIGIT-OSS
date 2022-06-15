@@ -187,6 +187,7 @@ public class NotificationService {
 				fsm.getApplicationStatus().equalsIgnoreCase(FSMConstants.WF_STATUS_PENDING_APPL_FEE_PAYMENT) && 
 				fsm.getSource() != null && fsm.getSource().equalsIgnoreCase(FSMConstants.APPLICATION_CHANNEL_TELEPONE)) {
 			String appCreatedMessage=FSMConstants.SMS_NOTIFICATION_PREFIX +FSMConstants.WF_STATUS_CREATED+"_"+FSMConstants.WF_ACTION_CREATE;
+			
 			String message = util.getCustomizedMsg(fsmRequest, localizationMessages,appCreatedMessage);
 			Map<String, String> mobileNumberToOwner = getUserList(fsmRequest);
 			smsRequests.addAll(util.createSMSRequest(message, mobileNumberToOwner));
@@ -221,6 +222,16 @@ public class NotificationService {
 		log.info("Printing the value of before final messageCode:: "+ messageCode);
 		if(null==messageCode) {
 			messageCode=localizationMessageKey;
+		}
+		/*
+		 * bug SAN-1088- Getting 2 sms for pay now application creation
+		 * message code for pre_pay
+		 */
+		if(!FSMConstants.FSM_PAYMENT_PREFERENCE_POST_PAY.equalsIgnoreCase(fsm.getPaymentPreference()) &&
+				fsm.getApplicationStatus().equalsIgnoreCase(FSMConstants.WF_STATUS_PENDING_APPL_FEE_PAYMENT)){
+			
+			messageCode=FSMConstants.SMS_NOTIFICATION_PREFIX + fsm.getApplicationStatus()
+			+ (fsmRequest.getWorkflow() == null ? "" : "_" + FSMConstants.WF_ACTION_SUBMIT);
 		}
 		log.info("Printing the value of final messageCode:: "+ messageCode);
 		
