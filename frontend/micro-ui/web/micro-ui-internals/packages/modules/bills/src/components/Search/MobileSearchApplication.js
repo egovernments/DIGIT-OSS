@@ -77,17 +77,12 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
       return [];
       }
       return data?.map((data) => ({
-        [t("TL_COMMON_TABLE_COL_APP_NO")]: data.applicationNumber,
-        [t("TL_COMMON_TABLE_COL_APP_DATE")]: "",
-        [t("TL_APPLICATION_TYPE_LABEL")]: data.applicationType
-          ? t(`TL_LOCALIZATION_APPLICATIONTYPE_${data.applicationType}`)
-          : "-",
-        [t("TL_LICENSE_NUMBERL_LABEL")]: data?.licenseNumber || "-",
-        [t("TL_LICENSE_YEAR_LABEL")]: data.financialYear || "",
-        [t("TL_COMMON_TABLE_COL_TRD_NAME")]: data.tradeName || "",
-        [t("TL_LOCALIZATION_TRADE_OWNER_NAME")]: data?.tradeLicenseDetail?.owners?.map( o => o.name ). join(",") || "" ,
-        [t("WF_INBOX_HEADER_CURRENT_OWNER")]: data?.CurrentOwners[0].currentOwner || "",
-        [t("TL_COMMON_TABLE_COL_STATUS")]: data.workflowCode && data.state ? t(`WF_${data.workflowCode}_${data.state}`) : "NA",
+        [t("ABG_COMMON_TABLE_COL_BILL_NO")]: GetCell(original?.billNumber),
+        [t("ABG_COMMON_TABLE_COL_CONSUMER_NAME")]: GetCell(original?.payerName),
+        [t("ABG_COMMON_TABLE_COL_BILL_EXP_DATE")]: GetDateCell(original?.billDate),
+        [t("ABG_COMMON_TABLE_COL_BILL_AMOUNT")]: GetCell(original?.totalAmount),
+        [t("ABG_COMMON_TABLE_COL_STATUS")]: GetCell(original?.status),
+        [t("ABG_COMMON_TABLE_COL_ACTION")]: GetActioncell(original),
       }))
     },
     [data]

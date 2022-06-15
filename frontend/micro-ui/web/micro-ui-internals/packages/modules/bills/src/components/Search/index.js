@@ -1,6 +1,7 @@
 import { Card, Header, SearchForm, Table } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { getActionButton, getBillNumber } from "../../utils";
 import { Link } from "react-router-dom";
 import MobileSearchApplication from "./MobileSearchApplication";
 import SearchFields from "./SearchFields";
@@ -15,6 +16,18 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
   const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
     defaultValues: initialValues,
   });
+  const convertEpochToDate = (dateEpoch) => {
+    if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
+      return "NA";
+    }
+    const dateFromApi = new Date(dateEpoch);
+    let month = dateFromApi.getMonth() + 1;
+    let day = dateFromApi.getDate();
+    let year = dateFromApi.getFullYear();
+    month = (month > 9 ? "" : "0") + month;
+    day = (day > 9 ? "" : "0") + day;
+    return `${day}/${month}/${year}`;
+  };
 
   useEffect(() => {
     register("offset", 0);
@@ -51,66 +64,104 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
 
   //need to get from workflow
   const GetCell = (value) => <span className="cell-text">{value}</span>;
+  <header>keerthi</header>
   const columns = useMemo(
     () => [
       {
-        Header: t("TL_COMMON_TABLE_COL_APP_NO"),
-        accessor: "applicationNo",
+        Header: t("ABG_COMMON_TABLE_COL_BILL_NO"),
         disableSortBy: true,
         Cell: ({ row }) => {
           return (
             <div>
               <span className="link">
-                <Link to={`/digit-ui/employee/tl/application-details/${row.original["applicationNumber"]}`}>{row.original["applicationNumber"]}</Link>
+                {GetCell(getBillNumber(row.original?.businessService, row.original?.consumerCode, row.original?.billNumber))}
               </span>
             </div>
           );
         },
       },
       {
-        Header: t("TL_COMMON_TABLE_COL_APP_DATE"),
+        Header: t("ABG_COMMON_TABLE_COL_CONSUMER_NAME"),
         disableSortBy: true,
-        accessor: (row) => "sas",
-      },
+        Cell: ({ row }) => {
+          return GetCell(`${row.original?.["payerName"]}`);
+        },      },
       {
-        Header: t("TL_APPLICATION_TYPE_LABEL"),
+        Header: t("ABG_COMMON_TABLE_COL_BILL_DATE"),
         disableSortBy: true,
-        accessor: (row) => GetCell(t(`TL_LOCALIZATION_APPLICATIONTYPE_${row.applicationType}`)),
-      },
+        Cell: ({ row }) => {
+          const billDate = row.original?.billDate === "NA" ? t("CS_NA") : convertEpochToDate(row.original?.billDate);
+          return GetCell(t(`${billDate}`));
+        },      },
       {
-        Header: t("TL_LICENSE_NUMBERL_LABEL"),
+        Header: t("ABG_COMMON_TABLE_COL_BILL_AMOUNT"),
         disableSortBy: true,
-        accessor: (row) => GetCell(row.licenseNumber || "-"),
-      },
+        Cell: ({ row }) => {
+          return GetCell(`${row.original?.["totalAmount"]}`);
+        },      },
       {
-        Header: t("TL_LICENSE_YEAR_LABEL"),
+        Header: t("ABG_COMMON_TABLE_COL_STATUS"),
         disableSortBy: true,
-        accessor: (row) => GetCell(row.financialYear),
-      },
+        Cell: ({ row }) => {
+          return GetCell(`${row.original?.["status"]}`);
+        },      },
       {
-        Header: t("TL_COMMON_TABLE_COL_TRD_NAME"),
+        Header: t("ABG_COMMON_TABLE_COL_ACTION"),
         disableSortBy: true,
-        accessor: (row) => GetCell(row.tradeName || ""),
-      },
-      {
-        Header: t("TL_LOCALIZATION_TRADE_OWNER_NAME"),
-        accessor: (row) => GetCell(row.payerName || ""),
-        disableSortBy: true,
-      },
-      {
-        Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
-        accessor: (row) => GetCell(row.payerName || ""),
-        disableSortBy: true,
-      },
-      {
-        Header: t("TL_COMMON_TABLE_COL_STATUS"),
-        accessor: (row) => GetCell(t((row?.workflowCode && row?.status && `WF_${row?.workflowCode?.toUpperCase()}_${row.status}`) || "NA")),
-        disableSortBy: true,
-      },
+        Cell: ({ row }) => {
+          const amount = row.original?.totalAmount;
+          if (amount > 0) {
+            return GetCell(getActionItem(row.original?.status, row));
+          } else {
+            return GetCell(t(`${"CS_NA"}`));
+          }
+        },
+      }
     ],
     []
   );
-
+  const getActionItem = (status, row) => {
+    if (window.location.href.includes("/digit-ui/employee/bills/group-bill")) {
+      return null;
+    }
+    switch (status) {
+      case "ACTIVE":
+        return (
+          <div>
+            <span className="link">
+              <Link
+                to={{
+                  pathname: `/digit-ui/employee/payment/collect/${row.original?.["businessService"]}/${row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}?workflow=mcollect`,
+                }}
+              >
+                {t(`${"ABG_COLLECT"}`)}{" "}
+              </Link>
+            </span>
+          </div>
+        );
+      case "CANCELLED":
+      case "EXPIRED":
+        return (
+          <div>
+            <span className="link">
+              <Link
+                to={{
+                  pathname: `/digit-ui/employee/payment/collect/${row.original?.["businessService"]}/${row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}?workflow=mcollect`,
+                }}
+              >
+                {t(`${"ABG_GENERATE_NEW_BILL"}`)}
+              </Link>
+            </span>
+          </div>
+        );
+      case "PAID":
+        return (
+          <div>
+            <span className="link">{getActionButton(row.original?.["businessService"], row.original?.["consumerCode"])}</span>
+          </div>
+        );
+    }
+  };
   return (
     <React.Fragment>
       <Header>{t("ABG_SEARCH_BILL_COMMON_HEADER")}</Header>

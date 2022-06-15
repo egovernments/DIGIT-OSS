@@ -41,10 +41,12 @@ const SearchFields = ({ register, control, reset, tenantId, t, previousPage ,for
 
   return (
     <>
-     
+      < div style={{marginRight:"542px", marginBottom:"10px"}}>
+                <span style={{color:"#505A5F"}}>{t("Provide at least one parameter to search for an application")}</span>
+                </div>
       {isLoading ? (
         <Loader />
-      ) : (
+      ) : (  
         <SearchField>
           <label>{t("ABG_SERVICE_CATEGORY_LABEL")}</label>
           <Controller
@@ -90,9 +92,9 @@ const SearchFields = ({ register, control, reset, tenantId, t, previousPage ,for
         <CardLabelError>{formState?.errors?.["mobileNumber"]?.message}</CardLabelError>
       </SearchField>
 
-      <SearchField className="submit">
-        <SubmitBar label={t("ES_COMMON_SEARCH")} submit />
-        <p
+      <SearchField className="submit" style={{marginTop:"-10px"}}>
+        <SubmitBar label={t("ES_COMMON_SEARCH")} style={{marginLeft:"720px", marginBottom:"-10px"}} submit />
+        <p style={{marginLeft:"540px",display:"table-caption", marginLeft:"430px", marginTop:"-25px"}}
           onClick={() => {
             reset({
               serviceCategory: "",
