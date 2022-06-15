@@ -23,10 +23,7 @@ import org.egov.bpa.util.BPAErrorConstants;
 import org.egov.bpa.util.BPAUtil;
 import org.egov.bpa.util.NotificationUtil;
 import org.egov.bpa.validator.BPAValidator;
-import org.egov.bpa.web.model.BPA;
-import org.egov.bpa.web.model.BPARequest;
-import org.egov.bpa.web.model.BPASearchCriteria;
-import org.egov.bpa.web.model.Workflow;
+import org.egov.bpa.web.model.*;
 import org.egov.bpa.web.model.landInfo.LandInfo;
 import org.egov.bpa.web.model.landInfo.LandSearchCriteria;
 import org.egov.bpa.web.model.user.UserDetailResponse;
@@ -55,6 +52,8 @@ import com.itextpdf.layout.properties.VerticalAlignment;
 
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
+
+import static org.egov.bpa.util.BPAConstants.STATUS_APPROVED;
 
 @Service
 @Slf4j
@@ -164,7 +163,7 @@ public class BPAService {
 			else if ( ocBpas.get(0).getStatus().equalsIgnoreCase(BPAConstants.STATUS_REVOCATED)) {
 				throw new CustomException(BPAErrorConstants.CREATE_ERROR, "This permit number is revocated you cannot use this permit number");
 			}
-			else if (!ocBpas.get(0).getStatus().equalsIgnoreCase(BPAConstants.STATUS_APPROVED)) {
+			else if (!ocBpas.get(0).getStatus().equalsIgnoreCase(STATUS_APPROVED)) {
 				throw new CustomException(BPAErrorConstants.CREATE_ERROR, "The selected permit number still in workflow approval process, Please apply occupancy after completing approval process.");
 			}
 
@@ -517,7 +516,7 @@ public class BPAService {
 			else if ( bpas.get(0).getStatus().equalsIgnoreCase(BPAConstants.STATUS_REVOCATED)) {
 				throw new CustomException(BPAErrorConstants.UPDATE_ERROR, "This permit number is revocated you cannot use this permit number");
 			}
-			else if (!bpas.get(0).getStatus().equalsIgnoreCase(BPAConstants.STATUS_APPROVED)) {
+			else if (!bpas.get(0).getStatus().equalsIgnoreCase(STATUS_APPROVED)) {
 				throw new CustomException(BPAErrorConstants.UPDATE_ERROR, "The selected permit number still in workflow approval process, Please apply occupancy after completing approval process.");
 			}
 			
@@ -727,6 +726,15 @@ public class BPAService {
             return repository.getBPACount(criteria, edcrNos);
         
         }
+
+	public int getBPAPermitCount(BPAPermitCountSearchCriteria criteria, RequestInfo requestInfo) {
+		if(criteria.getStatus()==null){
+			criteria.setStatus(STATUS_APPROVED);
+		}
+
+		int count = repository.getBPAPermitCount(criteria);
+		return count;
+	}
         
         public List<BPA> plainSearch(BPASearchCriteria criteria, RequestInfo requestInfo) {
     		List<BPA> bpas = new LinkedList<>();

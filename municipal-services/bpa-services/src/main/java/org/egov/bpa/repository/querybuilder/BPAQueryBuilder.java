@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.egov.bpa.config.BPAConfiguration;
+import org.egov.bpa.web.model.BPAPermitCountSearchCriteria;
 import org.egov.bpa.web.model.BPASearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ public class BPAQueryBuilder {
             + LEFT_OUTER_JOIN_STRING
             + "eg_bpa_document bpadoc ON bpadoc.buildingplanid = bpa.id";;
 
+    private static final String PERMIT_COUNT_QUERY = "SELECT COUNT(DISTINCT(bpa.id)) FROM eg_bpa_buildingplan bpa";
     private final String paginationWrapper = "SELECT * FROM "
             + "(SELECT *, DENSE_RANK() OVER (ORDER BY bpa_lastModifiedTime DESC) offset_ FROM " + "({})"
             + " result) result_offset " + "WHERE offset_ > ? AND offset_ <= ?";
@@ -182,6 +184,49 @@ public class BPAQueryBuilder {
         
         return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 
+    }
+
+    /**
+     * To give the Search query for the count of permits issued
+     *
+     * @param criteria BPA search criteria for permits issued
+     * @param preparedStmtList values to be replased on the query
+     * @return Final Search Query
+     */
+    public String getBPAPermitCountSearchQuery(BPAPermitCountSearchCriteria criteria, List<Object> preparedStmtList) {
+
+        StringBuilder builder = new StringBuilder(PERMIT_COUNT_QUERY);
+
+        if (criteria.getTenantId() != null) {
+            if (criteria.getTenantId().split("\\.").length == 1) {
+
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append(" bpa.tenantid like ?");
+                preparedStmtList.add('%' + criteria.getTenantId() + '%');
+            } else {
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append(" bpa.tenantid = ? ");
+                preparedStmtList.add(criteria.getTenantId());
+            }
+        }
+
+        String status = criteria.getStatus();
+        if (status != null) {
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" bpa.status = ? ");
+            preparedStmtList.add(status);
+        }
+
+        if (criteria.getFromDate() != null && criteria.getToDate() != null) {
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" bpa.createdtime BETWEEN ").append(criteria.getFromDate()).append(" AND ")
+                    .append(criteria.getToDate());
+        } else if (criteria.getFromDate() != null && criteria.getToDate() == null) {
+            addClauseIfRequired(preparedStmtList, builder);
+            builder.append(" bpa.createdtime >= ").append(criteria.getFromDate());
+        }
+
+        return builder.toString();
     }
 
     /**

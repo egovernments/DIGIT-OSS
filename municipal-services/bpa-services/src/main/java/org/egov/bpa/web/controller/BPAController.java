@@ -12,11 +12,7 @@ import org.egov.bpa.util.BPAConstants;
 import org.egov.bpa.util.BPAErrorConstants;
 import org.egov.bpa.util.BPAUtil;
 import org.egov.bpa.util.ResponseInfoFactory;
-import org.egov.bpa.web.model.BPA;
-import org.egov.bpa.web.model.BPARequest;
-import org.egov.bpa.web.model.BPAResponse;
-import org.egov.bpa.web.model.BPASearchCriteria;
-import org.egov.bpa.web.model.RequestInfoWrapper;
+import org.egov.bpa.web.model.*;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -77,6 +73,14 @@ public class BPAController {
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true)).count(count)
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
+	@PostMapping(value = "/_permitcount")
+	public Integer getPermitCount(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+											  @Valid @ModelAttribute BPAPermitCountSearchCriteria criteria) {
+
+		int count = bpaService.getBPAPermitCount(criteria, requestInfoWrapper.getRequestInfo());
+		return count;
 	}
 
 	@PostMapping(value = "/_permitorderedcr")

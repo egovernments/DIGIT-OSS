@@ -3,11 +3,13 @@ package org.egov.bpa.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.producer.Producer;
 import org.egov.bpa.repository.querybuilder.BPAQueryBuilder;
 import org.egov.bpa.repository.rowmapper.BPARowMapper;
 import org.egov.bpa.web.model.BPA;
+import org.egov.bpa.web.model.BPAPermitCountSearchCriteria;
 import org.egov.bpa.web.model.BPARequest;
 import org.egov.bpa.web.model.BPASearchCriteria;
 import org.egov.common.contract.request.RequestInfo;
@@ -16,6 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Slf4j
 public class BPARepository {
 
 	@Autowired
@@ -96,6 +99,22 @@ public class BPARepository {
                 int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
                 return count;
         }
+
+	/**
+	 * BPA search count of Permits issued in database
+	 *
+	 * @param criteria
+	 *            The BPA Search criteria for Permits issued
+	 * @return count of Permits issued from search
+	 */
+	public int getBPAPermitCount(BPAPermitCountSearchCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		String query = queryBuilder.getBPAPermitCountSearchQuery(criteria, preparedStmtList);
+		log.info("QUERY ----> "+query);
+		log.info("preparedStmtList ----> "+preparedStmtList.toString());
+		int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+		return count;
+	}
         
         public List<BPA> getBPADataForPlainSearch(BPASearchCriteria criteria, List<String> edcrNos) {
     		List<Object> preparedStmtList = new ArrayList<>();
