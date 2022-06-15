@@ -17,6 +17,8 @@ import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { useParams, useHistory, useLocation, Redirect } from "react-router-dom";
 import { stringReplaceAll } from "../bills/routes/bill-details/utils";
+import $ from 'jquery';
+
 
 export const SelectPaymentType = (props) => {
   const { state = {} } = useLocation();
