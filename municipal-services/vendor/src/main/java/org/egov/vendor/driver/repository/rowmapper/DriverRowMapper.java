@@ -54,10 +54,11 @@ public class DriverRowMapper implements ResultSetExtractor<List<Driver>> {
 			Object additionalDetail = getAdditionalDetail("additionaldetails",rs);
 			currentDriver = driverMap.get(id);
 			this.setFullCount(rs.getInt("full_count"));
+			String licenseNumber = rs.getString("licensenumber");
 			
 			if (currentDriver == null) {
 				currentDriver = Driver.builder().id(id).name(name).tenantId(tenantId).additionalDetails(additionalDetail)
-						.description(description).status(StatusEnum.valueOf(status)).ownerId(owner_id).build();
+						.description(description).status(StatusEnum.valueOf(status)).ownerId(owner_id).licenseNumber(licenseNumber).build();
 
 				driverMap.put(id, currentDriver);
 			}
