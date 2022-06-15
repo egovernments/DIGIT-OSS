@@ -466,9 +466,10 @@ const tradeUnitCard = {
                       value: tradeLicenceData[0].tradeLicenseDetail.tradeUnits[cardIndex].tradeType
                     }
                   ];
+                const tenantId = getQueryArg(window.location.href, "tenantId");
                 let payload = await httpRequest(
                   "post",
-                  `/tl-calculator/billingslab/_search?tenantId=${getTenantId()}`,
+                  `/tl-calculator/billingslab/_search?tenantId=${tenantId}`,
                   "_search",
                   queryObj,
                   {}
@@ -478,6 +479,20 @@ const tradeUnitCard = {
                   pFO(
                     `Licenses[0].tradeLicenseDetail.tradeUnits[${cardIndex}].rate`,
                     rate
+                  )
+                );
+                let rates = 0;
+                tradeLicenceData[0].tradeLicenseDetail.tradeUnits.map(
+                  (item) => {
+                    if (!item.hasOwnProperty("isDeleted")) {
+                      rates = rates + item.rate;
+                    }
+                  }
+                );
+                dispatch(
+                  pFO(
+                    `Licenses[0].tradeLicenseDetail.rates`,
+                    rates
                   )
                 );
                   dispatch(	
@@ -903,7 +918,7 @@ export const tradeDetails = getCommonCard({
               handleField(
                 "apply",
                 "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
-                "props.required",
+                "required",
                 true
               )
             );
@@ -911,7 +926,7 @@ export const tradeDetails = getCommonCard({
               handleField(
                 "apply",
                 "components.div.children.formwizardFirstStep.children.tradeDetails.children.cardContent.children.tradeDetailsConatiner.children.oldLicenseNo",
-                "required",
+                "props.required",
                 true
               )
             );
@@ -1330,7 +1345,7 @@ export const tradeDetails = getCommonCard({
               labelName: "Trade unit amount",
             },
             {
-              jsonPath: "Licenses[0].tradeLicenseDetail.tradeUnits[0].rate",
+              jsonPath: "Licenses[0].tradeLicenseDetail.rates",
             }
           ),
   // accessoriesCard

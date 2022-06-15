@@ -199,6 +199,22 @@ export const getData = async (action, state, dispatch) => {
 
   if (applicationNo) {
     //Edit/Update Flow ----
+
+    const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
+
+    if(getQueryArg(window.location.href, "action") !== "edit" && !isEditRenewal ){
+      dispatch(
+        prepareFinalObject("Licenses", [
+          {
+            licenseType: "PERMANENT",
+            oldLicenseNumber: queryValue ? "" : applicationNo,
+            applicationType: applicationType ? applicationType : "NEW"
+          }
+        ])
+      );
+    }
+    // dispatch(prepareFinalObject("LicensesTemp", []));
+    await updatePFOforSearchResults(action, state, dispatch, applicationNo);
     const applicationType = get(
       state.screenConfiguration.preparedFinalObject,
       "Licenses[0].applicationType",
@@ -219,7 +235,7 @@ export const getData = async (action, state, dispatch) => {
           "RENEWAL"
         )
       );
-    }else{
+    }if(applicationType === 'NEW'){
       dispatch(
         handleField(
           "apply",
@@ -235,22 +251,6 @@ export const getData = async (action, state, dispatch) => {
         )
       );
     }
-    const isEditRenewal = getQueryArg(window.location.href,"action") === "EDITRENEWAL";
-
-    if(getQueryArg(window.location.href, "action") !== "edit" && !isEditRenewal ){
-      dispatch(
-        prepareFinalObject("Licenses", [
-          {
-            licenseType: "PERMANENT",
-            oldLicenseNumber: queryValue ? "" : applicationNo,
-            applicationType: applicationType ? applicationType : "NEW"
-          }
-        ])
-      );
-    }
-    // dispatch(prepareFinalObject("LicensesTemp", []));
-    await updatePFOforSearchResults(action, state, dispatch, applicationNo);
-
     if (queryValue && isEditRenewal) {
       const oldApplicationNo = get(
         state.screenConfiguration.preparedFinalObject,

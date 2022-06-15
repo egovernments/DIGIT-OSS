@@ -588,7 +588,8 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  } else if (purpose === "application" && status === "cancelled") {
+  } 
+  else if (purpose === "application" && status === "cancelled") {
     return {
       header: getCommonContainer({
         header: getCommonHeader({
@@ -631,7 +632,8 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  } else if (purpose === "pay" && status === "failure") {
+  } 
+  else if (purpose === "pay" && status === "failure") {
     return {
       header: getCommonContainer({
         header: getCommonHeader({
@@ -669,7 +671,8 @@ const getAcknowledgementCard = (
       },
       paymentFailureFooter: paymentFailureFooter(applicationNumber, tenant)
     };
-  } else if (purpose === "mark" && status === "success") {
+  } 
+  else if (purpose === "mark" && status === "success") {
     return {
       header: getCommonHeader({
         labelName: `Application for Trade License ${financialYearText}`,
@@ -701,7 +704,8 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  } else if (purpose === "forward" && status === "success") {
+  } 
+  else if (purpose === "forward" && status === "success") {
     return {
       header: getCommonHeader({
         labelName: `Application for Trade License ${financialYearText}`,
@@ -734,7 +738,8 @@ const getAcknowledgementCard = (
       },
       gotoHomeFooter
     };
-  }else if ((purpose === "EDITRENEWAL" || purpose === "DIRECTRENEWAL") && status === "success") {
+  }
+   else if ((purpose === "EDITRENEWAL" || purpose === "DIRECTRENEWAL") && status === "success") {
     return {
 
       header: getCommonContainer({
@@ -858,7 +863,6 @@ const screenConfig = {
       financialYear,
       tenant
     );
-  
 
     set(action, "screenConfig.components.div.children", data);
 
@@ -870,8 +874,7 @@ const screenConfig = {
 
       set(action, "screenConfig.components.div.children.header.children.licenseNumber", {}); 
 
-    }   
-   
+    }      
 
     beforeInitFn(action, state, dispatch, applicationNumber);
     loadReceiptGenerationData(applicationNumber, tenant);
