@@ -436,7 +436,7 @@ async function create_bulk_pdf(kafkaData){
           searchCriteria,
           {RequestInfo:requestinfo.RequestInfo}
         );
-
+        console.log("\n check 1");
         restWater = restWater.data.WaterConnection;
         if(restWater.length>0){
           for(let water of restWater){
@@ -457,7 +457,7 @@ async function create_bulk_pdf(kafkaData){
           searchCriteria,
           {RequestInfo:requestinfo.RequestInfo}
         );
-
+        console.log("\n check 2");
         restSewerage = restSewerage.data.SewerageConnections;
         if(restSewerage.length>0){
           for(let sewerage of restSewerage){
@@ -487,13 +487,13 @@ async function create_bulk_pdf(kafkaData){
           {RequestInfo:requestinfo.RequestInfo}
         );
         waterBills = waterBills.data.Bills;
-
+        console.log("\n check 3");
         sewerageBills = await search_bill_genie_sewerage_bills(
           inputData,
           {RequestInfo:requestinfo.RequestInfo}
         );
         sewerageBills = sewerageBills.data.Bills;
-
+        console.log("\n check 4");
         if(waterBills.length>0){
           for(let waterBill of waterBills){
             if(waterBill.status ==='EXPIRED'){
@@ -508,6 +508,7 @@ async function create_bulk_pdf(kafkaData){
             }
           }
         }
+        console.log("\n check 5");
 
         if(sewerageBills.length>0){
           for(let sewerageBill of sewerageBills){
@@ -523,6 +524,7 @@ async function create_bulk_pdf(kafkaData){
             }
           }
         }
+        console.log("\n check 6");
 
       }
       catch (ex) {
@@ -667,6 +669,7 @@ async function create_bulk_pdf(kafkaData){
     }
 
     var propertyDetails = await getPropertyDeatils({RequestInfo:requestinfo.RequestInfo}, tenantId, propertyIdSet, connectionnoToPropertyMap);
+    console.log("\n check 7");
     if (consolidatedResult && consolidatedResult.Bill && consolidatedResult.Bill.length > 0) {
       var pdfResponse;
       var pdfkey = config.pdf.wns_bill;
@@ -708,6 +711,7 @@ async function create_bulk_pdf(kafkaData){
               isConsolidated: isConsolidated,
               consumerCode: consumerCode
           };
+          console.log("\n check 8");
           var pdfData = Object.assign({RequestInfo:requestinfo.RequestInfo}, billArray)
           payloads.push({
             topic: config.KAFKA_RECEIVE_CREATE_JOB_TOPIC,
@@ -723,6 +727,7 @@ async function create_bulk_pdf(kafkaData){
               logger.info("jobid: " + jobid + ": published to kafka successfully");
             }
           });
+          console.log("\n check 9");
 
         }
 
@@ -731,7 +736,8 @@ async function create_bulk_pdf(kafkaData){
           if(result.rowCount>=1){
             const updateQuery = 'UPDATE egov_bulk_pdf_info SET totalrecords = $1 WHERE jobid = $2';
             await pool.query(updateQuery,[size, jobid]);
-              }
+          }
+          console.log("\n check 10");
         } catch (err) {
           logger.error(err.stack || err);
         }
