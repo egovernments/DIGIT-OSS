@@ -1037,6 +1037,37 @@ export const convertModifyApplicationDetails = async (data, appData, actionData 
   return formData;
 };
 
+export const downloadPdf = (blob, fileName) => {
+  if (window.mSewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
+    var reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function () {
+      var base64data = reader.result;
+      window.mSewaApp.downloadBase64File(base64data, fileName);
+    };
+  } else {
+    const link = document.createElement("a");
+    // create a blobURI pointing to our Blob
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    // some browser needs the anchor to be in the doc
+    document.body.append(link);
+    link.click();
+    link.remove();
+    // in case the Blob uses a lot of memory
+    setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+  }
+};
+export const downloadAndOpenPdf = async (connectionNo, filters) => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const response = await Digit.WSService.generateBillPdf({tenantId, filters});
+  const responseStatus = parseInt(response.status, 10);
+  if (responseStatus === 201 || responseStatus === 200) {
+    console.log("Func");
+    downloadPdf(new Blob([response.data], { type: "application/pdf" }), `BILL-${connectionNo}.pdf`);
+  }
+};
+
 export const ifUserRoleExists = (role) => {
   const userInfo = Digit.UserService.getUser();
   const roleCodes = userInfo?.info?.roles ? userInfo?.info?.roles.map((role) => role.code) : [];

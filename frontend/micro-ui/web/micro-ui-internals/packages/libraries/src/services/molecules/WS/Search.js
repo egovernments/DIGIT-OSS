@@ -80,6 +80,16 @@ export const WSSearch = {
     return response;
   },
 
+  fetchBillData: async ({tenantId, serviceTypeOfData, collectionNumber}) => {
+    const businessService = serviceTypeOfData;
+    const consumerCode = collectionNumber;
+    const response = await Digit.PaymentService.fetchBill(tenantId, {
+      businessService: businessService,
+      consumerCode: consumerCode,
+    });
+    return response;
+  },
+
 
   applicationDetails: async (t, tenantId, applicationNumber, serviceType = "WATER", config = {}) => {
     const filters = { applicationNumber };
@@ -583,6 +593,7 @@ export const WSSearch = {
     const serviceTypeOfData = serviceType == "WATER" ? "WS" : "SW";
     const collectionNumber = wsDataDetails?.connectionNo;
     const colletionOFData = await WSSearch.colletionData({tenantId, serviceTypeOfData, collectionNumber}, {});
+    const fetchBills = await WSSearch.fetchBillData({ tenantId, serviceTypeOfData, collectionNumber});
 
 
     const applicationHeaderDetails = {
@@ -691,7 +702,8 @@ export const WSSearch = {
       applicationStatus: wsDataDetails?.applicationStatus,
       propertyDetails: propertyDataDetails,
       processInstancesDetails: workFlowDataDetails?.ProcessInstances,
-      colletionOfData: colletionOFData?.Payments
+      colletionOfData: colletionOFData?.Payments,
+      fetchBillsData: fetchBills?.Bill
     };
   },
 };

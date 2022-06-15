@@ -160,6 +160,7 @@ const Urls = {
     billAmendmentUpdate: "/billing-service/amendment/_update",
     ws_meter_conncetion_create: "/ws-calculator/meterConnection/_create",
     sw_meter_conncetion_create: "/sw-calculator/meterConnection/_create",
+    wns_generate_pdf: "/egov-pdf/download/WNS/wnsbill"
   },
 
   engagement: {
