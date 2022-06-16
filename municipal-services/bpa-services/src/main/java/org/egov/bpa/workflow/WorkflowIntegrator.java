@@ -88,7 +88,7 @@ public class WorkflowIntegrator {
 		obj.put(MODULENAMEKEY, MODULENAMEVALUE);
 		obj.put(ACTIONKEY, bpa.getWorkflow().getAction());
 		obj.put(COMMENTKEY, bpa.getWorkflow().getComments());
-		
+
 		if (!CollectionUtils.isEmpty(bpa.getWorkflow().getAssignes())) {
 			List<Map<String, String>> uuidmaps = new LinkedList<>();
 			bpa.getWorkflow().getAssignes().forEach(assignee -> {
@@ -98,7 +98,7 @@ public class WorkflowIntegrator {
 			});
 			obj.put(ASSIGNEEKEY, uuidmaps);
 		}
-		
+
 		obj.put(DOCUMENTSKEY, bpa.getWorkflow().getVarificationDocuments());
 		array.add(obj);
 		JSONObject workFlowRequest = new JSONObject();

@@ -200,14 +200,15 @@ public class UserService {
         mobileNumbers.forEach(mobileNumber -> {
             UserDetailResponse userDetailResponse = searchByUserName(mobileNumber, getStateLevelTenant(tenantId));
             if(!CollectionUtils.isEmpty(userDetailResponse.getUser())){
-				if(!mobilenumberToUUIDs.containsKey(mobileNumber)) {
-					uuids.add(userDetailResponse.getUser().get(0).getUuid());
 					mobilenumberToUUIDs.put(mobileNumber,userDetailResponse.getUser().get(0).getUuid());
-				}
             }
         });
 
-        return uuids;
+		for(String value: mobilenumberToUUIDs.values()){
+			uuids.add(value);
+		}
+
+		return uuids;
     }
     
 }
