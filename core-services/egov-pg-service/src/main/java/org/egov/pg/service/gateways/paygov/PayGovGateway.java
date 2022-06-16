@@ -137,7 +137,6 @@ public class PayGovGateway implements Gateway {
         HashMap<String, String> queryMap = new HashMap<>();
         queryMap.put(MESSAGE_TYPE_KEY, MESSAGE_TYPE);
         queryMap.put(MERCHANT_ID_KEY, PAYGOV_MERCHENT_ID);
-        queryMap.put(SERVICE_ID_KEY, PAYGOV_MERCHENT_USER);
         queryMap.put(ORDER_ID_KEY, transaction.getTxnId());
         queryMap.put(CUSTOMER_ID_KEY, transaction.getUser().getUuid());
         queryMap.put(TRANSACTION_AMOUNT_KEY, String.valueOf( transaction.getTxnAmount()));
@@ -146,16 +145,7 @@ public class PayGovGateway implements Gateway {
         queryMap.put(REQUEST_DATE_TIME_KEY, format.format(new Date()));
         String returnUrl = transaction.getCallbackUrl().replace(CITIZEN_URL, "");
 
-
-        String moduleCode ="------";
-        if(!StringUtils.isEmpty(transaction.getModule())) {
-            if(transaction.getModule().length() < 6) {
-                moduleCode= transaction.getModule() + moduleCode.substring(transaction.getModule().length()-1);
-            }else {
-                moduleCode =transaction.getModule();
-            }
-        }
-
+        queryMap.put(SERVICE_ID_KEY, getModuleCode(transaction));
 
 
         queryMap.put(SUCCESS_URL_KEY, getReturnUrl(returnUrl, REDIRECT_URL));
@@ -180,7 +170,7 @@ public class PayGovGateway implements Gateway {
         queryMap.put(ADDITIONAL_FIELD2_KEY, ADDITIONAL_FIELD_VALUE); //Not in use
         queryMap.put(ADDITIONAL_FIELD3_KEY, ADDITIONAL_FIELD_VALUE); //Not in use
         queryMap.put(ADDITIONAL_FIELD4_KEY, transaction.getConsumerCode());
-        queryMap.put(ADDITIONAL_FIELD5_KEY, moduleCode);
+        queryMap.put(ADDITIONAL_FIELD5_KEY, getModuleCode(transaction));
 
 
 
@@ -226,6 +216,22 @@ public class PayGovGateway implements Gateway {
         //return urlData;
     }
 
+    private String getModuleCode(Transaction transaction) {
+        String moduleCode ="------";
+        if(!StringUtils.isEmpty(transaction.getModule())) {
+            /*
+             * if(transaction.getModule().length() < 6) { moduleCode= transaction.getModule() +
+             * moduleCode.substring(transaction.getModule().length()-1); }else { moduleCode =transaction.getModule(); }
+             */
+            if (transaction.getModule().equals("BPAREG")) {
+                moduleCode = "BPA001";
+            } else {
+                moduleCode = transaction.getModule().concat("001").toUpperCase();
+            }
+        }
+        return moduleCode;
+    }
+
     @Override
     public String generateRedirectFormData(Transaction transaction) {
         PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, transaction.getTenantId());
@@ -240,7 +246,7 @@ public class PayGovGateway implements Gateway {
         HashMap<String, String> queryMap = new HashMap<>();
         queryMap.put(MESSAGE_TYPE_KEY, MESSAGE_TYPE);
         queryMap.put(MERCHANT_ID_KEY, PAYGOV_MERCHENT_ID);
-        queryMap.put(SERVICE_ID_KEY, PAYGOV_MERCHENT_USER);
+        queryMap.put(SERVICE_ID_KEY, getModuleCode(transaction));
         queryMap.put(ORDER_ID_KEY, transaction.getTxnId());
         queryMap.put(CUSTOMER_ID_KEY, transaction.getUser().getUuid());
         queryMap.put(TRANSACTION_AMOUNT_KEY, String.valueOf( transaction.getTxnAmount()));
