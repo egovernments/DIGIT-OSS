@@ -44,15 +44,12 @@ public class SmsNotificationListener {
     @Value("${kafka.topics.error.sms}")
     String errorSmsTopic;
 
-    @Value("${sms.enabled}")
-    Boolean smsEnable;
-
 
     @Autowired
     public SmsNotificationListener(
             ApplicationContext context,
             SMSService smsService,
-                                   CustomKafkaTemplate<String, SMSRequest> kafkaTemplate) {
+            CustomKafkaTemplate<String, SMSRequest> kafkaTemplate) {
         this.smsService = smsService;
         this.context = context;
         this.kafkaTemplate = kafkaTemplate;
@@ -65,26 +62,20 @@ public class SmsNotificationListener {
         RequestContext.setId(UUID.randomUUID().toString());
         SMSRequest request = null;
         try {
-            if(!smsEnable){
-                log.info("Sms service is disable to enable the notification service set the value of sms.enable flag as true");
-            }
-            else{
-                request = objectMapper.convertValue(consumerRecord, SMSRequest.class);
-                if (request.getExpiryTime() != null && request.getCategory() == Category.OTP) {
-                    Long expiryTime = request.getExpiryTime();
-                    Long currentTime = System.currentTimeMillis();
-                    if (expiryTime < currentTime) {
-                        log.info("OTP Expired");
-                        if (!StringUtils.isEmpty(expiredSmsTopic))
-                            kafkaTemplate.send(expiredSmsTopic, request);
-                    } else {
-                        smsService.sendSMS(request.toDomain());
-                    }
+            request = objectMapper.convertValue(consumerRecord, SMSRequest.class);
+            if (request.getExpiryTime() != null && request.getCategory() == Category.OTP) {
+                Long expiryTime = request.getExpiryTime();
+                Long currentTime = System.currentTimeMillis();
+                if (expiryTime < currentTime) {
+                    log.info("OTP Expired");
+                    if (!StringUtils.isEmpty(expiredSmsTopic))
+                        kafkaTemplate.send(expiredSmsTopic, request);
                 } else {
                     smsService.sendSMS(request.toDomain());
                 }
+            } else {
+                smsService.sendSMS(request.toDomain());
             }
-
         } catch (RestClientException rx) {
             log.info("Going to backup SMS Service", rx);
             if (!StringUtils.isEmpty(backupSmsTopic))
