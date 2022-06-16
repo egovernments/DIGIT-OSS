@@ -2,6 +2,8 @@ package org.egov.vendor.driver.repository.querybuilder;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.egov.vendor.config.VendorConfiguration;
 import org.egov.vendor.driver.web.model.DriverSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ public class DriverQueryBuilder {
 	private final String paginationWrapper = "SELECT * FROM "
 			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY createdTime DESC) offset_ FROM " + "({})"
 			+ " result) result_offset " + "limit ? offset ?";
-
+	private static final String DRIVER_NO_VENDOR_QUERY=" SELECT DISTINCT (driver.id) FROM EG_DRIVER driver LEFT JOIN eg_vendor_driver vendor_driver ON driver.id=vendor_driver.driver_id";
 		
 	public String getDriverSearchQuery(DriverSearchCriteria criteria, List<Object> preparedStmtList) {
 		StringBuilder builder = new StringBuilder(Query);
@@ -118,5 +120,28 @@ public class DriverQueryBuilder {
 		}
 		return builder.toString();
 	}
+	
+	public String getDriverIdsWithNoVendorQuery(@Valid DriverSearchCriteria criteria, List<Object> preparedStmtList) {
+		StringBuilder builder = new StringBuilder(DRIVER_NO_VENDOR_QUERY);
+				
+				if (criteria.getTenantId() != null) {
+					addClauseIfRequired(preparedStmtList, builder);
+					builder.append(" driver.tenantid=? ");
+					preparedStmtList.add(criteria.getTenantId());
+
+				}
+
+				List<String> status = criteria.getStatus();
+				if (!CollectionUtils.isEmpty(status)) {
+					addClauseIfRequired(preparedStmtList, builder);
+					builder.append(" vendor_driver.vendordriverstatus IN (").append(createQuery(status)).append(")");
+					addToPreparedStatement(preparedStmtList, status);
+				}
+
+				addClauseIfRequired(preparedStmtList, builder);
+				builder.append(" vendor_driver.vendor_id IS NULL OR vendordriverstatus='INACTIVE'");
+
+				return builder.toString();
+			}
 
 }
