@@ -177,8 +177,10 @@ const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, 
                 <MenuItem item={item} />
               </div>
             ))}
+            <div className={`sidebar-list`}>
+              <div className="side-bar-footer">{Footer}</div>
+            </div>
           </div>
-          <div className="side-bar-footer">{Footer}</div>
         </div>
       </div>
     </React.Fragment>

@@ -98,7 +98,6 @@
     }
     .icon + .menu-label {
       margin-left: 36px;
-      overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
@@ -292,7 +291,9 @@
 .side-bar-footer {
   width: 200px;
   margin-left: 50px;
-  @apply absolute bottom-0;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  position: relative;
 }
 
 .digit-footer {
