@@ -69,6 +69,24 @@ public class SMSProperties {
     @Value("${sms.whitelist.numbers}")
     private List<String> whitelistNumbers;
 
+    @Value("${sms.verify.certificate:false}")
+    private boolean verifyCertificate;
+
+    @Value("${sms.msg.append}")
+    private String smsMsgAppend;
+
+    @Value("${sms.provider.entityid}")
+    public String smsEntityId;
+
+    @Value("${sms.default.tmplid:1}")
+    public String smsDefaultTmplid;
+
+    @Value("${sms.debug.msggateway:false}")
+    private boolean debugMsggateway;
+
+    @Value("${sms.enabled:false}")
+    private boolean smsEnabled;
+
     @Setter(AccessLevel.PROTECTED) private List<Pattern> whitelistPatterns;
     @Setter(AccessLevel.PROTECTED) private List<Pattern> blacklistPatterns;
 
@@ -79,9 +97,9 @@ public class SMSProperties {
             patterns.add(
                     Pattern.compile(
                             "^" +
-                            data.get(i)
-                            .replace("X", "[0-9]")
-                            .replace("*","[0-9]+") + "$"));
+                                    data.get(i)
+                                            .replace("X", "[0-9]")
+                                            .replace("*","[0-9]+") + "$"));
         }
         return patterns;
     }

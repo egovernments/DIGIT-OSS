@@ -27,6 +27,7 @@
     "react-table": "7.7.0",
     "redux": "4.1.2",
     "redux-thunk": "2.4.1",
-    "rooks": "4.11.2"
+    "rooks": "4.11.2",
+    "jquery": "3.6.0"
   }
 }
