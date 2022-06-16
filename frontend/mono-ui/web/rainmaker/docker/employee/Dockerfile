@@ -9,7 +9,7 @@ COPY ${WORK_DIR} .
 RUN yarn run prod:employee
 
 # Create runtime image
-FROM nginx:mainline-alpine 
+FROM nginx:1.20-alpine 
 ENV WEB_DIR=/var/web/employee
 
 RUN mkdir -p ${WEB_DIR}
