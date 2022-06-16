@@ -137,7 +137,7 @@ public class PayGovGateway implements Gateway {
         HashMap<String, String> queryMap = new HashMap<>();
         queryMap.put(MESSAGE_TYPE_KEY, MESSAGE_TYPE);
         queryMap.put(MERCHANT_ID_KEY, PAYGOV_MERCHENT_ID);
-        queryMap.put(SERVICE_ID_KEY, transaction.getTenantId());
+        queryMap.put(SERVICE_ID_KEY, PAYGOV_MERCHENT_USER);
         queryMap.put(ORDER_ID_KEY, transaction.getTxnId());
         queryMap.put(CUSTOMER_ID_KEY, transaction.getUser().getUuid());
         queryMap.put(TRANSACTION_AMOUNT_KEY, String.valueOf( transaction.getTxnAmount()));
@@ -240,7 +240,7 @@ public class PayGovGateway implements Gateway {
         HashMap<String, String> queryMap = new HashMap<>();
         queryMap.put(MESSAGE_TYPE_KEY, MESSAGE_TYPE);
         queryMap.put(MERCHANT_ID_KEY, PAYGOV_MERCHENT_ID);
-        queryMap.put(SERVICE_ID_KEY, transaction.getTenantId());
+        queryMap.put(SERVICE_ID_KEY, PAYGOV_MERCHENT_USER);
         queryMap.put(ORDER_ID_KEY, transaction.getTxnId());
         queryMap.put(CUSTOMER_ID_KEY, transaction.getUser().getUuid());
         queryMap.put(TRANSACTION_AMOUNT_KEY, String.valueOf( transaction.getTxnAmount()));
