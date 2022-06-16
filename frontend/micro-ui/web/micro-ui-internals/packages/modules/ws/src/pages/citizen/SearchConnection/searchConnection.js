@@ -218,7 +218,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
           onChange={selectconsumerNumber}
           {...(validation = {
             isRequired: false,
-            pattern: "[A-Za-z]{2}\_[A-Za-z]{2}\/[0-9]{3}\/[0-9]{4}\-[0-9]{2}\/[0-9]{6}",
+            pattern: "[A-Za-z]{2}\/[0-9]{3}\/[0-9]{4}\-[0-9]{2}\/[0-9]{6}",
             type: "text",
             title: t("ERR_INVALID_CONSUMER_NO"),
           })}
@@ -245,7 +245,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
           onChange={selectoldconsumerNumber}
           {...(validation = {
             isRequired: false,
-            pattern: "[A-Za-z]{2}\_[A-Za-z]{2}\/[0-9]{3}\/[0-9]{4}\-[0-9]{2}\/[0-9]{6}",
+            pattern: "[A-Za-z]{2}\/[0-9]{3}\/[0-9]{4}\-[0-9]{2}\/[0-9]{6}",
             type: "text",
             title: t("ERR_INVALID_CONSUMER_NO"),
           })}
@@ -279,6 +279,12 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
           name="doorNumber"
           value={doorNumber}
           onChange={selectdoorNumber}
+          {...(validation = {
+            isRequired: false,
+            pattern: "^([1-9][0-9]*)$",
+            type: "text",
+            title: t("ERR_INVALID_DOOR_NO"),
+          })}
         />
         <CardLabel>{`${t("WS_CONSUMER_NAME_LABEL")}`}</CardLabel>
         <TextInput

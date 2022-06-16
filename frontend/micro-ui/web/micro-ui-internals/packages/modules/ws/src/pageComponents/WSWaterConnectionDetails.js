@@ -81,7 +81,7 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
           "noOfTaps": null,
           "noOfWaterClosets": null,
           "noOfToilets": null,
-          "propertyId": formData?.cptId?.id,
+          "propertyId": formData?.cptId?.id || formData?.cpt?.details?.propertyId,
           "additionalDetails": {
               "initialMeterReading": null,
               "detailsProvidedBy": "",
