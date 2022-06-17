@@ -7,7 +7,7 @@ COPY ${WORK_DIR} .
 RUN yarn run prod:employee-localization
 
 # Create runtime image
-FROM nginx:mainline-alpine
+FROM nginx:1.20-alpine
 ENV WEB_DIR=/var/web/ui-localization
 
 RUN mkdir -p ${WEB_DIR}
