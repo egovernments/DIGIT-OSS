@@ -8,7 +8,7 @@ COPY ${WORK_DIR} .
 RUN yarn run prod:ui-uploader
 
 # Create runtime image
-FROM nginx:mainline-alpine 
+FROM nginx:1.20-alpine 
 ENV WEB_DIR=/var/web/app/v2/uploader
 
 RUN mkdir -p ${WEB_DIR}
