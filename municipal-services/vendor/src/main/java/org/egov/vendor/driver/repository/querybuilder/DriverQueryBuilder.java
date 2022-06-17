@@ -132,11 +132,11 @@ public class DriverQueryBuilder {
 				}
 
 				List<String> status = criteria.getStatus();
-				if (!CollectionUtils.isEmpty(status)) {
-					addClauseIfRequired(preparedStmtList, builder);
-					builder.append(" vendor_driver.vendordriverstatus IN (").append(createQuery(status)).append(")");
-					addToPreparedStatement(preparedStmtList, status);
-				}
+//				if (!CollectionUtils.isEmpty(status)) {
+//					addClauseIfRequired(preparedStmtList, builder);
+//					builder.append(" vendor_driver.vendordriverstatus IN (").append(createQuery(status)).append(")");
+//					addToPreparedStatement(preparedStmtList, status);
+//				}
 
 				addClauseIfRequired(preparedStmtList, builder);
 				builder.append(" vendor_driver.vendor_id IS NULL OR vendordriverstatus='INACTIVE'");
