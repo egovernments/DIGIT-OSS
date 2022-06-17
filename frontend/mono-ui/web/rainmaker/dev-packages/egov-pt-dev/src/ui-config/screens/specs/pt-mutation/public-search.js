@@ -170,7 +170,8 @@ const screenConfig = {
 
   beforeInitScreen: (action, state, dispatch) => {
     resetFields(state, dispatch);
-    dispatch(fetchLocalizationLabel(getLocale(), getTenantId(), getTenantId()));
+    const default_language  = getLocale() ? getLocale(): "en_IN"
+    dispatch(fetchLocalizationLabel(default_language, getTenantId(), getTenantId()));
     getMDMSData(action, dispatch);
     getPayButtonData(action, dispatch);
 
