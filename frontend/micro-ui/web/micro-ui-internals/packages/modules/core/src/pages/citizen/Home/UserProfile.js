@@ -431,7 +431,6 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                   name="gender"
                 />
               </LabelFieldPair>
-              <CardLabelError></CardLabelError>
 
               <LabelFieldPair>
                 <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_EMAIL")}`}</CardLabel>
@@ -521,7 +520,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                     type={"text"}
                     isMandatory={false}
                     name="city"
-                    value={city}
+                    value={t(city)}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="Enter Your City Name"
                     {...(validation = {
