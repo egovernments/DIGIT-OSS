@@ -170,7 +170,7 @@
         <postgres-version>42.1.4</postgres-version>
 
         <!-- Other application dependency versions -->
-        <struts2-version>2.5.14.1</struts2-version>
+        <struts2-version>6.0.0</struts2-version>
         <struts2-jquery-version>4.0.2</struts2-jquery-version>
         <xstream-version>1.4.10</xstream-version>
         <spring-version>4.3.11.RELEASE</spring-version>
@@ -232,7 +232,7 @@
         <jcaptcha.version>2.0-alpha-1</jcaptcha.version>
         <javaxt.core.version>1.7.8</javaxt.core.version>
         <pdfbox.version>2.0.4</pdfbox.version>
-        <bouncycastle.version>1.60</bouncycastle.version>
+        <bouncycastle.version>1.69</bouncycastle.version>
         <!-- Plugin dependency versions-->
         <mvn.javadoc.plugin.version>2.10.4</mvn.javadoc.plugin.version>
         <mvn.release.plugin.version>2.5.3</mvn.release.plugin.version>
