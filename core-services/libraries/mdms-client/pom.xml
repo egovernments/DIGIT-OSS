@@ -6,7 +6,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>1.5.22.RELEASE</version>
-    <relativePath></relativePath>
+    <relativePath/>
   </parent>
   <groupId>org.egov</groupId>
   <artifactId>mdms-client</artifactId>
@@ -75,7 +75,7 @@
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
-      <version>20160810</version>
+      <version>20180130</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.dataformat</groupId>
