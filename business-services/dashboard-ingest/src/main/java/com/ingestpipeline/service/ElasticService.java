@@ -155,7 +155,7 @@ public class ElasticService implements IESService {
 	}
 	
 	@Override
-    public Map search(String index, String searchQuery) throws Exception {
+    public Map search(String index, String searchQuery) {
 
         String url = indexServiceHost + index + indexServiceHostSearch;
         HttpHeaders headers = new HttpHeaders();
@@ -182,7 +182,7 @@ public class ElasticService implements IESService {
     }
 	
 	@Override
-	public Boolean push(Map requestBody) throws Exception {
+	public Boolean push(Map requestBody) {
 
 		Object id = requestBody.get(Constants.IDENTIFIER);
 		Object trxid = ((Map)requestBody.get(Constants.DATA_OBJECT)).get(Constants.TRANSACTION_ID);
@@ -223,7 +223,7 @@ public class ElasticService implements IESService {
 	}
 
 	@Override
-	public Boolean push(TargetData requestBody) throws Exception {
+	public Boolean push(TargetData requestBody) {
 
 		String url = indexerServiceHost + targetIndexName + DOC_TYPE + requestBody.getId();
 
@@ -308,7 +308,7 @@ public class ElasticService implements IESService {
 	}
 	
 	@Override
-    public List searchMultiple(String index, String searchQuery) throws Exception {
+    public List searchMultiple(String index, String searchQuery) {
 
         String url = indexServiceHost + index + indexServiceHostSearch;
         HttpHeaders headers = new HttpHeaders();

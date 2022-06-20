@@ -161,7 +161,7 @@ public class MetadataServiceImpl implements MetadataService {
 		return dbArray;
 	}*/
 
-	public JSONArray getTargetDistrict() throws Exception {
+	public JSONArray getTargetDistrict() {
 		final String baseUrl = mdmsServiceHost + mdmsSearchEndpoint;
 		URI uri = new URI(baseUrl);
 		HttpHeaders headers = new HttpHeaders();

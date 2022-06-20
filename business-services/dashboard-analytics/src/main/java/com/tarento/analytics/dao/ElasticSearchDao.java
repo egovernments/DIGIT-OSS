@@ -27,7 +27,7 @@ public interface ElasticSearchDao {
 	
 	public ElasticSearchDictator createSearchDictator(AggregateRequestDto dto, String indexName, String documentType, String filterDateField) throws Exception ;
 	*/
-	public ElasticSearchDictator createSearchDictatorV2(AggregateRequestDto dto, String indexName, String documentType, String filterDateField) throws Exception ;
+	public ElasticSearchDictator createSearchDictatorV2(AggregateRequestDto dto, String indexName, String documentType, String filterDateField);
 		
 	public SearchRequest buildElasticSearchQuery(ElasticSearchDictator dictator);
 	

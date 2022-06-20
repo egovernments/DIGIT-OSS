@@ -121,7 +121,7 @@ public class VoucherServiceImpl implements VoucherService {
 	 * request.
 	 */
 	public VoucherResponse createReceiptVoucher(ReceiptReq receiptRequest, FinanceMdmsModel finSerMdms, String collectionVersion)
-			throws Exception {
+			{
 		Receipt receipt = receiptRequest.getReceipt().get(0);
 		String tenantId = receipt.getTenantId();
 //		final StringBuilder voucher_create_url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId)

@@ -40,7 +40,7 @@ public interface IESService {
      */
     JsonNode search(String index, ObjectNode searchQuery) throws IOException;
 
-    Boolean push(TargetData requestBody) throws Exception;
+    Boolean push(TargetData requestBody) ;
 
     /**
      * searches documents from ES based on query using restTemplate
@@ -49,10 +49,10 @@ public interface IESService {
      * @return
      * @throws Exception
      */
-    Map search(String index, String query) throws Exception;
+    Map search(String index, String query) ;
     
-    List searchMultiple(String index, String query) throws Exception;
-    Boolean push(Map requestBody) throws Exception;
+    List searchMultiple(String index, String query) ;
+    Boolean push(Map requestBody) ;
 
 
     /**
@@ -114,5 +114,5 @@ public interface IESService {
         return Boolean.TRUE;
     }
 
-    Boolean searchIndex(String index, String query, String dataContextVersion) throws Exception;
+    Boolean searchIndex(String index, String query, String dataContextVersion);
 }

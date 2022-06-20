@@ -11,6 +11,6 @@ import com.tarento.analytics.exception.AINException;
 public interface MetadataService {
 
 	public Object getDashboardConfiguration(String dashboardId, String catagory, List<RoleDto> roleIds) throws AINException, IOException;
-	public JSONArray getTargetDistrict() throws Exception ; 
+	public JSONArray getTargetDistrict();
 
 }

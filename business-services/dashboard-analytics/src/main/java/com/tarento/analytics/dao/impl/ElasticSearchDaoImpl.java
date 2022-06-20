@@ -1197,7 +1197,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 	
 	@Override
 	public ElasticSearchDictator createSearchDictatorV2(AggregateRequestDto dto, String indexName, String documentType,
-			String filterDateField) throws Exception {
+			String filterDateField) {
 		ElasticSearchDictator dictator = new ElasticSearchDictator();
 
 		dictator.setIndexName(indexName);
