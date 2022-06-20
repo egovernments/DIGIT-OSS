@@ -113,6 +113,12 @@ const BILLSBreadCrumbs = ({ location }) => {
       content: t("ES_COMMON_BILLS_SEWERAGE_INBOX_LABEL"),
       show: location.pathname.includes("/sewerage/bill-amendment/inbox") ? true : false,
     },
+    {
+      path: "/digit-ui/employee/ws/modify-application",
+      content: fromScreen ? `${t(fromScreen)} / ${t("WS_MODIFY_CONNECTION_BUTTON")}`:t("WS_MODIFY_CONNECTION_BUTTON"),
+      show: location.pathname.includes("ws/modify-application") ? true : false,
+      isBack:true,
+    }
   ];
 
   return <BreadCrumb crumbs={crumbs} spanStyle={{ maxWidth: "min-content" }} />;
@@ -123,7 +129,7 @@ const App = ({ path }) => {
   const WSDocsRequired = Digit?.ComponentRegistryService?.getComponent("WSDocsRequired");
   const WSInbox = Digit?.ComponentRegistryService?.getComponent("WSInbox");
 
-  const locationCheck = window.location.href.includes("/employee/ws/new-application") 
+  const locationCheck = window.location.href.includes("/employee/ws/new-application") || window.location.href.includes("/employee/ws/modify-application"); 
 
   const locationCheckReqDocs = window.location.href.includes("/employee/ws/create-application");
 

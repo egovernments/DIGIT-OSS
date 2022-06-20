@@ -148,7 +148,7 @@ const TradeUnitForm = (_props) => {
     const formValue = watch();
     const { errors } = localFormState;
 
-    const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
+    const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code?.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
 
     useEffect(() => {
         if (billingSlabTradeTypeData?.length > 0 && formData?.tradedetils?.["0"]?.structureType?.code && formData?.tradedetils?.["0"]?.structureSubType?.code) {

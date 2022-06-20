@@ -14,8 +14,8 @@ const SelectVehicleType = ({ t, config, onSelect, userType, formData }) => {
 
   useEffect(() => {
     if (vehicleData) {
-      const vehicleModal = vehicleData.filter((vehicle) => vehicle.code === formData?.vehicle?.modal)
-      const vehicleType = vehicleData.filter((vehicle) => vehicle.code === formData?.vehicle?.type)
+      const vehicleModal = vehicleData.filter((vehicle) => vehicle.code === (formData?.vehicle?.modal?.code || formData?.vehicle?.modal))
+      const vehicleType = vehicleData.filter((vehicle) => vehicle.code === (formData?.vehicle?.type?.code || formData?.vehicle?.type))
       setSelectedModal(...vehicleModal)
       setSelectedType(...vehicleType)
       setSelectedCapacity(formData?.vehicle?.tankCapacity)

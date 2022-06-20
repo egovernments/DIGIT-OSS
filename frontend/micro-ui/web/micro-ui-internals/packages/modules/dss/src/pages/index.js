@@ -310,6 +310,7 @@ const DashBoard = ({ stateCode }) => {
             isOpen={isFilterModalOpen}
             closeFilters={() => setIsFilterModalOpen(false)}
             isNational={isNational}
+            showDateRange= {dashboardConfig?.[0]?.name.includes("DSS_FINANCE_DASHBOARD") ? false : true}
           />
         )}
         {filters?.filters?.tenantId?.length > 0 && (

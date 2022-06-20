@@ -62,6 +62,16 @@ public class DriverService {
 		List<String> uuids = new ArrayList<String>();
 		UserDetailResponse userDetailResponse;
 		
+		if (criteria.isDriverWithNoVendor()) {
+			List<String> driverIds = driverRepository.fetchDriverIdsWithNoVendor(criteria);
+			if (CollectionUtils.isEmpty(criteria.getIds())) {
+				criteria.setIds(driverIds);
+			} else {
+				criteria.getIds().addAll(driverIds);
+			}
+
+		}
+		
 		if(criteria.getMobileNumber() !=null) {
 			userDetailResponse = userService.getOwner(criteria, requestInfo);
 			if(userDetailResponse !=null && userDetailResponse.getUser() != null && userDetailResponse.getUser().size() >0) {

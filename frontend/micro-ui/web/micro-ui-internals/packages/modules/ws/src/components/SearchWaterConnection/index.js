@@ -109,7 +109,7 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
         Header: t("WS_COMMON_TABLE_COL_OWN_NAME_LABEL"),
         disableSortBy: true,
         Cell: ({ row }) => {
-          return GetCell(row?.original?.connectionHolders?.[0]?.name ? row?.original?.connectionHolders?.[0]?.name : `${row.original?.["owner"] || "NA"}`);
+          return GetCell(row?.original?.connectionHolders?.map((owner) => owner?.name).join(",") ? row?.original?.connectionHolders?.map((owner) => owner?.name).join(",") : `${row.original?.["owner"] || "NA"}`);
         },
       },
       {
@@ -160,6 +160,10 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
   );
 
   const getActionItem = (status, row) => {
+    const userInfo = Digit.UserService.getUser();
+    const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
+    const isUserAllowedToAddMeterReading = userRoles.filter(role => (role === "WS_CEMP" || role === "SW_CEMP")).length > 0
+    if(!isUserAllowedToAddMeterReading) return null
     switch (status) {
       case "Active":
         return (

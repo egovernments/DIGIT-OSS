@@ -45,7 +45,8 @@ const WSMyPayments = () => {
   const swpayment = swpayments && swpayments?.Payments || [];
 
   let applicationsList = wspayment.concat(swpayment);
-  applicationsList = applicationsList?.map(ob => ({...ob, property:totalApaplications?.filter(ob1 => properties?.Properties?.filter(prop => prop?.propertyId === ( ob1?.connectionNo === ob?.paymentDetails?.[0]?.bill?.consumerCode)?.[0]?.propertyId))?.[0]}))
+  applicationsList = applicationsList?.map(ob => ({...ob,details:totalApaplications?.filter(app => app?.connectionNo === ob?.paymentDetails?.[0]?.bill?.consumerCode)?.[0]}))
+  applicationsList = applicationsList?.map(ob => ({...ob,property:properties?.Properties?.filter(prop => prop?.propertyId === ob?.details?.propertyId)?.[0]}))
   return (
     <React.Fragment>
       <Header>{`${t("WS_MY_PAYMENTS_HEADER")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>

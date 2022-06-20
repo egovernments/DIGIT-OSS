@@ -31,6 +31,8 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
   const { pathname, state } = useLocation();
   const isEditScreen = pathname.includes("/modify-application/");
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const isEmpNewApplication = window.location.href.includes("/employee/tl/new-application");
+  const isEmpRenewLicense = window.location.href.includes("/employee/tl/renew-application-details");
   const search = useLocation().search;
   const urlPropertyId = new URLSearchParams(search).get("propertyId");
   const [propertyId, setPropertyId] = useState(formData?.cptId?.id || urlPropertyId || "");
@@ -92,6 +94,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
 
   return (
     <React.Fragment>
+     { !(formData?.tradedetils?.[0]?.structureType?.code === "MOVABLE" && (isEmpNewApplication || isEmpRenewLicense)) &&  <div>
       <LabelFieldPair>
         <CardLabel className="card-label-smaller" style={getInputStyles()}>{`${t(`PROPERTY_ID`)}`}</CardLabel>
         <div className="field" style={{ marginTop: "20px", display: "flex" }}>
@@ -145,7 +148,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
               />
             </div>
           </StatusTable>
-          <Link to={`/digit-ui/employee/commonpt/view-property?propertyId=${propertyId}&tenantId=${tenantId}&from=${window.location.pathname?.includes("employee/ws/new-application") ? "ES_COMMON_WS_NEW_CONNECTION" : window.location.pathname?.includes("employee/tl/new-application")
+            <Link to={`/digit-ui/employee/commonpt/view-property?propertyId=${propertyId}&tenantId=${tenantId}&from=${window.location.pathname?.includes("employee/ws/new-application") ? "ES_COMMON_WS_NEW_CONNECTION" : window.location.pathname?.includes("employee/ws/modify-application") ?"WS_MODIFY_CONNECTION_BUTTON": window.location.pathname?.includes("employee/tl/new-application")
         ?"ES_TITLE_NEW_TRADE_LICESE_APPLICATION"
         :"WF_EMPLOYEE_NEWTL_RENEWAL_SUBMIT_BUTTON"}`}>
             <LinkButton label={t("CPT_COMPLETE_PROPERTY_DETAILS")} style={{ color: "#f47738", textAlign: "Left" }} />
@@ -164,6 +167,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
           }}
         />
       )}
+      </div>}
     </React.Fragment>
   );
 };

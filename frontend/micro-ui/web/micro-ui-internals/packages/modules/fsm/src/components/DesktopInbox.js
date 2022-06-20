@@ -14,7 +14,7 @@ const DesktopInbox = (props) => {
   const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const GetSlaCell = (value) => {
-    if (value === '-') return <span className="sla-cell-success">-</span>;
+    if (value === "-") return <span className="sla-cell-success">-</span>;
     if (isNaN(value)) return <span className="sla-cell-success">0</span>;
     return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
   };
@@ -87,17 +87,28 @@ const DesktopInbox = (props) => {
       case "FSM_EMP_FSTPO_REQUEST":
         return [
           {
-            Header: t("CS_COMMON_CITIZEN_NAME"),
+            Header: t("ES_INBOX_APPLICATION_NO"),
             accessor: "applicationNo",
             // disableSortBy: true,
             Cell: ({ row }) => {
               // fetching out citizen info
-              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo)
               return (
                 <div>
                   <span className="link">
-                    <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}>{citizen_info?.citizen?.name}</Link>
+                    <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}> {row.original["applicationNo"]}</Link>
                   </span>
+                </div>
+              );
+            },
+          },
+          {
+            Header: t("CS_COMMON_CITIZEN_NAME"),
+            disableSortBy: true,
+            Cell: ({ row }) => {
+              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo);
+              return (
+                <div>
+                  <span>{citizen_info?.citizen?.name}</span>
                 </div>
               );
             },
@@ -107,12 +118,10 @@ const DesktopInbox = (props) => {
             disableSortBy: true,
             accessor: "number",
             Cell: ({ row }) => {
-              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo)
+              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo);
               return (
                 <div>
-                  <span>
-                    {citizen_info?.citizen?.mobileNumber}
-                  </span>
+                  <span>{citizen_info?.citizen?.mobileNumber}</span>
                 </div>
               );
             },
@@ -122,12 +131,10 @@ const DesktopInbox = (props) => {
             disableSortBy: true,
             accessor: "locality",
             Cell: ({ row }) => {
-              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo)
+              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo);
               return (
                 <div>
-                  <span>
-                    {t(`PB_AMRITSAR_REVENUE_${citizen_info?.address?.locality?.code}`)}
-                  </span>
+                  <span>{t(`PB_AMRITSAR_REVENUE_${citizen_info?.address?.locality?.code}`)}</span>
                 </div>
               );
             },
@@ -144,12 +151,12 @@ const DesktopInbox = (props) => {
                 <div>
                   <span className="link">
                     <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}>
-                      {row.original["tripDetails"].map((i) =>
+                      {row.original["tripDetails"].map((i) => (
                         <div>
                           {i.referenceNo}
                           <br />
                         </div>
-                      )}
+                      ))}
                     </Link>
                   </span>
                 </div>
@@ -175,7 +182,9 @@ const DesktopInbox = (props) => {
             accessor: "createdTime",
             Cell: ({ row }) => {
               return GetCell(
-                `${new Date(row.original.auditDetails.createdTime).getDate()}/${new Date(row.original.auditDetails.createdTime).getMonth() + 1}/${new Date(row.original.auditDetails.createdTime).getFullYear()}`
+                `${new Date(row.original.auditDetails.createdTime).getDate()}/${
+                  new Date(row.original.auditDetails.createdTime).getMonth() + 1
+                }/${new Date(row.original.auditDetails.createdTime).getFullYear()}`
               );
             },
           },
@@ -308,7 +317,13 @@ const DesktopInbox = (props) => {
         <div className="filters-container">
           {props.userRole !== "FSM_EMP_FSTPO_REQUEST" ? <FSMLink parentRoute={props.parentRoute} /> : null}
           <div style={props.userRole !== "FSM_EMP_FSTPO_REQUEST" ? { marginTop: "24px" } : {}}>
-            <Filter searchParams={props.searchParams} paginationParms={props.paginationParms} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+            <Filter
+              searchParams={props.searchParams}
+              paginationParms={props.paginationParms}
+              applications={props.data}
+              onFilterChange={props.onFilterChange}
+              type="desktop"
+            />
           </div>
         </div>
       )}

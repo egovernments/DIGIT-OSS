@@ -72,7 +72,11 @@ const Filters = ({
     });
   };
   return (
-    <div className={`filters-wrapper ${isOpen ? "filters-modal" : ""}`}>
+    <div className={`filters-wrapper ${isOpen ? "filters-modal" : ""}`} style={{
+      justifyContent: window.location.href.includes("dss/dashboard/finance") && !isOpen ? "space-between" : "unset",
+      paddingRight: window.location.href.includes("dss/dashboard/finance") && !isOpen? "24px" : "0px",
+      paddingBottom: window.location.href.includes("dss/dashboard/finance") && !isOpen? "20px" : "unset"
+    }}>
       <span className="filter-close" onClick={() => closeFilters()}>
         <CloseSvg />
       </span>

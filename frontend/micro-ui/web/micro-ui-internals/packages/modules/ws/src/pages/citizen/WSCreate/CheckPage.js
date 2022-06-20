@@ -128,7 +128,7 @@ import {
           </div>
         ))}
       </Card>
-      <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
+      <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} style={{marginLeft:"10px",maxWidth:"95%"}}/>
     </React.Fragment>
     )
   }

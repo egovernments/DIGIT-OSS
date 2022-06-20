@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import WSApplication from "./ws-application";
 import { propertyCardBodyStyle } from "../../../utils";
+import WSInfoLabel from "../../../pageComponents/WSInfoLabel";
 
 export const WSMyApplications = () => {
   const { t } = useTranslation();
@@ -60,6 +61,7 @@ export const WSMyApplications = () => {
   return (
     <React.Fragment>
       <Header>{`${t("CS_HOME_MY_APPLICATIONS")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
+      <WSInfoLabel t={t} />
       <div>
         {applicationsList?.length > 0 &&
           applicationsList.sort((a, b) => b.auditDetails?.lastModifiedTime - a.auditDetails?.lastModifiedTime ).map((application, index) => (

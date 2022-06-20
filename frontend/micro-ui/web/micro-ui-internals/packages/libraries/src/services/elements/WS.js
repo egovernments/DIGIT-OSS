@@ -112,4 +112,14 @@ export const WSService = {
       params: {},
       auth: true,
     }),
+  generateBillPdf: ({tenantId, filters}) =>
+    Request({
+      url: Urls.ws.wns_generate_pdf,
+      useCache: true,
+      method: "POST",
+      auth: true,
+      userService: true,
+      params: { tenantId, ...filters },
+      userDownload: true,
+    }),
 };

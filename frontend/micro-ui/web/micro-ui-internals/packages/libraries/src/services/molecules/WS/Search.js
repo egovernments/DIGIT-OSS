@@ -80,6 +80,16 @@ export const WSSearch = {
     return response;
   },
 
+  fetchBillData: async ({tenantId, serviceTypeOfData, collectionNumber}) => {
+    const businessService = serviceTypeOfData;
+    const consumerCode = collectionNumber;
+    const response = await Digit.PaymentService.fetchBill(tenantId, {
+      businessService: businessService,
+      consumerCode: consumerCode,
+    });
+    return response;
+  },
+
 
   applicationDetails: async (t, tenantId, applicationNumber, serviceType = "WATER", config = {}) => {
     const filters = { applicationNumber };
@@ -576,6 +586,7 @@ export const WSSearch = {
     const workflowDetails = await WSSearch.workflowDataDetails(tenantId, businessIds);
 
     const wsDataDetails = cloneDeep(serviceType == "WATER" ? response?.WaterConnection?.[0] : response?.SewerageConnections?.[0]);
+    
     const propertyDataDetails = cloneDeep(properties?.Properties?.[0]);
     const workFlowDataDetails = cloneDeep(workflowDetails);
     const serviceDataType = cloneDeep(serviceType);
@@ -583,6 +594,7 @@ export const WSSearch = {
     const serviceTypeOfData = serviceType == "WATER" ? "WS" : "SW";
     const collectionNumber = wsDataDetails?.connectionNo;
     const colletionOFData = await WSSearch.colletionData({tenantId, serviceTypeOfData, collectionNumber}, {});
+    const fetchBills = await WSSearch.fetchBillData({ tenantId, serviceTypeOfData, collectionNumber});
 
 
     const applicationHeaderDetails = {
@@ -625,7 +637,7 @@ export const WSSearch = {
                 title: "WS_VIEW_CONSUMPTION_DETAIL",
                 to: `/digit-ui/employee/ws/consumption-details?applicationNo=${wsDataDetails?.connectionNo}&tenantId=${wsDataDetails?.tenantId}&service=${serviceType}&from=WS_COMMON_CONNECTION_DETAIL`,
                 value: "",
-                isLink: true,
+                isLink: wsDataDetails?.connectionType ==="Metered" ? true:false,
               },
             ]
           : [
@@ -651,7 +663,7 @@ export const WSSearch = {
           title: "WS_VIEW_PROPERTY_DETAIL",
           to: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}?from=WS_COMMON_CONNECTION_DETAIL`,
           value: "",
-          isLink: true,
+          isLink: wsDataDetails?.connectionType === "Metered" ? true : false,
         },
       ],
     };
@@ -691,7 +703,8 @@ export const WSSearch = {
       applicationStatus: wsDataDetails?.applicationStatus,
       propertyDetails: propertyDataDetails,
       processInstancesDetails: workFlowDataDetails?.ProcessInstances,
-      colletionOfData: colletionOFData?.Payments
+      colletionOfData: colletionOFData?.Payments,
+      fetchBillsData: fetchBills?.Bill
     };
   },
 };

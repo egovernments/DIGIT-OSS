@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
 import _ from "lodash";
+import * as func from "../utils/"
 
 const createConnectionDetails = () => ({
     water: true,
@@ -20,7 +21,8 @@ const createConnectionDetails = () => ({
 
 const WSEditConnectionDetails = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
 
-
+    let filters = func.getQueryStringParams(location.search);
+    const applicationNumber = filters?.applicationNumber;
     const { t } = useTranslation();
     const { pathname } = useLocation();
     const [connectionDetails, setConnectionDetails] = useState(formData?.ConnectionDetails ? [formData?.ConnectionDetails?.[0]] : [createConnectionDetails()]);
@@ -81,8 +83,9 @@ const WSEditConnectionDetails = ({ config, onSelect, userType, formData, setErro
         pipeSizeList,
         wsServicesCalculationData,
         waterSewarageSelection,
+        applicationNumber
     };
-
+    
     return (
         <React.Fragment>
             {connectionDetails.map((connectionDetail, index) => (
@@ -93,6 +96,7 @@ const WSEditConnectionDetails = ({ config, onSelect, userType, formData, setErro
 };
 
 const ConnectionDetails = (_props) => {
+    
     const {
         connectionDetail,
         focusIndex,
@@ -109,9 +113,10 @@ const ConnectionDetails = (_props) => {
         wsServicesCalculationData,
         pipeSizeList,
         connectionDetails,
-        waterSewarageSelection
+        waterSewarageSelection,
+        applicationNumber
     } = _props;
-
+    
     const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
     const formValue = watch();
     const { errors } = localFormState;
@@ -180,7 +185,7 @@ const ConnectionDetails = (_props) => {
             <div>
                 <CardSubHeader>{t("WS_COMMON_SERV_DETAIL")}</CardSubHeader>
                 <StatusTable>
-                    <Row className="border-none" key={`WS_MYCONNECTIONS_CONSUMER_NO`} label={`${t(`WS_MYCONNECTIONS_CONSUMER_NO`)}:`} text={connectionDetail?.applicationNo} />
+                        <Row className="border-none" key={`WS_MYCONNECTIONS_CONSUMER_NO`} label={`${t(`WS_MYCONNECTIONS_CONSUMER_NO`)}:`} text={applicationNumber} />
                     <Row className="border-none" key={`WS_SERVICE_NAME_LABEL`} label={`${t(`WS_SERVICE_NAME_LABEL`)}:`} text={connectionDetail?.serviceName} />
                 </StatusTable>
             </div> : 

@@ -3,6 +3,8 @@ package org.egov.vendor.driver.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.egov.vendor.config.VendorConfiguration;
 import org.egov.vendor.driver.repository.querybuilder.DriverQueryBuilder;
 import org.egov.vendor.driver.repository.rowmapper.DriverRowMapper;
@@ -13,6 +15,7 @@ import org.egov.vendor.driver.web.model.DriverSearchCriteria;
 import org.egov.vendor.producer.Producer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +56,13 @@ public class DriverRepository {
 		
 		System.out.println("query is " + query);
 		return response;
+	}
+	
+	public List<String> fetchDriverIdsWithNoVendor(@Valid DriverSearchCriteria criteria) {
+		List<Object> preparedStmtList = new ArrayList<>();
+		String query = driverQueryBuilder.getDriverIdsWithNoVendorQuery(criteria, preparedStmtList);
+		List<String> ids = jdbcTemplate.query(query,preparedStmtList.toArray(),	new SingleColumnRowMapper<>(String.class));
+		return ids;
 	}
 
 

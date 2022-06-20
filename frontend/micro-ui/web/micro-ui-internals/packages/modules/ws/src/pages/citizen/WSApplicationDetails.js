@@ -60,6 +60,7 @@ const WSApplicationDetails = () => {
     { filters: { propertyIds: data?.WaterConnection?.[0]?.propertyId } }
   );
 
+  const isPaid = (data?.WaterConnection?.[0]?.applicationStatus === 'CONNECTION_ACTIVATED' || data?.WaterConnection?.[0]?.applicationStatus === 'PENDING_FOR_CONNECTION_ACTIVATION') || (data?.SewerageConnections?.[0]?.applicationStatus === 'CONNECTION_ACTIVATED' || data?.SewerageConnections?.[0]?.applicationStatus === 'PENDING_FOR_CONNECTION_ACTIVATION') ? true : false;
   if (isLoading) {
     return <Loader />;
   }
@@ -156,9 +157,7 @@ const WSApplicationDetails = () => {
   sessionStorage.setItem("ApplicationNoState", applicationNobyData);
   return (
     <React.Fragment>
-      <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
-        <Header>{t("WS_APPLICATION_DETAILS_HEADER")}</Header>
-        {downloadOptions && downloadOptions.length > 0 && (
+      {downloadOptions && downloadOptions.length > 0 && (
           <MultiLink
             className="multilinkWrapper"
             onHeadClick={() => setShowOptions(!showOptions)}
@@ -166,6 +165,8 @@ const WSApplicationDetails = () => {
             options={downloadOptions}
           />
         )}
+      <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
+        <Header>{t("WS_APPLICATION_DETAILS_HEADER")}</Header>
       </div>
       <WSInfoLabel t={t} />
       <div className="hide-seperator">
@@ -207,9 +208,9 @@ const WSApplicationDetails = () => {
               <Row
                 className="border-none"
                 label={t("WS_COMMON_TABLE_COL_APPLICATION_STATUS")}
-                text={paymentDetails?.data?.Bill?.[0]?.billDetails?.amountPaid == null ? "Unpaid" : "Paid"}
+                text={isPaid ? t("WS_COMMON_PAID_LABEL") : t("WS_COMMON_NOT_PAID")}
                 textStyle={
-                  paymentDetails?.data?.Bill?.[0]?.billDetails?.amountPaid == null
+                  !isPaid
                     ? { textAlign: "right", color: "red" }
                     : { textAlign: "right", color: "darkgreen" }
                 }
@@ -240,7 +241,7 @@ const WSApplicationDetails = () => {
             <Row
               className="border-none"
               label={t("WS_OWN_DETAIL_CROSADD")}
-              text={PTData?.Properties?.[0]?.owners?.[0]?.correspondenceAddress || t("CS_NA")}
+              text={PTData?.Properties?.[0]?.owners?.[0]?.permanentAddress || t("CS_NA")}
               textStyle={{ whiteSpace: "pre" }}
             />
             <Link
@@ -292,7 +293,7 @@ const WSApplicationDetails = () => {
                 text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.correspondenceAddress || data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.correspondenceAddress || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
               />
-              <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={"NA"} textStyle={{ whiteSpace: "pre" }} />
+              <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={t(`COMMON_MASTERS_OWNERTYPE_${data?.WaterConnection?.[0]?.connectionHolders?.[0]?.ownerType || data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.ownerType}`)} textStyle={{ whiteSpace: "pre" }} />
             </StatusTable>
           </Card>
         ) : (

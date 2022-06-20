@@ -4,8 +4,9 @@ import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDeta
 import { useHistory } from "react-router-dom";
 import { Header, ActionBar, MultiLink, SubmitBar, Menu, Modal, ButtonSelector, Toast } from "@egovernments/digit-ui-react-components";
 import * as func from "../../../utils";
-import { ifUserRoleExists } from "../../../utils";
+import { ifUserRoleExists, downloadPdf, downloadAndOpenPdf } from "../../../utils";
 import WSInfoLabel from "../../../pageComponents/WSInfoLabel";
+
 
 const GetConnectionDetails = () => {
   const { t } = useTranslation();
@@ -44,22 +45,6 @@ const GetConnectionDetails = () => {
   } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
   const mobileView = Digit.Utils.browser.isMobile();
 
-  const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
-    {
-      tenantId: stateCode,
-      businessService: serviceType == "WATER" ? "WS.ONE_TIME_FEE" : "SW.ONE_TIME_FEE",
-      consumerCodes: applicationDetails?.applicationData?.applicationNo,
-    },
-    {
-      enabled:
-        applicationDetails?.applicationData?.applicationNo &&
-        applicationDetails?.applicationData?.applicationType?.includes("NEW_") &&
-        !applicationDetails?.colletionOfData?.length > 0
-          ? true
-          : false,
-    }
-  );
-  //for common receipt key.
   const { isCommonmastersLoading, data: mdmsCommonmastersData } = Digit.Hooks.obps.useMDMS(stateCode, "common-masters", ["uiCommonPay"]);
   const commonPayDetails = mdmsCommonmastersData?.["common-masters"]?.uiCommonPay || [];
   const index =
@@ -122,7 +107,7 @@ const GetConnectionDetails = () => {
     }
 
     
-    let pathname = `/digit-ui/employee/ws/modify-application?applicationNumber=${applicationDetails?.applicationData?.connectionNo}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+    let pathname = `/digit-ui/employee/ws/modify-application?applicationNumber=${applicationDetails?.applicationData?.connectionNo}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}&from=WS_COMMON_CONNECTION_DETAIL`;
 
 
     history.push(`${pathname}`, { data: applicationDetails });
@@ -190,23 +175,31 @@ const GetConnectionDetails = () => {
   //const showAction = due !== "0" ? actionConfig : actionConfig.filter((item) => item !== "BILL_AMENDMENT_BUTTON");
   const showAction= actionConfig
 
-  async function getRecieptSearch(payments) {
-    if (applicationDetails?.colletionOfData?.length > 0) {
-      const fileStore = await Digit.PaymentService.printReciept(stateCode, { fileStoreIds: applicationDetails?.colletionOfData?.[0]?.fileStoreId });
-      window.open(fileStore[applicationDetails?.colletionOfData?.[0]?.fileStoreId], "_blank");
-    } else {
-      let response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{ ...payments }] }, receiptKey);
-      const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
-      window.open(fileStore[response?.filestoreIds[0]], "_blank");
-    }
+
+  async function getBillSearch() {
+    if (applicationDetails?.fetchBillsData?.length > 0) {
+      const service = serviceType === "WATER" ? "WS" : "SW";
+      let wsSearchFilters = {
+        isConnectionSearch: true,
+        connectionNumber: applicationDetails?.applicationData?.connectionNo
+      }
+      const wsConnectionDetails = await Digit.WSService.search({ tenantId, filters: wsSearchFilters, businessService: service });
+      let filters = {
+        applicationNumber: serviceType === "WATER" ? wsConnectionDetails?.WaterConnection?.[0]?.applicationNo : wsConnectionDetails?.SewerageConnections?.[0]?.applicationNo,
+        bussinessService: service
+      };
+      if(wsConnectionDetails?.WaterConnection?.length > 0 || wsConnectionDetails?.SewerageConnections?.length > 0){
+        downloadAndOpenPdf(applicationDetails?.applicationData?.connectionNo, filters);
+      } 
+    } 
   }
 
   let dowloadOptions = [];
 
   const appFeeDownloadReceipt = {
     order: 1,
-    label: t("DOWNLOAD_RECEIPT_HEADER"),
-    onClick: () => getRecieptSearch(reciept_data?.Payments?.[0]),
+    label: t("WS_COMMON_DOWNLOAD_BILL"),
+    onClick: () => getBillSearch(),
   };
 
   const connectionDetailsReceipt = {
@@ -215,7 +208,7 @@ const GetConnectionDetails = () => {
     onClick: () => downloadConnectionDetails(),
   };
 
-  if (reciept_data?.Payments?.length > 0 || applicationDetails?.colletionOfData?.length > 0)
+  if (applicationDetails?.fetchBillsData?.length > 0)
     dowloadOptions = [appFeeDownloadReceipt, connectionDetailsReceipt];
   else dowloadOptions = [connectionDetailsReceipt];
   const Close = () => (

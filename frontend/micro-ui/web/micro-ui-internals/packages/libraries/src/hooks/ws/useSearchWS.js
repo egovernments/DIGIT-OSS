@@ -28,7 +28,7 @@ const combineResponse = (WaterConnections, SewerageConnections, businessService,
   data?.map((row) => {
     Properties?.map((property) => {
       if (row?.propertyId === property?.propertyId) {
-        row["owner"] = property?.owners[0]?.name;
+        row["owner"] = property?.owners?.map((ob) => ob?.name).join(",");
         row["address"] = getAddress(property?.address, t);
         row["ownerNames"] = getOwnerNames(property);
       }

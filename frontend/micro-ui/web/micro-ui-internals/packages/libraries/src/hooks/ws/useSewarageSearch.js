@@ -10,7 +10,7 @@ const getDate = (epochdate) => {
 const getAddress = (address, t) => {
     return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
       address?.landmark ? `${address?.landmark}, ` : ""
-    }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`
+    }${t(address?.locality.code)}, ${t(address?.city.code || address?.city)}${t(address?.pincode) ? `, ${address.pincode}` : " "}`
 } 
   
 const combineResponse = (WaterConnections, properties, billData, t) => {
@@ -49,7 +49,7 @@ const useSewarageSearch = ({tenantId, filters = {}, BusinessService="WS", t}, co
   , config)
   const billData = useQuery(['BILL_SEARCH', tenantId, consumercodes,BusinessService ], async () => await Digit.PaymentService.fetchBill(tenantId, {
     businessService: BusinessService,
-    consumerCode: consumercodes.substring(0, propertyids.length-2),
+    consumerCode: consumercodes.substring(0, consumercodes.length-2),
   })
   , config)
   return {isLoading:response?.isLoading || properties?.isLoading || billData?.isLoading, data : combineResponse(response?.data?.SewerageConnections,properties?.data?.Properties,billData?.data?.Bill, t)};

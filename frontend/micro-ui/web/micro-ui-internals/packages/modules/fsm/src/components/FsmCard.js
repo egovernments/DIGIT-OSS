@@ -142,10 +142,15 @@ const FSMCard = () => {
     ],
     links: [
       {
-        count: total,
-        label: t("ES_COMMON_INBOX"),
-        link: `/digit-ui/employee/fsm/inbox`
+          count: total,
+          label: t("ES_COMMON_HOME"),
+          link: `/digit-ui/employee/fsm/home`
       },
+      // {
+      //   count: total,
+      //   label: t("ES_COMMON_INBOX"),
+      //   link: `/digit-ui/employee/fsm/inbox`
+      // },
       ...linksForSomeFSMEmployees,
       ...linksForSomeFSMAdmin
     ]

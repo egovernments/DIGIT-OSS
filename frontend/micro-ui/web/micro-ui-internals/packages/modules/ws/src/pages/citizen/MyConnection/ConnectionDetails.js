@@ -258,14 +258,14 @@ const ConnectionDetails = () => {
                 <Row
                   className="border-none"
                   label={t("WS_SERV_DETAIL_CONN_EXECUTION_DATE")}
-                  text={state?.dateEffectiveFrom || t("NA")}
+                  text={Digit.DateUtils.ConvertEpochToDate(state?.connectionExecutionDate) || t("NA")}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row className="border-none" label={t("WS_SERV_DETAIL_METER_ID")} text={state?.meterId} textStyle={{ whiteSpace: "pre" }} />
                 <Row
                   className="border-none"
                   label={t("WS_ADDN_DETAIL_METER_INSTALL_DATE")}
-                  text={state?.meterInstallationDate || "NA"}
+                  text={Digit.DateUtils.ConvertEpochToDate(state?.meterInstallationDate) || "NA"}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row
@@ -344,13 +344,13 @@ const ConnectionDetails = () => {
                   text={state?.connectionHolders?.[0]?.correspondenceAddress}
                   textStyle={{ whiteSpace: "pre" }}
                 />
-                <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={"NA"} textStyle={{ whiteSpace: "pre" }} />
+                <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={t(`COMMON_MASTERS_OWNERTYPE_${state?.connectionHolders?.[0]?.ownerType}`)} textStyle={{ whiteSpace: "pre" }} />
               </StatusTable>
             </div>
           ) : (
             <CardText>{t("WS_PROPERTY_OWNER_SAME_AS_CONN_HOLDERS")}</CardText>
           )}
-          {state?.documents &&
+          {/* {state?.documents &&
             state?.documents.map((doc, index) => (
               <div key={`doc-${index}`}>
                 {
@@ -365,7 +365,7 @@ const ConnectionDetails = () => {
                   </div>
                 }
               </div>
-            ))}
+            ))} */}
           {state?.status !== "inactive" ? (
             <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px", marginTop: "15px" }}>
               <div style={{ width: "100%" }}>
