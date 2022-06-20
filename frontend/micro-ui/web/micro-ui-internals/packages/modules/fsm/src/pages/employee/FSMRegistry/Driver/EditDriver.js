@@ -25,13 +25,9 @@ const EditDriver = ({ parentUrl, heading }) => {
     { staleTime: Infinity }
   );
 
-  const {
-    isLoading: isLoading,
-    isError: vendorCreateError,
-    data: updateResponse,
-    error: updateError,
-    mutate,
-  } = Digit.Hooks.fsm.useDriverUpdate(tenantId);
+  const { isLoading: isLoading, isError: vendorCreateError, data: updateResponse, error: updateError, mutate } = Digit.Hooks.fsm.useDriverUpdate(
+    tenantId
+  );
 
   useEffect(() => {
     setMutationHappened(false);
@@ -41,30 +37,28 @@ const EditDriver = ({ parentUrl, heading }) => {
 
   useEffect(() => {
     if (driverData && driverData[0]) {
-      let driverDetails = driverData[0]
-      setDriverDetails(driverDetails?.driverData)
+      let driverDetails = driverData[0];
+      setDriverDetails(driverDetails?.driverData);
       let values = {
         driverName: driverDetails?.driverData?.name,
         license: driverDetails?.driverData?.licenseNumber,
-        selectGender: driverDetails?.driverDetails?.owner?.gender,
-        dob: driverDetails?.driverDetails?.owner?.dob && new Date(driverDetails?.driverDetails?.owner?.dob),
-        emailId: driverDetails?.driverDetails?.owner?.emailId,
+        selectGender: driverDetails?.driverData?.owner?.gender,
+        dob: driverDetails?.driverData?.owner?.dob && Digit.DateUtils.ConvertTimestampToDate(driverDetails?.driverData?.owner?.dob, "yyyy-MM-dd"),
+        emailId: driverDetails?.driverData?.owner?.emailId,
         phone: driverDetails?.driverData?.owner?.mobileNumber,
-        additionalDetails: driverDetails?.driverData?.additionalDetails?.description
-      }
-      setDefaultValues(values)
+        additionalDetails: driverDetails?.driverData?.additionalDetails?.description,
+      };
+      setDefaultValues(values);
     }
-  }, [driverData])
+  }, [driverData]);
 
   const { t } = useTranslation();
   const history = useHistory();
 
-  const Config = DriverConfig(t, true)
+  const Config = DriverConfig(t, true);
 
   const onFormValueChange = (setValue, formData) => {
-    if (
-      formData?.selectGender
-    ) {
+    if (formData?.selectGender) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
@@ -89,11 +83,11 @@ const EditDriver = ({ parentUrl, heading }) => {
         owner: {
           ...driverDetails.owner,
           relationship: driverDetails.owner?.relationship || "OTHER",
-          gender: gender || driverDetails.owner.gender || 'OTHER',
+          gender: gender || driverDetails.owner.gender || "OTHER",
           dob: dob,
-          emailId: emailId || 'abc@egov.com'
+          emailId: emailId || "abc@egov.com",
         },
-      }
+      },
     };
     mutate(formData, {
       onError: (error, variables) => {
@@ -101,7 +95,7 @@ const EditDriver = ({ parentUrl, heading }) => {
         setTimeout(closeToast, 5000);
       },
       onSuccess: (data, variables) => {
-        setShowToast({ key: "success", action: 'UPDATE_DRIVER' });
+        setShowToast({ key: "success", action: "UPDATE_DRIVER" });
         setTimeout(closeToast, 5000);
         queryClient.invalidateQueries("FSM_DRIVER_SEARCH");
       },
