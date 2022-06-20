@@ -49,6 +49,9 @@ public class DriverSearchCriteria {
 	
 	@JsonProperty("driverWithNoVendor")
 	private boolean driverWithNoVendor;
+	
+	@JsonProperty("vendordriverstatus")
+	private boolean vendordriverstatus;
 
 
 	public boolean isEmpty() {
