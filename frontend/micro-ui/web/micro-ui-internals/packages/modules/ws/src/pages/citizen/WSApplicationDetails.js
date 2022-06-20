@@ -293,7 +293,7 @@ const WSApplicationDetails = () => {
                 text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.correspondenceAddress || data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.correspondenceAddress || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
               />
-              <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={"NA"} textStyle={{ whiteSpace: "pre" }} />
+              <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={t(`COMMON_MASTERS_OWNERTYPE_${data?.WaterConnection?.[0]?.connectionHolders?.[0]?.ownerType || data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.ownerType}`)} textStyle={{ whiteSpace: "pre" }} />
             </StatusTable>
           </Card>
         ) : (

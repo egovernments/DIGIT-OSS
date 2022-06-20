@@ -9,11 +9,16 @@ const WSAdditionalDetails = () => {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
   const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
-  const applicationNobyData =
-    window.location.href.substring(window.location.href.indexOf("WS_")) || window.location.href.substring(window.location.href.indexOf("SW_"));
+  const applicationNobyData = window.location.href.includes("SW_")
+    ? window.location.href.substring(window.location.href.indexOf("SW_"))
+    : window.location.href.substring(window.location.href.indexOf("WS_"));
 
-  let filter1 = { tenantId: "pb.amritsar", applicationNumber: applicationNobyData };
-  const { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1 }, { filters: filter1 });
+ 
+    let filter1 = { tenantId: tenantId, applicationNumber: applicationNobyData };
+    const { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch(
+      { filters: filter1, BusinessService: applicationNobyData?.includes("SW") ? "SW" : "WS" },
+      { filters: filter1 }
+    );
 
   if (isLoading) {
     return <Loader />;
@@ -25,7 +30,7 @@ const WSAdditionalDetails = () => {
       <div className="hide-seperator">
         <Card>
           <CardSubHeader>{t("WS_COMMON_CONNECTION_DETAIL")}</CardSubHeader>
-          <StatusTable>
+          {data?.WaterConnection && data?.WaterConnection?.length > 0 && (<StatusTable>
             <Row
               className="border-none"
               label={t("WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL")}
@@ -60,7 +65,23 @@ const WSAdditionalDetails = () => {
               text={t(data?.WaterConnection?.[0]?.waterSource?.split(".")?.[1]) || t("CS_NA")}
               textStyle={{ whiteSpace: "pre" }}
             />
-          </StatusTable>
+          </StatusTable>)}
+          {data?.SewerageConnections && data?.SewerageConnections?.length > 0 && (
+            <StatusTable>
+              <Row
+                className="border-none"
+                label={t("WS_NO_OF_WATER_CLOSETS_LABEL")}
+                text={data?.SewerageConnections?.[0]?.proposedWaterClosets}
+                textStyle={{ whiteSpace: "pre" }}
+              />
+              <Row
+                className="border-none"
+                label={t("WS_SERV_DETAIL_NO_OF_TOILETS")}
+                text={data?.SewerageConnections?.[0]?.proposedToilets || t("CS_NA")}
+                textStyle={{ whiteSpace: "pre" }}
+              />
+            </StatusTable>
+          )}
         </Card>
         {
           <Card>
@@ -107,12 +128,12 @@ const WSAdditionalDetails = () => {
             <Row
               className="border-none"
               label={t("WS_ADDN_DETAIL_ROAD_TYPE")}
-              text={
+              text={ data?.WaterConnection?.[0]?.roadCuttingInfo?.[0]?.roadType || data?.SewerageConnections?.[0]?.roadCuttingInfo?.[0]?.roadType ?
                 t(
                   `WS_ROADTYPE_${
                     data?.WaterConnection?.[0]?.roadCuttingInfo?.[0]?.roadType || data?.SewerageConnections?.[0]?.roadCuttingInfo?.[0]?.roadType
                   }`
-                ) || t("NA")
+                ) : t("CS_NA")
               }
               textStyle={{ whiteSpace: "pre" }}
             />
