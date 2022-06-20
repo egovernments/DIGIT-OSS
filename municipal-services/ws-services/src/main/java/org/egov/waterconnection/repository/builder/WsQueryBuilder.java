@@ -71,7 +71,7 @@ public class WsQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id";
 	
-	private static final String WATER_SEARCH_BASE_QUERY = "SELECT DISTINCT(conn.applicationNo)";
+	private static final String WATER_SEARCH_BASE_QUERY = "SELECT DISTINCT(conn.applicationNo),";
 
 	private static final String WATER_SEARCH_INBOX_BASE_QUERY = "SELECT distinct(conn.applicationno), ";
 
