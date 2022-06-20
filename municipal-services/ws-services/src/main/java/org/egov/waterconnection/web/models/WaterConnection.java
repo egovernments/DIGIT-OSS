@@ -43,6 +43,8 @@ public class WaterConnection extends Connection {
 	@JsonProperty("noOfTaps")
 	private Integer noOfTaps = null;
 
+	@JsonProperty("isDisconnectionTemporary")
+	private boolean isDisconnectionTemporary = false;
 
 	public WaterConnection waterSource(String waterSource) {
 		this.waterSource = waterSource;
