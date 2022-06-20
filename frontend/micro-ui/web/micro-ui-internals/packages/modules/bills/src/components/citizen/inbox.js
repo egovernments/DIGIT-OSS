@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { getActionButton, getBillNumber } from "../../utils";
-import InboxLinks from "../inbox/ApplicationLinks";
-import ApplicationTable from "../inbox/ApplicationTable";
 import SearchCitizen from "./SearchCitizen";
 
 const CitizenInbox = ({ tableConfig, filterComponent, ...props }) => {

@@ -1,4 +1,4 @@
-import { Card, Header, SearchForm, Table, DownloadIcon,MultiLink, DownloadBtnCommon} from "@egovernments/digit-ui-react-components";
+import { Card, Header, SearchForm, Table, DownloadIcon  } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { getActionButton, getBillNumber } from "../../utils";
@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import MobileSearchApplication from "./MobileSearchApplication";
 import SearchFields from "./SearchFields";
 
-const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
+const SearchApplication = ({ tenantId, t, onSubmit, data, count, isInbox }) => {
   const initialValues = Digit.SessionStorage.get("BILLS_SEARCH_APPLICATION_DETAIL") || {
     offset: 0,
     limit: 10,
@@ -16,6 +16,8 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
   const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
     defaultValues: initialValues,
   });
+  const [enableSarch, setEnableSearch] = useState(() => (isInbox ? {} : { enabled: false }));
+
   const convertEpochToDate = (dateEpoch) => {
     if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
       return "NA";
@@ -28,42 +30,25 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
     day = (day > 9 ? "" : "0") + day;
     return `${day}/${month}/${year}`;
   };
-  const [tabledata,settabledata ]=useState([]);
-  const DownloadBtn = (props) => {
-    return (
-      <div onClick={props.onClick}>
-        <DownloadBtnCommon />
-      </div>
-    );
+  const download = async () => {
+    const keyv1 = keys.filter((key) => key.code === searchParams.businesService);
+    const bills = await Digit.PaymentService.generatePdf(tenantId, { Bill: data.Bills }, keyv1[0].billKey);
+    const res = await Digit.UploadServices.Filefetch(bills?.filestoreIds, tenantId);
+    window.open(res.data[bills.filestoreIds[0]]);
+    //logic for downloading all bills anyway(if api is giving multiple filestoreids)
+    const fsObj = res.data.fileStoreIds;
+    // downloadAll(fsObj)
   };
- const handleExcelDownload = (tabData) => {
-  console.log(" Table Data : " + JSON.stringify(tabData?.[0]));
-  if(tabData?.[0] !== undefined){
-    return Digit.Download.Excel(tabData?.[0] , "searchbillexcel");
-  }
-  }; 
-   useEffect(() => {
+  const MergeAndDownload = (e) => {
+    download();
+  };
+  useEffect(() => {
     register("offset", 0);
     register("limit", 10);
     register("sortBy", "commencementDate");
     register("sortOrder", "DESC");
   }, [register]);
-  useEffect(() => {
-    if ( data !== ""){
-      settabledata([
 
-        data?.map((obj)=> {
-          return {
-            "BillNo.": obj?.billNumber,
-            "ConsumerName": obj?.payerName,
-            "BillDate": convertEpochToDate(obj?.billDate),
-            "BillAmount": obj?.totalAmount,
-           "Status":obj?.status
-          }
-        })
-      ])
-    }
-  }, [data]);
   const onSort = useCallback((args) => {
     if (args.length === 0) return;
     setValue("sortBy", args.id);
@@ -89,11 +74,39 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
   if (isMobile) {
     return <MobileSearchApplication {...{ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit }} />;
   }
+  const handleMergeAndDownload = (e) => {
+    downloadBills();
+  };
+  const downloadAll = (data) => {
+    data.map((fs) => {
+      window.open(fs.url);
+    });
+  };
+  const downloadBills = async () => {
+    const keyv1 = keys.filter((key) => key.code === searchParams.businesService);
+    const bills = await Digit.PaymentService.generatePdf(tenantId, { Bill: data.Bills }, keyv1[0].billKey);
+    const res = await Digit.UploadServices.Filefetch(bills?.filestoreIds, tenantId);
+    window.open(res.data[bills.filestoreIds[0]]);
+    //logic for downloading all bills anyway(if api is giving multiple filestoreids)
+    const fsObj = res.data.fileStoreIds;
+    // downloadAll(fsObj)
+  };
+  const GetLogo = () => (
+    <button onClick={handleMergeAndDownload} style={{ margin: "0 0 0 0", verticalAlign: "middle" }} disabled={!data || data?.Bills?.length === 0}>
+      <div className="header" style={{marginLeft:"685px", marginTop:"-45px"}} >
+        <span className="logo">
+          <DownloadIcon />
+        </span>
+        <Header >{t("BILLS_MERGE_AND_DOWNLOAD")}</Header>
+      </div>
+    </button>
+  );
+
   //need to get from workflow
   const GetCell = (value) => <span className="cell-text">{value}</span>;
   const columns = useMemo(
     () => [
-   {
+      {
         Header: t("ABG_COMMON_TABLE_COL_BILL_NO"),
         disableSortBy: true,
         Cell: ({ row }) => {
@@ -190,13 +203,18 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
   };
   return (
     <React.Fragment>
-      <Header>{t("ABG_SEARCH_BILL_COMMON_HEADER")}</Header>
+      <Header>{t("ABG_COMMON_HEADER")}</Header>
+      <div className="groupBill-custom">
+        <div className="custom-group-merge-container">
+          {isInbox && <Header >{"Group Bills"}</Header>}
+          {GetLogo()}
+        </div>
       <SearchForm className="ws-custom-wrapper" onSubmit={onSubmit} handleSubmit={handleSubmit}>
         <SearchFields {...{ register, control, reset, tenantId, t, previousPage }} />
       </SearchForm>
       {data?.display ? (
         <Card style={{ marginTop: 20 }}>
-          {t(data.display)
+          {t("CS_MYAPPLICATIONS_NO_APPLICATION")
             .split("\\n")
             .map((text, index) => (
               <p key={index} style={{ textAlign: "center" }}>
@@ -205,18 +223,13 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
             ))}
         </Card>
       ) : (
-    data !== "" && 
-   (
-             <Table
-             secondaryTopComponent={ <DownloadBtn 
-             onClick={() => handleExcelDownload(tabledata)}
-            />}
+        data !== "" && (
+          <Table
             t={t}
             data={data}
             totalRecords={count}
             columns={columns}
             getCellProps={(cellInfo) => {
-
               return {
                 style: {
                   minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
@@ -236,8 +249,8 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
           />
         )
       )}
+      </div>
     </React.Fragment>
-  
   );
 };
 

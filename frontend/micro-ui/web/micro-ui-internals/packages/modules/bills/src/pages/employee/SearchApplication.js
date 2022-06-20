@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import PTSearchApplication from "../../components/Search";
+import SearchApplication from "../../components/SearchApp";
 import {Toast } from "@egovernments/digit-ui-react-components";
 const Search = ({ path }) => {
   const { t } = useTranslation();
@@ -13,14 +13,12 @@ const Search = ({ path }) => {
     Digit.SessionStorage.set("BILL_SEARCH_APPLICATION_DETAIL", {
       serviceCategory: _data?.serviceCategory,
       consumerCode: _data?.consumerCode,
-      billNumber: _data?.billNumber,
-      mobileNumber: _data?.mobileNumber,
+      locality:_data?.locality,
       offset: 0,
       limit: 10,
       sortBy: "commencementDate",
       sortOrder: "DESC",
     });
-
     const data = {
       ..._data,
     };
@@ -80,7 +78,7 @@ const Search = ({ path }) => {
 
 
   return <React.Fragment>
-    <PTSearchApplication
+    <SearchApplication
       t={t}
       tenantId={tenantId}
       onSubmit={onSubmit}

@@ -1,8 +1,8 @@
 import { Header, DownloadIcon } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import DesktopInbox from "../../../components/inbox/BillsDesktopInbox";
-import MobileInbox from "../../../components/inbox/BillsMobileInbox";
+//import DesktopInbox from "../../../components/inbox/BillsDesktopInbox";
+//import MobileInbox from "../../../components/inbox/BillsMobileInbox";
 
 const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filterComponent, isInbox, keys }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -135,19 +135,19 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
   // })
 
   if (isMobile) {
-    return (
-      <MobileInbox
-        data={data}
-        isLoading={hookLoading}
-        searchFields={getSearchFields()}
-        onFilterChange={handleFilterChange}
-        onSearch={handleFilterChange}
-        onSort={handleSort}
-        parentRoute={parentRoute}
-        searchParams={searchParams}
-        sortParams={sortParams}
-      />
-    );
+    // return (
+    //   <MobileInbox
+    //     data={data}
+    //     isLoading={hookLoading}
+    //     searchFields={getSearchFields()}
+    //     onFilterChange={handleFilterChange}
+    //     onSearch={handleFilterChange}
+    //     onSort={handleSort}
+    //     parentRoute={parentRoute}
+    //     searchParams={searchParams}
+    //     sortParams={sortParams}
+    //   />
+    // );
   } else {
     return (
       <div className="groupBill-custom">
@@ -156,7 +156,7 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
           {GetLogo()}
         </div>
 
-        <DesktopInbox
+        {/* <DesktopInbox
           businessService={businessService}
           data={data}
           tableConfig={rest?.tableConfig}
@@ -180,7 +180,7 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
           sortParams={sortParams}
           totalRecords={totalRecords}
           filterComponent={filterComponent}
-        />
+        /> */}
       </div>
     );
   }

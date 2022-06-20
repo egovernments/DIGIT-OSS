@@ -99,39 +99,6 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
         {/* {isInboxLoading ? <Loader /> : <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"FilterFormComponent"})}/>} */}
         {/* <SortAction text={t("ES_COMMON_SORT")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"SortComponent"})}/> */}
       </div>
-      {currentlyActiveMobileModal ? (
-        <PopUp>
-          <CurrentMobileModalComponent
-            onSubmit={(data) => {
-              setActiveMobileModal({ type: "remove" });
-              onSubmit(data);
-            }}
-            handleSubmit={handleSubmit}
-            id="search-form"
-            className="rm-mb form-field-flex-one inboxPopupMobileWrapper"
-            {...{ searchFormFieldsComponentProps, currentlyActiveMobileModal, closeMobilePopupModal, tenantId }}
-          />
-        </PopUp>
-      ) : null}
-      {data?.display ? (
-        <Card style={{ marginTop: 20 }}>
-          {t(data?.display)
-            .split("\\n")
-            .map((text, index) => (
-              <p key={index} style={{ textAlign: "center" }}>
-                {text}
-              </p>
-            ))}
-        </Card>
-      ) : (
-        <DetailsCard
-          {...{
-            data: propsMobileInboxCards,
-            linkPrefix: `/digit-ui/employee/tl/application-details/`,
-            serviceRequestIdKey: t("TL_COMMON_TABLE_COL_APP_NO"),
-          }}
-        />
-      )}
     </React.Fragment>
   )
 }

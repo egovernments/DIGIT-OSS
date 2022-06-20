@@ -11,8 +11,9 @@ import {
   Toast,
 } from "@egovernments/digit-ui-react-components";
 import SearchFormFields from "./SearchFields";
+// import { convertEpochToDateDMY } from "../../utils";
 
-const MobileSearchApplication = ({ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit, formState, setShowToast}) => {
+const MobileSearchApplication = ({ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit, setShowToast}) => {
 
   function activateModal(state, action) {
     switch (action.type) {
@@ -36,7 +37,7 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
     </div>
   );
 
-  const searchFormFieldsComponentProps = { Controller, register, control, t, reset, previousPage, formState, setShowToast };
+  const searchFormFieldsComponentProps = { Controller, register, control, t, reset, previousPage , setShowToast};
 
   const MobileComponentDirectory = ({ currentlyActiveMobileModal, searchFormFieldsComponentProps, tenantId, ...props }) => {
     const { closeMobilePopupModal } = props;
@@ -76,14 +77,12 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
       return [];
       }
       return data?.map((data) => ({
-        [t("PT_SEARCHPROPERTY_TABEL_PID")]: data?.propertyId,
-        [t("PT_APPLICATION_NO_LABEL")]: data?.acknowldgementNumber || "-",
-        [t("PT_SEARCHPROPERTY_TABEL_APPLICATIONTYPE")]: data?.creationReason || "",
-        [t("PT_COMMON_TABLE_COL_OWNER_NAME")]: data?.owners?.map( o => o.name ). join(",") || "" ,
-        [t("ES_SEARCH_PROPERTY_STATUS")]: t( data?.status &&`WF_PT_${data?.status}`|| "NA") || "",
-        [t("PT_ADDRESS_LABEL")]: `${data?.address?.doorNo ? `${data?.address?.doorNo}, ` : ""} ${data?.address?.street ? `${data?.address?.street}, ` : ""}${
-            data?.address?.landmark ? `${data?.address?.landmark}, ` : ""
-          }${t(data?.address?.locality.code)}, ${t(data?.address?.city.code)} ${t(data?.address?.pincode) ? `${data?.address.pincode}` : " "}` || "NA",
+        [t("ABG_COMMON_TABLE_COL_BILL_NO")]: GetCell(original?.billNumber),
+        [t("ABG_COMMON_TABLE_COL_CONSUMER_NAME")]: GetCell(original?.payerName),
+        [t("ABG_COMMON_TABLE_COL_BILL_EXP_DATE")]: GetDateCell(original?.billDate),
+        [t("ABG_COMMON_TABLE_COL_BILL_AMOUNT")]: GetCell(original?.totalAmount),
+        [t("ABG_COMMON_TABLE_COL_STATUS")]: GetCell(original?.status),
+        [t("ABG_COMMON_TABLE_COL_ACTION")]: GetActioncell(original),
       }))
     },
     [data]
@@ -100,39 +99,6 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
         {/* {isInboxLoading ? <Loader /> : <FilterAction text={t("ES_COMMON_FILTER")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"FilterFormComponent"})}/>} */}
         {/* <SortAction text={t("ES_COMMON_SORT")} handleActionClick={() => setActiveMobileModal({type:"set", payload:"SortComponent"})}/> */}
       </div>
-      {currentlyActiveMobileModal ? (
-        <PopUp>
-          <CurrentMobileModalComponent
-            onSubmit={(data) => {
-              setActiveMobileModal({ type: "remove" });
-              onSubmit(data);
-            }}
-            handleSubmit={handleSubmit}
-            id="search-form"
-            className="rm-mb form-field-flex-one inboxPopupMobileWrapper"
-            {...{ searchFormFieldsComponentProps, currentlyActiveMobileModal, closeMobilePopupModal, tenantId }}
-          />
-        </PopUp>
-      ) : null}
-      {data?.display ? (
-        <Card style={{ marginTop: 20 }}>
-          {t(data?.display)
-            .split("\\n")
-            .map((text, index) => (
-              <p key={index} style={{ textAlign: "center" }}>
-                {text}
-              </p>
-            ))}
-        </Card>
-      ) : (
-        <DetailsCard
-          {...{
-            data: propsMobileInboxCards,
-            linkPrefix: `/digit-ui/employee/pt/applicationsearch/application-details/`,
-            serviceRequestIdKey: t("PT_SEARCHPROPERTY_TABEL_PID"),
-          }}
-        />
-      )}
     </React.Fragment>
   )
 }

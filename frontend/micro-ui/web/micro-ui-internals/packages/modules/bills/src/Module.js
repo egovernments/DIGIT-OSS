@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import EmployeeApp from "./pages/employee";
 import BillsCard from "./billHomeCard";
 import BillsFilter from "./components/BillsFilter";
-import BillInbox from "./pages/employee/SearchBill/BillInbox";
 import ActionModal from "./components/Modal";
 import BillDetails from "./pages/employee/BillDetails";
 import Banner from "./components/Banner";
@@ -48,7 +47,6 @@ export const BillsLinks = ({ matchPath }) => {
 const componentsToRegister = {
   BillsModule,
   BillsCard,
-  BillInbox: BillInbox,
   BillDetails: BillDetails,
   ActionModal,
   Banner,

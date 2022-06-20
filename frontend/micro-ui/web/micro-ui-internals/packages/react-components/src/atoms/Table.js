@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import { ArrowBack, ArrowForward, ArrowToFirst, ArrowToLast, SortDown, SortUp } from "./svgindex";
-
 const noop = () => {};
 
 const Table = ({
@@ -31,7 +30,9 @@ const Table = ({
   customTableWrapperClassName="",
   styles={},
   tableTopComponent,
+  secondaryTopComponent,
   tableRef,
+ 
   isReportTable=false
 }) => {
   const {
@@ -89,8 +90,8 @@ const Table = ({
     <span className={customTableWrapperClassName}>
     {tableTopComponent ? tableTopComponent:null}
       <table className={className} {...getTableProps()} style={styles} ref={tableRef}>
-         
-        <thead>
+          <thead>
+          {secondaryTopComponent ? secondaryTopComponent : null}
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
              {showAutoSerialNo&& <th style={{  verticalAlign: "top"}}>
