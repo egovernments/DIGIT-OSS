@@ -71,7 +71,7 @@ public class WsQueryBuilder {
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id";
 	
-	private static final String WATER_SEARCH_BASE_QUERY = "SELECT ";
+	private static final String WATER_SEARCH_BASE_QUERY = "SELECT DISTINCT(conn.applicationNo)";
 
 	private static final String WATER_SEARCH_INBOX_BASE_QUERY = "SELECT distinct(conn.applicationno), ";
 
@@ -385,7 +385,7 @@ public class WsQueryBuilder {
 		preparedStmtList.add(limit + offset);
 		
 		if (criteria.getSortBy() != null && (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
-			if (criteria.getSortOrder() != null && (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
+			if (criteria.getSortOrder() == null || (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
 				return PAGINATION_INBOX_DESC_WRAPPER.replace("{}", query);
 			else
 				return PAGINATION_INBOX_WRAPPER.replace("{}", query);
