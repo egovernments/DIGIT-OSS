@@ -286,7 +286,7 @@ public class WsQueryBuilder {
 		}
 		
 		// Added clause to support multiple locality search
-		if (!CollectionUtils.isEmpty(criteria.getApplicationNumber())) {
+		if (!CollectionUtils.isEmpty(criteria.getLocality())) {
 			addClauseIfRequired(preparedStatement, query);
 			query.append("  conn.locality IN (").append(createQuery(criteria.getLocality())).append(")");
 			addToPreparedStatement(preparedStatement, criteria.getLocality());
