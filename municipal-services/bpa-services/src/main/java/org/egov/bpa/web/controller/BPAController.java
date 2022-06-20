@@ -75,8 +75,8 @@ public class BPAController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@PostMapping(value = "/_permitcount")
-	public Integer getPermitCount(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+	@PostMapping(value = "/_count")
+	public Integer getCount(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 											  @Valid @ModelAttribute BPAPermitCountSearchCriteria criteria) {
 
 		int count = bpaService.getBPAPermitCount(criteria, requestInfoWrapper.getRequestInfo());
