@@ -62,7 +62,7 @@ public class WorkflowIntegrator {
 			wfBusinessServiceName = config.getDisconnectBusinessServiceName();
 		}
 		
-		if(wsUtil.isModifyConnectionRequest(waterConnectionRequest)) {
+		else if(wsUtil.isModifyConnectionRequest(waterConnectionRequest)) {
 			wfBusinessServiceName = config.getModifyWSBusinessServiceName();
 		}
 		ProcessInstance processInstance = ProcessInstance.builder()
@@ -90,6 +90,7 @@ public class WorkflowIntegrator {
 		List<ProcessInstance> processInstances = new ArrayList<>();
 		processInstances.add(processInstance);
 		ProcessInstanceResponse processInstanceResponse = null;
+		log.info("PI :"+processInstances);
 		try {
 			processInstanceResponse = mapper.convertValue(
 					rest.postForObject(config.getWfHost().concat(config.getWfTransitionPath()),
