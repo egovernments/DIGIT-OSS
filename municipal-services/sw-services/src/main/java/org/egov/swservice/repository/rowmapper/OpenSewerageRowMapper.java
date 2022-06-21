@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,7 @@ public class OpenSewerageRowMapper implements ResultSetExtractor<List<SewerageCo
 	
 	@Override
     public List<SewerageConnection> extractData(ResultSet rs) throws SQLException, DataAccessException {
-        Map<String, SewerageConnection> connectionListMap = new HashMap<>();
+        Map<String, SewerageConnection> connectionListMap = new LinkedHashMap<>();
         SewerageConnection sewarageConnection = new SewerageConnection();
         while (rs.next()) {
             String Id = rs.getString("connection_Id");

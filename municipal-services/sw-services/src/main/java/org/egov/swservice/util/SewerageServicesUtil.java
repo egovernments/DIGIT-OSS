@@ -156,8 +156,8 @@ public class SewerageServicesUtil {
 			propertyIds.add(sewerageConnectionSearchCriteria.getPropertyId());
 			propertyCriteria.setPropertyIds(propertyIds);
 		}
-		if (!StringUtils.isEmpty(sewerageConnectionSearchCriteria.getLocality())) {
-			propertyCriteria.setLocality(sewerageConnectionSearchCriteria.getLocality());
+		if (!CollectionUtils.isEmpty(sewerageConnectionSearchCriteria.getLocality())) {
+			propertyCriteria.setLocality(sewerageConnectionSearchCriteria.getLocality().iterator().next());
 		}
 
 		Object result = serviceRequestRepository.fetchResult(

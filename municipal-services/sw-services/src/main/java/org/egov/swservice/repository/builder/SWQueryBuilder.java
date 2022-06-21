@@ -34,7 +34,7 @@ public class SWQueryBuilder {
 	
 	private static String holderSelectValues = "connectionholder.tenantid as holdertenantid, connectionholder.connectionid as holderapplicationId, userid, connectionholder.status as holderstatus, isprimaryholder, connectionholdertype, holdershippercentage, connectionholder.relationship as holderrelationship, connectionholder.createdby as holdercreatedby, connectionholder.createdtime as holdercreatedtime, connectionholder.lastmodifiedby as holderlastmodifiedby, connectionholder.lastmodifiedtime as holderlastmodifiedtime";
 	
-	private final static String SEWERAGE_SEARCH_QUERY = "SELECT conn.*, sc.*, document.*, plumber.*, sc.connectionExecutionDate,"
+	private final static String SEWERAGE_SEARCH_QUERY = "SELECT distinct(conn.applicationno), conn.*, sc.*, document.*, plumber.*, sc.connectionExecutionDate,"
 			+ "sc.noOfWaterClosets, sc.noOfToilets,sc.proposedWaterClosets, sc.proposedToilets, sc.connectionType, sc.connection_id as connection_Id, sc.appCreatedDate,"
 			+ "  sc.detailsprovidedby, sc.estimationfileStoreId , sc.sanctionfileStoreId , sc.estimationLetterDate,"
 			+ " conn.id as conn_id, conn.tenantid, conn.applicationNo, conn.applicationStatus, conn.status, conn.connectionNo, conn.oldConnectionNo, conn.property_id,"
@@ -43,7 +43,7 @@ public class SWQueryBuilder {
 			+ " conn.adhocpenaltyreason, conn.adhocpenaltycomment, conn.adhocrebatereason, conn.adhocrebatecomment, conn.applicationType, conn.channel, conn.dateEffectiveFrom,"
 			+ " conn.locality, conn.isoldapplication, conn.roadtype, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id, plumber.name as plumber_name, plumber.licenseno,"
 			+ " roadcuttingInfo.id as roadcutting_id, roadcuttingInfo.roadtype as roadcutting_roadtype, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.active as roadcutting_active,"
-			+ " plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress, plumber.relationship, " + holderSelectValues 
+			+ " plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress, plumber.relationship, conn.lastmodifiedtime as conn_lastmodifiedtime, " + holderSelectValues 
 			+ " FROM eg_sw_connection conn "
 			+  INNER_JOIN_STRING 
 			+ " eg_sw_service sc ON sc.connection_id = conn.id"
@@ -69,16 +69,35 @@ public class SWQueryBuilder {
 			+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id";
 	
 	private final String paginationWrapper = "SELECT * FROM " +
-            "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
+            "(SELECT *, DENSE_RANK() OVER (ORDER BY wc_appCreatedDate DESC) offset_ FROM " +
             "({})" +
             " result) result_offset " +
             "WHERE offset_ > ? AND offset_ <= ?";
+	
+	private static final String PAGINATION_INBOX_WRAPPER = "SELECT * FROM " +
+            "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_lastmodifiedtime ASC) offset_ FROM " +
+            "({})" +
+            " result) result_offset " +
+            "WHERE offset_ > ? AND offset_ <= ?";
+
+	private static final String PAGINATION_INBOX_DESC_WRAPPER = "SELECT * FROM " +
+            "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_lastmodifiedtime DESC) offset_ FROM " +
+            "({})" +
+            " result) result_offset " +
+            "WHERE offset_ > ? AND offset_ <= ?";
+
 	
 	private static final String COUNT_WRAPPER = " SELECT COUNT(*) FROM ({INTERNAL_QUERY}) AS count ";
 	
 	private static final String ORDER_BY_CLAUSE = " ORDER BY sc.appCreatedDate DESC";
 
 	private static final String ORDER_BY_COUNT_CLAUSE = " ORDER BY appCreatedDate DESC";
+	
+
+	private static final String ORDER_BY_INBOX_DESC_CLAUSE = " order by conn.lastmodifiedtime DESC";
+
+	private static final String ORDER_BY_INBOX_ASC_CLAUSE = " order by conn.lastmodifiedtime ASC";
+
 	/**
 	 *
 	 * @param criteria on search criteria
@@ -247,19 +266,34 @@ public class SWQueryBuilder {
 			addClauseIfRequired(preparedStatement, query);
 			query.append(" conn.applicationstatus in ('APPROVED','CONNECTION_ACTIVATED') ");
 		}
-		if (!StringUtils.isEmpty(criteria.getLocality())) {
+		
+		// Added clause to support multiple locality search
+		if (!CollectionUtils.isEmpty(criteria.getLocality())) {
 			addClauseIfRequired(preparedStatement, query);
-			query.append(" conn.locality = ? ");
-			preparedStatement.add(criteria.getLocality());
+			query.append("  conn.locality IN (").append(createQuery(criteria.getLocality())).append(")");
+			addToPreparedStatement(preparedStatement, criteria.getLocality());
+		}
+
+		// Added clause to support assignee search
+		if (!StringUtils.isEmpty(criteria.getAssignee())) {
+			addClauseIfRequired(preparedStatement, query);
+			query.append(" conn.assignee = ? ");
+			preparedStatement.add(criteria.getAssignee());
 		}
 		
 		// Add OrderBy clause
-		if (criteria.getIsCountCall() && !StringUtils.isEmpty(criteria.getSearchType())
+		if (criteria.getIsCountCall() != null && criteria.getIsCountCall() 
+				&& !StringUtils.isEmpty(criteria.getSearchType())
 				&& criteria.getSearchType().equalsIgnoreCase(SEARCH_TYPE_CONNECTION))
 			query.append("GROUP BY conn.connectionno ").append(ORDER_BY_COUNT_CLAUSE);
-		else if (criteria.getIsCountCall())
+		else if (criteria.getIsCountCall() != null && criteria.getIsCountCall())
 			query.append("GROUP BY conn.applicationno ").append(ORDER_BY_COUNT_CLAUSE);
-		else
+		else if (criteria.getSortBy() != null && (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
+			if (criteria.getSortOrder() != null && (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
+				query.append(ORDER_BY_INBOX_DESC_CLAUSE);
+			else
+				query.append(ORDER_BY_INBOX_ASC_CLAUSE);
+		} else
 			query.append(ORDER_BY_CLAUSE);
 		
 		// Pagination to limit results, do not paginate query in case of count call.
@@ -328,6 +362,15 @@ public class SWQueryBuilder {
 
 		preparedStmtList.add(offset);
 		preparedStmtList.add(limit + offset);
+		
+
+		if (criteria.getSortBy() != null && (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
+			if (criteria.getSortOrder() != null && (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
+				return PAGINATION_INBOX_DESC_WRAPPER.replace("{}", query);
+			else
+				return PAGINATION_INBOX_WRAPPER.replace("{}", query);
+		}
+		
 		return paginationWrapper.replace("{}",query);
 	}
 	
