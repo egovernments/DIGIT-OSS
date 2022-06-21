@@ -365,7 +365,7 @@ public class SWQueryBuilder {
 		
 
 		if (criteria.getSortBy() != null && (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
-			if (criteria.getSortOrder() != null && (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
+			if (criteria.getSortOrder() == null || (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
 				return PAGINATION_INBOX_DESC_WRAPPER.replace("{}", query);
 			else
 				return PAGINATION_INBOX_WRAPPER.replace("{}", query);
