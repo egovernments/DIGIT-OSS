@@ -12,10 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class OpenWaterRowMapper implements ResultSetExtractor<List<WaterConnection>> {
@@ -32,7 +29,7 @@ public class OpenWaterRowMapper implements ResultSetExtractor<List<WaterConnecti
 	
 	@Override
     public List<WaterConnection> extractData(ResultSet rs) throws SQLException, DataAccessException {
-        Map<String, WaterConnection> connectionListMap = new HashMap<>();
+        Map<String, WaterConnection> connectionListMap = new LinkedHashMap<>();
         WaterConnection currentWaterConnection = new WaterConnection();
         while (rs.next()) {
             String Id = rs.getString("connection_Id");
