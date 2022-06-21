@@ -196,16 +196,16 @@ const CheckPage = ({ onSubmit, value }) => {
               />
               <Row className="border-none"
                 label={t("TL_GUARDIAN_S_NAME_LABEL")}
-                text={t(owner?.fatherOrHusbandName)}
+                text={t(owner?.fatherOrHusbandName) || t("CS_NA")}
               />
               <Row className="border-none"
                label={t("TL_RELATIONSHIP_WITH_GUARDIAN_LABEL")}
-                  text={t(owner?.relationship?.i18nKey)}
+                  text={t(owner?.relationship?.i18nKey) || t("CS_NA")}
                 />
             <Row className="border-none"
                   label={t("TL_CORRESPONDENCE_ADDRESS")}
                   labelStyle={{marginRight:"2px"}}
-                  text={t(owners?.permanentAddress)}
+                  text={t(owners?.permanentAddress) || t("CS_NA")}
             />
             </div>
           ))}
