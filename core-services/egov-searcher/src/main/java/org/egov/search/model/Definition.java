@@ -27,6 +27,9 @@ public class Definition {
 	
 	@JsonProperty("rowMapperKey")
 	private String rowMapperKey;
+
+	@JsonProperty("decryptionPathId")
+	private String decryptionPathId;
 	
 	@JsonProperty("searchParams")
 	private SearchParams searchParams;

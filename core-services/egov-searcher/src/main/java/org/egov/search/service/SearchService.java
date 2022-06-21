@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.egov.SearchApplicationRunnerImpl;
 import org.egov.common.contract.response.ResponseInfo;
+import org.egov.encryption.EncryptionService;
 import org.egov.search.model.Definition;
 import org.egov.search.model.SearchDefinition;
 import org.egov.search.model.SearchRequest;
@@ -46,6 +47,9 @@ public class SearchService {
 	
 	@Autowired
 	private SearchUtils searchUtils;
+
+	@Autowired
+	private EncryptionService encryptionService;
 	
 	public static final Logger log = LoggerFactory.getLogger(SearchService.class);
 
@@ -61,6 +65,11 @@ public class SearchService {
 			if(null != searchDefinition.getIsCustomerRowMapEnabled()) {
 				if(!searchDefinition.getIsCustomerRowMapEnabled()) {
 					maps = searchRepository.fetchData(searchRequest, searchDefinition);
+					if ((searchDefinition.getDecryptionPathId()!= null)&&(searchRequest.getRequestInfo()!=null)&&(searchRequest.getRequestInfo().getUserInfo()!=null))
+					{
+						maps = encryptionService.decryptJson(searchRequest.getRequestInfo(),maps,
+								searchDefinition.getDecryptionPathId(), "Retrieve Searcher Data", String.class);
+					}
 				}else {
 					//This is a custom logic for bill-genie, we'll need to write code seperately to support custom rowmap logic for any search.
 					data =  searchRepository.fetchWithCustomMapper(searchRequest, searchDefinition);
@@ -72,6 +81,11 @@ public class SearchService {
 				}
 			}else {
 				maps = searchRepository.fetchData(searchRequest, searchDefinition);
+				if ((searchDefinition.getDecryptionPathId()!= null)&&(searchRequest.getRequestInfo()!=null)&&(searchRequest.getRequestInfo().getUserInfo()!=null))
+				{
+					maps = encryptionService.decryptJson(searchRequest.getRequestInfo(),maps,
+							searchDefinition.getDecryptionPathId(), "Retrieve Searcher Data", String.class);
+				}
 			}
 		}catch(Exception e){
 			log.error("Exception: ",e);
