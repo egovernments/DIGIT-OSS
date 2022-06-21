@@ -1,248 +1,114 @@
-import { FormComposer, Header, Loader, Toast } from "@egovernments/digit-ui-react-components";
-import cloneDeep from "lodash/cloneDeep";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useHistory } from "react-router-dom";
-import * as func from "../../../utils";
-import _ from "lodash";
-import { newConfig as newConfigLocal } from "../../../config/wsDisconnectionConfig";
-import {
-  createPayloadOfWS,
-  updatePayloadOfWS
-} from "../../../utils";
+import { useQueryClient } from "react-query";
+import { useRouteMatch, useLocation, useHistory, Switch, Route, Redirect } from "react-router-dom";
+import { newConfig as newConfigWS } from "../../../config/wsDisconnectionConfig";
+
+const getPath = (path, params) => {
+  params && Object.keys(params).map(key => {
+    path = path.replace(`:${key}`, params[key]);
+  })
+  return path;
+}
+
 
 const DisconnectionApplication = () => {
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
-  const { state } = useLocation();
+  const { path, url } = useRouteMatch();
+  const { pathname, state } = useLocation();
+  const match = useRouteMatch();
   const history = useHistory();
-  let filters = func.getQueryStringParams(location.search);
-  const [canSubmit, setSubmitValve] = useState(false);
-  const [isEnableLoader, setIsEnableLoader] = useState(false);
-  const [showToast, setShowToast] = useState(null);
-  const [appDetails, setAppDetails] = useState({});
-  const [waterAndSewerageBoth, setWaterAndSewerageBoth] = useState(null);
-  const [config, setConfig] = useState({ head: "", body: [] });
-  let tenantId = Digit.ULBService.getCurrentTenantId();
-  tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
-  const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
+  const location = useLocation();
 
-  const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_WS_NEW_FORM", {});
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("WS_DISCONNECTION", state?.edcrNumber ? { data: { scrutinyNumber: { edcrNumber: state?.edcrNumber } } } : {});
 
-  const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
-    { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { enabled: propertyId ? true : false }
-  );
+//   const CheckPage = Digit?.ComponentRegistryService?.getComponent('WSDisconnectionCheckPage') ;
+//   const Acknowledgement = Digit?.ComponentRegistryService?.getComponent('WSAcknowledgement') ;
 
-  useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen);
-    let bodyDetails = [];
-    config?.body?.forEach(data => { if(data?.isCreate) bodyDetails.push(data); })
-    config.body = bodyDetails;
-    setConfig(config);
-  });
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
+  let isModifyEdit = window.location.href.includes("/modify-connection/") || window.location.href.includes("/edit-application/")
 
-  useEffect(() => {
-    !propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
-  }, [sessionFormData?.cpt]);
-
-  useEffect(() => {
-    setSessionFormData({ ...sessionFormData, cpt: {details: propertyDetails?.Properties?.[0]} });
-  }, [propertyDetails])
-
-  const {
-    isLoading: creatingWaterApplicationLoading,
-    isError: createWaterApplicationError,
-    data: createWaterResponse,
-    error: createWaterError,
-    mutate: waterMutation,
-  } = Digit.Hooks.ws.useWaterCreateAPI("WATER");
-
-  const {
-    isLoading: updatingWaterApplicationLoading,
-    isError: updateWaterApplicationError,
-    data: updateWaterResponse,
-    error: updateWaterError,
-    mutate: waterUpdateMutation,
-  } = Digit.Hooks.ws.useWSApplicationActions("WATER");
-
-  const {
-    isLoading: creatingSewerageApplicationLoading,
-    isError: createSewerageApplicationError,
-    data: createSewerageResponse,
-    error: createSewerageError,
-    mutate: sewerageMutation,
-  } = Digit.Hooks.ws.useWaterCreateAPI("SEWERAGE");
-
-  const {
-    isLoading: updatingSewerageApplicationLoading,
-    isError: updateSewerageApplicationError,
-    data: updateSewerageResponse,
-    error: updateSewerageError,
-    mutate: sewerageUpdateMutation,
-  } = Digit.Hooks.ws.useWSApplicationActions("SEWERAGE");
-
-  const onFormValueChange = (setValue, formData, formState) => {
-    if (!_.isEqual(sessionFormData, formData)) {
-      setSessionFormData({ ...sessionFormData, ...formData });
-    }
-
-    if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0 && !formData?.cpt?.details?.propertyId) setSubmitValve(true);
-    else setSubmitValve(!(Object.keys(formState.errors).length));
-    if(!formData?.cpt?.details?.propertyId) setSubmitValve(false);
-  };
-
-  const closeToastOfError = () => { setShowToast(null); };
-
-
-  const onSubmit = async (data) => {
-    const allDetails = cloneDeep(data);
-    const payload = await createPayloadOfWS(data);
-    let waterAndSewerageLoader = false, waterLoader = false, sewerageLoader = false;
-    if (payload?.water && payload?.sewerage) waterAndSewerageLoader = true;
-    if (payload?.water && !payload?.sewerage) waterLoader = true;
-    if (!payload?.water && payload?.sewerage) sewerageLoader = true;
-
-    let waterConnection = { WaterConnection: payload };
-    let sewerageConnection = { SewerageConnection: payload };
-
-    if (waterAndSewerageLoader) {
-      setWaterAndSewerageBoth(true);
-      sessionStorage.setItem("setWaterAndSewerageBoth", JSON.stringify(true));
-    } else {
-      sessionStorage.setItem("setWaterAndSewerageBoth", JSON.stringify(false));
-    }
-
-    if (payload?.water && payload?.sewerage) {
-      if (waterMutation && sewerageMutation) {
-        setIsEnableLoader(true);
-        await waterMutation(waterConnection, {
-          onError: (error, variables) => {
-            setIsEnableLoader(false);
-            setShowToast({ key: "error", message: error?.message ? error.message : error });
-            setTimeout(closeToastOfError, 5000);
-          },
-          onSuccess: async (waterData, variables) => {
-            let response = await updatePayloadOfWS(waterData?.WaterConnection?.[0], "WATER");
-            let waterConnectionUpdate = { WaterConnection: response };
-            waterUpdateMutation(waterConnectionUpdate, {
-              onError: (error, variables) => {
-                setIsEnableLoader(false);
-                setShowToast({ key: "error", message: error?.message ? error.message : error });
-                setTimeout(closeToastOfError, 5000);
-              },
-              onSuccess: async (waterUpdateData, variables) => {
-                setAppDetails({ ...appDetails, waterConnection: waterUpdateData?.WaterConnection?.[0] });
-                await sewerageMutation(sewerageConnection, {
-                  onError: (error, variables) => {
-                    setIsEnableLoader(false);
-                    setShowToast({ key: "error", message: error?.message ? error.message : error });
-                    setTimeout(closeToastOfError, 5000);
-                  },
-                  onSuccess: async (sewerageData, variables) => {
-                    let response = await updatePayloadOfWS(sewerageData?.SewerageConnections?.[0], "SEWERAGE");
-                    let sewerageConnectionUpdate = { SewerageConnection: response };
-                    await sewerageUpdateMutation(sewerageConnectionUpdate, {
-                      onError: (error, variables) => {
-                        setIsEnableLoader(false);
-                        setShowToast({ key: "error", message: error?.message ? error.message : error });
-                        setTimeout(closeToastOfError, 5000);
-                      },
-                      onSuccess: async (sewerageUpdateData, variables) => {
-                        setAppDetails({ ...appDetails, sewerageConnection: sewerageUpdateData?.SewerageConnections?.[0] });
-                        clearSessionFormData();
-                        window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${waterUpdateData?.WaterConnection?.[0]?.applicationNo}&applicationNumber1=${sewerageUpdateData?.SewerageConnections?.[0]?.applicationNo}`
-                      },
-                    });
-                  },
-                });
-              },
-            })
-          },
-        });
-      }
-    } else if (payload?.water && !payload?.sewerage) {
-      if (waterMutation) {
-        setIsEnableLoader(true);
-        await waterMutation(waterConnection, {
-          onError: (error, variables) => {
-            setIsEnableLoader(false);
-            setShowToast({ key: "error", message: error?.message ? error.message : error });
-            setTimeout(closeToastOfError, 5000);
-          },
-          onSuccess: async (data, variables) => {
-            let response = await updatePayloadOfWS(data?.WaterConnection?.[0], "WATER");
-            let waterConnectionUpdate = { WaterConnection: response };
-            waterUpdateMutation(waterConnectionUpdate, {
-              onError: (error, variables) => {
-                setIsEnableLoader(false);
-                setShowToast({ key: "error", message: error?.message ? error.message : error });
-                setTimeout(closeToastOfError, 5000);
-              },
-              onSuccess: (data, variables) => {
-                setAppDetails({ ...appDetails, waterConnection: data?.WaterConnection?.[0] });
-                clearSessionFormData();
-                window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
-              },
-            })
-          },
-        });
-      }
-    } else if (payload?.sewerage && !payload?.water) {
-      if (sewerageMutation) {
-        setIsEnableLoader(true);
-        await sewerageMutation(sewerageConnection, {
-          onError: (error, variables) => {
-            setIsEnableLoader(false);
-            setShowToast({ key: "error", message: error?.message ? error.message : error });
-            setTimeout(closeToastOfError, 5000);
-          },
-          onSuccess: async (data, variables) => {
-            let response = await updatePayloadOfWS(data?.SewerageConnections?.[0], "SEWERAGE");
-            let sewerageConnectionUpdate = { SewerageConnection: response };
-            await sewerageUpdateMutation(sewerageConnectionUpdate, {
-              onError: (error, variables) => {
-                setIsEnableLoader(false);
-                setShowToast({ key: "error", message: error?.message ? error.message : error });
-                setTimeout(closeToastOfError, 5000);
-              },
-              onSuccess: (data, variables) => {
-                setAppDetails({ ...appDetails, sewerageConnection: data?.SewerageConnections?.[0] });
-                clearSessionFormData();
-                window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`;
-              },
-            });
-          },
-        });
+  const goNext = (skipStep) => {
+    
+    const currentPath = pathname.split("/").pop();
+    let { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
+    let routeObject = config.find((routeObj) => routeObj.route === currentPath && routeObj);
+    console.log(skipStep,"skipstep",nextStep);
+    // if(nextStep == "application-form" && nextStep != null ){
+    //     nextStep = "employee-application-form";
+    // }
+    if (typeof nextStep == "object" && nextStep != null) {
+    if (
+        nextStep[sessionStorage.getItem("KnowProperty")] &&
+        (nextStep[sessionStorage.getItem("KnowProperty")] === "search-property" || nextStep[sessionStorage.getItem("KnowProperty")] === "create-property")
+      ) {
+        nextStep = `${nextStep[sessionStorage.getItem("KnowProperty")]}`;
       }
     }
-  };
+    if (routeObject[sessionStorage.getItem("serviceName")]) nextStep = routeObject[sessionStorage.getItem("serviceName")];
+    if( (params?.cptId?.id || params?.cpt?.details?.propertyId || (isModifyEdit && params?.cpt?.details?.propertyId ))  && nextStep === "know-your-property" )
+    { 
+      nextStep = "property-details";
+    }
+    console.log(skipStep,"skipstep",nextStep);
 
-  const closeToast = () => {
-    setShowToast(null);
-  };
-
-  if (isEnableLoader) {
-    return <Loader />;
+    let redirectWithHistory = history.push;
+    if (nextStep === null) {
+      return redirectWithHistory(`${getPath(match.path, match.params)}/check`);
+    }
+    redirectWithHistory(`${getPath(match.path, match.params)}/${nextStep}`);
   }
 
+  const onSuccess = () => {
+    queryClient.invalidateQueries("WS_DISCONNECTION");
+  };
+  const createApplication = async () => {
+    history.push(`${getPath(match.path, match.params)}/acknowledgement`);
+  };
+
+  const handleSelect = (key, data, skipStep, isFromCreateApi) => {
+    if (isFromCreateApi) setParams(data);
+    else if (key === "") setParams({ ...data });
+    else setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
+    goNext(skipStep);
+  };
+  const handleSkip = () => { };
+
+  let config = [];
+  // newConfig = newConfig?.BuildingPermitConfig ? newConfig?.BuildingPermitConfig : newConfigWS;
+  newConfig = newConfigWS;
+  newConfig.forEach((obj) => {
+    config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
+  });
+  config.indexRoute = "docsrequired";
+
+  // const CheckPage = Digit?.ComponentRegistryService?.getComponent('BPACheckPage') ;
+  // const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('BPAAcknowledgement');
   return (
-    <React.Fragment>
-      <div style={{ marginLeft: "15px" }}>
-        <Header>{t(config.head)}</Header>
-      </div>
-      <FormComposer
-        config={config.body}
-        userType={"employee"}
-        onFormValueChange={onFormValueChange}
-        isDisabled={!canSubmit}
-        label={t("CS_COMMON_SUBMIT")}
-        onSubmit={onSubmit}
-        defaultValues={sessionFormData}
-      ></FormComposer>
-      {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />}
-    </React.Fragment>
+    <Switch>
+      {config.map((routeObj, index) => {
+        const { component, texts, inputs, key, isSkipEnabled } = routeObj;
+        console.log(routeObj,"routeobj")
+        const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
+        return (
+          <Route path={`${getPath(match.path, match.params)}/${routeObj.route}`} key={index}>
+            <Component config={{ texts, inputs, key, isSkipEnabled }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} userType={"employee"} />
+          </Route>
+        );
+      })}
+      {/* <Route path={`${getPath(match.path, match.params)}/check`}>
+        <CheckPage onSubmit={createApplication} value={params} />
+      </Route> */}
+    
+      <Route>
+        <Redirect to={`${getPath(match.path, match.params)}/${config.indexRoute}`} />
+      </Route>
+    </Switch>
   );
 };
 
 export default DisconnectionApplication;
+
