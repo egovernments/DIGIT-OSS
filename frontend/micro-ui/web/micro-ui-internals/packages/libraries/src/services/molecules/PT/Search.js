@@ -36,7 +36,6 @@ export const PTSearch = {
           value: `${property?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${property?.address?.locality?.code}`,
         },
         { title: "PT_PROPERTY_ADDRESS_HOUSE_NO", value: property?.address?.doorNo },
-        { title : "PT_BUILDING_COLONY_NAME", value: property?.address?.buildingName},
         { title: "PT_PROPERTY_ADDRESS_STREET_NAME", value: property?.address?.street },
       ],
     };
@@ -53,7 +52,7 @@ export const PTSearch = {
       title: "PT_DETAILS",
       values: [
         { title: "TL_PROPERTY_ID", value: property?.propertyId || "NA" },
-        { title: "PT_OWNER_NAME", value: property?.owners[0]?.name || "NA" },
+        { title: "PT_OWNER_NAME", value: property?.owners?.map((owner) => owner.name).join(",") || "NA" },
         { title: "PT_SEARCHPROPERTY_TABEL_STATUS", value: Digit.Utils.locale.getTransformedLocale(`WF_PT_${property?.status}`) || "NA" },
       ],
     };

@@ -1,11 +1,12 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import ApplicationDetailsTemplate from "../../../../../templates/ApplicationDetails";
 import { useHistory } from "react-router-dom";
 import { Header, ActionBar, MultiLink, SubmitBar, Menu, Modal, ButtonSelector, Toast } from "@egovernments/digit-ui-react-components";
 import * as func from "../../../utils";
-import { ifUserRoleExists } from "../../../utils";
+import { ifUserRoleExists, downloadPdf, downloadAndOpenPdf } from "../../../utils";
 import WSInfoLabel from "../../../pageComponents/WSInfoLabel";
+
 
 const GetConnectionDetails = () => {
   const { t } = useTranslation();
@@ -23,6 +24,14 @@ const GetConnectionDetails = () => {
   const stateCode = Digit.ULBService.getStateId();
   const actionConfig = ["MODIFY_CONNECTION_BUTTON", "BILL_AMENDMENT_BUTTON", "DISCONNECTION_BUTTON"];
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useConnectionDetail(t, tenantId, applicationNumber, serviceType);
+  const menuRef = useRef();
+  const actionMenuRef = useRef();
+
+  const { isLoading: isLoadingDemand, data: demandData } = Digit.Hooks.useDemandSearch(
+    { consumerCode: applicationDetails?.applicationData?.connectionNo, businessService: serviceType === "WATER" ? "WS" : "SW", tenantId }, { enabled: !!(applicationDetails?.applicationData?.applicationNo) }
+  );
+
+
   const [showModal, setshowModal] = useState(false);
   const [billData, setBilldata] = useState([]);
   const [showActionToast, setshowActionToast] = useState(null);
@@ -36,22 +45,6 @@ const GetConnectionDetails = () => {
   } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
   const mobileView = Digit.Utils.browser.isMobile();
 
-  const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
-    {
-      tenantId: stateCode,
-      businessService: serviceType == "WATER" ? "WS.ONE_TIME_FEE" : "SW.ONE_TIME_FEE",
-      consumerCodes: applicationDetails?.applicationData?.applicationNo,
-    },
-    {
-      enabled:
-        applicationDetails?.applicationData?.applicationNo &&
-        applicationDetails?.applicationData?.applicationType?.includes("NEW_") &&
-        !applicationDetails?.colletionOfData?.length > 0
-          ? true
-          : false,
-    }
-  );
-  //for common receipt key.
   const { isCommonmastersLoading, data: mdmsCommonmastersData } = Digit.Hooks.obps.useMDMS(stateCode, "common-masters", ["uiCommonPay"]);
   const commonPayDetails = mdmsCommonmastersData?.["common-masters"]?.uiCommonPay || [];
   const index =
@@ -105,23 +98,60 @@ const GetConnectionDetails = () => {
   const checkApplicationStatus = applicationDetails?.applicationData?.status === "Active" ? true : false;
 
   const getModifyConnectionButton = () => {
-    let pathname = `/digit-ui/employee/ws/modify-application?applicationNumber=${applicationDetails?.applicationData?.applicationNo}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
+    if (!checkApplicationStatus) {
+      setshowActionToast({
+        type: "error",
+        label: "CONN_NOT_ACTIVE",
+      });
+      return;
+    }
+
+    
+    let pathname = `/digit-ui/employee/ws/modify-application?applicationNumber=${applicationDetails?.applicationData?.connectionNo}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}&from=WS_COMMON_CONNECTION_DETAIL`;
+
 
     history.push(`${pathname}`, { data: applicationDetails });
   };
 
   const getBillAmendmentButton = () => {
-    let pathname = `/digit-ui/employee/ws/bill-amendment?connectionNumber=${applicationDetails?.applicationData?.applicationNo}&tenantId=${getTenantId}&service=${serviceType}`;
+    //redirect to documents required screen here instead of this screen
+    
+    let isBillAmendNotApplicable = false
+    billData?.map(bill => {
+      if (bill?.status === "INWORKFLOW") {
+        isBillAmendNotApplicable = true
+        return
+      }
+    })
 
-    if (billData[0]?.status === "INWORKFLOW") {
+    if (demandData?.Demands?.length === 0) {
+      setshowActionToast({
+        type: "error",
+        label: "No_Bills_Found",
+      });
+      return;
+    }
+    else if (isBillAmendNotApplicable) {
       setshowActionToast({
         type: "error",
         label: "WORKFLOW_IN_PROGRESS",
       });
       return;
-    } else billData?.length === 0;
-    history.push(`${pathname}`, { data: applicationDetails });
+    }
+    
+    history.push(`/digit-ui/employee/ws/required-documents?connectionNumber=${applicationDetails?.applicationData?.connectionNo}&tenantId=${getTenantId}&service=${serviceType}`, { data: applicationDetails });
   };
+
+  const closeMenu = () => {
+    setShowOptions(false);
+  }
+  Digit.Hooks.useClickOutside(menuRef, closeMenu, showOptions );
+
+  const closeActionMenu = () => {
+    setDisplayMenu(false);
+  }
+  Digit.Hooks.useClickOutside(actionMenuRef, closeActionMenu, displayMenu );
+
 
   const getDisconnectionButton = () => {
     let pathname = `/digit-ui/employee/ws/disconnection-application`;
@@ -141,25 +171,35 @@ const GetConnectionDetails = () => {
     }
   }
 
-  const showAction = due !== "0" ? actionConfig : actionConfig.filter((item) => item !== "BILL_AMENDMENT_BUTTON");
+  //all options needs to be shown
+  //const showAction = due !== "0" ? actionConfig : actionConfig.filter((item) => item !== "BILL_AMENDMENT_BUTTON");
+  const showAction= actionConfig
 
-  async function getRecieptSearch(payments) {
-    if (applicationDetails?.colletionOfData?.length > 0) {
-      const fileStore = await Digit.PaymentService.printReciept(stateCode, { fileStoreIds: applicationDetails?.colletionOfData?.[0]?.fileStoreId });
-      window.open(fileStore[applicationDetails?.colletionOfData?.[0]?.fileStoreId], "_blank");
-    } else {
-      let response = await Digit.PaymentService.generatePdf(tenantId, { Payments: [{ ...payments }] }, receiptKey);
-      const fileStore = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: response.filestoreIds[0] });
-      window.open(fileStore[response?.filestoreIds[0]], "_blank");
-    }
+
+  async function getBillSearch() {
+    if (applicationDetails?.fetchBillsData?.length > 0) {
+      const service = serviceType === "WATER" ? "WS" : "SW";
+      let wsSearchFilters = {
+        isConnectionSearch: true,
+        connectionNumber: applicationDetails?.applicationData?.connectionNo
+      }
+      const wsConnectionDetails = await Digit.WSService.search({ tenantId, filters: wsSearchFilters, businessService: service });
+      let filters = {
+        applicationNumber: serviceType === "WATER" ? wsConnectionDetails?.WaterConnection?.[0]?.applicationNo : wsConnectionDetails?.SewerageConnections?.[0]?.applicationNo,
+        bussinessService: service
+      };
+      if(wsConnectionDetails?.WaterConnection?.length > 0 || wsConnectionDetails?.SewerageConnections?.length > 0){
+        downloadAndOpenPdf(applicationDetails?.applicationData?.connectionNo, filters);
+      } 
+    } 
   }
 
   let dowloadOptions = [];
 
   const appFeeDownloadReceipt = {
     order: 1,
-    label: t("DOWNLOAD_RECEIPT_HEADER"),
-    onClick: () => getRecieptSearch(reciept_data?.Payments?.[0]),
+    label: t("WS_COMMON_DOWNLOAD_BILL"),
+    onClick: () => getBillSearch(),
   };
 
   const connectionDetailsReceipt = {
@@ -168,7 +208,7 @@ const GetConnectionDetails = () => {
     onClick: () => downloadConnectionDetails(),
   };
 
-  if (reciept_data?.Payments?.length > 0 || applicationDetails?.colletionOfData?.length > 0)
+  if (applicationDetails?.fetchBillsData?.length > 0)
     dowloadOptions = [appFeeDownloadReceipt, connectionDetailsReceipt];
   else dowloadOptions = [connectionDetailsReceipt];
   const Close = () => (
@@ -205,6 +245,7 @@ const GetConnectionDetails = () => {
               options={dowloadOptions}
               downloadBtnClassName={"employee-download-btn-className"}
               optionsClassName={"employee-options-btn-className"}
+              ref={menuRef}
             />
           )}
         </div>
@@ -225,7 +266,7 @@ const GetConnectionDetails = () => {
           <ActionBar>
             {displayMenu ? <Menu options={showAction} localeKeyPrefix={"WS"} t={t} onSelect={onActionSelect} /> : null}
 
-            <SubmitBar label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+            <SubmitBar ref={actionMenuRef} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
           </ActionBar>
         ) : null}
         {showModal ? (

@@ -69,13 +69,23 @@ const SelectTripNo = ({ config, formData, t, onSelect, userType }) => {
     if (isLoading || vehicleMenu.length === 0) {
         return <Loader />;
     }
-    
+
     if (userType === "employee") {
         return null;
     }
     return (
         <React.Fragment>
             <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={tripNo || vehicleCapacity ? false : true} t={t}>
+                <CardText> {t("ES_FSM_NUMBER_OF_TRIPS")} </CardText>
+                <RadioOrSelect
+                    options={tripNumberData}
+                    selectedOption={tripNo}
+                    optionKey="i18nKey"
+                    onSelect={SelectTrip}
+                    optionCardStyles={{ zIndex: "60" }}
+                    t={t}
+                    isMandatory={config.isMandatory}
+                />
                 <CardText> {t("ES_VEHICLE CAPACITY")} </CardText>
                 <RadioOrSelect
                     options={vehicleMenu?.map((vehicle) => ({ ...vehicle, label: vehicle.capacity }))}
@@ -86,16 +96,6 @@ const SelectTripNo = ({ config, formData, t, onSelect, userType }) => {
                     t={t}
                     isMandatory={config.isMandatory}
                     isDropDown={true}
-                />
-                <CardText> {t("ES_FSM_NUMBER_OF_TRIPS")} </CardText>
-                <RadioOrSelect
-                    options={tripNumberData}
-                    selectedOption={tripNo}
-                    optionKey="i18nKey"
-                    onSelect={SelectTrip}
-                    optionCardStyles={{ zIndex: "60" }}
-                    t={t}
-                    isMandatory={config.isMandatory}
                 />
             </FormStep>
         </React.Fragment>

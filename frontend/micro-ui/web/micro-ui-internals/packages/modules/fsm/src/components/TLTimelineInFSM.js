@@ -10,8 +10,6 @@ const getAction = (flow) => {
       break;
     case "APPLY": actions = [
       'FSM_TIMELINE_PROPERTY_DETAILS',
-      'FSM_TIMELINE_LOCATION_DETAILS',
-      'FSM_TIMELINE_SEPTIC_TANK_DETAILS',
       'FSM_GENDER_DETAILS',
       'FSM_PAYMENT_DETAILS',
       'FSM_TIMELINE_SUMMARY',

@@ -27,7 +27,7 @@ export const configNOCApproverApplication = ({
 
   return {
     label: {
-      heading: `WF_FORWARD_APPLICATION`,
+      heading: `WF_${action?.action}_APPLICATION`,
       submit: `WF_${businessService}_${action?.action}`,
       cancel: "CORE_LOGOUTPOPUP_CANCEL",
     },
@@ -36,7 +36,6 @@ export const configNOCApproverApplication = ({
         body: [
           {
             label: action.isTerminateState || isRejectOrRevocate ? null : t(assigneeLabel || `WF_ROLE_${action.assigneeRoles?.[0]}`),
-            // isMandatory: !action.isTerminateState,
             type: "dropdown",
             populators: action.isTerminateState || isRejectOrRevocate ? null : (
               <Dropdown

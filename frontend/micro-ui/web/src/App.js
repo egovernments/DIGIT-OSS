@@ -18,7 +18,7 @@ import { initWSComponents } from "@egovernments/digit-ui-module-ws";
 import {initCustomisationComponents} from "./Customisations";
 import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonPt";
 import { initBillsComponents } from "@egovernments/digit-ui-module-bills";
-import { initReportsComponents } from "@egovernments/digit-ui-module-reports";
+// import { initReportsComponents } from "@egovernments/digit-ui-module-reports";
 
 initLibraries();
 
@@ -52,7 +52,7 @@ initEngagementComponents();
 initWSComponents();
 initCommonPTComponents();
 initBillsComponents();
-initReportsComponents();
+// initReportsComponents();
 initCustomisationComponents();
 
 const moduleReducers = (initData) => ({

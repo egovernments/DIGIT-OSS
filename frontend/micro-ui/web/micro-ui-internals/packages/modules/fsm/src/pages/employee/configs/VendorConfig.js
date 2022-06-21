@@ -1,5 +1,5 @@
 import React from "react";
-const { DatePicker } = require("@egovernments/digit-ui-react-components")
+const { DatePicker, Dropdown } = require("@egovernments/digit-ui-react-components")
 
 const VendorConfig = (t, disabled = false) => {
   return [
@@ -18,6 +18,76 @@ const VendorConfig = (t, disabled = false) => {
               "pattern": /^[A-Za-z]/,
             },
             "error": t("FSM_REGISTRY_INVALID_NAME"),
+            "defaultValue": "",
+            "className": "payment-form-text-input-correction",
+          }
+        }
+      ]
+    },
+    {
+      "head": "ES_FSM_REGISTRY_PERSONAL_DETAILS",
+      "body": [
+        {
+          "label": "ES_FSM_REGISTRY_NEW_GENDER",
+          "isMandatory": true,
+          "type": "component",
+          "route": "select-gender",
+          "hideInEmployee": false,
+          "key": "selectGender",
+          "component": "SelectGender",
+          "disable": disabled,
+          "texts": {
+            "headerCaption": "",
+            "header": "CS_COMMON_CHOOSE_GENDER",
+            "cardText": "CS_COMMON_SELECT_GENDER",
+            "submitBarLabel": "CS_COMMON_NEXT",
+            "skipText": "CORE_COMMON_SKIP_CONTINUE"
+          }
+        },
+        {
+          "label": t("ES_FSM_REGISTRY_NEW_DOB"),
+          "isMandatory": false,
+          "type": "custom",
+          "key": "dob",
+          "disable": disabled,
+          "populators": {
+            "name": "dob",
+            "validation": {
+              "required": true,
+            },
+            "component": (props, customProps) => <DatePicker disabled={disabled} onChange={props.onChange} date={props.value} {...customProps} />,
+          },
+        },
+        {
+          "label": "ES_FSM_REGISTRY_NEW_EMAIL",
+          "isMandatory": false,
+          "type": "text",
+          "key": "emailId",
+          "disable": disabled,
+          "populators": {
+            "name": "emailId",
+            "validation": {
+              "required": false,
+              "pattern": /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+$/,
+            },
+            "error": t("FSM_REGISTRY_INVALID_EMAIL"),
+            "defaultValue": "",
+            "className": "payment-form-text-input-correction",
+          }
+        },
+        {
+          "label": "ES_FSM_REGISTRY_NEW_VENDOR_PHONE",
+          "isMandatory": true,
+          "type": "text",
+          "key": "phone",
+          "disable": disabled,
+          "populators": {
+            "name": "phone",
+            "validation": {
+              "required": true,
+              "pattern": /^[6-9]\d{9}$/,
+            },
+            "error": t("FSM_REGISTRY_INVALID_PHONE"),
             "defaultValue": "",
             "className": "payment-form-text-input-correction",
           }
@@ -108,138 +178,6 @@ const VendorConfig = (t, disabled = false) => {
           "key": "landmark",
           "populators": {
             "name": "landmark",
-            "defaultValue": "",
-            "className": "payment-form-text-input-correction",
-          }
-        }
-      ]
-    },
-    {
-      "head": "ES_FSM_REGISTRY_NEW_OWNER_DETAILS",
-      "body": [
-        {
-          "label": "ES_FSM_REGISTRY_NEW_OWNER_NAME",
-          "isMandatory": true,
-          "type": "text",
-          "key": "ownerName",
-          "disable": disabled,
-          "populators": {
-            "name": "ownerName",
-            "validation": {
-              "required": true,
-              "pattern": /^[A-Za-z]/,
-            },
-            "error": t("FSM_REGISTRY_INVALID_NAME"),
-            "defaultValue": "",
-            "className": "payment-form-text-input-correction",
-          }
-        },
-        {
-          "label": "ES_FSM_REGISTRY_NEW_FATHER_HUSBAND_NAME",
-          "isMandatory": false,
-          "type": "text",
-          "key": "fatherOrHusbandName",
-          "disable": disabled,
-          "populators": {
-            "name": "fatherOrHusbandName",
-            "validation": {
-              "required": false,
-              "pattern": /^[A-Za-z]/,
-            },
-            "error": t("FSM_REGISTRY_INVALID_NAME"),
-            "defaultValue": "",
-            "className": "payment-form-text-input-correction",
-          }
-        },
-        {
-          "label": "ES_FSM_REGISTRY_NEW_RELATIONSHIP",
-          "isMandatory": false,
-          "type": "text",
-          "key": "relationship",
-          "disable": disabled,
-          "populators": {
-            "name": "relationship",
-            "validation": {
-              "required": false,
-              "pattern": /^[A-Za-z]/,
-            },
-            "defaultValue": "",
-            "className": "payment-form-text-input-correction",
-          }
-        },
-        {
-          "label": "ES_FSM_REGISTRY_NEW_GENDER",
-          "isMandatory": true,
-          "type": "component",
-          "route": "select-gender",
-          "hideInEmployee": false,
-          "key": "selectGender",
-          "component": "SelectGender",
-          "disable": disabled,
-          "texts": {
-            "headerCaption": "",
-            "header": "CS_COMMON_CHOOSE_GENDER",
-            "cardText": "CS_COMMON_SELECT_GENDER",
-            "submitBarLabel": "CS_COMMON_NEXT",
-            "skipText": "CORE_COMMON_SKIP_CONTINUE"
-          }
-        },
-        {
-          "label": t("ES_FSM_REGISTRY_NEW_DOB"),
-          "isMandatory": false,
-          "type": "custom",
-          "key": "dob",
-          "disable": disabled,
-          "populators": {
-            "name": "dob",
-            "validation": {
-              "required": true,
-            },
-            "component": (props, customProps) => <DatePicker disabled={disabled} onChange={props.onChange} date={props.value} {...customProps} />,
-          },
-        },
-        {
-          "label": "ES_FSM_REGISTRY_NEW_EMAIL",
-          "isMandatory": false,
-          "type": "text",
-          "key": "emailId",
-          "disable": disabled,
-          "populators": {
-            "name": "emailId",
-            "validation": {
-              "required": false,
-              "pattern": /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+$/,
-            },
-            "error": t("FSM_REGISTRY_INVALID_EMAIL"),
-            "defaultValue": "",
-            "className": "payment-form-text-input-correction",
-          }
-        },
-        {
-          "label": "ES_FSM_REGISTRY_NEW_CORRESPONDENCE_ADDRESS",
-          "isMandatory": false,
-          "type": "text",
-          "key": "correspondenceAddress",
-          "disable": disabled,
-          "populators": {
-            "name": "correspondenceAddress",
-            "defaultValue": "",
-            "className": "payment-form-text-input-correction",
-          }
-        },
-        {
-          "label": "ES_FSM_REGISTRY_NEW_VENDOR_PHONE",
-          "isMandatory": true,
-          "type": "text",
-          "key": "phone",
-          "disable": disabled,
-          "populators": {
-            "name": "phone",
-            "validation": {
-              "required": true,
-              "pattern": /^[6-9]\d{9}$/,
-            },
-            "error": t("FSM_REGISTRY_INVALID_PHONE"),
             "defaultValue": "",
             "className": "payment-form-text-input-correction",
           }

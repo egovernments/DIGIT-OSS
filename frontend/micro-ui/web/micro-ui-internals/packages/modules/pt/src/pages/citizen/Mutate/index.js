@@ -3,7 +3,7 @@ import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from 
 import { newConfigMutate } from "../../../config/Mutate/config";
 
 import { useTranslation } from "react-i18next";
-import CheckPage from "../Create/CheckPage";
+import CheckPage from "./CheckPage";
 
 const MutationCitizen = (props) => {
   const { t } = useTranslation();

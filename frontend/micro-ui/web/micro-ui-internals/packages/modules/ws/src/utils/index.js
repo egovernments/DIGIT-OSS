@@ -1,10 +1,27 @@
 export const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   if (searcher == "") return str;
-  while (str.includes(searcher)) {
+  while (str && str.includes(searcher)) {
     str = str.replace(searcher, replaceWith);
   }
   return str;
 };
+
+export const mdmsData = async (tenantId,t) => {
+  
+  const result =  await Digit.MDMSService.getMultipleTypes(tenantId, "tenant", ["tenants", "citymodule"]);
+  
+  const filteredResult = result?.tenant.tenants.filter(e => e.code === tenantId)
+  
+  const headerLocale = Digit.Utils.locale.getTransformedLocale(tenantId)
+  const ulbGrade = filteredResult?.[0]?.city?.ulbGrade.replaceAll(" ","_")
+  
+  const obj =  {
+    header: t(`TENANT_TENANTS_${headerLocale}`)+ ` ` + t(`ULBGRADE_${ulbGrade}`),
+    subHeader:filteredResult?.[0].address,
+    description:`${filteredResult?.[0]?.contactNumber} | ${filteredResult?.[0]?.domainUrl} | ${filteredResult?.[0]?.emailId}`,
+  }
+  return obj
+  }
 
 export const convertEpochToDateDMY = (dateEpoch) => {
   if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
@@ -73,10 +90,10 @@ export const getQueryStringParams = (query) => {
 };
 
 export const getAddress = (address, t) => {
-  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+  return `${address?.doorNo ? `${address?.doorNo}, ` : ""}${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${address?.locality?.code ? t(address?.locality?.code) : ""}, ${address?.city?.code ? t(address?.city.code) : ""},${
-    address?.pincode ? `${address.pincode}` : " "
+  }${address?.locality?.code ? `${t(address?.locality?.code)}` : ""}${address?.city?.code || address?.city  ? `,${t(address?.city.code || address?.city)}` : ""}${
+    address?.pincode ? `,${address.pincode}` : " "
   }`;
 };
 
@@ -360,7 +377,7 @@ export const convertToEditWSUpdate = (data) => {
       wfDocuments: [],
       assignee: [],
       action: data?.isEditApplication ? "RESUBMIT_APPLICATION" : "SUBMIT_APPLICATION",
-      assignees: [],
+      assignes: [],
     },
   };
   return formdata;
@@ -460,7 +477,7 @@ export const convertToEditSWUpdate = (data) => {
       wfDocuments: [],
       assignee: [],
       action: data?.isEditApplication ? "RESUBMIT_APPLICATION" : "SUBMIT_APPLICATION",
-      assignees: [],
+      assignes: [],
     },
   };
   return formdata;
@@ -925,6 +942,7 @@ export const convertEditApplicationDetails = async (data, appData, actionData) =
 
   let payload = {
     ...appData.applicationData,
+    propertyId: data?.cpt?.details?.propertyId,
     proposedTaps: data?.ConnectionDetails?.[0]?.proposedTaps && Number(data?.ConnectionDetails?.[0]?.proposedTaps),
     proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size && Number(data?.ConnectionDetails?.[0]?.proposedPipeSize?.size),
     proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),
@@ -1017,6 +1035,37 @@ export const convertModifyApplicationDetails = async (data, appData, actionData 
   sessionStorage.setItem("WS_PROPERTY_INOF", JSON.stringify(data?.cpt?.details));
 
   return formData;
+};
+
+export const downloadPdf = (blob, fileName) => {
+  if (window.mSewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
+    var reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function () {
+      var base64data = reader.result;
+      window.mSewaApp.downloadBase64File(base64data, fileName);
+    };
+  } else {
+    const link = document.createElement("a");
+    // create a blobURI pointing to our Blob
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    // some browser needs the anchor to be in the doc
+    document.body.append(link);
+    link.click();
+    link.remove();
+    // in case the Blob uses a lot of memory
+    setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+  }
+};
+export const downloadAndOpenPdf = async (connectionNo, filters) => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const response = await Digit.WSService.generateBillPdf({tenantId, filters});
+  const responseStatus = parseInt(response.status, 10);
+  if (responseStatus === 201 || responseStatus === 200) {
+    console.log("Func");
+    downloadPdf(new Blob([response.data], { type: "application/pdf" }), `BILL-${connectionNo}.pdf`);
+  }
 };
 
 export const ifUserRoleExists = (role) => {

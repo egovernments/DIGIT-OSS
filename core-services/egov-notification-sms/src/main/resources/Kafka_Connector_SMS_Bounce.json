@@ -1,0 +1,40 @@
+{
+	"info": {
+		"_postman_id": "1ec2c682-883e-4523-b3da-693e75576580",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Creating kafka connector for SMS-Bounce",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"sms-bounce-back\",\n    \"config\": {\n        \"connector.class\": \"io.confluent.connect.elasticsearch.ElasticsearchSinkConnector\",\n        \"connection.url\": \"http://elasticsearch-data-v1.es-cluster:9200/\",\n        \"type.name\": \"nss\",\n        \"topics\": \"egov.core.notification.sms.bounce\",\n        \"key.ignore\": true,\n        \"schemas.enable\": false,\n        \"schema.ignore\": true,\n        \"value.converter.schemas.enable\": false,\n        \"key.converter\": \"org.apache.kafka.connect.storage.StringConverter\",\n        \"value.converter\": \"org.apache.kafka.connect.json.JsonConverter\",\n        \"batch.size\": 10,\n        \"max.buffered.records\": 500,\n        \"flush.timeout.ms\": 600000,\n        \"retry.backoff.ms\": 5000,\n        \"read.timout.ms\": 10000,\n        \"linger.ms\": 100,\n        \"max.in.flight.requests\": 2,\n        \"errors.log.enable\": true,\n        \"errors.deadletterqueue.topic.name\": \"egov.core.notification.sms.bounce-es-failed\",\n        \"tasks.max\": 1\n    }\n}"
+				},
+				"url": {
+					"raw": "http://kafka-connect.kafka-cluster:8083/connectors/",
+					"protocol": "http",
+					"host": [
+						"kafka-connect",
+						"kafka-cluster"
+					],
+					"port": "8083",
+					"path": [
+						"connectors",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

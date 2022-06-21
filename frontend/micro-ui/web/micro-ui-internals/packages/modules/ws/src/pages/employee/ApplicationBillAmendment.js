@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
 
+
 const ApplicationBillAmendment = () => {
   
   //connectionNumber=WS/107/2021-22/227166&tenantId=pb.amritsar&service=WATER&connectionType=Metered
@@ -34,6 +35,7 @@ const ApplicationBillAmendment = () => {
   const { isLoading: BillAmendmentMDMSLoading, data: BillAmendmentMDMS } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSMDMSBillAmendment({
     tenantId: stateId,
   });
+  
   const servicev1 = connectionNumber.includes("WS") ? "WS" : "SW";
   const billSearchFilters = { tenantId, consumerCode: connectionNumber, service: servicev1 };
   const { data: preBillSearchData, isLoading: isBillSearchLoading } = Digit.Hooks.usePaymentSearch(tenantId, billSearchFilters);
@@ -56,6 +58,7 @@ const ApplicationBillAmendment = () => {
     ...methods
   } = useForm();
   
+  const fromDateVal = watch("effectivefrom");
   const amendmentReason = watch("amendmentReason");
   const WS_REDUCED_AMOUNT = watch("WS_REDUCED_AMOUNT");
   const WS_ADDITIONAL_AMOUNT = watch("WS_ADDITIONAL_AMOUNT");
@@ -193,6 +196,16 @@ const ApplicationBillAmendment = () => {
     };
     history.push("/digit-ui/employee/ws/response", data);
   };
+
+ 
+  const isValidToDate = (enteredValue) => {
+    const enteredTs = new Date(enteredValue).getTime()
+    const fromDate = fromDateVal ? new Date(fromDateVal).getTime() : new Date().getTime()
+    // return ( toDate > enteredTs && enteredTs >= currentTs ) ? true : false 
+    return (enteredTs>fromDate) ? true : "Invalid format"
+
+  };
+
   
   return (
     <form onSubmit={handleSubmit(onFormSubmit)}>
@@ -319,7 +332,7 @@ const ApplicationBillAmendment = () => {
               </tr>
             ))}
             {<tr>
-              <td colSpan={2} style={{ paddingRight: "60px" }}>{t("WS_REBATE_PENALTY  ")}
+              <td colSpan={2} style={{ paddingRight: "60px" }}>{t("WS_REBATE_PENALTY")}
                 <div className="tooltip">
                   <InfoBannerIcon fill="#0b0c0c" style/>
                   <span className="tooltiptext" style={{
@@ -374,7 +387,7 @@ const ApplicationBillAmendment = () => {
                       style={{ width: "640px" }}
                       option={BillAmendmentMDMS}
                       selected={props?.value}
-                      optionKey={"i18nKey"}
+                      optionKey={"code"}
                       t={t}
                       select={props?.onChange}
                     />
@@ -391,7 +404,7 @@ const ApplicationBillAmendment = () => {
               {errors?.reasonDocumentNumber ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             </LabelFieldPair>
             <LabelFieldPair>
-              <CardLabel style={{ fontWeight: "500" }}>{t("WS_GOVERNMENT_NOTIFICATION_NUMBER")}</CardLabel>
+              <CardLabel style={{ fontWeight: "500" }}>{t("WS_BILL_AMEND_EFFECTIVE_FROM")}</CardLabel>
               <Controller
                 render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveFrom"
@@ -401,14 +414,16 @@ const ApplicationBillAmendment = () => {
               {errors?.effectiveFrom ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             </LabelFieldPair>
             <LabelFieldPair>
-              <CardLabel style={{ fontWeight: "500" }}>{t("WS_GOVERNMENT_NOTIFICATION_NUMBER")}</CardLabel>
+                <CardLabel style={{ fontWeight: "500" }}>{t("WS_BILL_AMEND_EFFECTIVE_TILL")}</CardLabel>
               <Controller
                 render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveTill"
-                rules={{ required: true }}
+                rules={{ required: true,validate:{isValidToDate}}}
                 control={control}
               />
-              {errors?.effectiveTill ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
+              {errors?.effectiveTill?.type==="required" && <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError>}
+              {errors?.effectiveTill?.message === "Invalid format" && <CardLabelError>{t("ERR_DEFAULT_INPUT_FIELD_MSG")}</CardLabelError>}
+
             </LabelFieldPair>
           </>
         )}
@@ -416,7 +431,7 @@ const ApplicationBillAmendment = () => {
         {requiredDocuments?.map((e) => (
           <LabelFieldPair>
             <CardLabel style={{ fontWeight: "500" }}>
-              {t(`WS_${e?.documentType}`)}
+              {t(`${e?.documentType}`)}
               {e?.required ? `*` : null}
             </CardLabel>
             <div className="field">
@@ -430,16 +445,14 @@ const ApplicationBillAmendment = () => {
                     onUpload={(d) => functionToHandleFileUpload(d, e?.documentType, props)}
                     onDelete={() => dispatch({ type: "remove", payload: { id: e?.documentType } })}
                     style={{ width: "640px" }}
-                    accept="image/*, .pdf, .png, .jpeg, .doc"
-                    showHintBelow={true}
-                    hintText={t("WS_DOCUMENTS_ATTACH_RESTRICTIONS_SIZE")}
                     message={functionToDisplayTheMessage}
+                    accept="image/*, .pdf, .png, .jpeg, .doc"
                     textStyles={{ width: "100%" }}
                     inputStyles={{ width: "280px" }}
                   />
                 )}
               />
-              {errors?.[e?.documentType] ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
+              {errors?.["DOCUMENTS"]?.[e?.documentType] ? <CardLabelError>{t("WS_NO_FILE_SELECTED")}</CardLabelError> : null}
             </div>
           </LabelFieldPair>
         ))}

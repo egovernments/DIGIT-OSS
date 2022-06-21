@@ -216,6 +216,7 @@ const ConnectionDetails = () => {
           </StatusTable>
           <CardHeader styles={{ fontSize: "28px" }}>{t("WS_COMMON_CONNECTION_DETAIL")}</CardHeader>
           <StatusTable>
+            {state?.applicationType?.includes("WATER") && <div>
             <Row
               className="border-none"
               label={t("WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL")}
@@ -224,7 +225,23 @@ const ConnectionDetails = () => {
             />
             <Row className="border-none" label={t("WS_SERV_DETAIL_NO_OF_TAPS")} text={state?.noOfTaps} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_SERV_DETAIL_PIPE_SIZE")} text={state?.pipeSize || "NA"} textStyle={{ whiteSpace: "pre" }} />
-            {state?.connectionType?.includes("WATER") && (
+            </div>}
+            {state?.applicationType?.includes("SEWERAGE") && <div>
+            <Row
+                className="border-none"
+                label={t("WS_NO_OF_WATER_CLOSETS_LABEL")}
+                text={state?.proposedWaterClosets}
+                textStyle={{ whiteSpace: "pre" }}
+              />
+              <Row
+                className="border-none"
+                label={t("WS_SERV_DETAIL_NO_OF_TOILETS")}
+                text={state?.proposedToilets || t("CS_NA")}
+                textStyle={{ whiteSpace: "pre" }}
+              />
+              <Row className="border-none" label={t("WS_SERV_DETAIL_CONN_EXECUTION_DATE")} text={state?.connectionExecutionDate ? Digit.DateUtils.ConvertEpochToDate(state?.connectionExecutionDate) : t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+            </div>}
+            {state?.applicationType?.includes("WATER") && (
               <div>
                 <Row
                   className="border-none"
@@ -241,14 +258,14 @@ const ConnectionDetails = () => {
                 <Row
                   className="border-none"
                   label={t("WS_SERV_DETAIL_CONN_EXECUTION_DATE")}
-                  text={state?.dateEffectiveFrom || t("NA")}
+                  text={Digit.DateUtils.ConvertEpochToDate(state?.connectionExecutionDate) || t("NA")}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row className="border-none" label={t("WS_SERV_DETAIL_METER_ID")} text={state?.meterId} textStyle={{ whiteSpace: "pre" }} />
                 <Row
                   className="border-none"
                   label={t("WS_ADDN_DETAIL_METER_INSTALL_DATE")}
-                  text={state?.meterInstallationDate || "NA"}
+                  text={Digit.DateUtils.ConvertEpochToDate(state?.meterInstallationDate) || "NA"}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row
@@ -274,13 +291,13 @@ const ConnectionDetails = () => {
             <Row
               className="border-none"
               label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")}
-              text={state?.property?.owners?.[0]?.name}
+              text={state?.property?.owners?.map((owner) => owner.name).join(",")}
               textStyle={{ whiteSpace: "pre" }}
             />
             <Row
               className="border-none"
               label={t("WS_OWN_DETAIL_CROSADD")}
-              text={state?.property?.owners?.[0]?.correspondenceAddress || t("CS_NA")}
+              text={state?.property?.owners?.[0]?.permanentAddress || t("CS_NA")}
               textStyle={{ whiteSpace: "pre" }}
             />
             <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${state?.propertyId}&tenantId=${state?.tenantId}`}>
@@ -327,13 +344,13 @@ const ConnectionDetails = () => {
                   text={state?.connectionHolders?.[0]?.correspondenceAddress}
                   textStyle={{ whiteSpace: "pre" }}
                 />
-                <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={"NA"} textStyle={{ whiteSpace: "pre" }} />
+                <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={t(`COMMON_MASTERS_OWNERTYPE_${state?.connectionHolders?.[0]?.ownerType}`)} textStyle={{ whiteSpace: "pre" }} />
               </StatusTable>
             </div>
           ) : (
             <CardText>{t("WS_PROPERTY_OWNER_SAME_AS_CONN_HOLDERS")}</CardText>
           )}
-          {state?.documents &&
+          {/* {state?.documents &&
             state?.documents.map((doc, index) => (
               <div key={`doc-${index}`}>
                 {
@@ -348,7 +365,7 @@ const ConnectionDetails = () => {
                   </div>
                 }
               </div>
-            ))}
+            ))} */}
           {state?.status !== "inactive" ? (
             <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px", marginTop: "15px" }}>
               <div style={{ width: "100%" }}>

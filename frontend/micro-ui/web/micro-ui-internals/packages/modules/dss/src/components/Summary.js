@@ -1,84 +1,110 @@
-import { Card, Details, Loader, Poll, PrintIcon } from "@egovernments/digit-ui-react-components";
-import { endOfMonth, getTime, startOfMonth } from "date-fns";
-import React from "react";
+import { Card, Loader } from "@egovernments/digit-ui-react-components";
+import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useHistory } from "react-router-dom";
+import { ArrowDownwardElement } from "./ArrowDownward";
+import { ArrowUpwardElement } from "./ArrowUpward";
+import FilterContext from "./FilterContext";
 
-const Chart = ({ data, todayValue = 15012,url="", monthValue = 15.2, target = "72%", task = 133, monthlyTask = 4500, sla = "91%" }) => {
-  const { t } = useTranslation();
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { id, name, chartType } = data;
-  const requestDate = {
-    startDate: getTime(startOfMonth(new Date())),
-    endDate: getTime(endOfMonth(new Date())),
-    interval: "month",
-    title: "",
-  };
-  const history =useHistory();
-  const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
-    key: id,
-    type: chartType,
-    tenantId,
-    requestDate,
-  });
-
-  if (isLoading) {
-    return <Loader />;
-  }
-
+const MetricData = ({ t, data }) => {
+  const { value } = useContext(FilterContext);
+  const insight = data?.insight?.value?.replace(/[+-]/g, "")?.split("%");
   return (
-    <div className="blocks cursorPointer">
-      <div onClick={()=>url&&history.push(`/digit-ui/employee/dss/dashboard/${url}`)}>
-        <p>{t(data?.name)}</p>
-        <p>{response?.responseData?.data?.[0]?.headerValue}</p>
-      </div>
-      {/* <div>
-        <p>This Month</p>
-        <p>{ monthValue }</p>
-      </div>
-      <div>
-        <p>Target</p>
-        <p>{ target }</p>
-      </div> */}
+    <div>
+      <p className="heading-m" style={{ paddingTop: "0px", whiteSpace: "nowrap", marginLeft: "0px" }}>
+        {`${Digit.Utils.dss.formatter(data?.headerValue, data?.headerSymbol, value?.denomination, true, t)}`}
+      </p>
+      {data?.insight && (
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "end",
+          }}
+        >
+          {data?.insight?.indicator === "upper_green" ? ArrowUpwardElement("10px") : ArrowDownwardElement("10px")}
+          <p className={`${data?.insight.colorCode}`} style={{ whiteSpace: "pre" }}>
+            {insight?.[0] &&
+              `${Digit.Utils.dss.formatter(insight[0], "number", value?.denomination, true, t)}% ${t(
+                Digit.Utils.locale.getTransformedLocale("DSS" + insight?.[1] || "")
+              )}`}
+          </p>
+        </div>
+      )}
     </div>
   );
 };
 
-const Summary = ({
-  title = "Total Collections",
-  todayValue = 15012,
-  monthValue = 15.2,
-  target = "72%",
-  task = 133,
-  monthlyTask = 4500,
-  sla = "91%",
-  data,
-}) => {
+const Chart = ({ data }) => {
+  const { id, chartType } = data;
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
+  const { value } = useContext(FilterContext);
+  const [showDate, setShowDate] = useState({});
+  const isMobile = window.Digit.Utils.browser.isMobile();
+  const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
+    key: id,
+    type: chartType,
+    tenantId,
+    requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
+    filters: value?.filters,
+  });
+  if (isLoading) {
+    return <Loader />;
+  }
+  let name = t(data?.name) || "";
+
+  const getWidth = (data) => {
+    if (isMobile) return "auto";
+    else return t(`TIP_${data.name}`).length < 50 ? "fit-content" : 400;
+  };
+
+  const getHeight = (data) => {
+    if (isMobile) return "auto";
+    else return 50;
+  };
   return (
-    <Card style={{ flexBasis: "100%" }}>
+    <div className="blocks cursorPointer" style={{ flexDirection: "column" }}>
+      <div className={`tooltip`}>
+        {typeof name == "string" && name}
+        {Array.isArray(name) && name?.filter((ele) => ele)?.map((ele) => <div style={{ whiteSpace: "pre" }}>{ele}</div>)}
+        <span className="dss-white-pre" style={{ display: "block" }}>
+          {" "}
+          {showDate?.[id]?.todaysDate}
+        </span>
+        <span
+          className="tooltiptext"
+          style={{
+            fontSize: "medium",
+            width: getWidth(data),
+            height: getHeight(data),
+            whiteSpace: "normal",
+          }}
+        >
+          <span style={{ fontWeight: "500", color: "white" }}>{t(`TIP_${data.name}`)}</span>
+          <span style={{ color: "white" }}> {showDate?.[id]?.lastUpdatedTime}</span>
+        </span>
+      </div>
+      <MetricData t={t} data={response?.responseData?.data?.[0]}></MetricData>
+    </div>
+  );
+};
+const Summary = ({ data }) => {
+  const { t } = useTranslation();
+  const { value } = useContext(FilterContext);
+  return (
+    <Card style={{ flexBasis: "100%" }} className="summary-card-margin">
       <div className="summary-wrapper">
-        <Poll />
-        <div className="wrapper-child">
+        <div className="wrapper-child fullWidth">
           <div className="blocks">
-            <p>{t(data?.name)}</p>
+            <p>
+              {t(data?.name)}{" "}
+              {<span style={{ whiteSpace: "pre" }}> ({t(`DSS_${Digit.Utils.locale.getTransformedLocale(value?.denomination)}`)})</span>}
+            </p>
           </div>
-          <div style={{ display: "flex" }}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             {data.charts.map((chart, key) => (
-              <Chart data={chart} key={key} url={data?.ref?.url}/>
+              <Chart data={chart} key={key} url={data?.ref?.url} />
             ))}
-          </div>
-        </div>
-        <div className="wrapper-child">
-          <div className="blocks cell-text" style={{ justifyContent: "space-around" }}>
-            {/* <p style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
-              <Details />
-              <Link to={`/digit-ui/employee/dss/dashboard/${data?.ref?.url}`}>View Details</Link>
-            </p> */}
-            {/* <p style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
-              <PrintIcon />
-              Print
-            </p> */}
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ import {
   useDemandSearch,
   useRecieptSearch,
   usePaymentSearch,
+  useBulkPdfDetails,
 } from "./payment";
 import { useUserSearch } from "./userSearch";
 import { useApplicationsForBusinessServiceSearch } from "./useApplicationForBillSearch";
@@ -52,12 +53,14 @@ import useSearch from "./fsm/useSearch";
 import useSearchAll from "./fsm/useSearchAll";
 import useVehicleSearch from "./fsm/useVehicleSearch";
 import useVehicleUpdate from "./fsm/useVehicleUpdate";
+import useVehicleTripCreate from "./fsm/useVehicleTripCreate";
 import useFSMInbox from "./fsm/useInbox";
 import useApplicationUpdate from "./fsm/useApplicationUpdate";
 import useWorkflowData from "./fsm/useWorkflowData";
 import useRouteSubscription from "./fsm/useRouteSubscription";
 import useDsoSearch from "./fsm/useDsoSearch";
 import usePropertySearch from "./pt/usePropertySearch";
+import usePropertySearchNew from "./pt/usePropertySearchNew";
 import usePropertySearchWithDue from "./pt/usePropertySearchWithDue";
 import usePropertyPayment from "./pt/usePropertyPayment";
 import useApplicationDetail from "./fsm/useApplicationDetail";
@@ -72,6 +75,13 @@ import usePaymentHistory from "./fsm/usePaymentHistory";
 import useVendorCreate from "./fsm/useVendorCreate";
 import useVendorUpdate from "./fsm/useVendorUpdate";
 import useVehicleDetails from "./fsm/useVehicleDetails";
+import useVehicleCreate from "./fsm/useVehicleCreate";
+import useUpdateVehicle from "./fsm/useUpdateVehicle";
+import useDriverSearch from "./fsm/useDriverSearch";
+import useDriverCreate from "./fsm/useDriverCreate";
+import useDriverUpdate from "./fsm/useDriverUpdate";
+import useDriverDetails from "./fsm/useDriverDetails";
+import useVendorSearch from "./fsm/useVendorSearch";
 
 import useEmployeeSearch from "./useEmployeeSearch";
 
@@ -198,12 +208,13 @@ import useSearchWS from "./ws/useSearchWS";
 import useMypaymentWS from "./ws/useMypaymentWS";
 import useWSDetailsPage from "./ws/useWSDetailsPage";
 import useWSApplicationActions from "./ws/useApplicationActions";
-import useApplicationActionsBillAmendUpdate from './ws/useApplicationActionsBillAmendUpdate'
+import useApplicationActionsBillAmendUpdate from "./ws/useApplicationActionsBillAmendUpdate";
 import useWSConsumptionSearch from "./ws/useConsumptionSearch";
 import useWSMDMS from "./ws/useWSMDMS";
 import useAccessControl from "./useAccessControl";
 import useConnectionDetail from "./ws/useConnectionDetail";
 import useBillSearch from "./bills/useBillSearch";
+import useCancelBill from "./bills/useCancelBill";
 import useWaterCreateAPI from "./ws/useWaterCreateAPI";
 import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
 import useWSUpdateAPI from "./ws/useWSUpdateAPI";
@@ -214,12 +225,15 @@ import useTenantsBills from "./bills/useTenants";
 import useMeterReadingCreateAPI from "./ws/useMeterConnectionCreateAPI";
 import useGetMeterStatusList from "./ws/useGetMeterStatusList";
 import useGetBillingPeriodValidation from "./ws/useBillingPeriodValidation";
-import  useReportMeta  from "./reports/useReport";
+import useReportMeta from "./reports/useReport";
 import useWaterPropertySearch from "./ws/useWaterPropertySearch";
 
 import useGetHowItWorksJSON from "./useHowItWorksJSON";
 import useGetFAQsJSON from "./useGetFAQsJSON";
+import useGetDSSFAQsJSON from "./useGetDSSFAQsJSON";
+import useGetDSSAboutJSON from "./useGetDSSAboutJSON";
 import useStaticData from "./useStaticData";
+import useBillAmendmentInbox from "./billAmendment/useInbox";
 
 const pgr = {
   useComplaintDetails,
@@ -264,11 +278,24 @@ const fsm = {
   usePaymentHistory,
   useVendorCreate,
   useVendorUpdate,
-  useVehicleDetails
+  useVehicleDetails,
+  useVehicleCreate,
+  useVendorCreate,
+  useVendorUpdate,
+  useVehicleDetails,
+  useVehicleCreate,
+  useUpdateVehicle,
+  useDriverSearch,
+  useDriverCreate,
+  useDriverUpdate,
+  useDriverDetails,
+  useVehicleTripCreate,
+  useVendorSearch
 };
 
 const pt = {
   usePropertySearch,
+  usePropertySearchNew,
   usePropertyPayment,
   usePropertyMDMS,
   usePropertySearchWithDue,
@@ -332,7 +359,7 @@ const tl = {
   useApplicationActions: useTLApplicationActions,
   useFetchBill: useTLFetchBill,
   useTLApplicationDetails,
-  useTLWorkflowData
+  useTLWorkflowData,
 };
 
 const receipts = {
@@ -436,8 +463,8 @@ const ws = {
 };
 
 const reports = {
-  useReportMeta
-}
+  useReportMeta,
+};
 
 const Hooks = {
   useSessionStorage,
@@ -471,6 +498,7 @@ const Hooks = {
   useInbox: useTLInbox,
   useAccessControl,
   useBillSearch,
+  useCancelBill,
   useTenantsBills,
   pgr,
   fsm,
@@ -490,8 +518,12 @@ const Hooks = {
   reports,
   useGetHowItWorksJSON,
   useGetFAQsJSON,
+  useGetDSSFAQsJSON,
+  useGetDSSAboutJSON,
   useStaticData,
   useDynamicData,
+  useBulkPdfDetails,
+  useBillAmendmentInbox,
 };
 
 export default Hooks;

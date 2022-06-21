@@ -152,7 +152,12 @@ const InboxComposer = ({
     );
   }
 
-  const isEnabledCommonModules = window.location.href.includes("/obps/") || window.location.href.includes("/noc/");
+  const isEnabledCommonModules =
+    window.location.href.includes("/obps/") ||
+    window.location.href.includes("/noc/") ||
+    window.location.href.includes("/ws/water/bill-amendment/inbox") ||
+    window.location.href.includes("/ws/sewerage/bill-amendment/inbox");
+
   const isEnabledWSCommonModules = window.location.href.includes("/ws/water/inbox") || window.location.href.includes("/ws/sewerage/inbox");
 
   if (isEnabledCommonModules) {
@@ -176,9 +181,9 @@ const InboxComposer = ({
               searchFormState={searchFormState}
               {...{ controlSearchForm }}
               searchFieldComponents={
-                <div>
+                <div style={window.location.href.includes("/citizen/obps") ? {display : "flex"} : {}}>
                   <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form" className="submit-bar-search" />
-                  <p onClick={onResetSearchForm} className="clear-search" style={{ paddingTop: "9px" }}>
+                  <p onClick={onResetSearchForm} className="clear-search" style={{ paddingTop: "9px", color: " #f47738" }}>
                     {t(`ES_COMMON_CLEAR_SEARCH`)}
                   </p>
                 </div>

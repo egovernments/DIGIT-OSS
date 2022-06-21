@@ -532,7 +532,10 @@ export const newRegistrationForm = getCommonCard({
   header: getCommonTitle(
     {
       labelName: "New Registration",
-      labelKey: "BND_NEW_REGISTRATION",
+      labelKey:
+        getQueryArg(window.location.href, "action") === "EDIT"
+          ? "BND_EDIT_REGISTRATION"
+          : "BND_NEW_REGISTRATION",
     },
     {
       style: {
@@ -735,7 +738,7 @@ export const newRegistrationForm = getCommonCard({
           labelName: "Age",
           labelKey: "BND_AGE_PLACEHOLDER",
         },
-        required: false,
+        required: true,
         visible: true,
         pattern: patterns["age"],
         jsonPath: "bnd.death.newRegistration.age",
@@ -753,7 +756,7 @@ export const newRegistrationForm = getCommonCard({
           labelName: "First Name",
           labelKey: "BND_FIRSTNAME_LABEL",
         },
-        required: false,
+        required: true,
         visible: true,
         pattern: patterns["name"],
         jsonPath: "bnd.death.newRegistration.firstname",
@@ -789,7 +792,7 @@ export const newRegistrationForm = getCommonCard({
           labelName: "Last Name",
           labelKey: "BND_LASTNAME_LABEL",
         },
-        required: false,
+        required: true,
         visible: true,
         pattern: patterns["name"],
         jsonPath: "bnd.death.newRegistration.lastname",

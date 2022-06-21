@@ -77,7 +77,10 @@ const getOwner = (application, t, customTitle) => {
 
 const getAssessmentInfo = (application, t) => {
   let values = [
-    { title: t("PT_ASSESMENT_INFO_USAGE_TYPE"), value: t(getPropertyUsageTypeLocale(application?.usageCategory)) || t("CS_NA") },
+    { title: t("PT_ASSESMENT_INFO_USAGE_TYPE"), value: `${t(
+      (application?.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
+        (application?.usageCategory?.split(".")[1] ? application?.usageCategory?.split(".")[1] : application?.usageCategory)
+    )}` || t("CS_NA") },
     { title: t("PT_ASSESMENT_INFO_TYPE_OF_BUILDING"), value: t(getPropertyTypeLocale(application?.propertyType)) || t("CS_NA") },
     { title: t("PT_ASSESMENT_INFO_PLOT_SIZE"), value: t(application?.landArea) || t("CS_NA") },
     { title: t("PT_ASSESMENT_INFO_NO_OF_FLOOR"), value: t(application?.noOfFloors) || t("CS_NA") },

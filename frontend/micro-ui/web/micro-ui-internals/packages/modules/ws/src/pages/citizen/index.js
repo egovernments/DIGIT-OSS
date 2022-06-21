@@ -21,6 +21,7 @@ const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
   let isCommonPTPropertyScreen = window.location.href.includes("/ws/create-application/property-details");
+  let isAcknowledgement = window.location.href.includes("/acknowledgement");
 
   const getBackPageNumber = () => {
     let goBacktoFromProperty = -1;
@@ -34,14 +35,14 @@ const App = ({ path }) => {
   return (
     <React.Fragment>
       <div className="ws-citizen-wrapper">
-        <BackButton style={{ border: "none" }} /* isCommonPTPropertyScreen={isCommonPTPropertyScreen} */ getBackPageNumber={getBackPageNumber}>
+        {!isAcknowledgement && <BackButton style={{ border: "none" }} /* isCommonPTPropertyScreen={isCommonPTPropertyScreen} */ getBackPageNumber={getBackPageNumber}>
           {t("CS_COMMON_BACK")}
-        </BackButton>
+        </BackButton>}
         <Switch>
           <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
           <PrivateRoute path={`${path}/disconnect-application`} component={WSDisconnection} />
           <Route path={`${path}/search`} component={SearchConnectionComponent} />
-          <Route path={`${path}/my-bills`} component={WNSMyBillsComponent} />
+          <PrivateRoute path={`${path}/my-bills`} component={WNSMyBillsComponent} />
           <Route path={`${path}/search-results`} component={SearchResultsComponent} />
           <Route path={`${path}/test-acknowledgment`} component={TestAcknowledgment} />
           <PrivateRoute path={`${path}/my-payments`} component={WSMyPayments} />

@@ -158,7 +158,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
         <span style={{ color: "#505A5F" }}>{t("WS_INFO_VALIDATION")}</span>
       </Card>
       <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} >
-        <SearchFields {...{ register, control, reset, tenantId, t }} />
+        <SearchFields {...{ register, control, reset, tenantId, t,businessService }} />
       </SearchForm>
       {data?.display && resultOk ? (
         <Card style={{ marginTop: 20 }}>

@@ -229,9 +229,11 @@ public class WCConstants {
 	public static final int CREATE_APPLICATION = 0;
 	public static final int UPDATE_APPLICATION = 1;
 	public static final int MODIFY_CONNECTION =  2;
+	public static final int DISCONNECT_CONNECTION =  3;
 	
 	public static final String NEW_WATER_CONNECTION = "NEW_WATER_CONNECTION";
 	public static final String MODIFY_WATER_CONNECTION = "MODIFY_WATER_CONNECTION";
+	public static final String DISCONNECT_WATER_CONNECTION = "DISCONNECT_WATER_CONNECTION";
 	
 	public static final String WATER_SERVICE_BUSINESS_ID = "WS";
 
@@ -268,5 +270,7 @@ public class WCConstants {
 	public static final String CHANNEL_LIST = "channelList";
 
 	public static final String CHANNEL = "Channel";
+	
+	public static final String ACTIVE = "ACTIVE";
 
 }

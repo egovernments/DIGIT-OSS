@@ -15,7 +15,7 @@ const amountFormatter = (value, denomination, t) => {
   }
 };
 
-export const formatter = (value, symbol, unit, commaSeparated = false, t) => {
+export const formatter = (value, symbol, unit, commaSeparated = true, t) => {
   if (!value && value !== 0) return "";
   switch (symbol) {
     case "amount":

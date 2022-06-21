@@ -14,7 +14,7 @@ const getPath = (path, params) => {
   return path;
 };
 
-const getEditDetails = (waterResult,sewerageresult) => {
+const getEditDetails = (waterResult,sewerageresult,t) => {
     if(waterResult)
     {
     waterResult["ConnectionHolderDetails"] = waterResult?.connectionHolders ? {
@@ -28,7 +28,7 @@ const getEditDetails = (waterResult,sewerageresult) => {
       mobileNumber : waterResult?.connectionHolders?.[0]?.mobileNumber,
       name : waterResult?.connectionHolders?.[0]?.name,
       relationship : {code:waterResult?.connectionHolders?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${waterResult?.connectionHolders?.[0]?.relationship}`},
-      specialCategoryType : {}
+      specialCategoryType : {code:waterResult?.connectionHolders?.[0]?.ownerType, i18nKey:`PROPERTYTAX_OWNERTYPE_${waterResult?.connectionHolders?.[0]?.ownerType}`}
     } :
     {
       address : waterResult?.property?.owners?.[0]?.correspondenceAddress,
@@ -41,7 +41,7 @@ const getEditDetails = (waterResult,sewerageresult) => {
       mobileNumber : waterResult?.property?.owners?.[0]?.mobileNumber,
       name : waterResult?.property?.owners?.[0]?.name,
       relationship : {code:waterResult?.property?.owners?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${waterResult?.property?.owners?.[0]?.relationship}`},
-      specialCategoryType : {}
+      specialCategoryType : {code:waterResult?.connectionHolders?.[0]?.ownerType, i18nKey:`PROPERTYTAX_OWNERTYPE_${waterResult?.connectionHolders?.[0]?.ownerType}`}
     }
     waterResult.WaterConnectionResult={WaterConnection:[{...waterResult}]}
     waterResult.cpt = {details:{...waterResult?.property}}
@@ -50,7 +50,7 @@ const getEditDetails = (waterResult,sewerageresult) => {
     waterResult.plumberPreference = { plumberPreference : {code:"ULB", i18nKey:"WS_I_WOULD_PREFER_FROM_MUNICIPAL_OFFICE"}}
     waterResult.serviceName = waterResult?.applicationType?.includes("WATER") ? {code:"WATER",i18nKey:"WS_WATER_CONNECTION_ONLY"} : {code:"SEWERAGE",i18nKey:"WS_SEWERAGE_CONNECTION_ONLY"}
     waterResult.waterConectionDetails = {
-      proposedPipeSize : {code:waterResult?.proposedPipeSize, i18nKey:`${waterResult?.proposedPipeSize} WS_INCHES_LABEL`, size:waterResult?.proposedPipeSize},
+      proposedPipeSize : {code:waterResult?.proposedPipeSize, i18nKey:`${waterResult?.proposedPipeSize} ${t("WS_INCHES_LABEL")}`, size:waterResult?.proposedPipeSize},
       proposedTaps : waterResult?.proposedTaps,
     }
     }
@@ -67,7 +67,7 @@ const getEditDetails = (waterResult,sewerageresult) => {
           mobileNumber : sewerageresult?.connectionHolders?.[0]?.mobileNumber,
           name : sewerageresult?.connectionHolders?.[0]?.name,
           relationship : {code:sewerageresult?.connectionHolders?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${sewerageresult?.connectionHolders?.[0]?.relationship}`},
-          specialCategoryType : {}
+          specialCategoryType : {code:sewerageresult?.connectionHolders?.[0]?.ownerType, i18nKey:`PROPERTYTAX_OWNERTYPE_${sewerageresult?.connectionHolders?.[0]?.ownerType}`}
         
       } :
     {
@@ -81,7 +81,7 @@ const getEditDetails = (waterResult,sewerageresult) => {
       mobileNumber : sewerageresult?.property?.owners?.[0]?.mobileNumber,
       name : sewerageresult?.property?.owners?.[0]?.name,
       relationship : {code:sewerageresult?.property?.owners?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${sewerageresult?.property?.owners?.[0]?.relationship}`},
-      specialCategoryType : {}
+      specialCategoryType : {code:sewerageresult?.connectionHolders?.[0]?.ownerType, i18nKey:`PROPERTYTAX_OWNERTYPE_${sewerageresult?.connectionHolders?.[0]?.ownerType}`}
     }
     sewerageresult.SewerageConnectionResult={SewerageConnections:[{...sewerageresult}]}
     sewerageresult.cpt = {details:{...sewerageresult?.property}}
@@ -123,8 +123,8 @@ const EditApplication = ({ parentRoute }) => {
   if (tenantId) filter1.tenantId = tenantId;
 
   //filter1 = {tenantId: tenantId, applicationNumber: applicationNobyData }
-  const Waterresult =  Digit.Hooks.ws.useWaterSearch({ tenantId, filters:{...filter1},BusinessService:"WS", t },{enabled:applicationNumber && applicationNumber.includes("WS") ? true : false});
-  const Sewarageresult = Digit.Hooks.ws.useSewarageSearch({ tenantId, filters:{...filter1},BusinessService:"SW",t },{enabled:applicationNumber && applicationNumber.includes("SW") ? true : false});
+  const {data : Waterresult} =  Digit.Hooks.ws.useWaterSearch({ tenantId, filters:{...filter1},BusinessService:"WS", t },{enabled:applicationNumber && applicationNumber.includes("WS") ? true : false});
+  const {data : Sewarageresult} = Digit.Hooks.ws.useSewarageSearch({ tenantId, filters:{...filter1},BusinessService:"SW",t },{enabled:applicationNumber && applicationNumber.includes("SW") ? true : false});
   let isModifyEdit = window.location.href.includes("/modify-connection/") || window.location.href.includes("/edit-application/")
 
   useEffect(() => {
@@ -159,7 +159,7 @@ const EditApplication = ({ parentRoute }) => {
       }
       sessionStorage.setItem("WaterInitialObject", JSON.stringify({ ...waterapplication }));
       sessionStorage.setItem("SewerageInitialObject", JSON.stringify({ ...sewerageapplication }));
-      let EditDetails = getEditDetails(waterapplication,sewerageapplication);
+      let EditDetails = getEditDetails(waterapplication,sewerageapplication,t);
       setParams({ ...params, ...EditDetails });
     }
 
@@ -183,6 +183,10 @@ const EditApplication = ({ parentRoute }) => {
     if (routeObject[sessionStorage.getItem("serviceName")]) nextStep = routeObject[sessionStorage.getItem("serviceName")];
     if( (params?.cptId?.id || params?.cpt?.details?.propertyId || (isModifyEdit && params?.cpt?.details?.propertyId ))  && nextStep === "know-your-property" )
     { 
+      nextStep = "property-details";
+    }
+    if(nextStep === "docsrequired" && sessionStorage.getItem("changePropertySelected") === "yes")
+    {
       nextStep = "property-details";
     }
     let redirectWithHistory = history.push;

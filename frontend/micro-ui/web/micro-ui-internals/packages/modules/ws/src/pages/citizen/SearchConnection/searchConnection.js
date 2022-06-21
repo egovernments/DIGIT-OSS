@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FormComposer, CardLabelDesc, Loader, Menu } from "@egovernments/digit-ui-react-components";
-import { FormStep, CardLabel, RadioButtons, RadioOrSelect, Localities } from "@egovernments/digit-ui-react-components";
+import { FormStep, CardLabel, RadioButtons, RadioOrSelect, Localities, InfoBannerIcon } from "@egovernments/digit-ui-react-components";
 import { TextInput, LabelFieldPair, Dropdown, Toast } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
@@ -43,7 +43,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
       }
       else {
         history.push(
-          `/digit-ui/citizen/ws/search-results?mobileNumber=${mobileNumber}&consumerNumber=${consumerNumber}&oldconsumerNumber=${oldconsumerNumber}&propertyId=${propertyId}&tenantId=${city.code}&locality=${locality.code}`
+          `/digit-ui/citizen/ws/search-results?mobileNumber=${mobileNumber}&consumerNumber=${consumerNumber}&oldconsumerNumber=${oldconsumerNumber}&propertyId=${propertyId}&tenantId=${city.code}&locality=${undefined}`
         );
       }
     }
@@ -164,8 +164,8 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
                 title: t("UC_CITY_MANDATORY"),
               })}
           />
-        {city && !logginedUser && <CardLabel>{`${t("WS_PROP_DETAIL_LOCALITY_LABEL")}*`}</CardLabel>}
-        {city && !logginedUser && <Localities
+        {city && searchType && searchType?.code == "CONNECTION_DETAILS"  && <CardLabel>{`${t("WS_PROP_DETAIL_LOCALITY_LABEL")}*`}</CardLabel>}
+        {city && searchType && searchType?.code == "CONNECTION_DETAILS"  && <Localities
                 selectLocality={selectLocality}
                 tenantId={city?.code}
                 boundaryType="revenue"
@@ -198,8 +198,16 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
             })}
           />
         </div>
-        <CardLabel style={{textAlign:"center",color:"#505A5F"}}>{`${t("(or)")}`}</CardLabel>
+        <CardLabel style={{textAlign:"center",color:"#505A5F"}}>{`${t("(or)")}`}</CardLabel>           
+        <div className="tooltip">
+        <div style={{display: "flex", gap: "0 4px"}}>
         <CardLabel>{`${t("WS_MYCONNECTIONS_CONSUMER_NO")}`}</CardLabel>
+        <InfoBannerIcon fill="#0b0c0c" />
+        <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
+        {t("WS_CONSUMER_NO_DESCRIPTION") + " " + "WS_CONSUMER_NO_FORMAT"}
+        </span>
+        </div>
+        </div>
         <TextInput
           t={t}
           type={"any"}
@@ -208,10 +216,25 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
           name="consumerNumber"
           value={consumerNumber}
           onChange={selectconsumerNumber}
+          {...(validation = {
+            isRequired: false,
+            pattern: "[A-Za-z]{2}\/[0-9]{3}\/[0-9]{4}\-[0-9]{2}\/[0-9]{6}",
+            type: "text",
+            title: t("ERR_INVALID_CONSUMER_NO"),
+          })}
         />
-        {logginedUser && <CardLabel style={{textAlign:"center",color:"#505A5F"}}>{`${t("(or)")}`}</CardLabel>}
-        {logginedUser && <CardLabel>{`${t("WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL")}`}</CardLabel>}
-        {logginedUser && <TextInput
+        {<CardLabel style={{textAlign:"center",color:"#505A5F"}}>{`${t("(or)")}`}</CardLabel>}
+        {
+        <div className="tooltip">
+        <div style={{display: "flex", gap: "0 4px"}}>
+        <CardLabel>{`${t("WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL")}`}</CardLabel>
+        <InfoBannerIcon fill="#0b0c0c" />
+        <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
+        {t("WS_CONSUMER_NO_DESCRIPTION") + " " + "WS_CONSUMER_NO_FORMAT"}
+        </span>
+        </div>
+        </div>}
+        {<TextInput
           t={t}
           type={"any"}
           isMandatory={false}
@@ -220,6 +243,12 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
           name="oldconsumerNumber"
           value={oldconsumerNumber}
           onChange={selectoldconsumerNumber}
+          {...(validation = {
+            isRequired: false,
+            pattern: "[A-Za-z]{2}\/[0-9]{3}\/[0-9]{4}\-[0-9]{2}\/[0-9]{6}",
+            type: "text",
+            title: t("ERR_INVALID_CONSUMER_NO"),
+          })}
         />}
         <CardLabel style={{textAlign:"center",color:"#505A5F"}}>{`${t("(or)")}`}</CardLabel>
         <CardLabel>{`${t("WS_PROPERTY_ID_LABEL")}`}</CardLabel>
@@ -232,6 +261,12 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
           name="propertyId"
           value={propertyId}
           onChange={selectpropertyId}
+          {...(validation = {
+            isRequired: false,
+            pattern: "[A-Za-z]{2}\-[A-Za-z]{2}\-[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-[0-9]{6}",
+            type: "text",
+            title: t("ERR_INVALID_PROPERTY_ID"),
+          })}
         />
         </div>}
         {searchType && searchType?.code == "CONNECTION_DETAILS" && <div style={{border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA",marginBottom:"20px"}} >
@@ -244,6 +279,12 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
           name="doorNumber"
           value={doorNumber}
           onChange={selectdoorNumber}
+          {...(validation = {
+            isRequired: false,
+            pattern: "^([1-9][0-9]*)$",
+            type: "text",
+            title: t("ERR_INVALID_DOOR_NO"),
+          })}
         />
         <CardLabel>{`${t("WS_CONSUMER_NAME_LABEL")}`}</CardLabel>
         <TextInput

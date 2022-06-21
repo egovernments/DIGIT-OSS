@@ -39,7 +39,8 @@ const useNOCInbox = ({ tenantId, filters, config={} }) => {
               source: application.businessObject.source,
               sla: application?.businessObject?.applicationStatus.match(/^(APPROVED)$/) ? "CS_NA" : Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
           })),
-          totalCount: data.totalCount
+          totalCount: data.totalCount,
+          nearingSlaCount: data.nearingSlaCount
         }), 
         ...config 
       }

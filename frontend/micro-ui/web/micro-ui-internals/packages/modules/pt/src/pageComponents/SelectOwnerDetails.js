@@ -208,7 +208,13 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
 
   return (
     <React.Fragment>
-    {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
+    {
+      window.location.href.includes("/citizen") ?
+        window.location.href.includes("/citizen/pt/property/property-mutation") ? 
+          <Timeline currentStep={1} flow="PT_MUTATE" /> : <Timeline currentStep={2} />
+    : null
+    }
+
     <FormStep
       config={config}
       onSelect={goNext}

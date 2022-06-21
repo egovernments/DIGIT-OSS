@@ -81,7 +81,7 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
           "noOfTaps": null,
           "noOfWaterClosets": null,
           "noOfToilets": null,
-          "propertyId": formData?.cptId?.id,
+          "propertyId": formData?.cptId?.id || formData?.cpt?.details?.propertyId,
           "additionalDetails": {
               "initialMeterReading": null,
               "detailsProvidedBy": "",
@@ -135,7 +135,7 @@ const WSWaterConnectionDetails = ({ t, config, userType, onSelect, formData }) =
             value={proposedTaps}
             {...(validation = {
               isRequired: true,
-              pattern: "^[0-9]*$",
+              pattern: "^[1-9]+[0-9]*$",
               title: t("ERR_DEFAULT_INPUT_FIELD_MSG"),
               type: "text",
             })}

@@ -10,6 +10,7 @@ const Inbox = ({ parentRoute }) => {
   const { t } = useTranslation();
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const checkPathName = window.location.href.includes("/ws/water/bill-amendment/inbox");
 
   const searchFormDefaultValues = {
     mobileNumber: "",
@@ -18,15 +19,19 @@ const Inbox = ({ parentRoute }) => {
 
   const filterFormDefaultValues = {
     applicationStatus: [],
+    businessService: checkPathName ? ["BS.AMENDMENT"] : ["BS.AMENDMENT"],
+    moduleName: checkPathName ? "bsWs-service" : "bsSw-service",
     locality: [],
     assignee: "ASSIGNED_TO_ALL",
   };
   const tableOrderFormDefaultValues = {
-    sortBy: "",
+    sortBy: "createdTime",
     limit: window.Digit.Utils.browser.isMobile() ? 50 : 10,
     offset: 0,
-    sortOrder: "DESC",
+    sortOrder: "ASC",
   };
+
+  sessionStorage.removeItem("Digit.BILL.AMENDMENT.INBOX");
 
   function formReducer(state, payload) {
     switch (payload.action) {
@@ -52,10 +57,10 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const onFilterFormReset = (setFilterFormValue) => {
-    setFilterFormValue("applicationStatus", "");
+    setFilterFormValue("moduleName", checkPathName ? "bsWs-service" : "bsSw-service");
     setFilterFormValue("locality", []);
     setFilterFormValue("assignee", "ASSIGNED_TO_ALL");
-    setFilterFormValue("applicationType", []);
+    setFilterFormValue("applicationStatus", []);
     dispatch({ action: "mutateFilterForm", data: filterFormDefaultValues });
   };
 
@@ -104,19 +109,31 @@ const Inbox = ({ parentRoute }) => {
     {},
     t
   );
-  const { isLoading: isInboxLoading, data: { table, statuses, totalCount } = {} } = Digit.Hooks.tl.useInbox({
+  const { isLoading: isInboxLoading, data: { table, statuses, totalCount } = {} } = Digit.Hooks.useBillAmendmentInbox({
     tenantId,
     filters: { ...formState },
   });
+
+  const { data: statusData, isLoading } = Digit.Hooks.useApplicationStatusGeneral({ businessServices: ["BS.AMENDMENT"], tenantId }, { enabled: statuses?.length>0});
+  
+  statuses?.map(status => {
+    statusData?.otherRoleStates?.map(state=>{
+      if(state?.uuid===status?.statusid){
+        status["applicationstatus"] = t(state?.state)
+      }
+    })
+    statusData?.userRoleStates?.map(state => {
+      if (state?.uuid === status?.statusid) {
+        status["applicationstatus"] = t(state?.state)
+      }
+    })
+  } )
+
 
   const PropsForInboxLinks = {
     logoIcon: <CollectionIcon />,
     headerText: "ACTION_TEST_BILLAMENDMENT",
     links: [
-      {
-        text: t("BILLAMEND_APPLICATION"),
-        link: "/digit-ui/employee/ws/create-bill-amendment",
-      },
       {
         text: t("ACTION_TEST_REPORTS"),
         link: "/digit-ui/employee/ws/reports",
@@ -129,7 +146,9 @@ const Inbox = ({ parentRoute }) => {
   };
 
   const SearchFormFields = useCallback(
-    ({ registerRef, searchFormState }) => <SearchFormFieldsComponents {...{ registerRef, searchFormState }} />,
+    ({ registerRef, searchFormState, searchFieldComponents }) => (
+      <SearchFormFieldsComponents {...{ registerRef, searchFormState, searchFieldComponents }} />
+    ),
     []
   );
 
@@ -149,16 +168,18 @@ const Inbox = ({ parentRoute }) => {
         }}
       />
     ),
-    [statuses, isInboxLoading, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant]
+    [statuses, isInboxLoading, localitiesForEmployeesCurrentTenant, loadingLocalitiesForEmployeesCurrentTenant,statusData]
   );
 
   const onSearchFormSubmit = (data) => {
-    data.hasOwnProperty("") ? delete data?.[""] : null;
+    data.hasOwnProperty("") && delete data?.[""];
+    dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateSearchForm", data });
   };
 
   const onFilterFormSubmit = (data) => {
-    data.hasOwnProperty("") ? delete data?.[""] : null;
+    data.hasOwnProperty("") && delete data?.[""];
+    dispatch({ action: "mutateTableForm", data: { ...tableOrderFormDefaultValues } });
     dispatch({ action: "mutateFilterForm", data });
   };
 
@@ -186,7 +207,10 @@ const Inbox = ({ parentRoute }) => {
 
   return (
     <>
-      <Header>{t("ES_COMMON_INBOX")}</Header>
+      <Header>
+        {t("ES_COMMON_INBOX")}
+        {totalCount ? <p className="inbox-count">{totalCount}</p> : null}
+      </Header>
       <InboxComposer
         {...{
           isInboxLoading,

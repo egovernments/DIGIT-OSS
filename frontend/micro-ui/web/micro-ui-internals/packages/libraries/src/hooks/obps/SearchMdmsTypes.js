@@ -69,6 +69,39 @@ const SearchMdmsTypes = {
       }
     ),
 
+    useBPAREGServiceTypes: (tenantId) =>
+    useQuery(
+      [tenantId, "BPAREG_MDMS_SERVICE_STATUS"],
+      () =>
+        MdmsService.getDataByCriteria(
+          tenantId,
+          {
+            details: {
+              tenantId: tenantId,
+              moduleDetails: [
+                {
+                  moduleName: "StakeholderRegistraition",
+                  masterDetails: [
+                    {
+                      name: "TradeTypetoRoleMapping",
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+          "StakeholderRegistraition"
+        ),
+      {
+        select: (data) =>{
+          return [...data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.map((type) => ({
+            code: type.tradeType?.split(".")[0],
+            i18nKey: `TRADELICENSE_TRADETYPE_${type.tradeType?.split(".")[0]}`,
+          }))]
+        },
+      }
+    ),
+
     useBPAServiceTypes: (tenantId) =>
      useQuery(
       [tenantId, "BPA_MDMS_SERVICE_STATUS"],

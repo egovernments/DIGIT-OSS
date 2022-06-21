@@ -15,7 +15,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     (formData?.TradeDetails && formData?.TradeDetails?.units) || [{ tradecategory: "", tradetype: "", tradesubtype: "", unit: null, uom: null }]
   );
 
-  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.ULBService.getCitizenCurrentTenant();
   const stateId = Digit.ULBService.getStateId();
 
   function handleAdd() {
@@ -32,28 +32,40 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     }
   }
 
-  const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TradeUnits", "[?(@.type=='TL')]");
+  // const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "TradeUnits", "[?(@.type=='TL')]");
+  const { data: billingSlabTradeTypeData, isLoading } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: tenantId, filters: {} }, {
+    select: (data) => {
+    return data?.billingSlab.filter((e) => e.tradeType && e.applicationType === "NEW" && e.licenseType === "PERMANENT");
+    }});
   let TradeCategoryMenu = [];
   //let TradeTypeMenu = [];
 
-  Data &&
-    Data.TradeLicense &&
-    Data.TradeLicense.TradeType.map((ob) => {
-      if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.code.split(".")[0]}`)) {
-        TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.code.split(".")[0]}`, code: `${ob.code.split(".")[0]}` });
-      }
-    });
+  // Data &&
+  //   Data.TradeLicense &&
+  //   Data.TradeLicense.TradeType.map((ob) => {
+  //     if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.code.split(".")[0]}`)) {
+  //       TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.code.split(".")[0]}`, code: `${ob.code.split(".")[0]}` });
+  //     }
+  //   });
+
+    billingSlabTradeTypeData &&
+    billingSlabTradeTypeData.length > 0 &&
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+        if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.tradeType.split(".")[0]}`)) {
+          TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` });
+        }
+      });
 
   function getTradeTypeMenu(TradeCategory) {
     let TradeTypeMenu = [];
-    Data &&
-      Data.TradeLicense &&
-      Data.TradeLicense.TradeType.map((ob) => {
+    billingSlabTradeTypeData &&
+    billingSlabTradeTypeData.length > 0 &&
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
         if (
-          ob.code.split(".")[0] === TradeCategory.code &&
-          !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.code.split(".")[1]}`)
+          ob.tradeType.split(".")[0] === TradeCategory.code &&
+          !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.tradeType.split(".")[1]}`)
         ) {
-          TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.code.split(".")[1]}`, code: `${ob.code.split(".")[1]}` });
+          TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[1]}`, code: `${ob.tradeType.split(".")[1]}` });
         }
       });
     return TradeTypeMenu;
@@ -62,11 +74,11 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   function getTradeSubTypeMenu(TradeType) {
     let TradeSubTypeMenu = [];
     TradeType &&
-      Data &&
-      Data.TradeLicense &&
-      Data.TradeLicense.TradeType.map((ob) => {
-        if (ob.code.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.code}`)) {
-          TradeSubTypeMenu.push({ i18nKey: `TL_${ob.code}`, code: `${ob.code}` });
+    billingSlabTradeTypeData &&
+    billingSlabTradeTypeData.length > 0 &&
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+        if (ob.tradeType.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.tradeType}`)) {
+          TradeSubTypeMenu.push({ i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` });
         }
       });
     return TradeSubTypeMenu;
@@ -102,10 +114,10 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     }
     Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
     value &&
-      Data &&
-      Data.TradeLicense &&
-      Data.TradeLicense.TradeType.map((ob) => {
-        if (value.code === ob.code) {
+    billingSlabTradeTypeData &&
+    billingSlabTradeTypeData?.length > 0 &&
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+        if (value.code === ob.tradeType) {
           units[i].unit = ob.uom;
           setUnitOfMeasure(ob.uom);
           // setFeilds(units);

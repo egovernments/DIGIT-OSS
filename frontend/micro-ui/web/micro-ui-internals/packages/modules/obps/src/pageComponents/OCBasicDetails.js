@@ -62,9 +62,13 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
   }
 
   const handleKeyPress = async (event) => {
+    if(!(scrutinyNumber?.edcrNumber?.startsWith("OC")))
+    setShowToast({ key: "true", message: t("BPA_INVALID_OCEDCR_NO"), labelName: "Please enter the valid OCeDCR Number." });
+    else{
     if (event.key === "Enter") {
       const handleData = await getOCEDCRTotalDetails();
     }
+  }
   }
 
 
@@ -82,7 +86,11 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
   };
 
   const handleSearch = async (event) => {
+    if(!(scrutinyNumber?.edcrNumber?.startsWith("OC")))
+    setShowToast({ key: "true", message: t("BPA_INVALID_OCEDCR_NO"), labelName: "Please enter the valid OCeDCR Number." });
+    else{
     const handleData = await getOCEDCRTotalDetails();
+    }
   }
 
   const getDetails = async () => {
@@ -177,7 +185,7 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
         <Label>{t(`OBPS_SEARCH_EDCR_NUMBER`)}</Label>
         <TextInput className="searchInput"
           onKeyPress={handleKeyPress}
-          onChange={event => setScrutinyNumber({ edcrNumber: event.target.value })} value={scrutinyNumber?.edcrNumber} signature={true} signatureImg={<SearchIconSvg className="signature-img" onClick={!disableVlaue ? () => handleSearch() : null} />}
+          onChange={event => setScrutinyNumber({ edcrNumber: event.target.value })} value={scrutinyNumber?.edcrNumber} signature={true} signatureImg={<SearchIconSvg className="signature-img" onClick={!disableVlaue && scrutinyNumber?.edcrNumber ? () => handleSearch() : null} />}
           disable={isDisabled}
           style={{ marginBottom: "10px" }}
         />

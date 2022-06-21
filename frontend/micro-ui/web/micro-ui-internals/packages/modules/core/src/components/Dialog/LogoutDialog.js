@@ -13,11 +13,11 @@ const Close = () => (
 );
 const CloseBtn = (props) => {
   return (
-    <div onClick={props?.onClick}>
+    <div onClick={props?.onClick} style={ props?.isMobileView ? { padding: 5} : null}>
       {
         props?.isMobileView
           ? (<CloseSvg />)
-          : (<div className={"icon-bg-secondary"}> <Close /> </div>)
+          : (<div className={"icon-bg-secondary"} style={{ backgroundColor: '#505A5F'}}> <Close /> </div>)
       }
     </div>
   )
@@ -75,23 +75,22 @@ const LogoutDialog = ({ onSelect, onCancel, onDismiss }) => {
         popupModuleMianStyles={{
           padding: "18px",
         }}
-        headerBarMain={<Heading label={t("CORE_LOGOUT_HEADER")} />}
+        headerBarMain={<Heading label={t("CORE_LOGOUT_WEB_HEADER")} />}
         headerBarEnd={<CloseBtn onClick={onDismiss} isMobileView={isMobileView} />}
-        actionCancelLabel={t("CORE_LOGOUT_NO")}
+        actionCancelLabel={t("TL_COMMON_NO")}
         actionCancelOnSubmit={onCancel}
-        actionSaveLabel={t("CORE_LOGOUT_YES")}
+        actionSaveLabel={t("TL_COMMON_YES")}
         actionSaveOnSubmit={onSelect}
         formId="modal-action">
         <div>
           <CardText style={{ margin: 0 }}>
-            {t("CORE_LOGOUT_CONFIRMATION_MESSAGE")}
-            
+            {t("CORE_LOGOUT_MOBILE_CONFIRMATION_MESSAGE") + " "}
           </CardText>
         </div>
       </Modal>
       : <Modal
         popupModuleMianStyles={{
-          paddingTop: "56px",
+          paddingTop: "30px",
         }}
         headerBarMain={<Heading label={t("CORE_LOGOUT_WEB_HEADER")} />}
         headerBarEnd={<CloseBtn onClick={onDismiss} isMobileView={false} />}

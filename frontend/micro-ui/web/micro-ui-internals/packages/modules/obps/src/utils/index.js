@@ -106,6 +106,7 @@ export const getBPAFormData = async (data, mdmsData, history, t) => {
   data.BlockIds = getBlockIds(data?.landInfo?.unit);
   data.address = data?.landInfo?.address;
   data.address.locality["i18nkey"] = `${t(`${stringReplaceAll(data?.landInfo?.address?.tenantId,".","_").toUpperCase()}_REVENUE_${data?.landInfo?.address?.locality?.code}`)}`;
+  data.placeName = data?.additionalDetails?.GISPlaceName || "";
   data.data = {
     scrutinyNumber: { edcrNumber: APIScrutinyDetails?.edcrNumber },
     applicantName: APIScrutinyDetails?.planDetail?.planInformation?.applicantName,
@@ -337,6 +338,7 @@ export const getBPAOwners = (data, isOCBPA) => {
     bpaownerarray?.forEach((newOwner) => {
       if (newOwner?.gender?.code) newOwner.gender = newOwner.gender?.code;
       if (!newOwner?.fatherOrHusbandName) newOwner.fatherOrHusbandName = "NAME";
+      newOwner.active = true;
     });
 
   data?.landInfo?.owners?.map((oldowner) => {
@@ -396,6 +398,7 @@ export const convertToBPAObject = (data, isOCBPA = false, isSendBackTOCitizen = 
       auditDetails: data?.auditDetails,
       additionalDetails: {
         ...data?.additionalDetails,
+        GISPlaceName : data?.address?.placeName,
         holdingNo: data?.data?.holdingNumber ? data?.data?.holdingNumber : data?.additionalDetails?.holdingNo,
         registrationDetails: data?.data?.registrationDetails ? data?.data?.registrationDetails : data?.additionalDetails?.registrationDetails,
       },
@@ -728,7 +731,7 @@ export const showHidingLinksForStakeholder = (roles = []) => {
   let checkedRoles = [];
   const rolearray = roles?.map((role) => {
     userInfo?.value?.info?.roles?.map((item) => {
-      if (item.code == role.code && item.tenantId === role.tenantId) {
+      if (item.code === role.code && item.tenantId === role.tenantId) {
         checkedRoles.push(item);
       }
     });

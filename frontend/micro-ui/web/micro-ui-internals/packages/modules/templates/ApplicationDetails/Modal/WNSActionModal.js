@@ -53,8 +53,11 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     (async () => {
       setError(null);
       if (file) {
+        const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i
         if (file.size >= 5242880) {
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+        } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
+          setError(t(`NOT_SUPPORTED_FILE_TYPE`))
         } else {
           try {
             const response = await Digit.UploadServices.Filestorage("WS", file, Digit.ULBService.getCurrentTenantId());
@@ -93,7 +96,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       action: action?.action,
       comment: data?.comments || "",
       assignee: !selectedApprover?.uuid ? [] : [selectedApprover?.uuid],
-      assignees: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
+      assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
       wfDocuments: uploadedFile
         ? [
           {
@@ -105,7 +108,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         : null,
       processInstance: {
         action: action?.action,
-        assignees: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
+        assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
         comment: data?.comments || "",
         documents: uploadedFile
           ? [

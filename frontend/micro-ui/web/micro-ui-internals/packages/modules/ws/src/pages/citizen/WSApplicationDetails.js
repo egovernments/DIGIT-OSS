@@ -21,6 +21,7 @@ import WSDocument from "../../pageComponents/WSDocument";
 import getPDFData from "../../utils/getWSAcknowledgementData";
 import { getFiles } from "../../utils";
 import { stringReplaceAll } from "../../utils";
+import WSInfoLabel from "../../pageComponents/WSInfoLabel";
 
 const WSApplicationDetails = () => {
   const { t } = useTranslation();
@@ -59,6 +60,7 @@ const WSApplicationDetails = () => {
     { filters: { propertyIds: data?.WaterConnection?.[0]?.propertyId } }
   );
 
+  const isPaid = (data?.WaterConnection?.[0]?.applicationStatus === 'CONNECTION_ACTIVATED' || data?.WaterConnection?.[0]?.applicationStatus === 'PENDING_FOR_CONNECTION_ACTIVATION') || (data?.SewerageConnections?.[0]?.applicationStatus === 'CONNECTION_ACTIVATED' || data?.SewerageConnections?.[0]?.applicationStatus === 'PENDING_FOR_CONNECTION_ACTIVATION') ? true : false;
   if (isLoading) {
     return <Loader />;
   }
@@ -155,9 +157,7 @@ const WSApplicationDetails = () => {
   sessionStorage.setItem("ApplicationNoState", applicationNobyData);
   return (
     <React.Fragment>
-      <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
-        <Header>{t("WS_APPLICATION_DETAILS_HEADER")}</Header>
-        {downloadOptions && downloadOptions.length > 0 && (
+      {downloadOptions && downloadOptions.length > 0 && (
           <MultiLink
             className="multilinkWrapper"
             onHeadClick={() => setShowOptions(!showOptions)}
@@ -165,7 +165,10 @@ const WSApplicationDetails = () => {
             options={downloadOptions}
           />
         )}
+      <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
+        <Header>{t("WS_APPLICATION_DETAILS_HEADER")}</Header>
       </div>
+      <WSInfoLabel t={t} />
       <div className="hide-seperator">
         <Card>
           <StatusTable>
@@ -194,20 +197,20 @@ const WSApplicationDetails = () => {
             <CardHeader styles={{ fontSize: "28px" }}>{t("WS_FEE_DEATAILS_HEADER")}</CardHeader>
             <StatusTable>
               {paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails.map((bill) => (
-                <Row className="border-none" label={t(bill?.taxHeadCode)} text={bill?.amount} textStyle={{ textAlign: "right" }} />
+                <Row className="border-none" label={t(bill?.taxHeadCode)} text={`₹${bill?.amount}`} textStyle={{ textAlign: "right" }} />
               ))}
               <Row
                 className="border-none"
                 label={t("WS_TOTAL_AMOUNT_DUE")}
-                text={paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount}
-                textStyle={{ textAlign: "right" }}
+                text={`₹${paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount}`}
+                textStyle={{ textAlign: "right", fontSize:"18px", fontWeight: "700" }}
               />
               <Row
                 className="border-none"
                 label={t("WS_COMMON_TABLE_COL_APPLICATION_STATUS")}
-                text={paymentDetails?.data?.Bill?.[0]?.billDetails?.amountPaid == null ? "Unpaid" : "Paid"}
+                text={isPaid ? t("WS_COMMON_PAID_LABEL") : t("WS_COMMON_NOT_PAID")}
                 textStyle={
-                  paymentDetails?.data?.Bill?.[0]?.billDetails?.amountPaid == null
+                  !isPaid
                     ? { textAlign: "right", color: "red" }
                     : { textAlign: "right", color: "darkgreen" }
                 }
@@ -238,7 +241,7 @@ const WSApplicationDetails = () => {
             <Row
               className="border-none"
               label={t("WS_OWN_DETAIL_CROSADD")}
-              text={PTData?.Properties?.[0]?.owners?.[0]?.correspondenceAddress || t("CS_NA")}
+              text={PTData?.Properties?.[0]?.owners?.[0]?.permanentAddress || t("CS_NA")}
               textStyle={{ whiteSpace: "pre" }}
             />
             <Link
@@ -257,40 +260,40 @@ const WSApplicationDetails = () => {
               <Row
                 className="border-none"
                 label={t("WS_OWN_DETAIL_MOBILE_NO_LABEL")}
-                text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.mobileNumber}
+                text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.mobileNumber || data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.mobileNumber}
                 textStyle={{ whiteSpace: "pre" }}
               />
               <Row
                 className="border-none"
                 label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")}
-                text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.name}
+                text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.name || data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.name}
                 textStyle={{ whiteSpace: "pre" }}
               />
               <Row
                 className="border-none"
                 label={t("WS_OWN_DETAIL_GENDER_LABEL")}
-                text={t(data?.WaterConnection?.[0]?.connectionHolders?.[0]?.gender)}
+                text={t(data?.WaterConnection?.[0]?.connectionHolders?.[0]?.gender || data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.gender)}
                 textStyle={{ whiteSpace: "pre" }}
               />
               <Row
                 className="border-none"
                 label={t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME")}
-                text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.fatherOrHusbandName || t("CS_NA")}
+                text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.fatherOrHusbandName || data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.fatherOrHusbandName || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
               />
               <Row
                 className="border-none"
                 label={t("WS_OWN_DETAIL_RELATION_LABEL")}
-                text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.relationship || t("CS_NA")}
+                text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.relationship || data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.relationship || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
               />
               <Row
                 className="border-none"
                 label={t("WS_OWN_DETAIL_CROSADD")}
-                text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.correspondenceAddress || t("CS_NA")}
+                text={data?.WaterConnection?.[0]?.connectionHolders?.[0]?.correspondenceAddress || data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.correspondenceAddress || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
               />
-              <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={"NA"} textStyle={{ whiteSpace: "pre" }} />
+              <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={t(`COMMON_MASTERS_OWNERTYPE_${data?.WaterConnection?.[0]?.connectionHolders?.[0]?.ownerType || data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.ownerType}`)} textStyle={{ whiteSpace: "pre" }} />
             </StatusTable>
           </Card>
         ) : (
@@ -352,7 +355,7 @@ const WSApplicationDetails = () => {
               <Row
                 className="border-none"
                 label={t("WS_SERV_DETAIL_NO_OF_TOILETS")}
-                text={data?.SewerageConnections?.[0]?.proposedPipeSize}
+                text={data?.SewerageConnections?.[0]?.proposedToilets || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
               />
               <Link to={`/digit-ui/citizen/ws/connection/additional/${data?.SewerageConnections?.[0]?.applicationNo}`}>
@@ -404,6 +407,7 @@ const WSApplicationDetails = () => {
           <WSWFApplicationTimeline
             application={data?.WaterConnection?.[0] || data?.SewerageConnections?.[0]}
             id={data?.WaterConnection?.[0]?.applicationNo || data?.SewerageConnections?.[0]?.applicationNo}
+            paymentbuttonenabled={false}
           />
           {data?.WaterConnection?.[0]?.applicationStatus === "PENDING_FOR_PAYMENT" ||
           data?.SewerageConnections?.[0]?.applicationStatus === "PENDING_FOR_PAYMENT" ? (
@@ -421,8 +425,8 @@ const WSApplicationDetails = () => {
               <SubmitBar label={t("MAKE_PAYMENT")} />
             </Link>
           ) : null}
-          {data?.WaterConnection?.[0]?.applicationStatus === "PENDING_FOR_CITIZEN_ACTION" ||
-          data?.SewerageConnections?.[0]?.applicationStatus === "PENDING_FOR_CITIZEN_ACTION" ? (
+          {data?.WaterConnection?.[0]?.applicationStatus.includes("PENDING_FOR_CITIZEN_ACTION") ||
+          data?.SewerageConnections?.[0]?.applicationStatus.includes("PENDING_FOR_CITIZEN_ACTION") ? (
             <Link
               to={{
                 pathname: `/digit-ui/citizen/ws/edit-application/${data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId}`,

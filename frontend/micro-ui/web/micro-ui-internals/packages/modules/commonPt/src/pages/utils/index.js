@@ -4,7 +4,7 @@ export const setAddressDetailsLW = (data) => {
   let propAddress = {
     city: locationDet?.cityCode?.name,
     doorNo: locationDet?.houseDoorNo,
-    buildingName: locationDet?.buildingColonyName,
+    street: locationDet?.buildingColonyName,
     landmark: locationDet?.landmarkName,
     locality: {
       code: locationDet?.locality?.code || "NA",

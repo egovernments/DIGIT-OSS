@@ -3,7 +3,7 @@ import { ArrowForward } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
 const FaqComponent = props => {
-  const { question, answer } = props;
+  const { question, answer, lastIndex } = props;
   const [isOpen, toggleOpen] = useState(false);
   const { t } = useTranslation();
 
@@ -26,6 +26,7 @@ const FaqComponent = props => {
         {t(answer)}
         </span>
       </div>
+      {!lastIndex ? <div className="cs-box-border"/> : null}
         </div>
   );
 };

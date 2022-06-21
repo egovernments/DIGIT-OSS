@@ -1,13 +1,13 @@
 import React from "react";
-const { DatePicker } = require("@egovernments/digit-ui-react-components")
+const { DatePicker, Dropdown } = require("@egovernments/digit-ui-react-components")
 
 const VehicleConfig = (t, disabled = false) => {
   return [
     {
-      "head": "ES_FSM_REGISTRY_NEW_VEHICLE_DETAILS",
+      "head": "ES_FSM_REGISTRY_VEHICLE_DETAILS",
       "body": [
         {
-          "label": "ES_FSM_REGISTRY_NEW_REGISTRATION_NUMBER",
+          "label": "ES_FSM_REGISTRY_VEHICLE_NUMBER",
           "isMandatory": true,
           "type": "text",
           "disable": disabled,
@@ -19,75 +19,96 @@ const VehicleConfig = (t, disabled = false) => {
           }
         },
         {
-          "label": "ES_FSM_REGISTRY_NEW_VEHICLE_TYPE",
-          "isMandatory": false,
-          "type": "text",
-          "key": "vehicleType",
-          "populators": {
-            "name": "vehicleType",
-            "defaultValue": "",
-            "className": "payment-form-text-input-correction",
-          }
+          "route": "vehicle",
+          "component": "SelectVehicle",
+          "withoutLabel": true,
+          "key": "vehicle",
+          "isMandatory": true,
+          "type": "component"
         },
         {
-          "label": "ES_FSM_REGISTRY_NEW_VEHICLE_MODAL",
-          "isMandatory": false,
-          "type": "text",
-          "key": "vehicleModal",
-          "populators": {
-            "name": "vehicleModal",
-            "defaultValue": "",
-            "className": "payment-form-text-input-correction",
-          }
-        },
-        {
-          "label": "ES_FSM_REGISTRY_NEW_TANK_CAPACITY",
-          "isMandatory": false,
-          "type": "text",
-          "key": "tankCapacity",
-          "populators": {
-            "name": "tankCapacity",
-            "defaultValue": "",
-            "className": "payment-form-text-input-correction",
-          }
-        },
-        {
-          "label": "ES_FSM_REGISTRY_NEW_POLLUTION",
+          "label": "ES_FSM_REGISTRY_VEHICLE_POLLUTION_CERT",
           "isMandatory": false,
           "type": "custom",
           "key": "pollutionCert",
           "populators": {
-            "name": "dob",
+            "name": "pollutionCert",
             "validation": {
               "required": true,
             },
-            "component": (props, customProps) => <DatePicker disabled={disabled} onChange={props.onChange} date={props.value} {...customProps} />,
+            "component": (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
           }
         },
         {
-          "label": "ES_FSM_REGISTRY_NEW_INSURANCE",
+          "label": "ES_FSM_REGISTRY_VEHICLE_INSURANCE",
           "isMandatory": false,
           "type": "custom",
           "key": "insurance",
           "populators": {
-            "name": "dob",
+            "name": "insurance",
             "validation": {
               "required": true,
             },
-            "component": (props, customProps) => <DatePicker disabled={disabled} onChange={props.onChange} date={props.value} {...customProps} />,
+            "component": (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
           }
         },
         {
-          "label": "ES_FSM_REGISTRY_NEW_ROAD_TAX",
+          "label": "ES_FSM_REGISTRY_VEHICLE_ROAD_TAX",
           "isMandatory": false,
           "type": "custom",
           "key": "roadTax",
           "populators": {
-            "name": "dob",
+            "name": "roadTax",
             "validation": {
               "required": true,
             },
-            "component": (props, customProps) => <DatePicker disabled={disabled} onChange={props.onChange} date={props.value} {...customProps} />,
+            "component": (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
+          }
+        },
+        {
+          "label": "ES_FSM_REGISTRY_NEW_FITNESS",
+          "isMandatory": false,
+          "type": "custom",
+          "key": "fitnessValidity",
+          "populators": {
+            "name": "fitnessValidity",
+            "validation": {
+              "required": true,
+            },
+            "component": (props, customProps) => <DatePicker onChange={props.onChange} date={props.value} {...customProps} />,
+          }
+        },
+        {
+          "label": "ES_FSM_REGISTRY_NEW_VEHICLE_OWNER_NAME",
+          "isMandatory": true,
+          "type": "text",
+          "disable": disabled,
+          "populators": {
+            "name": "ownerName",
+            "validation": {
+              "required": true,
+              "pattern": /^[A-Za-z]/,
+            },
+            "error": t("FSM_REGISTRY_INVALID_NAME"),
+            "defaultValue": "",
+            "className": "payment-form-text-input-correction",
+          }
+        },
+        {
+          "label": "ES_FSM_REGISTRY_NEW_VEHICLE_OWNER_PHONE",
+          "isMandatory": true,
+          "type": "text",
+          "key": "phone",
+          "disable": disabled,
+          "populators": {
+            "name": "phone",
+            "validation": {
+              "required": true,
+              "pattern": /^[6-9]\d{9}$/,
+            },
+            "error": t("FSM_REGISTRY_INVALID_PHONE"),
+            "defaultValue": "",
+            "className": "payment-form-text-input-correction",
           }
         },
         {

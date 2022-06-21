@@ -34,9 +34,10 @@ const NOCEmployeeHomeCard = () => {
       tableForm: tableOrderFormDefaultValues
     }
 
-    const { isLoading: isInboxLoading, data: {table , statuses, totalCount} = {} } = Digit.Hooks.noc.useInbox({
+    const { isLoading: isInboxLoading, data: {table , statuses, totalCount,nearingSlaCount} = {} } = Digit.Hooks.noc.useInbox({
         tenantId,
-        filters: { ...formInitValue }
+        filters: { ...formInitValue },
+        config : { enabled : formInitValue?.filterForm?.businessServiceArray?.length > 0}
     });
 
     const ComplaintIcon = () => <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
@@ -59,10 +60,10 @@ const NOCEmployeeHomeCard = () => {
             label: t("TOTAL_FSM"),
             link: `/digit-ui/employee/obps/inbox`
         },
-        // {   count:"-",
-        //     label: t("TOTAL_NEARING_SLA"),
-        //     link: `/digit-ui/employee/obps/inbox`
-        // }  
+        {   count:!isInboxLoading ?nearingSlaCount:"-",
+            label: t("TOTAL_NEARING_SLA"),
+            link: `/digit-ui/employee/obps/inbox`
+        }  
       ],
       links: [
         {

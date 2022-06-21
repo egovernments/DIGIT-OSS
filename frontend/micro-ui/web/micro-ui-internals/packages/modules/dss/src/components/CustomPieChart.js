@@ -1,5 +1,5 @@
 import { Loader, RemoveableTag } from "@egovernments/digit-ui-react-components";
-import React, { useContext, useMemo, useState, Fragment } from "react";
+import React, { useContext, useMemo, useState, Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import FilterContext from "./FilterContext";
@@ -104,7 +104,7 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
       >
         <p className="recharts-tooltip-label">{`${t(
           `COMMON_MASTERS_${payload?.[0]?.name && Digit.Utils.locale.getTransformedLocale(payload?.[0]?.name)}`
-        )}: ${Digit.Utils.dss.formatter(payload?.[0]?.value, payload?.[0]?.payload?.payload?.symbol, value?.denomination, false, t)}`}</p>
+        )}: ${Digit.Utils.dss.formatter(payload?.[0]?.value, payload?.[0]?.payload?.payload?.symbol, value?.denomination, true, t)}`}</p>
         <p>{`(${Number((payload?.[0]?.value / response?.responseData?.data?.[0]?.headerValue) * 100).toFixed(1)}%)`}</p>
       </div>
     );
@@ -140,6 +140,12 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
   const removeFilter = () => {
     setIsPieClicked(false);
   };
+
+  useEffect(() => {
+    setIsPieClicked(false);
+    setdrillDownId(null);
+    setPieSelected(null);
+  }, [id]);
 
   if (isLoading) {
     return <Loader />;

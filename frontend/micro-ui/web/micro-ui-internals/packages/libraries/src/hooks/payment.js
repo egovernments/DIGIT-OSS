@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from "react-query";
+import { PaymentService } from "../services/elements/Payment";
 
 export const useFetchCitizenBillsForBuissnessService = ({ businessService, ...filters }, config = {}) => {
   const queryClient = useQueryClient();
@@ -152,4 +153,8 @@ export const useRecieptSearch = ({ tenantId, businessService, ...params }, confi
       ...config,
     }
   );
+};
+
+export const useBulkPdfDetails = ({ filters }) => {
+  return useQuery(["BULK_PDF_DETAILS", filters], async () => await PaymentService.getBulkPdfRecordsDetails(filters));
 };

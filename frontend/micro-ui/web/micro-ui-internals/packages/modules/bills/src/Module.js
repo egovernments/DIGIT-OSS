@@ -18,6 +18,7 @@ import CitizenInbox from "./components/citizen/inbox";
 import CitizenMobileInbox from "./components/citizen/CitizenMobileInbox";
 import CitizenApp from "./pages/citizen";
 import { CitizenHomeCard, CollectionIcon } from "@egovernments/digit-ui-react-components";
+import CancelBills from "./components/CancelBill"; 
 
 export const BillsModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "abg";
@@ -58,6 +59,7 @@ const componentsToRegister = {
   SearchCitizenFilter,
   CitizenMobileInbox,
   BillsLinks,
+  CancelBills,
   BILLS_INBOX_FILTER: (props) => <BillsFilter {...props} />,
   BILLS_GROUP_FILTER: (props) => <GroupFilter {...props} />,
   CITIZEN_SEARCH_FILTER: (props) => <SearchCitizenFilter {...props} />,

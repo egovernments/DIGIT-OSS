@@ -31,6 +31,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   const [cityCode, setCityCode] = useState();
   const [formValue, setFormValue] = useState();
   const [errorShown, seterrorShown] = useState(false);
+  let isMobile = window.Digit.Utils.browser.isMobile();
   const { data: propertyData, isLoading: propertyDataLoading, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
     tenantId: searchData?.city,
     filters: searchData?.filters,
@@ -498,7 +499,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         onFormValueChange={onFormValueChange}
         cardStyle={{marginBottom:"0",maxWidth:"960px"}}
       ></FormComposer>
-      <span className="link" style={{display:"flex", justifyContent:"left",paddingBottom:"16px", marginLeft: "45px"}}>
+      <span className="link" style={isMobile ? {display:"flex", justifyContent:"center",paddingBottom:"16px"} : {display:"flex", justifyContent:"left",paddingBottom:"16px", marginLeft: "45px"}}>
         <Link to={window.location.href.includes("/ws/")?"/digit-ui/citizen/ws/create-application/create-property" : (window.location.href.includes("/tl/tradelicence/") ? "/digit-ui/citizen/tl/tradelicence/new-application/create-property" : "/digit-ui/citizen/commonpt/property/new-application")}>{t("CPT_REG_NEW_PROPERTY")}</Link>
       </span>
       {showToast && (

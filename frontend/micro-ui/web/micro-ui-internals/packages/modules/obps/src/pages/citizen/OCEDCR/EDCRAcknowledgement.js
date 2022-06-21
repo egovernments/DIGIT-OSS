@@ -84,8 +84,8 @@ const EDCRAcknowledgement = (props) => {
             {t("EDCR_DOWNLOAD_SCRUTINY_REPORT_LABEL")}
           </div>
           <div style={{padding: "0px 10px"}}>
-          <Link to={{pathname: `/digit-ui/citizen/obps/${bpaLinks?.linkData?.flow?.toLowerCase()}/${edcrData?.appliactionType?.toLowerCase()}/${edcrData?.applicationSubType?.toLowerCase()}/docs-required`, state: bpaLinks}} >
-              <SubmitBar label={t("BPA_APPLY_OC_FOR_BPA_LABEL")} className={"oc-aknowledgement-screen"}/>
+          <Link to={{pathname: `/digit-ui/citizen/obps/${bpaLinks?.linkData?.flow?.toLowerCase()}/${edcrData?.appliactionType?.toLowerCase()}/${edcrData?.applicationSubType?.toLowerCase()}/docs-required`, state: bpaLinks}} replace >
+              <SubmitBar label={t("BPA_APPLY_OC_FOR_BPA_LABEL")} className={"oc-aknowledgement-screen"} onSubmit={() => (sessionStorage.setItem("clickOnBPAApplyAfterEDCR",true))}/>
             </Link>
           </div>
           <div style={{marginTop: "12px", paddingBottom: "10px", paddingLeft: "10px"}}>

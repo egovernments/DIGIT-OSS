@@ -19,8 +19,8 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
     userType === "employee"
       ? allCities.filter((city) => city.code === tenantId)
       : pincode
-        ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
-        : allCities;
+      ? allCities.filter((city) => city?.pincode?.some((pin) => pin == pincode))
+      : allCities;
 
   const [selectedCity, setSelectedCity] = useState(() => {
     return formData?.address?.city || null;
@@ -178,42 +178,48 @@ const PTSelectAddress = ({ t, config, onSelect, userType, formData, setError, cl
   }
   return (
     <React.Fragment>
-    {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
-    <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
-      <div>
-        <CardLabel>{`${t("MYCITY_CODE_LABEL")} `}</CardLabel>
-        <span className={"form-pt-dropdown-only"}>
-          <RadioOrSelect
-            options={cities.sort((a, b) => a.name.localeCompare(b.name))}
-            selectedOption={selectedCity}
-            optionKey="i18nKey"
-            onSelect={selectCity}
-            t={t}
-            isPTFlow={true}
-            //isDependent={true}
-            //labelKey="TENANT_TENANTS"
-            disabled={isEditProperty}
-          />
-        </span>
-        {selectedCity && localities && <CardLabel>{`${t("PT_LOCALITY_LABEL")} `}</CardLabel>}
-        {selectedCity && localities && (
+      {window.location.href.includes("/citizen") ? (
+        window.location.href.includes("/citizen/pt/property/property-mutation") ? (
+          <Timeline currentStep={1} flow="PT_MUTATE" />
+        ) : (
+          <Timeline currentStep={1} />
+        )
+      ) : null}
+      <FormStep config={config} onSelect={onSubmit} t={t} isDisabled={selectedLocality ? false : true}>
+        <div>
+          <CardLabel>{`${t("MYCITY_CODE_LABEL")} `}</CardLabel>
           <span className={"form-pt-dropdown-only"}>
             <RadioOrSelect
-              dropdownStyle={{ paddingBottom: "20px" }}
-              isMandatory={config.isMandatory}
-              options={localities.sort((a, b) => a.name.localeCompare(b.name))}
-              selectedOption={selectedLocality}
-              optionKey="i18nkey"
-              onSelect={selectLocality}
+              options={cities.sort((a, b) => a.name.localeCompare(b.name))}
+              selectedOption={selectedCity}
+              optionKey="i18nKey"
+              onSelect={selectCity}
               t={t}
+              isPTFlow={true}
               //isDependent={true}
-              labelKey=""
+              //labelKey="TENANT_TENANTS"
               disabled={isEditProperty}
             />
           </span>
-        )}
-      </div>
-    </FormStep>
+          {selectedCity && localities && <CardLabel>{`${t("PT_LOCALITY_LABEL")} `}</CardLabel>}
+          {selectedCity && localities && (
+            <span className={"form-pt-dropdown-only"}>
+              <RadioOrSelect
+                dropdownStyle={{ paddingBottom: "20px" }}
+                isMandatory={config.isMandatory}
+                options={localities.sort((a, b) => a.name.localeCompare(b.name))}
+                selectedOption={selectedLocality}
+                optionKey="i18nkey"
+                onSelect={selectLocality}
+                t={t}
+                //isDependent={true}
+                labelKey=""
+                disabled={isEditProperty}
+              />
+            </span>
+          )}
+        </div>
+      </FormStep>
     </React.Fragment>
   );
 };

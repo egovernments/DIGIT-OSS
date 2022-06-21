@@ -62,6 +62,7 @@ import SectionalDropdown from "./atoms/SectionalDropdown";
 import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
 import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
+import ULBHomeCard from "./atoms/ULBHomeCard";
 import {
   AnnouncementIcon,
   ArrowDown,
@@ -161,7 +162,10 @@ import {
   TimerIcon,
   RupeeSymbol,
   ValidityTimeIcon,
-  AddIcon
+  AddIcon,
+  AddNewIcon,
+  InboxIcon,
+  ViewReportIcon
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -292,6 +296,7 @@ export {
   InboxLinks,
   PopupHeadingLabel,
   ToggleSwitch,
+  ULBHomeCard,
   // Icons
   GetApp,
   ArrowLeft,
@@ -427,5 +432,8 @@ export {
   TimerIcon,
   RupeeSymbol,
   ValidityTimeIcon,
-  AddIcon
+  AddIcon,
+  AddNewIcon,
+  ViewReportIcon,
+  InboxIcon,
 };

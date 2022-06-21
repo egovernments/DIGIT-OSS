@@ -57,11 +57,7 @@ public class WsQueryBuilder {
 			+ LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" 
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno"
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
+			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id";
 
 	private static final String SEARCH_COUNT_QUERY =  " FROM eg_ws_connection conn "
 			+  INNER_JOIN_STRING 
@@ -73,11 +69,7 @@ public class WsQueryBuilder {
 			+ LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id" 
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_processinstance_v2 pi ON pi.businessid = conn.applicationno"
-			+  LEFT_OUTER_JOIN_STRING
-			+ "eg_wf_assignee_v2 assg ON pi.id = assg.processinstanceid";
+			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id";
 	
 	private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_id) offset_ FROM " +
@@ -234,12 +226,7 @@ public class WsQueryBuilder {
 				addToPreparedStatement(preparedStatement, criteria.getApplicationStatus());
 			}
 		}
-		// Added clause to support assignee search
-		if (!StringUtils.isEmpty(criteria.getAssignee())) {
-			addClauseIfRequired(preparedStatement, query);
-			query.append(" assg.assignee= ? ");
-			preparedStatement.add(criteria.getAssignee());
-		}
+		
 		if (criteria.getFromDate() != null) {
 			addClauseIfRequired(preparedStatement, query);
 			query.append("  wc.appCreatedDate >= ? ");

@@ -255,7 +255,7 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
                     value={proposedWaterClosets}
                     {...(validation = {
                         isRequired: true,
-                        pattern: "^[0-9]*$",
+                        pattern: "^[1-9]+[0-9]*$",
                         title: t("ERR_DEFAULT_INPUT_FIELD_MSG"),
                     })}
                 />
@@ -270,7 +270,7 @@ const WSSewerageConnectionDetails = ({ t, config, userType, onSelect, formData }
                     value={proposedToilets}
                     {...(validation = {
                         isRequired: true,
-                        pattern: "^[0-9]*$",
+                        pattern: "^[1-9]+[0-9]*$",
                         title: t("ERR_DEFAULT_INPUT_FIELD_MSG"),
                     })}
                 />

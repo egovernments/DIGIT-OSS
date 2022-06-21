@@ -59,7 +59,7 @@
     "build:noc": "cd packages/modules/noc && yarn build",
     "build:ws": "cd packages/modules/ws && yarn build",
     "build:bills": "cd packages/modules/bills && yarn build",
-    "build:reports": "cd packages/modules/reports && yarn build",
+    "buildR:reports": "cd packages/modules/reports && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
   "devDependencies": {

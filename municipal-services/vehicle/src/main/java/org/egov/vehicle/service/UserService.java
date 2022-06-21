@@ -72,7 +72,7 @@ public class UserService {
 		User owner = vehicle.getOwner();
 
 		UserDetailResponse userDetailResponse = null;
-		if (owner.getMobileNumber() != null) {
+		if (owner!=null && owner.getMobileNumber() != null) {
 			userDetailResponse = userExists(owner, requestInfo);
 			if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {
 				//TODO once role is introduced for vehicle owner then verify for the role from the list of users

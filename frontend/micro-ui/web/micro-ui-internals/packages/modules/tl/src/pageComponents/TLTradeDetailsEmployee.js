@@ -258,7 +258,7 @@ const OwnerForm1 = (_props) => {
 }, [tradedetail?.structureType, !menuLoading]);
 
 
-  const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
+  //const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
 
   useEffect(() => {
     trigger();
