@@ -214,6 +214,7 @@ import useWSMDMS from "./ws/useWSMDMS";
 import useAccessControl from "./useAccessControl";
 import useConnectionDetail from "./ws/useConnectionDetail";
 import useBillSearch from "./bills/useBillSearch";
+import useCancelBill from "./bills/useCancelBill";
 import useWaterCreateAPI from "./ws/useWaterCreateAPI";
 import useSewerageCreateAPI from "./ws/useSewerageCreateAPI";
 import useWSUpdateAPI from "./ws/useWSUpdateAPI";
@@ -497,6 +498,7 @@ const Hooks = {
   useInbox: useTLInbox,
   useAccessControl,
   useBillSearch,
+  useCancelBill,
   useTenantsBills,
   pgr,
   fsm,

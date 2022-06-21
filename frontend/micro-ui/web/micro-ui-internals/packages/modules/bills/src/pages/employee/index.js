@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 import { Link, Switch, useLocation } from "react-router-dom";
 import DownloadBillInbox from "./DownloadBill";
 import GroupBillInbox from "./GroupBill";
+
+import ResponseCancelBill from "./ResponseCancelBill";
+import BillDetailsv1 from "./BillDetailsv1";
 import CancelBill from "./CancelBill";
 import DownloadBill from "./DownloadBill";
 
@@ -74,6 +77,14 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute
             path={`${path}/cancel-bill`}
             component={() => <CancelBill parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
+          />
+          <PrivateRoute
+            path={`${path}/response-cancelBill`}
+            component={() => <ResponseCancelBill parentRoute={path} />}
+          />
+          <PrivateRoute
+            path={`${path}/bill-details`}
+            component={() => <BillDetailsv1 parentRoute={path} />}
           />
         </div>
       </React.Fragment>

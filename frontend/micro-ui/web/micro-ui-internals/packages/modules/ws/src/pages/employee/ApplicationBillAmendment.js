@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 
 
+
 const ApplicationBillAmendment = () => {
   
   //connectionNumber=WS/107/2021-22/227166&tenantId=pb.amritsar&service=WATER&connectionType=Metered
@@ -34,7 +35,7 @@ const ApplicationBillAmendment = () => {
   const { isLoading: BillAmendmentMDMSLoading, data: BillAmendmentMDMS } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSMDMSBillAmendment({
     tenantId: stateId,
   });
-
+  
   const servicev1 = connectionNumber.includes("WS") ? "WS" : "SW";
   const billSearchFilters = { tenantId, consumerCode: connectionNumber, service: servicev1 };
   const { data: preBillSearchData, isLoading: isBillSearchLoading } = Digit.Hooks.usePaymentSearch(tenantId, billSearchFilters);
@@ -331,7 +332,7 @@ const ApplicationBillAmendment = () => {
               </tr>
             ))}
             {<tr>
-              <td colSpan={2} style={{ paddingRight: "60px" }}>{t("WS_REBATE_PENALTY  ")}
+              <td colSpan={2} style={{ paddingRight: "60px" }}>{t("WS_REBATE_PENALTY")}
                 <div className="tooltip">
                   <InfoBannerIcon fill="#0b0c0c" style/>
                   <span className="tooltiptext" style={{

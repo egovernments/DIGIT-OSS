@@ -34,7 +34,8 @@ const combineResponse = (WaterConnections, SewerageConnections, businessService,
       }
     });
   });
-  return {data,count};
+  
+  return {data,count,billData};
 };
 
 const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t }) => {
@@ -96,8 +97,7 @@ const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t }) =>
         consumerCode: consumercodes.join(","),
       }),
     { ...config, enabled: consumercodes.length > 0 }
-  );
-    
+  );  
   
   const properties = useQuery(
     ["WSP_SEARCH", tenantId, propertyfilter, bussinessService],

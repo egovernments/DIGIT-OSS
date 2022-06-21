@@ -189,6 +189,9 @@ const Urls = {
   reports: {
     reportSearch: "/report/",
   },
+  bills:{
+    cancelBill:"/billing-service/bill/v2/_cancelbill"
+  },
   access_control: "/access/v1/actions/mdms/_get",
   billgenie: "/egov-searcher",
 };
