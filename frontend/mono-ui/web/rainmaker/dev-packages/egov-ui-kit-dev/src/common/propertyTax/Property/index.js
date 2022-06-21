@@ -338,7 +338,7 @@ class Property extends Component {
     if(process.env.REACT_APP_NAME !='citizen'){  
       let redirectTo = `/property-tax/demand-and-collection?propertyId=${propertyId}&edit=true`;
       if (ifUserRoleExists("PTADMIN")) {
-        redirectTo = redirectTo + "&assessment=true";
+        redirectTo = redirectTo + "&newreassessment=true";
       }
       this.props.history.push(redirectTo);
     }
@@ -360,7 +360,7 @@ class Property extends Component {
 
       let redirectTo = `/property-tax/assessment-form-dataentry?assessmentId=0&purpose=update&propertyId=${propertyId}&tenantId=${tenantId}`;
       if (ifUserRoleExists("PTADMIN")) {
-        redirectTo = redirectTo + "&assessment=true";
+        redirectTo = redirectTo + "&newreassessment=true";
       }
       this.props.history.push(redirectTo);
       }

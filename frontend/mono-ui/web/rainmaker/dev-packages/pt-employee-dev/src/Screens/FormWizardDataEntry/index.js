@@ -440,7 +440,9 @@ class FormWizardDataEntry extends Component {
     const { selected , isRoleAdmin} = this.state;
     const {propertiesEdited}= this.props;
     const isReviewPage = selected === 3;
-    let isDisable= (isRoleAdmin ) ? true:false
+    let { search } = this.props.location;
+    let newReassessment = Boolean(getQueryValue(search, "newreassessment").replace('false', ''));
+    let isDisable= (isRoleAdmin ) ?(newReassessment?true:false):false
     // let ownerAr = this.state.ownerInfoArr;
     // ownerAr = ownerAr && ownerAr.length>1 && ownerAr.sort(function(item1,item2){
     // return ownerAr.indexOf(item2)-ownerAr.indexOf(item1);
