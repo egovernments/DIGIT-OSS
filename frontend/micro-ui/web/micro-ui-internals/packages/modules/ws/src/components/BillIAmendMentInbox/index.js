@@ -135,10 +135,6 @@ const Inbox = ({ parentRoute }) => {
     headerText: "ACTION_TEST_BILLAMENDMENT",
     links: [
       {
-        text: t("BILLAMEND_APPLICATION"),
-        link: "/digit-ui/employee/ws/create-bill-amendment",
-      },
-      {
         text: t("ACTION_TEST_REPORTS"),
         link: "/digit-ui/employee/ws/reports",
       },

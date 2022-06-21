@@ -308,7 +308,7 @@ const FstpOperatorDetails = () => {
     setShowToast({ key: "success", action: `ES_FSM_DISPOSE_UPDATE_SUCCESS` });
     setTimeout(() => {
       closeToast();
-      history.push(`/digit-ui/employee/fsm/fstp-inbox`);
+      history.push(`/digit-ui/employee/fsm/fstp-operations`);
     }, 5000);
   };
 
@@ -410,6 +410,7 @@ const FstpOperatorDetails = () => {
             <Row
               key={t("ES_VEHICLE_IN_TIME")}
               label={`${t("ES_VEHICLE_IN_TIME")} * `}
+              labelStyle={{ minWidth: "fit-content" }}
               textStyle={isMobile ? { width: "100%" } : {}}
               rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
               text={
@@ -424,6 +425,7 @@ const FstpOperatorDetails = () => {
             <Row
               key={t("ES_VEHICLE_SEPTAGE_DUMPED")}
               label={`${t("ES_VEHICLE_SEPTAGE_DUMPED")} * `}
+              labelStyle={{ minWidth: "fit-content" }}
               textStyle={isMobile ? { width: "100%" } : {}}
               text={
                 <div>
@@ -443,6 +445,7 @@ const FstpOperatorDetails = () => {
             <Row
               key={t("ES_VEHICLE_OUT_TIME")}
               label={`${t("ES_VEHICLE_OUT_TIME")} * `}
+              labelStyle={{ minWidth: "fit-content" }}
               textStyle={isMobile ? { width: "100%" } : {}}
               rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
               text={
@@ -451,7 +454,7 @@ const FstpOperatorDetails = () => {
                 </div>
               }
             />
-            {!isSearchLoading && !isIdle && tripDetails && currentTrip ?
+            {/* {!isSearchLoading && !isIdle && tripDetails && currentTrip ?
               <Row
                 key={t("ES_VEHICLE_TRIP_NO")}
                 label={`${t("ES_VEHICLE_TRIP_NO")} * `}
@@ -468,7 +471,7 @@ const FstpOperatorDetails = () => {
                   </div>
                 }
               >
-              </Row> : null}
+              </Row> : null} */}
             <div className={!isMobile && "row"} style={isMobile ? {} : { diplay: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <CardLabel style={{ fontWeight: "700" }}> {t("ES_FSM_ADDITIONAL_DETAILS")} </CardLabel>
               <TextArea className="form-field"
@@ -483,11 +486,20 @@ const FstpOperatorDetails = () => {
                 style={isMobile ? { width: "100%" } : { width: "100%", marginLeft: "35%" }} />
             </div>
 
-            <MultiUploadWrapper
-              t={t}
-              module="fsm"
-              tenantId={stateId}
-              getFormState={e => getData(e)}
+            <Row
+              key={t("ES_FSM_ATTACHMENTS")}
+              label={`${t("ES_FSM_ATTACHMENT")}`}
+              labelStyle={{ minWidth: "fit-content" }}
+              textStyle={isMobile ? { width: "100%" } : {}}
+              rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between", alignItems: "center" }}
+              text={
+                <MultiUploadWrapper
+                  t={t}
+                  module="fsm"
+                  tenantId={stateId}
+                  getFormState={e => getData(e)}
+                />
+              }
             />
 
             {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (

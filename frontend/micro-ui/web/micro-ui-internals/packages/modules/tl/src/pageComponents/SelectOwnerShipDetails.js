@@ -12,7 +12,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   //let isEditProperty = formData?.isEditProperty || false;
   let isEdit = window.location.href.includes("edit-application")||window.location.href.includes("renew-trade");
   const [ownershipCategory, setOwnershipCategory] = useState(formData?.ownershipCategory);
-  const [isSameAsPropertyOwner, setisSameAsPropertyOwner] = useState(null);
+  const [isSameAsPropertyOwner, setisSameAsPropertyOwner] = useState(formData?.ownershipCategory?.isSameAsPropertyOwner || null);
   const { data: dropdownData } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "TLOwnerTypeWithSubtypes",{userType});
   const isEmpNewApplication = window.location.href.includes("/employee/tl/new-application");
   const isEmpRenewLicense = window.location.href.includes("/employee/tl/renew-application-details");
@@ -28,6 +28,16 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
     setisSameAsPropertyOwner(e.target.checked);
     if(e.target.checked == true)
     {
+      if(window.location.href.includes("/citizen/tl") && formData?.cpt?.details?.ownershipCategory?.includes("INSTITUTIONAL"))
+      {
+        setOwnershipCategory({
+          code: `${formData?.cpt?.details?.ownershipCategory}`,
+          i18nKey: `PT_OWNERSHIP_${formData?.cpt?.details?.ownershipCategory?.includes("INSTITUTIONAL") ? (formData?.cpt?.details?.ownershipCategory?.includes("GOVERNMENT") ?"OTHERGOVERNMENTINSTITUITION":"OTHERSPRIVATEINSTITUITION"):formData?.cpt?.details?.ownershipCategory?.split(".")[1]}`,
+          label: undefined,
+          value: `${formData?.cpt?.details?.ownershipCategory}${formData?.cpt?.details?.ownershipCategory?.includes("INSTITUTIONAL") ? (formData?.cpt?.details?.ownershipCategory?.includes("GOVERNMENT") ?".OTHERGOVERNMENTINSTITUITION":".OTHERSPRIVATEINSTITUITION"):""}`,
+        })
+      }
+      else
       setOwnershipCategory({
         code: `${formData?.cpt?.details?.ownershipCategory}${formData?.cpt?.details?.ownershipCategory?.includes("INSTITUTIONAL") ? (formData?.cpt?.details?.ownershipCategory?.includes("GOVERNMENT") ?".OTHERGOVERNMENTINSTITUITION":".OTHERSPRIVATEINSTITUITION"):""}`,
         i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_INDIVIDUAL_${formData?.cpt?.details?.ownershipCategory?.includes("INSTITUTIONAL") ? (formData?.cpt?.details?.ownershipCategory?.includes("GOVERNMENT") ?"OTHERGOVERNMENTINSTITUITION":"OTHERSPRIVATEINSTITUITION"):formData?.cpt?.details?.ownershipCategory?.split(".")[1]}`,
@@ -62,6 +72,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
   const onSkip = () => onSelect();
   function goNext() {
     sessionStorage.setItem("ownershipCategory", ownershipCategory?.value);
+    sessionStorage.setItem("isSameAsPropertyOwner", isSameAsPropertyOwner);
     onSelect(config.key, {...ownershipCategory,isSameAsPropertyOwner});
   }
 
@@ -86,7 +97,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
 
     return (
       <React.Fragment>
-        {!(formData?.tradedetils?.[0]?.structureType?.code === "MOVABLE" && (isEmpNewApplication || isEmpRenewLicense)) && <LabelFieldPair>
+        {!(formData?.tradedetils?.[0]?.structureType?.code === "MOVABLE" && formData?.cpt?.details && (isEmpNewApplication || isEmpRenewLicense)) && <LabelFieldPair>
         <div className="field">
         <CheckBox
           label={t("TL_COMMON_SAME_AS_PROPERTY_OWNERS")}
@@ -127,6 +138,13 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
     <React.Fragment>
     {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownershipCategory}>
+      { !(formData?.TradeDetails?.StructureType?.code === "MOVABLE") &&<CheckBox
+          label={t("TL_COMMON_SAME_AS_PROPERTY_OWNERS")}
+          onChange={selectisSameAsPropertyOwner}
+          value={isSameAsPropertyOwner}
+          checked={isSameAsPropertyOwner || false}
+          style={{ marginBottom: "20px" }}
+      />}
       <RadioButtons
         isMandatory={config.isMandatory}
         options={dropdownData?dropdownData:[]}

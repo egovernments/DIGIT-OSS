@@ -16,6 +16,19 @@ const BillingService = {
       auth: true,
       userService: false,
     }),
-};
+    cancel_bill:(filters) =>
+      Request({
+        url: Urls?.bills?.cancelBill,
+        useCache: false,
+        method: "POST",
+        data: {
+          UpdateBillCriteria: {
+            ...filters,
+          },
+        },
+        auth: true,
+        userService: false,
+      }),
+}
 
-export default BillingService;
+export default BillingService

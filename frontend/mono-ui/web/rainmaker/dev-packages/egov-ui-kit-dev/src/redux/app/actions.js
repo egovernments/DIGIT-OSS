@@ -84,7 +84,57 @@ export const fetchLocalizationLabel = (locale = 'en_IN', module, tenantId, isFro
       if ((module && storedModuleList.includes(tenantModule) === false)) {
         storedModuleList.push(tenantModule);
         var newList = JSON.stringify(storedModuleList);
-        setStoredModulesList(newList);
+        const payload2 = module
+          ? await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
+            { key: "module", value: `rainmaker-${module}` },
+            { key: "locale", value: locale },
+            { key: "tenantId", value: tenantId ? tenantId : commonConfig.tenantId },
+          ])
+          : [];
+        if (payload2 && payload2.messages) {
+          setStoredModulesList(newList);
+          resultArray = [...resultArray, ...payload2.messages];
+        }
+      }
+
+      let prevLocalisationLabels = [];
+      if (getLocalizationLabels() != null && !isCommonScreen && storedModuleList.length > 0) {
+        prevLocalisationLabels = JSON.parse(getLocalizationLabels());
+      }
+      resultArray = [...prevLocalisationLabels, ...resultArray];
+      localStorage.removeItem(`localization_${getLocale()}`);
+      dispatch(setLocalizationLabels(locale, resultArray));
+    } catch (error) {
+    }
+  };
+};
+
+export const fetchLocalizationLabelForOpenScreens= (locale = 'en_IN', module, tenantId, isFromModule) => {
+  return async (dispatch) => {
+    let storedModuleList = [];
+    if (getStoredModulesList() !== null) {
+      storedModuleList = JSON.parse(getStoredModulesList());
+    }
+    const moduleName = getModule();
+    let localeModule;
+    if (moduleName === 'rainmaker-common') {
+      localeModule = 'rainmaker-common';
+    }
+    else if (storedModuleList.includes('rainmaker-common')) {
+      localeModule = moduleName;
+    }
+    else {
+      localeModule = moduleName ? `rainmaker-common,${moduleName}` : `rainmaker-common`;
+    }
+    try {
+      let resultArray = [], tenantModule = "", isCommonScreen;
+      if (module != null) {
+        tenantModule = `rainmaker-${module}`;
+      }
+
+
+      if ((module && storedModuleList.includes(tenantModule) === false)) {
+        storedModuleList.push(tenantModule);
         const payload2 = module
           ? await httpRequest(LOCALATION.GET.URL, LOCALATION.GET.ACTION, [
             { key: "module", value: `rainmaker-${module}` },
