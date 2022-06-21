@@ -123,6 +123,14 @@ const consumerCode = (challanNumber) => {
 * billNumber - bill number related to challan for cancel and failure bill number will be null
 */
 const applicationSuccessNotificationCard = (icon, color, headerkey, headername, bodykey, bodyname, billNumber) => {
+  let locale = billNumber
+    .split("-")[1]
+    .trim()
+    .split(".")[1]
+    .split("_")
+    .toString()
+    .replaceAll(",", " ");
+  billNumber = billNumber.replace(billNumber.split("-")[1].trim(), locale);
   return {
     uiFramework: "custom-atoms",
     componentPath: "Div",
