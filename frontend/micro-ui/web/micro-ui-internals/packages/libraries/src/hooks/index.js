@@ -13,6 +13,7 @@ import {
   useDemandSearch,
   useRecieptSearch,
   usePaymentSearch,
+  useBulkPdfDetails,
 } from "./payment";
 import { useUserSearch } from "./userSearch";
 import { useApplicationsForBusinessServiceSearch } from "./useApplicationForBillSearch";
@@ -519,6 +520,7 @@ const Hooks = {
   useGetDSSAboutJSON,
   useStaticData,
   useDynamicData,
+  useBulkPdfDetails,
   useBillAmendmentInbox,
 };
 

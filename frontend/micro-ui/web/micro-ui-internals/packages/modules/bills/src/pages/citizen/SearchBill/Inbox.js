@@ -33,7 +33,9 @@ const Inbox = ({ parentRoute, initialStates, businessService, filterComponent, i
   const { isFetching, isLoading: hookLoading, searchResponseKey, data, searchFields, ...rest } = Digit.Hooks.useBillSearch({
     tenantId,
     filters: { ...searchParams, businessService, ...paginationParams, sortParams },
-    config: {},
+    config: {
+      enabled: false,
+    },
   });
 
   useEffect(() => {

@@ -2,16 +2,16 @@ import { PrivateRoute } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Switch, useLocation } from "react-router-dom";
+import DownloadBillInbox from "./DownloadBill";
 import GroupBillInbox from "./GroupBill";
-import CancelBill from "./CancelBill"
-import DownloadBill from "./DownloadBill"
+import CancelBill from "./CancelBill";
+import DownloadBill from "./DownloadBill";
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
   const location = useLocation();
   const mobileView = innerWidth <= 640;
   const tenantId = Digit.ULBService.getCurrentTenantId();
-
 
   const inboxInitialState = {
     searchParams: {},
@@ -38,7 +38,9 @@ const EmployeeApp = ({ path, url, userType }) => {
             </Link>{" "}
             /{" "}
             <span>
-              {window?.location?.pathname === "/digit-ui/employee/bills/inbox" ? t("ABG_SEARCH_BILL_COMMON_HEADER") : t("ABG_SEARCH_BILL_COMMON_HEADER")}
+              {window?.location?.pathname === "/digit-ui/employee/bills/inbox"
+                ? t("ABG_SEARCH_BILL_COMMON_HEADER")
+                : t("ABG_SEARCH_BILL_COMMON_HEADER")}
             </span>
           </p>
           <PrivateRoute
@@ -47,15 +49,31 @@ const EmployeeApp = ({ path, url, userType }) => {
           />
           <PrivateRoute
             path={`${path}/group-bill`}
-            component={() => <GroupBillInbox parentRoute={path} filterComponent="BILLS_GROUP_FILTER" initialStates={{}} isInbox={true} keys={generateServiceType?.["common-masters"]?.uiCommonPay} />}
+            component={() => (
+              <GroupBillInbox
+                parentRoute={path}
+                filterComponent="BILLS_GROUP_FILTER"
+                initialStates={{}}
+                isInbox={true}
+                keys={generateServiceType?.["common-masters"]?.uiCommonPay}
+              />
+            )}
+          />
+          <PrivateRoute
+            path={`${path}/download-bill-pdf`}
+            component={() => (
+              <DownloadBillInbox
+                parentRoute={path}
+                filterComponent="BILLS_GROUP_FILTER"
+                initialStates={{}}
+                isInbox={true}
+                keys={generateServiceType?.["common-masters"]?.uiCommonPay}
+              />
+            )}
           />
           <PrivateRoute
             path={`${path}/cancel-bill`}
             component={() => <CancelBill parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
-          />
-          <PrivateRoute
-            path={`${path}/download-bill-pdf`}
-            component={() => <DownloadBill parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
           />
         </div>
       </React.Fragment>
