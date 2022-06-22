@@ -6,21 +6,17 @@ export const newConfig = [
         route: "docsrequired",
         component: "WSDisconnectionDocsRequired",
         key: "data",
-        type: "component",
-        // isMandatory: true,
+        type: "component",       
         withoutLabel: true,
-        nextStep: "application-form",
-        // hideInEmployee: true,
+        nextStep: "application-form"
       },
       {         
         route: "application-form",
         component: "WSDisconnectionForm",
         key: "WSDisconnectionForm",
         type: "component",
-        // isMandatory: true,
         withoutLabel: true,
         nextStep: "documents-upload",
-        // hideInEmployee: true,
       },
       {         
         route: "documents-upload",

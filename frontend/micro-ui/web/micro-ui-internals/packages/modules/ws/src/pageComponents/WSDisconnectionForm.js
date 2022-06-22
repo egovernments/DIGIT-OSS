@@ -20,7 +20,7 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType, formData }) => {
   let validation = {};
   const stateCode = Digit.ULBService.getStateId();
 
-  const storedData = formData?.WSDisConnectionForm?.WSDisConnectionForm||formData?.WSDisConnectionForm
+  const storedData = formData?.WSDisconnectionForm?.WSDisConnectionForm || formData?.WSDisConnectionForm;
   
   const [disconnectionData, setDisconnectionData] = useState({
       type: storedData?.type || "",
@@ -72,7 +72,7 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType, formData }) => {
       "documentType": "OWNER",
       "required": true,
       "active": true,
-      "hasDropdown": true,
+      "hasDropdown": false,
       "dropdownData": [
           {
               "code": "OWNER.IDENTITYPROOF.AADHAAR",
@@ -108,7 +108,7 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType, formData }) => {
     "documentType": "OWNER",
     "required": true,
     "active": true,
-    "hasDropdown": true,
+    "hasDropdown": false,
     "dropdownData": [
         {
             "code": "OWNER.ADDRESSPROOF.ELECTRICITYBILL",
@@ -165,14 +165,14 @@ if(userType === 'citizen') {
           </CardLabel>
           
           <CardLabel>{t("WS_DISCONNECTION_TYPE")}</CardLabel>
-            <RadioButtons
+          <RadioButtons
                 t={t}
                 options={disconnectionTypeList}
                 optionsKey="i18nKey"
-                value={disconnectionData.type?.value}
-                selectedOption={disconnectionData.type}
+                value={disconnectionData.type?.value?.code}
+                selectedOption={disconnectionData.type?.value}
                 isMandatory={false}
-                onSelect={filedChange}
+                onSelect={(val) => filedChange({code: "type",value: val})}
                 labelKey="WS_DISCONNECTION_TYPE"
             />
             
@@ -226,10 +226,10 @@ if(userType === 'citizen') {
                 t={t}
                 options={disconnectionTypeList}
                 optionsKey="i18nKey"
-                value={disconnectionData.type?.value}
-                selectedOption={disconnectionData.type}
+                value={disconnectionData.type?.value?.code}
+                selectedOption={disconnectionData.type?.value}
                 isMandatory={false}
-                onSelect={filedChange}
+                onSelect={(val) => filedChange({code: "type",value: val})}
                 labelKey="WS_DISCONNECTION_TYPE"
             />
           
@@ -314,7 +314,6 @@ function SelectDocument({
   }
 
   useEffect(() => {
-      if (selectedDocument?.code) {
           setDocuments((prev) => {
               const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
               if (uploadedFile?.length === 0 || uploadedFile === null) return filteredDocumentsByDocumentType;
@@ -322,14 +321,13 @@ function SelectDocument({
               return [
                   ...filteredDocumentsByFileStoreId,
                   {
-                      documentType: selectedDocument?.code,
+                      documentType: doc?.code,
                       fileStoreId: uploadedFile,
                       documentUid: uploadedFile,
                       fileName: file?.name || "",
                   },
               ];
           });
-      }
   }, [uploadedFile, selectedDocument]);
 
 
@@ -370,7 +368,7 @@ function SelectDocument({
               select={handleSelectDocument}
           /> */}
           <UploadFile
-              id={`noc-doc-${key}`}
+              id={`noc-doc-1-${key}`}
               extraStyleName={"propertyCreate"}
               accept=".jpg,.png,.pdf"
               onUpload={selectfile}
