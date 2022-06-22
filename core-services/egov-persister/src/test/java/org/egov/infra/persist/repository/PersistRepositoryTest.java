@@ -68,17 +68,17 @@ class PersistRepositoryTest {
 
     @Test
     void testGetRows() {
-        assertTrue(this.persistRepository.getRows(new ArrayList<>(), "Json Obj", "*").isEmpty());
+        assertTrue(this.persistRepository.getRowsAndKeyValuePairs(new ArrayList<>(), "Json Obj", "*").getRows().isEmpty());
     }
 
     @Test
     void testGetRows2() {
-        assertTrue(this.persistRepository.getRows(new ArrayList<>(), "Json Obj", "*.").isEmpty());
+        assertTrue(this.persistRepository.getRowsAndKeyValuePairs(new ArrayList<>(), "Json Obj", "*.").getRows().isEmpty());
     }
 
     @Test
     void testGetRows3() {
-        assertTrue(this.persistRepository.getRows(new ArrayList<>(), "Json Obj", ".*").isEmpty());
+        assertTrue(this.persistRepository.getRowsAndKeyValuePairs(new ArrayList<>(), "Json Obj", ".*").getRows().isEmpty());
     }
 
 }

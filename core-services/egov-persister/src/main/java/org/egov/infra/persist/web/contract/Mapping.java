@@ -33,6 +33,15 @@ public class Mapping   {
   @JsonProperty("queryMaps")
   private List<QueryMap> queryMaps = null;
 
+  @JsonProperty("module")
+  private String module = null;
+
+  @JsonProperty("idJsonPath")
+  private String idJsonPath = null;
+
+  @JsonProperty("tenantIdJsonPath")
+  private String tenantIdJsonPath = null;
+
  
 }
 

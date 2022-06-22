@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONArray;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.infra.persist.web.contract.JsonMap;
+import org.egov.infra.persist.web.contract.RowData;
 import org.egov.infra.persist.web.contract.TypeEnum;
 import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +48,11 @@ public class PersistRepository {
         }
     }
 
-    public void persist(String query, List<JsonMap> jsonMaps, Object jsonObj, String baseJsonPath) {
+    public List<Map<String, Object>> persist(String query, List<JsonMap> jsonMaps, Object jsonObj, String baseJsonPath) {
 
-        List<Object[]> rows = getRows(jsonMaps,jsonObj,baseJsonPath);
-
+        RowData rowData = getRowsAndKeyValuePairs(jsonMaps,jsonObj,baseJsonPath);
+        List<Object[]> rows = rowData.getRows();
+        List<Map<String, Object>> keyValuePairPersisted = rowData.getKeyValuePairsList();
         try {
             if( ! rows.isEmpty()) {
                 log.info("Executing query : "+ query);
@@ -61,14 +63,17 @@ public class PersistRepository {
             log.error("Failed to persist {} row(s) using query: {}", rows.size(), query, ex);
             throw ex;
         }
+
+        return keyValuePairPersisted;
     }
 
 
-    public List<Object[]> getRows(List<JsonMap> jsonMaps, Object jsonObj, String baseJsonPath) {
+    public RowData getRowsAndKeyValuePairs(List<JsonMap> jsonMaps, Object jsonObj, String baseJsonPath) {
 
         List<LinkedHashMap<String, Object>> dataSource = extractData(baseJsonPath, jsonObj);
 
         List<Object[]> rows = new ArrayList<>();
+        List<Map<String, Object>> keyValuePairsList = new LinkedList<>();
 
         for (int i = 0; i < dataSource.size(); i++) {
             LinkedHashMap<String, Object> rawDataRecord = dataSource.get(i);
@@ -81,6 +86,8 @@ public class PersistRepository {
 
 
             List<Object> row = new ArrayList<>();
+            Map<String, Object> keyValuePairs = new LinkedHashMap<>();
+
             for (JsonMap jsonMap : jsonMaps) {
                 String jsonPath = jsonMap.getJsonPath();
                 TypeEnum type = jsonMap.getType();
@@ -100,16 +107,20 @@ public class PersistRepository {
                     jsonPath = jsonPath.replace("{".concat(attribute).concat("}"), "\"" + rawDataRecord.get(attribute).toString() + "\"");
                     JSONArray jsonArray = JsonPath.read(jsonObj, jsonPath);
                     row.add(jsonArray.get(0));
-
+                    keyValuePairs.put(jsonPath, jsonArray.get(0));
                     continue;
 
                 }
 
                 else if (type.equals(TypeEnum.CURRENTDATE)) {
-                    if (dbType.equals(TypeEnum.DATE))
+                    if (dbType.equals(TypeEnum.DATE)) {
                         row.add(new Date());
-                    else if (dbType.equals(TypeEnum.LONG))
+                        keyValuePairs.put(jsonPath, new Date());
+                    }
+                    else if (dbType.equals(TypeEnum.LONG)) {
                         row.add(new Date().getTime());
+                        keyValuePairs.put(jsonPath, new Date().getTime());
+                    }
                     continue;
                 }
 
@@ -132,13 +143,16 @@ public class PersistRepository {
                     value = JsonPath.read(jsonObj, jsonPath);
                 }
 
-                if (jsonPath.startsWith("default"))
+                if (jsonPath.startsWith("default")) {
                     row.add(null);
+                    keyValuePairs.put(jsonPath, null);
+                }
 
                 else if (type.equals(TypeEnum.JSON) && dbType.equals(TypeEnum.STRING)) {
                     try {
                         String json = objectMapper.writeValueAsString(value);
                         row.add(json);
+                        keyValuePairs.put(jsonPath, json);
                     } catch (JsonProcessingException e) {
                         log.error("Error while processing JSON object to string", e);
                     }
@@ -152,6 +166,7 @@ public class PersistRepository {
                         pGobject.setType("jsonb");
                         pGobject.setValue(json);
                         row.add(pGobject);
+                        keyValuePairs.put(jsonPath, pGobject);
                     } catch (JsonProcessingException e) {
                         log.error("Error while processing JSON object to string", e);
                     } catch (SQLException e) {
@@ -160,10 +175,14 @@ public class PersistRepository {
                 }
 
                 else if (type.equals(TypeEnum.LONG)) {
-                    if (dbType == null)
+                    if (dbType == null) {
                         row.add(value);
-                    else if (dbType.equals(TypeEnum.DATE))
+                        keyValuePairs.put(jsonPath, value);
+                    }
+                    else if (dbType.equals(TypeEnum.DATE)){
                         row.add(new java.sql.Date(Long.parseLong(value.toString())));
+                        keyValuePairs.put(jsonPath, new java.sql.Date(Long.parseLong(value.toString())));
+                    }
                 }
 
                 else if (type.equals(TypeEnum.DATE) & value != null) {
@@ -177,15 +196,20 @@ public class PersistRepository {
                         log.error("Unable to parse date", e);
                     }
                     row.add(startDate);
+                    keyValuePairs.put(jsonPath, startDate);
                 }
 
-                else
+                else {
                     row.add(value);
-
+                    keyValuePairs.put(jsonPath, value);
+                }
             }
             rows.add(row.toArray());
+            keyValuePairsList.add(keyValuePairs);
         }
-        return rows;
+
+        RowData rowData = RowData.builder().rows(rows).keyValuePairsList(keyValuePairsList).build();
+        return rowData;
 
     }
 

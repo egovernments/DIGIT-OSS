@@ -39,16 +39,16 @@ public class PersistService {
 		List<Mapping> applicableMappings = filterMappings(map.get(topic), document);
 		log.info("{} applicable configs found!", applicableMappings.size());
 
+		List keyValuePairPersisted = new LinkedList();
+
 		for (Mapping mapping : applicableMappings) {
 			List<QueryMap> queryMaps = mapping.getQueryMaps();
 			for (QueryMap queryMap : queryMaps) {
 				String query = queryMap.getQuery();
 				List<JsonMap> jsonMaps = queryMap.getJsonMaps();
 				String basePath = queryMap.getBasePath();
-				persistRepository.persist(query, jsonMaps, document, basePath);
-
+				keyValuePairPersisted.add(persistRepository.persist(query, jsonMaps, document, basePath));
 			}
-
 		}
 	}
 
@@ -70,10 +70,8 @@ public class PersistService {
 					String query = queryMap.getQuery();
 					List<JsonMap> jsonMaps = queryMap.getJsonMaps();
 					String basePath = queryMap.getBasePath();
+					persistRepository.persist(query, jsonMaps, jsonObj, basePath);
 
-					List<Object[]> rows = new LinkedList<>(persistRepository.getRows(jsonMaps, jsonObj, basePath));
-
-					persistRepository.persist(query, rows);
 				}
 
 			}
