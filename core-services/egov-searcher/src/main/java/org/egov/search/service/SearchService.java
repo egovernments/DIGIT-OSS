@@ -90,7 +90,7 @@ public class SearchService {
 							searchDefinition.getDecryptionPathId(), "Retrieve Searcher Data", Map.class);
 					maps = new ArrayList<>();
 					for(Map map: mapData){
-						maps.addAll(map.values());
+						maps.add(map.values().toString());
 					}
 				}
 			}
