@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.egov.SearchApplicationRunnerImpl;
 import org.egov.common.contract.response.ResponseInfo;
+import org.egov.encryption.EncryptionService;
 import org.egov.search.model.Definition;
 import org.egov.search.model.SearchDefinition;
 import org.egov.search.model.SearchRequest;
@@ -46,6 +47,9 @@ public class SearchService {
 	
 	@Autowired
 	private SearchUtils searchUtils;
+
+	@Autowired
+	private EncryptionService encryptionService;
 	
 	public static final Logger log = LoggerFactory.getLogger(SearchService.class);
 
@@ -61,7 +65,19 @@ public class SearchService {
 			if(null != searchDefinition.getIsCustomerRowMapEnabled()) {
 				if(!searchDefinition.getIsCustomerRowMapEnabled()) {
 					maps = searchRepository.fetchData(searchRequest, searchDefinition);
-				}else {
+					if ((searchDefinition.getDecryptionPathId()!= null)&&(searchRequest.getRequestInfo()!=null)&&(searchRequest.getRequestInfo().getUserInfo()!=null))
+					{
+						Type type = new TypeToken<ArrayList<Map<String, Object>>>() {}.getType();
+						Gson gson = new Gson();
+						List<Map<String, Object>> mapData = gson.fromJson(maps.toString(), type);
+						mapData = encryptionService.decryptJson(searchRequest.getRequestInfo(),mapData,
+								searchDefinition.getDecryptionPathId(), "Retrieve Searcher Data", Map.class);
+
+						Map<String, Object> result = enrichedOuputData(mapData, searchDefinition, searchRequest);
+						data = result;
+					}
+				}
+				else {
 					//This is a custom logic for bill-genie, we'll need to write code seperately to support custom rowmap logic for any search.
 					data =  searchRepository.fetchWithCustomMapper(searchRequest, searchDefinition);
 					Map<String, Object> result = new HashMap<>();
@@ -72,6 +88,17 @@ public class SearchService {
 				}
 			}else {
 				maps = searchRepository.fetchData(searchRequest, searchDefinition);
+				if ((searchDefinition.getDecryptionPathId()!= null)&&(searchRequest.getRequestInfo()!=null)&&(searchRequest.getRequestInfo().getUserInfo()!=null))
+				{
+					Type type = new TypeToken<ArrayList<Map<String, Object>>>() {}.getType();
+					Gson gson = new Gson();
+					List<Map<String, Object>> mapData = gson.fromJson(maps.toString(), type);
+					mapData = encryptionService.decryptJson(searchRequest.getRequestInfo(),mapData,
+							searchDefinition.getDecryptionPathId(), "Retrieve Searcher Data", Map.class);
+
+					Map<String, Object> result = enrichedOuputData(mapData, searchDefinition, searchRequest);
+					data = result;
+				}
 			}
 		}catch(Exception e){
 			log.error("Exception: ",e);
@@ -88,6 +115,14 @@ public class SearchService {
 		}
 		
 		return data;
+	}
+
+	private Map<String, Object> enrichedOuputData(List<Map<String, Object>> mapData, Definition searchDefinition, SearchRequest searchRequest ){
+		Map<String, Object> result = new HashMap<>();
+		result.put("ResponseInfo", responseInfoFactory.createResponseInfoFromRequestInfo(searchRequest.getRequestInfo(), true));
+		String outputKey = searchDefinition.getOutput().getOutJsonPath().split("\\.")[1];
+		result.put(outputKey, mapData);
+		return  result;
 	}
 	
 	
