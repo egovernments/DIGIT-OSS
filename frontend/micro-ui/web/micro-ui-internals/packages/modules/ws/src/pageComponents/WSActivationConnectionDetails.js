@@ -45,7 +45,6 @@ const WSActivationConnectionDetails = ({ config, onSelect, userType, formData, s
     const { isMdmsLoading, data: mdmsData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["connectionType", "waterSource"]);
     const { isWSServicesCalculationLoading, data: wsServicesCalculationData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-calculation", ["PipeSize"]);
 
-
     useEffect(() => {
         const data = connectionDetails.map((e) => {
             return e;
@@ -53,9 +52,8 @@ const WSActivationConnectionDetails = ({ config, onSelect, userType, formData, s
         onSelect(config?.key, data);
     }, [connectionDetails]);
 
-
     useEffect(() => {
-        const list = mdmsData?.["ws-services-calculation"]?.PipeSize || [];
+        const list = wsServicesCalculationData?.["ws-services-calculation"]?.PipeSize || [];
         list?.forEach(data => data.i18nKey = data.size);
 
         const connectionTypes = mdmsData?.["ws-services-masters"]?.connectionType || [];
