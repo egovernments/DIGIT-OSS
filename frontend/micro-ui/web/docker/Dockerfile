@@ -16,8 +16,8 @@ RUN cd web/ \
     && yarn install \
     && yarn build 
 
-#FROM nginx:mainline-alpine
-FROM ghcr.io/egovernments/nginx:mainline-alpine
+FROM nginx:mainline-alpine
+#FROM ghcr.io/egovernments/nginx:mainline-alpine
 ENV WORK_DIR=/var/web/digit-ui
 
 RUN mkdir -p ${WORK_DIR}
