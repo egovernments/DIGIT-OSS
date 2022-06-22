@@ -83,10 +83,13 @@ public class SearchService {
 				maps = searchRepository.fetchData(searchRequest, searchDefinition);
 				if ((searchDefinition.getDecryptionPathId()!= null)&&(searchRequest.getRequestInfo()!=null)&&(searchRequest.getRequestInfo().getUserInfo()!=null))
 				{
-					List<Object> objectList = new ArrayList<Object>(maps);
-					objectList = encryptionService.decryptJson(searchRequest.getRequestInfo(),objectList,
-							searchDefinition.getDecryptionPathId(), "Retrieve Searcher Data", String.class);
-					System.out.println(objectList);
+					Type type = new TypeToken<ArrayList<Map<String, Object>>>() {}.getType();
+					Gson gson = new Gson();
+					List<Map<String, Object>> mapData = gson.fromJson(maps.toString(), type);
+					mapData = encryptionService.decryptJson(searchRequest.getRequestInfo(),mapData,
+							searchDefinition.getDecryptionPathId(), "Retrieve Searcher Data", Map.class);
+					System.out.println(mapData);
+
 				}
 			}
 		}catch(Exception e){
