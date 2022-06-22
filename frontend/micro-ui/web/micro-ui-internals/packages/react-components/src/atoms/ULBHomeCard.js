@@ -12,11 +12,11 @@ const ULBHomeCard = (props) => {
 
     return (
         <React.Fragment>
-            <Card style={{ backgroundColor: "transparent", boxShadow: "none" }}>
+            <Card className="fsm" style={{ backgroundColor: "transparent", boxShadow: "none", paddingTop: "0" }}>
                 <CardHeader> {t(props.title)} </CardHeader>
                 <div style={{ display: "grid", gridTemplateColumns: "33.3% 33.3% 33.3%", textAlign: "-webkit-center" }}>
                     {props.module.map((i) => {
-                        return <Card style={{ minWidth: "100px" }} onClick={() => i.link ? history.push(i.link) : location.assign(i.locate)} children={<> {i.icon} <p> {t(i.name)} </p> </>}></Card>
+                        return <Card style={{ minWidth: "100px", cursor: "pointer" }} onClick={() => i.link ? history.push(i.link) : location.assign(i.locate)} children={<> {i.icon} <p> {t(i.name)} </p> </>}></Card>
                     })}
                 </div>
             </Card>
