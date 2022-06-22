@@ -36,8 +36,6 @@ export const ApplicationTimeline = (props) => {
       return <TLCaption data={caption} />;
     } else if (
       checkpoint.status === "PENDING_APPL_FEE_PAYMENT" ||
-      checkpoint.status === "ASSING_DSO" ||
-      checkpoint.status === "PENDING_DSO_APPROVAL" ||
       checkpoint.status === "DSO_REJECTED" ||
       checkpoint.status === "CANCELED" ||
       checkpoint.status === "REJECTED"
@@ -77,6 +75,14 @@ export const ApplicationTimeline = (props) => {
           </Link>
         </div>
       );
+    } else if (checkpoint.status === "DISPOSAL_IN_PROGRESS") {
+      const caption = {
+        date: checkpoint?.auditDetails?.created,
+        name: checkpoint?.assigner,
+        mobileNumber: checkpoint?.assigner?.mobileNumber,
+      };
+      if (checkpoint?.numberOfTrips) caption.comment = `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`;
+      return <TLCaption data={caption} />;
     }
   };
 
