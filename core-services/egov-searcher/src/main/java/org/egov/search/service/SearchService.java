@@ -88,7 +88,9 @@ public class SearchService {
 					List<Map<String, Object>> mapData = gson.fromJson(maps.toString(), type);
 					mapData = encryptionService.decryptJson(searchRequest.getRequestInfo(),mapData,
 							searchDefinition.getDecryptionPathId(), "Retrieve Searcher Data", Map.class);
-					data = mapData;
+					for(Map map: mapData){
+						maps.addAll(map.values());
+					}
 				}
 			}
 		}catch(Exception e){
