@@ -88,10 +88,12 @@ public class SearchService {
 					List<Map<String, Object>> mapData = gson.fromJson(maps.toString(), type);
 					mapData = encryptionService.decryptJson(searchRequest.getRequestInfo(),mapData,
 							searchDefinition.getDecryptionPathId(), "Retrieve Searcher Data", Map.class);
-					maps = new ArrayList<>();
-					for(Map map: mapData){
-						maps.add(map.values().toString());
-					}
+					
+					Map<String, Object> result = new HashMap<>();
+					result.put("ResponseInfo", responseInfoFactory.createResponseInfoFromRequestInfo(searchRequest.getRequestInfo(), true));
+					String outputKey = searchDefinition.getOutput().getOutJsonPath().split("\\.")[1];
+					result.put(outputKey, mapData);
+					data = result;
 				}
 			}
 		}catch(Exception e){
