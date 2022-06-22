@@ -25,8 +25,16 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
   const [searchType, setSearchType] = useState(formData?.searchType || {code : "CONSUMER_NUMBER",i18nKey:"WS_CONSUMER_NUMBER_SEARCH"});
   const allCities = Digit.Hooks.ws.usewsTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   const [mobileNumberError, setmobileNumberError] = useState(null);
+  let filters = {}
 
   const { data: Menu, isLoading } = Digit.Hooks.mcollect.useMCollectMDMS(tenantId, "BillingService", "BusinessService");
+
+  const { data: ptSearchConfig, isLoading : isValidationLoading } = Digit.Hooks.pt.useMDMS(Digit.ULBService.getStateId(), "DIGIT-UI", "HelpText", {
+    select: (data) => {
+      return data?.["DIGIT-UI"]?.["HelpText"]?.[0]?.PT;
+    },
+  });
+
   if (isLoading) {
     return <Loader />;
   }
@@ -56,6 +64,16 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
       else if(!doorNumber && !consumerName)
       setShowToast({ key: true, label: "WS_HOME_SEARCH_CONN_RESULTS_DESC" });
       else{
+          if (locality !== "undefined") filters.locality = locality?.code;
+          if (doorNumber) filters.doorNo = doorNumber;
+          if (consumerName) filters.ownerName = consumerName;
+          filters = {...filters , searchType:"CONNECTION"}
+        const response = await Digit.WSService.search({tenantId : city?.code, filters: { ...filters }, businessService:"WS"})
+        const SWresponse = await Digit.WSService.search({tenantId : city?.code, filters: { ...filters }, businessService:"SW"})
+        let totalResponse = response?.TotalCount + SWresponse?.TotalCount;
+        if(ptSearchConfig?.maxResultValidation && totalResponse > ptSearchConfig?.maxPropertyResult)
+        setShowToast({ key: true, label: "Refine your search" });
+        else
         history.push(
           `/digit-ui/citizen/ws/search-results?doorNumber=${doorNumber}&consumerName=${consumerName}&tenantId=${city.code}&locality=${locality.code}`
         );

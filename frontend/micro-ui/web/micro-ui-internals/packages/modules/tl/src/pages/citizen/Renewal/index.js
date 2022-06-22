@@ -7,7 +7,7 @@ import TradeLicenseList from "./TradeLicenseList";
 export const TLList = () => {
   const { t } = useTranslation();
   const userInfo = Digit.UserService.getUser();
-  const tenantId = userInfo?.info?.permanentCity;
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || userInfo?.info?.permanentCity;
   const { mobileNumber: mobileno, LicenseNumber: licenseno, tenantId: tenantID } = Digit.Hooks.useQueryParams();
   let filter1 = {};
   if (licenseno) filter1.licenseNumbers = licenseno;

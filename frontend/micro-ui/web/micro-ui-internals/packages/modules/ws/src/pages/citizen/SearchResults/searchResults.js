@@ -9,15 +9,37 @@ import {stringReplaceAll} from "../../../utils/index";
 const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
   const { t } = useTranslation();
   const history = useHistory();
-  const { mobileNumber, consumerNumber, oldconsumerNumber, tenantId, propertyId, locality, doorNumber, consumerName } = Digit.Hooks.useQueryParams();
+  const { mobileNumber, consumerNumber, oldconsumerNumber, tenantId, propertyId, locality, doorNumber, consumerName, PToffset } = Digit.Hooks.useQueryParams();
   let filters = {};
+
+  let OfsetForSearch = PToffset;
+  let t1;
+  let off;
+  if (!isNaN(parseInt(OfsetForSearch))) {
+    off = OfsetForSearch;
+    t1 = parseInt(OfsetForSearch) + 5;
+  } else {
+    t1 = 5;
+  }
+
+  let filter1 = !isNaN(parseInt(OfsetForSearch))
+  ? { limit: "5", sortOrder: "ASC", sortBy: "createdTime", offset: off }
+  : { limit: "5", sortOrder: "ASC", sortBy: "createdTime", offset: "0" };
+
   if (mobileNumber) filters.mobileNumber = mobileNumber;
   if (consumerNumber) filters.connectionNumber = consumerNumber;
   if (oldconsumerNumber) filters.oldConnectionNumber = oldconsumerNumber;
   if (propertyId) filters.propertyId = propertyId;
   if (locality !== "undefined") filters.locality = locality;
-  if (doorNumber) filters.doorNumber = doorNumber;
+  if (doorNumber) filters.doorNo = doorNumber;
   if (consumerName) filters.ownerName = consumerName;
+  if (locality || ( searchQuery && searchQuery.locality ) ){
+    filters.limit = filter1.limit;
+    filters.sortOrder = filter1.sortOrder;
+    filters.sortBy = filter1.sortBy;
+    filters.offset = filter1.offset;
+  }
+
 
   filters = {...filters , searchType:"CONNECTION"}
   const {isLoading:isWSLoading, data:Waterresult} = Digit.Hooks.ws.useWaterSearch({ tenantId, filters:{...filters},BusinessService:"WS", t });
@@ -44,6 +66,21 @@ const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
           </Header>
         )}
         <ResponseComposer data={searchResults} template={template} actionButtonLabel={actionButtonLabel} onSubmit={onSubmit} />
+        {!searchResults?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("WS_NO_APP_FOUND_MSG")}</p>}
+        {searchResults?.length !== 0 && (searchResults?.length == 5 || searchResults?.length == 50) && (locality || ( searchQuery && searchQuery.locality )) && (
+          <div>
+            <p style={{ marginLeft: "16px", marginTop: "16px" }}>
+              {t("WS_LOAD_MORE_MSG")}{" "}
+              <span className="link">{<Link to={`/digit-ui/citizen/ws/search-results?doorNumber=${doorNumber}&consumerName=${consumerName}&tenantId=${city.code}&locality=${locality.code}&PToffset=${t1}`}>{t("PT_COMMON_CLICK_HERE")}</Link>}</span>
+            </p>
+          </div>
+        )}
+        <p style={{ marginLeft: "16px", marginTop: "16px" }}>
+        {t("WS_WANT_TO_ADD_NEW_CONNECTION")}{" "}
+        <span className="link" style={{ display: "block" }}>
+          <Link to="/digit-ui/citizen/ws/create-application/search-property">{t("WS_CLICK_HERE_TO_APPLY")}</Link>
+        </span>
+        </p>
       </div>
     </div>
   );
