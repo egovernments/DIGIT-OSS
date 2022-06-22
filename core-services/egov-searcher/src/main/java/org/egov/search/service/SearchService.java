@@ -67,10 +67,17 @@ public class SearchService {
 					maps = searchRepository.fetchData(searchRequest, searchDefinition);
 					if ((searchDefinition.getDecryptionPathId()!= null)&&(searchRequest.getRequestInfo()!=null)&&(searchRequest.getRequestInfo().getUserInfo()!=null))
 					{
-						maps = encryptionService.decryptJson(searchRequest.getRequestInfo(),maps,
-								searchDefinition.getDecryptionPathId(), "Retrieve Searcher Data", String.class);
+						Type type = new TypeToken<ArrayList<Map<String, Object>>>() {}.getType();
+						Gson gson = new Gson();
+						List<Map<String, Object>> mapData = gson.fromJson(maps.toString(), type);
+						mapData = encryptionService.decryptJson(searchRequest.getRequestInfo(),mapData,
+								searchDefinition.getDecryptionPathId(), "Retrieve Searcher Data", Map.class);
+
+						Map<String, Object> result = enrichedOuputData(mapData, searchDefinition, searchRequest);
+						data = result;
 					}
-				}else {
+				}
+				else {
 					//This is a custom logic for bill-genie, we'll need to write code seperately to support custom rowmap logic for any search.
 					data =  searchRepository.fetchWithCustomMapper(searchRequest, searchDefinition);
 					Map<String, Object> result = new HashMap<>();
@@ -88,11 +95,8 @@ public class SearchService {
 					List<Map<String, Object>> mapData = gson.fromJson(maps.toString(), type);
 					mapData = encryptionService.decryptJson(searchRequest.getRequestInfo(),mapData,
 							searchDefinition.getDecryptionPathId(), "Retrieve Searcher Data", Map.class);
-					
-					Map<String, Object> result = new HashMap<>();
-					result.put("ResponseInfo", responseInfoFactory.createResponseInfoFromRequestInfo(searchRequest.getRequestInfo(), true));
-					String outputKey = searchDefinition.getOutput().getOutJsonPath().split("\\.")[1];
-					result.put(outputKey, mapData);
+
+					Map<String, Object> result = enrichedOuputData(mapData, searchDefinition, searchRequest);
 					data = result;
 				}
 			}
@@ -111,6 +115,14 @@ public class SearchService {
 		}
 		
 		return data;
+	}
+
+	private Map<String, Object> enrichedOuputData(List<Map<String, Object>> mapData, Definition searchDefinition, SearchRequest searchRequest ){
+		Map<String, Object> result = new HashMap<>();
+		result.put("ResponseInfo", responseInfoFactory.createResponseInfoFromRequestInfo(searchRequest.getRequestInfo(), true));
+		String outputKey = searchDefinition.getOutput().getOutJsonPath().split("\\.")[1];
+		result.put(outputKey, mapData);
+		return  result;
 	}
 	
 	
