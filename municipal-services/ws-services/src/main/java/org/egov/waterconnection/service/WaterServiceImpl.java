@@ -114,6 +114,8 @@ public class WaterServiceImpl implements WaterService {
 		// call work-flow
 		if (config.getIsExternalWorkFlowEnabled())
 			wfIntegrator.callWorkFlow(waterConnectionRequest, property);
+		if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getProcessInstance().getAssignes()))
+			waterConnectionRequest.getWaterConnection().getProcessInstance().setAssignes(null);
 		waterDao.saveWaterConnection(waterConnectionRequest);
 		return Arrays.asList(waterConnectionRequest.getWaterConnection());
 	}
@@ -243,11 +245,14 @@ public class WaterServiceImpl implements WaterService {
 		userService.createUser(waterConnectionRequest);
 		enrichmentService.postStatusEnrichment(waterConnectionRequest);
 		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
+		if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getProcessInstance().getAssignes()))
+			waterConnectionRequest.getWaterConnection().getProcessInstance().setAssignes(null);
+		enrichmentService.enrichProcessInstance(Arrays.asList(waterConnectionRequest.getWaterConnection()), criteria, waterConnectionRequest.getRequestInfo());
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
 		enrichmentService.postForMeterReading(waterConnectionRequest,  WCConstants.UPDATE_APPLICATION);
 		if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getTenantId()))
 			criteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
-		enrichmentService.enrichProcessInstance(Arrays.asList(waterConnectionRequest.getWaterConnection()), criteria, waterConnectionRequest.getRequestInfo());
+		//enrichmentService.enrichProcessInstance(Arrays.asList(waterConnectionRequest.getWaterConnection()), criteria, waterConnectionRequest.getRequestInfo());
 		return Arrays.asList(waterConnectionRequest.getWaterConnection());
 	}
 
