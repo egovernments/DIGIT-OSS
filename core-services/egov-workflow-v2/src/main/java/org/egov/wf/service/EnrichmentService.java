@@ -3,7 +3,6 @@ package org.egov.wf.service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
@@ -343,7 +342,8 @@ public class EnrichmentService {
             Long businessServiceSlaInDb = processInstance.getBusinesssServiceSla();
             Long stateSlaInDB = processInstance.getStateSla();
             Long timeSinceLastAction = System.currentTimeMillis() - processInstance.getAuditDetails().getLastModifiedTime();
-            processInstance.setBusinesssServiceSla(businessServiceSlaInDb-timeSinceLastAction);
+            if(businessServiceSlaInDb != null)
+            	processInstance.setBusinesssServiceSla(businessServiceSlaInDb-timeSinceLastAction);
             if(stateSlaInDB!=null)
                 processInstance.setStateSla(stateSlaInDB-timeSinceLastAction);
         });
