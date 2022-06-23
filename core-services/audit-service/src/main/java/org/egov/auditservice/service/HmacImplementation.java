@@ -26,7 +26,6 @@ public class HmacImplementation implements ConfigurableSignAndVerify {
 
     @Override
     public List<String> sign(AuditLogRequest auditLogRequest) {
-        System.out.println("INSIDE HMAC IMPLEMENTATION!!!!!!!");
         auditLogRequest.getAuditLogs().forEach(auditLog -> {
             try {
                 String dataToBeHashed = objectMapper.writeValueAsString(auditLog.getKeyValuePairs());
