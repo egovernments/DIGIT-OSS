@@ -12,6 +12,7 @@ import { initLocalizationLabels } from "egov-ui-kit/redux/app/utils";
 import { getTranslatedLabel } from "egov-ui-kit/utils/commons";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
 import { httpRequest } from "egov-pt/ui-utils";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const locale = getLocale() || "en_IN";
 const localizationLabelsData = initLocalizationLabels(locale);
