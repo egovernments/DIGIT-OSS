@@ -30,22 +30,22 @@ window.Digit.ComponentRegistryService.setupRegistry({
   PaymentModule,
   PaymentLinks,
   ...PTComponents,
-  MCollectLinks,
-  MCollectModule,
-  HRMSModule,
+  // MCollectLinks,
+  // MCollectModule,
+  // HRMSModule,
   TLModule,
   TLLinks,
-  ReceiptsModule
+  // ReceiptsModule
 });
 
 
 initPGRComponents();
 initFSMComponents();
 initDSSComponents();
-initMCollectComponents();
-initHRMSComponents()
+// initMCollectComponents();
+// initHRMSComponents()
 initTLComponents();
-initReceiptsComponents();
+// initReceiptsComponents();
 initOBPSComponents();
 initNOCComponents();
 initEngagementComponents();
