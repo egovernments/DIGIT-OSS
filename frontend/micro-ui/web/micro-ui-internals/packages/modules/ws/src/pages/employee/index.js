@@ -80,7 +80,7 @@ const BILLSBreadCrumbs = ({ location }) => {
       show: location.pathname.includes("/new-application") ? true : false,
     },
     {
-      path: "/digit-ui/employee/ws/ws-response",
+      path: `${location?.pathname}${location.search}`,
       content: t("ACTION_TEST_RESPONSE"),
       show: location.pathname.includes("/ws-response") ? true : false,
     },
@@ -109,6 +109,12 @@ const BILLSBreadCrumbs = ({ location }) => {
       isBack: true,
     },
     {
+      path: `${location?.pathname}${location.search}`,
+      content: `${t("WS_APPLICATION_DETAILS_HEADER")} / ${t("WF_EMPLOYEE_NEWSW1_ACTIVATE_CONNECTION")}`,
+      show: location.pathname.includes("/activate-connection") ? true : false,
+      isBack: true,
+    },
+    {
       path: "/digit-ui/employee/sewerage/bill-amendment/inbox",
       content: t("ES_COMMON_BILLS_SEWERAGE_INBOX_LABEL"),
       show: location.pathname.includes("/sewerage/bill-amendment/inbox") ? true : false,
@@ -129,7 +135,15 @@ const App = ({ path }) => {
   const WSDocsRequired = Digit?.ComponentRegistryService?.getComponent("WSDocsRequired");
   const WSInbox = Digit?.ComponentRegistryService?.getComponent("WSInbox");
 
-  const locationCheck = window.location.href.includes("/employee/ws/new-application") || window.location.href.includes("/employee/ws/modify-application"); 
+  const locationCheck = 
+  window.location.href.includes("/employee/ws/new-application") || 
+  window.location.href.includes("/employee/ws/modify-application") ||
+  window.location.href.includes("/employee/ws/edit-application") ||
+  window.location.href.includes("/employee/ws/activate-connection") ||
+  window.location.href.includes("/employee/ws/application-details") ||
+  window.location.href.includes("/employee/ws/ws-response");
+  
+
 
   const locationCheckReqDocs = window.location.href.includes("/employee/ws/create-application");
 

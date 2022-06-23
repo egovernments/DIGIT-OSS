@@ -39,7 +39,7 @@ const NewApplication = () => {
     config?.body?.forEach(data => { if(data?.isCreateConnection) bodyDetails.push(data); })
     config.body = bodyDetails;
     setConfig(config);
-  });
+  }, []);
 
   useEffect(() => {
     !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);

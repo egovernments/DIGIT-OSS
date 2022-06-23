@@ -31,6 +31,9 @@ const ActivateConnection = () => {
         mutate,
     } = Digit.Hooks.ws.useWSApplicationActions(filters?.service);
 
+    const waterSourceSubDataWithClone = state?.data?.waterSource ? cloneDeep(state?.data?.waterSource) : "";
+    const waterSourceSubDataWithUS = waterSourceSubDataWithClone ? stringReplaceAll(waterSourceSubDataWithClone?.toUpperCase(), " ", "_") : "";
+    const waterSourceSubDataWithCma = waterSourceSubDataWithUS ? stringReplaceAll(waterSourceSubDataWithUS?.toUpperCase(), ".", "_") : "";
     const connectionDetails = filters?.service === "WATER" ? {
         connectionType: state?.data?.connectionType ? {
             code: state?.data?.connectionType, i18nKey: `WS_CONNECTIONTYPE_${stringReplaceAll(state?.data?.connectionType?.toUpperCase(), " ", "_")}`
@@ -39,7 +42,7 @@ const ActivateConnection = () => {
             code: state?.data?.waterSource, i18nKey: `WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(state?.data?.waterSource?.split('.')[0]?.toUpperCase(), " ", "_")}`
         } : "",
         sourceSubData: state?.data?.waterSource ? {
-            code: state?.data?.waterSource, i18nKey: `WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(state?.data?.waterSource?.toUpperCase(), " ", "_")}`
+            code: state?.data?.waterSource, i18nKey: `WS_SERVICES_MASTERS_WATERSOURCE_${waterSourceSubDataWithCma}`
         } : "",
         pipeSize: state?.data?.pipeSize ? {
             code: state?.data?.pipeSize, i18nKey: state?.data?.pipeSize
