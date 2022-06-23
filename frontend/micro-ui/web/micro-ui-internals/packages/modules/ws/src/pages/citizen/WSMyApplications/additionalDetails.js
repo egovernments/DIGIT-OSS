@@ -142,7 +142,7 @@ const WSAdditionalDetails = () => {
               label={t("WS_ADDN_DETAILS_AREA_LABEL")}
               text={
                 data?.WaterConnection?.[0]?.roadCuttingInfo?.[0]?.roadCuttingArea ||
-                data?.SewerageConnections?.roadCuttingInfo?.[0]?.roadCuttingArea ||
+                data?.SewerageConnections?.[0]?.roadCuttingInfo?.[0]?.roadCuttingArea ||
                 t("NA")
               }
               textStyle={{ whiteSpace: "pre" }}
