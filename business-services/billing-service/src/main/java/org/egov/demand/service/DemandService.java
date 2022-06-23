@@ -383,7 +383,9 @@ public class DemandService {
 			String tenantId = demand.getTenantId();
 
 			// Searching demands based on consumer code of the current demand (demand which has to be created)
-			DemandCriteria searchCriteria = DemandCriteria.builder().tenantId(tenantId).consumerCode(Collections.singleton(consumerCode)).businessService(businessService).build();
+			DemandCriteria searchCriteria = DemandCriteria.builder().tenantId(tenantId).
+							.status(Demand.StatusEnum.ACTIVE.toString()).
+							consumerCode(Collections.singleton(consumerCode)).businessService(businessService).build();
 			List<Demand> demandsFromSearch = demandRepository.getDemands(searchCriteria);
 
 			// If no demand is found means there is no advance available. The current demand is added for creation
