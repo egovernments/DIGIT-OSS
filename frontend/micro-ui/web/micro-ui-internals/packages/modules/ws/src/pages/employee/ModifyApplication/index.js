@@ -170,7 +170,7 @@ const ModifyApplication = () => {
         await sewerageMutation(reqDetails, {
           onError: (error, variables) => {
             setIsEnableLoader(false);
-            setShowToast({ key: "error", message: error?.message ? error.message : error });
+            setShowToast({ key: "error", message: error?.response?.data?.Errors?.[0]?.message ? error?.response?.data?.Errors?.[0]?.message : error });
             setTimeout(closeToastOfError, 5000);
           },
           onSuccess: async (data, variables) => {

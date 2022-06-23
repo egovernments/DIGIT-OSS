@@ -265,7 +265,7 @@ export const updatePayloadOfWS = async (data, type) => {
     },
     documents: JSON.parse(sessionStorage.getItem("WS_DOCUMENTS_INOF")),
     property: JSON.parse(sessionStorage.getItem("WS_PROPERTY_INOF")),
-    connectionType: type === "WATER" ? null : "Non Metered",
+    connectionType: type === "WATER" ? data?.connectionType : "Non Metered",
   };
   return payload;
 };
@@ -973,7 +973,10 @@ export const convertEditApplicationDetails = async (data, appData, actionData) =
 };
 
 export const getConvertedDate = async (dateOfTime) => {
-  let dateOfReplace = stringReplaceAll(dateOfTime, "/", "-");
+  const splitStr = dateOfTime?.split("-")
+  const dateOfTimeReversedArr = splitStr?.reverse()
+  const dateOfTimeReversed = dateOfTimeReversedArr?.join("-")
+  let dateOfReplace = stringReplaceAll(dateOfTimeReversed, "/", "-");
   let formattedDate = "";
   if (dateOfReplace.split("-")[2] > 1900) {
     formattedDate = `${dateOfReplace.split("-")[2]}-${dateOfReplace.split("-")[1]}-${dateOfReplace.split("-")[0]}`;
@@ -1006,6 +1009,7 @@ export const convertModifyApplicationDetails = async (data, appData, actionData 
     formData.additionalDetails.initialMeterReading = data?.activationDetails?.[0]?.meterInitialReading;
   if (data?.activationDetails?.[0]?.connectionExecutionDate)
     formData.connectionExecutionDate = await getConvertedDate(data?.activationDetails?.[0]?.connectionExecutionDate);
+    
   if (data?.activationDetails?.[0]?.dateEffectiveFrom)
     formData.dateEffectiveFrom = await getConvertedDate(data?.activationDetails?.[0]?.dateEffectiveFrom);
 

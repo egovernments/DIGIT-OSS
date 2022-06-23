@@ -100,11 +100,19 @@ const GetConnectionDetails = () => {
   const getModifyConnectionButton = () => {
     if (!checkApplicationStatus) {
       setshowActionToast({
-        type: "error",
+        key: "error",
         label: "CONN_NOT_ACTIVE",
       });
       return;
     }
+    if (applicationDetails?.fetchBillsData[0]?.totalAmount>0){
+      setshowActionToast({
+        key: "error",
+        label: "WS_DUE_AMOUNT_SHOULD_BE_ZERO",
+      });
+      return;
+    }
+    //here check if this connection have any active bills(don't allow to modify in this case)
 
     
     let pathname = `/digit-ui/employee/ws/modify-application?applicationNumber=${applicationDetails?.applicationData?.connectionNo}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}&from=WS_COMMON_CONNECTION_DETAIL`;
@@ -126,14 +134,14 @@ const GetConnectionDetails = () => {
 
     if (demandData?.Demands?.length === 0) {
       setshowActionToast({
-        type: "error",
+        key: "error",
         label: "No_Bills_Found",
       });
       return;
     }
     else if (isBillAmendNotApplicable) {
       setshowActionToast({
-        type: "error",
+        key: "error",
         label: "WORKFLOW_IN_PROGRESS",
       });
       return;
