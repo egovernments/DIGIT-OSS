@@ -96,7 +96,7 @@ const DesktopInbox = (props) => {
               return (
                 <div>
                   <span className="link">
-                    <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + citizen_info?.applicationNo}> {citizen_info?.applicationNo}</Link>
+                    <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}> {citizen_info?.applicationNo}</Link>
                   </span>
                 </div>
               );
