@@ -142,7 +142,7 @@ const WSAdditionalDetails = () => {
               label={t("WS_ADDN_DETAILS_AREA_LABEL")}
               text={
                 data?.WaterConnection?.[0]?.roadCuttingInfo?.[0]?.roadCuttingArea ||
-                data?.SewerageConnections?.roadCuttingInfo?.[0]?.roadCuttingArea ||
+                data?.SewerageConnections?.[0]?.roadCuttingInfo?.[0]?.roadCuttingArea ||
                 t("NA")
               }
               textStyle={{ whiteSpace: "pre" }}
@@ -164,6 +164,7 @@ const WSAdditionalDetails = () => {
               }
               textStyle={{ whiteSpace: "pre" }}
             />
+            {data?.WaterConnection && data?.WaterConnection?.length > 0 && <div>
             <Row
               className="border-none"
               label={t("WS_SERV_DETAIL_METER_ID")}
@@ -192,6 +193,7 @@ const WSAdditionalDetails = () => {
               }
               textStyle={{ whiteSpace: "pre" }}
             />
+            </div>}
           </StatusTable>
         </Card>
       </div>

@@ -130,6 +130,7 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
   }
 
   function addComment(e) {
+    setError(null);
     setComments(e.target.value);
   }
 
@@ -169,6 +170,9 @@ const ComplaintDetailsModal = ({ workflowDetails, complaintDetails, close, popup
               : t("CS_COMMON_RESOLVE")
       }
       actionSaveOnSubmit={() => {
+        if(selectedAction === "REJECT" && !comments)
+        setError(t("CS_MANDATORY_COMMENTS"));
+        else
         onAssign(selectedEmployee, comments, uploadedFile);
       }}
       error={error}

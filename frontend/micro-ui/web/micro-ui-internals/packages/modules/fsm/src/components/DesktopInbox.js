@@ -92,10 +92,11 @@ const DesktopInbox = (props) => {
             // disableSortBy: true,
             Cell: ({ row }) => {
               // fetching out citizen info
+              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo);
               return (
                 <div>
                   <span className="link">
-                    <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}> {row.original["applicationNo"]}</Link>
+                    <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}> {citizen_info?.applicationNo}</Link>
                   </span>
                 </div>
               );

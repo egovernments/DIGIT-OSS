@@ -320,7 +320,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
                   />
                 </>
               )}
-              <CardLabel>{`${t("PT_FORM2_BUILT_UP_AREA")}*`}</CardLabel>
+              <CardLabel>{formData?.PropertyType?.i18nKey === "COMMON_PROPTYPE_BUILTUP_SHAREDPROPERTY" ? `${t("PT_FORM2_BUILT_UP_AREA")}*`:`${t("PT_BUILT_UP_AREA_HEADER")}*`}</CardLabel>
               <TextInput
                 style={{ background: "#FAFAFA" }}
                 t={t}
