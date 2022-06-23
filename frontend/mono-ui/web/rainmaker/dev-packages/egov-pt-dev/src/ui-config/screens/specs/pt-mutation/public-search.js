@@ -70,7 +70,7 @@ const getMDMSData = async (action, dispatch) => {
       [],
       mdmsBody
     );     
-    dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
+    payload &&  payload.MdmsRes && dispatch(prepareFinalObject("searchScreenMdmsData", payload.MdmsRes));
   } catch (e) {
     console.log(e);
   }
@@ -107,7 +107,7 @@ const getMDMSData = async (action, dispatch) => {
             //   .toUpperCase()
             //   .replace(/[._:-\s\/]/g, "_")}`
           }, []);
-          dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
+          mohallaData && dispatch(prepareFinalObject("searchScreenMdmsData.tenant.localities", mohallaData))
         }
       }
 
