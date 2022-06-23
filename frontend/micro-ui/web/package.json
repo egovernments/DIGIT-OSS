@@ -8,6 +8,11 @@
   ],
   "homepage": "/digit-ui",
   "dependencies": {
+    "@egovernments/digit-ui-css": "^1.4.0",
+    "@egovernments/digit-ui-module-pgr":"1.5.2",
+    "@egovernments/digit-ui-module-hrms":"1.5.2",
+    "@egovernments/digit-ui-module-mcollect":"1.5.2",
+    "@egovernments/digit-ui-module-receipts":"1.5.2",
     "babel-loader": "8.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
