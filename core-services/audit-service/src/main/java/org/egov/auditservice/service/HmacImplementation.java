@@ -2,6 +2,8 @@ package org.egov.auditservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.macs.HMac;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class HmacImplementation implements ConfigurableSignAndVerify {
 
@@ -28,6 +31,7 @@ public class HmacImplementation implements ConfigurableSignAndVerify {
     public List<String> sign(AuditLogRequest auditLogRequest) {
         auditLogRequest.getAuditLogs().forEach(auditLog -> {
             try {
+                objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
                 String dataToBeHashed = objectMapper.writeValueAsString(auditLog.getKeyValuePairs());
                 auditLog.setIntegrityHash(hashData(dataToBeHashed, hmacKey));
             } catch (JsonProcessingException e) {
