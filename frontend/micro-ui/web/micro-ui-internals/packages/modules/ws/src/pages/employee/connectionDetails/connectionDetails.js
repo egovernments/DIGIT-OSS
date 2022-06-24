@@ -26,6 +26,8 @@ const GetConnectionDetails = () => {
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useConnectionDetail(t, tenantId, applicationNumber, serviceType);
   const menuRef = useRef();
   const actionMenuRef = useRef();
+  sessionStorage.removeItem("IsDetailsExists");
+  Digit.SessionStorage.del("PT_CREATE_EMP_WS_NEW_FORM");
 
   const { isLoading: isLoadingDemand, data: demandData } = Digit.Hooks.useDemandSearch(
     { consumerCode: applicationDetails?.applicationData?.connectionNo, businessService: serviceType === "WATER" ? "WS" : "SW", tenantId }, { enabled: !!(applicationDetails?.applicationData?.applicationNo) }

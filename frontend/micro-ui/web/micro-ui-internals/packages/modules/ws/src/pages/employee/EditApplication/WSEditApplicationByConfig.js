@@ -52,7 +52,7 @@ const convertEditApplicationDetails1 = (data, appData) => {
     })),
     connectionNo: null,
     connectionType: data?.connectionDetails?.[0]?.connectionType?.code || appData?.connectionType,
-    waterSource: data?.connectionDetails?.[0]?.waterSource?.code || appData?.waterSource,
+    waterSource: data?.connectionDetails?.[0]?.sourceSubData?.code || appData?.waterSource,
     pipeSize: data?.connectionDetails?.[0]?.pipeSize?.size || appData?.pipeSize,
     noOfTaps: data?.connectionDetails?.[0]?.noOfTaps || appData?.noOfTaps,
     sourceSubData: data?.connectionDetails?.[0]?.sourceSubData?.code || appData?.sourceSubData,

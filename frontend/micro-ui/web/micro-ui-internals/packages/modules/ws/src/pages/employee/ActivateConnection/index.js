@@ -125,7 +125,7 @@ const ActivateConnection = () => {
         const formData = { ...appDetails };
 
         if (formDetails?.connectionDetails?.[0]?.connectionType?.code) formData.connectionType = formDetails?.connectionDetails?.[0]?.connectionType?.code;
-        if (formDetails?.connectionDetails?.[0]?.waterSource?.code) formData.waterSource = formDetails?.connectionDetails?.[0]?.waterSource?.code;
+        if (formDetails?.connectionDetails?.[0]?.waterSource?.code) formData.waterSource = formDetails?.connectionDetails?.[0]?.sourceSubData?.code;
         if (formDetails?.connectionDetails?.[0]?.pipeSize?.size) formData.pipeSize = formDetails?.connectionDetails?.[0]?.pipeSize?.size;
         if (formDetails?.connectionDetails?.[0]?.noOfTaps) formData.noOfTaps = formDetails?.connectionDetails?.[0]?.noOfTaps;
 

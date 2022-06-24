@@ -23,7 +23,7 @@ export const mdmsData = async (tenantId,t) => {
   return obj
   }
 
-export const convertEpochToDateDMY = (dateEpoch) => {
+export const convertEpochToDateDMY = (dateEpoch, isModify = false) => {
   if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
     return "NA";
   }
@@ -33,7 +33,8 @@ export const convertEpochToDateDMY = (dateEpoch) => {
   let year = dateFromApi.getFullYear();
   month = (month > 9 ? "" : "0") + month;
   day = (day > 9 ? "" : "0") + day;
-  return `${day}/${month}/${year}`;
+  // return `${day}-${month}-${year}`;
+  return isModify ? `${year}-${month}-${day}` : `${day}-${month}-${year}`;
 };
 
 export const convertEpochToDate = (dateEpoch) => {
@@ -844,20 +845,20 @@ export const convertApplicationData = (data, serviceType, modify = false, editBy
   if (modify) {
     const activationDetails = [
       {
-        meterId: data?.applicationData?.meterId || "",
+        meterId: data?.applicationData?.meterId ? Number(data?.applicationData?.meterId) : "",
         meterInstallationDate: data?.applicationData?.meterInstallationDate
-          ? convertEpochToDateDMY(data?.applicationData?.meterInstallationDate)
+          ? convertEpochToDateDMY(data?.applicationData?.meterInstallationDate, true)
           : null,
-        meterInitialReading: data?.applicationData?.additionalDetails?.initialMeterReading || "",
+        meterInitialReading: data?.applicationData?.additionalDetails?.initialMeterReading ? Number(data?.applicationData?.additionalDetails?.initialMeterReading) : "",
         connectionExecutionDate: data?.applicationData?.connectionExecutionDate
-          ? convertEpochToDateDMY(data?.applicationData?.connectionExecutionDate)
+          ? convertEpochToDateDMY(data?.applicationData?.connectionExecutionDate, true)
           : null,
       },
     ];
 
     if (window.location.href.includes("modify-application-edit"))
       activationDetails[0].dateEffectiveFrom = data?.applicationData?.dateEffectiveFrom
-        ? convertEpochToDateDMY(data?.applicationData?.dateEffectiveFrom)
+        ? convertEpochToDateDMY(data?.applicationData?.dateEffectiveFrom, true)
         : null;
 
     const sourceSubDataValue = data?.applicationData?.waterSource
