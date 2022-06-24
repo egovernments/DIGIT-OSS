@@ -10,7 +10,7 @@ import { PrivacyMaskIcon } from "..";
  * Feature :: Privacy
  *
  * @example
- * <UnMaskComponent   privacy={{ uuid: "", fieldName: "name", model: "User" }}   />
+ * <UnMaskComponent   privacy={{ uuid: "", fieldName: "name", model: "User" ,hide: false}}   />
  */
 
 const UnMaskComponent = React.memo(({ privacy = {} }) => {
@@ -23,8 +23,7 @@ const UnMaskComponent = React.memo(({ privacy = {} }) => {
     }
   );
   const { privacy: privacyValue, updatePrivacy } = Digit.Hooks.usePrivacyContext();
-
-  if (isLoading) {
+  if (isLoading || privacy?.hide) {
     return null;
   }
 

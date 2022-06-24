@@ -187,11 +187,20 @@ export const PTSearch = {
                   privacy: { uuid: owner?.uuid, fieldName: "fatherOrHusbandName", model: "User" },
                 },
                 { title: "PT_FORM3_OWNERSHIP_TYPE", value: response?.ownershipCategory },
-                { title: "PT_OWNERSHIP_INFO_EMAIL_ID", value: owner?.emailId, privacy: { uuid: owner?.uuid, fieldName: "emailId", model: "User" } },
+                {
+                  title: "PT_OWNERSHIP_INFO_EMAIL_ID",
+                  value: owner?.emailId,
+                  privacy: { uuid: owner?.uuid, fieldName: "emailId", model: "User", hide: !(owner?.emailId && owner?.emailId !== "NA") },
+                },
                 {
                   title: "PT_OWNERSHIP_INFO_CORR_ADDR",
-                  value: owner?.correspondenceAddress,
-                  privacy: { uuid: owner?.uuid, fieldName: "correspondenceAddress", model: "User" },
+                  value: owner?.correspondenceAddress || owner?.permanentAddress,
+                  privacy: {
+                    uuid: owner?.uuid,
+                    fieldName: owner?.permanentAddress ? "permanentAddress" : "correspondenceAddress",
+                    model: "User",
+                    hide: !(owner?.permanentAddress || owner?.correspondenceAddress),
+                  },
                 },
               ],
             };
