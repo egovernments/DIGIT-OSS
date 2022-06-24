@@ -12,7 +12,7 @@ public class WSConstants {
     public static final String WS_APPLICATION_STATUS_PARAM = "applicationStatus";
     public static final String WS_APPLICATION_TYPE_PARAM = "applicationType";
     public static final String WS_APPLICATION_SEARCH_TYPE_PARAM = "searchType";
-    public static final String ASSIGNEE_PARAM = "assignee";
+    public static final String WS_ASSIGNEE_PARAM = "assignee";
     public static final String STATUS_PARAM = "status";
     public static final String OFFSET_PARAM = "offset";
     public static final String NO_OF_RECORDS_PARAM = "noOfRecords";
@@ -25,4 +25,8 @@ public class WSConstants {
     public static final String DESC_PARAM = "DESC";
     public static final String WS_BUSINESS_IDS_PARAM = "businessIds";
     public static final String WS_CONNECTION_NO_PARAM = "consumerNo";
+
+    public static final String WS_MODULE_LEVEL = "WS";
+    public static final String WS_VIZ_TOTALCONNECTION = "wstotalConnection";
+    public static final String WS_VIZ_TOTALCOllECTION = "wstotalCollection";
 }

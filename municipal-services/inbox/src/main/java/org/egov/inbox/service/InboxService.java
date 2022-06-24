@@ -8,6 +8,7 @@ import static org.egov.inbox.util.BpaConstants.MOBILE_NUMBER_PARAM;
 import static org.egov.inbox.util.BpaConstants.OFFSET_PARAM;
 import static org.egov.inbox.util.BpaConstants.STATUS_ID;
 import static org.egov.inbox.util.BpaConstants.STATUS_PARAM;
+import static org.egov.inbox.util.DSSConstants.*;
 import static org.egov.inbox.util.FSMConstants.APPLICATIONSTATUS;
 import static org.egov.inbox.util.FSMConstants.CITIZEN_FEEDBACK_PENDING_STATE;
 import static org.egov.inbox.util.FSMConstants.COMPLETED_STATE;
@@ -29,12 +30,6 @@ import static org.egov.inbox.util.TLConstants.REQUESTINFO_PARAM;
 import static org.egov.inbox.util.TLConstants.SEARCH_CRITERIA_PARAM;
 import static org.egov.inbox.util.TLConstants.TENANT_ID_PARAM;
 import static org.egov.inbox.util.TLConstants.TL;
-import static org.egov.inbox.util.WSConstants.WS;
-import static org.egov.inbox.util.WSConstants.WS_APPLICATION_NUMBER_PARAM;
-import static org.egov.inbox.util.WSConstants.WS_REQUESTINFO_PARAM;
-import static org.egov.inbox.util.WSConstants.WS_SEARCH_CRITERIA_PARAM;
-import static org.egov.inbox.util.WSConstants.WS_BUSINESS_SERVICE_PARAM;
-import static org.egov.inbox.util.WSConstants.WS_BUSINESS_IDS_PARAM;
 import static org.egov.inbox.util.SWConstants.SW;
 import static org.egov.inbox.util.SWConstants.SW_APPLICATION_NUMBER_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_REQUESTINFO_PARAM;
@@ -42,15 +37,9 @@ import static org.egov.inbox.util.SWConstants.SW_SEARCH_CRITERIA_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_BUSINESS_SERVICE_PARAM;
 import static org.egov.inbox.util.SWConstants.SW_BUSINESS_IDS_PARAM;
 import static org.egov.inbox.util.BSConstants.*;
+import static org.egov.inbox.util.WSConstants.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -74,6 +63,10 @@ import org.egov.inbox.web.model.InboxResponse;
 import org.egov.inbox.web.model.InboxSearchCriteria;
 import org.egov.inbox.web.model.RequestInfoWrapper;
 import org.egov.inbox.web.model.VehicleCustomResponse;
+import org.egov.inbox.web.model.dss.MetricResponse;
+import org.egov.inbox.web.model.dss.RequestDate;
+import org.egov.inbox.web.model.dss.RequestDto;
+import org.egov.inbox.web.model.dss.ResponseDto;
 import org.egov.inbox.web.model.workflow.BusinessService;
 import org.egov.inbox.web.model.workflow.ProcessInstance;
 import org.egov.inbox.web.model.workflow.ProcessInstanceResponse;
@@ -1139,5 +1132,42 @@ public class InboxService {
 
 		return results;
 	}
-    
+
+    public ResponseDto getAggregateData(RequestDto request) {
+        ResponseDto result = new ResponseDto();
+        RequestDate dateReq = new RequestDate();
+        Map<String, Object> filters = new HashMap<>();
+        try {
+            dateReq.setInterval(DSS_INTERVAL);
+            request.getAggregationRequestDto().setRequestDate(dateReq);
+            request.getAggregationRequestDto().setVisualizationType(DSS_VISUALIZATIONTYPE);
+            Calendar cal = Calendar.getInstance();
+            long endDate = cal.getTimeInMillis();
+            cal.add(Calendar.YEAR, -1);
+            long startDate = cal.getTimeInMillis();
+            request.getAggregationRequestDto().getRequestDate().setStartDate(String.valueOf(startDate));
+            request.getAggregationRequestDto().getRequestDate().setEndDate(String.valueOf(endDate));
+            filters.put(TENANT_ID, new ArrayList<>());
+            request.getAggregationRequestDto().setFilters(filters);
+
+            if (request.getAggregationRequestDto().getModuleLevel().equalsIgnoreCase(WS_MODULE_LEVEL)) {
+                List<String> vizCodes = config.getWnsVizualizationCodes();
+                for (String codes : vizCodes) {
+                    request.getAggregationRequestDto().setVisualizationCode(codes);
+                    Object response = wsInboxFilterService.getAggregateData(request);
+                    MetricResponse metricResponse = mapper.convertValue(response, MetricResponse.class);
+                    log.info("response from the query " + mapper.writeValueAsString(metricResponse));
+                    if (codes.equalsIgnoreCase(WS_VIZ_TOTALCOllECTION)) {
+                        result.setTotalAmountPaid(metricResponse.getResponseData().getData().get(0).getHeaderValue());
+                    }
+                    if (codes.equalsIgnoreCase(WS_VIZ_TOTALCONNECTION)) {
+                        result.setActiveConnections(metricResponse.getResponseData().getData().get(0).getHeaderValue());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new CustomException(ErrorConstants.INVALID_MODULE_DATA, "could not find the data" + e.getMessage());
+        }
+        return result;
+    }
 }

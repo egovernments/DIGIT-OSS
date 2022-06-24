@@ -1,5 +1,6 @@
 package org.egov.inbox.config;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -77,5 +78,8 @@ public class InboxConfiguration {
 	
 	@Value("#{${bs.businesscode.service.search}}")
 	private Map<String, Map<String, String>> bsServiceSearchMapping;
+
+	@Value("${wns.visualization.codes}")
+	private List<String> wnsVizualizationCodes;
 
 }
