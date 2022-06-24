@@ -1142,11 +1142,9 @@ public class InboxService {
             request.getAggregationRequestDto().setRequestDate(dateReq);
             request.getAggregationRequestDto().setVisualizationType(DSS_VISUALIZATIONTYPE);
             Calendar cal = Calendar.getInstance();
-            long endDate = cal.getTimeInMillis();
-            cal.add(Calendar.YEAR, -1);
-            long startDate = cal.getTimeInMillis();
-            request.getAggregationRequestDto().getRequestDate().setStartDate(String.valueOf(startDate));
-            request.getAggregationRequestDto().getRequestDate().setEndDate(String.valueOf(endDate));
+            request.getAggregationRequestDto().getRequestDate().setEndDate(String.valueOf(cal.getTimeInMillis()));
+            cal.add(Calendar.YEAR, -config.getDssYear());
+            request.getAggregationRequestDto().getRequestDate().setStartDate(String.valueOf(cal.getTimeInMillis()));
             filters.put(TENANT_ID, new ArrayList<>());
             request.getAggregationRequestDto().setFilters(filters);
 

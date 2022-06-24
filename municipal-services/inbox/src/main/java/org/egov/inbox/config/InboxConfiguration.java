@@ -82,4 +82,7 @@ public class InboxConfiguration {
 	@Value("${wns.visualization.codes}")
 	private List<String> wnsVizualizationCodes;
 
+	@Value("${dss.data.year}")
+	private Integer dssYear;
+
 }
