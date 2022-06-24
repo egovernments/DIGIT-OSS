@@ -13,7 +13,7 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
     sortBy: "commencementDate",
     sortOrder: "DESC",
   };
-  const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
+  const { register, control, handleSubmit, setValue, getValues, reset , formState} = useForm({
     defaultValues: initialValues,
   });
   const convertEpochToDate = (dateEpoch) => {
@@ -37,7 +37,6 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
     );
   };
  const handleExcelDownload = (tabData) => {
-  console.log(" Table Data : " + JSON.stringify(tabData?.[0]));
   if(tabData?.[0] !== undefined){
     return Digit.Download.Excel(tabData?.[0] , "searchbillexcel");
   }
@@ -53,12 +52,14 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
       settabledata([
 
         data?.map((obj)=> {
+          let returnObject={};
+          returnObject[ t("ABG_COMMON_TABLE_COL_BILL_NO")]=obj?.billNumber;
+          returnObject[t("ABG_COMMON_TABLE_COL_CONSUMER_NAME")]=obj?.payerName;
+          returnObject[t("ABG_COMMON_TABLE_COL_BILL_DATE")]=convertEpochToDate(obj?.billDate);
+          returnObject[t("ABG_COMMON_TABLE_COL_BILL_AMOUNT")]=obj?.totalAmount;
+          returnObject[t("ABG_COMMON_TABLE_COL_STATUS")]=obj?.status;
           return {
-            "BillNo.": obj?.billNumber,
-            "ConsumerName": obj?.payerName,
-            "BillDate": convertEpochToDate(obj?.billDate),
-            "BillAmount": obj?.totalAmount,
-           "Status":obj?.status
+            ...returnObject,
           }
         })
       ])
@@ -69,7 +70,7 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
     setValue("sortBy", args.id);
     setValue("sortOrder", args.desc ? "DESC" : "ASC");
   }, []);
-
+  
   function onPageSizeChange(e) {
     setValue("limit", Number(e.target.value));
     handleSubmit(onSubmit)();
@@ -192,7 +193,7 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
     <React.Fragment>
       <Header>{t("ABG_SEARCH_BILL_COMMON_HEADER")}</Header>
       <SearchForm className="ws-custom-wrapper" onSubmit={onSubmit} handleSubmit={handleSubmit}>
-        <SearchFields {...{ register, control, reset, tenantId, t, previousPage }} />
+        <SearchFields {...{ register, control, reset, tenantId, t, previousPage, formState }} />
       </SearchForm>
       {data?.display ? (
         <Card style={{ marginTop: 20 }}>
@@ -207,33 +208,37 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
       ) : (
     data !== "" && 
    (
-             <Table
-             secondaryTopComponent={ <DownloadBtn 
-             onClick={() => handleExcelDownload(tabledata)}
-            />}
-            t={t}
-            data={data}
-            totalRecords={count}
-            columns={columns}
-            getCellProps={(cellInfo) => {
+    <div style={{ backgroundColor: "white" }}>
+              <div className="sideContent" style={{ float: "right", padding:"10px 30px"}}>
+                <span className="table-search-wrapper">
+                  <DownloadBtn className="mrlg cursorPointer"  onClick={() => handleExcelDownload(tabledata)}/>
+                </span>
+              </div>
+            <Table
+                t={t}
+                data={data}
+                totalRecords={count}
+                columns={columns}
+                getCellProps={(cellInfo) => {
 
-              return {
-                style: {
-                  minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
-                  padding: "20px 18px",
-                  fontSize: "16px",
-                },
-              };
-            }}
-            onPageSizeChange={onPageSizeChange}
-            currentPage={getValues("offset") / getValues("limit")}
-            onNextPage={nextPage}
-            onPrevPage={previousPage}
-            pageSizeLimit={getValues("limit")}
-            onSort={onSort}
-            disableSort={false}
-            sortParams={[{ id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false }]}
-          />
+                  return {
+                    style: {
+                      minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
+                      padding: "20px 18px",
+                      fontSize: "16px",
+                    },
+                  };
+                } }
+                onPageSizeChange={onPageSizeChange}
+                currentPage={getValues("offset") / getValues("limit")}
+                onNextPage={nextPage}
+                manualPagination={false}
+                onPrevPage={previousPage}
+                pageSizeLimit={getValues("limit")}
+                onSort={onSort}
+                disableSort={false}
+                sortParams={[{ id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false }]} />
+                </div>
         )
       )}
     </React.Fragment>

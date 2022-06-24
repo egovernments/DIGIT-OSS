@@ -30,7 +30,6 @@ const Table = ({
   customTableWrapperClassName="",
   styles={},
   tableTopComponent,
-  secondaryTopComponent,
   tableRef,
  
   isReportTable=false
@@ -90,8 +89,7 @@ const Table = ({
     <span className={customTableWrapperClassName}>
     {tableTopComponent ? tableTopComponent:null}
       <table className={className} {...getTableProps()} style={styles} ref={tableRef}>
-          <thead>
-          {secondaryTopComponent ? secondaryTopComponent : null}
+        <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
              {showAutoSerialNo&& <th style={{  verticalAlign: "top"}}>

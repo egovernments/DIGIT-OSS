@@ -13,7 +13,7 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count, isInbox }) => {
     sortBy: "commencementDate",
     sortOrder: "DESC",
   };
-  const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
+  const { register, control, handleSubmit, setValue, getValues, reset,formState } = useForm({
     defaultValues: initialValues,
   });
   const [enableSarch, setEnableSearch] = useState(() => (isInbox ? {} : { enabled: false }));
@@ -143,19 +143,7 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count, isInbox }) => {
         disableSortBy: true,
         Cell: ({ row }) => {
           return GetCell(`${row.original?.["status"]}`);
-        },      },
-      {
-        Header: t("ABG_COMMON_TABLE_COL_ACTION"),
-        disableSortBy: true,
-        Cell: ({ row }) => {
-          const amount = row.original?.totalAmount;
-          if (amount > 0) {
-            return GetCell(getActionItem(row.original?.status, row));
-          } else {
-            return GetCell(t(`${"CS_NA"}`));
-          }
-        },
-      }
+        },      }
     ],
     []
   );
@@ -210,7 +198,7 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count, isInbox }) => {
           {GetLogo()}
         </div>
       <SearchForm className="ws-custom-wrapper" onSubmit={onSubmit} handleSubmit={handleSubmit}>
-        <SearchFields {...{ register, control, reset, tenantId, t, previousPage }} />
+        <SearchFields {...{ register, control, reset, tenantId, t, previousPage,formState }} />
       </SearchForm>
       {data?.display ? (
         <Card style={{ marginTop: 20 }}>
@@ -240,6 +228,7 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count, isInbox }) => {
             }}
             onPageSizeChange={onPageSizeChange}
             currentPage={getValues("offset") / getValues("limit")}
+            manualPagination={false}
             onNextPage={nextPage}
             onPrevPage={previousPage}
             pageSizeLimit={getValues("limit")}

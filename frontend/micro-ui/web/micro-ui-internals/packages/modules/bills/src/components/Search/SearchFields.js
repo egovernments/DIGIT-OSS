@@ -1,22 +1,13 @@
 import React, { Fragment } from "react";
-import { Controller, useWatch } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import {
   TextInput,
   SubmitBar,
-  LinkLabel,
-  ActionBar,
-  CloseSvg,
-  DatePicker,
   CardLabelError,
-  SearchForm,
   SearchField,
   Dropdown,
-  Table,
-  Card,
   MobileNumber,
   Loader,
-  CardText,
-  Header,
 } from "@egovernments/digit-ui-react-components";
 
 const SearchFields = ({ register, control, reset, tenantId, t, previousPage ,formState}) => {
@@ -26,7 +17,6 @@ const SearchFields = ({ register, control, reset, tenantId, t, previousPage ,for
   
     const filterServiceType = generateServiceType?.BillingService?.BusinessService?.filter((element) => element.billGineiURL);
   
-    const getUlbLists = generateServiceType?.tenant?.tenants?.filter((element) => element.code === tenantId);
     let serviceTypeList = [];
     if (filterServiceType) {
       serviceTypeList = filterServiceType.map((element) => {
@@ -37,7 +27,6 @@ const SearchFields = ({ register, control, reset, tenantId, t, previousPage ,for
         };
       });
     }
-
     const formErrors = formState?.errors
     const propsForMobileNumber = {
         maxlength: 10,
@@ -45,6 +34,32 @@ const SearchFields = ({ register, control, reset, tenantId, t, previousPage ,for
         title: t("ES_SEARCH_APPLICATION_MOBILE_INVALID"),
         componentInFront: "+91",
     };
+    const getLabel = () => {
+      const service = serviceCategory?.businesService
+      if (service === "WS" || service === "SW" || !service)
+          return <label>{t("ABG_COMMON_TABLE_COL_CONSUMER_ID")}</label>
+      else
+          return <label>{t("ABG_COMMON_TABLE_COL_PROPERTY_ID")}</label>
+  }
+
+  const getInputBasedOnServiceCategory = () => {
+      const service = serviceCategory?.businesService
+      if(service==="WS" || service==="SW" || !service){
+          return <SearchField>
+              <label>{t("ABG_COMMON_TABLE_COL_CONSUMER_ID")}</label>
+              <TextInput name="consumerCode"
+                  inputRef={register({})}
+              />
+          </SearchField>
+      }else {
+          return <SearchField>
+              <label>{t("ABG_COMMON_TABLE_COL_PROPERTY_ID")}</label>
+              <TextInput name="consumerCode"
+                  inputRef={register({})}
+              />
+          </SearchField>
+      }
+  }
   return (
     <>
       < div style={{marginRight:"542px", marginBottom:"10px"}}>
@@ -54,7 +69,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, previousPage ,for
         <Loader />
       ) : (  
         <SearchField>
-           <label>{t("ABG_SERVICE_CATEGORY_LABEL")}</label>
+           <label>{t("ABG_SERVICE_CATEGORY_LABEL")+ " *"}</label>
           <Controller
             control={control}
             rules={{ required: t("REQUIRED_FIELD") }}
@@ -63,18 +78,20 @@ const SearchFields = ({ register, control, reset, tenantId, t, previousPage ,for
               <Dropdown name="serviceCategory" t={t} option={serviceTypeList} onBlur={props.onBlur} selected={props.value}  select={props.onChange} optionKey={"name"} />
             )}
           />
-           {formErrors && formErrors?.businesService && formErrors?.businesService?.type === "required" && (
+           {formErrors && formErrors?.serviceCategory && formErrors?.serviceCategory?.type === "required" && (
                     <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>)}
         </SearchField>
       )}
       <SearchField>
         <label>{t("ABG_BILL_NUMBER_LABEL")}</label>
-        <TextInput name="billNumber" inputRef={register({})} />
+        <TextInput name="billNo" inputRef={register({})} />
       </SearchField>
       <SearchField>
-        <label>{t("ABG_PROPERTYID_CONS_NO")}</label>
-        <TextInput name="consumerCode" inputRef={register({})} />
-      </SearchField>
+                {getLabel()}
+                <TextInput name="consumerCode"
+                    inputRef={register({})}
+                />
+            </SearchField>
       <SearchField>
                 <label>{t("ABG_MOBILE_NO_LABEL")}</label>
                 <MobileNumber name="mobileNumber" inputRef={register({})} {...propsForMobileNumber} />
@@ -87,7 +104,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, previousPage ,for
             reset({
               serviceCategory: "",
               consumerCode: "",
-              billNumber: "",
+              billNo: "",
               mobileNumber: "",
               offset: 0,
               limit: 10,

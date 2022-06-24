@@ -8,7 +8,8 @@ import BillsFilter from "./components/BillsFilter";
 import ActionModal from "./components/Modal";
 import BillDetails from "./pages/employee/BillDetails";
 import Banner from "./components/Banner";
-import GroupFilter from "./pages/employee/GroupBill/GroupFilter";
+//import GroupFilter from "./pages/employee/GroupBill/GroupFilter";
+
 import Inbox from "./pages/citizen/SearchBill/Inbox";
 import ApplicationCitizenCard from "./components/citizen/ApplicationCitizenCard";
 import SearchCitizen from "./components/citizen/SearchCitizen";
