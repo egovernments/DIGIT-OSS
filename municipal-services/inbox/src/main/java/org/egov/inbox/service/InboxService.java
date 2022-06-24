@@ -157,8 +157,7 @@ public class InboxService {
         }
 
         Integer totalCount = workflowService.getProcessCount(criteria.getTenantId(), requestInfo, processCriteria);
-        Integer nearingSlaProcessCount = 0;
-        //workflowService.getNearingSlaProcessCount(criteria.getTenantId(), requestInfo, processCriteria);
+        Integer nearingSlaProcessCount = workflowService.getNearingSlaProcessCount(criteria.getTenantId(), requestInfo, processCriteria);
         List<String> inputStatuses = new ArrayList<>();
         if (!CollectionUtils.isEmpty(processCriteria.getStatus()))
             inputStatuses = new ArrayList<>(processCriteria.getStatus());
