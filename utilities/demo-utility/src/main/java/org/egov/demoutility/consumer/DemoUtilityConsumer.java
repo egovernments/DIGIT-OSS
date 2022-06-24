@@ -296,6 +296,8 @@ public class DemoUtilityConsumer {
 		List<Vehicle> vehicleList = new ArrayList<Vehicle>();
 		vehicleList.add(vehicle);
 		vendor.setVehicles(vehicleList);
+		vendor.setAgencyType(UtilityConstants.AGENCY_TYPE);
+                vendor.setPaymentPreference(UtilityConstants.PAYMENT_PREFERENCE);
 		vendorRequest.setRequestInfo(requestInfo);
 		vendorRequest.setVendor(vendor);
 		return vendorRequest;

@@ -113,5 +113,11 @@ public class Vendor {
 
 	@JsonProperty("auditDetails")
 	private AuditDetails auditDetails = null;
+	
+        @JsonProperty("agencyType")
+        private String agencyType = null;
+        
+        @JsonProperty("paymentPreference")
+        private String paymentPreference = null;
 
 }

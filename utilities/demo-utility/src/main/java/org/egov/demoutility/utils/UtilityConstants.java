@@ -86,7 +86,8 @@ public class UtilityConstants {
     public static final String PATTERN_CITY = "^[a-zA-Z. ]*$";
     public static final String PATTERN_TENANT = "^[a-zA-Z. ]*$";
     public static final List<String> NUMBERS=Arrays.asList("ONE","TWO","THREE","FOUR","FIVE","SIX");
-	
+    public static final String AGENCY_TYPE = "Private";
+    public static final String PAYMENT_PREFERENCE = "post-service";
 	
 	
 	
