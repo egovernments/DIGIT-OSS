@@ -120,4 +120,10 @@ public class SurveyValidator {
         if(surveyService.hasCitizenAlreadyResponded(answerEntity, citizenId))
             throw new CustomException("EG_CITIZEN_ALREADY_RESPONDED", "The citizen has already responded to this survey.");
     }
+
+    public void validateUpdateRequest(SurveyEntity surveyEntity) {
+        // Validate if there is at least one question
+        if(ObjectUtils.isEmpty(surveyEntity.getTenantId()))
+            throw new CustomException("EG_SURVEY_NO_TENANTID_ERR", "Update request cannot have tenantId as empty or null.");
+    }
 }

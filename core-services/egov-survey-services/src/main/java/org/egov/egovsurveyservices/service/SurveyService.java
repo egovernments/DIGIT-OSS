@@ -175,7 +175,7 @@ public class SurveyService {
         surveyValidator.validateUserType(surveyRequest.getRequestInfo());
         // Validate question types.
         surveyValidator.validateQuestions(surveyEntity);
-
+        surveyValidator.validateUpdateRequest(surveyEntity);
         // Enrich update request
         surveyEntity.setAuditDetails(existingSurveyEntity.getAuditDetails());
         surveyEntity.getQuestions().forEach(question -> {

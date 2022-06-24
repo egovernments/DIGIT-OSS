@@ -200,9 +200,9 @@ public class SurveyQueryBuilder {
 
     private void appendStatusFilterToQuery(StringBuilder query, String status) {
         if(status.equals(ACTIVE))
-            query.append(" AND (select extract(epoch from current_timestamp)) BETWEEN survey.startdate AND survey.enddate) ");
+            query.append(" AND (select extract(epoch from current_timestamp) * 1000 ) BETWEEN survey.startdate AND survey.enddate) ");
         else
-            query.append(" OR (select extract(epoch from current_timestamp)) NOT BETWEEN survey.startdate AND survey.enddate) ");
+            query.append(" OR (select extract(epoch from current_timestamp) * 1000 ) NOT BETWEEN survey.startdate AND survey.enddate) ");
     }
 
     public String getSurveyUuidsToCountMapQuery(List<String> listOfSurveyIds, List<Object> preparedStmtList) {
