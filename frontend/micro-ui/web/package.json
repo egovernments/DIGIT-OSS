@@ -3,7 +3,8 @@
   "version":"1.5.0",
   "private": true,
   "workspaces": [
-    "micro-ui-internals/packages/*",
+    "micro-ui-internals/packages/libraries",
+    "micro-ui-internals/packages/react-components",
     "micro-ui-internals/packages/modules/*"
   ],
   "homepage": "/digit-ui",
