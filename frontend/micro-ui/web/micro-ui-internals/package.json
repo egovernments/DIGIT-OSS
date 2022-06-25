@@ -3,7 +3,6 @@
   "version": "1.5.0",
   "main": "index.js",
   "workspaces": [
-    "example",
     "packages/libraries",
     "packages/react-components",
     "packages/modules/*"
