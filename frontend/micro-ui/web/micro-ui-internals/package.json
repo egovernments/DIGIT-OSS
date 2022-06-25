@@ -4,7 +4,8 @@
   "main": "index.js",
   "workspaces": [
     "example",
-    "packages/*",
+    "packages/libraries",
+    "packages/react-components",
     "packages/modules/*"
   ],
   "author": "Abhinav Kushwaha <abhinav.kushwaha@egovernments.org>",
