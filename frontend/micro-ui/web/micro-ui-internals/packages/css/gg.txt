@@ -11,11 +11,11 @@ using GIT_SSH to set credentials SSH private key file for git checkouts
  > git rev-parse refs/remotes/origin/build-opt^{commit} # timeout=10
  > git rev-parse refs/remotes/origin/origin/build-opt^{commit} # timeout=10
 JENKINS-19022: warning: possible memory leak due to Git plugin usage; see: https://wiki.jenkins.io/display/JENKINS/Remove+Git+Plugin+BuildsByBranch+BuildData
-Checking out Revision 8067514043c7d424fc7cc847deb2703d75360bee (refs/remotes/origin/build-opt)
+Checking out Revision df8470791afbc0a48d973235955b9ebdd6e6509a (refs/remotes/origin/build-opt)
  > git config core.sparsecheckout # timeout=10
- > git checkout -f 8067514043c7d424fc7cc847deb2703d75360bee # timeout=10
-Commit message: "Removed Unwanted dependencies"
- > git rev-list --no-walk 31f5fcbb2753bbc015df679dbc370e89cc879c8f # timeout=10
+ > git checkout -f df8470791afbc0a48d973235955b9ebdd6e6509a # timeout=10
+Commit message: "Corrected the module dependcy loaders"
+ > git rev-list --no-walk 8067514043c7d424fc7cc847deb2703d75360bee # timeout=10
 Running in Durability level: MAX_SURVIVABILITY
 [Pipeline] Start of Pipeline
 [Pipeline] library
@@ -42,31 +42,31 @@ Commit message: "Merge pull request #16 from egovernments/mem_update"
 [Pipeline] podTemplate
 [Pipeline] {
 [Pipeline] node
+Created Pod: jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38
+[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38][Scheduled] Successfully assigned jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38 to ip-192-168-76-167.ap-south-1.compute.internal
+[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38][Pulled] Container image "gcr.io/kaniko-project/executor:debug-v0.15.0" already present on machine
+[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38][Created] Created container kaniko
+[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38][Started] Started container kaniko
+[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38][Pulled] Container image "docker.io/egovio/builder:2-64da60a1-version_script_update-NA" already present on machine
+[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38][Created] Created container git
+[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38][Started] Started container git
+[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38][Pulled] Container image "jenkins/jnlp-slave:4.0.1-1" already present on machine
+[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38][Created] Created container jnlp
+[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38][Started] Started container jnlp
 Still waiting to schedule task
-Waiting for next available executor
-Created Pod: jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq
-[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq][Scheduled] Successfully assigned jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq to ip-192-168-67-7.ap-south-1.compute.internal
-[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq][Pulled] Container image "gcr.io/kaniko-project/executor:debug-v0.15.0" already present on machine
-[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq][Created] Created container kaniko
-[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq][Started] Started container kaniko
-[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq][Pulled] Container image "docker.io/egovio/builder:2-64da60a1-version_script_update-NA" already present on machine
-[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq][Created] Created container git
-[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq][Started] Started container git
-[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq][Pulled] Container image "jenkins/jnlp-slave:4.0.1-1" already present on machine
-[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq][Created] Created container jnlp
-[Normal][jenkins/builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq][Started] Started container jnlp
-Agent builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq is provisioned from template builds_digit-dev_frontend_micro-ui_digit-ui_1086-16wxw-90q81
+‘builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38’ is offline
+Agent builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38 is provisioned from template builds_digit-dev_frontend_micro-ui_digit-ui_1087-5xknh-3zqr4
 ---
 apiVersion: "v1"
 kind: "Pod"
 metadata:
   annotations:
-    buildUrl: "http://jenkins:8080/job/builds/job/digit-dev/job/frontend/job/micro-ui/job/digit-ui/1086/"
-    runUrl: "job/builds/job/digit-dev/job/frontend/job/micro-ui/job/digit-ui/1086/"
+    buildUrl: "http://jenkins:8080/job/builds/job/digit-dev/job/frontend/job/micro-ui/job/digit-ui/1087/"
+    runUrl: "job/builds/job/digit-dev/job/frontend/job/micro-ui/job/digit-ui/1087/"
   labels:
     jenkins/jenkins-jenkins-slave: "true"
-    jenkins/label: "builds_digit-dev_frontend_micro-ui_digit-ui_1086-16wxw"
-  name: "builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq"
+    jenkins/label: "builds_digit-dev_frontend_micro-ui_digit-ui_1087-5xknh"
+  name: "builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38"
 spec:
   containers:
   - command:
@@ -141,9 +141,9 @@ spec:
     - name: "JENKINS_TUNNEL"
       value: "jenkins-agent:50000"
     - name: "JENKINS_AGENT_NAME"
-      value: "builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq"
+      value: "builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38"
     - name: "JENKINS_NAME"
-      value: "builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq"
+      value: "builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38"
     - name: "JENKINS_AGENT_WORKDIR"
       value: "/home/jenkins/agent"
     - name: "JENKINS_URL"
@@ -187,7 +187,7 @@ spec:
       claimName: "kaniko-cache-claim"
       readOnly: true
 
-Running on builds-digit-dev-frontend-micro-ui-digit-ui-1086-16wxw-90-bpxgq in /home/jenkins/agent/workspace/builds/digit-dev/frontend/micro-ui/digit-ui
+Running on builds-digit-dev-frontend-micro-ui-digit-ui-1087-5xknh-3z-59m38 in /home/jenkins/agent/workspace/builds/digit-dev/frontend/micro-ui/digit-ui
 [Pipeline] {
 [Pipeline] checkout
 using credential git_read
@@ -200,17 +200,17 @@ using GIT_SSH to set credentials SSH private key file for git checkouts
  > git fetch --tags --progress -- git@github.com:egovernments/DIGIT-Dev.git +refs/heads/*:refs/remotes/origin/* # timeout=10
  > git config remote.origin.url git@github.com:egovernments/DIGIT-Dev.git # timeout=10
  > git config --add remote.origin.fetch +refs/heads/*:refs/remotes/origin/* # timeout=10
-JENKINS-19022: warning: possible memory leak due to Git plugin usage; see: https://wiki.jenkins.io/display/JENKINS/Remove+Git+Plugin+BuildsByBranch+BuildData
-Checking out Revision 8067514043c7d424fc7cc847deb2703d75360bee (refs/remotes/origin/build-opt)
  > git config remote.origin.url git@github.com:egovernments/DIGIT-Dev.git # timeout=10
 Fetching upstream changes from git@github.com:egovernments/DIGIT-Dev.git
 using GIT_SSH to set credentials SSH private key file for git checkouts
  > git fetch --tags --progress -- git@github.com:egovernments/DIGIT-Dev.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+JENKINS-19022: warning: possible memory leak due to Git plugin usage; see: https://wiki.jenkins.io/display/JENKINS/Remove+Git+Plugin+BuildsByBranch+BuildData
+Checking out Revision df8470791afbc0a48d973235955b9ebdd6e6509a (refs/remotes/origin/build-opt)
  > git rev-parse refs/remotes/origin/build-opt^{commit} # timeout=10
  > git rev-parse refs/remotes/origin/origin/build-opt^{commit} # timeout=10
  > git config core.sparsecheckout # timeout=10
- > git checkout -f 8067514043c7d424fc7cc847deb2703d75360bee # timeout=10
-Commit message: "Removed Unwanted dependencies"
+ > git checkout -f df8470791afbc0a48d973235955b9ebdd6e6509a # timeout=10
+Commit message: "Corrected the module dependcy loaders"
 [Pipeline] readYaml
 [Pipeline] stage
 [Pipeline] { (Parse Latest Git Commit)
@@ -241,11 +241,11 @@ frontend/micro-ui frontend/micro-ui/web/docker/Dockerfile
 [Pipeline] echo
 ALT_REPO_PUSH ENABLED: false
 [Pipeline] sh
-+ echo 'Attempting to build image,  docker.io/egovio/digit-ui:build-opt-8067514043-1086'
-Attempting to build image,  docker.io/egovio/digit-ui:build-opt-8067514043-1086
++ echo 'Attempting to build image,  docker.io/egovio/digit-ui:build-opt-df8470791a-1087'
+Attempting to build image,  docker.io/egovio/digit-ui:build-opt-df8470791a-1087
 + pwd
 + pwd
-+ /kaniko/executor -f /home/jenkins/agent/workspace/builds/digit-dev/frontend/micro-ui/digit-ui/frontend/micro-ui/web/docker/Dockerfile -c /home/jenkins/agent/workspace/builds/digit-dev/frontend/micro-ui/digit-ui/./frontend/micro-ui --build-arg 'WORK_DIR=./' --build-arg 'token=********' --build-arg 'nexusUsername=********' --build-arg 'nexusPassword=********' --build-arg 'ciDbUsername=********' --build-arg 'ciDbpassword=********' '--cache=true' '--cache-dir=/cache' '--single-snapshot=true' '--snapshotMode=time' '--destination=docker.io/egovio/digit-ui:build-opt-8067514043-1086' '--no-push=false' '--cache-repo=egovio/cache/cache'
++ /kaniko/executor -f /home/jenkins/agent/workspace/builds/digit-dev/frontend/micro-ui/digit-ui/frontend/micro-ui/web/docker/Dockerfile -c /home/jenkins/agent/workspace/builds/digit-dev/frontend/micro-ui/digit-ui/./frontend/micro-ui --build-arg 'WORK_DIR=./' --build-arg 'token=********' --build-arg 'nexusUsername=********' --build-arg 'nexusPassword=********' --build-arg 'ciDbUsername=********' --build-arg 'ciDbpassword=********' '--cache=true' '--cache-dir=/cache' '--single-snapshot=true' '--snapshotMode=time' '--destination=docker.io/egovio/digit-ui:build-opt-df8470791a-1087' '--no-push=false' '--cache-repo=egovio/cache/cache'
 [36mINFO[0m[0002] Resolved base name egovio/alpine-node-builder-14:yarn to egovio/alpine-node-builder-14:yarn 
 [36mINFO[0m[0002] Resolved base name nginx:mainline-alpine to nginx:mainline-alpine 
 [36mINFO[0m[0002] Resolved base name egovio/alpine-node-builder-14:yarn to egovio/alpine-node-builder-14:yarn 
@@ -256,18 +256,18 @@ Attempting to build image,  docker.io/egovio/digit-ui:build-opt-8067514043-1086
 [36mINFO[0m[0005] Retrieving image manifest nginx:mainline-alpine 
 [36mINFO[0m[0007] Image nginx:mainline-alpine not found in cache 
 [36mINFO[0m[0007] Retrieving image manifest nginx:mainline-alpine 
-[36mINFO[0m[0008] Built cross stage deps: map[0:[/app/web/build /app/web/docker/nginx.conf]] 
-[36mINFO[0m[0008] Retrieving image manifest egovio/alpine-node-builder-14:yarn 
+[36mINFO[0m[0009] Built cross stage deps: map[0:[/app/web/build /app/web/docker/nginx.conf]] 
+[36mINFO[0m[0009] Retrieving image manifest egovio/alpine-node-builder-14:yarn 
 [36mINFO[0m[0010] Image egovio/alpine-node-builder-14:yarn not found in cache 
 [36mINFO[0m[0010] Retrieving image manifest egovio/alpine-node-builder-14:yarn 
 [36mINFO[0m[0011] Only file modification time will be considered when snapshotting 
 [36mINFO[0m[0011] Checking for cached layer egovio/cache/cache:ddecfe4e1131aa99815f498f0272ba63a6104a3636d75ed0194670d025cb5a16... 
 [36mINFO[0m[0013] No cached layer found for cmd RUN apk update && apk upgrade 
 [36mINFO[0m[0013] Unpacking rootfs as cmd RUN apk update && apk upgrade requires it. 
-[36mINFO[0m[0016] Taking snapshot of full filesystem...        
-[36mINFO[0m[0018] RUN apk update && apk upgrade                
-[36mINFO[0m[0018] cmd: /bin/sh                                 
-[36mINFO[0m[0018] args: [-c apk update && apk upgrade]         
+[36mINFO[0m[0018] Taking snapshot of full filesystem...        
+[36mINFO[0m[0019] RUN apk update && apk upgrade                
+[36mINFO[0m[0019] cmd: /bin/sh                                 
+[36mINFO[0m[0019] args: [-c apk update && apk upgrade]         
 fetch http://dl-cdn.alpinelinux.org/alpine/v3.11/main/x86_64/APKINDEX.tar.gz
 fetch http://dl-cdn.alpinelinux.org/alpine/v3.11/community/x86_64/APKINDEX.tar.gz
 v3.11.13-8-gaf7d80ff31 [http://dl-cdn.alpinelinux.org/alpine/v3.11/main]
@@ -284,33 +284,33 @@ Executing busybox-1.31.1-r11.post-upgrade
 (4/4) Upgrading ssl_client (1.31.1-r9 -> 1.31.1-r11)
 Executing busybox-1.31.1-r11.trigger
 OK: 7 MiB in 16 packages
-[36mINFO[0m[0019] RUN apk add --no-cache git>2.30.0            
-[36mINFO[0m[0019] cmd: /bin/sh                                 
-[36mINFO[0m[0019] args: [-c apk add --no-cache git>2.30.0]     
-[36mINFO[0m[0020] ARG WORK_DIR                                 
-[36mINFO[0m[0020] WORKDIR /app                                 
-[36mINFO[0m[0020] cmd: workdir                                 
-[36mINFO[0m[0020] Changed working directory to /app            
-[36mINFO[0m[0020] Creating directory /app                      
-[36mINFO[0m[0020] ENV NODE_OPTIONS "--max-old-space-size=7168" 
-[36mINFO[0m[0020] COPY ${WORK_DIR} .                           
-[36mINFO[0m[0020] RUN ls -lah                                  
-[36mINFO[0m[0020] cmd: /bin/sh                                 
-[36mINFO[0m[0020] args: [-c ls -lah]                           
+[36mINFO[0m[0021] RUN apk add --no-cache git>2.30.0            
+[36mINFO[0m[0021] cmd: /bin/sh                                 
+[36mINFO[0m[0021] args: [-c apk add --no-cache git>2.30.0]     
+[36mINFO[0m[0022] ARG WORK_DIR                                 
+[36mINFO[0m[0022] WORKDIR /app                                 
+[36mINFO[0m[0022] cmd: workdir                                 
+[36mINFO[0m[0022] Changed working directory to /app            
+[36mINFO[0m[0022] Creating directory /app                      
+[36mINFO[0m[0022] ENV NODE_OPTIONS "--max-old-space-size=7168" 
+[36mINFO[0m[0022] COPY ${WORK_DIR} .                           
+[36mINFO[0m[0022] RUN ls -lah                                  
+[36mINFO[0m[0022] cmd: /bin/sh                                 
+[36mINFO[0m[0022] args: [-c ls -lah]                           
 total 24K    
-drwxr-xr-x    4 1000     1000         139 Jun 25 12:56 .
-drwxr-xr-x    1 root     root         217 Jun 25 12:56 ..
--rw-r--r--    1 1000     1000         380 Jun 25 12:56 .gitignore
--rw-r--r--    1 1000     1000          48 Jun 25 12:56 CODEOWNERS
--rw-r--r--    1 1000     1000          73 Jun 25 12:56 Jenkinsfile
--rw-r--r--    1 1000     1000        1.4K Jun 25 12:56 README.md
-drwxr-xr-x    2 1000     1000          30 Jun 25 12:56 build
--rw-r--r--    1 1000     1000          46 Jun 25 12:56 package.json
-drwxr-xr-x    6 1000     1000         189 Jun 25 12:56 web
--rw-r--r--    1 1000     1000          86 Jun 25 12:56 yarn.lock
-[36mINFO[0m[0020] RUN cd web/     && node envs.js     &&  ./install-deps.sh     && yarn install     && yarn build 
-[36mINFO[0m[0020] cmd: /bin/sh                                 
-[36mINFO[0m[0020] args: [-c cd web/     && node envs.js     &&  ./install-deps.sh     && yarn install     && yarn build] 
+drwxr-xr-x    4 1000     1000         139 Jun 25 13:09 .
+drwxr-xr-x    1 root     root         217 Jun 25 13:09 ..
+-rw-r--r--    1 1000     1000         380 Jun 25 13:09 .gitignore
+-rw-r--r--    1 1000     1000          48 Jun 25 13:09 CODEOWNERS
+-rw-r--r--    1 1000     1000          73 Jun 25 13:09 Jenkinsfile
+-rw-r--r--    1 1000     1000        1.4K Jun 25 13:09 README.md
+drwxr-xr-x    2 1000     1000          30 Jun 25 13:09 build
+-rw-r--r--    1 1000     1000          46 Jun 25 13:09 package.json
+drwxr-xr-x    6 1000     1000         189 Jun 25 13:09 web
+-rw-r--r--    1 1000     1000          86 Jun 25 13:09 yarn.lock
+[36mINFO[0m[0022] RUN cd web/     && node envs.js     &&  ./install-deps.sh     && yarn install     && yarn build 
+[36mINFO[0m[0022] cmd: /bin/sh                                 
+[36mINFO[0m[0022] args: [-c cd web/     && node envs.js     &&  ./install-deps.sh     && yarn install     && yarn build] 
 fatal: not a git repository (or any of the parent directories): .git
 Main Branch: 
 fatal: not a git repository (or any of the parent directories): .git
@@ -324,38 +324,44 @@ info No lockfile found.
 [2/5] Resolving packages...
 warning microbundle-crl > rollup-plugin-babel@4.4.0: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-babel.
 warning microbundle-crl > @svgr/rollup > @svgr/plugin-svgo > svgo@1.3.2: This SVGO version is no longer supported. Upgrade to v2.x.x.
-warning microbundle-crl > @svgr/rollup > @svgr/plugin-svgo > svgo > stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
 warning microbundle-crl > cssnano > cssnano-preset-default > postcss-svgo > svgo@1.3.2: This SVGO version is no longer supported. Upgrade to v2.x.x.
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > axios@0.20.0: Critical security vulnerability fixed in v0.21.1. For more information, see https://github.com/axios/axios/pull/3410
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > babel-eslint@10.1.0: babel-eslint is now @babel/eslint-parser. This package will no longer receive updates.
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > babel-eslint@10.1.0: babel-eslint is now @babel/eslint-parser. This package will no longer receive updates.
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > @storybook/react > @storybook/store > stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > babel-preset-react > babel-plugin-transform-react-display-name > babel-runtime > core-js@2.6.12: core-js@<3.4 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Please, upgrade your dependencies to the actual version of core-js.
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > webpack-dev-server > chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > webpack-dev-server > chokidar > fsevents@1.2.13: fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > rollup-plugin-babel@4.4.0: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-babel.
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > @storybook/addon-essentials > @storybook/addon-docs > @storybook/builder-webpack4 > stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > @pmmmwh/react-refresh-webpack-plugin > native-url > querystring@0.2.1: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > webpack-dev-server > url > querystring@0.2.0: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > webpack > watchpack > watchpack-chokidar2 > chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > webpack > micromatch > snapdragon > source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > resolve-url-loader > rework > css > source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > webpack > micromatch > snapdragon > source-map-resolve > source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > webpack-dev-server > webpack-log > uuid@3.4.0: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi@15.1.1: Switch to 'npm install joi'
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > @storybook/addon-essentials > @storybook/addon-docs > @storybook/builder-webpack4 > webpack-hot-middleware > querystring@0.2.1: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > babel-jest > @jest/transform > jest-haste-map > sane@4.1.0: some dependency vulnerabilities fixed, support for node < 10 dropped, and newer ECMAScript syntax/features added
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > postcss-preset-env > postcss-color-functional-notation > postcss-values-parser > flatten@1.0.3: flatten is deprecated in favor of utility frameworks such as lodash.
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > resolve-url-loader > rework > css > urix@0.1.0: Please see https://github.com/lydell/urix#deprecated
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > webpack > micromatch > snapdragon > source-map-resolve > urix@0.1.0: Please see https://github.com/lydell/urix#deprecated
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > webpack > micromatch > snapdragon > source-map-resolve > resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/address@2.1.4: Moved to 'npm install @sideway/address'
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/hoek@8.5.1: This version has been deprecated and is no longer supported or maintained
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/bourne@1.3.2: This version has been deprecated and is no longer supported or maintained
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/topo@3.1.6: This version has been deprecated and is no longer supported or maintained
-warning workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/topo > @hapi/hoek@8.5.1: This version has been deprecated and is no longer supported or maintained
+warning microbundle-crl > @svgr/rollup > @svgr/plugin-svgo > svgo > stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-libraries > axios@0.20.0: Critical security vulnerability fixed in v0.21.1. For more information, see https://github.com/axios/axios/pull/3410
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > babel-eslint@10.1.0: babel-eslint is now @babel/eslint-parser. This package will no longer receive updates.
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > babel-eslint@10.1.0: babel-eslint is now @babel/eslint-parser. This package will no longer receive updates.
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-css > node-sass > request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-css > node-sass > node-gyp > request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > webpack-dev-server > chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-css > gulp > glob-watcher > chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > webpack-dev-server > chokidar > fsevents@1.2.13: fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > @storybook/react > @storybook/store > stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-css > node-sass > node-gyp > tar@2.2.2: This version of tar is no longer supported, and will not receive security updates. Please upgrade asap.
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-css > node-sass > request > har-validator@5.1.5: this library is no longer supported
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-css > node-sass > request > uuid@3.4.0: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > webpack-dev-server > webpack-log > uuid@3.4.0: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > workbox-webpack-plugin > workbox-build > rollup-plugin-babel@4.4.0: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-babel.
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > workbox-webpack-plugin > source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > workbox-webpack-plugin > workbox-build > source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-libraries > babel-preset-react > babel-plugin-transform-react-jsx-self > babel-runtime > core-js@2.6.12: core-js@<3.4 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Please, upgrade your dependencies to the actual version of core-js.
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > @storybook/addon-essentials > @storybook/addon-docs > @storybook/builder-webpack4 > stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > @pmmmwh/react-refresh-webpack-plugin > native-url > querystring@0.2.1: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > webpack-dev-server > url > querystring@0.2.0: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > webpack-dev-server > http-proxy-middleware > micromatch > snapdragon > source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > resolve-url-loader > rework > css > source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > webpack-dev-server > http-proxy-middleware > micromatch > snapdragon > source-map-resolve > source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > webpack > watchpack > watchpack-chokidar2 > chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi@15.1.1: Switch to 'npm install joi'
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-css > postcss-preset-env > postcss-color-functional-notation > postcss-values-parser > flatten@1.0.3: flatten is deprecated in favor of utility frameworks such as lodash.
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > @storybook/addon-essentials > @storybook/addon-docs > @storybook/builder-webpack4 > webpack-hot-middleware > querystring@0.2.1: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > babel-jest > @jest/transform > jest-haste-map > sane@4.1.0: some dependency vulnerabilities fixed, support for node < 10 dropped, and newer ECMAScript syntax/features added
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > resolve-url-loader > rework > css > urix@0.1.0: Please see https://github.com/lydell/urix#deprecated
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > webpack-dev-server > http-proxy-middleware > micromatch > snapdragon > source-map-resolve > urix@0.1.0: Please see https://github.com/lydell/urix#deprecated
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > webpack-dev-server > http-proxy-middleware > micromatch > snapdragon > source-map-resolve > resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/hoek@8.5.1: This version has been deprecated and is no longer supported or maintained
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/address@2.1.4: Moved to 'npm install @sideway/address'
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/topo@3.1.6: This version has been deprecated and is no longer supported or maintained
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/topo > @hapi/hoek@8.5.1: This version has been deprecated and is no longer supported or maintained
+warning workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/bourne@1.3.2: This version has been deprecated and is no longer supported or maintained
 [3/5] Fetching packages...
 info fsevents@2.3.2: The platform "linux" is incompatible with this module.
 info "fsevents@2.3.2" is an optional dependency and failed compatibility check. Excluding it from installation.
@@ -387,39 +393,41 @@ warning " > @egovernments/digit-ui-module-tl@1.5.0" has unmet peer dependency "r
 warning " > @egovernments/digit-ui-module-tl@1.5.0" has unmet peer dependency "react-router-dom@5.3.0".
 warning " > @egovernments/digit-ui-module-ws@1.5.0" has unmet peer dependency "react@17.0.2".
 warning " > @egovernments/digit-ui-module-ws@1.5.0" has unmet peer dependency "react-router-dom@5.3.0".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > @storybook/addon-essentials@6.4.20" has unmet peer dependency "@babel/core@^7.9.6".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > @storybook/addon-essentials@6.4.20" has unmet peer dependency "babel-loader@^8.0.0".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app@3.2.0" has unmet peer dependency "@babel/core@*".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > babel-eslint@10.1.0" has unmet peer dependency "eslint@>= 4.12.1".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-module-dss > react-simple-maps@2.0.0" has incorrect peer dependency "react@^16.8.0".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-module-dss > react-simple-maps@2.0.0" has incorrect peer dependency "react-dom@^16.8.0".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-module-dss > react-simple-maps@2.0.0" has unmet peer dependency "prop-types@^15.7.2".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-module-dss > react-inlinesvg@1.1.7" has incorrect peer dependency "react@^16.3.0".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-module-dss > react-inlinesvg@1.1.7" has incorrect peer dependency "react-dom@^16.3.0".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > react-date-range@1.3.0" has unmet peer dependency "date-fns@2.0.0-alpha.7 || >=2.0.0".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app > react-docgen-typescript-plugin@1.0.1" has unmet peer dependency "typescript@>= 3.x".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app > react-docgen-typescript-plugin@1.0.1" has unmet peer dependency "webpack@>= 4".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > @storybook/react > @storybook/react-docgen-typescript-plugin@1.0.2-canary.253f8c1.0" has unmet peer dependency "typescript@>= 3.x".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-module-dss > recharts > react-smooth@2.0.0" has unmet peer dependency "prop-types@^15.6.0".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-module-dss > react-inlinesvg > react-from-dom@0.2.3" has incorrect peer dependency "react@^15.0.0 || ^16.0.0".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-libraries > react-scripts > @typescript-eslint/eslint-plugin > tsutils@3.21.0" has unmet peer dependency "typescript@>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > @storybook/react > @storybook/core-common > fork-ts-checker-webpack-plugin@6.5.2" has unmet peer dependency "typescript@>= 2.7".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app > react-docgen-typescript-plugin > react-docgen-typescript@1.22.0" has unmet peer dependency "typescript@>= 3.x".
-warning "workspace-aggregator-aef1b9e1-b6be-44ab-806d-bf424e4d2f84 > @egovernments/digit-ui-react-components > @storybook/react > @storybook/react-docgen-typescript-plugin > react-docgen-typescript@2.2.2" has unmet peer dependency "typescript@>= 4.3.x".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-i18next@11.16.2" has unmet peer dependency "i18next@>= 19.0.0".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > react-date-range@1.3.0" has unmet peer dependency "date-fns@2.0.0-alpha.7 || >=2.0.0".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-css > postcss-header@2.0.0" has incorrect peer dependency "postcss@^7.0.0".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > babel-eslint@10.1.0" has unmet peer dependency "eslint@>= 4.12.1".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > @storybook/addon-essentials@6.4.20" has unmet peer dependency "@babel/core@^7.9.6".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > @storybook/addon-essentials@6.4.20" has unmet peer dependency "babel-loader@^8.0.0".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-module-dss > react-inlinesvg@1.1.7" has incorrect peer dependency "react@^16.3.0".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-module-dss > react-inlinesvg@1.1.7" has incorrect peer dependency "react-dom@^16.3.0".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-module-dss > react-simple-maps@2.0.0" has incorrect peer dependency "react@^16.8.0".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-module-dss > react-simple-maps@2.0.0" has incorrect peer dependency "react-dom@^16.8.0".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-module-dss > react-simple-maps@2.0.0" has unmet peer dependency "prop-types@^15.7.2".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app@3.2.0" has unmet peer dependency "@babel/core@*".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > @storybook/react > @storybook/react-docgen-typescript-plugin@1.0.2-canary.253f8c1.0" has unmet peer dependency "typescript@>= 3.x".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-module-dss > react-inlinesvg > react-from-dom@0.2.3" has incorrect peer dependency "react@^15.0.0 || ^16.0.0".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-module-dss > recharts > react-smooth@2.0.0" has unmet peer dependency "prop-types@^15.6.0".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-example > react-scripts > @typescript-eslint/eslint-plugin > tsutils@3.21.0" has unmet peer dependency "typescript@>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > @storybook/react > @storybook/core-common > fork-ts-checker-webpack-plugin@6.5.2" has unmet peer dependency "typescript@>= 2.7".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app > react-docgen-typescript-plugin@1.0.1" has unmet peer dependency "typescript@>= 3.x".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app > react-docgen-typescript-plugin@1.0.1" has unmet peer dependency "webpack@>= 4".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > @storybook/react > @storybook/react-docgen-typescript-plugin > react-docgen-typescript@2.2.2" has unmet peer dependency "typescript@>= 4.3.x".
+warning "workspace-aggregator-a04688d1-8245-4f93-bc92-d8351b5144a5 > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app > react-docgen-typescript-plugin > react-docgen-typescript@1.22.0" has unmet peer dependency "typescript@>= 3.x".
 [5/5] Building fresh packages...
 success Saved lockfile.
-Done in 120.36s.
+Done in 194.74s.
 starting build
 yarn run v1.22.10
 $ run-p build:**
-$ cd packages/modules/common && yarn build
-$ cd packages/modules/dss && yarn build
-$ cd packages/modules/engagement && yarn build
-$ cd packages/modules/core && yarn build
 $ cd packages/libraries && yarn build
 $ cd packages/react-components && yarn build
+$ cd packages/modules/core && yarn build
+$ cd packages/modules/dss && yarn build
+$ cd packages/modules/common && yarn build
 $ cd packages/modules/pt && yarn build
 $ cd packages/modules/pgr && yarn build
+$ cd packages/modules/engagement && yarn build
 $ cd packages/modules/hrms && yarn build
 $ microbundle-crl --no-compress --format modern,cjs
 $ microbundle-crl --no-compress --format modern,cjs
@@ -434,34 +442,34 @@ Non-existent export 'APPLY_FILTER' is imported from src/redux/actions/types.js
 'useRef' is imported from external module 'react' but never used
 'GreyOutText', 'AppContainer', 'LastRow', 'ButtonSelector' and 'RoundedLabel' are imported from external module '@egovernments/digit-ui-react-components' but never used
 'isError' is imported from external module 'react-query' but never used
+'LinkButton' is imported from external module '@egovernments/digit-ui-react-components' but never used
 'useContext' is imported from external module 'react' but never used
 'ButtonSelector', 'LinkButton', 'Menu', 'ActionBar', 'Button', 'LanguageIcon', 'AddressBookIcon', 'LocationIcon', 'ArrowDirection', 'UploadFile', 'HelpIcon', 'DownloadBtnCommon' and 'WhatsappIcon' are imported from external module '@egovernments/digit-ui-react-components' but never used
-'LinkButton' is imported from external module '@egovernments/digit-ui-react-components' but never used
 Non-existent export 'APPLY_FILTER' is imported from src/redux/actions/types.js
 'useRef' is imported from external module 'react' but never used
 'GreyOutText', 'AppContainer', 'LastRow', 'ButtonSelector' and 'RoundedLabel' are imported from external module '@egovernments/digit-ui-react-components' but never used
 'isError' is imported from external module 'react-query' but never used
 'CardLabelDesc', 'ArrowLeft' and 'PrivateRoute' are imported from external module '@egovernments/digit-ui-react-components' but never used
 'LinkLabel' is imported from external module 'react-router-dom' but never used
-'@egovernments/digit-ui-react-components' is imported by src/atoms/ULBHomeCard.js, but could not be resolved – treating it as an external dependency
-'useContext' is imported from external module 'react' but never used
-'ButtonSelector', 'LinkButton', 'Menu', 'ActionBar', 'Button', 'LanguageIcon', 'AddressBookIcon', 'LocationIcon', 'ArrowDirection', 'UploadFile', 'HelpIcon', 'DownloadBtnCommon' and 'WhatsappIcon' are imported from external module '@egovernments/digit-ui-react-components' but never used
 [34mBuild "digitUiModulePgr" to dist:[39m
       [33m34.6 kB[39m: [37mindex.js[39m.gz
       [33m27.7 kB[39m: [37mindex.js[39m.br
       [33m34.3 kB[39m: [37mindex.modern.js[39m.gz
       [33m27.7 kB[39m: [37mindex.modern.js[39m.br
 'LinkButton' is imported from external module '@egovernments/digit-ui-react-components' but never used
-[34mBuild "digitUiModuleCore" to dist:[39m
-      [31m48.9 kB[39m: [37mindex.js[39m.gz
-      [33m36.1 kB[39m: [37mindex.js[39m.br
-      [31m48.9 kB[39m: [37mindex.modern.js[39m.gz
-      [33m36.2 kB[39m: [37mindex.modern.js[39m.br
+'@egovernments/digit-ui-react-components' is imported by src/atoms/ULBHomeCard.js, but could not be resolved – treating it as an external dependency
+'useContext' is imported from external module 'react' but never used
+'ButtonSelector', 'LinkButton', 'Menu', 'ActionBar', 'Button', 'LanguageIcon', 'AddressBookIcon', 'LocationIcon', 'ArrowDirection', 'UploadFile', 'HelpIcon', 'DownloadBtnCommon' and 'WhatsappIcon' are imported from external module '@egovernments/digit-ui-react-components' but never used
 [34mBuild "digitUiModuleHrms" to dist:[39m
       [33m31.6 kB[39m: [37mindex.js[39m.gz
       [33m25.8 kB[39m: [37mindex.js[39m.br
       [33m31.5 kB[39m: [37mindex.modern.js[39m.gz
       [33m25.7 kB[39m: [37mindex.modern.js[39m.br
+[34mBuild "digitUiModuleCore" to dist:[39m
+      [31m48.9 kB[39m: [37mindex.js[39m.gz
+      [33m36.1 kB[39m: [37mindex.js[39m.br
+      [31m48.9 kB[39m: [37mindex.modern.js[39m.gz
+      [33m36.2 kB[39m: [37mindex.modern.js[39m.br
 'CardLabelDesc', 'ArrowLeft' and 'PrivateRoute' are imported from external module '@egovernments/digit-ui-react-components' but never used
 'LinkLabel' is imported from external module 'react-router-dom' but never used
 [34mBuild "digitUiModuleCommon" to dist:[39m
@@ -479,20 +487,20 @@ Non-existent export 'APPLY_FILTER' is imported from src/redux/actions/types.js
 Circular dependency: src/index.js -> src/atoms/UnMaskComponent.js -> src/index.js
 Circular dependency: src/index.js -> src/atoms/StatusTable.js -> src/index.js
 'BackButton', 'AddNewIcon', 'InboxIcon', 'ViewReportIcon' and 'CardText' are imported from external module '@egovernments/digit-ui-react-components' but never used
-Circular dependency: src/index.js -> src/atoms/UnMaskComponent.js -> src/index.js
-Circular dependency: src/index.js -> src/atoms/StatusTable.js -> src/index.js
 Circular dependency: src/Module.js -> src/pages/employee/index.js -> src/Module.js
-'BackButton', 'AddNewIcon', 'InboxIcon', 'ViewReportIcon' and 'CardText' are imported from external module '@egovernments/digit-ui-react-components' but never used
-Non-existent export 'configPTRejectApplication' is imported from ../templates/ApplicationDetails/config/index.js
-Non-existent export 'configPTVerifyApplication' is imported from ../templates/ApplicationDetails/config/index.js
-Non-existent export 'values' is imported from ../../../node_modules/lodash/lodash.js
 Non-existent export 'size' is imported from ../../../node_modules/lodash/lodash.js
 Non-existent export 'configPTRejectApplication' is imported from ../templates/ApplicationDetails/config/index.js
 Non-existent export 'configPTVerifyApplication' is imported from ../templates/ApplicationDetails/config/index.js
 Non-existent export 'values' is imported from ../../../node_modules/lodash/lodash.js
 Non-existent export 'first' is imported from ../../../node_modules/lodash/lodash.js
 Non-existent export 'update' is imported from ../../../node_modules/lodash/lodash.js
+Non-existent export 'configPTRejectApplication' is imported from ../templates/ApplicationDetails/config/index.js
+Non-existent export 'configPTVerifyApplication' is imported from ../templates/ApplicationDetails/config/index.js
+Non-existent export 'values' is imported from ../../../node_modules/lodash/lodash.js
+Circular dependency: src/index.js -> src/atoms/UnMaskComponent.js -> src/index.js
+Circular dependency: src/index.js -> src/atoms/StatusTable.js -> src/index.js
 'PropertyHouse', 'Localities', 'ApplyFilterBar', 'TypeSelectCard', 'FormStep', 'RadioOrSelect', 'CitizenInfoLabel' and 'Text' are imported from external module '@egovernments/digit-ui-react-components' but never used
+'BackButton', 'AddNewIcon', 'InboxIcon', 'ViewReportIcon' and 'CardText' are imported from external module '@egovernments/digit-ui-react-components' but never used
 'TypeSelectCard' is imported from external module '@egovernments/digit-ui-react-components' but never used
 'useWatch' is imported from external module 'react-hook-form' but never used
 [34mBuild "digitUiReactComponents" to dist:[39m
@@ -503,10 +511,10 @@ Non-existent export 'update' is imported from ../../../node_modules/lodash/lodas
 Non-existent export 'configPTRejectApplication' is imported from ../templates/ApplicationDetails/config/index.js
 Non-existent export 'configPTVerifyApplication' is imported from ../templates/ApplicationDetails/config/index.js
 Non-existent export 'values' is imported from ../../../node_modules/lodash/lodash.js
-'PropertyHouse', 'Localities', 'ApplyFilterBar', 'TypeSelectCard', 'FormStep', 'RadioOrSelect', 'CitizenInfoLabel' and 'Text' are imported from external module '@egovernments/digit-ui-react-components' but never used
 'default' is imported from external module 'jspdf' but never used
 'roundToNearestMinutes' is imported from external module 'date-fns/esm' but never used
 'startOfMonth', 'endOfMonth', 'getTime' and 'subSeconds' are imported from external module 'date-fns' but never used
+'PropertyHouse', 'Localities', 'ApplyFilterBar', 'TypeSelectCard', 'FormStep', 'RadioOrSelect', 'CitizenInfoLabel' and 'Text' are imported from external module '@egovernments/digit-ui-react-components' but never used
 Circular dependency: src/Module.js -> src/pages/employee/index.js -> src/Module.js
 Non-existent export 'size' is imported from ../../../node_modules/lodash/lodash.js
 Non-existent export 'configPTRejectApplication' is imported from ../templates/ApplicationDetails/config/index.js
@@ -534,8 +542,10 @@ Non-existent export 'update' is imported from ../../../node_modules/lodash/lodas
       [31m1.06 MB[39m: [37mindex.js[39m.br
       [31m1.51 MB[39m: [37mindex.modern.js[39m.gz
       [31m1.06 MB[39m: [37mindex.modern.js[39m.br
-Done in 249.96s.
+Done in 264.47s.
 building finished
+./example/node_modules
+./packages/css/node_modules
 ./packages/libraries/node_modules
 ./packages/modules/fsm/node_modules
 ./packages/react-components/node_modules
@@ -544,34 +554,34 @@ yarn install v1.22.10
 info No lockfile found.
 [1/4] Resolving packages...
 warning @egovernments/digit-ui-libraries > axios@0.20.0: Critical security vulnerability fixed in v0.21.1. For more information, see https://github.com/axios/axios/pull/3410
-warning @egovernments/digit-ui-libraries > react-scripts > babel-eslint@10.1.0: babel-eslint is now @babel/eslint-parser. This package will no longer receive updates.
-warning @egovernments/digit-ui-libraries > babel-preset-react > babel-plugin-transform-react-jsx > babel-runtime > core-js@2.6.12: core-js@<3.4 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Please, upgrade your dependencies to the actual version of core-js.
 warning @egovernments/digit-ui-libraries > microbundle-crl > rollup-plugin-babel@4.4.0: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-babel.
+warning @egovernments/digit-ui-libraries > react-scripts > babel-eslint@10.1.0: babel-eslint is now @babel/eslint-parser. This package will no longer receive updates.
+warning @egovernments/digit-ui-libraries > babel-preset-react > babel-plugin-transform-react-jsx-source > babel-runtime > core-js@2.6.12: core-js@<3.4 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Please, upgrade your dependencies to the actual version of core-js.
 warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
-warning @egovernments/digit-ui-libraries > react-scripts > webpack-dev-server > chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
-warning @egovernments/digit-ui-libraries > react-scripts > webpack-dev-server > chokidar > fsevents@1.2.13: fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
 warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > rollup-plugin-babel@4.4.0: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-babel.
 warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
+warning @egovernments/digit-ui-libraries > react-scripts > webpack-dev-server > chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
+warning @egovernments/digit-ui-libraries > react-scripts > webpack-dev-server > chokidar > fsevents@1.2.13: fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
 warning @egovernments/digit-ui-libraries > react-scripts > @pmmmwh/react-refresh-webpack-plugin > native-url > querystring@0.2.1: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
 warning @egovernments/digit-ui-libraries > react-scripts > webpack-dev-server > url > querystring@0.2.0: The querystring API is considered Legacy. new code should use the URLSearchParams API instead.
 warning @egovernments/digit-ui-libraries > react-scripts > @svgr/webpack > @svgr/plugin-svgo > svgo@1.3.2: This SVGO version is no longer supported. Upgrade to v2.x.x.
+warning @egovernments/digit-ui-libraries > microbundle-crl > cssnano > cssnano-preset-default > postcss-svgo > svgo@1.3.2: This SVGO version is no longer supported. Upgrade to v2.x.x.
 warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi@15.1.1: Switch to 'npm install joi'
 warning @egovernments/digit-ui-libraries > react-scripts > webpack-dev-server > webpack-log > uuid@3.4.0: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
 warning @egovernments/digit-ui-libraries > react-scripts > webpack > watchpack > watchpack-chokidar2 > chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
-warning @egovernments/digit-ui-libraries > microbundle-crl > cssnano > cssnano-preset-default > postcss-svgo > svgo@1.3.2: This SVGO version is no longer supported. Upgrade to v2.x.x.
 warning @egovernments/digit-ui-libraries > react-scripts > @svgr/webpack > @svgr/plugin-svgo > svgo > stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
 warning @egovernments/digit-ui-libraries > react-scripts > babel-jest > @jest/transform > jest-haste-map > sane@4.1.0: some dependency vulnerabilities fixed, support for node < 10 dropped, and newer ECMAScript syntax/features added
 warning @egovernments/digit-ui-libraries > react-scripts > webpack > micromatch > snapdragon > source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
 warning @egovernments/digit-ui-libraries > react-scripts > resolve-url-loader > rework > css > source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated
 warning @egovernments/digit-ui-libraries > react-scripts > webpack > micromatch > snapdragon > source-map-resolve > source-map-url@0.4.1: See https://github.com/lydell/source-map-url#deprecated
-warning @egovernments/digit-ui-libraries > react-scripts > postcss-preset-env > postcss-color-functional-notation > postcss-values-parser > flatten@1.0.3: flatten is deprecated in favor of utility frameworks such as lodash.
+warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/address@2.1.4: Moved to 'npm install @sideway/address'
+warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/hoek@8.5.1: This version has been deprecated and is no longer supported or maintained
+warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/topo@3.1.6: This version has been deprecated and is no longer supported or maintained
+warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/topo > @hapi/hoek@8.5.1: This version has been deprecated and is no longer supported or maintained
+warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/bourne@1.3.2: This version has been deprecated and is no longer supported or maintained
+warning @egovernments/digit-ui-libraries > react-scripts > postcss-preset-env > postcss-color-gray > postcss-values-parser > flatten@1.0.3: flatten is deprecated in favor of utility frameworks such as lodash.
 warning @egovernments/digit-ui-libraries > react-scripts > resolve-url-loader > rework > css > urix@0.1.0: Please see https://github.com/lydell/urix#deprecated
 warning @egovernments/digit-ui-libraries > react-scripts > webpack > micromatch > snapdragon > source-map-resolve > urix@0.1.0: Please see https://github.com/lydell/urix#deprecated
-warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/bourne@1.3.2: This version has been deprecated and is no longer supported or maintained
-warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/address@2.1.4: Moved to 'npm install @sideway/address'
-warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/topo@3.1.6: This version has been deprecated and is no longer supported or maintained
-warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/hoek@8.5.1: This version has been deprecated and is no longer supported or maintained
-warning @egovernments/digit-ui-libraries > react-scripts > workbox-webpack-plugin > workbox-build > @hapi/joi > @hapi/topo > @hapi/hoek@8.5.1: This version has been deprecated and is no longer supported or maintained
 warning @egovernments/digit-ui-libraries > react-scripts > webpack > micromatch > snapdragon > source-map-resolve > resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated
 warning @egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > babel-eslint@10.1.0: babel-eslint is now @babel/eslint-parser. This package will no longer receive updates.
 warning @egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/react > @storybook/store > stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
@@ -580,12 +590,6 @@ warning @egovernments/digit-ui-module-common > @egovernments/digit-ui-react-comp
 warning react-scripts > babel-eslint@10.1.0: babel-eslint is now @babel/eslint-parser. This package will no longer receive updates.
 warning react-scripts > webpack-dev-server > chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
 warning react-scripts > webpack-dev-server > sockjs > uuid@3.4.0: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
-warning workspace-aggregator-60920548-7b71-43a5-92f2-9824cf206542 > @egovernments/digit-ui-css > node-sass > request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142
-warning workspace-aggregator-60920548-7b71-43a5-92f2-9824cf206542 > @egovernments/digit-ui-css > node-sass > request > uuid@3.4.0: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
-warning workspace-aggregator-60920548-7b71-43a5-92f2-9824cf206542 > @egovernments/digit-ui-css > node-sass > node-gyp > request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142
-warning workspace-aggregator-60920548-7b71-43a5-92f2-9824cf206542 > @egovernments/digit-ui-css > node-sass > node-gyp > tar@2.2.2: This version of tar is no longer supported, and will not receive security updates. Please upgrade asap.
-warning workspace-aggregator-60920548-7b71-43a5-92f2-9824cf206542 > @egovernments/digit-ui-css > gulp > glob-watcher > chokidar@2.1.8: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
-warning workspace-aggregator-60920548-7b71-43a5-92f2-9824cf206542 > @egovernments/digit-ui-css > node-sass > request > har-validator@5.1.5: this library is no longer supported
 [2/4] Fetching packages...
 info fsevents@2.3.2: The platform "linux" is incompatible with this module.
 info "fsevents@2.3.2" is an optional dependency and failed compatibility check. Excluding it from installation.
@@ -596,25 +600,24 @@ warning " > babel-loader@8.1.0" has unmet peer dependency "@babel/core@^7.0.0".
 warning " > babel-loader@8.1.0" has unmet peer dependency "webpack@>=2".
 warning "@egovernments/digit-ui-libraries > react-scripts > @typescript-eslint/eslint-plugin > tsutils@3.21.0" has unmet peer dependency "typescript@>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta".
 warning "@egovernments/digit-ui-module-dss > react-date-range@1.3.0" has unmet peer dependency "date-fns@2.0.0-alpha.7 || >=2.0.0".
+warning "@egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/addon-essentials@6.4.20" has unmet peer dependency "@babel/core@^7.9.6".
 warning "@egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app@3.2.0" has unmet peer dependency "@babel/core@*".
+warning "@egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/react > @storybook/core-common > fork-ts-checker-webpack-plugin@6.5.2" has unmet peer dependency "typescript@>= 2.7".
+warning "@egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/react > @storybook/react-docgen-typescript-plugin@1.0.2-canary.253f8c1.0" has unmet peer dependency "typescript@>= 3.x".
 warning "@egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app > react-docgen-typescript-plugin@1.0.1" has unmet peer dependency "typescript@>= 3.x".
 warning "@egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app > react-docgen-typescript-plugin@1.0.1" has unmet peer dependency "webpack@>= 4".
-warning "@egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/addon-essentials@6.4.20" has unmet peer dependency "@babel/core@^7.9.6".
-warning "@egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/react > @storybook/react-docgen-typescript-plugin@1.0.2-canary.253f8c1.0" has unmet peer dependency "typescript@>= 3.x".
-warning "@egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/react > @storybook/core-common > fork-ts-checker-webpack-plugin@6.5.2" has unmet peer dependency "typescript@>= 2.7".
-warning "@egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app > react-docgen-typescript-plugin > react-docgen-typescript@1.22.0" has unmet peer dependency "typescript@>= 3.x".
 warning "@egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/react > @storybook/react-docgen-typescript-plugin > react-docgen-typescript@2.2.2" has unmet peer dependency "typescript@>= 4.3.x".
+warning "@egovernments/digit-ui-module-common > @egovernments/digit-ui-react-components > @storybook/preset-create-react-app > react-docgen-typescript-plugin > react-docgen-typescript@1.22.0" has unmet peer dependency "typescript@>= 3.x".
 warning "@egovernments/digit-ui-module-engagement > recharts > react-smooth@2.0.0" has unmet peer dependency "prop-types@^15.6.0".
-warning "@egovernments/digit-ui-module-dss > react-inlinesvg@1.1.7" has incorrect peer dependency "react@^16.3.0".
-warning "@egovernments/digit-ui-module-dss > react-inlinesvg@1.1.7" has incorrect peer dependency "react-dom@^16.3.0".
 warning "@egovernments/digit-ui-module-dss > react-simple-maps@2.0.0" has incorrect peer dependency "react@^16.8.0".
 warning "@egovernments/digit-ui-module-dss > react-simple-maps@2.0.0" has incorrect peer dependency "react-dom@^16.8.0".
 warning "@egovernments/digit-ui-module-dss > react-simple-maps@2.0.0" has unmet peer dependency "prop-types@^15.7.2".
+warning "@egovernments/digit-ui-module-dss > react-inlinesvg@1.1.7" has incorrect peer dependency "react@^16.3.0".
+warning "@egovernments/digit-ui-module-dss > react-inlinesvg@1.1.7" has incorrect peer dependency "react-dom@^16.3.0".
 warning "@egovernments/digit-ui-module-dss > react-inlinesvg > react-from-dom@0.2.3" has incorrect peer dependency "react@^15.0.0 || ^16.0.0".
-warning "workspace-aggregator-60920548-7b71-43a5-92f2-9824cf206542 > @egovernments/digit-ui-css > postcss-header@2.0.0" has incorrect peer dependency "postcss@^7.0.0".
 [4/4] Building fresh packages...
 success Saved lockfile.
-Done in 103.68s.
+Done in 95.02s.
 yarn run v1.22.10
 $ react-scripts build
 Creating an optimized production build...
@@ -672,32 +675,32 @@ Find out more about ******** here:
 
   https://cra.link/********
 
-Done in 218.43s.
-[36mINFO[0m[0716] Taking snapshot of full filesystem...        
-[36mINFO[0m[0828] Pushing layer egovio/cache/cache:c69968007b5662a7dc942098e364f52e3bdd4e68ed966a797e7eb2f9f8677888 to cache now 
-[33mWARN[0m[0831] error uploading layer to cache: failed to push to destination index.docker.io/egovio/cache/cache:c69968007b5662a7dc942098e364f52e3bdd4e68ed966a797e7eb2f9f8677888: unsupported status code 401 
-[36mINFO[0m[0831] Saving file /app/web/build for later use.    
-[36mINFO[0m[0831] Saving file /app/web/docker/nginx.conf for later use. 
-[36mINFO[0m[0831] Deleting filesystem...                       
-[36mINFO[0m[0838] Retrieving image manifest nginx:mainline-alpine 
-[36mINFO[0m[0840] Image nginx:mainline-alpine not found in cache 
-[36mINFO[0m[0840] Retrieving image manifest nginx:mainline-alpine 
-[36mINFO[0m[0842] Only file modification time will be considered when snapshotting 
-[36mINFO[0m[0842] Checking for cached layer egovio/cache/cache:689bcba952501e8f85c1af30fa948ff00216b6979b5528325ada07099f88e17e... 
-[36mINFO[0m[0844] No cached layer found for cmd RUN mkdir -p ${WORK_DIR} 
-[36mINFO[0m[0844] Unpacking rootfs as cmd RUN mkdir -p ${WORK_DIR} requires it. 
-[36mINFO[0m[0846] Taking snapshot of full filesystem...        
-[36mINFO[0m[0846] ENV WORK_DIR=/var/web/digit-ui               
-[36mINFO[0m[0846] RUN mkdir -p ${WORK_DIR}                     
-[36mINFO[0m[0846] cmd: /bin/sh                                 
-[36mINFO[0m[0846] args: [-c mkdir -p ${WORK_DIR}]              
-[36mINFO[0m[0846] COPY --from=build /app/web/build ${WORK_DIR}/ 
-[36mINFO[0m[0846] COPY --from=build /app/web/docker/nginx.conf /etc/nginx/conf.d/default.conf 
-[36mINFO[0m[0846] Taking snapshot of full filesystem...        
-[36mINFO[0m[0848] Pushing layer egovio/cache/cache:38ef2e270d755938302753f47348a71ac568894ae49cf2f82490d37cfeaa8f17 to cache now 
-[33mWARN[0m[0849] error uploading layer to cache: failed to push to destination index.docker.io/egovio/cache/cache:38ef2e270d755938302753f47348a71ac568894ae49cf2f82490d37cfeaa8f17: unsupported status code 401 
+Done in 322.38s.
+[36mINFO[0m[0905] Taking snapshot of full filesystem...        
+[36mINFO[0m[1023] Pushing layer egovio/cache/cache:7c5917799f3bf9afb54698fda2af28743fbf6e8b24c461f3616f8db6f36bb11a to cache now 
+[33mWARN[0m[1026] error uploading layer to cache: failed to push to destination index.docker.io/egovio/cache/cache:7c5917799f3bf9afb54698fda2af28743fbf6e8b24c461f3616f8db6f36bb11a: unsupported status code 401 
+[36mINFO[0m[1026] Saving file /app/web/build for later use.    
+[36mINFO[0m[1026] Saving file /app/web/docker/nginx.conf for later use. 
+[36mINFO[0m[1026] Deleting filesystem...                       
+[36mINFO[0m[1037] Retrieving image manifest nginx:mainline-alpine 
+[36mINFO[0m[1039] Image nginx:mainline-alpine not found in cache 
+[36mINFO[0m[1039] Retrieving image manifest nginx:mainline-alpine 
+[36mINFO[0m[1041] Only file modification time will be considered when snapshotting 
+[36mINFO[0m[1041] Checking for cached layer egovio/cache/cache:689bcba952501e8f85c1af30fa948ff00216b6979b5528325ada07099f88e17e... 
+[36mINFO[0m[1043] No cached layer found for cmd RUN mkdir -p ${WORK_DIR} 
+[36mINFO[0m[1043] Unpacking rootfs as cmd RUN mkdir -p ${WORK_DIR} requires it. 
+[36mINFO[0m[1045] Taking snapshot of full filesystem...        
+[36mINFO[0m[1045] ENV WORK_DIR=/var/web/digit-ui               
+[36mINFO[0m[1045] RUN mkdir -p ${WORK_DIR}                     
+[36mINFO[0m[1045] cmd: /bin/sh                                 
+[36mINFO[0m[1045] args: [-c mkdir -p ${WORK_DIR}]              
+[36mINFO[0m[1045] COPY --from=build /app/web/build ${WORK_DIR}/ 
+[36mINFO[0m[1045] COPY --from=build /app/web/docker/nginx.conf /etc/nginx/conf.d/default.conf 
+[36mINFO[0m[1045] Taking snapshot of full filesystem...        
+[36mINFO[0m[1047] Pushing layer egovio/cache/cache:2cc98da759f21e40f2a4f3b13c75e2874b05f56548ed4e9561ed11d67f56881c to cache now 
+[33mWARN[0m[1049] error uploading layer to cache: failed to push to destination index.docker.io/egovio/cache/cache:2cc98da759f21e40f2a4f3b13c75e2874b05f56548ed4e9561ed11d67f56881c: unsupported status code 401 
 [Pipeline] echo
-docker.io/egovio/digit-ui:build-opt-8067514043-1086 pushed successfully!
+docker.io/egovio/digit-ui:build-opt-df8470791a-1087 pushed successfully!
 [Pipeline] }
 [Pipeline] // container
 [Pipeline] }
@@ -711,6 +714,6 @@ docker.io/egovio/digit-ui:build-opt-8067514043-1086 pushed successfully!
 [Pipeline] End of Pipeline
 Finished: SUCCESS
 Page generated:
-Jun 25, 2022 6:46:21 PM IST
+Jun 25, 2022 6:58:29 PM IST
 REST API
 Jenkins 2.242
