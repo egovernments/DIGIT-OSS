@@ -167,7 +167,10 @@ import {
   AddNewIcon,
   InboxIcon,
   ViewReportIcon,
-  PrivacyMaskIcon
+  PrivacyMaskIcon,
+  DeathIcon,
+  BirthIcon,
+  FirenocIcon,
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -439,5 +442,8 @@ export {
   ViewReportIcon,
   InboxIcon,
   UnMaskComponent,
-  PrivacyMaskIcon
+  PrivacyMaskIcon,
+  DeathIcon,
+  BirthIcon,
+  FirenocIcon,
 };
