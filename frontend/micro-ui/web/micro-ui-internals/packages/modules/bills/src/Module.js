@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import EmployeeApp from "./pages/employee";
