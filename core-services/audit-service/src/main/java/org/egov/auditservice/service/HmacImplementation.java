@@ -28,7 +28,7 @@ public class HmacImplementation implements ConfigurableSignAndVerify {
     private String hmacKey;
 
     @Override
-    public List<String> sign(AuditLogRequest auditLogRequest) {
+    public void sign(AuditLogRequest auditLogRequest) {
         auditLogRequest.getAuditLogs().forEach(auditLog -> {
             try {
                 objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
@@ -40,7 +40,6 @@ public class HmacImplementation implements ConfigurableSignAndVerify {
                 throw new CustomException("EG_AUDIT_SIGNING_ERR", "Some unknown error occurred while signing: " + e.getMessage());
             }
         });
-        return null;
     }
 
     public String hashData(String data, String key) {
