@@ -124,6 +124,16 @@ const BILLSBreadCrumbs = ({ location }) => {
       content: fromScreen ? `${t(fromScreen)} / ${t("WS_MODIFY_CONNECTION_BUTTON")}`:t("WS_MODIFY_CONNECTION_BUTTON"),
       show: location.pathname.includes("ws/modify-application") ? true : false,
       isBack:true,
+    },
+    {
+      path: "/digit-ui/employee/ws/required-documents",
+      content: t("ES_COMMON_WS_DOCUMENTS_REQUIRED"),
+      show: location.pathname.includes("/required-documents") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/ws/bill-amendment",
+      content: t("WS_BILL_AMEND_APP"),
+      show: location.pathname.includes("ws/bill-amendment") ? true : false,
     }
   ];
 

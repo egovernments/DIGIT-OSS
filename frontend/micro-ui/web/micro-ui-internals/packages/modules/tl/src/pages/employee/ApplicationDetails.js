@@ -253,6 +253,7 @@ const ApplicationDetails = () => {
                 onHeadClick={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)}
                 displayOptions={isDisplayDownloadMenu}
                 options={dowloadOptions}
+                downloadBtnClassName="employee-download-btn-className"
         />
       </div>
       <ApplicationDetailsTemplate

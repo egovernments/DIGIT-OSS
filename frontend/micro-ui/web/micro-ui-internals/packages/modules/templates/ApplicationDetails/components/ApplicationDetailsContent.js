@@ -174,13 +174,19 @@ function ApplicationDetailsContent({
                     <th style={{ padding: "10px" }}>{t(header)}</th>
                   ))}
                 </tr>
-                {detail?.tableRows.map((row) => (
-                  <tr>
-                    {row.map((element) => (
-                      <td style={{ paddingRight: "60px", paddingTop: "20px", textAlign: "center" }}>{t(element)}</td>
-                    ))}
-                  </tr>
-                ))}
+
+                {detail?.tableRows.map((row,index)=>{
+                if(index===detail?.tableRows.length - 1){
+                  return <>
+                    <hr style={{ width: "370%",marginTop:"15px" }} className="underline" />
+                    <tr>
+                      {row.map(element => <td style={{ textAlign: "left" }}>{t(element)}</td>)}
+                    </tr>
+                    </>
+                }
+                return <tr>
+                  {row.map(element => <td style={{ paddingTop:"20px",textAlign:"left" }}>{t(element)}</td>)}
+                </tr>})}
               </table>
             )}
             <StatusTable style={getTableStyles()}>

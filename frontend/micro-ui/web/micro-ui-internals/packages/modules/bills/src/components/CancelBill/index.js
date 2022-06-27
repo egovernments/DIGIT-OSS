@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useCallback, useMemo,useState } from "react";
-import { SearchForm, Table, Card, Loader, Header } from "@egovernments/digit-ui-react-components";
+import { SearchForm, Table, Card, Loader, Header, DownloadBtnCommon, DownloadIcon } from "@egovernments/digit-ui-react-components";
 import { useForm, Controller } from "react-hook-form";
 import SearchFields from "./SearchFields";
 import { useTranslation } from "react-i18next";
@@ -37,7 +37,7 @@ const CancelBills = ({ tenantId, onSubmit, data, count,isLoading,resultOk }) => 
 
     
     const handleBillLinkClick = (row) => {
-        history.push(`/digit-ui/employee/bills/bill-details?connectionNumber=${row?.consumerCode}&tenantId=${tenantId}&service=${row?.businessService}`,row)
+        history.push(`/digit-ui/employee/bills/bill-details?connectionNumber=${row?.consumerCode}&tenantId=${tenantId}&service=${row?.businessService}&from=ABG_CANCEL_BILL`,row)
     }
 
     const getBillLink = (row) => {
@@ -57,7 +57,38 @@ const CancelBills = ({ tenantId, onSubmit, data, count,isLoading,resultOk }) => 
     if (isMobile) {
         return <MobileCancelBill {...{ Controller, register, control, t, reset, handleSubmit, tenantId, data, onSubmit,isLoading,resultOk }} />;
     }
+    const DownloadBtn = (props) => {
+        return (
+            <div onClick={props.onClick}>
+                <DownloadBtnCommon />
+            </div>
+        );
+    };
 
+    const handleExcelDownload = (tabData) => {
+        if (tabData?.[0] !== undefined) {
+            return Digit.Download.Excel(tabData?.[0], "searchbillexcel");
+        }
+    }; 
+    const [tabledata, settabledata] = useState([]);
+    useEffect(() => {
+        if (data !== "") {
+            settabledata([
+
+                data?.map((obj) => {
+                    let returnObject = {};
+                    returnObject[t("ABG_COMMON_TABLE_COL_BILL_NO")] = obj?.billNumber;
+                    returnObject[t("ABG_COMMON_TABLE_COL_CONSUMER_NAME")] = obj?.payerName;
+                    returnObject[t("ABG_COMMON_TABLE_COL_BILL_DATE")] = convertEpochToDate(obj?.billDate);
+                    returnObject[t("ABG_COMMON_TABLE_COL_BILL_AMOUNT")] = obj?.totalAmount;
+                    returnObject[t("ABG_COMMON_TABLE_COL_STATUS")] = obj?.status;
+                    return {
+                        ...returnObject,
+                    }
+                })
+            ])
+        }
+    }, [data]);
     const GetCell = (value) => <span className="cell-text">{value}</span>;
     const columns = useMemo(
         () => [
@@ -157,22 +188,30 @@ const CancelBills = ({ tenantId, onSubmit, data, count,isLoading,resultOk }) => 
                 <SearchFields {...{ register, control, reset, tenantId, t,formState }} />
             </SearchForm>
             {isLoading && <Loader/>}
-            {isLoading===false && resultOk && <Table
-                    t={t}
-                    data={data}
-                    totalRecords={count}
-                    columns={columns}
-                    getCellProps={(cellInfo) => {
-                        return {
-                            style: {
-                                minWidth: cellInfo.column.Header === t("ABG_BILL_NUMBER_LABEL") ? "240px" : "",
-                                padding: "20px 18px",
-                                fontSize: "16px",
-                            },
-                        };
-                    }}
-                    manualPagination={false}
-                /> }
+            {isLoading===false && resultOk && 
+                <div style={{ backgroundColor: "white" }}>
+                    <div className="sideContent" style={{ float: "right", padding: "10px 30px" }}>
+                        <span className="table-search-wrapper">
+                            <DownloadBtn className="mrlg cursorPointer" onClick={() => handleExcelDownload(tabledata)} />
+                        </span>
+                    </div>
+                    <Table
+                        t={t}
+                        data={data}
+                        totalRecords={count}
+                        columns={columns}
+                        getCellProps={(cellInfo) => {
+                            return {
+                                style: {
+                                    minWidth: cellInfo.column.Header === t("ABG_BILL_NUMBER_LABEL") ? "240px" : "",
+                                    padding: "20px 18px",
+                                    fontSize: "16px",
+                                },
+                            };
+                        }}
+                        manualPagination={false}
+                    />
+                </div> }
             {showModal && <CancelBillModal 
                 t={t}
                 //surveyTitle={surveyData.title}

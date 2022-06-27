@@ -32,7 +32,7 @@ const BillDetailsv1 = (props) => {
     // const fetchedBill = result?.billData?.[0]
     
     const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useConnectionDetail(t, tenantId, connectionNumber, serviceType==="WS"?"WATER":"SEWERAGE"); 
-   
+    
     const [showModal, setShowModal] = useState(false)
     const handleCancelBillAction = (_data) => {
         setShowModal(false)
@@ -167,7 +167,7 @@ const BillDetailsv1 = (props) => {
                                                 <Row
                                                     key={t(value.title)}
                                                     label={
-                                                        window.location.href.includes("tl") || window.location.href.includes("ws") ? (
+                                                        window.location.href.includes("tl") || window.location.href.includes("ws") || window.location.href.includes("bills") ? (
                                                             <div style={{ width: "200%" }}>
                                                                 <Link to={value?.to}>
                                                                     <span className="link" style={{ color: "#F47738" }}>

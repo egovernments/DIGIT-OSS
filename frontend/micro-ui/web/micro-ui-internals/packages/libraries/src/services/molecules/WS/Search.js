@@ -524,7 +524,7 @@ export const WSSearch = {
       asSectionHeader: true,
       additionalDetails: {
         documents: [{
-          title: "WS_COMMON_DOCS",
+          title: "BILL_AMEND_DOCS_UPLOADED",
           values: billAmendmentSearch.Amendments[0]?.documents?.map((document) => {
             return {
               title: `WS_${document?.documentType}`,
