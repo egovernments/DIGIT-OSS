@@ -25,12 +25,13 @@ import { Link, useLocation } from "react-router-dom";
 import WSWFApplicationTimeline from "../../../pageComponents/WSWFApplicationTimeline";
 import WSDocument from "../../../pageComponents/WSDocument";
 import getPDFData from "../../../utils/getWSAcknowledgementData";
+import { stringReplaceAll } from "../../../utils";
 
 const ConnectionDetails = () => {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
   const history = useHistory();
-  const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   const [showOptions, setShowOptions] = useState(false);
   const applicationNobyData = window.location.href.substring(window.location.href.indexOf("WS_"));
   const { state = {} } = useLocation();
@@ -246,13 +247,15 @@ const ConnectionDetails = () => {
                 <Row
                   className="border-none"
                   label={t("WS_SERV_DETAIL_WATER_SOURCE")}
-                  text={state?.waterSource || "NA"}
+                  text={t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(state?.waterSource?.split(".")?.[0], ".", "_")}`) ||
+                  t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(state?.waterSource, ".", "_")}`) ||
+                  t("CS_NA")}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row
                   className="border-none"
                   label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")}
-                  text={state?.waterSubSource || "NA"}
+                  text={t(state?.waterSource?.split(".")?.[1]) || t("CS_NA")}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row

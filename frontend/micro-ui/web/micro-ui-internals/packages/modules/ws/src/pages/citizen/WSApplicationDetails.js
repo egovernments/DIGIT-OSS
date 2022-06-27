@@ -182,7 +182,7 @@ const WSApplicationDetails = () => {
               className="border-none"
               label={t("WS_SERVICE_NAME_LABEL")}
               text={t(`WS_APPLICATION_TYPE_${data?.WaterConnection?.[0]?.applicationType || data?.SewerageConnections?.[0]?.applicationType}`)}
-              textStyle={{ whiteSpace: "pre" }}
+              textStyle={{wordBreak:"break-word"}}
             />
             <Row
               className="border-none"
@@ -202,7 +202,7 @@ const WSApplicationDetails = () => {
               <Row
                 className="border-none"
                 label={t("WS_TOTAL_AMOUNT_DUE")}
-                text={`₹${paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount}`}
+                text={`₹${isPaid? 0 : paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount}`}
                 textStyle={{ textAlign: "right", fontSize:"18px", fontWeight: "700" }}
               />
               <Row

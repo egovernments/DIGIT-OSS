@@ -505,6 +505,7 @@ export const convertToSWUpdate = (data) => {
   let formdata = {
     SewerageConnection: {
       ...data?.SewerageConnectionResult?.SewerageConnections?.[0],
+      connectionType:"Non Metered",
       documents: [...data?.documents?.documents],
       processInstance: {
         action: "SUBMIT_APPLICATION",

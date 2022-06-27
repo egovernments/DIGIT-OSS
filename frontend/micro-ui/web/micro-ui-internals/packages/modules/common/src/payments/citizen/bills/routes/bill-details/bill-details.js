@@ -11,7 +11,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
   const history = useHistory();
   const { state, ...location } = useLocation();
   let { consumerCode } = useParams();
-  const { workflow: wrkflow, tenantId: _tenantId } = Digit.Hooks.useQueryParams();
+  const { workflow: wrkflow, tenantId: _tenantId, ConsumerName } = Digit.Hooks.useQueryParams();
   const [bill, setBill] = useState(state?.bill);
   const tenantId = state?.tenantId || _tenantId || Digit.UserService.getUser().info?.tenantId;
   if(wrkflow === "WNS" && consumerCode.includes("?"))
@@ -101,7 +101,7 @@ const BillDetails = ({ paymentRules, businessService }) => {
         tenantId: billDetails.tenantId,
       });
     } else if (wrkflow === "WNS") {
-      history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}?workflow=WNS`, {
+      history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}?workflow=WNS&ConsumerName=${ConsumerName}`, {
         paymentAmount,
         tenantId: billDetails.tenantId,
         name: bill.payerName,
