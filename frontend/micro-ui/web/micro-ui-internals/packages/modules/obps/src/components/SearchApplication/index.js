@@ -18,7 +18,7 @@ import useSearchApplicationTableConfig from "./useTableConfig";
 
 const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData, isLoading, Count, setparamerror }) => {
   const [showToast, setShowToast] = useState(null);
-  // const currentUserPhoneNumber = Digit.UserService.getUser().info.mobileNumber;
+  // const currentUserPhoneNumber = Digit.UserService.getUser()?.info?.mobileNumber;
   // const userInformation = Digit.UserService.getUser()?.info;
 
   const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
@@ -77,7 +77,7 @@ const OBPSSearchApplication = ({ tenantId, t, onSubmit, data, error, searchData,
       //reset({ ...searchData, isSubmitSuccessful: false });
       reset({
         applicationNo: "",
-       mobileNumber: window.location.href.includes("/digit-ui/citizen") ? Digit.UserService.getUser().info.mobileNumber : "",
+       mobileNumber: window.location.href.includes("/digit-ui/citizen") ? Digit.UserService.getUser()?.info?.mobileNumber : "",
         fromDate: "",
         toDate: "",
         status: "",
