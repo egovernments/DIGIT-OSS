@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 
 const Search = ({ path }) => {
   const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
@@ -8,6 +9,7 @@ const Search = ({ path }) => {
 
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
+  const location = useLocation();
   const details = () => {
     if (userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length <= 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length > 0) return "BUILDING_PLAN_SCRUTINY";
     if (userInformation?.roles?.filter((ob) => ob.code.includes("BPAREG_"))?.length > 0 && userInformation?.roles?.filter((ob) =>(ob.code.includes("BPA_"))).length <= 0) return "BPA_STAKEHOLDER_REGISTRATION";
@@ -16,6 +18,13 @@ const Search = ({ path }) => {
   const [selectedType, setSelectedType] = useState(details());
   const [payload, setPayload] = useState({});
   const [searchData, setSearchData] = useState({});
+
+  useEffect(()=>{
+    if (location.pathname === "/digit-ui/citizen/obps/search/application" || location.pathname === "/digit-ui/employee/obps/search/application") {
+      Digit.SessionStorage.del("OBPS.INBOX")
+      Digit.SessionStorage.del("STAKEHOLDER.INBOX")
+    }
+  },[location.pathname])
 
   const Search = Digit.ComponentRegistryService.getComponent("OBPSSearchApplication");
 
@@ -84,7 +93,7 @@ const Search = ({ path }) => {
         applicationType: "BUILDING_PLAN_SCRUTINY",
         serviceType: "NEW_CONSTRUCTION",
         ...(window.location.href.includes("/digit-ui/citizen") && {
-          mobileNumber: Digit.UserService.getUser().info.mobileNumber,
+          mobileNumber: Digit.UserService.getUser()?.info?.mobileNumber,
         }),
       };
 

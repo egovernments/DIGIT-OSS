@@ -281,7 +281,7 @@ const BpaApplicationDetail = () => {
     }
   }
 
-  if(data?.comparisionReport){
+  if(data?.comparisionReport && data && data?.applicationData?.businessService === "BPA_OC"){
     dowloadOptions.push({
       order: 4,
       label: t("BPA_COMPARISON_REPORT_LABEL"),
