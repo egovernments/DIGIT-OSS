@@ -481,6 +481,7 @@ const callBackForNext = async (state, dispatch) => {
    "screenConfiguration.preparedFinalObject.Property.ownersTemp"
  );
  let ownerTemp = [];
+ if(newOwners!=null){
  newOwners = newOwners.map((item) => {
    if (
      item.hasOwnProperty("isDeleted") &&
@@ -489,7 +490,7 @@ const callBackForNext = async (state, dispatch) => {
    } else {
      ownerTemp.push(item);
    }
- });
+ });}
  dispatch(
   prepareFinalObject(
   "Property.ownersTemp",
