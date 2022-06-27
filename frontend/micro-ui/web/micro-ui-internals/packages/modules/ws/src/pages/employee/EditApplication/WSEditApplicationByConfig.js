@@ -8,7 +8,7 @@ import { newConfig as newConfigLocal } from "../../../config/wsCreateConfig";
 import { convertApplicationData, convertEditApplicationDetails } from "../../../utils";
 import cloneDeep from "lodash/cloneDeep";
 
-const convertEditApplicationDetails1 = (data, appData) => {
+const convertEditApplicationDetails1 = (data, appData, serviceType) => {
   data?.cpt?.details?.owners?.forEach(owner => {
     if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
   });
@@ -44,18 +44,23 @@ const convertEditApplicationDetails1 = (data, appData) => {
         mobileNumber: data?.plumberDetails?.[0]?.plumberMobileNo || appData?.plumberMobileNo
       }
     ],
-    roadType: null,
-    roadCuttingArea: null,
-    roadCuttingInfo: data?.RoadCuttingDetails?.map((details) => ({
+    roadCuttingInfo: data?.roadCuttingDetails?.map((details) => ({
       roadType: details?.roadType?.code,
       roadCuttingArea: details?.area,
     })),
     connectionNo: null,
-    connectionType: data?.connectionDetails?.[0]?.connectionType?.code || appData?.connectionType,
-    waterSource: data?.connectionDetails?.[0]?.sourceSubData?.code || appData?.waterSource,
-    pipeSize: data?.connectionDetails?.[0]?.pipeSize?.size || appData?.pipeSize,
-    noOfTaps: data?.connectionDetails?.[0]?.noOfTaps || appData?.noOfTaps,
-    sourceSubData: data?.connectionDetails?.[0]?.sourceSubData?.code || appData?.sourceSubData,
+    ...serviceType === "WATER" ?
+    {
+      connectionType: data?.connectionDetails?.[0]?.connectionType?.code || appData?.connectionType,
+      waterSource: data?.connectionDetails?.[0]?.sourceSubData?.code || appData?.waterSource,
+      pipeSize: data?.connectionDetails?.[0]?.pipeSize?.size || appData?.pipeSize,
+      noOfTaps: data?.connectionDetails?.[0]?.noOfTaps || appData?.noOfTaps,
+      sourceSubData: data?.connectionDetails?.[0]?.sourceSubData?.code || appData?.sourceSubData,
+    } : {
+      connectionType: 'Non Metered',
+      noOfWaterClosets: data?.connectionDetails?.[0]?.noOfWaterClosets || appData?.noOfWaterClosets || "",
+      noOfToilets: data?.connectionDetails?.[0]?.noOfToilets || appData?.noOfToilets || "",
+    },
     tenantId: data?.cpt?.details?.tenantId,
     additionalDetails: {
       detailsProvidedBy: data?.plumberDetails?.[0]?.detailsProvidedBy?.code || appData?.detailsProvidedBy,
@@ -156,7 +161,7 @@ const WSEditApplicationByConfig = () => {
 
   const onSubmit = async (data) => {
     const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
-    let convertAppData = await convertEditApplicationDetails1(data, details);
+    let convertAppData = await convertEditApplicationDetails1(data, details, serviceType);
     const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
     setSubmitValve(false);
     if (mutate) {

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useHistory } from "react-router-dom";
 import { newConfig as newConfigLocal } from "../../../config/wsActivationConfig";
-import { stringReplaceAll, convertDateToEpoch, convertEpochToDates } from "../../../utils";
+import { stringReplaceAll, convertDateToEpochNew, convertEpochToDates } from "../../../utils";
 import * as func from "../../../utils";
 import _ from "lodash";
 
@@ -109,7 +109,7 @@ const ActivateConnection = () => {
         } else {
             formattedDate = `${dateOfReplace.split("-")[0]}-${dateOfReplace.split("-")[2]}-${dateOfReplace.split("-")[1]}`;
         }
-        const convertedDate = await convertDateToEpoch(formattedDate);
+        const convertedDate = await convertDateToEpochNew(formattedDate);
         return convertedDate;
     }
 

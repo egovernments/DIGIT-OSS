@@ -114,6 +114,23 @@ export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   }
 };
 
+export const convertDateToEpochNew = (dateString, dayStartOrEnd = "dayend") => {
+  //example input format : "2018-10-02"
+  try {
+    const parts = dateString.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+    const DateObj = new Date(Date.UTC(parts[1], parts[3] - 1, parts[2]));
+
+    DateObj.setMinutes(DateObj.getMinutes() + DateObj.getTimezoneOffset());
+    if (dayStartOrEnd === "dayend") {
+      DateObj.setHours(DateObj.getHours() + 24);
+      DateObj.setSeconds(DateObj.getSeconds() - 1);
+    }
+    return DateObj.getTime();
+  } catch (e) {
+    return dateString;
+  }
+};
+
 export const convertEpochToDates = (dateEpoch) => {
   if (dateEpoch) {
     const dateFromApi = new Date(dateEpoch);
@@ -746,7 +763,6 @@ export const convertApplicationData = (data, serviceType, modify = false, editBy
     },
   ];
 
-
   const ConnectionHolderDetails =
   data?.applicationData?.connectionHolders?.length > 0
     ? [
@@ -925,8 +941,45 @@ export const convertApplicationData = (data, serviceType, modify = false, editBy
       InfoLabel: "InfoLabel"
     }
 
+    let plumberDetails = [
+      {
+        detailsProvidedBy: data?.applicationData?.additionalDetails?.detailsProvidedBy
+        ? {
+            i18nKey: data?.applicationData?.additionalDetails?.detailsProvidedBy,
+            code: data?.applicationData?.additionalDetails?.detailsProvidedBy,
+            size: data?.applicationData?.additionalDetails?.detailsProvidedBy,
+          }
+        : "",
+        plumberName: data?.applicationData?.plumberInfo?.[0].name,
+        plumberMobileNo: data?.applicationData?.plumberInfo?.[0].mobileNumber,
+        plumberLicenseNo: data?.applicationData?.plumberInfo?.[0].licenseNo
+      }
+    ];
+
+    let roadCuttingDetails = data?.applicationData?.roadCuttingInfo ? data?.applicationData?.roadCuttingInfo?.map((rc, index) => {
+      return {
+        key: index + '_' + Date.now(),
+        roadType: {
+          i18nKey: `WS_ROADTYPE_`+rc?.roadType,
+          code: rc?.roadType,
+        },
+        area: rc?.roadCuttingArea,
+      }
+    }) : [
+      {
+        key: 99999 + '_' + Date.now(),
+        roadType: {
+          i18nKey: '',
+          code: '',
+        },
+        area: '',
+      }
+    ];
+
     if(editByConfig) { 
       payload.connectionDetails = [connectionDetails];
+      payload.plumberDetails = plumberDetails;
+      payload.roadCuttingDetails = roadCuttingDetails;
     }
   }
 
