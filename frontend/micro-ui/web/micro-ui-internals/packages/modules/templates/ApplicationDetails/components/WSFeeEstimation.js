@@ -13,13 +13,13 @@ const WSFeeEstimation = ({ wsAdditionalDetails }) => {
                     <StatusTable>
                         <div>
                             {wsAdditionalDetails?.additionalDetails?.values?.map((value, index) => {
-                                return <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />
+                                return <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.value ? value?.value : ""} />
                             })}
                         </div>
                         <hr style={{ border: "1px solid #D6D5D4", color: "#D6D5D4", margin: "16px 0px" }}></hr>
                         <div>
-                            <Row className="border-none" key={`WS_COMMON_TOTAL_AMT`} label={`${t(`WS_COMMON_TOTAL_AMT`)}:`} text={wsAdditionalDetails?.additionalDetails?.data?.totalAmount} />
-                            <Row className="border-none" key={`CS_INBOX_STATUS_FILTER`} label={`${t(`CS_INBOX_STATUS_FILTER`)}:`} text={isPaid ? t("WS_COMMON_PAID_LABEL") : t("WS_COMMON_NOT_PAID")} textStyle={!isPaid ? { color: "#D4351C" }: {color : "#00703C"}} />
+                            <Row className="border-none" key={`WS_COMMON_TOTAL_AMT`} label={`${t(`WS_COMMON_TOTAL_AMT`)}`} text={wsAdditionalDetails?.additionalDetails?.data?.totalAmount} />
+                            <Row className="border-none" key={`CS_INBOX_STATUS_FILTER`} label={`${t(`CS_INBOX_STATUS_FILTER`)}`} text={isPaid ? t("WS_COMMON_PAID_LABEL") : t("WS_COMMON_NOT_PAID")} textStyle={!isPaid ? { color: "#D4351C" }: {color : "#00703C"}} />
                         </div>
                     </StatusTable>}
             </div>

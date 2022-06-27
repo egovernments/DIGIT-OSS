@@ -159,6 +159,7 @@ const SurveyDetails = ({ location, match }) => {
   const handleMarkInactive = () => {
     const details = {
       SurveyEntity: { ...surveyData,
+        tenantId,
         questions: surveyData.questions.map(filterQuestion), 
         status: "INACTIVE", 
         collectCitizenInfo: surveyData.collectCitizenInfo.code },

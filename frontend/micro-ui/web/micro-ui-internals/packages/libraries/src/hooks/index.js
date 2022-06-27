@@ -234,6 +234,7 @@ import useGetDSSFAQsJSON from "./useGetDSSFAQsJSON";
 import useGetDSSAboutJSON from "./useGetDSSAboutJSON";
 import useStaticData from "./useStaticData";
 import useBillAmendmentInbox from "./billAmendment/useInbox";
+import { usePrivacyContext } from "./usePrivacyContext";
 
 const pgr = {
   useComplaintDetails,
@@ -290,7 +291,7 @@ const fsm = {
   useDriverUpdate,
   useDriverDetails,
   useVehicleTripCreate,
-  useVendorSearch
+  useVendorSearch,
 };
 
 const pt = {
@@ -500,6 +501,7 @@ const Hooks = {
   useBillSearch,
   useCancelBill,
   useTenantsBills,
+  usePrivacyContext,
   pgr,
   fsm,
   pt,

@@ -1,9 +1,7 @@
 import React, { useState, Fragment } from "react";
-import { connect } from "react-redux";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import ReactTooltip from "react-tooltip";
 import { useTranslation } from "react-i18next";
-import { bindActionCreators } from "redux";
 import { get } from "lodash";
 import FilterContext from "./FilterContext";
 import { endOfMonth, getTime, startOfMonth } from "date-fns";
