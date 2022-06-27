@@ -4,6 +4,8 @@
   "main": "index.js",
   "workspaces": [
     "packages/libraries",
+    "packages/css",
+    "example",
     "packages/react-components",
     "packages/modules/*"
   ],
