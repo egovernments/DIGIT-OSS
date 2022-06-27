@@ -69,8 +69,9 @@ const InboxComposer = ({
     }
 
     const onResetSearchForm = () => {
-        onSearchFormReset(setSearchFormValue)
-        clearSearchFormErrors()
+        onSearchFormReset(setSearchFormValue);
+        clearSearchFormErrors();
+        closeMobilePopupModal();
     }
 
     useEffect(() => {
@@ -120,7 +121,14 @@ const InboxComposer = ({
         {currentlyActiveMobileModal ? <PopUp>
             <CurrentMobileModalComponent {...propsForCurrentMobileModalComponent} />
         </PopUp> : null}
-        {isInboxLoading ? <Loader /> : <DetailsCard {...propsForInboxMobileCards} />}
+        {/* {isInboxLoading ? <Loader /> : <DetailsCard {...propsForInboxMobileCards} />} */}
+        {isInboxLoading ? <Loader /> :
+            <div>
+                {propsForInboxMobileCards?.data?.length < 1 ? 
+                    <Card className="margin-unset text-align-center">
+                        {propsForInboxTable?.noResultsMessage ? t(propsForInboxTable?.noResultsMessage) : t("CS_MYAPPLICATIONS_NO_APPLICATION")} 
+                    </Card> : <DetailsCard {...propsForInboxMobileCards} />}
+            </div>}
     </div>
     }
 
