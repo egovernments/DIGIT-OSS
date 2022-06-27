@@ -113,6 +113,8 @@ public class SewerageServiceImpl implements SewerageService {
 		// call work-flow
 		if (config.getIsExternalWorkFlowEnabled())
 			wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
+		if (!StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAssignes()))
+			sewerageConnectionRequest.getSewerageConnection().getProcessInstance().setAssignes(null);
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
 	}
 
@@ -240,6 +242,8 @@ public class SewerageServiceImpl implements SewerageService {
 		// Enrich file store Id After payment
 		enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
 		enrichmentService.postStatusEnrichment(sewerageConnectionRequest);
+		if (!StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAssignes()))
+			sewerageConnectionRequest.getSewerageConnection().getProcessInstance().setAssignes(null);
 		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
 				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
 		if (!StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getTenantId()))
@@ -267,7 +271,8 @@ public class SewerageServiceImpl implements SewerageService {
 		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest);
 		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
 		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
-		
+		calculationService.calculateFeeAndGenerateDemand(sewerageConnectionRequest, property);
+		sewerageDaoImpl.pushForEditNotification(sewerageConnectionRequest);
 		userService.updateUser(sewerageConnectionRequest, searchResult);
 		// Call workflow
 		wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);

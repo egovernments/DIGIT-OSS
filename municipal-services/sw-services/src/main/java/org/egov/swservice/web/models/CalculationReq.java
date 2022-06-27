@@ -30,7 +30,7 @@ import lombok.ToString;
 @Builder
 @ToString
 public class CalculationReq   {
-	
+
 		@JsonProperty("RequestInfo")
 		@NotNull
         private RequestInfo requestInfo;
@@ -39,10 +39,14 @@ public class CalculationReq   {
         @NotNull
         @JsonProperty("CalculationCriteria")
         private List<CalculationCriteria> calculationCriteria;
-        
+
     	@JsonProperty("isconnectionCalculation")
 		@NotNull
 		 private Boolean isconnectionCalculation;
+
+        @JsonProperty("isDisconnectionRequest")
+        @NotNull
+        private Boolean isDisconnectionRequest;
 
 
         public CalculationReq addCalulationCriteriaItem(CalculationCriteria calulationCriteriaItem) {

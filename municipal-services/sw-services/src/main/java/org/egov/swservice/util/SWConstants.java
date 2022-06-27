@@ -246,4 +246,6 @@ public class SWConstants {
 	public static final String CHANNEL = "Channel";
 	
 	public static final String ACTIVE = "ACTIVE";
+
+	public static final String EXECUTE_DISCONNECTION = "EXECUTE_DISCONNECTION";
 }

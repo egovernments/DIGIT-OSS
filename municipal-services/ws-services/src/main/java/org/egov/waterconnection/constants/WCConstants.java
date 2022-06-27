@@ -274,4 +274,7 @@ public class WCConstants {
 	public static final String ACTIVE = "ACTIVE";
 
 	public static final String EXECUTE_DISCONNECTION = "EXECUTE_DISCONNECTION";
+
+	public static final String APPROVE_DISCONNECTION_CONST = "APPROVE_FOR_DISCONNECTION";
+
 }

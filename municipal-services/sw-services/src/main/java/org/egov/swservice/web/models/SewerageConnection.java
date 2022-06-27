@@ -28,6 +28,9 @@ public class SewerageConnection extends Connection {
 	@JsonProperty("noOfToilets")
 	private Integer noOfToilets = null;
 
+	@JsonProperty("isDisconnectionTemporary")
+	private boolean isDisconnectionTemporary = false;
+
 	public SewerageConnection noOfWaterClosets(Integer noOfWaterClosets) {
 		this.noOfWaterClosets = noOfWaterClosets;
 		return this;

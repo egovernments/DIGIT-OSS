@@ -66,7 +66,7 @@ public class WorkflowIntegrator {
 			wfBusinessServiceName = config.getDisconnectBusinessServiceName();
 		}
 		
-		if(servicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)){
+		else if(servicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)){
 			wfBusinessServiceName = config.getModifySWBusinessServiceName();
 		}
 		SewerageConnection connection = sewerageConnectionRequest.getSewerageConnection();

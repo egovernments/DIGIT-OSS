@@ -114,6 +114,10 @@ public class WaterServiceImpl implements WaterService {
 		// call work-flow
 		if (config.getIsExternalWorkFlowEnabled())
 			wfIntegrator.callWorkFlow(waterConnectionRequest, property);
+		//enrichmentService.postStatusEnrichment(waterConnectionRequest);
+
+		if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getProcessInstance().getAssignes()))
+			waterConnectionRequest.getWaterConnection().getProcessInstance().setAssignes(null);
 		waterDao.saveWaterConnection(waterConnectionRequest);
 		return Arrays.asList(waterConnectionRequest.getWaterConnection());
 	}
@@ -243,6 +247,8 @@ public class WaterServiceImpl implements WaterService {
 		userService.createUser(waterConnectionRequest);
 		enrichmentService.postStatusEnrichment(waterConnectionRequest);
 		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
+		if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getProcessInstance().getAssignes()))
+			waterConnectionRequest.getWaterConnection().getProcessInstance().setAssignes(null);
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
 		enrichmentService.postForMeterReading(waterConnectionRequest,  WCConstants.UPDATE_APPLICATION);
 		if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getTenantId()))
@@ -255,7 +261,7 @@ public class WaterServiceImpl implements WaterService {
 		
 		SearchCriteria criteria = new SearchCriteria();
 		waterConnectionValidator.validateWaterConnection(waterConnectionRequest, WCConstants.DISCONNECT_CONNECTION);
-		mDMSValidator.validateMasterData(waterConnectionRequest,WCConstants.DISCONNECT_CONNECTION );
+		mDMSValidator.validateMasterData(waterConnectionRequest,WCConstants.DISCONNECT_CONNECTION);
 		Property property = validateProperty.getOrValidateProperty(waterConnectionRequest);
 		validateProperty.validatePropertyFields(property,waterConnectionRequest.getRequestInfo());
 		BusinessService businessService = workflowService.getBusinessService(waterConnectionRequest.getWaterConnection().getTenantId(), 
