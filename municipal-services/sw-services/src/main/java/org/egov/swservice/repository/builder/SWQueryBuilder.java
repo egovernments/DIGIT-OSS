@@ -75,28 +75,19 @@ public class SWQueryBuilder {
             "WHERE offset_ > ? AND offset_ <= ?";
 	
 	private static final String PAGINATION_INBOX_WRAPPER = "SELECT * FROM " +
-            "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_lastmodifiedtime ASC) offset_ FROM " +
-            "({})" +
+            "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_lastmodifiedtime {SORT_ORDER}) offset_ FROM ";
+
+	private static final String PAGINATION_INBOX_WRAPPER_APPEND = "({})" +
             " result) result_offset " +
             "WHERE offset_ > ? AND offset_ <= ?";
-
-	private static final String PAGINATION_INBOX_DESC_WRAPPER = "SELECT * FROM " +
-            "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_lastmodifiedtime DESC) offset_ FROM " +
-            "({})" +
-            " result) result_offset " +
-            "WHERE offset_ > ? AND offset_ <= ?";
-
 	
 	private static final String COUNT_WRAPPER = " SELECT COUNT(*) FROM ({INTERNAL_QUERY}) AS count ";
 	
 	private static final String ORDER_BY_CLAUSE = " ORDER BY sc.appCreatedDate DESC";
 
 	private static final String ORDER_BY_COUNT_CLAUSE = " ORDER BY appCreatedDate DESC";
-	
 
-	private static final String ORDER_BY_INBOX_DESC_CLAUSE = " order by conn.lastmodifiedtime DESC";
-
-	private static final String ORDER_BY_INBOX_ASC_CLAUSE = " order by conn.lastmodifiedtime ASC";
+	private static final String ORDER_BY_INBOX_CLAUSE = " order by conn.lastmodifiedtime {SORT_ORDER}";
 
 	/**
 	 *
@@ -289,10 +280,10 @@ public class SWQueryBuilder {
 		else if (criteria.getIsCountCall() != null && criteria.getIsCountCall())
 			query.append("GROUP BY conn.applicationno ").append(ORDER_BY_COUNT_CLAUSE);
 		else if (criteria.getSortBy() != null && (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
-			if (criteria.getSortOrder() != null && (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
-				query.append(ORDER_BY_INBOX_DESC_CLAUSE);
+			if (criteria.getSortOrder() == null || (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
+				query.append(ORDER_BY_INBOX_CLAUSE.replace("{SORT_ORDER}", "DESC"));
 			else
-				query.append(ORDER_BY_INBOX_ASC_CLAUSE);
+				query.append(ORDER_BY_INBOX_CLAUSE.replace("{SORT_ORDER}", "ASC"));
 		} else
 			query.append(ORDER_BY_CLAUSE);
 		
@@ -366,9 +357,9 @@ public class SWQueryBuilder {
 
 		if (criteria.getSortBy() != null && (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
 			if (criteria.getSortOrder() == null || (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
-				return PAGINATION_INBOX_DESC_WRAPPER.replace("{}", query);
+				return PAGINATION_INBOX_WRAPPER.replace("{SORT_ORDER}", "DESC")	+ (PAGINATION_INBOX_WRAPPER_APPEND.replace("{}", query));
 			else
-				return PAGINATION_INBOX_WRAPPER.replace("{}", query);
+				return PAGINATION_INBOX_WRAPPER.replace("{SORT_ORDER}", "ASC")	+ (PAGINATION_INBOX_WRAPPER_APPEND.replace("{}", query));
 		}
 		
 		return paginationWrapper.replace("{}",query);

@@ -81,34 +81,19 @@ public class WsQueryBuilder {
             " result) result_offset " +
             "WHERE offset_ > ? AND offset_ <= ?";
 	
-	private static final String PAGINATION_INBOX_WRAPPER = "SELECT * FROM "
-			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_lastmodifiedtime ASC) offset_ FROM " +
+	private static String PAGINATION_INBOX_WRAPPER = "SELECT * FROM "
+			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_lastmodifiedtime {SORT_ORDER}) offset_ FROM " +
             "({})" +
             " result) result_offset " +
             "WHERE offset_ > ? AND offset_ <= ?";
-
-	private static final String PAGINATION_INBOX_DESC_WRAPPER = "SELECT * FROM "
-			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY conn_lastmodifiedtime DESC) offset_ FROM " +
-            "({})" +
-            " result) result_offset " +
-            "WHERE offset_ > ? AND offset_ <= ?";
-	
 	private static final String COUNT_WRAPPER = " SELECT COUNT(*) FROM ({INTERNAL_QUERY}) AS count ";
 
 	private static final String ORDER_BY_CLAUSE= " ORDER BY wc.appCreatedDate DESC";
-	
+
 	private static final String ORDER_BY_COUNT_CLAUSE= " ORDER BY appCreatedDate DESC";
 	
-	private static final String ORDER_BY_INBOX_DESC_CLAUSE = " order by conn.lastmodifiedtime DESC";
-//			" AND pi.createdtime IN (select max(createdtime) "
-//			+ " from eg_wf_processinstance_v2 wf where wf.businessid = conn.applicationno GROUP BY wf.businessid)"
-//			+ " order by pi.createdtime DESC";
+	private static final String ORDER_BY_INBOX_CLAUSE = " order by conn.lastmodifiedtime {SORT_ORDER}";
 
-	private static final String ORDER_BY_INBOX_ASC_CLAUSE = " order by conn.lastmodifiedtime ASC";
-//			" AND pi.createdtime IN (select max(createdtime) "
-//			+ " from eg_wf_processinstance_v2 wf where wf.businessid = conn.applicationno GROUP BY wf.businessid)"
-//			+ " order by pi.createdtime ASC";
-	
 	/**
 	 * 
 	 * @param criteria
@@ -307,10 +292,10 @@ public class WsQueryBuilder {
 		else if (criteria.getIsCountCall() != null && criteria.getIsCountCall())
 			query.append("GROUP BY conn.applicationno ").append(ORDER_BY_COUNT_CLAUSE);
 		else if (criteria.getSortBy() != null && (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
-			if (criteria.getSortOrder() != null && (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
-				query.append(ORDER_BY_INBOX_DESC_CLAUSE);
+			if (criteria.getSortOrder() == null || (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
+				query.append(ORDER_BY_INBOX_CLAUSE.replace("{SORT_ORDER}", "DESC"));
 			else
-				query.append(ORDER_BY_INBOX_ASC_CLAUSE);
+				query.append(ORDER_BY_INBOX_CLAUSE.replace("{SORT_ORDER}", "ASC"));
 		} else
 			query.append(ORDER_BY_CLAUSE);
 		
@@ -385,10 +370,13 @@ public class WsQueryBuilder {
 		preparedStmtList.add(limit + offset);
 		
 		if (criteria.getSortBy() != null && (criteria.getSortBy()).equalsIgnoreCase("createdtime")) {
-			if (criteria.getSortOrder() == null || (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC))
-				return PAGINATION_INBOX_DESC_WRAPPER.replace("{}", query);
-			else
+			if (criteria.getSortOrder() == null || (criteria.getSortOrder() == SearchCriteria.SortOrder.DESC)) {
+				PAGINATION_INBOX_WRAPPER = PAGINATION_INBOX_WRAPPER.replace("{SORT_ORDER}", "DESC");
 				return PAGINATION_INBOX_WRAPPER.replace("{}", query);
+			} else {
+				PAGINATION_INBOX_WRAPPER = PAGINATION_INBOX_WRAPPER.replace("{SORT_ORDER}", "ASC");
+				return PAGINATION_INBOX_WRAPPER.replace("{}", query);
+			}
 		}
 		
 		return PAGINATION_WRAPPER.replace("{}",query);
