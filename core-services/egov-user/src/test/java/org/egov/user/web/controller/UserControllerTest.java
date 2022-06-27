@@ -12,6 +12,7 @@ import org.egov.user.domain.service.utils.EncryptionDecryptionUtil;
 import org.egov.user.security.CustomAuthenticationKeyGenerator;
 import org.egov.user.web.contract.auth.Role;
 import org.egov.user.web.contract.auth.User;
+import org.egov.tracer.model.CustomException;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -376,7 +377,7 @@ public class UserControllerTest {
         try {
             return IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream(fileName), "UTF-8");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomException(e.toString(),e.toString());
         }
     }
 

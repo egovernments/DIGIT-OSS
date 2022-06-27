@@ -12,6 +12,7 @@ import org.egov.telemetry.enrich.TelemetryEnrichMessages;
 import org.egov.telemetry.formatchecker.TelemetryFormatChecker;
 import org.egov.telemetry.sink.TelemetryFinalStream;
 import org.egov.telemetry.unbundle.TelemetryUnbundleBatches;
+import org.egov.tracer.model.CustomException;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -61,11 +62,11 @@ public class Main {
 
     }
 
-    private static void checkIfFilesExists() throws Exception {
+    private static void checkIfFilesExists() throws CustomException {
         if(Main.class.getClassLoader().getResource("application.properties") == null)
-            throw new Exception("Properties File Not Found");
+            throw new CustomException("Properties File Not Found","Properties File Not Found");
         if(Main.class.getClassLoader().getResource("telemetryMessageSchema.json") == null)
-            throw new Exception("Schema File Not Found");
+            throw new CustomException("Schema File Not Found","Schema File Not Found");
     }
 
     private static void createTopics(AppProperties appProperties) {
@@ -93,7 +94,7 @@ public class Main {
         } catch (InterruptedException | ExecutionException e) {
             log.error("Error fetching topic names from KafkaAdmin");
             log.error(e.getMessage());
-            throw new RuntimeException(e.getMessage(), e);
+            throw new CustomException(e.toString(), e.getMessage());
         }
 
         telemetryTopics.removeAll(allTopics);
@@ -114,7 +115,7 @@ public class Main {
                 } else {
                     log.error("Error while creating topic : " + newTopic.name());
                     log.error(e.getMessage());
-                    throw new RuntimeException(e.getMessage(), e);
+                    throw new CustomException(e.toString(),e.getMessage());
                 }
             }
         }

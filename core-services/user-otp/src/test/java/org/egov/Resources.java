@@ -1,6 +1,7 @@
 package org.egov;
 
 import org.apache.commons.io.IOUtils;
+import org.egov.tracer.model.CustomException;
 
 import java.io.IOException;
 
@@ -14,7 +15,7 @@ public class Resources {
                     .replaceAll("\\s*:\\s*", ":")
                     .replace("\n", "");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomException(e.toString(),e.toString());
         }
     }
 }

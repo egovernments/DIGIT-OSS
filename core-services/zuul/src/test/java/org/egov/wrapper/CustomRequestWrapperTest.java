@@ -4,6 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.egov.Resources;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.egov.tracer.model.CustomException;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -50,7 +51,7 @@ public class CustomRequestWrapperTest {
         try {
             return IOUtils.toByteArray(IOUtils.toInputStream(resources.getFileContents(fileName)));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomException(e.toString(),e.toString());
         }
     }
 

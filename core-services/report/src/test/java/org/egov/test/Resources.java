@@ -1,6 +1,7 @@
 package org.egov.test;
 
 import org.apache.commons.io.IOUtils;
+import org.egov.tracer.model.CustomException;
 
 import java.io.IOException;
 
@@ -11,7 +12,7 @@ public class Resources {
             return IOUtils.toString(this.getClass().getClassLoader()
                     .getResourceAsStream(fileName), "UTF-8");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomException(e.toString(),e.toString());
         }
     }
 }

@@ -12,6 +12,7 @@ import org.egov.contract.User;
 import org.egov.exceptions.CustomException;
 import org.egov.model.AuthorizationRequest;
 import org.egov.model.AuthorizationRequestWrapper;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -146,8 +147,7 @@ public class RbacFilter extends ZuulFilter {
                 }
 
             } catch (IOException e) {
-                throw new RuntimeException( new CustomException("REQUEST_PARSE_FAILED", HttpStatus.UNAUTHORIZED.value() ,"Failed to parse request at" +
-                    " API gateway"));
+                throw new CustomException("REQUEST_PARSE_FAILED", "Failed to parse request at API gateway");
             }
         }
 

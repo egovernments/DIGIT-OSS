@@ -9,6 +9,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
+import org.egov.tracer.model.CustomException;
 
 import java.util.concurrent.ExecutionException;
 
@@ -47,7 +48,7 @@ public class LogAwareKafkaTemplate<K, V> {
             return result;
         } catch (InterruptedException | ExecutionException e) {
             log.error(String.format(SEND_FAILURE_MESSAGE_WITH_TOPIC, topic), e);
-            throw new RuntimeException(e);
+            throw new CustomException(e.toString(),e.toString());
         }
     }
 
@@ -58,7 +59,7 @@ public class LogAwareKafkaTemplate<K, V> {
             return result;
         } catch (InterruptedException | ExecutionException e) {
             log.error(String.format(SEND_FAILURE_MESSAGE_WITH_TOPIC_KEY, topic, key), e);
-            throw new RuntimeException(e);
+            throw new CustomException(e.toString(),e.toString());
         }
     }
 
@@ -69,7 +70,7 @@ public class LogAwareKafkaTemplate<K, V> {
             return result;
         } catch (InterruptedException | ExecutionException e) {
             log.error(String.format(SEND_FAILURE_MESSAGE_WITH_TOPIC_KEY_PARTITION, topic, key, partition), e);
-            throw new RuntimeException(e);
+            throw new CustomException(e.toString(),e.toString());
         }
     }
 
