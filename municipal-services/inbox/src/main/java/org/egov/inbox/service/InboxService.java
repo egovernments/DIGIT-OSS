@@ -39,6 +39,7 @@ import static org.egov.inbox.util.SWConstants.SW_BUSINESS_IDS_PARAM;
 import static org.egov.inbox.util.BSConstants.*;
 import static org.egov.inbox.util.WSConstants.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -1133,8 +1134,8 @@ public class InboxService {
 		return results;
 	}
 
-    public ResponseDto getAggregateData(RequestDto request) {
-        ResponseDto result = new ResponseDto();
+    public Map<String, BigDecimal> getAggregateData(RequestDto request) {
+        Map<String, BigDecimal> result = new HashMap<>();
         RequestDate dateReq = new RequestDate();
         Map<String, Object> filters = new HashMap<>();
         try {
@@ -1148,23 +1149,23 @@ public class InboxService {
             filters.put(TENANT_ID, new ArrayList<>());
             request.getAggregationRequestDto().setFilters(filters);
 
-            if (request.getAggregationRequestDto().getModuleLevel().equalsIgnoreCase(WS_MODULE_LEVEL)) {
-                List<String> vizCodes = config.getWnsVizualizationCodes();
-                for (String codes : vizCodes) {
-                    request.getAggregationRequestDto().setVisualizationCode(codes);
-                    Object response = wsInboxFilterService.getAggregateData(request);
-                    MetricResponse metricResponse = mapper.convertValue(response, MetricResponse.class);
-                    log.info("response from the query " + mapper.writeValueAsString(metricResponse));
-                    if (codes.equalsIgnoreCase(WS_VIZ_TOTALCOllECTION)) {
-                        result.setTotalAmountPaid(metricResponse.getResponseData().getData().get(0).getHeaderValue());
+            Map<String, List<String>> vizCodes = config.getDssVizualizationModuleCodes();
+            for (Map.Entry<String, List<String>> entry : vizCodes.entrySet()) {
+                if (entry.getKey().equalsIgnoreCase(request.getAggregationRequestDto().getModuleLevel())) {
+                    List<String> codes = entry.getValue();
+                    for (String code : codes) {
+                        request.getAggregationRequestDto().setVisualizationCode(code);
+                        Object response = wsInboxFilterService.getAggregateData(request);
+                        MetricResponse metricResponse = mapper.convertValue(response, MetricResponse.class);
+                        log.info("response from the query " + mapper.writeValueAsString(metricResponse));
+                        result.put(code,metricResponse.getResponseData().getData().get(0).getHeaderValue());
                     }
-                    if (codes.equalsIgnoreCase(WS_VIZ_TOTALCONNECTION)) {
-                        result.setActiveConnections(metricResponse.getResponseData().getData().get(0).getHeaderValue());
-                    }
+                } else {
+                    throw new CustomException(ErrorConstants.INVALID_MODULE, "could not find the configurations for " +request.getAggregationRequestDto().getModuleLevel());
                 }
             }
         } catch (Exception e) {
-            throw new CustomException(ErrorConstants.INVALID_MODULE_DATA, "could not find the data" + e.getMessage());
+            throw new CustomException(ErrorConstants.INVALID_MODULE_DATA, e.getMessage());
         }
         return result;
     }

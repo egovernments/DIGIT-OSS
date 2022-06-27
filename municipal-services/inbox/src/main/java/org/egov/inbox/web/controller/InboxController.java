@@ -1,7 +1,9 @@
 package org.egov.inbox.web.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -49,8 +51,8 @@ public class InboxController {
 	}
 
 	@PostMapping(value = "/dss/_search")
-	public ResponseEntity<ResponseDto> getChartV2(@Valid @RequestBody RequestDto request) {
-		ResponseDto response = inboxService.getAggregateData(request);
+	public ResponseEntity<Map<String, BigDecimal>> getChartV2(@Valid @RequestBody RequestDto request) {
+		Map<String, BigDecimal> response = inboxService.getAggregateData(request);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	

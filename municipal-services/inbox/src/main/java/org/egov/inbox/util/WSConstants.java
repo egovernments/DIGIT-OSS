@@ -25,8 +25,4 @@ public class WSConstants {
     public static final String DESC_PARAM = "DESC";
     public static final String WS_BUSINESS_IDS_PARAM = "businessIds";
     public static final String WS_CONNECTION_NO_PARAM = "consumerNo";
-
-    public static final String WS_MODULE_LEVEL = "WS";
-    public static final String WS_VIZ_TOTALCONNECTION = "wstotalConnection";
-    public static final String WS_VIZ_TOTALCOllECTION = "wstotalCollection";
 }

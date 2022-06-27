@@ -79,8 +79,8 @@ public class InboxConfiguration {
 	@Value("#{${bs.businesscode.service.search}}")
 	private Map<String, Map<String, String>> bsServiceSearchMapping;
 
-	@Value("${wns.visualization.codes}")
-	private List<String> wnsVizualizationCodes;
+	@Value("#{${dss.visualization.module.codes}}")
+	private Map<String, List<String>> dssVizualizationModuleCodes;
 
 	@Value("${dss.data.year}")
 	private Integer dssYear;
