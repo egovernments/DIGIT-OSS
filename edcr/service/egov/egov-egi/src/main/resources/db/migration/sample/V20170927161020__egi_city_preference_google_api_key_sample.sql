@@ -1,1 +1,1 @@
-update eg_citypreferences set googleApiKey='AIzaSyA1otT5_xEGe0qMrh2lemKKYH7Vo-pGOlA';
+update eg_citypreferences set googleApiKey='<Google_API_Key>';
