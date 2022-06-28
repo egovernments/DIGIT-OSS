@@ -23,6 +23,7 @@ const GetConnectionDetails = () => {
   const [showOptions, setShowOptions] = useState(false);
   const stateCode = Digit.ULBService.getStateId();
   const actionConfig = ["MODIFY_CONNECTION_BUTTON", "BILL_AMENDMENT_BUTTON", "DISCONNECTION_BUTTON"];
+  const actionConfigWithoutDisconnection = ["MODIFY_CONNECTION_BUTTON", "BILL_AMENDMENT_BUTTON"];
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useConnectionDetail(t, tenantId, applicationNumber, serviceType);
   const menuRef = useRef();
   const actionMenuRef = useRef();
@@ -154,11 +155,20 @@ const GetConnectionDetails = () => {
 
 
   const getDisconnectionButton = () => {
-    let pathname = `/digit-ui/employee/ws/disconnection-application`;
-    if (billData[0]?.status === "ACTIVE" || due === "0") {
-      history.push(`${pathname}`);
-    } else {
-      setshowModal(true);
+    let pathname = `/digit-ui/employee/ws/new-disconnection`;
+    if(applicationDetails?.applicationData?.applicationStatus === "CONNECTION_ACTIVATED"){
+      if (billData[0]?.status === "ACTIVE" || due === "0") {
+        Digit.SessionStorage.set("WS_DISCONNECTION", applicationDetails);
+        history.push(`${pathname}`);
+      } else {
+        setshowModal(true);
+      }
+    }
+    else {
+      setshowActionToast({
+        type: "error",
+        label: "WORKFLOW_IN_PROGRESS",
+      });
     }
   };
   function onActionSelect(action) {
@@ -173,7 +183,8 @@ const GetConnectionDetails = () => {
 
   //all options needs to be shown
   //const showAction = due !== "0" ? actionConfig : actionConfig.filter((item) => item !== "BILL_AMENDMENT_BUTTON");
-  const showAction= actionConfig
+  const checkApplicationStatusForDisconnection =  applicationDetails?.applicationData?.status === "Active" || applicationDetails?.applicationData?.status === "InWorkflow" ? true : false
+  const showAction= checkApplicationStatusForDisconnection ? actionConfig : actionConfigWithoutDisconnection
 
 
   async function getBillSearch() {

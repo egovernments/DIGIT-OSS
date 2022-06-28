@@ -15,7 +15,7 @@ const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => 
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
   sessionStorage.removeItem("IsDetailsExists");
 
-  const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId, 'DisconnectionDocuments');
+  const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId, "Disconnection");
 
   if (userType === "citizen") {
     return (
@@ -30,7 +30,7 @@ const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => 
           {wsDocsLoading ?
             <Loader /> :
             <Fragment>
-              {wsDocs?.DisconnectionDocuments?.map((doc, index) => (
+              {wsDocs?.Disconnection?.map((doc, index) => (
                 <div>
                   <div style={{ fontWeight: 700, marginBottom: "8px" }} key={index}>
                     <div style={{ display: "flex" }}>
@@ -57,8 +57,8 @@ const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => 
       <Card >
         {wsDocsLoading ?
           <Loader /> :
-          <Fragment>
-            {wsDocs?.DisconnectionDocuments?.map((doc, index) => (
+          <div id="documents-div">
+            {wsDocs?.Disconnection?.map((doc, index) => (
               <div key={index} style={{ marginTop: "16px" }}>
                 <CardSectionHeader style={{ marginBottom: "16px", lineHeight: "28px", fontSize: "24px" }}>{t(doc?.code.replace('.', '_'))}</CardSectionHeader>
                 {doc.dropdownData && doc.dropdownData.length > 1 && <p style={{ lineHeight: "24px", fontSize: "16px" }}>{t(`${doc?.code.replace('.', '_')}_DESCRIPTION`)}</p>}
@@ -68,18 +68,17 @@ const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => 
                 <p style={{fontSize: "16px"}}>{t(`${doc?.code.replace('.', '_')}_BELOW_DESCRIPTION`)}</p>
               </div>
             ))}
-          </Fragment>
+          </div>
         }
         <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
           {
             <SubmitBar
               label={t("ACTION_TEST_APPLY")}
-              onSubmit={goNext}
-              // onSubmit={() => {
-              //   history.push(match.path.replace("disconnection-application", "new-disconnection"));
-              // }}
+              onSubmit={() => {
+                history.push(match.path.replace("docsrequired", "application-form"));
+              }}
               style={{ margin: "10px 10px 0px 0px" }}
-              // disabled={wsDocsLoading ? true : false}
+              disabled={wsDocsLoading ? true : false}
             />}
         </ActionBar>
       </Card>

@@ -22,13 +22,12 @@ const DisconnectionApplication = () => {
   const location = useLocation();
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("WS_DISCONNECTION", state?.edcrNumber ? { data: { scrutinyNumber: { edcrNumber: state?.edcrNumber } } } : {});
+  const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("WS_DISCONNECTION", {});
 
 //   const CheckPage = Digit?.ComponentRegistryService?.getComponent('WSDisconnectionCheckPage') ;
 //   const Acknowledgement = Digit?.ComponentRegistryService?.getComponent('WSAcknowledgement') ;
 
   const stateId = Digit.ULBService.getStateId();
-  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
   let isModifyEdit = window.location.href.includes("/modify-connection/") || window.location.href.includes("/edit-application/")
 
   const goNext = (skipStep) => {
@@ -36,7 +35,7 @@ const DisconnectionApplication = () => {
     const currentPath = pathname.split("/").pop();
     let { nextStep } = config.find((routeObj) => routeObj.route === currentPath);
     let routeObject = config.find((routeObj) => routeObj.route === currentPath && routeObj);
-    console.log(skipStep,"skipstep",nextStep);
+
     // if(nextStep == "application-form" && nextStep != null ){
     //     nextStep = "employee-application-form";
     // }
@@ -53,7 +52,6 @@ const DisconnectionApplication = () => {
     { 
       nextStep = "property-details";
     }
-    console.log(skipStep,"skipstep",nextStep);
 
     let redirectWithHistory = history.push;
     if (nextStep === null) {
@@ -79,29 +77,23 @@ const DisconnectionApplication = () => {
 
   let config = [];
   // newConfig = newConfig?.BuildingPermitConfig ? newConfig?.BuildingPermitConfig : newConfigWS;
-  newConfig = newConfigWS;
+  let newConfig = newConfigWS;
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = "docsrequired";
 
-  // const CheckPage = Digit?.ComponentRegistryService?.getComponent('BPACheckPage') ;
-  // const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('BPAAcknowledgement');
   return (
     <Switch>
       {config.map((routeObj, index) => {
         const { component, texts, inputs, key, isSkipEnabled } = routeObj;
-        console.log(routeObj,"routeobj")
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Route path={`${getPath(match.path, match.params)}/${routeObj.route}`} key={index}>
-            <Component config={{ texts, inputs, key, isSkipEnabled }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} userType={"employee"} />
+            <Component config={{ texts, inputs, key, isSkipEnabled }} onSelect={handleSelect} onSkip={handleSkip} t={t} userType={"employee"} />
           </Route>
         );
       })}
-      {/* <Route path={`${getPath(match.path, match.params)}/check`}>
-        <CheckPage onSubmit={createApplication} value={params} />
-      </Route> */}
     
       <Route>
         <Redirect to={`${getPath(match.path, match.params)}/${config.indexRoute}`} />

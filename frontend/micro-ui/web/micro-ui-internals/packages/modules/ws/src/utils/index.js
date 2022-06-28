@@ -495,6 +495,81 @@ export const convertToSWUpdate = (data) => {
   };
   return formdata;
 };
+export const createPayloadOfWSDisconnection = async (data, storeData, service) => {
+  // data?.cpt?.details?.owners?.forEach((owner) => {
+  //   if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress;
+  // });
+
+  let wsPayload = {
+    WaterConnection : {
+      id: storeData?.applicationData?.id,
+      applicationNo: storeData?.applicationData?.applicationNo,
+      applicationStatus: storeData?.applicationData?.applicationStatus,
+      status: storeData?.applicationData?.status,
+      connectionNo: storeData?.applicationData?.connectionNo,
+      applicationType: "DISCONNECT_WATER_CONNECTION",
+      dateEffectiveFrom: convertDateToEpoch(data?.date),
+      isdisconnection : true,
+      isDisconnectionTemporary: data?.type?.value?.code === "Temporary" ? true :false,
+      documents: data?.documents,
+      water: true,
+      sewerage: false,
+      proposedTaps: storeData?.applicationData?.proposedTaps && Number(storeData?.applicationData?.proposedTaps),
+      proposedPipeSize: storeData?.applicationData?.proposedPipeSize?.size && Number(storeData?.applicationData?.proposedPipeSize?.size),
+      service: "Water",
+      property: storeData?.applicationData?.property,
+      propertyId: storeData?.applicationData?.propertyId,
+      oldConnectionNo: null,
+      plumberInfo: null,
+      roadCuttingArea: null,
+      roadType: null,
+      connectionExecutionDate: storeData?.applicationData?.connectionExecutionDate,
+      noOfTaps: storeData?.applicationData?.noOfTaps,
+      additionalDetails: storeData?.applicationData?.additionalDetails,
+      tenantId: storeData?.applicationData?.tenantId,
+      processInstance: storeData?.applicationData?.processInstance,
+      channel: "CFC_COUNTER",
+    },
+    disconnectRequest: true
+};
+
+  let swPayload = {
+    SewerageConnections: {
+      id: storeData?.applicationData?.id,
+      applicationNo: storeData?.applicationData?.applicationNo,
+      applicationStatus: storeData?.applicationData?.applicationStatus,
+      status: storeData?.applicationData?.status,
+      connectionNo: storeData?.applicationData?.connectionNo,
+      applicationType: "DISCONNECT_WATER_CONNECTION",
+      dateEffectiveFrom: convertDateToEpoch(data?.date),
+      isdisconnection : true,
+      isDisconnectionTemporary: data?.type?.value?.code === "Temporary" ? true :false,
+      documents: data?.documents,
+      water: false,
+      sewerage: true,
+      proposedWaterClosets: storeData?.applicationData?.proposedWaterClosets && Number(storeData?.applicationData?.proposedWaterClosets),
+      proposedToilets: storeData?.applicationData?.proposedToilets && Number(storeData?.applicationData?.proposedToilets),
+      service: "Water",
+      property: storeData?.applicationData?.property,
+      propertyId: storeData?.applicationData?.propertyId,
+      oldConnectionNo: null,
+      plumberInfo: null,
+      roadCuttingArea: null,
+      roadType: null,
+      connectionExecutionDate: storeData?.applicationData?.connectionExecutionDate,
+      noOfWaterClosets: storeData?.applicationData?.noOfWaterClosets ,
+      noOfToilets : storeData?.applicationData?.noOfToilets,
+      additionalDetails: storeData?.applicationData?.additionalDetails,
+      tenantId: storeData?.applicationData?.tenantId,
+      processInstance: storeData?.applicationData?.processInstance,
+      channel: "CFC_COUNTER",
+    },
+    disconnectRequest: true
+  };
+
+
+  return service === "WATER" ?  wsPayload : swPayload;
+};
 
 export const getOwnersforPDF = (property, t) => {
   let interarray = [];

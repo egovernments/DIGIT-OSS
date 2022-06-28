@@ -45,8 +45,6 @@ import WSDisconnectionForm from "./pageComponents/WSDisconnectionForm";
 import WSDisconnectionDocumentsForm from "./pageComponents/WSDisconnectionDocumentsForm";
 import WSDisconnectionCheckPage from "./pages/citizen/WSDisconnection/CheckPage";
 import WSDisconnectAcknowledgement from "./pageComponents/WSDisconnectAcknowledgement";
-import WSDisconnectionDetails from './pageComponents/WSDisconnectionDetails';
-import WSDisconnectionDocumentsEmployee from "./pageComponents/WSDisconnectionDocumentsEmployee";
 
 import WSInbox from "./components/WSInbox";
 import WSEditApplicationByConfig from './pages/employee/EditApplication/WSEditApplicationByConfig';
@@ -152,8 +150,6 @@ const componentsToRegister = {
   WSDisconnectionDocumentsForm,
   WSDisconnectionCheckPage,
   WSDisconnectAcknowledgement,
-  WSDisconnectionDetails,
-  WSDisconnectionDocumentsEmployee,
 };
 
 export const initWSComponents = () => {

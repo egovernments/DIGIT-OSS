@@ -10,38 +10,71 @@ import {
   SubmitBar, 
   CitizenInfoLabel,
   CardHeader ,
-  Toast
+  Toast,
+  DatePicker,
+  Header,
+  CardSectionHeader,
+  StatusTable, 
+  Row,
+  InfoBannerIcon,
+  ActionBar
 } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import DisconnectTimeline from "../components/DisconnectTimeline";
-import { stringReplaceAll } from "../utils";
+import { stringReplaceAll, createPayloadOfWSDisconnection } from "../utils";
 
-const WSDisconnectionForm = ({ t, config, onSelect, userType, formData }) => {
+const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
   let validation = {};
   const stateCode = Digit.ULBService.getStateId();
 
-  const storedData = formData?.WSDisconnectionForm?.WSDisConnectionForm || formData?.WSDisConnectionForm;
+  const applicationData = Digit.SessionStorage.get("WS_DISCONNECTION");
   
   const [disconnectionData, setDisconnectionData] = useState({
-      type: storedData?.type || "",
-      date: storedData?.date || "",
-      reason: storedData?.reason || "",
+      type: "",
+      date: "",
+      reason: "",
+      documents: []
   });
-  const [documents, setDocuments] = useState(storedData?.documents || []);
+  const [documents, setDocuments] = useState([]);
   const [error, setError] = useState(null);
   const [disconnectionTypeList, setDisconnectionTypeList] = useState([]);
+  const [checkRequiredFields, setCheckRequiredFields] = useState(false);
+  const [isEnableLoader, setIsEnableLoader] = useState(false);
 
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["disconnectionType"]);
+  const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(stateCode, "Disconnection");
+  const {
+    isLoading: creatingWaterApplicationLoading,
+    isError: createWaterApplicationError,
+    data: createWaterResponse,
+    error: createWaterError,
+    mutate: waterMutation,
+  } = Digit.Hooks.ws.useWaterCreateAPI("WATER");
 
-  useEffect(() =>{
-    setDisconnectionData({
-      type:storedData?.type||"",
-      date: storedData?.date || "",
-      reason: storedData?.reason || "",
-    });
-    setDocuments(storedData?.documents || [])
+  const {
+    isLoading: creatingSewerageApplicationLoading,
+    isError: createSewerageApplicationError,
+    data: createSewerageResponse,
+    error: createSewerageError,
+    mutate: sewerageMutation,
+  } = Digit.Hooks.ws.useWaterCreateAPI("SEWERAGE");
 
-  },[]);
+  // useEffect(() =>{
+  //   setDisconnectionData({
+  //     type:storedData?.type||"",
+  //     date: storedData?.date || "",
+  //     reason: storedData?.reason || "",
+  //     documents: storedData?.documents || []
+  //   });
+  //   setDocuments(storedData?.documents || [])
+
+  // },[]);
+
+  useEffect(() => {
+    const oldData = {...disconnectionData};
+    oldData['documents'] = documents;
+    setDisconnectionData(oldData);
+  }, [documents]);
 
   useEffect(() => {
     const disconnectionTypes = mdmsData?.["ws-services-masters"]?.disconnectionType || []; 
@@ -52,7 +85,10 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType, formData }) => {
 
   const handleSubmit = () => onSelect(config.key, { WSDisConnectionForm: disconnectionData });
 
-  const handleEmployeeSubmit = () => onSelect(config.key, { WSDisConnectionForm: {...disconnectionData, documents:documents} });
+  const handleEmployeeSubmit = () => {
+    console.log("Emp Submit");
+    onSelect(config.key, { WSDisConnectionForm: {...disconnectionData, documents:documents} });
+  };
 
 
   const onSkip = () => onSelect();
@@ -63,88 +99,46 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType, formData }) => {
     setDisconnectionData(oldData);
   }
 
-  if (isMdmsLoading) return <Loader />
+  const onSubmit = async (data) => {
+    if(data?.documents?.length === 0 || data?.documents?.length < 2){
+      setError({key: "error", message: "DOCUMENTS_MANDATORY"})
+    }
 
+    const payload = await createPayloadOfWSDisconnection(data, applicationData, applicationData?.applicationData?.serviceType);
+    if(payload?.WaterConnection?.water){
+      if (waterMutation) {
+        setIsEnableLoader(true);
+        await waterMutation(payload, {
+          onError: (error, variables) => {
+            setIsEnableLoader(false);
+            setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
+            setTimeout(closeToastOfError, 5000);
+          },
+          onSuccess: async (data, variables) => {
+            history.push(`/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`);
+          },
+        });
+      }
+    }
+    else if(payload?.SewerageConnections?.sewerage){
+      if (sewerageMutation) {
+        setIsEnableLoader(true);
+        await sewerageMutation(payload, {
+          onError: (error, variables) => {
+            setIsEnableLoader(false);
+            setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
+            setTimeout(closeToastOfError, 5000);
+          },
+          onSuccess: async (data, variables) => {
+            history.push(`/digit-ui/employee/ws/ws-response?applicationNumber=${data?.SewerageConnections?.[0]?.applicationNo}`);
+          },
+        });
+      }
+    }
+  } ;
 
-  const wsDocs={Documents: [
-    {
-      "code": "OWNER.IDENTITYPROOF",
-      "documentType": "OWNER",
-      "required": true,
-      "active": true,
-      "hasDropdown": false,
-      "dropdownData": [
-          {
-              "code": "OWNER.IDENTITYPROOF.AADHAAR",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_AADHAAR"
-          },
-          {
-              "code": "OWNER.IDENTITYPROOF.VOTERID",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_VOTERID"
-          },
-          {
-              "code": "OWNER.IDENTITYPROOF.DRIVING",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_DRIVING"
-          },
-          {
-              "code": "OWNER.IDENTITYPROOF.PAN",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_PAN"
-          },
-          {
-              "code": "OWNER.IDENTITYPROOF.PASSPORT",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_PASSPORT"
-          }
-      ],
-      "description": "OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION",
-      "i18nKey": "OWNER_IDENTITYPROOF"
-  },
-  {
-    "code": "OWNER.ADDRESSPROOF",
-    "documentType": "OWNER",
-    "required": true,
-    "active": true,
-    "hasDropdown": false,
-    "dropdownData": [
-        {
-            "code": "OWNER.ADDRESSPROOF.ELECTRICITYBILL",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_ELECTRICITYBILL"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.DL",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_DL"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.VOTERID",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_VOTERID"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.AADHAAR",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_AADHAAR"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.PAN",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_PAN"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.PASSPORT",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_PASSPORT"
-        }
-    ],
-    "description": "OWNER.ADDRESSPROOF.ADDRESSPROOF_DESCRIPTION",
-    "i18nKey": "OWNER_ADDRESSPROOF"
-}
-]}
+  if (isMdmsLoading || wsDocsLoading || isEnableLoader) return <Loader />
+
 
 if(userType === 'citizen') {
     return (
@@ -161,7 +155,7 @@ if(userType === 'citizen') {
           <CardHeader>{t("WS_APPLICATION_FORM")}</CardHeader>
           <CardLabel>
             {t('WS_CONSUMER_NUMBER')} 
-            <span style={{float:'right'}}>PG-WS-2021-09-29-006024</span>
+            <span style={{float:'right'}}>{"PG-WS-2021-09-29-006024"}</span>
           </CardLabel>
           
           <CardLabel>{t("WS_DISCONNECTION_TYPE")}</CardLabel>
@@ -207,7 +201,10 @@ if(userType === 'citizen') {
     );
   }
 
+  console.log("Disconnection Data: " + JSON.stringify(disconnectionData));
   return (
+    <div style={{ margin: "16px" }}>
+    <Header styles={{fontSize: "32px", marginLeft: "18px"}}>{t("WS_WATER_AND_SEWERAGE_DISCONNECTION")}</Header>
     <FormStep
           config={config}
           onSelect={handleEmployeeSubmit}
@@ -215,13 +212,24 @@ if(userType === 'citizen') {
           t={t}       
     >
       <div style={{padding:"10px",paddingTop:"20px",marginTop:"10px"}}>
-      <CardHeader>{t("WS_APPLICATION_FORM")}</CardHeader>
-        <CardLabel>
-          {t('WS_CONSUMER_NUMBER')} 
-          <span style={{float:'right'}}>PG-WS-2021-09-29-006024</span>
-        </CardLabel>
-        
-        <CardLabel>{t("WS_DISCONNECTION_TYPE")}</CardLabel>
+      <CardSectionHeader>{t("CS_TITLE_APPLICATION_DETAILS")}</CardSectionHeader>
+      <StatusTable>
+        <Row key={t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")} label={`${t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")}`} text={applicationData?.applicationData?.connectionNo} className="border-none" />
+      </StatusTable>        
+      <CardSectionHeader>
+        {t("WS_DISCONNECTION_TYPE")}
+            <div className={`tooltip`}>
+            <InfoBannerIcon fill="#0b0c0c"/>
+            <span className="tooltiptext" style={{
+                    whiteSpace: "nowrap",
+                    fontSize: "medium"
+                  }}>
+                    {`${t(`WS_DISCONNECTION_PERMANENT_TOOLTIP`)}`}
+                    <br/><br/>
+                    {`${t(`WS_DISCONNECTION_TEMPORARY_TOOLTIP`)}`}
+                  </span>
+            </div>
+      </CardSectionHeader>
         <RadioButtons
                 t={t}
                 options={disconnectionTypeList}
@@ -231,23 +239,35 @@ if(userType === 'citizen') {
                 isMandatory={false}
                 onSelect={(val) => filedChange({code: "type",value: val})}
                 labelKey="WS_DISCONNECTION_TYPE"
+                style={{display: "flex", gap: "0px 3rem"}}
             />
           
           <LabelFieldPair>
-          <CardLabel>{t("WS_DISCONEECTION_DATE")}</CardLabel>
-          <TextInput
-              t={t}
-              type={"text"}
-              style={{background:"#FAFAFA"}}
-              isMandatory={false}
-              optionKey="i18nKey"
-              name="date"
-              value={disconnectionData?.date?.value}
-              onChange={(e) => filedChange({code:"date" , value:e.target.value})}
-            />
+          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">
+            {t("WS_DISCONECTION_DATE")}
+            <div className={`tooltip`} style={{position: "absolute"}}>
+            <InfoBannerIcon fill="#0b0c0c"/>
+            <span className="tooltiptext" style={{
+                    whiteSpace: "nowrap",
+                    fontSize: "medium"
+                  }}>
+                    {`${t(`WS_DISCONNECTION_DATE_TOOLTIP`)}`}
+                  </span>
+            </div>
+          </CardLabel>
+          <div className="field">
+          <DatePicker
+            date={disconnectionData?.date}
+            onChange={(date) => {
+              setDisconnectionData({ ...disconnectionData, date: date });
+            }}
+          ></DatePicker>
+          </div>
+          
           </LabelFieldPair>
           <LabelFieldPair>
-              <CardLabel>{t("WS_DISCONNECTION_REASON")}</CardLabel>              
+              <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{t("WS_DISCONNECTION_REASON")}</CardLabel>              
+              <div className="field">
                 <TextArea
                   isMandatory={false}
                   optionKey="i18nKey"
@@ -255,11 +275,11 @@ if(userType === 'citizen') {
                   name={"reason"}
                   value={disconnectionData.reason?.value}
                   onChange={(e) => filedChange({code:"reason" , value:e.target.value})}
-                />              
+                />  
+                </div>            
           </LabelFieldPair>
-          
-          <CardHeader>{t(`WS_DISCONNECTION_DOCUMENTS`)}</CardHeader>
-          {wsDocs?.Documents?.map((document, index) => { 
+          <CardSectionHeader>{t("WS_DISCONNECTION_DOCUMENTS")}</CardSectionHeader>
+          {wsDocs?.Disconnection?.map((document, index) => { 
                   return (
                     <SelectDocument
                       key={index}
@@ -269,16 +289,25 @@ if(userType === 'citizen') {
                       setError={setError}
                       setDocuments={setDocuments}
                       documents={documents}
-                    //   setCheckRequiredFields={setCheckRequiredFields}
+                      setCheckRequiredFields={setCheckRequiredFields}
                     />
                   );
                   })}
-                  {error && <Toast label={error} onClose={() => setError(null)} error />}
-          <SubmitBar label={t(`CS_COMMON_NEXT`)} submit={true} />
+                  {error && <Toast error={error?.key === "error" ? true : false} label={t(error?.message)} onClose={() => setError(null)} />}
       </div>
 
 
     </FormStep>
+    <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
+          {
+            <SubmitBar
+              label={t("ACTION_TEST_SUBMIT")}
+              onSubmit={onSubmit(disconnectionData)}
+              style={{ margin: "10px 10px 0px 0px" }}
+              disabled={wsDocsLoading || documents.length === 0 ? true : false}
+            />}
+     </ActionBar>
+    </div>
   );
 
 };
@@ -358,7 +387,7 @@ function SelectDocument({
   return (
       <div style={{ marginBottom: "24px" }}>
           <LabelFieldPair>
-          <CardLabel>{t(doc?.i18nKey)}</CardLabel>
+          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{t(doc?.i18nKey) + "*"}</CardLabel>
           {/* <Dropdown
               t={t}
               isMandatory={false}
@@ -367,6 +396,7 @@ function SelectDocument({
               optionKey="i18nKey"
               select={handleSelectDocument}
           /> */}
+          <div className="field">
           <UploadFile
               id={`noc-doc-1-${key}`}
               extraStyleName={"propertyCreate"}
@@ -379,6 +409,7 @@ function SelectDocument({
               message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`ES_NO_FILE_SELECTED_LABEL`)}
               error={error}
           />
+          </div>
           </LabelFieldPair>
         
          
