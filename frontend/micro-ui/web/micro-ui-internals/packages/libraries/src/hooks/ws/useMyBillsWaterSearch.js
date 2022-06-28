@@ -24,7 +24,7 @@ const combineResponse = (WaterConnections, properties, billData, t) => {
     ConsumerNumber : app?.connectionNo,
     ConsumerName : app?.connectionHolders ? app?.connectionHolders.map((owner) => owner?.name).join(",") : properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.owners?.map((ow) => ow.name).join(","),
     Address: getAddress((properties.filter((prop) => prop.propertyId === app?.propertyId)[0]).address, t),
-    AmountDue : billData ? (billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.amount ? billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.amount : "NA")  : "NA",
+    AmountDue : billData ? (billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.totalAmount ? billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.totalAmount : "NA")  : "NA",
     DueDate : billData ? getDate(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.expiryDate) : "NA",
     BillingPeriod : billData ?  getBillingPeriod(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.fromPeriod , billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.toPeriod) : "NA",
     ServiceName: billData ?  (t(`WS_SERVICE_TYPE_${billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.businessService}`)) : "NA",

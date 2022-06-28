@@ -31,16 +31,6 @@ const MobileInbox = ({
 }) => {
   const { t } = useTranslation();
 
-  const getApplicationNumberCell = (value) => {
-    return (
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + value}>
-          <span className="link">{value}</span>
-        </Link>
-      </div>
-    );
-  };
-
   const getData = () => {
     if (isSearch) {
       return data?.table?.map(({ applicationNo, applicationStatus, propertyUsage, tenantId, address, citizen }) => ({
@@ -79,7 +69,7 @@ const MobileInbox = ({
   const fstp_citizen_data = fstprequest?.map((citizen) => {
     let vehicleInfo = vehicleLog?.find((i) => i?.tripDetails[0]?.referenceNo === citizen?.applicationNo);
     return {
-      [t("ES_INBOX_APPLICATION_NO")]: getApplicationNumberCell(vehicleInfo?.applicationNo) || "N/A",
+      [t("ES_INBOX_VEHICLE_LOG")]: vehicleInfo?.applicationNo || "N/A",
       [t("CS_COMMON_CITIZEN_NAME")]: citizen?.citizen?.name || "N/A",
       [t("CS_COMMON_CITIZEN_NUMBER")]: citizen?.citizen?.mobileNumber || "N/A",
       [t("ES_INBOX_LOCALITY")]: citizen?.address?.locality?.name || "N/A",

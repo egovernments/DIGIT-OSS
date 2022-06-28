@@ -94,6 +94,13 @@ const ConsumptionDetails = ({ view }) => {
       setTimeout(closeToast, 5000);
       return;
     }
+    //check if the current reading is less than last reading
+    if (data?.currentReading <= details?.[0]?.currentReading ){
+      setShowToast({ key: "error", message: t("CURRENT_READING_ERROR") });
+      setError(t("CURRENT_READING_ERROR"));
+      setTimeout(closeToast, 5000);
+      return
+    }
     let meterReadingsJS = {
       "billingPeriod" : `${getDate(meterDetails?.currentReadingDate)} - ${getDate(data?.currentReadingDate)}`,
       "connectionNo" : meterDetails?.connectionNo,
@@ -134,11 +141,19 @@ const ConsumptionDetails = ({ view }) => {
     }));
 
   const onFormValueChange = (setValue, formData, formState) => {
+    //console.log(selectMeterStatus);
+    //console.log(details);
     setCurrentReading(formData?.currentReading);
     setBillingPeriod(`${getDate(meterDetails?.currentReadingDate)} - ${getDate(formData?.currentReadingDate)}`);
     if(parseInt(currentMeterReading) < parseInt(details?.[0]?.lastReading)){
       setConsumption("0");
     }
+    //here we need to handle the case of RAIN-7304
+    // else if(selectMeterStatus?.code!=="Working"){
+    //   console.log(selectedConsumtion);
+    //   setConsumption(prevState=>parseInt(formData?.consumption))
+    //   return 
+    // }
     else{
       setConsumption(`${parseInt(currentMeterReading) - parseInt(details?.[0]?.currentReading)}`);
     }

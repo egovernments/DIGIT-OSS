@@ -46,7 +46,7 @@ const EditApplication = () => {
     config?.body?.forEach(data => { if (data?.isEditConnection) bodyDetails.push(data); })
     config.body = bodyDetails;
     setConfig(config);
-  });
+  }, []);
 
   useEffect(() => {
     !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);

@@ -86,7 +86,7 @@ const SearchFields = ({ register, control, reset, tenantId, t,formState}) => {
         <>
             <SearchField>
                 <label>
-                    {t("ABG_COMMON_TABLE_COL_SERVICE_CATEGORY")}
+                    {`${t("ABG_COMMON_TABLE_COL_SERVICE_CATEGORY")} *`}
                 </label>
                 
                 <Controller

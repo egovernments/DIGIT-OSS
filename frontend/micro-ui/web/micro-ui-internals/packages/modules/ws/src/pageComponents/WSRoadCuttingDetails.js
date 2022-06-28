@@ -84,7 +84,7 @@ const RoadCuttForm = (_props) => {
     isEditScreen,
   } = _props;
 
-  const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger } = useForm();
+  const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
   const formValue = watch();
   const { errors } = localFormState;
 
@@ -97,6 +97,10 @@ const RoadCuttForm = (_props) => {
   useEffect(() => {
     trigger();
   }, []);
+
+  useEffect(() => {
+    trigger();
+  }, [allRoadCuttingDetails, formData?.connectionDetails, formData?.plumberDetails]);
   
   const [part, setPart] = React.useState({});
 
@@ -109,9 +113,13 @@ const RoadCuttForm = (_props) => {
   }, [formValue]);
 
   useEffect(() => {
-    if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) setError(config.key, { type: errors });
-    else if (!Object.keys(errors).length && formState.errors[config.key]) clearErrors(config.key);
-  }, [errors]);
+    if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) {
+        setError(config.key, { type: errors });
+    }
+    else if (!Object.keys(errors).length && formState.errors[config.key]) {
+        clearErrors(config.key);
+    }
+}, [errors]);
 
   const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
 
@@ -136,26 +144,25 @@ const RoadCuttForm = (_props) => {
               <Controller
                 control={control}
                 name={"roadType"}
-                defaultValue={isEditScreen ? {
-                  active: true,
-                  code: roadType?.code,
-                  i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(roadType?.code || "")}`,
-                  name: t(`COMMON_MASTERS_OWNERSHIPCATEGORY_${stringReplaceAll(roadType?.code || "")}`),
-                } : null}
-                rules={{ required: t("CORE_COMMON_REQUIRED_ERRMSG") }}
+                defaultValue={roadCutt?.roadType}
+                rules={{ required: t("REQUIRED_FIELD") }}
+                isMandatory={true}
                 render={(props) => (
-                  <Dropdown
-                    className="form-field"
-                    selected={props.value}
-                    select={props.onChange}
-                    onBlur={props.onBlur}
-                    option={roadCuttingTypeMenu}
-                    optionKey="i18nKey"
-                    disable={isEditScreen}
-                    t={t}
-                  />
+                    <Dropdown
+                        className="form-field"
+                        selected={getValues("roadType")}
+                        errorStyle={(localFormState.touched.roadType && errors?.roadType?.message) ? true : false}
+                        select={(e) => {
+                          props.onChange(e);
+                        }}
+                        option={roadCuttingTypeMenu}
+                        onBlur={props.onBlur}
+                        optionKey="i18nKey"
+                        disable={false}
+                        t={t}
+                    />
                 )}
-              />
+            />
             </LabelFieldPair>
             <CardLabelError style={errorStyle}>
               {localFormState.touched?.roadType ? errors?.roadType?.message : ""}
@@ -166,7 +173,7 @@ const RoadCuttForm = (_props) => {
                 <Controller
                   control={control}
                   name={"area"}
-                  defaultValue={isEditScreen ? area : null}
+                  defaultValue={roadCutt?.area}
                   rules={{
                     required: t("CORE_COMMON_REQUIRED_ERRMSG"),
                     validate: {

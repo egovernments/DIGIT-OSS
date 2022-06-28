@@ -22,8 +22,9 @@ const FstpAddVehicle = ({ onSelect }) => {
                 "type": "text",
                 "name": "vehicleNumber",
                 "validation": {
-                    "pattern": "[a-zA-Z0-9 ]{1,20}",
-                    "title": "Please provide a valid vehicle number"
+                    // "pattern": "[a-zA-Z0-9 ]{1,20}",
+                    "pattern": `[A-Z]{2}\\s{1}[0-9]{2}\\s{1}[A-Z]{2}\\s{1}[0-9]{4}`,
+                    "title": "Please provide valid vehicle number with proper spaces"
                 }
             },
         ],
@@ -47,6 +48,7 @@ const FstpAddVehicle = ({ onSelect }) => {
                 t={t}
                 isDisabled={!vehicleNumber}
                 cardStyle={{ margin: "10px" }}
+                textInputStyle={{ maxWidth: "540px" }}
             ></FormStep>
         </React.Fragment>
     );

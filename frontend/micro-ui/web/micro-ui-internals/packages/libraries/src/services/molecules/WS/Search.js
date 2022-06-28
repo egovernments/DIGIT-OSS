@@ -332,12 +332,20 @@ export const WSSearch = {
                   title: "WS_SERV_DETAIL_CONN_EXECUTION_DATE",
                   value: wsDataDetails?.connectionExecutionDate ? convertEpochToDate(wsDataDetails?.connectionExecutionDate) : t("NA"),
                 },
+                {
+                  title: "WS_MODIFICATIONS_EFFECTIVE_FROM",
+                  value: wsDataDetails?.dateEffectiveFrom ? convertEpochToDate(wsDataDetails?.dateEffectiveFrom) : t("NA"),
+                },
               ]
             : [
                 {
                   title: "WS_SERV_DETAIL_CONN_EXECUTION_DATE",
                   value: wsDataDetails?.connectionExecutionDate ? convertEpochToDate(wsDataDetails?.connectionExecutionDate) : t("NA"),
                 },
+                {
+                  title: "WS_MODIFICATIONS_EFFECTIVE_FROM",
+                  value: wsDataDetails?.dateEffectiveFrom ? convertEpochToDate(wsDataDetails?.dateEffectiveFrom) : t("NA"),
+                }
               ],
       },
     };
@@ -516,7 +524,7 @@ export const WSSearch = {
       asSectionHeader: true,
       additionalDetails: {
         documents: [{
-          title: "WS_COMMON_DOCS",
+          title: "BILL_AMEND_DOCS_UPLOADED",
           values: billAmendmentSearch.Amendments[0]?.documents?.map((document) => {
             return {
               title: `WS_${document?.documentType}`,
@@ -680,6 +688,7 @@ export const WSSearch = {
               { title: "WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME", value: wsDataDetails?.connectionHolders?.[0]?.fatherOrHusbandName },
               { title: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.relationship },
               { title: "WS_CORRESPONDANCE_ADDRESS_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.correspondenceAddress },
+              { title: "WS_OWNER_SPECIAL_CATEGORY", value: wsDataDetails?.connectionHolders?.[0]?.ownerType ? `PROPERTYTAX_OWNERTYPE_${wsDataDetails?.connectionHolders?.[0]?.ownerType?.toUpperCase()}` : "NA"}
             ]
           : [{ title: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS", value: t("SCORE_YES") }],
     };

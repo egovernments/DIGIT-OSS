@@ -113,7 +113,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
 
   return (
     <div className="newSurveyForm_wrapper">
-      <span className="newSurveyForm_quesno">{`${t("CS_COMMON_QUESTION")} ${index + 1}`}</span>
+      <span className="newSurveyForm_quesno">{`${t("CS_COMMON_QUESTION")} ${index + 1} * :`}</span>
       <span className="newSurveyForm_mainsection">
         <div className="newSurveyForm_questions">
           <div style={{width: "80%"}}>
@@ -145,7 +145,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
             select={(ev) => {
               setSurveyQuestionConfig((prevState) => ({ ...prevState, type: ev.title }));
             }}
-            selected={surveyQuestionConfig.type || {title: "Short Answer",value: "SHORT_ANSWER_TYPE"}}
+            //selected={surveyQuestionConfig.type || {title: "Short Answer",value: "SHORT_ANSWER_TYPE"}}
             optionKey="title"
             disable={disableInputs}
           />
@@ -161,11 +161,11 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
               disable={disableInputs}
             />
           </div>
-          <div className="newSurveyForm_seprator" />
-          <div className={`pointer ${disableInputs ? 'disabled-btn':''}`} onClick={() => dispatch({ type: "removeForm", payload: { index } })}>
+          {index!==0 && <div className="newSurveyForm_seprator" />}
+          {index!==0 && <div className={`pointer ${disableInputs ? 'disabled-btn':''}`} onClick={() => dispatch({ type: "removeForm", payload: { index } })}>
             <DustbinIcon />
+          </div>}
           </div>
-        </div>
       </span>
     </div>
   );

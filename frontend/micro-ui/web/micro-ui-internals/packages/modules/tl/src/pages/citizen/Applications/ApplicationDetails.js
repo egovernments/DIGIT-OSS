@@ -130,8 +130,9 @@ const TLApplicationDetails = () => {
     propertyAddress = getAddress(PTData?.Properties[0]?.address, t);
   }
 
+  
   const dowloadOptions =
-    paymentsHistory?.Payments?.length > 0
+    paymentsHistory?.Payments?.length > 0 && application?.[0]?.status !== "EXPIRED" && application?.[0]?.status !== "CANCELLED" 
       ? [
           {
             label: t("TL_CERTIFICATE"),
@@ -142,7 +143,7 @@ const TLApplicationDetails = () => {
             onClick: downloadPaymentReceipt,
           },
           {
-            label: t("CS_COMMON_APPLICATION_ACKNOWLEDGEMENT"),
+            label: t("TL_APPLICATION"),
             onClick: handleDownloadPdf,
           },
         ]

@@ -80,7 +80,7 @@ const BILLSBreadCrumbs = ({ location }) => {
       show: location.pathname.includes("/new-application") ? true : false,
     },
     {
-      path: "/digit-ui/employee/ws/ws-response",
+      path: `${location?.pathname}${location.search}`,
       content: t("ACTION_TEST_RESPONSE"),
       show: location.pathname.includes("/ws-response") ? true : false,
     },
@@ -109,6 +109,12 @@ const BILLSBreadCrumbs = ({ location }) => {
       isBack: true,
     },
     {
+      path: `${location?.pathname}${location.search}`,
+      content: `${t("WS_APPLICATION_DETAILS_HEADER")} / ${t("WF_EMPLOYEE_NEWSW1_ACTIVATE_CONNECTION")}`,
+      show: location.pathname.includes("/activate-connection") ? true : false,
+      isBack: true,
+    },
+    {
       path: "/digit-ui/employee/sewerage/bill-amendment/inbox",
       content: t("ES_COMMON_BILLS_SEWERAGE_INBOX_LABEL"),
       show: location.pathname.includes("/sewerage/bill-amendment/inbox") ? true : false,
@@ -118,6 +124,16 @@ const BILLSBreadCrumbs = ({ location }) => {
       content: fromScreen ? `${t(fromScreen)} / ${t("WS_MODIFY_CONNECTION_BUTTON")}`:t("WS_MODIFY_CONNECTION_BUTTON"),
       show: location.pathname.includes("ws/modify-application") ? true : false,
       isBack:true,
+    },
+    {
+      path: "/digit-ui/employee/ws/required-documents",
+      content: t("ES_COMMON_WS_DOCUMENTS_REQUIRED"),
+      show: location.pathname.includes("/required-documents") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/ws/bill-amendment",
+      content: t("WS_BILL_AMEND_APP"),
+      show: location.pathname.includes("ws/bill-amendment") ? true : false,
     }
   ];
 
@@ -132,7 +148,15 @@ const App = ({ path }) => {
   
   // const locationCheck = window.location.href.includes("/employee/ws/new-application") || window.location.href.includes("/employee/ws/create-application");
 
-  const locationCheck = window.location.href.includes("/employee/ws/new-application") || window.location.href.includes("/employee/ws/modify-application"); 
+  const locationCheck = 
+  window.location.href.includes("/employee/ws/new-application") || 
+  window.location.href.includes("/employee/ws/modify-application") ||
+  window.location.href.includes("/employee/ws/edit-application") ||
+  window.location.href.includes("/employee/ws/activate-connection") ||
+  window.location.href.includes("/employee/ws/application-details") ||
+  window.location.href.includes("/employee/ws/ws-response");
+  
+
 
   const locationCheckReqDocs = window.location.href.includes("/employee/ws/create-application");
 

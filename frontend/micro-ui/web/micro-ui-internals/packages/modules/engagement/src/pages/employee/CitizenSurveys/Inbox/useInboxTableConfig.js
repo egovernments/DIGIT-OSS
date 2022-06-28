@@ -78,7 +78,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
             }
         },
         disableSort: false,
-        autoSort: false,
+        autoSort: true,
         manualPagination: true,
         initSortI: "endDate",
         onPageSizeChange: onPageSizeChange,

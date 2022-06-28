@@ -144,7 +144,6 @@ function ApplicationDetailsContent({
     else if (value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
     else return value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("N/A");
   };
-
   return (
     <Card style={{ position: "relative" }} className={"employeeCard-override"}>
       {applicationDetails?.applicationDetails?.map((detail, index) => (
@@ -169,13 +168,25 @@ function ApplicationDetailsContent({
             {/* TODO, Later will move to classes */}
             {/* Here Render the table for adjustment amount details detail.isTable is true for that table*/}
             {detail?.isTable && (
-              <table style={{tableLayout:"fixed",width:"100%",borderCollapse:"collapse"}}>
+              <table style={{ tableLayout: "fixed", width: "100%", borderCollapse: "collapse" }}>
                 <tr style={{ textAlign: "left" }}>
-                  {detail?.headers.map(header =><th style={{padding:"10px"}}>{t(header)}</th>)}
+                  {detail?.headers.map((header) => (
+                    <th style={{ padding: "10px" }}>{t(header)}</th>
+                  ))}
                 </tr>
-                {detail?.tableRows.map(row=><tr>
-                  {row.map(element => <td style={{ paddingRight: "60px",paddingTop:"20px",textAlign:"center" }}>{t(element)}</td>)}
-                </tr>)}
+
+                {detail?.tableRows.map((row,index)=>{
+                if(index===detail?.tableRows.length - 1){
+                  return <>
+                    <hr style={{ width: "370%",marginTop:"15px" }} className="underline" />
+                    <tr>
+                      {row.map(element => <td style={{ textAlign: "left" }}>{t(element)}</td>)}
+                    </tr>
+                    </>
+                }
+                return <tr>
+                  {row.map(element => <td style={{ paddingTop:"20px",textAlign:"left" }}>{t(element)}</td>)}
+                </tr>})}
               </table>
             )}
             <StatusTable style={getTableStyles()}>
@@ -183,7 +194,7 @@ function ApplicationDetailsContent({
                 !detail?.title.includes("NOC") &&
                 detail?.values?.map((value, index) => {
                   if (value.map === true && value.value !== "N/A") {
-                    return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
+                    return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" privacy={value?.privacy} />} />;
                   }
                   if (value?.isLink == true) {
                     return (
@@ -228,6 +239,8 @@ function ApplicationDetailsContent({
                       last={index === detail?.values?.length - 1}
                       caption={value.caption}
                       className="border-none"
+                      /* privacy object set to the Row Component */
+                      privacy={value?.privacy}
                       // TODO, Later will move to classes
                       rowContainerStyle={getRowStyles()}
                     />
@@ -290,7 +303,7 @@ function ApplicationDetailsContent({
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />
           )}
           {detail?.isWaterConnectionDetails && <WSAdditonalDetails wsAdditionalDetails={detail} oldValue={oldValue} />}
-          {detail?.isLabelShow ? <WSInfoLabel t={t}/> : null}
+          {detail?.isLabelShow ? <WSInfoLabel t={t} /> : null}
           {detail?.additionalDetails?.redirectUrl && (
             <div style={{ fontSize: "16px", lineHeight: "24px", fontWeight: "400", padding: "10px 0px" }}>
               <Link to={detail?.additionalDetails?.redirectUrl?.url}>

@@ -53,7 +53,7 @@ const screenConfig = {
     beforeInitScreen: (action, state, dispatch) => {
         setModule(getModuleName());
         const tenantId = getTenantId();
-        dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
+        // dispatch(fetchLocalizationLabel(getLocale(), tenantId, tenantId));
         getMDMSData(dispatch);
 
         return action;

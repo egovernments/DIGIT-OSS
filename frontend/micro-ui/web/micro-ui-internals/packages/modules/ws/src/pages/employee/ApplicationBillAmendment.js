@@ -376,7 +376,7 @@ const ApplicationBillAmendment = () => {
             <CardSectionHeader style={{ marginBottom: "16px" }}>{t("WS_ADD_DEMAND_REVISION_BASIS")}</CardSectionHeader>
             <CardSectionSubText style={{ marginBottom: "16px" }}>{t("WS_SELECT_DEMAND_REVISION")}</CardSectionSubText>
             <LabelFieldPair>
-              <CardLabel style={{ fontWeight: "500" }}>{t("WS_DEMAND_REVISION_BASIS")}</CardLabel>
+              <CardLabel style={{ fontWeight: "500" }}>{`${t("WS_DEMAND_REVISION_BASIS")} *`}</CardLabel>
               <Controller
                 name="amendmentReason"
                 control={control}
@@ -397,14 +397,14 @@ const ApplicationBillAmendment = () => {
               {errors?.amendmentReason ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             </LabelFieldPair>
             <LabelFieldPair>
-              <CardLabel style={{ fontWeight: "500" }}>{t("WS_GOVERNMENT_NOTIFICATION_NUMBER")}</CardLabel>
+                <CardLabel style={{ fontWeight: "500" }}>{`${t("WS_GOVERNMENT_NOTIFICATION_NUMBER")} *`}</CardLabel>
               <div className="reasonDocumentNumber">
                 <TextInput style={{ width: "640px" }} name="reasonDocumentNumber" inputRef={register({ required: true })} />
               </div>
               {errors?.reasonDocumentNumber ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             </LabelFieldPair>
             <LabelFieldPair>
-              <CardLabel style={{ fontWeight: "500" }}>{t("WS_BILL_AMEND_EFFECTIVE_FROM")}</CardLabel>
+              <CardLabel style={{ fontWeight: "500" }}>{`${t("WS_BILL_AMEND_EFFECTIVE_FROM")} *`}</CardLabel>
               <Controller
                 render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveFrom"
@@ -414,7 +414,7 @@ const ApplicationBillAmendment = () => {
               {errors?.effectiveFrom ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             </LabelFieldPair>
             <LabelFieldPair>
-                <CardLabel style={{ fontWeight: "500" }}>{t("WS_BILL_AMEND_EFFECTIVE_TILL")}</CardLabel>
+                <CardLabel style={{ fontWeight: "500" }}>{`${t("WS_BILL_AMEND_EFFECTIVE_TILL")} *`}</CardLabel>
               <Controller
                 render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveTill"
@@ -458,7 +458,7 @@ const ApplicationBillAmendment = () => {
         ))}
       </Card>
       <ActionBar>
-        <SubmitBar submit={true} label={t("ES_COMMON_TAKE_ACTION")} />
+        <SubmitBar submit={true} label={t("WS_COMMON_BUTTON_SUBMIT")} />
       </ActionBar>
     </form>
   );

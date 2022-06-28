@@ -22,7 +22,7 @@ const FstpInbox = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [searchParams, setSearchParams] = useState({ applicationStatus: "WAITING_FOR_DISPOSAL" });
-  const [sortParams, setSortParams] = useState([{ "id": "createdTime", "desc": true }]);
+  const [sortParams, setSortParams] = useState([{ id: "createdTime", desc: true }]);
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const { isLoading: isVehiclesLoading, data: vehicles } = Digit.Hooks.fsm.useVehiclesSearch({
@@ -30,7 +30,6 @@ const FstpInbox = () => {
     filters: { registrationNumber: searchParams?.registrationNumber },
     config: { enabled: searchParams?.registrationNumber?.length > 0 },
   });
-
 
   const userInfo = Digit.UserService.getUser();
 
@@ -44,7 +43,7 @@ const FstpInbox = () => {
     tenantId,
     {
       name: searchParams?.name,
-      status: 'ACTIVE'
+      status: "ACTIVE",
     },
     { enabled: searchParams?.name?.length > 1 }
   );
@@ -60,17 +59,17 @@ const FstpInbox = () => {
 
   if (applicationData == undefined) {
     filters = {
-      "responseInfo": {
-        "apiId": "Rainmaker",
-        "ver": null,
-        "ts": null,
-        "resMsgId": "uief87324",
-        "msgId": "1645827148736|en_IN",
-        "status": "successful"
+      responseInfo: {
+        apiId: "Rainmaker",
+        ver: null,
+        ts: null,
+        resMsgId: "uief87324",
+        msgId: "1645827148736|en_IN",
+        status: "successful",
       },
-      "vehicle": [],
-      "totalCount": 0
-    }
+      vehicle: [],
+      totalCount: 0,
+    };
   }
   const { isLoading, data: { totalCount, vehicleLog } = {}, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({
     tenantId,
@@ -95,7 +94,7 @@ const FstpInbox = () => {
     setPageSize(Number(e.target.value));
   };
 
-  const handleFilterChange = () => { };
+  const handleFilterChange = () => {};
 
   const searchFields = [
     {
@@ -121,17 +120,20 @@ const FstpInbox = () => {
   // if (isSuccess) {
   if (isMobile) {
     return (
-      <MobileInbox
-        onFilterChange={handleFilterChange}
-        vehicleLog={vehicleLog}
-        isLoading={isLoading}
-        userRole={"FSM_EMP_FSTPO"}
-        linkPrefix={"/digit-ui/employee/fsm/fstp-operator-details/"}
-        onSearch={onSearch}
-        searchFields={searchFields}
-        onSort={handleSort}
-        sortParams={sortParams}
-      />
+      <div>
+        <Header>{t("ES_COMMON_INBOX")}</Header>
+        <MobileInbox
+          onFilterChange={handleFilterChange}
+          vehicleLog={vehicleLog}
+          isLoading={isLoading}
+          userRole={"FSM_EMP_FSTPO"}
+          linkPrefix={"/digit-ui/employee/fsm/fstp-operator-details/"}
+          onSearch={onSearch}
+          searchFields={searchFields}
+          onSort={handleSort}
+          sortParams={sortParams}
+        />
+      </div>
     );
   } else {
     return (

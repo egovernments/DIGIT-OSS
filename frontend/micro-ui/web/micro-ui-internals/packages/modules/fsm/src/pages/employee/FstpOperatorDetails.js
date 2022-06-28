@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import TimePicker from "react-time-picker";
-import { Dropdown, MultiUploadWrapper, TextArea } from "@egovernments/digit-ui-react-components";
+import { Dropdown, Header, MultiUploadWrapper, TextArea } from "@egovernments/digit-ui-react-components";
 import {
   Card,
   CardLabel,
@@ -398,10 +398,17 @@ const FstpOperatorDetails = () => {
 
   return (
     <div>
+      <Header styles={{ marginLeft: "16px" }}>{t("ES_INBOX_VEHICLE_LOG")}</Header>
       <Card>
         <StatusTable>
           {vehicleData?.map((row, index) => (
-            <Row rowContainerStyle={{ justifyContent: "space-between" }} key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
+            <Row rowContainerStyle={isMobile && history.location.pathname.includes("new-vehicle-entry") ? { display: "block" } : { justifyContent: "space-between" }}
+              textStyle={isMobile && history.location.pathname.includes("new-vehicle-entry") ? { width: "100%" } : {}}
+              key={row.title} label={row.title}
+              text={row.value || "N/A"}
+              last={false}
+              labelStyle={{ fontWeight: "normal" }} />
+
           ))}
           <div ref={tripStartTimeRef}>
             <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
@@ -410,7 +417,7 @@ const FstpOperatorDetails = () => {
             <Row
               key={t("ES_VEHICLE_IN_TIME")}
               label={`${t("ES_VEHICLE_IN_TIME")} * `}
-              labelStyle={{ minWidth: "fit-content" }}
+              labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
               textStyle={isMobile ? { width: "100%" } : {}}
               rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
               text={
@@ -425,7 +432,7 @@ const FstpOperatorDetails = () => {
             <Row
               key={t("ES_VEHICLE_SEPTAGE_DUMPED")}
               label={`${t("ES_VEHICLE_SEPTAGE_DUMPED")} * `}
-              labelStyle={{ minWidth: "fit-content" }}
+              labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
               textStyle={isMobile ? { width: "100%" } : {}}
               text={
                 <div>
@@ -445,7 +452,7 @@ const FstpOperatorDetails = () => {
             <Row
               key={t("ES_VEHICLE_OUT_TIME")}
               label={`${t("ES_VEHICLE_OUT_TIME")} * `}
-              labelStyle={{ minWidth: "fit-content" }}
+              labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
               textStyle={isMobile ? { width: "100%" } : {}}
               rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
               text={
@@ -460,6 +467,7 @@ const FstpOperatorDetails = () => {
                 label={`${t("ES_VEHICLE_TRIP_NO")} * `}
                 rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
                 textStyle={isMobile ? { width: "100%" } : {}}
+                labelStyle={{ fontWeight: "normal" }}
                 text={
                   <div>
                     <Dropdown
@@ -473,7 +481,7 @@ const FstpOperatorDetails = () => {
               >
               </Row> : null} */}
             <div className={!isMobile && "row"} style={isMobile ? {} : { diplay: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <CardLabel style={{ fontWeight: "700" }}> {t("ES_FSM_ADDITIONAL_DETAILS")} </CardLabel>
+              <CardLabel style={{ fontWeight: "normal" }}> {t("ES_FSM_ADDITIONAL_DETAILS")} </CardLabel>
               <TextArea className="form-field"
                 onChange={(e) => {
                   if (e.target.value.length > 1024) {
@@ -489,7 +497,7 @@ const FstpOperatorDetails = () => {
             <Row
               key={t("ES_FSM_ATTACHMENTS")}
               label={`${t("ES_FSM_ATTACHMENT")}`}
-              labelStyle={{ minWidth: "fit-content" }}
+              labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
               textStyle={isMobile ? { width: "100%" } : {}}
               rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between", alignItems: "center" }}
               text={

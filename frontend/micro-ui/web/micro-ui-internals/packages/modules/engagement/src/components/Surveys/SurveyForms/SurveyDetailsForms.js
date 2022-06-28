@@ -63,7 +63,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
       </span>
 
       <span className="surveyformfield">
-        <label>{t("CS_SURVEY_NAME")}</label>
+        <label>{`${t("CS_SURVEY_NAME")} * :`}</label>
         <TextInput
           name="title"
           type="text"
@@ -83,7 +83,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
         {surveyFormState?.errors?.title && <CardLabelError>{surveyFormState?.errors?.["title"]?.message}</CardLabelError>}
       </span>
       <span className="surveyformfield">
-        <label>{t("CS_SURVEY_DESCRIPTION")}</label>
+        <label>{`${t("CS_SURVEY_DESCRIPTION")} * :`}</label>
         <TextInput
           name="description"
           type="text"

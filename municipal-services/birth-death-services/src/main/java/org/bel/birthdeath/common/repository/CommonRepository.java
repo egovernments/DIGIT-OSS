@@ -256,7 +256,7 @@ public class CommonRepository {
 		for (Entry<String, EgBirthDtl> entry : uniqueList.entrySet()) {
 			EgBirthDtl birthDtl = entry.getValue();
 			birthDtl.setGenderStr(birthDtl.getGenderStr()==null?"":birthDtl.getGenderStr().trim().toLowerCase());
-			if(birthDtl.getIsLegacyRecord()) {
+			if(birthDtl.getIsLegacyRecord() != null && birthDtl.getIsLegacyRecord()) {
 				auditDetails = commUtils.getAuditDetails("import-user", true);
 			} else {
 				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
@@ -562,7 +562,7 @@ public class CommonRepository {
 			AuditDetails auditDetails;
 		for (Entry<String, EgDeathDtl> entry : uniqueList.entrySet()) {
 			EgDeathDtl deathDtl = entry.getValue();
-			if(deathDtl.getIsLegacyRecord()) {
+			if(deathDtl.getIsLegacyRecord() != null && deathDtl.getIsLegacyRecord()) {
 				auditDetails = commUtils.getAuditDetails("import-user", true);
 			} else {
 				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
@@ -575,7 +575,7 @@ public class CommonRepository {
 			case "female":
 				deathDtl.setGender(2);
 				break;
-			case "others":
+			case "transgender":
 				deathDtl.setGender(3);
 				break;
 			default:
@@ -848,7 +848,7 @@ public class CommonRepository {
 		int finalCount=0;
 		for (Entry<String, EgBirthDtl> entry : uniqueList.entrySet()) {
 			EgBirthDtl birthDtl = entry.getValue();
-			if(birthDtl.getIsLegacyRecord()) {
+			if(birthDtl.getIsLegacyRecord() != null && birthDtl.getIsLegacyRecord()) {
 				auditDetails = commUtils.getAuditDetails("import-user", true);
 			} else {
 				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
@@ -957,7 +957,7 @@ public class CommonRepository {
 		int finalCount=0;
 		for (Entry<String, EgDeathDtl> entry : uniqueList.entrySet()) {
 			EgDeathDtl deathDtl = entry.getValue();
-			if(deathDtl.getIsLegacyRecord()) {
+			if(deathDtl.getIsLegacyRecord() != null && deathDtl.getIsLegacyRecord()) {
 				auditDetails = commUtils.getAuditDetails("import-user", true);
 			} else {
 				auditDetails = commUtils.getAuditDetails(requestInfo.getUserInfo().getUuid(), true);
@@ -970,7 +970,7 @@ public class CommonRepository {
 			case "female":
 				deathDtl.setGender(2);
 				break;
-			case "others":
+			case "transgender":
 				deathDtl.setGender(3);
 				break;
 			default:

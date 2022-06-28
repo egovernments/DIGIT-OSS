@@ -281,7 +281,7 @@ export const newConfig = [
       isEditByConfigConnection: true,
       body: [{
         type: "component",
-        key: "RoadCuttingDetails",
+        key: "roadCuttingDetails",
         component: "WSRoadCuttingDetails",
         withoutLabel: true,
       }]

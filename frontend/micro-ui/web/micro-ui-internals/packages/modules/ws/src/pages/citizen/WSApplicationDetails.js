@@ -26,7 +26,7 @@ import WSInfoLabel from "../../pageComponents/WSInfoLabel";
 const WSApplicationDetails = () => {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
-  const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   const stateCode = Digit.ULBService.getStateId();
   const [showOptions, setShowOptions] = useState(false);
   const applicationNobyData = window.location.href.includes("SW_")
@@ -40,7 +40,7 @@ const WSApplicationDetails = () => {
     { filters: filter1 }
   );
 
-  const fetchBillParams = { consumerCode: data?.WaterConnection?.[0]?.applicationNo };
+  const fetchBillParams = { consumerCode: data?.WaterConnection?.[0]?.connectionNo };
 
   const { data: generatePdfKey } = Digit.Hooks.useCommonMDMS(tenantId, "common-masters", "ReceiptKey", {
     select: (data) =>
@@ -48,7 +48,7 @@ const WSApplicationDetails = () => {
   });
 
   const paymentDetails = Digit.Hooks.useFetchBillsForBuissnessService(
-    { businessService: "WS.ONE_TIME_FEE", ...fetchBillParams, tenantId: tenantId },
+    { businessService: applicationNobyData?.includes("SW") ? "SW" : "WS", ...fetchBillParams, tenantId: tenantId },
     {
       enabled: data?.WaterConnection?.[0]?.applicationNo ? true : false,
       retry: false,
@@ -182,7 +182,7 @@ const WSApplicationDetails = () => {
               className="border-none"
               label={t("WS_SERVICE_NAME_LABEL")}
               text={t(`WS_APPLICATION_TYPE_${data?.WaterConnection?.[0]?.applicationType || data?.SewerageConnections?.[0]?.applicationType}`)}
-              textStyle={{ whiteSpace: "pre" }}
+              textStyle={{wordBreak:"break-word"}}
             />
             <Row
               className="border-none"
@@ -202,7 +202,7 @@ const WSApplicationDetails = () => {
               <Row
                 className="border-none"
                 label={t("WS_TOTAL_AMOUNT_DUE")}
-                text={`₹${paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount}`}
+                text={`₹${isPaid? 0 : paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount}`}
                 textStyle={{ textAlign: "right", fontSize:"18px", fontWeight: "700" }}
               />
               <Row
@@ -231,6 +231,7 @@ const WSApplicationDetails = () => {
               className="border-none"
               label={t("WS_PROPERTY_ID_LABEL")}
               text={data?.WaterConnection?.[0]?.propertyId || data?.SewerageConnections?.[0]?.propertyId}
+              textStyle={{wordBreak:"break-word"}}
             />
             <Row
               className="border-none"
@@ -242,7 +243,7 @@ const WSApplicationDetails = () => {
               className="border-none"
               label={t("WS_OWN_DETAIL_CROSADD")}
               text={PTData?.Properties?.[0]?.owners?.[0]?.permanentAddress || t("CS_NA")}
-              textStyle={{ whiteSpace: "pre" }}
+              textStyle={{wordBreak:"break-word"}}
             />
             <Link
               to={`/digit-ui/citizen/commonpt/view-property?propertyId=${

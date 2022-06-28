@@ -1,20 +1,23 @@
-import { BackButton } from "@egovernments/digit-ui-react-components";
+import {
+  BackButton,
+  BillsIcon,
+  CitizenHomeCard,
+  CitizenInfoLabel,
+  FSMIcon,
+  Loader,
+  MCollectIcon,
+  OBPSIcon,
+  PGRIcon,
+  PTIcon,
+  TLIcon,
+  WSICon,
+} from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import {
-  CitizenHomeCard,
-  PTIcon,
-  WSICon,
-  FSMIcon,
-  MCollectIcon,
-  PGRIcon,
-  TLIcon,
-  OBPSIcon,
-  Loader,
-  BillsIcon,
-  CitizenInfoLabel,
-} from "@egovernments/digit-ui-react-components";
 
+/* 
+Feature :: Citizen All service screen cards
+*/
 export const processLinkData = (newData, code, t) => {
   const obj = newData?.[`${code}`];
   if (obj) {
@@ -36,7 +39,7 @@ export const processLinkData = (newData, code, t) => {
         loginLink: "CS_LINK_LOGIN_DSO",
       },
     ];
-
+    //RAIN-7297
     roleBasedLoginRoutes.map(({ role, from, loginLink, dashoardLink }) => {
       if (Digit.UserService.hasAccess(role))
         newObj?.links?.push({
@@ -51,6 +54,7 @@ export const processLinkData = (newData, code, t) => {
         });
     });
   }
+
   return newObj;
 };
 const iconSelector = (code) => {
@@ -94,11 +98,11 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
             .map(({ code }, index) => {
               let mdmsDataObj;
               if (fetchedCitizen) mdmsDataObj = fetchedCitizen ? processLinkData(getCitizenMenu, code, t) : undefined;
-              if (mdmsDataObj?.links?.length > 0)
+              if (mdmsDataObj?.links?.length > 0) {
                 return (
                   <CitizenHomeCard
                     header={t(mdmsDataObj?.header)}
-                    links={mdmsDataObj?.links}
+                    links={mdmsDataObj?.links?.filter((ele) => ele?.link)?.sort((x, y) => x?.orderNumber - y?.orderNumber)}
                     Icon={() => iconSelector(code)}
                     Info={
                       code === "OBPS"
@@ -114,7 +118,7 @@ const CitizenHome = ({ modules, getCitizenMenu, fetchedCitizen, isLoading }) => 
                     isInfo={code === "OBPS" ? true : false}
                   />
                 );
-              else return <React.Fragment />;
+              } else return <React.Fragment />;
             })}
         </div>
       </div>

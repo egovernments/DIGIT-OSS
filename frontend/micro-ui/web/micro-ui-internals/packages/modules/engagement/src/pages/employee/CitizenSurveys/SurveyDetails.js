@@ -42,7 +42,7 @@ const SurveyDetails = ({ location, match }) => {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [userAction, setUserAction] = useState(undefined);
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const tenantIdForInboxSearch = window.Digit.SessionStorage.get("CITIZENSURVEY.INBOX").searchForm.tenantIds.code
+  const tenantIdForInboxSearch = window?.Digit.SessionStorage?.get("CITIZENSURVEY.INBOX")?.searchForm?.tenantIds?.code || tenantId
   const { isLoading, data: surveyData } = Digit.Hooks.survey.useSearch(
     { tenantIds: tenantIdForInboxSearch, uuid: id },
     {
@@ -159,6 +159,7 @@ const SurveyDetails = ({ location, match }) => {
   const handleMarkInactive = () => {
     const details = {
       SurveyEntity: { ...surveyData,
+        tenantId,
         questions: surveyData.questions.map(filterQuestion), 
         status: "INACTIVE", 
         collectCitizenInfo: surveyData.collectCitizenInfo.code },
