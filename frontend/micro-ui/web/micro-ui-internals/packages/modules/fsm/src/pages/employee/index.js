@@ -6,7 +6,9 @@ import { Switch, useLocation } from "react-router-dom";
 export const FsmBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
+  const FSTPO = Digit.UserService.hasAccess(["FSM_EMP_FSTPO"]);
   const isApplicationDetails = location?.pathname?.includes("application-details");
+  const isVehicleLog = location?.pathname?.includes("fstp-operator-details");
   const isInbox = location?.pathname?.includes("inbox");
   const isFsm = location?.pathname?.includes("fsm");
   const isSearch = location?.pathname?.includes("search");
@@ -27,8 +29,8 @@ export const FsmBreadCrumb = ({ location }) => {
       show: isFsm,
     },
     {
-      path: "/digit-ui/employee/fsm/inbox",
-      content: isInbox || isApplicationDetails || search ? t("ES_TITLE_INBOX") : "FSM",
+      path: FSTPO ? "/digit-ui/employee/fsm/fstp-inbox" : "/digit-ui/employee/fsm/inbox",
+      content: isInbox || isApplicationDetails || search || isVehicleLog ? t("ES_TITLE_INBOX") : "FSM",
       show: isFsm,
     },
     {
@@ -37,6 +39,7 @@ export const FsmBreadCrumb = ({ location }) => {
       show: search,
     },
     { content: t("ES_TITLE_APPLICATION_DETAILS"), show: isApplicationDetails },
+    { content: t("ES_TITLE_VEHICLE_LOG"), show: isVehicleLog },
   ];
 
   return <BreadCrumb crumbs={crumbs} />;
@@ -77,7 +80,10 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
           <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />
           <PrivateRoute path={`${path}/modify-application/:id`} component={() => <EditApplication />} />
-          <PrivateRoute path={`${path}/application-details/:id`} component={() => <EmployeeApplicationDetails parentRoute={path} userType="EMPLOYEE" />} />
+          <PrivateRoute
+            path={`${path}/application-details/:id`}
+            component={() => <EmployeeApplicationDetails parentRoute={path} userType="EMPLOYEE" />}
+          />
           <PrivateRoute path={`${path}/fstp-operator-details/:id`} component={FstpOperatorDetails} />
           <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/application-audit/:id`} component={() => <ApplicationAudit parentRoute={path} />} />
