@@ -820,6 +820,23 @@ const getFSMTripNumberCriteria = (tenantId, moduleCode, type) => ({
   },
 });
 
+const getFSMReceivedPaymentTypeCriteria = (tenantId, moduleCode, type) => ({
+  type,
+  details: {
+    tenantId: tenantId,
+    moduleDetails: [
+      {
+        moduleName: moduleCode,
+        masterDetails: [
+          {
+            name: "ReceivedPaymentType",
+            filter: null,
+          },
+        ],
+      },
+    ],
+  },
+});
 
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
@@ -1121,6 +1138,17 @@ const GetTripNumber = (MdmsRes) => {
     });
 }
 
+const GetReceivedPaymentType = (MdmsRes) => {
+
+  return MdmsRes["FSM"].ReceivedPaymentType.filter((option) => option.active)
+    .map((reasonDetails) => {
+      return {
+        ...reasonDetails,
+        i18nKey: `ES_ACTION_${reasonDetails.code}`,
+      };
+    });
+}
+
 const getDssDashboard = (MdmsRes) => MdmsRes["dss-dashboard"]["dashboard-config"];
 
 const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;
@@ -1226,6 +1254,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return GetPaymentType(MdmsRes);
     case "TripNumber":
       return GetTripNumber(MdmsRes);
+    case "ReceivedPaymentType":
+      return GetReceivedPaymentType(MdmsRes);
     default:
       return MdmsRes;
   }
@@ -1516,6 +1546,9 @@ export const MdmsService = {
 
   getFSMTripNumber: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getFSMTripNumberCriteria(tenantId, moduleCode, type), moduleCode);
-  }
+  },
 
+  getFSMReceivedPaymentType: (tenantId, moduleCode, type) => {
+    return MdmsService.getDataByCriteria(tenantId, getFSMReceivedPaymentTypeCriteria(tenantId, moduleCode, type), moduleCode);
+  }
 };
