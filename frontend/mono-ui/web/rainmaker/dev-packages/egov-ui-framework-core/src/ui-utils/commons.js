@@ -279,7 +279,7 @@ export const setDocuments = async (
     uploadedDocData &&
     uploadedDocData.map((item, index) => {
       if(item.documentType == "OWNERPHOTO"){
-        getOwnerPhoto(fileUrlPayload[item.fileStoreId].split(",")[0])
+        getOwnerPhoto( fileUrlPayload && fileUrlPayload[item.fileStoreId] &&  fileUrlPayload[item.fileStoreId].split(",")[0])
       }
       return {
         title: `${businessService}_${item.documentType}` || "",
@@ -319,7 +319,7 @@ export const addWflowFileUrl = async (ProcessInstances, prepareFinalObject) => {
           i.link = getFileUrl(fileUrlPayload[i.fileStoreId]);
           i.title = `TL_${i.documentType}`;
           i.name = decodeURIComponent(
-            getFileUrl(fileUrlPayload[i.fileStoreId])
+            getFileUrl(fileUrlPayload && fileUrlPayload[i.fileStoreId] && fileUrlPayload[i.fileStoreId])
               .split("?")[0]
               .split("/")
               .pop()
