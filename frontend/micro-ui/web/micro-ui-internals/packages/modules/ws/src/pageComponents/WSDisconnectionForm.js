@@ -86,7 +86,6 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
   const handleSubmit = () => onSelect(config.key, { WSDisConnectionForm: disconnectionData });
 
   const handleEmployeeSubmit = () => {
-    console.log("Emp Submit");
     onSelect(config.key, { WSDisConnectionForm: {...disconnectionData, documents:documents} });
   };
 

@@ -23,7 +23,6 @@ const GetConnectionDetails = () => {
   const [showOptions, setShowOptions] = useState(false);
   const stateCode = Digit.ULBService.getStateId();
   const actionConfig = ["MODIFY_CONNECTION_BUTTON", "BILL_AMENDMENT_BUTTON", "DISCONNECTION_BUTTON"];
-  const actionConfigWithoutDisconnection = ["MODIFY_CONNECTION_BUTTON", "BILL_AMENDMENT_BUTTON"];
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useConnectionDetail(t, tenantId, applicationNumber, serviceType);
   const menuRef = useRef();
   const actionMenuRef = useRef();
@@ -184,7 +183,7 @@ const GetConnectionDetails = () => {
   //all options needs to be shown
   //const showAction = due !== "0" ? actionConfig : actionConfig.filter((item) => item !== "BILL_AMENDMENT_BUTTON");
   const checkApplicationStatusForDisconnection =  applicationDetails?.applicationData?.status === "Active" || applicationDetails?.applicationData?.status === "InWorkflow" ? true : false
-  const showAction= checkApplicationStatusForDisconnection ? actionConfig : actionConfigWithoutDisconnection
+  const showAction= checkApplicationStatusForDisconnection ? actionConfig : actionConfig.filter((item) => item !== "DISCONNECTION_BUTTON");
 
 
   async function getBillSearch() {

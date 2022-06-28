@@ -145,11 +145,12 @@ const componentsToRegister = {
   EditApplication,
   WSDisconnectionDocsRequired,
   WSInbox,
+  WSEditApplicationByConfig,
   SWCard,
   WSDisconnectionForm,
   WSDisconnectionDocumentsForm,
   WSDisconnectionCheckPage,
-  WSDisconnectAcknowledgement,
+  WSDisconnectAcknowledgement
 };
 
 export const initWSComponents = () => {
