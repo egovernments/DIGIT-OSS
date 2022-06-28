@@ -271,7 +271,7 @@ public class FSMValidator {
 
 	}
 
-	public void validateUpdate(FSMRequest fsmRequest, List<FSM> searchResult, Object mdmsData) {
+	public void validateUpdate(FSMRequest fsmRequest, List<FSM> searchResult, Object mdmsData,boolean isDsoRole) {
 		boundaryService.getAreaType(fsmRequest, config.getHierarchyTypeCode());
 		FSM fsm = fsmRequest.getFsm();
 		
@@ -290,11 +290,29 @@ public class FSMValidator {
 			throw new CustomException(FSMErrorConstants.INVALID_ACTION," Payment preference is mandatory!");
 		}
 		
+		mdmsValidator.validateMdmsData(fsmRequest, mdmsData);
+		// SAN-889: Added validation for recevied payment
+		if (null != fsmRequest.getWorkflow() && null != fsmRequest.getWorkflow().getAction()
+				&& fsmRequest.getWorkflow().getAction().equalsIgnoreCase(FSMConstants.WF_ACTION_COMPLETE)
+				&& isDsoRole) {
+			Map<String, String> additionalDetails = null;
+			try {
+				additionalDetails = fsmRequest.getFsm().getAdditionalDetails() != null
+						? (Map<String, String>) fsmRequest.getFsm().getAdditionalDetails()
+						: new HashMap<String, String>();
+			} catch (Exception e) {
+				throw new CustomException(FSMErrorConstants.INVALID_ACTION, " Received payment type is mandatory!");
+			}
+			if (null != additionalDetails && additionalDetails.get("receivedPayment") == null)
+				throw new CustomException(FSMErrorConstants.INVALID_ACTION, " Received payment type is mandatory!");
+			log.info("additionalDetails.get(\"receivedPayment\"):: " + additionalDetails.get("receivedPayment"));
+			mdmsValidator.validateReceivedPaymentType(additionalDetails.get("receivedPayment"));
+		}
+		
 		validateUpdatableParams(fsmRequest, searchResult, mdmsData);
 		validateAllIds(searchResult, fsm);
 		
-		mdmsValidator.validateMdmsData(fsmRequest, mdmsData);
-		//validateVehicleType(fsmRequest);
+		
 		validateVehicleCapacity(fsmRequest);
 		
 		if(!StringUtils.isEmpty(fsm.getSource())) {

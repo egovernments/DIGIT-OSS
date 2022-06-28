@@ -85,4 +85,6 @@ public class FSMErrorConstants {
 	public static final String INVALID_FSTP_CODE ="INVALID_FSTP_CODE";
 	public static final String INVALID_VEHICLE_ASSIGN_ACTION = "INVALID_VEHICLE_ASSIGN_ACTION";
 
+	public static final String INVALID_RECEIVED_PAYMENT_TYPE = "INVALID_RECEIVED_PAYMENT_TYPE";
+
 }
