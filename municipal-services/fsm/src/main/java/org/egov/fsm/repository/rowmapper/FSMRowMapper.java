@@ -29,8 +29,8 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 
 	@Autowired
 	private ObjectMapper mapper;
-	
-	private int full_count=0;
+
+	private int full_count = 0;
 
 	public int getFull_count() {
 		return full_count;
@@ -95,54 +95,52 @@ public class FSMRowMapper implements ResultSetExtractor<List<FSM>> {
 	private void addChildrenToProperty(ResultSet rs, FSM fsm) throws SQLException {
 
 		// TODO add all the child data Vehicle, Pit, address
-		String tenantId = fsm.getTenantId(); 
-		
+		String tenantId = fsm.getTenantId();
+
 		AuditDetails auditdetails = AuditDetails.builder().createdBy(rs.getString("createdBy"))
 				.createdTime(rs.getLong("createdTime")).lastModifiedBy(rs.getString("lastModifiedBy"))
 				.lastModifiedTime(rs.getLong("lastModifiedTime")).build();
 
-		Double latitude =  rs.getDouble("latitude");
-		Double longitude =  rs.getDouble("longitude");
-		
+		Double latitude = rs.getDouble("latitude");
+		Double longitude = rs.getDouble("longitude");
 
 		Boundary locality = Boundary.builder().code(rs.getString("locality")).build();
 
-		GeoLocation geoLocation = GeoLocation.builder().id(rs.getString("fsm_geo_id")).latitude(latitude).longitude(longitude)
-				.build();
+		GeoLocation geoLocation = GeoLocation.builder().id(rs.getString("fsm_geo_id")).latitude(latitude)
+				.longitude(longitude).build();
 
 		Address address = Address.builder().buildingName(rs.getString("buildingName")).city(rs.getString("city"))
 				.plotNo(rs.getString("plotno")).district(rs.getString("district")).region(rs.getString("region"))
 				.state(rs.getString("state")).country(rs.getString("country")).landmark(rs.getString("landmark"))
-				.geoLocation(geoLocation).pincode(rs.getString("pincode")).doorNo(rs.getString("doorno")).id(rs.getString("fsm_address_id"))
-				.additionalDetails(rs.getString("additionalDetails")).street(rs.getString("street")).slumName(rs.getString("slumname")).tenantId(rs.getString("tenantid")).locality(locality).auditDetails(auditdetails)
-				.build();
+				.geoLocation(geoLocation).pincode(rs.getString("pincode")).doorNo(rs.getString("doorno"))
+				.id(rs.getString("fsm_address_id")).additionalDetails(rs.getString("additionalDetails"))
+				.street(rs.getString("street")).slumName(rs.getString("slumname")).tenantId(rs.getString("tenantid"))
+				.locality(locality).auditDetails(auditdetails).build();
 
 		PitDetail pitDetail = PitDetail.builder().height(rs.getDouble("height")).width(rs.getDouble("width"))
 				.diameter(rs.getDouble("diameter")).length(rs.getDouble("length"))
 				.distanceFromRoad(rs.getDouble("distanceFromRoad")).id(rs.getString("fsm_pit_id"))
-				.additionalDetails(rs.getString("additionalDetails")).tenantId(rs.getString("tenantid")).build();
-		
-			
+				.additionalDetails(getAdditionalDetail("fsm_pit_additionalDetails", rs))
+				.tenantId(rs.getString("tenantid")).auditDetails(auditdetails).build();
+
 		fsm.setAddress(address);
 		fsm.setPitDetail(pitDetail);
 		fsm.setAuditDetails(auditdetails);
-		
+
 	}
 
+	private JsonNode getAdditionalDetail(String columnName, ResultSet rs) {
 
-    private JsonNode getAdditionalDetail(String columnName, ResultSet rs){
-
-        JsonNode additionalDetail = null;
-        try {
-            PGobject pgObj = (PGobject) rs.getObject(columnName);
-            if(pgObj!=null){
-                 additionalDetail = mapper.readTree(pgObj.getValue());
-            }
-        }
-        catch (IOException | SQLException e){
-            e.printStackTrace();
-            throw new CustomException("PARSING_ERROR","Failed to parse additionalDetail object");
-        }
-        return additionalDetail;
-    }
+		JsonNode additionalDetail = null;
+		try {
+			PGobject pgObj = (PGobject) rs.getObject(columnName);
+			if (pgObj != null) {
+				additionalDetail = mapper.readTree(pgObj.getValue());
+			}
+		} catch (IOException | SQLException e) {
+			e.printStackTrace();
+			throw new CustomException("PARSING_ERROR", "Failed to parse additionalDetail object");
+		}
+		return additionalDetail;
+	}
 }

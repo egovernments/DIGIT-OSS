@@ -177,5 +177,15 @@ public class FSMConstants {
 	public static final String UPDATE_ONLY_VEHICLE_TRIP_RECORD = "UPDATE_ONLY_VEHICLE_TRIP_RECORD";
 
 	public static final String WF_DISPOSAL_IN_PROGRESS = "DISPOSAL_IN_PROGRESS";
+	
+	public static final String MDMS_RECEIVED_PAYMENT = "ReceivedPaymentType";
+	
+	public static final String FSM_SMS_PENDING_DSO_APPROVAL_ASSIGN="FSM_SMS_PENDING_DSO_APPROVAL_ASSIGN";
+
+	public static final String FSM_SMS_PENDING_APPL_FEE_PAYMENT_SCHEDULE="FSM_SMS_PENDING_APPL_FEE_PAYMENT_SCHEDULE";
+
+	public static final String FSM_SMS_DISPOSAL_IN_PROGRESS_PAY = "FSM_SMS_DISPOSAL_IN_PROGRESS_PAY";
+	
+
 
 }
