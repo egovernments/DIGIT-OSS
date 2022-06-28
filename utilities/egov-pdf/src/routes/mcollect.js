@@ -47,8 +47,8 @@ var {
           return renderError(res, "Failed to query details of Challan", 500);
         }
         
-        //console.log("data-",echallanDtls.data);
-       // console.log("data-",JSON.stringify(echallanDtls.data.challans[0]));
+        console.log("data-",echallanDtls.data);
+        console.log("data-",JSON.stringify(echallanDtls.data.challans[0]));
         var echallans = echallanDtls.data;
         var challanObj;
         if (
@@ -64,7 +64,7 @@ var {
               ResponseInfo: requestinfo,
               key: config.pdf.mcollect_challan_template
             }
-            //console.log("respObj--",respObj);
+            console.log("respObj--",respObj);
             var filename = `${pdfkey}_${new Date().getTime()}`;
             res.writeHead(200, {
               "Content-Type": "application/pdf",
@@ -93,7 +93,7 @@ var {
             );
           }
           var challanBillDtl = challanBill.data;
-          //console.log("challanBillDtl--",JSON.stringify(challanBillDtl));
+          console.log("challanBillDtl--",JSON.stringify(challanBillDtl));
           
           if (challanBillDtl && challanBillDtl.Bill && challanBillDtl.Bill.length > 0) {
             challanObj.totalAmount = challanBillDtl.Bill[0].totalAmount;
@@ -104,7 +104,7 @@ var {
             challanObj.amount = sortedObj;
             challanObj.mobileNumber = challanObj.citizen.mobileNumber;
             challanObj.serviceType= challanObj.businessService.split(".")[0];
-            //console.log("final obj--",challanObj);
+            console.log("final obj--",challanObj);
             var finalObj = {Challan :challanObj};
             tenantId = tenantId.split('.')[0];
             var pdfResponse;
@@ -118,15 +118,15 @@ var {
               );
             } catch (ex) {
              // 
-             // if (ex.response && ex.response.data) console.log(ex.response.data);
+             if (ex.response && ex.response.data) console.log(ex.response.data);
               return renderError(
                 res,
                 "Failed to generate PDF for mcollect-challan receipt",
                 500
               );
             }
-            //console.log("pdfResponse--",pdfResponse);
-            //console.log("pdfResponse--",pdfResponse.data);
+            console.log("pdfResponse--",pdfResponse);
+            console.log("pdfResponse--",pdfResponse.data);
             var filename = `${pdfkey}_${new Date().getTime()}`;
             res.writeHead(200, {
               "Content-Type": "application/pdf",
@@ -183,7 +183,7 @@ var {
         }
         
         
-        //console.log("data-",echallanDtls.data.Bills[0]);
+        console.log("data-",echallanDtls.data.Bills[0]);
         var echallansBill = echallanDtls.data;
         var challanObj;
          if (
@@ -195,7 +195,7 @@ var {
           sortedObj.sort(compareAmount);
           echallansBill.Bills[0].billDetails[0].billAccountDetails =  sortedObj;
           challanObj = echallansBill.Bills;
-            //console.log("final obj--",challanObj);
+            console.log("final obj--",challanObj);
             var finalObj = {Bill :challanObj};
             tenantId = tenantId.split('.')[0];
             var pdfResponse;
