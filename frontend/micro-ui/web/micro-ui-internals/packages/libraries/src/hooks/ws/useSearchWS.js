@@ -20,7 +20,7 @@ const combineResponse = (WaterConnections, SewerageConnections, businessService,
       const bill = billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0];
       if (bill) {
         app.due = bill.totalAmount;
-        app.dueDate = bill.billDate;
+        app.dueDate = bill?.billDetails?.[0]?.expiryDate;        
       }
     });
   }
