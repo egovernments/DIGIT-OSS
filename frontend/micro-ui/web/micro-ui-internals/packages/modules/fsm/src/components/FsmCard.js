@@ -92,7 +92,7 @@ const FSMCard = () => {
   }
 
   if (isFSTPOperator && isSuccess) {
-    return  <EmployeeModuleCard {...propsForFSTPO} />
+    return  <EmployeeModuleCard {...propsForFSTPO} longModuleName={true} />
   }
 
   const linksForSomeFSMAdmin = FSM_ADMIN ? [
@@ -156,6 +156,6 @@ const FSMCard = () => {
     ]
   }
 
-  return <EmployeeModuleCard {...propsForModuleCard} />
+  return <EmployeeModuleCard {...propsForModuleCard} longModuleName={true} />
 };
 export default FSMCard;

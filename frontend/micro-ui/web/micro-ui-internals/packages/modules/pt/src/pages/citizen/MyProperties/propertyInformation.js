@@ -35,7 +35,7 @@ const setBillData = async (tenantId, propertyIds, updatefetchBillData, updateCan
 
 const getBillAmount = (fetchBillData = null) => {
   if (fetchBillData == null) return "CS_NA";
-  return fetchBillData ? (fetchBillData?.Bill && fetchBillData.Bill[0] ? fetchBillData.Bill[0]?.totalAmount : "₹0") : "₹0";
+  return fetchBillData ? (fetchBillData?.Bill && fetchBillData.Bill[0] ? fetchBillData.Bill[0]?.totalAmount : "0") : "0";
 };
 
 const PropertyInformation = () => {
