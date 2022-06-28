@@ -7,7 +7,11 @@ import getPDFData from "../getPDFData";
 import { getVehicleType } from "../utils";
 
 const GetMessage = (type, action, isSuccess, isEmployee, t, paymentPreference) => {
-  return t(`${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action ? action : "CREATE"}_${type}${isSuccess ? "" : "_ERROR"}${paymentPreference === 'POST_PAY' ? "_POST_PAY" : ""}`);
+  return t(
+    `${isEmployee ? "E" : "C"}S_FSM_RESPONSE_${action ? action : "CREATE"}_${type}${isSuccess ? "" : "_ERROR"}${
+      paymentPreference === "POST_PAY" ? "_POST_PAY" : ""
+    }`
+  );
 };
 
 const GetActionMessage = (action, isSuccess, isEmployee, t) => {
@@ -23,13 +27,17 @@ const DisplayText = (action, isSuccess, isEmployee, t, paymentPreference) => {
 };
 
 const BannerPicker = (props) => {
-  let labelMessage = GetLabel(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)
-  if (props.errorInfo && props.errorInfo !== null && props.errorInfo !== '' && typeof props.errorInfo === 'string') {
-    labelMessage = props.errorInfo
+  let actionMessage = props.data?.fsm?.[0].applicationStatus;
+  if (props.data?.fsm?.[0].applicationStatus === "ASSIGN_DSO") {
+    actionMessage = props.action === "SUBMIT" ? props.action : props.data?.fsm?.[0].applicationStatus;
+  }
+  let labelMessage = GetLabel(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t);
+  if (props.errorInfo && props.errorInfo !== null && props.errorInfo !== "" && typeof props.errorInfo === "string") {
+    labelMessage = props.errorInfo;
   }
   return (
     <Banner
-      message={GetActionMessage(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t)}
+      message={GetActionMessage(actionMessage || props.action, props.isSuccess, props.isEmployee, props.t)}
       applicationNumber={props.data?.fsm?.[0].applicationNo}
       info={labelMessage}
       successful={props.isSuccess}
@@ -55,7 +63,7 @@ const Response = (props) => {
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
   const onError = (error, variables) => {
-    setErrorInfo(error?.response?.data?.Errors[0]?.code || error?.message || 'ERROR');
+    setErrorInfo(error?.response?.data?.Errors[0]?.code || error?.message || "ERROR");
     setMutationHappened(true);
   };
   useEffect(() => {
@@ -147,13 +155,11 @@ const Response = (props) => {
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
       {props.parentRoute.includes("employee") &&
-        (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
-        paymentAccess &&
-        isSuccess ? (
+      (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
+      paymentAccess &&
+      isSuccess ? (
         <div className="secondary-action">
-          <Link
-            to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`}
-          >
+          <Link to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`}>
             <SubmitBar label={t("ES_COMMON_PAY")} />
           </Link>
         </div>

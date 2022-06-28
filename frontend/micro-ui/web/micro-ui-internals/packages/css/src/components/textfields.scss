@@ -28,7 +28,7 @@
 
 .inputWrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   max-width: 500px;
 
   div {
@@ -37,6 +37,8 @@
 
   span {
     margin-top: 16px;
+    margin-left: 10%;
+    margin-right: 10%;
   }
 }
 
