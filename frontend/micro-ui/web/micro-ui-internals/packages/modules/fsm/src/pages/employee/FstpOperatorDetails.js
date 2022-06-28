@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import TimePicker from "react-time-picker";
 import { Dropdown } from "@egovernments/digit-ui-react-components";
@@ -15,7 +15,7 @@ import {
   StatusTable,
   Row,
   LabelFieldPair,
-  Menu
+  Menu,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
@@ -61,23 +61,30 @@ const FstpOperatorDetails = () => {
   const [appId, setAppId] = useState();
   const [filterVehicle, setFilterVehicle] = useState();
   const [currentTrip, setCurrentTrip] = useState();
+  const wasteRecievedRef = useRef();
+  const tripStartTimeRef = useRef();
+  const tripTimeRef = useRef();
 
   const { isLoading: totalload, isSuccess: totalsuccess, data: totalvehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, totalconfig });
   const { isLoading, isSuccess, data: vehicle } = Digit.Hooks.fsm.useVehicleSearch({ tenantId, filters, config });
-  const { isLoading: isSearchLoading, isIdle, data: { data: { table: tripDetails } = {} } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParams, null, {
-    enabled: !!isVehicleSearchCompleted,
-  });
+  const { isLoading: isSearchLoading, isIdle, data: { data: { table: tripDetails } = {} } = {} } = Digit.Hooks.fsm.useSearchAll(
+    tenantId,
+    searchParams,
+    null,
+    {
+      enabled: !!isVehicleSearchCompleted,
+    }
+  );
 
   useEffect(() => {
-    filterVehicle?.length == 0 ? setCurrentTrip(1) : setCurrentTrip((tripNo - filterVehicle?.length) + 1)
+    filterVehicle?.length == 0 ? setCurrentTrip(1) : setCurrentTrip(tripNo - filterVehicle?.length + 1);
   }, [tripNo, filterVehicle, totalvehicle, totalsuccess, isSuccess]);
-
 
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: tenantId,
     id: applicationNos,
     moduleCode: "FSM_VEHICLE_TRIP",
-    role: "FSM_EMP_FSTPO"
+    role: "FSM_EMP_FSTPO",
   });
 
   const mutation = Digit.Hooks.fsm.useVehicleUpdate(tenantId);
@@ -91,11 +98,10 @@ const FstpOperatorDetails = () => {
     }
   }, [isSuccess]);
 
-
   useEffect(() => {
     if (!isIdle && !isSearchLoading && tripDetails) {
-      setTripNo(tripDetails[0]?.noOfTrips)
-      setAppId(tripDetails[0].applicationNo)
+      setTripNo(tripDetails[0]?.noOfTrips);
+      setAppId(tripDetails[0].applicationNo);
     }
   }, [isSearchLoading, isIdle, tripDetails]);
 
@@ -104,10 +110,10 @@ const FstpOperatorDetails = () => {
       case "DECLINEVEHICLE":
         return setShowModal(true);
       case "DISPOSE":
-        setSelectedAction(null)
-        return handleSubmit()
+        setSelectedAction(null);
+        return handleSubmit();
       default:
-        setSelectedAction()
+        setSelectedAction();
         console.debug("default case");
         break;
     }
@@ -115,20 +121,23 @@ const FstpOperatorDetails = () => {
 
   useEffect(() => {
     if (totalsuccess) {
-      const temp = totalvehicle?.vehicleTrip?.filter((c, i, r) => c?.tripDetails[0]?.referenceNo === appId && c?.applicationStatus === "WAITING_FOR_DISPOSAL");
-      setFilterVehicle(temp)
+      const temp = totalvehicle?.vehicleTrip?.filter(
+        (c, i, r) => c?.tripDetails[0]?.referenceNo === appId && c?.applicationStatus === "WAITING_FOR_DISPOSAL"
+      );
+      setFilterVehicle(temp);
     }
   }, [totalsuccess, totalvehicle, isSuccess, isIdle, appId]);
-
 
   const handleSubmit = () => {
     const wasteCombined = tripDetails.reduce((acc, trip) => acc + trip.volume, 0);
     if (!wasteCollected || wasteCollected > wasteCombined || wasteCollected > vehicle.vehicle.tankCapacity) {
       setErrors({ wasteRecieved: "ES_FSTP_INVALID_WASTE_AMOUNT" });
+      wasteRecievedRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
     if (tripStartTime === null) {
       setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
+      tripStartTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
@@ -139,6 +148,7 @@ const FstpOperatorDetails = () => {
 
     if (tripStartTime === tripTime || tripStartTime > tripTime) {
       setErrors({ tripTime: "ES_FSTP_INVALID_TRIP_TIME" });
+      tripTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
@@ -147,13 +157,13 @@ const FstpOperatorDetails = () => {
     const d = new Date();
     const timeStamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripTime)) / 1000;
     const tripStartTimestamp = Date.parse(new Date(d.toString().split(":")[0].slice(0, -2) + tripStartTime)) / 1000;
-    const tripDetail = { tripNo: currentTrip }
+    const tripDetail = { tripNo: currentTrip };
     vehicle.tripStartTime = tripStartTimestamp;
     vehicle.fstpEntryTime = tripStartTimestamp;
     vehicle.tripEndTime = timeStamp;
     vehicle.fstpExitTime = timeStamp;
     vehicle.volumeCarried = wasteCollected;
-    vehicle.tripDetails[0].additionalDetails = tripDetail
+    vehicle.tripDetails[0].additionalDetails = tripDetail;
     const details = {
       vehicleTrip: [vehicle],
       workflow: {
@@ -170,7 +180,7 @@ const FstpOperatorDetails = () => {
   const handleDecline = (data) => {
     vehicle.additionalDetails = {
       comments: data?.workflow?.comments,
-      vehicleDeclineReason: data?.workflow?.fstpoRejectionReason
+      vehicleDeclineReason: data?.workflow?.fstpoRejectionReason,
     };
     const details = {
       vehicleTrip: [vehicle],
@@ -191,7 +201,7 @@ const FstpOperatorDetails = () => {
 
   const handleSuccess = () => {
     if (selectedAction === "DECLINEVEHICLE") {
-      setShowModal(false)
+      setShowModal(false);
     }
     /* Show Toast on success */
     queryClient.invalidateQueries("FSM_VEHICLE_DATA");
@@ -204,7 +214,7 @@ const FstpOperatorDetails = () => {
 
   const handleError = () => {
     if (selectedAction === "DECLINEVEHICLE") {
-      setShowModal(false)
+      setShowModal(false);
       setSelectedAction(null);
     }
     /* Show Toast on error */
@@ -214,7 +224,6 @@ const FstpOperatorDetails = () => {
       closeToast();
     }, 5000);
   };
-
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -249,10 +258,10 @@ const FstpOperatorDetails = () => {
   ];
 
   const handleTimeChange = (value, cb) => {
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       cb(value);
     }
-  }
+  };
 
   function onActionSelect(action) {
     setSelectedAction(action);
@@ -271,6 +280,9 @@ const FstpOperatorDetails = () => {
           {vehicleData?.map((row, index) => (
             <Row key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
           ))}
+          <div ref={tripStartTimeRef}>
+            <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
+          </div>
           <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
           <form>
             <Row
@@ -279,11 +291,13 @@ const FstpOperatorDetails = () => {
               rowContainerStyle={{ marginBottom: "32px" }}
               text={
                 <div>
-                  <CustomTimePicker name="tripStartTime" onChange={val => handleTimeChange(val, setTripStartTime)} value={tripStartTime} />
+                  <CustomTimePicker name="tripStartTime" onChange={(val) => handleTimeChange(val, setTripStartTime)} value={tripStartTime} />
                 </div>
               }
             />
-            <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>
+            <div ref={wasteRecievedRef}>
+              <CardLabelError>{t(errors.wasteRecieved)}</CardLabelError>
+            </div>
             <Row
               key={t("ES_VEHICLE_SEPTAGE_DUMPED")}
               label={`${t("ES_VEHICLE_SEPTAGE_DUMPED")} * `}
@@ -299,17 +313,19 @@ const FstpOperatorDetails = () => {
                 </div>
               }
             />
-            <CardLabelError>{t(errors.tripTime)}</CardLabelError>
+            <div ref={tripTimeRef}>
+              <CardLabelError>{t(errors.tripTime)}</CardLabelError>
+            </div>
             <Row
               key={t("ES_VEHICLE_OUT_TIME")}
               label={`${t("ES_VEHICLE_OUT_TIME")} * `}
               text={
                 <div>
-                  <CustomTimePicker name="tripTime" onChange={val => handleTimeChange(val, setTripTime)} value={tripTime} />
+                  <CustomTimePicker name="tripTime" onChange={(val) => handleTimeChange(val, setTripTime)} value={tripTime} />
                 </div>
               }
             />
-            {!isSearchLoading && !isIdle && tripDetails && currentTrip ?
+            {!isSearchLoading && !isIdle && tripDetails && currentTrip ? (
               <Row
                 key={t("ES_VEHICLE_TRIP_NO")}
                 label={`${t("ES_VEHICLE_TRIP_NO")} * `}
@@ -317,14 +333,15 @@ const FstpOperatorDetails = () => {
                   <div>
                     <Dropdown
                       disable
-                      selected={{ "name": `${currentTrip} of ${tripDetails[0]?.noOfTrips}` }}
+                      selected={{ name: `${currentTrip} of ${tripDetails[0]?.noOfTrips}` }}
                       t={t}
                       optionKey="name"
-                      style={{ maxWidth: '200px' }} />
+                      style={{ maxWidth: "200px" }}
+                    />
                   </div>
                 }
-              >
-              </Row> : null}
+              ></Row>
+            ) : null}
             {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
               <ActionBar>
                 {displayMenu && workflowDetails?.data?.nextActions ? (
