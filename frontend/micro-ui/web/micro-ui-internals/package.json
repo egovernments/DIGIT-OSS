@@ -43,7 +43,7 @@
     "dev:reports": "cd packages/modules/reports && yarn start",
     "dev:example": "cd example && yarn start",
     "build": "run-p build:**",
-    "buildParallel":  "concurrently \"yarn:build:libraries\" \"yarn:build:components\" \"yarn:build:common\" \"yarn:build:commonPt\" \"yarn:build:core\" \"yarn:build:mcollect\" \"yarn:build:receipts\" \"yarn:build:pgr\" \"yarn:build:hrms\" \"yarn:build:obps\" \"yarn:build:dss\" \"yarn:build:pt\" \"yarn:build:tl\" \"yarn:build:engagement\" \"yarn:build:noc\" \"yarn:build:ws\" \"yarn:build:bills\" \"yarn:build:fsm\"",
+    "buildParallel": "concurrently \"yarn:build:libraries\" \"yarn:build:components\" \"yarn:build:common\" \"yarn:build:commonPt\" \"yarn:build:core\" \"yarn:build:mcollect\" \"yarn:build:receipts\" \"yarn:build:pgr\" \"yarn:build:hrms\" \"yarn:build:obps\" \"yarn:build:dss\" \"yarn:build:pt\" \"yarn:build:tl\" \"yarn:build:engagement\" \"yarn:build:noc\" \"yarn:build:ws\" \"yarn:build:bills\" \"yarn:build:fsm\"",
     "build:libraries": "cd packages/libraries && yarn build-webpack",
     "build:components": "cd packages/react-components && yarn build-webpack",
     "build:common": "cd packages/modules/common && yarn build-webpack",
@@ -66,20 +66,21 @@
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
   "devDependencies": {
+    "css-loader": "^6.7.1",
     "husky": "7.0.4",
     "lint-staged": "12.3.7",
-    "prettier": "2.1.2",
-    "npm-run-all": "4.1.5"
+    "npm-run-all": "4.1.5",
+    "prettier": "2.1.2"
   },
   "husky": {},
   "lint-staged": {
     "*.{js,css,md}": "prettier --write"
   },
   "dependencies": {
+    "babel-loader": "8.1.0",
     "concurrently": "^7.2.2",
     "lodash": "4.17.21",
     "microbundle-crl": "0.13.11",
-    "babel-loader": "8.1.0",
     "webpack": "^5.72.0",
     "webpack-cli": "^4.9.2"
   }
