@@ -20,14 +20,17 @@ import {
   ActionBar
 } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import DisconnectTimeline from "../components/DisconnectTimeline";
-import { stringReplaceAll, createPayloadOfWSDisconnection } from "../utils";
+import { stringReplaceAll, createPayloadOfWSDisconnection, updatePayloadOfWSDisconnection } from "../utils";
 
 const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
   let validation = {};
   const stateCode = Digit.ULBService.getStateId();
 
   const applicationData = Digit.SessionStorage.get("WS_DISCONNECTION");
+  const history = useHistory();
+  const match = useRouteMatch();
   
   const [disconnectionData, setDisconnectionData] = useState({
       type: "",
@@ -42,7 +45,7 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
   const [isEnableLoader, setIsEnableLoader] = useState(false);
 
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["disconnectionType"]);
-  const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(stateCode, "Disconnection");
+  const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(stateCode, "DisconnectionDocuments");
   const {
     isLoading: creatingWaterApplicationLoading,
     isError: createWaterApplicationError,
@@ -52,6 +55,15 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
   } = Digit.Hooks.ws.useWaterCreateAPI("WATER");
 
   const {
+    isLoading: updatingWaterApplicationLoading,
+    isError: updateWaterApplicationError,
+    data: updateWaterResponse,
+    error: updateWaterError,
+    mutate: waterUpdateMutation,
+  } = Digit.Hooks.ws.useWSApplicationActions("WATER");
+
+
+  const {
     isLoading: creatingSewerageApplicationLoading,
     isError: createSewerageApplicationError,
     data: createSewerageResponse,
@@ -59,6 +71,13 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
     mutate: sewerageMutation,
   } = Digit.Hooks.ws.useWaterCreateAPI("SEWERAGE");
 
+  const {
+    isLoading: updatingSewerageApplicationLoading,
+    isError: updateSewerageApplicationError,
+    data: updateSewerageResponse,
+    error: updateSewerageError,
+    mutate: sewerageUpdateMutation,
+  } = Digit.Hooks.ws.useWSApplicationActions("SEWERAGE");
   // useEffect(() =>{
   //   setDisconnectionData({
   //     type:storedData?.type||"",
@@ -114,7 +133,18 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
             setTimeout(closeToastOfError, 5000);
           },
           onSuccess: async (data, variables) => {
-            history.push(`/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`);
+            let response = await updatePayloadOfWSDisconnection(data?.WaterConnection?.[0], "WATER");
+            let waterConnectionUpdate = { WaterConnection: response };
+            await waterUpdateMutation(waterConnectionUpdate, {
+              onError: (error, variables) => {
+                setIsEnableLoader(false);
+                setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
+                setTimeout(closeToastOfError, 5000);
+              },
+              onSuccess: (data, variables) => {
+                history.push(`/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}&applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`);                // window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
+              },
+            })
           },
         });
       }
@@ -129,7 +159,18 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
             setTimeout(closeToastOfError, 5000);
           },
           onSuccess: async (data, variables) => {
-            history.push(`/digit-ui/employee/ws/ws-response?applicationNumber=${data?.SewerageConnections?.[0]?.applicationNo}`);
+            let response = await updatePayloadOfWSDisconnection(data?.SewerageConnections?.[0], "SEWERAGE");
+            let sewerageConnectionUpdate = { SewerageConnections: response };
+            await sewerageUpdateMutation(sewerageConnectionUpdate, {
+              onError: (error, variables) => {
+                setIsEnableLoader(false);
+                setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
+                setTimeout(closeToastOfError, 5000);
+              },
+              onSuccess: (data, variables) => {
+                history.push(`/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}&applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`);                // window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
+              },
+            })
           },
         });
       }
@@ -192,7 +233,13 @@ if(userType === 'citizen') {
                   onChange={(e) => filedChange({code:"reason" , value:e.target.value})}
                 />              
             </LabelFieldPair>
-            <SubmitBar label={t(`CS_COMMON_NEXT`)} submit={true} />
+            <SubmitBar
+              label={t("CS_COMMON_NEXT")}
+              onSubmit={() => {
+                history.push(match.path.replace("application-form", "documents-upload"));
+              }}
+              disabled={wsDocsLoading ? true : false}
+             />
           </div>
         </FormStep>
         <CitizenInfoLabel style={{ margin: "0px" }} textStyle={{ color: "#0B0C0C" }} text={t(`WS_DISONNECT_APPL_INFO`)} />
@@ -278,7 +325,7 @@ if(userType === 'citizen') {
                 </div>            
           </LabelFieldPair>
           <CardSectionHeader>{t("WS_DISCONNECTION_DOCUMENTS")}</CardSectionHeader>
-          {wsDocs?.Disconnection?.map((document, index) => { 
+          {wsDocs?.DisconnectionDocuments?.map((document, index) => { 
                   return (
                     <SelectDocument
                       key={index}
@@ -301,9 +348,9 @@ if(userType === 'citizen') {
           {
             <SubmitBar
               label={t("ACTION_TEST_SUBMIT")}
-              onSubmit={onSubmit(disconnectionData)}
+              onSubmit={() => onSubmit(disconnectionData)}
               style={{ margin: "10px 10px 0px 0px" }}
-              disabled={wsDocsLoading || documents.length === 0 ? true : false}
+              disabled={wsDocsLoading || documents.length < 2 ? true : false}
             />}
      </ActionBar>
     </div>

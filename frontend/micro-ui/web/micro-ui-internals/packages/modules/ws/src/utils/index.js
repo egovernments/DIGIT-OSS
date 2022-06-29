@@ -526,7 +526,7 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
       applicationStatus: storeData?.applicationData?.applicationStatus,
       status: storeData?.applicationData?.status,
       connectionNo: storeData?.applicationData?.connectionNo,
-      applicationType: "DISCONNECT_WATER_CONNECTION",
+      applicationType: "NEW_WATER_CONNECTION",
       dateEffectiveFrom: convertDateToEpoch(data?.date),
       isdisconnection : true,
       isDisconnectionTemporary: data?.type?.value?.code === "Temporary" ? true :false,
@@ -546,7 +546,9 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
       noOfTaps: storeData?.applicationData?.noOfTaps,
       additionalDetails: storeData?.applicationData?.additionalDetails,
       tenantId: storeData?.applicationData?.tenantId,
-      processInstance: storeData?.applicationData?.processInstance,
+      processInstance: {
+        action: "INITIATE",
+      },
       channel: "CFC_COUNTER",
     },
     disconnectRequest: true
@@ -559,7 +561,7 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
       applicationStatus: storeData?.applicationData?.applicationStatus,
       status: storeData?.applicationData?.status,
       connectionNo: storeData?.applicationData?.connectionNo,
-      applicationType: "DISCONNECT_WATER_CONNECTION",
+      applicationType: "NEW_WATER_CONNECTION",
       dateEffectiveFrom: convertDateToEpoch(data?.date),
       isdisconnection : true,
       isDisconnectionTemporary: data?.type?.value?.code === "Temporary" ? true :false,
@@ -580,7 +582,9 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
       noOfToilets : storeData?.applicationData?.noOfToilets,
       additionalDetails: storeData?.applicationData?.additionalDetails,
       tenantId: storeData?.applicationData?.tenantId,
-      processInstance: storeData?.applicationData?.processInstance,
+      processInstance: {
+        action: "INITIATE",
+      },
       channel: "CFC_COUNTER",
     },
     disconnectRequest: true
@@ -588,6 +592,18 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
 
 
   return service === "WATER" ?  wsPayload : swPayload;
+};
+
+export const updatePayloadOfWSDisconnection = async (data, type) => {
+  let payload = {
+    ...data,
+    applicationType: "DISCONNECT_WATER_CONNECTION",
+    processInstance: {
+      ...data?.processInstance,
+      action: "SUBMIT_APPLICATION",
+    }
+  };
+  return payload;
 };
 
 export const getOwnersforPDF = (property, t) => {
