@@ -69,6 +69,7 @@ import org.egov.edcr.contract.EdcrDetail;
 import org.egov.edcr.contract.EdcrRequest;
 import org.egov.edcr.contract.EdcrResponse;
 import org.egov.edcr.contract.PlanResponse;
+import org.egov.edcr.contract.EdcrCountCriteria;
 import org.egov.edcr.entity.ApplicationType;
 import org.egov.edcr.service.EdcrRestService;
 import org.egov.edcr.service.EdcrValidator;
