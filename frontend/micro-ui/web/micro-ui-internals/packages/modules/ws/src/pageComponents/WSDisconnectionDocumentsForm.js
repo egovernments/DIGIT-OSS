@@ -11,23 +11,28 @@ import {
   CardHeader,
   SubmitBar
 } from "@egovernments/digit-ui-react-components";
-
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 function WSDisconnectionDocumentsForm({ t, config, onSelect, userType, formData  }) { 
   const tenantId = Digit.ULBService.getStateId();
-  const storedData = formData?.WSDisconnectionDocumentsForm?.WSDisconnectionDocumentsForm||formData?.WSDisconnectionDocumentsForm
+  const storedData = Digit.SessionStorage.get("WS_DISCONNECTION");
 
-  const [documents, setDocuments] = useState(storedData || []);
+  const [documents, setDocuments] = useState(storedData.WSDisconnectionForm.documents || []);
   const [error, setError] = useState(null);
   const [checkRequiredFields, setCheckRequiredFields] = useState(false);
+  const history = useHistory();
+  const match = useRouteMatch();
 
   useEffect(() =>{
-      setDocuments(storedData||[])
+      setDocuments(storedData.WSDisconnectionForm.documents ||[])
   },[]);
 
   const handleSubmit = () => {
       onSelect(config.key, {WSDisconnectionDocumentsForm: documents});
   };
+  useEffect(() => {
+    Digit.SessionStorage.set("WS_DISCONNECTION", {...storedData, WSDisconnectionForm: {...storedData.WSDisconnectionForm, documents: documents}});
+  }, [documents]);
  
   const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId, 'DisconnectionDocuments');
  

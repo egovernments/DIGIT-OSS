@@ -515,10 +515,6 @@ export const convertToSWUpdate = (data) => {
   return formdata;
 };
 export const createPayloadOfWSDisconnection = async (data, storeData, service) => {
-  // data?.cpt?.details?.owners?.forEach((owner) => {
-  //   if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress;
-  // });
-
   let wsPayload = {
     WaterConnection : {
       id: storeData?.applicationData?.id,
@@ -530,6 +526,7 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
       dateEffectiveFrom: convertDateToEpoch(data?.date),
       isdisconnection : true,
       isDisconnectionTemporary: data?.type?.value?.code === "Temporary" ? true :false,
+      reason: data?.reason.value,
       documents: data?.documents,
       water: true,
       sewerage: false,
@@ -547,6 +544,7 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
       additionalDetails: storeData?.applicationData?.additionalDetails,
       tenantId: storeData?.applicationData?.tenantId,
       processInstance: {
+        ...storeData?.applicationData?.processInstance,
         action: "INITIATE",
       },
       channel: "CFC_COUNTER",
@@ -565,6 +563,7 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
       dateEffectiveFrom: convertDateToEpoch(data?.date),
       isdisconnection : true,
       isDisconnectionTemporary: data?.type?.value?.code === "Temporary" ? true :false,
+      reason: data?.reason.value,
       documents: data?.documents,
       water: false,
       sewerage: true,
@@ -583,6 +582,7 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
       additionalDetails: storeData?.applicationData?.additionalDetails,
       tenantId: storeData?.applicationData?.tenantId,
       processInstance: {
+        ...storeData?.applicationData?.processInstance,
         action: "INITIATE",
       },
       channel: "CFC_COUNTER",

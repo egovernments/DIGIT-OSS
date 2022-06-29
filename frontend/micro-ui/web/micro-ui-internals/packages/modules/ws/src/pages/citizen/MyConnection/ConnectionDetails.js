@@ -154,6 +154,7 @@ const ConnectionDetails = () => {
     else if(state?.applicationStatus === "CONNECTION_ACTIVATED"){
       if (paymentDetails?.data?.Bill?.length === 0 ) {
         let pathname = `/digit-ui/citizen/ws/disconnect-application`;
+        Digit.SessionStorage.set("WS_DISCONNECTION", {...state, serviceType: isSW ? "SEWERAGE" : "WATER"});
         history.push(`${pathname}`);
       } else if (paymentDetails?.data?.Bill?.[0]?.totalAmount !== 0) {
         setshowModal(true);

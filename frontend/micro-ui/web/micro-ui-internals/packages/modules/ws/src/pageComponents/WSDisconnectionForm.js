@@ -33,10 +33,10 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
   const match = useRouteMatch();
   
   const [disconnectionData, setDisconnectionData] = useState({
-      type: "",
-      date: "",
-      reason: "",
-      documents: []
+      type: applicationData.WSDisconnectionForm ? applicationData.WSDisconnectionForm.type : "",
+      date: applicationData.WSDisconnectionForm ? applicationData.WSDisconnectionForm.date : "",
+      reason: applicationData.WSDisconnectionForm ?  applicationData.WSDisconnectionForm.reason : "",
+      documents: applicationData.WSDisconnectionForm ? applicationData.WSDisconnectionForm.documents : []
   });
   const [documents, setDocuments] = useState([]);
   const [error, setError] = useState(null);
@@ -102,6 +102,9 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
     setDisconnectionTypeList(disconnectionTypes);
   }, [mdmsData]);
 
+  useEffect(() => {
+    Digit.SessionStorage.set("WS_DISCONNECTION", {...applicationData, WSDisconnectionForm: disconnectionData});
+  }, [disconnectionData]);
   const handleSubmit = () => onSelect(config.key, { WSDisConnectionForm: disconnectionData });
 
   const handleEmployeeSubmit = () => {
@@ -193,12 +196,11 @@ if(userType === 'citizen') {
           
           <div style={{padding:"10px",paddingTop:"20px",marginTop:"10px"}}>
           <CardHeader>{t("WS_APPLICATION_FORM")}</CardHeader>
-          <CardLabel>
-            {t('WS_CONSUMER_NUMBER')} 
-            <span style={{float:'right'}}>{"PG-WS-2021-09-29-006024"}</span>
-          </CardLabel>
+          <StatusTable>
+            <Row key={t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")} label={`${t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")}`} text={applicationData?.connectionNo} className="border-none" />
+          </StatusTable> 
           
-          <CardLabel>{t("WS_DISCONNECTION_TYPE")}</CardLabel>
+          <CardLabel className="card-label-smaller">{t("WS_DISCONNECTION_TYPE")}</CardLabel>
           <RadioButtons
                 t={t}
                 options={disconnectionTypeList}
@@ -209,21 +211,29 @@ if(userType === 'citizen') {
                 onSelect={(val) => filedChange({code: "type",value: val})}
                 labelKey="WS_DISCONNECTION_TYPE"
             />
-            
-          <CardLabel>{t("WS_DISCONNECTION_DATE")}</CardLabel>
-            <TextInput
-              t={t}
-              type={"text"}
-              style={{background:"#FAFAFA"}}
-              isMandatory={false}
-              optionKey="i18nKey"
-              name="date"
-              value={disconnectionData?.date?.value}
-              onChange={(e) => filedChange({code:"date" , value:e.target.value})}
-            />
+            <CardLabel className="card-label-smaller">
+            {t("WS_DISCONECTION_DATE")}
+            <div className={`tooltip`} style={{position: "absolute"}}>
+            <InfoBannerIcon fill="#0b0c0c"/>
+            <span className="tooltiptext" style={{
+                    whiteSpace: "nowrap",
+                    fontSize: "medium"
+                  }}>
+                    {`${t(`WS_DISCONNECTION_DATE_TOOLTIP`)}`}
+                  </span>
+            </div>
+          </CardLabel>
+          <div className="field">
+          <DatePicker
+            date={disconnectionData?.date}
+            onChange={(date) => {
+              setDisconnectionData({ ...disconnectionData, date: date });
+            }}
+          ></DatePicker>
+          </div>
 
             <LabelFieldPair>
-              <CardLabel>{t("WS_DISCONNECTION_REASON")}</CardLabel>              
+              <CardLabel className="card-label-smaller">{t("WS_DISCONNECTION_REASON")}</CardLabel>              
                 <TextArea
                   isMandatory={false}
                   optionKey="i18nKey"
@@ -247,7 +257,6 @@ if(userType === 'citizen') {
     );
   }
 
-  console.log("Disconnection Data: " + JSON.stringify(disconnectionData));
   return (
     <div style={{ margin: "16px" }}>
     <Header styles={{fontSize: "32px", marginLeft: "18px"}}>{t("WS_WATER_AND_SEWERAGE_DISCONNECTION")}</Header>
