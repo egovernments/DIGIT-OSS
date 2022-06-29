@@ -3,14 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useQueryClient } from "react-query";
 import { UploadPitPhoto } from "@egovernments/digit-ui-react-components";
 
-import {
-  configAssignDso,
-  configCompleteApplication,
-  configReassignDSO,
-  configAcceptDso,
-  configRejectApplication,
-  configScheduleDso,
-} from "../config";
+import { configAssignDso, configCompleteApplication, configReassignDSO, configAcceptDso, configRejectApplication, configScheduleDso } from "../config";
 import { configRejectFstpo } from "../config/RejectFstpo";
 
 const Heading = (props) => {
@@ -31,6 +24,7 @@ const CloseBtn = (props) => {
     </div>
   );
 };
+
 const popupActionBarStyles = {
   boxShadow: "0 -2px 8px rgb(0 0 0 / 16%)",
   maxWidth: "480px",
@@ -48,9 +42,7 @@ const popupActionBarStyles = {
 
 const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData }) => {
   const mobileView = Digit.Utils.browser.isMobile() ? true : false;
-  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, {
-    limit: "-1",
-  });
+  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: "-1", status: 'ACTIVE' });
   const { isLoading, isSuccess, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: id },
@@ -95,9 +87,12 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     { staleTime: Infinity }
   );
 
-  const { data: pitList, isLoading: isPitData, isSuccess: isPitDataLoaded } = Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "PitType", {
-    staleTime: Infinity,
-  });
+  const { data: pitList, isLoading: isPitData, isSuccess: isPitDataLoaded } = Digit.Hooks.fsm.useMDMS(
+    stateCode,
+    "FSM",
+    "PitType",
+    { staleTime: Infinity }
+  );
 
   const { data: Reason, isLoading: isReasonLoading } = Digit.Hooks.fsm.useMDMS(stateCode, "FSM", "Reason", { staleTime: Infinity }, [
     "ReassignReason",
@@ -197,6 +192,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       setPitType(pitType);
       setPitDetail(applicationData.pitDetail);
       setDefautValue(arrayList);
+
     }
   }, [isPitDataLoaded, isSuccess]);
 
@@ -289,11 +285,14 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     if (data.subtype && typeof data.subtype === "object") applicationData.propertyUsage = data.subtype.code;
     if (data.subtype && typeof data.subtype === "string") applicationData.propertyUsage = data.subtype;
     if (data.noOfTrips) applicationData.noOfTrips = data.noOfTrips;
-    if (data.paymentMode) applicationData.receivedPayment = data.paymentMode.code;
+    if (data.paymentMode) applicationData.additionalDetails.receivedPayment = data.paymentMode.code;
+
     if (fileStoreId) {
-      let temp = {};
-      fileStoreId.map((i) => (temp[fileStoreId.indexOf(i) + 1] = i));
-      applicationData.pitDetail.additionalDetails = { fileStoreId: temp };
+      if (applicationData.pitDetail.additionalDetails && applicationData.pitDetail.additionalDetails.fileStoreId) {
+        applicationData.pitDetail.additionalDetails.fileStoreId = { ...applicationData.pitDetail.additionalDetails.fileStoreId, FSM_DSO: fileStoreId };
+      } else {
+        applicationData.pitDetail.additionalDetails = { fileStoreId: { FSM_DSO: fileStoreId } };
+      }
     }
     if (data.noOfTrips) applicationData.noOfTrips = Number(data.noOfTrips);
     if (action === "REASSING") applicationData.vehicleId = null;
@@ -472,7 +471,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       actionCancelLabel={t(config.label.cancel)}
       actionCancelOnSubmit={closeModal}
       actionSaveLabel={t(config.label.submit)}
-      actionSaveOnSubmit={() => {}}
+      actionSaveOnSubmit={() => { }}
       formId="modal-action"
       isDisabled={!formValve}
     >
@@ -485,9 +484,13 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         formId="modal-action"
         defaultValues={defaultValues}
       ></FormComposer>
-      {action === "COMPLETED" ? (
-        <UploadPitPhoto header="" tenantId={tenantId} cardText="" onPhotoChange={handleUpload} uploadedImages={null} />
-      ) : null}
+      {action === "COMPLETED" ? <UploadPitPhoto
+        header=""
+        tenantId={tenantId}
+        cardText=""
+        onPhotoChange={handleUpload}
+        uploadedImages={null} /> : null
+      }
 
       {/* {toastError && <Toast {...toastError} />} */}
     </Modal>
