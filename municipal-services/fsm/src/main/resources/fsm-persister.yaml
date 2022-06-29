@@ -7,7 +7,7 @@ serviceMaps:
    isTransaction: true
    queryMaps:
 
-       - query: INSERT INTO  eg_fsm_application( id, applicationno, tenantid, additionaldetails, accountid, description, applicationstatus, source, sanitationtype, propertyusage, nooftrips, status, vehicle_id, vehicletype, vehicleCapacity,paymentPreference, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+       - query: INSERT INTO  eg_fsm_application( id, applicationno, tenantid, additionaldetails, accountid, description, applicationstatus, source, sanitationtype, propertyusage, nooftrips, status, vehicle_id, vehicletype, vehicleCapacity,paymentPreference,receivedpayment, createdby, lastmodifiedby, createdtime, lastmodifiedtime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
          basePath: fsm
          jsonMaps:
           - jsonPath: $.fsm.id
@@ -43,6 +43,8 @@ serviceMaps:
           - jsonPath: $.fsm.vehicleCapacity
           
           - jsonPath: $.fsm.paymentPreference
+
+          - jsonPath: $.fsm.receivedPayment
 
           - jsonPath: $.fsm.auditDetails.createdBy
 
@@ -164,7 +166,7 @@ serviceMaps:
          jsonMaps: 
             - jsonPath: $.fsm.id
              
-       - query: UPDATE  eg_fsm_application SET additionaldetails=?, description=?, applicationstatus=?, source=?, sanitationtype=?, propertyusage=?, nooftrips=?, status=?, vehicle_id=?, vehicletype=?,vehicleCapacity=?,paymentPreference=?, createdby=?, lastmodifiedby=?, createdtime=?, lastmodifiedtime=?, possible_srv_date=?, dso_id=?, completed_on=? where id=? 
+       - query: UPDATE  eg_fsm_application SET additionaldetails=?, description=?, applicationstatus=?, source=?, sanitationtype=?, propertyusage=?, nooftrips=?, status=?, vehicle_id=?, vehicletype=?,vehicleCapacity=?,paymentPreference=?, receivedpayment=?, createdby=?, lastmodifiedby=?, createdtime=?, lastmodifiedtime=?, possible_srv_date=?, dso_id=?, completed_on=? where id=? 
          basePath: fsm
          jsonMaps:          
                 - jsonPath: $.fsm.additionalDetails
@@ -192,6 +194,8 @@ serviceMaps:
                 - jsonPath: $.fsm.vehicleCapacity
                 
                 - jsonPath: $.fsm.paymentPreference
+
+                - jsonPath: $.fsm.receivedPayment
                   
                 - jsonPath: $.fsm.auditDetails.createdBy
       

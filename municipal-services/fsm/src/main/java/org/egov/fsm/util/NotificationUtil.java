@@ -100,7 +100,7 @@ public class NotificationUtil {
 			
 			messageTemplate = getMessageTemplate(messageCode, localizationMessage);
 			
-			if (!StringUtils.isEmpty(messageTemplate)) {
+			if (null != messageTemplate && !StringUtils.isEmpty(messageTemplate)) {
 				message = getInitiatedMsg(fsm, messageTemplate);
 
 				if (message.contains("{SLA_HOURS}")) {
@@ -164,7 +164,10 @@ public class NotificationUtil {
     			
 					message = message.replace("{PAY_LINK}", getShortenedUrl(actionLink));
 				}
-
+				
+				if(message.contains("{APPLICATION_ID}") ) {
+					message = message.replace("{APPLICATION_ID}", fsm.getApplicationNo());
+				}
 				
 				if (message.contains("{RECEIPT_LINK}") ) {
 
@@ -270,16 +273,19 @@ public class NotificationUtil {
 	@SuppressWarnings("rawtypes")
 	public String getMessageTemplate(String notificationCode, String localizationMessage) {
 		String path = "$..messages[?(@.code==\"{}\")].message";
-		path = path.replace("{}", notificationCode);
 		String message = null;
-		try {
-			List data = JsonPath.parse(localizationMessage).read(path);
-			if (!CollectionUtils.isEmpty(data))
-				message = data.get(0).toString();
-			else
-				log.error("Fetching from localization failed with code " + notificationCode);
-		} catch (Exception e) {
-			log.warn("Fetching from localization failed", e);
+		log.info("notificationCode :::  {} "+notificationCode);
+		if(null != notificationCode) {
+			try {
+				path = path.replace("{}", notificationCode.trim());
+				List data = JsonPath.parse(localizationMessage).read(path);
+				if (!CollectionUtils.isEmpty(data))
+					message = data.get(0).toString();
+				else
+					log.error("Fetching from localization failed with code " + notificationCode);
+			} catch (Exception e) {
+				log.warn("Fetching from localization failed", e);
+			}
 		}
 		return message;
 	}
