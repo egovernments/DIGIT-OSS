@@ -12,6 +12,13 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.LinkedList;
 
 
@@ -26,7 +33,7 @@ public class EncryptionService {
     @Autowired
     private KeyManagementService keyManagementService;
 
-    public Object encrypt(EncryptionRequest encryptionRequest) throws Exception {
+    public Object encrypt(EncryptionRequest encryptionRequest) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
         LinkedList<Object> outputList = new LinkedList<>();
         for(EncReqObject encReqObject : encryptionRequest.getEncryptionRequests()) {
             if(!keyManagementService.checkIfTenantExists(encReqObject.getTenantId())) {
@@ -43,7 +50,7 @@ public class EncryptionService {
         return outputList;
     }
 
-    public Object decrypt(Object decryptionRequest) throws Exception {
+    public Object decrypt(Object decryptionRequest) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
         return processJSONUtil.processJSON(decryptionRequest, ModeEnum.DECRYPT, null, null);
     }
 }

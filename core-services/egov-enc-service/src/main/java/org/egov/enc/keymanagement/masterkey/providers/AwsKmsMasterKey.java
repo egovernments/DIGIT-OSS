@@ -9,6 +9,7 @@ import com.amazonaws.services.kms.model.DecryptResult;
 import com.amazonaws.services.kms.model.EncryptRequest;
 import com.amazonaws.services.kms.model.EncryptResult;
 import org.egov.enc.keymanagement.masterkey.MasterKeyProvider;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
@@ -44,7 +45,7 @@ public class AwsKmsMasterKey implements MasterKeyProvider {
     }
 
     @Override
-    public String encryptWithMasterPassword(String plainKey) throws Exception {
+    public String encryptWithMasterPassword(String plainKey) throws CustomException {
         EncryptRequest encryptRequest = new EncryptRequest();
         encryptRequest.setKeyId(masterPasswordKeyId);
         encryptRequest.setPlaintext(ByteBuffer.wrap(plainKey.getBytes(StandardCharsets.UTF_8)));
@@ -54,7 +55,7 @@ public class AwsKmsMasterKey implements MasterKeyProvider {
     }
 
     @Override
-    public String decryptWithMasterPassword(String encryptedKey) throws Exception {
+    public String decryptWithMasterPassword(String encryptedKey) throws CustomException {
         DecryptRequest decryptRequest = new DecryptRequest();
         decryptRequest.setKeyId(masterPasswordKeyId);
         decryptRequest.setCiphertextBlob(ByteBuffer.wrap(Base64.getDecoder().decode(encryptedKey)));

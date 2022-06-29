@@ -63,7 +63,7 @@ public class KeyStore implements ApplicationRunner {
     }
 
     //Reset and Initialize all the keys and HashMaps from the database
-    public void refreshKeys() throws Exception {
+    public void refreshKeys() {
         tenantIds = (ArrayList<String>) keyRepository.fetchDistinctTenantIds();
 
         symmetricKeys = (ArrayList<SymmetricKey>) this.keyRepository.fetchSymmetricKeys();
@@ -177,7 +177,7 @@ public class KeyStore implements ApplicationRunner {
     }
 
     //Decrypt all keys
-    private void decryptAllKeys() throws Exception {
+    private void decryptAllKeys() {
         for (SymmetricKey symmetricKey : symmetricKeys) {
             symmetricKey.setSecretKey(masterKeyProvider.decryptWithMasterPassword(symmetricKey.getSecretKey()));
             symmetricKey.setInitialVector(masterKeyProvider.decryptWithMasterPassword(symmetricKey.getInitialVector()));
@@ -191,7 +191,7 @@ public class KeyStore implements ApplicationRunner {
 
     //Initialize keys after application has finished loading
     @Override
-    public void run(ApplicationArguments applicationArguments) throws Exception {
+    public void run(ApplicationArguments applicationArguments) {
         refreshKeys();
     }
 

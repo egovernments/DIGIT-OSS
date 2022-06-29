@@ -37,7 +37,7 @@ public class ProcessJSONUtil {
     private KeyStore keyStore;
 
     //The input object may be JSON Object or a JSON Array
-    public Object processJSON(Object inputObject, ModeEnum mode, MethodEnum method, String tenantId) throws Exception {
+    public Object processJSON(Object inputObject, ModeEnum mode, MethodEnum method, String tenantId) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
         Object outputObject;
 
         if(inputObject instanceof Map) {
@@ -51,7 +51,7 @@ public class ProcessJSONUtil {
     }
 
     //Navigate through JSON Object
-    private Map<String, Object> processJSONMap(Map jsonMap, ModeEnum mode, MethodEnum method, String tenantId) throws Exception {
+    private Map<String, Object> processJSONMap(Map jsonMap, ModeEnum mode, MethodEnum method, String tenantId) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
         HashMap<String, Object> outputJSONMap = new HashMap<>();
         Set<String> keySet = jsonMap.keySet();
         Iterator<String> keyNames = keySet.iterator();
@@ -69,7 +69,7 @@ public class ProcessJSONUtil {
     }
 
     //Navigate through JSON Array
-    private List<Object> processJSONList(List jsonList, ModeEnum mode, MethodEnum method, String tenantId) throws Exception {
+    private List<Object> processJSONList(List jsonList, ModeEnum mode, MethodEnum method, String tenantId) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
         ArrayList<Object> outputJSONList = new ArrayList<>();
         for(int i = 0; i < jsonList.size(); i++) {
             if(jsonList.get(i) instanceof List) {

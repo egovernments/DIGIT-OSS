@@ -15,8 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
 
 @Slf4j
 @Controller
@@ -39,32 +47,32 @@ public class CryptoApiController{
     }
 
     @RequestMapping(value="/crypto/v1/_encrypt", method = RequestMethod.POST)
-    public ResponseEntity<Object> cryptoEncryptPost(@Valid @RequestBody EncryptionRequest encryptionRequest) {
+    public ResponseEntity<Object> cryptoEncryptPost(@Valid @RequestBody EncryptionRequest encryptionRequest) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
         return new ResponseEntity<>(encryptionService.encrypt(encryptionRequest), HttpStatus.OK );
     }
 
     @RequestMapping(value="/crypto/v1/_decrypt", method = RequestMethod.POST)
-    public ResponseEntity<Object> cryptoDecryptPost(@Valid @RequestBody Object decryptionRequest) {
+    public ResponseEntity<Object> cryptoDecryptPost(@Valid @RequestBody Object decryptionRequest) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeySpecException, InvalidKeyException {
         return new ResponseEntity<>(encryptionService.decrypt(decryptionRequest), HttpStatus.OK );
     }
 
     @RequestMapping(value="/crypto/v1/_sign", method = RequestMethod.POST)
-    public ResponseEntity<SignResponse> cryptoSignPost(@Valid @RequestBody SignRequest signRequest) {
+    public ResponseEntity<SignResponse> cryptoSignPost(@Valid @RequestBody SignRequest signRequest) throws InvalidKeySpecException, NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         return new ResponseEntity<>(signatureService.hashAndSign(signRequest), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/crypto/v1/_verify", method = RequestMethod.POST)
-    public ResponseEntity<VerifyResponse> cryptoVerifyPost(@Valid @RequestBody VerifyRequest verifyRequest) {
+    public ResponseEntity<VerifyResponse> cryptoVerifyPost(@Valid @RequestBody VerifyRequest verifyRequest) throws InvalidKeySpecException, NoSuchAlgorithmException, SignatureException, InvalidKeyException {
         return new ResponseEntity<>(signatureService.hashAndVerify(verifyRequest), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/crypto/v1/_rotateallkeys", method=RequestMethod.POST)
-    public ResponseEntity<RotateKeyResponse> cryptoRotateAllKeys(@Valid @RequestBody RotateKeyRequest rotateKeyRequest) {
+    public ResponseEntity<RotateKeyResponse> cryptoRotateAllKeys(@Valid @RequestBody RotateKeyRequest rotateKeyRequest) throws NoSuchAlgorithmException {
         return new ResponseEntity<RotateKeyResponse>(keyManagementService.rotateAllKeys(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/crypto/v1/_rotatekey", method=RequestMethod.POST)
-    public ResponseEntity<RotateKeyResponse> cryptoRotateKeys(@Valid @RequestBody RotateKeyRequest rotateKeyRequest) {
+    public ResponseEntity<RotateKeyResponse> cryptoRotateKeys(@Valid @RequestBody RotateKeyRequest rotateKeyRequest) throws NoSuchAlgorithmException {
         return new ResponseEntity<RotateKeyResponse>(keyManagementService.rotateKey(rotateKeyRequest), HttpStatus.OK);
     }
 

@@ -52,7 +52,7 @@ public class KeyGenerator {
 
     //Returns a list of Symmetric Keys corresponding to the list of input tenants
     //The returned keys will be encrypted with the master password
-    public ArrayList<SymmetricKey> generateSymmetricKeys(ArrayList<String> tenantIds) throws Exception {
+    public ArrayList<SymmetricKey> generateSymmetricKeys(ArrayList<String> tenantIds) {
         int numberOfKeys = tenantIds.size();
         SecretKey[] keys = new SecretKey[numberOfKeys];
         byte[][] initialVectors = new byte[numberOfKeys][appProperties.getInitialVectorSize()];
@@ -76,7 +76,7 @@ public class KeyGenerator {
 
     //Returns a list of Asymmetric Keys corresponding to the list of input tenants
     //The returned keys will be encrypted with the master password
-    public ArrayList<AsymmetricKey> generateAsymmetricKeys(ArrayList<String> tenantIds) throws Exception {
+    public ArrayList<AsymmetricKey> generateAsymmetricKeys(ArrayList<String> tenantIds) throws NoSuchAlgorithmException {
         int numberOfKeys = tenantIds.size();
         KeyPair[] keys = new KeyPair[numberOfKeys];
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");

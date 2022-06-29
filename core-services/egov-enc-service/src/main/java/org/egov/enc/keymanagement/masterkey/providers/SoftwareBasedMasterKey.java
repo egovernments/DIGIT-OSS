@@ -1,9 +1,11 @@
 package org.egov.enc.keymanagement.masterkey.providers;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.enc.config.AppProperties;
 import org.egov.enc.keymanagement.masterkey.MasterKeyProvider;
 import org.egov.enc.utils.SymmetricEncryptionUtil;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -11,17 +13,19 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
+import javax.crypto.*;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
 
 @Component
+@Slf4j
 @Order(1)
 @ConditionalOnProperty( value = "master.password.provider", havingValue = "software")
 public class SoftwareBasedMasterKey implements MasterKeyProvider {
@@ -66,14 +70,26 @@ public class SoftwareBasedMasterKey implements MasterKeyProvider {
 
 
     @Override
-    public String encryptWithMasterPassword(String key) throws Exception {
-        byte[] encryptedKey = SymmetricEncryptionUtil.encrypt(key.getBytes(StandardCharsets.UTF_8), masterKey, masterInitialVector);
+    public String encryptWithMasterPassword(String key) throws CustomException {
+        byte[] encryptedKey = new byte[0];
+        try {
+            encryptedKey = SymmetricEncryptionUtil.encrypt(key.getBytes(StandardCharsets.UTF_8), masterKey, masterInitialVector);
+        } catch (Exception e) {
+            log.error(e.toString());
+            throw new CustomException(e.toString(), e.toString());
+        }
         return Base64.getEncoder().encodeToString(encryptedKey);
     }
 
     @Override
-    public String decryptWithMasterPassword(String encryptedKey) throws Exception {
-        byte[] decryptedKey = SymmetricEncryptionUtil.decrypt(Base64.getDecoder().decode(encryptedKey), masterKey, masterInitialVector);
+    public String decryptWithMasterPassword(String encryptedKey) throws CustomException {
+        byte[] decryptedKey = new byte[0];
+        try {
+            decryptedKey = SymmetricEncryptionUtil.decrypt(Base64.getDecoder().decode(encryptedKey), masterKey, masterInitialVector);
+        } catch (Exception e) {
+            log.error(e.toString());
+            throw new CustomException(e.toString(), e.toString());
+        }
         return new String(decryptedKey, StandardCharsets.UTF_8);
     }
 
