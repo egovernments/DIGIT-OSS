@@ -9,6 +9,7 @@ import org.egov.common.contract.request.User;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
+import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.oldProperty.OldUserDetailResponse;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.repository.ServiceRequestRepository;
@@ -115,6 +116,11 @@ public class CalculationService {
             String dobFormat = "yyyy-MM-dd";
             migrationUtils.parseResponse(responseMap,dobFormat);
             user = 	mapper.convertValue(users.get(0), OwnerInfo.class);
+            Boolean status = (Boolean) users.get(0).get("active");
+            if(status)
+                user.setStatus(Status.ACTIVE);
+            else
+                user.setStatus(Status.INACTIVE);
 
         } catch (Exception e) {
             throw new CustomException("EG_USER_SEARCH_ERROR", "Service returned null while fetching user");
