@@ -416,7 +416,7 @@ public class MigrationService {
      * @param responeMap LinkedHashMap got from user api response
      * @param dobFormat dob format (required because dob is returned in different format's in search and create response in user service)
      */
-    private void parseResponse(LinkedHashMap responeMap,String dobFormat){
+    public void parseResponse(LinkedHashMap responeMap,String dobFormat){
         List<LinkedHashMap> users = (List<LinkedHashMap>)responeMap.get("user");
         String format1 = "dd-MM-yyyy HH:mm:ss";
         if(users!=null){

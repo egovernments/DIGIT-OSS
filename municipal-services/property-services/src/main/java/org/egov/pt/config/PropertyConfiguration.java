@@ -357,4 +357,7 @@ public class PropertyConfiguration {
     @Value("${inbox.property.search.allowed}")
     private Boolean isInboxSearchAllowed;
 
+    @Value("${egov.internal.microservice.user.uuid}")
+    private String egovInternalMicroserviceUserUuid;
+
 }
