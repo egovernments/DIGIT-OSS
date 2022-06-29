@@ -10,7 +10,7 @@ import {
   PTLinks,
   PTComponents,
 } from "@egovernments/digit-ui-module-pt";
-// import { MCollectModule, MCollectLinks, initMCollectComponents } from "@egovernments/digit-ui-module-mcollect";
+import { MCollectModule, MCollectLinks, initMCollectComponents } from "@egovernments/digit-ui-module-mcollect";
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import {
   PaymentModule,
@@ -28,7 +28,7 @@ import {
   TLLinks,
   initTLComponents,
 } from "@egovernments/digit-ui-module-tl";
-// import { initReceiptsComponents, ReceiptsModule } from "@egovernments/digit-ui-module-receipts";
+import { initReceiptsComponents, ReceiptsModule } from "@egovernments/digit-ui-module-receipts";
 import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
@@ -68,21 +68,21 @@ window.Digit.ComponentRegistryService.setupRegistry({
   PaymentModule,
   PaymentLinks,
   ...PTComponents,
-  // MCollectLinks,
-  // MCollectModule,
+  MCollectLinks,
+  MCollectModule,
   HRMSModule,
   TLModule,
   TLLinks,
-  // ReceiptsModule
+  ReceiptsModule
 });
 
 initPGRComponents();
 initFSMComponents();
 initDSSComponents();
-// initMCollectComponents();
+initMCollectComponents();
 initHRMSComponents();
 initTLComponents();
-// initReceiptsComponents();
+initReceiptsComponents();
 initOBPSComponents();
 initNOCComponents();
 initEngagementComponents();
