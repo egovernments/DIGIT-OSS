@@ -1,4 +1,4 @@
-numpy==1.19.1
+numpy==1.22.2
 autocorrect==2.0.0
 certifi==2020.6.20
 chardet==3.0.4
@@ -12,7 +12,7 @@ h2==3.2.0
 hpack==3.0.0
 hstspreload==2020.9.9
 httpcore==0.9.1
-httpx==0.13.3
+httpx==0.23.0
 hyperframe==5.2.0
 idna==2.10
 itsdangerous==1.1.0
