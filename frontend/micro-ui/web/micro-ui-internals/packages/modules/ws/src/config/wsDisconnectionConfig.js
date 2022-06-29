@@ -27,7 +27,17 @@ export const newConfig = [
         withoutLabel: true,
         nextStep: "check",
         hideInEmployee: true,
-      }        
+      },
+      {         
+        route: "check",
+        component: "WSDisconnectionCheckPage",
+        key: "WSDisconnectionCheckPage",
+        type: "component",
+        isMandatory: true,
+        withoutLabel: true,
+        nextStep: "check",
+        hideInEmployee: true,
+      }         
   ]
 }
 ]

@@ -50,9 +50,6 @@ const ConnectionDetails = () => {
   const closeBillToast = () => {
     setshowActionToast(null);
   };
-  setTimeout(() => {
-    closeBillToast();
-  }, 10000);
 
   const { data: generatePdfKey } = Digit.Hooks.useCommonMDMS(tenantId, "common-masters", "ReceiptKey", {
     select: (data) => data["common-masters"]?.uiCommonPay?.filter(({ code }) => "WS"?.includes(code))[0]?.receiptKey || "consolidatedreceipt",
@@ -150,13 +147,19 @@ const ConnectionDetails = () => {
         type: "error",
         label: "CONNECTION_INPROGRESS_LABEL",
       });
+      setTimeout(() => {
+        closeBillToast();
+      }, 5000);
     }
-    if (paymentDetails?.data?.Bill?.length === 0) {
-      let pathname = `/digit-ui/citizen/ws/disconnection-application`;
-      history.push(`${pathname}`);
-    } else if (paymentDetails?.data?.Bill?.[0]?.totalAmount !== 0) {
-      setshowModal(true);
+    else if(state?.applicationStatus === "CONNECTION_ACTIVATED"){
+      if (paymentDetails?.data?.Bill?.length === 0 ) {
+        let pathname = `/digit-ui/citizen/ws/disconnect-application`;
+        history.push(`${pathname}`);
+      } else if (paymentDetails?.data?.Bill?.[0]?.totalAmount !== 0) {
+        setshowModal(true);
+      }
     }
+    
   };
 
   function onActionSelect() {

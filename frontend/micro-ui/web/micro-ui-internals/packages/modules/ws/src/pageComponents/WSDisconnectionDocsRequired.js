@@ -3,19 +3,15 @@ import { Card, CardHeader, SubmitBar, CitizenInfoLabel, CardText, Loader, CardSu
 import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
-const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => {
+const WSDisconnectionDocsRequired = ({ userType }) => {
   const { t } = useTranslation();
-  const history = useHistory()
+  const history = useHistory();
   const match = useRouteMatch();
   const tenantId = Digit.ULBService.getStateId();
   const goNext = () => {
-    onSelect("DocsReq", "");
   }
 
-  sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
-  sessionStorage.removeItem("IsDetailsExists");
-
-  const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId, "Disconnection");
+  const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId, "DisconnectionDocuments");
 
   if (userType === "citizen") {
     return (
@@ -30,7 +26,7 @@ const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => 
           {wsDocsLoading ?
             <Loader /> :
             <Fragment>
-              {wsDocs?.Disconnection?.map((doc, index) => (
+              {wsDocs?.DisconnectionDocuments?.map((doc, index) => (
                 <div>
                   <div style={{ fontWeight: 700, marginBottom: "8px" }} key={index}>
                     <div style={{ display: "flex" }}>
@@ -45,7 +41,9 @@ const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => 
               ))}
             </Fragment>
           }
-          <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={goNext} />
+          <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={() => {
+                history.push(match.path.replace("docsrequired", "application-form"));
+              }} />
         </Card>
       </Fragment>
     );
@@ -58,7 +56,7 @@ const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => 
         {wsDocsLoading ?
           <Loader /> :
           <div id="documents-div">
-            {wsDocs?.Disconnection?.map((doc, index) => (
+            {wsDocs?.DisconnectionDocuments?.map((doc, index) => (
               <div key={index} style={{ marginTop: "16px" }}>
                 <CardSectionHeader style={{ marginBottom: "16px", lineHeight: "28px", fontSize: "24px" }}>{t(doc?.code.replace('.', '_'))}</CardSectionHeader>
                 {doc.dropdownData && doc.dropdownData.length > 1 && <p style={{ lineHeight: "24px", fontSize: "16px" }}>{t(`${doc?.code.replace('.', '_')}_DESCRIPTION`)}</p>}
