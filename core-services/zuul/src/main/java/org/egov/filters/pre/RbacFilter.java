@@ -9,7 +9,6 @@ import org.egov.Utils.ExceptionUtils;
 import org.egov.Utils.Utils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.contract.User;
-import org.egov.exceptions.CustomException;
 import org.egov.model.AuthorizationRequest;
 import org.egov.model.AuthorizationRequestWrapper;
 import org.egov.tracer.model.CustomException;

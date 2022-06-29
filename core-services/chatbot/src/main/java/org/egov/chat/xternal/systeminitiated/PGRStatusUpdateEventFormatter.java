@@ -18,6 +18,7 @@ import org.egov.chat.config.KafkaStreamsConfig;
 import org.egov.chat.post.systeminitiated.SystemInitiatedEventFormatter;
 import org.egov.chat.util.LocalizationService;
 import org.egov.chat.util.URLShorteningSevice;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -167,7 +168,7 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
         return chatNodes;
     }
 
-    private ObjectNode createChatNodeForUser(JsonNode event) throws Exception {
+    private ObjectNode createChatNodeForUser(JsonNode event) throws CustomException {
         String mobileNumber = event.at(SERVICE_CITIZEN_MOBILENO_PATH).asText();
         String uuid = event.at(SERVICE_CITIZEN_UUID_PATH).asText();
         ObjectNode chatNode = objectMapper.createObjectNode();

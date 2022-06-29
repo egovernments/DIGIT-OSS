@@ -14,7 +14,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import org.egov.tracer.model.CustomException;
 
 public class ExceptionUtils {
     private static final Logger logger = LoggerFactory.getLogger(ExceptionUtils.class);
@@ -81,12 +80,12 @@ public class ExceptionUtils {
     }
 
     public static void RaiseException(Throwable ex) {
-        throw new CustomException(ex.toString(),ex.toString());
+        throw new org.egov.tracer.model.CustomException(ex.toString(), ex.toString());
 
     }
 
     public static void raiseCustomException(HttpStatus status, String message) {
-        throw new CustomException( CODE_CUSTOM_EXCEPTION,message);
+        throw new org.egov.tracer.model.CustomException(CODE_CUSTOM_EXCEPTION, message);
     }
 
     public static void raiseErrorFilterException( RequestContext ctx) {

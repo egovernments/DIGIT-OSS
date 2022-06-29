@@ -74,7 +74,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.egov.tracer.model.CustomException;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -249,7 +248,7 @@ public class BoundaryService {
 			}
 			return Optional.empty();
 		} catch (final Exception e) {
-			throw new CustomException(e.toString(),"Error occurred while fetching boundary from GIS data");
+			throw new org.egov.tracer.model.CustomException(e.toString(), "Error occurred while fetching boundary from GIS data");
 		}
 	}
 

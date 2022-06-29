@@ -8,7 +8,6 @@ import org.egov.chat.config.ApplicationProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.egov.tracer.model.CustomException;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +49,7 @@ public class KafkaTopicCreater {
                     log.info("Topic already exists : " + newTopic.name());
                 } else {
                     log.error("Error while creating topic : " + newTopic.name(), e);
-                    throw new CustomException(e.toString(),e.getMessage());
+                    throw new RuntimeException(e.getMessage(), e);
                 }
             }
         }
