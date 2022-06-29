@@ -974,7 +974,7 @@ class FormWizardDataEntry extends Component {
     const { location, finalData } = this.props;
     const { search } = location;
     const isCompletePayment = getQueryValue(search, "isCompletePayment");
-    const isAssesment = getQueryValue(search, "newreassessment");
+    const isAssesment = getQueryValue(search, "assessment");
     switch (selected) {
       case 0:
         return (
