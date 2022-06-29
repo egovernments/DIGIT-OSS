@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
-    "build": "microbundle-crl --no-compress --format modern,cjs",
+    "build": "microbundle-crl --compress --format modern,cjs",
     "prepublish": "yarn build"
   },
   "dependencies": {
