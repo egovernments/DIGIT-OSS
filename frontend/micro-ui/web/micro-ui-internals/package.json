@@ -43,7 +43,7 @@
     "dev:reports": "cd packages/modules/reports && yarn start",
     "dev:example": "cd example && yarn start",
     "build": "run-p build:**",
-    "buildParallel":  "concurrently \"yarn:build:libraries\" \"yarn:build:components\" \"yarn:build:common\" \"yarn:build:commonPt\" \"yarn:build:core\" \"yarn:build:pgr\" \"yarn:build:hrms\" \"yarn:build:obps\" \"yarn:build:pt\" \"yarn:build:tl\" \"yarn:build:engagement\" \"yarn:build:noc\" \"yarn:build:ws\" \"yarn:build:bills\"",
+    "buildParallel":  "concurrently \"yarn:build:libraries\" \"yarn:build:components\" \"yarn:build:common\" \"yarn:build:commonPt\" \"yarn:build:core\" \"yarn:build:pgr\" \"yarn:build:hrms\" \"yarn:build:obps\" \"yarn:build:pt\" \"yarn:build:tl\" \"yarn:build:engagement\" \"yarn:build:noc\" \"yarn:build:ws\" \"yarn:build:bills\" \"yarn:build:fsm\"",
     "build:libraries": "cd packages/libraries && yarn build",
     "build:components": "cd packages/react-components && yarn build",
     "build:common": "cd packages/modules/common && yarn build",
