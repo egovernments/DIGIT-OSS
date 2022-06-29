@@ -18,6 +18,15 @@ const useSearch = (filters, config) => {
         limit,
         offset
     }
+
+    //clearing out empty string params from payload
+    Object.keys(finalFilters).forEach(key => {
+        if (finalFilters[key] === '') {
+            delete finalFilters[key];
+        }
+    });
+
+
     return useQuery(["search_surveys", title, tenantIds, postedBy, status, offset, limit], () => Surveys.search(finalFilters), { ...config });
 };
 

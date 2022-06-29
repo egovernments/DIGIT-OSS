@@ -60,7 +60,7 @@ function PropertyOwners({ owners }) {
               ></div>
               {owner?.values?.map((value, index) => {
                 if (value.map === true && value.value !== "N/A") {
-                  return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
+                  return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" privacy={value?.privacy} />} />;
                 }
                 return (
                   <span>
@@ -72,6 +72,11 @@ function PropertyOwners({ owners }) {
                       caption={value.caption}
                       className="border-none"
                       textStyle={value.textStyle}
+                      /*
+                        Feature :: Privacy
+                        privacy object set to the Row Component
+                       */
+                      privacy={value?.privacy}
                       // TODO, Later will move to classes
                       rowContainerStyle={rowContainerStyle}
                     />

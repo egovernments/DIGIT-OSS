@@ -23,7 +23,7 @@ export const mdmsData = async (tenantId,t) => {
   return obj
   }
 
-export const convertEpochToDateDMY = (dateEpoch) => {
+export const convertEpochToDateDMY = (dateEpoch, isModify = false) => {
   if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
     return "NA";
   }
@@ -33,7 +33,8 @@ export const convertEpochToDateDMY = (dateEpoch) => {
   let year = dateFromApi.getFullYear();
   month = (month > 9 ? "" : "0") + month;
   day = (day > 9 ? "" : "0") + day;
-  return `${day}/${month}/${year}`;
+  // return `${day}-${month}-${year}`;
+  return isModify ? `${year}-${month}-${day}` : `${day}-${month}-${year}`;
 };
 
 export const convertEpochToDate = (dateEpoch) => {
@@ -102,6 +103,23 @@ export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   try {
     const parts = dateString.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
     const DateObj = new Date(Date.UTC(parts[1], parts[2] - 1, parts[3]));
+    DateObj.setMinutes(DateObj.getMinutes() + DateObj.getTimezoneOffset());
+    if (dayStartOrEnd === "dayend") {
+      DateObj.setHours(DateObj.getHours() + 24);
+      DateObj.setSeconds(DateObj.getSeconds() - 1);
+    }
+    return DateObj.getTime();
+  } catch (e) {
+    return dateString;
+  }
+};
+
+export const convertDateToEpochNew = (dateString, dayStartOrEnd = "dayend") => {
+  //example input format : "2018-10-02"
+  try {
+    const parts = dateString.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+    const DateObj = new Date(Date.UTC(parts[1], parts[3] - 1, parts[2]));
+
     DateObj.setMinutes(DateObj.getMinutes() + DateObj.getTimezoneOffset());
     if (dayStartOrEnd === "dayend") {
       DateObj.setHours(DateObj.getHours() + 24);
@@ -265,7 +283,7 @@ export const updatePayloadOfWS = async (data, type) => {
     },
     documents: JSON.parse(sessionStorage.getItem("WS_DOCUMENTS_INOF")),
     property: JSON.parse(sessionStorage.getItem("WS_PROPERTY_INOF")),
-    connectionType: type === "WATER" ? null : "Non Metered",
+    connectionType: type === "WATER" ? data?.connectionType : "Non Metered",
   };
   return payload;
 };
@@ -487,6 +505,7 @@ export const convertToSWUpdate = (data) => {
   let formdata = {
     SewerageConnection: {
       ...data?.SewerageConnectionResult?.SewerageConnections?.[0],
+      connectionType:"Non Metered",
       documents: [...data?.documents?.documents],
       processInstance: {
         action: "SUBMIT_APPLICATION",
@@ -745,7 +764,6 @@ export const convertApplicationData = (data, serviceType, modify = false, editBy
     },
   ];
 
-
   const ConnectionHolderDetails =
   data?.applicationData?.connectionHolders?.length > 0
     ? [
@@ -844,20 +862,20 @@ export const convertApplicationData = (data, serviceType, modify = false, editBy
   if (modify) {
     const activationDetails = [
       {
-        meterId: data?.applicationData?.meterId || "",
+        meterId: data?.applicationData?.meterId ? Number(data?.applicationData?.meterId) : "",
         meterInstallationDate: data?.applicationData?.meterInstallationDate
-          ? convertEpochToDateDMY(data?.applicationData?.meterInstallationDate)
+          ? convertEpochToDateDMY(data?.applicationData?.meterInstallationDate, true)
           : null,
-        meterInitialReading: data?.applicationData?.additionalDetails?.initialMeterReading || "",
+        meterInitialReading: data?.applicationData?.additionalDetails?.initialMeterReading ? Number(data?.applicationData?.additionalDetails?.initialMeterReading) : "",
         connectionExecutionDate: data?.applicationData?.connectionExecutionDate
-          ? convertEpochToDateDMY(data?.applicationData?.connectionExecutionDate)
+          ? convertEpochToDateDMY(data?.applicationData?.connectionExecutionDate, true)
           : null,
       },
     ];
 
     if (window.location.href.includes("modify-application-edit"))
       activationDetails[0].dateEffectiveFrom = data?.applicationData?.dateEffectiveFrom
-        ? convertEpochToDateDMY(data?.applicationData?.dateEffectiveFrom)
+        ? convertEpochToDateDMY(data?.applicationData?.dateEffectiveFrom, true)
         : null;
 
     const sourceSubDataValue = data?.applicationData?.waterSource
@@ -924,8 +942,45 @@ export const convertApplicationData = (data, serviceType, modify = false, editBy
       InfoLabel: "InfoLabel"
     }
 
+    let plumberDetails = [
+      {
+        detailsProvidedBy: data?.applicationData?.additionalDetails?.detailsProvidedBy
+        ? {
+            i18nKey: data?.applicationData?.additionalDetails?.detailsProvidedBy,
+            code: data?.applicationData?.additionalDetails?.detailsProvidedBy,
+            size: data?.applicationData?.additionalDetails?.detailsProvidedBy,
+          }
+        : "",
+        plumberName: data?.applicationData?.plumberInfo?.[0].name,
+        plumberMobileNo: data?.applicationData?.plumberInfo?.[0].mobileNumber,
+        plumberLicenseNo: data?.applicationData?.plumberInfo?.[0].licenseNo
+      }
+    ];
+
+    let roadCuttingDetails = data?.applicationData?.roadCuttingInfo ? data?.applicationData?.roadCuttingInfo?.map((rc, index) => {
+      return {
+        key: index + '_' + Date.now(),
+        roadType: {
+          i18nKey: `WS_ROADTYPE_`+rc?.roadType,
+          code: rc?.roadType,
+        },
+        area: rc?.roadCuttingArea,
+      }
+    }) : [
+      {
+        key: 99999 + '_' + Date.now(),
+        roadType: {
+          i18nKey: '',
+          code: '',
+        },
+        area: '',
+      }
+    ];
+
     if(editByConfig) { 
       payload.connectionDetails = [connectionDetails];
+      payload.plumberDetails = plumberDetails;
+      payload.roadCuttingDetails = roadCuttingDetails;
     }
   }
 
@@ -973,7 +1028,10 @@ export const convertEditApplicationDetails = async (data, appData, actionData) =
 };
 
 export const getConvertedDate = async (dateOfTime) => {
-  let dateOfReplace = stringReplaceAll(dateOfTime, "/", "-");
+  const splitStr = dateOfTime?.split("-")
+  const dateOfTimeReversedArr = splitStr?.reverse()
+  const dateOfTimeReversed = dateOfTimeReversedArr?.join("-")
+  let dateOfReplace = stringReplaceAll(dateOfTimeReversed, "/", "-");
   let formattedDate = "";
   if (dateOfReplace.split("-")[2] > 1900) {
     formattedDate = `${dateOfReplace.split("-")[2]}-${dateOfReplace.split("-")[1]}-${dateOfReplace.split("-")[0]}`;
@@ -1006,6 +1064,7 @@ export const convertModifyApplicationDetails = async (data, appData, actionData 
     formData.additionalDetails.initialMeterReading = data?.activationDetails?.[0]?.meterInitialReading;
   if (data?.activationDetails?.[0]?.connectionExecutionDate)
     formData.connectionExecutionDate = await getConvertedDate(data?.activationDetails?.[0]?.connectionExecutionDate);
+    
   if (data?.activationDetails?.[0]?.dateEffectiveFrom)
     formData.dateEffectiveFrom = await getConvertedDate(data?.activationDetails?.[0]?.dateEffectiveFrom);
 

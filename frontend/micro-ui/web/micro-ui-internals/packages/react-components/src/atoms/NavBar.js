@@ -26,6 +26,7 @@ import {
   EditPencilIcon,
   LanguageIcon,
 } from "./svgindex";
+import { BirthIcon, DeathIcon, FirenocIcon } from "..";
 
 const IconsObject = {
   CommonPTIcon: <PTIcon className="icon" />,
@@ -35,6 +36,9 @@ const IconsObject = {
   PGRIcon: <PGRIcon className="icon" />,
   FSMIcon: <FSMIcon className="icon" />,
   WSIcon: <WSICon className="icon" />,
+  BirthIcon: <BirthIcon className="icon" />,
+  DeathIcon: <DeathIcon className="icon" />,
+  FirenocIcon: <FirenocIcon className="icon" />,
   MCollectIcon: <MCollectIcon className="icon" />,
   BillsIcon: <CollectionIcon className="icon" />,
   home: <HomeIcon className="icon" />,

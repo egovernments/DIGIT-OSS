@@ -25,12 +25,13 @@ import { Link, useLocation } from "react-router-dom";
 import WSWFApplicationTimeline from "../../../pageComponents/WSWFApplicationTimeline";
 import WSDocument from "../../../pageComponents/WSDocument";
 import getPDFData from "../../../utils/getWSAcknowledgementData";
+import { stringReplaceAll } from "../../../utils";
 
 const ConnectionDetails = () => {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
   const history = useHistory();
-  const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   const [showOptions, setShowOptions] = useState(false);
   const applicationNobyData = window.location.href.substring(window.location.href.indexOf("WS_"));
   const { state = {} } = useLocation();
@@ -205,12 +206,12 @@ const ConnectionDetails = () => {
       <div className="hide-seperator">
         <Card>
           <StatusTable>
-            <Row className="border-none" label={t("WS_MYCONNECTIONS_CONSUMER_NO")} text={state?.connectionNo} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_MYCONNECTIONS_CONSUMER_NO")} text={state?.connectionNo} />
             <Row
               className="border-none"
               label={t("WS_SERVICE_NAME_LABEL")}
               text={t(`WS_APPLICATION_TYPE_${state?.applicationType}`)}
-              textStyle={{ whiteSpace: "pre" }}
+              textStyle={{ wordBreak : "break-word" }}
             />
             <Row className="border-none" label={t("WS_STATUS")} text={state?.status || "NA"} textStyle={{ whiteSpace: "pre" }} />
           </StatusTable>
@@ -246,13 +247,15 @@ const ConnectionDetails = () => {
                 <Row
                   className="border-none"
                   label={t("WS_SERV_DETAIL_WATER_SOURCE")}
-                  text={state?.waterSource || "NA"}
+                  text={t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(state?.waterSource?.split(".")?.[0], ".", "_")}`) ||
+                  t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(state?.waterSource, ".", "_")}`) ||
+                  t("CS_NA")}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row
                   className="border-none"
                   label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")}
-                  text={state?.waterSource || "NA"}
+                  text={t(state?.waterSource?.split(".")?.[1]) || t("CS_NA")}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row
@@ -287,7 +290,7 @@ const ConnectionDetails = () => {
           </StatusTable>
           <CardHeader styles={{ fontSize: "28px" }}>{t("WS_COMMON_PROPERTY_DETAILS")}</CardHeader>
           <StatusTable>
-            <Row className="border-none" label={t("WS_PROPERTY_ID_LABEL")} text={state?.propertyId} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_PROPERTY_ID_LABEL")} text={state?.propertyId}  />
             <Row
               className="border-none"
               label={t("WS_OWN_DETAIL_OWN_NAME_LABEL")}
@@ -298,7 +301,7 @@ const ConnectionDetails = () => {
               className="border-none"
               label={t("WS_OWN_DETAIL_CROSADD")}
               text={state?.property?.owners?.[0]?.permanentAddress || t("CS_NA")}
-              textStyle={{ whiteSpace: "pre" }}
+              textStyle={{ wordBreak : "break-word" }}
             />
             <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${state?.propertyId}&tenantId=${state?.tenantId}`}>
               <LinkButton style={{ textAlign: "left", marginBottom: "10px", marginTop: "5px" }} label={t("WS_VIEW_PROPERTY")} />

@@ -1,14 +1,56 @@
-import { PrivateRoute } from "@egovernments/digit-ui-react-components";
+import { PrivateRoute,BreadCrumb } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Switch, useLocation } from "react-router-dom";
 import DownloadBillInbox from "./DownloadBill";
-import GroupBillInbox from "./GroupBill";
+import GroupBillInbox from "./GroupBill/index";
 
 import ResponseCancelBill from "./ResponseCancelBill";
 import BillDetailsv1 from "./BillDetailsv1";
 import CancelBill from "./CancelBill";
+import GroupBill from "./GroupBill";
+
 import DownloadBill from "./DownloadBill";
+
+const BILLSBreadCrumbs = ({ location }) => {
+  const { t } = useTranslation();
+
+  const search = useLocation().search;
+  
+  const fromScreen = new URLSearchParams(search).get("from") || null;
+
+  const crumbs = [
+    {
+      path: "/digit-ui/employee",
+      content: t("ES_COMMON_HOME"),
+      show: true,
+    },
+    {
+      path: "/digit-ui/employee/bills/cancel-bill",
+      content: t("ABG_CANCEL_BILL"),
+      show: location.pathname.includes("/cancel-bill") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/bills/bill-details",
+      content: fromScreen ? `${t(fromScreen)} / ${t("ABG_BILL_DETAILS_HEADER")}` : t("ABG_BILL_DETAILS_HEADER"),
+      show: location.pathname.includes("/bill-details") ? true : false,
+      isBack: fromScreen && true,
+    },
+    {
+      path: "/digit-ui/employee/bills/group-bill",
+      content: t("ABG_COMMON_HEADER"),
+      show: location.pathname.includes("/group-bill") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/bills/inbox",
+      content: t("ABG_SEARCH_BILL_COMMON_HEADER"),
+      show: location.pathname.includes("/inbox") ? true : false,
+    }
+    
+  ];
+
+  return <BreadCrumb crumbs={crumbs} spanStyle={{ maxWidth: "min-content" }} />;
+};
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
@@ -36,22 +78,14 @@ const EmployeeApp = ({ path, url, userType }) => {
       <React.Fragment>
         <div className="ground-container">
           <p className="breadcrumb" style={{ marginLeft: mobileView ? "2vw" : "revert" }}>
-            <Link to="/digit-ui/employee" style={{ cursor: "pointer", color: "#666" }}>
-              {t("ES_COMMON_HOME")}
-            </Link>{" "}
-            /{" "}
-            <span>
-              {window?.location?.pathname === "/digit-ui/employee/bills/inbox"
-                ? t("ABG_SEARCH_BILL_COMMON_HEADER")
-                : t("ABG_SEARCH_BILL_COMMON_HEADER")}
-            </span>
+            <BILLSBreadCrumbs location={location} />
           </p>
           <PrivateRoute
             path={`${path}/inbox`}
             component={() => <BillInbox parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
           />
           <PrivateRoute
-            path={`${path}/group-bill`}
+            path={`${path}/group-billold`}
             component={() => (
               <GroupBillInbox
                 parentRoute={path}
@@ -77,6 +111,10 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute
             path={`${path}/cancel-bill`}
             component={() => <CancelBill parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
+          />
+          <PrivateRoute
+            path={`${path}/group-bill`}
+            component={() => <GroupBill parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
           />
           <PrivateRoute
             path={`${path}/response-cancelBill`}

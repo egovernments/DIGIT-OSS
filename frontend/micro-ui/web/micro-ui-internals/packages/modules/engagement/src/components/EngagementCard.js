@@ -157,7 +157,7 @@ const EngagementCard = () => {
     result = (
       <>
         {engagementSubModulesProps.map((propsForModuleCard, index) => (
-          <EmployeeModuleCard key={index} {...propsForModuleCard} />
+          <EmployeeModuleCard key={index} longModuleName={true} {...propsForModuleCard} />
         ))}
       </>
     );

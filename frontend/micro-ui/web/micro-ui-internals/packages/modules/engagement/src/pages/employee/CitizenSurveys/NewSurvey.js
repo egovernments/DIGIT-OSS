@@ -16,6 +16,16 @@ export const answerTypeEnum = {
 
 /**TODO NRJ-egov handle this by setting correct state inside the surveyFormMaker */
 export const mapQuestions = (questions =[]) =>{
+  //Added this condition to avoid a bug in which the question type is set as undefined when question type dropdown is not touched and create survey form is submitted. 
+  questions = questions.map(ques=>{
+    if(!ques?.formConfig?.type){
+      return {
+        ...ques,
+        formConfig: { ...ques?.formConfig, type:"Short Answer"}
+      }
+    }
+    return ques
+  })
   if(!questions.length) return;
   return questions.map(({formConfig},index)=>{
       const {options:choices, questionStatement,required, type:stringType} = formConfig;

@@ -160,14 +160,48 @@ export const PTSearch = {
               status: owner.status,
               title: "ES_OWNER",
               values: [
-                { title: "PT_OWNERSHIP_INFO_NAME", value: owner?.name },
-                { title: "PT_OWNERSHIP_INFO_GENDER", value: owner?.gender },
-                { title: "PT_OWNERSHIP_INFO_MOBILE_NO", value: owner?.mobileNumber },
-                { title: "PT_OWNERSHIP_INFO_USER_CATEGORY", value: `COMMON_MASTERS_OWNERTYPE_${owner?.ownerType}` || "NA" },
-                { title: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", value: owner?.fatherOrHusbandName },
+                {
+                  title: "PT_OWNERSHIP_INFO_NAME",
+                  value: owner?.name,
+                  /* 
+                  Feature :: Privacy
+                  
+                  Desc :: if field requires a demasking option then privacy object has to set with uuid, fieldName, model
+                  */
+                  privacy: { uuid: owner?.uuid, fieldName: "name", model: "User" },
+                },
+                { title: "PT_OWNERSHIP_INFO_GENDER", value: owner?.gender, privacy: { uuid: owner?.uuid, fieldName: "gender", model: "User" } },
+                {
+                  title: "PT_OWNERSHIP_INFO_MOBILE_NO",
+                  value: owner?.mobileNumber,
+                  privacy: { uuid: owner?.uuid, fieldName: "mobileNumber", model: "User" },
+                },
+                {
+                  title: "PT_OWNERSHIP_INFO_USER_CATEGORY",
+                  value: `COMMON_MASTERS_OWNERTYPE_${owner?.ownerType}` || "NA",
+                  privacy: { uuid: owner?.uuid, fieldName: "ownerType", model: "User" },
+                },
+                {
+                  title: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME",
+                  value: owner?.fatherOrHusbandName,
+                  privacy: { uuid: owner?.uuid, fieldName: "fatherOrHusbandName", model: "User" },
+                },
                 { title: "PT_FORM3_OWNERSHIP_TYPE", value: response?.ownershipCategory },
-                { title: "PT_OWNERSHIP_INFO_EMAIL_ID", value: owner?.emailId },
-                { title: "PT_OWNERSHIP_INFO_CORR_ADDR", value: owner?.correspondenceAddress },
+                {
+                  title: "PT_OWNERSHIP_INFO_EMAIL_ID",
+                  value: owner?.emailId,
+                  privacy: { uuid: owner?.uuid, fieldName: "emailId", model: "User", hide: !(owner?.emailId && owner?.emailId !== "NA") },
+                },
+                {
+                  title: "PT_OWNERSHIP_INFO_CORR_ADDR",
+                  value: owner?.correspondenceAddress || owner?.permanentAddress,
+                  privacy: {
+                    uuid: owner?.uuid,
+                    fieldName: owner?.permanentAddress ? "permanentAddress" : "correspondenceAddress",
+                    model: "User",
+                    hide: !(owner?.permanentAddress || owner?.correspondenceAddress),
+                  },
+                },
               ],
             };
           }),

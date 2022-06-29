@@ -63,7 +63,14 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
       setShowToast({ error: true, label: "PT_ENTER_PROPERTY_ID_AND_SEARCH" });
     }
     setSearchPropertyId(propertyId);
-    history.push(`/digit-ui/employee/ws/new-application?propertyId=${propertyId}`)
+    if(window.location.pathname.includes("/tl/new-application")){
+      history.push(`/digit-ui/employee/tl/new-application?propertyId=${propertyId}`)
+      const scrollConst =  1600 
+      setTimeout(() => window.scrollTo(0, scrollConst), 0);
+    }
+    
+    else if (window.location.pathname.includes("/ws/new-application"))
+      history.push(`/digit-ui/employee/ws/new-application?propertyId=${propertyId}`)
   };
 
   if (isEditScreen) {

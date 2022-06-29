@@ -4,6 +4,7 @@ import * as dss from "./dss";
 import * as locale from "./locale";
 import * as obps from "./obps";
 import * as pt from "./pt";
+import * as privacy from "./privacy";
 import PDFUtil, { downloadReceipt ,downloadPDFFromLink,downloadBill ,getFileUrl} from "./pdf";
 import getFileTypeFromFileStoreURL from "./fileType";
 
@@ -265,6 +266,7 @@ const swAccess = () => {
   return SW_ACCESS?.length > 0;
 };
 
+
 export default {
   pdf: PDFUtil,
   downloadReceipt,
@@ -298,5 +300,7 @@ export default {
   getUnique,
   tlAccess,
   wsAccess,
-  swAccess
+  swAccess,
+
+  ...privacy
 };
