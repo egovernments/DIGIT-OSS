@@ -43,6 +43,7 @@
     "dev:reports": "cd packages/modules/reports && yarn start",
     "dev:example": "cd example && yarn start",
     "build": "run-p build:**",
+    "buildParallel":  "concurrently \"yarn:build:libraries\" \"yarn:build:components\" \"yarn:build:common\" \"yarn:build:commonPt\" \"yarn:build:core\" \"yarn:build:pgr\" \"yarn:build:hrms\" \"yarn:build:obps\" \"yarn:build:pt\" \"yarn:build:tl\" \"yarn:build:engagement\" \"yarn:build:noc\" \"yarn:build:ws\" \"yarn:build:bills\"",
     "build:libraries": "cd packages/libraries && yarn build",
     "build:components": "cd packages/react-components && yarn build",
     "build:common": "cd packages/modules/common && yarn build",
@@ -67,14 +68,15 @@
   "devDependencies": {
     "husky": "7.0.4",
     "lint-staged": "12.3.7",
-    "npm-run-all": "4.1.5",
-    "prettier": "2.1.2"
+    "prettier": "2.1.2",
+    "npm-run-all": "4.1.5"
   },
   "husky": {},
   "lint-staged": {
     "*.{js,css,md}": "prettier --write"
   },
   "dependencies": {
+    "concurrently": "^7.2.2",
     "lodash": "4.17.21",
     "microbundle-crl": "0.13.11"
   }
