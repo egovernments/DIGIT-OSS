@@ -155,7 +155,7 @@ const ApplicationDetails = (props) => {
   };
 
   if (isLoading || isEnableLoader) {
-    return <Loader />;
+    return ( <Loader></Loader>);
   }
 
   return (

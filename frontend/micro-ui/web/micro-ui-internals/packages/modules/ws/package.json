@@ -11,6 +11,7 @@
   "scripts": {
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "build": "microbundle-crl --compress --format cjs",
+    "build-webpack": "webpack --mode=production --node-env=production",
     "prepublish": "yarn build"
   },
   "peerDependencies": {

@@ -9,7 +9,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "microbundle-crl --compress --format modern,cjs",
+      "build": "microbundle-crl --compress --format modern,cjs",
+ "build-webpack": "webpack --mode=production --node-env=production",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepublish": "yarn build"
   },

@@ -10,7 +10,8 @@
   },
   "scripts": {
     "example": "cd example && npm run start",
-    "build": "microbundle-crl --compress --format modern,cjs",
+      "build": "microbundle-crl --compress --format modern,cjs",
+    "build-webpack": "webpack --mode=production --node-env=production",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepare": "yarn build",
     "predeploy": "cd example && yarn install && yarn run build",
