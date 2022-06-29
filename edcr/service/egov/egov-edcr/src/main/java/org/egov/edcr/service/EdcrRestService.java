@@ -796,9 +796,8 @@ public class EdcrRestService {
     public Integer fetchPlainCount(final EdcrCountCriteria edcrRequest, final RequestInfoWrapper reqInfoWrapper) {
 
         City stateCity = cityService.fetchStateCityDetails();
+        final Map<String, String> params = new ConcurrentHashMap<>();
         if (edcrRequest != null && edcrRequest.getTenantId().equalsIgnoreCase(stateCity.getCode())) {
-            final Map<String, String> params = new ConcurrentHashMap<>();
-
             String queryString = getStateLevelCountQuery(edcrRequest, params);
 
             final Query query = getCurrentSession().createSQLQuery(queryString);
@@ -861,7 +860,7 @@ public class EdcrRestService {
         String tenantId = edcrRequest.getTenantId();
 
             queryStr.append("select appln.applicationNumber from ")
-                    .append(tenantId))
+                    .append(tenantId)
                     .append(".edcr_application appln, ")
                     .append(tenantId)
                     .append(".edcr_application_detail dtl, ")
