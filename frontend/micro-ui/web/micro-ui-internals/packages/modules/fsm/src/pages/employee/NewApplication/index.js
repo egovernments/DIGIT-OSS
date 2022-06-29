@@ -43,7 +43,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-    
+
     if (
       formData?.propertyType &&
       formData?.subtype &&
@@ -157,7 +157,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
       heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
       isDisabled={!canSubmit}
       label={t("ES_COMMON_APPLICATION_SUBMIT")}
-      config={configs.map((config) => {
+      config={configs.filter((i) => !i.hideInEmployee).map((config) => {
         return {
           ...config,
           body: config.body.filter((a) => !a.hideInEmployee),

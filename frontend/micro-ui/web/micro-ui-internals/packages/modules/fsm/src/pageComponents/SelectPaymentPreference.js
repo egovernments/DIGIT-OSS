@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FormStep, Dropdown, Loader, RadioOrSelect, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/TLTimelineInFSM";
 
 const SelectPaymentPreference = ({ config, formData, t, onSelect, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -12,7 +13,7 @@ const SelectPaymentPreference = ({ config, formData, t, onSelect, userType }) =>
       const preFilledPaymentType = PaymentTypeData.filter(
         (paymentType) => paymentType.code === (formData?.selectPaymentPreference?.code || formData?.selectPaymentPreference)
       )[0];
-      setPaymentType(preFilledPaymentType);
+      preFilledPaymentType ? setPaymentType(preFilledPaymentType) : setPaymentType(PaymentTypeData.find((i) => i.code === "POST_PAY"))
     }
   }, [formData?.selectPaymentPreference, PaymentTypeData]);
 
@@ -40,6 +41,7 @@ const SelectPaymentPreference = ({ config, formData, t, onSelect, userType }) =>
   }
   return (
     <React.Fragment>
+      <Timeline currentStep={3} flow="APPLY" />
       <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!paymentType} t={t}>
         <RadioOrSelect
           options={PaymentTypeData}

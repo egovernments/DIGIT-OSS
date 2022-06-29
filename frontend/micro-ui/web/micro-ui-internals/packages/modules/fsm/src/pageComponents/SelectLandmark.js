@@ -53,16 +53,16 @@ const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
 
   return (
     <React.Fragment>
-    {window.location.href.includes("/tl") ? <Timeline currentStep={2}/> : null}
-    <FormStep
-      config={{ ...config, inputs }}
-      value={landmark}
-      onChange={onChange}
-      onSelect={(data) => onSelect(config.key, { ...formData[config.key], ...data })}
-      onSkip={onSkip}
-      t={t}
-      forcedError={t(error)}
-    ></FormStep>
+      {window.location.href.includes("/tl") ? <Timeline currentStep={2} /> : <Timeline currentStep={1} flow="APPLY" />}
+      <FormStep
+        config={{ ...config, inputs }}
+        value={landmark}
+        onChange={onChange}
+        onSelect={(data) => onSelect(config.key, { ...formData[config.key], ...data })}
+        onSkip={onSkip}
+        t={t}
+        forcedError={t(error)}
+      ></FormStep>
     </React.Fragment>
   );
 };

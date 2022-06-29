@@ -14,14 +14,14 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
   const { errors } = localFormState;
   const checkLocation = window.location.href.includes("tl/new-application") || window.location.href.includes("tl/renew-application-details");
   const isRenewal = window.location.href.includes("edit-application") || window.location.href.includes("tl/renew-application-details");
-  
+
   let inputs;
   if (window.location.href.includes("tl")) {
     inputs = config.inputs;
     config.inputs[0].disable = window.location.href.includes("edit-application");
     config.inputs[1].disable = window.location.href.includes("edit-application");
-    inputs[0].validation = { minLength : 0, maxLength:256};
-    inputs[1].validation = { minLength : 0, maxLength:256};
+    inputs[0].validation = { minLength: 0, maxLength: 256 };
+    inputs[1].validation = { minLength: 0, maxLength: 256 };
   } else {
     inputs = [
       {
@@ -126,14 +126,14 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
   }
   return (
     <React.Fragment>
-    {window.location.href.includes("/tl") ? <Timeline currentStep={2}/> : null}
-    <FormStep
-      config={{ ...config, inputs }}
-      _defaultValues={{ street: formData?.address.street, doorNo: formData?.address.doorNo }}
-      onSelect={(data) => onSelect(config.key, data)}
-      onSkip={onSkip}
-      t={t}
-    />
+      {window.location.href.includes("/tl") ? <Timeline currentStep={2} /> : <Timeline currentStep={1} flow="APPLY" />}
+      <FormStep
+        config={{ ...config, inputs }}
+        _defaultValues={{ street: formData?.address.street, doorNo: formData?.address.doorNo }}
+        onSelect={(data) => onSelect(config.key, data)}
+        onSkip={onSkip}
+        t={t}
+      />
     </React.Fragment>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FormStep, PitDimension } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/TLTimelineInFSM";
 
 const isConventionalSpecticTank = (tankDimension) => tankDimension === "lbd";
 
@@ -54,9 +55,12 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
   }
 
   return (
-    <FormStep config={config} onSkip={onSkip} onSelect={handleSubmit} isDisabled={disable} t={t}>
-      <PitDimension sanitationType={formData.pitType} size={size} handleChange={handleChange} t={t} />
-    </FormStep>
+    <React.Fragment>
+      <Timeline currentStep={1} flow="APPLY" />
+      <FormStep config={config} onSkip={onSkip} onSelect={handleSubmit} isDisabled={disable} t={t}>
+        <PitDimension sanitationType={formData.pitType} size={size} handleChange={handleChange} t={t} />
+      </FormStep>
+    </React.Fragment>
   );
 };
 
