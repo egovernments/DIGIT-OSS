@@ -443,7 +443,7 @@ class FormWizardDataEntry extends Component {
     let { search } = this.props.location;
     // let newReassessment = Boolean(getQueryValue(search, "newreassessment").replace('false', ''));
     // console.log("Palak newReassessment", newReassessment);
-    let isDisable= (isRoleAdmin ) ?true:false
+    let isDisable= (isRoleAdmin ) ?false:true
     // let ownerAr = this.state.ownerInfoArr;
     // ownerAr = ownerAr && ownerAr.length>1 && ownerAr.sort(function(item1,item2){
     // return ownerAr.indexOf(item2)-ownerAr.indexOf(item1);
