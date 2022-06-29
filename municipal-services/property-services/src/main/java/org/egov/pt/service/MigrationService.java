@@ -31,6 +31,7 @@ import org.egov.pt.repository.rowmapper.OldPropertyRowMapper;
 import org.egov.pt.repository.rowmapper.PropertyRowMapper;
 import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.util.ErrorConstants;
+import org.egov.pt.util.MigrationUtils;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.validator.AssessmentValidator;
 import org.egov.pt.validator.PropertyMigrationValidator;
@@ -101,6 +102,8 @@ public class MigrationService {
     @Autowired
     private ServiceRequestRepository restRepo;
 
+    @Autowired
+    private MigrationUtils migrationUtils;
 
 
     @Value("${egov.user.host}")
@@ -277,7 +280,7 @@ public class MigrationService {
                 .append(SEPARATER).append(LIMIT_FIELD_FOR_SEARCH_URL).append(propertyCriteria.getLimit());
 
 
-        OldPropertyResponse res = mapper.convertValue(fetchResult(url, requestInfoWrapper), OldPropertyResponse.class);
+        OldPropertyResponse res = mapper.convertValue(migrationUtils.fetchResult(url, requestInfoWrapper), OldPropertyResponse.class);
 
 
         return res.getProperties();
@@ -399,8 +402,8 @@ public class MigrationService {
         else if(uri.toString().contains(userCreateEndpoint))
             dobFormat = "dd/MM/yyyy";
         try{
-            LinkedHashMap responseMap = (LinkedHashMap)fetchResult(uri, userRequest);
-            parseResponse(responseMap,dobFormat);
+            LinkedHashMap responseMap = (LinkedHashMap)migrationUtils.fetchResult(uri, userRequest);
+            migrationUtils.parseResponse(responseMap,dobFormat);
             OldUserDetailResponse userDetailResponse = mapper.convertValue(responseMap,OldUserDetailResponse.class);
             return userDetailResponse;
         }
@@ -416,39 +419,9 @@ public class MigrationService {
      * @param responeMap LinkedHashMap got from user api response
      * @param dobFormat dob format (required because dob is returned in different format's in search and create response in user service)
      */
-    public void parseResponse(LinkedHashMap responeMap,String dobFormat){
-        List<LinkedHashMap> users = (List<LinkedHashMap>)responeMap.get("user");
-        String format1 = "dd-MM-yyyy HH:mm:ss";
-        if(users!=null){
-            users.forEach( map -> {
-                        map.put("createdDate",dateTolong((String)map.get("createdDate"),format1));
-                        if((String)map.get("lastModifiedDate")!=null)
-                            map.put("lastModifiedDate",dateTolong((String)map.get("lastModifiedDate"),format1));
-                        if((String)map.get("dob")!=null)
-                            map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
-                        if((String)map.get("pwdExpiryDate")!=null)
-                            map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),format1));
-                    }
-            );
-        }
-    }
 
-    /**
-     * Converts date to long
-     * @param date date to be parsed
-     * @param format Format of the date
-     * @return Long value of date
-     */
-    private Long dateTolong(String date,String format){
-        SimpleDateFormat f = new SimpleDateFormat(format);
-        Date d = null;
-        try {
-            d = f.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return  d.getTime();
-    }
+
+
 
     public  List<Property> migrateProperty(RequestInfo requestInfo, List<OldProperty> oldProperties,Map<String, List<String>> masters,Map<String, String> errorMap) {
         List<Property> properties = new ArrayList<>();
@@ -1027,29 +1000,7 @@ public class MigrationService {
 
 
 
-    /**
-     * Fetches results from external services through rest call.
-     *
-     * @param request
-     * @param uri
-     * @return Object
-     */
-    public Object fetchResult(StringBuilder uri, Object request) {
-        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        Object response = null;
-        log.info("URI: "+uri.toString());
-        try {
-            log.info("Request: "+mapper.writeValueAsString(request));
-            response = restTemplate.postForObject(uri.toString(), request, Map.class);
-        }catch(HttpClientErrorException e) {
-            log.error("External Service threw an Exception: ",e);
-            throw new ServiceCallException(e.getResponseBodyAsString());
-        }catch(Exception e) {
-            log.error("Exception while fetching from external service: ",e);
-        }
 
-        return response;
-    }
 
     public Map<String, List<String>> getMDMSData(RequestInfo requestInfo, String tenantId) {
         Map<String, List<String>> masters = fetchMaster(requestInfo, tenantId);

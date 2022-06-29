@@ -12,6 +12,7 @@ import org.egov.pt.models.Property;
 import org.egov.pt.models.oldProperty.OldUserDetailResponse;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.repository.ServiceRequestRepository;
+import org.egov.pt.util.MigrationUtils;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
@@ -31,7 +32,7 @@ public class CalculationService {
     private TranslationService translationService;
 
     @Autowired
-    private MigrationService migrationService;
+    private MigrationUtils migrationUtils;
 
     @Autowired
     private ObjectMapper mapper;
@@ -107,12 +108,12 @@ public class CalculationService {
         userSearchRequest.put("uuid",Collections.singletonList(uuid));
         OwnerInfo user = null;
         try {
-            LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>) migrationService.fetchResult(uri, userSearchRequest);
+            LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>) migrationUtils.fetchResult(uri, userSearchRequest);
 
 
             List<LinkedHashMap<String, Object>> users = (List<LinkedHashMap<String, Object>>) responseMap.get("user");
             String dobFormat = "yyyy-MM-dd";
-            migrationService.parseResponse(responseMap,dobFormat);
+            migrationUtils.parseResponse(responseMap,dobFormat);
             user = 	mapper.convertValue(users.get(0), OwnerInfo.class);
 
         } catch (Exception e) {
