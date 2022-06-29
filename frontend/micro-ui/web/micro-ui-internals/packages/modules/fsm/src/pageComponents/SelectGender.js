@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FormStep, Loader, RadioOrSelect } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/TLTimelineInFSM";
 
 const SelectGender = ({ config, onSelect, t, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -37,16 +38,19 @@ const SelectGender = ({ config, onSelect, t, userType, formData }) => {
   }
 
   return (
-    <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!genderType} t={t}>
-      <RadioOrSelect
-        options={GenderData}
-        selectedOption={genderType}
-        optionKey="i18nKey"
-        onSelect={selectGenderType}
-        t={t}
-        isMandatory={config.isMandatory}
-      />
-    </FormStep>
+    <React.Fragment>
+      <Timeline currentStep={2} flow="APPLY" />
+      <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!genderType} t={t}>
+        <RadioOrSelect
+          options={GenderData}
+          selectedOption={genderType}
+          optionKey="i18nKey"
+          onSelect={selectGenderType}
+          t={t}
+          isMandatory={config.isMandatory}
+        />
+      </FormStep>
+    </React.Fragment>
   );
 };
 

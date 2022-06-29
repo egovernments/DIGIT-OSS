@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CitizenInfoLabel, Loader, Dropdown, FormStep, CardLabel, RadioOrSelect } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/TLTimelineInFSM";
 
 const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -38,7 +39,7 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
     }
     return content
   }
- 
+
   if (propertyTypesData.isLoading) {
     return <Loader />;
   }
@@ -47,6 +48,7 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
   } else {
     return (
       <React.Fragment>
+        <Timeline currentStep={1} flow="APPLY" />
         <FormStep config={config} onSelect={goNext} isDisabled={!propertyType} t={t}>
           <CardLabel>{`${t("CS_FILE_APPLICATION_PROPERTY_LABEL")} *`}</CardLabel>
           <RadioOrSelect options={propertyTypesData.data} selectedOption={propertyType} optionKey="i18nKey" onSelect={selectedValue} t={t} />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FormStep, Dropdown, Loader, CardLabel, RadioButtons, RadioOrSelect } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/TLTimelineInFSM";
 
 const SelectPitType = ({ t, formData, config, onSelect, userType }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -31,17 +32,20 @@ const SelectPitType = ({ t, formData, config, onSelect, userType }) => {
     return <Dropdown isMandatory={true} option={sanitationMenu} optionKey="i18nKey" select={selectPitType} selected={pitType} t={t} />;
   }
   return (
-    <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!pitType} t={t}>
-      <CardLabel>{t("CS_FILE_APPLICATION_PIT_TYPE_LABEL")}</CardLabel>
-      <RadioOrSelect
-        isMandatory={config.isMandatory}
-        options={sanitationMenu}
-        selectedOption={pitType}
-        optionKey="i18nKey"
-        onSelect={selectPitType}
-        t={t}
-      />
-    </FormStep>
+    <React.Fragment>
+      <Timeline currentStep={1} flow="APPLY" />
+      <FormStep config={config} onSelect={onSubmit} onSkip={onSkip} isDisabled={!pitType} t={t}>
+        <CardLabel>{t("CS_FILE_APPLICATION_PIT_TYPE_LABEL")}</CardLabel>
+        <RadioOrSelect
+          isMandatory={config.isMandatory}
+          options={sanitationMenu}
+          selectedOption={pitType}
+          optionKey="i18nKey"
+          onSelect={selectPitType}
+          t={t}
+        />
+      </FormStep>
+    </React.Fragment>
   );
 };
 

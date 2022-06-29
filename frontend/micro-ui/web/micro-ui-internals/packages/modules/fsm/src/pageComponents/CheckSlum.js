@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FormStep, RadioOrSelect } from "@egovernments/digit-ui-react-components";
+import Timeline from "../components/TLTimelineInFSM";
 
 const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -16,18 +17,21 @@ const CheckSlum = ({ t, config, onSelect, userType, formData }) => {
   }
 
   return (
-    <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!slumArea}>
-      <RadioOrSelect
-        isMandatory={config.isMandatory}
-        options={[
-          { code: true, i18nKey: "CS_COMMON_YES" },
-          { code: false, i18nKey: "CS_COMMON_NO" },
-        ]}
-        selectedOption={slumArea}
-        optionKey="i18nKey"
-        onSelect={setSlumArea}
-      />
-    </FormStep>
+    <React.Fragment>
+      <Timeline currentStep={1} flow="APPLY" />
+      <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!slumArea}>
+        <RadioOrSelect
+          isMandatory={config.isMandatory}
+          options={[
+            { code: true, i18nKey: "CS_COMMON_YES" },
+            { code: false, i18nKey: "CS_COMMON_NO" },
+          ]}
+          selectedOption={slumArea}
+          optionKey="i18nKey"
+          onSelect={setSlumArea}
+        />
+      </FormStep>
+    </React.Fragment>
   );
 };
 

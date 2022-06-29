@@ -33,7 +33,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       noOfTrips: applicationData.noOfTrips,
       amountPerTrip: applicationData.additionalDetails.tripAmount,
       amount: applicationData.noOfTrips * applicationData.additionalDetails.tripAmount || undefined,
-      vehicleType: { capacity : applicationData?.vehicleCapacity },
+      vehicleType: { capacity: applicationData?.vehicleCapacity },
       vehicleCapacity: applicationData?.vehicleCapacity,
     },
     propertyType: applicationData.propertyUsage.split(".")[0],
@@ -172,7 +172,7 @@ const EditForm = ({ tenantId, applicationData, channelMenu, vehicleMenu, sanitat
       heading={t("ES_TITLE_MODIFY_DESULDGING_APPLICATION")}
       isDisabled={!canSubmit}
       label={defaultValues?.tripData?.vehicleCapacity ? t("ES_FSM_APPLICATION_SCHEDULE") : t("ES_FSM_APPLICATION_UPDATE")}
-      config={configs.map((config) => {
+      config={configs.filter((i) => !i.hideInEmployee).map((config) => {
         return {
           ...config,
           body: config.body.filter((a) => !a.hideInEmployee),

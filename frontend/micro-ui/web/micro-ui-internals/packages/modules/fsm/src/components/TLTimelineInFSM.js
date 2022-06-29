@@ -8,6 +8,13 @@ const getAction = (flow) => {
   switch (flow) {
     case "STAKEHOLDER": actions = []
       break;
+    case "APPLY": actions = [
+      'FSM_TIMELINE_PROPERTY_DETAILS',
+      'FSM_GENDER_DETAILS',
+      'FSM_PAYMENT_DETAILS',
+      'FSM_TIMELINE_SUMMARY',
+    ]
+      break;
     default: actions = [
       'TL_COMMON_TR_DETAILS',
       'TL_LOCATION_AND_OWNER_DETAILS',
@@ -21,7 +28,7 @@ const Timeline = ({ currentStep = 1, flow = "" }) => {
   const isMobile = window.Digit.Utils.browser.isMobile();
   getAction(flow);
   return (
-    <div className="timeline-container" style={isMobile ? {} : { maxWidth: "960px", minWidth: "640px", marginRight: "auto" }} >
+    <div className="timeline-container" style={isMobile ? {} : { maxWidth: "960px", marginRight: "auto" }} >
       {actions.map((action, index, arr) => (
         <div className="timeline-checkpoint" key={index}>
           <div className="timeline-content">
