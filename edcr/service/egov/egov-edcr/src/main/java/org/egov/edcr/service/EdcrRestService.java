@@ -793,6 +793,99 @@ public class EdcrRestService {
         return query;
     }
 
+    public Integer fetchPlainCount(final EdcrCountCriteria edcrRequest, final RequestInfoWrapper reqInfoWrapper) {
+
+        City stateCity = cityService.fetchStateCityDetails();
+        if (edcrRequest != null && edcrRequest.getTenantId().equalsIgnoreCase(stateCity.getCode())) {
+            final Map<String, String> params = new ConcurrentHashMap<>();
+
+            String queryString = getStateLevelCountQuery(edcrRequest, params);
+
+            final Query query = getCurrentSession().createSQLQuery(queryString);
+            for (final Map.Entry<String, String> param : params.entrySet())
+                query.setParameter(param.getKey(), param.getValue());
+            LOG.info("Query 1"+query);
+            return query.list().size();
+        } else {
+            String queryString = getSingleTenantCountQuery(edcrRequest, params);
+
+            final Query query = getCurrentSession().createSQLQuery(queryString);
+            for (final Map.Entry<String, String> param : params.entrySet())
+                query.setParameter(param.getKey(), param.getValue());
+            LOG.info("Query 2"+query);
+            return query.list().size();
+        }
+    }
+    private String getStateLevelCountQuery(final EdcrCountCriteria edcrRequest,
+                                            final Map<String, String> params) {
+        StringBuilder queryStr = new StringBuilder();
+        Map<String, String> tenants = tenantUtils.tenantsMap();
+        Iterator<Map.Entry<String, String>> tenantItr = tenants.entrySet().iterator();
+        while (tenantItr.hasNext()) {
+            Map.Entry<String, String> value = tenantItr.next();
+            queryStr.append("(select appln.applicationNumber from ")
+                    .append(value.getKey())
+                    .append(".edcr_application appln, ")
+                    .append(value.getKey())
+                    .append(".edcr_application_detail dtl ")
+                    .append("where appln.id = dtl.application ");
+
+            if (isNotBlank(edcrRequest.getStatus())) {
+                queryStr.append("and dtl.status=:status ");
+                params.put("status", edcrRequest.getStatus());
+            }
+
+            if (edcrRequest.getFromDate() != null) {
+                queryStr.append("and appln.applicationDate>=:fromDate");
+                params.put("fromDate", edcrRequest.getFromDate());
+            }
+
+            if (edcrRequest.getToDate() != null) {
+                queryStr.append("and appln.applicationDate<=:toDate )");
+                params.put("toDate", edcrRequest.getToDate());
+            }
+
+            if (tenantItr.hasNext()) {
+                queryStr.append(" union ");
+            }
+        }
+
+        LOG.info(" State Tenant Query -> " + queryStr.toString());
+        return queryStr.toString();
+    }
+
+    private String getSingleTenantCountQuery(final EdcrCountCriteria edcrRequest,
+                                               final Map<String, String> params) {
+
+        StringBuilder queryStr = new StringBuilder();
+        String tenantId = edcrRequest.getTenantId();
+
+            queryStr.append("select appln.applicationNumber from ")
+                    .append(tenantId))
+                    .append(".edcr_application appln, ")
+                    .append(tenantId)
+                    .append(".edcr_application_detail dtl, ")
+                    .append("where appln.id = dtl.application ");
+
+            if (isNotBlank(edcrRequest.getStatus())) {
+                queryStr.append("and dtl.status=:status ");
+                params.put("status", edcrRequest.getStatus());
+            }
+
+            if (edcrRequest.getFromDate() != null) {
+                queryStr.append("and appln.applicationDate>=:fromDate");
+                params.put("fromDate", edcrRequest.getFromDate());
+            }
+
+            if (edcrRequest.getToDate() != null) {
+                queryStr.append("and appln.applicationDate<=:toDate");
+                params.put("toDate", edcrRequest.getToDate());
+            }
+
+        LOG.info(" Single Tenant Query -> " + queryStr.toString());
+        return queryStr.toString();
+    }
+
     private Criteria getCriteriaofSingleTenant(final EdcrRequest edcrRequest, UserInfo userInfo, String userId,
             boolean onlyTenantId, boolean isStakeholder) {
         final Criteria criteria = getCurrentSession().createCriteria(EdcrApplicationDetail.class,

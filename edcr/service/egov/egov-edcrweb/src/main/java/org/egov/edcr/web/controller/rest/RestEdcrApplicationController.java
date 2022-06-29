@@ -310,6 +310,14 @@ public class RestEdcrApplicationController {
         }
     }
 
+    @PostMapping(value = "/count", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Integer count(@ModelAttribute EdcrCountCriteria edcrRequest,
+                                             @RequestBody @Valid RequestInfoWrapper requestInfoWrapper) {
+        Integer count = edcrRestService.fetchPlainCount(edcrRequest, requestInfoWrapper);
+            return count;
+    }
+
     @PostMapping(value = "/extractplan", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<?> planDetails(@RequestBody MultipartFile planFile,
