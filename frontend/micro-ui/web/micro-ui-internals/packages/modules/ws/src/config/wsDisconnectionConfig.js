@@ -35,9 +35,18 @@ export const newConfig = [
         type: "component",
         isMandatory: true,
         withoutLabel: true,
-        nextStep: "check",
+        nextStep: "disconnect-Acknowledge",
         hideInEmployee: true,
-      }         
+      },
+      {         
+        route: "disconnect-Acknowledge",
+        component: "WSDisconnectAcknowledgement",
+        key: "WSDisconnectAcknowledgement",
+        type: "component",
+        isMandatory: true,
+        withoutLabel: true,
+        hideInEmployee: true,
+      }           
   ]
 }
 ]
