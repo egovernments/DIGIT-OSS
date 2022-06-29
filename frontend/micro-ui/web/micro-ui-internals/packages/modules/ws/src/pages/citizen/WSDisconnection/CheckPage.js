@@ -79,7 +79,7 @@ import { convertDateToEpoch, convertEpochToDate, createPayloadOfWSDisconnection,
                 },
                 onSuccess: (data, variables) => {
                   Digit.SessionStorage.set("WS_DISCONNECTION", {...value, DisconnectionResponse: data?.WaterConnection?.[0]});
-                  history.push(`/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}&applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`);                // window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
+                  history.push(`/digit-ui/citizen/ws/disconnect-acknowledge`);
                 },
               })
             },
@@ -106,7 +106,7 @@ import { convertDateToEpoch, convertEpochToDate, createPayloadOfWSDisconnection,
                 },
                 onSuccess: (data, variables) => {
                   Digit.SessionStorage.set("WS_DISCONNECTION", {...value, DisconnectionResponse: data?.SewerageConnections?.[0]});
-                  history.push(`/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}&applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`);                // window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
+                  history.push(`/digit-ui/citizen/ws/disconnect-acknowledge`);
                 },
               })
             },
