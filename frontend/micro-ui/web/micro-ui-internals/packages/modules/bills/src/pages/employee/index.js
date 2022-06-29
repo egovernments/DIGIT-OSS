@@ -9,9 +9,8 @@ import ResponseCancelBill from "./ResponseCancelBill";
 import BillDetailsv1 from "./BillDetailsv1";
 import CancelBill from "./CancelBill";
 import GroupBill from "./GroupBill";
-
 import DownloadBill from "./DownloadBill";
-
+import SearchApp from "./SearchApp";
 const BILLSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
 
@@ -82,7 +81,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           </p>
           <PrivateRoute
             path={`${path}/inbox`}
-            component={() => <BillInbox parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
+            component={() => <SearchApp parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
           />
           <PrivateRoute
             path={`${path}/group-billold`}
