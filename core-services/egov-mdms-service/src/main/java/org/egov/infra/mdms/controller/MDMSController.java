@@ -5,10 +5,13 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.egov.MDMSApplicationRunnerImpl;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.infra.mdms.service.MDMSService;
 import org.egov.mdms.model.*;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,14 @@ import net.minidev.json.JSONArray;
 @Slf4j
 @RequestMapping(value = "/v1")
 public class MDMSController {
+
+    @Value("${mdms.reload.frequency.in.minutes}")
+    private Integer reloadFrequencyInMinutes;
+
+    private static Long lastReloadTimeEpoch = 0l;
+
+    @Autowired
+    private MDMSApplicationRunnerImpl applicationRunner;
 
     @Autowired
     private MDMSService mdmsService;
@@ -72,4 +83,20 @@ public class MDMSController {
         return new ResponseEntity<>(mdmsResponse, HttpStatus.OK);
 
     }
+
+    @PostMapping("_reload")
+    @ResponseBody
+    private ResponseEntity<?> reload(@RequestBody @Valid MdmsCriteriaReq mdmsCriteriaReq) {
+        Long currentTimeEpoch = System.currentTimeMillis();
+
+        if(lastReloadTimeEpoch == 0l)
+            lastReloadTimeEpoch = currentTimeEpoch;
+
+        if(currentTimeEpoch - lastReloadTimeEpoch <= (reloadFrequencyInMinutes * 60 * 60))
+            throw new CustomException("EG_MDMS_RELOAD_ERR", "Last reload happened very recently. Current allowed frequency of reload is " + reloadFrequencyInMinutes + " minutes.");
+        applicationRunner.run();
+        MdmsResponse mdmsResponse = new MdmsResponse();
+        return new ResponseEntity<>(mdmsResponse, HttpStatus.OK);
+    }
+
 }
