@@ -19,6 +19,7 @@ import {
   Rating,
   ActionLinks,
   Header,
+  ImageViewer,
 } from "@egovernments/digit-ui-react-components";
 
 import ActionModal from "./Modal";
@@ -28,6 +29,7 @@ import { useQueryClient } from "react-query";
 
 import { Link, useHistory, useParams } from "react-router-dom";
 import { actions } from "react-table";
+import { ViewImages } from "../../../components/ViewImages";
 
 const ApplicationDetails = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -41,6 +43,7 @@ const ApplicationDetails = (props) => {
   const [config, setCurrentConfig] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [showToast, setShowToast] = useState(null);
+  const [imageZoom, setImageZoom] = useState(null);
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
 
   const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(
@@ -141,6 +144,14 @@ const ApplicationDetails = (props) => {
     closeModal();
   };
 
+  function zoomImageWrapper(imageSource, index) {
+    setImageZoom(imageSource);
+  }
+
+  function onCloseImageZoom() {
+    setImageZoom(null);
+  }
+
   const getTimelineCaptions = (checkpoint) => {
     const __comment = checkpoint?.comment?.split("~");
     const reason = __comment ? __comment[0] : null;
@@ -155,6 +166,8 @@ const ApplicationDetails = (props) => {
       return <TLCaption data={caption} />;
     } else if (
       checkpoint.status === "PENDING_APPL_FEE_PAYMENT" ||
+      checkpoint.status === "ASSING_DSO" ||
+      checkpoint.status === "PENDING_DSO_APPROVAL" ||
       checkpoint.status === "DSO_REJECTED" ||
       checkpoint.status === "CANCELED" ||
       checkpoint.status === "REJECTED"
@@ -182,12 +195,7 @@ const ApplicationDetails = (props) => {
           </Link>
         </div>
       );
-    } else if (
-      checkpoint.status === "WAITING_FOR_DISPOSAL" ||
-      checkpoint.status === "DISPOSAL_IN_PROGRESS" ||
-      checkpoint.status === "DISPOSED" ||
-      checkpoint.status === "CITIZEN_FEEDBACK_PENDING"
-    ) {
+    } else if (checkpoint.status === "WAITING_FOR_DISPOSAL" || checkpoint.status === "DISPOSED" || checkpoint.status === "DISPOSAL_IN_PROGRESS") {
       const caption = {
         date: checkpoint?.auditDetails?.created,
         name: checkpoint?.assigner,
@@ -243,6 +251,27 @@ const ApplicationDetails = (props) => {
                 </StatusTable>
               </React.Fragment>
             ))}
+            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN?.length && (
+              <>
+                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t("ES_FSM_SUB_HEADING_CITIZEN_UPLOADS")}</CardSectionHeader>
+                <ViewImages
+                  fileStoreIds={applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN}
+                  tenantId={state}
+                  onClick={(source, index) => zoomImageWrapper(source, index)}
+                />
+              </>
+            )}
+            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO?.length && (
+              <>
+                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t("ES_FSM_SUB_HEADING_DSO_UPLOADS")}</CardSectionHeader>
+                <ViewImages
+                  fileStoreIds={applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO}
+                  tenantId={tenantId}
+                  onClick={(source, index) => zoomImageWrapper(source, index)}
+                />
+              </>
+            )}
+            {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
 
             <BreakLine />
             {(workflowDetails?.isLoading || isDataLoading) && <Loader />}
@@ -297,7 +326,7 @@ const ApplicationDetails = (props) => {
             />
           )}
           {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
-            <ActionBar>
+            <ActionBar style={{ zIndex: "19" }}>
               {displayMenu && workflowDetails?.data?.nextActions ? (
                 <Menu
                   localeKeyPrefix={"ES_FSM"}
