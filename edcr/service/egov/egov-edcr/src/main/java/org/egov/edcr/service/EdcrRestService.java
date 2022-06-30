@@ -836,12 +836,12 @@ public class EdcrRestService {
 
             if (edcrRequest.getFromDate() != null) {
                 queryStr.append("and appln.applicationDate>=:fromDate");
-                params.put("fromDate", edcrRequest.getFromDate());
+                params.put("fromDate", String.valueOf(edcrRequest.getFromDate()));
             }
 
             if (edcrRequest.getToDate() != null) {
                 queryStr.append("and appln.applicationDate<=:toDate )");
-                params.put("toDate", edcrRequest.getToDate());
+                params.put("toDate", String.valueOf(edcrRequest.getToDate()));
             }
 
             if (tenantItr.hasNext()) {
@@ -873,12 +873,12 @@ public class EdcrRestService {
 
             if (edcrRequest.getFromDate() != null) {
                 queryStr.append("and appln.applicationDate>=:fromDate");
-                params.put("fromDate", edcrRequest.getFromDate());
+                params.put("fromDate", String.valueOf(edcrRequest.getFromDate()));
             }
 
             if (edcrRequest.getToDate() != null) {
                 queryStr.append("and appln.applicationDate<=:toDate");
-                params.put("toDate", edcrRequest.getToDate());
+                params.put("toDate", String.valueOf(edcrRequest.getToDate()));
             }
 
         LOG.info(" Single Tenant Query -> " + queryStr.toString());
