@@ -95,6 +95,7 @@ public class MDMSController {
         if(currentTimeEpoch - lastReloadTimeEpoch <= (reloadFrequencyInMinutes * 60 * 60))
             throw new CustomException("EG_MDMS_RELOAD_ERR", "Last reload happened very recently. Current allowed frequency of reload is " + reloadFrequencyInMinutes + " minutes.");
         applicationRunner.run();
+        lastReloadTimeEpoch = currentTimeEpoch;
         MdmsResponse mdmsResponse = new MdmsResponse();
         return new ResponseEntity<>(mdmsResponse, HttpStatus.OK);
     }
