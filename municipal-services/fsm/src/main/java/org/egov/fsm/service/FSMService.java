@@ -48,6 +48,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.egov.fsm.service.notification.NotificationService;
 
 import com.jayway.jsonpath.JsonPath;
 
@@ -106,6 +107,9 @@ public class FSMService {
 
 	@Autowired
 	private FSMRepository repository;
+	
+	@Autowired
+	private NotificationService notificationService;
 
 	public FSM create(FSMRequest fsmRequest) {
 		RequestInfo requestInfo = fsmRequest.getRequestInfo();
@@ -226,6 +230,8 @@ public class FSMService {
 		wfIntegrator.callWorkFlow(fsmRequest);
 
 		enrichmentService.postStatusEnrichment(fsmRequest);
+		
+		notificationService.process(fsmRequest,oldFSM);
 
 		repository.update(fsmRequest, workflowService.isStateUpdatable(fsm.getApplicationStatus(), businessService));
 		return fsmRequest.getFsm();

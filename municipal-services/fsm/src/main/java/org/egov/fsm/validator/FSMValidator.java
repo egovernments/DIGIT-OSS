@@ -371,6 +371,9 @@ public class FSMValidator {
 			if (listOfUpdatedParams.contains(FSMConstants.NO_OF_TRIPS)) {
 				listOfAllowedUpdatableParams.add(FSMConstants.NO_OF_TRIPS);
 			}
+			if (listOfUpdatedParams.contains(FSMConstants.VEHICLE_CAPACITY)) {
+				listOfAllowedUpdatableParams.add(FSMConstants.VEHICLE_CAPACITY);
+			}
 			
 			for(String updatedParam : listOfUpdatedParams) {
 				if (!contains(listOfAllowedUpdatableParams, updatedParam)) {
