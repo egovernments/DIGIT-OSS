@@ -23,10 +23,8 @@ const DisconnectionApplication = () => {
 
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("WS_DISCONNECTION", state?.edcrNumber ? { data: { scrutinyNumber: { edcrNumber: state?.edcrNumber } } } : {});
-
-//   const CheckPage = Digit?.ComponentRegistryService?.getComponent('WSDisconnectionCheckPage') ;
-//   const Acknowledgement = Digit?.ComponentRegistryService?.getComponent('WSAcknowledgement') ;
-
+  
+  const Acknowledgement = Digit?.ComponentRegistryService?.getComponent('WSDisconnectionAcknowledgement') ;
   const stateId = Digit.ULBService.getStateId();
   let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
   let isModifyEdit = window.location.href.includes("/modify-connection/") || window.location.href.includes("/edit-application/")
@@ -73,7 +71,11 @@ const DisconnectionApplication = () => {
     if (isFromCreateApi) setParams(data);
     else if (key === "") setParams({ ...data });
     else setParams({ ...params, ...{ [key]: { ...params[key], ...data } } });
-    goNext(skipStep);
+    if(skipStep=="acknowledgement"){
+      createApplication();
+    }else{
+      goNext(skipStep);
+    }
   };
   const handleSkip = () => { };
 
@@ -85,8 +87,6 @@ const DisconnectionApplication = () => {
   });
   config.indexRoute = "docsrequired";
 
-  // const CheckPage = Digit?.ComponentRegistryService?.getComponent('BPACheckPage') ;
-  // const OBPSAcknowledgement = Digit?.ComponentRegistryService?.getComponent('BPAAcknowledgement');
   return (
     <Switch>
       {config.map((routeObj, index) => {
@@ -99,10 +99,9 @@ const DisconnectionApplication = () => {
           </Route>
         );
       })}
-      {/* <Route path={`${getPath(match.path, match.params)}/check`}>
-        <CheckPage onSubmit={createApplication} value={params} />
-      </Route> */}
-    
+      <Route path={`${getPath(match.path, match.params)}/acknowledgement`}>
+        <Acknowledgement data={params} onSuccess={onSuccess} clearParams={clearParams} userType={"employee"}/>
+      </Route>    
       <Route>
         <Redirect to={`${getPath(match.path, match.params)}/${config.indexRoute}`} />
       </Route>

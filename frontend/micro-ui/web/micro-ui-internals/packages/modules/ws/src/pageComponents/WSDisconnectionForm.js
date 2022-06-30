@@ -52,7 +52,9 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType, formData }) => {
 
   const handleSubmit = () => onSelect(config.key, { WSDisConnectionForm: disconnectionData });
 
-  const handleEmployeeSubmit = () => onSelect(config.key, { WSDisConnectionForm: {...disconnectionData, documents:documents} });
+  const handleEmployeeSubmit = () => { 
+    onSelect(config.key, { WSDisConnectionForm: {...disconnectionData, documents:documents} },'acknowledgement');
+  };
 
 
   const onSkip = () => onSelect();
