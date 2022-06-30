@@ -10,7 +10,8 @@ import {
   SubmitBar, 
   CitizenInfoLabel,
   CardHeader ,
-  Toast
+  Toast,
+  DatePicker
 } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import DisconnectTimeline from "../components/DisconnectTimeline";
@@ -59,7 +60,7 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType, formData }) => {
 
   const onSkip = () => onSelect();
 
-  const filedChange = (val) => {
+  const filedChange = (val) => {    
     const oldData = {...disconnectionData};
     oldData[val.code]=val;
     setDisconnectionData(oldData);
@@ -179,16 +180,13 @@ if(userType === 'citizen') {
             />
             
           <CardLabel>{t("WS_DISCONNECTION_DATE")}</CardLabel>
-            <TextInput
+          <DatePicker
               t={t}
-              type={"text"}
+              // isRequired={true}
               style={{background:"#FAFAFA"}}
-              isMandatory={false}
-              optionKey="i18nKey"
-              name="date"
-              value={disconnectionData?.date?.value}
-              onChange={(e) => filedChange({code:"date" , value:e.target.value})}
-            />
+              date={disconnectionData?.date?.value}
+              onChange={(e) => filedChange({code:"date" , value:e})}             
+            />       
 
             <LabelFieldPair>
               <CardLabel>{t("WS_DISCONNECTION_REASON")}</CardLabel>              
@@ -237,16 +235,14 @@ if(userType === 'citizen') {
           
           <LabelFieldPair>
           <CardLabel>{t("WS_DISCONEECTION_DATE")}</CardLabel>
-          <TextInput
+            <DatePicker
               t={t}
-              type={"text"}
+              // isRequired={true}
               style={{background:"#FAFAFA"}}
-              isMandatory={false}
-              optionKey="i18nKey"
-              name="date"
-              value={disconnectionData?.date?.value}
-              onChange={(e) => filedChange({code:"date" , value:e.target.value})}
+              date={disconnectionData?.date?.value}
+              onChange={(e) => filedChange({code:"date" , value:e})}             
             />
+          
           </LabelFieldPair>
           <LabelFieldPair>
               <CardLabel>{t("WS_DISCONNECTION_REASON")}</CardLabel>              
