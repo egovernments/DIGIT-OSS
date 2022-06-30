@@ -331,7 +331,7 @@ public class NotificationUtil {
 	 * Parses date formats to long for all users in responseMap
 	 * @param responeMap LinkedHashMap got from user api response
 	 */
-	private void parseResponse(LinkedHashMap responeMap,String dobFormat){
+	public void parseResponse(LinkedHashMap responeMap, String dobFormat){
 		List<LinkedHashMap> users = (List<LinkedHashMap>)responeMap.get("user");
 		String formatForDate = "dd-MM-yyyy HH:mm:ss";
 		if(users!=null){

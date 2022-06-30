@@ -184,4 +184,7 @@ public class SWCalculationConfiguration {
 
 	@Value("${bulk.demand.offset.value}")
 	private Integer batchOffset;
+
+	@Value("${egov.internal.microservice.user.uuid}")
+	private String egovInternalMicroserviceUserUuid;
 }
