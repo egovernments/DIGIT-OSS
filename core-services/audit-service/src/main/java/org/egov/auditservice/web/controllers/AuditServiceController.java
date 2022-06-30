@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -38,7 +39,8 @@ public class AuditServiceController {
     @RequestMapping(value="/v1/_search", method = RequestMethod.POST)
     public ResponseEntity<AuditLogResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
                                                           @Valid @ModelAttribute AuditLogSearchCriteria criteria) {
-        AuditLogResponse response = AuditLogResponse.builder().build();
+        List<AuditLog> auditLogList = service.getAuditLogs(requestInfoWrapper.getRequestInfo(), criteria);
+        AuditLogResponse response = AuditLogResponse.builder().auditLogs(auditLogList).build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
