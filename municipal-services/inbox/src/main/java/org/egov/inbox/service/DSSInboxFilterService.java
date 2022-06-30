@@ -28,6 +28,7 @@ public class DSSInboxFilterService {
     @Autowired
     private InboxConfiguration config;
 
+    @Autowired
     private ObjectMapper mapper;
 
     @Autowired
@@ -61,8 +62,7 @@ public class DSSInboxFilterService {
             Object mdmsData = mdmsCall(request);
             List<Map> aggregationData = JsonPath.read(mdmsData, MDMS_AGGREGATE_PATH);
 
-            for (Map visualizationcodes : aggregationData) {
-                //aggregationData.forEach(visualizationcodes -> {
+                aggregationData.forEach(visualizationcodes -> {
                 if (visualizationcodes.get(MDMS_AGGREGATE_MODULE_KEY).toString().equalsIgnoreCase(request.getModule())) {
                     List<String> codes = new ArrayList<>();
                     if (!visualizationcodes.get(MDMS_VIZCODES_WITH_DATE).toString().isEmpty()) {
@@ -92,11 +92,8 @@ public class DSSInboxFilterService {
                             result.put(code, metricResponse.getResponseData().getData().get(0).getHeaderValue());
                         }
                     }
-                } else {
-                    throw new CustomException(ErrorConstants.INVALID_MODULE, "could not find the configurations for " + request.getModule());
                 }
-            }
-
+            });
         } catch (Exception e) {
             throw new CustomException(ErrorConstants.INVALID_MODULE_DATA, e.getMessage());
         }
