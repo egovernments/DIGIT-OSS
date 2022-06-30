@@ -180,5 +180,9 @@ public class FSMConstants {
 	public static final String PAYED_IN_CASH = "Citizen Payed in Cash";
 
 	public static final String PAYED_IN_CHEQUE = "Citizen Payed in Cheque";
+	
+	public static final String VEHICLE_CAPACITY = "vehicleCapacity";
+
+	public static final String FSM_SMS_CITIZEN_NO_OF_TRIPS_VEHICLE_CAPACITY_CHANGE="FSM_SMS_CITIZEN_NO_OF_TRIPS_VEHICLE_CAPACITY_CHANGE";
 
 }
