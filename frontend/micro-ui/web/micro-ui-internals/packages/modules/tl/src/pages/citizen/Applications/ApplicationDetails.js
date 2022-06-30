@@ -149,7 +149,7 @@ const TLApplicationDetails = () => {
         ]
       : [
           {
-            label: t("CS_COMMON_APPLICATION_ACKNOWLEDGEMENT"),
+          label: t("TL_APPLICATION"),
             onClick: handleDownloadPdf,
           },
         ];
