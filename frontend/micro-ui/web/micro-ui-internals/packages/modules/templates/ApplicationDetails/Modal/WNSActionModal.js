@@ -77,6 +77,9 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
   function submit(data) {
     if(applicationData?.isBillAmend){
+      const comments = data?.comments ? data.comments : null
+     
+      const additionalDetails = { ...applicationData?.billAmendmentDetails?.additionalDetails, comments } 
      const amendment = {
        ...applicationData?.billAmendmentDetails,
         workflow:{
@@ -86,7 +89,33 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           businessService:"BS.AMENDMENT",
           moduleName:"BS"
         },
+       additionalDetails,
+       comment: data?.comments || "",
+       wfDocuments: uploadedFile
+         ? [
+           {
+             documentType: action?.action + " DOC",
+             fileName: file?.name,
+             fileStoreId: uploadedFile,
+           },
+         ]
+         : null,
+       processInstance: {
+         action: action?.action,
+         assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
+         comment: data?.comments || "",
+         documents: uploadedFile
+           ? [
+             {
+               documentType: action?.action + " DOC",
+               fileName: file?.name,
+               fileStoreId: uploadedFile,
+             },
+           ]
+           : []
+       }
       }
+      //amendment?.additionalDetails?.comments = comments
       submitAction({AmendmentUpdate:amendment})
       return
     }

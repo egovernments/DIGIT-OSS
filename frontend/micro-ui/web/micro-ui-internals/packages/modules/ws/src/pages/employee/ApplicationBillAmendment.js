@@ -16,22 +16,24 @@ import {
   ActionBar,
   SubmitBar,
   CardLabelError,
-  InfoBannerIcon
+  InfoBannerIcon,
+  Toast
 } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useEffect, useMemo, useReducer,useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useHistory,useLocation } from "react-router-dom";
 
 
 
 const ApplicationBillAmendment = () => {
-  
+  const [showToast,setShowToast] = useState(null)
   //connectionNumber=WS/107/2021-22/227166&tenantId=pb.amritsar&service=WATER&connectionType=Metered
   const { t } = useTranslation();
   const { connectionNumber, tenantId, service, connectionType } = Digit.Hooks.useQueryParams();
   const stateId = Digit.ULBService.getStateId();
-
+  const { state } = useLocation();
+  
   const { isLoading: BillAmendmentMDMSLoading, data: BillAmendmentMDMS } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSMDMSBillAmendment({
     tenantId: stateId,
   });
@@ -47,6 +49,7 @@ const ApplicationBillAmendment = () => {
     availableBillAmendmentTaxHeads?.find((taxHeadMaster) => taxHeadMaster.code === e.taxHeadCode)
   );
   const rebateAndPenaltyTaxHeads = data?.BillingService?.TaxHeadMaster?.filter(e=> e.code.includes("ADHOC") && e.IsBillamend && e.service===servicev1)
+  
   const {
     register,
     control,
@@ -54,10 +57,25 @@ const ApplicationBillAmendment = () => {
     setValue,
     unregister,
     handleSubmit,
-    formState: { errors },
+    formState: { errors,...rest },
+    reset,
     ...methods
-  } = useForm();
-  
+  } = useForm({
+    defaultValues : {
+      ...state?.data?.applicationDetails?.amendment?.additionalDetails?.editForm
+  },
+});
+  const applicationDetailsFromState = state?.data?.applicationDetails
+  const {
+    isLoading: updatingApplication,
+    isError: updateApplicationError,
+    data: updateResponse,
+    error: updateError,
+    isSuccess,
+    mutate,
+  } = Digit.Hooks.ws.useApplicationActionsBillAmendUpdate();
+ 
+  const [goToAppDetailsPage,setGoToAppDetailsPage] = useState(false)
   const fromDateVal = watch("effectivefrom");
   const amendmentReason = watch("amendmentReason");
   const WS_REDUCED_AMOUNT = watch("WS_REDUCED_AMOUNT");
@@ -168,6 +186,19 @@ const ApplicationBillAmendment = () => {
     return { ...actionPerformed,actionPerformed, TOTAL: Object.values(actionPerformed).reduce((a, b) => parseInt(a) + parseInt(b), 0),originalDemand,action };
   };
 
+  const closeToast = () => {
+    setShowToast(null)
+  }
+
+  let amendmentIdToRedirect
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (goToAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details-bill-amendment?applicationNumber=${state?.data.applicationDetails.amendment.amendmentId}`
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [goToAppDetailsPage]);
+
   const onFormSubmit = (d) => {
     const data = {
       Amendment: {
@@ -191,9 +222,55 @@ const ApplicationBillAmendment = () => {
         demandDetails: getDemandDetailsComparingUpdates(d),
         additionalDetails: {
           searchBillDetails: getTotalDetailsOfUpdatedData(d),
+          editForm: d
         },
       },
     };
+    //here if state.data.action is "RE-SUBMIT-APPLICATION" then need to implement the mutation logic(call billamendment/_update) here and show relevant toast and redirect to application details screen. check existing logic of mutation in applicationdetails template file
+    // workflow: {
+    //   businessId: applicationData?.billAmendmentDetails?.amendmentId,
+    //     action: action?.action,
+    //       tenantId: tenantId,
+    //         businessService: "BS.AMENDMENT",
+    //           moduleName: "BS"
+    // }
+    //send this workflow object inside and AmendmentUpdate object, AmendmentUpdate object will contain all the amendment details(current)
+    //then call mutate wit this data
+
+    if (state?.data?.action === "RE-SUBMIT-APPLICATION"){
+      //isme processInstance aur wfDocuments obj bhi bhejo RAIN-6981
+      const workflow= {
+        businessId: state?.data?.applicationDetails?.amendment?.amendmentId,
+        action: "RE-SUBMIT",
+        tenantId: tenantId,
+        businessService: "BS.AMENDMENT",
+        moduleName: "BS"
+    }
+      const AmendmentUpdate = { ...state?.data?.applicationDetails?.applicationData?.billAmendmentDetails, workflow, ...data?.Amendment }
+      mutate({AmendmentUpdate}, {
+      onError: (error, variables) => {
+        //setIsEnableLoader(false);
+          setShowToast({ key: "error", error, label: t("CS_WATER_UPDATE_APPLICATION_FAILED") });
+        setTimeout(closeToast, 5000);
+      },
+      onSuccess: (data, variables) => {
+        //setIsEnableLoader(false);
+        if (data?.Amendments?.length > 0) {
+            if (variables?.AmendmentUpdate?.workflow?.action.includes("RE-SUBMIT")) {
+            setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_RE_SUBMIT_UPDATE_SUCCESS") })
+          } 
+          //now goto application details page
+         
+          setGoToAppDetailsPage(true)
+
+         // history?.push(`/digit-ui/employee/ws/application-details-bill-amendment?applicationNumber=${data?.Amendments[0].amendmentId}`)
+          return
+        }
+      },
+    })
+    return
+  }
+    
     history.push("/digit-ui/employee/ws/response", data);
   };
 
@@ -209,7 +286,7 @@ const ApplicationBillAmendment = () => {
   
   return (
     <form onSubmit={handleSubmit(onFormSubmit)}>
-      <Header>{t("WS_BILL_AMENDMENT_BUTTON")}</Header>
+      <Header>{state?.data?.action ? t("WS_APP_FOR_WATER_AND_SEWERAGE_EDIT_LABEL"):t("WS_BILL_AMENDMENT_BUTTON")}</Header>
       <Card>
         <LabelFieldPair>
           <CardLabel style={{ fontWeight: "500" }}>{t(`WS_ACKNO_CONNECTION_NO_LABEL`)}</CardLabel>
@@ -457,8 +534,17 @@ const ApplicationBillAmendment = () => {
           </LabelFieldPair>
         ))}
       </Card>
+      {showToast ? (
+        <Toast
+          isDleteBtn={true}
+         // error={updateApplicationError ? "WS_APPLICATION_UPDATE_ERROR" : null}
+          error={showToast?.error}
+          label={showToast?.label}
+          onClose={closeToast}
+        />
+      ) : null}
       <ActionBar>
-        <SubmitBar submit={true} label={t("WS_COMMON_BUTTON_SUBMIT")} />
+        <SubmitBar submit={true} label={state?.data?.action ?t("WF_CITIZEN_NEWSW1_RESUBMIT_APPLICATION"):t("WS_COMMON_BUTTON_SUBMIT")} />
       </ActionBar>
     </form>
   );

@@ -445,9 +445,9 @@ export const WSSearch = {
     const billData = await WSSearch.searchBills(tenantId, consumercodes);
 
     if (filters?.applicationNumber) businessIds = filters?.applicationNumber;
-
-    const workflowDetails = await WSSearch.workflowDataDetails(tenantId, businessIds);
-
+    
+    const workflowDetails = await WSSearch.workflowDataDetails(tenantId, applicationNumber);
+    
     const wsDataDetails = cloneDeep(response?.WaterConnection?.[0] || response?.SewerageConnections?.[0]);
     const propertyDataDetails = cloneDeep(properties?.Properties?.[0]);
     const billDetails = cloneDeep(billData);
@@ -525,6 +525,7 @@ export const WSSearch = {
       additionalDetails: {
         documents: [{
           title: "BILL_AMEND_DOCS_UPLOADED",
+          BS:'BillAmend',
           values: billAmendmentSearch.Amendments[0]?.documents?.map((document) => {
             return {
               title: `WS_${document?.documentType}`,
