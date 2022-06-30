@@ -1133,40 +1133,4 @@ public class InboxService {
 
 		return results;
 	}
-
-    public Map<String, BigDecimal> getAggregateData(RequestDto request) {
-        Map<String, BigDecimal> result = new HashMap<>();
-        RequestDate dateReq = new RequestDate();
-        Map<String, Object> filters = new HashMap<>();
-        try {
-            dateReq.setInterval(DSS_INTERVAL);
-            request.getAggregationRequestDto().setRequestDate(dateReq);
-            request.getAggregationRequestDto().setVisualizationType(DSS_VISUALIZATIONTYPE);
-            Calendar cal = Calendar.getInstance();
-            request.getAggregationRequestDto().getRequestDate().setEndDate(String.valueOf(cal.getTimeInMillis()));
-            cal.add(Calendar.YEAR, -config.getDssYear());
-            request.getAggregationRequestDto().getRequestDate().setStartDate(String.valueOf(cal.getTimeInMillis()));
-            filters.put(TENANT_ID, new ArrayList<>());
-            request.getAggregationRequestDto().setFilters(filters);
-
-            Map<String, List<String>> vizCodes = config.getDssVizualizationModuleCodes();
-            for (Map.Entry<String, List<String>> entry : vizCodes.entrySet()) {
-                if (entry.getKey().equalsIgnoreCase(request.getAggregationRequestDto().getModuleLevel())) {
-                    List<String> codes = entry.getValue();
-                    for (String code : codes) {
-                        request.getAggregationRequestDto().setVisualizationCode(code);
-                        Object response = wsInboxFilterService.getAggregateData(request);
-                        MetricResponse metricResponse = mapper.convertValue(response, MetricResponse.class);
-                        log.info("response from the query " + mapper.writeValueAsString(metricResponse));
-                        result.put(code,metricResponse.getResponseData().getData().get(0).getHeaderValue());
-                    }
-                } else {
-                    throw new CustomException(ErrorConstants.INVALID_MODULE, "could not find the configurations for " +request.getAggregationRequestDto().getModuleLevel());
-                }
-            }
-        } catch (Exception e) {
-            throw new CustomException(ErrorConstants.INVALID_MODULE_DATA, e.getMessage());
-        }
-        return result;
-    }
 }

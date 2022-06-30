@@ -79,10 +79,11 @@ public class InboxConfiguration {
 	@Value("#{${bs.businesscode.service.search}}")
 	private Map<String, Map<String, String>> bsServiceSearchMapping;
 
-	@Value("#{${dss.visualization.module.codes}}")
-	private Map<String, List<String>> dssVizualizationModuleCodes;
+	@Value("${egov.mdms.host}")
+	private String mdmsHost;
 
-	@Value("${dss.data.year}")
-	private Integer dssYear;
+	@Value("${egov.mdms.search.endpoint}")
+	private String mdmsSearchEndPoint;
+
 
 }

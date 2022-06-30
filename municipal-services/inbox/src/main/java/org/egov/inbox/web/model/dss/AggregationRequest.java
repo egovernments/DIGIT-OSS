@@ -11,13 +11,14 @@ import java.util.Map;
 @NoArgsConstructor
 @Getter
 @Setter
-public class RequestDto {
+public class AggregationRequest {
 
     @Valid
-    @JsonProperty("tenantId")
-    private String tenantId;
+    @JsonProperty("headers")
+    private Map<String, Object> headers;
 
     @Valid
-    @JsonProperty("module")
-    private String module;
+    @JsonProperty("aggregationRequestDto")
+    private AggregateRequestDto aggregationRequestDto;
+
 }

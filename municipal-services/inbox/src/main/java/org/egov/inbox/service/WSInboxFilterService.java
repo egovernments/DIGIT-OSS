@@ -44,12 +44,6 @@ public class WSInboxFilterService {
     @Value("${egov.searcher.ws.count.path}")
     private String wsInboxSearcherCountEndpoint;
 
-    @Value("${egov.dashboard.analytics.host}")
-    private String dashboardAnalyticsHost;
-
-    @Value("${egov.dashboard.analytics.getchartv2.path}")
-    private String dashboardAnalyticsEndPoint;
-
     @Autowired
     private RestTemplate restTemplate;
 
@@ -253,19 +247,5 @@ public class WSInboxFilterService {
             log.error("Exception trace: ", e);
         }
         return userUuids;
-    }
-
-    public Object getAggregateData(RequestDto request) {
-        StringBuilder uri = new StringBuilder(dashboardAnalyticsHost)
-                .append(dashboardAnalyticsEndPoint);
-        try {
-            request.getAggregationRequestDto().setModuleLevel("");
-            Object response = serviceRequestRepository.fetchResult(uri, request);
-            return response;
-        } catch (IllegalArgumentException e) {
-            throw new CustomException("IllegalArgumentException", "ObjectMapper not able to convertValue in dss call");
-        } catch (Exception e) {
-            throw new CustomException("ServiceCallException", "Exception while fetching the result for dss");
-        }
     }
 }

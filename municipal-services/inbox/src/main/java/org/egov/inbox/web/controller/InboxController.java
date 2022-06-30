@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.egov.inbox.service.DSSInboxFilterService;
 import org.egov.inbox.service.InboxService;
 import org.egov.inbox.web.model.Inbox;
 import org.egov.inbox.web.model.InboxRequest;
@@ -34,8 +35,10 @@ public class InboxController {
 	
 	@Autowired
 	private InboxService inboxService;
-	
-	
+
+	@Autowired
+	private DSSInboxFilterService dssInboxService;
+
 	@Autowired
 	private ResponseInfoFactory responseInfoFactory;
 	
@@ -52,7 +55,7 @@ public class InboxController {
 
 	@PostMapping(value = "/dss/_search")
 	public ResponseEntity<Map<String, BigDecimal>> getChartV2(@Valid @RequestBody RequestDto request) {
-		Map<String, BigDecimal> response = inboxService.getAggregateData(request);
+		Map<String, BigDecimal> response = dssInboxService.getAggregateData(request);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
