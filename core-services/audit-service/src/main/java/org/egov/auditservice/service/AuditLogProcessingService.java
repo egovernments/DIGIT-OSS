@@ -2,6 +2,7 @@ package org.egov.auditservice.service;
 
 import org.egov.auditservice.producer.Producer;
 import org.egov.auditservice.repository.AuditServiceRepository;
+import org.egov.auditservice.validator.AuditServiceValidator;
 import org.egov.auditservice.web.models.AuditLog;
 import org.egov.auditservice.web.models.AuditLogRequest;
 import org.egov.auditservice.web.models.AuditLogSearchCriteria;
@@ -30,6 +31,9 @@ public class AuditLogProcessingService {
     @Autowired
     private AuditServiceRepository repository;
 
+    @Autowired
+    private AuditServiceValidator validator;
+
     public void process(AuditLogRequest request) {
 
         // Enrich audit logs
@@ -44,6 +48,8 @@ public class AuditLogProcessingService {
 
 
     public List<AuditLog> getAuditLogs(RequestInfo requestInfo, AuditLogSearchCriteria criteria) {
+
+        validator.validateAuditLogSearch(criteria);
 
         List<AuditLog> auditLogs = repository.getAuditLogsFromDb(criteria);
 
