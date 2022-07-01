@@ -37,7 +37,7 @@ public class AuditLogProcessingService {
         chooseSignerAndVerifier.selectImplementationAndSign(request);
 
         // Persister will handle persisting audit records
-        producer.push("persist-audit-record", request);
+        producer.push("persist-audit-logs", request);
     }
 
 

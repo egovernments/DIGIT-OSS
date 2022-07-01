@@ -4,14 +4,17 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.auditservice.web.models.AuditLog;
 import org.egov.tracer.model.CustomException;
+import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -47,20 +50,11 @@ public class AuditRowMapper implements ResultSetExtractor<List<AuditLog>> {
                         .integrityHash(rs.getString("integrityhash"))
                         .build();
 
-                try {
-                    Map<String, Object> keyValuePairs = objectMapper
-                            .readValue(rs.getString("keyvaluepairs"),
-                                    new TypeReference<Map<String, Object>>() {
-                                    });
-                } catch (JsonParseException e1) {
-                    throw new CustomException("EG_AUDIT_ROW_MAPPER_ERR", "Error while parsing key value pairs");
+                JsonNode keyValuePairsJson = getKeyValuePairs("keyvaluepairs", rs);
 
-                } catch (JsonMappingException e2) {
-                    throw new CustomException("EG_AUDIT_ROW_MAPPER_ERR", "Error while mapping key value pairs");
+                Map<String, Object> keyValuePairs = objectMapper.convertValue(keyValuePairsJson, new TypeReference<Map<String, Object>>(){});
 
-                } catch (JsonProcessingException e3) {
-                    throw new CustomException("EG_AUDIT_ROW_MAPPER_ERR", "Error while processing key value pairs");
-                }
+                auditLog.setKeyValuePairs(keyValuePairs);
 
             }
 
@@ -68,4 +62,20 @@ public class AuditRowMapper implements ResultSetExtractor<List<AuditLog>> {
         }
         return new ArrayList<>(auditLogMap.values());
     }
+
+    private JsonNode getKeyValuePairs(String columnName, ResultSet rs){
+
+        JsonNode keyValuePairs = null;
+        try {
+            PGobject pgObj = (PGobject) rs.getObject(columnName);
+            if(pgObj!=null){
+                keyValuePairs = objectMapper.readTree(pgObj.getValue());
+            }
+        }
+        catch (IOException | SQLException e){
+            throw new CustomException("PARSING_ERROR","Failed to parse additionalDetail object");
+        }
+        return keyValuePairs;
+    }
+
 }
