@@ -85,7 +85,7 @@ const Response = ({ data, onSuccess }) => {
             source,
             sanitationtype: pitType?.code,
             paymentPreference: selectPaymentPreference ? selectPaymentPreference?.code : "POST_PAY",
-            noOfTrips: selectTripNo ? selectTripNo?.code : 1,
+            noOfTrips: selectTripNo ? selectTripNo?.tripNo?.code : 1,
             vehicleCapacity: selectTripNo ? selectTripNo?.vehicleCapacity?.capacity : ""
           },
           workflow: null,
