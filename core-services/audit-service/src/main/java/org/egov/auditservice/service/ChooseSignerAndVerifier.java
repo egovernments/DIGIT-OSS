@@ -1,7 +1,11 @@
 package org.egov.auditservice.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.egov.auditservice.repository.AuditServiceRepository;
+import org.egov.auditservice.web.models.AuditLog;
 import org.egov.auditservice.web.models.AuditLogRequest;
+import org.egov.auditservice.web.models.AuditLogSearchCriteria;
+import org.egov.auditservice.web.models.ObjectIdWrapper;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +22,9 @@ public class ChooseSignerAndVerifier {
 
     @Value("${audit.log.signing.algorithm}")
     private String signingAlgorithm;
+
+    @Autowired
+    private AuditServiceRepository repository;
 
 
     private final Map<String, ConfigurableSignAndVerify> signerAndVerifierByImplementationName;
@@ -39,7 +46,16 @@ public class ChooseSignerAndVerifier {
         signAndVerifyUtil.sign(auditLogRequest);
     }
 
-    public void selectImplementationAndVerify(AuditLogRequest auditLogRequest){
-        
+    public void selectImplementationAndVerify(ObjectIdWrapper objectIdWrapper){
+
+        // Selects verification implementation according to the configured signing algorithm
+        ConfigurableSignAndVerify signAndVerifyUtil = signerAndVerifierByImplementationName.get(signingAlgorithm);
+
+        // Verify audit log
+        Boolean isUntampered = signAndVerifyUtil.verify(objectIdWrapper);
+
+        if(!isUntampered)
+            throw new CustomException("EG_AUDIT_LOG_VERIFICATION_ERR", "Verification unsuccessful, the db entity with object id - " + objectIdWrapper.getObjectId() + " has been tampered.");
+
     }
 }

@@ -26,4 +26,10 @@ public class AuditLogSearchCriteria {
     @JsonProperty("tenantId")
     private String tenantId;
 
+    @JsonProperty("offset")
+    private Integer offset;
+
+    @JsonProperty("limit")
+    private Integer limit;
+
 }

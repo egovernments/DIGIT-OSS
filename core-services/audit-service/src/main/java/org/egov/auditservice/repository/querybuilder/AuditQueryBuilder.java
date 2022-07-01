@@ -1,6 +1,8 @@
 package org.egov.auditservice.repository.querybuilder;
 
+import org.egov.auditservice.config.AuditServiceConfiguration;
 import org.egov.auditservice.web.models.AuditLogSearchCriteria;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
@@ -9,6 +11,9 @@ import java.util.List;
 
 @Component
 public class AuditQueryBuilder {
+
+    @Autowired
+    private AuditServiceConfiguration config;
 
     private static final String BASE_QUERY = "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluepairs, operationtype, integrityhash FROM eg_audit_logs ";
 
@@ -40,7 +45,29 @@ public class AuditQueryBuilder {
             preparedStmtList.add(criteria.getUserUUID());
         }
 
+        addPagination(query, preparedStmtList, criteria);
+
         return query.toString();
+
+    }
+
+    private void addPagination(StringBuilder query,List<Object> preparedStmtList, AuditLogSearchCriteria criteria){
+        int limit = config.getDefaultLimit();
+        int offset = config.getDefaultOffset();
+        query.append(" OFFSET ? ");
+        query.append(" LIMIT ? ");
+
+        if(criteria.getLimit()!=null && criteria.getLimit()<=config.getMaxSearchLimit())
+            limit = criteria.getLimit();
+
+        if(criteria.getLimit()!=null && criteria.getLimit()>config.getMaxSearchLimit())
+            limit = config.getMaxSearchLimit();
+
+        if(criteria.getOffset()!=null)
+            offset = criteria.getOffset();
+
+        preparedStmtList.add(offset);
+        preparedStmtList.add(limit);
 
     }
 

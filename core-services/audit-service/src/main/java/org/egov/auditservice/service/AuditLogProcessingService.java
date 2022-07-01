@@ -5,6 +5,7 @@ import org.egov.auditservice.repository.AuditServiceRepository;
 import org.egov.auditservice.web.models.AuditLog;
 import org.egov.auditservice.web.models.AuditLogRequest;
 import org.egov.auditservice.web.models.AuditLogSearchCriteria;
+import org.egov.auditservice.web.models.ObjectIdWrapper;
 import org.egov.common.contract.request.RequestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AuditLogProcessingService {
@@ -49,5 +51,9 @@ public class AuditLogProcessingService {
             return new ArrayList<>();
 
         return auditLogs;
+    }
+
+    public void verifyDbEntity(String objectId, Map<String, Object> keyValuePairs){
+        chooseSignerAndVerifier.selectImplementationAndVerify(ObjectIdWrapper.builder().objectId(objectId).keyValuePairs(keyValuePairs).build());
     }
 }

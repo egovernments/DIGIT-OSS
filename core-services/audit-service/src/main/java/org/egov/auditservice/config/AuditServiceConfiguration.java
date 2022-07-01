@@ -22,6 +22,15 @@ import java.util.TimeZone;
 @AllArgsConstructor
 public class AuditServiceConfiguration {
 
+    @Value("${audit.service.default.offset}")
+    private Integer defaultOffset;
+
+    @Value("${audit.service.default.limit}")
+    private Integer defaultLimit;
+
+    @Value("${audit.service.max.search.limit}")
+    private Integer maxSearchLimit;
+
     @Value("${app.timezone}")
     private String timeZone;
 

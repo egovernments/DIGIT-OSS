@@ -9,11 +9,16 @@ import org.bouncycastle.crypto.digests.SHA256Digest;
 import org.bouncycastle.crypto.macs.HMac;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.util.encoders.Hex;
+import org.egov.auditservice.repository.AuditServiceRepository;
+import org.egov.auditservice.web.models.AuditLog;
 import org.egov.auditservice.web.models.AuditLogRequest;
+import org.egov.auditservice.web.models.AuditLogSearchCriteria;
+import org.egov.auditservice.web.models.ObjectIdWrapper;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -23,6 +28,9 @@ public class HmacImplementation implements ConfigurableSignAndVerify {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private AuditServiceRepository repository;
 
     @Value("${hmac.key}")
     private String hmacKey;
@@ -57,8 +65,31 @@ public class HmacImplementation implements ConfigurableSignAndVerify {
     }
 
     @Override
-    public Boolean verify(AuditLogRequest auditLogRequest) {
-        return null;
+    public Boolean verify(ObjectIdWrapper objectIdWrapper) {
+
+        Boolean isUntampered = false;
+
+        List<AuditLog> auditLogs = repository.getAuditLogsFromDb(AuditLogSearchCriteria.builder().objectId(objectIdWrapper.getObjectId()).build());
+
+        if(CollectionUtils.isEmpty(auditLogs))
+            throw new CustomException("EG_AUDIT_LOG_VERIFICATION_ERR", "No audit log entry found with object id - " + objectIdWrapper.getObjectId());
+
+        objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+
+        try {
+            objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+            String dataToBeHashed = objectMapper.writeValueAsString(objectIdWrapper.getKeyValuePairs());
+            if(hashData(dataToBeHashed, hmacKey).equals(auditLogs.get(0).getIntegrityHash())){
+                log.info("Verification of the object with objectId - " + objectIdWrapper.getObjectId() +  " is successful. This record has not been tampered.");
+                isUntampered = true;
+            }else
+                throw new CustomException("EG_AUDIT_LOG_VERIFICATION_ERR", "Verification unsuccessful, record has been tampered.");
+        } catch (JsonProcessingException e) {
+            throw new CustomException("EG_AUDIT_LOG_VERIFICATION_ERR", "Error while parsing key value pairs");
+        }
+
+        return isUntampered;
+
     }
 
     @Override

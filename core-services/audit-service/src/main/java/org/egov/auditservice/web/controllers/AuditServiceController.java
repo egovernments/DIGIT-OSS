@@ -46,8 +46,8 @@ public class AuditServiceController {
 
 
     @RequestMapping(value="/v1/_verify", method = RequestMethod.POST)
-    public ResponseEntity<ResponseInfo> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
-                                               @Valid @ModelAttribute ObjectIdWrapper objectIdWrapper) {
+    public ResponseEntity<ResponseInfo> verify(@Valid @RequestBody VerificationRequest verificationRequest) {
+        service.verifyDbEntity(verificationRequest.getObjectId(), verificationRequest.getKeyValuePairs());
         return new ResponseEntity<>(ResponseInfo.builder().build(), HttpStatus.OK);
     }
 
