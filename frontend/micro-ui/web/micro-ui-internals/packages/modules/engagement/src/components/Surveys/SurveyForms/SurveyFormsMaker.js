@@ -50,14 +50,15 @@ const surveyFormReducer = (state, { type, payload }) => {
       <div className="heading">{t("CS_SURVEYS_QUESTIONS")}</div>
       {renderPreviewForms()}
       <div className="pointer">
-        <button 
+        {surveyState.length < 30  && <button 
           // disabled={surveyState.length >= 30 ? "true":""}
           className={`unstyled-button link ${disableInputs ? "disabled-btn" : ""} ${surveyState.length >= 30 ? "disabled-btn":""} `}
           type="button"
           onClick={() => passingSurveyConfigInDispatch({ type: "addNewForm" })}
+          disabled={surveyState.length >= 30?true:false}
         >
           {t("CS_COMMON_ADD_QUESTION")}
-        </button>
+        </button>}
       </div>
     </div>
   );
