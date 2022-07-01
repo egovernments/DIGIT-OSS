@@ -71,7 +71,7 @@ const ApplicationDetails = () => {
 
   const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
     {
-      tenantId: stateCode,
+      tenantId: tenantId,
       businessService:  serviceType == "WATER" ? "WS.ONE_TIME_FEE" : "SW.ONE_TIME_FEE",
       consumerCodes: applicationDetails?.applicationData?.applicationNo
     },

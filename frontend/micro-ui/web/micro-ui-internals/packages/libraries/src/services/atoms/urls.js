@@ -163,7 +163,9 @@ const Urls = {
     sw_meter_conncetion_create: "/sw-calculator/meterConnection/_create",
     wns_group_bill: "/egov-pdf/download/WNS/wnsgroupbill",
     cancel_group_bill: "/pdf-service/v1/_cancelProcess",
-    wns_generate_pdf: "/egov-pdf/download/WNS/wnsbill"
+    wns_generate_pdf: "/egov-pdf/download/WNS/wnsbill",
+    water_applyAdhocTax : "/ws-calculator/waterCalculator/_applyAdhocTax",
+    sewerage_applyAdhocTax: "/sw-calculator/sewerageCalculator/_applyAdhocTax",
   },
 
   engagement: {

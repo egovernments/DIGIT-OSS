@@ -4,6 +4,7 @@ import cloneDeep from "lodash/cloneDeep";
 import { PaymentService } from "../../elements/Payment";
 import { MdmsService } from "../../elements/MDMS";
 import { WorkflowService } from "../../elements/WorkFlow";
+import _ from 'lodash';
 
 const stringReplaceAll = (str = "", searcher = "", replaceWith = "") => {
   if (searcher == "") return str;
@@ -140,12 +141,50 @@ export const WSSearch = {
             ],
       isconnectionCalculation: false,
     };
-    let estimationResponse = {};
-    if (serviceType == "WATER" && response?.WaterConnection?.length > 0) {
-      estimationResponse = await WSSearch.wsEstimationDetails(data, serviceType);
+
+    tenantId = wsData?.[0]?.tenantId ? wsData?.[0]?.tenantId : tenantId;
+    const serviceTypeOfData = serviceType == "WATER" ? "WS.ONE_TIME_FEE" : "SW.ONE_TIME_FEE";
+    const collectionNumber = filters?.applicationNumber;
+
+    let fetchBillData = {}, colletionData = {}, estimationResponse = {}, mdmsRes = {};
+
+    fetchBillData = await WSSearch.fetchBillData({ tenantId, serviceTypeOfData, collectionNumber });
+
+    if (fetchBillData?.Bill?.length > 0) {
+      const stateCode = Digit.ULBService.getStateId();
+      mdmsRes = await MdmsService.getMultipleTypes(stateCode, "BillingService", ["TaxHeadMaster"]);
+      let taxHeadMasterResponce = mdmsRes.BillingService.TaxHeadMaster;
+      fetchBillData.Bill[0].billDetails[0].billAccountDetails.forEach(data => {
+        taxHeadMasterResponce.forEach(taxHeadCode => { if (data.taxHeadCode == taxHeadCode.code) { data.category = taxHeadCode.category } });
+      });
+
+      let fee = 0, charge = 0, taxAmount = 0;
+      fetchBillData.Bill[0].billSlabData = _.groupBy(fetchBillData.Bill[0].billDetails[0].billAccountDetails, 'category')
+      if (fetchBillData?.Bill?.[0]?.billSlabData?.FEE?.length > 0) fetchBillData.Bill[0].billSlabData.FEE?.map(amount => { fee += parseFloat(amount.amount); });
+      if (fetchBillData?.Bill?.[0]?.billSlabData?.CHARGES?.length > 0) fetchBillData.Bill[0].billSlabData.CHARGES?.map(amount => { charge += parseFloat(amount.amount); });
+      if (fetchBillData?.Bill?.[0]?.billSlabData?.TAX?.length > 0) fetchBillData.Bill[0].billSlabData.TAX?.map(amount => { taxAmount += parseFloat(amount.amount); });
+      fetchBillData.Bill[0].fee = fee;
+      fetchBillData.Bill[0].charge = charge
+      fetchBillData.Bill[0].taxAmount = taxAmount;
+      fetchBillData.Bill[0].totalAmount = fee + charge + taxAmount;
     }
-    if (serviceType !== "WATER" && response?.SewerageConnections?.length > 0) {
-      estimationResponse = await WSSearch.wsEstimationDetails(data, serviceType);
+
+    if (!(fetchBillData?.Bill?.length > 0)) {
+      colletionData = await WSSearch.colletionData({ tenantId, serviceTypeOfData, collectionNumber });
+    }
+
+    if (colletionData?.Payments?.length == 0 && fetchBillData?.Bill?.length == 0) {
+      if (serviceType == "WATER" && response?.WaterConnection?.length > 0) {
+        estimationResponse = await WSSearch.wsEstimationDetails(data, serviceType);
+      }
+      if (serviceType !== "WATER" && response?.SewerageConnections?.length > 0) {
+        estimationResponse = await WSSearch.wsEstimationDetails(data, serviceType);
+      }
+
+      fetchBillData = {};
+      fetchBillData.Bill = [];
+      fetchBillData.Bill[0] = estimationResponse?.Calculation?.[0]
+
     }
 
     const wsDataDetails = cloneDeep(serviceType == "WATER" ? response?.WaterConnection?.[0] : response?.SewerageConnections?.[0]);
@@ -174,17 +213,21 @@ export const WSSearch = {
             ],
     };
 
+    let isAdhocRebate = false;
+    if (workFlowDataDetails?.ProcessInstances?.[0]?.state?.applicationStatus == "PENDING_FOR_PAYMENT" && !window.location.href.includes("/citizen") && workFlowDataDetails?.ProcessInstances?.[0]?.state?.actions?.length > 0) isAdhocRebate = true;
     const feeEstimation = {
       title: "WS_TASK_DETAILS_FEE_ESTIMATE",
       asSectionHeader: true,
       additionalDetails: {
         estimationDetails: true,
-        data: estimationResponse?.Calculation?.[0],
+        data: fetchBillData?.Bill?.[0],
         appDetails: wsDataDetails,
+        isAdhocRebate: isAdhocRebate,
+        isPaid: colletionData?.Payments?.length > 0 ? true : false,
         values: [
-          { title: "WS_APPLICATION_FEE_HEADER", value: estimationResponse?.Calculation?.[0]?.fee },
-          { title: "WS_SERVICE_FEE_HEADER", value: estimationResponse?.Calculation?.[0]?.charge },
-          { title: "WS_TAX_HEADER", value: estimationResponse?.Calculation?.[0]?.taxAmount },
+          { title: "WS_APPLICATION_FEE_HEADER", value: fetchBillData?.Bill?.[0]?.fee },
+          { title: "WS_SERVICE_FEE_HEADER", value: fetchBillData?.Bill?.[0]?.charge },
+          { title: "WS_TAX_HEADER", value: fetchBillData?.Bill?.[0]?.taxAmount },
         ],
       },
     };
