@@ -13,9 +13,9 @@ const nationalScreenURLs = {
   obps: { key: "nss-obps", stateKey: "obps", label: "DSS_BUILDING_PERMISSION", active: true, nActive: true },
   noc: { key: "national-firenoc", stateKey: "noc", label: "NURT_FIRENOC", active: true, nActive: true },
   bnd: {key:"nss-birth-death",stateKey:"birth-death",label:"BIRTH_AND_DEATH",active:true,nActive:true},
-  faqs: {key:"national-faqs",stateKey:"national-faqs",label:"DSS_FAQS",active:false,nActive:true},
+  faqs: {key:"national-faqs",stateKey:"national-faqs",label:"DSS_FAQS",active:false,nActive:true,others:true},
   finance: {key:"national-finance",stateKey:"finance",label:"DSS_FINANCE",active:true,nActive:false},
-  about: {key:"national-about",stateKey:"national-about",label:"DSS_ABOUT_DASHBOARD",active:false,nActive:true},
+  about: {key:"national-about",stateKey:"national-about",label:"DSS_ABOUT_DASHBOARD",active:false,nActive:true,others:true},
 };
 
 export const checkCurrentScreen = () => {
@@ -37,6 +37,7 @@ const NDSSCard = () => {
     .map((obj) => ({
       label: t(obj?.label),
       link: `/digit-ui/employee/dss/dashboard/${obj?.key}`,
+      link: obj?.others?`/digit-ui/employee/dss/${obj?.key}`:`/digit-ui/employee/dss/dashboard/${obj?.key}`,
     }));
 
   const propsForModuleCard = {
