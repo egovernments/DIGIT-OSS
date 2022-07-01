@@ -138,8 +138,9 @@ export const searchPropertyTable = {
         options: {
           filter: false,
           customBodyRender: (value, tableMeta) =>
-          (value.totalAmount > 0) ? getPayButton(tableMeta) : getMutationButton(tableMeta) ,
-
+          {
+           return (value.totalAmount > 0) ? getPayButton(tableMeta) : value.status==="ACTIVE"?getMutationButton(tableMeta):"N/A";
+          }
         },
       }, 
       {
