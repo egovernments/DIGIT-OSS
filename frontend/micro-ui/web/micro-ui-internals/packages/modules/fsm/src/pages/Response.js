@@ -155,9 +155,9 @@ const Response = (props) => {
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
       {props.parentRoute.includes("employee") &&
-      (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
-      paymentAccess &&
-      isSuccess ? (
+        (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
+        paymentAccess &&
+        isSuccess ? (
         <div className="secondary-action">
           <Link to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`}>
             <SubmitBar label={t("ES_COMMON_PAY")} />
