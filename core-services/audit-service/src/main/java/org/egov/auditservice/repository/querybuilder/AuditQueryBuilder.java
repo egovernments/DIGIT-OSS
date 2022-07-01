@@ -1,11 +1,53 @@
 package org.egov.auditservice.repository.querybuilder;
 
 import org.egov.auditservice.web.models.AuditLogSearchCriteria;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
+@Component
 public class AuditQueryBuilder {
+
+    private static final String BASE_QUERY = "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluepairs, operationtype, integrityhash FROM eg_audit_logs ";
+
     public String getAuditLogQuery(AuditLogSearchCriteria criteria, List<Object> preparedStmtList) {
-        return "";
+        StringBuilder query = new StringBuilder(BASE_QUERY);
+        if(!ObjectUtils.isEmpty(criteria.getTenantId())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" tenantid = ? ");
+            preparedStmtList.add(criteria.getTenantId());
+        }
+        if(!ObjectUtils.isEmpty(criteria.getId())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" id = ? ");
+            preparedStmtList.add(criteria.getId());
+        }
+        if(!ObjectUtils.isEmpty(criteria.getModule())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" module = ? ");
+            preparedStmtList.add(criteria.getModule());
+        }
+        if(!ObjectUtils.isEmpty(criteria.getObjectId())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" objectid = ? ");
+            preparedStmtList.add(criteria.getObjectId());
+        }
+        if(!ObjectUtils.isEmpty(criteria.getUserUUID())){
+            addClauseIfRequired(query, preparedStmtList);
+            query.append(" useruuid = ? ");
+            preparedStmtList.add(criteria.getUserUUID());
+        }
+
+        return query.toString();
+
+    }
+
+    private void addClauseIfRequired(StringBuilder query, List<Object> preparedStmtList){
+        if(CollectionUtils.isEmpty(preparedStmtList))
+            query.append(" WHERE ");
+        else
+            query.append(" AND ");
     }
 }
