@@ -39,6 +39,8 @@ import com.ingestpipeline.model.IncomingData;
 import com.ingestpipeline.model.TargetData;
 import com.ingestpipeline.util.Constants;
 
+import org.egov.tracer.model.CustomException;
+
 @Component("elasticService")
 public class ElasticService implements IESService {
 
@@ -155,7 +157,7 @@ public class ElasticService implements IESService {
 	}
 	
 	@Override
-    public Map search(String index, String searchQuery) {
+    public Map search(String index, String searchQuery) throws CustomException{
 
         String url = indexServiceHost + index + indexServiceHostSearch;
         HttpHeaders headers = new HttpHeaders();
@@ -182,7 +184,7 @@ public class ElasticService implements IESService {
     }
 	
 	@Override
-	public Boolean push(Map requestBody) {
+	public Boolean push(Map requestBody) throws CustomException {
 
 		Object id = requestBody.get(Constants.IDENTIFIER);
 		Object trxid = ((Map)requestBody.get(Constants.DATA_OBJECT)).get(Constants.TRANSACTION_ID);
@@ -223,7 +225,7 @@ public class ElasticService implements IESService {
 	}
 
 	@Override
-	public Boolean push(TargetData requestBody) {
+	public Boolean push(TargetData requestBody) throws CustomException {
 
 		String url = indexerServiceHost + targetIndexName + DOC_TYPE + requestBody.getId();
 
@@ -308,7 +310,7 @@ public class ElasticService implements IESService {
 	}
 	
 	@Override
-    public List searchMultiple(String index, String searchQuery) {
+    public List searchMultiple(String index, String searchQuery) throws CustomException {
 
         String url = indexServiceHost + index + indexServiceHostSearch;
         HttpHeaders headers = new HttpHeaders();

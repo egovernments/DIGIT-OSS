@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.egov.tracer.model.CustomException;
+
 
 public interface IESService {
 
@@ -40,7 +42,7 @@ public interface IESService {
      */
     JsonNode search(String index, ObjectNode searchQuery) throws IOException;
 
-    Boolean push(TargetData requestBody) ;
+    Boolean push(TargetData requestBody) throws CustomException ;
 
     /**
      * searches documents from ES based on query using restTemplate
@@ -49,10 +51,10 @@ public interface IESService {
      * @return
      * @throws Exception
      */
-    Map search(String index, String query) ;
+    Map search(String index, String query) throws CustomException;
     
-    List searchMultiple(String index, String query) ;
-    Boolean push(Map requestBody) ;
+    List searchMultiple(String index, String query) throws CustomException;
+    Boolean push(Map requestBody) throws CustomException;
 
 
     /**
@@ -114,5 +116,5 @@ public interface IESService {
         return Boolean.TRUE;
     }
 
-    Boolean searchIndex(String index, String query, String dataContextVersion);
+    Boolean searchIndex(String index, String query, String dataContextVersion) throws CustomException;
 }

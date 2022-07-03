@@ -84,6 +84,7 @@ import org.egov.receipt.consumer.model.VoucherSearchRequest;
 import org.egov.receipt.consumer.repository.ServiceRequestRepository;
 import org.egov.receipt.custom.exception.VoucherCustomException;
 import org.egov.reciept.consumer.config.PropertiesManager;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,7 +122,7 @@ public class VoucherServiceImpl implements VoucherService {
 	 * request.
 	 */
 	public VoucherResponse createReceiptVoucher(ReceiptReq receiptRequest, FinanceMdmsModel finSerMdms, String collectionVersion)
-			{
+			throws CustomException {
 		Receipt receipt = receiptRequest.getReceipt().get(0);
 		String tenantId = receipt.getTenantId();
 //		final StringBuilder voucher_create_url = new StringBuilder(propertiesManager.getErpURLBytenantId(tenantId)

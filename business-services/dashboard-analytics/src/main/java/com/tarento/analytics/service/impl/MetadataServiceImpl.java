@@ -33,6 +33,7 @@ import com.tarento.analytics.dto.RoleDto;
 import com.tarento.analytics.dto.Tenants;
 import com.tarento.analytics.exception.AINException;
 import com.tarento.analytics.service.MetadataService;
+import org.egov.tracer.model.CustomException;
 
 @Service("metadataService")
 public class MetadataServiceImpl implements MetadataService {
@@ -161,7 +162,7 @@ public class MetadataServiceImpl implements MetadataService {
 		return dbArray;
 	}*/
 
-	public JSONArray getTargetDistrict() {
+	public JSONArray getTargetDistrict() throws CustomException {
 		final String baseUrl = mdmsServiceHost + mdmsSearchEndpoint;
 		URI uri = new URI(baseUrl);
 		HttpHeaders headers = new HttpHeaders();
