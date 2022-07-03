@@ -28,8 +28,29 @@
     <log4j2.version>2.17.1</log4j2.version>
     <java.version>1.8</java.version>
     <lombok.version>1.18.8</lombok.version>
+    <gson.version>2.8.9</gson.version>
   </properties>
   <dependencies>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot</artifactId>
+      <version>2.2.11.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>net.minidev</groupId>
+      <artifactId>json-smart</artifactId>
+      <version>2.3.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+      <version>5.2.20.RELEASE</version>
+    </dependency>
     <dependency>
       <groupId>org.egov.services</groupId>
       <artifactId>services-common</artifactId>
@@ -61,6 +82,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
+      <version>2.12.6.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
