@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.tarento.analytics.constant.Constants;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -162,7 +164,7 @@ public class MetadataServiceImpl implements MetadataService {
 		return dbArray;
 	}*/
 
-	public JSONArray getTargetDistrict() throws CustomException {
+	public JSONArray getTargetDistrict() throws CustomException, URISyntaxException, IOException {
 		final String baseUrl = mdmsServiceHost + mdmsSearchEndpoint;
 		URI uri = new URI(baseUrl);
 		HttpHeaders headers = new HttpHeaders();

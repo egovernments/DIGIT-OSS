@@ -53,8 +53,8 @@ import org.egov.receipt.custom.exception.VoucherCustomException;
 import org.egov.tracer.model.CustomException;
 
 public interface MicroServiceUtil {
-	public List<TaxHeadMaster> getTaxHeadMasters(String tenantId, String code, RequestInfo requestInfo, FinanceMdmsModel finSerMdms)  throws CustomException;
-	public List<BusinessService> getBusinessService(String tenantId, String code, RequestInfo requestInfo, FinanceMdmsModel finSerMdms) throws CustomException;
+	public List<TaxHeadMaster> getTaxHeadMasters(String tenantId, String code, RequestInfo requestInfo, FinanceMdmsModel finSerMdms)  throws CustomException, VoucherCustomException;
+	public List<BusinessService> getBusinessService(String tenantId, String code, RequestInfo requestInfo, FinanceMdmsModel finSerMdms) throws CustomException, VoucherCustomException;
 	String getBusinessServiceName(String tenantId, String code, RequestInfo requestInfo, FinanceMdmsModel finSerMdms)
 			throws VoucherCustomException;
 	String getGlcodeByInstrumentType(String tenantId, String businessCode, RequestInfo requestInfo,
