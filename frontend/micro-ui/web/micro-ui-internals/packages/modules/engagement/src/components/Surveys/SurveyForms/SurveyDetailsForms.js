@@ -14,6 +14,20 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
     const filtered = ulbs.filter((item) => item.code === tenantId);
     return filtered;
   }, [ulbs]);
+  const checkRemovableTagDisabled = (isFormDisabled, isActiveSurveyEdit) => {
+
+    //survey details page 
+    if (!isActiveSurveyEdit && isFormDisabled){
+      return true
+    }
+    //active survey editing
+    else if(isActiveSurveyEdit){
+      return true
+    }
+    //inactive survey editing
+    return false
+  }
+
 
   return (
     <div className="surveydetailsform-wrapper">
@@ -32,6 +46,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
                     <RemoveableTag
                       key={index}
                       text={ulb.name}
+                      disabled = {checkRemovableTagDisabled(disableInputs,enableDescriptionOnly)}
                       onClick={() => {
                         props.onChange(props?.value?.filter((loc) => loc.code !== ulb.code));
                       }}
