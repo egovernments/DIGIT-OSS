@@ -83,6 +83,7 @@ const Urls = {
   dss: {
     dashboardConfig: "/dashboard-analytics/dashboard/getDashboardConfig",
     getCharts: "/dashboard-analytics/dashboard/getChartV2",
+    getSearchDetails: "/inbox/v1/dss/_search"
   },
 
   mcollect: {

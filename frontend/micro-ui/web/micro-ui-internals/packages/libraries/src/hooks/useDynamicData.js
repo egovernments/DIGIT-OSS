@@ -2,9 +2,12 @@ import { useQuery } from "react-query";
 import { TLService } from "./../services/elements/TL";
 import { MCollectService } from "./../services/elements/MCollect";
 import { PGRService } from "../services/elements/PGR";
+import { endOfToday, start } from "date-fns";
+import { WSService } from "../services/elements/WS";
+import { PTService } from "../services/elements/PT";
+import { format, subMonths } from "date-fns";
 
 const useDynamicData = ({moduleCode ,tenantId, filters, t }) => {
-
     const useTLDynamicData = () => {
         const { isLoading, error, data, isSuccess } =  useQuery(['TL_OPEN_SEARCH', tenantId, filters], async () => await TLService.TLOpensearch({ tenantId, filters }), 
         {select: (data) => {
@@ -23,7 +26,7 @@ const useDynamicData = ({moduleCode ,tenantId, filters, t }) => {
         {select: (data) => {
             const mCollectData = {
                 "dynamicDataOne": data?.countOfServices === 0 || data?.countOfServices === null ? null : data?.countOfServices + " "+ t("SERVICE_CATEGORIES_OF_CHALLANS_PROCESSED_IN") + " " + t(tenantId),
-                "dynamicDataTwo": data?.totalAmountCollected === 0 || data?.totalAmountCollected === null ? null : `₹ ${data?.totalAmountCollected}` + t("COLLECTED_IN_FORM_OF_CHALLANS_IN_LAST_12_MONTHS"),
+                "dynamicDataTwo": data?.totalAmountCollected === 0 || data?.totalAmountCollected === null ? null : `₹ ${data?.totalAmountCollected}` + " " +  t("COLLECTED_IN_FORM_OF_CHALLANS_IN_LAST_12_MONTHS"),
                 "staticData": data?.challanValidity === 0 || data?.challanValidity === null ? null : t("VALIDITY_OF_CHALLAN_IS") + " " + data?.challanValidity + " " + (data?.challanValidity === 1 ? t("COMMON_DAY") : t("COMMON_DAYS")) + " " + t("FROM_ISSUED_DATE")
             }
             return mCollectData;
@@ -43,6 +46,52 @@ const useDynamicData = ({moduleCode ,tenantId, filters, t }) => {
         }});
         return { isLoading, error, data, isSuccess };
     }
+    const usePTDynamicData = () => {
+        const fromDate = format(subMonths(new Date(), 12), 'yyyy-MM-dd').toString();
+        const toDate = format(new Date(),'yyyy-MM-dd').toString();
+        let filter1 = {
+            fromDate: Digit.Utils.pt.convertDateToEpoch(fromDate),
+            toDate: Digit.Utils.pt.convertDateToEpoch(toDate),
+        }
+
+        let filter2 = {...filter1, status: "ACTIVE"}
+        const { isLoading : isPTPropLoading, error: ptPropError, data: ptPropData, isSuccess : ptPropSuccess  } =  useQuery(['PT_OPEN_SEARCH_REG_PROP', tenantId, filter1], async () => await PTService.PTOpenSearch({ tenantId, filters: filter1 }), 
+        {select: (data) => {
+            const ptDataOne = {
+                "dynamicDataOne": data?.count === 0 || data?.count === null ? null : data?.count + " " + t("PROPERTIES_REGISTERED_IN_LAST_12_MONTHS"),
+            }
+            return ptDataOne;
+        }});
+
+        const { isLoading : isPTAppLoading, error: ptAppError, data: ptAppData, isSuccess : ptAppSuccess  } =  useQuery(['PT_OPEN_SEARCH_APP_PROCESS', tenantId, filter2], async () => await PTService.PTOpenSearch({ tenantId, filters: filter2 }), 
+        {select: (data) => {
+            const ptDataTwo = {
+                "dynamicDataTwo": data?.count === 0 || data?.count === null ? null : data?.count + " " + t("APPLICATION_PROCESSED_IN_LAST_12_MONTHS"),
+            }
+            return ptDataTwo;
+        }});
+        return { isLoading : isPTPropLoading || isPTAppLoading, error : ptAppError || ptPropError, data : {...ptPropData, ...ptAppData}, isSuccess: ptPropSuccess && ptAppSuccess };
+    }
+
+    //Commenting as RAIN-6754:: changes need to be made once backend response is finalized
+    // const useWSDynamicData = () => {
+    //     const { isLoading, error, data, isSuccess } =  useQuery(['WS_OPEN_SEARCH_DSS', tenantId], async () => await WSService.WSOpensearch({
+    //         aggregationRequestDto: {
+    //             moduleLevel: "WS", 
+    //           },
+    //         headers: {
+    //             tenantId,
+    //         },
+    //     }), 
+    //     {select: (data) => {
+    //         const wsData = {
+    //             "dynamicDataOne": data?.wstotalCollection === 0 || data?.wstotalCollection === null ? null : `₹ ${data?.wstotalCollection}` + " " +  t("PAID_IN_LAST_12_MONTHS_TOWARDS_WS_CHARGES"),
+    //             "dynamicDataTwo": data?.wstotalConnection === 0 || data?.wstotalConnection === null ? null : data?.wstotalConnection + " " + t("ACTIVE_CONNECTIONS_PRESENT_IN") + t(tenantId),
+    //         }
+    //         return wsData;
+    //     }});
+    //     return { isLoading, error, data, isSuccess };
+    // }
 
     switch(moduleCode){
         case 'TL':
@@ -51,6 +100,10 @@ const useDynamicData = ({moduleCode ,tenantId, filters, t }) => {
             return useMCOLLECTDynamicData();
         case 'PGR':
             return usePGRDynamicData();
+        // case 'WS':                                          //Commenting as RAIN-6754:: changes need to be made once backend response is finalized
+        //     return useWSDynamicData();
+        case 'PT':
+            return usePTDynamicData();
         default:
             return {isLoading: false, error: false, data: null, isSuccess: false};
     }
