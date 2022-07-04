@@ -726,12 +726,44 @@ export const WSSearch = {
       values:
         wsDataDetails?.connectionHolders != null && wsDataDetails?.connectionHolders.length > 0
           ? [
-              { title: "WS_OWN_DETAIL_NAME", value: wsDataDetails?.connectionHolders?.[0]?.name || t("NA") },
+              { 
+                title: "WS_OWN_DETAIL_NAME", 
+                value: wsDataDetails?.connectionHolders?.[0]?.name || t("NA"),
+                privacy: {
+                  uuid: wsDataDetails?.connectionHolders?.[0]?.uuid, 
+                  fieldName: "name", 
+                  model: "User"
+                }
+              },
               { title: "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.gender },
-              { title: "CORE_COMMON_MOBILE_NUMBER", value: wsDataDetails?.connectionHolders?.[0]?.mobileNumber },
-              { title: "WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME", value: wsDataDetails?.connectionHolders?.[0]?.fatherOrHusbandName },
+              { 
+                title: "CORE_COMMON_MOBILE_NUMBER", 
+                value: wsDataDetails?.connectionHolders?.[0]?.mobileNumber,
+                privacy: { 
+                  uuid: wsDataDetails?.connectionHolders?.[0]?.uuid, 
+                  fieldName: "mobileNumber", 
+                  model: "User" 
+                } 
+              },
+              { 
+                title: "WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME", 
+                value: wsDataDetails?.connectionHolders?.[0]?.fatherOrHusbandName,
+                privacy: { 
+                  uuid: wsDataDetails?.connectionHolders?.[0]?.uuid, 
+                  fieldName: "fatherOrHusbandName", 
+                  model: "User" 
+                }
+              },
               { title: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.relationship },
-              { title: "WS_CORRESPONDANCE_ADDRESS_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.correspondenceAddress },
+              { 
+                title: "WS_CORRESPONDANCE_ADDRESS_LABEL", 
+                value: wsDataDetails?.connectionHolders?.[0]?.correspondenceAddress,
+                privacy: { 
+                  uuid: wsDataDetails?.connectionHolders?.[0]?.uuid, 
+                  fieldName: "correspondenceAddress", 
+                  model: "User" 
+                }
+              },
               { title: "WS_OWNER_SPECIAL_CATEGORY", value: wsDataDetails?.connectionHolders?.[0]?.ownerType ? `PROPERTYTAX_OWNERTYPE_${wsDataDetails?.connectionHolders?.[0]?.ownerType?.toUpperCase()}` : "NA"}
             ]
           : [{ title: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS", value: t("SCORE_YES") }],
