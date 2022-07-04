@@ -14,11 +14,13 @@ import ApplicationDetailsBillAmendment from "./ApplicationDetailsBillAmendment";
 import Search from "./search";
 import SearchWater from "./SearchWater";
 import EditApplication from "./EditApplication";
+import EditDisconnectionApplication from "./EditDisconnectionApplication";
 import ConsumptionDetails from "./connectionDetails/ConsumptionDetails";
 import ModifyApplication from "./ModifyApplication";
 import EditModifyApplication from "./EditModifyApplication";
 import DisconnectionApplication from './DisconnectionApplication/'
 import WSEditApplicationByConfig from "./EditApplication/WSEditApplicationByConfig";
+import WSEditDisconnectionByConfig from "./EditDisconnectionApplication/WSEditApplicationByConfig";
 import ResponseBillAmend from "./ResponseBillAmend";
 import BillIAmendMentInbox from "../../components/BillIAmendMentInbox";
 import GetDisconnectionDetails from "./DisconnectionDetails";
@@ -171,6 +173,7 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/create-application`} component={WSDocsRequired} />
           <PrivateRoute path={`${path}/new-application`} component={NewApplication} />
           <PrivateRoute path={`${path}/edit-application`} component={EditApplication} />
+          <PrivateRoute path={`${path}/edit-disconnection-application`} component={EditDisconnectionApplication} />          
           <PrivateRoute path={`${path}/application-details`} component={ApplicationDetails} />
           <PrivateRoute path={`${path}/connection-details`} component={GetConnectionDetails} />
           <PrivateRoute path={`${path}/bill-amendment`} component={() => <ApplicationBillAmendment {...{ path }} />} />
@@ -194,6 +197,7 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/water/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/sewerage/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/edit-application-by-config`} component={WSEditApplicationByConfig} />
+          <PrivateRoute path={`${path}/edit-disconnection-by-config`} component={WSEditDisconnectionByConfig} />
           <PrivateRoute path={`${path}/disconnection-details`} component={GetDisconnectionDetails} />
           <PrivateRoute path={`${path}/water/bill-amendment/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/sewerage/bill-amendment/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />

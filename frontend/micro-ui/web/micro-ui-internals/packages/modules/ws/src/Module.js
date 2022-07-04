@@ -36,9 +36,11 @@ import WSActivationPageDetails from "./pageComponents/WSActivationPageDetails";
 import WSActivationCommentsDetails from "./pageComponents/WSActivationCommentsDetails";
 import WSActivationSupportingDocuments from "./pageComponents/WSActivationSupportingDocuments";
 import WSDocumentsEmployee from "./pageComponents/WSDocumentsEmployee";
+import WSDisconnectionDocsEmployee from "./pageComponents/WSDisconnectionDocsEmployee";
 import WSAcknowledgement from "./pages/citizen/WSCreate/WSAcknowledgement";
 import WSPayments from "./pages/citizen/MyPayment/WSPayments";
 import WSEditConnectionDetails from"./pageComponents/WSEditConnectionDetails";
+import WSEditDisConnectionDetails from"./pageComponents/WSEditDisConnectionDetails";
 import ConsumptionDetails from "./pages/employee/connectionDetails/ConsumptionDetails";
 import WSDisconnectionDocsRequired from "./pageComponents/WSDisconnectionDocsRequired";
 import WSDisconnectionForm from "./pageComponents/WSDisconnectionForm";
@@ -48,6 +50,7 @@ import WSDisconnectAcknowledgement from "./pageComponents/WSDisconnectAcknowledg
 
 import WSInbox from "./components/WSInbox";
 import WSEditApplicationByConfig from './pages/employee/EditApplication/WSEditApplicationByConfig';
+import WSEditDisconnectionConfig from './pages/employee/EditDisconnectionApplication/WSEditApplicationByConfig';
 
 const WSModule = ({ stateCode, userType, tenants }) => {
   const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || Digit.ULBService.getCurrentTenantId();
@@ -150,7 +153,10 @@ const componentsToRegister = {
   WSDisconnectionForm,
   WSDisconnectionDocumentsForm,
   WSDisconnectionCheckPage,
-  WSDisconnectAcknowledgement
+  WSDisconnectAcknowledgement,
+  WSEditDisconnectionConfig,
+  WSDisconnectionDocsEmployee,
+  WSEditDisConnectionDetails
 };
 
 export const initWSComponents = () => {

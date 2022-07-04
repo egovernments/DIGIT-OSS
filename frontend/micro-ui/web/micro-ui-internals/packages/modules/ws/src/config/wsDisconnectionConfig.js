@@ -48,5 +48,50 @@ export const newConfig = [
         hideInEmployee: true,
       }           
   ]
+},
+{
+  head: "WS_APP_DISCONNECTION_FOR_WATER_AND_SEWERAGE",
+  hideInCitizen: true,
+  body: [
+  {
+    head: "",
+    isEditConnection: true,
+    isCreateConnection: false,
+    isModifyConnection: true,
+    isEditByConfigConnection: true,
+    body: [
+      {
+        component: "WSEditDisConnectionDetails",
+        withoutLabel: true,
+        key: "ConnectionDetails",
+        type: "component",
+        hideInCitizen: true
+      },
+    ],
+  },
+  {
+    head: "WS_COMMON_PLUMBER_DETAILS",
+    isEditByConfigConnection: true,
+    body: [{
+      type: "component",
+      key: "plumberDetails",
+      component: "WSActivationPlumberDetails",
+      withoutLabel: true,
+    }]
+  },
+  {
+    head: "WS_COMMON_DOCS",
+    isEditConnection: true,
+    isCreateConnection: true,
+    isModifyConnection: true,
+    isEditByConfigConnection: true,
+    body: [{
+      type: "component",
+      key: "DocumentsRequired",
+      component: "WSDisconnectionDocsEmployee",
+      withoutLabel: true
+    }]
+  }
+  ]
 }
 ]
