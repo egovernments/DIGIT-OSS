@@ -227,7 +227,7 @@ public class FSMService {
 		wfIntegrator.callWorkFlow(fsmRequest);
 		enrichmentService.postStatusEnrichment(fsmRequest);
 		
-		//notificationService.process(fsmRequest,oldFSM);
+		notificationService.process(fsmRequest,oldFSM);
 		
 		repository.update(fsmRequest, workflowService.isStateUpdatable(fsm.getApplicationStatus(), businessService));
 
