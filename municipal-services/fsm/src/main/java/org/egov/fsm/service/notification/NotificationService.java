@@ -328,11 +328,11 @@ public class NotificationService {
 			}
 
 			
-			/* Commenting out the SMS code as only notification is required for SAN-1024
-			 * if (null != config.getIsSMSEnabled()) { if (config.getIsSMSEnabled()) { if
-			 * (!CollectionUtils.isEmpty(smsRequests)) util.sendSMS(smsRequests,
-			 * config.getIsSMSEnabled()); } }
-			 */
+			// Commenting out the SMS code as only notification is required for SAN-1024
+			  if (null != config.getIsSMSEnabled()) { if (config.getIsSMSEnabled()) { if
+			  (!CollectionUtils.isEmpty(smsRequests)) util.sendSMS(smsRequests,
+			  config.getIsSMSEnabled()); } }
+			 //
 			
 			if (null != config.getIsUserEventsNotificationEnabled()) {
 				if (config.getIsUserEventsNotificationEnabled()) {
