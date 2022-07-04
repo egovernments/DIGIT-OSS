@@ -7,7 +7,9 @@
     "packages/css",
     "example",
     "packages/react-components",
-    "packages/modules/*"
+    "packages/modules/*",
+    "packages/css",
+    "example"
   ],
   "author": "Abhinav Kushwaha <abhinav.kushwaha@egovernments.org>",
   "license": "MIT",

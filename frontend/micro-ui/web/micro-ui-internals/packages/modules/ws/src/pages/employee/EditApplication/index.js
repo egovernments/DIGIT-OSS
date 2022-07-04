@@ -36,7 +36,7 @@ const EditApplication = () => {
 
   const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId && propertyId != "" ? true : false }
+    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId && propertyId != "" ? true : false, privacy : Digit.Utils.getPrivacyObject() }
   );
 
   useEffect(() => {

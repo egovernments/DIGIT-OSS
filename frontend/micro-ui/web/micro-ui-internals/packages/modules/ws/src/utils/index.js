@@ -769,6 +769,7 @@ export const convertApplicationData = (data, serviceType, modify = false, editBy
     ? [
         {
           sameAsOwnerDetails: false,
+          uuid: data?.applicationData?.connectionHolders?.[0]?.uuid,
           name: data?.applicationData?.connectionHolders?.[0]?.name || "",
           mobileNumber: data?.applicationData?.connectionHolders?.[0]?.mobileNumber || "",
           guardian: data?.applicationData?.connectionHolders?.[0]?.fatherOrHusbandName || "",

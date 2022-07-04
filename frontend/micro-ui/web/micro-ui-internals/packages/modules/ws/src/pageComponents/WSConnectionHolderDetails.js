@@ -1,4 +1,4 @@
-import { CardLabel, Dropdown, LabelFieldPair, TextInput, CardLabelError, CheckBox } from "@egovernments/digit-ui-react-components";
+import { CardLabel, Dropdown, LabelFieldPair, TextInput, CardLabelError, CheckBox, UnMaskComponent } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { stringReplaceAll, getPattern } from "../utils";
 import * as func from "../utils";
@@ -230,6 +230,7 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Name").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
+                <div >
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "name"}
@@ -241,10 +242,16 @@ const ConnectionDetails = (_props) => {
                   labelStyle={{ marginTop: "unset" }}
                   onBlur={props.onBlur}
                 />
+                <UnMaskComponent privacy={{ uuid:connectionHolderDetail?.uuid, fieldName: "name", model: "User" }}></UnMaskComponent>
+                </div>
               )}
             />
           </div>
         </LabelFieldPair>
+        {/* <LabelFieldPair>
+          <CardLabel>trial</CardLabel>
+          <UnMaskComponent privacy={{ uuid:connectionHolderDetail?.uuid, fieldName: "name", model: "User" }}></UnMaskComponent>
+        </LabelFieldPair> */}
         <CardLabelError style={errorStyle}>{localFormState.touched.name ? errors?.name?.message : ""}</CardLabelError>
         <LabelFieldPair>
           <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL")}:*`}</CardLabel>
@@ -283,6 +290,7 @@ const ConnectionDetails = (_props) => {
               type="number"
               isMandatory={true}
               render={(props) => (
+                <div>
                 <TextInput
                   type="number"
                   value={props.value}
@@ -295,6 +303,8 @@ const ConnectionDetails = (_props) => {
                   labelStyle={{ marginTop: "unset" }}
                   onBlur={props.onBlur}
                 />
+                <UnMaskComponent privacy={{ uuid:connectionHolderDetail?.uuid, fieldName: "mobileNumber", model: "User" }}></UnMaskComponent>
+                </div>
               )}
             />
           </div>
@@ -362,6 +372,7 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Address").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
+                <div>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "address"}
@@ -373,6 +384,8 @@ const ConnectionDetails = (_props) => {
                   labelStyle={{ marginTop: "unset" }}
                   onBlur={props.onBlur}
                 />
+                <UnMaskComponent privacy={{ uuid:connectionHolderDetail?.uuid, fieldName: "correspondenceAddress", model: "User" }}></UnMaskComponent>
+                </div>
               )}
             />
           </div>

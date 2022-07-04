@@ -66,6 +66,7 @@ const ApplicationDetails = () => {
     },
     {
       enabled: applicationDetails?.processInstancesDetails?.[0]?.businessService ? true : false,
+      privacy: Digit.Utils.getPrivacyObject(),
     }
   );
 
@@ -76,7 +77,8 @@ const ApplicationDetails = () => {
       consumerCodes: applicationDetails?.applicationData?.applicationNo
     },
     {
-      enabled: applicationDetails?.applicationData?.applicationType?.includes("NEW_")
+      enabled: applicationDetails?.applicationData?.applicationType?.includes("NEW_"),
+      privacy: Digit.Utils.getPrivacyObject(),
     }
   );
 
@@ -85,7 +87,8 @@ const ApplicationDetails = () => {
     filters: { connectionNumber: applicationDetails?.applicationData?.connectionNo, isConnectionSearch: true },
     businessService: serviceType
   },{
-    enabled: applicationDetails?.applicationData?.applicationType?.includes("MODIFY_") ? true : false
+    enabled: applicationDetails?.applicationData?.applicationType?.includes("MODIFY_") ? true : false,
+    privacy: Digit.Utils.getPrivacyObject(),
   });
 
   const oldValueWC = oldData?.WaterConnection;
