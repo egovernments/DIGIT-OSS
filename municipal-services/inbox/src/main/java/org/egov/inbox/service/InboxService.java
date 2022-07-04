@@ -66,7 +66,6 @@ import org.egov.inbox.web.model.RequestInfoWrapper;
 import org.egov.inbox.web.model.VehicleCustomResponse;
 import org.egov.inbox.web.model.dss.MetricResponse;
 import org.egov.inbox.web.model.dss.RequestDate;
-import org.egov.inbox.web.model.dss.RequestDto;
 import org.egov.inbox.web.model.dss.ResponseDto;
 import org.egov.inbox.web.model.workflow.BusinessService;
 import org.egov.inbox.web.model.workflow.ProcessInstance;
