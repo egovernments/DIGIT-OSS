@@ -1,4 +1,4 @@
-openapi: 3.0.0
+swagger: "2.0"
 info:
   title: Employee Management System
   description: Demo API specs for Tech Council
@@ -6,35 +6,31 @@ info:
     name: eGov Foundation
     url: https://core.digit.org
   version: 1.0.0
-servers:
-  - url: https://dev.digit.org
 paths:
-  "/employee/_create":
-    description: Create a new employee
+  /employee/_create:
     post:
-      description: Operation to create a new employee
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/EmployeeRequest"
+      summary: Operation to create a new employee
+      description: |
+        To create new employee in the system.
+      parameters:
+        - name: EmployeeRequest
+          in: body
+          description: Details for the new employee.
+          required: true
+          schema:
+            $ref: '#/definitions/EmployeeRequest'
       responses:
-        200:
-          description: OK
-        201:
-          description: Created
-        401:
-          description: Unauthorized
-        403:
-          description: Forbidden
-components:
-  schemas:
-    EmployeeRequest:
-      type: object
-      properties:
-        employeeId:
-          type: integer
-          example: 3
-        name:
-          type: string
-          example: Ramesh
+        '201':
+          description: ReponseInfo with Voter Registration Application(s) created successfully
+        '400':
+          description: Voter Registration Application(s) creation failed
+definitions:
+  EmployeeRequest:
+    type: object
+    properties:
+      employeeId:
+        type: integer
+        example: 3
+      name:
+        type: string
+        example: Ramesh
