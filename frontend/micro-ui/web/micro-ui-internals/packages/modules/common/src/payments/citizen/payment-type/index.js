@@ -18,6 +18,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useParams, useHistory, useLocation, Redirect } from "react-router-dom";
 import { stringReplaceAll } from "../bills/routes/bill-details/utils";
 import $ from "jquery";
+import { makePayment } from "./payGov";
 
 export const SelectPaymentType = (props) => {
   const { state = {} } = useLocation();
@@ -90,6 +91,7 @@ export const SelectPaymentType = (props) => {
       } else {
         // new payment gatewayfor UPYOG pay
         try {
+
           const gatewayParam = redirectUrl
             ?.split("?")
             ?.slice(1)
@@ -127,17 +129,28 @@ export const SelectPaymentType = (props) => {
 
           // override default date for UPYOG Custom pay
           gatewayParam["requestDateTime"] = gatewayParam["requestDateTime"]?.split(new Date().getFullYear()).join(`${new Date().getFullYear()} `);
+          gatewayParam["successUrl"]= window.location.href.includes("mcollect")
+          ? `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}/${tenantId}?workflow=mcollect`
+          : `${window.location.protocol}//${window.location.host}/digit-ui/citizen/payment/success/${businessService}/${consumerCode}/${tenantId}`;
+          gatewayParam["failUrl"]= gatewayParam["successUrl"];
+          var formdata = new FormData();
+          
           for (var key of orderForNDSLPaymentSite) {
-            newForm.append(
-              $("<input>", {
-                name: key,
-                value: gatewayParam[key],
-                type: "hidden",
-              })
-            );
+            formdata.append(key, `\"${gatewayParam[key]}\"`);
+            // newForm.append(
+            //   $("<input>", {
+            //     name: key,
+            //     value: gatewayParam[key],
+            //     type: "hidden",
+            //   })
+            // );
           }
-          $(document.body).append(newForm);
-          newForm.submit();
+          // $(document.body).append(newForm);
+          // newForm.submit();
+
+        
+          makePayment(gatewayParam.txURL,formdata);
+
         } catch (e) {
           console.log("Error in payment redirect ", e);
           //window.location = redirectionUrl;
