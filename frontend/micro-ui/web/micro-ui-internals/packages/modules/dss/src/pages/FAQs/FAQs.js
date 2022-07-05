@@ -20,7 +20,6 @@ const FAQsSection = () => {
   return (
     <Fragment>
     <div className="faq-page">
-      <BackButton></BackButton>
         <div style={{ marginBottom: "15px" }}>
           <Header styles={{ marginLeft: "0px", paddingTop: "10px", fontSize: "36px"}}>{t("DSS_FAQS")}</Header>
         </div>
