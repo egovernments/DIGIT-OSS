@@ -50,7 +50,7 @@ public class AuditService {
         }
         auditObject.setEntityIds(entityIds);
 
-        producer.push(encProperties.getAuditTopicName(), auditObject.getId(), objectMapper.valueToTree(auditObject).toString());
+        producer.push(encProperties.getAuditTopicName(), auditObject.getId(), auditObject);
     }
 
 }
