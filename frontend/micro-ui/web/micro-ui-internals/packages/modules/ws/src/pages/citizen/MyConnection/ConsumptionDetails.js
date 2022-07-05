@@ -6,7 +6,7 @@ import { Link, useParams } from "react-router-dom";
 const consumptionDetails = ({ view }) => {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
-  const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   const {applicationNo} = Digit.Hooks.useQueryParams();
   let filter1 = { tenantId: tenantId, connectionNos:applicationNo };
 

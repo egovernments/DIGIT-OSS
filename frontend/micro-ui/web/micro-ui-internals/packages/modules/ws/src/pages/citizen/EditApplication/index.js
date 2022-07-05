@@ -22,12 +22,12 @@ const getEditDetails = (waterResult,sewerageresult,t) => {
       documentId : "",
       documentType : "",
       filestoreId : null,
-      gender : {code :waterResult?.connectionHolders?.[0]?.gender, i18nKey:`COMMON_GENDER_${waterResult?.connectionHolders?.[0]?.gender}` },
+      gender : waterResult?.connectionHolders?.[0]?.gender ? {code :waterResult?.connectionHolders?.[0]?.gender, i18nKey:`COMMON_GENDER_${waterResult?.connectionHolders?.[0]?.gender}` } : null,
       guardian : waterResult?.connectionHolders?.[0]?.fatherOrHusbandName,
       isOwnerSame : waterResult?.connectionHolders?.length>0 ? false : true,
       mobileNumber : waterResult?.connectionHolders?.[0]?.mobileNumber,
       name : waterResult?.connectionHolders?.[0]?.name,
-      relationship : {code:waterResult?.connectionHolders?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${waterResult?.connectionHolders?.[0]?.relationship}`},
+      relationship : waterResult?.connectionHolders?.[0]?.relationship ? {code:waterResult?.connectionHolders?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${waterResult?.connectionHolders?.[0]?.relationship}`}:null,
       specialCategoryType : waterResult?.connectionHolders?.[0]?.ownerType ? {code:waterResult?.connectionHolders?.[0]?.ownerType, i18nKey:`PROPERTYTAX_OWNERTYPE_${waterResult?.connectionHolders?.[0]?.ownerType}`} : ""
     } :
     {
@@ -35,12 +35,12 @@ const getEditDetails = (waterResult,sewerageresult,t) => {
       documentId : "",
       documentType : "",
       filestoreId : null,
-      gender : {code :waterResult?.property?.owners?.[0]?.gender, i18nKey:`COMMON_GENDER_${waterResult?.property?.owners?.[0]?.gender}` },
+      gender : waterResult?.property?.owners?.[0]?.gender ? {code :waterResult?.property?.owners?.[0]?.gender, i18nKey:`COMMON_GENDER_${waterResult?.property?.owners?.[0]?.gender}` }:null,
       guardian : waterResult?.property?.owners?.[0]?.fatherOrHusbandName,
       isOwnerSame : waterResult?.connectionHolders ? false : true,
       mobileNumber : waterResult?.property?.owners?.[0]?.mobileNumber,
       name : waterResult?.property?.owners?.[0]?.name,
-      relationship : {code:waterResult?.property?.owners?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${waterResult?.property?.owners?.[0]?.relationship}`},
+      relationship : waterResult?.property?.owners?.[0]?.relationship ? {code:waterResult?.property?.owners?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${waterResult?.property?.owners?.[0]?.relationship}`}:null,
       specialCategoryType : waterResult?.connectionHolders?.[0]?.ownerType? {code:waterResult?.connectionHolders?.[0]?.ownerType, i18nKey:`PROPERTYTAX_OWNERTYPE_${waterResult?.connectionHolders?.[0]?.ownerType}`} : ""
     }
     waterResult.WaterConnectionResult={WaterConnection:[{...waterResult}]}
@@ -61,12 +61,12 @@ const getEditDetails = (waterResult,sewerageresult,t) => {
           documentId : "",
           documentType : "",
           filestoreId : null,
-          gender : {code :sewerageresult?.connectionHolders?.[0]?.gender, i18nKey:`COMMON_GENDER_${sewerageresult?.connectionHolders?.[0]?.gender}` },
+          gender : sewerageresult?.connectionHolders?.[0]?.gender ? {code :sewerageresult?.connectionHolders?.[0]?.gender, i18nKey:`COMMON_GENDER_${sewerageresult?.connectionHolders?.[0]?.gender}` }:null,
           guardian : sewerageresult?.connectionHolders?.[0]?.fatherOrHusbandName,
           isOwnerSame : sewerageresult?.connectionHolders?.length>0 ? false : true,
           mobileNumber : sewerageresult?.connectionHolders?.[0]?.mobileNumber,
           name : sewerageresult?.connectionHolders?.[0]?.name,
-          relationship : {code:sewerageresult?.connectionHolders?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${sewerageresult?.connectionHolders?.[0]?.relationship}`},
+          relationship : sewerageresult?.connectionHolders?.[0]?.relationship ? {code:sewerageresult?.connectionHolders?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${sewerageresult?.connectionHolders?.[0]?.relationship}`}:null,
           specialCategoryType :sewerageresult?.connectionHolders?.[0]?.ownerType ? {code:sewerageresult?.connectionHolders?.[0]?.ownerType, i18nKey:`PROPERTYTAX_OWNERTYPE_${sewerageresult?.connectionHolders?.[0]?.ownerType}`} : ""
         
       } :
@@ -75,12 +75,12 @@ const getEditDetails = (waterResult,sewerageresult,t) => {
       documentId : "",
       documentType : "",
       filestoreId : null,
-      gender : {code :sewerageresult?.property?.owners?.[0]?.gender, i18nKey:`COMMON_GENDER_${sewerageresult?.property?.owners?.[0]?.gender}` },
+      gender : sewerageresult?.property?.owners?.[0]?.gender ? {code :sewerageresult?.property?.owners?.[0]?.gender, i18nKey:`COMMON_GENDER_${sewerageresult?.property?.owners?.[0]?.gender}` } : null,
       guardian : sewerageresult?.property?.owners?.[0]?.fatherOrHusbandName,
       isOwnerSame : sewerageresult?.connectionHolders ? false : true,
       mobileNumber : sewerageresult?.property?.owners?.[0]?.mobileNumber,
       name : sewerageresult?.property?.owners?.[0]?.name,
-      relationship : {code:sewerageresult?.property?.owners?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${sewerageresult?.property?.owners?.[0]?.relationship}`},
+      relationship : sewerageresult?.property?.owners?.[0]?.relationship ? {code:sewerageresult?.property?.owners?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${sewerageresult?.property?.owners?.[0]?.relationship}`} : null,
       specialCategoryType : sewerageresult?.connectionHolders?.[0]?.ownerType ? {code:sewerageresult?.connectionHolders?.[0]?.ownerType, i18nKey:`PROPERTYTAX_OWNERTYPE_${sewerageresult?.connectionHolders?.[0]?.ownerType}`} : ""
     }
     sewerageresult.SewerageConnectionResult={SewerageConnections:[{...sewerageresult}]}

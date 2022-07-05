@@ -255,14 +255,14 @@ export const SuccessfulPayment = (props)=>{
   if (workflw) {
     bannerText = `CITIZEN_SUCCESS_UC_PAYMENT_MESSAGE`;
   } else {
-    if (paymentData?.paymentDetails?.[0]?.businessService?.includes("BPA")) {
+    if (paymentData?.paymentDetails?.[0]?.businessService && paymentData?.paymentDetails?.[0]?.businessService?.includes("BPA")) {
       let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
       let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
-      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_${parsedArchitectName}_PAYMENT_MESSAGE`;
-    } else if (businessService?.includes("WS") || businessService?.includes("SW")) {
-      return t(`CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_WS_PAYMENT_MESSAGE`);
+      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0]?.businessService.replace(/\./g, "_")}_${parsedArchitectName}_PAYMENT_MESSAGE`;
+    } else if (business_service?.includes("WS") || business_service?.includes("SW")) {
+      bannerText = t(`CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_WS_PAYMENT_MESSAGE`);
     } else {
-      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE`;
+      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0]?.businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE`;
     }
   }
 

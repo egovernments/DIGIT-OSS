@@ -40,7 +40,7 @@ const WSApplicationDetails = () => {
     { filters: filter1 }
   );
 
-  const fetchBillParams = { consumerCode: data?.WaterConnection?.[0]?.connectionNo };
+  const fetchBillParams = { consumerCode: data?.WaterConnection?.[0]?.applicationNo || data?.SewerageConnections?.[0]?.applicationNo };
 
   const { data: generatePdfKey } = Digit.Hooks.useCommonMDMS(tenantId, "common-masters", "ReceiptKey", {
     select: (data) =>
@@ -48,7 +48,7 @@ const WSApplicationDetails = () => {
   });
 
   const paymentDetails = Digit.Hooks.useFetchBillsForBuissnessService(
-    { businessService: applicationNobyData?.includes("SW") ? "SW" : "WS", ...fetchBillParams, tenantId: tenantId },
+    { businessService: applicationNobyData?.includes("SW") ? "SW.ONE_TIME_FEE" : "WS.ONE_TIME_FEE", ...fetchBillParams, tenantId: tenantId },
     {
       enabled: data?.WaterConnection?.[0]?.applicationNo ? true : false,
       retry: false,
@@ -242,7 +242,7 @@ const WSApplicationDetails = () => {
             <Row
               className="border-none"
               label={t("WS_OWN_DETAIL_CROSADD")}
-              text={PTData?.Properties?.[0]?.owners?.[0]?.permanentAddress || t("CS_NA")}
+              text={PTData?.Properties?.[0]?.owners?.[0]?.permanentAddress || PTData?.Properties?.[0]?.owners?.[0]?.correspondenceAddress || t("CS_NA")}
               textStyle={{wordBreak:"break-word"}}
             />
             <Link
@@ -330,13 +330,15 @@ const WSApplicationDetails = () => {
               <Row
                 className="border-none"
                 label={t("WS_SERV_DETAIL_WATER_SOURCE")}
-                text={data?.WaterConnection?.[0]?.waterSource || t("CS_NA")}
+                text={t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.WaterConnection?.[0]?.waterSource?.split(".")?.[0], ".", "_")}`) ||
+                t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.WaterConnection?.[0]?.WaterConnection?.[0]?.waterSource, ".", "_")}`) ||
+                t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
               />
               <Row
                 className="border-none"
                 label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")}
-                text={data?.WaterConnection?.[0]?.waterSubSource || t("CS_NA")}
+                text={t(data?.WaterConnection?.[0]?.waterSource?.split(".")?.[1]) || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
               />
 
