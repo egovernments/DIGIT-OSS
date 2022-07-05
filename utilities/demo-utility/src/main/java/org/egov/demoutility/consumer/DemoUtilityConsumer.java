@@ -123,7 +123,7 @@ public class DemoUtilityConsumer {
 
 			StringBuffer emailContent = new StringBuffer();
 			emailContent.append(UtilityConstants.EMAIL_STRATING_CONTENT);
-
+			log.info("#########demoUtilityRequest::::"+demoUtilityRequest.toString());
 			for (int i = 0; i < demoUtilityRequest.getSetOfUsers(); i++) {
 
 				Map<String, List<String>> roleWiseList = getRoleWiseList();
@@ -142,7 +142,7 @@ public class DemoUtilityConsumer {
 
 					Employee employee = createEmployee(demoUtilityRequest, username, mobileNumber, authToken,
 							roleWiseList.get("employee" + j), UtilityConstants.NUMBERS.get(j - 1));
-
+					log.info("employee::"+i+employee.toString());
 					employeeList.add(employee);
 					employess.put("employee" + j, username);
 					employess.put("applicantName", demoUtilityRequest.getApplicantName());
@@ -155,6 +155,7 @@ public class DemoUtilityConsumer {
 			EmployeeRequest employeeRequest = new EmployeeRequest();
 			employeeRequest.setEmployees(employeeList);
 			employeeRequest.setRequestInfo(requestInfo);
+			log.info("######employeeRequest*******"+employeeRequest.toString());
 			ObjectNode employeeResponse = (ObjectNode) serviceCallRepository.fetchResult(
 					propertyConfiguration.getHrmsHost() + propertyConfiguration.getHrmsCreateEndPoint(),
 					employeeRequest);
@@ -162,16 +163,17 @@ public class DemoUtilityConsumer {
 			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 			EmployeeResponse employeeObj = mapper.treeToValue(employeeResponse, EmployeeResponse.class);
-
+			log.info("########employeeObj*****"+employeeObj.toString());
 			VendorRequest vendorRequest = createDso(demoUtilityRequest, authToken);
-
+			log.info("#######vendorRequest############"+vendorRequest.toString());
 			ObjectNode vendorResponse = (ObjectNode) serviceCallRepository.fetchResult(
 					propertyConfiguration.getVendorHost() + propertyConfiguration.getVendorcreateEndpoint(),
 					vendorRequest);
 
 			VendorResponse vendorObj = mapper.treeToValue(vendorResponse, VendorResponse.class);
-
+			log.info("vendorObj#####"+vendorObj.toString());
 			updateEmployeePassword(employeeObj.getEmployees(), requestInfo);
+			log.info("####after updating passsword**********");
 			emailContent.append(UtilityConstants.EMAIL_REGARDS);
 			emailContent.append(UtilityConstants.EMAIL_ENDING_CONTENT);
 

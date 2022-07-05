@@ -12,6 +12,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-01-06T05:34:12.238Z[GMT]")
@@ -20,6 +21,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
+@ToString
 public class VendorRequest {
 
 	@JsonProperty("RequestInfo")
