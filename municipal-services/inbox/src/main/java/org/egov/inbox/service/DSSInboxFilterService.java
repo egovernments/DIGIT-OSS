@@ -63,30 +63,31 @@ public class DSSInboxFilterService {
             List<Map> aggregationData = JsonPath.read(mdmsData, MDMS_AGGREGATE_PATH);
 
             aggregationData.forEach(aggData -> {
-                List<Map<String, String>> vizCodes = JsonPath.read(aggData, MDMS_VISUALIZATION_PATH);
-                vizCodes.forEach(visualizationcodes -> {
-                    try {
-                        if (Integer.parseInt(String.valueOf(visualizationcodes.get(MDMS_VISUALIZATION_DATE_KEY))) > 0) {
-                            Calendar cal = Calendar.getInstance();
-                            aggregateRequestDto.getRequestDate().setEndDate(String.valueOf(cal.getTimeInMillis()));
-                            Integer dateInMonths = Integer.parseInt(String.valueOf(visualizationcodes.get(MDMS_VISUALIZATION_DATE_KEY)));
-                            cal.add(Calendar.MONTH, -dateInMonths);
-                            aggregateRequestDto.getRequestDate().setStartDate(String.valueOf(cal.getTimeInMillis()));
-                        } else {
-                            aggregateRequestDto.getRequestDate().setEndDate("0");
-                            aggregateRequestDto.getRequestDate().setStartDate("0");
+                if(aggData.get(MDMS_VISUALIZATION_MODULE_KEY).toString().equals(request.getModule())) {
+                    List<Map<String, String>> vizCodes = JsonPath.read(aggData, MDMS_VISUALIZATION_PATH);
+                    vizCodes.forEach(visualizationcodes -> {
+                        try {
+                            if (Integer.parseInt(String.valueOf(visualizationcodes.get(MDMS_VISUALIZATION_DATE_KEY))) > 0) {
+                                Calendar cal = Calendar.getInstance();
+                                aggregateRequestDto.getRequestDate().setEndDate(String.valueOf(cal.getTimeInMillis()));
+                                Integer dateInMonths = Integer.parseInt(String.valueOf(visualizationcodes.get(MDMS_VISUALIZATION_DATE_KEY)));
+                                cal.add(Calendar.MONTH, -dateInMonths);
+                                aggregateRequestDto.getRequestDate().setStartDate(String.valueOf(cal.getTimeInMillis()));
+                            } else {
+                                aggregateRequestDto.getRequestDate().setEndDate("0");
+                                aggregateRequestDto.getRequestDate().setStartDate("0");
+                            }
+                            aggregateRequestDto.setVisualizationCode(visualizationcodes.get(MDMS_VISUALIZATION_CODES_KEY).toString());
+                            aggRequest.setAggregationRequestDto(aggregateRequestDto);
+                            log.info("Request for " + request.getModule() + ": " + mapper.writeValueAsString(aggRequest));
+                            Object response = getHeaderData(aggRequest);
+                            MetricResponse metricResponse = mapper.convertValue(response, MetricResponse.class);
+                            result.put(visualizationcodes.get(MDMS_VISUALIZATION_CODES_KEY), metricResponse.getResponseData().getData().get(0).getHeaderValue());
+                        } catch (Exception e) {
+                            throw new CustomException(ErrorConstants.INVALID_MODULE_DATA, e.getMessage());
                         }
-                        aggregateRequestDto.setVisualizationCode(visualizationcodes.get(MDMS_VISUALIZATION_CODES_KEY).toString());
-                        aggRequest.setAggregationRequestDto(aggregateRequestDto);
-                        log.info("Request for " + request.getModule() + ": " + mapper.writeValueAsString(aggRequest));
-                        Object response = getHeaderData(aggRequest);
-                        MetricResponse metricResponse = mapper.convertValue(response, MetricResponse.class);
-                        result.put(visualizationcodes.get(MDMS_VISUALIZATION_CODES_KEY), metricResponse.getResponseData().getData().get(0).getHeaderValue());
-                    } catch (Exception e) {
-                        throw new CustomException(ErrorConstants.INVALID_MODULE_DATA, e.getMessage());
-                    }
-
-                });
+                    });
+                }
             });
         } catch (Exception e) {
             throw new CustomException(ErrorConstants.INVALID_MODULE_DATA, e.getMessage());

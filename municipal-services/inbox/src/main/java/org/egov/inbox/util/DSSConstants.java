@@ -19,4 +19,6 @@ public class DSSConstants {
     public static final String MDMS_VISUALIZATION_CODES_KEY = "code";
 
     public static final String MDMS_VISUALIZATION_DATE_KEY = "dateRange";
+
+    public static final String MDMS_VISUALIZATION_MODULE_KEY = "module";
 }
