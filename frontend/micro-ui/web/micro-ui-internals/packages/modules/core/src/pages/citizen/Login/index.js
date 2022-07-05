@@ -42,6 +42,8 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   const [params, setParmas] = useState(isUserRegistered ? {} : location?.state?.data);
   const [errorTO, setErrorTO] = useState(null);
   const searchParams = Digit.Hooks.useQueryParams();
+  const [canSubmitName, setCanSubmitName] = useState(false);
+  const [canSubmitOtp, setCanSubmitOtp] = useState(true);
 
   useEffect(() => {
     let errorTimeout;
@@ -132,15 +134,20 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
       ...name,
     };
     setParmas({ ...params, ...name });
+    setCanSubmitName(true);
     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
     if (res) {
+      setCanSubmitName(false);
       history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
+    } else {
+      setCanSubmitName(false);
     }
   };
 
   const selectOtp = async () => {
     try {
       setIsOtpValid(true);
+      setCanSubmitOtp(false);
       const { mobileNumber, otp, name } = params;
       if (isUserRegistered) {
         const requestData = {
@@ -149,7 +156,6 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
           tenantId: stateCode,
           userType: getUserType(),
         };
-
         const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
 
         if (location.state?.role) {
@@ -182,6 +188,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
         setUser({ info, ...tokens });
       }
     } catch (err) {
+      setCanSubmitOtp(true);
       setIsOtpValid(false);
     }
   };
@@ -232,11 +239,12 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
               onSelect={selectOtp}
               otp={params.otp}
               error={isOtpValid}
+              canSubmit={canSubmitOtp}
               t={t}
             />
           </Route>
           <Route path={`${path}/name`}>
-            <SelectName config={stepItems[2]} onSelect={selectName} t={t} />
+            <SelectName config={stepItems[2]} onSelect={selectName} t={t} isDisabled={canSubmitName} />
           </Route>
           {error && <Toast error={true} label={error} onClose={() => setError(null)} />}
         </AppContainer>
