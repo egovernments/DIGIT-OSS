@@ -125,12 +125,13 @@ public class DemoUtilityConsumer {
 			emailContent.append(UtilityConstants.EMAIL_STRATING_CONTENT);
 			log.info("#########demoUtilityRequest::::"+demoUtilityRequest.toString());
 			for (int i = 0; i < demoUtilityRequest.getSetOfUsers(); i++) {
-
+			        log.info("####Start creating users**********");
 				Map<String, List<String>> roleWiseList = getRoleWiseList();
+				log.info("####roleWiseList**********"+roleWiseList.size());
 				Map<String, Object> employess = new LinkedHashMap<String, Object>();
 
 				for (int j = 1; j < 7; j++) {
-
+				        log.info("before creating sequence");
 					long sequenceNo = queryBuilder.getSequence();
 
 					log.info(" sequence No is", sequenceNo);
@@ -180,7 +181,7 @@ public class DemoUtilityConsumer {
 			processEmail(emailContent.toString(), demoUtilityRequest, requestInfo);
 
 		} catch (Exception e) {
-
+		        e.printStackTrace();
 			log.error("error while creating employees", e.getMessage());
 
 		}
