@@ -1,5 +1,6 @@
 package org.egov.pt.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,7 +12,9 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.encryption.EncryptionService;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
@@ -23,19 +26,25 @@ import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.models.workflow.State;
 import org.egov.pt.producer.Producer;
 import org.egov.pt.repository.PropertyRepository;
+import org.egov.pt.util.EncryptionDecryptionUtil;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 
+@Slf4j
 @Service
 public class PropertyService {
 
@@ -75,7 +84,14 @@ public class PropertyService {
 	@Autowired
 	private FuzzySearchService fuzzySearchService;
 
+	private EncryptionDecryptionUtil encryptionDecryptionUtil;
+	//private EncryptionService encryptionService;
 
+	@Value(("${egov.state.level.tenant.id}"))
+	private String stateLevelTenantId;
+
+	@Value(("${decryption.abac.enabled}"))
+	private boolean abacEnabled;
 
 	/**
 	 * Enriches the Request and pushes to the Queue
@@ -105,7 +121,7 @@ public class PropertyService {
 	/**
 	 * Updates the property
 	 *
-	 * handles multiple processes 
+	 * handles multiple processes
 	 *
 	 * Update
 	 *
@@ -352,7 +368,21 @@ public class PropertyService {
 	public List<Property> searchProperty(PropertyCriteria criteria, RequestInfo requestInfo) {
 
 		List<Property> properties;
-
+		criteria = encryptionDecryptionUtil.encryptObject(criteria, "Property", PropertyCriteria.class);
+		/*try {
+			if (criteria != null) {
+				criteria = encryptionService.encryptJson(criteria, "Property", stateLevelTenantId, PropertyCriteria.class);
+			}
+			if (criteria == null) {
+				throw new CustomException("ENCRYPTION_NULL_ERROR", "Null object found on performing encryption");
+			}
+		} catch (IOException | HttpClientErrorException | HttpServerErrorException | ResourceAccessException e) {
+			log.error("Error occurred while encrypting", e);
+			throw new CustomException("ENCRYPTION_ERROR", "Error occurred in encryption process");
+		} catch (Exception e) {
+			log.error("Unknown Error occurred while encrypting", e);
+			throw new CustomException("UNKNOWN_ERROR", "Unknown error occurred in encryption process");
+		}*/
 		/*
 		 * throw error if audit request is with no proeprty id or multiple propertyids
 		 */
