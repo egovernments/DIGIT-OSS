@@ -1,1 +1,1 @@
-ALTER TABLE eg_privacy_userinfo_access_audit ALTER COLUMN entityids TYPE JSONB;
+ALTER TABLE eg_privacy_userinfo_access_audit ALTER COLUMN entityids TYPE JSONB USING entityids::JSONB;
