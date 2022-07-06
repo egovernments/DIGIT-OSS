@@ -6,12 +6,12 @@ import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.infra.persist.repository.PersistRepository;
+import org.egov.infra.persist.utils.AuditUtil;
 import org.egov.infra.persist.utils.Utils;
-import org.egov.infra.persist.web.contract.JsonMap;
-import org.egov.infra.persist.web.contract.Mapping;
-import org.egov.infra.persist.web.contract.QueryMap;
-import org.egov.infra.persist.web.contract.TopicMap;
+import org.egov.infra.persist.web.contract.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +30,21 @@ public class PersistService {
 	@Autowired
 	private Utils utils;
 
+	@Autowired
+	private AuditUtil auditUtil;
+
+	@Autowired
+	private KafkaTemplate kafkaTemplate;
+
+	@Value("${persister.audit.error.queue}")
+	private String auditErrorTopic;
+
+	@Value("${persister.audit.kafka.topic}")
+	private String auditTopic;
+
+	@Value("${persister.audit.user.jsonpath}")
+	private String userJsonPath;
+
 	@Transactional
 	public void persist(String topic, String json) {
 
@@ -39,16 +54,60 @@ public class PersistService {
 		List<Mapping> applicableMappings = filterMappings(map.get(topic), document);
 		log.info("{} applicable configs found!", applicableMappings.size());
 
-		List keyValuePairPersisted = new LinkedList();
+		List<Map<String, Object>> keyValuePairList;
 
 		for (Mapping mapping : applicableMappings) {
+
+			List<AuditLog> auditLogs = new LinkedList<>();
+			AuditAttributes auditAttributes = new AuditAttributes();
+			Boolean isAuditEnabled = mapping.getIsAuditEnabled();
+
+			if(isAuditEnabled == null){
+				isAuditEnabled = false;
+			}
+			if(isAuditEnabled){
+
+				// Fetch the values required to attribute using mapping and json
+				String module = mapping.getModule();
+				String tenantId = getValueFromJsonPath(mapping.getTenantIdJsonPath(), json);
+				String transactionCode = getValueFromJsonPath(mapping.getTransactionCodeJsonPath(), json);
+				String objectId = getValueFromJsonPath(mapping.getObjecIdJsonPath(), json);
+				String userUUID = getValueFromJsonPath(userJsonPath, json);
+
+				// Set the values to auditAttribute
+				auditAttributes.setModule(module);
+				auditAttributes.setObjectId(objectId);
+				auditAttributes.setTenantId(tenantId);
+				auditAttributes.setTransactionCode(transactionCode);
+				auditAttributes.setUserUUID(userUUID);
+			}
+
+
+
 			List<QueryMap> queryMaps = mapping.getQueryMaps();
 			for (QueryMap queryMap : queryMaps) {
 				String query = queryMap.getQuery();
 				List<JsonMap> jsonMaps = queryMap.getJsonMaps();
 				String basePath = queryMap.getBasePath();
-				keyValuePairPersisted.add(persistRepository.persist(query, jsonMaps, document, basePath));
+				keyValuePairList = persistRepository.persist(query, jsonMaps, document, basePath);
+				/**
+				 * The following code block will generate AuditLog objects for each query that is executed
+				 */
+				try {
+					auditLogs.addAll(auditUtil.getAuditRecord(keyValuePairList, auditAttributes, query));
+
+				}
+				catch (Exception e){
+					log.error("AUDIT_LOG_ERROR","Failed to create audit log for: "+keyValuePairList);
+					AuditError auditError = AuditError.builder().mapping(mapping)
+																.query(query)
+																.keyValuePairList(keyValuePairList)
+																.exception(e)
+																.build();
+					kafkaTemplate.send(auditErrorTopic, auditError);
+				}
 			}
+			kafkaTemplate.send(auditTopic, auditLogs);
 		}
 	}
 
@@ -92,6 +151,24 @@ public class PersistService {
 		}
 
 		return filteredMaps;
+	}
+
+	/**
+	 * Function to execute jsonPath on given json. Returns null in case of error
+	 * @param jsonPath
+	 * @param json
+	 * @return
+	 */
+	private String getValueFromJsonPath(String jsonPath, String json){
+
+		String value = null;
+		try {
+			value = JsonPath.read(json, jsonPath);
+		}
+		catch (Exception e){
+			log.error("JSONPATH_ERROR","Error while executing jsonPath: ",jsonPath);
+		}
+		return value;
 	}
 
 }

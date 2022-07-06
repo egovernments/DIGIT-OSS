@@ -1,5 +1,6 @@
 package org.egov.infra.persist.utils;
 
+import org.egov.infra.persist.web.contract.AuditAttributes;
 import org.egov.infra.persist.web.contract.AuditLog;
 import org.egov.infra.persist.web.contract.Mapping;
 import org.egov.tracer.model.CustomException;
@@ -22,17 +23,32 @@ public class AuditUtil {
     /**
      * Creates AuditLogs for every query execution
      * @param keyValuePairsList The list of key value pairs which are getting inserted/updated in table
-     * @param mapping Persister Configuration for the particular Entity
      * @param query The query which is going to be executed
      * @return
      */
-    public List<AuditLog> getAuditRecord(List<Map<String, Object>> keyValuePairsList, Mapping mapping, String query){
+    public List<AuditLog> getAuditRecord(List<Map<String, Object>> keyValuePairsList, AuditAttributes auditAttributes,
+                                         String query){
+
+        if(!isAuditAttributeValid(auditAttributes)){
+            throw new CustomException("INVALID_CONFIG","Failed to fetch required attributes from configuration: "+auditAttributes);
+        }
 
         List<AuditLog> auditLogs = new LinkedList<>();
-        String module = mapping.getModule();
 
         for(Map<String, Object> value : keyValuePairsList){
+            AuditLog auditLog = AuditLog.builder()
+                    .userUUID(auditAttributes.getUserUUID())
+                    .tenantId(auditAttributes.getTenantId())
+                    .changeDate(System.currentTimeMillis())
+                    .objectId(auditAttributes.getObjectId())
+                    .operationType(getOperationType(query))
+                    .transactionCode(auditAttributes.getTransactionCode())
+                    .module(auditAttributes.getModule())
+                    .entityName(getTableName(query))
+                    .value(value)
+                    .build();
 
+            auditLogs.add(auditLog);
         }
 
         return auditLogs;
@@ -82,5 +98,15 @@ public class AuditUtil {
 
         return operationType;
     }
+
+    private Boolean isAuditAttributeValid(AuditAttributes auditAttributes){
+
+        if(auditAttributes.getModule() != null && auditAttributes.getObjectId() != null
+          && auditAttributes.getTransactionCode() != null && auditAttributes.getTenantId() != null )
+            return true;
+
+        else return false;
+    }
+
 
 }

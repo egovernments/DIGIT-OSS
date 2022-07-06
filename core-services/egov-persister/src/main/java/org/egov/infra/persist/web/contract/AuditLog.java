@@ -1,10 +1,14 @@
 package org.egov.infra.persist.web.contract;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 import java.util.Map;
 
+@Builder
+@Data
 public class AuditLog   {
 
     @JsonProperty("id")

@@ -36,11 +36,17 @@ public class Mapping   {
   @JsonProperty("module")
   private String module = null;
 
-  @JsonProperty("idJsonPath")
-  private String idJsonPath = null;
+  @JsonProperty("objecIdJsonPath")
+  private String objecIdJsonPath = null;
 
   @JsonProperty("tenantIdJsonPath")
   private String tenantIdJsonPath = null;
+
+  @JsonProperty("transactionCodeJsonPath")
+  private String transactionCodeJsonPath = null;
+
+  @JsonProperty("isAuditEnabled")
+  private Boolean isAuditEnabled = null;
 
  
 }
