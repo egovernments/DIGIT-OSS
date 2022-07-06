@@ -136,7 +136,7 @@ export const SelectPaymentType = (props) => {
           var formdata = new FormData();
           
           for (var key of orderForNDSLPaymentSite) {
-            formdata.append(key, `\"${gatewayParam[key]}\"`);
+            formdata.append(key,gatewayParam[key]);
             // newForm.append(
             //   $("<input>", {
             //     name: key,
