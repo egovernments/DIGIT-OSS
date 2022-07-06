@@ -247,7 +247,7 @@ export const CollectPayment = (props) => {
       head: t("PAYMENT_MODE_HEAD"),
       body: [
         {
-          withoutLabel: true,
+          label: t("PAYMENT_MODE_LABEL"),
           type: "custom",
           populators: {
             name: "paymentMode",
@@ -299,7 +299,7 @@ export const CollectPayment = (props) => {
 
   return (
     <React.Fragment>
-      <Header styles={{marginLeft:"15px"}}>{t("PAYMENT_COLLECT")}</Header>
+      <Header styles={{ marginLeft: "15px" }}>{t("PAYMENT_COLLECT")}</Header>
       <FormComposer
         cardStyle={{ paddingBottom: "100px" }}
         label={t("PAYMENT_COLLECT_LABEL")}
