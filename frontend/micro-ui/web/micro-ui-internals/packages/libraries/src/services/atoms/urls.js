@@ -83,7 +83,6 @@ const Urls = {
   dss: {
     dashboardConfig: "/dashboard-analytics/dashboard/getDashboardConfig",
     getCharts: "/dashboard-analytics/dashboard/getChartV2",
-    getSearchDetails: "/inbox/v1/dss/_search"
   },
 
   mcollect: {
@@ -131,6 +130,7 @@ const Urls = {
     bpaRegUpdate: "/tl-services/v1/BPAREG/_update",
     receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
     edcrreportdownload: "/bpa-services/v1/bpa/_permitorderedcr",
+    getSearchDetails: "/inbox/v1/dss/_search"
   },
 
   edcr: {
@@ -167,6 +167,7 @@ const Urls = {
     wns_generate_pdf: "/egov-pdf/download/WNS/wnsbill",
     water_applyAdhocTax : "/ws-calculator/waterCalculator/_applyAdhocTax",
     sewerage_applyAdhocTax: "/sw-calculator/sewerageCalculator/_applyAdhocTax",
+    getSearchDetails: "/inbox/v1/dss/_search"
   },
 
   engagement: {

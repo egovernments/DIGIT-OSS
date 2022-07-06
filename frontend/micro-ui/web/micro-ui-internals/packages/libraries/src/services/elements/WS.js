@@ -142,7 +142,7 @@ export const WSService = {
     }),
   WSOpensearch: (data) =>
     Request({
-     url: Urls.dss.getSearchDetails,
+     url: Urls.ws.getSearchDetails,
      useCache: false,
      method: "POST",
      auth: false ,
