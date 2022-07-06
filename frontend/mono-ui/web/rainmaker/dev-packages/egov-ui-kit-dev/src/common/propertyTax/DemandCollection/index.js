@@ -18,10 +18,10 @@ class DemandCollection extends React.Component {
   render() {
     const { prepareFinalObject, preparedFinalObject,Properties = [], isAssesment=false } = this.props;
     let finalData=getFinalData();
-    if(isAssesment){
+   /*  if(isAssesment){
       let filter_data=finalData[0]
       finalData=[filter_data]
-    }
+    } */
     let demands_data = get(preparedFinalObject, `DemandProperties[0].propertyDetails[0].demand`);
     
     let dummyarray = [];
