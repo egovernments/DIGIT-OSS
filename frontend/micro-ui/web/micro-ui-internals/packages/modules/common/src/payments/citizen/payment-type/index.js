@@ -131,23 +131,25 @@ export const SelectPaymentType = (props) => {
           gatewayParam["requestDateTime"] = gatewayParam["requestDateTime"]?.split(new Date().getFullYear()).join(`${new Date().getFullYear()} `);
           gatewayParam["successUrl"]= data?.Transaction?.callbackUrl;
           gatewayParam["failUrl"]= data?.Transaction?.callbackUrl;
-          var formdata = new FormData();
+          // var formdata = new FormData();
           
           for (var key of orderForNDSLPaymentSite) {
-            formdata.append(key,gatewayParam[key]);
-            // newForm.append(
-            //   $("<input>", {
-            //     name: key,
-            //     value: gatewayParam[key],
-            //     type: "hidden",
-            //   })
-            // );
+           
+            // formdata.append(key,gatewayParam[key]);
+           
+            newForm.append(
+              $("<input>", {
+                name: key,
+                value: gatewayParam[key],
+                // type: "hidden",
+              })
+            );
           }
-          // $(document.body).append(newForm);
-          // newForm.submit();
+          $(document.body).append(newForm);
+          newForm.submit();
 
         
-          makePayment(gatewayParam.txURL,formdata);
+          // makePayment(gatewayParam.txURL,formdata);
 
         } catch (e) {
           console.log("Error in payment redirect ", e);
