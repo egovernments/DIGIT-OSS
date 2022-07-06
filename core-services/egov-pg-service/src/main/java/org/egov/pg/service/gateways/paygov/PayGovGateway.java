@@ -156,12 +156,10 @@ public class PayGovGateway implements Gateway {
                 userDetail.append(transaction.getUser().getMobileNumber());
             }
 
-            if(!StringUtils.isEmpty(transaction.getUser().getEmailId())) {
-                if(userDetail.length()>0) {
-                    userDetail.append("^");
-                }
-                userDetail.append(transaction.getUser().getEmailId());
-            }
+            /*
+             * if(!StringUtils.isEmpty(transaction.getUser().getEmailId())) { if(userDetail.length()>0) { userDetail.append("^");
+             * } userDetail.append(transaction.getUser().getEmailId()); }
+             */
         }
         if(userDetail.length() == 0) {
             userDetail.append(ADDITIONAL_FIELD_VALUE);
@@ -195,6 +193,9 @@ public class PayGovGateway implements Gateway {
         String message = String.join("|", fields);
         queryMap.put("checksum", PayGovUtils.generateCRC32Checksum(message, PAYGOV_MERCHENT_SECERET_KEY));
         queryMap.put("txURL",GATEWAY_URL);
+        SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyyHH:mm:SSS");
+        queryMap.put(REQUEST_DATE_TIME_KEY, format1.format(queryMap.get(REQUEST_DATE_TIME_KEY)));
+        log.info("REQUEST_DATE_TIME_KEY::"+queryMap.get(REQUEST_DATE_TIME_KEY));
         ObjectMapper mapper = new ObjectMapper();
         try {
             urlData= mapper.writeValueAsString(queryMap);
@@ -275,12 +276,10 @@ public class PayGovGateway implements Gateway {
                 userDetail.append(transaction.getUser().getMobileNumber());
             }
 
-            if(!StringUtils.isEmpty(transaction.getUser().getEmailId())) {
-                if(userDetail.length()>0) {
-                    userDetail.append("^");
-                }
-                userDetail.append(transaction.getUser().getEmailId());
-            }
+            /*
+             * if(!StringUtils.isEmpty(transaction.getUser().getEmailId())) { if(userDetail.length()>0) { userDetail.append("^");
+             * } userDetail.append(transaction.getUser().getEmailId()); }
+             */
         }
         if(userDetail.length() == 0) {
             userDetail.append(ADDITIONAL_FIELD_VALUE);
