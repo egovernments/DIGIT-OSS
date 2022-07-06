@@ -266,9 +266,9 @@ public class PayGovGateway implements Gateway {
         }
 
 
-
-        queryMap.put(SUCCESS_URL_KEY, getReturnUrl(returnUrl, REDIRECT_URL));
-        queryMap.put(FAIL_URL_KEY, getReturnUrl(returnUrl, REDIRECT_URL));
+        log.info("returnUrl::::"+returnUrl);
+        queryMap.put(SUCCESS_URL_KEY, returnUrl);
+        queryMap.put(FAIL_URL_KEY, returnUrl);
         StringBuffer userDetail = new StringBuffer();
         if( transaction.getUser()!=null) {
             if(!StringUtils.isEmpty(transaction.getUser().getMobileNumber())) {
@@ -318,7 +318,6 @@ public class PayGovGateway implements Gateway {
         try {
             urlData= mapper.writeValueAsString(queryMap);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             log.error("PAYGOV URL generation failed", e);
             throw new CustomException("URL_GEN_FAILED",
                     "PAYGOV URL generation failed, gateway redirect URI cannot be generated");
