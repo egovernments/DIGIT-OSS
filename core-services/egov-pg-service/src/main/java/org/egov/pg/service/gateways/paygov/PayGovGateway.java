@@ -142,7 +142,8 @@ public class PayGovGateway implements Gateway {
         queryMap.put(TRANSACTION_AMOUNT_KEY, String.valueOf( transaction.getTxnAmount()));
         queryMap.put(CURRENCY_CODE_KEY,CURRENCY_CODE);
         SimpleDateFormat format = new SimpleDateFormat(TX_DATE_FORMAT);
-        queryMap.put(REQUEST_DATE_TIME_KEY, format.format(new Date()));
+        Date currentDate = new Date();
+        queryMap.put(REQUEST_DATE_TIME_KEY, format.format(currentDate));
         String returnUrl = transaction.getCallbackUrl().replace(CITIZEN_URL, "");
 
         queryMap.put(SERVICE_ID_KEY, getModuleCode(transaction));
@@ -194,7 +195,7 @@ public class PayGovGateway implements Gateway {
         queryMap.put("checksum", PayGovUtils.generateCRC32Checksum(message, PAYGOV_MERCHENT_SECERET_KEY));
         queryMap.put("txURL",GATEWAY_URL);
         SimpleDateFormat format1 = new SimpleDateFormat("dd-MM-yyyyHH:mm:SSS");
-        queryMap.put(REQUEST_DATE_TIME_KEY, format1.format(queryMap.get(REQUEST_DATE_TIME_KEY)));
+        queryMap.put(REQUEST_DATE_TIME_KEY, format1.format(currentDate));
         log.info("REQUEST_DATE_TIME_KEY::"+queryMap.get(REQUEST_DATE_TIME_KEY));
         ObjectMapper mapper = new ObjectMapper();
         try {
