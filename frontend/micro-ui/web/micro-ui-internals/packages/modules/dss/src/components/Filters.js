@@ -76,7 +76,7 @@ const Filters = ({
           <DateRange onFilterChange={handleFilterChange} values={value?.range} t={t} />
         </div>
       )}
-      {showDDR && (
+      {/* {showDDR && (
         <div className="filters-input">
           <div className="mbsm">{t(isNational ? "ES_DSS_STATE" : "ES_DSS_DDR")}</div>
           <MultiSelectDropdown
@@ -88,7 +88,7 @@ const Filters = ({
             defaultUnit={t(isNational ? "ES_DSS_STATE_SELECTED" : "ES_DSS_DDR_SELECTED")}
           />
         </div>
-      )}
+      )} */}
       {showUlb && (
         <div className="filters-input">
           <div className="mbsm">{t("ES_DSS_ULB")}</div>
