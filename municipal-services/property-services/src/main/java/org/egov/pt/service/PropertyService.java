@@ -84,6 +84,7 @@ public class PropertyService {
 	@Autowired
 	private FuzzySearchService fuzzySearchService;
 
+	@Autowired
 	private EncryptionDecryptionUtil encryptionDecryptionUtil;
 	//private EncryptionService encryptionService;
 
