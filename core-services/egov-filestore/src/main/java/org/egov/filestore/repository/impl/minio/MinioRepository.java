@@ -30,6 +30,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.egov.tracer.model.CustomException;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectOptions;
@@ -96,7 +97,7 @@ public class MinioRepository implements CloudFilesManager {
 		} catch (MinioException | InvalidKeyException | IllegalArgumentException | NoSuchAlgorithmException
 				| IOException e) {
 			log.error("Error occurred: ", e);
-			throw new RuntimeException(ERROR_IN_CONFIGURATION);
+			throw new CustomException(e.toString(),ERROR_IN_CONFIGURATION);
 		}
 
 	}
@@ -110,7 +111,7 @@ public class MinioRepository implements CloudFilesManager {
 		} catch (MinioException | InvalidKeyException | IllegalArgumentException | NoSuchAlgorithmException
 				| IOException e) {
 			log.error("Error occurred: " + e);
-			throw new RuntimeException(ERROR_IN_CONFIGURATION);
+			throw new CustomException(e.toString(),ERROR_IN_CONFIGURATION);
 		}
 
 	}

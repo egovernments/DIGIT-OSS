@@ -17,6 +17,7 @@ import org.springframework.http.converter.*;
 import org.springframework.http.converter.json.*;
 import org.springframework.util.*;
 import org.springframework.web.client.*;
+import org.egov.tracer.model.CustomException;
 
 import javax.annotation.*;
 import javax.net.ssl.*;
@@ -83,15 +84,15 @@ abstract public class BaseSMSService implements SMSService, SMSBodyBuilder {
         String responseString = res.getBody().toString();
         if (!isResponseValidated(res)) {
             log.error("Response from API - " + responseString);
-            throw new RuntimeException(SMS_RESPONSE_NOT_SUCCESSFUL);
+            throw new CustomException(SMS_RESPONSE_NOT_SUCCESSFUL,SMS_RESPONSE_NOT_SUCCESSFUL);
         }
 
         if (smsProperties.getSmsErrorCodes().size() > 0 && isResponseCodeInKnownErrorCodeList(res)) {
-            throw new RuntimeException(SMS_RESPONSE_NOT_SUCCESSFUL);
+            throw new CustomException(SMS_RESPONSE_NOT_SUCCESSFUL,SMS_RESPONSE_NOT_SUCCESSFUL);
         }
 
         if (smsProperties.getSmsSuccessCodes().size() > 0 && !isResponseCodeInKnownSuccessCodeList(res)) {
-            throw new RuntimeException(SMS_RESPONSE_NOT_SUCCESSFUL);
+            throw new CustomException(SMS_RESPONSE_NOT_SUCCESSFUL,SMS_RESPONSE_NOT_SUCCESSFUL);
         }
 
         return res;

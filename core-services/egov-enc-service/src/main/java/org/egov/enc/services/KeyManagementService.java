@@ -59,12 +59,12 @@ public class KeyManagementService implements ApplicationRunner {
 
 
     //Initialize active tenant id list and Check for any new tenants
-    private void init() throws Exception {
+    private void init() throws NoSuchAlgorithmException {
         generateKeyForNewTenants();
     }
 
     //Check if a given tenantId exists
-    public boolean checkIfTenantExists(String tenant) throws Exception {
+    public boolean checkIfTenantExists(String tenant) throws NoSuchAlgorithmException {
         if(keyStore.getTenantIds().contains(tenant)) {
             return true;
         }
@@ -73,7 +73,7 @@ public class KeyManagementService implements ApplicationRunner {
     }
 
     //Generate Symmetric and Asymmetric Keys for each of the TenantId in the given input list
-    private void generateKeys(ArrayList<String> tenantIds) throws Exception {
+    private void generateKeys(ArrayList<String> tenantIds) throws NoSuchAlgorithmException {
 
         int status;
         ArrayList<SymmetricKey> symmetricKeys = keyGenerator.generateSymmetricKeys(tenantIds);
@@ -95,7 +95,7 @@ public class KeyManagementService implements ApplicationRunner {
 
     //Generate keys if there are any new tenants
     //Returns the number of tenants for which the keys have been generated
-    private int generateKeyForNewTenants() throws Exception {
+    private int generateKeyForNewTenants() throws NoSuchAlgorithmException {
         Collection<String> tenantIdsFromMdms = makeComprehensiveListOfTenantIds();
         tenantIdsFromMdms.removeAll(keyStore.getTenantIds());
 
@@ -131,13 +131,13 @@ public class KeyManagementService implements ApplicationRunner {
     }
 
     //Deactivate old keys and generate new keys for every tenantId
-    public RotateKeyResponse rotateAllKeys() throws Exception {
+    public RotateKeyResponse rotateAllKeys() throws NoSuchAlgorithmException {
         deactivateOldKeys();
         generateKeyForNewTenants();
         return new RotateKeyResponse(true);
     }
 
-    public RotateKeyResponse rotateKey(RotateKeyRequest rotateKeyRequest) throws Exception {
+    public RotateKeyResponse rotateKey(RotateKeyRequest rotateKeyRequest) throws NoSuchAlgorithmException {
         int status;
         status = keyRepository.deactivateSymmetricKeyForGivenTenant(rotateKeyRequest.getTenantId());
         log.info("Key Rotate SYM Return Status: " + status);
@@ -184,7 +184,7 @@ public class KeyManagementService implements ApplicationRunner {
     }
 
     @Override
-    public void run(ApplicationArguments applicationArguments) throws Exception {
+    public void run(ApplicationArguments applicationArguments) throws NoSuchAlgorithmException {
         init();
     }
 }

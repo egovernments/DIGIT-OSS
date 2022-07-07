@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.egov.tracer.model.CustomException;
 
 import java.io.IOException;
 import java.util.List;
@@ -97,7 +98,7 @@ public class MessageCacheRepository {
 				messageCacheEntry = objectMapper.readValue(entry, MessageCacheEntry.class);
 				return messageCacheEntry.getDomainMessages();
 			} catch (IOException e) {
-				throw new RuntimeException(e);
+				throw new CustomException(e.toString(),e.toString());
 			}
 		}
 		return null;

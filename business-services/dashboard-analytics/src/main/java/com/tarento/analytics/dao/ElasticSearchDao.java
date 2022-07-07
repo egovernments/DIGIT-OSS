@@ -11,6 +11,7 @@ import com.tarento.analytics.dto.AggregateRequestDto;
 import com.tarento.analytics.dto.CummulativeDataRequestDto;
 import com.tarento.analytics.dto.SearchDto;
 import com.tarento.analytics.model.ElasticSearchDictator;
+import org.egov.tracer.model.CustomException;
 
 
 public interface ElasticSearchDao {
@@ -27,7 +28,7 @@ public interface ElasticSearchDao {
 	
 	public ElasticSearchDictator createSearchDictator(AggregateRequestDto dto, String indexName, String documentType, String filterDateField) throws Exception ;
 	*/
-	public ElasticSearchDictator createSearchDictatorV2(AggregateRequestDto dto, String indexName, String documentType, String filterDateField) throws Exception ;
+	public ElasticSearchDictator createSearchDictatorV2(AggregateRequestDto dto, String indexName, String documentType, String filterDateField) throws CustomException;
 		
 	public SearchRequest buildElasticSearchQuery(ElasticSearchDictator dictator);
 	

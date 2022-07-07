@@ -34,6 +34,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.egov.tracer.model.CustomException;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(BusinessCategoryController.class)
@@ -166,7 +167,7 @@ public class BusinessCategoryControllerTest {
 		try {
 			return IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream(fileName), "UTF-8");
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new CustomException(e.toString(),e.toString());
 		}
 	}
 

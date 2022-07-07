@@ -16,6 +16,7 @@ import org.apache.commons.io.IOUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.common.contract.response.ResponseInfo;
+import org.egov.tracer.model.CustomException;
 
 import org.egov.commons.TestConfiguration;
 
@@ -263,7 +264,7 @@ public class BusinessDetailsControllerTest {
 		try {
 			return IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream(fileName), "UTF-8");
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new CustomException(e.toString(),e.toString());
 		}
 	}
 

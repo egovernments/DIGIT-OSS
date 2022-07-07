@@ -64,6 +64,7 @@ import com.tarento.analytics.dto.SearchDto;
 import com.tarento.analytics.model.ElasticSearchDictator;
 import com.tarento.analytics.utils.ElasticProperties;
 import com.tarento.analytics.utils.ElasticSearchClient;
+import org.egov.tracer.model.CustomException;
 
 @Component
 public class ElasticSearchDaoImpl implements ElasticSearchDao {
@@ -1197,7 +1198,7 @@ public class ElasticSearchDaoImpl implements ElasticSearchDao {
 	
 	@Override
 	public ElasticSearchDictator createSearchDictatorV2(AggregateRequestDto dto, String indexName, String documentType,
-			String filterDateField) throws Exception {
+			String filterDateField) throws CustomException {
 		ElasticSearchDictator dictator = new ElasticSearchDictator();
 
 		dictator.setIndexName(indexName);

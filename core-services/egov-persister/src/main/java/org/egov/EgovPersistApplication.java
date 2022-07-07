@@ -17,6 +17,7 @@ import org.springframework.context.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.egov.tracer.model.CustomException;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -64,7 +65,7 @@ public class EgovPersistApplication {
         File folder = new File(baseFolderPath);
 
         if (!folder.exists()) {
-            throw new RuntimeException("The folder doesn't exist - " + baseFolderPath);
+            throw new CustomException("The folder doesn't exist - " + baseFolderPath,"The folder doesn't exist - " + baseFolderPath);
         }
 
         File[] listOfFiles = folder.listFiles();

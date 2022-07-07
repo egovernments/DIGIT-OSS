@@ -248,7 +248,7 @@ public class BoundaryService {
 			}
 			return Optional.empty();
 		} catch (final Exception e) {
-			throw new RuntimeException("Error occurred while fetching boundary from GIS data", e);
+			throw new org.egov.tracer.model.CustomException(e.toString(), "Error occurred while fetching boundary from GIS data");
 		}
 	}
 

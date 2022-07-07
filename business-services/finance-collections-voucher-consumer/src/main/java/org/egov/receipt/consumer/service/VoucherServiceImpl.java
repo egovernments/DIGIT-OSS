@@ -84,6 +84,7 @@ import org.egov.receipt.consumer.model.VoucherSearchRequest;
 import org.egov.receipt.consumer.repository.ServiceRequestRepository;
 import org.egov.receipt.custom.exception.VoucherCustomException;
 import org.egov.reciept.consumer.config.PropertiesManager;
+import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,7 +154,7 @@ public class VoucherServiceImpl implements VoucherService {
 	 * true or false in business mapping file.
 	 */
 	@Override
-	public boolean isVoucherCreationEnabled(Receipt receipt, RequestInfo req, FinanceMdmsModel finSerMdms) throws Exception {
+	public boolean isVoucherCreationEnabled(Receipt receipt, RequestInfo req, FinanceMdmsModel finSerMdms) throws VoucherCustomException {
 //		Receipt receipt = req.getReceipt().get(0);
 		String tenantId = receipt.getTenantId();
 		Bill bill = receipt.getBill().get(0);
@@ -423,7 +424,7 @@ public class VoucherServiceImpl implements VoucherService {
 	 *             business service code which is mapped in json file
 	 */
 	private List<BusinessService> getBusinessServiceByCode(String tenantId, String bsCode, RequestInfo requestInfo,
-			FinanceMdmsModel finSerMdms) throws Exception {
+			FinanceMdmsModel finSerMdms) throws CustomException,VoucherCustomException {
 		List<BusinessService> businessServices = microServiceUtil.getBusinessService(tenantId, bsCode,
 				requestInfo, finSerMdms);
 		if (businessServices.isEmpty()) {
