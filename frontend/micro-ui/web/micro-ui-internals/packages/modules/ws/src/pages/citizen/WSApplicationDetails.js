@@ -50,7 +50,7 @@ const WSApplicationDetails = () => {
   const paymentDetails = Digit.Hooks.useFetchBillsForBuissnessService(
     { businessService: applicationNobyData?.includes("SW") ? "SW.ONE_TIME_FEE" : "WS.ONE_TIME_FEE", ...fetchBillParams, tenantId: tenantId },
     {
-      enabled: data?.WaterConnection?.[0]?.applicationNo ? true : false,
+      enabled: data?.WaterConnection?.[0]?.applicationNo || data?.SewerageConnections?.[0]?.applicationNo ? true : false,
       retry: false,
     }
   );
@@ -66,10 +66,10 @@ const WSApplicationDetails = () => {
   }
 
   const handleDownloadPdf = async () => {
-    const tenantInfo = data?.WaterConnection?.[0]?.tenantId;
+    const tenantInfo = data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId;
     let res = data?.WaterConnection?.[0];
     const PDFdata = getPDFData({ ...res }, { ...PTData?.Properties?.[0] }, tenantInfo, t);
-    PDFdata.then((ress) => Digit.Utils.pdf.generate(ress));
+    PDFdata.then((ress) => Digit.Utils.pdf.generatev1(ress));
     setShowOptions(false);
   };
 
@@ -421,7 +421,7 @@ const WSApplicationDetails = () => {
                 }/${
                   stringReplaceAll(data?.WaterConnection?.[0]?.applicationNo, "/", "+") ||
                   stringReplaceAll(data?.SewerageConnections?.[0]?.applicationNo, "/", "+")
-                }?workflow=WNS&tenantId=${data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId}`,
+                }?workflow=WNS&tenantId=${data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId}&ConsumerName=${data?.WaterConnection?.[0]?.connectionHolders?.map((owner) => owner.name).join(",") || data?.SewerageConnections?.[0]?.connectionHolders?.map((owner) => owner.name).join(",") || PTData?.Properties?.[0]?.owners?.map((owner) => owner.name).join(",")}`,
                 state: {},
               }}
             >

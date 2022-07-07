@@ -34,13 +34,14 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   const totalTimelineLength = useMemo(()=> timeline?.length ,[timeline])
 
   useEffect(() => {
-    const [{auditDetails}] = timeline?.filter((status, index, array) => {
+    let filteredTimeline = timeline?.filter((status, index, array) => {
       if (index === array.length - 1 && status.status === "PENDINGFORASSIGNMENT") {
         return true;
       } else {
         return false;
       }
     });
+    const [{auditDetails}] = filteredTimeline?.length>0 ? filteredTimeline : [{}];
 
     const onlyPendingForAssignmentStatusArray = timeline?.filter( e => e?.status === "PENDINGFORASSIGNMENT")
     const duplicateCheckpointOfPendingForAssignment = onlyPendingForAssignmentStatusArray.at(-1)
