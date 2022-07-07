@@ -25,7 +25,7 @@ public class DeathDtlAllQueryBuilder {
 			"bdtl.tenantid tenantid, registrationno, dateofdeath, counter, gender ,  " + 
 			"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Transgender'  END AS genderstr , " +
 			"(select bh.hospitalname from eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname, placeofdeath, dateofreport, remarks, " + 
-			"hospitalid , informantsname , informantsaddress , age,  eidno , icdcode , bdtl.nationality bdtlnationality, bdtl.religion bdtlreligion ," + 
+			"hospitalid , informantsname , informantsaddress , age,  eidno , icdcode, islegacyrecord, bdtl.nationality bdtlnationality, bdtl.religion bdtlreligion ," +
 			"bfat.firstname bfatfn ,bmot.firstname bmotfn , bdtl.firstname bdtlfn , bsps.firstname bspsfn ," + 
 			"bfat.middlename bfatmn ,bmot.middlename bmotmn , bdtl.middlename bdtlmn , bsps.middlename bspsmn ," + 
 			"bfat.lastname bfatln ,bmot.lastname bmotln , bdtl.lastname bdtlln , bsps.lastname bspsln ," + 
