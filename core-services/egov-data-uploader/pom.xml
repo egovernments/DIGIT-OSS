@@ -14,14 +14,14 @@
   <description>Common library providing bulk data upload operation on the Database</description>
   <distributionManagement>
     <repository>
-      <id>repo.egovernments.org</id>
+      <id>repo.digit.org</id>
       <name>eGov ERP Releases Repository</name>
-      <url>https://nexus-repo.egovernments.org/nexus/content/repositories/releases/</url>
+      <url>https://nexus-repo.digit.org/nexus/content/repositories/releases/</url>
     </repository>
     <snapshotRepository>
-      <id>repo.egovernments.org</id>
+      <id>repo.digit.org</id>
       <name>eGov ERP Snapshots Repository</name>
-      <url>https://nexus-repo.egovernments.org/nexus/content/repositories/snapshots/</url>
+      <url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
   <properties>
@@ -33,7 +33,7 @@
     <dependency>
       <groupId>org.egov.services</groupId>
       <artifactId>services-common</artifactId>
-      <version>1.1.0</version>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -113,14 +113,14 @@
   </dependencies>
   <repositories>
     <repository>
-      <id>repo.egovernments.org</id>
+      <id>repo.digit.org</id>
       <name>eGov ERP Releases Repository</name>
-      <url>https://nexus-repo.egovernments.org/nexus/content/repositories/releases/</url>
+      <url>https://nexus-repo.digit.org/nexus/content/repositories/releases/</url>
     </repository>
     <repository>
-      <id>repo.egovernments.org.snapshots</id>
+      <id>repo.digit.org.snapshots</id>
       <name>eGov ERP Snapshots Repository</name>
-      <url>https://nexus-repo.egovernments.org/nexus/content/repositories/snapshots/</url>
+      <url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
     </repository>
   </repositories>
   <build>
