@@ -195,7 +195,12 @@ const ApplicationDetails = (props) => {
           </Link>
         </div>
       );
-    } else if (checkpoint.status === "WAITING_FOR_DISPOSAL" || checkpoint.status === "DISPOSED" || checkpoint.status === "DISPOSAL_IN_PROGRESS") {
+    } else if (
+      checkpoint.status === "WAITING_FOR_DISPOSAL" ||
+      checkpoint.status === "DISPOSED" ||
+      checkpoint.status === "DISPOSAL_IN_PROGRESS" ||
+      checkpoint.status === "CITIZEN_FEEDBACK_PENDING"
+    ) {
       const caption = {
         date: checkpoint?.auditDetails?.created,
         name: checkpoint?.assigner,
