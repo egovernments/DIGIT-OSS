@@ -80,12 +80,11 @@ public class ExceptionUtils {
     }
 
     public static void RaiseException(Throwable ex) {
-        throw new org.egov.tracer.model.CustomException(ex.toString(), ex.toString());
-
+        throw new RuntimeException(ex);
     }
 
     public static void raiseCustomException(HttpStatus status, String message) {
-        throw new org.egov.tracer.model.CustomException(CODE_CUSTOM_EXCEPTION, message);
+        throw new RuntimeException(new CustomException(message, status.value(), CODE_CUSTOM_EXCEPTION));
     }
 
     public static void raiseErrorFilterException( RequestContext ctx) {
