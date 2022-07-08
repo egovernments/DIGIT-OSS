@@ -112,7 +112,7 @@ export const SelectPaymentType = (props) => {
         <Card>
           <div className="payment-amount-info" style={{ marginBottom: "26px" }}>
             <CardLabel className="dark">{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</CardLabel>
-            <CardSectionHeader> ₹ {paymentAmount || billDetails?.totalAmount}</CardSectionHeader>
+            <CardSectionHeader> ₹ {Number(paymentAmount).toFixed(2) || Number(billDetails?.totalAmount).toFixed(2)}</CardSectionHeader>
           </div>
           <CardLabel>{t("PAYMENT_CS_SELECT_METHOD")}</CardLabel>
           {menu?.length && (

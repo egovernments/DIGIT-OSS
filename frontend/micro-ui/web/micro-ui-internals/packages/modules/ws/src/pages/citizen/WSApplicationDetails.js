@@ -187,7 +187,7 @@ const WSApplicationDetails = () => {
             <Row
               className="border-none"
               label={t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")}
-              text={paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount || "NA"}
+              text={paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount ? Number(paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount).toFixed(2) : t("CS_NA")}
               textStyle={{ whiteSpace: "pre" }}
             />
           </StatusTable>
@@ -197,12 +197,12 @@ const WSApplicationDetails = () => {
             <CardHeader styles={{ fontSize: "28px" }}>{t("WS_FEE_DEATAILS_HEADER")}</CardHeader>
             <StatusTable>
               {paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails.map((bill) => (
-                <Row className="border-none" label={t(bill?.taxHeadCode)} text={`₹${bill?.amount}`} textStyle={{ textAlign: "right" }} />
+                <Row className="border-none" label={t(bill?.taxHeadCode)} text={`₹${Number(bill?.amount).toFixed(2)}`} textStyle={{ textAlign: "right" }} />
               ))}
               <Row
                 className="border-none"
                 label={t("WS_TOTAL_AMOUNT_DUE")}
-                text={`₹${isPaid? 0 : paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount}`}
+                text={`₹${Number(isPaid? 0 : paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount).toFixed(2)}`}
                 textStyle={{ textAlign: "right", fontSize:"18px", fontWeight: "700" }}
               />
               <Row

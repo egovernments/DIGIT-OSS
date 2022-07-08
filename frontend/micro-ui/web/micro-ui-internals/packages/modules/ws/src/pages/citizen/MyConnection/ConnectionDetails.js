@@ -406,7 +406,7 @@ const ConnectionDetails = () => {
               <div className="modal-header-ws">{t("WS_CLEAR_DUES_DISCONNECTION_SUB_HEADER_LABEL")} </div>
               <div className="modal-body-ws">
                 <span>
-                  {t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")}: ₹{paymentDetails?.data?.Bill[0]?.totalAmount}
+                  {t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")}: ₹{Number(paymentDetails?.data?.Bill[0]?.totalAmount).toFixed(2)}
                 </span>{" "}
               </div>
             </Modal>

@@ -225,9 +225,9 @@ export const WSSearch = {
         isAdhocRebate: isAdhocRebate,
         isPaid: colletionData?.Payments?.length > 0 ? true : false,
         values: [
-          { title: "WS_APPLICATION_FEE_HEADER", value: fetchBillData?.Bill?.[0]?.fee },
-          { title: "WS_SERVICE_FEE_HEADER", value: fetchBillData?.Bill?.[0]?.charge },
-          { title: "WS_TAX_HEADER", value: fetchBillData?.Bill?.[0]?.taxAmount },
+          { title: "WS_APPLICATION_FEE_HEADER", value: Number(fetchBillData?.Bill?.[0]?.fee).toFixed(2) },
+          { title: "WS_SERVICE_FEE_HEADER", value: Number(fetchBillData?.Bill?.[0]?.charge).toFixed(2) },
+          { title: "WS_TAX_HEADER", value: Number(fetchBillData?.Bill?.[0]?.taxAmount).toFixed(2) },
         ],
       },
     };
