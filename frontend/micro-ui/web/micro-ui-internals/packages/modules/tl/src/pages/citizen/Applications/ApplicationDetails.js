@@ -57,6 +57,7 @@ const TLApplicationDetails = () => {
   );
 
   useEffect(() => {
+    localStorage.setItem("TLAppSubmitEnabled", "true");
     setMutationHappened(false);
   }, []);
 
@@ -130,9 +131,8 @@ const TLApplicationDetails = () => {
     propertyAddress = getAddress(PTData?.Properties[0]?.address, t);
   }
 
-  
   const dowloadOptions =
-    paymentsHistory?.Payments?.length > 0 && application?.[0]?.status !== "EXPIRED" && application?.[0]?.status !== "CANCELLED" 
+    paymentsHistory?.Payments?.length > 0 && application?.[0]?.status !== "EXPIRED" && application?.[0]?.status !== "CANCELLED"
       ? [
           {
             label: t("TL_CERTIFICATE"),
@@ -149,7 +149,7 @@ const TLApplicationDetails = () => {
         ]
       : [
           {
-          label: t("TL_APPLICATION"),
+            label: t("TL_APPLICATION"),
             onClick: handleDownloadPdf,
           },
         ];
