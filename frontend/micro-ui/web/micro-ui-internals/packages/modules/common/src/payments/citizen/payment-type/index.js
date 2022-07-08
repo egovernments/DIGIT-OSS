@@ -129,8 +129,9 @@ export const SelectPaymentType = (props) => {
 
           // override default date for UPYOG Custom pay
           gatewayParam["requestDateTime"] = gatewayParam["requestDateTime"]?.split(new Date().getFullYear()).join(`${new Date().getFullYear()} `);
-          gatewayParam["successUrl"]= data?.Transaction?.callbackUrl;
-          gatewayParam["failUrl"]= data?.Transaction?.callbackUrl;
+          // gatewayParam["successUrl"]= data?.Transaction?.callbackUrl;
+          // gatewayParam["failUrl"]= data?.Transaction?.callbackUrl;
+          
           // var formdata = new FormData();
           
           for (var key of orderForNDSLPaymentSite) {
