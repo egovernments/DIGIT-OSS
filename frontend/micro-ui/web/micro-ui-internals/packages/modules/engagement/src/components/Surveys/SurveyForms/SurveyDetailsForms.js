@@ -61,6 +61,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
                   allowMultiselect={true}
                   optionKey={"i18nKey"}
                   option={userUlbs}
+                  placeholder={t("ES_COMMON_USER_ULBS")}
                   select={(e) => {
                     props.onChange([...(surveyFormData("tenantIds")?.filter?.((f) => e.code !== f?.code) || []), e]);
                   }}

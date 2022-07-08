@@ -133,7 +133,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
                   message: t("EXCEEDS_60_CHAR_LIMIT"),
                 },
                 pattern:{
-                  value: /^[A-Za-z_-][A-Za-z0-9_\ -]*$/,
+                  value: /^[A-Za-z_-][A-Za-z0-9_\ -?]*$/,
                   message: t("ES_SURVEY_DONT_START_WITH_NUMBER")
                 }
               })}
@@ -145,6 +145,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
             select={(ev) => {
               setSurveyQuestionConfig((prevState) => ({ ...prevState, type: ev.title }));
             }}
+            placeholder={"Short Answer"}
             //selected={surveyQuestionConfig.type || {title: "Short Answer",value: "SHORT_ANSWER_TYPE"}}
             optionKey="title"
             disable={disableInputs}
