@@ -22,7 +22,7 @@ public class RedirectController {
     @Value("${egov.default.citizen.url}")
     private String defaultURL;
 
-    @Value("${paygov.redirect.url:originalreturnurl}")
+    @Value("${paygov.original.return.url.key}")
     private String returnUrlKey;
 
     @RequestMapping(value = "/transaction/v1/_redirect", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
