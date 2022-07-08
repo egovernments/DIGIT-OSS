@@ -34,6 +34,7 @@ public class RedirectController {
         HttpHeaders httpHeaders = new HttpHeaders();
         StringBuilder redirectURL = new StringBuilder();
         redirectURL.append(citizenRedirectDomain).append(formData.get(returnUrlKey).get(0));
+        formData.remove(returnUrlKey);
         httpHeaders.setLocation(UriComponentsBuilder.fromHttpUrl(redirectURL.toString())
                 .queryParams(formData).build().encode().toUri());
         return new ResponseEntity<>(httpHeaders, HttpStatus.FOUND);
