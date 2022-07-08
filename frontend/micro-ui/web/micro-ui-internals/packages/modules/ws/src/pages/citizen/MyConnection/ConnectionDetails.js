@@ -391,7 +391,7 @@ const ConnectionDetails = () => {
                 history.push(
                   `/digit-ui/citizen/payment/collect/${isSW ? "SW" : "WS"}/${encodeURIComponent(
                     state?.connectionNo
-                  )}/${tenantId}?tenantId=${tenantId}`
+                  )}/${tenantId}?consumerCode=${state?.connectionNo}&&tenantId=${tenantId}&&workflow=WNS`
                 );
                 setshowModal(false);
               }}
