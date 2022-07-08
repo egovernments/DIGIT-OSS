@@ -1,5 +1,7 @@
 package org.egov.pg.web.controllers;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,12 +28,13 @@ public class RedirectController {
     private String returnUrlKey;
 
     @RequestMapping(value = "/transaction/v1/_redirect", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<Object> method(@RequestBody MultiValueMap<String, String> formData) {
+    public ResponseEntity<Object> method(@RequestBody MultiValueMap<String, String> formData, HttpServletRequest request) {
         for(String str : formData.keySet())
             log.info("Key:::"+str+"::Value:::"+formData.getFirst(str));
         log.info("returnUrlKey:::"+returnUrlKey);
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(UriComponentsBuilder.fromHttpUrl(formData.get(returnUrlKey).get(0))
+        String domain = request.getRequestURL().toString().replace(request.getRequestURI(),"");
+        httpHeaders.setLocation(UriComponentsBuilder.fromHttpUrl(domain+formData.get(returnUrlKey).get(0))
                 .queryParams(formData).build().encode().toUri());
         return new ResponseEntity<>(httpHeaders, HttpStatus.FOUND);
     }
