@@ -50,6 +50,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PayGovGateway implements Gateway {
 
+    private static final String UNABLE_TO_FETCH_STATUS_FROM_PAY_GOV_GATEWAY = "Unable to fetch status from PayGov gateway";
+    private static final String UNABLE_TO_FETCH_STATUS = "UNABLE_TO_FETCH_STATUS";
     private static final String GATEWAY_NAME = "paygov";
     private final String MESSAGE_TYPE;
 
@@ -377,7 +379,7 @@ public class PayGovGateway implements Gateway {
 
     @Override
     public Transaction fetchStatus(Transaction currentStatus, Map<String, String> param) {
-        PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, currentStatus.getTenantId());
+        //PgDetail pgDetail = pgDetailRepository.getPgDetailByTenantId(requestInfo, currentStatus.getTenantId());
         log.debug("tx input "+ currentStatus);
         try {
             // create auth credentials
@@ -405,7 +407,7 @@ public class PayGovGateway implements Gateway {
             }else {
                 log.error("tx input "+ currentStatus);
                 log.error("NOT A SUCCESSFUL TX "+response);
-                throw new CustomException("UNABLE_TO_FETCH_STATUS", "Unable to fetch status from PayGov gateway");
+                throw new CustomException(UNABLE_TO_FETCH_STATUS, UNABLE_TO_FETCH_STATUS_FROM_PAY_GOV_GATEWAY);
             }
         }catch (HttpStatusCodeException ex) {
             log.error("tx input "+ currentStatus);
@@ -415,22 +417,21 @@ public class PayGovGateway implements Gateway {
                 PayGovGatewayStatusResponse errorResponse = new ObjectMapper().readValue(ex.getResponseBodyAsString(),PayGovGatewayStatusResponse.class);
                 //Error 404 --> No Data Found for given Request and 408 --> Session Time Out Error if not transaction has been initiated for 15 min
                 if(errorResponse.getErrorCode().equals("404")||errorResponse.getErrorCode().equals("408")) {
-                    Transaction txStatus = Transaction.builder().txnId(currentStatus.getTxnId())
+                    return Transaction.builder().txnId(currentStatus.getTxnId())
                             .txnStatus(Transaction.TxnStatusEnum.FAILURE)
                             .txnStatusMsg(PgConstants.TXN_FAILURE_GATEWAY)
                             .gatewayStatusCode(errorResponse.getErrorCode()).gatewayStatusMsg(errorResponse.getErrorMessage())
                             .responseJson(ex.getResponseBodyAsString()).build();
-                    return txStatus;
                 }
             } catch (Exception e) {
                 log.error("Error in response transform",e);
             }
 
             log.error("Unable to fetch status from PayGov gateway ", ex);
-            throw new CustomException("UNABLE_TO_FETCH_STATUS", "Unable to fetch status from PayGov gateway");
+            throw new CustomException(UNABLE_TO_FETCH_STATUS, UNABLE_TO_FETCH_STATUS_FROM_PAY_GOV_GATEWAY);
         } catch (RestClientException e) {
             log.error("Unable to fetch status from PayGov gateway ", e);
-            throw new CustomException("UNABLE_TO_FETCH_STATUS", "Unable to fetch status from PayGov gateway");
+            throw new CustomException(UNABLE_TO_FETCH_STATUS, UNABLE_TO_FETCH_STATUS_FROM_PAY_GOV_GATEWAY);
         } catch (Exception e) {
             log.error("PayGov Checksum validation failed ", e);
             throw new CustomException("CHECKSUM_GEN_FAILED","Checksum generation failed, gateway redirect URI cannot be generated");
@@ -621,7 +622,7 @@ public class PayGovGateway implements Gateway {
                             .responseJson(resp).build();
                     break;
                 default :
-                    throw new CustomException("UNABLE_TO_FETCH_STATUS", "Unable to fetch Status of transaction");
+                    throw new CustomException(UNABLE_TO_FETCH_STATUS, "Unable to fetch Status of transaction");
             }
             log.info("Encoded value "+resp);
             log.info("PayGovGatewayStatusResponse --> "+statusResponse);
@@ -629,7 +630,7 @@ public class PayGovGateway implements Gateway {
             return txStatus;
         } else {
             log.error("Received error response from status call : " + resp);
-            throw new CustomException("UNABLE_TO_FETCH_STATUS", "Unable to fetch status from PayGov gateway");
+            throw new CustomException(UNABLE_TO_FETCH_STATUS, UNABLE_TO_FETCH_STATUS_FROM_PAY_GOV_GATEWAY);
         }
     }
 
