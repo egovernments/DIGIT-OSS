@@ -147,10 +147,11 @@ public class PayGovGateway implements Gateway {
         String returnUrl = transaction.getCallbackUrl().replace(CITIZEN_URL, "");
 
         queryMap.put(SERVICE_ID_KEY, getModuleCode(transaction));
-
-        log.info("returnUrl::::"+returnUrl);
-        queryMap.put(SUCCESS_URL_KEY, returnUrl);
-        queryMap.put(FAIL_URL_KEY, returnUrl);
+        String domainName =  returnUrl.replaceAll("http(s)?://|www\\.|/.*", "");
+        String citizenReturnURL = returnUrl.split(domainName)[1];
+        log.info("returnUrl::::"+getReturnUrl(citizenReturnURL, REDIRECT_URL));
+        queryMap.put(SUCCESS_URL_KEY, getReturnUrl(citizenReturnURL, REDIRECT_URL));
+        queryMap.put(FAIL_URL_KEY, getReturnUrl(citizenReturnURL, REDIRECT_URL));
         StringBuffer userDetail = new StringBuffer();
         if( transaction.getUser()!=null) {
             if(!StringUtils.isEmpty(transaction.getUser().getMobileNumber())) {
@@ -257,7 +258,8 @@ public class PayGovGateway implements Gateway {
         queryMap.put(REQUEST_DATE_TIME_KEY, format.format(new Date()));
         String returnUrl = transaction.getCallbackUrl().replace(CITIZEN_URL, "");
 
-
+        String domainName =  returnUrl.replaceAll("http(s)?://|www\\.|/.*", "");
+        String citizenReturnURL = returnUrl.split(domainName)[1];
         String moduleCode ="------";
         if(!StringUtils.isEmpty(transaction.getModule())) {
             if(transaction.getModule().length() < 6) {
@@ -268,9 +270,9 @@ public class PayGovGateway implements Gateway {
         }
 
 
-        log.info("returnUrl::::"+returnUrl);
-        queryMap.put(SUCCESS_URL_KEY, returnUrl);
-        queryMap.put(FAIL_URL_KEY, returnUrl);
+        log.info("returnUrl::::"+getReturnUrl(citizenReturnURL, REDIRECT_URL));
+        queryMap.put(SUCCESS_URL_KEY, getReturnUrl(citizenReturnURL, REDIRECT_URL));
+        queryMap.put(FAIL_URL_KEY, getReturnUrl(citizenReturnURL, REDIRECT_URL));
         StringBuffer userDetail = new StringBuffer();
         if( transaction.getUser()!=null) {
             if(!StringUtils.isEmpty(transaction.getUser().getMobileNumber())) {
