@@ -300,6 +300,13 @@ if(!flag)
  }
  ];
  propertyPayload.creationReason = 'MUTATION';
+ if(propertyPayload.ownershipCategory==="INDIVIDUAL.INDIVIDUAL.SINGLEOWNER" &&  
+ propertyPayload.ownershipCategoryTemp=== "INDIVIDUAL.MULTIPLEOWNERS")
+ {
+    let temp = propertyPayload.ownershipCategory.split(".");
+    temp.pop();    
+    propertyPayload.ownershipCategory = temp.join(".")+"."+"MULTIPLEOWNERS";
+ }
  let payload = null;
  payload = await httpRequest(
  "post",
