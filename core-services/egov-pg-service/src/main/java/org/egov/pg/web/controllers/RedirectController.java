@@ -10,9 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,15 +25,16 @@ public class RedirectController {
 
     @Value("${paygov.original.return.url.key}")
     private String returnUrlKey;
-
-    @RequestMapping(value = "/transaction/v1/_redirect", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    
+    @Value("${paygov.citizen.redirect.domain.name}")
+    private String citizenRedirectDomain;
+    
+    @PostMapping(value = "/transaction/v1/_redirect", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<Object> method(@RequestBody MultiValueMap<String, String> formData, HttpServletRequest request) {
-        for(String str : formData.keySet())
-            log.info("Key:::"+str+"::Value:::"+formData.getFirst(str));
-        log.info("returnUrlKey:::"+returnUrlKey);
         HttpHeaders httpHeaders = new HttpHeaders();
-        String domain = request.getRequestURL().toString().replace(request.getRequestURI(),"");
-        httpHeaders.setLocation(UriComponentsBuilder.fromHttpUrl(domain+formData.get(returnUrlKey).get(0))
+        StringBuilder redirectURL = new StringBuilder();
+        redirectURL.append(citizenRedirectDomain).append(formData.get(returnUrlKey).get(0));
+        httpHeaders.setLocation(UriComponentsBuilder.fromHttpUrl(redirectURL.toString())
                 .queryParams(formData).build().encode().toUri());
         return new ResponseEntity<>(httpHeaders, HttpStatus.FOUND);
     }
