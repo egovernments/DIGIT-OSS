@@ -120,7 +120,6 @@ const ConnectionDetails = () => {
       downloadOptions = downloadOptions.concat(applicationDownloadObject);
       break;
     case "PENDING_FOR_CONNECTION_ACTIVATION":
-    case "CONNECTION_ACTIVATED":
       downloadOptions = downloadOptions.concat(applicationDownloadObject, receiptApplicationFeeDownloadObject);
       break;
     case "REJECTED":
