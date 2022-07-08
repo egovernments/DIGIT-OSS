@@ -330,8 +330,7 @@ public class PayGovGateway implements Gateway {
 
 
     private String getReturnUrl(String callbackUrl, String baseurl) {
-        return UriComponentsBuilder.fromHttpUrl(baseurl).queryParam(ORIGINAL_RETURN_URL_KEY, callbackUrl).build()
-                .encode().toUriString();
+        return UriComponentsBuilder.fromHttpUrl(baseurl).queryParam(ORIGINAL_RETURN_URL_KEY, callbackUrl).build().toUriString();
     }
 
     class RequestMsg{
