@@ -27,7 +27,9 @@ public class RedirectController {
 
     @RequestMapping(value = "/transaction/v1/_redirect", method = RequestMethod.POST, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<Object> method(@RequestBody MultiValueMap<String, String> formData) {
-
+        for(String str : formData.keySet())
+            log.info("Key:::"+str+"::Value:::"+formData.getFirst(str));
+        log.info("returnUrlKey:::"+returnUrlKey);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(UriComponentsBuilder.fromHttpUrl(formData.get(returnUrlKey).get(0))
                 .queryParams(formData).build().encode().toUri());
