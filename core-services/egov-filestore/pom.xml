@@ -8,7 +8,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.2.6.RELEASE</version>
-		<relativePath></relativePath>
+		<relativePath/>
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>egov-filestore</artifactId>
@@ -63,7 +63,7 @@
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-core</artifactId>
-			<version>1.23</version>
+			<version>1.28.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -82,7 +82,7 @@
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-s3</artifactId>
-			<version>1.11.289</version>
+			<version>1.12.257</version>
 		</dependency>
 		<dependency>
 			<groupId>com.microsoft.azure</groupId>
@@ -197,7 +197,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
