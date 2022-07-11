@@ -137,11 +137,20 @@ const ConnectionDetails = (_props) => {
     GuardianOptions,
     Menu
   } = _props;
-
+  
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
-  const formValue = watch();
+  // const formValue = watch();
+  const [name,setName]=useState();
+  const [gender,setGender]=useState();
+  const [mobileNumber,setMobileNumber]=useState();
+  const [guardian,setGuardian] =useState();
+  const [relationship,setRelationship]=useState()
+  const [ownerType,setOwnerType]=useState()
+  const [sameAsOwnerDetails,setSameAsOwnerDetails]=useState()
+  const [address,setAddress]=useState()
+  const formValue={name,gender,mobileNumber,guardian,relationship,ownerType,sameAsOwnerDetails,address}
   const { errors } = localFormState;
-
+  
   useEffect(() => {
     trigger();
   }, []);
@@ -207,6 +216,7 @@ const ConnectionDetails = (_props) => {
               autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "sameAsOwnerDetails"}
               errorStyle={(localFormState.touched.sameAsOwnerDetails && errors?.sameAsOwnerDetails?.message) ? true : false}
               onChange={(e) => {
+                setSameAsOwnerDetails(e.target.checked)
                 props.onChange(e.target.checked);
                 setFocusIndex({ index: connectionHolderDetail?.key, type: "sameAsOwnerDetails" });
               }}
@@ -235,6 +245,7 @@ const ConnectionDetails = (_props) => {
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "name"}
                   errorStyle={(localFormState.touched.name && errors?.name?.message) ? true : false}
                   onChange={(e) => {
+                    setName(e.target.value)
                     props.onChange(e.target.value);
                     setFocusIndex({ index: connectionHolderDetail?.key, type: "name" });
                   }}
@@ -262,6 +273,7 @@ const ConnectionDetails = (_props) => {
                 option={menu}
                 errorStyle={(localFormState.touched.gender && errors?.gender?.message) ? true : false}
                 select={(e) => {
+                  setGender(e)
                   props.onChange(e);
                 }}
                 optionKey="i18nKey"
@@ -289,6 +301,7 @@ const ConnectionDetails = (_props) => {
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "mobileNumber"}
                   errorStyle={(localFormState.touched.mobileNumber && errors?.mobileNumber?.message) ? true : false}
                   onChange={(e) => {
+                    setMobileNumber(e.target.value)
                     props.onChange(e.target.value);
                     setFocusIndex({ index: connectionHolderDetail?.key, type: "mobileNumber" });
                   }}
@@ -315,6 +328,7 @@ const ConnectionDetails = (_props) => {
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "guardian"}
                   errorStyle={(localFormState.touched.guardian && errors?.guardian?.message) ? true : false}
                   onChange={(e) => {
+                    setGuardian(e.target.value)
                     props.onChange(e.target.value);
                     setFocusIndex({ index: connectionHolderDetail?.key, type: "guardian" });
                   }}
@@ -342,6 +356,7 @@ const ConnectionDetails = (_props) => {
                 option={GuardianOptions}
                 errorStyle={(localFormState.touched.relationship && errors?.relationship?.message) ? true : false}
                 select={(e) => {
+                  setRelationship(e)
                   props.onChange(e);
                 }}
                 optionKey="i18nKey"
@@ -367,6 +382,7 @@ const ConnectionDetails = (_props) => {
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "address"}
                   errorStyle={(localFormState.touched.address && errors?.address?.message) ? true : false}
                   onChange={(e) => {
+                    setAddress(e.target.value)
                     props.onChange(e.target.value);
                     setFocusIndex({ index: connectionHolderDetail?.key, type: "address" });
                   }}
@@ -394,6 +410,7 @@ const ConnectionDetails = (_props) => {
                 option={Menu}
                 errorStyle={(localFormState.touched.ownerType && errors?.ownerType?.message) ? true : false}
                 select={(e) => {
+                  setOwnerType(e)
                   props.onChange(e);
                 }}
                 optionKey="i18nKey"
