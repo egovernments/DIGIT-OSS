@@ -205,9 +205,24 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       }
     })
 
+    let nocData = [];
+    if (nocDetails) {
+      nocDetails.map(noc => {
+        if (
+            noc?.Noc?.applicationStatus?.toUpperCase() != "APPROVED" &&
+            noc?.Noc?.applicationStatus?.toUpperCase() != "AUTO_APPROVED" &&
+            noc?.Noc?.applicationStatus?.toUpperCase() != "REJECTED" &&
+            noc?.Noc?.applicationStatus?.toUpperCase() != "AUTO_REJECTED" &&
+            noc?.Noc?.applicationStatus?.toUpperCase() != "VOIDED"
+          ) {
+            nocData.push(noc);
+          }
+      })
+    }
+
     submitAction({
       BPA:applicationData
-    }, nocDetails, {isStakeholder: false, bpa: true});
+    }, nocData?.length > 0 ? nocData : false, {isStakeholder: false, bpa: true});
   }
 
 
