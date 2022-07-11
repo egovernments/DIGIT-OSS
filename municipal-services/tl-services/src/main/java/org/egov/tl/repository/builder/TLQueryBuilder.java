@@ -226,6 +226,12 @@ public class TLQueryBuilder {
                 preparedStmtList.add(criteria.getIssuedTo());
             }
 
+            if (criteria.getTradeType() != null) {
+                addClauseIfRequired(preparedStmtList, builder);
+                builder.append("  tlunit.tradetype LIKE ? ");
+                preparedStmtList.add(criteria.getTradeType().split("\\.")[0]+"%");
+            }
+
         }
 
        // enrichCriteriaForUpdateSearch(builder,preparedStmtList,criteria);
