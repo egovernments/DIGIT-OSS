@@ -172,7 +172,9 @@ const screenConfig = {
     resetFields(state, dispatch);
     const default_language  = getLocale() ? getLocale(): "en_IN"
     dispatch(fetchLocalizationLabel(default_language, getTenantId(), getTenantId()));
+    console.log("state log before mdms call ", state);
     getMDMSData(action, dispatch);
+    console.log("state log before after call ", state);
     getPayButtonData(action, dispatch);
 
     set(
