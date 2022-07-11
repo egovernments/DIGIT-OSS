@@ -213,7 +213,7 @@ const EditApplication = ({ parentRoute }) => {
   newConfig?.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
-  config.indexRoute = "docsrequired";
+  config.indexRoute = "property-details";
   if ((Waterresult && Object.keys(Waterresult).length>0 || !Sewarageresult) && Waterresult?.isLoading || Sewarageresult?.isLoading) {
     return <Loader />;
   }
