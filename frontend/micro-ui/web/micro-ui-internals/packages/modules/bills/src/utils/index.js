@@ -12,13 +12,18 @@ export const printBill = async (businessService, consumerCode) => {
 
 const retrywnsDownloadBill = async (key, tenantId, locality, isConsolidated, bussinessService, setShowToast) => {
   const result = await Digit.WSService.wnsGroupBill({ key, tenantId, locality, isConsolidated, bussinessService });
-  setShowToast({ label: "Retry started" })
+  if(result){    
+    setShowToast(()=>({ label: "Retry started" }))
+  }
+  
   //setTimeout(setShowToast(null), 5000)
 };
 
 const cancelwnsDownloadBill = async (jobid, setShowToast) => {
   const result = await Digit.WSService.cancelGroupBill({ jobId:jobid });
-  setShowToast({label:"Cancel Started"})
+ if(result){    
+    setShowToast(()=>({ label: "Cancel Started" }))
+  }
   //setTimeout(setShowToast(null),5000)
 };
 /* method to get date from epoch */
