@@ -45,6 +45,11 @@ const BILLSBreadCrumbs = ({ location }) => {
       path: "/digit-ui/employee/bills/inbox",
       content: t("ABG_SEARCH_BILL_COMMON_HEADER"),
       show: location.pathname.includes("/inbox") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/bills/download-bill-pdf",
+      content: t("ABG_VIEW_DOWNLOADS_HEADER"),
+      show: location.pathname.includes("/download-bill-pdf") ? true : false,
     }
     
   ];
@@ -84,6 +89,10 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute
             path={`${path}/inbox`}
             component={() => <SearchApp parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
+          />
+          <PrivateRoute
+            path={`${path}/group-bill`}
+            component={() => <GroupBill parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
           />
           <PrivateRoute
             path={`${path}/group-billold`}
