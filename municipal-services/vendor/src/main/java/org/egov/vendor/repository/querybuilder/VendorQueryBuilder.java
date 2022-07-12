@@ -14,7 +14,7 @@ public class VendorQueryBuilder {
 	@Autowired
 	private VendorConfiguration config;
 
-	private static final String Query = "select vendor.*,vendor_address.*,vendor_driver.*,vendor_vehicle.*, vendor.id as vendor_id,"
+	private static final String Query = "SELECT count(*) OVER() AS full_count, vendor.*,vendor_address.*,vendor_driver.*,vendor_vehicle.*, vendor.id as vendor_id,"
 			+ "  vendor.createdby as vendor_createdby,vendor.lastmodifiedby as vendor_lastmodifiedby,"
 			+ "  vendor.createdtime as vendor_createdtime," + "  vendor.lastmodifiedtime as vendor_lastmodifiedtime,"
 			+ "  vendor.additionaldetails as vendor_additionaldetails,"
@@ -25,43 +25,70 @@ public class VendorQueryBuilder {
 			+ "  vendor_vehicle.vendor_id=vendor_driver.vendor_id";
 
 	private final String paginationWrapper = "SELECT * FROM "
-			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY vendor_lastModifiedTime DESC) offset_ FROM " + "({})"
-			+ " result) result_offset " + "WHERE offset_ > ? AND offset_ <= ?";
+			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY vendor_createdtime DESC) offset_ FROM " + "({})"
+			+ " result) result_offset " + " limit ? offset ?";
 
-	private static final String DRIVER_VEHICLE_QUERY = "SELECT %s FROM %s where %s = ?";
+	private static final String DRIVER_VEHICLE_QUERY = "SELECT %s FROM %s where %s = ? AND %s = ?";
 	private static final String VEHICLE_EXISTS = "SELECT vendor_id FROM eg_vendor_vehicle where vechile_id IN ";
 
+	private static final String DRIVER_EXISTS = "SELECT vendor_id FROM eg_vendor_driver where driver_id IN ";
 	private static final String DRIVER_ID = "driver_id";
 	private static final String VEHICLE_ID = "vechile_id";
 	private static final String VENDOR_ID = "vendor_id";
+	private static final String VENDOR_DRIVER_STATUS = "vendorDriverStatus";
+	private static final String VENDOR_VEHICLE_STATUS = "vendorVehicleStatus";
 	private static final String VENDOR_DRIVER = "eg_vendor_driver";
 	private static final String VENDOR_VEHICLE = "eg_vendor_vehicle";
-	
-	public static final String VENDOR_COUNT="select count(*) from eg_vendor where owner_id IN ";
+
+	public static final String VENDOR_COUNT = "select count(*) from eg_vendor where owner_id IN ";
 
 	public String getDriverSearchQuery() {
-		return String.format(DRIVER_VEHICLE_QUERY, DRIVER_ID, VENDOR_DRIVER, VENDOR_ID);
+		return String.format(DRIVER_VEHICLE_QUERY, DRIVER_ID, VENDOR_DRIVER, VENDOR_ID, VENDOR_DRIVER_STATUS);
 	}
 
 	public String getVehicleSearchQuery() {
-		return String.format(DRIVER_VEHICLE_QUERY, VEHICLE_ID, VENDOR_VEHICLE, VENDOR_ID);
+		return String.format(DRIVER_VEHICLE_QUERY, VEHICLE_ID, VENDOR_VEHICLE, VENDOR_ID,VENDOR_VEHICLE_STATUS);
 	}
-	
-	public String vendorsForVehicles(List<String> vehicleIds, List<Object> preparedStmtList) {
-		StringBuilder builder = new StringBuilder(VEHICLE_EXISTS);		
-		builder.append("(").append(createQuery(vehicleIds)).append(")");
-		addToPreparedStatement(preparedStmtList, vehicleIds);
+
+	public String vendorsForVehicles(VendorSearchCriteria vendorSearchCriteria, List<Object> preparedStmtList) {
+
+		StringBuilder builder = new StringBuilder(VEHICLE_EXISTS);
+		builder.append("(").append(createQuery(vendorSearchCriteria.getVehicleIds())).append(")");
+		addToPreparedStatement(preparedStmtList, vendorSearchCriteria.getVehicleIds());
+
+		List<String> status = vendorSearchCriteria.getStatus();
+		if (!CollectionUtils.isEmpty(status)) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" vendorVehicleStatus IN (").append(createQuery(status)).append(")");
+			addToPreparedStatement(preparedStmtList, status);
+		}
+
 		return builder.toString();
 	}
 
-	public String getvendorCount(List<String> ownerList,List<Object> preparedStmtList) {
-		StringBuilder builder = new StringBuilder(VENDOR_COUNT);		
+	public String vendorsForDrivers(VendorSearchCriteria vendorSearchCriteria, List<Object> preparedStmtList) {
+
+		StringBuilder builder = new StringBuilder(DRIVER_EXISTS);
+		builder.append("(").append(createQuery(vendorSearchCriteria.getDriverIds())).append(")");
+		addToPreparedStatement(preparedStmtList, vendorSearchCriteria.getDriverIds());
+
+		List<String> status = vendorSearchCriteria.getStatus();
+		if (!CollectionUtils.isEmpty(status)) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" vendordriverstatus IN (").append(createQuery(status)).append(")");
+			addToPreparedStatement(preparedStmtList, status);
+		}
+
+		return builder.toString();
+	}
+
+	public String getvendorCount(List<String> ownerList, List<Object> preparedStmtList) {
+		StringBuilder builder = new StringBuilder(VENDOR_COUNT);
 		builder.append("(").append(createQuery(ownerList)).append(")");
 		addToPreparedStatement(preparedStmtList, ownerList);
 		return builder.toString();
 
 	}
-
 
 	public String getVendorSearchQuery(VendorSearchCriteria criteria, List<Object> preparedStmtList) {
 		StringBuilder builder = new StringBuilder(Query);
@@ -97,6 +124,14 @@ public class VendorQueryBuilder {
 				builder.append(" vendor.id IN (").append(createQuery(ids)).append(")");
 				addToPreparedStatement(preparedStmtList, ids);
 			}
+			
+			List<String> status=criteria.getStatus();
+			if (!CollectionUtils.isEmpty(status)) {
+				addClauseIfRequired(preparedStmtList, builder);
+				builder.append(" vendor.status IN (").append(createQuery(status)).append(")");
+				addToPreparedStatement(preparedStmtList, status);
+			}
+			
 		}
 		return addPaginationWrapper(builder.toString(), preparedStmtList, criteria);
 	}
@@ -117,10 +152,10 @@ public class VendorQueryBuilder {
 			offset = criteria.getOffset();
 
 		if (limit == -1) {
-			finalQuery = finalQuery.replace("WHERE offset_ > ? AND offset_ <= ?", "");
+			finalQuery = finalQuery.replace("limit ? offset ?", "");
 		} else {
+			preparedStmtList.add(limit);
 			preparedStmtList.add(offset);
-			preparedStmtList.add(limit + offset);
 		}
 
 		return finalQuery;
@@ -172,24 +207,25 @@ public class VendorQueryBuilder {
 	private String addPaginationClause(StringBuilder builder, List<Object> preparedStmtList,
 			VendorSearchCriteria criteria) {
 
-		if (criteria.getLimit()!=null && criteria.getLimit() != 0) {
-			builder.append("and vendor.id in (select id from eg_vendor where tenantid like ? order by id offset ? limit ?)");
+		if (criteria.getLimit() != null && criteria.getLimit() != 0) {
+			builder.append(
+					"and vendor.id in (select id from eg_vendor where tenantid like ? order by id offset ? limit ?)");
 			if (criteria.getTenantId() != null) {
 				if (criteria.getTenantId().split("\\.").length == 1) {
-					
+
 					preparedStmtList.add('%' + criteria.getTenantId() + '%');
 				} else {
-					
+
 					preparedStmtList.add(criteria.getTenantId());
 				}
 			}
 			preparedStmtList.add(criteria.getOffset());
 			preparedStmtList.add(criteria.getLimit());
 
-			 addOrderByClause(builder, criteria);
+			addOrderByClause(builder, criteria);
 
 		} else {
-			 addOrderByClause(builder, criteria);
+			addOrderByClause(builder, criteria);
 		}
 		return builder.toString();
 	}

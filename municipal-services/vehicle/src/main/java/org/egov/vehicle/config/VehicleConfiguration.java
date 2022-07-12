@@ -20,6 +20,10 @@ public class VehicleConfiguration {
     // Persister Config
     @Value("${persister.save.vehicle.topic}")
     private String saveTopic;
+    
+ // Persister Config
+    @Value("${persister.update.vehicle.topic}")
+    private String updateTopic;
 
 	@Value("${egov.hrms.host}")
 	private String employeeHost;

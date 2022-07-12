@@ -2,6 +2,7 @@ package org.egov.vendor.web.model.vehicle;
 
 
 import org.egov.vendor.web.model.AuditDetails;
+import javax.validation.constraints.Size;
 import org.egov.vendor.web.model.user.User;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
@@ -82,12 +83,15 @@ public class Vehicle {
 	@JsonProperty("gpsEnabled")
 	private Boolean gpsEnabled = null;
 
-	@JsonProperty("additionalDetail")
-	private Object additionalDetail = null;
+	@JsonProperty("additionalDetails")
+	private Object additionalDetails = null;
 
 	@SafeHtml
 	@JsonProperty("source")
 	private String source = null;
+	
+	@JsonProperty("vendorVehicleStatus")
+	private StatusEnum vendorVehicleStatus = null;
 
 	/**
 	 * Inactive records will be consider as soft deleted
@@ -95,7 +99,8 @@ public class Vehicle {
 	public enum StatusEnum {
 		ACTIVE("ACTIVE"),
 
-		INACTIVE("INACTIVE");
+		INACTIVE("INACTIVE"),
+		DISABLED("DISABLED");
 
 		private String value;
 

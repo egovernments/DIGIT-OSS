@@ -40,7 +40,7 @@ public class VendorValidator {
 
 	@Autowired
 	private BoundaryService boundaryService;
-	
+
 	@Autowired
 	private VehicleService vehicleService;
 
@@ -94,43 +94,37 @@ public class VendorValidator {
 		}
 		if (criteria.getIds() != null && !allowedParams.contains("ids"))
 			throw new CustomException(VendorErrorConstants.INVALID_SEARCH, "Search on ids is not allowed");
-		
+
 		if (criteria.getVehicleRegistrationNumber() != null && !allowedParams.contains("vehicleRegistrationNumber"))
-			throw new CustomException(VendorErrorConstants.INVALID_SEARCH, "Search on vehicleRegistrationNumber is not allowed");
-		
+			throw new CustomException(VendorErrorConstants.INVALID_SEARCH,
+					"Search on vehicleRegistrationNumber is not allowed");
+
 		if (criteria.getVehicleIds() != null && !allowedParams.contains("vehicleIds"))
 			throw new CustomException(VendorErrorConstants.INVALID_SEARCH, "Search on vehicleIds is not allowed");
-		
-		
+
 	}
 
 	/**
 	 * 
 	 * @param vendorRequest
 	 */
-	public void validateCreate(VendorRequest vendorRequest, Object mdmsData) {
+	public void validateCreateOrUpdateRequest(VendorRequest vendorRequest, Object mdmsData, boolean isCreate) {
 
-		RequestInfo requestInfo = vendorRequest.getRequestInfo();
-		Vendor vendor = vendorRequest.getVendor();
+		// RequestInfo requestInfo = vendorRequest.getRequestInfo();
+		// Vendor vendor = vendorRequest.getVendor();
 		mdmsValidator.validateMdmsData(mdmsData);
 		mdmsValidator.validateAgencyType(vendorRequest);
 		mdmsValidator.validatePaymentPreference(vendorRequest);
 		boundaryService.getAreaType(vendorRequest, config.getHierarchyTypeCode());
+
 		vehicleService.manageVehicle(vendorRequest);
-		ownerService.manageOwner(vendorRequest);
+
+		if (isCreate) {
+			ownerService.manageOwner(vendorRequest);
+		}
+
 		ownerService.manageDrivers(vendorRequest);
-		
-		
 
 	}
-	
-	public void manageVehicles(VendorRequest vendorRequest) {
-		RequestInfo requestInfo = vendorRequest.getRequestInfo();
-		Vendor vendor = vendorRequest.getVendor();
-		List<Vehicle> vehicles = vendor.getVehicles();
-	
-		vehicles.forEach(vehicle->{
-			
-		});
-	}
+
 }

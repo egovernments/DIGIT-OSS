@@ -65,6 +65,19 @@ public class VehicleTripService {
 		validator.validateCreateOrUpdateRequest(request);
 		vehicleLogEnrichmentService.setInsertData(request);
 		wfIntegrator.callWorkFlow(request);
+		
+		/*
+		 * request.getVehicleTrip().forEach(vehicleTrip->{
+		 * if(vehicleTrip.getTripDetails().get(0).getReferenceNo()==null ||
+		 * vehicleTrip.getTripDetails().get(0).getReferenceNo().isEmpty()) {
+		 * 
+		 * request.setWorkflow(Workflow.builder().action(VehicleTripConstants.
+		 * READY_FOR_DISPOSAL).build()); wfIntegrator.callWorkFlow(request);
+		 * 
+		 * request.setWorkflow(Workflow.builder().action(VehicleTripConstants.DISPOSE).
+		 * build()); wfIntegrator.callWorkFlow(request); } });
+		 */
+		
 		vehicleLogRepository.save(request);
 		return request.getVehicleTrip();
 	}
