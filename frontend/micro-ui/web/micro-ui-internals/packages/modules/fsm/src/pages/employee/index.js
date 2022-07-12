@@ -1,7 +1,10 @@
-import { BreadCrumb, PrivateRoute } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useState } from "react";
+import { BreadCrumb, ShippingTruck, EmployeeModuleCard, PrivateRoute, BackButton, AddNewIcon, ViewReportIcon, InboxIcon, ULBHomeCard } from "@egovernments/digit-ui-react-components";
+import React, { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation } from "react-router-dom";
+import FstpAddVehicle from "./FstpAddVehicle";
+import FstpOperations from "./FstpOperations";
+import FstpServiceRequest from "./FstpServiceRequest";
 
 export const FsmBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
@@ -12,13 +15,20 @@ export const FsmBreadCrumb = ({ location }) => {
   const isInbox = location?.pathname?.includes("inbox");
   const isFsm = location?.pathname?.includes("fsm");
   const isSearch = location?.pathname?.includes("search");
+  const isNewApplication = location?.pathname?.includes("new-application");
   const [search, setSearch] = useState(false);
+  const [id, setId] = useState(false);
 
   useEffect(() => {
     if (!search) {
       setSearch(isSearch);
     } else if (isInbox && search) {
       setSearch(false);
+    }
+    if (location?.pathname) {
+      let path = location?.pathname.split("/")
+      let id = path[path.length - 1]
+      setId(id)
     }
   }, [location]);
 
@@ -46,6 +56,7 @@ export const FsmBreadCrumb = ({ location }) => {
 };
 
 const EmployeeApp = ({ path, url, userType }) => {
+  const { t } = useTranslation();
   const location = useLocation();
 
   useEffect(() => {
@@ -68,13 +79,14 @@ const EmployeeApp = ({ path, url, userType }) => {
   const ApplicationAudit = Digit.ComponentRegistryService.getComponent("FSMApplicationAudit");
   const RateView = Digit.ComponentRegistryService.getComponent("FSMRateView");
   const FSMLinks = Digit.ComponentRegistryService.getComponent("FSMLinks");
+  const FSTPO = Digit.UserService.hasAccess(["FSM_EMP_FSTPO"]);
   const BreadCrumbComp = Digit.ComponentRegistryService.getComponent("FsmBreadCrumb");
 
   return (
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-          <BreadCrumbComp location={location} />
+          {FSTPO ? <BackButton isCommonPTPropertyScreen={location.pathname.includes("new") ? true : false} getBackPageNumber={location.pathname.includes("new") ? () => -2 : null}>{t("CS_COMMON_BACK")}</BackButton> : <BreadCrumbComp location={location} />}
           <PrivateRoute exact path={`${path}/`} component={() => <FSMLinks matchPath={path} userType={userType} />} />
           <PrivateRoute path={`${path}/inbox`} component={() => <Inbox parentRoute={path} isInbox={true} />} />
           <PrivateRoute path={`${path}/fstp-inbox`} component={() => <FstpInbox parentRoute={path} />} />
@@ -90,6 +102,11 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/search`} component={() => <Inbox parentRoute={path} isSearch={true} />} />
           <PrivateRoute path={`${path}/rate-view/:id`} component={() => <RateView parentRoute={path} />} />
           <PrivateRoute path={`${path}/mark-for-disposal`} component={() => <div />} />
+          <PrivateRoute exact path={`${path}/fstp-operations`} component={() => <FstpOperations />} />
+          <PrivateRoute exact path={`${path}/fstp-add-vehicle`} component={() => <FstpAddVehicle />} />
+          <PrivateRoute exact path={`${path}/fstp-fsm-request/:id`} component={() => <FstpServiceRequest />} />
+          <PrivateRoute exact path={`${path}/home`} component={() => <ULBHomeCard module={module} />} />
+          <PrivateRoute path={`${path}/fstp/new-vehicle-entry`} component={FstpOperatorDetails} />
         </div>
       </React.Fragment>
     </Switch>

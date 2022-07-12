@@ -14,7 +14,7 @@ const DesktopInbox = (props) => {
   const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
 
   const GetSlaCell = (value) => {
-    if (value === '-') return <span className="sla-cell-success">-</span>;
+    if (value === "-") return <span className="sla-cell-success">-</span>;
     if (isNaN(value)) return <span className="sla-cell-success">0</span>;
     return value < 0 ? <span className="sla-cell-error">{value}</span> : <span className="sla-cell-success">{value}</span>;
   };
@@ -84,22 +84,80 @@ const DesktopInbox = (props) => {
       ];
     }
     switch (props.userRole) {
+      case "FSM_EMP_FSTPO_REQUEST":
+        return [
+          {
+            Header: t("ES_INBOX_APPLICATION_NO"),
+            accessor: "applicationNo",
+            // disableSortBy: true,
+            Cell: ({ row }) => {
+              // fetching out citizen info
+              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo);
+              return (
+                <div>
+                  <span className="link">
+                    <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}> {citizen_info?.applicationNo}</Link>
+                  </span>
+                </div>
+              );
+            },
+          },
+          {
+            Header: t("CS_COMMON_CITIZEN_NAME"),
+            disableSortBy: true,
+            Cell: ({ row }) => {
+              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo);
+              return (
+                <div>
+                  <span>{citizen_info?.citizen?.name}</span>
+                </div>
+              );
+            },
+          },
+          {
+            Header: t("CS_COMMON_CITIZEN_NUMBER"),
+            disableSortBy: true,
+            accessor: "number",
+            Cell: ({ row }) => {
+              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo);
+              return (
+                <div>
+                  <span>{citizen_info?.citizen?.mobileNumber}</span>
+                </div>
+              );
+            },
+          },
+          {
+            Header: t("ES_INBOX_LOCALITY"),
+            disableSortBy: true,
+            accessor: "locality",
+            Cell: ({ row }) => {
+              let citizen_info = props?.fstprequest?.find((i) => row.original.tripDetails[0].referenceNo === i.applicationNo);
+              return (
+                <div>
+                  <span>{t(`${citizen_info?.address?.locality?.code}`)}</span>
+                </div>
+              );
+            },
+          },
+        ];
       case "FSM_EMP_FSTPO":
         return [
           {
             Header: t("ES_INBOX_APPLICATION_NO"),
+            disableSortBy: true,
             accessor: "tripDetails",
             Cell: ({ row }) => {
               return (
                 <div>
                   <span className="link">
                     <Link to={"/digit-ui/employee/fsm/fstp-operator-details/" + row.original["applicationNo"]}>
-                      {row.original["tripDetails"].map((i) =>
+                      {row.original["tripDetails"].map((i) => (
                         <div>
                           {i.referenceNo}
                           <br />
                         </div>
-                      )}
+                      ))}
                     </Link>
                   </span>
                 </div>
@@ -109,6 +167,7 @@ const DesktopInbox = (props) => {
           {
             Header: t("ES_INBOX_VEHICLE_LOG"),
             accessor: "applicationNo",
+            disableSortBy: true,
             Cell: ({ row }) => {
               return (
                 <div>
@@ -120,19 +179,34 @@ const DesktopInbox = (props) => {
             },
           },
           {
+            Header: t("ES_INBOX_APPLICATION_DATE"),
+            accessor: "createdTime",
+            Cell: ({ row }) => {
+              return GetCell(
+                `${new Date(row.original.auditDetails.createdTime).getDate()}/${
+                  new Date(row.original.auditDetails.createdTime).getMonth() + 1
+                }/${new Date(row.original.auditDetails.createdTime).getFullYear()}`
+              );
+            },
+          },
+          {
             Header: t("ES_INBOX_VEHICLE_NO"),
+            disableSortBy: true,
             accessor: (row) => row.vehicle?.registrationNumber,
           },
           {
             Header: t("ES_INBOX_DSO_NAME"),
+            disableSortBy: true,
             accessor: (row) => `${row.dsoName} - ${row.tripOwner.name}`,
           },
           {
             Header: t("ES_INBOX_VEHICLE_STATUS"),
+            disableSortBy: true,
             accessor: (row) => row.status,
           },
           {
             Header: t("ES_INBOX_WASTE_COLLECTED"),
+            disableSortBy: true,
             accessor: (row) => row.tripDetails[0]?.volume,
           },
         ];
@@ -185,7 +259,7 @@ const DesktopInbox = (props) => {
           },
         ];
     }
-  }, []);
+  }, [props.fstprequest, props.data]);
 
   let result;
   if (props.isLoading) {
@@ -231,9 +305,9 @@ const DesktopInbox = (props) => {
         pageSizeLimit={props.pageSizeLimit}
         onSort={props.onSort}
         disableSort={props.disableSort}
-        onPageSizeChange={props.onPageSizeChange}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
+        isPaginationRequired={props.isPaginationRequired}
       />
     );
   }
@@ -242,9 +316,15 @@ const DesktopInbox = (props) => {
     <div className="inbox-container">
       {props.userRole !== "FSM_EMP_FSTPO" && !props.isSearch && (
         <div className="filters-container">
-          <FSMLink parentRoute={props.parentRoute} />
-          <div style={{marginTop: "24px"}}>
-            <Filter searchParams={props.searchParams} paginationParms={props.paginationParms} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+          {props.userRole !== "FSM_EMP_FSTPO_REQUEST" ? <FSMLink parentRoute={props.parentRoute} /> : null}
+          <div style={props.userRole !== "FSM_EMP_FSTPO_REQUEST" ? { marginTop: "24px" } : {}}>
+            <Filter
+              searchParams={props.searchParams}
+              paginationParms={props.paginationParms}
+              applications={props.data}
+              onFilterChange={props.onFilterChange}
+              type="desktop"
+            />
           </div>
         </div>
       )}

@@ -156,6 +156,14 @@ export const WorkflowService = {
           return { ...state, nextActions: _nextActions, roles: state?.action, roles: state?.actions?.reduce((acc, el) => [...acc, ...el.roles], []) };
         })?.[0];
 
+      // HANDLING ACTION for NEW VEHICLE LOG FROM UI SIDE
+      const action_newVehicle = [
+        {
+          action: "READY_FOR_DISPOSAL",
+          roles: "FSM_EMP_FSTPO,FSM_EMP_FSTPO",
+        },
+      ];
+
       const actionRolePair = nextActions?.map((action) => ({
         action: action?.action,
         roles: action.state?.actions?.map((action) => action.roles).join(","),
@@ -280,7 +288,8 @@ export const WorkflowService = {
           } catch (err) {}
         }
 
-        const nextActions = actionRolePair;
+        // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
+        const nextActions = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : actionRolePair;
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
           const onlyPendingForAssignmentStatusArray = timeline?.filter((e) => e?.status === "PENDINGFORASSIGNMENT");

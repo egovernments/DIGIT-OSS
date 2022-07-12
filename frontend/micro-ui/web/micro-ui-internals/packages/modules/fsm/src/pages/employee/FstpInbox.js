@@ -30,7 +30,6 @@ const FstpInbox = () => {
     config: { enabled: searchParams?.registrationNumber?.length > 0 },
   });
 
-
   const userInfo = Digit.UserService.getUser();
 
   const { isLoading: applicationLoading, isError, data: applicationData, error } = Digit.Hooks.fsm.useSearch(
@@ -44,6 +43,7 @@ const FstpInbox = () => {
     { name: searchParams?.name },
     { enabled: searchParams?.name?.length > 1 }
   );
+
   let filters = {
     businessService: "FSM_VEHICLE_TRIP",
     refernceNos: applicationData !== undefined && searchParams?.refernceNos?.length > 0 ? applicationData?.applicationNo || "null" : "",
@@ -52,20 +52,22 @@ const FstpInbox = () => {
     tripOwnerIds: dsoData !== undefined && searchParams?.name?.length > 0 ? dsoData?.[0]?.ownerId || "null" : "",
     applicationStatus: searchParams?.applicationStatus,
   };
+
   if (applicationData == undefined) {
     filters = {
-      "responseInfo": {
-        "apiId": "Rainmaker",
-        "ver": null,
-        "ts": null,
-        "resMsgId": "uief87324",
-        "msgId": "1645827148736|en_IN",
-        "status": "successful"
+      responseInfo: {
+        apiId: "Rainmaker",
+        ver: null,
+        ts: null,
+        resMsgId: "uief87324",
+        msgId: "1645827148736|en_IN",
+        status: "successful",
       },
-      "vehicle": [],
-      "totalCount": 0
-    }
+      vehicle: [],
+      totalCount: 0,
+    };
   }
+
   const { isLoading, data: { totalCount, vehicleLog } = {}, isSuccess } = Digit.Hooks.fsm.useVehicleSearch({
     tenantId,
     filters,
@@ -89,7 +91,7 @@ const FstpInbox = () => {
     setPageSize(Number(e.target.value));
   };
 
-  const handleFilterChange = () => { };
+  const handleFilterChange = () => {};
 
   const searchFields = [
     {
@@ -110,15 +112,18 @@ const FstpInbox = () => {
   // if (isSuccess) {
   if (isMobile) {
     return (
-      <MobileInbox
-        onFilterChange={handleFilterChange}
-        vehicleLog={vehicleLog}
-        isLoading={isLoading}
-        userRole={"FSM_EMP_FSTPO"}
-        linkPrefix={"/digit-ui/employee/fsm/fstp-operator-details/"}
-        onSearch={onSearch}
-        searchFields={searchFields}
-      />
+      <div>
+        <Header>{t("ES_COMMON_INBOX")}</Header>
+        <MobileInbox
+          onFilterChange={handleFilterChange}
+          vehicleLog={vehicleLog}
+          isLoading={isLoading}
+          userRole={"FSM_EMP_FSTPO"}
+          linkPrefix={"/digit-ui/employee/fsm/fstp-operator-details/"}
+          onSearch={onSearch}
+          searchFields={searchFields}
+        />
+      </div>
     );
   } else {
     return (

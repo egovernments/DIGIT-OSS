@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ApplicationCard } from "./inbox/ApplicationCard";
 import ApplicationLinks from "./inbox/ApplicationLinks";
 import Filter from "./inbox/Filter";
+import { Link } from "react-router-dom";
 
 const GetSlaCell = (value) => {
   if (isNaN(value)) return <span className="sla-cell-success">0</span>;
@@ -25,8 +26,11 @@ const MobileInbox = ({
   parentRoute,
   removeParam,
   sortParams,
+  fstprequest,
+  isFSMRequest,
 }) => {
   const { t } = useTranslation();
+
   const getData = () => {
     if (isSearch) {
       return data?.table?.map(({ applicationNo, applicationStatus, propertyUsage, tenantId, address, citizen }) => ({
@@ -62,6 +66,16 @@ const MobileInbox = ({
     [t("ES_INBOX_WASTE_COLLECTED")]: vehicle?.tripDetails[0]?.volume,
   }));
 
+  const fstp_citizen_data = fstprequest?.map((citizen) => {
+    let vehicleInfo = vehicleLog?.find((i) => i?.tripDetails[0]?.referenceNo === citizen?.applicationNo);
+    return {
+      [t("ES_INBOX_VEHICLE_LOG")]: vehicleInfo?.applicationNo || "N/A",
+      [t("CS_COMMON_CITIZEN_NAME")]: citizen?.citizen?.name || "N/A",
+      [t("CS_COMMON_CITIZEN_NUMBER")]: citizen?.citizen?.mobileNumber || "N/A",
+      [t("ES_INBOX_LOCALITY")]: citizen?.address?.locality?.name || "N/A",
+    };
+  });
+
   return (
     <div style={{ padding: 0 }}>
       <div className="inbox-container">
@@ -72,8 +86,8 @@ const MobileInbox = ({
           </div>
           <ApplicationCard
             t={t}
-            data={isFstpOperator ? fstpOperatorData : getData()}
-            onFilterChange={!isFstpOperator ? onFilterChange : false}
+            data={!data ? (isFstpOperator && isFSMRequest ? fstp_citizen_data : fstpOperatorData) : getData()}
+            onFilterChange={isFSMRequest || !isFstpOperator ? onFilterChange : false}
             serviceRequestIdKey={isFstpOperator ? t("ES_INBOX_VEHICLE_LOG") : DSO ? t("ES_INBOX_APPLICATION_NO") : t("ES_INBOX_APPLICATION_NO")}
             isFstpOperator={isFstpOperator}
             isLoading={isLoading}
