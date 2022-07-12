@@ -42,6 +42,7 @@ const Urls = {
     vehicleTripSearch: "/vehicle/trip/v1/_search",
     billingSlabSearch: "/fsm-calculator/v1/billingSlab/_search",
     vehilceUpdate: "/vehicle/trip/v1/_update",
+    vehicleTripCreate: "/vehicle/trip/v1/_create",
   },
 
   payment: {

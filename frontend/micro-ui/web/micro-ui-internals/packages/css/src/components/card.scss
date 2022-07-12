@@ -56,7 +56,8 @@
 } 
 
 .field-container {
-  @apply flex justify-center items-center;
+  @apply flex  items-center;
+  /*@apply flex  justify-center items-center;*/
 }
 
 .employeeCard {
@@ -120,7 +121,11 @@
     padding-left: 25px;
   }
 }
-
+.employeeCard.fsm {
+  margin-bottom: 16px !important;
+  margin-left: 0px !important;
+  margin-right: 16px !important; }
+  
 .header-wrap {
   @apply flex mb-md;
 
