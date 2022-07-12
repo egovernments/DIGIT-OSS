@@ -2,13 +2,12 @@ package org.egov.infra.persist.utils;
 
 import org.egov.infra.persist.web.contract.AuditAttributes;
 import org.egov.infra.persist.web.contract.AuditLog;
-import org.egov.infra.persist.web.contract.Mapping;
+import org.egov.infra.persist.web.contract.RowData;
 import org.egov.tracer.model.CustomException;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AuditUtil {
@@ -22,35 +21,37 @@ public class AuditUtil {
 
     /**
      * Creates AuditLogs for every query execution
-     * @param keyValuePairsList The list of key value pairs which are getting inserted/updated in table
+     * @param rowDataList The list of RowData
      * @param query The query which is going to be executed
      * @return
      */
-    public List<AuditLog> getAuditRecord(List<Map<String, Object>> keyValuePairsList, AuditAttributes auditAttributes,
-                                         String query){
-
-        if(!isAuditAttributeValid(auditAttributes)){
-            throw new CustomException("INVALID_CONFIG","Failed to fetch required attributes from configuration: "+auditAttributes);
-        }
+    public List<AuditLog> getAuditRecord(List<RowData> rowDataList,String query){
 
         List<AuditLog> auditLogs = new LinkedList<>();
 
-        for(Map<String, Object> value : keyValuePairsList){
-            AuditLog auditLog = AuditLog.builder()
-                    .userUUID(auditAttributes.getUserUUID())
-                    .tenantId(auditAttributes.getTenantId())
-                    .changeDate(System.currentTimeMillis())
-                    .objectId(auditAttributes.getObjectId())
-                    .operationType(getOperationType(query))
-                    .transactionCode(auditAttributes.getTransactionCode())
-                    .module(auditAttributes.getModule())
-                    .entityName(getTableName(query))
-                    .value(value)
-                    .build();
+        for (RowData rowData : rowDataList) {
 
-            auditLogs.add(auditLog);
+            AuditAttributes auditAttributes = rowData.getAuditAttributes();
+            if (!isAuditAttributeValid(auditAttributes)) {
+                throw new CustomException("INVALID_CONFIG", "Failed to fetch required attributes from configuration: " + auditAttributes);
+            }
+
+
+                AuditLog auditLog = AuditLog.builder()
+                        .userUUID(auditAttributes.getUserUUID())
+                        .tenantId(auditAttributes.getTenantId())
+                        .changeDate(System.currentTimeMillis())
+                        .objectId(auditAttributes.getObjectId())
+                        .operationType(getOperationType(query))
+                        .transactionCode(auditAttributes.getTransactionCode())
+                        .module(auditAttributes.getModule())
+                        .entityName(getTableName(query))
+                        .keyValueMap(rowData.getKeyValueMap())
+                        .build();
+
+                auditLogs.add(auditLog);
+
         }
-
         return auditLogs;
     }
 

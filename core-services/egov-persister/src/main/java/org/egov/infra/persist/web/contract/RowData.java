@@ -10,7 +10,7 @@ import java.util.*;
 public class RowData {
 
 
-    private List<Object[]> rows;
-    private List<Map<String, Object>> keyValuePairsList;
+    private Map<String, Object> keyValueMap;
+    private AuditAttributes auditAttributes;
 
 }

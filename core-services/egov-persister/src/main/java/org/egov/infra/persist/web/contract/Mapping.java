@@ -48,6 +48,9 @@ public class Mapping   {
   @JsonProperty("isAuditEnabled")
   private Boolean isAuditEnabled = null;
 
+  @JsonProperty("auditAttributeBasePath")
+  private String auditAttributeBasePath = null;
+
  
 }
 

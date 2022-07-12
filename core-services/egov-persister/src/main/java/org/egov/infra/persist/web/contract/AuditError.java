@@ -14,7 +14,7 @@ public class AuditError {
 
     private String query;
 
-    private List<Map<String, Object>> keyValuePairList;
+    private List<RowData> rowDataList;
 
     private Exception exception;
 

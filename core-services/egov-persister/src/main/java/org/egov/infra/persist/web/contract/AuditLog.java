@@ -33,10 +33,10 @@ public class AuditLog   {
     private String entityName = null;
 
     @JsonProperty("objectId")
-        private String objectId = null;
+    private String objectId = null;
 
-    @JsonProperty("value")
-    private Map<String, Object> value = null;
+    @JsonProperty("keyValueMap")
+    private Map<String, Object> keyValueMap = null;
 
     @JsonProperty("operationType")
     private String operationType = null;
