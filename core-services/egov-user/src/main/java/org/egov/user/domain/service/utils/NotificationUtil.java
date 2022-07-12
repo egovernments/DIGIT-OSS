@@ -38,8 +38,8 @@ public class NotificationUtil {
         String locale = existingUser.getLocale();
 
         String emailUpdationMessage = localizationUtil.getLocalizedMessage(EMAIL_UPDATION_CODE,locale,requestInfo);
-        emailUpdationMessage = emailUpdationMessage.replace("<oldEmail>",oldEmail);
-        emailUpdationMessage = emailUpdationMessage.replace("<newEmail>",newEmail);
+        emailUpdationMessage = emailUpdationMessage.replace("{oldEmail}",oldEmail);
+        emailUpdationMessage = emailUpdationMessage.replace("{newEmail}",newEmail);
 
         Email email = new Email();
         email.setEmailTo(Collections.singleton(oldEmail));
