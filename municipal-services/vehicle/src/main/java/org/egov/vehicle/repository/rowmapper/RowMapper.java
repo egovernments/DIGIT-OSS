@@ -71,6 +71,10 @@ public class RowMapper  implements ResultSetExtractor<List<Vehicle>> {
 				if (rs.wasNull()) {
 					lastModifiedTime = null;
 				}
+				
+				if(null==status) {
+					status="ACTIVE";
+				}
 
 				currentVehicle = Vehicle.builder().tenantId(tenantId).registrationNumber(registrationNumber).model(model).type(type).tankCapacity(tankCapicity)
 						.suctionType(suctionType).vehicleOwner(vehicleOwner).pollutionCertiValidTill(pollutionCertiValidTill).InsuranceCertValidTill(InsuranceCertValidTill)

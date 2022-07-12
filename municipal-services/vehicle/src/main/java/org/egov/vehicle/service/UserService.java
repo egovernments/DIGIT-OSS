@@ -75,7 +75,7 @@ public class UserService {
 		UserDetailResponse userDetailResponse = null;
 		
 
-		if (owner.getMobileNumber() != null) {
+		if (owner!=null && owner.getMobileNumber() != null) {
 
 			userDetailResponse = userExists(owner, requestInfo);
 			if (userDetailResponse != null && !CollectionUtils.isEmpty(userDetailResponse.getUser())) {

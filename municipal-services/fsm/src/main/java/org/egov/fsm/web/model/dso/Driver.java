@@ -1,14 +1,10 @@
 package org.egov.fsm.web.model.dso;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 
 import org.egov.fsm.web.model.AuditDetails;
-import org.egov.fsm.web.model.location.Address;
 import org.egov.fsm.web.model.user.User;
-import org.egov.fsm.web.model.vehicle.Vehicle;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
 
@@ -22,10 +18,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-
 /**
- * Capture the vendor information in the system.
+ * Capture the Driver information in the system.
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-01-06T05:34:12.238Z[GMT]")
@@ -34,56 +28,51 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class Vendor {
+public class Driver {
 
 	@SafeHtml
 	@JsonProperty("id")
 	private String id = null;
 
-	@SafeHtml
 	@JsonProperty("tenantId")
+	@SafeHtml
+	@Size(max = 64)
 	private String tenantId = null;
 
-	@SafeHtml
 	@JsonProperty("name")
+	@SafeHtml
+	@Size(max = 128)
 	private String name = null;
 
-	@JsonProperty("address")
-	private Address address = null;
-
 	@JsonProperty("owner")
+	@Valid
 	private User owner = null;
 
-	@JsonProperty("vehicles")
-	@Valid
-	private List<Vehicle> vehicles = new ArrayList<Vehicle>();
-
-	@JsonProperty("drivers")
-	@Valid
-	private List<Driver> drivers = null;
+	@JsonProperty("ownerId")
+	@SafeHtml
+	@Size(max = 64)
+	private String ownerId = null;
 
 	@JsonProperty("additionalDetails")
 	private Object additionalDetails = null;
-
-	@SafeHtml
-	@JsonProperty("source")
-	private String source = null;
 
 	@SafeHtml
 	@JsonProperty("description")
 	private String description = null;
 
 	@SafeHtml
-	@JsonProperty("ownerId")
-	private String ownerId = null;
+	@JsonProperty("licenseNumber")
+	private String licenseNumber = null;
+
+	@JsonProperty("vendor")
+	@Valid
+	private Vendor vendor = null;
 
 	/**
 	 * Inactive records will be consider as soft deleted
 	 */
 	public enum StatusEnum {
-		ACTIVE("ACTIVE"),
-
-		INACTIVE("INACTIVE");
+		ACTIVE("ACTIVE"), INACTIVE("INACTIVE"), DISABLED("DISABLED");
 
 		private String value;
 
@@ -94,7 +83,7 @@ public class Vendor {
 		@Override
 		@JsonValue
 		public String toString() {
-		
+
 			return String.valueOf(value);
 		}
 
@@ -114,5 +103,8 @@ public class Vendor {
 
 	@JsonProperty("auditDetails")
 	private AuditDetails auditDetails = null;
+
+	@JsonProperty("vendorDriverStatus")
+	private StatusEnum vendorDriverStatus = null;
 
 }

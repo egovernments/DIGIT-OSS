@@ -50,19 +50,26 @@ public class VendorSearchCriteria {
 	
 	@JsonProperty("vehicleCapacity")
 	private String vehicleCapacity;
+	
+	@JsonProperty("status")
+	private List<String> status; 
+
+
+	@JsonProperty("driverIds")
+	private List<String> driverIds; 
 
 	public boolean isEmpty() {
 		// TODO Auto-generated method stub
 		return (this.tenantId == null && this.offset == null && this.limit == null && this.mobileNumber == null && CollectionUtils.isEmpty(this.vehicleRegistrationNumber)
 				&& this.ownerIds == null && CollectionUtils.isEmpty(this.name) && CollectionUtils.isEmpty(this.vehicleIds)
-				&& CollectionUtils.isEmpty(this.ids) && this.vehicleType == null && this.vehicleCapacity == null);
+				&& CollectionUtils.isEmpty(this.ids) && this.vehicleType == null && this.vehicleCapacity == null && CollectionUtils.isEmpty(this.status));
 	}
 
 	public boolean tenantIdOnly() {
 		// TODO Auto-generated method stub
 		return (this.tenantId != null && this.mobileNumber == null && this.ownerIds == null
 				&& CollectionUtils.isEmpty(this.vehicleRegistrationNumber) && CollectionUtils.isEmpty(this.vehicleIds)
-				&& CollectionUtils.isEmpty(this.name) && CollectionUtils.isEmpty(this.ids) && this.vehicleType == null && this.vehicleCapacity==null);
+				&& CollectionUtils.isEmpty(this.name) && CollectionUtils.isEmpty(this.ids) && this.vehicleType == null && this.vehicleCapacity==null && CollectionUtils.isEmpty(this.status));
 	}
 	
 
