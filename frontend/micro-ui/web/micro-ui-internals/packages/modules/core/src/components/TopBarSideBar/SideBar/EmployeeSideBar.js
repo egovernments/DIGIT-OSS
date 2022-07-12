@@ -28,7 +28,7 @@ const EmployeeSideBar = () => {
     if (NATADMIN)
       return "/digit-ui/employee/payment/integration/dss/NURT_DASHBOARD";
     else if(STADMIN)
-      return "/employee/integration/dss/home";
+      return "/digit-ui/employee/integration/dss/home";
     else
       return "/employee";
   }
