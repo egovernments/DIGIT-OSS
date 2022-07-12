@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.chat.pre.formatter.RequestFormatter;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -25,10 +26,14 @@ public class MessageWebhook {
 
     private String outputTopicName = "transformed-input-messages";
 
-    public Object receiveMessage(Map<String, String> params) throws Exception {
+    public Object receiveMessage(Map<String, String> params) throws CustomException {
         JsonNode message = prepareMessage(params);
         if(requestFormatter.isValid(message)) {
-            message = requestFormatter.getTransformedRequest(message);
+            try {
+                message = requestFormatter.getTransformedRequest(message);
+            } catch (Exception e) {
+                throw new CustomException(e.getMessage(), e.getMessage());
+            }
             String key = message.at("/user/mobileNumber").asText();
             kafkaTemplate.send(outputTopicName, key, message);
         }

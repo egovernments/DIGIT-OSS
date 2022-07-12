@@ -14,6 +14,7 @@ import org.egov.chat.models.EgovChat;
 import org.egov.chat.models.Message;
 import org.egov.chat.models.Response;
 import org.egov.chat.repository.MessageRepository;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +35,7 @@ public class RestAPI {
     @Autowired
     ObjectMapper objectMapper;
 
-    public Response makeRestEndpointCall(JsonNode config, EgovChat chatNode) throws Exception {
+    public Response makeRestEndpointCall(JsonNode config, EgovChat chatNode) throws CustomException {
 
         String restClassName = config.get("class").asText();
 

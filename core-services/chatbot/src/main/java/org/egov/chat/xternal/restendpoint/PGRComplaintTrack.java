@@ -63,7 +63,7 @@ public class PGRComplaintTrack implements RestEndpoint {
     String pgrRequestBody = "{\"RequestInfo\":{\"authToken\":\"\",\"userInfo\":\"\"}}";
 
     @Override
-    public ObjectNode getMessageForRestCall(ObjectNode params) throws Exception {
+    public ObjectNode getMessageForRestCall(ObjectNode params) throws CustomException {
         String tenantId = params.get("tenantId").asText();
         String authToken = params.get("authToken").asText();
         String mobileNumber = params.get("mobileNumber").asText();
@@ -72,21 +72,24 @@ public class PGRComplaintTrack implements RestEndpoint {
         DocumentContext request = JsonPath.parse(pgrRequestBody);
         request.set("$.RequestInfo.authToken", authToken);
         request.set("$.RequestInfo.userInfo", userInfo.json());
+        try {
+            URL baseUrl = new URL(pgrHost);
+            URL relativeUrl = new URL(baseUrl, pgrSearchComplaintPath);
 
-        URL baseUrl = new URL(pgrHost);
-        URL relativeUrl = new URL( baseUrl, pgrSearchComplaintPath);
-
-        UriComponentsBuilder uriComponents = UriComponentsBuilder.fromUriString(relativeUrl.toString());
-        uriComponents.queryParam("limit", numberOfRecentComplaints);
-        uriComponents.queryParam("applicationStatus", pgrShowComplaintForStatusArray);
-        JsonNode requestObject = objectMapper.readTree(request.jsonString());
-        ObjectNode responseMessage = objectMapper.createObjectNode();
-        responseMessage.put("type", "text");
-        ResponseEntity<ObjectNode> response = restTemplate.postForEntity(uriComponents.buildAndExpand().toUri(),
-                requestObject, ObjectNode.class);
-        responseMessage = makeMessageForResponse(response, mobileNumber);
-        responseMessage.put("timestamp", System.currentTimeMillis());
-        return responseMessage;
+            UriComponentsBuilder uriComponents = UriComponentsBuilder.fromUriString(relativeUrl.toString());
+            uriComponents.queryParam("limit", numberOfRecentComplaints);
+            uriComponents.queryParam("applicationStatus", pgrShowComplaintForStatusArray);
+            JsonNode requestObject = objectMapper.readTree(request.jsonString());
+            ObjectNode responseMessage = objectMapper.createObjectNode();
+            responseMessage.put("type", "text");
+            ResponseEntity<ObjectNode> response = restTemplate.postForEntity(uriComponents.buildAndExpand().toUri(),
+                    requestObject, ObjectNode.class);
+            responseMessage = makeMessageForResponse(response, mobileNumber);
+            responseMessage.put("timestamp", System.currentTimeMillis());
+            return responseMessage;
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage(), e.getMessage());
+        }
     }
 
     private ObjectNode makeMessageForResponse(ResponseEntity<ObjectNode> responseEntity, String mobileNumber) throws UnsupportedEncodingException {

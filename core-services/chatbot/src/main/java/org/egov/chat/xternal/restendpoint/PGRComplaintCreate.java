@@ -53,7 +53,7 @@ public class PGRComplaintCreate implements RestEndpoint {
     String pgrCreateRequestBody = "{\"RequestInfo\":{\"authToken\":\"\",\"userInfo\":{}},\"service\":{\"tenantId\":\"\",\"serviceCode\":\"\",\"description\":\"\",\"accountId\":\"\",\"source\":\"whatsapp\",\"address\":{\"landmark\":\"\",\"city\":\"\",\"geoLocation\":{},\"locality\":{\"code\":\"\"}}},\"workflow\":{\"action\":\"APPLY\",\"verificationDocuments\":[]}}";
 
     @Override
-    public ObjectNode getMessageForRestCall(ObjectNode params) throws Exception {
+    public ObjectNode getMessageForRestCall(ObjectNode params) throws CustomException {
         String authToken = params.get("authToken").asText();
         String mobileNumber = params.get("mobileNumber").asText();
         String userId = params.get("userId").asText();
@@ -86,19 +86,23 @@ public class PGRComplaintCreate implements RestEndpoint {
 
         }
         log.info("PGR Create complaint request : " + request.jsonString());
-        JsonNode requestObject = null;
-        requestObject = objectMapper.readTree(request.jsonString());
-        ObjectNode responseMessage = objectMapper.createObjectNode();
-        responseMessage.put("type", "text");
-        
-        URL baseUrl = new URL(pgrHost);
-        URL relativeUrl = new URL( baseUrl, pgrCreateComplaintPath);
+        try {
+            JsonNode requestObject = null;
+            requestObject = objectMapper.readTree(request.jsonString());
+            ObjectNode responseMessage = objectMapper.createObjectNode();
+            responseMessage.put("type", "text");
 
-        ResponseEntity<ObjectNode> response = restTemplate.postForEntity(relativeUrl.toString(),
-                requestObject, ObjectNode.class);
-        responseMessage = makeMessageForResponse(response, mobileNumber);
-        responseMessage.put("timestamp", System.currentTimeMillis());
-        return responseMessage;
+            URL baseUrl = new URL(pgrHost);
+            URL relativeUrl = new URL(baseUrl, pgrCreateComplaintPath);
+
+            ResponseEntity<ObjectNode> response = restTemplate.postForEntity(relativeUrl.toString(),
+                    requestObject, ObjectNode.class);
+            responseMessage = makeMessageForResponse(response, mobileNumber);
+            responseMessage.put("timestamp", System.currentTimeMillis());
+            return responseMessage;
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage(), e.getMessage());
+        }
     }
 
     private ObjectNode makeMessageForResponse(ResponseEntity<ObjectNode> responseEntity, String mobileNumber) throws Exception {

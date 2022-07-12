@@ -16,6 +16,7 @@ import org.apache.kafka.streams.kstream.Produced;
 import org.egov.chat.config.KafkaStreamsConfig;
 import org.egov.chat.pre.formatter.RequestFormatter;
 import org.egov.chat.util.FileStore;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -68,13 +69,17 @@ public class ValueFirstRequestFormatter implements RequestFormatter {
     }
 
     @Override
-    public JsonNode getTransformedRequest(JsonNode inputRequest) throws Exception {
+    public JsonNode getTransformedRequest(JsonNode inputRequest) throws CustomException {
         boolean missedCall = checkForMissedCallNotification(inputRequest);
         JsonNode chatNode = null;
         if (missedCall) {
             chatNode = getMissedCallChatNode(inputRequest);
         } else {
-            chatNode = getUserMessageChatNode(inputRequest);
+            try {
+                chatNode = getUserMessageChatNode(inputRequest);
+            } catch (IOException e) {
+                throw new CustomException(e.getMessage(), e.getMessage());
+            }
         }
         return chatNode;
     }

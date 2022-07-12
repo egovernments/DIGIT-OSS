@@ -5,6 +5,7 @@ import org.apache.kafka.clients.admin.*;
 import org.apache.kafka.common.KafkaFuture;
 import org.apache.kafka.common.errors.TopicExistsException;
 import org.egov.chat.config.ApplicationProperties;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -49,7 +50,7 @@ public class KafkaTopicCreater {
                     log.info("Topic already exists : " + newTopic.name());
                 } else {
                     log.error("Error while creating topic : " + newTopic.name(), e);
-                    throw new RuntimeException(e.getMessage(), e);
+                    throw new CustomException(e.getMessage(), e.getMessage());
                 }
             }
         }

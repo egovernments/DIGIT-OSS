@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.chat.models.EgovChat;
 import org.egov.chat.models.User;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -23,7 +24,7 @@ public class UserService {
     @Autowired
     private CreateNewUserService createNewUserService;
 
-    public EgovChat addLoggedInUser(EgovChat chatNode) throws Exception {
+    public EgovChat addLoggedInUser(EgovChat chatNode) throws CustomException {
         String tenantId = chatNode.getTenantId();
         String mobileNumber = chatNode.getUser().getMobileNumber();
 
@@ -33,13 +34,13 @@ public class UserService {
         return chatNode;
     }
 
-    User getUser(String mobileNumber, String tenantId) throws Exception {
+    User getUser(String mobileNumber, String tenantId) throws CustomException {
         User user = loginOrCreateUser(mobileNumber, tenantId);
 
         return user;
     }
 
-    User loginOrCreateUser(String mobileNumber, String tenantId) throws Exception {
+    User loginOrCreateUser(String mobileNumber, String tenantId) throws CustomException {
         User user = User.builder().mobileNumber(mobileNumber).build();
         try {
             JsonNode loginUserObject = loginUser(mobileNumber, tenantId);
@@ -69,7 +70,7 @@ public class UserService {
         return loginService.getLoggedInUser(mobileNumber, tenantId);
     }
 
-    JsonNode createUserForSystem(String mobileNumber, String tenantId) throws Exception {
+    JsonNode createUserForSystem(String mobileNumber, String tenantId) throws CustomException {
         return createNewUserService.createNewUser(mobileNumber, tenantId);
     }
 

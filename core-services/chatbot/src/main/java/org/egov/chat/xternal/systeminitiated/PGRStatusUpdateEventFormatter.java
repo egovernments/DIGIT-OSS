@@ -124,7 +124,7 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
     }
 
     @Override
-    public List<JsonNode> createChatNodes(JsonNode event) throws Exception {
+    public List<JsonNode> createChatNodes(JsonNode event) throws CustomException {
         List<JsonNode> chatNodes = new ArrayList<>();
             String source = event.at(SERVICESOURCE_PATH).asText();
             if ((source != null) && source.equals(SOURCE_WHATSAPP)) {
@@ -138,25 +138,32 @@ public class PGRStatusUpdateEventFormatter implements SystemInitiatedEventFormat
                 ObjectNode userChatNodeForStatusUpdate = createChatNodeForUser(event);
                 if(StringUtils.isEmpty(status) && StringUtils.isEmpty(action) && !StringUtils.isEmpty(comments)) {
                     ObjectNode userChatNodeForComment = userChatNodeForStatusUpdate.deepCopy();
-                    userChatNodeForComment.set(EXTRA_INFO_KEY, createResponseForComment(event, comments, citizenName));
+                    try {
+                        userChatNodeForComment.set(EXTRA_INFO_KEY, createResponseForComment(event, comments, citizenName));
+                    } catch (IOException e) {
+                        throw new CustomException(e.getMessage(), e.getMessage());
+                    }
                     chatNodes.add(userChatNodeForComment);
                 }
                 JsonNode extraInfo = null;
                 if (status != null) {
-                    if (status.equalsIgnoreCase(STATUS_REJECTED)) {
-                        extraInfo = responseForRejectedStatus(event, comments, citizenName);
-                    } else if ((action + "-" + status).equalsIgnoreCase(REASSIGN_ASSIGNED)) {
-                        extraInfo = responseForReassignedtatus(event, citizenName, mobileNumber);
-                    } else if (status.equalsIgnoreCase(STATUS_PENDINGATLME)) {
-                        if(action.equalsIgnoreCase(STATUS_REASSIGN)){
+                    try {
+                        if (status.equalsIgnoreCase(STATUS_REJECTED)) {
+                            extraInfo = responseForRejectedStatus(event, comments, citizenName);
+                        } else if ((action + "-" + status).equalsIgnoreCase(REASSIGN_ASSIGNED)) {
                             extraInfo = responseForReassignedtatus(event, citizenName, mobileNumber);
-                        }
-                        else{
-                            extraInfo = responseForAssignedStatus(event, citizenName, mobileNumber);
-                        }
+                        } else if (status.equalsIgnoreCase(STATUS_PENDINGATLME)) {
+                            if (action.equalsIgnoreCase(STATUS_REASSIGN)) {
+                                extraInfo = responseForReassignedtatus(event, citizenName, mobileNumber);
+                            } else {
+                                extraInfo = responseForAssignedStatus(event, citizenName, mobileNumber);
+                            }
 
-                    } else if (status.equalsIgnoreCase(STATUS_RESOLVED)) {
-                        extraInfo = responseForResolvedStatus(event, citizenName, mobileNumber);
+                        } else if (status.equalsIgnoreCase(STATUS_RESOLVED)) {
+                            extraInfo = responseForResolvedStatus(event, citizenName, mobileNumber);
+                        }
+                    } catch (Exception e) {
+                        throw new CustomException(e.getMessage(), e.getMessage());
                     }
                 }
                 if (extraInfo != null) {
