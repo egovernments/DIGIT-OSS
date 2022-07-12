@@ -12,7 +12,7 @@ import {
   CardHeader,
   SubmitBar,
 } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 //import PropertyDocument from "../../pageComponents/PropertyDocument";
@@ -25,6 +25,7 @@ import WSInfoLabel from "../../pageComponents/WSInfoLabel";
 
 const WSApplicationDetails = () => {
   const { t } = useTranslation();
+  const menuRef = useRef();
   const user = Digit.UserService.getUser();
   const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   const stateCode = Digit.ULBService.getStateId();
@@ -40,6 +41,12 @@ const WSApplicationDetails = () => {
     { filters: filter1 }
   );
 
+  const closeModal = () => {
+    setShowOptions(false);
+  };
+  Digit.Hooks.useClickOutside(menuRef, closeModal, showOptions);
+
+  // const fetchBillParams = { consumerCode: data?.WaterConnection?.[0]?.connectionNo };
   const fetchBillParams = { consumerCode: data?.WaterConnection?.[0]?.applicationNo || data?.SewerageConnections?.[0]?.applicationNo };
 
   const { data: generatePdfKey } = Digit.Hooks.useCommonMDMS(tenantId, "common-masters", "ReceiptKey", {
@@ -67,7 +74,7 @@ const WSApplicationDetails = () => {
 
   const handleDownloadPdf = async () => {
     const tenantInfo = data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId;
-    let res = data?.WaterConnection?.[0];
+    let res = data?.WaterConnection?.[0] || data?.SewerageConnections?.[0];
     const PDFdata = getPDFData({ ...res }, { ...PTData?.Properties?.[0] }, tenantInfo, t);
     PDFdata.then((ress) => Digit.Utils.pdf.generatev1(ress));
     setShowOptions(false);
@@ -118,9 +125,8 @@ const WSApplicationDetails = () => {
     label: t("WS_RECEIPT_APPLICATION_FEE"),
     onClick: printApplicationReceipts,
   };
-
-  const appStatus = data?.WaterConnection?.[0]?.applicationStatus || "";
-
+  
+  const appStatus = data?.WaterConnection?.[0]?.applicationStatus || data?.SewerageConnections?.[0]?.applicationStatus;
   switch (appStatus) {
     case "PENDING_FOR_DOCUMENT_VERIFICATION":
     case "PENDING_FOR_CITIZEN_ACTION":
@@ -158,12 +164,15 @@ const WSApplicationDetails = () => {
   return (
     <React.Fragment>
       {downloadOptions && downloadOptions.length > 0 && (
-          <MultiLink
-            className="multilinkWrapper"
-            onHeadClick={() => setShowOptions(!showOptions)}
-            displayOptions={showOptions}
-            options={downloadOptions}
-          />
+        <div ref={menuRef}>
+        <MultiLink
+        className="multilinkWrapper"
+        onHeadClick={() => setShowOptions(!showOptions)}
+        displayOptions={showOptions}
+        options={downloadOptions}
+        // optionsStyle={{margin: '0px'}}
+        />
+        </div>        
         )}
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
         <Header>{t("WS_APPLICATION_DETAILS_HEADER")}</Header>
