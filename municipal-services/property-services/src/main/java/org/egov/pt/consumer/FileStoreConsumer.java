@@ -23,7 +23,7 @@ import org.egov.pt.models.Document;
 import org.egov.pt.models.Property;
 import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.enums.Status;
-import org.egov.pt.producer.Producer;
+import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
@@ -45,7 +45,7 @@ public class FileStoreConsumer {
     private PropertyRepository propertyRepository;
 
     @Autowired
-    private Producer producer;
+    private PropertyProducer producer;
 
     @Autowired
     private PropertyConfiguration config;

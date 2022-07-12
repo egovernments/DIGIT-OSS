@@ -17,7 +17,7 @@ import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.BusinessService;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.models.workflow.State;
-import org.egov.pt.producer.Producer;
+import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.util.AssessmentUtils;
 import org.egov.pt.validator.AssessmentValidator;
@@ -31,7 +31,7 @@ public class AssessmentService {
 
 	private AssessmentValidator validator;
 
-	private Producer producer;
+	private PropertyProducer producer;
 
 	private PropertyConfiguration props;
 
@@ -51,9 +51,9 @@ public class AssessmentService {
 
 
 	@Autowired
-	public AssessmentService(AssessmentValidator validator, Producer producer, PropertyConfiguration props, AssessmentRepository repository,
-							 AssessmentEnrichmentService assessmentEnrichmentService, PropertyConfiguration config, DiffService diffService,
-							 AssessmentUtils utils, WorkflowService workflowService, CalculationService calculationService) {
+	public AssessmentService(AssessmentValidator validator, PropertyProducer producer, PropertyConfiguration props, AssessmentRepository repository,
+                             AssessmentEnrichmentService assessmentEnrichmentService, PropertyConfiguration config, DiffService diffService,
+                             AssessmentUtils utils, WorkflowService workflowService, CalculationService calculationService) {
 		this.validator = validator;
 		this.producer = producer;
 		this.props = props;

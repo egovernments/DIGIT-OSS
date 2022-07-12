@@ -152,4 +152,15 @@ public class PropertyController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /* Api to encrypt address of existing property records*/
+    /* To be executed only once*/
+    @RequestMapping(value = "/_encryptAddress", method = RequestMethod.POST)
+    public ResponseEntity<PropertyResponse> searchUpdate(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                         @Valid @ModelAttribute PropertyCriteria propertyCriteria) {
+        List<Property> properties = propertyService.updatePropertyAddress(propertyCriteria, requestInfoWrapper.getRequestInfo());
+        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
+                        responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

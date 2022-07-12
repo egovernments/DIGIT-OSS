@@ -21,7 +21,7 @@ import org.egov.pt.models.oldProperty.*;
 //import org.egov.pt.models.oldProperty.PropertyCriteria;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
-import org.egov.pt.producer.Producer;
+import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.AssessmentRepository;
 import org.egov.pt.repository.ServiceRequestRepository;
 import org.egov.pt.repository.builder.OldPropertyQueryBuilder;
@@ -63,7 +63,7 @@ import static org.egov.pt.util.PTConstants.*;
 public class MigrationService {
 
     @Autowired
-    private Producer producer;
+    private PropertyProducer producer;
 
     @Autowired
     private AssessmentValidator validator;

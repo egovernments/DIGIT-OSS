@@ -1,7 +1,7 @@
 package org.egov.pt.service;
 
 import org.egov.pt.config.PropertyConfiguration;
-import org.egov.pt.producer.Producer;
+import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.util.ResponseInfoFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DraftsService {
 	
 	@Autowired
-	private Producer producer;
+	private PropertyProducer producer;
 	
 	@Autowired
 	private ResponseInfoFactory responseInfoFactory;

@@ -1,20 +1,12 @@
 package org.egov.pt.service;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
-import org.egov.encryption.EncryptionService;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
@@ -24,7 +16,7 @@ import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.models.workflow.State;
-import org.egov.pt.producer.Producer;
+import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.util.EncryptionDecryptionUtil;
 import org.egov.pt.util.PTConstants;
@@ -33,23 +25,19 @@ import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.ResourceAccessException;
 
 @Slf4j
 @Service
 public class PropertyService {
 
 	@Autowired
-	private Producer producer;
+	private PropertyProducer producer;
 	
 	@Autowired
 	private NotificationService notifService;
@@ -85,15 +73,7 @@ public class PropertyService {
 	private FuzzySearchService fuzzySearchService;
 
 	@Autowired
-	private EncryptionDecryptionUtil encryptionDecryptionUtil;
-	//private EncryptionService encryptionService;
-
-	@Value(("${egov.state.level.tenant.id}"))
-	private String stateLevelTenantId;
-
-	@Value(("${decryption.abac.enabled}"))
-	private boolean abacEnabled;
-
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
 	/**
 	 * Enriches the Request and pushes to the Queue
 	 *
@@ -103,6 +83,8 @@ public class PropertyService {
 	public Property createProperty(PropertyRequest request) {
 
 		propertyValidator.validateCreateRequest(request);
+		/* encrypt here */
+		request.setProperty(encryptionDecryptionUtil.encryptObject(request.getProperty(), "Property", Property.class));
 		enrichmentService.enrichCreateRequest(request);
 		userService.createUser(request);
 		if (config.getIsWorkflowEnabled()
@@ -116,7 +98,10 @@ public class PropertyService {
 
 		producer.push(config.getSavePropertyTopic(), request);
 		request.getProperty().setWorkflow(null);
-		return request.getProperty();
+
+		/* decrypt here */
+		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
+		//return request.getProperty();
 	}
 
 	/**
@@ -138,7 +123,10 @@ public class PropertyService {
 		boolean isRequestForOwnerMutation = CreationReason.MUTATION.equals(request.getProperty().getCreationReason());
 		
 		boolean isNumberDifferent = checkIsRequestForMobileNumberUpdate(request, propertyFromSearch);
-		
+
+		/* encrypt here */
+		request.setProperty(encryptionDecryptionUtil.encryptObject(request.getProperty(), "Property", Property.class));
+
 		if (isRequestForOwnerMutation)
 			processOwnerMutation(request, propertyFromSearch);
 		else if(isNumberDifferent)
@@ -148,7 +136,11 @@ public class PropertyService {
 			processPropertyUpdate(request, propertyFromSearch);
 
 		request.getProperty().setWorkflow(null);
-		return request.getProperty();
+
+		/* decrypt here */
+		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
+
+//		return request.getProperty();
 	}
 	
 	/*
@@ -369,21 +361,9 @@ public class PropertyService {
 	public List<Property> searchProperty(PropertyCriteria criteria, RequestInfo requestInfo) {
 
 		List<Property> properties;
+		/* encrypt here */
 		criteria = encryptionDecryptionUtil.encryptObject(criteria, "Property", PropertyCriteria.class);
-		/*try {
-			if (criteria != null) {
-				criteria = encryptionService.encryptJson(criteria, "Property", stateLevelTenantId, PropertyCriteria.class);
-			}
-			if (criteria == null) {
-				throw new CustomException("ENCRYPTION_NULL_ERROR", "Null object found on performing encryption");
-			}
-		} catch (IOException | HttpClientErrorException | HttpServerErrorException | ResourceAccessException e) {
-			log.error("Error occurred while encrypting", e);
-			throw new CustomException("ENCRYPTION_ERROR", "Error occurred in encryption process");
-		} catch (Exception e) {
-			log.error("Unknown Error occurred while encrypting", e);
-			throw new CustomException("UNKNOWN_ERROR", "Unknown error occurred in encryption process");
-		}*/
+
 		/*
 		 * throw error if audit request is with no proeprty id or multiple propertyids
 		 */
@@ -415,7 +395,11 @@ public class PropertyService {
 			enrichmentService.enrichBoundary(property, requestInfo);
 		});
 
-		return properties;
+		List<Property> encryptedProperties= new LinkedList<>();
+
+		/* decrypt here */
+		return encryptionDecryptionUtil.decryptObject(properties, "Property", Property.class, requestInfo);
+		//return encryptedProperties;
 	}
 
 	private void filterPropertiesForUser(List<Property> properties, Set<String> ownerIds) {
@@ -519,6 +503,32 @@ public class PropertyService {
 		propertyCriteria.setIsInboxSearch(false);
         Integer count = repository.getCount(propertyCriteria, requestInfo);
         return count;
+	}
+
+	public List<Property> updatePropertyAddress(PropertyCriteria criteria, RequestInfo requestInfo) {
+		List<Property> properties = searchPropertyPlainSearch(criteria, requestInfo);
+		encryptPropertyAddress(properties, requestInfo);
+		return properties;
+	}
+
+	public List<Property> encryptPropertyAddress(List<Property> properties, RequestInfo requestInfo) {
+		List<Property> updatedProperties = new ArrayList<>();
+		for (Property property : properties) {
+			/* encrypt here */
+			property = encryptionDecryptionUtil.encryptObject(property, "Property", Property.class);
+
+			PropertyRequest request= PropertyRequest.builder()
+					.requestInfo(requestInfo)
+					.property(property)
+					.build();
+
+			producer.push(config.getUpdatePropertyTopic(), request);
+
+			/* decrypt here */
+			property = encryptionDecryptionUtil.decryptObject(property, "Property", Property.class, requestInfo);
+			updatedProperties.add(property);
+		}
+		return updatedProperties;
 	}
 	
 }
