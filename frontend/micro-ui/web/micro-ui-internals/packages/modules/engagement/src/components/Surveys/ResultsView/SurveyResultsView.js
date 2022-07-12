@@ -38,7 +38,7 @@ function transformTime (time) {
 
 const getUserData = (data) => {
     const obj = {}
-    data.map(ans => {
+    data?.map(ans => {
         obj[ans.mobileNumber]=ans.emailId
     })
     return obj;
@@ -46,7 +46,7 @@ const getUserData = (data) => {
 
 
 
-const displayResult = (ques,ans,type,resCount) => {
+const displayResult = (ques,ans,type,resCount=0) => {
         switch(type) {
             case "Short Answer":
                  return (
@@ -54,21 +54,21 @@ const displayResult = (ques,ans,type,resCount) => {
                         //     <span className="question-title">{quesStmt}</span>
                         //     <header className=''>{`${resCount} Responses`}</header>
                         //     <Card style={{"backgroundColor":"#FAFAFA","margin":"0px"}}>
-                        //     {ans.map(el=> <span>{el}<BreakLine /></span>)}
+                        //     {ans?.map(el=> <span>{el}<BreakLine /></span>)}
                         //     </Card>
                         // </div>
                         // <div>
                         //     <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                         //     <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
                         //     <Card style={{"backgroundColor":"#FAFAFA","margin":"0px"}}>
-                        //     {ans.map(el=> <p>{el}<BreakLine /></p>)}
+                        //     {ans?.map(el=> <p>{el}<BreakLine /></p>)}
                         //     </Card>
                         // </div>
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
                             <div className='responses-container'>
-                            {ans.map(el=> <div className='response-result responses-container-line'>{el}<BreakLine style={{"marginTop":"10px"}} /></div>)}
+                            {ans?.map(el=> <div className='response-result responses-container-line'>{el}<BreakLine style={{"marginTop":"10px"}} /></div>)}
                             </div>
                             
                         </div>
@@ -80,10 +80,10 @@ const displayResult = (ques,ans,type,resCount) => {
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
                             {/* <div className="responses-container-date">
-                            {ans.map(el=> <div className='date-time'>{transformDate(el).date}</div>)}
+                            {ans?.map(el=> <div className='date-time'>{transformDate(el).date}</div>)}
                             </div> */}
                             <div className='date-container'>
-                                {ans.map(el => (<div className='date-response'>
+                                {ans?.map(el => (<div className='date-response'>
                                     <div>
                                     {transformDate(el).date}
                                     </div>
@@ -101,10 +101,10 @@ const displayResult = (ques,ans,type,resCount) => {
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                            <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
                             {/* <div className='responses-container-date'>
-                            {ans.map(el=> <div className='date-time'><strong>{el}</strong></div>)}
+                            {ans?.map(el=> <div className='date-time'><strong>{el}</strong></div>)}
                             </div> */}
                             <div className='date-container'>
-                                {ans.map(el => (<div className='date-response'>
+                                {ans?.map(el => (<div className='date-response'>
                                     <div>
                                     {el}
                                     </div>
@@ -122,13 +122,13 @@ const displayResult = (ques,ans,type,resCount) => {
                         // <div className="surveyQuestion-wrapper">
                         //     <span className="question-title">{ques.questionStatement}</span>
                         //     <span className='text-3xl font-bold'>{`${resCount} Responses`}</span>
-                        //     {ans.map(el=> <span>{el}</span>)}
+                        //     {ans?.map(el=> <span>{el}</span>)}
                         // </div>
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
                             <div className='responses-container'>
-                            {ans.map(el=> <div className='response-result responses-container-line'>{el}<BreakLine style={{"marginTop":"10px"}} /></div>)}
+                            {ans?.map(el=> <div className='response-result responses-container-line'>{el}<BreakLine style={{"marginTop":"10px"}} /></div>)}
                             </div>
                         </div>
                         )
@@ -137,19 +137,19 @@ const displayResult = (ques,ans,type,resCount) => {
                         // <div className="surveyQuestion-wrapper">
                         //     <span className="question-title">{ques.questionStatement}</span>
                         //     <span className='text-3xl font-bold'>{`${resCount} Responses`}</span>
-                        //     {ans.map(el=> <span>{el}</span>)}
+                        //     {ans?.map(el=> <span>{el}</span>)}
                         // </div>
                         // <div>
                         //     <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                         //     <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
                         //     <Card style={{"backgroundColor":"#FAFAFA","margin":"0px"}}>
-                        //     {ans.map(el=> <p>{el}<BreakLine /></p>)}
+                        //     {ans?.map(el=> <p>{el}<BreakLine /></p>)}
                         //     </Card>
                         // </div>
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
-                            {/* {ans.map(el=> <p>{el}<BreakLine /></p>)} */}
+                            {/* {ans?.map(el=> <p>{el}<BreakLine /></p>)} */}
                             <div className='responses-container' style={{"padding":"30px"}}>
                             <CheckBoxChart data={ques}/>
                             </div>
@@ -161,7 +161,7 @@ const displayResult = (ques,ans,type,resCount) => {
                         <div style={{"margin":"30px"}}>
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
-                            {/* {ans.map(el=> <p>{el}<BreakLine /></p>)} */}
+                            {/* {ans?.map(el=> <p>{el}<BreakLine /></p>)} */}
                             <div className='responses-container'>
                             <McqChart data={ques}/>
                             </div>
@@ -200,8 +200,8 @@ const SurveyResultsView = ({surveyInfo,responsesInfoMutation}) => {
         <SurveyDetailsView surveyTitle={surveyInfo.title} surveyDesc={surveyInfo.description} t={t} />
         </div>
         <WhoHasResponded t={t} userInfo={userInfo}/>
-        {data.map(element =>( 
-            displayResult(element,element.answers,element.type,element.answers.length)
+        {data?.map(element =>( 
+            displayResult(element,element?.answers,element?.type,element?.answers?.length)
         ))}
     </Card>
   )
