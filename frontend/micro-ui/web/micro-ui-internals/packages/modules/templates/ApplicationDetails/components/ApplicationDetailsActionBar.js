@@ -53,7 +53,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
       {!workflowDetails?.isLoading && !isMenuBotton && isSingleButton && (
         <ActionBar style={{...ActionBarStyle}}>
           <button
-              style={{ color: "#FFFFFF", fontSize: "19px" }}
+              style={{ color: "#FFFFFF", fontSize: "18px" }}
               className={"submit-bar"}
               name={actions?.[0]?.action}
               value={actions?.[0]?.action}
