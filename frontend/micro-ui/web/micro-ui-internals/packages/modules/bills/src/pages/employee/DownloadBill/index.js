@@ -86,6 +86,7 @@ const DownloadBillInbox = () => {
   }, [isLoading, data]);
   return (
     <div>
+      <Header>{t("ACTION_TEST_DOWNLOADBILLS")}</Header>
       <TableComponent />
       {showToast?.label && (
         <Toast
