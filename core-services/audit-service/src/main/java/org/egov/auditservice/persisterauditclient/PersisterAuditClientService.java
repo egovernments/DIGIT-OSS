@@ -43,7 +43,7 @@ public class PersisterAuditClientService {
     @Autowired
     private KafkaTemplate kafkaTemplate;
 
-    public void generateAuditLogs(PersisterClientInput input) {
+    public List<AuditLog> generateAuditLogs(PersisterClientInput input) {
         Map<String, List<Mapping>> map = topicMap.getTopicMap();
         String topic = input.getTopic();
         String json = input.getJson();
@@ -51,6 +51,7 @@ public class PersisterAuditClientService {
         List<Mapping> applicableMappings = filterMappings(map.get(topic), document);
         log.info("{} applicable configs found!", applicableMappings.size());
         List<Map<String, Object>> keyValuePairList;
+        List<AuditLog> auditLogsResponse = new ArrayList<>();
         for (Mapping mapping : applicableMappings) {
             List<AuditLog> auditLogs = new LinkedList<>();
             List<QueryMap> queryMaps = mapping.getQueryMaps();
@@ -75,9 +76,13 @@ public class PersisterAuditClientService {
                     kafkaTemplate.send(auditErrorTopic, auditError);
                 }
             }
-            if(!CollectionUtils.isEmpty(auditLogs))
-                kafkaTemplate.send(auditTopic, auditLogs);
+            if(!CollectionUtils.isEmpty(auditLogs)) {
+                // ****************** TEMPORARY **************
+                //kafkaTemplate.send(auditTopic, auditLogs);
+                auditLogsResponse.addAll(auditLogs);
+            }
         }
+        return auditLogsResponse;
     }
     public List<RowData> getRowData(List<JsonMap> jsonMaps, Object jsonObj, String baseJsonPath, Mapping mapping) {
         Map<AuditAttributes, List<LinkedHashMap<String, Object>>> data = extractData(baseJsonPath, mapping, jsonObj);
@@ -200,8 +205,10 @@ public class PersisterAuditClientService {
         List<LinkedHashMap<String, Object>> list = null;
         String auditAttributeBasePath = mapping.getAuditAttributeBasePath();
         Map<AuditAttributes, List<LinkedHashMap<String, Object>>> data= new LinkedHashMap<>();
-        AuditAttributes auditAttributes = getAuditAttribute(mapping, document);
-        String relativeJsonPath = baseJsonPath.substring(auditAttributeBasePath.length() + 1);
+        String relativeJsonPath = null;
+        String userUUID = getValueFromJsonPath(userJsonPath, document);
+        if(!baseJsonPath.equals(auditAttributeBasePath))
+                relativeJsonPath = baseJsonPath.substring(auditAttributeBasePath.length() + 1);
         try {
             if (baseJsonPath.contains("*")) {
                 /**
@@ -216,18 +223,26 @@ public class PersisterAuditClientService {
                  * In above example we will create auditAttribute for each demand. We will then execute the
                  * baseJsonPath of that queryMap and create map of auditAttribute vs data extracted using baseJaonPath
                  */
-                for (int i = 0; i < parentObjects.size(); i++) {
-                    list = JsonPath.read(parentObjects.get(i), relativeJsonPath);
-                    data.put(auditAttributes, list);
-                }
+
+                    for (int i = 0; i < parentObjects.size(); i++) {
+                        AuditAttributes auditAttributes = getAuditAttribute(mapping, parentObjects.get(i), userUUID);
+                        if(!baseJsonPath.equals(auditAttributeBasePath))
+                            list = JsonPath.read(parentObjects.get(i), relativeJsonPath);
+                        else
+                            list = Collections.singletonList(parentObjects.get(i));
+
+                        data.put(auditAttributes, list);
+                    }
+
             } else {
                 LinkedHashMap<String, Object> map = JsonPath.read(document, relativeJsonPath);
+                AuditAttributes auditAttributes = getAuditAttribute(mapping, document, userUUID);
                 list = Collections.singletonList(map);
                 data.put(auditAttributes, list);
             }
         }
         catch (Exception e){
-            log.error(e.getMessage());
+            e.printStackTrace();
             throw new CustomException("INVALID_JSONPATH","Failed to fetch auditAttributes");
         }
         return data;
@@ -288,7 +303,7 @@ public class PersisterAuditClientService {
         } else
             return false;
     }
-    private AuditAttributes getAuditAttribute(Mapping mapping, Object json){
+    private AuditAttributes getAuditAttribute(Mapping mapping, Object json, String userUUID){
         AuditAttributes auditAttributes = new AuditAttributes();
         Boolean isAuditEnabled = mapping.getIsAuditEnabled();
         if(isAuditEnabled == null){
@@ -300,7 +315,6 @@ public class PersisterAuditClientService {
             String tenantId = getValueFromJsonPath(mapping.getTenantIdJsonPath(), json);
             String transactionCode = getValueFromJsonPath(mapping.getTransactionCodeJsonPath(), json);
             String objectId = getValueFromJsonPath(mapping.getObjecIdJsonPath(), json);
-            String userUUID = getValueFromJsonPath(userJsonPath, json);
             // Set the values to auditAttribute
             auditAttributes.setModule(module);
             auditAttributes.setObjectId(objectId);
@@ -322,7 +336,7 @@ public class PersisterAuditClientService {
             value = JsonPath.read(json, jsonPath);
         }
         catch (Exception e){
-            log.error("JSONPATH_ERROR","Error while executing jsonPath: ",jsonPath);
+            throw new CustomException("JSONPATH_ERROR","Error while executing jsonPath: " + jsonPath);
         }
         return value;
     }

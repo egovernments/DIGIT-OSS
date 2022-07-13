@@ -16,4 +16,6 @@ public class AuditAttributes {
     private String objectId ;
 
     private String userUUID;
+
+    private String auditCorrelationId;
 }
