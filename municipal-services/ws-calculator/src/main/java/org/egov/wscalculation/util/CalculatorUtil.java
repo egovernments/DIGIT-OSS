@@ -402,4 +402,27 @@ public class CalculatorUtil {
 
 		return epochToDate(fromDateLong) + "-" +epochToDate(toDateLong) ;
 	}
+
+	/**
+	 *
+	 * @param requestInfo, tenantId, consumerCode
+	 *
+	 * @return billing response
+	 */
+	public Map<String, Object> getBillData(RequestInfo requestInfo, String tenantId, String consumerCode) {
+		Object result =  serviceRequestRepository.fetchResult(
+				getFetchBillURL(tenantId, consumerCode),
+				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
+
+		Map<String, Object> billResponse = null;
+		try {
+			billResponse = mapper.convertValue(result, Map.class);
+		} catch (IllegalArgumentException e) {
+			throw new CustomException("PARSING_ERROR", "Error while parsing response of bill");
+		}
+		if (billResponse == null)
+			throw new CustomException("WATERMETER_INACTIVE", "Can not generate bill for inactive waterconnection");
+
+		return billResponse;
+	}
 }

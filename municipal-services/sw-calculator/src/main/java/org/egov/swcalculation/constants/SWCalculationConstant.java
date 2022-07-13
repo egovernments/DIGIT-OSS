@@ -346,7 +346,23 @@ public class SWCalculationConstant {
 
 	public static final String STATUS_APPROVED = "CONNECTION_ACTIVATED";
 
+	public static final String DISCONNECTION_APPROVED = "PENDING_APPROVAL_FOR_DISCONNECTION";
+
+	public static final String CONNECTION_INACTIVATED = "Inactive";
+
 	public static final List<String> FINAL_CONNECTION_STATES = Collections
 			.unmodifiableList(Arrays.asList(MODIFIED_FINAL_STATE, STATUS_APPROVED));
+
+	public static final String BILL_KEY= "Bill";
+
+	public static final String CONSUMER_CODE_KEY= "consumerCode";
+
+	public static final String BILL_DETAILS_KEY= "billDetails";
+
+	public static final String TO_PERIOD_KEY= "toPeriod";
+
+	public static final String FROM_PERIOD_KEY= "fromPeriod";
+
+	public static final String AMOUNT_KEY= "amount";
 
 }
