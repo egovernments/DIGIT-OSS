@@ -19,6 +19,7 @@ import { Link, useLocation } from "react-router-dom";
 import WSWFApplicationTimeline from "../../pageComponents/WSWFApplicationTimeline";
 import WSDocument from "../../pageComponents/WSDocument";
 import getPDFData from "../../utils/getWSAcknowledgementData";
+import getDisconnectPDFData from "../../utils/getWSDisconnectionApplicationForm"
 import { getFiles } from "../../utils";
 import { stringReplaceAll } from "../../utils";
 import WSInfoLabel from "../../pageComponents/WSInfoLabel";
@@ -80,6 +81,14 @@ const WSApplicationDetails = () => {
     setShowOptions(false);
   };
 
+  const handleDownloadDisconnectPdf = async () => {
+    const tenantInfo = data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId;
+    let res = data?.WaterConnection?.[0] || data?.SewerageConnections?.[0];
+    const PDFdata = getDisconnectPDFData({ ...res }, { ...PTData?.Properties?.[0] }, tenantInfo, t);
+    PDFdata.then((ress) => Digit.Utils.pdf.generate(ress));
+    setShowOptions(false);
+  };
+
   const printApplicationReceipts = async () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const state = Digit.ULBService.getStateId();
@@ -126,9 +135,29 @@ const WSApplicationDetails = () => {
     onClick: printApplicationReceipts,
   };
   
+  const disconnectionNoticeNApplicationFormOptions = [
+    {
+      order: 1,
+      label: t("WS_APPLICATION"),
+      onClick: handleDownloadDisconnectPdf,
+    },
+    {
+      order: 2,
+      label: t("WS_DISCONNECTION_NOTICE"),
+      onClick: null,
+    }
+];
+
   const appStatus = data?.WaterConnection?.[0]?.applicationStatus || data?.SewerageConnections?.[0]?.applicationStatus;
   switch (appStatus) {
     case "PENDING_FOR_DOCUMENT_VERIFICATION":
+      if(data?.WaterConnection?.[0].applicationType === "DISCONNECT_WATER_CONNECTION" || data?.SewerageConnections?.[0].applicationType === "DISCONNECT_WATER_CONNECTION"){
+        downloadOptions = disconnectionNoticeNApplicationFormOptions
+      }
+      else{
+        downloadOptions = downloadOptions.concat(applicationDownloadObject);
+      }
+      break;
     case "PENDING_FOR_CITIZEN_ACTION":
     case "PENDING_FOR_FIELD_INSPECTION":
       downloadOptions = downloadOptions.concat(applicationDownloadObject);
@@ -187,6 +216,16 @@ const WSApplicationDetails = () => {
               text={data?.WaterConnection?.[0]?.applicationNo || data?.SewerageConnections?.[0]?.applicationNo}
               textStyle={{}}
             />
+            {(data?.WaterConnection?.[0].applicationType === "DISCONNECT_WATER_CONNECTION" || data?.SewerageConnections?.[0].applicationType === "DISCONNECT_WATER_CONNECTION") 
+              && (
+                <Row
+                  className="border-none"
+                  label={t("WS_MYCONNECTIONS_CONSUMER_NO")}
+                  text={data?.WaterConnection?.[0]?.connectionNo || data?.SewerageConnections?.[0]?.connectionNo}
+                  textStyle={{wordBreak:"break-word"}}
+            />
+              )
+            }
             <Row
               className="border-none"
               label={t("WS_SERVICE_NAME_LABEL")}
@@ -199,6 +238,32 @@ const WSApplicationDetails = () => {
               text={paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount ? Number(paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount).toFixed(2) : t("CS_NA")}
               textStyle={{ whiteSpace: "pre" }}
             />
+            {(data?.WaterConnection?.[0].applicationType === "DISCONNECT_WATER_CONNECTION" || data?.SewerageConnections?.[0].applicationType === "DISCONNECT_WATER_CONNECTION") 
+              && (
+                <Row
+                  className="border-none"
+                  label={t("WS_DISCONNECTION_PROPOSED_DATE")}
+                  text={ applicationNobyData?.includes("WS") 
+                          ? convertEpochToDate(data?.WaterConnection?.[0]?.dateEffectiveFrom) 
+                          : convertEpochToDate(data?.SewerageConnections?.[0]?.dateEffectiveFrom)}
+                  textStyle={{wordBreak:"break-word"}}
+                />
+              )
+            }
+             {(data?.WaterConnection?.[0].applicationType === "DISCONNECT_WATER_CONNECTION" || data?.SewerageConnections?.[0].applicationType === "DISCONNECT_WATER_CONNECTION") 
+              && (
+                <Row
+                  className="border-none"
+                  label={t("WS_DISCONNECTION_REASON")}
+                  text={data?.WaterConnection?.[0]?.disconnectionReason != null 
+                        ? data?.WaterConnection?.[0]?.disconnectionReason 
+                        : data?.SewerageConnections?.[0]?.disconnectionReason != null 
+                        ? data?.SewerageConnections?.[0]?.disconnectionReason 
+                        : t("NA") }
+                  textStyle={{wordBreak:"break-word"}}
+            />
+              )
+            }
           </StatusTable>
         </Card>
         {paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails.length > 0 && (
