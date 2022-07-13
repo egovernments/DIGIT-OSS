@@ -20,6 +20,9 @@ public class QueryMap  {
 
   @JsonProperty("basePath")
   private String basePath = null;
+
+  @JsonProperty("isParentEntity")
+  private Boolean isParentEntity = false;
   
 }
 

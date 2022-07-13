@@ -57,13 +57,13 @@ public class AuditServiceController {
     }
 
     @RequestMapping(value="/v1/_test", method = RequestMethod.POST)
-    public ResponseEntity<List<org.egov.auditservice.persisterauditclient.models.contract.AuditLog>> testNewAuditFlow(@RequestBody @Valid PersisterClientInput input) {
+    public ResponseEntity<List<AuditLog>> testNewAuditFlow(@RequestBody @Valid PersisterClientInput input) {
         log.info("Received request: " + input.toString());
 //        List<Integer> responseHash = ingestService.ingestData(ingestRequest);
 //        //log.info("############ Completed before pushing data");
 //        ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(ingestRequest.getRequestInfo(), true);
 //        IngestResponse response = IngestResponse.builder().responseInfo(responseInfo).responseHash(responseHash).build();
-        List<org.egov.auditservice.persisterauditclient.models.contract.AuditLog> auditLogs = auditLogsProcessingService.generateAuditLogs(input);
+        List<AuditLog> auditLogs = auditLogsProcessingService.generateAuditLogs(input);
         return new ResponseEntity<>(auditLogs, HttpStatus.OK);
     }
 

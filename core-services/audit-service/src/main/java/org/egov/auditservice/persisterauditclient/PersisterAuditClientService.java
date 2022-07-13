@@ -11,6 +11,9 @@ import net.minidev.json.JSONArray;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.auditservice.persisterauditclient.models.contract.*;
 import org.egov.auditservice.persisterauditclient.utils.AuditUtil;
+import org.egov.auditservice.service.ChooseSignerAndVerifier;
+import org.egov.auditservice.web.models.AuditLog;
+import org.egov.auditservice.web.models.AuditLogRequest;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -27,18 +32,27 @@ import static java.util.Objects.isNull;
 @Service
 @Slf4j
 public class PersisterAuditClientService {
+
     @Autowired
     private ObjectMapper objectMapper;
+
     @Value("${persister.audit.user.jsonpath}")
     private String userJsonPath;
+
     @Value("${persister.audit.error.queue}")
     private String auditErrorTopic;
+
     @Value("${persister.audit.kafka.topic}")
     private String auditTopic;
+
     @Autowired
     private TopicMap topicMap;
+
     @Autowired
     private AuditUtil auditUtil;
+
+    @Autowired
+    private ChooseSignerAndVerifier chooseSignerAndVerifier;
 
     @Autowired
     private KafkaTemplate kafkaTemplate;
@@ -51,6 +65,7 @@ public class PersisterAuditClientService {
         List<Mapping> applicableMappings = filterMappings(map.get(topic), document);
         log.info("{} applicable configs found!", applicableMappings.size());
         List<Map<String, Object>> keyValuePairList;
+        Map<String, String> objectIdVsAuditIdMap = new HashMap<>();
         List<AuditLog> auditLogsResponse = new ArrayList<>();
         for (Mapping mapping : applicableMappings) {
             List<AuditLog> auditLogs = new LinkedList<>();
@@ -59,12 +74,27 @@ public class PersisterAuditClientService {
                 String query = queryMap.getQuery();
                 List<JsonMap> jsonMaps = queryMap.getJsonMaps();
                 String basePath = queryMap.getBasePath();
+
+                // Correlation Enrichment Logic
+                Boolean isParentEntity = queryMap.getIsParentEntity();
+
                 List<RowData> rowDataList = getRowData(jsonMaps, document, basePath, mapping);
                 /**
                  * The following code block will generate AuditLog objects for each query that is executed
                  */
                 try {
-                    auditLogs.addAll(auditUtil.getAuditRecord(rowDataList, query));
+                    List<AuditLog> currentBatchOfAuditRecords = auditUtil.getAuditRecord(rowDataList, query);
+                    /*
+                    if(!CollectionUtils.isEmpty(currentBatchOfAuditRecords)){
+                        currentBatchOfAuditRecords.forEach(auditLog -> {
+                            if(!ObjectUtils.isEmpty(isParentEntity) && isParentEntity)
+                                objectIdVsAuditIdMap.put(auditLog.getObjectId(), auditLog.getId());
+                            else
+                                auditLog.setAuditCorrelationId(objectIdVsAuditIdMap.get(auditLog.getObjectId()));
+                        });
+                    }
+                     */
+                    auditLogs.addAll(currentBatchOfAuditRecords);
                 }
                 catch (Exception e){
                     log.error("AUDIT_LOG_ERROR","Failed to create audit log for: "+rowDataList);
@@ -77,6 +107,7 @@ public class PersisterAuditClientService {
                 }
             }
             if(!CollectionUtils.isEmpty(auditLogs)) {
+                chooseSignerAndVerifier.selectImplementationAndSign(AuditLogRequest.builder().auditLogs(auditLogs).build());
                 // ****************** TEMPORARY **************
                 //kafkaTemplate.send(auditTopic, auditLogs);
                 auditLogsResponse.addAll(auditLogs);

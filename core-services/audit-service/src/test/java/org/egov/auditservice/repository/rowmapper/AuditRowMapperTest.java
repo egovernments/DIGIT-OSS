@@ -87,7 +87,7 @@ class AuditRowMapperTest {
             assertEquals("operationtype1", auditLog.getOperationType());
             assertEquals("integrityhash1", auditLog.getIntegrityHash());
 
-            Map<String, Object> actualKeyValuePairs = auditLog.getKeyValuePairs();
+            Map<String, Object> actualKeyValuePairs = auditLog.getKeyValueMap();
 
             assertEquals(2, actualKeyValuePairs.size());
 

@@ -51,7 +51,7 @@ public class AuditRowMapper implements ResultSetExtractor<List<AuditLog>> {
 
                 Map<String, Object> keyValuePairs = objectMapper.convertValue(keyValuePairsJson, new TypeReference<Map<String, Object>>(){});
 
-                auditLog.setKeyValuePairs(keyValuePairs);
+                auditLog.setKeyValueMap(keyValuePairs);
 
             }
 

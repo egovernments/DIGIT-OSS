@@ -2,9 +2,7 @@ package org.egov.auditservice.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.egov.auditservice.repository.AuditServiceRepository;
-import org.egov.auditservice.web.models.AuditLog;
 import org.egov.auditservice.web.models.AuditLogRequest;
-import org.egov.auditservice.web.models.AuditLogSearchCriteria;
 import org.egov.auditservice.web.models.ObjectIdWrapper;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;

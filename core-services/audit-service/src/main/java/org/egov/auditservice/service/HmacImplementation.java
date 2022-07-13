@@ -40,7 +40,7 @@ public class HmacImplementation implements ConfigurableSignAndVerify {
         auditLogRequest.getAuditLogs().forEach(auditLog -> {
             try {
                 objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
-                String dataToBeHashed = objectMapper.writeValueAsString(auditLog.getKeyValuePairs());
+                String dataToBeHashed = objectMapper.writeValueAsString(auditLog.getKeyValueMap());
                 auditLog.setIntegrityHash(hashData(dataToBeHashed, hmacKey));
             } catch (JsonProcessingException e) {
                 throw new CustomException("EG_AUDIT_SIGNING_ERR", "Error while parsing key value pairs");

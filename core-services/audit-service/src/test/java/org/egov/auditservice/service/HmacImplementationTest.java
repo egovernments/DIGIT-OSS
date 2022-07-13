@@ -117,7 +117,7 @@ class HmacImplementationTest {
         when(objectMapper.configure((SerializationFeature) any(), anyBoolean())).thenReturn(objectMapper);
         when(objectMapper.writeValueAsString((Object) any())).thenReturn("42");
         AuditLog auditLog = mock(AuditLog.class);
-        when(auditLog.getKeyValuePairs()).thenThrow(new CustomException("Code", "An error occurred"));
+        when(auditLog.getKeyValueMap()).thenThrow(new CustomException("Code", "An error occurred"));
         doThrow(new CustomException("Code", "An error occurred")).when(auditLog).setIntegrityHash((String) any());
         ArrayList<AuditLog> auditLogList = new ArrayList<>();
         auditLogList.add(auditLog);
