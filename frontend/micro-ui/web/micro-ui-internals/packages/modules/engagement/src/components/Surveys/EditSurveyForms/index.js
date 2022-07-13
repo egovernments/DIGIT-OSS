@@ -7,6 +7,7 @@ import SurveyFormsMaker from "../SurveyForms/SurveyFormsMaker";
 import SurveySettingsForms from "../SurveyForms/SurveySettingsForm";
 
 const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormDisabled, isPartiallyEnabled, displayMenu, setDisplayMenu, onActionSelect ,isSurveyActive}) => {
+  
   const {
     register: registerRef,
     control: controlSurveyForm,
@@ -17,7 +18,7 @@ const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormD
     formState: surveyFormState,
     clearErrors: clearSurveyFormsErrors,
   } = useForm({
-    defaultValues: initialSurveysConfig,
+    defaultValues: { ...initialSurveysConfig, collectCitizenInfo: initialSurveysConfig?.collectCitizenInfo?.code ? { code: true, name: t("ES_COMMON_YES") } : { code: false, name: t("ES_COMMON_NO") } },
   });
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormD
             enableDescriptionOnly={isPartiallyEnabled}
             surveyFormData={getSurveyFormValues}
           />
-          <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} disableInputs={isFormDisabled} formsConfig={initialSurveysConfig.questions} isPartiallyEnabled={isPartiallyEnabled} formDisabled={isFormDisabled}/>
+          <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} disableInputs={isFormDisabled} formsConfig={initialSurveysConfig.questions} isPartiallyEnabled={isPartiallyEnabled} formDisabled={isFormDisabled} controlSurveyForm={controlSurveyForm}/>
           <SurveySettingsForms
             t={t}
             controlSurveyForm={controlSurveyForm}

@@ -82,6 +82,7 @@ const Inbox = ({ parentRoute }) => {
     dispatch({ action: "mutateTableForm", data: { ...formState.tableForm, limit: e.target.value } })
   }
 
+  
   const { data: { Surveys, TotalCount } = {}, isLoading: isInboxLoading, } = Digit.Hooks.survey.useSurveyInbox(formState)
 
   const PropsForInboxLinks = {
@@ -109,6 +110,9 @@ const Inbox = ({ parentRoute }) => {
 
     
   const onSearchFormSubmit = (data) => {
+    //setting the offset to 0(In case searched from page other than 1)
+    dispatch({ action: "mutateTableForm", data: { ...formState.tableForm, offset:0 } })
+
     data.hasOwnProperty("") ? delete data?.[""] : null
     dispatch({ action: "mutateSearchForm", data })
   }
