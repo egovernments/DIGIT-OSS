@@ -540,6 +540,7 @@ public class PayGovGateway implements Gateway {
                     statusResponse.setErrorDescription(splitArray[++index]);
                     statusResponse.setResponseDateTime(splitArray[++index]);
                     statusResponse.setCheckSum(splitArray[++index]);
+                    statusResponse.setTransactionAmount(currentStatus.getTxnAmount());
                     String txStatusMsg =PgConstants.TXN_FAILURE_GATEWAY;
                     if(statusResponse.getErrorMessage().equalsIgnoreCase("PAYMENT_DECLINED_A")) {
                         txStatusMsg="Transaction Failed At Aggregator";
