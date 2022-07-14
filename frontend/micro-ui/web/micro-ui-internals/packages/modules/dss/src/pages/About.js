@@ -25,7 +25,14 @@ const About = () => {
           {obj?.definePoints ?
             <div>
               {obj?.definePoints?.map((about, i) => (
-                <div style={{ fontSize: "16px", marginLeft: "15px",marginBottom:"20px" }}>{"•"+" "+t(about?.point)}</div>
+                <div style={{ fontSize: "16px", marginLeft: "15px",marginBottom:"20px" }}>{"•"}<div style={{ marginTop: "-25px", marginLeft:"15px"}}>{t(about?.point)}</div></div>
+              ))}
+            </div> : null}
+            <div style={{ fontSize: "16px" ,marginBottom:"20px"}}>{t(obj?.subdefine)}</div> 
+            {obj?.subdefinePoints ?
+            <div>
+              {obj?.subdefinePoints?.map((about, i) => (
+                <div style={{ fontSize: "16px", marginLeft: "15px",marginBottom:"20px" }}>{"•"}<div style={{ marginTop: "-25px", marginLeft:"15px"}}>{t(about?.point)}</div></div>
               ))}
             </div> : null}
         </div>
