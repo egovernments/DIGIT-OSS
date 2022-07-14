@@ -20,6 +20,18 @@
             <url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
+    <repositories>
+        <repository>
+            <id>repo.digit.org</id>
+            <name>eGov ERP Releases Repository</name>
+            <url>https://nexus-repo.digit.org/nexus/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>repo.digit.org</id>
+            <name>eGov ERP Snapshots Repository</name>
+            <url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
     <properties>
         <log4j2.version>2.17.1</log4j2.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
