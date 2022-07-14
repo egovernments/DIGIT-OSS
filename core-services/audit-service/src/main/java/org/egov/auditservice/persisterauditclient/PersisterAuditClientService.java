@@ -74,7 +74,6 @@ public class PersisterAuditClientService {
                 String query = queryMap.getQuery();
                 List<JsonMap> jsonMaps = queryMap.getJsonMaps();
                 String basePath = queryMap.getBasePath();
-
                 // Correlation Enrichment Logic
                 Boolean isParentEntity = queryMap.getIsParentEntity();
 
@@ -97,6 +96,7 @@ public class PersisterAuditClientService {
                     auditLogs.addAll(currentBatchOfAuditRecords);
                 }
                 catch (Exception e){
+                    e.printStackTrace();
                     log.error("AUDIT_LOG_ERROR","Failed to create audit log for: "+rowDataList);
                     AuditError auditError = AuditError.builder().mapping(mapping)
                             .query(query)
@@ -233,42 +233,57 @@ public class PersisterAuditClientService {
      * @return Partial data source tree based on provided json base path
      */
     private Map<AuditAttributes, List<LinkedHashMap<String, Object>>> extractData(String baseJsonPath, Mapping mapping, Object document) {
-        List<LinkedHashMap<String, Object>> list = null;
         String auditAttributeBasePath = mapping.getAuditAttributeBasePath();
-        Map<AuditAttributes, List<LinkedHashMap<String, Object>>> data= new LinkedHashMap<>();
-        String relativeJsonPath = null;
         String userUUID = getValueFromJsonPath(userJsonPath, document);
-        if(!baseJsonPath.equals(auditAttributeBasePath))
-                relativeJsonPath = baseJsonPath.substring(auditAttributeBasePath.length() + 1);
+        Map<AuditAttributes, List<LinkedHashMap<String, Object>>> data = new LinkedHashMap<>();
         try {
-            if (baseJsonPath.contains("*")) {
-                /**
-                 * Executes the base json path to get list of objects. For example if object is
-                 * {"RequestInfo" : {...}, Demands: [...]} and auditAttributeBasePath is $.Demands.*
-                 * after executing the auditAttributeBasePath we will get only the list of demands
-                 *
-                 */
+            String relativeJsonPath = null;
+            if (!baseJsonPath.equals(auditAttributeBasePath))
+                relativeJsonPath = baseJsonPath.substring(auditAttributeBasePath.length() + 1);
+            LinkedHashMap<AuditAttributes, Integer> auditAttributesToNumberOfObjMap = new LinkedHashMap<>();
+            if (auditAttributeBasePath.contains("*")) {
                 List<LinkedHashMap<String, Object>> parentObjects = JsonPath.read(document, auditAttributeBasePath);
-                /**
-                 * We will iterate through the list and create the auditAttribute for each object.
-                 * In above example we will create auditAttribute for each demand. We will then execute the
-                 * baseJsonPath of that queryMap and create map of auditAttribute vs data extracted using baseJaonPath
-                 */
+                for (int i = 0; i < parentObjects.size(); i++) {
+                    AuditAttributes auditAttributes = getAuditAttribute(mapping, parentObjects.get(i), userUUID);
+                    if (!baseJsonPath.equals(auditAttributeBasePath)) {
+                        LinkedList childObj = new LinkedList();
 
-                    for (int i = 0; i < parentObjects.size(); i++) {
-                        AuditAttributes auditAttributes = getAuditAttribute(mapping, parentObjects.get(i), userUUID);
-                        if(!baseJsonPath.equals(auditAttributeBasePath))
-                            list = JsonPath.read(parentObjects.get(i), relativeJsonPath);
+                        if(JsonPath.read(parentObjects.get(i), relativeJsonPath) instanceof Collection)
+                            childObj.addAll(JsonPath.read(parentObjects.get(i), relativeJsonPath));
                         else
-                            list = Collections.singletonList(parentObjects.get(i));
+                            childObj.addAll(Collections.singletonList(JsonPath.read(parentObjects.get(i), relativeJsonPath)));
 
-                        data.put(auditAttributes, list);
+                        auditAttributesToNumberOfObjMap.put(auditAttributes, childObj.size());
+                    } else {
+                        auditAttributesToNumberOfObjMap.put(auditAttributes, 1);
                     }
-
+                }
+                /**
+                 * TODO: Validate if basePath contains auditAttributeBasePath else throw error
+                 */
+                String arrayBasePath = baseJsonPath.substring(0, baseJsonPath.lastIndexOf(".*") + 2);
+                List<LinkedHashMap<String, Object>> list = JsonPath.read(document, arrayBasePath);
+                int currentIdx = 0;
+                for (Map.Entry<AuditAttributes, Integer> entry : auditAttributesToNumberOfObjMap.entrySet()) {
+                    int numberOfObj = entry.getValue();
+                    List<LinkedHashMap<String, Object>> listWithSameAuditAttributes = new LinkedList<>();
+                    AuditAttributes auditAttributes = entry.getKey();
+                    for (int i = currentIdx; i < currentIdx + numberOfObj; i++) {
+                        listWithSameAuditAttributes.add(list.get(i));
+                    }
+                    data.put(auditAttributes, listWithSameAuditAttributes);
+                    currentIdx = currentIdx + numberOfObj;
+                }
             } else {
-                LinkedHashMap<String, Object> map = JsonPath.read(document, relativeJsonPath);
                 AuditAttributes auditAttributes = getAuditAttribute(mapping, document, userUUID);
-                list = Collections.singletonList(map);
+                List<LinkedHashMap<String, Object>> list = null;
+                if (baseJsonPath.contains("*")) {
+                    String arrayBasePath = baseJsonPath.substring(0, baseJsonPath.lastIndexOf(".*") + 2);
+                    list = JsonPath.read(document, arrayBasePath);
+                } else {
+                    LinkedHashMap<String, Object> map = JsonPath.read(document, baseJsonPath);
+                    list = Collections.singletonList(map);
+                }
                 data.put(auditAttributes, list);
             }
         }
@@ -318,6 +333,7 @@ public class PersisterAuditClientService {
      * @return If node not available, return true, else false
      */
     private boolean isChildObjectEmpty(String baseJsonPath, LinkedHashMap<String, Object> jsonTree) {
+
         if ( baseJsonPath.contains("*") && ! baseJsonPath.endsWith("*")) {
             String baseJsonPathForNullCheck = baseJsonPath.substring(baseJsonPath.lastIndexOf("*.") + 2);
             String[] baseObjectsForNullCheck = baseJsonPathForNullCheck.split("\\.");

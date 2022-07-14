@@ -79,16 +79,29 @@ public class AuditUtil {
      * @param query The query which is going to be executed
      * @return
      */
+
     private String getTableName(String query){
         String tableName = null;
+
+        String[] queryWords = query.split(" ");
+        LinkedList<String> words = new LinkedList<>();
+        for(String str : queryWords){
+            if(!str.equals(""))
+                words.add(str);
+        }
+
         if (query.startsWith(INSERT_SQL_KEYWORD)){
-            // TODO
+            tableName = words.get(2);
         }
         else if(query.startsWith(UPDATE_SQL_KEYWORD)){
-            // TODO
+            tableName = words.get(1);
         }
         else {
             throw new CustomException("PARSING_ERROR","Failed to fetch table name from the query: "+query);
+        }
+
+        if(tableName.contains("(")) {
+            tableName = tableName.substring(0, tableName.indexOf("("));
         }
         return tableName;
     }
