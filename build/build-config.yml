@@ -355,6 +355,11 @@ config:
       - work-dir: "core-services/libraries/services-common"
         image-name: "services-common"
         
+  - name: "builds/digit-dev/core-services/libraries/digit-models"
+    build:
+      - work-dir: "core-services/libraries/digit-models"
+        image-name: "digit-models"
+        
   - name: "builds/digit-dev/core-services/libraries/tracer"
     build:
       - work-dir: "core-services/libraries/tracer"
