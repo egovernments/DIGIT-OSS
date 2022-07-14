@@ -1,7 +1,7 @@
 import { ActionBar, Card, SubmitBar, Menu } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useForm,FormProvider } from "react-hook-form";
-import SurveyInfoLabel from "../../../utils/surveyInfoLabel";
+import SurveyInfoLabel from "../../../utils/SurveyInfoLabel";
 import SurveyDetailsForms from "../SurveyForms/SurveyDetailsForms";
 import SurveyFormsMaker from "../SurveyForms/SurveyFormsMaker";
 import SurveySettingsForms from "../SurveyForms/SurveySettingsForm";
