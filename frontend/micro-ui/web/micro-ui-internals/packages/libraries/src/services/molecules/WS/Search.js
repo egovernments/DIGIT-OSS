@@ -709,8 +709,22 @@ export const WSSearch = {
       asSectionHeader: true,
       values: [
         { title: "WS_PROPERTY_ID_LABEL", value: propertyDataDetails?.propertyId },
-        { title: "WS_COMMON_OWNER_NAME_LABEL", value: getOwnerNames(propertyDataDetails) },
-        { title: "WS_PROPERTY_ADDRESS_LABEL", value: getAddress(propertyDataDetails?.address, t)},
+        { title: "WS_COMMON_OWNER_NAME_LABEL", 
+          value: getOwnerNames(propertyDataDetails),
+          privacy: {
+            uuid: propertyDataDetails?.owners?.[0]?.uuid, 
+            fieldName: "name", 
+            model: "User"
+          }
+        },
+        { title: "WS_PROPERTY_ADDRESS_LABEL",
+          value: getAddress(propertyDataDetails?.address, t),
+          privacy: {
+            uuid: propertyDataDetails?.propertyId, 
+            fieldName: ["doorNo" , "street" , "landmark"], 
+            model: "Property"
+          }
+        },
         {
           title: "WS_VIEW_PROPERTY_DETAIL",
           to: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}?from=WS_COMMON_CONNECTION_DETAIL`,
@@ -750,7 +764,7 @@ export const WSSearch = {
                 value: wsDataDetails?.connectionHolders?.[0]?.fatherOrHusbandName,
                 privacy: { 
                   uuid: wsDataDetails?.connectionHolders?.[0]?.uuid, 
-                  fieldName: "fatherOrHusbandName", 
+                  fieldName: "guardian", 
                   model: "User" 
                 }
               },
