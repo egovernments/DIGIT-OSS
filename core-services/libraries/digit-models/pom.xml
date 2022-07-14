@@ -27,7 +27,7 @@
             <url>https://nexus-repo.digit.org/nexus/content/repositories/releases/</url>
         </repository>
         <repository>
-            <id>repo.digit.org</id>
+            <id>snapshots.repo.digit.org</id>
             <name>eGov ERP Snapshots Repository</name>
             <url>https://nexus-repo.digit.org/nexus/content/repositories/snapshots/</url>
         </repository>
