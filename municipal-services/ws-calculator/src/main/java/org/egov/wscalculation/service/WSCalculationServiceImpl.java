@@ -28,6 +28,7 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 
 import static org.egov.wscalculation.constants.WSCalculationConstant.*;
+import static org.egov.wscalculation.web.models.TaxHeadCategory.CHARGES;
 
 @Service
 @Slf4j
@@ -161,21 +162,28 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 					waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.CONNECTION_INACTIVATED)) {
 
 				Map<String, Object> finalMap = new HashMap<>();
+				List<WaterConnection> waterConnectionList = calculatorUtil.getWaterConnection(requestInfo, criteria.getConnectionNo(), requestInfo.getUserInfo().getTenantId());
+				for (WaterConnection connection : waterConnectionList) {
+					if (connection.getApplicationType().equalsIgnoreCase(NEW_WATER_CONNECTION)) {
+						Map<String, Object> bills = util.getBillData(requestInfo, requestInfo.getUserInfo().getTenantId(), connection.getApplicationNo());
+						List<String> bill = (List<String>) bills.get(BILL_KEY);
+						Map<String, String> billMap = mapper.convertValue(bill.get(0), Map.class);
+						Double amount = 0.0;
+						List<Map<String, String>> billDetails = mapper.convertValue(billMap.get(BILL_DETAILS_KEY), List.class);
 
-				Map<String, Object> bills = util.getBillData(requestInfo, requestInfo.getUserInfo().getTenantId(), waterConnection.getConnectionNo());
-				List<String> bill = (List<String>) bills.get(BILL_KEY);
-				Map<String, String> billMap = mapper.convertValue(bill.get(0), Map.class);
-
-				if (billMap.get(CONSUMER_CODE_KEY).equals(waterConnection.getConnectionNo())) {
-					List<Map<String,String>> billDetails = mapper.convertValue(billMap.get(BILL_DETAILS_KEY), List.class);
-
-					Collections.sort(billDetails, (l1, l2) -> {
-						return new Long(l1.get(TO_PERIOD_KEY)).compareTo(new Long(l2.get(TO_PERIOD_KEY)));
-					});
-					finalMap = mapper.convertValue(billDetails.get(0), Map.class);
-					Long billingPeriod = Long.parseLong(finalMap.get(TO_PERIOD_KEY).toString()) - Long.parseLong(finalMap.get(FROM_PERIOD_KEY).toString());
-					waterCharge = waterCharge.add(BigDecimal.valueOf((Double.parseDouble(finalMap.get(AMOUNT_KEY).toString()) *
-							(Double.parseDouble(finalMap.get(TO_PERIOD_KEY).toString()) - waterConnection.getDateEffectiveFrom())) / billingPeriod));
+						Collections.sort(billDetails, (l1, l2) -> {
+							return new Long(l1.get(TO_PERIOD_KEY)).compareTo(new Long(l2.get(TO_PERIOD_KEY)));
+						});
+						finalMap = mapper.convertValue(billDetails.get(0), Map.class);
+						Long billingPeriod = Long.parseLong(finalMap.get(TO_PERIOD_KEY).toString()) - Long.parseLong(finalMap.get(FROM_PERIOD_KEY).toString());
+						BigDecimal finalWaterCharge = waterCharge.add(BigDecimal.valueOf((Double.parseDouble(finalMap.get(AMOUNT_KEY).toString()) *
+								(Double.parseDouble(finalMap.get(TO_PERIOD_KEY).toString()) - waterConnection.getDateEffectiveFrom())) / billingPeriod));
+						estimates.stream().forEach(estimate -> {
+							if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
+								estimate.setEstimateAmount(finalWaterCharge);
+							}
+						});
+					}
 				}
 			}
 		}

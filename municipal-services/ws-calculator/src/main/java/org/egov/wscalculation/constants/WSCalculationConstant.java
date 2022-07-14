@@ -309,7 +309,7 @@ public class WSCalculationConstant {
 
 	public static final String STATUS_APPROVED = "CONNECTION_ACTIVATED";
 
-	public static final String DISCONNECTION_APPROVED = "PENDING_APPROVAL_FOR_DISCONNECTION";
+	public static final String PENDING_FOR_PAYMENT = "PENDING_FOR_PAYMENT";
 
 	public static final String CONNECTION_INACTIVATED = "Inactive";
 
@@ -329,5 +329,7 @@ public class WSCalculationConstant {
 	public static final String FROM_PERIOD_KEY= "fromPeriod";
 
 	public static final String AMOUNT_KEY= "amount";
+
+	public static final String NEW_WATER_CONNECTION = "NEW_WATER_CONNECTION";
 
 }

@@ -406,7 +406,7 @@ public class CalculatorUtils {
 	 */
 	public Map<String, Object> getBillData(RequestInfo requestInfo, String tenantId, String consumerCode) {
 		Object result =  serviceRequestRepository.fetchResult(
-				getFetchBillURL(tenantId, consumerCode),
+				getSearchBillURL(tenantId, consumerCode),
 				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
 
 		Map<String, Object> billResponse = null;
@@ -420,5 +420,16 @@ public class CalculatorUtils {
 			throw new CustomException("WATERMETER_INACTIVE", "Can not generate bill for inactive waterconnection");
 
 		return billResponse;
+	}
+
+	private StringBuilder getSearchBillURL(String tenantId, String consumerCode) {
+
+		return new StringBuilder().append(configurations.getBillingServiceHost())
+				.append(configurations.getSearchBillEndPoint()).append(SWCalculationConstant.URL_PARAMS_SEPARATER)
+				.append(SWCalculationConstant.TENANT_ID_FIELD_FOR_SEARCH_URL).append(tenantId)
+				.append(SWCalculationConstant.SEPARATER).append(SWCalculationConstant.CONSUMER_CODE_SEARCH_FIELD_NAME)
+				.append(consumerCode).append(SWCalculationConstant.SEPARATER)
+				.append(SWCalculationConstant.SERVICE_FIELD_FOR_SEARCH_URL)
+				.append(SWCalculationConstant.ONE_TIME_FEE_SERVICE_FIELD);
 	}
 }
