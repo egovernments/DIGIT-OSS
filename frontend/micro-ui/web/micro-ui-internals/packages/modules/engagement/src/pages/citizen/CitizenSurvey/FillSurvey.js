@@ -19,6 +19,9 @@ const transformSurveyResponseData = (data) => {
 
 const FillSurvey = ({ location }) => {
   const surveyData = location?.state;
+  
+  //sort survey questions based on qorder field, in surveyData.questions array, here and then render
+  surveyData?.questions?.sort((a,b)=>a.qorder-b.qorder)
   const history = useHistory();
 
   const onSubmit = (data) => {
