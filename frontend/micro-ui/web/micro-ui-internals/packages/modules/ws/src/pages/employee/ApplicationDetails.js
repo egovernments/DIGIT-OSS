@@ -46,6 +46,8 @@ const ApplicationDetails = () => {
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
   sessionStorage.removeItem("IsDetailsExists");
 
+  const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_ADD_REBATE_DATA", {});
+
   //for common receipt key.
   const { isBillingServiceLoading, data: mdmsBillingServiceData } = Digit.Hooks.obps.useMDMS(stateCode, "BillingService", ["BusinessService"]);
   const { isCommonmastersLoading, data: mdmsCommonmastersData } = Digit.Hooks.obps.useMDMS(stateCode, "common-masters", ["uiCommonPay"]);
@@ -57,7 +59,7 @@ const ApplicationDetails = () => {
   else commonPayInfo = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
   const receiptKey = commonPayInfo?.receiptKey || "consolidatedreceipt";
   
-  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, applicationNumber, serviceType);
+  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, applicationNumber, serviceType, userInfo);
   let workflowDetails = Digit.Hooks.useWorkflowDetails(
     {
       tenantId: tenantId,
@@ -109,9 +111,17 @@ const ApplicationDetails = () => {
     mutate,
   } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
 
+  useEffect(() => {
+    clearSessionFormData();
+  }, []);
+
+  const clearDataDetails = () => {
+    clearSessionFormData();
+    setSessionFormData({});
+  }
+
   const closeToast = () => {
     setShowToast(null);
-    // setError(null);
   };
 
   let dowloadOptions = [],
@@ -346,6 +356,8 @@ const ApplicationDetails = () => {
           closeToast={closeToast}
           timelineStatusPrefix={`WF_${applicationDetails?.processInstancesDetails?.[0]?.businessService?.toUpperCase()}_`}
           oldValue={res}
+          isInfoLabel={true}
+          clearDataDetails={clearDataDetails}
         />
       </div>
     </Fragment>

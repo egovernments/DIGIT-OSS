@@ -97,6 +97,12 @@ const BILLSBreadCrumbs = ({ location }) => {
       isBack: fromScreen && true,
     },
     {
+      path: "/digit-ui/employee/ws/disconnection-details",
+      content: fromScreen ? `${t(fromScreen)} / ${t("WS_APPLICATION_DETAILS_HEADER")}` : t("WS_APPLICATION_DETAILS_HEADER"),
+      show: location.pathname.includes("/disconnection-details") ? true : false,
+      isBack: fromScreen && true,
+    },
+    {
       path: "/digit-ui/employee/ws/connection-details",
       content: fromScreen ? `${t(fromScreen)} / ${t("WS_COMMON_CONNECTION_DETAIL")}` : t("WS_COMMON_CONNECTION_DETAIL"),
       show: location.pathname.includes("/connection-details") ? true : false,
@@ -120,7 +126,7 @@ const BILLSBreadCrumbs = ({ location }) => {
       show: location.pathname.includes("/sewerage/bill-amendment/inbox") ? true : false,
     },
     {
-      path: "/digit-ui/employee/ws/modify-application",
+      path: `${location?.pathname}${location.search}`,
       content: fromScreen ? `${t(fromScreen)} / ${t("WS_MODIFY_CONNECTION_BUTTON")}`:t("WS_MODIFY_CONNECTION_BUTTON"),
       show: location.pathname.includes("ws/modify-application") ? true : false,
       isBack:true,
