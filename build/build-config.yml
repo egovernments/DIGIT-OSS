@@ -349,11 +349,16 @@ config:
     build:
       - work-dir: "core-services/libraries/enc-client"
         image-name: "enc-client"
-        
+
   - name: "builds/digit-dev/core-services/libraries/tracer"
     build:
       - work-dir: "core-services/libraries/tracer"
         image-name: "tracer"
+
+  - name: "builds/digit-dev/core-services/libraries/digit-models"
+    build:
+      - work-dir: "core-services/libraries/digit-models"
+        image-name: "digit-models"
 
   - name: "builds/digit-dev/core-services/nlp-engine"
     build:
