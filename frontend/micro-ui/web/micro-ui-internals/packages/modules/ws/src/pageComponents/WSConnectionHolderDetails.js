@@ -155,7 +155,7 @@ const ConnectionDetails = (_props) => {
   const [guardian,setGuardian] =useState();
   const [relationship,setRelationship]=useState()
   const [ownerType,setOwnerType]=useState()
-  const [sameAsOwnerDetails,setSameAsOwnerDetails]=useState()
+  const [sameAsOwnerDetails,setSameAsOwnerDetails]=useState(formData?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails)
   const [address,setAddress]=useState()
   const formValue={name,gender,mobileNumber,guardian,relationship,ownerType,sameAsOwnerDetails,address}
   const { errors } = localFormState;
@@ -222,7 +222,7 @@ const ConnectionDetails = (_props) => {
         <Controller
           control={control}
           name="sameAsOwnerDetails"
-          defaultValue={(window.location.href.includes("edit") ||window.location.href.includes("modify"))? connectionHolderDetail?.sameAsOwnerDetails : sameAsOwnerDetails}
+          defaultValue={sameAsOwnerDetails}
           isMandatory={true}
           render={(props) => (
             <CheckBox
@@ -235,7 +235,7 @@ const ConnectionDetails = (_props) => {
                 props.onChange(e.target.checked);
                 setFocusIndex({ index: connectionHolderDetail?.key, type: "sameAsOwnerDetails" });
               }}
-              checked={(window.location.href.includes("edit") ||window.location.href.includes("modify"))? connectionHolderDetail?.sameAsOwnerDetails : sameAsOwnerDetails}
+              checked={sameAsOwnerDetails}
               style={{ paddingBottom: "10px", paddingTop: "3px" }}
               onBlur={props.onBlur}
             />
@@ -243,7 +243,7 @@ const ConnectionDetails = (_props) => {
         />
       </div>
 
-      {!((window.location.href.includes("edit") ||window.location.href.includes("modify"))? connectionHolderDetail?.sameAsOwnerDetails : sameAsOwnerDetails) ? <div>
+      {!sameAsOwnerDetails ? <div>
 
         <LabelFieldPair>
           <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_OWN_DETAIL_NAME")}:*`}</CardLabel>
