@@ -227,6 +227,7 @@ import useGetMeterStatusList from "./ws/useGetMeterStatusList";
 import useGetBillingPeriodValidation from "./ws/useBillingPeriodValidation";
 import useReportMeta from "./reports/useReport";
 import useWaterPropertySearch from "./ws/useWaterPropertySearch";
+import useDisconnectionWorkflow from "./ws/useDisconnectionWorkflow";
 import useDisConnectionDetails from "./ws/useDisConnectionDetails";
 
 import useGetHowItWorksJSON from "./useHowItWorksJSON";
@@ -462,7 +463,8 @@ const ws = {
   useGetMeterStatusList,
   useGetBillingPeriodValidation,
   useWaterPropertySearch,
-  useDisConnectionDetails
+  useDisconnectionWorkflow,
+  useDisConnectionDetails,
 };
 
 const reports = {

@@ -3,52 +3,39 @@ import { Banner, Card, CardSectionHeader, CardText, LinkButton, SubmitBar, succe
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { pdfDocumentName, pdfDownloadLink } from "../utils";
-
-const GetActionMessage = (props) => {
-  const { t } = useTranslation();
-  if (props.isSuccess) {
-    return t("APPLICATION_COMPLETED");
-  } else if (!props.isSuccess) {
-    return t("APPLICATION_FAILED");
-  }
-};
+import getWSDisconectionAcknowledgementData from "../utils/getWSDisconnectionAcknowledgementData";
 
 const BannerPicker = (props) => {
-  return <Banner message={GetActionMessage(props)} successful={props.isSuccess} />;
+  return <Banner 
+  message={props.message} 
+  applicationNumber={props?.applicationNumber}
+  successful={props.isSuccess} style={{ padding: "10px" }}
+  headerStyles={{ fontSize: "32px" }}
+  infoOneStyles={{ paddingTop: "20px" }}/>;
 };
 
-const WSDisconnectAcknowledgement = ({ data, t, onSuccess, clearParams}) => {
-  let isEdit = window.location.href.includes("/edit-application/") || window.location.href.includes("/modify-disconnection/");
-  let isDownload = window.location.href.includes("/download-pdf/") || window.location.href.includes("/disconnect-Acknowledge/");
-  const { data: storeData } = Digit.Hooks.useStore.getInitData();
-  const { tenants } = storeData || {};
-  const stateId = Digit.ULBService.getStateId();
-  useEffect(() => {
-    try {
-      const tenantId = Digit.ULBService.getStateId();
-      const { isLoading: wsDocsLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId, "DisconnectionDocuments");
-      if (data?.serviceName?.code === "WATER" || data?.serviceName?.code === "BOTH") {
-        tenantId = data?.cpt?.details?.tenantId || tenantId;
+const WSDisconnectAcknowledgement = () => {
+  const { t } = useTranslation();
+  // let isDownload = window.location.href.includes("/download-pdf/") || window.location.href.includes("/disconnect-Acknowledge/");
+  const disconnectionData = Digit.SessionStorage.get("WS_DISCONNECTION");
 
-        let forminfo = isDownload ? pdfDocumentName(data) : pdfDownloadLink(data);
-      }
-    } catch (err) {}
-  }, [data]);
-
-  const handleDownloadPdf = () => {};
+  const handleDownloadPdf = () => {
+    const disconnectionRes = disconnectionData?.DisconnectionResponse
+    const PDFdata = getWSDisconectionAcknowledgementData(disconnectionRes, disconnectionData?.property, disconnectionRes?.tenantId, t);
+    PDFdata.then((res) => Digit.Utils.pdf.generatev1(res));
+  };
 
   return (
     <Card style={{ padding: "10px" }}>
       <CardSectionHeader>
-        {" "}
-        <BannerPicker t={t} /> <successSvg />
+        <BannerPicker isSuccess={true} message={t("WS_APPLICATION_COMPLETED_SUCCESSFULLY_LABEL")} applicationNumber={disconnectionData?.DisconnectionResponse?.applicationNo}/> <successSvg />
       </CardSectionHeader>
       <CardText>
         {t('WS_DISCONNECTION_APPLICATION_SUCC_MSG')}
       </CardText>
       {<SubmitBar label={t("WS_DOWNLOAD_ACK_FORM")} onSubmit={handleDownloadPdf} />}
       <Link to={`/digit-ui/citizen`}>
-        <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
+        <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} onClick={() => Digit.SessionStorage.del("WS_DISCONNECTION")}/>
       </Link>
     </Card>
   );

@@ -9,7 +9,7 @@ import { pdfDocumentName, pdfDownloadLink } from "../utils";
 //   </svg>
 // );
 
-function WSDocument({ value = {}, Code, index, }) {
+function WSDocument({ value = {}, Code, index, showFileName= false}) {
   const { t } = useTranslation();
   const { isLoading, isError, error, data } = Digit.Hooks.ws.useWSDocumentSearch(
     {
@@ -39,6 +39,7 @@ function WSDocument({ value = {}, Code, index, }) {
               <a target="_" href={documentLink} style={{ minWidth: "160px" }} key={index}>
                 <PDFSvg /* width={85} height={100} style={{ background: "#f6f6f6", padding: "8px" }}  *//>
                {/*  <p style={{ marginTop: "8px" }}>{pdfDocumentName(documentLink, index)}</p> */}
+               { showFileName ? <p style={{ marginTop: "8px" }}>{t(Code?.split('.').slice(0,3).join('_'))}</p> : null}
               </a>
             );
           })}

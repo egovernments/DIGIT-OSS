@@ -41,11 +41,9 @@ const ConnectionDetails = () => {
   const [showActionToast, setshowActionToast] = useState(null);
   const mobileView = Digit.Utils.browser.isMobile();
 
-  // const applicationNobyData = 
-
   let filter1 = { tenantId: tenantId, applicationNumber: applicationNobyData };
   var isSewerageConnections= false;
-  var { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1, BusinessService: applicationNobyData?.includes("SW") ? "SW" : "WS" }, { filters: filter1 });
+  var { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1, BusinessService: applicationNobyData?.includes("SW") ? "SW" : "WS" }, { filters: filter1 }, true);
 
   if(data && data["SewerageConnections"]){
     isSewerageConnections = true;
@@ -67,9 +65,6 @@ const ConnectionDetails = () => {
   const closeBillToast = () => {
     setshowActionToast(null);
   };
-  setTimeout(() => {
-    closeBillToast();
-  }, 10000);
 
   const { data: generatePdfKey } = Digit.Hooks.useCommonMDMS(tenantId, "common-masters", "ReceiptKey", {
     select: (data) => data["common-masters"]?.uiCommonPay?.filter(({ code }) => "WS"?.includes(code))[0]?.receiptKey || "consolidatedreceipt",
@@ -162,18 +157,26 @@ const ConnectionDetails = () => {
   );
 
   const getDisconnectionButton = () => {
-    if (state?.applicationStatus === "INPROGRESS") {
+    if (!data?.checkWorkFlow){
       setshowActionToast({
         type: "error",
         label: "CONNECTION_INPROGRESS_LABEL",
       });
+      setTimeout(() => {
+        closeBillToast();
+      }, 5000);
     }
-    if (paymentDetails?.data?.Bill?.length === 0) {
-      let pathname = `/digit-ui/citizen/ws/disconnection-application`;
-      history.push(`${pathname}`);
-    } else if (paymentDetails?.data?.Bill?.[0]?.totalAmount !== 0) {
-      setshowModal(true);
+    else {
+        if (paymentDetails?.data?.Bill?.length === 0 ) {
+          let pathname = `/digit-ui/citizen/ws/disconnect-application`;
+          Digit.SessionStorage.set("WS_DISCONNECTION", {...state, serviceType: isSW ? "SEWERAGE" : "WATER"});
+          history.push(`${pathname}`);
+        } else if (paymentDetails?.data?.Bill?.[0]?.totalAmount !== 0) {
+          setshowModal(true);
+        }
+      
     }
+    
   };
 
   function onActionSelect() {
@@ -392,7 +395,7 @@ const ConnectionDetails = () => {
                 }
               </div>
             ))} */}
-          {state?.status !== "inactive" ? (
+          {state?.status !== "inactive" || state?.applicationStatus !== "Inactive" || state?.applicationStatus !== "INACTIVE" ? (
             <ActionBar style={{ position: "relative", boxShadow: "none", minWidth: "240px", maxWidth: "310px", padding: "0px", marginTop: "15px" }}>
               <div style={{ width: "100%" }}>
                 <SubmitBar style={{ width: "100%" }} label={t("WS_DISCONNECTION_BUTTON")} onSubmit={onActionSelect} />
