@@ -123,7 +123,7 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 		BigDecimal fee = BigDecimal.ZERO;
 
 		if(isLastElementWithDisconnectionRequest) {
-			if (sewerageConnection.getApplicationStatus().equalsIgnoreCase(SWCalculationConstant.DISCONNECTION_APPROVED) ||
+			if (sewerageConnection.getApplicationStatus().equalsIgnoreCase(SWCalculationConstant.PENDING_FOR_PAYMENT) ||
 					sewerageConnection.getApplicationStatus().equalsIgnoreCase(SWCalculationConstant.CONNECTION_INACTIVATED)) {
 
 				Map<String, Object> finalMap = new HashMap<>();

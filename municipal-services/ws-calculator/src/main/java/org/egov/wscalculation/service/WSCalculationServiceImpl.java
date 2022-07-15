@@ -158,7 +158,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 		BigDecimal fee = BigDecimal.ZERO;
 
 		if(isLastElementWithDisconnectionRequest) {
-			if (waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.DISCONNECTION_APPROVED) ||
+			if (waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.PENDING_FOR_PAYMENT) ||
 					waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.CONNECTION_INACTIVATED)) {
 
 				Map<String, Object> finalMap = new HashMap<>();
