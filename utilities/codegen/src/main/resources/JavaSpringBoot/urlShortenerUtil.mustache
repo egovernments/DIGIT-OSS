@@ -1,12 +1,11 @@
 package {{utilPackage}};
 
-import digit.config.VTRConfiguration;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
+import org.springframework.beans.factory.annotation.Value;
 import java.util.HashMap;
 
 @Slf4j
@@ -16,15 +15,18 @@ public class UrlShortenerUtil {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Autowired
-    private VTRConfiguration config;
+    @Value("${egov.url.shortner.host}")
+    private String urlShortnerHost;
+
+    @Value("${egov.url.shortner.endpoint}")
+    private String urShortnerPath;
 
     public String getShortenedUrl(String url){
 
         HashMap<String,String> body = new HashMap<>();
         body.put("url",url);
-        StringBuilder builder = new StringBuilder(config.getUrlShortnerHost());
-        builder.append(config.getUrlShortnerEndpoint());
+        StringBuilder builder = new StringBuilder(urlShortnerHost);
+        builder.append(urShortnerPath);
         String res = restTemplate.postForObject(builder.toString(), body, String.class);
 
         if(StringUtils.isEmpty(res)){

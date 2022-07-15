@@ -26,6 +26,7 @@ public class SpringBootCodegen extends AbstractJavaCodegen
     public static final String BASE_PACKAGE = "basePackage";
     public static final String REPO_PACKAGE = "repositoryPackage";
     public static final String UTIL_PACKAGE = "utilPackage";
+    public static final String KAFKA_PACKAGE = "kafkaPackage";
     public static final String INTERFACE_ONLY = "interfaceOnly";
     public static final String DELEGATE_PATTERN = "delegatePattern";
     public static final String SINGLE_CONTENT_TYPES = "singleContentTypes";
@@ -43,6 +44,7 @@ public class SpringBootCodegen extends AbstractJavaCodegen
     protected String configPackage;
     protected String repositoryPackage;
     protected String utilPackage;
+    protected String kafkaPackage;
     protected boolean interfaceOnly = false;
     protected boolean delegatePattern = false;
     protected boolean delegateMethod = false;
@@ -107,12 +109,14 @@ public class SpringBootCodegen extends AbstractJavaCodegen
         invokerPackage = basePackage + ".web";
         repositoryPackage = basePackage + ".repository";
         utilPackage = basePackage + ".util";
+        kafkaPackage = basePackage + ".kafka";
         dateLibrary = "";
 
         additionalProperties.put(CONFIG_PACKAGE, configPackage);
         additionalProperties.put(BASE_PACKAGE, basePackage);
         additionalProperties.put(REPO_PACKAGE, repositoryPackage);
         additionalProperties.put(UTIL_PACKAGE, utilPackage);
+        additionalProperties.put(KAFKA_PACKAGE, kafkaPackage);
         additionalProperties.put("jackson", true);
 
 
@@ -188,6 +192,10 @@ public class SpringBootCodegen extends AbstractJavaCodegen
 
         if (additionalProperties.containsKey(UTIL_PACKAGE)) {
             this.setUtilPackage((String) additionalProperties.get(UTIL_PACKAGE));
+        }
+
+        if (additionalProperties.containsKey(KAFKA_PACKAGE)) {
+            this.setkafkaPackage((String) additionalProperties.get(KAFKA_PACKAGE));
         }
 
         if (additionalProperties.containsKey(INTERFACE_ONLY)) {
@@ -286,9 +294,21 @@ public class SpringBootCodegen extends AbstractJavaCodegen
                 (sourceFolder + File.separator + utilPackage).replace(".", java.io.File.separator),
                 "MdmsUtil.java"));
 
+        supportingFiles.add(new SupportingFile("idgenUtil.mustache",
+                (sourceFolder + File.separator + utilPackage).replace(".", java.io.File.separator),
+                "IdgenUtil.java"));
+
         supportingFiles.add(new SupportingFile("responseInfoFactory.mustache",
                 (sourceFolder + File.separator + utilPackage).replace(".", java.io.File.separator),
                 "ResponseInfoFactory.java"));
+
+        supportingFiles.add(new SupportingFile("consumer.mustache",
+                (sourceFolder + File.separator + kafkaPackage).replace(".", java.io.File.separator),
+                "Consumer.java"));
+
+        supportingFiles.add(new SupportingFile("producer.mustache",
+                (sourceFolder + File.separator + kafkaPackage).replace(".", java.io.File.separator),
+                "Producer.java"));
 
         if(config.isUseTracer()) {
             supportingFiles.add(new SupportingFile("testConfiguration.mustache",
@@ -609,9 +629,9 @@ public class SpringBootCodegen extends AbstractJavaCodegen
         this.repositoryPackage = repositoryPackage;
     }
 
-    public void setUtilPackage(String utilPackage) {
-        this.utilPackage = utilPackage;
-    }
+    public void setUtilPackage(String utilPackage) {this.utilPackage = utilPackage;}
+
+    public void setkafkaPackage(String kafkaPackage) {this.kafkaPackage = kafkaPackage;}
 
     public void setBasePackage(String configPackage) {
         this.basePackage = configPackage;
