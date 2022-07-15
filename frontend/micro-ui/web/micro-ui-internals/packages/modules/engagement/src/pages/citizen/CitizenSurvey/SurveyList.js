@@ -54,8 +54,9 @@ const SurveyList = () => {
 
   //trying to implement like this-> If user already responded then open ShowSurvey
   const handleCardClick = (details) => {
+    
     if (!details.hasResponded) {
-      history.push("/digit-ui/citizen/engagement/surveys/fill-survey", details);
+      history.push(`/digit-ui/citizen/engagement/surveys/fill-survey?applicationNumber=${details?.uuid}&tenantId=${details?.tenantId}`, details);
     } else {
       history.push("/digit-ui/citizen/engagement/surveys/show-survey", details);
     }
