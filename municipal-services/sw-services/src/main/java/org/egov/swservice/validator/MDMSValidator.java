@@ -75,9 +75,20 @@ public class MDMSValidator {
 			Map<String, List<String>> finalcodes = Stream.of(codes, codeFromCalculatorMaster).map(Map::entrySet)
 					.flatMap(Collection::stream).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 			validateMDMSData(masterNames, finalcodes);
-			validateCodes(request.getSewerageConnection(), finalcodes, errorMap);
+			validateCodesForDisconnection(request.getSewerageConnection(), finalcodes, errorMap);
 			if (!errorMap.isEmpty())
 				throw new CustomException(errorMap);
+		}
+	}
+
+	private void validateCodesForDisconnection(SewerageConnection sewerageConnection,
+											   Map<String, List<String>> codes, Map<String, String> errorMap) {
+		StringBuilder messageBuilder;
+		if (sewerageConnection.getConnectionType() != null
+				&& !codes.get(SWConstants.MDMS_SW_CONNECTION_TYPE).contains(sewerageConnection.getConnectionType())) {
+			messageBuilder = new StringBuilder();
+			messageBuilder.append("Connection type value is invalid, please enter proper value! ");
+			errorMap.put("INVALID SEWERAGE CONNECTION TYPE", messageBuilder.toString());
 		}
 	}
 
