@@ -53,8 +53,9 @@ const DssBreadCrumb = ({ location }) => {
 
 const Routes = ({ path, stateCode }) => {
   const location = useLocation();
+  const isMobile = window.Digit.Utils.browser.isMobile();
   return (
-    <div className="chart-wrapper">
+    <div className="chart-wrapper" style={isMobile ? {marginTop:"unset"} : {}}>
       <DssBreadCrumb location={location} />
       <Switch>
         <PrivateRoute path={`${path}/landing/:moduleCode`} component={() => <Home stateCode={stateCode} />} />
