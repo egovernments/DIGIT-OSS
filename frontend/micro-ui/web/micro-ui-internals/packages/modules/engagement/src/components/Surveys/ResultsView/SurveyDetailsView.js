@@ -1,7 +1,9 @@
-import { TextInput,Dropdown,RemoveableTag } from '@egovernments/digit-ui-react-components'
+import { TextInput, Dropdown, RemoveableTag, LinkButton,SearchField,SubmitBar } from '@egovernments/digit-ui-react-components'
 import React,{useMemo} from 'react'
+import { useHistory } from "react-router-dom";
 
-const SurveyDetailsView = ({surveyTitle,surveyDesc,t}) => {
+const SurveyDetailsView = ({surveyTitle,surveyDesc,t,surveyId}) => {
+    const history = useHistory()
     const ulbs = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const userInfo = Digit.UserService.getUser().info;
@@ -30,6 +32,13 @@ const SurveyDetailsView = ({surveyTitle,surveyDesc,t}) => {
                       text={userUlbs[0].name}
                     />
             </div>  
+        <button
+          type={"button"}
+          style={{ border: "2px solid #F47738", backgroundColor: "white", padding: "8px 8px",width:"200px",marginLeft:"50px",marginTop:"-45px" }}
+          onClick={() => history.push(`/digit-ui/employee/engagement/surveys/inbox/details/${surveyId}`)}
+        >
+          <header style={{ color:"#F47738"}}>{t("SURVEY_QUESTIONS")}</header>
+        </button>
         </span>
     
         <span className="surveyformfield">

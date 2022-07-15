@@ -8,6 +8,9 @@ import SurveySettingsForms from "../SurveyForms/SurveySettingsForm";
 
 const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormDisabled, isPartiallyEnabled, displayMenu, setDisplayMenu, onActionSelect ,isSurveyActive}) => {
   
+  //for active surveys isPartiallyEnabled is true while editing and for inactive isFormDisabled is false
+  const showActionBar = initialSurveysConfig?.status === "ACTIVE" ? !isPartiallyEnabled : isFormDisabled
+
   const {
     register: registerRef,
     control: controlSurveyForm,
@@ -61,12 +64,13 @@ const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormD
           </span>
         </Card>
       </form>
-      <ActionBar>
+      {/* Don't render the action bar after edit action is clicked-> to accomodate RAIN-7559 */}
+      {showActionBar && <ActionBar>
         {displayMenu ? (
           <Menu localeKeyPrefix={"ES_SURVEY"} options={menuOptions} t={t} onSelect={onActionSelect} />
         ) : null}
         <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
-      </ActionBar>
+      </ActionBar>}
     </FormProvider>
   );
 };

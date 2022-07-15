@@ -1,5 +1,5 @@
 import React,{Fragment,useEffect,useMemo,useState} from 'react'
-import { Card, CardLabelError, CheckBox, RadioButtons, TextArea, TextInput,Loader,CardHeader, BreakLine, CardLabel, CardSectionHeader } from "@egovernments/digit-ui-react-components";
+import { Card, CardLabelError, CheckBox, RadioButtons, TextArea, TextInput, Loader, CardHeader, BreakLine, CardLabel, CardSectionHeader, Header, MultiLink } from "@egovernments/digit-ui-react-components";
 import { bindQuesWithAns } from './bindquesansutil';
 import WhoHasResponded from './WhoHasResponded';
 import SurveyDetailsView from './SurveyDetailsView';
@@ -162,7 +162,7 @@ const displayResult = (ques,ans,type,resCount=0) => {
                             <CardSectionHeader>{ques.questionStatement}</CardSectionHeader>
                             <header style={{"fontWeight":"bold"}}>{`${resCount} Responses`}</header>
                             {/* {ans?.map(el=> <p>{el}<BreakLine /></p>)} */}
-                            <div className='responses-container'>
+                            <div className='responses-container' style={{overflow:"-moz-hidden-unscrollable"}}>
                             <McqChart data={ques}/>
                             </div>
                             
@@ -174,6 +174,7 @@ const displayResult = (ques,ans,type,resCount=0) => {
     }
 
 const SurveyResultsView = ({surveyInfo,responsesInfoMutation}) => {
+    
     const { t } = useTranslation();
     const [data,setData]=useState(null);
     const [userInfo,setUserInfo] = useState(null)
@@ -192,18 +193,26 @@ const SurveyResultsView = ({surveyInfo,responsesInfoMutation}) => {
     if(!data) return <Loader />
     
     return (
-    <Card>
-        <CardHeader>Surveys</CardHeader>
-        {/* display survey detail form
-        display whoHasResponded component */}
-        <div style={{"margin":"30px"}}>
-        <SurveyDetailsView surveyTitle={surveyInfo.title} surveyDesc={surveyInfo.description} t={t} />
-        </div>
-        <WhoHasResponded t={t} userInfo={userInfo}/>
-        {data?.map(element =>( 
-            displayResult(element,element?.answers,element?.type,element?.answers?.length)
-        ))}
-    </Card>
+    <div className="custom-group-merge-container">
+        <Header>{t("CS_COMMON_SURVEYS")}</Header>
+        <MultiLink
+                style={{marginTop:"-45px"}}
+                onHeadClick={() => console.log('')}
+                downloadBtnClassName={"employee-download-btn-className"}
+                label={t("SURVEY_REPORT")}
+        />
+        <Card >
+            {/* display survey detail form
+            display whoHasResponded component */}
+            <div style={{"margin":"30px"}}>
+            <SurveyDetailsView surveyTitle={surveyInfo.title} surveyDesc={surveyInfo.description} t={t} surveyId={surveyInfo.uuid} />
+            </div>
+            <WhoHasResponded t={t} userInfo={userInfo}/>
+            {data?.map(element =>( 
+                displayResult(element,element?.answers,element?.type,element?.answers?.length)
+            ))}
+        </Card>
+    </div>
   )
 }
 
