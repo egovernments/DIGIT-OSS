@@ -149,14 +149,14 @@ const ConnectionDetails = (_props) => {
   
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
   // const formValue = watch();
-  const [name,setName]=useState();
-  const [gender,setGender]=useState();
-  const [mobileNumber,setMobileNumber]=useState();
-  const [guardian,setGuardian] =useState();
-  const [relationship,setRelationship]=useState()
-  const [ownerType,setOwnerType]=useState()
-  const [sameAsOwnerDetails,setSameAsOwnerDetails]=useState(formData?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails)
-  const [address,setAddress]=useState()
+  const [name,setName]=useState(connectionHolderDetail?.name);
+  const [gender,setGender]=useState(connectionHolderDetail?.gender);
+  const [mobileNumber,setMobileNumber]=useState(connectionHolderDetail?.mobileNumber);
+  const [guardian,setGuardian] =useState(connectionHolderDetail?.guardian);
+  const [relationship,setRelationship]=useState(connectionHolderDetail?.relationship)
+  const [address,setAddress]=useState(connectionHolderDetail?.address)
+  const [ownerType,setOwnerType]=useState(connectionHolderDetail?.ownerType)
+  const [sameAsOwnerDetails,setSameAsOwnerDetails]=useState(connectionHolderDetail?.sameAsOwnerDetails)
   const formValue={name,gender,mobileNumber,guardian,relationship,ownerType,sameAsOwnerDetails,address}
   const { errors } = localFormState;
   
