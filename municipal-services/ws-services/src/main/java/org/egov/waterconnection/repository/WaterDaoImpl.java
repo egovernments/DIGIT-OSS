@@ -207,4 +207,19 @@ public class WaterDaoImpl implements WaterDao {
 		return ids;
 	}
 
+	@Override
+	public void updateOldWaterConnections(WaterConnectionRequest waterConnectionRequest) {
+		waterConnectionProducer.push(updateWaterConnection, waterConnectionRequest);
+
+	}
+
+	@Override
+	public Integer getTotalApplications(SearchCriteria criteria){
+
+		String query = wsQueryBuilder.getTotalApplicationsCountQueryString(criteria);
+		if (query == null)
+			return 0;
+		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
+		return count;
+	}
 }

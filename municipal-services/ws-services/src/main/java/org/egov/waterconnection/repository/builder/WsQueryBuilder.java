@@ -70,6 +70,8 @@ public class WsQueryBuilder {
 			+ "eg_ws_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_ws_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.wsid = conn.id";
+
+	private static final String TOTAL_APPLICATIONS_COUNT_QUERY = "select count(*) from eg_ws_connection where tenantid = '{}';";
 	
 	private static final String PAGINATION_WRAPPER = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY wc_appCreatedDate DESC) offset_ FROM " +
@@ -417,5 +419,9 @@ public class WsQueryBuilder {
 			builder.append(" DESC ");
 
 		return builder.toString();
+	}
+
+	public String getTotalApplicationsCountQueryString(SearchCriteria criteria) {
+		return TOTAL_APPLICATIONS_COUNT_QUERY.replace("{}",criteria.getTenantId());
 	}
 }

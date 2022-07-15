@@ -1,10 +1,7 @@
 package org.egov.waterconnection.service;
 
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -14,6 +11,7 @@ import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.repository.WaterDao;
 import org.egov.waterconnection.repository.WaterDaoImpl;
+import org.egov.waterconnection.util.EncryptionDecryptionUtil;
 import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.validator.ActionValidator;
 import org.egov.waterconnection.validator.MDMSValidator;
@@ -28,12 +26,16 @@ import org.egov.waterconnection.web.models.workflow.BusinessService;
 import org.egov.waterconnection.workflow.WorkflowIntegrator;
 import org.egov.waterconnection.workflow.WorkflowService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import static org.egov.waterconnection.constants.WCConstants.APPROVE_CONNECTION;
 
+@Slf4j
 @Component
 public class WaterServiceImpl implements WaterService {
 
@@ -79,6 +81,17 @@ public class WaterServiceImpl implements WaterService {
 	@Autowired
 	private WaterServicesUtil wsUtil;
 
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
+
+	@Value("${encryption.batch.value}")
+	private Integer batchSize;
+
+	@Value("${encryption.offset.value}")
+	private Integer batchOffset;
+
+	private Integer count2=0;
+
 	/**
 	 * 
 	 * @param waterConnectionRequest
@@ -114,7 +127,15 @@ public class WaterServiceImpl implements WaterService {
 		// call work-flow
 		if (config.getIsExternalWorkFlowEnabled())
 			wfIntegrator.callWorkFlow(waterConnectionRequest, property);
+
+		/* encrypt here */
+		waterConnectionRequest.setWaterConnection(encryptionDecryptionUtil.encryptObject(waterConnectionRequest.getWaterConnection(), "WaterConnection", WaterConnection.class));
+
 		waterDao.saveWaterConnection(waterConnectionRequest);
+
+		/* decrypt here */
+		waterConnectionRequest.setWaterConnection(encryptionDecryptionUtil.decryptObject(waterConnectionRequest.getWaterConnection(), "WaterConnection", WaterConnection.class, waterConnectionRequest.getRequestInfo()));
+
 		return Arrays.asList(waterConnectionRequest.getWaterConnection());
 	}
 
@@ -145,13 +166,16 @@ public class WaterServiceImpl implements WaterService {
 	 */
 	public List<WaterConnection> search(SearchCriteria criteria, RequestInfo requestInfo) {
 		List<WaterConnection> waterConnectionList;
+
+		/* encrypt here */
+		criteria = encryptionDecryptionUtil.encryptObject(criteria, "WaterConnection", SearchCriteria.class);
+
 		waterConnectionList = getWaterConnectionsList(criteria, requestInfo);
 		if (!StringUtils.isEmpty(criteria.getSearchType()) &&
 				criteria.getSearchType().equals(WCConstants.SEARCH_TYPE_CONNECTION)) {
 			waterConnectionList = enrichmentService.filterConnections(waterConnectionList);
 			/*if(criteria.getIsPropertyDetailsRequired()){
 				waterConnectionList = enrichmentService.enrichPropertyDetails(waterConnectionList, criteria, requestInfo);
-
 			}*/
 		}
 		if ((criteria.getIsPropertyDetailsRequired() != null) && criteria.getIsPropertyDetailsRequired()) {
@@ -160,7 +184,10 @@ public class WaterServiceImpl implements WaterService {
 		waterConnectionValidator.validatePropertyForConnection(waterConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(waterConnectionList, criteria, requestInfo);
 		enrichmentService.enrichProcessInstance(waterConnectionList, criteria, requestInfo);
-		return waterConnectionList;
+		
+		/* decrypt here */
+		return encryptionDecryptionUtil.decryptObject(waterConnectionList, "WaterConnection", WaterConnection.class, requestInfo);
+//		return waterConnectionList;
 	}
 
 	/**
@@ -243,11 +270,19 @@ public class WaterServiceImpl implements WaterService {
 		userService.createUser(waterConnectionRequest);
 		enrichmentService.postStatusEnrichment(waterConnectionRequest);
 		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
+		
+		/* encrypt here */
+		waterConnectionRequest.setWaterConnection(encryptionDecryptionUtil.encryptObject(waterConnectionRequest.getWaterConnection(), "WaterConnection", WaterConnection.class));
+
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
 		enrichmentService.postForMeterReading(waterConnectionRequest,  WCConstants.UPDATE_APPLICATION);
 		if (!StringUtils.isEmpty(waterConnectionRequest.getWaterConnection().getTenantId()))
 			criteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
 		enrichmentService.enrichProcessInstance(Arrays.asList(waterConnectionRequest.getWaterConnection()), criteria, waterConnectionRequest.getRequestInfo());
+
+		/* decrypt here */
+		waterConnectionRequest.setWaterConnection(encryptionDecryptionUtil.decryptObject(waterConnectionRequest.getWaterConnection(), "WaterConnection", WaterConnection.class, waterConnectionRequest.getRequestInfo()));
+		
 		return Arrays.asList(waterConnectionRequest.getWaterConnection());
 	}
 
@@ -368,4 +403,88 @@ public class WaterServiceImpl implements WaterService {
 			RequestInfo requestInfo) {
 		return waterDao.getWaterConnectionListForPlaneSearch(criteria, requestInfo);
 	}
+	
+
+	public WaterConnectionResponse updateOldData(SearchCriteria criteria, RequestInfo requestInfo){
+		//WaterConnectionResponse waterConnectionResponse = planeSearch(criteria, requestInfo);
+		WaterConnectionResponse waterConnectionResponse = encryptOldWaterData(requestInfo, criteria);
+		return waterConnectionResponse;
+	}
+
+	public WaterConnectionResponse encryptOldWaterData(RequestInfo requestInfo, SearchCriteria criteria) {
+		List<WaterConnection> waterConnectionList = new ArrayList();
+		WaterConnectionResponse waterConnectionResponse;
+		Map<String, String> resultMap = null;
+
+		if(StringUtils.isEmpty(criteria.getLimit()))
+			criteria.setLimit(Integer.valueOf(batchSize));
+
+		if(StringUtils.isEmpty(criteria.getOffset()))
+			criteria.setOffset(Integer.valueOf(batchOffset));
+
+		waterConnectionList = initiateEncryption(requestInfo, criteria);
+		waterConnectionResponse = WaterConnectionResponse.builder().waterConnection(waterConnectionList)
+				.build();
+		return waterConnectionResponse;
+	}
+
+	public List<WaterConnection> initiateEncryption(RequestInfo requestInfo,SearchCriteria criteria) {
+		List<WaterConnection> finalWaterList = new LinkedList<>();
+		Map<String, String> responseMap = new HashMap<>();
+
+		WaterConnectionResponse waterConnectionResponse;
+
+		Integer startBatch = Math.toIntExact(criteria.getOffset());
+		Integer batchSizeInput = Math.toIntExact(criteria.getLimit());
+
+		Integer count = waterDao.getTotalApplications(criteria);
+
+		log.info("Count: "+count);
+		log.info("startbatch: "+startBatch);
+
+		while(startBatch<count) {
+			long startTime = System.nanoTime();
+			List<WaterConnection> waterConnectionList = new LinkedList<>();
+//			List<WaterConnection> waterConnectionList =  search( criteria,  requestInfo);
+			waterConnectionResponse = planeSearch(criteria, requestInfo);
+			try {
+				for (WaterConnection waterConnection : waterConnectionResponse.getWaterConnection()) {
+					/* encrypt here */
+					waterConnection = encryptionDecryptionUtil.encryptObject(waterConnection, "WaterConnection", WaterConnection.class);
+
+					WaterConnectionRequest waterConnectionRequest= WaterConnectionRequest.builder()
+							.requestInfo(requestInfo)
+							.waterConnection(waterConnection)
+							.build();
+
+					waterDao.updateOldWaterConnections(waterConnectionRequest);
+
+					/* decrypt here */
+					waterConnection = encryptionDecryptionUtil.decryptObject(waterConnection, "WaterConnection", WaterConnection.class, requestInfo);
+					waterConnectionList.add(waterConnection);
+				}
+			} catch (Exception e) {
+
+				log.error("Encryption failed at batch count of : " + startBatch);
+				responseMap.put( "Encryption failed at batch count : " + startBatch, e.getMessage());
+				return null;
+			}
+
+			log.info(" count completed for batch : " + startBatch);
+			long endtime = System.nanoTime();
+			long elapsetime = endtime - startTime;
+			log.info("\n\nBatch elapsed time: "+elapsetime+"\n\n");
+
+			startBatch = startBatch+batchSizeInput;
+			criteria.setOffset(Integer.valueOf(startBatch));
+			System.out.println("Property Count which pushed into kafka topic:"+count2);
+			finalWaterList = Stream.concat(finalWaterList.stream(), waterConnectionList.stream())
+					.collect(Collectors.toList());
+		}
+		criteria.setOffset(Integer.valueOf(batchOffset));
+
+		return finalWaterList;
+
+	}
+
 }

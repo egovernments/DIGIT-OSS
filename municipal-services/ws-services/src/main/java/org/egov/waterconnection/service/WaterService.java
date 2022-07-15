@@ -20,4 +20,5 @@ public interface WaterService {
 	
 	WaterConnectionResponse planeSearch(SearchCriteria criteria, RequestInfo requestInfo);
 
+	WaterConnectionResponse updateOldData(SearchCriteria criteria, RequestInfo requestInfo);
 }

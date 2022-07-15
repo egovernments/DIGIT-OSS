@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.egov.common.contract.request.PlainAccessRequest;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.tracer.model.CustomException;
@@ -13,6 +14,7 @@ import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.repository.IdGenRepository;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
 import org.egov.waterconnection.repository.WaterDaoImpl;
+import org.egov.waterconnection.util.EncryptionDecryptionUtil;
 import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.web.models.Connection.StatusEnum;
@@ -63,6 +65,9 @@ public class EnrichmentService {
 
 	@Autowired
 	private WorkflowService wfService;
+
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
 	/**
 	 * Enrich water connection
 	 * 
@@ -352,7 +357,28 @@ public class EnrichmentService {
 			return;
 		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(criteria.getTenantId(), requestInfo);
 		userSearchRequest.setUuid(connectionHolderIds);
+		PlainAccessRequest apiPlainAccessRequest = userSearchRequest.getRequestInfo().getPlainAccessRequest();
+		List<String> plainRequestFieldsList = new ArrayList<String>() {{
+			add("userName");
+			add("mobileNumber");
+			add("correspondenceAddress");
+			add("guardian");
+			add("fatherOrHusbandName");
+			add("name");
+		}};
+		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(connectionHolderIds.iterator().next())
+				.plainRequestFields(plainRequestFieldsList).build();
+
+		requestInfo.setPlainAccessRequest(plainAccessRequest);
+
 		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
+		/* encrypt here */
+		userDetailResponse.setUser((List<OwnerInfo>) encryptionDecryptionUtil.encryptObject(userDetailResponse.getUser(), "WaterConnectionOwner", OwnerInfo.class));
+
+		/* decrypt here */
+		userDetailResponse.setUser(encryptionDecryptionUtil.decryptObject(userDetailResponse.getUser(), "WaterConnectionOwner", OwnerInfo.class, requestInfo));
+
 		enrichConnectionHolderInfo(userDetailResponse, waterConnectionList,requestInfo);
 	}
 
@@ -411,7 +437,7 @@ public class EnrichmentService {
 	 * @return
 	 */
 	public List<WaterConnection> filterConnections(List<WaterConnection> connectionList) {
-		HashMap<String, Connection> connectionHashMap = new HashMap<>();
+		HashMap<String, Connection> connectionHashMap = new LinkedHashMap<>();
 		connectionList.forEach(connection -> {
 			if (!StringUtils.isEmpty(connection.getConnectionNo())) {
 				if (connectionHashMap.get(connection.getConnectionNo()) == null
@@ -496,6 +522,9 @@ public class EnrichmentService {
 			RequestInfo requestInfo) {
 		if (CollectionUtils.isEmpty(waterConnectionList))
 			return;
+
+		PlainAccessRequest apiPlainAccessRequest = requestInfo.getPlainAccessRequest();
+
 		ProcessInstance processInstance=null;
 		for (WaterConnection waterConnection : waterConnectionList) {
 			if(criteria.getTenantId()!=null)
@@ -510,6 +539,7 @@ public class EnrichmentService {
 				if(!ObjectUtils.isEmpty(processInstance.getAssignes()))
 					waterConnection.getProcessInstance().setAssignes(processInstance.getAssignes());
 			}
+			requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 		}
 	}
 }

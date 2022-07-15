@@ -1,16 +1,20 @@
 package org.egov.waterconnection.workflow;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.egov.common.contract.request.PlainAccessRequest;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.User;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
+import org.egov.waterconnection.util.EncryptionDecryptionUtil;
 import org.egov.waterconnection.web.models.RequestInfoWrapper;
 import org.egov.waterconnection.web.models.WaterConnection;
 import org.egov.waterconnection.web.models.workflow.BusinessService;
@@ -34,6 +38,9 @@ public class WorkflowService {
 
 	@Autowired
 	private ObjectMapper mapper;
+
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
 
 	/**
 	 * Get the workflow-config for the given tenant
@@ -125,14 +132,33 @@ public class WorkflowService {
 		StringBuilder url = getProcessInstanceSearchURL(tenantId, applicationNo, businessServiceName);
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+		List<String> plainRequestFieldsList = new ArrayList<String>() {{
+			add("mobileNumber");
+		}};
+
 		ProcessInstanceResponse response = null;
 		try {
 			response = mapper.convertValue(result, ProcessInstanceResponse.class);
+			PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(response.
+							getProcessInstances().get(0).getAssignes().get(0).getUuid())
+					.plainRequestFields(plainRequestFieldsList).build();
+
+			requestInfo.setPlainAccessRequest(plainAccessRequest);
+			requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+			Object resultNew = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+			response = mapper.convertValue(resultNew, ProcessInstanceResponse.class);
+
 		} catch (IllegalArgumentException e) {
 			throw new CustomException("PARSING_ERROR", "Failed to parse response of process instance");
 		}
 		if (!ObjectUtils.isEmpty(response.getProcessInstances())) {
 			Optional<ProcessInstance> processInstance = response.getProcessInstances().stream().findFirst();
+			/* encrypt here */
+			processInstance.get().setAssignes((List<org.egov.common.contract.request.User>) encryptionDecryptionUtil.encryptObject(processInstance.get().getAssignes(), "WaterConnectionOwner", User.class));
+
+			/* decrypt here */
+			processInstance.get().setAssignes(encryptionDecryptionUtil.decryptObject(processInstance.get().getAssignes(), "WaterConnectionOwner", User.class, requestInfo));
+
 			return processInstance.get();
 		}
 		return null;

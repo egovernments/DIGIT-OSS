@@ -83,4 +83,17 @@ public class WaterController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}
+
+	@RequestMapping(value = "/_encryptOldData", method = RequestMethod.POST)
+	public ResponseEntity<WaterConnectionResponse> encryptOldData(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+			@Valid @ModelAttribute SearchCriteria criteria){
+		//List<WaterConnection> waterConnection = waterService.updateWaterConnection(waterConnectionRequest);
+		WaterConnectionResponse waterConnectionResponse = waterService.updateOldData(criteria, requestInfoWrapper.getRequestInfo());
+
+		//WaterConnectionResponse response = waterService.planeSearch(criteria, requestInfoWrapper.getRequestInfo());
+		waterConnectionResponse.setResponseInfo(
+				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
+		return new ResponseEntity<>(waterConnectionResponse, HttpStatus.OK);
+	}
+
 }

@@ -2,6 +2,7 @@ package org.egov.waterconnection;
 
 import java.util.TimeZone;
 
+import org.egov.encryption.config.EncryptionConfiguration;
 import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -16,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication(scanBasePackages = "org.egov.waterconnection")
 @EnableAutoConfiguration
-@Import({ TracerConfiguration.class })
+@Import({ TracerConfiguration.class, EncryptionConfiguration.class  })
 public class WaterConnectionApplication{
 	@Value("${app.timezone}")
 	private String timeZone;
