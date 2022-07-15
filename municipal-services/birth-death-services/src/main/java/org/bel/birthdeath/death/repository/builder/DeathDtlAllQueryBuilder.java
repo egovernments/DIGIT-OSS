@@ -171,7 +171,7 @@ public class DeathDtlAllQueryBuilder {
 		}
 		if (criteria.getSpouseName() != null) {
 			addClauseIfRequired(preparedStmtList, builder);
-			builder.append(" ( bfat.firstname ilike ? or bfat.middlename ilike ? or bfat.lastname ilike ? ) ");
+			builder.append(" ( bsps.firstname ilike ? or bsps.middlename ilike ? or bsps.lastname ilike ? ) ");
 			preparedStmtList.add("%"+criteria.getSpouseName()+"%");
 			preparedStmtList.add("%"+criteria.getSpouseName()+"%");
 			preparedStmtList.add("%"+criteria.getSpouseName()+"%");
