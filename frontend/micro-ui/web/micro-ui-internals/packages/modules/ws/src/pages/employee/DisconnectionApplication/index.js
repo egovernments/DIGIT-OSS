@@ -12,11 +12,9 @@ const getPath = (path, params) => {
 }
 
 
-const WSDisconnection = () => {
-  const queryClient = useQueryClient();
+const DisconnectionApplication = () => {
   const { t } = useTranslation();
   const match = useRouteMatch();
-
 
   let config = [];
   let newConfig = newConfigWS;
@@ -32,10 +30,11 @@ const WSDisconnection = () => {
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
         return (
           <Route path={`${getPath(match.path, match.params)}/${routeObj.route}`} key={index}>
-            <Component config={{ texts, inputs, key, isSkipEnabled }} t={t} userType={"citizen"} />
+            <Component config={{ texts, inputs, key, isSkipEnabled }}  t={t} userType={"employee"} />
           </Route>
         );
       })}
+    
       <Route>
         <Redirect to={`${getPath(match.path, match.params)}/${config.indexRoute}`} />
       </Route>
@@ -43,4 +42,5 @@ const WSDisconnection = () => {
   );
 };
 
-export default WSDisconnection;
+export default DisconnectionApplication;
+

@@ -688,7 +688,7 @@ export const WSSearch = {
 
     let propertyids = "",
       consumercodes = "",
-      businessIds = "";
+      businessIds = [];
 
     const response = await WSSearch.application(tenantId, filters, serviceType);
 
@@ -707,9 +707,15 @@ export const WSSearch = {
 
     const properties = await WSSearch.property(tenantId, propertyfilter);
 
-    if (filters?.connectionNumber) businessIds = filters?.connectionNumber;
+    const wsResponseForWorkflow = await WSSearch.application(tenantId, { connectionNumber }, serviceType);
 
-    const workflowDetails = await WSSearch.workflowDataDetails(tenantId, businessIds);
+    const wsResponseForWorkflowData = cloneDeep(serviceType == "WATER" ? wsResponseForWorkflow?.WaterConnection : wsResponseForWorkflow?.SewerageConnections);
+
+    wsResponseForWorkflowData?.forEach((item) => {
+      item?.applicationNo &&  businessIds.push(item?.applicationNo);
+    });
+
+    const workflowDetails = await WSSearch.workflowDataDetails(tenantId, businessIds.join(","));
 
     const wsDataDetails = cloneDeep(serviceType == "WATER" ? response?.WaterConnection?.[0] : response?.SewerageConnections?.[0]);
     
@@ -857,6 +863,7 @@ export const WSSearch = {
           : [{ title: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS", value: t("SCORE_YES") }],
     };
 
+    const isApplicationApproved =  workFlowDataDetails?.ProcessInstances?.[0]?.state.isTerminateState  
     const isLabelShow = {
       title: "",
       asSectionHeader: true,
@@ -877,7 +884,8 @@ export const WSSearch = {
       propertyDetails: propertyDataDetails,
       processInstancesDetails: workFlowDataDetails?.ProcessInstances,
       colletionOfData: colletionOFData?.Payments,
-      fetchBillsData: fetchBills?.Bill
+      fetchBillsData: fetchBills?.Bill,
+      isApplicationApproved: isApplicationApproved
     };
   },
 

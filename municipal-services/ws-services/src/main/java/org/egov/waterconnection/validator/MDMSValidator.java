@@ -83,9 +83,29 @@ public class MDMSValidator {
 			Map<String, List<String>> finalcodes = Stream.of(codes, codeFromCalculatorMaster).map(Map::entrySet)
 					.flatMap(Collection::stream).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 			validateMDMSData(finalmasterNames, finalcodes);
-			validateCodes(request.getWaterConnection(), finalcodes);
+			validateCodesForDisconnection(request.getWaterConnection(), finalcodes);
 		}
 	}
+
+	private void validateCodesForDisconnection(WaterConnection waterConnection, Map<String, List<String>> codes) {
+		Map<String, String> errorMap = new HashMap<>();
+		StringBuilder messageBuilder = new StringBuilder();
+		if (!StringUtils.isEmpty(waterConnection.getConnectionType())
+				&& !codes.get(WCConstants.MDMS_WC_CONNECTION_TYPE).contains(waterConnection.getConnectionType())) {
+			messageBuilder = new StringBuilder();
+			messageBuilder.append("Connection type value is invalid, please enter proper value! ");
+			errorMap.put("INVALID_WATER_CONNECTION_TYPE", messageBuilder.toString());
+		}
+		if (!StringUtils.isEmpty(waterConnection.getWaterSource())
+				&& !codes.get(WCConstants.MDMS_WC_WATER_SOURCE).contains(waterConnection.getWaterSource())) {
+			messageBuilder = new StringBuilder();
+			messageBuilder.append("Water Source / Water Sub Source value is invalid, please enter proper value! ");
+			errorMap.put("INVALID_WATER_CONNECTION_SOURCE", messageBuilder.toString());
+		}
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
+	}
+
 	public void validateMasterDataForUpdateConnection(WaterConnectionRequest request) {
 		if (request.getWaterConnection().getProcessInstance().getAction()
 				.equalsIgnoreCase(WCConstants.ACTIVATE_CONNECTION_CONST)) {

@@ -31,6 +31,9 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl, initData }) 
     if (pathname?.toString() === "/digit-ui/employee") {
       Digit.SessionStorage.del("SEARCH_APPLICATION_DETAIL");
     }
+    if (pathname?.toString() === "/digit-ui/citizen" || pathname?.toString() === "/digit-ui/employee") {
+      Digit.SessionStorage.del("WS_DISCONNECTION");
+    }
   }, [pathname]);
 
   history.listen(() => {
