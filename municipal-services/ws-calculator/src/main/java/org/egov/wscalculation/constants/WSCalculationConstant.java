@@ -309,7 +309,27 @@ public class WSCalculationConstant {
 
 	public static final String STATUS_APPROVED = "CONNECTION_ACTIVATED";
 
+	public static final String PENDING_FOR_PAYMENT = "PENDING_FOR_PAYMENT";
+
+	public static final String CONNECTION_INACTIVATED = "Inactive";
+
+	public static final String bulkSupplyConnection= "Bulk-supply";
+
 	public static final List<String> FINAL_CONNECTION_STATES = Collections
 			.unmodifiableList(Arrays.asList(MODIFIED_FINAL_STATE, STATUS_APPROVED));
+
+	public static final String BILL_KEY= "Bill";
+
+	public static final String CONSUMER_CODE_KEY= "consumerCode";
+
+	public static final String BILL_DETAILS_KEY= "billDetails";
+
+	public static final String TO_PERIOD_KEY= "toPeriod";
+
+	public static final String FROM_PERIOD_KEY= "fromPeriod";
+
+	public static final String AMOUNT_KEY= "amount";
+
+	public static final String NEW_WATER_CONNECTION = "NEW_WATER_CONNECTION";
 
 }

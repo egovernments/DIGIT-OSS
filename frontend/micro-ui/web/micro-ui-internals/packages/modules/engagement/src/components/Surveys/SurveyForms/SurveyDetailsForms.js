@@ -61,6 +61,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
                   allowMultiselect={true}
                   optionKey={"i18nKey"}
                   option={userUlbs}
+                  placeholder={t("ES_COMMON_USER_ULBS")}
                   select={(e) => {
                     props.onChange([...(surveyFormData("tenantIds")?.filter?.((f) => e.code !== f?.code) || []), e]);
                   }}
@@ -98,15 +99,15 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
         {surveyFormState?.errors?.title && <CardLabelError>{surveyFormState?.errors?.["title"]?.message}</CardLabelError>}
       </span>
       <span className="surveyformfield">
-        <label>{`${t("CS_SURVEY_DESCRIPTION")} * :`}</label>
+        <label>{`${t("CS_SURVEY_DESCRIPTION")} :`}</label>
         <TextInput
           name="description"
           type="text"
           inputRef={registerRef({
-            required: t("ES_ERROR_REQUIRED"),
+            //required: t("ES_ERROR_REQUIRED"),
             maxLength: {
-              value: 250,
-              message: t("EXCEEDS_250_CHAR_LIMIT"),
+              value: 140,
+              message: t("EXCEEDS_140_CHAR_LIMIT"),
             },
             pattern:{
               value: /^[A-Za-z_-][A-Za-z0-9_\ -]*$/,

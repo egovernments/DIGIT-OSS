@@ -402,4 +402,37 @@ public class CalculatorUtil {
 
 		return epochToDate(fromDateLong) + "-" +epochToDate(toDateLong) ;
 	}
+
+	/**
+	 *
+	 * @param requestInfo, tenantId, consumerCode
+	 *
+	 * @return billing response
+	 */
+	public Map<String, Object> getBillData(RequestInfo requestInfo, String tenantId, String consumerCode) {
+		Object result =  serviceRequestRepository.fetchResult(
+				getSearchBillURL(tenantId, consumerCode),
+				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
+
+		Map<String, Object> billResponse = null;
+		try {
+			billResponse = mapper.convertValue(result, Map.class);
+		} catch (IllegalArgumentException e) {
+			throw new CustomException("PARSING_ERROR", "Error while parsing response of bill");
+		}
+		if (billResponse == null)
+			throw new CustomException("WATERMETER_INACTIVE", "Can not generate bill for inactive waterconnection");
+
+		return billResponse;
+	}
+
+	private StringBuilder getSearchBillURL(String tenantId, String consumerCode) {
+		return new StringBuilder().append(calculationConfig.getBillingServiceHost())
+				.append(calculationConfig.getSearchBillEndPoint()).append(WSCalculationConstant.URL_PARAMS_SEPARATER)
+				.append(WSCalculationConstant.TENANT_ID_FIELD_FOR_SEARCH_URL).append(tenantId)
+				.append(WSCalculationConstant.SEPARATER).append(WSCalculationConstant.CONSUMER_CODE_SEARCH_FIELD_NAME)
+				.append(consumerCode).append(WSCalculationConstant.SEPARATER)
+				.append(WSCalculationConstant.SERVICE_FIELD_FOR_SEARCH_URL)
+				.append(WSCalculationConstant.ONE_TIME_FEE_SERVICE_FIELD);
+	}
 }

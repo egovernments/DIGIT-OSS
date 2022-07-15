@@ -44,6 +44,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class UserServiceConstants {
 
+    public static final String EMAIL_UPDATION_CODE = "EMAIL_UPDATED";
+
     public static final String INVALID_USER_REQUEST = "UserRequest is Invalid";
 
     public static final String ROLECODE_MISSING_CODE = "egs_001";

@@ -231,17 +231,33 @@ export const SuccessfulPayment = (props)=>{
       return "FY " + from + "-" + to;
     } else if (fromPeriod && toPeriod) {
       if (workflw === "mcollect") {
-        from =
+        let from =
           new Date(fromPeriod).getDate().toString() +
           " " +
           Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth() + 1].toString() +
           " " +
           new Date(fromPeriod).getFullYear().toString();
-        to =
+        let to =
           new Date(toPeriod).getDate() +
           " " +
           Digit.Utils.date.monthNames[new Date(toPeriod).getMonth() + 1] +
           " " +
+          new Date(toPeriod).getFullYear();
+        return from + " - " + to;
+      }
+      else if(workflw === "WNS")
+      {
+        let from =
+          new Date(fromPeriod).getDate().toString() +
+          "/" +
+          (new Date(fromPeriod).getMonth() + 1).toString() +
+          "/" +
+          new Date(fromPeriod).getFullYear().toString();
+        let to =
+          new Date(toPeriod).getDate() +
+          "/" +
+          (new Date(toPeriod).getMonth() + 1) +
+          "/" +
           new Date(toPeriod).getFullYear();
         return from + " - " + to;
       }
@@ -313,7 +329,7 @@ export const SuccessfulPayment = (props)=>{
             rowContainerStyle={rowContainerStyle}
             last
             label={t("CS_PAYMENT_AMOUNT_PENDING")}
-            text={reciept_data?.paymentDetails?.[0]?.totalDue - reciept_data?.paymentDetails?.[0]?.totalAmountPaid}
+            text={`₹ ${reciept_data?.paymentDetails?.[0]?.totalDue - reciept_data?.paymentDetails?.[0]?.totalAmountPaid}`}
           />
         )}
 

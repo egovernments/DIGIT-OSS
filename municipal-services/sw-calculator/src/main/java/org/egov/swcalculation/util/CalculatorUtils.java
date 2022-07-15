@@ -11,12 +11,7 @@ import org.egov.mdms.model.ModuleDetail;
 import org.egov.swcalculation.config.SWCalculationConfiguration;
 import org.egov.swcalculation.constants.SWCalculationConstant;
 import org.egov.swcalculation.repository.ServiceRequestRepository;
-import org.egov.swcalculation.web.models.Property;
-import org.egov.swcalculation.web.models.PropertyResponse;
-import org.egov.swcalculation.web.models.RequestInfoWrapper;
-import org.egov.swcalculation.web.models.SearchCriteria;
-import org.egov.swcalculation.web.models.SewerageConnection;
-import org.egov.swcalculation.web.models.SewerageConnectionResponse;
+import org.egov.swcalculation.web.models.*;
 import org.egov.swcalculation.web.models.workflow.ProcessInstance;
 import org.egov.swcalculation.web.models.workflow.ProcessInstanceResponse;
 import org.egov.tracer.model.CustomException;
@@ -401,5 +396,40 @@ public class CalculatorUtils {
 		Long toDateLong = (Long) financialYearMaster.get(SWCalculationConstant.ENDING_DATE_APPLICABLES);
 
 		return epochToDate(fromDateLong) + "-" +epochToDate(toDateLong) ;
+	}
+
+	/**
+	 *
+	 * @param requestInfo, tenantId, consumerCode
+	 *
+	 * @return billing response
+	 */
+	public Map<String, Object> getBillData(RequestInfo requestInfo, String tenantId, String consumerCode) {
+		Object result =  serviceRequestRepository.fetchResult(
+				getSearchBillURL(tenantId, consumerCode),
+				RequestInfoWrapper.builder().requestInfo(requestInfo).build());
+
+		Map<String, Object> billResponse = null;
+		try {
+			billResponse = mapper.convertValue(result, Map.class);
+		} catch (IllegalArgumentException e) {
+			throw new CustomException("PARSING_ERROR", "Error while parsing response of bill");
+		}
+
+		if (billResponse == null)
+			throw new CustomException("WATERMETER_INACTIVE", "Can not generate bill for inactive waterconnection");
+
+		return billResponse;
+	}
+
+	private StringBuilder getSearchBillURL(String tenantId, String consumerCode) {
+
+		return new StringBuilder().append(configurations.getBillingServiceHost())
+				.append(configurations.getSearchBillEndPoint()).append(SWCalculationConstant.URL_PARAMS_SEPARATER)
+				.append(SWCalculationConstant.TENANT_ID_FIELD_FOR_SEARCH_URL).append(tenantId)
+				.append(SWCalculationConstant.SEPARATER).append(SWCalculationConstant.CONSUMER_CODE_SEARCH_FIELD_NAME)
+				.append(consumerCode).append(SWCalculationConstant.SEPARATER)
+				.append(SWCalculationConstant.SERVICE_FIELD_FOR_SEARCH_URL)
+				.append(SWCalculationConstant.ONE_TIME_FEE_SERVICE_FIELD);
 	}
 }

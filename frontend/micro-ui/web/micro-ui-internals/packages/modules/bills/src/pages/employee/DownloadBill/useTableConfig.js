@@ -104,7 +104,7 @@ const useSearchApplicationTableConfig = (setShowToast) => {
         Header: t("ES_INBOX_LOCALITY"),
         disableSortBy: true,
         accessor: (row) => {
-          return GetCell(`${Digit.Utils.locale.getTransformedLocale(row?.tenantId)}_REVENUE_${row?.locality}` || "-");
+          return GetCell(t(`${Digit.Utils.locale.getTransformedLocale(row?.tenantId)}_REVENUE_${row?.locality}`) || "-");
         },
       },
       {

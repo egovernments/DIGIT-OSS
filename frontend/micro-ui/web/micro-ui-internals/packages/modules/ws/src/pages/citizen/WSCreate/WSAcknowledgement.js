@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 //import { convertToEditTrade, convertToResubmitTrade, convertToTrade, convertToUpdateTrade, stringToBoolean } from "../../../utils";
 //import getPDFData from "../../../utils/getTLAcknowledgementData";
 //import getPDFData from "../TestAcknowledgment";
-import {convertToWSUpdate, convertToSWUpdate, getPDFData, convertToEditWSUpdate, convertToEditSWUpdate} from "../../../utils/index";
-
+import {convertToWSUpdate, convertToSWUpdate, convertToEditWSUpdate, convertToEditSWUpdate} from "../../../utils/index";
+import getPDFData from "../../../utils/getWSAcknowledgementData";
 const GetActionMessage = (props) => {
   const { t } = useTranslation();
   if (props.isSuccess) {
@@ -97,21 +97,21 @@ const WSAcknowledgement = ({ data, onSuccess, clearParams }) => {
     const tenantInfo = tenants.find((tenant) => tenant.code === data?.cpt?.details?.tenantId);
     if(data?.serviceName?.code === "WATER")
     {
-      const data1 = getPDFData({...WSmutationdata},data,tenantInfo, t);
-      Digit.Utils.pdf.generate(data1);
+      const data1 = getPDFData({...WSmutationdata},{...data?.cpt?.details},tenantInfo?.code, t);
+      data1.then((ress) => Digit.Utils.pdf.generatev1(ress));
 
     }
     else if(data?.serviceName?.code === "SEWERAGE")
     {
-      const data2 = getPDFData({...SWmutationdata},data,tenantInfo, t);
-      Digit.Utils.pdf.generate(data2);
+      const data2 = getPDFData({...SWmutationdata},{...data?.cpt?.details},tenantInfo?.code, t);
+      data2.then((ress) => Digit.Utils.pdf.generatev1(ress));
     }
     else
     {
-      const data1 = getPDFData({...WSmutationdata},data,tenantInfo, t);
-      const data2 = getPDFData({...SWmutationdata},data,tenantInfo, t);
-      Digit.Utils.pdf.generate(data1);
-      Digit.Utils.pdf.generate(data2);
+      const data1 = getPDFData({...WSmutationdata},{...data?.cpt?.details},tenantInfo?.code, t);
+      const data2 = getPDFData({...SWmutationdata},{...data?.cpt?.details},tenantInfo?.code, t);
+      data1.then((ress) => Digit.Utils.pdf.generatev1(ress));
+      data2.then((ress) => Digit.Utils.pdf.generatev1(ress));
     }
   };
 

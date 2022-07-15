@@ -187,4 +187,7 @@ public class SWCalculationConfiguration {
 
 	@Value("${egov.internal.microservice.user.uuid}")
 	private String egovInternalMicroserviceUserUuid;
+
+	@Value("${egov.bill.search.endpoint}")
+	private String searchBillEndPoint;
 }

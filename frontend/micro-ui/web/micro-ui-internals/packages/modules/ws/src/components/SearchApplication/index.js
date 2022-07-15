@@ -67,7 +67,20 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
         accessor: "connectionNo",
         Cell: ({ row }) => {
           let service = "WATER";
-          if (row.original["applicationNo"].includes("SW")) service = "SEWERAGE";
+            if (
+              row?.original?.["applicationType"] == "NEW_WATER_CONNECTION" || 
+              row?.original?.["applicationType"] == "MODIFY_WATER_CONNECTION" ||
+              row?.original?.["applicationType"] == "DISCONNECT_WATER_CONNECTION"
+            ) {
+              service = "WATER"
+            } else if (
+              row?.original?.["applicationType"] == "NEW_SEWERAGE_CONNECTION" ||
+              row?.original?.["applicationType"] == "MODIFY_SEWERAGE_CONNECTION" || 
+              row?.original?.["applicationType"] == "DISCONNECT_SEWERAGE_CONNECTION"
+            ) {
+              service = "SEWERAGE"
+            }
+          
           return (
             <div>
               {row.original["connectionNo"] ? (
@@ -93,7 +106,20 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
         disableSortBy: true,
         Cell: ({ row }) => {
           let service = "WATER";
-          if (row.original["applicationNo"].includes("SW")) service = "SEWERAGE";
+          if (
+            row?.original?.["applicationType"] == "NEW_WATER_CONNECTION" || 
+            row?.original?.["applicationType"] == "MODIFY_WATER_CONNECTION" ||
+            row?.original?.["applicationType"] == "DISCONNECT_WATER_CONNECTION"
+          ) {
+            service = "WATER"
+          } else if (
+            row?.original?.["applicationType"] == "NEW_SEWERAGE_CONNECTION" ||
+            row?.original?.["applicationType"] == "MODIFY_SEWERAGE_CONNECTION" || 
+            row?.original?.["applicationType"] == "DISCONNECT_SEWERAGE_CONNECTION"
+          ) {
+            service = "SEWERAGE"
+          }
+        
           if (row.original["applicationType"] === "MODIFY_SEWERAGE_CONNECTION" || row.original["applicationType"] === "MODIFY_WATER_CONNECTION") {
             return (
               <div>
@@ -109,11 +135,15 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
               </div>
             );
           } else {
+            let application = "application";
+            if(row?.original?.["applicationType"]?.includes("DISCONNECT")) {
+              application = "disconnection"
+            }
             return (
               <div>
                 <span className="link">
                   <Link
-                    to={`/digit-ui/employee/ws/application-details?applicationNumber=${row.original["applicationNo"]}&tenantId=${tenantId}&service=${service}&from=WS_SEWERAGE_APPLICATION_SEARCH`}
+                    to={`/digit-ui/employee/ws/${application}-details?applicationNumber=${row.original["applicationNo"]}&tenantId=${tenantId}&service=${service}&from=WS_SEWERAGE_APPLICATION_SEARCH`}
                   >
                     {row.original["applicationNo"]}
                   </Link>

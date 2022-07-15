@@ -103,8 +103,8 @@ import {
             <Row className="border-none" label={t("WS_NO_OF_WATER_CLOSETS")}   text={sewerageConnectionDetails?.proposedWaterClosets} />
             <Row className="border-none" label={t("WS_SERV_DETAIL_NO_OF_TOILETS")} text={sewerageConnectionDetails?.proposedToilets} />
           </div>}
-          <Row className="border-none" label={t("WS_SERV_DETAIL_WATER_SOURCE")}  text={"NA"} />
-          <Row className="border-none" label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")} text={"NA"} />
+          {waterConectionDetails && Object.keys(waterConectionDetails)?.length>0 && <div><Row className="border-none" label={t("WS_SERV_DETAIL_WATER_SOURCE")}  text={"NA"} />
+          <Row className="border-none" label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")} text={"NA"} /></div>}
         </StatusTable>
     </Card>
     <Card style={{paddingRight:"16px"}}>

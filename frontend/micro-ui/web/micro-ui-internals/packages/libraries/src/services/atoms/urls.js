@@ -167,7 +167,7 @@ const Urls = {
     wns_generate_pdf: "/egov-pdf/download/WNS/wnsbill",
     water_applyAdhocTax : "/ws-calculator/waterCalculator/_applyAdhocTax",
     sewerage_applyAdhocTax: "/sw-calculator/sewerageCalculator/_applyAdhocTax",
-    getSearchDetails: "/inbox/v1/dss/_search"
+    getSearchDetails: "/inbox/v1/dss/_search",
   },
 
   engagement: {

@@ -10,15 +10,21 @@ export const printBill = async (businessService, consumerCode) => {
   await Digit.Utils.downloadBill(consumerCode, businessService, "consolidatedreceipt");
 };
 
-const retrywnsDownloadBill = async (key, tenantId, locality, isConsolidated, bussinessService, setShowToast) => {
+const retrywnsDownloadBill = async (key, tenantId, locality, isConsolidated, bussinessService, setShowToast,t) => {
   const result = await Digit.WSService.wnsGroupBill({ key, tenantId, locality, isConsolidated, bussinessService });
-  setShowToast({ label: "Retry started" })
+  
+  if(result){    
+    setShowToast(() => ({ label: `${t("GRP_JOB_INITIATED_STATUS")} ${result?.jobId}` }))
+  }
+  
   //setTimeout(setShowToast(null), 5000)
 };
 
-const cancelwnsDownloadBill = async (jobid, setShowToast) => {
+const cancelwnsDownloadBill = async (jobid, setShowToast,t) => {
   const result = await Digit.WSService.cancelGroupBill({ jobId:jobid });
-  setShowToast({label:"Cancel Started"})
+  if (result) {
+    setShowToast(() => ({ label: `${t("GRP_JOB_INITIATED_STATUS")} ${result?.jobId}` }))
+  }
   //setTimeout(setShowToast(null),5000)
 };
 /* method to get date from epoch */
@@ -137,7 +143,7 @@ export const getRetryButton = (key, tenantId, locality, isConsolidated, business
         cursor: "pointer",
       }}
       onClick={() => {
-        retrywnsDownloadBill(key, tenantId, locality, isConsolidated, businessService,setShowToast);
+        retrywnsDownloadBill(key, tenantId, locality, isConsolidated, businessService,setShowToast,t);
       }}
     >
       {t(`${"ABG_RETRY"}`)}
@@ -155,7 +161,7 @@ export const getCancelButton = (jobid,setShowToast) => {
         cursor: "pointer",
       }}
       onClick={() => {
-        cancelwnsDownloadBill(jobid,setShowToast);
+        cancelwnsDownloadBill(jobid,setShowToast,t);
       }}
     >
       {t(`${"GRP_BILL_ACT_CANCEL"}`)}

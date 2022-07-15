@@ -44,6 +44,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   const searchParams = Digit.Hooks.useQueryParams();
   const [canSubmitName, setCanSubmitName] = useState(false);
   const [canSubmitOtp, setCanSubmitOtp] = useState(true);
+  const [canSubmitNo, setCanSubmitNo] = useState(true);
 
   useEffect(() => {
     let errorTimeout;
@@ -104,6 +105,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   };
 
   const selectMobileNumber = async (mobileNumber) => {
+    setCanSubmitNo(false);
     setParmas({ ...params, ...mobileNumber });
     const data = {
       ...mobileNumber,
@@ -113,22 +115,27 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
     if (isUserRegistered) {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
       if (!err) {
+        setCanSubmitNo(true);
         history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams), role: location.state?.role });
         return;
       } else {
+        setCanSubmitNo(true);
         if (!(location.state && location.state.role === "FSM_DSO")) {
           history.push(`/digit-ui/citizen/register/name`, { from: getFromLocation(location.state, searchParams), data: data });
         }
       }
       if (location.state?.role) {
+        setCanSubmitNo(true);
         setError(location.state?.role === "FSM_DSO" ? t("ES_ERROR_DSO_LOGIN") : "User not registered.");
       }
     } else {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
       if (!err) {
+        setCanSubmitNo(true);
         history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
         return;
       }
+      setCanSubmitNo(true);
     }
   };
 
@@ -233,6 +240,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
               config={stepItems[0]}
               mobileNumber={params.mobileNumber || ""}
               onMobileChange={handleMobileChange}
+              canSubmit={canSubmitNo}
               showRegisterLink={isUserRegistered && !location.state?.role}
               t={t}
             />

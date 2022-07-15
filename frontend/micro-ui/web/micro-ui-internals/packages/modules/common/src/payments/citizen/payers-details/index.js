@@ -87,7 +87,7 @@ const SelectPaymentType = (props) => {
       history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS`, {
         paymentAmount: paymentAmt,
         tenantId: billDetails.tenantId,
-        name: paymentType?.code !== optionSecound?.code ? ConsumerName : userInfo ? payersActiveName : payersName,
+        name: paymentType?.code !== optionSecound?.code && ConsumerName !== "undefined" ? ConsumerName : userInfo ? payersActiveName : payersName,
         mobileNumber: paymentType?.code !== optionSecound?.code ? bill?.mobileNumber : userInfo ? payersActiveMobileNumber : payersMobileNumber,
       });
     }

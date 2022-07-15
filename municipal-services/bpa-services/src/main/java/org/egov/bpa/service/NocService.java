@@ -28,6 +28,8 @@ import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import net.logstash.logback.encoder.org.apache.commons.lang.StringUtils;
 
+import static org.egov.bpa.util.BPAConstants.INPROGRESS_STATUS;
+
 @Service
 @Slf4j
 public class NocService {
@@ -226,7 +228,7 @@ public class NocService {
 			if (!CollectionUtils.isEmpty(nocs)) {
 				nocs.forEach(noc -> {
 					log.debug("====> noc application status " + noc.getApplicationStatus()  +" for noc appno "+ noc.getApplicationNo());
-					if(!noc.getApplicationStatus().equalsIgnoreCase(BPAConstants.INPROGRESS_STATUS)){
+					if(!noc.getApplicationStatus().equalsIgnoreCase(INPROGRESS_STATUS)){
 						noc.setWorkflow(Workflow.builder().action(config.getNocInitiateAction()).build());
 						NocRequest nocRequest = NocRequest.builder().noc(noc).requestInfo(bpaRequest.getRequestInfo())
 								.build();
@@ -247,13 +249,14 @@ public class NocService {
 		BPA bpa = bpaRequest.getBPA();
 
 		nocs.forEach(noc -> {
-					noc.setWorkflow(Workflow.builder().action(config.getNocVoidAction())
-							.comment(bpa.getWorkflow().getComments()).build());
-					NocRequest nocRequest = NocRequest.builder().noc(noc).requestInfo(bpaRequest.getRequestInfo())
-							.build();
-					updateNoc(nocRequest);
-					log.debug("Noc Voided having applicationNo : " + noc.getApplicationNo());
-			
+			if(noc.getApplicationStatus().equalsIgnoreCase(INPROGRESS_STATUS)) {
+				noc.setWorkflow(Workflow.builder().action(config.getNocVoidAction())
+						.comment(bpa.getWorkflow().getComments()).build());
+				NocRequest nocRequest = NocRequest.builder().noc(noc).requestInfo(bpaRequest.getRequestInfo())
+						.build();
+				updateNoc(nocRequest);
+				log.debug("Noc Voided having applicationNo : " + noc.getApplicationNo());
+			}
 		});
 	}
 }

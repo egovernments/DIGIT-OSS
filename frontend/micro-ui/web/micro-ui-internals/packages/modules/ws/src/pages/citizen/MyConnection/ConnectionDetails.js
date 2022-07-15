@@ -18,7 +18,7 @@ import {
 } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 //import PropertyDocument from "../../pageComponents/PropertyDocument";
@@ -29,18 +29,35 @@ import { stringReplaceAll } from "../../../utils";
 
 const ConnectionDetails = () => {
   const { t } = useTranslation();
+  const menuRef = useRef();
   const user = Digit.UserService.getUser();
   const history = useHistory();
   const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   const [showOptions, setShowOptions] = useState(false);
-  const applicationNobyData = window.location.href.substring(window.location.href.indexOf("WS_"));
+  const applicationNobyData = window.location.href.includes("SW_") ? window.location.href.substring(window.location.href.indexOf("SW_")) : window.location.href.substring(window.location.href.indexOf("WS_"));
+  // window.location.href.substring(window.location.href.indexOf("WS_"));
   const { state = {} } = useLocation();
   const [showModal, setshowModal] = useState(false);
   const [showActionToast, setshowActionToast] = useState(null);
   const mobileView = Digit.Utils.browser.isMobile();
 
+  // const applicationNobyData = 
+
   let filter1 = { tenantId: tenantId, applicationNumber: applicationNobyData };
-  const { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1 }, { filters: filter1 });
+  var isSewerageConnections= false;
+  var { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1, BusinessService: applicationNobyData?.includes("SW") ? "SW" : "WS" }, { filters: filter1 });
+
+  if(data && data["SewerageConnections"]){
+    isSewerageConnections = true;
+    var str = JSON.stringify(data);
+    str = str.replace(/SewerageConnections/g, 'WaterConnection');    
+    data = JSON.parse(str);
+  }
+
+  const closeModal = () => {
+    setShowOptions(false);
+  };
+  Digit.Hooks.useClickOutside(menuRef, closeModal, showOptions);
 
   const { isLoading: isPTLoading, isError: isPTError, error: PTerror, data: PTData } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: data?.WaterConnection?.[0]?.propertyId } },
@@ -106,30 +123,30 @@ const ConnectionDetails = () => {
     onClick: printApplicationReceipts,
   };
 
-  const appStatus = data?.WaterConnection?.[0]?.applicationStatus || "";
+  const appStatus = isSewerageConnections ? data?.WaterConnection?.[0]?.applicationStatus : "";
 
-  switch (appStatus) {
-    case "PENDING_FOR_DOCUMENT_VERIFICATION":
-    case "PENDING_FOR_CITIZEN_ACTION":
-    case "PENDING_FOR_FIELD_INSPECTION":
-      downloadOptions = downloadOptions.concat(applicationDownloadObject);
-      // downloadOptions = [applicationDownloadObject];
-      break;
-    case "PENDING_APPROVAL_FOR_CONNECTION":
-    case "PENDING_FOR_PAYMENT":
-      downloadOptions = downloadOptions.concat(applicationDownloadObject);
-      break;
-    case "PENDING_FOR_CONNECTION_ACTIVATION":
-    case "CONNECTION_ACTIVATED":
-      downloadOptions = downloadOptions.concat(applicationDownloadObject, receiptApplicationFeeDownloadObject);
-      break;
-    case "REJECTED":
-      downloadOptions = downloadOptions.concat(applicationDownloadObject);
-      break;
-    default:
-      downloadOptions = downloadOptions.concat(applicationDownloadObject);
-      break;
-  }
+  // switch (appStatus) {
+  //   case "PENDING_FOR_DOCUMENT_VERIFICATION":
+  //   case "PENDING_FOR_CITIZEN_ACTION":
+  //   case "PENDING_FOR_FIELD_INSPECTION":
+  //     downloadOptions = downloadOptions.concat(applicationDownloadObject);
+  //     // downloadOptions = [applicationDownloadObject];
+  //     break;
+  //   case "PENDING_APPROVAL_FOR_CONNECTION":
+  //   case "PENDING_FOR_PAYMENT":
+  //     downloadOptions = downloadOptions.concat(applicationDownloadObject);
+  //     break;
+  //   case "PENDING_FOR_CONNECTION_ACTIVATION":
+  //   case "CONNECTION_ACTIVATED":
+  //     downloadOptions = downloadOptions.concat(applicationDownloadObject, receiptApplicationFeeDownloadObject);
+  //     break;
+  //   case "REJECTED":
+  //     downloadOptions = downloadOptions.concat(applicationDownloadObject);
+  //     break;
+  //   default:
+  //     isSewerageConnections ? downloadOptions = downloadOptions.concat(applicationDownloadObject) : null;
+  //     break;
+  // }
 
   downloadOptions.sort(function (a, b) {
     return a.order - b.order;
@@ -190,17 +207,23 @@ const ConnectionDetails = () => {
   }
   sessionStorage.setItem("ApplicationNoState", state?.applicationNo);
 
+
+
+
   return (
     <React.Fragment>
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
         <Header>{t("WS_COMMON_CONNECTION_DETAIL")}</Header>
         {downloadOptions && downloadOptions.length > 0 && (
+          <div ref={menuRef}>
           <MultiLink
             className="multilinkWrapper"
             onHeadClick={() => setShowOptions(!showOptions)}
             displayOptions={showOptions}
             options={downloadOptions}
+            optionsStyle={{margin: '0px'}}
           />
+          </div>
         )}
       </div>
       <div className="hide-seperator">
@@ -391,7 +414,7 @@ const ConnectionDetails = () => {
                 history.push(
                   `/digit-ui/citizen/payment/collect/${isSW ? "SW" : "WS"}/${encodeURIComponent(
                     state?.connectionNo
-                  )}/${tenantId}?tenantId=${tenantId}`
+                  )}/${tenantId}?consumerCode=${state?.connectionNo}&&tenantId=${tenantId}&&workflow=WNS`
                 );
                 setshowModal(false);
               }}
@@ -406,7 +429,7 @@ const ConnectionDetails = () => {
               <div className="modal-header-ws">{t("WS_CLEAR_DUES_DISCONNECTION_SUB_HEADER_LABEL")} </div>
               <div className="modal-body-ws">
                 <span>
-                  {t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")}: ₹{paymentDetails?.data?.Bill[0]?.totalAmount}
+                  {t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")}: ₹{Number(paymentDetails?.data?.Bill[0]?.totalAmount).toFixed(2)}
                 </span>{" "}
               </div>
             </Modal>

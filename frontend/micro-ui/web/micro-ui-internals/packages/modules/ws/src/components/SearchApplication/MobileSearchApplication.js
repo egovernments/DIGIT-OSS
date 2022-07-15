@@ -67,6 +67,23 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
     if (data?.display) {
       return [];
     }
+
+    const getWaterSewerageData = (data) => {
+      if (
+        data?.applicationType == "NEW_WATER_CONNECTION" || 
+        data?.applicationType == "MODIFY_WATER_CONNECTION" ||
+        data?.applicationType == "DISCONNECT_WATER_CONNECTION"
+      ) {
+        return "WATER"
+      } else if (
+        data?.applicationType == "NEW_SEWERAGE_CONNECTION" ||
+        data?.applicationType == "MODIFY_SEWERAGE_CONNECTION" || 
+        data?.applicationType == "DISCONNECT_SEWERAGE_CONNECTION"
+      ) {
+        return "SEWERAGE"
+      }
+    }
+
     return data?.map((data) => ({
       [t("WS_MYCONNECTIONS_CONSUMER_NO")]: data?.connectionNo || "NA",
       //[t("WS_ACK_COMMON_APP_NO_LABEL")]: data?.applicationNo || "-",
@@ -74,8 +91,8 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
         <div>
           <span className="link">
             <Link
-              to={`/digit-ui/employee/ws/application-details?applicationNumber=${data?.applicationNo}&tenantId=${tenantId}&service=${
-                data?.applicationNo.includes("SW") ? "SEWERAGE" : "WATER"
+              to={`/digit-ui/employee/ws/${data?.applicationType?.includes("DISCONNECT") ? "disconnection" : "application"}-details?applicationNumber=${data?.applicationNo}&tenantId=${tenantId}&service=${
+                getWaterSewerageData(data)
               }`}
             >
               {data?.applicationNo}

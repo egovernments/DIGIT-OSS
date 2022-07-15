@@ -71,6 +71,7 @@ public class DeathMasterDtlRowMapper implements ResultSetExtractor<List<EgDeathD
 							.hospitalid(rs.getString("hospitalid")).informantsname(rs.getString("informantsname")).informantsaddress(rs.getString("informantsaddress"))
 							.eidno(rs.getString("eidno")).aadharno(rs.getString("bdtlaadharno"))
 							.nationality(rs.getString("bdtlnationality")).religion(rs.getString("bdtlreligion")).icdcode(rs.getString("icdcode")).age(rs.getLong("age"))
+							.isLegacyRecord(rs.getBoolean("islegacyrecord"))
 							.build();
 					deathDtl.setFullName(utils.addfullName(deathDtl.getFirstname(), deathDtl.getMiddlename(), deathDtl.getLastname()));
 					deathDtlMap.put(deathdtlid, deathDtl);
