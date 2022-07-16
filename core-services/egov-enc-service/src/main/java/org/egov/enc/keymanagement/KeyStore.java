@@ -143,6 +143,9 @@ public class KeyStore implements ApplicationRunner {
         }
     }
 
+    public boolean checkIfKeyExists(int keyId) {
+        return symmetricKeyHashMap.containsKey(keyId) || asymmetricKeyHashMap.containsKey(keyId);
+    }
 
     //Generate Secret Key to be used by AES from custom object SymmetricKey
     public SecretKey getSecretKey(SymmetricKey symmetricKey) {
