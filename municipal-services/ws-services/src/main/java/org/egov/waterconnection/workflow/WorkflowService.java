@@ -139,12 +139,16 @@ public class WorkflowService {
 		ProcessInstanceResponse response = null;
 		try {
 			response = mapper.convertValue(result, ProcessInstanceResponse.class);
-			PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(response.
-							getProcessInstances().get(0).getAssignes().get(0).getUuid())
-					.plainRequestFields(plainRequestFieldsList).build();
+			if(response.getProcessInstances() !=null){
+				if(response.getProcessInstances().get(0).getAssignes()!=null) {
+					PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(response.
+									getProcessInstances().get(0).getAssignes().get(0).getUuid())
+							.plainRequestFields(plainRequestFieldsList).build();
 
-			requestInfo.setPlainAccessRequest(plainAccessRequest);
-			requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+					requestInfo.setPlainAccessRequest(plainAccessRequest);
+					requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+				}
+			}
 			Object resultNew = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
 			response = mapper.convertValue(resultNew, ProcessInstanceResponse.class);
 

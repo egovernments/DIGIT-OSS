@@ -84,6 +84,9 @@ public class WaterController {
 
 	}
 
+	/* Api to encrypt ownerType in connectionholder table and mobileNumber in plumberInfo table
+	* of existing water records */
+	/* To be executed only once*/
 	@RequestMapping(value = "/_encryptOldData", method = RequestMethod.POST)
 	public ResponseEntity<WaterConnectionResponse> encryptOldData(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute SearchCriteria criteria){
