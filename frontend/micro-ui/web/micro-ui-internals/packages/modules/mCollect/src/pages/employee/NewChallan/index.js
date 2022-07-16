@@ -20,16 +20,16 @@ const getformDataforEdit = (ChallanData,fetchBillData) => {
     fromDate : ChallanData[0]
         ? new Date(ChallanData[0].taxPeriodFrom).getFullYear().toString() +
           "-" +
-          (new Date(ChallanData[0].taxPeriodFrom).getMonth() + 1) +
+          `${(new Date(ChallanData[0].taxPeriodFrom).getMonth() + 1) < 10?"0":""}${(new Date(ChallanData[0].taxPeriodFrom).getMonth() + 1)}` +
           "-" +
-          new Date(ChallanData[0].taxPeriodFrom).getDate()
+          `${(new Date(ChallanData[0].taxPeriodFrom).getDate() < 10?"0":"")}${new Date(ChallanData[0].taxPeriodFrom).getDate()}`
         : null,
     toDate : ChallanData[0]
         ? new Date(ChallanData[0].taxPeriodTo).getFullYear().toString() +
           "-" +
-          (new Date(ChallanData[0].taxPeriodTo).getMonth() + 1) +
+          `${(new Date(ChallanData[0].taxPeriodTo).getMonth() + 1) < 10?"0":""}${(new Date(ChallanData[0].taxPeriodTo).getMonth() + 1)}` +
           "-" +
-          new Date(ChallanData[0].taxPeriodTo).getDate()
+          `${(new Date(ChallanData[0].taxPeriodTo).getDate() < 10?"0":"")}${new Date(ChallanData[0].taxPeriodTo).getDate()}`
         : null
   };
   defaultval[`${ChallanData[0]?.businessService.split(".")[0]}`] = {};

@@ -13,6 +13,7 @@ import {
 import some from "lodash/some";
 import store from "ui-redux/store";
 import { addQueryArg, hasTokenExpired, prepareForm } from "./commons";
+import { setUserObj } from "./localStorageUtils";
 
 axios.interceptors.response.use(
   (response) => {
@@ -223,7 +224,7 @@ export const loginRequest = async (username = null, password = null, refreshToke
     const response = await loginInstance.post("/user/oauth/token", params);
     const responseStatus = parseInt(response.status, 10);
     if (responseStatus === 200 || responseStatus === 201) {
-      localStorage.setItem("citizen.userRequestObject", JSON.stringify(response.data.UserRequest));
+      setUserObj(JSON.stringify(response.data.UserRequest));
       return response.data;
     }
   } catch (error) {

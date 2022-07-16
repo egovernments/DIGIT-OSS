@@ -30,6 +30,7 @@ import WSAdditonalDetails from "./WSAdditonalDetails";
 import WSFeeEstimation from "./WSFeeEstimation";
 import WSInfoLabel from "../../../ws/src/pageComponents/WSInfoLabel";
 import DocumentsPreview from "./DocumentsPreview";
+import InfoDetails from "./InfoDetails";
 
 function ApplicationDetailsContent({
   applicationDetails,
@@ -42,6 +43,7 @@ function ApplicationDetailsContent({
   statusAttribute = "status",
   paymentsList,
   oldValue,
+  isInfoLabel = false
 }) {
   const { t } = useTranslation();
 
@@ -144,8 +146,25 @@ function ApplicationDetailsContent({
     else if (value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
     else return value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("N/A");
   };
+
+  const getClickInfoDetails = () => {
+    if (window.location.href.includes("disconnection") || window.location.href.includes("application")) {
+      return "WS_DISCONNECTION_CLICK_ON_INFO_LABEL"
+    } else {
+      return "WS_CLICK_ON_INFO_LABEL"
+    }
+  }
+
+  const getClickInfoDetails1 = () => {
+    if (window.location.href.includes("disconnection") || window.location.href.includes("application")) {
+        return "WS_DISCONNECTION_CLICK_ON_INFO1_LABEL"
+    } else {
+        return ""
+    }
+  }
   return (
     <Card style={{ position: "relative" }} className={"employeeCard-override"}>
+      {isInfoLabel ? <InfoDetails t={t} userType={false} infoBannerLabel={"CS_FILE_APPLICATION_INFO_LABEL"} infoClickLable={"WS_CLICK_ON_LABEL"} infoClickInfoLabel={getClickInfoDetails()} infoClickInfoLabel1={getClickInfoDetails1()}/> : null}
       {applicationDetails?.applicationDetails?.map((detail, index) => (
         <React.Fragment key={index}>
           <div style={getMainDivStyles()}>
@@ -313,7 +332,7 @@ function ApplicationDetailsContent({
               </Link>
             </div>
           )}
-          {detail?.additionalDetails?.estimationDetails && <WSFeeEstimation wsAdditionalDetails={detail} />}
+          {detail?.additionalDetails?.estimationDetails && <WSFeeEstimation wsAdditionalDetails={detail} workflowDetails={workflowDetails}/>}
         </React.Fragment>
       ))}
       {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (

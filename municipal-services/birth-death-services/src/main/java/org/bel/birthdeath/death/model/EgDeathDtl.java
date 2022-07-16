@@ -97,5 +97,5 @@ public class EgDeathDtl{
 	
 	private String fullName;
 
-	private Boolean isLegacyRecord;
+	private Boolean isLegacyRecord = false;
 }

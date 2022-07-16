@@ -248,7 +248,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
         <CardLabel>{`${t("WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL")}`}</CardLabel>
         <InfoBannerIcon fill="#0b0c0c" />
         <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
-        {t("WS_CONSUMER_NO_DESCRIPTION") + " " + "WS_CONSUMER_NO_FORMAT"}
+        {t("WS_CONSUMER_NO_DESCRIPTION") + " " + t("WS_CONSUMER_NO_FORMAT")}
         </span>
         </div>
         </div>}

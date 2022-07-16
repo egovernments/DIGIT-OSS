@@ -16,10 +16,13 @@ import { Controller, useFormContext } from "react-hook-form";
 };
 
 const SurveySettingsForms = ({ t, controlSurveyForm, surveyFormState, disableInputs, enableEndDateTimeOnly }) => {
+  
   const formErrors = surveyFormState?.errors;
+  
   const { getValues } = useFormContext()
   const currentTs = new Date().getTime()
   const isValidFromDate = (enteredValue) => {
+    
     const enteredTs = new Date(enteredValue).getTime()
     const toDate = getValues("toDate") ? new Date(getValues("toDate")).getTime() : new Date().getTime()
     // return ( toDate > enteredTs && enteredTs >= currentTs ) ? true : false 
@@ -46,7 +49,7 @@ const SurveySettingsForms = ({ t, controlSurveyForm, surveyFormState, disableInp
           control={controlSurveyForm}
           name="fromDate"
           defaultValue={surveyFormState?.fromDate}
-          rules={{ required: true, validate: { isValidFromDate } }}
+          rules={{ required: true, validate: !enableEndDateTimeOnly? { isValidFromDate }:null }}
           render={({ onChange, value }) => <TextInput type="date" onChange={onChange} defaultValue={value} disable={disableInputs}/>}
         />
         {formErrors && formErrors?.fromDate && formErrors?.fromDate?.type === "required" && (

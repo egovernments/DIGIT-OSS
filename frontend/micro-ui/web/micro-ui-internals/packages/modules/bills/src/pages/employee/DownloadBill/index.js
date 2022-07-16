@@ -1,5 +1,5 @@
 import { Header, DownloadIcon, Table, Loader, Toast } from "@egovernments/digit-ui-react-components";
-import React, { useCallback, useEffect, useMemo, useState,Fragment } from "react";
+import React, { useCallback, useEffect, useMemo, useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import DesktopInbox from "../../../components/inbox/BillsDesktopInbox";
 import MobileInbox from "../../../components/inbox/BillsMobileInbox";
@@ -8,7 +8,8 @@ import { useFormContext } from "react-hook-form";
 
 const DownloadBillInbox = () => {
   const { t } = useTranslation();
-  const [showToast, setShowToast] = useState(null)
+
+  const [showToast, setShowToast] = useState(null);
 
   const [pageOffset, setPageOffset] = useState(0);
   const [totalRecords, setTotalRecords] = useState(0);
@@ -34,10 +35,12 @@ const DownloadBillInbox = () => {
   const fetchPrevPage = () => {
     setPageOffset((prevState) => prevState - pageSize);
   };
-  
+
+
   const showingToastMessage = (message) => {
-    setShowToast(message)
-  }
+    setShowToast(message);
+  };
+
   const columns = useSearchApplicationTableConfig(showingToastMessage);
   const TableComponent = useCallback(() => {
     if (isLoading) {
@@ -55,38 +58,45 @@ const DownloadBillInbox = () => {
         </Card>
       ) : (
         <>
-        <Table
-          t={t}
-          data={data?.groupBillrecords}
-          columns={columns}
-          getCellProps={(cellInfo) => {
-            return {
-              style: {
-                minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
-                padding: "20px 18px",
-                fontSize: "16px",
-              },
-            };
-          }}
-          currentPage={Math.floor(pageOffset / pageSize)}
-          onLastPage={fetchLastPage}
-          onNextPage={fetchNextPage}
-          onPrevPage={fetchPrevPage}
-          isLoading={isLoading}
-          totalRecords={totalRecords}
-          manualPagination={false}
-          pageSizeLimit={10}
-        />
-            
-          </>
+          <Table
+            t={t}
+            data={data?.groupBillrecords}
+            columns={columns}
+            getCellProps={(cellInfo) => {
+              return {
+                style: {
+                  minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
+                  padding: "20px 18px",
+                  fontSize: "16px",
+                },
+              };
+            }}
+            currentPage={Math.floor(pageOffset / pageSize)}
+            onLastPage={fetchLastPage}
+            onNextPage={fetchNextPage}
+            onPrevPage={fetchPrevPage}
+            isLoading={isLoading}
+            totalRecords={totalRecords}
+            manualPagination={false}
+            pageSizeLimit={10}
+          />
+        </>
       );
     }
-  },[isLoading,data]);
+  }, [isLoading, data]);
   return (
-    <React.Fragment>
-      <TableComponent /> 
-      {showToast && <Toast label={showToast?.label} onClose={setShowToast(null)} />}
-   </React.Fragment>
+    <div>
+      <Header>{t("ACTION_TEST_DOWNLOADBILLS")}</Header>
+      <TableComponent />
+      {showToast?.label && (
+        <Toast
+          label={showToast?.label}
+          onClose={(w) => {
+            setShowToast((x) => null);
+          }}
+        />
+      )}
+    </div>
   );
 };
 

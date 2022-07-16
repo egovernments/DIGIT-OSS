@@ -7,7 +7,6 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
   const isMutation = url.includes("property-mutation");
-
   let index = isMutation ? ownerIndex : window.location.href.charAt(window.location.href.length - 1);
   const [permanentAddress, setPermanentAddress] = useState(
     (formData.owners && formData.owners[index] && formData.owners[index]?.permanentAddress) ||
@@ -27,20 +26,9 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
 
   function setCorrespondenceAddress(e) {
     if (e.target.checked == true) {
-      const address = isMutation ? formData?.searchResult?.property?.address : formData?.address;
-      let obj = {
-        doorNo: address?.doorNo,
-        street: address?.street,
-        landmark: address?.landmark,
-        locality: address?.locality?.i18nkey,
-        city: address?.city?.code,
-        pincode: address?.pincode,
-      };
+      
       let addressDetails = "";
-      for (const key in obj) {
-        if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
-        else addressDetails += obj[key] ? t(obj[key]) + ", " : "";
-      }
+      addressDetails= formData?.searchResult?.data?.property_address;
       setPermanentAddress(addressDetails);
     } else {
       setPermanentAddress("");

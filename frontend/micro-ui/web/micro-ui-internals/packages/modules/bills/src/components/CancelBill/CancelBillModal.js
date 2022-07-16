@@ -21,11 +21,7 @@ const CloseBtn = (props) => {
     );
 };
 
-const options = [
-    {name:"NIpun"},
-    { name: "Vipul" },
-    { name: "Shaifali" },
-]
+
 
 const CancelBillModal = ({ t, closeModal, actionCancelLabel, actionCancelOnSubmit, actionSaveLabel, actionSaveOnSubmit,onSubmit }) => {
     
@@ -63,6 +59,7 @@ const CancelBillModal = ({ t, closeModal, actionCancelLabel, actionCancelOnSubmi
     const { control, handleSubmit,formState } = useForm();
     const formErrors = formState?.errors;
 
+    
     const selectedReason = useWatch({ control: control, name: "reason", defaultValue: "" });
     //const [othersSelected,setOthersSelected] = useState(false)
     let othersSelected = false
@@ -102,7 +99,7 @@ const CancelBillModal = ({ t, closeModal, actionCancelLabel, actionCancelOnSubmi
                         {formErrors && formErrors?.businesService && formErrors?.businesService?.type === "required" && (
                             <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>)}
                     </span>:<Loader/>}
-                    <span className="surveyformfield">
+                    {selectedReason?.code==="OTHER" && <span className="surveyformfield">
                         <label>{t("BC_MORE_DETAILS_LABEL")}</label>
                         <Controller
                             control={control}
@@ -112,7 +109,7 @@ const CancelBillModal = ({ t, closeModal, actionCancelLabel, actionCancelOnSubmi
                         />
                         {formErrors && formErrors?.details && formErrors?.details?.type === "required" && (
                             <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>)}
-                    </span>
+                    </span>}
                 </form>
             </Card>
         </Modal>

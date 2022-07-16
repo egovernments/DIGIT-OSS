@@ -526,7 +526,7 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
       dateEffectiveFrom: convertDateToEpoch(data?.date),
       isdisconnection : true,
       isDisconnectionTemporary: data?.type?.value?.code === "Temporary" ? true :false,
-      reason: data?.reason.value,
+      disconnectionReason: data?.reason.value,
       documents: data?.documents,
       water: true,
       sewerage: false,
@@ -563,7 +563,7 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
       dateEffectiveFrom: convertDateToEpoch(data?.date),
       isdisconnection : true,
       isDisconnectionTemporary: data?.type?.value?.code === "Temporary" ? true :false,
-      reason: data?.reason.value,
+      disconnectionReason: data?.reason.value,
       documents: data?.documents,
       water: false,
       sewerage: true,
@@ -576,7 +576,7 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
       plumberInfo: null,
       roadCuttingArea: null,
       roadType: null,
-      connectionExecutionDate: storeData?.applicationData?.connectionExecutionDate,
+      connectionExecutionDate: convertDateToEpoch(data?.date),
       noOfWaterClosets: storeData?.applicationData?.noOfWaterClosets ,
       noOfToilets : storeData?.applicationData?.noOfToilets,
       additionalDetails: storeData?.applicationData?.additionalDetails,
@@ -597,9 +597,10 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
 export const updatePayloadOfWSDisconnection = async (data, type) => {
   let payload = {
     ...data,
-    applicationType: "DISCONNECT_WATER_CONNECTION",
+    applicationType: type === "WATER" ? "DISCONNECT_WATER_CONNECTION" : "DISCONNECT_SEWERAGE_CONNECTION",
     processInstance: {
       ...data?.processInstance,
+      businessService: type === "WATER" ? "DisconnectWSConnection" : "DisconnectSWConnection",
       action: "SUBMIT_APPLICATION",
     }
   };
@@ -860,6 +861,7 @@ export const convertApplicationData = (data, serviceType, modify = false, editBy
     ? [
         {
           sameAsOwnerDetails: false,
+          uuid: data?.applicationData?.connectionHolders?.[0]?.uuid,
           name: data?.applicationData?.connectionHolders?.[0]?.name || "",
           mobileNumber: data?.applicationData?.connectionHolders?.[0]?.mobileNumber || "",
           guardian: data?.applicationData?.connectionHolders?.[0]?.fatherOrHusbandName || "",

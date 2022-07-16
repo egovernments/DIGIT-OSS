@@ -15,7 +15,12 @@ const GetActionMessage = (props) => {
 };
 
 const BannerPicker = (props) => {
-  return <Banner message={GetActionMessage(props)} successful={props.isSuccess} />;
+  return <Banner 
+  message={props.message} 
+  applicationNumber={props?.applicationNumber}
+  successful={props.isSuccess} style={{ padding: "10px" }}
+  headerStyles={{ fontSize: "32px" }}
+  infoOneStyles={{ paddingTop: "20px" }}/>;
 };
 
 const WSDisconnectAcknowledgement = () => {
@@ -32,8 +37,7 @@ const WSDisconnectAcknowledgement = () => {
   return (
     <Card style={{ padding: "10px" }}>
       <CardSectionHeader>
-        {" "}
-        <BannerPicker t={t} /> <successSvg />
+        <BannerPicker isSuccess={true} message={t("WS_APPLICATION_COMPLETED_SUCCESSFULLY_LABEL")} applicationNumber={disconnectionData?.DisconnectionResponse?.applicationNo}/> <successSvg />
       </CardSectionHeader>
       <CardText>
         {t('WS_DISCONNECTION_APPLICATION_SUCC_MSG')}

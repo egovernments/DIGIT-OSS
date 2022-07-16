@@ -13,6 +13,7 @@ import {
   Toast,
   StatusTable,
   Row,
+  UnMaskComponent,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
@@ -42,7 +43,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
 
   const { isLoading, isError, error, data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: searchPropertyId }, tenantId: tenantId },
-    { filters: { propertyIds: searchPropertyId }, tenantId: tenantId, enabled: searchPropertyId ? true : false }
+    { filters: { propertyIds: searchPropertyId }, tenantId: tenantId, enabled: searchPropertyId ? true : false, privacy : Digit.Utils.getPrivacyObject() }
   );
 
   useEffect(() => {
@@ -146,6 +147,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
                 label={t(`OWNER_NAME`)}
                 text={getOwnerNames(propertyDetails?.Properties[0])}
               />
+               <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
               <Row
                 className="border-none"
                 labelStyle={isMobile ? { width: "40%" } : {}}
@@ -153,6 +155,8 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
                 label={t(`PROPERTY_ADDRESS`)}
                 text={propertyAddress}
               />
+                <UnMaskComponent privacy={{ uuid:propertyDetails?.Properties[0]?.propertyId, fieldName: ["doorNo","street","landmark"], model: "Property" }}></UnMaskComponent>
+              </span>
             </div>
           </StatusTable>
             <Link to={`/digit-ui/employee/commonpt/view-property?propertyId=${propertyId}&tenantId=${tenantId}&from=${window.location.pathname?.includes("employee/ws/new-application") ? "ES_COMMON_WS_NEW_CONNECTION" : window.location.pathname?.includes("employee/ws/modify-application") ?"WS_MODIFY_CONNECTION_BUTTON": window.location.pathname?.includes("employee/tl/new-application")

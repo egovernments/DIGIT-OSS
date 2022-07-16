@@ -7,7 +7,6 @@ import * as func from "../../../utils";
 import { ifUserRoleExists, downloadPdf, downloadAndOpenPdf } from "../../../utils";
 import WSInfoLabel from "../../../pageComponents/WSInfoLabel";
 
-
 const GetConnectionDetails = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
@@ -23,16 +22,18 @@ const GetConnectionDetails = () => {
   const [showOptions, setShowOptions] = useState(false);
   const stateCode = Digit.ULBService.getStateId();
   const actionConfig = ["MODIFY_CONNECTION_BUTTON", "BILL_AMENDMENT_BUTTON", "DISCONNECTION_BUTTON"];
-  const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useConnectionDetail(t, tenantId, applicationNumber, serviceType);
+  const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useConnectionDetail(t, tenantId, applicationNumber, serviceType, {
+    privacy: Digit.Utils.getPrivacyObject(),
+  });
   const menuRef = useRef();
   const actionMenuRef = useRef();
   sessionStorage.removeItem("IsDetailsExists");
   Digit.SessionStorage.del("PT_CREATE_EMP_WS_NEW_FORM");
 
   const { isLoading: isLoadingDemand, data: demandData } = Digit.Hooks.useDemandSearch(
-    { consumerCode: applicationDetails?.applicationData?.connectionNo, businessService: serviceType === "WATER" ? "WS" : "SW", tenantId }, { enabled: !!(applicationDetails?.applicationData?.applicationNo) }
+    { consumerCode: applicationDetails?.applicationData?.connectionNo, businessService: serviceType === "WATER" ? "WS" : "SW", tenantId },
+    { enabled: !!applicationDetails?.applicationData?.applicationNo }
   );
-
 
   const [showModal, setshowModal] = useState(false);
   const [billData, setBilldata] = useState([]);
@@ -98,6 +99,7 @@ const GetConnectionDetails = () => {
   }, 10000);
 
   const checkApplicationStatus = applicationDetails?.applicationData?.status === "Active" ? true : false;
+  const checkWorkflow = applicationDetails?.isApplicationApproved;
 
   const getModifyConnectionButton = () => {
     if (!checkApplicationStatus) {
@@ -107,7 +109,7 @@ const GetConnectionDetails = () => {
       });
       return;
     }
-    if (applicationDetails?.fetchBillsData[0]?.totalAmount>0){
+    if (applicationDetails?.fetchBillsData[0]?.totalAmount > 0) {
       setshowActionToast({
         key: "error",
         label: "WS_DUE_AMOUNT_SHOULD_BE_ZERO",
@@ -116,23 +118,21 @@ const GetConnectionDetails = () => {
     }
     //here check if this connection have any active bills(don't allow to modify in this case)
 
-    
     let pathname = `/digit-ui/employee/ws/modify-application?applicationNumber=${applicationDetails?.applicationData?.connectionNo}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}&from=WS_COMMON_CONNECTION_DETAIL`;
-
 
     history.push(`${pathname}`, { data: applicationDetails });
   };
 
   const getBillAmendmentButton = () => {
     //redirect to documents required screen here instead of this screen
-    
-    let isBillAmendNotApplicable = false
-    billData?.map(bill => {
+
+    let isBillAmendNotApplicable = false;
+    billData?.map((bill) => {
       if (bill?.status === "INWORKFLOW") {
-        isBillAmendNotApplicable = true
-        return
+        isBillAmendNotApplicable = true;
+        return;
       }
-    })
+    });
 
     if (demandData?.Demands?.length === 0) {
       setshowActionToast({
@@ -140,44 +140,46 @@ const GetConnectionDetails = () => {
         label: "No_Bills_Found",
       });
       return;
-    }
-    else if (isBillAmendNotApplicable) {
+    } else if (isBillAmendNotApplicable) {
       setshowActionToast({
         key: "error",
         label: "WORKFLOW_IN_PROGRESS",
       });
       return;
     }
-    
-    history.push(`/digit-ui/employee/ws/required-documents?connectionNumber=${applicationDetails?.applicationData?.connectionNo}&tenantId=${getTenantId}&service=${serviceType}`, { data: applicationDetails });
+
+    history.push(
+      `/digit-ui/employee/ws/required-documents?connectionNumber=${applicationDetails?.applicationData?.connectionNo}&tenantId=${getTenantId}&service=${serviceType}`,
+      { data: applicationDetails }
+    );
   };
 
   const closeMenu = () => {
     setShowOptions(false);
-  }
-  Digit.Hooks.useClickOutside(menuRef, closeMenu, showOptions );
+  };
+  Digit.Hooks.useClickOutside(menuRef, closeMenu, showOptions);
 
   const closeActionMenu = () => {
     setDisplayMenu(false);
-  }
-  Digit.Hooks.useClickOutside(actionMenuRef, closeActionMenu, displayMenu );
-
+  };
+  Digit.Hooks.useClickOutside(actionMenuRef, closeActionMenu, displayMenu);
 
   const getDisconnectionButton = () => {
     let pathname = `/digit-ui/employee/ws/new-disconnection`;
-    if(applicationDetails?.applicationData?.applicationStatus === "CONNECTION_ACTIVATED"){
-      if (billData[0]?.status === "ACTIVE" || due === "0") {
-        Digit.SessionStorage.set("WS_DISCONNECTION", applicationDetails);
-        history.push(`${pathname}`);
-      } else {
-        setshowModal(true);
-      }
-    }
-    else {
+
+    if(!checkWorkflow){
       setshowActionToast({
         type: "error",
         label: "WORKFLOW_IN_PROGRESS",
       });
+    }
+    else{
+        if (billData[0]?.status === "ACTIVE"  || due === "0") {
+          Digit.SessionStorage.set("WS_DISCONNECTION", applicationDetails);
+          history.push(`${pathname}`);
+        } else {
+          setshowModal(true);
+        }
     }
   };
   function onActionSelect(action) {
@@ -192,7 +194,7 @@ const GetConnectionDetails = () => {
 
   //all options needs to be shown
   //const showAction = due !== "0" ? actionConfig : actionConfig.filter((item) => item !== "BILL_AMENDMENT_BUTTON");
-  const checkApplicationStatusForDisconnection =  applicationDetails?.applicationData?.status === "Active" || applicationDetails?.applicationData?.status === "InWorkflow" ? true : false
+  const checkApplicationStatusForDisconnection =  applicationDetails?.applicationData?.status === "Active" ? true : false
   const showAction= checkApplicationStatusForDisconnection ? actionConfig : actionConfig.filter((item) => item !== "DISCONNECTION_BUTTON");
 
 
@@ -201,17 +203,20 @@ const GetConnectionDetails = () => {
       const service = serviceType === "WATER" ? "WS" : "SW";
       let wsSearchFilters = {
         isConnectionSearch: true,
-        connectionNumber: applicationDetails?.applicationData?.connectionNo
-      }
+        connectionNumber: applicationDetails?.applicationData?.connectionNo,
+      };
       const wsConnectionDetails = await Digit.WSService.search({ tenantId, filters: wsSearchFilters, businessService: service });
       let filters = {
-        applicationNumber: serviceType === "WATER" ? wsConnectionDetails?.WaterConnection?.[0]?.applicationNo : wsConnectionDetails?.SewerageConnections?.[0]?.applicationNo,
-        bussinessService: service
+        applicationNumber:
+          serviceType === "WATER"
+            ? wsConnectionDetails?.WaterConnection?.[0]?.applicationNo
+            : wsConnectionDetails?.SewerageConnections?.[0]?.applicationNo,
+        bussinessService: service,
       };
-      if(wsConnectionDetails?.WaterConnection?.length > 0 || wsConnectionDetails?.SewerageConnections?.length > 0){
+      if (wsConnectionDetails?.WaterConnection?.length > 0 || wsConnectionDetails?.SewerageConnections?.length > 0) {
         downloadAndOpenPdf(applicationDetails?.applicationData?.connectionNo, filters);
-      } 
-    } 
+      }
+    }
   }
 
   let dowloadOptions = [];
@@ -228,8 +233,7 @@ const GetConnectionDetails = () => {
     onClick: () => downloadConnectionDetails(),
   };
 
-  if (applicationDetails?.fetchBillsData?.length > 0)
-    dowloadOptions = [appFeeDownloadReceipt, connectionDetailsReceipt];
+  if (applicationDetails?.fetchBillsData?.length > 0) dowloadOptions = [appFeeDownloadReceipt, connectionDetailsReceipt];
   else dowloadOptions = [connectionDetailsReceipt];
   const Close = () => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF">
@@ -252,6 +256,7 @@ const GetConnectionDetails = () => {
       </div>
     );
   };
+
   return (
     <Fragment>
       <div>

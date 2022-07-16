@@ -57,9 +57,53 @@ public class MDMSValidator {
 			case WCConstants.MODIFY_CONNECTION:
 				validateMasterDataForModifyConnection(request);
 				break;
+			case WCConstants.DISCONNECT_CONNECTION:
+				validateMasterDataForDisconnection(request);
+				break;
 			default:
 				break;
 		}
+	}
+	private void validateMasterDataForDisconnection(WaterConnectionRequest request) {
+		if (request.getWaterConnection().getProcessInstance().getAction()
+				.equalsIgnoreCase(WCConstants.EXECUTE_DISCONNECTION)) {
+			String jsonPath = WCConstants.JSONPATH_ROOT;
+			String taxjsonPath = WCConstants.TAX_JSONPATH_ROOT;
+			String tenantId = request.getWaterConnection().getTenantId();
+			List<String> names = new ArrayList<>(Arrays.asList(WCConstants.MDMS_WC_CONNECTION_TYPE,
+					WCConstants.MDMS_WC_CONNECTION_CATEGORY, WCConstants.MDMS_WC_WATER_SOURCE));
+			Map<String, List<String>> codes = getAttributeValues(tenantId, WCConstants.MDMS_WC_MOD_NAME, names,
+					"$.*.code", jsonPath, request.getRequestInfo());
+			List<String> taxModelnames = new ArrayList<>(Arrays.asList(WCConstants.WC_ROADTYPE_MASTER));
+			Map<String, List<String>> codeFromCalculatorMaster = getAttributeValues(tenantId, WCConstants.WS_TAX_MODULE,
+					taxModelnames, "$.*.code", taxjsonPath, request.getRequestInfo());
+			// merge codes
+			String[] finalmasterNames = {WCConstants.MDMS_WC_CONNECTION_TYPE, WCConstants.MDMS_WC_CONNECTION_CATEGORY,
+					WCConstants.MDMS_WC_WATER_SOURCE, WCConstants.WC_ROADTYPE_MASTER};
+			Map<String, List<String>> finalcodes = Stream.of(codes, codeFromCalculatorMaster).map(Map::entrySet)
+					.flatMap(Collection::stream).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+			validateMDMSData(finalmasterNames, finalcodes);
+			validateCodesForDisconnection(request.getWaterConnection(), finalcodes);
+		}
+	}
+
+	private void validateCodesForDisconnection(WaterConnection waterConnection, Map<String, List<String>> codes) {
+		Map<String, String> errorMap = new HashMap<>();
+		StringBuilder messageBuilder = new StringBuilder();
+		if (!StringUtils.isEmpty(waterConnection.getConnectionType())
+				&& !codes.get(WCConstants.MDMS_WC_CONNECTION_TYPE).contains(waterConnection.getConnectionType())) {
+			messageBuilder = new StringBuilder();
+			messageBuilder.append("Connection type value is invalid, please enter proper value! ");
+			errorMap.put("INVALID_WATER_CONNECTION_TYPE", messageBuilder.toString());
+		}
+		if (!StringUtils.isEmpty(waterConnection.getWaterSource())
+				&& !codes.get(WCConstants.MDMS_WC_WATER_SOURCE).contains(waterConnection.getWaterSource())) {
+			messageBuilder = new StringBuilder();
+			messageBuilder.append("Water Source / Water Sub Source value is invalid, please enter proper value! ");
+			errorMap.put("INVALID_WATER_CONNECTION_SOURCE", messageBuilder.toString());
+		}
+		if (!errorMap.isEmpty())
+			throw new CustomException(errorMap);
 	}
 
 	public void validateMasterDataForUpdateConnection(WaterConnectionRequest request) {

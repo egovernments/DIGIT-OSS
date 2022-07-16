@@ -56,6 +56,8 @@ import { convertDateToEpoch, convertEpochToDate, createPayloadOfWSDisconnection,
       error: updateSewerageError,
       mutate: sewerageUpdateMutation,
     } = Digit.Hooks.ws.useWSApplicationActions("SEWERAGE");
+    
+    const closeToastOfError = () => { setShowToast(null); };
 
     const onSubmit = async (data) => {
       const payload = await createPayloadOfWSDisconnection(data, {applicationData: value}, value.serviceType);
@@ -71,6 +73,7 @@ import { convertDateToEpoch, convertEpochToDate, createPayloadOfWSDisconnection,
             onSuccess: async (data, variables) => {
               let response = await updatePayloadOfWSDisconnection(data?.WaterConnection?.[0], "WATER");
               let waterConnectionUpdate = { WaterConnection: response };
+              waterConnectionUpdate = {...waterConnectionUpdate, disconnectRequest: true}
               await waterUpdateMutation(waterConnectionUpdate, {
                 onError: (error, variables) => {
                   setIsEnableLoader(false);
@@ -98,6 +101,7 @@ import { convertDateToEpoch, convertEpochToDate, createPayloadOfWSDisconnection,
             onSuccess: async (data, variables) => {
               let response = await updatePayloadOfWSDisconnection(data?.SewerageConnections?.[0], "SEWERAGE");
               let sewerageConnectionUpdate = { SewerageConnections: response };
+              sewerageConnectionUpdate = {...sewerageConnectionUpdate, disconnectRequest: true};
               await sewerageUpdateMutation(sewerageConnectionUpdate, {
                 onError: (error, variables) => {
                   setIsEnableLoader(false);
@@ -155,7 +159,7 @@ import { convertDateToEpoch, convertEpochToDate, createPayloadOfWSDisconnection,
          {<div><CardSectionHeader>{t(doc?.documentType?.split('.').slice(0,2).join('_'))}</CardSectionHeader>
           <StatusTable>
           {
-           <WSDocument value={{documents: value.WSDisconnectionForm}} Code={doc?.documentType} index={index} /> }
+           <WSDocument value={{documents: value.WSDisconnectionForm}} Code={doc?.documentType} index={index} showFileName={true}/> }
           {documents?.length != index+ 1 ? <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/> : null}
           </StatusTable>
           </div>}

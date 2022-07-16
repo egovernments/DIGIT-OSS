@@ -98,7 +98,7 @@ import {
       subHeader: t(`${application?.tenantId?.replace('.', '_')?.toUpperCase()}_SUB_HEADER_LABEL`),
       description: t(`${application?.tenantId?.replace('.', '_')?.toUpperCase()}_DES_HEADER_LABEL`),
       typeOfApplication: application?.applicationNo?.includes("SW") ? t("WS_SEWERAGE_DISCONNECTION_APP"): t("WS_WATER_DISCONNECTION_APPLICATION"),
-      date: Digit.DateUtils.ConvertEpochToDate(application?.auditDetails?.createdTime) || "NA",
+      date: Digit.DateUtils.ConvertEpochToDate(application?.additionalDetails?.appCreatedDate) || "NA",
       values: values,
       ...dynamicHeaderData
     }
@@ -109,8 +109,8 @@ import {
         title: t("WS_DISCONNECTION_DETAILS"),
         values: [
           { title: t("WS_DISCONNECTION_TYPE"), value: application?.isDisconnectionTemporary === true ? t("WS_DISCONNECTIONTYPE_TEMPORARY") : t("WS_DISCONNECTIONTYPE_PERMANENT") || t("CS_NA") },
-          { title: t("WS_PROPOSED_DISCONECTION_DATE"), value: Digit.DateUtils.ConvertEpochToDate(application?.connectionExecutionDate) || t("CS_NA") },
-          { title: t("WS_DISCONNECTION_REASON"), value: application?.reason || t("CS_NA") },
+          { title: t("WS_PROPOSED_DISCONECTION_DATE"), value: Digit.DateUtils.ConvertEpochToDate(application?.dateEffectiveFrom) || t("CS_NA") },
+          { title: t("WS_DISCONNECTION_REASON"), value: application?.disconnectionReason || t("CS_NA") },
         ],
       };
   };

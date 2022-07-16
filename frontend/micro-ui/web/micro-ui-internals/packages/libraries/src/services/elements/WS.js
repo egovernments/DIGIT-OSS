@@ -140,4 +140,24 @@ export const WSService = {
       params: { tenantId, ...filters },
       userDownload: true,
     }),
+  WSOpensearch: (data) =>
+    Request({
+     url: Urls.ws.getSearchDetails,
+     useCache: false,
+     method: "POST",
+     auth: false ,
+     userService: false,
+     data: data
+   }),
+  wsCalculationApplyAdhoc: (details, businessService) =>
+    Request({
+      url: businessService === "WS" ? Urls.ws.water_applyAdhocTax : Urls.ws.sewerage_applyAdhocTax,
+      data: details,
+      useCache: false,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      params: {},
+      auth: true,
+    }),
 };

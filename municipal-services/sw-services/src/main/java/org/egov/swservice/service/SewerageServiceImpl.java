@@ -267,10 +267,11 @@ public class SewerageServiceImpl implements SewerageService {
 		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest);
 		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
 		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
-		
+		sewerageDaoImpl.pushForEditNotification(sewerageConnectionRequest);
 		userService.updateUser(sewerageConnectionRequest, searchResult);
 		// Call workflow
 		wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
+		calculationService.calculateFeeAndGenerateDemand(sewerageConnectionRequest, property);
 		// Enrich file store Id After payment
 		enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
 		enrichmentService.postStatusEnrichment(sewerageConnectionRequest);

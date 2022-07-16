@@ -476,8 +476,8 @@ class ShowField extends Component {
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
           if (doc.content[1] && !doc.content[2]) {
             doc.content[1].margin = reportHeader.length > 6 ? null : [60, 10, 10, 12];
-          }else if (doc.content[1] && doc.content[2]) {
-            doc.content[1].margin = reportHeader.length > 6 ? null : [180, 10, 10, 12];
+          } else if (doc.content[1] && doc.content[2]) {
+            doc.content[1].margin = reportHeader.length > 6 ? [380, 10, 10, 12] : [180, 10, 10, 12];
             doc.content[2].margin = reportHeader.length > 6 ? null : [60, 10, 10, 12];
           }
           if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
@@ -1031,8 +1031,9 @@ class ShowField extends Component {
   };
 
   getReportTitle = (rptName) => {
-    let reportName = rptName || this.state.reportName;
-    let reportTitleArr = reportName && reportName.split(/(?=[A-Z])/);
+    let reportName = rptName || this.state.reportName || "";
+    reportName = reportName.toUpperCase();
+    let reportTitleArr = reportName && getLocaleLabels(reportName, reportName).split(/(?=[A-Z])/);
     let reportTitle = "";
     if (reportTitleArr) {
       reportTitle = reportTitleArr.map((char) => {
@@ -1048,8 +1049,9 @@ class ShowField extends Component {
   };
 
   getXlsReportTitle = (rptName) => {
-    let reportName = rptName || this.state.reportName;
-    let reportTitleArr = reportName && reportName.split(/(?=[A-Z])/);
+    let reportName = rptName || this.state.reportName || "";
+    reportName = reportName.toUpperCase();
+    let reportTitleArr = reportName && getLocaleLabels(reportName, reportName).split(/(?=[A-Z])/);
     let reportTitle = "";
     let reportHeaderName = "";
     if (reportTitleArr) {

@@ -17,17 +17,21 @@ import {
   StatusTable, 
   Row,
   InfoBannerIcon,
-  ActionBar
+  ActionBar,
+  Dropdown
 } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import DisconnectTimeline from "../components/DisconnectTimeline";
-import { stringReplaceAll, createPayloadOfWSDisconnection, updatePayloadOfWSDisconnection } from "../utils";
+import { stringReplaceAll, createPayloadOfWSDisconnection, updatePayloadOfWSDisconnection, convertDateToEpoch } from "../utils";
+import { addDays, format } from "date-fns";
 
 const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
   let validation = {};
   const stateCode = Digit.ULBService.getStateId();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
 
+  const isMobile = window.Digit.Utils.browser.isMobile();
   const applicationData = Digit.SessionStorage.get("WS_DISCONNECTION");
   const history = useHistory();
   const match = useRouteMatch();
@@ -38,7 +42,7 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
       reason: applicationData.WSDisconnectionForm ?  applicationData.WSDisconnectionForm.reason : "",
       documents: applicationData.WSDisconnectionForm ? applicationData.WSDisconnectionForm.documents : []
   });
-  const [documents, setDocuments] = useState([]);
+  const [documents, setDocuments] = useState(applicationData.WSDisconnectionForm ? applicationData.WSDisconnectionForm.documents : []);
   const [error, setError] = useState(null);
   const [disconnectionTypeList, setDisconnectionTypeList] = useState([]);
   const [checkRequiredFields, setCheckRequiredFields] = useState(false);
@@ -46,6 +50,7 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
 
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["disconnectionType"]);
   const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(stateCode, "DisconnectionDocuments");
+  const {isLoading: slaLoading, data: slaData } = Digit.Hooks.ws.useDisconnectionWorkflow({tenantId});
   const {
     isLoading: creatingWaterApplicationLoading,
     isError: createWaterApplicationError,
@@ -78,22 +83,16 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
     error: updateSewerageError,
     mutate: sewerageUpdateMutation,
   } = Digit.Hooks.ws.useWSApplicationActions("SEWERAGE");
-  // useEffect(() =>{
-  //   setDisconnectionData({
-  //     type:storedData?.type||"",
-  //     date: storedData?.date || "",
-  //     reason: storedData?.reason || "",
-  //     documents: storedData?.documents || []
-  //   });
-  //   setDocuments(storedData?.documents || [])
 
-  // },[]);
+
+  const closeToastOfError = () => { setShowToast(null); };
 
   useEffect(() => {
     const oldData = {...disconnectionData};
     oldData['documents'] = documents;
     setDisconnectionData(oldData);
   }, [documents]);
+  
 
   useEffect(() => {
     const disconnectionTypes = mdmsData?.["ws-services-masters"]?.disconnectionType || []; 
@@ -121,66 +120,74 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
   }
 
   const onSubmit = async (data) => {
-    if(data?.documents?.length === 0 || data?.documents?.length < 2){
-      setError({key: "error", message: "DOCUMENTS_MANDATORY"})
+    const appDate= new Date();
+    const proposedDate= format(addDays(appDate, slaData?.slaDays), 'yyyy-MM-dd').toString();
+
+    if( convertDateToEpoch(data?.date)  <= convertDateToEpoch(proposedDate)){
+      setError({key: "error", message: "PROPOSED_DISCONNECTION_INVALID_DATE"});
     }
 
-    const payload = await createPayloadOfWSDisconnection(data, applicationData, applicationData?.applicationData?.serviceType);
-    if(payload?.WaterConnection?.water){
-      if (waterMutation) {
-        setIsEnableLoader(true);
-        await waterMutation(payload, {
-          onError: (error, variables) => {
-            setIsEnableLoader(false);
-            setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
-            setTimeout(closeToastOfError, 5000);
-          },
-          onSuccess: async (data, variables) => {
-            let response = await updatePayloadOfWSDisconnection(data?.WaterConnection?.[0], "WATER");
-            let waterConnectionUpdate = { WaterConnection: response };
-            await waterUpdateMutation(waterConnectionUpdate, {
-              onError: (error, variables) => {
-                setIsEnableLoader(false);
-                setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
-                setTimeout(closeToastOfError, 5000);
-              },
-              onSuccess: (data, variables) => {
-                history.push(`/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}&applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`);                // window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
-              },
-            })
-          },
-        });
+    else {
+      const payload = await createPayloadOfWSDisconnection(data, applicationData, applicationData?.applicationData?.serviceType);
+      if(payload?.WaterConnection?.water){
+        if (waterMutation) {
+          setIsEnableLoader(true);
+          await waterMutation(payload, {
+            onError: (error, variables) => {
+              setIsEnableLoader(false);
+              setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
+              setTimeout(closeToastOfError, 5000);
+            },
+            onSuccess: async (data, variables) => {
+              let response = await updatePayloadOfWSDisconnection(data?.WaterConnection?.[0], "WATER");
+              let waterConnectionUpdate = { WaterConnection: response };
+              waterConnectionUpdate = {...waterConnectionUpdate, disconnectRequest: true}
+              await waterUpdateMutation(waterConnectionUpdate, {
+                onError: (error, variables) => {
+                  setIsEnableLoader(false);
+                  setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
+                  setTimeout(closeToastOfError, 5000);
+                },
+                onSuccess: (data, variables) => {
+                  history.push(`/digit-ui/employee/ws/ws-disconnection-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`);                
+                },
+              })
+            },
+          });
+        }
+      }
+      else if(payload?.SewerageConnections?.sewerage){
+        if (sewerageMutation) {
+          setIsEnableLoader(true);
+          await sewerageMutation(payload, {
+            onError: (error, variables) => {
+              setIsEnableLoader(false);
+              setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
+              setTimeout(closeToastOfError, 5000);
+            },
+            onSuccess: async (data, variables) => {
+              let response = await updatePayloadOfWSDisconnection(data?.SewerageConnections?.[0], "SEWERAGE");
+              let sewerageConnectionUpdate = { SewerageConnections: response };
+              sewerageConnectionUpdate = {...sewerageConnectionUpdate, disconnectRequest: true};
+              await sewerageUpdateMutation(sewerageConnectionUpdate, {
+                onError: (error, variables) => {
+                  setIsEnableLoader(false);
+                  setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
+                  setTimeout(closeToastOfError, 5000);
+                },
+                onSuccess: (data, variables) => {
+                  history.push(`/digit-ui/employee/ws/ws-disconnection-response?applicationNumber=${data?.SewerageConnections?.[0]?.applicationNo}`);              
+                },
+              })
+            },
+          });
+        }
       }
     }
-    else if(payload?.SewerageConnections?.sewerage){
-      if (sewerageMutation) {
-        setIsEnableLoader(true);
-        await sewerageMutation(payload, {
-          onError: (error, variables) => {
-            setIsEnableLoader(false);
-            setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
-            setTimeout(closeToastOfError, 5000);
-          },
-          onSuccess: async (data, variables) => {
-            let response = await updatePayloadOfWSDisconnection(data?.SewerageConnections?.[0], "SEWERAGE");
-            let sewerageConnectionUpdate = { SewerageConnections: response };
-            await sewerageUpdateMutation(sewerageConnectionUpdate, {
-              onError: (error, variables) => {
-                setIsEnableLoader(false);
-                setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
-                setTimeout(closeToastOfError, 5000);
-              },
-              onSuccess: (data, variables) => {
-                history.push(`/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}&applicationNumber1=${data?.SewerageConnections?.[0]?.applicationNo}`);                // window.location.href = `${window.location.origin}/digit-ui/employee/ws/ws-response?applicationNumber=${data?.WaterConnection?.[0]?.applicationNo}`;
-              },
-            })
-          },
-        });
-      }
-    }
+    
   } ;
 
-  if (isMdmsLoading || wsDocsLoading || isEnableLoader) return <Loader />
+  if (isMdmsLoading || wsDocsLoading || isEnableLoader || slaLoading) return <Loader />
 
 
 if(userType === 'citizen') {
@@ -200,7 +207,7 @@ if(userType === 'citizen') {
             <Row key={t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")} label={`${t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")}`} text={applicationData?.connectionNo} className="border-none" />
           </StatusTable> 
           
-          <CardLabel className="card-label-smaller">{t("WS_DISCONNECTION_TYPE")}</CardLabel>
+          <CardLabel className="card-label-smaller" style={{display: "inline"}}>{t("WS_DISCONNECTION_TYPE")}</CardLabel>
           <RadioButtons
                 t={t}
                 options={disconnectionTypeList}
@@ -211,15 +218,15 @@ if(userType === 'citizen') {
                 onSelect={(val) => filedChange({code: "type",value: val})}
                 labelKey="WS_DISCONNECTION_TYPE"
             />
-            <CardLabel className="card-label-smaller">
-            {t("WS_DISCONECTION_DATE")}
+            <CardLabel className="card-label-smaller" style={{display: "inline"}}>
+            {t("WS_DISCONNECTION_PROPOSED_DATE")}
             <div className={`tooltip`} style={{position: "absolute"}}>
             <InfoBannerIcon fill="#0b0c0c"/>
             <span className="tooltiptext" style={{
                     whiteSpace: "nowrap",
                     fontSize: "medium"
                   }}>
-                    {`${t(`WS_DISCONNECTION_DATE_TOOLTIP`)}`}
+                   {t("SHOULD_BE_DATE") + " " + slaData?.slaDays + " " + t("DAYS_OF_APPLICATION_DATE")}
                   </span>
             </div>
           </CardLabel>
@@ -233,7 +240,7 @@ if(userType === 'citizen') {
           </div>
 
             <LabelFieldPair>
-              <CardLabel className="card-label-smaller">{t("WS_DISCONNECTION_REASON")}</CardLabel>              
+              <CardLabel className="card-label-smaller" style={{display: "inline"}}>{t("WS_DISCONNECTION_REASON")}</CardLabel>              
                 <TextArea
                   isMandatory={false}
                   optionKey="i18nKey"
@@ -246,10 +253,23 @@ if(userType === 'citizen') {
             <SubmitBar
               label={t("CS_COMMON_NEXT")}
               onSubmit={() => {
-                history.push(match.path.replace("application-form", "documents-upload"));
+                const appDate= new Date();
+                const proposedDate= format(addDays(appDate, slaData?.slaDays), 'yyyy-MM-dd').toString();
+
+                if( parseInt(convertDateToEpoch(disconnectionData?.date))  <= parseInt(convertDateToEpoch(proposedDate))){
+                  setError({key: "error", message: "PROPOSED_DISCONNECTION_INVALID_DATE"});
+                }
+                else{
+                  history.push(match.path.replace("application-form", "documents-upload"));
+                }
+                
               }}
-              disabled={wsDocsLoading ? true : false}
+              disabled={
+                disconnectionData?.reason?.value === "" || disconnectionData?.date === "" || disconnectionData?.type === "" 
+                ? true 
+                : false}
              />
+             {error && <Toast error={error?.key === "error" ? true : false} label={t(error?.message)} onClose={() => setError(null)} />}
           </div>
         </FormStep>
         <CitizenInfoLabel style={{ margin: "0px" }} textStyle={{ color: "#0B0C0C" }} text={t(`WS_DISONNECT_APPL_INFO`)} />
@@ -298,15 +318,15 @@ if(userType === 'citizen') {
             />
           
           <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">
-            {t("WS_DISCONECTION_DATE")}
+          <CardLabel style={{ marginTop: "-5px", fontWeight: "700", display: "inline" }} className="card-label-smaller">
+            {t("WS_DISCONNECTION_PROPOSED_DATE")} 
             <div className={`tooltip`} style={{position: "absolute"}}>
             <InfoBannerIcon fill="#0b0c0c"/>
             <span className="tooltiptext" style={{
                     whiteSpace: "nowrap",
                     fontSize: "medium"
                   }}>
-                    {`${t(`WS_DISCONNECTION_DATE_TOOLTIP`)}`}
+                    {t("SHOULD_BE_DATE")+ " " + slaData?.slaDays + " " + t("DAYS_OF_APPLICATION_DATE")}
                   </span>
             </div>
           </CardLabel>
@@ -321,7 +341,7 @@ if(userType === 'citizen') {
           
           </LabelFieldPair>
           <LabelFieldPair>
-              <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{t("WS_DISCONNECTION_REASON")}</CardLabel>              
+              <CardLabel style={{ marginTop: "-5px", fontWeight: "700", display: "inline" }} className="card-label-smaller">{t("WS_DISCONNECTION_REASON")}</CardLabel>              
               <div className="field">
                 <TextArea
                   isMandatory={false}
@@ -333,7 +353,7 @@ if(userType === 'citizen') {
                 />  
                 </div>            
           </LabelFieldPair>
-          <CardSectionHeader>{t("WS_DISCONNECTION_DOCUMENTS")}</CardSectionHeader>
+          <CardSectionHeader style={{ marginBottom: "8px"}}>{t("WS_DISCONNECTION_DOCUMENTS") }</CardSectionHeader>
           {wsDocs?.DisconnectionDocuments?.map((document, index) => { 
                   return (
                     <SelectDocument
@@ -359,7 +379,10 @@ if(userType === 'citizen') {
               label={t("ACTION_TEST_SUBMIT")}
               onSubmit={() => onSubmit(disconnectionData)}
               style={{ margin: "10px 10px 0px 0px" }}
-              disabled={wsDocsLoading || documents.length < 2 ? true : false}
+              disabled={
+                wsDocsLoading || documents.length < 2 || disconnectionData?.reason?.value === "" || disconnectionData?.date === "" || disconnectionData?.type === ""
+                ? true 
+                : false}
             />}
      </ActionBar>
     </div>
@@ -398,21 +421,23 @@ function SelectDocument({
   }
 
   useEffect(() => {
-          setDocuments((prev) => {
-              const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
-              if (uploadedFile?.length === 0 || uploadedFile === null) return filteredDocumentsByDocumentType;
-              const filteredDocumentsByFileStoreId = filteredDocumentsByDocumentType?.filter((item) => item?.fileStoreId !== uploadedFile);
-              return [
-                  ...filteredDocumentsByFileStoreId,
-                  {
-                      documentType: doc?.code,
-                      fileStoreId: uploadedFile,
-                      documentUid: uploadedFile,
-                      fileName: file?.name || "",
-                  },
-              ];
-          });
-  }, [uploadedFile, selectedDocument]);
+    if (selectedDocument?.code) {
+        setDocuments((prev) => {
+            const filteredDocumentsByDocumentType = prev?.filter((item) => item?.documentType !== selectedDocument?.code);
+            if (uploadedFile?.length === 0 || uploadedFile === null) return filteredDocumentsByDocumentType;
+            const filteredDocumentsByFileStoreId = filteredDocumentsByDocumentType?.filter((item) => item?.fileStoreId !== uploadedFile);
+            return [
+                ...filteredDocumentsByFileStoreId,
+                {
+                    documentType: selectedDocument?.code,
+                    fileStoreId: uploadedFile,
+                    documentUid: uploadedFile,
+                    fileName: file?.name || "",
+                },
+            ];
+        });
+    }
+}, [uploadedFile, selectedDocument]);
 
 
   useEffect(() => {
@@ -442,16 +467,17 @@ function SelectDocument({
   return (
       <div style={{ marginBottom: "24px" }}>
           <LabelFieldPair>
-          <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{t(doc?.i18nKey) + "*"}</CardLabel>
-          {/* <Dropdown
+          <CardLabel style={{ marginTop: "-5px", fontWeight: "700", display : "inline" }} className="card-label-smaller">{t(doc?.i18nKey) + "*"}</CardLabel>
+          <div className="field">
+          <Dropdown
               t={t}
               isMandatory={false}
               option={doc?.dropdownData}
               selected={selectedDocument}
               optionKey="i18nKey"
               select={handleSelectDocument}
-          /> */}
-          <div className="field">
+          />
+
           <UploadFile
               id={`noc-doc-1-${key}`}
               extraStyleName={"propertyCreate"}

@@ -177,10 +177,16 @@ public class EnrichmentService {
 	 *            SewerageConnectionRequest which is to be created
 	 */
 	private void setSewarageApplicationIdgenIds(SewerageConnectionRequest request) {
-		List<String> applicationNumbers = getIdList(request.getRequestInfo(),
-				request.getSewerageConnection().getTenantId(), config.getSewerageApplicationIdGenName(),
-				config.getSewerageApplicationIdGenFormat(), 1);
-
+		List<String> applicationNumbers = new ArrayList<>();
+		if (request.getSewerageConnection().getApplicationStatus() != null && request.isDisconnectRequest()) {
+			applicationNumbers = getIdList(request.getRequestInfo(),
+					request.getSewerageConnection().getTenantId(), config.getSewerageDisconnectionIdGenName(),
+					config.getSewerageDisconnectionIdGenFormat(), 1);
+		} else {
+			applicationNumbers = getIdList(request.getRequestInfo(),
+					request.getSewerageConnection().getTenantId(), config.getSewerageApplicationIdGenName(),
+					config.getSewerageApplicationIdGenFormat(), 1);
+		}
 		if (CollectionUtils.isEmpty(applicationNumbers) || applicationNumbers.size() != 1) {
 			Map<String, String> errorMap = new HashMap<>();
 			errorMap.put("IDGEN ERROR ",

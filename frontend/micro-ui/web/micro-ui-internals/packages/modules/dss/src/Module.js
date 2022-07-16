@@ -24,7 +24,7 @@ const DssBreadCrumb = ({ location }) => {
     {
       path: checkCurrentScreen() || window.location.href.includes("NURT_DASHBOARD") ? "/digit-ui/employee/dss/landing/NURT_DASHBOARD" : "/digit-ui/employee/dss/landing/home",
       content: t("ES_LANDING_PAGE"),
-      show: true,
+      show: location.pathname.includes("national-faqs")||location.pathname.includes("national-about")  ? false : true,
     },
     {
       path: fromModule?`/digit-ui/employee/dss/dashboard/${fromModule}`:`/digit-ui/employee/dss/dashboard/${Digit.Utils.dss.getCurrentModuleName()}`,
@@ -48,13 +48,14 @@ const DssBreadCrumb = ({ location }) => {
     } 
   ];
 
-  return <BreadCrumb crumbs={crumbs} />;
+  return <BreadCrumb crumbs={crumbs?.filter(ele=>ele.show)} />;
 };
 
 const Routes = ({ path, stateCode }) => {
   const location = useLocation();
+  const isMobile = window.Digit.Utils.browser.isMobile();
   return (
-    <div className="chart-wrapper">
+    <div className="chart-wrapper" style={isMobile ? {marginTop:"unset"} : {}}>
       <DssBreadCrumb location={location} />
       <Switch>
         <PrivateRoute path={`${path}/landing/:moduleCode`} component={() => <Home stateCode={stateCode} />} />
