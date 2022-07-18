@@ -829,14 +829,22 @@ export const WSSearch = {
                   model: "User"
                 }
               },
-              { title: "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.gender },
+              { 
+                title: "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL", 
+                value: wsDataDetails?.connectionHolders?.[0]?.gender,
+                privacy: { 
+                  uuid: wsDataDetails?.connectionHolders?.[0]?.uuid, 
+                  fieldName: "gender", 
+                  model: "WaterConnectionOwner" 
+                } 
+              },
               { 
                 title: "CORE_COMMON_MOBILE_NUMBER", 
                 value: wsDataDetails?.connectionHolders?.[0]?.mobileNumber,
                 privacy: { 
                   uuid: wsDataDetails?.connectionHolders?.[0]?.uuid, 
-                  fieldName: "mobileNumber", 
-                  model: "User" 
+                  fieldName: "connectionHoldersMobileNumber", 
+                  model: "WaterConnectionOwner" 
                 } 
               },
               { 
@@ -844,8 +852,8 @@ export const WSSearch = {
                 value: wsDataDetails?.connectionHolders?.[0]?.fatherOrHusbandName,
                 privacy: { 
                   uuid: wsDataDetails?.connectionHolders?.[0]?.uuid, 
-                  fieldName: "guardian", 
-                  model: "User" 
+                  fieldName: "fatherOrHusbandName", 
+                  model: "WaterConnectionOwner" 
                 }
               },
               { title: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.relationship },
