@@ -132,9 +132,12 @@ public class WorkflowService {
 		StringBuilder url = getProcessInstanceSearchURL(tenantId, applicationNo, businessServiceName);
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+
+		PlainAccessRequest apiPlainAccessRequest = requestInfo.getPlainAccessRequest();
 		List<String> plainRequestFieldsList = new ArrayList<String>() {{
 			add("mobileNumber");
 		}};
+
 
 		ProcessInstanceResponse response = null;
 		try {
@@ -151,7 +154,7 @@ public class WorkflowService {
 			}
 			Object resultNew = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
 			response = mapper.convertValue(resultNew, ProcessInstanceResponse.class);
-
+			requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 		} catch (IllegalArgumentException e) {
 			throw new CustomException("PARSING_ERROR", "Failed to parse response of process instance");
 		}

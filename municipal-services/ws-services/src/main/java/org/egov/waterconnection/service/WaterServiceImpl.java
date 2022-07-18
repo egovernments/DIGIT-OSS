@@ -477,7 +477,7 @@ public class WaterServiceImpl implements WaterService {
 
 			startBatch = startBatch+batchSizeInput;
 			criteria.setOffset(Integer.valueOf(startBatch));
-			System.out.println("Property Count which pushed into kafka topic:"+count2);
+			System.out.println("WaterConnections Count which pushed into kafka topic:"+count2);
 			finalWaterList = Stream.concat(finalWaterList.stream(), waterConnectionList.stream())
 					.collect(Collectors.toList());
 		}

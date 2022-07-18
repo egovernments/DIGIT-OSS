@@ -19,4 +19,6 @@ public interface SewerageService {
 	
 	List<SewerageConnection> plainSearch(SearchCriteria criteria, RequestInfo requestInfo);
 
+	List<SewerageConnection> updateOldData(SearchCriteria criteria, RequestInfo requestInfo);
+
 }

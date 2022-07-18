@@ -251,4 +251,11 @@ public class PropertyRepository {
         return count;
     }
 
+	public Integer getTotalApplications(PropertyCriteria criteria) {
+		String query = queryBuilder.getTotalApplicationsCountQueryString(criteria);
+		if (query == null)
+			return 0;
+		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
+		return count;
+	}
 }

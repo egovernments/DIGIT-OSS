@@ -2,6 +2,7 @@ package org.egov.pt.service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -25,6 +26,7 @@ import org.egov.pt.validator.PropertyValidator;
 import org.egov.pt.web.contracts.PropertyRequest;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -74,6 +76,14 @@ public class PropertyService {
 
 	@Autowired
 	EncryptionDecryptionUtil encryptionDecryptionUtil;
+
+	@Value("${encryption.batch.value}")
+	private Integer batchSize;
+
+	@Value("${encryption.offset.value}")
+	private Integer batchOffset;
+
+	private Integer count2=0;
 	/**
 	 * Enriches the Request and pushes to the Queue
 	 *
@@ -505,30 +515,108 @@ public class PropertyService {
         return count;
 	}
 
-	public List<Property> updatePropertyAddress(PropertyCriteria criteria, RequestInfo requestInfo) {
-		List<Property> properties = searchPropertyPlainSearch(criteria, requestInfo);
-		encryptPropertyAddress(properties, requestInfo);
+//	public List<Property> updatePropertyAddress(PropertyCriteria criteria, RequestInfo requestInfo) {
+//		List<Property> properties = searchPropertyPlainSearch(criteria, requestInfo);
+//		encryptPropertyAddress(properties, requestInfo);
+//		return properties;
+//	}
+//
+//	public List<Property> encryptPropertyAddress(List<Property> properties, RequestInfo requestInfo) {
+//		List<Property> updatedProperties = new ArrayList<>();
+//		for (Property property : properties) {
+//			/* encrypt here */
+//			property = encryptionDecryptionUtil.encryptObject(property, "Property", Property.class);
+//
+//			PropertyRequest request= PropertyRequest.builder()
+//					.requestInfo(requestInfo)
+//					.property(property)
+//					.build();
+//
+//			producer.push(config.getUpdatePropertyTopic(), request);
+//
+//			/* decrypt here */
+//			property = encryptionDecryptionUtil.decryptObject(property, "Property", Property.class, requestInfo);
+//			updatedProperties.add(property);
+//		}
+//		return updatedProperties;
+//	}
+
+	public List<Property> updatePropertyAddress(PropertyCriteria criteria, RequestInfo requestInfo){
+		List<Property> properties= encryptOldPropertyAddress(requestInfo, criteria);
 		return properties;
 	}
 
-	public List<Property> encryptPropertyAddress(List<Property> properties, RequestInfo requestInfo) {
-		List<Property> updatedProperties = new ArrayList<>();
-		for (Property property : properties) {
-			/* encrypt here */
-			property = encryptionDecryptionUtil.encryptObject(property, "Property", Property.class);
+	public List<Property> encryptOldPropertyAddress(RequestInfo requestInfo, PropertyCriteria criteria) {
+		List<Property> propertyList = new ArrayList<>();
+//		SewerageConnectionResponse sewerageConnectionResponse;
+		Map<String, String> resultMap = null;
 
-			PropertyRequest request= PropertyRequest.builder()
-					.requestInfo(requestInfo)
-					.property(property)
-					.build();
+		if(StringUtils.isEmpty(criteria.getLimit()))
+			criteria.setLimit(Long.valueOf(batchSize));
 
-			producer.push(config.getUpdatePropertyTopic(), request);
+		if(StringUtils.isEmpty(criteria.getOffset()))
+			criteria.setOffset(Long.valueOf(batchOffset));
 
-			/* decrypt here */
-			property = encryptionDecryptionUtil.decryptObject(property, "Property", Property.class, requestInfo);
-			updatedProperties.add(property);
-		}
-		return updatedProperties;
+		propertyList = encryptPropertyAddress(requestInfo, criteria);
+//		sewerageConnectionResponse = SewerageConnectionResponse.builder().sewerageConnections(sewerageConnectionList)
+//				.build();
+		return propertyList;
 	}
-	
+
+	public List<Property> encryptPropertyAddress(RequestInfo requestInfo,PropertyCriteria criteria) {
+		List<Property> finalPropertyList = new LinkedList<>();
+		Map<String, String> responseMap = new HashMap<>();
+
+//		SewerageConnectionResponse sewerageConnectionResponse;
+
+		Integer startBatch = Math.toIntExact(criteria.getOffset());
+		Integer batchSizeInput = Math.toIntExact(criteria.getLimit());
+
+		Integer count = repository.getTotalApplications(criteria);
+
+		log.info("Count: "+count);
+		log.info("startbatch: "+startBatch);
+
+		while(startBatch<count) {
+			long startTime = System.nanoTime();
+			List<Property> propertyList = new LinkedList<>();
+			propertyList = searchPropertyPlainSearch(criteria, requestInfo);
+			try {
+				for (Property property : propertyList) {
+					/* encrypt here */
+					property = encryptionDecryptionUtil.encryptObject(property, "Property", Property.class);
+
+					PropertyRequest request= PropertyRequest.builder()
+							.requestInfo(requestInfo)
+							.property(property)
+							.build();
+
+					producer.push(config.getUpdatePropertyTopic(), request);
+
+					/* decrypt here */
+					property = encryptionDecryptionUtil.decryptObject(property, "Property", Property.class, requestInfo);
+				}
+			} catch (Exception e) {
+
+				log.error("Encryption failed at batch count of : " + startBatch);
+				responseMap.put( "Encryption failed at batch count : " + startBatch, e.getMessage());
+				return null;
+			}
+
+			log.info(" count completed for batch : " + startBatch);
+			long endtime = System.nanoTime();
+			long elapsetime = endtime - startTime;
+			log.info("\n\nBatch elapsed time: "+elapsetime+"\n\n");
+
+			startBatch = startBatch+batchSizeInput;
+			criteria.setOffset(Long.valueOf(startBatch));
+			System.out.println("Property Count pushed into kafka topic:"+count2);
+			finalPropertyList = Stream.concat(finalPropertyList.stream(), propertyList.stream())
+					.collect(Collectors.toList());
+		}
+		criteria.setOffset(Long.valueOf(batchOffset));
+
+		return finalPropertyList;
+
+	}
 }

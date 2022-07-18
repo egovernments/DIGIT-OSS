@@ -18,4 +18,8 @@ public interface SewerageDao {
 
 	List<SewerageConnection> getSewerageConnectionPlainSearchList(SearchCriteria criteria,
 			RequestInfo requestInfo);
+
+	void updateOldSewerageConnections(SewerageConnectionRequest sewerageConnectionRequest);
+
+	Integer getTotalApplications(SearchCriteria criteria);
 }

@@ -89,4 +89,20 @@ public class SewarageController {
 
 	}
 
+
+	/* Api to encrypt ownerType in connectionholder table and mobileNumber in plumberInfo table
+	 * of existing water records */
+	/* To be executed only once*/
+	@RequestMapping(value = "/_encryptOldData", method = RequestMethod.POST)
+	public ResponseEntity<SewerageConnectionResponse> encryptOldData(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+																  @Valid @ModelAttribute SearchCriteria criteria){
+		SewerageConnectionResponse sewerageConnectionResponse = new SewerageConnectionResponse();
+		List<SewerageConnection> sewerageConnectionList = sewarageService.updateOldData(criteria, requestInfoWrapper.getRequestInfo());
+
+		sewerageConnectionResponse.setSewerageConnections(sewerageConnectionList);
+		sewerageConnectionResponse.setResponseInfo(
+				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
+		return new ResponseEntity<>(sewerageConnectionResponse, HttpStatus.OK);
+	}
+
 }
