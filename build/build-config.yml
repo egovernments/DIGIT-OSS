@@ -91,6 +91,13 @@ config:
         image-name: "egov-accesscontrol"
         dockerfile: "build/maven/Dockerfile"
 # Core Services
+  - name: "builds/digit-dev/core-services/audit-service"
+    build:
+      - work-dir: "core-services/audit-service"
+        image-name: "audit-service"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "core-services/audit-service/src/main/resources/db"
+        image-name: "audit-service-db"
   - name: "builds/digit-dev/core-services/egov-common-masters"
     build:
       - work-dir: "core-services/egov-common-masters"
