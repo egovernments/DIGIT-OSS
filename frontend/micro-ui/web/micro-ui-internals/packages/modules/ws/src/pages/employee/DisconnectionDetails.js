@@ -43,50 +43,6 @@ const GetDisconnectionDetails = () => {
 
   const mobileView = Digit.Utils.browser.isMobile();
 
-  workflowDetails?.data?.actionState?.nextActions?.forEach((action) => {
-    if (action?.action === "ACTIVATE_CONNECTION") {
-      action.redirectionUrll = {
-        action: "ACTIVATE_CONNECTION",
-        pathname: `/digit-ui/employee/ws/activate-connection?applicationNumber=${applicationNumber}&service=${serviceType}&action=ACTIVATE_CONNECTION`,
-        state: applicationDetails?.applicationData,
-      };
-    }
-    if (action?.action === "RESUBMIT_APPLICATION") {
-      let pathName = `/digit-ui/employee/ws/edit-disconnection-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
-
-      const userConfig = servicesMasterData?.["ws-services-masters"]?.WSEditApplicationByConfigUser || [];
-      const editApplicationUserRole = userConfig?.[0]?.roles || [];
-      const mdmsApplicationStatus = userConfig?.[0]?.status;
-
-      let isFieldInspector = false;
-      editApplicationUserRole.every((role, index) => {
-        isFieldInspector = ifUserRoleExists(role);
-        if(isFieldInspector) return false;
-        else return true;
-      })
-
-      if(isFieldInspector && appStatus === mdmsApplicationStatus) {
-        pathName = `/digit-ui/employee/ws/edit-disconnection-by-config?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
-      }
-
-      action.redirectionUrll = {
-        action: "ACTIVATE_CONNECTION",
-        pathname: pathName,
-        state: {
-          applicationDetails: applicationDetails,
-          action: "RESUBMIT_APPLICATION"
-        },
-      };
-    }
-    if (action?.action === "SUBMIT_APPLICATION") {
-      action.redirectionUrll = {
-        action: "ACTIVATE_CONNECTION",
-        pathname: `/digit-ui/employee/ws/modify-application-edit?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`,
-        state: applicationDetails,
-      };
-    }
-  });
-
   if ( 
     workflowDetails?.data?.nextActions?.length > 0 &&
     workflowDetails?.data?.actionState?.nextActions?.length > 0 &&
@@ -196,7 +152,7 @@ const GetDisconnectionDetails = () => {
           workflowDetails={workflowDetails}
           businessService={applicationDetails?.processInstancesDetails?.[0]?.businessService?.toUpperCase()}
           moduleCode="WS"
-          showToast={showToast}
+          showToast={showToast} 
           setShowToast={setShowToast}
           closeToast={closeToast}
           timelineStatusPrefix={`WF_${applicationDetails?.processInstancesDetails?.[0]?.businessService?.toUpperCase()}_`}

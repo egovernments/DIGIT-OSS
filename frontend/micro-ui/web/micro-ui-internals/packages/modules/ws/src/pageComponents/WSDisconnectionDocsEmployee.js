@@ -25,90 +25,9 @@ const WSDisconnectionDocsEmployee = ({ t, config, onSelect, userType, formData, 
 
   if (isEditScreen) action = "update";
 
-  const { isLoading, data: wsDocs2 } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(stateId, wsDocsData);
+  const { isLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(stateId, wsDocsData);
+  const wsDocs2=wsDocs?.Documents?.filter((item)=>item.code=="OWNER.IDENTITYPROOF"||item.code==="OWNER.ADDRESSPROOF");
 
-  const wsDocs={Documents: [
-    {
-      "code": "OWNER.IDENTITYPROOF",
-      "documentType": "OWNER",
-      "required": true,
-      "active": true,
-      "hasDropdown": false,
-      "dropdownData": [
-          {
-              "code": "OWNER.IDENTITYPROOF.AADHAAR",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_AADHAAR"
-          },
-          {
-              "code": "OWNER.IDENTITYPROOF.VOTERID",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_VOTERID"
-          },
-          {
-              "code": "OWNER.IDENTITYPROOF.DRIVING",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_DRIVING"
-          },
-          {
-              "code": "OWNER.IDENTITYPROOF.PAN",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_PAN"
-          },
-          {
-              "code": "OWNER.IDENTITYPROOF.PASSPORT",
-              "active": true,
-              "i18nKey": "OWNER_IDENTITYPROOF_PASSPORT"
-          }
-      ],
-      "description": "OWNER.ADDRESSPROOF.IDENTITYPROOF_DESCRIPTION",
-      "i18nKey": "OWNER_IDENTITYPROOF"
-  },
-  {
-    "code": "OWNER.ADDRESSPROOF",
-    "documentType": "OWNER",
-    "required": true,
-    "active": true,
-    "hasDropdown": false,
-    "dropdownData": [
-        {
-            "code": "OWNER.ADDRESSPROOF.ELECTRICITYBILL",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_ELECTRICITYBILL"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.DL",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_DL"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.VOTERID",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_VOTERID"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.AADHAAR",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_AADHAAR"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.PAN",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_PAN"
-        },
-        {
-            "code": "OWNER.ADDRESSPROOF.PASSPORT",
-            "active": true,
-            "i18nKey": "OWNER_ADDRESSPROOF_PASSPORT"
-        }
-    ],
-    "description": "OWNER.ADDRESSPROOF.ADDRESSPROOF_DESCRIPTION",
-    "i18nKey": "OWNER_ADDRESSPROOF"
-}
-]}
-
-  // const { isLoading: wsDocsLoading, data: wsDocs2 } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId, "DisconnectionDocuments");
-  console.log(wsDocs,wsDocs2,"wsDocs");
   const goNext = () => {
     onSelect(config.key, { documents });
   };
@@ -116,10 +35,6 @@ const WSDisconnectionDocsEmployee = ({ t, config, onSelect, userType, formData, 
   useEffect(() => {
     goNext();
   }, [documents]);
-
-  // if (isLoading) {
-  //   return <Loader />;
-  // }
 
   const applicationDetailsData = JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS"));
 
@@ -145,7 +60,7 @@ const WSDisconnectionDocsEmployee = ({ t, config, onSelect, userType, formData, 
   
   return (
     <div>
-      {wsDocs?.Documents?.map((document, index) => {
+      {wsDocs2?.map((document, index) => {
         return (
           <SelectDocument
             key={index}
@@ -187,7 +102,6 @@ function SelectDocument({
   id,
 }) {
   const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
-  const tenantId = Digit.ULBService.getCurrentTenantId();
   const [selectedDocument, setSelectedDocument] = useState(
     filteredDocument
       ? { ...filteredDocument, code: filteredDocument?.documentType }
@@ -197,8 +111,6 @@ function SelectDocument({
   );
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(() => filteredDocument?.fileStoreId || null);
-
-  const handleSelectDocument = (value) => setSelectedDocument(value);
 
   useEffect(() => {
     if (filteredDocument) {
@@ -213,9 +125,6 @@ function SelectDocument({
   function selectfile(e) {
     setFile(e.target.files[0]);
   }
-  const { dropdownData } = doc;
-  const { dropdownFilter, enabledActions, filterCondition } = doc?.additionalDetails || {};
-  var dropDownData = dropdownData;
   const [isHidden, setHidden] = useState(false);
 
   const addError = () => {
@@ -326,4 +235,3 @@ function SelectDocument({
 }
 
 export default WSDisconnectionDocsEmployee;
-
