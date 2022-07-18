@@ -35,8 +35,19 @@ export const PTSearch = {
           title: "PT_PROPERTY_ADDRESS_MOHALLA",
           value: `${property?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${property?.address?.locality?.code}`,
         },
-        { title: "PT_PROPERTY_ADDRESS_HOUSE_NO", value: property?.address?.doorNo },
-        { title: "PT_PROPERTY_ADDRESS_STREET_NAME", value: property?.address?.street },
+        { title: "PT_PROPERTY_ADDRESS_HOUSE_NO", value: property?.address?.doorNo, 
+        privacy:{ 
+          uuid: property?.propertyId,
+          fieldName: "doorNo",
+          model: "Property",
+        } },
+        { title: "PT_PROPERTY_ADDRESS_STREET_NAME", 
+          value: property?.address?.street ,
+          privacy:{ 
+          uuid: property?.propertyId,
+          fieldName: "street",
+          model: "Property",
+        }}
       ],
     };
     const assessmentDetails = {
@@ -73,7 +84,12 @@ export const PTSearch = {
                 { title: "PT_SEARCHPROPERTY_TABEL_GUARDIANNAME", value: owner?.fatherOrHusbandName },
                 { title: "PT_FORM3_OWNERSHIP_TYPE", value: property?.ownershipCategory },
                 { title: "PT_OWNERSHIP_INFO_EMAIL_ID", value: owner?.emailId },
-                { title: "PT_OWNERSHIP_INFO_CORR_ADDR", value: owner?.permanentAddress },
+                { title: "PT_OWNERSHIP_INFO_CORR_ADDR", value: owner?.permanentAddress,
+                privacy:{ 
+                  uuid: owner?.uuid,
+                  fieldName: "permanentAddress",
+                  model: "User",
+                } },
               ],
             };
           }),
@@ -103,8 +119,16 @@ export const PTSearch = {
             title: "PT_PROPERTY_ADDRESS_MOHALLA",
             value: `${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${response?.address?.locality?.code}`,
           },
-          { title: "PT_PROPERTY_ADDRESS_STREET_NAME", value: response?.address?.street },
-          { title: "PT_PROPERTY_ADDRESS_HOUSE_NO", value: response?.address?.doorNo },
+          { title: "PT_PROPERTY_ADDRESS_STREET_NAME", value: response?.address?.street,privacy:{ 
+            uuid: property?.propertyId,
+            fieldName: "street",
+            model: "Property",
+          } },
+          { title: "PT_PROPERTY_ADDRESS_HOUSE_NO", value: response?.address?.doorNo, privacy:{ 
+            uuid: property?.propertyId,
+            fieldName: "doorNo",
+            model: "Property",
+          } },
         ],
       },
       {

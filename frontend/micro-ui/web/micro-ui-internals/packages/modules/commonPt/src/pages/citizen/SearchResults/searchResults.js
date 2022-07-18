@@ -121,7 +121,6 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
 
   const searchResults = arr?.map((property) => {
     let addr = property?.address || {};
-   
     return {
       property_id: property?.propertyId,
       owner_name: (property?.owners || [])[0]?.name,
@@ -132,7 +131,13 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
       bil_due__date: payment[property?.propertyId]?.bil_due__date || t("N/A"),
       status:t(property.status),
       owner_mobile: (property?.owners || [])[0]?.mobileNumber,
-    };
+      privacy: {
+        property_address : {
+          uuid: property?.propertyId, 
+          fieldName: ["doorNo" , "street" , "landmark"], 
+          model: "Property"
+        }
+      }  };
   });
   const getUserType = () => Digit.UserService.getType();
 
@@ -174,8 +179,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
       return [null, err];
     }
   };
-  
-  return (
+    return (
     <div className="static" style={{ marginTop: "16px" }}>
       <div className="static-wrapper">
         {header && (

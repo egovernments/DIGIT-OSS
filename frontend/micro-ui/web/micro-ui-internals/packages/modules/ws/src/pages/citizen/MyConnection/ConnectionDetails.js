@@ -324,6 +324,12 @@ const ConnectionDetails = () => {
               className="border-none"
               label={t("WS_OWN_DETAIL_CROSADD")}
               text={state?.property?.owners?.[0]?.permanentAddress || t("CS_NA")}
+              privacy={ {
+                uuid: state?.property?.owners?.[0]?.uuid,
+                fieldName: "permanentAddress",
+                model: "User",
+                hide: !(state?.property?.owners?.[0]?.permanentAddress),
+              }}
               textStyle={{ wordBreak : "break-word" }}
             />
             <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${state?.propertyId}&tenantId=${state?.tenantId}`}>
@@ -368,6 +374,12 @@ const ConnectionDetails = () => {
                   className="border-none"
                   label={t("WS_OWN_DETAIL_CROSADD")}
                   text={state?.connectionHolders?.[0]?.correspondenceAddress}
+                  privacy={ {
+                    uuid: state?.connectionHolders?.[0]?.uuid,
+                    fieldName: "correspondenceAddress",
+                    model: "User",
+                    hide: !(state?.connectionHolders),
+                  }}
                   textStyle={{ whiteSpace: "pre" }}
                 />
                 <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={t(`COMMON_MASTERS_OWNERTYPE_${state?.connectionHolders?.[0]?.ownerType}`)} textStyle={{ whiteSpace: "pre" }} />
