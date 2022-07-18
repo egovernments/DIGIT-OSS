@@ -96,6 +96,9 @@ public class KeyManagementService implements ApplicationRunner {
     //Generate keys if there are any new tenants
     //Returns the number of tenants for which the keys have been generated
     private int generateKeyForNewTenants() throws Exception {
+        keyStore.refreshKeys();
+        keyIdGenerator.refreshKeyIds();
+
         Collection<String> tenantIdsFromMdms = makeComprehensiveListOfTenantIds();
         tenantIdsFromMdms.removeAll(keyStore.getTenantIds());
 

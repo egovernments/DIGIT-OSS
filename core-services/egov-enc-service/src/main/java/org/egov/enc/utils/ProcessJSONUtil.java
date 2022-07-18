@@ -8,6 +8,7 @@ import org.egov.enc.models.ModeEnum;
 import org.egov.enc.models.Plaintext;
 import org.egov.enc.services.SymmetricEncryptionService;
 import org.egov.enc.services.AsymmetricEncryptionService;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -84,7 +85,7 @@ public class ProcessJSONUtil {
     }
 
     //Each value in the object will be encrypted
-    private String processValue(Object value, ModeEnum mode, MethodEnum method, String tenantId) throws NoSuchPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidKeySpecException {
+    private String processValue(Object value, ModeEnum mode, MethodEnum method, String tenantId) throws Exception {
         if(value == null) {
             return null;
         }
@@ -101,6 +102,11 @@ public class ProcessJSONUtil {
         else {
             Plaintext plaintext;
             Ciphertext ciphertext = new Ciphertext(value.toString());
+            if(!keyStore.checkIfKeyExists(ciphertext.getKeyId())) {
+                keyStore.refreshKeys();
+                if(!keyStore.checkIfKeyExists(ciphertext.getKeyId()))
+                    throw new CustomException("KEY_NOT_FOUND", "Key not found in the database");
+            }
             method = keyStore.getTypeOfKey(ciphertext.getKeyId());
             if(method.equals(MethodEnum.SYM)) {
                 plaintext = symmetricEncryptionService.decrypt(ciphertext);

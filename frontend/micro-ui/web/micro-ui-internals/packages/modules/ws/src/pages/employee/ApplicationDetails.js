@@ -127,6 +127,21 @@ const ApplicationDetails = () => {
     setShowToast(null);
   };
 
+  const checkWSAdditionalDetails = () => {
+    const connectionType = applicationDetails?.applicationData?.connectionType;
+    const noOfTaps = applicationDetails?.applicationData?.noOfTaps;
+    const pipeSize = applicationDetails?.applicationData?.pipeSize;
+    const waterSource =  applicationDetails?.applicationData?.waterSource;
+    const noOfWaterClosets = applicationDetails?.applicationData?.noOfWaterClosets;
+    const noOfToilets = applicationDetails?.applicationData?.noOfToilets
+    const plumberDetails = applicationDetails?.applicationData?.additionalDetails?.detailsProvidedBy;
+    const roadCuttingInfo = applicationDetails?.applicationData?.roadCuttingInfo;
+
+    if( connectionType && ((noOfTaps && pipeSize && waterSource) || (noOfWaterClosets && noOfToilets)) && plumberDetails && roadCuttingInfo){
+      return true
+    }
+    return false;
+  }
   let dowloadOptions = [],
   appStatus = applicationDetails?.applicationData?.applicationStatus || "";
 
@@ -216,6 +231,14 @@ const ApplicationDetails = () => {
       };
     }
   });
+
+  workflowDetails?.data?.nextActions?.forEach((action) => {
+    if(action?.action === "VERIFY_AND_FORWARD" && appStatus === "PENDING_FOR_FIELD_INSPECTION" && !checkWSAdditionalDetails()){
+      action.isToast = true;
+      action.toastMessage = "MISSING_ADDITIONAL_DETAILS";
+    }
+  });
+
 
   workflowDetails?.data?.nextActions?.forEach((action) => {
     if (action?.action === "PAY") {

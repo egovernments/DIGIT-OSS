@@ -149,14 +149,14 @@ const ConnectionDetails = (_props) => {
   
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
   // const formValue = watch();
-  const [name,setName]=useState();
-  const [gender,setGender]=useState();
-  const [mobileNumber,setMobileNumber]=useState();
-  const [guardian,setGuardian] =useState();
-  const [relationship,setRelationship]=useState()
-  const [ownerType,setOwnerType]=useState()
-  const [sameAsOwnerDetails,setSameAsOwnerDetails]=useState(formData?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails)
-  const [address,setAddress]=useState()
+  const [name,setName]=useState(connectionHolderDetail?.name);
+  const [gender,setGender]=useState(connectionHolderDetail?.gender);
+  const [mobileNumber,setMobileNumber]=useState(connectionHolderDetail?.mobileNumber);
+  const [guardian,setGuardian] =useState(connectionHolderDetail?.guardian);
+  const [relationship,setRelationship]=useState(connectionHolderDetail?.relationship)
+  const [address,setAddress]=useState(connectionHolderDetail?.address)
+  const [ownerType,setOwnerType]=useState(connectionHolderDetail?.ownerType)
+  const [sameAsOwnerDetails,setSameAsOwnerDetails]=useState(connectionHolderDetail?.sameAsOwnerDetails)
   const formValue={name,gender,mobileNumber,guardian,relationship,ownerType,sameAsOwnerDetails,address}
   const { errors } = localFormState;
   
@@ -255,7 +255,7 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Name").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight:"-20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "name"}
@@ -315,7 +315,7 @@ const ConnectionDetails = (_props) => {
               //type="number"
               isMandatory={true}
               render={(props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight:"-20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   //type="number"
                   value={props.value}
@@ -348,7 +348,7 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Name").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight:"-20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "guardian"}
@@ -407,7 +407,7 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Address").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight:"-20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "address"}

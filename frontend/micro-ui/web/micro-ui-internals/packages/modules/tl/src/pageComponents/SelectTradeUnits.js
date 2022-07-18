@@ -55,6 +55,13 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
           TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` });
         }
       });
+    billingSlabTradeTypeData &&
+    billingSlabTradeTypeData.length > 0 &&
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
+        if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.tradeType.split(".")[0]}`)) {
+          TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` });
+        }
+      });
 
   function getTradeTypeMenu(TradeCategory) {
     let TradeTypeMenu = [];
