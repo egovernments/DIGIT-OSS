@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.egov.auditservice.persisterauditclient.PersisterAuditClientService;
+import org.egov.auditservice.persisterauditclient.models.contract.PersisterClientInput;
 import org.egov.auditservice.service.AuditLogProcessingService;
 import org.egov.auditservice.web.models.AuditLogRequest;
 import org.egov.auditservice.web.models.AuditLogSearchCriteria;
@@ -40,10 +42,14 @@ class AuditServiceControllerTest {
     @MockBean
     private ObjectMapper objectMapper;
 
+    @MockBean
+    private PersisterAuditClientService persisterAuditClientService;
+
 
     @Test
     void testCreate() throws Exception {
         doNothing().when(auditLogProcessingService).process((AuditLogRequest) any());
+
         AuditLogRequest auditLogRequest = new AuditLogRequest();
         auditLogRequest.setAuditLogs(new ArrayList<>());
         auditLogRequest.setRequestInfo(new RequestInfo());
@@ -59,10 +65,12 @@ class AuditServiceControllerTest {
                 .andExpect(MockMvcResultMatchers.content().string("{\"responseInfo\":null,\"AuditLogs\":null}"));
     }
 
+
     @Test
     void testSearch() throws Exception {
         when(auditLogProcessingService.getAuditLogs((RequestInfo) any(), (AuditLogSearchCriteria) any()))
                 .thenReturn(new ArrayList<>());
+
         RequestInfoWrapper requestInfoWrapper = new RequestInfoWrapper();
         requestInfoWrapper.setRequestInfo(new RequestInfo());
         String content = (new ObjectMapper()).writeValueAsString(requestInfoWrapper);
@@ -75,6 +83,26 @@ class AuditServiceControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content().string("{\"responseInfo\":null,\"AuditLogs\":[]}"));
+    }
+
+
+    @Test
+    void testTestNewAuditFlow() throws Exception {
+        when(persisterAuditClientService.generateAuditLogs((PersisterClientInput) any())).thenReturn(new ArrayList<>());
+
+        PersisterClientInput persisterClientInput = new PersisterClientInput();
+        persisterClientInput.setJson("Json");
+        persisterClientInput.setTopic("Topic");
+        String content = (new ObjectMapper()).writeValueAsString(persisterClientInput);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/log/v1/_test")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+        MockMvcBuilders.standaloneSetup(auditServiceController)
+                .build()
+                .perform(requestBuilder)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content().string("[]"));
     }
 
 
