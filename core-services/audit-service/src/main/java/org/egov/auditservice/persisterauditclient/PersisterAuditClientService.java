@@ -242,9 +242,10 @@ public class PersisterAuditClientService {
                 relativeJsonPath = baseJsonPath.substring(auditAttributeBasePath.length() + 1);
             LinkedHashMap<AuditAttributes, Integer> auditAttributesToNumberOfObjMap = new LinkedHashMap<>();
             if (auditAttributeBasePath.contains("*")) {
+                Boolean isBulkUseCase = true;
                 List<LinkedHashMap<String, Object>> parentObjects = JsonPath.read(document, auditAttributeBasePath);
                 for (int i = 0; i < parentObjects.size(); i++) {
-                    AuditAttributes auditAttributes = getAuditAttribute(mapping, parentObjects.get(i), userUUID);
+                    AuditAttributes auditAttributes = getAuditAttribute(mapping, parentObjects.get(i), userUUID, isBulkUseCase);
                     if (!baseJsonPath.equals(auditAttributeBasePath)) {
                         LinkedList childObj = new LinkedList();
 
@@ -275,7 +276,8 @@ public class PersisterAuditClientService {
                     currentIdx = currentIdx + numberOfObj;
                 }
             } else {
-                AuditAttributes auditAttributes = getAuditAttribute(mapping, document, userUUID);
+                Boolean isBulkUseCase = false;
+                AuditAttributes auditAttributes = getAuditAttribute(mapping, document, userUUID, isBulkUseCase);
                 List<LinkedHashMap<String, Object>> list = null;
                 if (baseJsonPath.contains("*")) {
                     String arrayBasePath = baseJsonPath.substring(0, baseJsonPath.lastIndexOf(".*") + 2);
@@ -350,7 +352,7 @@ public class PersisterAuditClientService {
         } else
             return false;
     }
-    private AuditAttributes getAuditAttribute(Mapping mapping, Object json, String userUUID){
+    private AuditAttributes getAuditAttribute(Mapping mapping, Object json, String userUUID, Boolean isBulkUseCase){
         AuditAttributes auditAttributes = new AuditAttributes();
         Boolean isAuditEnabled = mapping.getIsAuditEnabled();
         if(isAuditEnabled == null){
@@ -359,9 +361,21 @@ public class PersisterAuditClientService {
         if(isAuditEnabled){
             // Fetch the values required to attribute using mapping and json
             String module = mapping.getModule();
-            String tenantId = getValueFromJsonPath(mapping.getTenantIdJsonPath(), json);
-            String transactionCode = getValueFromJsonPath(mapping.getTransactionCodeJsonPath(), json);
-            String objectId = getValueFromJsonPath(mapping.getObjecIdJsonPath(), json);
+
+            String tenantIdJsonPath = mapping.getTenantIdJsonPath();
+            String transactionCodeJsonPath = mapping.getTransactionCodeJsonPath();
+            String objectIdJsonPath = mapping.getObjecIdJsonPath();
+
+            if(!isBulkUseCase){
+                tenantIdJsonPath = mapping.getAuditAttributeBasePath() + tenantIdJsonPath.substring(tenantIdJsonPath.indexOf("."));
+                transactionCodeJsonPath = mapping.getAuditAttributeBasePath() + transactionCodeJsonPath.substring(transactionCodeJsonPath.indexOf("."));
+                objectIdJsonPath = mapping.getAuditAttributeBasePath() + objectIdJsonPath.substring(objectIdJsonPath.indexOf("."));
+            }
+
+            String tenantId = getValueFromJsonPath(tenantIdJsonPath, json);
+            String transactionCode = getValueFromJsonPath(transactionCodeJsonPath, json);
+            String objectId = getValueFromJsonPath(objectIdJsonPath, json);
+
             // Set the values to auditAttribute
             auditAttributes.setModule(module);
             auditAttributes.setObjectId(objectId);
