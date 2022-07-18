@@ -255,7 +255,7 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Name").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight:"-20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "name"}
@@ -315,7 +315,7 @@ const ConnectionDetails = (_props) => {
               //type="number"
               isMandatory={true}
               render={(props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight:"-20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   //type="number"
                   value={props.value}
@@ -348,7 +348,7 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Name").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight:"-20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "guardian"}
@@ -407,7 +407,7 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Address").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight:"-20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "address"}

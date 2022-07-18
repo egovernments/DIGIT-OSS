@@ -809,7 +809,7 @@ export const WSSearch = {
           title: "WS_VIEW_PROPERTY_DETAIL",
           to: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}?from=WS_COMMON_CONNECTION_DETAIL`,
           value: "",
-          isLink: wsDataDetails?.connectionType === "Metered" ? true : false,
+          isLink: true,
         },
       ],
     };
