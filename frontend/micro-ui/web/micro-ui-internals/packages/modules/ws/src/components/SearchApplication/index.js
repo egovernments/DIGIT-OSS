@@ -6,6 +6,10 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import MobileSearchApplication from "./MobileSearchApplication";
 const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, businessService }) => {
+  
+  const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_ADD_REBATE_DATA", {});
+  const [sessionBillFormData, setSessionBillFormData, clearBillSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_BILL_ADD_REBATE_DATA", {});
+  
   const replaceUnderscore = (str) => {
     str = str.replace(/_/g, " ");
     return str;
@@ -30,6 +34,13 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
     register("sortOrder", "DESC");
     register("isConnectionSearch", true);
   }, [register]);
+
+  useEffect(() => {
+    clearSessionFormData();
+    setSessionFormData({});
+    setSessionBillFormData({});
+    clearBillSessionFormData()
+  }, []);
 
   const onSort = useCallback((args) => {
     if (args.length === 0) return;

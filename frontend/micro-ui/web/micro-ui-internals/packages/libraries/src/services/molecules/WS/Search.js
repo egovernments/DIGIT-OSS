@@ -145,6 +145,15 @@ export const WSSearch = {
 
     const isVisible = await checkFeeEstimateVisible(cloneDeep(wsData));
 
+    const adhocRebateData = sessionStorage.getItem("Digit.ADHOC_ADD_REBATE_DATA");
+    const parsedAdhocRebateData = adhocRebateData ? JSON.parse(adhocRebateData) : "";
+    if (wsData?.[0]?.additionalDetails && parsedAdhocRebateData?.value) {
+      if (parsedAdhocRebateData?.value?.adhocPenalty) parsedAdhocRebateData?.value?.adhocPenalty = parseInt(parsedAdhocRebateData?.value?.adhocPenalty)
+      if (parsedAdhocRebateData?.value?.adhocRebate) parsedAdhocRebateData?.value?.adhocRebate = parseInt(parsedAdhocRebateData?.value?.adhocRebate)
+      const data = { ...wsData?.[0]?.additionalDetails, ...parsedAdhocRebateData?.value };
+      wsData[0].additionalDetails = data;
+    }
+
     const data = {
       CalculationCriteria:
         serviceType == "WATER"
@@ -228,14 +237,18 @@ export const WSSearch = {
         if (serviceType !== "WATER" && response?.SewerageConnections?.length > 0) {
           estimationResponse = await WSSearch.wsEstimationDetails(data, serviceType);
         }
-  
+
+        if (estimationResponse?.Calculation?.[0]?.taxHeadEstimates?.length > 0) {
+          estimationResponse.Calculation[0].taxHeadEstimates?.forEach(data => data.amount = data.estimateAmount);
+          estimationResponse.Calculation[0].billSlabData = _.groupBy(estimationResponse.Calculation[0].taxHeadEstimates, 'category');
+        }
         fetchBillData = {};
         fetchBillData.Bill = [];
         fetchBillData.Bill[0] = estimationResponse?.Calculation?.[0]
       }
     }
 
-    const wsDataDetails = cloneDeep(serviceType == "WATER" ? response?.WaterConnection?.[0] : response?.SewerageConnections?.[0]);
+    const wsDataDetails = cloneDeep(wsData?.[0]);
     const propertyDataDetails = cloneDeep(properties?.Properties?.[0]);
     const billDetails = cloneDeep(billData);
     const workFlowDataDetails = cloneDeep(workflowDetails);
@@ -292,6 +305,7 @@ export const WSSearch = {
         isAdhocRebate: isAdhocRebate,
         isVisible: isVisible,
         isPaid: colletionData?.Payments?.length > 0 ? true : false,
+        isViewBreakup: isVisible,
         values: [
           { title: "WS_APPLICATION_FEE_HEADER", value: Number(fetchBillData?.Bill?.[0]?.fee).toFixed(2) },
           { title: "WS_SERVICE_FEE_HEADER", value: Number(fetchBillData?.Bill?.[0]?.charge).toFixed(2) },
