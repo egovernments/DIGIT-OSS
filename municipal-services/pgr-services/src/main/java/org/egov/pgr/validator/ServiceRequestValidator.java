@@ -1,6 +1,7 @@
 package org.egov.pgr.validator;
 
 import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pgr.config.PGRConfiguration;
 import org.egov.pgr.repository.PGRRepository;
@@ -17,6 +18,7 @@ import java.util.*;
 import static org.egov.pgr.util.PGRConstants.*;
 
 @Component
+@Slf4j
 public class ServiceRequestValidator {
 
 
@@ -186,11 +188,15 @@ public class ServiceRequestValidator {
         Service service = request.getService();
         RequestInfo requestInfo = request.getRequestInfo();
         Long lastModifiedTime = service.getAuditDetails().getLastModifiedTime();
-
+        log.info("lastModifiedTime -> "+lastModifiedTime.toString());
         if(requestInfo.getUserInfo().getType().equalsIgnoreCase(USERTYPE_CITIZEN)){
             if(!requestInfo.getUserInfo().getUuid().equalsIgnoreCase(service.getAccountId()))
                 throw new CustomException("INVALID_ACTION","Not authorized to re-open the complain");
         }
+
+        Long diff = System.currentTimeMillis()-lastModifiedTime;
+        log.info("Time difference -> " + diff);
+        log.info("getComplainMaxIdleTime -> "+config.getComplainMaxIdleTime());
 
         if(System.currentTimeMillis()-lastModifiedTime > config.getComplainMaxIdleTime())
             throw new CustomException("INVALID_ACTION","Complaint is closed");
