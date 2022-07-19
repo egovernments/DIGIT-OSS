@@ -38,8 +38,8 @@ public class LocalizationUtil {
         String response = restTemplate.postForObject(uri, requestInfo, String.class);
         Object object = JsonPath.read(response,
                 "$.messages[?(@.code==\"" + code + "\")].message");
-        List<String> messaages = (ArrayList<String>) object;
-        String message = messaages.get(0);
+        List<String> messages = (ArrayList<String>) object;
+        String message = messages.get(0);
         return message;
     }
 
