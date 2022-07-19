@@ -147,7 +147,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
                 label={t(`OWNER_NAME`)}
                 text={getOwnerNames(propertyDetails?.Properties[0])}
               />
-               <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
+               {/* <span style={{ display: "inline-flex", width: "fit-content"}}> */}
               <Row
                 className="border-none"
                 labelStyle={isMobile ? { width: "40%" } : {}}
@@ -155,7 +155,8 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
                 label={t(`PROPERTY_ADDRESS`)}
                 text={propertyAddress}
               />
-                <UnMaskComponent privacy={{ uuid:propertyDetails?.Properties[0]?.propertyId, fieldName: ["doorNo","street","landmark"], model: "Property" }}></UnMaskComponent>
+              <span>
+                <UnMaskComponent privacy={{ uuid:propertyDetails?.Properties[0]?.propertyId, fieldName: ["doorNo","street","landmark"], model: "Property" }} style={{position:"relative", marginTop:"-35px",marginLeft:"auto",marginRight:"40px"}}></UnMaskComponent>
               </span>
             </div>
           </StatusTable>

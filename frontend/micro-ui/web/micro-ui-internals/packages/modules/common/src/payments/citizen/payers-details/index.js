@@ -16,6 +16,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { useParams, useHistory, useLocation, Redirect } from "react-router-dom";
+import { stringReplaceAll } from "../bills/routes/bill-details/utils";
 
 const SelectPaymentType = (props) => {
   const optionFirst = {
@@ -84,7 +85,7 @@ const SelectPaymentType = (props) => {
   const onSubmit = () => {
     if(wrkflow === "WNS")
     {
-      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS`, {
+      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS&consumerCode=${stringReplaceAll(consumerCode, "+", "/")}`, {
         paymentAmount: paymentAmt,
         tenantId: billDetails.tenantId,
         name: paymentType?.code !== optionSecound?.code && ConsumerName !== "undefined" ? ConsumerName : userInfo ? payersActiveName : payersName,
