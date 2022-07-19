@@ -31,6 +31,7 @@ import WSFeeEstimation from "./WSFeeEstimation";
 import WSInfoLabel from "../../../ws/src/pageComponents/WSInfoLabel";
 import DocumentsPreview from "./DocumentsPreview";
 import InfoDetails from "./InfoDetails";
+import ViewBreakup from"./ViewBreakup";
 
 function ApplicationDetailsContent({
   applicationDetails,
@@ -333,6 +334,8 @@ function ApplicationDetailsContent({
             </div>
           )}
           {detail?.additionalDetails?.estimationDetails && <WSFeeEstimation wsAdditionalDetails={detail} workflowDetails={workflowDetails}/>}
+          {detail?.additionalDetails?.estimationDetails && <ViewBreakup wsAdditionalDetails={detail} workflowDetails={workflowDetails}/>}
+          
         </React.Fragment>
       ))}
       {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (

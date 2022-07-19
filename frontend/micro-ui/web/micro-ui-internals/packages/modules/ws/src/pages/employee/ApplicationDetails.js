@@ -47,7 +47,7 @@ const ApplicationDetails = () => {
   sessionStorage.removeItem("IsDetailsExists");
 
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_ADD_REBATE_DATA", {});
-
+  const [sessionBillFormData, setSessionBillFormData, clearBillSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_BILL_ADD_REBATE_DATA", {});
   //for common receipt key.
   const { isBillingServiceLoading, data: mdmsBillingServiceData } = Digit.Hooks.obps.useMDMS(stateCode, "BillingService", ["BusinessService"]);
   const { isCommonmastersLoading, data: mdmsCommonmastersData } = Digit.Hooks.obps.useMDMS(stateCode, "common-masters", ["uiCommonPay"]);
@@ -114,13 +114,11 @@ const ApplicationDetails = () => {
     mutate,
   } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
 
-  useEffect(() => {
-    clearSessionFormData();
-  }, []);
-
   const clearDataDetails = () => {
     clearSessionFormData();
     setSessionFormData({});
+    setSessionBillFormData({});
+    clearBillSessionFormData()
   }
 
   const closeToast = () => {
