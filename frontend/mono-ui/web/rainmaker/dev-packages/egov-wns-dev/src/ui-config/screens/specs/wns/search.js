@@ -149,6 +149,8 @@ const employeeSearchResults = {
     getMdmsTenantsData(dispatch);
     dispatch(prepareFinalObject("searchConnection.tenantId", getTenantIdCommon()));
     dispatch(prepareFinalObject("currentTab", "SEARCH_CONNECTION"));
+    localStorage.setItem("WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify({}));
+    localStorage.setItem("IS_WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify(false));
     return action;
   },
   components: {
