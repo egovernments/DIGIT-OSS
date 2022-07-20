@@ -73,7 +73,7 @@ const tradeUnitCard = {
               props: {
                 jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
                 setDataInField: true,
-                disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,               },
+                disabled:(getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit")? true:false,               },
                sourceJsonPath:
                 "applyScreenMdmsData.TradeLicense.TradeTypeTransformed",
               gridDefination: {
