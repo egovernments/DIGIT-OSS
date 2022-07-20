@@ -1401,7 +1401,7 @@ class FormWizardDataEntry extends Component {
         }
 
         if (isAssesment) {
-          errorCode = "FINE";
+/*           errorCode = "FINE";
           let demandResponse = DemandPropertiesResponse.Demands
           demand.map((item,index)=>{
             let data = item.demand[Object.keys(item.demand)]
@@ -1413,7 +1413,7 @@ class FormWizardDataEntry extends Component {
                 
               }
             })
-          })
+          }) */
         } 
 
         switch (errorCode) {
