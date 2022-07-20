@@ -154,10 +154,11 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
                 textStyle={{ wordBreak: "break-word" }}
                 label={t(`PROPERTY_ADDRESS`)}
                 text={propertyAddress}
+                privacy={{ 
+                  uuid:propertyDetails?.Properties[0]?.propertyId, 
+                  fieldName: ["doorNo","street","landmark"], 
+                  model: "Property" }}
               />
-              <span>
-                <UnMaskComponent privacy={{ uuid:propertyDetails?.Properties[0]?.propertyId, fieldName: ["doorNo","street","landmark"], model: "Property" }} style={{position:"relative", marginTop:"-35px",marginLeft:"auto",marginRight:"40px"}}></UnMaskComponent>
-              </span>
             </div>
           </StatusTable>
             <Link to={`/digit-ui/employee/commonpt/view-property?propertyId=${propertyId}&tenantId=${tenantId}&from=${window.location.pathname?.includes("employee/ws/new-application") ? "ES_COMMON_WS_NEW_CONNECTION" : window.location.pathname?.includes("employee/ws/modify-application") ?"WS_MODIFY_CONNECTION_BUTTON": window.location.pathname?.includes("employee/tl/new-application")

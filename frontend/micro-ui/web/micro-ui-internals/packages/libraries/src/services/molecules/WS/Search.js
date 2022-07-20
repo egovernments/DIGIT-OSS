@@ -148,8 +148,8 @@ export const WSSearch = {
     const adhocRebateData = sessionStorage.getItem("Digit.ADHOC_ADD_REBATE_DATA");
     const parsedAdhocRebateData = adhocRebateData ? JSON.parse(adhocRebateData) : "";
     if (wsData?.[0]?.additionalDetails && parsedAdhocRebateData?.value) {
-      if (parsedAdhocRebateData?.value?.adhocPenalty) parsedAdhocRebateData?.value?.adhocPenalty = parseInt(parsedAdhocRebateData?.value?.adhocPenalty)
-      if (parsedAdhocRebateData?.value?.adhocRebate) parsedAdhocRebateData?.value?.adhocRebate = parseInt(parsedAdhocRebateData?.value?.adhocRebate)
+      // if (parsedAdhocRebateData?.value?.adhocPenalty) parsedAdhocRebateData?.value?.adhocPenalty = parseInt(parsedAdhocRebateData?.value?.adhocPenalty)
+      // if (parsedAdhocRebateData?.value?.adhocRebate) parsedAdhocRebateData?.value?.adhocRebate = parseInt(parsedAdhocRebateData?.value?.adhocRebate)
       const data = { ...wsData?.[0]?.additionalDetails, ...parsedAdhocRebateData?.value };
       wsData[0].additionalDetails = data;
     }
