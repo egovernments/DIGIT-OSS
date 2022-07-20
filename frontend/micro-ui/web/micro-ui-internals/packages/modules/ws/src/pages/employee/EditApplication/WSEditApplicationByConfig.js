@@ -106,7 +106,7 @@ const WSEditApplicationByConfig = () => {
   );
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen);
+    const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isEditByConfig);
     config.head = "WS_APP_FOR_WATER_AND_SEWERAGE_EDIT_LABEL";
     let bodyDetails = [];
     config?.body?.forEach(data => { if (data?.isEditByConfigConnection) bodyDetails.push(data); })
