@@ -33,6 +33,7 @@ import { getReviewConnectionDetails } from "./applyResource/review-trade";
 import { snackbarWarningMessage } from "./applyResource/reviewConnectionDetails";
 import { reviewModificationsEffective } from "./applyResource/reviewModificationsEffective";
 import cloneDeep from "lodash/cloneDeep";
+import { getUserInfo } from "egov-ui-kit/utils/localStorageUtils";
 
 const tenantId = getQueryArg(window.location.href, "tenantId");
 let applicationNumber = getQueryArg(window.location.href, "applicationNumber");
@@ -105,8 +106,8 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
   dispatch(prepareFinalObject("SewerageConnection",[]));
   dispatch(prepareFinalObject("WaterConnectionOld",[]));
   dispatch(prepareFinalObject("SewerageConnectionOld",[]));
-  localStorage.setItem("WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify({}));
-  localStorage.setItem("IS_WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify(false));
+  // localStorage.setItem("WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify({}));
+  // localStorage.setItem("IS_WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify(false));
   const queryObj = [
     { key: "businessIds", value: applicationNumber },
     { key: "history", value: true },
@@ -290,7 +291,29 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       get(state, "screenConfiguration.preparedFinalObject.WaterConnection[0].applicationStatus")
     );
 
-    if (process.env.REACT_APP_NAME !== "Citizen" && processInstanceAppStatus == "PENDING_APPROVAL_FOR_CONNECTION" && nextActions.length > 0) {
+
+    const checkUserExist = async (roles) => {
+      const checkList = ["SW_FIELD_INSPECTOR", "WS_APPROVER", "WS_FIELD_INSPECTOR", "SW_APPROVER"];
+      const filterList = [];
+      checkList.map(list => {
+        let filterData = roles.filter(role => role.code == list);
+        if(filterData.length > 0) {
+          filterList.push(filterData[0].code);
+        }
+      })
+      return filterList;
+    }
+    
+    const checkExistStatus = async (processInstances) => {
+      const checkStatus = processInstances.filter(state => state && state.state && state.state.applicationStatus == "PENDING_FOR_PAYMENT");
+      return checkStatus.length > 0 ? checkStatus : [];
+    }
+
+    let userInfo = JSON.parse(getUserInfo());
+    const roles = get(userInfo, "roles");
+    const checkUserList = await checkUserExist(cloneDeep(roles));
+    const checkStatus = await checkExistStatus(cloneDeep(Response.ProcessInstances));
+    if (checkUserList.length > 0 && checkStatus.length == 0 && process.env.REACT_APP_NAME !== "Citizen" && nextActions.length > 0) {
       dispatch(
         handleField(
           "search-preview",
@@ -301,17 +324,6 @@ const beforeInitFn = async (action, state, dispatch, applicationNumber) => {
       );
     }
 
-    // if (process.env.REACT_APP_NAME !== "Citizen" && (processInstanceAppStatus !== 'PENDING_FOR_PAYMENT' && processInstanceAppStatus !== "PENDING_FOR_CONNECTION_ACTIVATION" && processInstanceAppStatus !== 'CONNECTION_ACTIVATED')) {
-
-    //   dispatch(
-    //     handleField(
-    //       "search-preview",
-    //       "components.div.children.taskDetails.children.cardContent.children.estimate.children.cardContent.children.addPenaltyRebateButton",
-    //       "visible",
-    //       true
-    //     )
-    //   );
-    // }
     const printCont = downloadPrintContainer(
       action,
       state,
@@ -715,10 +727,61 @@ const screenConfig = {
 const searchResults = async (action, state, dispatch, applicationNumber, processInstanceAppStatus) => {
   let queryObjForSearch = [{ key: "tenantId", value: tenantId }, { key: "applicationNumber", value: applicationNumber }]
   let viewBillTooltip = [], estimate, payload = [];
+  
+  const checkFeeEstimateVisible = async (wsDatas) => {
+    const dataDetails = wsDatas[0].applicationType.includes("NEW");
+    return dataDetails;
+  } 
+
   if (service === serviceConst.WATER) {
     payload = [];
     payload = await getSearchResults(queryObjForSearch);
     set(payload, 'WaterConnection[0].service', service);
+
+    const getValuesofAdhoc = localStorage.getItem("WS_ADDITIONAL_DETAILS_FOR_DATA");
+    const adhocDetails = getValuesofAdhoc ? JSON.parse(getValuesofAdhoc) : {};
+    const getAddtionalDetails = get(payload, "WaterConnection[0]", {});
+
+    if (adhocDetails && adhocDetails.additionalDetails &&  getAddtionalDetails && getAddtionalDetails.additionalDetails &&  adhocDetails.applicationNo == getAddtionalDetails.applicationNo) {
+      getAddtionalDetails.additionalDetails.adhocPenalty = parseFloat(adhocDetails.additionalDetails.adhocPenalty);
+      getAddtionalDetails.additionalDetails.adhocPenaltyComment = adhocDetails.additionalDetails.adhocPenaltyComment;
+      getAddtionalDetails.additionalDetails.adhocPenaltyReason = adhocDetails.additionalDetails.adhocPenaltyReason;
+      getAddtionalDetails.additionalDetails.adhocRebate = parseFloat(adhocDetails.additionalDetails.adhocRebate);
+      getAddtionalDetails.additionalDetails.adhocRebateComment = adhocDetails.additionalDetails.adhocRebateComment;
+      getAddtionalDetails.additionalDetails.adhocRebateReason = adhocDetails.additionalDetails.adhocRebateReason;
+      set(payload, 'WaterConnection[0].additionalDetails', getAddtionalDetails.additionalDetails);
+    }
+
+    const isVisible = await checkFeeEstimateVisible(cloneDeep(payload.WaterConnection));
+    if (isVisible) {
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.estimate.visible",
+        true
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.estimate",
+          "visible",
+          true
+        )
+      );
+    } else {
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.estimate.visible",
+        false
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.estimate",
+          "visible",
+          false
+        )
+      );
+    }
     // let additionalDetailsformdata = JSON.parse(localStorage.getItem("WS_ADDITIONAL_DETAILS"));
     // if(additionalDetailsformdata) {
     //   set(payload, 'WaterConnection[0].additionalDetails', additionalDetailsformdata );
@@ -779,42 +842,42 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     }
     if(!window.location.href.includes("mode=MODIFY")) {
     
-    if(processInstanceAppStatus =="CONNECTION_ACTIVATED" || processInstanceAppStatus == "PENDING_FOR_CONNECTION_ACTIVATION" || processInstanceAppStatus == 'PENDING_FOR_PAYMENT') {
-      let estimateSearch = {};
-    if (processInstanceAppStatus == 'PENDING_FOR_PAYMENT' && (ifUserRoleExists("WS_CEMP") || ifUserRoleExists("SW_CEMP"))) {
-      let queryObjectForFetch = [
-        { key: "tenantId", value: tenantId },
-        { key: "consumerCode", value: applicationNumber },
-        { key: "businessService", value: "WS.ONE_TIME_FEE" }
-      ]
-      estimateSearch = await fetchBill(queryObjectForFetch, dispatch);
-    } else {
-      estimateSearch = await waterSewerageBillingSearch(queryObjectForSearch, dispatch);
-    }
-      estimateSearch.Bill[0].billDetails[0].billAccountDetails.forEach(bill => { bill.estimateAmount = bill.amount;});
-      let bodyOfTH = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "BillingService", "masterDetails": [{ "name": "TaxHeadMaster" }] }] } }
-      let taxHeadMasterRes = await getDescriptionFromMDMS(bodyOfTH, dispatch);
-      let taxHeadMasterResponce = taxHeadMasterRes.MdmsRes.BillingService.TaxHeadMaster;
-      let viewBillTooltip = [];
-      estimateSearch.Bill[0].billDetails[0].billAccountDetails.forEach(data => {
-      taxHeadMasterResponce.forEach(taxHeadCode => { if(data.taxHeadCode == taxHeadCode.code) { data.category = taxHeadCode.category } });
-      })
-      if (estimateSearch !== null && estimateSearch !== undefined) {
-        await processBillsSearch(estimateSearch, viewBillTooltip, dispatch, applicationNumber);
-        //viewBreakup
-        let fee = 0, charge = 0, taxAmount = 0;
-        estimateSearch.Bill[0].billSlabData = _.groupBy(estimateSearch.Bill[0].billDetails[0].billAccountDetails, 'category') 
-        if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.FEE && estimateSearch.Bill[0].billSlabData.FEE.length > 0) estimateSearch.Bill[0].billSlabData.FEE.map(amount => { fee += parseFloat(amount.amount); });
-        if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.CHARGES && estimateSearch.Bill[0].billSlabData.CHARGES.length > 0) estimateSearch.Bill[0].billSlabData.CHARGES.map(amount => { charge += parseFloat(amount.amount); });
-        if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.TAX && estimateSearch.Bill[0].billSlabData.TAX.length > 0) estimateSearch.Bill[0].billSlabData.TAX.map(amount => { taxAmount += parseFloat(amount.amount); });
-        estimateSearch.Bill[0].fee = fee;
-        estimateSearch.Bill[0].charge = charge
-        estimateSearch.Bill[0].taxAmount = taxAmount;
-        estimateSearch.Bill[0].totalAmount = fee + charge + taxAmount;
-        estimateSearch.Bill[0].appStatus = processInstanceAppStatus;
-        dispatch(prepareFinalObject("dataCalculation", estimateSearch.Bill[0]));
-      }
-    } else {
+    // if(processInstanceAppStatus =="CONNECTION_ACTIVATED" || processInstanceAppStatus == "PENDING_FOR_CONNECTION_ACTIVATION" || processInstanceAppStatus == 'PENDING_FOR_PAYMENT') {
+    //   let estimateSearch = {};
+    // if (processInstanceAppStatus == 'PENDING_FOR_PAYMENT' && (ifUserRoleExists("WS_CEMP") || ifUserRoleExists("SW_CEMP"))) {
+    //   let queryObjectForFetch = [
+    //     { key: "tenantId", value: tenantId },
+    //     { key: "consumerCode", value: applicationNumber },
+    //     { key: "businessService", value: "WS.ONE_TIME_FEE" }
+    //   ]
+    //   estimateSearch = await fetchBill(queryObjectForFetch, dispatch);
+    // } else {
+    //   estimateSearch = await waterSewerageBillingSearch(queryObjectForSearch, dispatch);
+    // }
+    //   estimateSearch.Bill[0].billDetails[0].billAccountDetails.forEach(bill => { bill.estimateAmount = bill.amount;});
+    //   let bodyOfTH = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "BillingService", "masterDetails": [{ "name": "TaxHeadMaster" }] }] } }
+    //   let taxHeadMasterRes = await getDescriptionFromMDMS(bodyOfTH, dispatch);
+    //   let taxHeadMasterResponce = taxHeadMasterRes.MdmsRes.BillingService.TaxHeadMaster;
+    //   let viewBillTooltip = [];
+    //   estimateSearch.Bill[0].billDetails[0].billAccountDetails.forEach(data => {
+    //   taxHeadMasterResponce.forEach(taxHeadCode => { if(data.taxHeadCode == taxHeadCode.code) { data.category = taxHeadCode.category } });
+    //   })
+    //   if (estimateSearch !== null && estimateSearch !== undefined) {
+    //     await processBillsSearch(estimateSearch, viewBillTooltip, dispatch, applicationNumber);
+    //     //viewBreakup
+    //     let fee = 0, charge = 0, taxAmount = 0;
+    //     estimateSearch.Bill[0].billSlabData = _.groupBy(estimateSearch.Bill[0].billDetails[0].billAccountDetails, 'category') 
+    //     if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.FEE && estimateSearch.Bill[0].billSlabData.FEE.length > 0) estimateSearch.Bill[0].billSlabData.FEE.map(amount => { fee += parseFloat(amount.amount); });
+    //     if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.CHARGES && estimateSearch.Bill[0].billSlabData.CHARGES.length > 0) estimateSearch.Bill[0].billSlabData.CHARGES.map(amount => { charge += parseFloat(amount.amount); });
+    //     if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.TAX && estimateSearch.Bill[0].billSlabData.TAX.length > 0) estimateSearch.Bill[0].billSlabData.TAX.map(amount => { taxAmount += parseFloat(amount.amount); });
+    //     estimateSearch.Bill[0].fee = fee;
+    //     estimateSearch.Bill[0].charge = charge
+    //     estimateSearch.Bill[0].taxAmount = taxAmount;
+    //     estimateSearch.Bill[0].totalAmount = fee + charge + taxAmount;
+    //     estimateSearch.Bill[0].appStatus = processInstanceAppStatus;
+    //     dispatch(prepareFinalObject("dataCalculation", estimateSearch.Bill[0]));
+    //   }
+    // } else {
 
 
 
@@ -828,7 +891,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
           dispatch(prepareFinalObject("dataCalculation", estimate.Calculation[0]));
         }
       }
-    }
+    // }
   }
     // estimate = await waterEstimateCalculation(queryObjectForEst, dispatch);
     // if (estimate !== null && estimate !== undefined) {
@@ -864,6 +927,52 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
     payload = [];
     payload = await getSearchResultsForSewerage(queryObjForSearch, dispatch);
     payload.SewerageConnections[0].service = service;
+
+    const getValuesofAdhoc = localStorage.getItem("WS_ADDITIONAL_DETAILS_FOR_DATA");
+    const adhocDetails = getValuesofAdhoc ? JSON.parse(getValuesofAdhoc) : {};
+    const getAddtionalDetails = get(payload, "SewerageConnections[0]", {});
+
+    if (adhocDetails && adhocDetails.additionalDetails && getAddtionalDetails && getAddtionalDetails.additionalDetails && adhocDetails.applicationNo == getAddtionalDetails.applicationNo) {
+      getAddtionalDetails.additionalDetails.adhocPenalty = parseFloat(adhocDetails.additionalDetails.adhocPenalty);
+      getAddtionalDetails.additionalDetails.adhocPenaltyComment = adhocDetails.additionalDetails.adhocPenaltyComment;
+      getAddtionalDetails.additionalDetails.adhocPenaltyReason = adhocDetails.additionalDetails.adhocPenaltyReason;
+      getAddtionalDetails.additionalDetails.adhocRebate = parseFloat(adhocDetails.additionalDetailsadhocRebate);
+      getAddtionalDetails.additionalDetails.adhocRebateComment = adhocDetails.additionalDetails.adhocRebateComment;
+      getAddtionalDetails.additionalDetails.adhocRebateReason = adhocDetails.additionalDetails.adhocRebateReason;
+      set(payload, 'SewerageConnections[0].additionalDetails', getAddtionalDetails.additionalDetails);
+    }
+
+
+    const isVisible = await checkFeeEstimateVisible(cloneDeep(payload.SewerageConnections));
+    if (isVisible) {
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.estimate.visible",
+        true
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.estimate",
+          "visible",
+          true
+        )
+      );
+    } else {
+      set(
+        action.screenConfig,
+        "components.div.children.taskDetails.children.cardContent.children.estimate.visible",
+        false
+      );
+      dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.taskDetails.children.cardContent.children.estimate",
+          "visible",
+          false
+        )
+      );
+    }
     let additionalDetailsformdata = JSON.parse(localStorage.getItem("WS_ADDITIONAL_DETAILS"));
     if(additionalDetailsformdata) {
       set(payload, 'SewerageConnections[0].additionalDetails', additionalDetailsformdata );
@@ -935,42 +1044,42 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
       { key: "Service", value: "SW.ONE_TIME_FEE" }
     ];
     if(!window.location.href.includes("mode=MODIFY")) {
-    if(processInstanceAppStatus =="CONNECTION_ACTIVATED" || processInstanceAppStatus == "PENDING_FOR_CONNECTION_ACTIVATION" || processInstanceAppStatus == 'PENDING_FOR_PAYMENT') {
-      let estimateSearch = {};
-      if (processInstanceAppStatus == 'PENDING_FOR_PAYMENT' && (ifUserRoleExists("WS_CEMP") || ifUserRoleExists("SW_CEMP"))) {
-        let queryObjectForFetch = [
-          { key: "tenantId", value: tenantId },
-          { key: "consumerCode", value: applicationNumber },
-          { key: "businessService", value: "WS.ONE_TIME_FEE" }
-        ]
-        estimateSearch = await fetchBill(queryObjectForFetch, dispatch);
-      } else {
-        estimateSearch = await waterSewerageBillingSearch(queryObjectForSearch, dispatch);
-      }
-      // let estimateSearch = await waterSewerageBillingSearch(queryObjectForSearch, dispatch);
-      estimateSearch.Bill[0].billDetails[0].billAccountDetails.forEach(bill => { bill.estimateAmount = bill.amount;});
-      let bodyOfTH = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "BillingService", "masterDetails": [{ "name": "TaxHeadMaster" }] }] } }
-      let taxHeadMasterRes = await getDescriptionFromMDMS(bodyOfTH, dispatch);
-      let taxHeadMasterResponce = taxHeadMasterRes.MdmsRes.BillingService.TaxHeadMaster;
-      estimateSearch.Bill[0].billDetails[0].billAccountDetails.forEach(data => {
-      taxHeadMasterResponce.forEach(taxHeadCode => { if(data.taxHeadCode == taxHeadCode.code) { data.category = taxHeadCode.category } });
-      })
-      if (estimateSearch !== null && estimateSearch !== undefined) {
-        await processBillsSearch(estimateSearch, viewBillTooltip, dispatch, applicationNumber);
-        //viewBreakup
-        let fee = 0, charge = 0, taxAmount = 0;
-        estimateSearch.Bill[0].billSlabData = _.groupBy(estimateSearch.Bill[0].billDetails[0].billAccountDetails, 'category') 
-        if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.FEE && estimateSearch.Bill[0].billSlabData.FEE.length > 0) estimateSearch.Bill[0].billSlabData.FEE.map(amount => { fee += parseFloat(amount.amount); });
-        if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.CHARGES && estimateSearch.Bill[0].billSlabData.CHARGES.length > 0) estimateSearch.Bill[0].billSlabData.CHARGES.map(amount => { charge += parseFloat(amount.amount); });
-        if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.TAX && estimateSearch.Bill[0].billSlabData.TAX.length > 0) estimateSearch.Bill[0].billSlabData.TAX.map(amount => { taxAmount += parseFloat(amount.amount); });
-        estimateSearch.Bill[0].fee = fee;
-        estimateSearch.Bill[0].charge = charge
-        estimateSearch.Bill[0].taxAmount = taxAmount;
-        estimateSearch.Bill[0].totalAmount = fee + charge + taxAmount;
-        estimateSearch.Bill[0].appStatus = processInstanceAppStatus;
-        dispatch(prepareFinalObject("dataCalculation", estimateSearch.Bill[0]));
-      }
-    } else {
+    // if(processInstanceAppStatus =="CONNECTION_ACTIVATED" || processInstanceAppStatus == "PENDING_FOR_CONNECTION_ACTIVATION" || processInstanceAppStatus == 'PENDING_FOR_PAYMENT') {
+    //   let estimateSearch = {};
+    //   if (processInstanceAppStatus == 'PENDING_FOR_PAYMENT' && (ifUserRoleExists("WS_CEMP") || ifUserRoleExists("SW_CEMP"))) {
+    //     let queryObjectForFetch = [
+    //       { key: "tenantId", value: tenantId },
+    //       { key: "consumerCode", value: applicationNumber },
+    //       { key: "businessService", value: "WS.ONE_TIME_FEE" }
+    //     ]
+    //     estimateSearch = await fetchBill(queryObjectForFetch, dispatch);
+    //   } else {
+    //     estimateSearch = await waterSewerageBillingSearch(queryObjectForSearch, dispatch);
+    //   }
+    //   // let estimateSearch = await waterSewerageBillingSearch(queryObjectForSearch, dispatch);
+    //   estimateSearch.Bill[0].billDetails[0].billAccountDetails.forEach(bill => { bill.estimateAmount = bill.amount;});
+    //   let bodyOfTH = { "MdmsCriteria": { "tenantId": tenantId, "moduleDetails": [{ "moduleName": "BillingService", "masterDetails": [{ "name": "TaxHeadMaster" }] }] } }
+    //   let taxHeadMasterRes = await getDescriptionFromMDMS(bodyOfTH, dispatch);
+    //   let taxHeadMasterResponce = taxHeadMasterRes.MdmsRes.BillingService.TaxHeadMaster;
+    //   estimateSearch.Bill[0].billDetails[0].billAccountDetails.forEach(data => {
+    //   taxHeadMasterResponce.forEach(taxHeadCode => { if(data.taxHeadCode == taxHeadCode.code) { data.category = taxHeadCode.category } });
+    //   })
+    //   if (estimateSearch !== null && estimateSearch !== undefined) {
+    //     await processBillsSearch(estimateSearch, viewBillTooltip, dispatch, applicationNumber);
+    //     //viewBreakup
+    //     let fee = 0, charge = 0, taxAmount = 0;
+    //     estimateSearch.Bill[0].billSlabData = _.groupBy(estimateSearch.Bill[0].billDetails[0].billAccountDetails, 'category') 
+    //     if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.FEE && estimateSearch.Bill[0].billSlabData.FEE.length > 0) estimateSearch.Bill[0].billSlabData.FEE.map(amount => { fee += parseFloat(amount.amount); });
+    //     if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.CHARGES && estimateSearch.Bill[0].billSlabData.CHARGES.length > 0) estimateSearch.Bill[0].billSlabData.CHARGES.map(amount => { charge += parseFloat(amount.amount); });
+    //     if(estimateSearch.Bill[0].billSlabData && estimateSearch.Bill[0].billSlabData.TAX && estimateSearch.Bill[0].billSlabData.TAX.length > 0) estimateSearch.Bill[0].billSlabData.TAX.map(amount => { taxAmount += parseFloat(amount.amount); });
+    //     estimateSearch.Bill[0].fee = fee;
+    //     estimateSearch.Bill[0].charge = charge
+    //     estimateSearch.Bill[0].taxAmount = taxAmount;
+    //     estimateSearch.Bill[0].totalAmount = fee + charge + taxAmount;
+    //     estimateSearch.Bill[0].appStatus = processInstanceAppStatus;
+    //     dispatch(prepareFinalObject("dataCalculation", estimateSearch.Bill[0]));
+    //   }
+    // } else {
       estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
       if (estimate !== null && estimate !== undefined) {
         if (estimate.Calculation.length > 0) {
@@ -982,7 +1091,7 @@ const searchResults = async (action, state, dispatch, applicationNumber, process
         }
         createEstimateData(estimate.Calculation[0].taxHeadEstimates, "taxHeadEstimates", dispatch, {}, {});
       }
-    }
+    // }
   }
 
     // estimate = await swEstimateCalculation(queryObjectForEst, dispatch);
