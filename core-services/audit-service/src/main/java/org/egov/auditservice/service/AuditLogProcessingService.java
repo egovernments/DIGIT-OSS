@@ -34,16 +34,18 @@ public class AuditLogProcessingService {
     @Autowired
     private AuditServiceValidator validator;
 
-    public void process(AuditLogRequest request) {
+    public List<AuditLog> process(AuditLogRequest request) {
 
         // Enrich audit logs
         enrichmentService.enrichAuditLogs(request);
 
         // Sign incoming data before persisting
-        chooseSignerAndVerifier.selectImplementationAndSign(request);
+        List<AuditLog> signedAuditLogs = chooseSignerAndVerifier.selectImplementationAndSign(request);
 
         // Persister will handle persisting audit records
         producer.push("persist-audit-logs", request);
+
+        return signedAuditLogs;
     }
 
 

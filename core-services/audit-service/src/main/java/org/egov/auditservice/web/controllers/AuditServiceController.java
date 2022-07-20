@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -36,8 +37,8 @@ public class AuditServiceController {
 //        //log.info("############ Completed before pushing data");
 //        ResponseInfo responseInfo = responseInfoFactory.createResponseInfoFromRequestInfo(ingestRequest.getRequestInfo(), true);
 //        IngestResponse response = IngestResponse.builder().responseInfo(responseInfo).responseHash(responseHash).build();
-        service.process(auditLogRequest);
-        AuditLogResponse response = AuditLogResponse.builder().build();
+        List<AuditLog> signedAuditLogs = service.process(auditLogRequest);
+        AuditLogResponse response = AuditLogResponse.builder().auditLogs(signedAuditLogs).build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
