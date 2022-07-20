@@ -146,7 +146,7 @@ export const useDemandSearch = ({ consumerCode, businessService, tenantId }, con
 
 export const useRecieptSearch = ({ tenantId, businessService, ...params }, config = {}) => {
   return useQuery(
-    ["reciept_search", { tenantId, businessService, params }],
+    ["reciept_search", { tenantId, businessService, params },config],
     () => Digit.PaymentService.recieptSearch(tenantId, businessService, params),
     {
       refetchOnMount: false,

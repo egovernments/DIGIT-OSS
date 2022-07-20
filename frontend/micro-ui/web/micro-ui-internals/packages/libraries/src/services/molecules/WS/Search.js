@@ -28,11 +28,12 @@ const convertEpochToDate = (dateEpoch) => {
 };
 
 const getAddress = (address, t) => {
-  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+  const result =  `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
   }${t(Digit.Utils.pt.getMohallaLocale(address?.locality.code, address?.tenantId))}, ${t(Digit.Utils.pt.getCityLocale(address?.tenantId))}${
     address?.pincode && t(address?.pincode) ? `, ${address.pincode}` : " "
   }`;
+  return result
 };
 
 const getOwnerNames = (propertyData) => {
@@ -113,7 +114,9 @@ export const WSSearch = {
   },
 
 
+
   applicationDetails: async (t, tenantId, applicationNumber, serviceType = "WATER", userInfo, config = {}) => {
+
     const filters = { applicationNumber };
 
     let propertyids = "",
@@ -178,7 +181,9 @@ export const WSSearch = {
     const serviceTypeOfData = serviceType == "WATER" ? "WS.ONE_TIME_FEE" : "SW.ONE_TIME_FEE";
     const collectionNumber = filters?.applicationNumber;
 
+
     let fetchBillData = {}, colletionData = {}, estimationResponse = {}, mdmsRes = {}, isPaid = false;
+
 
     fetchBillData = await WSSearch.fetchBillData({ tenantId, serviceTypeOfData, collectionNumber });
 
@@ -320,7 +325,7 @@ export const WSSearch = {
       values: [
         { title: "WS_PROPERTY_ID_LABEL", value: propertyDataDetails?.propertyId },
         { title: "WS_COMMON_OWNER_NAME_LABEL", value: getOwnerNames(propertyDataDetails) },
-        { title: "WS_PROPERTY_ADDRESS_LABEL", value: getAddress(propertyDataDetails?.address, t)},
+        { title: "WS_PROPERTY_ADDRESS_LABEL", value: getAddress(propertyDataDetails?.address, t), isNotTranslated: true, privacy: { uuid: propertyDataDetails?.propertyId, fieldName: ["doorNo", "street", "landmark"], model: "Property" }, },
       ],
       additionalDetails: {
         redirectUrl: {
@@ -330,19 +335,34 @@ export const WSSearch = {
       },
     };
 
+    const uuid = wsDataDetails?.connectionHolders?.[0]?.uuid
+    const applicationNoForPrivacy = wsDataDetails?.applicationNo
     const connectionHolderDetails = {
       title: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
       asSectionHeader: true,
       values:
         wsDataDetails?.connectionHolders?.length > 0
           ? [
-              { title: "WS_OWN_DETAIL_NAME", value: wsDataDetails?.connectionHolders?.[0]?.name || t("NA") },
-              { title: "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.gender },
-              { title: "CORE_COMMON_MOBILE_NUMBER", value: wsDataDetails?.connectionHolders?.[0]?.mobileNumber },
-              { title: "WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME", value: wsDataDetails?.connectionHolders?.[0]?.fatherOrHusbandName },
-              { title: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.relationship },
-              { title: "WS_CORRESPONDANCE_ADDRESS_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.correspondenceAddress },
-              { title: "WS_OWNER_SPECIAL_CATEGORY", value: wsDataDetails?.connectionHolders?.[0]?.ownerType ? `PROPERTYTAX_OWNERTYPE_${wsDataDetails?.connectionHolders?.[0]?.ownerType?.toUpperCase()}` : "NA"},
+            { title: "WS_OWN_DETAIL_NAME", value: wsDataDetails?.connectionHolders?.[0]?.name || t("NA") },
+            { title: "WS_CONN_HOLDER_OWN_DETAIL_GENDER_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.gender, privacy: { uuid: uuid, fieldName: ["gender"], model: "WaterConnectionOwner" }, },
+            { title: "CORE_COMMON_MOBILE_NUMBER", value: wsDataDetails?.connectionHolders?.[0]?.mobileNumber, privacy: { uuid: uuid, fieldName: ["connectionHoldersMobileNumber"], model: "WaterConnectionOwner" }, },
+            { title: "WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME", value: wsDataDetails?.connectionHolders?.[0]?.fatherOrHusbandName, privacy: { uuid: uuid, fieldName: ["fatherOrHusbandName"], model: "WaterConnectionOwner" }, },
+              { title: "WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.relationship,
+              privacy: { uuid: uuid, fieldName: ["relationship"], model: "WaterConnectionOwner" },
+            },
+            {
+              title: "WS_CORRESPONDANCE_ADDRESS_LABEL", value: wsDataDetails?.connectionHolders?.[0]?.correspondenceAddress, 
+              privacy: {
+                uuid: uuid,
+                fieldName: wsDataDetails?.connectionHolders[0]?.permanentAddress ? ["permanentAddress"] : ["correspondenceAddress"],
+                model: "WaterConnectionOwner",
+                hide: !(wsDataDetails?.connectionHolders[0]?.permanentAddress || wsDataDetails?.connectionHolders[0]?.correspondenceAddress),
+              } 
+            },
+            {
+              title: "WS_OWNER_SPECIAL_CATEGORY", value: wsDataDetails?.connectionHolders?.[0]?.ownerType ? (wsDataDetails?.connectionHolders?.[0]?.ownerType?.includes("*") ? wsDataDetails?.connectionHolders?.[0]?.ownerType : (`PROPERTYTAX_OWNERTYPE_${wsDataDetails?.connectionHolders?.[0]?.ownerType?.toUpperCase()}`) ): "NA",
+              privacy: { uuid: applicationNoForPrivacy, fieldName: ["ownerType"], model: "WaterConnection" },
+            },
             ]
           : [{ title: "WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS", value: t("SCORE_YES") }],
     };
@@ -415,7 +435,10 @@ export const WSSearch = {
                 },
                 { title: "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL", value: wsDataDetails?.plumberInfo?.[0]?.licenseNo || t("NA") },
                 { title: "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL", value: wsDataDetails?.plumberInfo?.[0]?.name || t("NA") },
-                { title: "WS_PLUMBER_MOBILE_NO_LABEL", value: wsDataDetails?.plumberInfo?.[0]?.mobileNumber || t("NA") },
+              {
+                title: "WS_PLUMBER_MOBILE_NO_LABEL", value: wsDataDetails?.plumberInfo?.[0]?.mobileNumber || t("NA"), privacy: { uuid: wsDataDetails?.applicationNo, fieldName: ["plumberInfoMobileNumber"], model: "WaterConnection" },
+                //privacy:{} 
+              },
               ]
             : [
                 {
@@ -476,7 +499,13 @@ export const WSSearch = {
     };
 
     let details = [];
-    details = [...details, applicationHeaderDetails, feeEstimation, propertyDetails, connectionHolderDetails, AdditionalDetailsByWS, documentDetails];
+    const isLabelShow = {
+      title: "",
+      asSectionHeader: true,
+      isLabelShow: true,
+      additionalDetails: { isLabelShow: true },
+    };
+    details = [...details,isLabelShow, applicationHeaderDetails, feeEstimation, propertyDetails, connectionHolderDetails, AdditionalDetailsByWS, documentDetails];
     wsDataDetails.serviceType = serviceDataType;
 
     if (!isVisible) {
