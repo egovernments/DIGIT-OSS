@@ -50,8 +50,8 @@ const getConnectionDetails = (application, oldApplication, t) => {
             { val1: t("WS_MODIFICATIONS_EFFECTIVE_DATE"), val2: convertEpochToDateDMY(application?.dateEffectiveFrom), val3: compare(convertEpochToDateDMY(application?.dateEffectiveFrom), convertEpochToDateDMY(oldApplication?.dateEffectiveFrom), t) }
         ] : [
             { val1: t("WS_SERV_DETAIL_CONN_TYPE"), val2: application?.connectionType, val3: compare(application?.connectionType, oldApplication?.connectionType, t) },
-            { val1: t("WS_NO_WATER_CLOSETS_LABEL"), val2: application?.proposedWaterClosets || t("CS_NA"), val3: compare(application?.proposedWaterClosets, oldApplication?.proposedWaterClosets, t) },
-            { val1: t("WS_SERV_DETAIL_NO_OF_TOILETS"), val2: application?.proposedToilets || t("CS_NA"), val3: compare(application?.proposedToilets, oldApplication?.proposedToilets, t) },
+            { val1: t("WS_NO_WATER_CLOSETS_LABEL"), val2: application?.noOfWaterClosets || t("CS_NA"), val3: compare(application?.noOfWaterClosets, oldApplication?.noOfWaterClosets, t) },
+            { val1: t("WS_SERV_DETAIL_NO_OF_TOILETS"), val2: application?.noOfToilets || t("CS_NA"), val3: compare(application?.noOfToilets, oldApplication?.noOfToilets, t) },
             { val1: t("WS_SERV_DETAIL_CONN_EXECUTION_DATE"), val2: convertEpochToDateDMY(application?.connectionExecutionDate), val3: compare(application?.connectionExecutionDate, oldApplication?.connectionExecutionDate, t) },
             { val1: t("WS_MODIFICATIONS_EFFECTIVE_DATE"), val2: convertEpochToDateDMY(application?.dateEffectiveFrom), val3: compare(convertEpochToDateDMY(application?.dateEffectiveFrom), convertEpochToDateDMY(oldApplication?.dateEffectiveFrom), t) }
         ],

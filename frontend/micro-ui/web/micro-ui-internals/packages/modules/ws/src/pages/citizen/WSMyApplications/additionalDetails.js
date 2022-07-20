@@ -91,30 +91,30 @@ const WSAdditionalDetails = () => {
                 className="border-none"
                 label={t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")}
                 text={
-                  (data?.WaterConnection?.[0]?.plumberInfo ? t("WS_PLUMBER_ULB") : t("WS_PLUMBER_SELF")) ||
-                  (data?.SewerageConnections?.[0]?.plumberInfo ? t("WS_PLUMBER_ULB") : t("WS_PLUMBER_SELF")) ||
+                  (data?.WaterConnection?.[0]?.additionalDetails?.detailsProvidedBy === "ULB" ? t("WS_PLUMBER_ULB") : t("WS_PLUMBER_SELF")) ||
+                  (data?.SewerageConnections?.[0]?.additionalDetails?.detailsProvidedBy === "ULB" ? t("WS_PLUMBER_ULB") : t("WS_PLUMBER_SELF")) ||
                   t("NA")
                 }
                 textStyle={{ whiteSpace: "pre" }}
               />
-              {data?.WaterConnection?.[0]?.plumberInfo && (
+              {(data?.WaterConnection?.[0]?.additionalDetails?.detailsProvidedBy === "ULB" || data?.SewerageConnections?.[0]?.additionalDetails?.detailsProvidedBy === "ULB") && (
                 <div>
                   <Row
                     className="border-none"
                     label={t("WS_PLUMBER_LIC_NO")}
-                    text={data?.WaterConnection?.[0]?.plumberInfo?.licenseNo || data?.SewerageConnections?.[0]?.plumberInfo?.licenseNo || t("NA")}
+                    text={data?.WaterConnection?.[0]?.plumberInfo?.[0]?.licenseNo || data?.SewerageConnections?.[0]?.plumberInfo?.licenseNo || t("NA")}
                     textStyle={{ whiteSpace: "pre" }}
                   />
                   <Row
                     className="border-none"
                     label={t("WS_ADDN_DETAILS_PLUMBER_NAME_LABEL")}
-                    text={data?.WaterConnection?.[0]?.plumberInfo?.name || data?.SewerageConnections?.[0]?.plumberInfo?.name || "NA"}
+                    text={data?.WaterConnection?.[0]?.plumberInfo?.[0]?.name || data?.SewerageConnections?.[0]?.plumberInfo?.name || "NA"}
                     textStyle={{ whiteSpace: "pre" }}
                   />
                   <Row
                     className="border-none"
                     label={t("WS_PLUMBER_MOB_NO")}
-                    text={data?.WaterConnection?.[0]?.plumberInfo?.mobileNumber || data?.SewerageConnections?.[0]?.plumberInfo?.mobileNumber || "NA"}
+                    text={data?.WaterConnection?.[0]?.plumberInfo?.[0]?.mobileNumber || data?.SewerageConnections?.[0]?.plumberInfo?.mobileNumber || "NA"}
                     textStyle={{ whiteSpace: "pre" }}
                   />
                 </div>

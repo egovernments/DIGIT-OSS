@@ -221,6 +221,7 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
                 title: t("WS_NAME_ERROR_MESSAGE"),
               })}
             />
+            <CardLabel>{t("WS_OWN_DETAIL_RELATIONSHIP_LABEL")}</CardLabel>
             <RadioButtons
                 t={t}
                 optionsKey="i18nKey"

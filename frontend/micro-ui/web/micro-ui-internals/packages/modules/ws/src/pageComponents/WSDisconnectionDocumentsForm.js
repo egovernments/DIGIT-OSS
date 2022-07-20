@@ -148,7 +148,7 @@ function SelectDocument({
 
   return (
       <div style={{ marginBottom: "24px" }}>
-          <CardLabel>{t(doc?.i18nKey)}</CardLabel>
+          <CardLabel>{t(doc?.i18nKey)+ "*"}</CardLabel>
           <Dropdown
               t={t}
               isMandatory={false}

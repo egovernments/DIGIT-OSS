@@ -7,7 +7,13 @@ import SearchFields from "./SearchFields";
 import MobileSearchApplication from "./MobileSearchApplication";
 
 const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
-  const initialValues = Digit.SessionStorage.get("SEARCH_APPLICATION_DETAIL")|| {
+  const initialValues = Digit.SessionStorage.get("SEARCH_APPLICATION_DETAIL")? {
+    ...Digit.SessionStorage.get("SEARCH_APPLICATION_DETAIL"),
+    offset: 0,
+    limit: 10,
+    sortBy: "commencementDate",
+    sortOrder: "DESC"
+} : {
     offset: 0,
     limit: 10,
     sortBy: "commencementDate",
