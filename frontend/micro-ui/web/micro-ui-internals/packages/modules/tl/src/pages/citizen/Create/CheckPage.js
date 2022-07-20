@@ -110,7 +110,7 @@ const WrapCheckPage = ({ onSubmit, value }) => {
             ))}
         </StatusTable>
       </Card>
-      <Card>
+      { !(TradeDetails?.StructureType.code === "MOVABLE") && <Card>
         <StatusTable>
           <CardHeader styles={{ fontSize: "28px" }}>{t("TL_NEW_TRADE_DETAILS_HEADER_TRADE_LOC_DETAILS")}</CardHeader>
           {cpt && cpt.details && cpt.details.propertyId ? (
@@ -159,7 +159,7 @@ const WrapCheckPage = ({ onSubmit, value }) => {
             <LinkButton style={{ textAlign: "left" }} label={t("TL_VIEW_PROPERTY")} />
           </Link>
         </div>
-      </Card>
+      </Card>}
       <Card>
         <StatusTable>
           <CardHeader styles={{ fontSize: "28px" }}>{t("TL_NEW_OWNER_DETAILS_HEADER")}</CardHeader>
