@@ -1220,7 +1220,6 @@ export {
   BirthIcon,
   DeathIcon,
   SendIcon,
-  GalleryIcon,
   ArrowIcon,
   RatingPopupImage
 };

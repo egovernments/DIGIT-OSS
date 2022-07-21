@@ -172,7 +172,6 @@ import {
   BirthIcon,
   FirenocIcon,
   SendIcon,
-  GalleryIcon,
   ArrowIcon,
   RatingPopupImage
 } from "./atoms/svgindex";
@@ -476,7 +475,6 @@ export {
   BirthIcon,
   FirenocIcon,
   SendIcon,
-  GalleryIcon,
   ArrowIcon,
   RatingPopupImage
 
