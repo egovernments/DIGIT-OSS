@@ -180,17 +180,9 @@ components:
           minLength: 1
           maxLength: 64
           example: 5b493cd0-af24-11ec-b909-0242ac120002
-        fieldName:
-          type: string
-          description: Name of the field  
-          minLength: 1
-          maxLength: 64
-          example: "Property,Address"
-        newValue:
-          type: string
-          description: The new updated value
-          minLength: 1
-          maxLength: 64
+        keyValuePairs:
+          type: object
+          description: Key value pairs specifying fields of the object
         operationType:
           type: string
           description: CRUD operation discriminator
@@ -200,13 +192,6 @@ components:
         integrityHash:
           type: string
           description: Integrity hash of the data 
-      required:
-      - financialYear
-      - module
-      - ulb
-      - region
-      - state
-      - metrics
 
     AuditLogRequest:
       type: object
@@ -240,4 +225,3 @@ components:
         RequestInfo:
           $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/PT_APPLY_PAY/docs/common/contracts/v1-1-1.yml#/components/schemas/RequestHeader'          
    
-
