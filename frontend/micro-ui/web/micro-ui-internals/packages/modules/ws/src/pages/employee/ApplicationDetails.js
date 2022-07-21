@@ -24,7 +24,7 @@ import getModifyPDFData from "../../utils/getWsAckDataForModifyPdfs"
 import { getFiles, getBusinessService } from "../../utils";
 import _ from "lodash";
 import { ifUserRoleExists } from "../../utils";
-
+import WSInfoLabel from "../../pageComponents/WSInfoLabel";
 const ApplicationDetails = () => {
   const { id } = useParams();
   const { t } = useTranslation();
@@ -59,18 +59,21 @@ const ApplicationDetails = () => {
   else commonPayInfo = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
   const receiptKey = commonPayInfo?.receiptKey || "consolidatedreceipt";
   
-  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, applicationNumber, serviceType, userInfo);
+
+  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, applicationNumber, serviceType, userInfo,{ privacy: Digit.Utils.getPrivacyObject() });
+
   let workflowDetails = Digit.Hooks.useWorkflowDetails(
     {
       tenantId: tenantId,
       id: applicationNumber,
       moduleCode: applicationDetails?.processInstancesDetails?.[0]?.businessService,
+      config: {
+        enabled: applicationDetails?.processInstancesDetails?.[0]?.businessService ? true : false,
+        privacy: Digit.Utils.getPrivacyObject()
+      }
     },
-    {
-      enabled: applicationDetails?.processInstancesDetails?.[0]?.businessService ? true : false,
-      privacy: Digit.Utils.getPrivacyObject(),
-    }
   );
+  
 
   const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
     {
@@ -79,9 +82,9 @@ const ApplicationDetails = () => {
       consumerCodes: applicationDetails?.applicationData?.applicationNo
     },
     {
-      enabled: applicationDetails?.applicationData?.applicationType?.includes("NEW_"),
-      privacy: Digit.Utils.getPrivacyObject(),
-    }
+      enabled: applicationDetails?.applicationData?.applicationType?.includes("NEW_")?true:false,
+      privacy: Digit.Utils.getPrivacyObject()
+    },
   );
 
   const { data: oldData } = Digit.Hooks.ws.useOldValue({
@@ -90,7 +93,7 @@ const ApplicationDetails = () => {
     businessService: serviceType
   },{
     enabled: applicationDetails?.applicationData?.applicationType?.includes("MODIFY_") ? true : false,
-    privacy: Digit.Utils.getPrivacyObject(),
+    privacy: Digit.Utils.getPrivacyObject()
   });
 
   const oldValueWC = oldData?.WaterConnection;
@@ -371,6 +374,7 @@ const ApplicationDetails = () => {
             />
           )}
         </div>
+        
         <ApplicationDetailsTemplate
           applicationDetails={applicationDetails}
           isLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading || isServicesMasterLoading }

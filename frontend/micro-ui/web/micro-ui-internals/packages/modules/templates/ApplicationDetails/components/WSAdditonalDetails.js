@@ -335,8 +335,9 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_COMMON_PLUMBER_DETAILS")}</CardSubHeader>
             <div>
               <div className="plumber-details-new-value-wrapper">
+
                 {plumberDetails?.map((value, index) => {
-                  return <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.oldValue ? value?.oldValue: value?.value ? value?.value : ""} />;
+                  return <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.oldValue ? value?.oldValue: value?.value ? value?.value : ""} privacy={value.privacy} />;
                 })}
               </div>
             </div>

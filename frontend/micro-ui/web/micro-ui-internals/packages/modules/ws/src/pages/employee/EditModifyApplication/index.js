@@ -34,7 +34,7 @@ const EditModifyApplication = () => {
   );
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen);
+    const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isModify);
     config.head = "WS_WATER_AND_SEWERAGE_MODIFY_CONNECTION_LABEL";
     let bodyDetails = [];
     config?.body?.forEach(data => { if (data?.isModifyConnection) bodyDetails.push(data); });
