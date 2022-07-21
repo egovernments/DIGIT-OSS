@@ -7,7 +7,7 @@ const getVehicleDetails = (vehicles) => {
           name: index,
           values: [
             { title: "ES_FSM_REGISTRY_VEHICLE_NUMBER", value: vehicle?.registrationNumber },
-            { title: "ES_FSM_REGISTRY_VEHICLE_TYPE", value: vehicle?.type },
+            { title: "ES_FSM_REGISTRY_VEHICLE_TYPE", value: `COMMON_MASTER_VEHICLE_${vehicle?.type}` },
             { title: "ES_FSM_REGISTRY_VEHICLE_MODEL", value: vehicle?.model },
             { title: "ES_FSM_REGISTRY_VEHICLE_CAPACITY", value: vehicle?.tankCapacity },
             {
