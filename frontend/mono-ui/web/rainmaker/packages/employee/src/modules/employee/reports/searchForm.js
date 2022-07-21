@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Row } from "react-bootstrap";
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
 import { Card } from "components";
 import RaisedButton from "material-ui/RaisedButton";
 import { commonApiPost } from "egov-ui-kit/utils/api";
@@ -191,8 +191,7 @@ class ShowForm extends Component {
           let endDate = this.props.searchForm.toDate;
           this.props.handleChange(e, name, required, pattern);
           this.validateDate(startDate, endDate, required, "fromDate"); //3rd param to denote whether field fails
-        } catch (e) {
-        }
+        } catch (e) {}
       } else {
         this.props.handleChange(e, name, required, pattern);
       }
@@ -203,8 +202,7 @@ class ShowForm extends Component {
           let startDate = this.props.searchForm.fromDate;
           this.props.handleChange(e, name, required, pattern);
           this.validateDate(startDate, endDate, required, "toDate"); //3rd param to denote whether field fails
-        } catch (e) {
-        }
+        } catch (e) {}
       }
     }
   };
@@ -240,7 +238,7 @@ class ShowForm extends Component {
 
   // set the value here, introduce the disabled
   handleFormFields = () => {
-    let { metaData, searchForm ,labels} = this.props;
+    let { metaData, searchForm, labels } = this.props;
     if (!_.isEmpty(metaData) && metaData.reportDetails && metaData.reportDetails.searchParams && metaData.reportDetails.searchParams.length > 0) {
       return metaData.reportDetails.searchParams.map((item, index) => {
         item["value"] = !_.isEmpty(searchForm) ? (searchForm[item.name] ? searchForm[item.name] : "") : "";
@@ -262,7 +260,7 @@ class ShowForm extends Component {
               dateField={this.state.datefield}
               dateError={this.state.dateError}
               handler={this.handleChange}
-              localizationLabels = {labels}
+              localizationLabels={labels}
             />
           )
         );
@@ -353,14 +351,7 @@ class ShowForm extends Component {
       e.preventDefault();
     }
 
-    let {
-      showTable,
-      changeButtonText,
-      setReportResult,
-      setFlag,
-      pushReportHistory,
-      clearReportHistory
-    } = this.props;
+    let { showTable, changeButtonText, setReportResult, setFlag, pushReportHistory, clearReportHistory } = this.props;
     let today = new Date();
     let date = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
     let tabLabel = `Showing data upto : ${date}`;
@@ -371,16 +362,28 @@ class ShowForm extends Component {
     if (!isDrilldown) {
       let searchParams = [];
       clearReportHistory();
-      let resulturl = getResultUrl(moduleName,rptName);
-        resulturl &&
+      let resulturl = getResultUrl(moduleName, rptName);
+      resulturl &&
         commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: rptName || this.state.reportName, searchParams }).then(
-          function(response) {
+          function (response) {
+            if (response && response.reportHeader && response.reportData) {
+              let hiddenRows = [];
+              response.reportHeader.map((e, i) => {
+                if (!e.showColumn) {
+                  hiddenRows.push(i);
+                }
+              });
+              response.reportHeader = response.reportHeader.filter((e) => e.showColumn);
+              response.reportData = response.reportData.map((ele) =>
+                ele.filter((e, i) => !hiddenRows.includes(i)).map((ele) => (ele == null ? "" : ele))
+              );
+            }
             pushReportHistory({ tenantId: tenantId, reportName: self.state.reportName, searchParams });
             setReportResult(response);
             showTable(true);
             setFlag(1);
           },
-          function(err) {
+          function (err) {
             showTable(false);
             alert("Something went wrong or try again later");
           }
@@ -406,28 +409,31 @@ class ShowForm extends Component {
       pushReportHistory,
       clearReportHistory,
       decreaseReportIndex,
-      toggleSnackbarAndSetText
+      toggleSnackbarAndSetText,
     } = this.props;
     let searchParams = [];
     var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
     let self = this;
-    let mandatoryfields=[]
-    metaData.reportDetails.searchParams.forEach(param=>{
-      if(param.isMandatory){
+    let mandatoryfields = [];
+    metaData.reportDetails.searchParams.forEach((param) => {
+      if (param.isMandatory) {
         mandatoryfields.push(param.name);
       }
     });
-    let filledMandatoryFieldsCount=searchForm ? Object.keys(searchForm)
-    .filter(param => searchForm[param]&&mandatoryfields.includes(param)).length:0;
-    if(filledMandatoryFieldsCount!=mandatoryfields.length)
-    { 
-      toggleSnackbarAndSetText(true,{labelKey:"COMMON_MANDATORY_MISSING_ERROR",labelName:"Please fill all mandatory fields to search"},
-      "error");
+    let filledMandatoryFieldsCount = searchForm
+      ? Object.keys(searchForm).filter((param) => searchForm[param] && mandatoryfields.includes(param)).length
+      : 0;
+    if (filledMandatoryFieldsCount != mandatoryfields.length) {
+      toggleSnackbarAndSetText(
+        true,
+        { labelKey: "COMMON_MANDATORY_MISSING_ERROR", labelName: "Please fill all mandatory fields to search" },
+        "error"
+      );
       return;
     }
     if (!isDrilldown) {
       const displayOnlyFields = this.getDisplayOnlyFields(metaData);
-      
+
       searchForm = searchForm
         ? Object.keys(searchForm)
             .filter((param) => !_.includes(displayOnlyFields, param))
@@ -439,7 +445,7 @@ class ShowForm extends Component {
 
       for (var variable in searchForm) {
         let input;
-        
+
         if (this.state.moduleName == "oldPGR") {
           if (variable == "fromDate") {
             input =
@@ -466,15 +472,13 @@ class ShowForm extends Component {
               input = searchForm[variable].setHours(0);
               input = searchForm[variable].setMinutes(0);
               input = searchForm[variable].setSeconds(0);
-            } catch (e) {
-            }
+            } catch (e) {}
           } else if (variable == "toDate") {
             try {
               input = searchForm[variable].setHours(23);
               input = searchForm[variable].setMinutes(59);
               input = searchForm[variable].setSeconds(59);
-            } catch (e) {
-            }
+            } catch (e) {}
           } else {
             input = searchForm[variable];
           }
@@ -487,16 +491,29 @@ class ShowForm extends Component {
       setSearchParams(searchParams);
 
       clearReportHistory();
-      let resulturl = getResultUrl(this.state.moduleName,this.state.reportName);
-        resulturl &&
+      let resulturl = getResultUrl(this.state.moduleName, this.state.reportName);
+      resulturl &&
         commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: this.state.reportName, searchParams }).then(
-          function(response) {
+          function (response) {
+            if (response && response.reportHeader && response.reportData) {
+              let hiddenRows = [];
+
+              response.reportHeader.map((e, i) => {
+                if (!e.showColumn) {
+                  hiddenRows.push(i);
+                }
+              });
+              response.reportHeader = response.reportHeader.filter((e) => e.showColumn);
+              response.reportData = response.reportData.map((ele) =>
+                ele.filter((e, i) => !hiddenRows.includes(i)).map((ele) => (ele == null ? "" : ele))
+              );
+            }
             pushReportHistory({ tenantId: tenantId, reportName: self.state.reportName, searchParams });
             setReportResult(response);
             showTable(true);
             setFlag(1);
           },
-          function(err) {
+          function (err) {
             showTable(false);
             alert("Something went wrong or try again later");
           }
@@ -504,17 +521,29 @@ class ShowForm extends Component {
     } else {
       if (_.isEmpty(JSON.parse(localStorageGet("searchCriteria")))) {
         let reportData = reportHistory[reportIndex - 1 - 1];
-        let resulturl = getResultUrl(this.state.moduleName,this.state.reportName);
-          resulturl &&
+        let resulturl = getResultUrl(this.state.moduleName, this.state.reportName);
+        resulturl &&
           commonApiPost(resulturl, {}, { ...reportData }).then(
-            function(response) {
+            function (response) {
+              if (response && response.reportHeader && response.reportData) {
+                let hiddenRows = [];
+                response.reportHeader.map((e, i) => {
+                  if (!e.showColumn) {
+                    hiddenRows.push(i);
+                  }
+                });
+                response.reportHeader = response.reportHeader.filter((e) => e.showColumn);
+                response.reportData = response.reportData.map((ele) =>
+                  ele.filter((e, i) => !hiddenRows.includes(i)).map((ele) => (ele == null ? "" : ele))
+                );
+              }
               decreaseReportIndex();
               setReportResult(response);
 
               showTable(true);
               setFlag(1);
             },
-            function(err) {
+            function (err) {
               showTable(false);
               alert("Something went wrong or try again later");
             }
@@ -522,9 +551,21 @@ class ShowForm extends Component {
       } else {
         var reportData = JSON.parse(localStorageGet("searchCriteria"));
         let resulturl = getResultUrl(localStorageGet("moduleName"));
-          resulturl &&
+        resulturl &&
           commonApiPost(resulturl, {}, { ...reportData }).then(
-            function(response) {
+            function (response) {
+              if (response && response.reportHeader && response.reportData) {
+                let hiddenRows = [];
+                response.reportHeader.map((e, i) => {
+                  if (!e.showColumn) {
+                    hiddenRows.push(i);
+                  }
+                });
+                response.reportHeader = response.reportHeader.filter((e) => e.showColumn);
+                response.reportData = response.reportData.map((ele) =>
+                  ele.filter((e, i) => !hiddenRows.includes(i)).map((ele) => (ele == null ? "" : ele))
+                );
+              }
               setReturnUrl("");
               localStorageSet("searchCriteria", JSON.stringify({}));
               localStorageSet("moduleName", "");
@@ -537,7 +578,7 @@ class ShowForm extends Component {
               showTable(true);
               setFlag(1);
             },
-            function(err) {
+            function (err) {
               showTable(false);
               alert("Something went wrong or try again later");
             }
@@ -559,11 +600,9 @@ class ShowForm extends Component {
 
     let tabLabel = "";
     if (fromDate && toDate) {
-      tabLabel = `Showing data for : ${fromDate.getDate() + "/" + (fromDate.getMonth() + 1) + "/" + fromDate.getFullYear()} to ${toDate.getDate() +
-        "/" +
-        (toDate.getMonth() + 1) +
-        "/" +
-        toDate.getFullYear()}`;
+      tabLabel = `Showing data for : ${fromDate.getDate() + "/" + (fromDate.getMonth() + 1) + "/" + fromDate.getFullYear()} to ${
+        toDate.getDate() + "/" + (toDate.getMonth() + 1) + "/" + toDate.getFullYear()
+      }`;
     }
 
     /** Zone wise selection show in header */
@@ -598,8 +637,7 @@ class ShowForm extends Component {
         return reportTitle;
       });
     }
-    return reportTitle&&typeof reportTitle =='string'&&getLocaleLabels(getTransformedLocale(reportTitle))||reportTitle;
-    
+    return (reportTitle && typeof reportTitle == "string" && getLocaleLabels(getTransformedLocale(reportTitle))) || reportTitle;
   };
 
   getReportTitlefromTwoOptions = (metaData) => {
@@ -613,9 +651,11 @@ class ShowForm extends Component {
       );
     } else {
       return (
-        get(metaData, "reportDetails.reportName") && <div className="report-title">
-          {getLocaleLabels(getTransformedLocale(metaData.reportDetails.reportName),getTransformedLocale(metaData.reportDetails.reportName))}
+        get(metaData, "reportDetails.reportName") && (
+          <div className="report-title">
+            {getLocaleLabels(getTransformedLocale(metaData.reportDetails.reportName), getTransformedLocale(metaData.reportDetails.reportName))}
           </div>
+        )
       );
     }
   };
@@ -637,7 +677,9 @@ class ShowForm extends Component {
               textChildren={
                 <div>
                   <Label label={"REPORTS_SEARCHFORM_MODIFY_DATE_HEADER"} />
-                  <Grid container spacing={8}>{this.handleFormFields()}</Grid>
+                  <Grid container spacing={8}>
+                    {this.handleFormFields()}
+                  </Grid>
                   <Row>
                     <div style={{ marginTop: "16px", textAlign: "center" }} className="col-xs-12">
                       <RaisedButton
@@ -691,7 +733,7 @@ class ShowForm extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const labels = get(state.app , "localizationLabels")
+  const labels = get(state.app, "localizationLabels");
   return {
     searchForm: state.formtemp.form,
     fieldErrors: state.formtemp.fieldErrors,
@@ -701,7 +743,7 @@ const mapStateToProps = (state) => {
     metaData: state.report.metaData,
     reportHistory: state.report.reportHistory,
     reportIndex: state.report.reportIndex,
-    labels
+    labels,
   };
 };
 
@@ -748,10 +790,8 @@ const mapDispatchToProps = (dispatch) => ({
   setFlag: (flag) => {
     dispatch({ type: "SET_FLAG", flag });
   },
-  toggleSnackbarAndSetText:(open,message,type)=>{
-   dispatch(toggleSnackbarAndSetText(
-    open,message,type
-  )) 
+  toggleSnackbarAndSetText: (open, message, type) => {
+    dispatch(toggleSnackbarAndSetText(open, message, type));
   },
   setMetaData: (metaData) => {
     dispatch({ type: "SET_META_DATA", metaData });
@@ -770,7 +810,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ShowForm);
+export default connect(mapStateToProps, mapDispatchToProps)(ShowForm);

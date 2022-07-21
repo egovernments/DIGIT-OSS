@@ -608,6 +608,19 @@ class ShowField extends Component {
         }
       ).then(
         function (response) {
+          if (response && response.reportHeader && response.reportData) {
+            let hiddenRows = [];
+            response.reportHeader.map((e, i) => {
+              if (!e.showColumn) {
+                hiddenRows.push(i);
+              }
+            });
+            response.reportHeader = response.reportHeader.filter((e) => e.showColumn);
+            response.reportData = response.reportData.map((ele) =>
+              ele.filter((e, i) => !hiddenRows.includes(i)).map((ele) => (ele == null ? "" : ele))
+            );
+          }
+
           if (response.viewPath && response.reportData && response.reportData[0]) {
             localStorage.reportData = JSON.stringify(response.reportData);
             setReturnUrl(window.location.hash.split("#/")[1]);
@@ -840,6 +853,19 @@ class ShowField extends Component {
           }
         ).then(
           function (response) {
+            if (response && response.reportHeader && response.reportData) {
+              let hiddenRows = [];
+              response.reportHeader.map((e, i) => {
+                if (!e.showColumn) {
+                  hiddenRows.push(i);
+                }
+              });
+              response.reportHeader = response.reportHeader.filter((e) => e.showColumn);
+              response.reportData = response.reportData.map((ele) =>
+                ele.filter((e, i) => !hiddenRows.includes(i)).map((ele) => (ele == null ? "" : ele))
+              );
+            }
+
             if (response.viewPath && response.reportData) {
               localStorage.reportData = JSON.stringify(response.reportData);
               setReturnUrl(window.location.hash.split("#/")[1]);
@@ -981,14 +1007,14 @@ class ShowField extends Component {
       for (let j = 0; j < reportResult.reportData[i].length; j++) {
         let val = intVal(reportResult.reportData[i][j]);
         if (i == 0) {
-          if (sumColumn[j + 1].total && typeof val === "number") {
+          if (sumColumn[j + 1] && sumColumn[j + 1].total && typeof val === "number") {
             total.push(val);
           } else {
             total.push("");
           }
           continue;
         }
-        if (sumColumn[j + 1].total) {
+        if (sumColumn[j + 1] && sumColumn[j + 1].total) {
           if (typeof val === "number") {
             if (typeof total[j] === "string") {
               total[j] = val;
