@@ -162,7 +162,7 @@ const tradeUnitCard = {
               jsonPath: "LicensesTemp.tradeUnits[0].tradeSubType",
               props: {
                 jsonPathUpdatePrefix: "LicensesTemp.tradeUnits",
-                disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,             
+                disabled:(getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit")? true:false,             
               },
               sourceJsonPath:
                 "applyScreenMdmsData.TradeLicense.TradeCategoryTransformed",
@@ -270,7 +270,7 @@ const tradeUnitCard = {
               setDataInField: true,
               labelsFromLocalisation: true,
               props: {
-                disabled:getQueryArg(window.location.href, "action") === "EDITRENEWAL"? true:false,             
+                disabled:(getQueryArg(window.location.href, "action") === "EDITRENEWAL" || getQueryArg(window.location.href, "action") === "edit")? true:false,
               },
               gridDefination: {
                 xs: 12,
