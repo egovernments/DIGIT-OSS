@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "../../components/DesktopInbox";
@@ -22,6 +22,7 @@ const FstpInbox = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [searchParams, setSearchParams] = useState({ applicationStatus: "WAITING_FOR_DISPOSAL" });
+  const [sortParams, setSortParams] = useState([{ id: "createdTime", desc: true }]);
   const [pageOffset, setPageOffset] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const { isLoading: isVehiclesLoading, data: vehicles } = Digit.Hooks.fsm.useVehiclesSearch({
@@ -40,7 +41,10 @@ const FstpInbox = () => {
 
   const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(
     tenantId,
-    { name: searchParams?.name },
+    {
+      name: searchParams?.name,
+      status: "ACTIVE",
+    },
     { enabled: searchParams?.name?.length > 1 }
   );
 
@@ -51,6 +55,7 @@ const FstpInbox = () => {
     // vehicleIds: applicationData !== undefined && searchParams?.applicationNos?.length > 0 ? applicationData?.vehicleId || "null" : vehicles !== undefined && searchParams?.registrationNumber?.length > 0 ? vehicles?.vehicle?.[0]?.id || "null" : "",
     tripOwnerIds: dsoData !== undefined && searchParams?.name?.length > 0 ? dsoData?.[0]?.ownerId || "null" : "",
     applicationStatus: searchParams?.applicationStatus,
+    sortOrder: sortParams[0]?.desc === false ? "ASC" : "DESC",
   };
 
   if (applicationData == undefined) {
@@ -108,6 +113,11 @@ const FstpInbox = () => {
     },
   ];
 
+  const handleSort = useCallback((args) => {
+    if (args?.length === 0) return;
+    setSortParams(args);
+  }, []);
+
   let isMobile = window.Digit.Utils.browser.isMobile();
   // if (isSuccess) {
   if (isMobile) {
@@ -122,6 +132,8 @@ const FstpInbox = () => {
           linkPrefix={"/digit-ui/employee/fsm/fstp-operator-details/"}
           onSearch={onSearch}
           searchFields={searchFields}
+          onSort={handleSort}
+          sortParams={sortParams}
         />
       </div>
     );
@@ -132,6 +144,9 @@ const FstpInbox = () => {
         <DesktopInbox
           data={{ table: vehicleLog }}
           isLoading={isLoading}
+          onSort={handleSort}
+          disableSort={false}
+          sortParams={sortParams}
           userRole={"FSM_EMP_FSTPO"}
           onFilterChange={handleFilterChange}
           searchFields={searchFields}
