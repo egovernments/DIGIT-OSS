@@ -28,6 +28,13 @@ const combineResponse = (WaterConnections, properties, billData, t) => {
     DueDate : billData ? getDate(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.expiryDate) : "NA",
     BillingPeriod : billData ?  getBillingPeriod(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.fromPeriod , billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.toPeriod) : "NA",
     ServiceName: billData ?  (t(`WS_SERVICE_TYPE_${billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.businessService}`)) : "NA",
+    privacy: {
+      Address : {
+        uuid: properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.propertyId, 
+        fieldName: ["doorNo" , "street" , "landmark"], 
+        model: "Property"
+      }
+    }
     }))
   else
   return [];
