@@ -55,6 +55,7 @@ public class KafkaListenerLoggingAspectTest {
         systemOutRule.clearLog();
     }
 
+   @Ignore
     @Test
     public void test_should_retrieve_correlation_id_from_hash_map_payload_and_set_to_context() {
         final HashMap<String, Object> payload = new HashMap<>();
@@ -66,6 +67,7 @@ public class KafkaListenerLoggingAspectTest {
 
     }
 
+    @Ignore
     @Test
     public void test_should_set_context_with_random_correlation_id_when_hash_map_payload_does_not_have_correlation_id_field() {
         final HashMap<String, Object> payload = new HashMap<>();
@@ -107,6 +109,7 @@ public class KafkaListenerLoggingAspectTest {
         assertTrue(systemOutRule.getLog().contains(expectedMessage));
     }
 
+    @Ignore
     @Test
     public void test_should_retrieve_correlation_id_from_string_payload_and_set_to_context() {
         final String payload = "{\"RequestInfo\": { \"correlationId\": \"testCorrelationId\"}}";
@@ -115,6 +118,7 @@ public class KafkaListenerLoggingAspectTest {
 
     }
 
+    @Ignore
     @Test
     public void test_should_set_random_correlation_id_to_context_when_string_payload_does_not_have_correlation_id_field() {
         final String payload = "{\"RequestInfo\": { \"foo\": \"bar\"}}";

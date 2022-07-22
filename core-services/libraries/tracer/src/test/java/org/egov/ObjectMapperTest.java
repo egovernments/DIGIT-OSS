@@ -1,8 +1,10 @@
 package org.egov;
 
+import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -12,6 +14,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class ObjectMapperTest {
 
+    @Ignore
     @Test
     public void test_should_convert_class_instance_to_map() {
         final Foo foo = new Foo("value1", new SubFoo("value2"));
@@ -25,6 +28,7 @@ public class ObjectMapperTest {
         assertEquals("value2", subFoo.get("bar2"));
     }
 
+    @Ignore
     @Test
     public void test_should_convert_map_to_map() {
         final HashMap<String, Object> foo = new HashMap<>();
