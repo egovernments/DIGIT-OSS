@@ -610,5 +610,32 @@ export const footer = getCommonApplyFooter({
     //   action: "PAY"
     // },
     visible: process.env.REACT_APP_NAME === "Citizen" ? true : false
+  },
+  gotoHome: {
+    componentPath: "Button",
+    props: {
+      variant: "contained",
+      color: "primary",
+      className: "gotoHome-btn",
+    },
+    children: {
+      submitButtonIcon: {
+        uiFramework: "custom-atoms",
+        componentPath: "Icon",
+        props: {
+          iconName: "keyboard_arrow_left",
+          className: ""
+        }
+      },
+      submitButtonLabel: getLabel({
+        labelName: "BACK_TO_HOME",
+        labelKey: "BACK_TO_HOME"
+      }),
+    },
+    onClickDefination: {
+      action: "page_change",
+      path: `/`
+    },    
+    visible: (process.env.REACT_APP_NAME === "Citizen" && isPublicSearch) ? true : false
   }
 });

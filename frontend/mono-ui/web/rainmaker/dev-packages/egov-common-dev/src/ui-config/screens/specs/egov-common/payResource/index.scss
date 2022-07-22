@@ -10,6 +10,13 @@
         position: relative;
         border-radius: 0px ;
     }
+    .gotoHome-btn{
+      width: 363px;
+      height: 48px;
+      float: left;
+      position: relative;
+      border-radius: 0px ;
+  }
     .make-payment-com{
         width: 363px;
         height: 48px;
@@ -29,6 +36,13 @@
         position: relative  !important;
         border-radius: 0px   !important;  
     } 
+    .gotoHome-btn{
+      width: 100% !important;
+      height: 48px  !important;
+      float: left  !important;
+      position: relative  !important;
+      border-radius: 0px   !important;  
+  } 
   }
   @media only screen and (max-width: 768px) {
     .gen-receipt-com{
@@ -44,6 +58,13 @@
         position: relative;
         border-radius: 0px ;
     }
+    .gotoHome-btn{
+      width: 100%;
+      height: 48px;
+      float: left;
+      position: relative;
+      border-radius: 0px ;
+  }
   }
   
 
