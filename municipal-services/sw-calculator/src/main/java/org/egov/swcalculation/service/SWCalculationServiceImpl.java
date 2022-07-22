@@ -61,19 +61,22 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 	public List<Calculation> getCalculation(CalculationReq request) {
 		List<Calculation> calculations;
 		boolean connectionRequest = false;
-		if ((request.getDisconnectRequest()!= null && request.getDisconnectRequest()) || request.getIsconnectionCalculation()) {
+		if (request.getDisconnectRequest()!= null && request.getDisconnectRequest()) {
 			// Calculate and create demand for connection
-
-			if(request.getDisconnectRequest()){
-				connectionRequest = request.getDisconnectRequest();
-			} else {
-				connectionRequest = request.getIsconnectionCalculation();
-			}
+			connectionRequest = request.getDisconnectRequest();
 			Map<String, Object> masterMap = mDataService.loadMasterData(request.getRequestInfo(),
 					request.getCalculationCriteria().get(0).getTenantId());
 			calculations = getCalculations(request, masterMap);
 			demandService.generateDemand(request.getRequestInfo(), calculations, masterMap, connectionRequest);
 			unsetSewerageConnection(calculations);
+		} else if (request.getIsconnectionCalculation()) {
+			connectionRequest = request.getIsconnectionCalculation();
+			Map<String, Object> masterMap = mDataService.loadMasterData(request.getRequestInfo(),
+					request.getCalculationCriteria().get(0).getTenantId());
+			calculations = getCalculations(request, masterMap);
+			demandService.generateDemand(request.getRequestInfo(), calculations, masterMap, connectionRequest);
+			unsetSewerageConnection(calculations);
+
 		} else {
 			// Calculate and create demand for application
 			Map<String, Object> masterData = mDataService.loadExemptionMaster(request.getRequestInfo(),
@@ -246,11 +249,12 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 			mDataService.enrichBillingPeriod(criteria, billingFrequencyMap, masterMap, criteria.getSewerageConnection().getConnectionType());
 
 			Calculation calculation = null;
-
-			if(request.getDisconnectRequest() &&
-					criteria.getApplicationNo().equals(request.getCalculationCriteria().get(request.getCalculationCriteria().size()-1)
-							.getApplicationNo())) {
-				calculation = getCalculation(request.getRequestInfo(), criteria, estimationMap, masterMap, true, true);
+			if (request.getDisconnectRequest() != null) {
+				if (request.getDisconnectRequest() &&
+						criteria.getApplicationNo().equals(request.getCalculationCriteria().get(request.getCalculationCriteria().size() - 1)
+								.getApplicationNo())) {
+					calculation = getCalculation(request.getRequestInfo(), criteria, estimationMap, masterMap, true, true);
+				}
 			} else {
 				calculation = getCalculation(request.getRequestInfo(), criteria, estimationMap, masterMap, true, false);
 			}

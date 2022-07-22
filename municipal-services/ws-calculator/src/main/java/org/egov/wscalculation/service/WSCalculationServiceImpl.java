@@ -73,31 +73,32 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 
 		Map<String, Object> masterMap;
 		boolean connectionRequest = false;
-		if ((request.getIsDisconnectionRequest()!= null && request.getIsDisconnectionRequest()) || request.getIsconnectionCalculation()) {
-			//Calculate and create demand for connection
-			if(request.getIsDisconnectionRequest()) {
-				MeterReadingSearchCriteria meterCriteria = new MeterReadingSearchCriteria();
-				meterCriteria.setTenantId(request.getCalculationCriteria().get(0).getTenantId());
-				meterCriteria.setConnectionNos(Collections.singleton(request.getCalculationCriteria().get(0).getConnectionNo()));
-				List<MeterReading> meterreadingList = wSCalculationDao.searchMeterReadings(meterCriteria);
-				if (!meterreadingList.isEmpty()) {
-					request.getCalculationCriteria().get(0).setLastReading(meterreadingList.get(0).getLastReading());
-					request.getCalculationCriteria().get(0).setCurrentReading(meterreadingList.get(0).getCurrentReading());
-					SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-					String dates[] = meterreadingList.get(0).getBillingPeriod().split("-");
-					try {
-						Date startDate = f.parse(dates[0]);
-						request.getCalculationCriteria().get(0).setFrom(startDate.getTime());
-						Date endDate = f.parse(dates[1]);
-						request.getCalculationCriteria().get(0).setTo(endDate.getTime());
-					} catch (ParseException e) {
-						throw new RuntimeException(e);
-					}
+		//Calculate and create demand for connection
+		if (request.getIsDisconnectionRequest() != null && request.getIsDisconnectionRequest()) {
+			MeterReadingSearchCriteria meterCriteria = new MeterReadingSearchCriteria();
+			meterCriteria.setTenantId(request.getCalculationCriteria().get(0).getTenantId());
+			meterCriteria.setConnectionNos(Collections.singleton(request.getCalculationCriteria().get(0).getConnectionNo()));
+			List<MeterReading> meterreadingList = wSCalculationDao.searchMeterReadings(meterCriteria);
+			if (!meterreadingList.isEmpty()) {
+				request.getCalculationCriteria().get(0).setLastReading(meterreadingList.get(0).getLastReading());
+				request.getCalculationCriteria().get(0).setCurrentReading(meterreadingList.get(0).getCurrentReading());
+				SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+				String dates[] = meterreadingList.get(0).getBillingPeriod().split("-");
+				try {
+					Date startDate = f.parse(dates[0]);
+					request.getCalculationCriteria().get(0).setFrom(startDate.getTime());
+					Date endDate = f.parse(dates[1]);
+					request.getCalculationCriteria().get(0).setTo(endDate.getTime());
+				} catch (ParseException e) {
+					throw new RuntimeException(e);
 				}
-				connectionRequest = request.getIsDisconnectionRequest();
-			} else {
-				connectionRequest = request.getIsconnectionCalculation();
 			}
+			connectionRequest = request.getIsDisconnectionRequest();
+			masterMap = masterDataService.loadMasterData(request.getRequestInfo(),
+					request.getCalculationCriteria().get(0).getTenantId());
+			calculations = getCalculations(request, masterMap);
+		} else if (request.getIsconnectionCalculation()) {
+			connectionRequest = request.getIsconnectionCalculation();
 			masterMap = masterDataService.loadMasterData(request.getRequestInfo(),
 					request.getCalculationCriteria().get(0).getTenantId());
 			calculations = getCalculations(request, masterMap);
@@ -253,10 +254,12 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 
 			Calculation calculation = null;
 
-			if(request.getIsDisconnectionRequest() &&
-					criteria.getApplicationNo().equals(request.getCalculationCriteria().get(request.getCalculationCriteria().size()-1)
-							.getApplicationNo())) {
-				calculation = getCalculation(request.getRequestInfo(), criteria, estimationMap, masterMap, true, true);
+			if (request.getIsDisconnectionRequest() != null) {
+				if (request.getIsDisconnectionRequest() &&
+						criteria.getApplicationNo().equals(request.getCalculationCriteria().get(request.getCalculationCriteria().size() - 1)
+								.getApplicationNo())) {
+					calculation = getCalculation(request.getRequestInfo(), criteria, estimationMap, masterMap, true, true);
+				}
 			} else {
 				calculation = getCalculation(request.getRequestInfo(), criteria, estimationMap, masterMap, true, false);
 			}
