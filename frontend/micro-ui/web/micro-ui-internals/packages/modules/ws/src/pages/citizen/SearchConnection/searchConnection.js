@@ -44,8 +44,9 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
     {
       if (!city.code)
       setShowToast({ key: true, label: "WS_PLEASE_PROVIDE_CITY" });
-      else if(logginedUser == null && !locality)
-      setShowToast({ key: true, label: "WS_PLEASE_PROVIDE_LOCALITY" });
+      // If search type is consumer no whey do we need locality check? It will always fail for open search
+      // else if(logginedUser == null && !locality)
+      // setShowToast({ key: true, label: "WS_PLEASE_PROVIDE_LOCALITY" });
       else if (!mobileNumber && !consumerNumber && !oldconsumerNumber && !propertyId) {
       setShowToast({ key: true, label: "WS_HOME_SEARCH_CONN_RESULTS_DESC" });
       }
