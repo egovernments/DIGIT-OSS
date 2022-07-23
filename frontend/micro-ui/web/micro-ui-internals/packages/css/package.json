@@ -21,10 +21,8 @@
   ],
   "style": "./dist/index.css",
   "dependencies": {
-    "autoprefixer": "9.0.0",
     "node-sass": "4.14.1",
     "normalize.css": "8.0.1",
-    "postcss": "7.0.39",
     "postcss-scss": "3.0.5",
     "tailwindcss": "1.9.6"
   },
