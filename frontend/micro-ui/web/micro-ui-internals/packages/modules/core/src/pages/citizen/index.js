@@ -9,6 +9,7 @@ import StaticCitizenSideBar from "../../components/TopBarSideBar/SideBar/StaticC
 import CitizenHome from "./Home";
 import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
+import CFModule from "../../../../cf/src/Module";
 import Login from "./Login";
 import UserProfile from "./Home/UserProfile";
 import ErrorComponent from "../../components/ErrorComponent";
@@ -134,7 +135,18 @@ const Home = ({
       </React.Fragment>
     );
   });
-
+ const cfRoutes = () => {
+    return (
+      <React.Fragment>
+        <Route path={`${path}/cf-home`}>
+          <CFModule userType="citizen" stateCode={stateCode} isUserRegistered={false} />
+        </Route>
+        <Route path={`${path}/cf`}>
+          <CFModule userType="citizen" stateCode={stateCode} isUserRegistered={false} />
+        </Route>
+      </React.Fragment>
+    )
+  }
   return (
     <div className={classname}>
       <TopBarSideBar
@@ -203,6 +215,7 @@ const Home = ({
           <ErrorBoundary initData={initData}>
             {appRoutes}
             {ModuleLevelLinkHomePages}
+             {cfRoutes()}
           </ErrorBoundary>
         </Switch>
       </div>

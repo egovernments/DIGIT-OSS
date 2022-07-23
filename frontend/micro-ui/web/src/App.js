@@ -33,6 +33,7 @@ import { initOBPSComponents } from "@egovernments/digit-ui-module-obps";
 import { initNOCComponents } from "@egovernments/digit-ui-module-noc";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 import { initWSComponents } from "@egovernments/digit-ui-module-ws";
+import { initCFComponents } from "@egovernments/digit-ui-module-cf";
 import { initCustomisationComponents } from "./Customisations";
 import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonPt";
 import { initBillsComponents } from "@egovernments/digit-ui-module-bills";
@@ -60,6 +61,7 @@ const enabledModules = [
   "Reports",
   "Bills",
   "SW",
+   "CF",
 ];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
@@ -87,6 +89,7 @@ initOBPSComponents();
 initNOCComponents();
 initEngagementComponents();
 initWSComponents();
+initCFComponents();
 initCommonPTComponents();
 initBillsComponents();
 // initReportsComponents();

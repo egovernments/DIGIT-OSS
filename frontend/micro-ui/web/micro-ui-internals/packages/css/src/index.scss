@@ -106,6 +106,14 @@
 @import "./pages/citizen/citizenDocument.scss";
 @import "./pages/employee/surveys.scss";
 
+@import "./components/chatBubble.scss";
+@import "./components/multiSelectCheckbox.scss";
+@import "./components/availableOptionList.scss";
+@import "./components/Accordian.scss";
+@import "./pages/citizen/CitizenFeedbackHome.scss";
+@import "./components/galleryButton.scss";
+@import "./components/userInput.scss";
+@import "./components/starRating.scss";
 .display-none {
   display: none;
 }

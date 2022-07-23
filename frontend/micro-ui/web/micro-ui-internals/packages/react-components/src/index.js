@@ -135,6 +135,7 @@ import {
   EventsIconSolid,
   SurveyIconSolid,
   DustbinIcon,
+  SendIcon,
   InfoBannerIcon,
   WSICon,
   ArrowForward,
@@ -143,6 +144,8 @@ import {
   CameraIcon,
   EditPencilIcon,
   GalleryIcon,
+  ArrowIcon,	
+  RatingPopupImage,
   RemoveIcon,
   CheckSvg,
   AddressBookIcon,
@@ -218,6 +221,17 @@ import OpenLinkContainer from "./atoms/OpenLinkContainer";
 import UploadPitPhoto from "./molecules/UploadPitPhoto";
 import { DownloadBtnCommon } from "./atoms/svgindex";
 import ToggleSwitch from "./atoms/ToggleSwitch";
+import ChatBubble from "./atoms/ChatBubble"	
+import AvailableOptionItem from "./atoms/AvailableOptionItem"	
+import SendButton from "./atoms/SendButton"	
+import UserInput from "./molecules/UserInput"	
+import StarRating from "./molecules/StarRating"	
+import ReplyComponent from "./molecules/ReplyComponent"	
+import MultipleSelect from "./molecules/MultipleSelect"	
+import GalleryButton from "./molecules/GalleryButton"	
+import AvailableOptionsList from "./molecules/AvailableOptionsList"	
+import Accordion from "./atoms/Accordion";	
+import Timeline from "./molecules/Timeline";
 export {
   Phone,
   Body,
@@ -302,6 +316,10 @@ export {
   PopupHeadingLabel,
   ToggleSwitch,
   ULBHomeCard,
+  ChatBubble,	
+  AvailableOptionItem,	
+  SendButton,	
+  Accordion,
   // Icons
   GetApp,
   ArrowLeft,
@@ -358,6 +376,13 @@ export {
   FilterForm,
   FilterFormField,
   SortAction,
+  UserInput,	
+  StarRating,	
+  ReplyComponent,	
+  MultipleSelect,	
+  GalleryButton,	
+  AvailableOptionsList,	
+  Timeline,
   // hoc
   FormComposer,
   ResponseComposer,
@@ -408,9 +433,12 @@ export {
   SearchIcon,
   DeleteIcon,
   WSICon,
+  SendIcon,
   CameraIcon,
   EditPencilIcon,
   GalleryIcon,
+   ArrowIcon,	
+  RatingPopupImage,
   RemoveIcon,
   UploadPitPhoto,
   CheckSvg,
