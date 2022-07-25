@@ -24,7 +24,7 @@ const ResponseComposer = ({ data, template, actionButtonLabel, onSubmit }) => {
                 />
               );
             })}
-            {actionButtonLabel && result.status !== "INACTIVE" && (
+            {actionButtonLabel && result?.AmountDue !== "0" && result.status !== "INACTIVE" && (
               <SubmitBar
                 submit={false}
                 label={t(actionButtonLabel)}
