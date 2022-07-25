@@ -20,10 +20,11 @@ const ResponseComposer = ({ data, template, actionButtonLabel, onSubmit }) => {
                   keyValue={t(field.label)}
                   note={field.notePrefix ? field.notePrefix + result[field.key] : result[field.key]}
                   noteStyle={field.noteStyle}
+                  privacy={ result?.privacy?.[field.key] ? result?.privacy?.[field.key] : null}
                 />
               );
             })}
-            {actionButtonLabel && result.status !== "INACTIVE" && (
+            {actionButtonLabel && result?.AmountDue !== "0" && result.status !== "INACTIVE" && (
               <SubmitBar
                 submit={false}
                 label={t(actionButtonLabel)}

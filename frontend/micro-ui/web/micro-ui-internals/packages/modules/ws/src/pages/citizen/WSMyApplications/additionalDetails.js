@@ -30,7 +30,7 @@ const WSAdditionalDetails = () => {
       <div className="hide-seperator">
         <Card>
           <CardSubHeader>{t("WS_COMMON_CONNECTION_DETAIL")}</CardSubHeader>
-          {data?.WaterConnection && data?.WaterConnection?.length > 0 && (<StatusTable>
+          {(<StatusTable>
             <Row
               className="border-none"
               label={t("WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL")}

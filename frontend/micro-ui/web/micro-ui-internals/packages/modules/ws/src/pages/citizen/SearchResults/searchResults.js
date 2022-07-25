@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import {stringReplaceAll} from "../../../utils/index";
 
 const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
+  
   const { t } = useTranslation();
   const history = useHistory();
   const { mobileNumber, consumerNumber, oldconsumerNumber, tenantId, propertyId, locality, doorNumber, consumerName, PToffset } = Digit.Hooks.useQueryParams();
@@ -42,9 +43,9 @@ const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
 
 
   filters = {...filters , searchType:"CONNECTION"}
-  const {isLoading:isWSLoading, data:Waterresult} = Digit.Hooks.ws.useWaterSearch({ tenantId, filters:{...filters},BusinessService:"WS", t });
-  const {isLoading:isSWLoading, data:Sewarageresult} = Digit.Hooks.ws.useSewarageSearch({ tenantId, filters:{...filters},BusinessService:"SW",t });
-
+  const { isLoading: isWSLoading, data: Waterresult } = Digit.Hooks.ws.useWaterSearch({ tenantId, filters: { ...filters }, BusinessService: "WS", t }, { privacy: Digit.Utils.getPrivacyObject() });
+  const { isLoading: isSWLoading, data: Sewarageresult } = Digit.Hooks.ws.useSewarageSearch({ tenantId, filters: { ...filters }, BusinessService: "SW", t }, { privacy: Digit.Utils.getPrivacyObject() });
+ 
   if (isWSLoading || isSWLoading ) {
     return <Loader />;
   }

@@ -113,7 +113,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
   return (
     <React.Fragment>
     {window.location.href.includes("/citizen") ? <Timeline currentStep={4}/> : null}
-    <Header styles={{fontSize:"32px"}}>{t("WS_COMMON_SUMMARY")}</Header>
+    <Header styles={{fontSize:"32px", marginLeft: "8px"}}>{t("WS_COMMON_SUMMARY")}</Header>
     <Card style={{paddingRight:"16px"}}>
     <StatusTable>
         <Row className="border-none" label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
