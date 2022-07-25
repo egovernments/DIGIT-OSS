@@ -26,9 +26,21 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
 
   function setCorrespondenceAddress(e) {
     if (e.target.checked == true) {
-      
-      let addressDetails = "";
-      addressDetails= formData?.searchResult?.data?.property_address;
+      const address = isMutation ? formData?.searchResult?.property?.address : formData?.address;
+      let obj = {
+        doorNo: address?.doorNo,
+        street: address?.street,
+        landmark: address?.landmark,
+        locality: address?.locality?.i18nkey,
+        city: address?.city?.code,
+        pincode: address?.pincode,
+      };
+
+      let addressDetails = formData?.searchResult?.data?.property_address?formData?.searchResult?.data?.property_address:"";
+      for (const key in obj) {
+        if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
+        else addressDetails += obj[key] ? t(obj[key]) + ", " : "";
+      }
       setPermanentAddress(addressDetails);
     } else {
       setPermanentAddress("");
