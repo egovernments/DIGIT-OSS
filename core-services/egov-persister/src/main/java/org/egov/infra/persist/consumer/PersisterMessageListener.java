@@ -14,6 +14,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 @Slf4j
 public class PersisterMessageListener implements MessageListener<String, Object> {
@@ -43,8 +46,12 @@ public class PersisterMessageListener implements MessageListener<String, Object>
 			log.error("Failed to serialize incoming message", e);
 		}
 		persistService.persist(data.topic(),rcvData);
+
 		if(!data.topic().equalsIgnoreCase(persistAuditKafkaTopic)){
-			kafkaTemplate.send(auditGenerateKafkaTopic, data);
+			Map<String, Object> producerRecord = new HashMap<>();
+			producerRecord.put("topic", data.topic());
+			producerRecord.put("value", data.value());
+			kafkaTemplate.send(auditGenerateKafkaTopic, producerRecord);
 		}
 	}
 
