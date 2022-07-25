@@ -20,24 +20,6 @@ import { pgrCustomizations, pgrComponents } from "./pgr";
 var Digit = window.Digit || {};
 
 const enabledModules = [
-  "PGR",
-  "FSM",
-  "Payment",
-  "PT",
-  "QuickPayLinks",
-  "DSS",
-  "MCollect",
-  "HRMS",
-  "TL",
-  "Receipts",
-  "Reports",
-  "OBPS",
-  "Engagement",
-  "NOC",
-  "WS",
-  "CommonPT",
-  "NDSS",
-  "Bills",
   "Works"
 ];
 
