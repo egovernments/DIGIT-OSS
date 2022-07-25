@@ -859,11 +859,19 @@ export const createAndSave = async (
     // fs.writeFileSync('./data.txt', util.inspect(JSON.stringify(formatconfig)) , 'utf-8');
     //function to download pdf automatically
     let locale = requestInfo.msgId.split('|')[1];
-    if(!locale)
+    if(!locale){
       locale = envVariables.DEFAULT_LOCALISATION_LOCALE;
+      logger.info(
+        `Locale ${locale}`
+      );
+    }
 
-    if(defaultFontMapping[locale] != 'default')
+    if(defaultFontMapping[locale] != 'default'){
       formatconfig.defaultStyle.font = defaultFontMapping[locale];
+      logger.info(
+        `Default font maping locale ${defaultFontMapping[locale]}`
+      );
+    }
 
     createPdfBinary(
       key,
