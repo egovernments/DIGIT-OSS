@@ -2,6 +2,9 @@ package org.egov.auditservice.consumers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.egov.auditservice.persisterauditclient.PersisterAuditClientService;
+import org.egov.auditservice.persisterauditclient.models.contract.PersisterClientInput;
 import org.egov.auditservice.service.AuditLogProcessingService;
 import org.egov.auditservice.web.models.AuditLogRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +25,19 @@ public class AuditLogsConsumer {
     @Autowired
     private ObjectMapper mapper;
 
+    @Autowired
+    private PersisterAuditClientService auditLogsProcessingService;
 
     @KafkaListener(topics = { "${process.audit.logs.kafka.topic}"})
-    public void listen(final HashMap<String, Object> record, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+    public void listen(final ConsumerRecord<String, Object> data, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         try {
-            AuditLogRequest request = mapper.convertValue(record, AuditLogRequest.class);
-            auditService.process(request);
+            PersisterClientInput input = PersisterClientInput.builder()
+                    .topic(data.topic())
+                    .json(mapper.writeValueAsString(data.value()))
+                    .build();
+            auditLogsProcessingService.generateAuditLogs(input);
         } catch (Exception ex) {
-            StringBuilder builder = new StringBuilder("Error while listening to value: ").append(record)
+            StringBuilder builder = new StringBuilder("Error while listening to value: ").append(data)
                     .append("on topic: ").append(topic);
             log.error(builder.toString(), ex);
         }

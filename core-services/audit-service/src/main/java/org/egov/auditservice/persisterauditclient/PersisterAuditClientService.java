@@ -108,8 +108,7 @@ public class PersisterAuditClientService {
             }
             if(!CollectionUtils.isEmpty(auditLogs)) {
                 chooseSignerAndVerifier.selectImplementationAndSign(AuditLogRequest.builder().auditLogs(auditLogs).build());
-                // ****************** TEMPORARY **************
-                //kafkaTemplate.send(auditTopic, auditLogs);
+                kafkaTemplate.send(auditTopic, auditLogs);
                 auditLogsResponse.addAll(auditLogs);
             }
         }
