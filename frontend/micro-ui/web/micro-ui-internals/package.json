@@ -24,10 +24,10 @@
     "publish:css": "cd packages/css && yarn publish --access public",
     "dev:libraries": "cd packages/libraries && yarn start",
     "dev:components": "cd packages/react-components && yarn start",
-    "dev:ws": "cd packages/modules/ws && yarn start",
+    "dev:works": "cd packages/modules/works && yarn start",
     "dev:example": "cd example && yarn start",
     "build": "run-p build:**",
-    "build:ws": "cd packages/modules/ws && yarn build",
+    "build:works": "cd packages/modules/works && yarn build",
     "build:libraries": "cd packages/libraries && yarn build",
     "build:components": "cd packages/react-components && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh"

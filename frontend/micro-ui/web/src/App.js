@@ -5,7 +5,7 @@ import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
-import { initWSComponents } from "@egovernments/digit-ui-module-ws";
+import { initWorksComponents } from "@egovernments/digit-ui-module-works";
 // import { initReportsComponents } from "@egovernments/digit-ui-module-reports";
 
 initLibraries();
@@ -29,7 +29,7 @@ const enabledModules = [
   "WS",
   "Reports",
   "Bills",
-  "SW",
+  "Works",
 ];
 window.Digit.ComponentRegistryService.setupRegistry({
  
@@ -37,7 +37,7 @@ window.Digit.ComponentRegistryService.setupRegistry({
 
 initDSSComponents();
 initEngagementComponents();
-initWSComponents();
+initWorksComponents();
 
 const moduleReducers = (initData) => ({
   initData

@@ -7,7 +7,7 @@ import { initLibraries } from "@egovernments/digit-ui-libraries";
 // import { initPGRComponents } from "@egovernments/digit-ui-module-pgr";
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
-import { initWSComponents } from "@egovernments/digit-ui-module-ws";
+import { initWorksComponents } from "@egovernments/digit-ui-module-works";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 import "@egovernments/digit-ui-css/example/index.css";
 
@@ -38,7 +38,7 @@ const enabledModules = [
   "CommonPT",
   "NDSS",
   "Bills",
-  "SW"
+  "Works"
 ];
 
 const initTokens = (stateCode) => {
@@ -76,7 +76,7 @@ const initDigitUI = () => {
   // initPGRComponents();
   initDSSComponents();
   initEngagementComponents();
-  initWSComponents();
+  initWorksComponents();
   const moduleReducers = (initData) => (
     initData
   );
