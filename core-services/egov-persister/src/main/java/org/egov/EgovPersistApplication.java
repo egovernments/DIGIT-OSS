@@ -1,6 +1,7 @@
 package org.egov;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -96,6 +97,7 @@ public class EgovPersistApplication {
             log.info("====================== EGOV PERSISTER ======================");
             log.info("LOADING CONFIGS: " + configPaths);
             ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
             List<String> fileUrls = Arrays.asList(configPaths.split(","));
             String fileTypes = "yaml,yml";
