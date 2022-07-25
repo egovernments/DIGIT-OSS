@@ -12,7 +12,7 @@ curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/b
     "ver": ".01",
     "authToken": "{{Auth_Token}}"
   },
-  "BusinessServices": [
+ "BusinessServices": [
     {
       "tenantId": "pb",
       "businessService": "ModifyWSConnection",
@@ -123,5 +123,7 @@ curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/b
              }
            ]
         }
+      ]
+    }
   ]
 }'
