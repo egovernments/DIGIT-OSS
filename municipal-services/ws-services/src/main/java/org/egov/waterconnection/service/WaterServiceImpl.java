@@ -17,11 +17,7 @@ import org.egov.waterconnection.validator.ActionValidator;
 import org.egov.waterconnection.validator.MDMSValidator;
 import org.egov.waterconnection.validator.ValidateProperty;
 import org.egov.waterconnection.validator.WaterConnectionValidator;
-import org.egov.waterconnection.web.models.Property;
-import org.egov.waterconnection.web.models.SearchCriteria;
-import org.egov.waterconnection.web.models.WaterConnection;
-import org.egov.waterconnection.web.models.WaterConnectionRequest;
-import org.egov.waterconnection.web.models.WaterConnectionResponse;
+import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.web.models.workflow.BusinessService;
 import org.egov.waterconnection.workflow.WorkflowIntegrator;
 import org.egov.waterconnection.workflow.WorkflowService;
@@ -93,21 +89,21 @@ public class WaterServiceImpl implements WaterService {
 	private Integer count2=0;
 
 	/**
-	 * 
+	 *
 	 * @param waterConnectionRequest
 	 *            WaterConnectionRequest contains water connection to be created
 	 * @return List of WaterConnection after create
 	 */
 	@Override
 	public List<WaterConnection> createWaterConnection(WaterConnectionRequest waterConnectionRequest) {
-		
+
 		int reqType = WCConstants.CREATE_APPLICATION;
-		
+
 		if (waterConnectionRequest.isDisconnectRequest()) {
 			reqType = WCConstants.DISCONNECT_CONNECTION;
 			validateDisconnectionRequest(waterConnectionRequest);
 		}
-		
+
 		else if (wsUtil.isModifyConnectionRequest(waterConnectionRequest)) {
 			List<WaterConnection> previousConnectionsList = getAllWaterApplications(waterConnectionRequest);
 
@@ -144,20 +140,20 @@ public class WaterServiceImpl implements WaterService {
 			throw new CustomException("INVALID_REQUEST",
 					"Water connection must be active for disconnection request");
 		}
-		
+
 		List<WaterConnection> previousConnectionsList = getAllWaterApplications(waterConnectionRequest);
-		
+
 		for(WaterConnection connection : previousConnectionsList) {
 			if(!(connection.getApplicationStatus().equalsIgnoreCase(WCConstants.STATUS_APPROVED) || connection.getApplicationStatus().equalsIgnoreCase(WCConstants.MODIFIED_FINAL_STATE))) {
 				throw new CustomException("INVALID_REQUEST",
 						"No application should be in progress while applying for disconnection");
 			}
 		}
-		
+
 	}
 
 	/**
-	 * 
+	 *
 	 * @param criteria
 	 *            WaterConnectionSearchCriteria contains search criteria on water
 	 *            connection
@@ -184,14 +180,14 @@ public class WaterServiceImpl implements WaterService {
 		waterConnectionValidator.validatePropertyForConnection(waterConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(waterConnectionList, criteria, requestInfo);
 		enrichmentService.enrichProcessInstance(waterConnectionList, criteria, requestInfo);
-		
+
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(waterConnectionList, "WaterConnection", WaterConnection.class, requestInfo);
 //		return waterConnectionList;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param criteria
 	 *            WaterConnectionSearchCriteria contains search criteria on water
 	 *            connection
@@ -201,9 +197,9 @@ public class WaterServiceImpl implements WaterService {
 	public List<WaterConnection> getWaterConnectionsList(SearchCriteria criteria, RequestInfo requestInfo) {
 		return waterDao.getWaterConnectionList(criteria, requestInfo);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param criteria
 	 *            WaterConnectionSearchCriteria contains search criteria on water
 	 *            connection
@@ -217,7 +213,7 @@ public class WaterServiceImpl implements WaterService {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param criteria
 	 *            WaterConnectionSearchCriteria contains search criteria on water
 	 *            connection
@@ -227,9 +223,9 @@ public class WaterServiceImpl implements WaterService {
 	public Integer getWaterConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
 		return waterDao.getWaterConnectionsCount(criteria, requestInfo);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param waterConnectionRequest
 	 *            WaterConnectionRequest contains water connection to be updated
 	 * @return List of WaterConnection after update
@@ -270,9 +266,10 @@ public class WaterServiceImpl implements WaterService {
 		userService.createUser(waterConnectionRequest);
 		enrichmentService.postStatusEnrichment(waterConnectionRequest);
 		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);
-		
+
 		/* encrypt here */
 		waterConnectionRequest.setWaterConnection(encryptionDecryptionUtil.encryptObject(waterConnectionRequest.getWaterConnection(), "WaterConnection", WaterConnection.class));
+		waterConnectionRequest.getWaterConnection().getConnectionHolders().set(0,encryptionDecryptionUtil.encryptObject(waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0), "WaterConnectionOwner", OwnerInfo.class));
 
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
 		enrichmentService.postForMeterReading(waterConnectionRequest,  WCConstants.UPDATE_APPLICATION);
@@ -282,12 +279,12 @@ public class WaterServiceImpl implements WaterService {
 
 		/* decrypt here */
 		waterConnectionRequest.setWaterConnection(encryptionDecryptionUtil.decryptObject(waterConnectionRequest.getWaterConnection(), "WaterConnection", WaterConnection.class, waterConnectionRequest.getRequestInfo()));
-		
+		waterConnectionRequest.getWaterConnection().getConnectionHolders().set(0,encryptionDecryptionUtil.decryptObject(waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0), "WaterConnectionOwner", OwnerInfo.class, waterConnectionRequest.getRequestInfo()));
 		return Arrays.asList(waterConnectionRequest.getWaterConnection());
 	}
 
 	public List<WaterConnection> updateWaterConnectionForDisconnectFlow(WaterConnectionRequest waterConnectionRequest) {
-		
+
 		SearchCriteria criteria = new SearchCriteria();
 		waterConnectionValidator.validateWaterConnection(waterConnectionRequest, WCConstants.DISCONNECT_CONNECTION);
 		mDMSValidator.validateMasterData(waterConnectionRequest,WCConstants.DISCONNECT_CONNECTION );
@@ -325,7 +322,7 @@ public class WaterServiceImpl implements WaterService {
 
 	/**
 	 * Search Water connection to be update
-	 * 
+	 *
 	 * @param id
 	 * @param requestInfo
 	 * @return water connection
@@ -398,12 +395,12 @@ public class WaterServiceImpl implements WaterService {
 		enrichmentService.enrichConnectionHolderDeatils(waterConnection.getWaterConnection(), criteria, requestInfo);
 		return waterConnection;
 	}
-	
+
 	public WaterConnectionResponse getWaterConnectionsListForPlaneSearch(SearchCriteria criteria,
-			RequestInfo requestInfo) {
+																		 RequestInfo requestInfo) {
 		return waterDao.getWaterConnectionListForPlaneSearch(criteria, requestInfo);
 	}
-	
+
 
 	public WaterConnectionResponse updateOldData(SearchCriteria criteria, RequestInfo requestInfo){
 		//WaterConnectionResponse waterConnectionResponse = planeSearch(criteria, requestInfo);
