@@ -163,7 +163,14 @@ const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
 
     const selectedValuesData = (value, isDropDownValue = false, e) => {
         let values = { ...fields };
-        if (isDropDownValue) {
+        if((value == "adhocPenalty"||value=="adhocRebate") && e.target.value){
+            const targetValueSign = e?.target?.value ==0 ? 1 : Math.sign(e?.target?.value)||-1;
+            if(targetValueSign == 1){
+                values[value] = e.target.value;
+            }else{
+                values[value] = '';
+            }
+        }else if (isDropDownValue) {
             values[`${value}_data`] = e;
             values[value] = e.title;
             if (e.title == "PT_OTHERS" && value == "adhocPenaltyReason") values[`adhocPenaltyComment`] = "";
