@@ -1,5 +1,4 @@
 //HAVE TO CHANGE THI
-import { stringReplaceAll } from "@egovernments/digit-ui-module-pt/src/utils";
 import { ApiCacheService } from "../atoms/ApiCacheService";
 import Urls from "../atoms/urls";
 import { Request, ServiceRequest } from "../atoms/Utils/Request";
@@ -1128,7 +1127,7 @@ const getPTPropertyType = (MdmsRes) =>
   MdmsRes["PropertyTax"].UsageCategory.filter((PropertyType) => PropertyType.active).map((PTPropertyTypelist) => {
     return {
       ...UsageCategorylist,
-      i18nKey: `COMMON_PROPTYPE_${stringReplaceAll(PTPropertyTypelist.code, ".", "_")}`,
+      i18nKey: `COMMON_PROPTYPE_${Digit.Utils.locale.stringReplaceAll(PTPropertyTypelist.code, ".", "_")}`,
     };
   });
 
@@ -1136,7 +1135,7 @@ const getTLStructureType = (MdmsRes) =>
   MdmsRes["common-masters"].StructureType.filter((StructureType) => StructureType.active).map((TLStructureTypeList) => {
     return {
       ...TLStructureTypeList,
-      i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${stringReplaceAll(TLStructureTypeList.code, ".", "_")}`,
+      i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${Digit.Utils.locale.stringReplaceAll(TLStructureTypeList.code, ".", "_")}`,
     };
   });
 
@@ -1144,7 +1143,7 @@ const getTLAccessoriesType = (MdmsRes) =>
   MdmsRes["TradeLicense"].AccessoriesCategory.filter((AccessoriesCategory) => AccessoriesCategory.active).map((TLAccessoryTypeList) => {
     return {
       ...TLAccessoryTypeList,
-      i18nKey: `TRADELICENSE_ACCESSORIESCATEGORY_${stringReplaceAll(TLAccessoryTypeList.code, ".", "_")}`,
+      i18nKey: `TRADELICENSE_ACCESSORIESCATEGORY_${Digit.Utils.locale.stringReplaceAll(TLAccessoryTypeList.code, ".", "_")}`,
     };
   });
 
