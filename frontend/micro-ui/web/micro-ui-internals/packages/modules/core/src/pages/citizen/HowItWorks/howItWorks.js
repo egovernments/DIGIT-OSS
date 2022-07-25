@@ -97,7 +97,7 @@ const HowItWorks = ({module}) => {
         </div>
         <div className="pdf-header-desc">
                 <h2>{t(mdmsConfigResult.pdfHeader)}</h2>
-                <p>{mdmsConfigResult.pdfDesc}</p>
+                <p>{t(mdmsConfigResult.pdfDesc)}</p>
           </div>
         </div>
         <div className="download-icon">

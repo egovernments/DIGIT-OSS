@@ -22,8 +22,14 @@ const WNSMyBills = ({ template, header, actionButtonLabel }) => {
   filters = {...filters , searchType:"CONNECTION"}
 
   const params = { mobileNumber, ...filters };
-  const Waterresult = Digit.Hooks.ws.useMyBillsWaterSearch({ tenantId, filters:{...params},BusinessService:"WS", t });
-  const Sewarageresult = Digit.Hooks.ws.useMyBillsSewarageSearch({ tenantId, filters:{...params},BusinessService:"SW",t });
+  const Waterresult = Digit.Hooks.ws.useMyBillsWaterSearch({ tenantId, filters:{...params},BusinessService:"WS", t }, 
+  {
+    privacy: Digit.Utils.getPrivacyObject(),
+  });
+  const Sewarageresult = Digit.Hooks.ws.useMyBillsSewarageSearch({ tenantId, filters:{...params},BusinessService:"SW",t },
+  {
+    privacy: Digit.Utils.getPrivacyObject(),
+  });
 
   if (Waterresult?.isLoading || Sewarageresult?.isLoading || Waterresult == undefined || Sewarageresult == undefined) {
     return <Loader />;
