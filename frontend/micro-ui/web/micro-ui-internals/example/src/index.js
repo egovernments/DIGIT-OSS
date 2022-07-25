@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { initLibraries } from "@egovernments/digit-ui-libraries";
-import { PGRReducers } from "@egovernments/digit-ui-module-pgr";
+// import { PGRReducers } from "@egovernments/digit-ui-module-pgr";
 
-import { initPGRComponents } from "@egovernments/digit-ui-module-pgr";
+// import { initPGRComponents } from "@egovernments/digit-ui-module-pgr";
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 import { initWSComponents } from "@egovernments/digit-ui-module-ws";
@@ -70,16 +70,16 @@ const initTokens = (stateCode) => {
 
 const initDigitUI = () => {
   window?.Digit.ComponentRegistryService.setupRegistry({
-    ...pgrComponents,
+    // ...pgrComponents,
   });
 
-  initPGRComponents();
+  // initPGRComponents();
   initDSSComponents();
   initEngagementComponents();
   initWSComponents();
-  const moduleReducers = (initData) => ({
-    pgr: PGRReducers(initData),
-  });
+  const moduleReducers = (initData) => (
+    initData
+  );
 
   window.Digit.Customizations = {
     PGR: pgrCustomizations,
