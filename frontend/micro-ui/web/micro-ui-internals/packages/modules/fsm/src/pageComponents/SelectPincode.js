@@ -65,7 +65,7 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register,
             {config.isMandatory ? " * " : null}
           </CardLabel>
           <div className="field">
-            <TextInput key={input.name} value={pincode} onChange={onChange} {...input.validation} autoFocus={presentInModifyApplication} />
+            <TextInput key={input.name} value={pincode} onChange={onChange} {...input.validation} />
           </div>
         </LabelFieldPair>
       );
