@@ -46,7 +46,7 @@ class AuditServiceControllerTest {
     private PersisterAuditClientService persisterAuditClientService;
 
 
-    @Test
+    ////@Test
     void testCreate() throws Exception {
         doNothing().when(auditLogProcessingService).process((AuditLogRequest) any());
 
@@ -66,7 +66,7 @@ class AuditServiceControllerTest {
     }
 
 
-    @Test
+    ////@Test
     void testSearch() throws Exception {
         when(auditLogProcessingService.getAuditLogs((RequestInfo) any(), (AuditLogSearchCriteria) any()))
                 .thenReturn(new ArrayList<>());
@@ -86,7 +86,7 @@ class AuditServiceControllerTest {
     }
 
 
-    @Test
+    ////@Test
     void testTestNewAuditFlow() throws Exception {
         when(persisterAuditClientService.generateAuditLogs((PersisterClientInput) any())).thenReturn(new ArrayList<>());
 
@@ -106,7 +106,7 @@ class AuditServiceControllerTest {
     }
 
 
-    @Test
+    ////@Test
     void testVerify() throws Exception {
         doNothing().when(auditLogProcessingService).verifyDbEntity((String) any(), (Map<String, Object>) any());
 

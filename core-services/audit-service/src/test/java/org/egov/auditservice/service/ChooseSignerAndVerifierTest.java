@@ -32,7 +32,7 @@ class ChooseSignerAndVerifierTest {
     private List<ConfigurableSignAndVerify> list;
 
 
-    @Test
+    //@Test
     void testSelectImplementationAndSign() {
         assertThrows(CustomException.class,
                 () -> chooseSignerAndVerifier.selectImplementationAndSign(new AuditLogRequest()));

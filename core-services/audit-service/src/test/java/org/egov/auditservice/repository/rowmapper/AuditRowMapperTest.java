@@ -34,7 +34,7 @@ class AuditRowMapperTest {
     @MockBean
     private ObjectMapper objectMapper;
 
-    @Test
+    //@Test
     @DisplayName("Should return empty list when the result set is empty")
     void extractDataWhenResultSetIsEmptyThenReturnEmptyList() throws SQLException {
         ResultSet resultSet = mock(ResultSet.class);
@@ -43,7 +43,7 @@ class AuditRowMapperTest {
         assertTrue(auditLogs.isEmpty());
     }
 
-    @Test
+    //@Test
     @DisplayName("Should return list of audit logs when the result set is not empty")
     void extractDataWhenResultSetIsNotEmptyThenReturnListOfAuditLogs() {
         ResultSet resultSet = mock(ResultSet.class);
@@ -99,7 +99,7 @@ class AuditRowMapperTest {
         }
     }
 
-    @Test
+    //@Test
     void testExtractData() throws JsonProcessingException, IllegalArgumentException, SQLException, DataAccessException {
         when(objectMapper.readTree((String) any())).thenReturn(MissingNode.getInstance());
         when(objectMapper.convertValue((Object) any(), (TypeReference<Object>) any())).thenReturn("Convert Value");
@@ -110,7 +110,7 @@ class AuditRowMapperTest {
         when(resultSet.next()).thenReturn(true).thenReturn(true).thenReturn(false);
     }
 
-    @Test
+    //@Test
     void testExtractDataWithNull() throws JsonProcessingException, IllegalArgumentException, SQLException, DataAccessException {
         when(objectMapper.readTree((String) any())).thenReturn(MissingNode.getInstance());
         when(objectMapper.convertValue((Object) any(), (TypeReference<Object>) any())).thenReturn("Convert Value");

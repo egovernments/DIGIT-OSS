@@ -41,7 +41,7 @@ class AuditServiceRepositoryTest {
     private JdbcTemplate jdbcTemplate;
 
 
-    @Test
+    ////@Test
     void testGetAuditLogsFromDb() throws DataAccessException {
         when(jdbcTemplate.query((String) any(), (Object[]) any(), (ResultSetExtractor<Object>) any())).thenReturn("Query");
         when(auditQueryBuilder.getAuditLogQuery((AuditLogSearchCriteria) any(), (List<Object>) any()))
@@ -50,7 +50,7 @@ class AuditServiceRepositoryTest {
         verify(auditQueryBuilder).getAuditLogQuery((AuditLogSearchCriteria) any(), (List<Object>) any());
     }
 
-    @Test
+    ////@Test
     void testGetAuditLogsFromDbWithAuditLogQuery() throws DataAccessException {
         ArrayList<Object> objectList = new ArrayList<>();
         when(jdbcTemplate.query((String) any(), (Object[]) any(), (ResultSetExtractor<Object>) any()))
@@ -65,7 +65,7 @@ class AuditServiceRepositoryTest {
     }
 
 
-    @Test
+    ////@Test
     void testGetAuditLogsFromDbWithNullAuditLogQuery() throws DataAccessException {
         when(jdbcTemplate.query((String) any(), (Object[]) any(), (ResultSetExtractor<Object>) any())).thenReturn("Query");
         when(auditQueryBuilder.getAuditLogQuery((AuditLogSearchCriteria) any(), (List<Object>) any()))

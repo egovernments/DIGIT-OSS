@@ -22,14 +22,14 @@ class AuditServiceValidatorTest {
     private AuditServiceValidator auditServiceValidator;
 
 
-    @Test
+    //@Test
     void testValidateAuditLogSearch() {
         assertThrows(CustomException.class,
                 () -> auditServiceValidator.validateAuditLogSearch(new AuditLogSearchCriteria()));
     }
 
 
-    @Test
+    //@Test
     void TestValidateAuditLogSearch() {
         AuditLogSearchCriteria auditLogSearchCriteria = new AuditLogSearchCriteria("42", "42", "EG_AUDIT_LOGS_SEARCH_ERR",
                 "01234567-89AB-CDEF-FEDC-BA9876543210", "42", 2, 1);
@@ -44,7 +44,7 @@ class AuditServiceValidatorTest {
     }
 
 
-    @Test
+    //@Test
     void testValidateAuditLogSearchWithAllData() {
         AuditLogSearchCriteria auditLogSearchCriteria = mock(AuditLogSearchCriteria.class);
         when(auditLogSearchCriteria.getModule()).thenReturn("Module");
@@ -56,7 +56,7 @@ class AuditServiceValidatorTest {
     }
 
 
-    @Test
+    //@Test
     void testValidateAuditLogSearchWithEmptyModule() {
         AuditLogSearchCriteria auditLogSearchCriteria = mock(AuditLogSearchCriteria.class);
         when(auditLogSearchCriteria.getModule()).thenReturn("");
@@ -69,7 +69,7 @@ class AuditServiceValidatorTest {
     }
 
 
-    @Test
+    //@Test
     void testValidateAuditLogSearchWithEmptyModuleAndUUID() {
         AuditLogSearchCriteria auditLogSearchCriteria = mock(AuditLogSearchCriteria.class);
         when(auditLogSearchCriteria.getModule()).thenReturn("");
@@ -83,7 +83,7 @@ class AuditServiceValidatorTest {
     }
 
 
-    @Test
+    //@Test
     void testValidateAuditLogSearchWithEmptyObjectId() {
         AuditLogSearchCriteria auditLogSearchCriteria = mock(AuditLogSearchCriteria.class);
         when(auditLogSearchCriteria.getModule()).thenReturn("");
