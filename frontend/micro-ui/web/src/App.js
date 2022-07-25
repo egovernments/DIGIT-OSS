@@ -1,9 +1,6 @@
 import React from "react";
 
-import {
-  initPGRComponents,
-  PGRReducers,
-} from "@egovernments/digit-ui-module-pgr";
+
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 import { initLibraries } from "@egovernments/digit-ui-libraries";
@@ -38,13 +35,12 @@ window.Digit.ComponentRegistryService.setupRegistry({
  
 });
 
-initPGRComponents();
 initDSSComponents();
 initEngagementComponents();
 initWSComponents();
 
 const moduleReducers = (initData) => ({
-  pgr: PGRReducers(initData),
+  initData
 });
 
 function App() {
