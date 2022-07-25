@@ -15,7 +15,7 @@ public class AuditQueryBuilder {
     @Autowired
     private AuditServiceConfiguration config;
 
-    private static final String BASE_QUERY = "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluepairs, operationtype, integrityhash FROM eg_audit_logs ";
+    private static final String BASE_QUERY = "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluemap, operationtype, integrityhash FROM eg_audit_logs ";
 
     public String getAuditLogQuery(AuditLogSearchCriteria criteria, List<Object> preparedStmtList) {
         StringBuilder query = new StringBuilder(BASE_QUERY);

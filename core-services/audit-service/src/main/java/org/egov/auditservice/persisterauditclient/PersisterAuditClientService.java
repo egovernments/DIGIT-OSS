@@ -14,6 +14,7 @@ import org.egov.auditservice.persisterauditclient.utils.AuditUtil;
 import org.egov.auditservice.service.ChooseSignerAndVerifier;
 import org.egov.auditservice.web.models.AuditLog;
 import org.egov.auditservice.web.models.AuditLogRequest;
+import org.egov.auditservice.web.models.AuditLogResponse;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,7 +109,8 @@ public class PersisterAuditClientService {
             }
             if(!CollectionUtils.isEmpty(auditLogs)) {
                 chooseSignerAndVerifier.selectImplementationAndSign(AuditLogRequest.builder().auditLogs(auditLogs).build());
-                kafkaTemplate.send(auditTopic, auditLogs);
+                AuditLogResponse response = AuditLogResponse.builder().auditLogs(auditLogs).build();
+                kafkaTemplate.send(auditTopic, response);
                 auditLogsResponse.addAll(auditLogs);
             }
         }

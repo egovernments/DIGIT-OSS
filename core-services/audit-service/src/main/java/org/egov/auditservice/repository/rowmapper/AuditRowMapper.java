@@ -47,7 +47,7 @@ public class AuditRowMapper implements ResultSetExtractor<List<AuditLog>> {
                         .integrityHash(rs.getString("integrityhash"))
                         .build();
 
-                JsonNode keyValuePairsJson = getKeyValuePairs("keyvaluepairs", rs);
+                JsonNode keyValuePairsJson = getKeyValuePairs("keyvaluemap", rs);
 
                 Map<String, Object> keyValuePairs = objectMapper.convertValue(keyValuePairsJson, new TypeReference<Map<String, Object>>(){});
 

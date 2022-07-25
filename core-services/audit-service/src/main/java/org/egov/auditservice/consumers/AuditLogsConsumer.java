@@ -29,11 +29,11 @@ public class AuditLogsConsumer {
     private PersisterAuditClientService auditLogsProcessingService;
 
     @KafkaListener(topics = { "${process.audit.logs.kafka.topic}"})
-    public void listen(final ConsumerRecord<String, Object> data, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
+    public void listen(final HashMap<String, Object> data, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         try {
             PersisterClientInput input = PersisterClientInput.builder()
-                    .topic(data.topic())
-                    .json(mapper.writeValueAsString(data.value()))
+                    .topic((String) data.get("topic"))
+                    .json(mapper.writeValueAsString(data.get("value")))
                     .build();
             auditLogsProcessingService.generateAuditLogs(input);
         } catch (Exception ex) {

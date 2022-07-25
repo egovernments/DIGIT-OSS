@@ -7,7 +7,7 @@ CREATE TABLE eg_audit_logs(
     entityname character varying(128),
     objectid character varying(128),
     integrityhash character varying(1024),
-    keyvaluepairs JSONB,
+    keyvaluemap JSONB,
     operationtype character varying(64),
     changedate bigint,
     CONSTRAINT uk_eg_audit_logs UNIQUE (id),
