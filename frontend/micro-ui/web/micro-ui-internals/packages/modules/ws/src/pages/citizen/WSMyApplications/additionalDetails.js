@@ -30,14 +30,15 @@ const WSAdditionalDetails = () => {
       <div className="hide-seperator">
         <Card>
           <CardSubHeader>{t("WS_COMMON_CONNECTION_DETAIL")}</CardSubHeader>
-          {(<StatusTable>
+          <StatusTable>
             <Row
               className="border-none"
               label={t("WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL")}
               text={data?.WaterConnection?.[0]?.connectionType || data?.SewerageConnections?.[0]?.connectionType || t("NA")}
               textStyle={{ whiteSpace: "pre" }}
             />
-            <Row
+            {data?.WaterConnection && data?.WaterConnection?.length > 0 && <div>
+              <Row
               className="border-none"
               label={t("WS_SERV_DETAIL_NO_OF_TAPS")}
               text={data?.WaterConnection?.[0]?.noOfTaps || data?.SewerageConnections?.[0]?.noOfTaps || t("CS_NA")}
@@ -65,7 +66,8 @@ const WSAdditionalDetails = () => {
               text={t(data?.WaterConnection?.[0]?.waterSource?.split(".")?.[1]) || t("CS_NA")}
               textStyle={{ whiteSpace: "pre" }}
             />
-          </StatusTable>)}
+            </div>}
+          </StatusTable>
           {data?.SewerageConnections && data?.SewerageConnections?.length > 0 && (
             <StatusTable>
               <Row
