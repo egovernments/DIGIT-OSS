@@ -165,11 +165,9 @@ definitions:
         description: Place of birth 
         maxLength: 128
         minLength: 2
-      dateOfBirth:
-        type: string
-        description: Date of birth 
-        maxLength: 128
-        minLength: 2  
+      timeOfBirth:
+        type: integer
+        description: Date of birth epoch
      
       auditDetails:
         $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/AuditDetails'
@@ -183,7 +181,7 @@ definitions:
       - doctorName
       - hospitalName
       - placeOfBirth
-      - dateOfBirth
+      - timeOfBirth
       
       
   Workflow:
