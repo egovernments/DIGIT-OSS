@@ -36,6 +36,9 @@ public class AuditLogProcessingService {
 
     public List<AuditLog> process(AuditLogRequest request) {
 
+        // Validate audit logs size
+        validator.validateAuditRequestSize(request.getAuditLogs());
+
         // Enrich audit logs
         enrichmentService.enrichAuditLogs(request);
 
