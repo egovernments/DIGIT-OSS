@@ -109,8 +109,18 @@ export const PTSearch = {
             title: "PT_PROPERTY_ADDRESS_MOHALLA",
             value: `${response?.tenantId?.toUpperCase()?.split(".")?.join("_")}_REVENUE_${response?.address?.locality?.code}`,
           },
-          { title: "PT_PROPERTY_ADDRESS_STREET_NAME", value: response?.address?.street },
-          { title: "PT_PROPERTY_ADDRESS_HOUSE_NO", value: response?.address?.doorNo },
+          { title: "PT_PROPERTY_ADDRESS_STREET_NAME", value: response?.address?.street,
+          privacy:{ 
+            uuid: property?.propertyId,
+            fieldName: "street",
+            model: "Property",
+          } },
+          { title: "PT_PROPERTY_ADDRESS_HOUSE_NO", value: response?.address?.doorNo,
+          privacy:{ 
+            uuid: property?.propertyId,
+            fieldName: "doorNo",
+            model: "Property",
+          }  },
         ],
       },
       {

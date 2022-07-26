@@ -34,7 +34,7 @@ const MyConnections = ({ view }) => {
   let applicationNos = applicationNoWS.concat(applicaionNoSW);
   const { isLoading: PTisLoading, isError: PTisError, error: PTerror, data: PTdata } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: applicationNos } },
-    { filters: { propertyIds: applicationNos }, enabled: applicationNos ? true : false }
+    { filters: { propertyIds: applicationNos }, enabled: applicationNos ? true : false, privacy: Digit.Utils.getPrivacyObject()}
   );
   connectionList =
     connectionList &&
