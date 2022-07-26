@@ -27,14 +27,14 @@
     font-size: 14px;
     font-weight: 400;
     padding-top: 4px;
-    word-break: break-all;
+    word-break: break-word;
     margin-inline: 20px;
 }
 .staticDataCard{
     background: rgba(238, 238, 238, 1);
     mix-blend-mode: normal;
     height: auto;
-    max-height: 64px;
+    max-height: 84px;
     border-radius: 4px;
     margin-bottom: 16px;
 }
@@ -64,7 +64,7 @@
     font-family: 'Roboto';
     font-size: 16px;
     font-weight: 700;
-    word-break: break-all;
+    word-break: break-word;
 }
 .staticDataCardLast{
     background: rgba(238, 238, 238, 1);
