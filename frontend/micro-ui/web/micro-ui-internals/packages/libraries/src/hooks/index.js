@@ -42,6 +42,7 @@ import useInboxData from "./pgr/useInboxData";
 import useLocalities from "./pgr/useLocalities";
 import useServiceDefs from "./pgr/useServiceDefs";
 import usePGRTenants from "./pgr/useTenants";
+import usePGRMDMS from "./pgr/useMDMS";
 import useComplaintSubType from "./pgr/useComplaintSubType";
 import useComplaintStatusCount from "./pgr/useComplaintStatusWithCount";
 
@@ -254,6 +255,7 @@ const pgr = {
   usePropertyMDMS,
   useComplaintStatusCount,
   useTradeLicenseBillingslab,
+  useMDMS : usePGRMDMS,
 };
 
 const fsm = {

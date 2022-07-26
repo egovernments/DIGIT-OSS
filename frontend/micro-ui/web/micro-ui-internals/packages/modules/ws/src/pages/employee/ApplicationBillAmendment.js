@@ -164,7 +164,7 @@ const ApplicationBillAmendment = () => {
       return {
         taxHeadMasterCode: e[0],
         //taxAmount: e[1] - preUpdateDataAmount,
-        taxAmount: action === "rebate" ? -e[1] : e[1]
+        taxAmount: action === "penalty" ? -e[1] : e[1]
       };
     });
 
