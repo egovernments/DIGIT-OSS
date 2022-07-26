@@ -156,10 +156,11 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
           });
         }
       }
-      else if(payload?.SewerageConnections?.sewerage){
+      else if(payload?.SewerageConnection?.sewerage){
         if (sewerageMutation) {
           setIsEnableLoader(true);
           await sewerageMutation(payload, {
+
             onError: (error, variables) => {
               setIsEnableLoader(false);
               setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
@@ -167,7 +168,7 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
             },
             onSuccess: async (data, variables) => {
               let response = await updatePayloadOfWSDisconnection(data?.SewerageConnections?.[0], "SEWERAGE");
-              let sewerageConnectionUpdate = { SewerageConnections: response };
+              let sewerageConnectionUpdate = { SewerageConnection: response };
               sewerageConnectionUpdate = {...sewerageConnectionUpdate, disconnectRequest: true};
               await sewerageUpdateMutation(sewerageConnectionUpdate, {
                 onError: (error, variables) => {
