@@ -522,5 +522,71 @@ public class EnrichmentService {
 			requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 		}
 	}
+	
+	public OwnerInfo getConnectionHolderDetailsForUpdateCall(SewerageConnection sewerageConnection, RequestInfo requestInfo) {
+		if (ObjectUtils.isEmpty(sewerageConnection))
+			return null;
+		Set<String> connectionHolderIds = new HashSet<>();
+		if (!CollectionUtils.isEmpty(sewerageConnection.getConnectionHolders())) {
+			connectionHolderIds.addAll(sewerageConnection.getConnectionHolders().stream()
+					.map(OwnerInfo::getUuid).collect(Collectors.toSet()));
+		}
+		if (CollectionUtils.isEmpty(connectionHolderIds))
+			return null;
+		OwnerInfo connectionHolder = sewerageConnection.getConnectionHolders().get(0);
+
+		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(sewerageConnection.getTenantId(), requestInfo);
+		userSearchRequest.setUuid(connectionHolderIds);
+		PlainAccessRequest apiPlainAccessRequest = userSearchRequest.getRequestInfo().getPlainAccessRequest();
+		List<String> plainRequestFieldsList = new ArrayList<String>();
+		if (connectionHolder.getFatherOrHusbandName().contains("*")){
+			plainRequestFieldsList.add("guardian");
+			plainRequestFieldsList.add("fatherOrHusbandName");
+		}
+		if (connectionHolder.getMobileNumber().contains("*")){
+			plainRequestFieldsList.add("mobileNumber");
+		}
+		if (connectionHolder.getCorrespondenceAddress().contains("*")){
+			plainRequestFieldsList.add("correspondenceAddress");
+		}
+		if (connectionHolder.getUserName().contains("*")){
+			plainRequestFieldsList.add("userName");
+		}
+		if (connectionHolder.getName().contains("*")){
+			plainRequestFieldsList.add("name");
+		}
+		if (connectionHolder.getGender().contains("*")){
+			plainRequestFieldsList.add("gender");
+		}
+		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(connectionHolderIds.iterator().next())
+				.plainRequestFields(plainRequestFieldsList).build();
+
+		requestInfo.setPlainAccessRequest(plainAccessRequest);
+
+		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+		if (!connectionHolder.getFatherOrHusbandName().contains("*")){
+			userDetailResponse.getUser().get(0).setFatherOrHusbandName(connectionHolder.getFatherOrHusbandName());
+		}
+		if (!connectionHolder.getMobileNumber().contains("*")){
+			userDetailResponse.getUser().get(0).setMobileNumber(connectionHolder.getMobileNumber());
+		}
+		if (!connectionHolder.getCorrespondenceAddress().contains("*")){
+			userDetailResponse.getUser().get(0).setCorrespondenceAddress(connectionHolder.getCorrespondenceAddress());
+		}
+		if (!connectionHolder.getUserName().contains("*")){
+			userDetailResponse.getUser().get(0).setUserName(connectionHolder.getUserName());
+		}
+		if (!connectionHolder.getName().contains("*")){
+			userDetailResponse.getUser().get(0).setName(connectionHolder.getName());
+		}
+		if (!connectionHolder.getGender().contains("*")){
+			userDetailResponse.getUser().get(0).setGender(connectionHolder.getGender());
+		}
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
+		List<SewerageConnection> sewerageConnectionList=new ArrayList<>();
+		sewerageConnectionList.add(sewerageConnection);
+		enrichConnectionHolderInfo(userDetailResponse, sewerageConnectionList, requestInfo);
+		return userDetailResponse.getUser().get(0);
+	}
 
 }

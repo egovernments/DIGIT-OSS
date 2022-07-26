@@ -293,6 +293,7 @@ public class SewerageServiceImpl implements SewerageService {
 
 		/* encrypt here */
 		sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.encryptObject(sewerageConnectionRequest.getSewerageConnection(), "WaterConnection", SewerageConnection.class));
+		sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().set(0, encryptionDecryptionUtil.encryptObject(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0), "WaterConnectionOwner", OwnerInfo.class));
 
 		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
 				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
@@ -302,6 +303,7 @@ public class SewerageServiceImpl implements SewerageService {
 
 		/* decrypt here */
 		sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), "WaterConnection", SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
+		sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().set(0, encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0), "WaterConnectionOwner", OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
 
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
 	}

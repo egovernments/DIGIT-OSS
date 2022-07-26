@@ -35,9 +35,6 @@ public class UserService {
 	private ObjectMapper mapper;
 
 	@Autowired
-	EncryptionDecryptionUtil encryptionDecryptionUtil;
-
-	@Autowired
 	private EnrichmentService enrichmentService;
 
 	/**
