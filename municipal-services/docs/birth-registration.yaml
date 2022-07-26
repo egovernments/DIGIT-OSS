@@ -18,7 +18,7 @@ paths:
       summary: Get the list of Birth registration applications
       description: 
         1. Search and get birth registration applications(s) based on defined search criteria.
-        2. In case multiple parameters are passed birth registration applications will be searched as an AND combination of all the parameters.
+        2. In case multiple parameters are passed voter registration applications will be searched as an AND combination of all the parameters.
       parameters:
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/requestInfo'
         - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/tenantId'
@@ -103,10 +103,7 @@ paths:
 definitions:
 ##############################################      
   
-  Applicant:
-      description: Details of the user applying for birth registration
-      allOf:
-        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-user/contracts/v1-0-0.yml#/definitions/User'
+ 
 
 
 
@@ -135,61 +132,58 @@ definitions:
         readOnly: true
       babyFirstName:
         type: string
-        description: Baby's first name.
-        maxLength: 256
+        description: Baby’s namefirst 
+        maxLength: 128
         minLength: 2
       babyLastName:
         type: string
-        description: Baby's last name.
-        maxLength: 256
-        minLength: 2
+        description: Baby’s last name
+        maxLength: 128
+        minLength: 2  
       fatherName:
         type: string
-        description: Father's name.
-        maxLength: 256
+        description: Name of father
+        maxLength: 128
         minLength: 2
       motherName:
         type: string
-        description: Mother's name.
-        maxLength: 256
+        description: Name of mother
+        maxLength: 128
         minLength: 2
-      doctorAttendingBirth:
+      doctorName:
         type: string
-        description: Doctor attending birth.
-        maxLength: 256
-        minLength: 2
+        description: Name of doctor 
+        maxLength: 128
+        minLength: 2 
       hospitalName:
         type: string
-        description: Name of hospital.
-        maxLength: 256
-        minLength: 2
+        description: Name of hospital 
+        maxLength: 128
+        minLength: 2  
       placeOfBirth:
         type: string
-        description: Place of birth.
-        maxLength: 256
+        description: Place of birth 
+        maxLength: 128
         minLength: 2
       dateOfBirth:
-        type: integer
-        description: Date Of Birth
-      address:
-        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/Address' 
-      applicant:
-        $ref: '#/definitions/Applicant'
+        type: string
+        description: Date of birth 
+        maxLength: 128
+        minLength: 2  
+     
       auditDetails:
         $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/AuditDetails'
     required:
-      - id
       - tenantId
       - applicant
       - babyFirstName
       - babyLastName
       - fatherName
       - motherName
-      - doctorAttendingBirth
+      - doctorName
       - hospitalName
       - placeOfBirth
       - dateOfBirth
-      - address
       
       
   Workflow:
