@@ -31,7 +31,7 @@ const FAQComponent = props => {
        <div> <span style={{color:"#000",marginTop: index===1  ? i===0 ? "20px" : "0px" :  "20px", marginBottom: index===1 ? i===0 ?"20px": "0px" : "20px"}}>
         {t(obj.acr)}
         </span>
-         <span style={{color:"#000",marginTop: index===1  ? i===0 ? "-40px" : "-20px" :  "20px", marginBottom: index===1 ? i===14 ?"20px": "0px" :"20px",marginLeft:"60px"}}>
+         <span style={{color:"#000",marginTop: index===1  ? i===0 ? "-40px" : "-20px" :  "20px", marginBottom: index===1 ? i===14 ?"20px": "0px" :"20px",marginLeft:"115px"}}>
          {t(obj.fullForm)}
          </span></div>)}
         
