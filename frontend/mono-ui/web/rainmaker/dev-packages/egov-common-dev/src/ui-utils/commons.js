@@ -822,7 +822,7 @@ export const downloadBill = async (consumerCode ,tenantId) => {
   const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
   const queryStr = [
             { key: "key", value: "consolidatedbill" },
-            { key: "tenantId", value: "pb" }
+            { key: "tenantId", value: "uk" }
         ]
   const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
   downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
