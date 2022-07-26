@@ -159,7 +159,7 @@ const SearchApplication = ({showTable,showLoader,isLoading, tenantId, t, onSubmi
             <span className="link">
               <Link
                 to={{
-                  pathname: `/digit-ui/employee/payment/collect/${row.original?.["businessService"]}/${row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}?workflow=mcollect`,
+                  pathname: `/digit-ui/employee/payment/collect/${row.original?.["businessService"]}/${(row.original?.["consumerCode"])?.includes("WS") || (row.original?.["consumerCode"])?.includes("SW") ? encodeURIComponent(row.original?.["consumerCode"],"/","+") : row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}?workflow=${(row.original?.["consumerCode"])?.includes("WS") || (row.original?.["consumerCode"])?.includes("SW")? "WS" : "mcollect"}`,
                 }}
               >
                 {t(`${"ABG_COLLECT"}`)}{" "}
@@ -174,7 +174,7 @@ const SearchApplication = ({showTable,showLoader,isLoading, tenantId, t, onSubmi
             <span className="link">
               <Link
                 to={{
-                  pathname: `/digit-ui/employee/payment/collect/${row.original?.["businessService"]}/${row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}?workflow=mcollect`,
+                  pathname: `/digit-ui/employee/payment/collect/${row.original?.["businessService"]}/${(row.original?.["consumerCode"])?.includes("WS") || (row.original?.["consumerCode"])?.includes("SW") ? encodeURIComponent(row.original?.["consumerCode"],"/","+") : row.original?.["consumerCode"]}/tenantId=${row.original?.["tenantId"]}?workflow=${(row.original?.["consumerCode"])?.includes("WS") || (row.original?.["consumerCode"])?.includes("SW")? "WS" : "mcollect"}`,
                 }}
               >
                 {t(`${"ABG_GENERATE_NEW_BILL"}`)}

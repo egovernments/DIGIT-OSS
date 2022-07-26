@@ -553,7 +553,7 @@ export const createPayloadOfWSDisconnection = async (data, storeData, service) =
 };
 
   let swPayload = {
-    SewerageConnections: {
+    SewerageConnection: {
       id: storeData?.applicationData?.id,
       applicationNo: storeData?.applicationData?.applicationNo,
       applicationStatus: storeData?.applicationData?.applicationStatus,

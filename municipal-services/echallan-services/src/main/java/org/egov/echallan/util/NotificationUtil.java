@@ -93,7 +93,8 @@ public class NotificationUtil {
 		paymentPath = paymentPath.replace("$tenantId",challan.getTenantId());
 		paymentPath = paymentPath.replace("$businessservice",challan.getBusinessService());
 		String finalPath = UIHost + paymentPath;
-		message = message.replace("{Link}",getShortenedUrl(finalPath));
+		if(message.contains("{Link}"))
+			message = message.replace("{Link}",getShortenedUrl(finalPath));
 
         return message;
     }
@@ -110,7 +111,8 @@ public class NotificationUtil {
 		message = message.replace("{Payment_No}",paymentResponse.getPayments().get(0).getPaymentDetails().get(0).getReceiptNumber());
 		message = message.replace("{challanno}",paymentResponse.getPayments().get(0).getPaymentMode());
 
-		message = message.replace("{Online_Receipt_Link}", getRecepitDownloadLink(challanRequest,paymentResponse,challanRequest.getChallan().getCitizen().getMobileNumber()));
+		if(message.contains("{Online_Receipt_Link}"))
+			message = message.replace("{Online_Receipt_Link}", getRecepitDownloadLink(challanRequest,paymentResponse,challanRequest.getChallan().getCitizen().getMobileNumber()));
 
 	    if(message.contains("{ULB}"))
 			message = message.replace("{ULB}", capitalize(challan.getTenantId().split("\\.")[1]));
@@ -346,22 +348,22 @@ public class NotificationUtil {
 		String localizationMessages = getLocalizationMessages(challan.getTenantId(), requestInfo);
 		String message = null, messageTemplate;
 
-		if(messageCode.equals(CREATE_CODE))
+		if(messageCode.equals(CREATE_CODE) || messageCode.equals(CREATE_CODE_INAPP))
 		{
 			messageTemplate = getMessageTemplate(messageCode, localizationMessages);
 			message  = getReplacedMsg(requestInfo,challan,messageTemplate);
 		}
-		else if(messageCode.equals(UPDATE_CODE))
+		else if(messageCode.equals(UPDATE_CODE) || messageCode.equals(UPDATE_CODE_INAPP))
 		{
 			messageTemplate = getMessageTemplate(messageCode, localizationMessages);
 			message  = getReplacedMsg(requestInfo,challan,messageTemplate);
 		}
-		else if(messageCode.equals(CANCEL_CODE))
+		else if(messageCode.equals(CANCEL_CODE) || messageCode.equals(CANCEL_CODE_INAPP))
 		{
 			messageTemplate = getMessageTemplate(messageCode, localizationMessages);
 			message  = getReplacedMsg(requestInfo,challan,messageTemplate);
 		}
-		else if(messageCode.equals(PAYMENT_CODE))
+		else if(messageCode.equals(PAYMENT_CODE) || messageCode.equals(PAYMENT_CODE_INAPP))
 		{
 			messageTemplate = getMessageTemplate(messageCode, localizationMessages);
 			message  = getPaymentMsg(requestInfo,challan,messageTemplate);

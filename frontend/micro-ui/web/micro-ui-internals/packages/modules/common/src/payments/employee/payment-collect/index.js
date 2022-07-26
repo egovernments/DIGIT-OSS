@@ -21,7 +21,7 @@ export const CollectPayment = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const search = useLocation().search;
   if (window.location.href.includes("ISWSAPP")) consumerCode = new URLSearchParams(search).get("applicationNumber");
-  if (window.location.href.includes("ISWSCON")) consumerCode = decodeURIComponent(consumerCode);
+  if (window.location.href.includes("ISWSCON") || ModuleWorkflow === "WS") consumerCode = decodeURIComponent(consumerCode);
 
   const { data: paymentdetails, isLoading } = Digit.Hooks.useFetchPayment({ tenantId: tenantId, consumerCode, businessService });
   const bill = paymentdetails?.Bill ? paymentdetails?.Bill[0] : {};

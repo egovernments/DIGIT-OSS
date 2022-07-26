@@ -6,6 +6,7 @@ const FAQComponent = props => {
   const { question, answer, index, lastIndex, subAnswer, acrynom} = props;
   const [isOpen, toggleOpen] = useState(false);
   const { t } = useTranslation();
+  const selectedLanguage = Digit.StoreData.getCurrentLanguage();
   return (
     <div className="faqs border-none" onClick={() => toggleOpen(!isOpen)}>
           <div className="faq-question" style={{justifyContent: "space-between", display: "flex"}}>
@@ -31,7 +32,7 @@ const FAQComponent = props => {
        <div> <span style={{color:"#000",marginTop: index===1  ? i===0 ? "20px" : "0px" :  "20px", marginBottom: index===1 ? i===0 ?"20px": "0px" : "20px"}}>
         {t(obj.acr)}
         </span>
-         <span style={{color:"#000",marginTop: index===1  ? i===0 ? "-40px" : "-20px" :  "20px", marginBottom: index===1 ? i===14 ?"20px": "0px" :"20px",marginLeft:"60px"}}>
+         <span style={{color:"#000",marginTop: index===1  ? i===0 ? "-40px" : "-20px" :  "20px", marginBottom: index===1 ? i===14 ?"20px": "0px" :"20px",marginLeft: selectedLanguage === "hi_IN" ?  "115px" :"60px"}}>
          {t(obj.fullForm)}
          </span></div>)}
         

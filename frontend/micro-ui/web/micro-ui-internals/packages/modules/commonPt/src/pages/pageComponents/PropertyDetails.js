@@ -14,8 +14,12 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
     {
       filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId },
       tenantId: tenantId,
+      privacy: Digit.Utils.getPrivacyObject(),
     },
-    { filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId }, tenantId: tenantId }
+    { 
+      filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId }, 
+      tenantId: tenantId,
+      privacy: Digit.Utils.getPrivacyObject(), }
   );
 
   const onSkip = () => onSelect();
@@ -74,7 +78,12 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
             <StatusTable>
               <Row className="border-none" label={t(`PROPERTY_ID`)} text={propertyDetails?.Properties[0]?.propertyId} />
               <Row className="border-none" label={t(`OWNER_NAME`)} text={propertyDetails?.Properties[0]?.owners[0]?.name} />
-              <Row className="border-none" textStyle={{ wordBreak: "break-word" }} label={t(`PROPERTY_ADDRESS`)} text={propAddArr.join(', ')} />
+              <Row className="border-none" textStyle={{ wordBreak: "break-word" }} label={t(`PROPERTY_ADDRESS`)} text={propAddArr.join(', ')} 
+              privacy={ {
+                uuid: propertyDetails?.Properties[0]?.propertyId,
+                fieldName: ["doorNo" , "street" , "landmark"], 
+                model: "Property"
+              }}/>
               <Row className="border-none" label={t(`PT_MUTATION_STATUS`)} text={t(propertyDetails?.Properties[0]?.status)} />
               <div style={{ textAlign: "left" }}>
                 <Link

@@ -24,13 +24,14 @@ const ResponseComposer = ({ data, template, actionButtonLabel, onSubmit }) => {
                 />
               );
             })}
-            {actionButtonLabel && result?.AmountDue !== "0" && result.status !== "INACTIVE" && (
+            {actionButtonLabel && result.status !== "INACTIVE" && (
               <SubmitBar
                 submit={false}
                 label={t(actionButtonLabel)}
                 onSubmit={() => {
                   onSubmit(result);
                 }}
+                disabled={result?.AmountDue === "0"? true : false}
               />
             )}
             {result.status === "INACTIVE" && (

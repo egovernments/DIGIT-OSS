@@ -65,7 +65,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const scity = city ? city : searchQuery?.city;
   const searchArgs = scity ? { tenantId: scity, filters, auth } : { filters, auth };
-  const result = Digit.Hooks.pt.usePropertySearch(searchArgs);
+  const result = Digit.Hooks.pt.usePropertySearch(searchArgs,{privacy: Digit.Utils.getPrivacyObject()});
   const consumerCode = result?.data?.Properties?.map((a) => a.propertyId).join(",");
 
   const fetchBillParams = mobileNumber ? { mobileNumber, consumerCode } : { consumerCode };
@@ -132,7 +132,13 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
       bil_due__date: payment[property?.propertyId]?.bil_due__date || t("N/A"),
       status:t(property.status),
       owner_mobile: (property?.owners || [])[0]?.mobileNumber,
-    };
+      privacy: {
+        property_address : {
+          uuid: property?.propertyId, 
+          fieldName: ["doorNo" , "street" , "landmark"], 
+          model: "Property"
+        }
+      }  };
   });
   const getUserType = () => Digit.UserService.getType();
 

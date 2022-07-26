@@ -17,7 +17,12 @@ const WSConnection = ({ application }) => {
           application?.connectionHolders?.map((owner) => owner.name).join(",") || application?.property?.owners?.map((owner) => owner.name).join(",")
         }
       />
-      <KeyNote keyValue={t("WS_MYCONNECTION_ADDRESS")} note={getAddress(application?.property?.address, t)} />
+      <KeyNote keyValue={t("WS_MYCONNECTION_ADDRESS")} note={getAddress(application?.property?.address, t)}
+      privacy={{
+        uuid:application?.property?.propertyId, 
+        fieldName: ["doorNo" , "street" , "landmark"], 
+        model: "Property"
+       }}  />
       <KeyNote keyValue={t("WS_MYCONNECTIONS_STATUS")} note={t(application?.applicationStatus)} />
       <Link to={{ pathname: `/digit-ui/citizen/ws/connection/details/${encodeApplicationNo}`, state: { ...application } }}>
         <SubmitBar label={t("WS_VIEW_DETAILS_LABEL")} />
