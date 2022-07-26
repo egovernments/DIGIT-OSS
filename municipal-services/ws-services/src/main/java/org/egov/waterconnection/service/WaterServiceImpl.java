@@ -269,7 +269,8 @@ public class WaterServiceImpl implements WaterService {
 
 		/* encrypt here */
 		waterConnectionRequest.setWaterConnection(encryptionDecryptionUtil.encryptObject(waterConnectionRequest.getWaterConnection(), "WaterConnection", WaterConnection.class));
-		waterConnectionRequest.getWaterConnection().getConnectionHolders().set(0,encryptionDecryptionUtil.encryptObject(waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0), "WaterConnectionOwner", OwnerInfo.class));
+		if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders()))
+			waterConnectionRequest.getWaterConnection().getConnectionHolders().set(0,encryptionDecryptionUtil.encryptObject(waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0), "WaterConnectionOwner", OwnerInfo.class));
 
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
 		enrichmentService.postForMeterReading(waterConnectionRequest,  WCConstants.UPDATE_APPLICATION);
@@ -279,7 +280,8 @@ public class WaterServiceImpl implements WaterService {
 
 		/* decrypt here */
 		waterConnectionRequest.setWaterConnection(encryptionDecryptionUtil.decryptObject(waterConnectionRequest.getWaterConnection(), "WaterConnection", WaterConnection.class, waterConnectionRequest.getRequestInfo()));
-		waterConnectionRequest.getWaterConnection().getConnectionHolders().set(0,encryptionDecryptionUtil.decryptObject(waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0), "WaterConnectionOwner", OwnerInfo.class, waterConnectionRequest.getRequestInfo()));
+		if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders()))
+			waterConnectionRequest.getWaterConnection().getConnectionHolders().set(0,encryptionDecryptionUtil.decryptObject(waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0), "WaterConnectionOwner", OwnerInfo.class, waterConnectionRequest.getRequestInfo()));
 		return Arrays.asList(waterConnectionRequest.getWaterConnection());
 	}
 
