@@ -1,16 +1,18 @@
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { WSService } from "../../services/elements/WS";
 import { PTService } from "../../services/elements/PT";
 import cloneDeep from "lodash/cloneDeep";
   
 const useMyApplicationSearch = ({tenantId, filters = {}, BusinessService="WS", t}, config = {}, getWorkflow = false) => {
-  const { isLoading, error, data, isSuccess } =  useQuery(['WS_SEARCH', tenantId, filters, BusinessService], async () => await WSService.search({tenantId, filters: { ...filters }, businessService:BusinessService})
+  const client = useQueryClient();
+
+  const { isLoading, error, data, isSuccess } =  useQuery(['WS_SEARCH', tenantId, filters, BusinessService, config], async () => await WSService.search({tenantId, filters: { ...filters }, businessService:BusinessService})
   , config);
 
   const user = Digit.UserService.getUser();
   const tenant = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
 
-  const { isLoading : isWSLoading , error : isWSError, data : wsData, isSuccess: wsSuccess } =  useQuery(['WS_SEARCH_CONNECTION', tenant, BusinessService, data], async () => await WSService.search({tenantId : tenant, filters: 
+  const { isLoading : isWSLoading , error : isWSError, data : wsData, isSuccess: wsSuccess } =  useQuery(['WS_SEARCH_CONNECTION', tenant, BusinessService, data, config], async () => await WSService.search({tenantId : tenant, filters: 
     isSuccess && data?.WaterConnection ? 
     { 
       connectionNumber : data?.WaterConnection?.[0]?.connectionNo  
@@ -49,7 +51,13 @@ const useMyApplicationSearch = ({tenantId, filters = {}, BusinessService="WS", t
       };
     }
   } );
-  return { isLoading : !getWorkflow ? isLoading : isLoading || isWSLoading || isWorkflowLoading , error, data : !getWorkflow ? data : {...data, ...workflowData}, isSuccess };
+  return { 
+    isLoading : !getWorkflow ? isLoading : isLoading || isWSLoading || isWorkflowLoading , 
+    error, 
+    data : !getWorkflow ? data : {...data, ...workflowData}, 
+    isSuccess,
+    revalidate: () => client.invalidateQueries(["WS_SEARCH", tenantId, filters, BusinessService]),
+  };
     
 
 

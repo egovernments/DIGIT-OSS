@@ -342,7 +342,7 @@ if(userType === 'citizen') {
           
           </LabelFieldPair>
           <LabelFieldPair>
-              <CardLabel style={{ marginTop: "-5px", fontWeight: "700", display: "inline" }} className="card-label-smaller">{t("WS_DISCONNECTION_REASON")}</CardLabel>              
+              <CardLabel style={{ marginTop: "-5px", fontWeight: "700", display: "inline" }} className="card-label-smaller">{t("WS_DISCONNECTION_REASON") + "*"}</CardLabel>              
               <div className="field">
                 <TextArea
                   isMandatory={false}
@@ -381,7 +381,7 @@ if(userType === 'citizen') {
               onSubmit={() => onSubmit(disconnectionData)}
               style={{ margin: "10px 10px 0px 0px" }}
               disabled={
-                wsDocsLoading || documents.length < 2 || disconnectionData?.reason?.value === "" || disconnectionData?.date === "" || disconnectionData?.type === ""
+                wsDocsLoading || documents.length < 2 || disconnectionData?.reason?.value === "" || disconnectionData?.reason === "" || disconnectionData?.date === "" || disconnectionData?.type === ""
                 ? true 
                 : false}
             />}

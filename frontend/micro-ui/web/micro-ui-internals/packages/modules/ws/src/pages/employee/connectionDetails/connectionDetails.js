@@ -169,7 +169,7 @@ const GetConnectionDetails = () => {
 
     if(!checkWorkflow){
       setshowActionToast({
-        type: "error",
+        key: "error",
         label: "WORKFLOW_IN_PROGRESS",
       });
     }

@@ -43,7 +43,7 @@ const ConnectionDetails = () => {
 
   let filter1 = { tenantId: tenantId, applicationNumber: applicationNobyData };
   var isSewerageConnections= false;
-  var { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1, BusinessService: applicationNobyData?.includes("SW") ? "SW" : "WS" }, { filters: filter1 }, true);
+  var { isLoading, isError, error, data } = Digit.Hooks.ws.useMyApplicationSearch({ filters: filter1, BusinessService: applicationNobyData?.includes("SW") ? "SW" : "WS" }, { filters: filter1, privacy: Digit.Utils.getPrivacyObject()  }, true);
 
   if(data && data["SewerageConnections"]){
     isSewerageConnections = true;
@@ -59,7 +59,7 @@ const ConnectionDetails = () => {
 
   const { isLoading: isPTLoading, isError: isPTError, error: PTerror, data: PTData } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: data?.WaterConnection?.[0]?.propertyId } },
-    { filters: { propertyIds: data?.WaterConnection?.[0]?.propertyId } }
+    { filters: { propertyIds: data?.WaterConnection?.[0]?.propertyId } , privacy: Digit.Utils.getPrivacyObject() }
   );
 
   const closeBillToast = () => {
@@ -159,7 +159,7 @@ const ConnectionDetails = () => {
   const getDisconnectionButton = () => {
     if (!data?.checkWorkFlow){
       setshowActionToast({
-        type: "error",
+        key: "error",
         label: "CONNECTION_INPROGRESS_LABEL",
       });
       setTimeout(() => {
@@ -326,13 +326,13 @@ const ConnectionDetails = () => {
             <Row
               className="border-none"
               label={t("WS_OWN_DETAIL_CROSADD")}
-              text={state?.property?.owners?.[0]?.permanentAddress || t("CS_NA")}
+              text={PTData?.Properties?.[0]?.owners?.[0]?.permanentAddress || t("CS_NA")}
               textStyle={{ wordBreak : "break-word" }}
               privacy={ {
-                uuid: state?.property?.owners?.[0]?.uuid,
+                uuid: PTData?.Properties?.[0]?.owners?.[0]?.uuid,
                 fieldName: "permanentAddress",
                 model: "User",
-                hide: !(state?.property?.owners?.[0]?.permanentAddress),
+                hide: !(PTData?.Properties?.[0]?.owners?.[0]?.permanentAddress),
               }}
             />
             <Link to={`/digit-ui/citizen/commonpt/view-property?propertyId=${state?.propertyId}&tenantId=${state?.tenantId}`}>
@@ -346,8 +346,13 @@ const ConnectionDetails = () => {
                 <Row
                   className="border-none"
                   label={t("WS_OWN_DETAIL_MOBILE_NO_LABEL")}
-                  text={state?.connectionHolders?.[0]?.mobileNumber}
+                  text={applicationNobyData?.includes("WS") ? data?.WaterConnection?.[0]?.connectionHolders?.[0]?.mobileNumber : data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.mobileNumber}
                   textStyle={{ whiteSpace: "pre" }}
+                  privacy={ {
+                    uuid: applicationNobyData?.includes("WS") ? data?.WaterConnection?.[0]?.connectionHolders?.[0]?.uuid : data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.uuid,
+                    fieldName: "mobileNumber",
+                    model: "User",
+                  }}
                 />
                 <Row
                   className="border-none"
@@ -358,25 +363,40 @@ const ConnectionDetails = () => {
                 <Row
                   className="border-none"
                   label={t("WS_OWN_DETAIL_GENDER_LABEL")}
-                  text={state?.connectionHolders?.[0]?.gender}
+                  text={applicationNobyData?.includes("WS") ? data?.WaterConnection?.[0]?.connectionHolders?.[0]?.gender : data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.gender}
                   textStyle={{ whiteSpace: "pre" }}
+                  privacy={ {
+                    uuid: applicationNobyData?.includes("WS") ? data?.WaterConnection?.[0]?.connectionHolders?.[0]?.uuid : data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.uuid,
+                    fieldName: "gender",
+                    model: "User",
+                  }}
                 />
                 <Row
                   className="border-none"
                   label={t("WS_OWN_DETAIL_FATHER_OR_HUSBAND_NAME")}
-                  text={state?.connectionHolders?.[0]?.fatherOrHusbandName}
+                  text={applicationNobyData?.includes("WS") ? data?.WaterConnection?.[0]?.connectionHolders?.[0]?.fatherOrHusbandName : data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.fatherOrHusbandName}
                   textStyle={{ whiteSpace: "pre" }}
+                  privacy={ {
+                    uuid: applicationNobyData?.includes("WS") ? data?.WaterConnection?.[0]?.connectionHolders?.[0]?.uuid : data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.uuid,
+                    fieldName: "fatherOrHusbandName",
+                    model: "User", //applicationNobyData?.includes("WS") ? "WaterConnectionOwner" : "User"
+                  }}
                 />
                 <Row
                   className="border-none"
                   label={t("WS_OWN_DETAIL_RELATION_LABEL")}
-                  text={state?.connectionHolders?.[0]?.relationship}
+                  text={applicationNobyData?.includes("WS") ? data?.WaterConnection?.[0]?.connectionHolders?.[0]?.relationship : data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.relationship}
                   textStyle={{ whiteSpace: "pre" }}
+                  privacy={ {
+                    uuid: applicationNobyData?.includes("WS") ? data?.WaterConnection?.[0]?.connectionHolders?.[0]?.uuid : data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.uuid,
+                    fieldName: "relationship",
+                    model: "User", //applicationNobyData?.includes("WS") ? "WaterConnectionOwner" : "User"
+                  }}
                 />
                 <Row
                   className="border-none"
                   label={t("WS_OWN_DETAIL_CROSADD")}
-                  text={state?.connectionHolders?.[0]?.correspondenceAddress}
+                  text={applicationNobyData?.includes("WS") ? data?.WaterConnection?.[0]?.connectionHolders?.[0]?.correspondenceAddress : data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.correspondenceAddress}
                   textStyle={{ whiteSpace: "pre" }}
                   privacy={ {
                     uuid: state?.connectionHolders?.[0]?.uuid,
@@ -385,7 +405,18 @@ const ConnectionDetails = () => {
                     hide: !(state?.connectionHolders),
                   }}
                 />
-                <Row className="border-none" label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} text={t(`COMMON_MASTERS_OWNERTYPE_${state?.connectionHolders?.[0]?.ownerType}`)} textStyle={{ whiteSpace: "pre" }} />
+                <Row 
+                  className="border-none" 
+                  label={t("WS_OWN_DETAIL_SPECIAL_APPLICANT_LABEL")} 
+                  text={t(`COMMON_MASTERS_OWNERTYPE_${applicationNobyData?.includes("WS") ? data?.WaterConnection?.[0]?.connectionHolders?.[0]?.ownerType : data?.SewerageConnections?.[0]?.connectionHolders?.[0]?.ownerType}`)} 
+                  textStyle={{ whiteSpace: "pre" }} 
+                  privacy={ {
+                    uuid: state?.connectionHolders?.[0]?.uuid,
+                    fieldName: "ownerType",
+                    model: "User",
+                    hide: !(state?.connectionHolders?.[0]?.ownerType),
+                  }}
+                  />
               </StatusTable>
             </div>
           ) : (
