@@ -132,7 +132,7 @@ definitions:
         readOnly: true
       babyFirstName:
         type: string
-        description: Baby’s namefirst 
+        description: Baby’s first name 
         maxLength: 128
         minLength: 2
       babyLastName:
