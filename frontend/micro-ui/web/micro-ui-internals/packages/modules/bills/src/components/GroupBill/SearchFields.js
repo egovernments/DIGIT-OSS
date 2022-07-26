@@ -69,9 +69,9 @@ const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
     const getLabel = () => {
         const service = serviceCategory?.businesService
         if (service === "WS" || service === "SW" || !service)
-            return <label>{t("ABG_COMMON_TABLE_COL_CONSUMER_ID")}</label>
+            return <label style={{ marginLeft: "-80px", width: "120%" } }>{t("ABG_COMMON_TABLE_COL_CONSUMER_ID")}</label>
         else
-            return <label>{t("ABG_COMMON_TABLE_COL_PROPERTY_ID")}</label>
+            return <label style={{ marginLeft: "-80px", width: "120%" } }>{t("ABG_COMMON_TABLE_COL_PROPERTY_ID")}</label>
     }
 
     const getInputBasedOnServiceCategory = () => {
@@ -116,6 +116,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
                             onBlur={props.onBlur}
                             t={t}
                             selected={props.value}
+                            style={{width:"125%"}}
                         />
                     )}
                 />
@@ -124,7 +125,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
             </SearchField>
 
             <SearchField>
-                <label>
+                <label style={{ width: "125%", marginLeft: "-40px" }}>
                     {`${t("CS_INBOX_LOCALITY_FILTER")} *`}
                 </label>
 
@@ -142,6 +143,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
                             onBlur={props.onBlur}
                             t={t}
                             selected={props.value}
+                            style={{ width: "125%",marginLeft:"-40px" }}
                         />
                     )}
                 />
@@ -150,7 +152,7 @@ const SearchFields = ({ register, control, reset, tenantId, t, formState }) => {
             </SearchField>
             <SearchField>
                 {getLabel()}
-                <TextInput name="consumerCode"
+                <TextInput name="consumerCode" style={{marginLeft:"-80px",width:"120%"}}
                     inputRef={register({})}
                 />
             </SearchField>

@@ -15,35 +15,37 @@ const answerTypeEnum = {
   Time: "TIME_ANSWER_TYPE",
 };
 
-const dropdownOptions = [
-  {
-    title: "Short Answer",
-    value: "SHORT_ANSWER_TYPE",
-  },
-  {
-    title: "Multiple Choice",
-    value: "MULTIPLE_ANSWER_TYPE",
-  },
-  {
-    title: "Check Boxes",
-    value: "CHECKBOX_ANSWER_TYPE",
-  },
-  {
-    title: "Paragraph",
-    value: "LONG_ANSWER_TYPE",
-  },
-  {
-    title: "Date",
-    value: "DATE_ANSWER_TYPE",
-  },
-  {
-    title: "Time",
-    value: "TIME_ANSWER_TYPE",
-  },
-];
 
 const NewSurveyForm = ({ t, index, questionStatement, type, required, options, disableInputs, dispatch, isPartiallyEnabled, addOption, formDisabled, controlSurveyForm }) => {
   
+  const dropdownOptions = [
+    {
+      title: t("Surveys_Short_Answer"),
+      value: "SHORT_ANSWER_TYPE",
+    },
+    {
+      title: t("Surveys_Multiple_Choice"),
+      value: "MULTIPLE_ANSWER_TYPE",
+    },
+    {
+      title: t("Surveys_Check_Boxes"),
+      value: "CHECKBOX_ANSWER_TYPE",
+    },
+    {
+      title: t("Surveys_Paragraph"),
+      value: "LONG_ANSWER_TYPE",
+    },
+    {
+      title: t("Surveys_Date"),
+      value: "DATE_ANSWER_TYPE",
+    },
+    {
+      title: t("Surveys_Time"),
+      value: "TIME_ANSWER_TYPE",
+    },
+  ];
+
+
   const selectedType = dropdownOptions.filter(option => option?.title === type) 
   
   const [surveyQuestionConfig, setSurveyQuestionConfig] = useState({

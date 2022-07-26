@@ -31,6 +31,7 @@ import WSFeeEstimation from "./WSFeeEstimation";
 import WSInfoLabel from "../../../ws/src/pageComponents/WSInfoLabel";
 import DocumentsPreview from "./DocumentsPreview";
 import InfoDetails from "./InfoDetails";
+import ViewBreakup from"./ViewBreakup";
 
 function ApplicationDetailsContent({
   applicationDetails,
@@ -71,15 +72,17 @@ function ApplicationDetailsContent({
       };
       return <TLCaption data={caption} />;
     } else if (window.location.href.includes("/obps/") || window.location.href.includes("/noc/") || window.location.href.includes("/ws/")) {
+      //From BE side assigneeMobileNumber is masked/unmasked with connectionHoldersMobileNumber and not assigneeMobileNumber
+      const privacy = { uuid: checkpoint?.assignes?.[0]?.uuid, fieldName: ["connectionHoldersMobileNumber"], model: "WaterConnectionOwner" }
       const caption = {
         date: checkpoint?.auditDetails?.lastModified,
         name: checkpoint?.assignes?.[0]?.name,
-        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
+        mobileNumber:applicationData?.processInstance?.assignes?.[0]?.uuid===checkpoint?.assignes?.[0]?.uuid && applicationData?.processInstance?.assignes?.[0]?.mobileNumber ? applicationData?.processInstance?.assignes?.[0]?.mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
         wfComment: checkpoint.wfComment,
         thumbnailsToShow: checkpoint?.thumbnailsToShow,
       };
-      return <TLCaption data={caption} OpenImage={OpenImage} />;
+      return <TLCaption data={caption} OpenImage={OpenImage} privacy={privacy} />;
     } else {
       const caption = {
         date: Digit.DateUtils?.ConvertTimestampToDate(applicationData?.auditDetails?.lastModifiedTime),
@@ -333,6 +336,8 @@ function ApplicationDetailsContent({
             </div>
           )}
           {detail?.additionalDetails?.estimationDetails && <WSFeeEstimation wsAdditionalDetails={detail} workflowDetails={workflowDetails}/>}
+          {detail?.additionalDetails?.estimationDetails && <ViewBreakup wsAdditionalDetails={detail} workflowDetails={workflowDetails}/>}
+          
         </React.Fragment>
       ))}
       {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (

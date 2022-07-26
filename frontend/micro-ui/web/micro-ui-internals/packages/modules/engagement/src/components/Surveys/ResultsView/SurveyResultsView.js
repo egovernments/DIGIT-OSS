@@ -190,6 +190,45 @@ const SurveyResultsView = ({surveyInfo,responsesInfoMutation}) => {
     //    const dp = bindQuesWithAns(surveyInfo?.questions,responsesInfoMutation.data.answers);
     //    setData(dp)    
     
+    
+    const generateExcelObj = (ques,ans) => {
+
+        const countResponses = parseInt(ans.length/ques.length)
+        const dp = bindQuesWithAns(surveyInfo?.questions, responsesInfoMutation.data.answers)
+        
+        const result = []
+        //now in a loop fill all the sampleObj (3 times) and use it to download report
+        for(let i=0;i<countResponses;i++){
+            //fill the sampleObj using dp and push into result
+            
+            const sampleObj = {
+                "TimeStamp": ""
+            }
+            ques?.map(q => {
+                sampleObj[q.questionStatement] = ""
+            })
+
+            const qStatements = ques?.map(q=>q.questionStatement) 
+            qStatements?.map(qs=>{
+                const filteredElement = dp?.filter(element => element?.questionStatement === qs)
+                const ansToStore = typeof filteredElement?.[0]?.answers?.[i] === "object" ? (filteredElement?.[0]?.answers?.[i]?.join()?.includes("ul") ? "NA" : filteredElement?.[0]?.answers?.[i]?.join()) : (filteredElement?.[0]?.answers?.[i] === "ul" ? "NA" : (filteredElement?.[0]?.answers?.[i] === "" ? "NA" : filteredElement?.[0]?.answers?.[i]))
+                sampleObj[qs] = ansToStore
+                sampleObj["TimeStamp"] = filteredElement?.[0]?.timeStamp
+            })
+            
+            result.push(sampleObj)
+        }
+        return result
+        
+        
+        
+    }
+
+    const handleReportDownload = () => {
+        const result = generateExcelObj(surveyInfo?.questions, responsesInfoMutation.data.answers)
+        return Digit.Download.Excel(result, responsesInfoMutation.data.title);
+    }
+
     if(!data) return <Loader />
     
     return (
@@ -197,7 +236,7 @@ const SurveyResultsView = ({surveyInfo,responsesInfoMutation}) => {
         <Header>{t("CS_COMMON_SURVEYS")}</Header>
         <MultiLink
                 style={{marginTop:"-45px"}}
-                onHeadClick={() => console.log('')}
+                onHeadClick={() => handleReportDownload()}
                 downloadBtnClassName={"employee-download-btn-className"}
                 label={t("SURVEY_REPORT")}
         />

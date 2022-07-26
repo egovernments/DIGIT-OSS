@@ -89,6 +89,20 @@ const WSAcknowledgement = ({ data, onSuccess, clearParams }) => {
     
   },[data,WSmutation.isSuccess])
 
+  const handleDownloadPdfWater = () => {
+    const WSmutationdata =  WSmutation?.data?.WaterConnection?.[0];
+    const tenantInfo = tenants.find((tenant) => tenant.code === data?.cpt?.details?.tenantId);
+    const data1 = getPDFData({...WSmutationdata},{...data?.cpt?.details},tenantInfo?.code, t);
+      data1.then((ress) => Digit.Utils.pdf.generatev1(ress));
+  };
+
+  const handleDownloadPdfSewerage = () => {
+    const SWmutationdata = SWmutation?.data?.SewerageConnections?.[0];
+    const tenantInfo = tenants.find((tenant) => tenant.code === data?.cpt?.details?.tenantId);
+    const data2 = getPDFData({...SWmutationdata},{...data?.cpt?.details},tenantInfo?.code, t);
+      data2.then((ress) => Digit.Utils.pdf.generatev1(ress));
+  };
+
 
   const handleDownloadPdf = () => {
 
@@ -115,15 +129,12 @@ const WSAcknowledgement = ({ data, onSuccess, clearParams }) => {
     }
   };
 
-
   return (data?.serviceName?.code === "WATER"? WSmutation.isLoading || WSmutation.isIdle : (data?.serviceName?.code === "SEWERAGE") ? SWmutation.isLoading || SWmutation.isIdle : (WSmutation.isLoading || WSmutation.isIdle || SWmutation.isLoading || SWmutation.isIdle)) ? (
     <Loader />
   ) : (
     <Card>
       <BannerPicker t={t} clearParams={clearParams} Waterdata={WSmutation.data } Seweragedata={SWmutation.data} isSuccess={data?.serviceName?.code === "WATER"? WSmutation.isSuccess : SWmutation.isSuccess} isLoading={data?.serviceName?.code === "WATER"? WSmutation.isLoading || WSmutation.isIdle : (data?.serviceName?.code === "SEWERAGE") ? SWmutation.isLoading || SWmutation.isIdle : (WSmutation.isLoading || WSmutation.isIdle || SWmutation.isLoading || SWmutation.isIdle)} />
       {(data?.serviceName?.code === "WATER"? WSmutation.isSuccess : SWmutation.isSuccess) && <CardText>{t("WS_FILE_RESPONSE")}</CardText>}
-      {(!(data?.serviceName?.code === "WATER"? WSmutation.isSuccess : SWmutation.isSuccess)) && <CardText>{t("WS_FILE_TRADE_FAILED_RESPONSE")}</CardText>}
-      {(data?.serviceName?.code === "WATER"? WSmutation.isSuccess : SWmutation.isSuccess) && <SubmitBar label={t("WS_DOWNLOAD_ACK_FORM")} onSubmit={handleDownloadPdf} />}
       {/* {(data?.serviceName?.code === "WATER"? WSmutation.isSuccess : SWmutation.isSuccess) && (
         <LinkButton
           label={
@@ -145,6 +156,34 @@ const WSAcknowledgement = ({ data, onSuccess, clearParams }) => {
       }}>
         <SubmitBar label={t("COMMON_MAKE_PAYMENT")} />
       </Link>} */}
+      {(data?.serviceName?.code === "WATER" || data?.serviceName?.code === "BOTH") && WSmutation.isSuccess && <LinkButton
+      label={
+        <div className="response-download-button">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#f47738">
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+            </svg>
+          </span>
+          <span className="download-button">{t("WS_PRINT_WATER_APPLICATION_LABEL")}</span>
+        </div>
+      }
+      //style={{ width: "100px" }}
+      onClick={handleDownloadPdfWater}
+    />}
+      {(data?.serviceName?.code === "SEWERAGE" || data?.serviceName?.code === "BOTH") && SWmutation.isSuccess && <LinkButton
+      label={
+        <div className="response-download-button">
+          <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#f47738">
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+            </svg>
+          </span>
+          <span className="download-button">{t("WS_PRINT_SEWERAGE_APPLICATION_LABEL")}</span>
+        </div>
+      }
+      //style={{ width: "100px" }}
+      onClick={handleDownloadPdfSewerage}
+    />}
       <Link to={`/digit-ui/citizen`}>
         <LinkButton label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>

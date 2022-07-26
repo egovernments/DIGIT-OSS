@@ -158,7 +158,7 @@ const VendorDetails = (props) => {
         setShowToast({ key: "success", action: selectedAction === "DELETE" ? "DELETE_VENDOR" : selectedAction });
         queryClient.invalidateQueries("DSO_SEARCH");
         setTimeout(() => {
-          closeToast;
+          closeToast();
           if (selectedAction === "DELETE") history.push(`/digit-ui/employee/fsm/registry`);
         }, 5000);
       },
@@ -219,7 +219,7 @@ const VendorDetails = (props) => {
         setShowToast({ key: "success", action: type === "ES_FSM_REGISTRY_DETAILS_TYPE_DRIVER" ? "DELETE_DRIVER" : "DELETE_VEHICLE" });
         queryClient.invalidateQueries("DSO_SEARCH");
         setTimeout(() => {
-          closeToast;
+          closeToast();
         }, 5000);
       },
     });
@@ -304,6 +304,7 @@ const VendorDetails = (props) => {
                             last={index === detail?.values?.length - 1}
                             caption={value.caption}
                             className="border-none"
+                            textStyle={value.value === "ACTIVE" ? { color: "green" } : {}}
                           />
                         ))}
                       </Card>

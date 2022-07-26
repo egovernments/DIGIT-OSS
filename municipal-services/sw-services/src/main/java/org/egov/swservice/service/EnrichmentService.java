@@ -388,7 +388,7 @@ public class EnrichmentService {
 	 * @return
 	 */
 	public List<SewerageConnection> filterConnections(List<SewerageConnection> connectionList) {
-		HashMap<String, Connection> connectionHashMap = new HashMap<>();
+		HashMap<String, Connection> connectionHashMap = new LinkedHashMap<>();
 		connectionList.forEach(connection -> {
 			if (!StringUtils.isEmpty(connection.getConnectionNo())) {
 				if (connectionHashMap.get(connection.getConnectionNo()) == null &&

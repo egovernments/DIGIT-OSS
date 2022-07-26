@@ -63,7 +63,7 @@ const WSResponse = (props) => {
     let result = sewerageApplicationData?.applicationData;
 
     if (sewerageApplicationData?.applicationData?.applicationType?.includes("MODIFY_")) {
-      const PDFdata = getModifyPDFData({ ...oldDataWater?.SewerageConnections?.[0] }, { ...sewerageApplicationData?.propertyDetails }, tenantInfo, t, oldApplicationSew)
+      const PDFdata = getModifyPDFData({ ...oldDataSew?.SewerageConnections?.[0] }, { ...sewerageApplicationData?.propertyDetails }, tenantInfo, t, oldApplicationSew)
       PDFdata.then((ress) => Digit.Utils.pdf.generateModifyPdf(ress))
       return
     }

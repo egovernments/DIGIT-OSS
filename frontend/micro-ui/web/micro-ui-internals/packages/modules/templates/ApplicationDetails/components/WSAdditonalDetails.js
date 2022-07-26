@@ -71,36 +71,15 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
       </div>
     );
   };
-
+  
   const renderWSConnectionDetails = () => {
     return (
       <div className="connection-details-old-value-wrapper">
-        {oldValueData?.connectionType ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.connectionType} />
-        ) : (
-          <div className="old-value-null-wrapper ">{"NA"}</div>
-        )}
-
-        {oldValueData?.noOfTaps ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.noOfTaps} />
-        ) : (
-          <div className="old-value-null-wrapper ">{"NA"}</div>
-        )}
-        {oldValueData?.waterSource ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={t(oldValueData?.waterSource?.toUpperCase()?.split(".")[0])} />
-        ) : (
-          <div className="old-value-null-wrapper ">{"NA"}</div>
-        )}
-        {oldValueData?.pipeSize ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.pipeSize} />
-        ) : (
-          <div className="old-value-null-wrapper ">{"NA"}</div>
-        )}
-        {oldValueData?.waterSource ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={t(oldValueData?.waterSource?.toUpperCase()?.split(".")[1])} />
-        ) : (
-          <div className="old-value-null-wrapper ">{"NA"}</div>
-        )}
+        {oldValueData?.connectionType && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.connectionType} /> )}
+        {oldValueData?.noOfTaps && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.noOfTaps} /> )}
+        {oldValueData?.waterSource && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={t(oldValueData?.waterSource?.toUpperCase()?.split(".")[0])} /> )}
+        {oldValueData?.pipeSize && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.pipeSize} /> )}
+        {oldValueData?.waterSource && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={t(oldValueData?.waterSource?.toUpperCase()?.split(".")[1])} /> )}
       </div>
     );
   };
@@ -173,30 +152,165 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
   const renderWSActivationDetails = () => {
     return (
       <div className="plumber-details-old-value-wrapper">
-        {oldValueData?.meterId ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.meterId} />
-        ) : (
-          <div className="old-value-null-wrapper ">{"NA"}</div>
-        )}
-        {oldValueData?.additionalDetails?.initialMeterReading ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.additionalDetails?.initialMeterReading} />
-        ) : (
-          <div className="old-value-null-wrapper ">{"NA"}</div>
-        )}
-        {oldValueData?.meterInstallationDate ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={convertEpochToDate(oldValueData?.meterInstallationDate)} />
-        ) : (
-          <div className="old-value-null-wrapper ">{"NA"}</div>
-        )}
-        {oldValueData?.connectionExecutionDate ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={convertEpochToDate(oldValueData?.connectionExecutionDate)} />
-        ) : (
-          <div className="old-value-null-wrapper ">{"NA"}</div>
-        )}
+        {oldValueData?.meterId && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.meterId} /> )}
+        {oldValueData?.additionalDetails?.initialMeterReading && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.additionalDetails?.initialMeterReading} /> )}
+        {oldValueData?.meterInstallationDate && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={convertEpochToDate(oldValueData?.meterInstallationDate)} /> )}
+        {oldValueData?.connectionExecutionDate && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={convertEpochToDate(oldValueData?.connectionExecutionDate)} /> )}
       </div>
     );
   };
 
+  var { connectionDetails, plumberDetails, roadCuttingDetails, activationDetails } = wsAdditionalDetails?.additionalDetails || {connectionDetails:[], plumberDetails: []};
+
+  // binding old values with new values
+  if(isModify === "MODIFY"){
+
+    connectionDetails = connectionDetails?.map((value) => {
+      if(value.title == "WS_SERV_DETAIL_CONN_TYPE" && oldValueData?.connectionType) value["oldValue"] = [
+        { value:value?.value, className:"newValue", style:{ display:"inline"} },
+        { 
+          value:`${t("WS_OLD_LABEL_NAME")} ${oldValueData?.connectionType}`, 
+          className:"oldValue", style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}
+        }];
+      if(value.title == "WS_SERV_DETAIL_NO_OF_TAPS" && oldValueData?.noOfTaps) value["oldValue"] = [
+        {value:value?.value,className:"newValue", style:{ display:"inline"}},
+        {value:`${t("WS_OLD_LABEL_NAME")} ${oldValueData?.noOfTaps}`, style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"},className:"oldValue"}
+      ];
+      if(value.title == "WS_SERV_DETAIL_WATER_SOURCE" && oldValueData?.waterSource) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${t(oldValueData?.waterSource?.toUpperCase()?.split(".")[0])}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];
+      if(value.title == "WS_PIPE_SIZE_IN_INCHES_LABEL" && oldValueData?.pipeSize) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.pipeSize}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];    
+      if(value.title == "WS_SERV_DETAIL_WATER_SUB_SOURCE" && oldValueData?.waterSource) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${t(oldValueData?.waterSource?.toUpperCase()?.split(".")[1])}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];
+      if(value.title == "WS_NUMBER_WATER_CLOSETS_LABEL" && oldValueData?.noOfWaterClosets) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.noOfWaterClosets}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];
+      if(value.title == "WS_SERV_DETAIL_NO_OF_TOILETS" && oldValueData?.noOfWaterClosets) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.noOfWaterClosets}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];
+      
+      return value;
+    })
+
+    plumberDetails = plumberDetails?.map((value) => {
+      if(value.title == "WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY" && oldValueData?.additionalDetails?.detailsProvidedBy && oldValueData?.additionalDetails?.detailsProvidedBy !== value.value ) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.additionalDetails?.detailsProvidedBy}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];
+      if(value.title == "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL" && oldValueData?.plumberInfo[0]?.licenseNo ) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.plumberInfo[0]?.licenseNo}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];
+      if(value.title == "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL" && oldValueData?.plumberInfo[0]?.name ) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.plumberInfo[0]?.name}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];
+      if(value.title == "WS_PLUMBER_MOBILE_NO_LABEL" && oldValueData?.plumberInfo[0]?.mobileNumber ) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.plumberInfo[0]?.mobileNumber}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];
+      return value;
+    })
+
+    roadCuttingDetails = roadCuttingDetails?.map((roadDetail) => {
+      const roadDetailValues = roadDetail?.values?.map((value) => {
+        if(value.title == "WS_ADDN_DETAIL_ROAD_TYPE" && oldValueData?.roadCuttingInfo[0]?.roadType) value["oldValue"] = [
+          {value:value?.value, className:"newValue", style:{ display:"inline"}},
+          {
+            value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.roadCuttingInfo[0]?.roadType}`,
+            style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+          }
+        ];
+        if(value.title == "WS_ROAD_CUTTING_AREA_LABEL" && oldValueData?.roadCuttingInfo[0]?.roadCuttingArea) value["oldValue"] = [
+          {value:value?.value, className:"newValue", style:{ display:"inline"}},
+          {
+            value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.roadCuttingInfo[0]?.roadCuttingArea}`,
+            style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+          }
+        ];
+        return value;
+      })
+      return ({...roadDetail,values:roadDetailValues});  
+    })
+
+    activationDetails = activationDetails?.map((value) => {
+      if(value.title == "WS_SERV_DETAIL_CONN_EXECUTION_DATE" && oldValueData?.connectionExecutionDate) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${convertEpochToDate(oldValueData?.connectionExecutionDate)}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];
+
+      if(value.title == "WS_SERV_DETAIL_METER_ID" && oldValueData?.meterId) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.meterId}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];
+
+      if(value.title == "WS_INITIAL_METER_READING_LABEL" && oldValueData?.initialMeterReading) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.initialMeterReading}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];
+
+      if(value.title == "WS_INSTALLATION_DATE_LABEL" && oldValueData?.meterInstallationDate) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${convertEpochToDate(oldValueData?.meterInstallationDate)}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];
+      if(value.title == "WS_SERV_DETAIL_CONN_EXECUTION_DATE" && oldValueData?.connectionExecutionDate) value["oldValue"] = [
+        {value:value?.value, className:"newValue", style:{ display:"inline"}},
+        {
+          value: `${t("WS_OLD_LABEL_NAME")} ${convertEpochToDate(oldValueData?.connectionExecutionDate)}`,
+          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+        }
+      ];      
+      return value;
+    })
+  };
+  
   return (
     <Fragment>
       <div style={{ lineHeight: "19px", maxWidth: "950px", minWidth: "280px" }}>
@@ -205,20 +319,14 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_COMMON_CONNECTION_DETAIL")}</CardSubHeader>
             <div>
               <div className="connection-details-new-value-wrapper">
-                {wsAdditionalDetails?.additionalDetails?.connectionDetails?.map((value, index) => {
+                {connectionDetails?.map((value, index) => {
                   return (
                     <div>
-                      <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />
+                      <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.oldValue ? value?.oldValue: value?.value ? value?.value : ""} />
                     </div>
                   );
                 })}
               </div>
-
-              {serviceType === "SEWERAGE" && isModify === "MODIFY"
-                ? renderSWConnectionDetails()
-                : serviceType === "WATER" && isModify === "MODIFY"
-                ? renderWSConnectionDetails()
-                : null}
             </div>
           </StatusTable>
         )}
@@ -227,15 +335,11 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_COMMON_PLUMBER_DETAILS")}</CardSubHeader>
             <div>
               <div className="plumber-details-new-value-wrapper">
-                {wsAdditionalDetails?.additionalDetails?.plumberDetails?.map((value, index) => {
-                  return <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />;
+
+                {plumberDetails?.map((value, index) => {
+                  return <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.oldValue ? value?.oldValue: value?.value ? value?.value : ""} privacy={value.privacy} />;
                 })}
               </div>
-              {serviceType === "SEWERAGE" && isModify === "MODIFY"
-                ? renderSWPlumberDetails()
-                : serviceType === "WATER" && isModify === "MODIFY"
-                ? renderWSPlumberDetails()
-                : null}
             </div>
           </StatusTable>
         )}
@@ -244,11 +348,10 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_ROAD_CUTTING_DETAILS")}</CardSubHeader>
             <div>
               <div className="plumber-details-new-value-wrapper">
-                {wsAdditionalDetails?.additionalDetails?.roadCuttingDetails?.map((value) => {
+                {roadCuttingDetails?.map((value) => {
                   return (
                     <div
-                      style={
-                        wsAdditionalDetails?.additionalDetails?.roadCuttingDetails?.length > 1
+                      style={ roadCuttingDetails?.length > 1
                           ? {
                               border: "1px solid #D6D5D4",
                               background: "#FAFAFA",
@@ -264,18 +367,13 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
                           className="border-none"
                           key={`${roadValue.title}`}
                           label={`${t(`${roadValue.title}`)}:`}
-                          text={roadValue?.value ? roadValue?.value : ""}
+                          text={roadValue?.oldValue ? roadValue?.oldValue: roadValue?.value ? roadValue?.value : ""}
                         />
                       ))}
                     </div>
                   );
                 })}
-              </div>
-              {serviceType === "SEWERAGE" && isModify === "MODIFY"
-                ? renderSWRoadCuttingDetails()
-                : serviceType === "WATER" && isModify === "MODIFY"
-                ? renderSWRoadCuttingDetails()
-                : null}
+              </div>             
             </div>
           </StatusTable>
         )}
@@ -284,17 +382,12 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
             <CardSubHeader style={cardSubHeaderStyles()}>{t("WS_ACTIVATION_DETAILS")}</CardSubHeader>
             <div>
               <div className="plumber-details-new-value-wrapper">
-                {wsAdditionalDetails?.additionalDetails?.activationDetails?.map((value, index) => {
+                {activationDetails?.map((value, index) => {
                   return (
-                    <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.value ? value?.value : ""} />
+                    <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.oldValue ? value?.oldValue: value?.value ? value?.value : ""} />
                   );
                 })}
-              </div>
-              {serviceType === "SEWERAGE" && isModify === "MODIFY"
-                ? renderSWActivationDetails()
-                : serviceType === "WATER" && isModify === "MODIFY"
-                ? renderWSActivationDetails()
-                : null}
+              </div>              
             </div>
           </StatusTable>
         )}

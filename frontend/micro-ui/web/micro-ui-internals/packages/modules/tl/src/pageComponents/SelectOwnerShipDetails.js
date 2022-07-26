@@ -97,7 +97,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
 
     return (
       <React.Fragment>
-        {!(formData?.tradedetils?.[0]?.structureType?.code === "MOVABLE" && formData?.cpt?.details && (isEmpNewApplication || isEmpRenewLicense)) && <LabelFieldPair>
+        {!(formData?.tradedetils?.[0]?.structureType?.code === "MOVABLE") && formData?.cpt?.details && (isEmpNewApplication || isEmpRenewLicense) && <LabelFieldPair>
         <div className="field">
         <CheckBox
           label={t("TL_COMMON_SAME_AS_PROPERTY_OWNERS")}

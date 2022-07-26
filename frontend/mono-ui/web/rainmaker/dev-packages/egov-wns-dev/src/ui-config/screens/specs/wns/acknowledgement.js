@@ -786,6 +786,8 @@ const screenConfig = {
     }
   },
   beforeInitScreen: (action, state, dispatch) => {
+    localStorage.setItem("WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify({}));
+    localStorage.setItem("IS_WS_ADDITIONAL_DETAILS_FOR_DATA", JSON.stringify(false));
     pageReset(dispatch);
     fetchData(dispatch)
     .then(() => {

@@ -156,10 +156,11 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
           });
         }
       }
-      else if(payload?.SewerageConnections?.sewerage){
+      else if(payload?.SewerageConnection?.sewerage){
         if (sewerageMutation) {
           setIsEnableLoader(true);
           await sewerageMutation(payload, {
+
             onError: (error, variables) => {
               setIsEnableLoader(false);
               setError({ key: "error", message: error?.response?.data?.Errors?.[0].message ? error?.response?.data?.Errors?.[0].message : error });
@@ -167,7 +168,7 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
             },
             onSuccess: async (data, variables) => {
               let response = await updatePayloadOfWSDisconnection(data?.SewerageConnections?.[0], "SEWERAGE");
-              let sewerageConnectionUpdate = { SewerageConnections: response };
+              let sewerageConnectionUpdate = { SewerageConnection: response };
               sewerageConnectionUpdate = {...sewerageConnectionUpdate, disconnectRequest: true};
               await sewerageUpdateMutation(sewerageConnectionUpdate, {
                 onError: (error, variables) => {
@@ -207,7 +208,7 @@ if(userType === 'citizen') {
             <Row key={t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")} label={`${t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")}`} text={applicationData?.connectionNo} className="border-none" />
           </StatusTable> 
           
-          <CardLabel className="card-label-smaller" style={{display: "inline"}}>{t("WS_DISCONNECTION_TYPE")}</CardLabel>
+          <CardLabel className="card-label-smaller" style={{display: "inline"}}>{t("WS_DISCONNECTION_TYPE") + "*"}</CardLabel>
           <RadioButtons
                 t={t}
                 options={disconnectionTypeList}
@@ -219,7 +220,7 @@ if(userType === 'citizen') {
                 labelKey="WS_DISCONNECTION_TYPE"
             />
             <CardLabel className="card-label-smaller" style={{display: "inline"}}>
-            {t("WS_DISCONNECTION_PROPOSED_DATE")}
+            {t("WS_DISCONNECTION_PROPOSED_DATE") + "*"}
             <div className={`tooltip`} style={{position: "absolute"}}>
             <InfoBannerIcon fill="#0b0c0c"/>
             <span className="tooltiptext" style={{
@@ -240,7 +241,7 @@ if(userType === 'citizen') {
           </div>
 
             <LabelFieldPair>
-              <CardLabel className="card-label-smaller" style={{display: "inline"}}>{t("WS_DISCONNECTION_REASON")}</CardLabel>              
+              <CardLabel className="card-label-smaller" style={{display: "inline"}}>{t("WS_DISCONNECTION_REASON")+ "*"}</CardLabel>              
                 <TextArea
                   isMandatory={false}
                   optionKey="i18nKey"
@@ -292,7 +293,7 @@ if(userType === 'citizen') {
         <Row key={t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")} label={`${t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")}`} text={applicationData?.applicationData?.connectionNo} className="border-none" />
       </StatusTable>        
       <CardSectionHeader>
-        {t("WS_DISCONNECTION_TYPE")}
+        {t("WS_DISCONNECTION_TYPE")+ "*"}
             <div className={`tooltip`}>
             <InfoBannerIcon fill="#0b0c0c"/>
             <span className="tooltiptext" style={{
@@ -319,7 +320,7 @@ if(userType === 'citizen') {
           
           <LabelFieldPair>
           <CardLabel style={{ marginTop: "-5px", fontWeight: "700", display: "inline" }} className="card-label-smaller">
-            {t("WS_DISCONNECTION_PROPOSED_DATE")} 
+            {t("WS_DISCONNECTION_PROPOSED_DATE")+ "*"} 
             <div className={`tooltip`} style={{position: "absolute"}}>
             <InfoBannerIcon fill="#0b0c0c"/>
             <span className="tooltiptext" style={{
@@ -353,7 +354,7 @@ if(userType === 'citizen') {
                 />  
                 </div>            
           </LabelFieldPair>
-          <CardSectionHeader style={{ marginBottom: "8px"}}>{t("WS_DISCONNECTION_DOCUMENTS") }</CardSectionHeader>
+          <CardSectionHeader style={{ marginBottom: "8px"}}>{t("WS_DISCONNECTION_DOCUMENTS")+ "*" }</CardSectionHeader>
           {wsDocs?.DisconnectionDocuments?.map((document, index) => { 
                   return (
                     <SelectDocument

@@ -1,15 +1,20 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { TelePhone, DisplayPhotos } from "@egovernments/digit-ui-react-components";
+import { TelePhone, DisplayPhotos, UnMaskComponent } from "@egovernments/digit-ui-react-components";
 import Reason from "./Reason";
 
-const TLCaption = ({ data,OpenImage  }) => {
+const TLCaption = ({ data,OpenImage,privacy={}}) => {
+  
   const { t } = useTranslation();
   return (
     <div>
       {data.date && <p>{data.date}</p>}
       <p>{data.name}</p>
-      {data.mobileNumber && <TelePhone mobile={data.mobileNumber} />}
+      {data.mobileNumber && <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
+        <TelePhone mobile={data.mobileNumber} />
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        <UnMaskComponent privacy={privacy}></UnMaskComponent>
+      </span>}
       {data.source && <p>{t("ES_APPLICATION_DETAILS_APPLICATION_CHANNEL_" + data.source.toUpperCase())}</p>}
       {data.comment && <Reason otherComment={data?.otherComment} headComment={data?.comment}></Reason>}
       {data?.wfComment ? <div>{data?.wfComment?.map( e => 

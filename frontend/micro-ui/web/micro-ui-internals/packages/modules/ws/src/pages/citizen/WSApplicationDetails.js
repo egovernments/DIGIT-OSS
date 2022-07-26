@@ -235,7 +235,7 @@ const WSApplicationDetails = () => {
             <Row
               className="border-none"
               label={t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")}
-              text={paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount ? Number(paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount).toFixed(2) : t("CS_NA")}
+              text={paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount ? Number(paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount).toFixed(2) : t("₹0")}
               textStyle={{ whiteSpace: "pre" }}
             />
             {(data?.WaterConnection?.[0].applicationType === "DISCONNECT_WATER_CONNECTION" || data?.SewerageConnections?.[0].applicationType === "DISCONNECT_WATER_CONNECTION") 
@@ -385,12 +385,6 @@ const WSApplicationDetails = () => {
             <StatusTable>
               <Row
                 className="border-none"
-                label={t("WS_SERV_DETAIL_CONN_TYPE")}
-                text={data?.WaterConnection?.[0]?.connectionType || t("CS_NA")}
-                textStyle={{ whiteSpace: "pre" }}
-              />
-              <Row
-                className="border-none"
                 label={t("WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED")}
                 text={data?.WaterConnection?.[0]?.proposedTaps || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
@@ -399,20 +393,6 @@ const WSApplicationDetails = () => {
                 className="border-none"
                 label={t("WS_SERV_DETAIL_PIPE_SIZE")}
                 text={`${data?.WaterConnection?.[0]?.proposedPipeSize} ${t("WS_INCHES_LABEL")}` || t("CS_NA")}
-                textStyle={{ whiteSpace: "pre" }}
-              />
-              <Row
-                className="border-none"
-                label={t("WS_SERV_DETAIL_WATER_SOURCE")}
-                text={t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.WaterConnection?.[0]?.waterSource?.split(".")?.[0], ".", "_")}`) ||
-                t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.WaterConnection?.[0]?.WaterConnection?.[0]?.waterSource, ".", "_")}`) ||
-                t("CS_NA")}
-                textStyle={{ whiteSpace: "pre" }}
-              />
-              <Row
-                className="border-none"
-                label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")}
-                text={t(data?.WaterConnection?.[0]?.waterSource?.split(".")?.[1]) || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
               />
 

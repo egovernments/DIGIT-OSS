@@ -24,7 +24,7 @@ import getModifyPDFData from "../../utils/getWsAckDataForModifyPdfs"
 import { getFiles, getBusinessService } from "../../utils";
 import _ from "lodash";
 import { ifUserRoleExists } from "../../utils";
-
+import WSInfoLabel from "../../pageComponents/WSInfoLabel";
 const ApplicationDetails = () => {
   const { id } = useParams();
   const { t } = useTranslation();
@@ -47,7 +47,7 @@ const ApplicationDetails = () => {
   sessionStorage.removeItem("IsDetailsExists");
 
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_ADD_REBATE_DATA", {});
-
+  const [sessionBillFormData, setSessionBillFormData, clearBillSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_BILL_ADD_REBATE_DATA", {});
   //for common receipt key.
   const { isBillingServiceLoading, data: mdmsBillingServiceData } = Digit.Hooks.obps.useMDMS(stateCode, "BillingService", ["BusinessService"]);
   const { isCommonmastersLoading, data: mdmsCommonmastersData } = Digit.Hooks.obps.useMDMS(stateCode, "common-masters", ["uiCommonPay"]);
@@ -59,18 +59,21 @@ const ApplicationDetails = () => {
   else commonPayInfo = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
   const receiptKey = commonPayInfo?.receiptKey || "consolidatedreceipt";
   
-  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, applicationNumber, serviceType, userInfo);
+
+  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, applicationNumber, serviceType, userInfo,{ privacy: Digit.Utils.getPrivacyObject() });
+
   let workflowDetails = Digit.Hooks.useWorkflowDetails(
     {
       tenantId: tenantId,
       id: applicationNumber,
       moduleCode: applicationDetails?.processInstancesDetails?.[0]?.businessService,
+      config: {
+        enabled: applicationDetails?.processInstancesDetails?.[0]?.businessService ? true : false,
+        privacy: Digit.Utils.getPrivacyObject()
+      }
     },
-    {
-      enabled: applicationDetails?.processInstancesDetails?.[0]?.businessService ? true : false,
-      privacy: Digit.Utils.getPrivacyObject(),
-    }
   );
+  
 
   const { data: reciept_data, isLoading: recieptDataLoading } = Digit.Hooks.useRecieptSearch(
     {
@@ -79,9 +82,9 @@ const ApplicationDetails = () => {
       consumerCodes: applicationDetails?.applicationData?.applicationNo
     },
     {
-      enabled: applicationDetails?.applicationData?.applicationType?.includes("NEW_"),
-      privacy: Digit.Utils.getPrivacyObject(),
-    }
+      enabled: applicationDetails?.applicationData?.applicationType?.includes("NEW_")?true:false,
+      privacy: Digit.Utils.getPrivacyObject()
+    },
   );
 
   const { data: oldData } = Digit.Hooks.ws.useOldValue({
@@ -90,7 +93,7 @@ const ApplicationDetails = () => {
     businessService: serviceType
   },{
     enabled: applicationDetails?.applicationData?.applicationType?.includes("MODIFY_") ? true : false,
-    privacy: Digit.Utils.getPrivacyObject(),
+    privacy: Digit.Utils.getPrivacyObject()
   });
 
   const oldValueWC = oldData?.WaterConnection;
@@ -114,19 +117,32 @@ const ApplicationDetails = () => {
     mutate,
   } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
 
-  useEffect(() => {
-    clearSessionFormData();
-  }, []);
-
   const clearDataDetails = () => {
     clearSessionFormData();
     setSessionFormData({});
+    setSessionBillFormData({});
+    clearBillSessionFormData()
   }
 
   const closeToast = () => {
     setShowToast(null);
   };
 
+  const checkWSAdditionalDetails = () => {
+    const connectionType = applicationDetails?.applicationData?.connectionType;
+    const noOfTaps = applicationDetails?.applicationData?.noOfTaps === 0 ? null : applicationDetails?.applicationData?.noOfTaps;
+    const pipeSize = applicationDetails?.applicationData?.pipeSize === 0 ? null : applicationDetails?.applicationData?.pipeSize;
+    const waterSource =  applicationDetails?.applicationData?.waterSource;
+    const noOfWaterClosets = applicationDetails?.applicationData?.noOfWaterClosets === 0 ? null : applicationDetails?.applicationData?.noOfWaterClosets;
+    const noOfToilets = applicationDetails?.applicationData?.noOfToilets === 0 ? null : applicationDetails?.applicationData?.noOfToilets;
+    const plumberDetails = applicationDetails?.applicationData?.additionalDetails?.detailsProvidedBy;
+    const roadCuttingInfo = applicationDetails?.applicationData?.roadCuttingInfo;
+
+    if( !connectionType || !((noOfTaps && pipeSize && waterSource) || (noOfWaterClosets && noOfToilets)) || !plumberDetails || !roadCuttingInfo){
+      return false
+    }
+    return true;
+  }
   let dowloadOptions = [],
   appStatus = applicationDetails?.applicationData?.applicationStatus || "";
 
@@ -217,6 +233,19 @@ const ApplicationDetails = () => {
     }
   });
 
+  workflowDetails?.data?.nextActions?.forEach((action) => {
+    if(action?.action === "VERIFY_AND_FORWARD" && appStatus === "PENDING_FOR_FIELD_INSPECTION" && !checkWSAdditionalDetails()){
+      action.isToast = true;
+      action.toastMessage = "MISSING_ADDITIONAL_DETAILS";
+    }
+  });
+
+  workflowDetails?.data?.actionState?.nextActions?.forEach((action) => {
+    if(action?.action === "VERIFY_AND_FORWARD" && appStatus === "PENDING_FOR_FIELD_INSPECTION" && !checkWSAdditionalDetails()){
+      action.isToast = true;
+      action.toastMessage = "MISSING_ADDITIONAL_DETAILS";
+    }
+  });
   workflowDetails?.data?.nextActions?.forEach((action) => {
     if (action?.action === "PAY") {
       action.redirectionUrll = {
@@ -345,6 +374,7 @@ const ApplicationDetails = () => {
             />
           )}
         </div>
+        
         <ApplicationDetailsTemplate
           applicationDetails={applicationDetails}
           isLoading={isLoading || isBillingServiceLoading || isCommonmastersLoading || isServicesMasterLoading }

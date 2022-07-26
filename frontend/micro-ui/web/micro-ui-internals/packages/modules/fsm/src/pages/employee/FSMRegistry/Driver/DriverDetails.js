@@ -176,6 +176,7 @@ const DriverDetails = (props) => {
       },
       onSuccess: (data, variables) => {
         setShowToast({ key: "success", action: "DELETE_VENDOR" });
+        window.location.reload(false);
         queryClient.invalidateQueries("FSM_VENDOR_SEARCH");
         setTimeout(() => {
           closeToast;
@@ -195,7 +196,6 @@ const DriverDetails = (props) => {
         drivers: dsoDetails.drivers ? [...dsoDetails.drivers, driverDetails] : [driverDetails],
       },
     };
-
     mutateVendor(formData, {
       onError: (error, variables) => {
         setShowToast({ key: "error", action: error });
@@ -203,8 +203,11 @@ const DriverDetails = (props) => {
       },
       onSuccess: (data, variables) => {
         setShowToast({ key: "success", action: "ADD_VENDOR" });
-        queryClient.invalidateQueries("FSM_DRIVER_SEARCH");
-        setTimeout(closeToast, 5000);
+        queryClient.invalidateQueries("DSO_SEARCH");
+        setTimeout(() => {
+          closeToast;
+          window.location.reload(false);
+        }, 3000);
       },
     });
     setShowModal(false);

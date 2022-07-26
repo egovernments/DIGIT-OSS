@@ -13,7 +13,7 @@ import { PrivacyMaskIcon } from "..";
  * <UnMaskComponent   privacy={{ uuid: "", fieldName: "name", model: "User" ,hide: false}}   />
  */
 
-const UnMaskComponent = React.memo(({ privacy = {} }) => {
+const UnMaskComponent = React.memo(({ privacy = {}, style = {} }) => {
   const { isLoading, data } = Digit.Hooks.useCustomMDMS(
     Digit.ULBService.getStateId(),
     "DataSecurity",
@@ -34,7 +34,7 @@ const UnMaskComponent = React.memo(({ privacy = {} }) => {
           updatePrivacy(privacy?.uuid, privacy?.fieldName);
         }}
       >
-        <PrivacyMaskIcon className="privacy-icon"></PrivacyMaskIcon>
+        <PrivacyMaskIcon className="privacy-icon" style={style}></PrivacyMaskIcon>
       </span>
     );
   }

@@ -55,33 +55,62 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
           TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` });
         }
       });
+    billingSlabTradeTypeData &&
+    billingSlabTradeTypeData.length > 0 &&
+    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
+        if (!TradeCategoryMenu.some((TradeCategoryMenu) => TradeCategoryMenu.code === `${ob.tradeType.split(".")[0]}`)) {
+          TradeCategoryMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[0]}`, code: `${ob.tradeType.split(".")[0]}` });
+        }
+      });
 
   function getTradeTypeMenu(TradeCategory) {
     let TradeTypeMenu = [];
-    billingSlabTradeTypeData &&
-    billingSlabTradeTypeData.length > 0 &&
-    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
-        if (
-          ob.tradeType.split(".")[0] === TradeCategory.code &&
-          !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.tradeType.split(".")[1]}`)
-        ) {
-          TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[1]}`, code: `${ob.tradeType.split(".")[1]}` });
-        }
-      });
-    return TradeTypeMenu;
+    if(billingSlabTradeTypeData && billingSlabTradeTypeData.length > 0){
+      if(formData?.TradeDetails?.BuildingType){
+        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+          if (
+            ob.tradeType.split(".")[0] === TradeCategory.code &&
+            !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.tradeType.split(".")[1]}`)
+          ) {
+            TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[1]}`, code: `${ob.tradeType.split(".")[1]}` });
+          }
+        });
+        return TradeTypeMenu;
+      }
+      else if(formData?.TradeDetails?.VehicleType){
+        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
+          if (
+            ob.tradeType.split(".")[0] === TradeCategory.code &&
+            !TradeTypeMenu.some((TradeTypeMenu) => TradeTypeMenu.code === `${ob.tradeType.split(".")[1]}`)
+          ) {
+            TradeTypeMenu.push({ i18nKey: `TRADELICENSE_TRADETYPE_${ob.tradeType.split(".")[1]}`, code: `${ob.tradeType.split(".")[1]}` });
+          }
+        });
+        return TradeTypeMenu;
+      }
+    }
   }
 
   function getTradeSubTypeMenu(TradeType) {
     let TradeSubTypeMenu = [];
-    TradeType &&
-    billingSlabTradeTypeData &&
-    billingSlabTradeTypeData.length > 0 &&
-    billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
-        if (ob.tradeType.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.tradeType}`)) {
-          TradeSubTypeMenu.push({ i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` });
-        }
-      });
-    return TradeSubTypeMenu;
+    if(TradeType && billingSlabTradeTypeData && billingSlabTradeTypeData.length > 0){
+      if(formData?.TradeDetails?.BuildingType){
+        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.BuildingType?.code.toString() ).map((ob) => {
+          if (ob.tradeType.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.tradeType}`)) {
+            TradeSubTypeMenu.push({ i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` });
+          }
+        });
+        return TradeSubTypeMenu;
+      }
+      else if(formData?.TradeDetails?.VehicleType){
+        billingSlabTradeTypeData.filter((e) => e.structureType === formData?.TradeDetails?.VehicleType?.code.toString() ).map((ob) => {
+          if (ob.tradeType.split(".")[1] === TradeType.code && !TradeSubTypeMenu.some((TradeSubTypeMenu) => TradeSubTypeMenu.code === `${ob.tradeType}`)) {
+            TradeSubTypeMenu.push({ i18nKey: `TL_${ob.tradeType}`, code: `${ob.tradeType}` });
+          }
+        });
+        return TradeSubTypeMenu;
+      }
+    }
   }
 
   const isUpdateProperty = formData?.isUpdateProperty || false;
@@ -227,7 +256,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
                       t={t}
                       optionKey="i18nKey"
                       isMandatory={config.isMandatory}
-                      option={sortDropdownNames(getTradeSubTypeMenu(field?.tradetype), "i18nKey", t)}
+                      option={getTradeSubTypeMenu(field?.tradetype)}
                       selected={field?.tradesubtype}
                       optionCardStyles={{maxHeight:"125px",overflow:"scroll"}}
                       select={(e) => selectTradeSubType(index, e)}

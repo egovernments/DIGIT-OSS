@@ -25,8 +25,16 @@ const combineResponse = (WaterConnections, properties, billData, t) => {
       ConsumerNumber : app?.connectionNo,
       ConsumerName : app?.connectionHolders ? app?.connectionHolders.map((owner) => owner?.name).join(",") : properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.owners?.map((ow) => ow.name).join(","),
       Address: getAddress((properties.filter((prop) => prop.propertyId === app?.propertyId)[0])?.address, t),
-      AmountDue : billData ? (billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.amount ? billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0].billDetails?.[0]?.amount : "NA")  : "NA",
+      propertyId:app?.propertyId,
+      AmountDue : billData ? (billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.amount ? billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0].billDetails?.[0]?.amount : "0")  : "0",
       DueDate : billData ? getDate(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.expiryDate) : "NA",
+      privacy: {
+        Address: {
+          uuid: properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.propertyId,
+          fieldName: ["doorNo", "street", "landmark"],
+          model: "Property"
+        }
+      }
       }))
     }
     else
@@ -34,7 +42,7 @@ const combineResponse = (WaterConnections, properties, billData, t) => {
 }
 
 const useSewarageSearch = ({tenantId, filters = {}, BusinessService="WS", t}, config = {}) => {
-  const response = useQuery(['WS_SEARCH', tenantId, filters, BusinessService], async () => await WSService.search({tenantId, filters: { ...filters }, businessService:BusinessService})
+  const response = useQuery(['WS_SEARCH', tenantId, filters, BusinessService,config], async () => await WSService.search({tenantId, filters: { ...filters }, businessService:BusinessService})
   , config)
     let propertyids = "";
     let consumercodes = "";
@@ -44,10 +52,10 @@ const useSewarageSearch = ({tenantId, filters = {}, BusinessService="WS", t}, co
   })
     let propertyfilter = { propertyIds : propertyids.substring(0, propertyids.length-1),}
     if(propertyids !== "" && filters?.locality) propertyfilter.locality = filters?.locality;
-    config={enabled:propertyids!==""?true:false}
-  const properties = useQuery(['WSP_SEARCH', tenantId, propertyfilter,BusinessService], async () => await PTService.search({ tenantId, filters:propertyfilter, auth:filters?.locality?false:true })
+    config={...config,enabled:propertyids!==""?true:false}
+  const properties = useQuery(['WSP_SEARCH', tenantId, propertyfilter,BusinessService,config], async () => await PTService.search({ tenantId, filters:propertyfilter, auth:filters?.locality?false:true })
   , config)
-  const billData = useQuery(['BILL_SEARCH', tenantId, consumercodes,BusinessService ], async () => await Digit.PaymentService.fetchBill(tenantId, {
+  const billData = useQuery(['BILL_SEARCH', tenantId, consumercodes,BusinessService,config ], async () => await Digit.PaymentService.fetchBill(tenantId, {
     businessService: BusinessService,
     consumerCode: consumercodes.substring(0, consumercodes.length-2),
   })

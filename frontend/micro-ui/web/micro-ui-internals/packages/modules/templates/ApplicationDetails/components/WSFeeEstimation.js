@@ -2,6 +2,7 @@ import React, { useState, Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardSectionHeader, CardLabel } from "@egovernments/digit-ui-react-components";
 import { Modal, Dropdown, Row, StatusTable, TextInput, Toast } from "@egovernments/digit-ui-react-components";
+import cloneDeep from "lodash/cloneDeep";
 
 const Penality_menu = [
     {
@@ -44,6 +45,7 @@ const Rebate_menu = [
 const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
     const { t } = useTranslation();
     const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_ADD_REBATE_DATA", {});
+    const [sessionBillFormData, setSessionBillFormData, clearBillSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_BILL_ADD_REBATE_DATA", {});
     const isPaid = wsAdditionalDetails?.additionalDetails?.isPaid ? true : false;
     const [popup, showPopUp] = useState(false);
     const [fields, setFields] = useState(sessionFormData ? sessionFormData : {});
@@ -55,7 +57,7 @@ const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
     const { isMdmsLoading, data: mdmsRes } = Digit.Hooks.ws.useMDMS(stateCode, "BillingService", ["TaxHeadMaster"]);
 
     useEffect(() => {
-        const data = { ...wsAdditionalDetails?.additionalDetails?.appDetails?.additionalDetails, ...sessionFormData };
+        const data = { ...wsAdditionalDetails?.additionalDetails?.appDetails?.additionalDetails };
         setSessionFormData(data);
         setFields(data);
         if (sessionFormData?.billDetails?.length > 0) {
@@ -133,12 +135,17 @@ const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
                 let businessService = wsAdditionalDetails?.additionalDetails?.appDetails?.service == "WATER" ? "WS" : "SW";
                 Digit.WSService.wsCalculationEstimate(data, businessService)
                     .then((result, err) => {
+                        if (result?.Calculation?.[0]?.taxHeadEstimates?.length > 0) {
+                            result?.Calculation?.[0]?.taxHeadEstimates?.forEach(data => data.amount = data.estimateAmount);
+                          }
+
                         result.Calculation[0].billSlabData = _.groupBy(result?.Calculation?.[0]?.taxHeadEstimates, 'category');
                         const values = [
                             { title: "WS_APPLICATION_FEE_HEADER", value: result.Calculation?.[0]?.fee },
                             { title: "WS_SERVICE_FEE_HEADER", value: result.Calculation?.[0]?.charge },
                             { title: "WS_TAX_HEADER", value: result.Calculation?.[0]?.taxAmount },
                         ];
+                        setSessionBillFormData(cloneDeep(result.Calculation[0]));
                         setBillDetails(result?.Calculation?.[0]);
                         setValues(values);
                         fields.billDetails = result?.Calculation;
@@ -156,7 +163,14 @@ const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
 
     const selectedValuesData = (value, isDropDownValue = false, e) => {
         let values = { ...fields };
-        if (isDropDownValue) {
+        if((value == "adhocPenalty"||value=="adhocRebate") && e.target.value){
+            const targetValueSign = e?.target?.value ==0 ? 1 : Math.sign(e?.target?.value)||-1;
+            if(targetValueSign == 1){
+                values[value] = e.target.value;
+            }else{
+                values[value] = '';
+            }
+        }else if (isDropDownValue) {
             values[`${value}_data`] = e;
             values[value] = e.title;
             if (e.title == "PT_OTHERS" && value == "adhocPenaltyReason") values[`adhocPenaltyComment`] = "";

@@ -107,7 +107,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
               )}}
             />
             {formErrors && formErrors?.[question.uuid] && formErrors?.[question.uuid]?.type ==="required" && (
-              <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>
+              <CardLabelError style={{marginTop:"20px"}}>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>
             )}
           </>
         );

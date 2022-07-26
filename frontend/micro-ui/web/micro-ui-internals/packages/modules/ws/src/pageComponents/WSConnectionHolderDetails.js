@@ -81,7 +81,7 @@ const WSConnectionHolderDetails = ({ config, onSelect, userType, formData, setEr
   }, [connectionHolderDetails]);
 
   useMemo(() => {
-    if((window.location.href.includes("edit") ||window.location.href.includes("modify")) && formData?.ConnectionHolderDetails && ((connectionHolderDetails?.[0]?.address && formData?.ConnectionHolderDetails?.[0]?.address !== connectionHolderDetails?.[0]?.address) || (connectionHolderDetails?.[0]?.name && formData?.ConnectionHolderDetails?.[0]?.name !== connectionHolderDetails?.[0]?.name) || (connectionHolderDetails?.[0]?.guardian && formData?.ConnectionHolderDetails?.[0]?.guardian !== connectionHolderDetails?.[0]?.guardian)|| (connectionHolderDetails?.[0]?.mobileNumber && formData?.ConnectionHolderDetails?.[0]?.mobileNumber !== connectionHolderDetails?.[0]?.mobileNumber)))
+    if((window.location.href.includes("edit") ||window.location.href.includes("modify")) && formData?.ConnectionHolderDetails && Object.values(formData?.ConnectionHolderDetails)?.length>1 && ((connectionHolderDetails?.[0]?.address && formData?.ConnectionHolderDetails?.[0]?.address !== connectionHolderDetails?.[0]?.address) || (connectionHolderDetails?.[0]?.name && formData?.ConnectionHolderDetails?.[0]?.name !== connectionHolderDetails?.[0]?.name) || (connectionHolderDetails?.[0]?.guardian && formData?.ConnectionHolderDetails?.[0]?.guardian !== connectionHolderDetails?.[0]?.guardian)|| (connectionHolderDetails?.[0]?.mobileNumber && formData?.ConnectionHolderDetails?.[0]?.mobileNumber !== connectionHolderDetails?.[0]?.mobileNumber)))
     { 
     window.location.reload();
     }
@@ -255,7 +255,7 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Name").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight:"-20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "name"}
@@ -315,7 +315,7 @@ const ConnectionDetails = (_props) => {
               //type="number"
               isMandatory={true}
               render={(props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight:"-20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   //type="number"
                   value={props.value}
@@ -348,7 +348,7 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Name").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight:"-20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "guardian"}
@@ -407,7 +407,7 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Address").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
-                <div style={{display:"flex",alignItems:"baseline",marginRight:"-20px"}}>
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "address"}
