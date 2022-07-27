@@ -143,6 +143,6 @@ const FSMCard = () => {
       ]
     }
 
-  return <EmployeeModuleCard {...propsForModuleCard} />
+  return <EmployeeModuleCard {...propsForModuleCard} FsmHideCount={true}/>
 };
 export default FSMCard;
