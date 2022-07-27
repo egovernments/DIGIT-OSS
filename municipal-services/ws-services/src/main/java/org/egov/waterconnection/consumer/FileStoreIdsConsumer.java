@@ -5,7 +5,6 @@ import java.util.HashMap;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
 import org.egov.waterconnection.service.PdfFileStoreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -17,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@Lazy
 public class FileStoreIdsConsumer {
 
 	@Autowired

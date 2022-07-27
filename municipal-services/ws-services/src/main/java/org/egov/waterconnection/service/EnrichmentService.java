@@ -25,6 +25,7 @@ import org.egov.waterconnection.web.models.users.UserSearchRequest;
 import org.egov.waterconnection.web.models.workflow.ProcessInstance;
 import org.egov.waterconnection.workflow.WorkflowService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -51,12 +52,14 @@ public class EnrichmentService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	@Lazy
 	@Autowired
 	private WaterDaoImpl waterDao;
 
 	@Autowired
 	private UserService userService;
 
+	@Lazy
 	@Autowired
 	private WaterServiceImpl waterService;
 
