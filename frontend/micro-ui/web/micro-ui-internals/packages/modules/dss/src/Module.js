@@ -24,7 +24,7 @@ const DssBreadCrumb = ({ location }) => {
     {
       path: checkCurrentScreen() || window.location.href.includes("NURT_DASHBOARD") ? "/digit-ui/employee/dss/landing/NURT_DASHBOARD" : "/digit-ui/employee/dss/landing/home",
       content: t("ES_LANDING_PAGE"),
-      show: location.pathname.includes("national-faqs")||location.pathname.includes("national-about")  ? false : true,
+      show: true,
     },
     {
       path: fromModule?`/digit-ui/employee/dss/dashboard/${fromModule}`:`/digit-ui/employee/dss/dashboard/${Digit.Utils.dss.getCurrentModuleName()}`,
