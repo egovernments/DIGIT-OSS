@@ -6,6 +6,7 @@ import {
   addSeconds,
   differenceInDays,
   endOfMonth,
+  endOfDay,
   endOfQuarter,
   endOfToday,
   endOfWeek,
@@ -155,7 +156,8 @@ const DateRange = ({ values, onFilterChange, t }) => {
   };
 
   const handleSelect = (ranges, e) => {
-    const { range1: selection } = ranges;
+    let { range1: selection } = ranges;
+    selection = { ...selection, endDate: endOfDay(selection?.endDate) };
     const { startDate, endDate, title, interval } = selection;
     if (
       staticRanges.some((range) => {
@@ -168,7 +170,7 @@ const DateRange = ({ values, onFilterChange, t }) => {
     } else if (isStartDateFocused(focusedRange[1])) {
       setSelectionRange(selection);
     } else if (isEndDateFocused(focusedRange[1])) {
-      setSelectionRange({ title, interval, startDate, endDate: addSeconds(addMinutes(addHours(endDate, 23), 59), 59) });
+      setSelectionRange({ title, interval, startDate, endDate: endDate });
       setIsModalOpen(false);
     }
   };
