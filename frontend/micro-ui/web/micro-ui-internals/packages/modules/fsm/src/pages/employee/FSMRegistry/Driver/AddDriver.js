@@ -16,13 +16,9 @@ const AddDriver = ({ parentUrl, heading }) => {
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
 
-  const {
-    isLoading: isLoading,
-    isError: vendorCreateError,
-    data: updateResponse,
-    error: updateError,
-    mutate,
-  } = Digit.Hooks.fsm.useDriverCreate(tenantId);
+  const { isLoading: isLoading, isError: vendorCreateError, data: updateResponse, error: updateError, mutate } = Digit.Hooks.fsm.useDriverCreate(
+    tenantId
+  );
 
   useEffect(() => {
     setMutationHappened(false);
@@ -32,7 +28,7 @@ const AddDriver = ({ parentUrl, heading }) => {
 
   const { t } = useTranslation();
 
-  const Config = DriverConfig(t)
+  const Config = DriverConfig(t);
 
   const [canSubmit, setSubmitValve] = useState(false);
 
@@ -45,11 +41,7 @@ const AddDriver = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-    if (
-      formData?.driverName &&
-      formData?.phone &&
-      formData?.selectGender
-    ) {
+    if (formData?.driverName && formData?.phone && formData?.selectGender) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
@@ -66,7 +58,7 @@ const AddDriver = ({ parentUrl, heading }) => {
     const gender = data?.selectGender?.code;
     const emailId = data?.emailId;
     const phone = data?.phone;
-    const dob = new Date(`${data.dob}`).getTime();
+    const dob = new Date(`${data.dob}`).getTime() || new Date(`1/1/1970`).getTime();
     const additionalDetails = data?.additionalDetails;
     const formData = {
       driver: {
@@ -82,11 +74,11 @@ const AddDriver = ({ parentUrl, heading }) => {
           relationship: "OTHER",
           gender: gender,
           dob: dob,
-          emailId: emailId || 'abc@egov.com',
-          mobileNumber: phone
+          emailId: emailId || "abc@egov.com",
+          mobileNumber: phone,
         },
-        vendorDriverStatus: "INACTIVE"
-      }
+        vendorDriverStatus: "INACTIVE",
+      },
     };
 
     mutate(formData, {
@@ -95,7 +87,7 @@ const AddDriver = ({ parentUrl, heading }) => {
         setTimeout(closeToast, 5000);
       },
       onSuccess: (data, variables) => {
-        setShowToast({ key: "success", action: 'ADD_DRIVER' });
+        setShowToast({ key: "success", action: "ADD_DRIVER" });
         setTimeout(closeToast, 5000);
         queryClient.invalidateQueries("FSM_DRIVER_SEARCH");
         setTimeout(() => {
