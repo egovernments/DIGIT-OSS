@@ -285,10 +285,10 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
         }
       ];
 
-      if(value.title == "WS_INITIAL_METER_READING_LABEL" && oldValueData?.initialMeterReading) value["oldValue"] = [
+      if(value.title == "WS_INITIAL_METER_READING_LABEL" && oldValueData?.additionalDetails) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
-          value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.initialMeterReading}`,
+          value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.initialMeterReading?oldValueData?.initialMeterReading:oldValueData?.additionalDetails?.initialMeterReading}`,
           style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
         }
       ];
