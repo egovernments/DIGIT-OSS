@@ -8,7 +8,7 @@ import { SuccessfulPayment, FailedPayment } from "./response";
 import { testForm } from "../../hoc/testForm-config";
 import { subFormRegistry } from "@egovernments/digit-ui-libraries";
 import { useTranslation } from "react-i18next";
-import IFrameInterface from "./IFrameInterface"
+import IFrameInterface from "./IFrameInterface";
 
 subFormRegistry.addSubForm("testForm", testForm);
 
@@ -22,10 +22,13 @@ const EmployeePayment = ({ stateCode, cityCode, moduleCode }) => {
 
   const commonProps = { stateCode, cityCode, moduleCode, setLink };
 
+  const isFsm = location?.pathname?.includes("fsm") || location?.pathname?.includes("FSM");
+
   return (
     <React.Fragment>
-      <p className="breadcrumb" style={{"marginLeft":"15px"}}>
-        <Link to={`/digit-ui/employee`}>{t("ES_COMMON_HOME")}</Link>/{link}
+      <p className="breadcrumb" style={{ marginLeft: "15px" }}>
+        <Link to={`/digit-ui/employee`}>{t("ES_COMMON_HOME")}</Link>
+        {isFsm ? <Link to={`/digit-ui/employee/fsm/inbox`}>/ {t("ES_TITLE_INBOX")}</Link> : null}/ {link}
       </p>
       <Switch>
         <Route path={`${currentPath}/collect/:businessService/:consumerCode`}>
@@ -34,7 +37,7 @@ const EmployeePayment = ({ stateCode, cityCode, moduleCode }) => {
         <Route path={`${currentPath}/success/:businessService/:receiptNumber/:consumerCode`}>
           <SuccessfulPayment {...commonProps} />
         </Route>
-          <Route path={`${currentPath}/integration/:moduleName/:pageName`}>
+        <Route path={`${currentPath}/integration/:moduleName/:pageName`}>
           <IFrameInterface {...commonProps} />
         </Route>
         <Route path={`${currentPath}/failure`}>

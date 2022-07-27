@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { ArrowRightInbox } from "./svgindex";
 import { Link } from "react-router-dom";
 
-const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen = false, className, styles }) => {
+const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen = false, className, styles, FsmHideCount }) => {
   return (
     <div className={className ? className : "employeeCard card-home customEmployeeCard"} style={styles ? styles : {}}>
       <div className="complaint-links-container">
@@ -35,7 +35,7 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen
                 {link ? <Link to={link}>{label}</Link> : null}
                 {count ? (
                   <>
-                    <span className={"inbox-total"}>{count || "-"}</span>
+                    {FsmHideCount ? null : <span className={"inbox-total"}>{count || "-"}</span>}
                     <Link to={link}>
                       <ArrowRightInbox />
                     </Link>
@@ -50,7 +50,7 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen
   );
 };
 
-const ModuleCardFullWidth = ({ moduleName,  links = [], isCitizen = false, className, styles, headerStyle, subHeader, subHeaderLink }) => {
+const ModuleCardFullWidth = ({ moduleName, links = [], isCitizen = false, className, styles, headerStyle, subHeader, subHeaderLink }) => {
   return (
     <div className={className ? className : "employeeCard card-home customEmployeeCard"} style={styles ? styles : {}}>
       <div className="complaint-links-container" style={{ padding: "10px" }}>
@@ -72,7 +72,7 @@ const ModuleCardFullWidth = ({ moduleName,  links = [], isCitizen = false, class
           <div className="links-wrapper" style={{ width: "100%", display: "flex", flexWrap: "wrap" }}>
             {links.map(({ count, label, link }, index) => (
               <span className="link full-employee-card-link" key={index}>
-                {link ? (link?.includes('digit-ui/')?<Link to={link}>{label}</Link>:<a href={link}>{label}</a>) : null}
+                {link ? link?.includes("digit-ui/") ? <Link to={link}>{label}</Link> : <a href={link}>{label}</a> : null}
               </span>
             ))}
           </div>
