@@ -111,13 +111,13 @@ export const PTSearch = {
           },
           { title: "PT_PROPERTY_ADDRESS_STREET_NAME", value: response?.address?.street,
           privacy:{ 
-            uuid: property?.propertyId,
+            uuid: response?.propertyId,
             fieldName: "street",
             model: "Property",
           } },
           { title: "PT_PROPERTY_ADDRESS_HOUSE_NO", value: response?.address?.doorNo,
           privacy:{ 
-            uuid: property?.propertyId,
+            uuid: response?.propertyId,
             fieldName: "doorNo",
             model: "Property",
           }  },

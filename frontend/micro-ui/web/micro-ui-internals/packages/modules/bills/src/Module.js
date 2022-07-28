@@ -21,7 +21,8 @@ import CancelBills from "./components/CancelBill";
 import GroupBills from "./components/GroupBill"; 
 
 export const BillsModule = ({ stateCode, userType, tenants }) => {
-  const moduleCode = "abg";
+  const tenantId =  Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || Digit.ULBService.getCurrentTenantId();
+  const moduleCode = ["abg",tenantId];
 
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
