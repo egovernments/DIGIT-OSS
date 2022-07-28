@@ -2,8 +2,8 @@ import { handleScreenConfigurationFieldChange as handleField, prepareFinalObject
 import { disableFieldAndShowSpinner, enableFieldAndHideSpinner, getTransformedLocale, transformById } from "egov-ui-framework/ui-utils/commons";
 import { getLocalization, getTenantId } from "egov-ui-kit/utils/localStorageUtils";
 import get from "lodash/get";
-import { getPaymentSearchResults } from "../../../../../ui-utils/commons";
-import { convertEpochToDate, getTextToLocalMapping, validateFields } from "../../utils";
+import { getPaymentSearchResults, getPropertySearchResults} from "../../../../../ui-utils/commons";
+import { convertEpochToDate, getTextToLocalMapping, validateFields,  } from "../../utils";
 
 const localizationLabels = JSON.parse(getLocalization("localization_en_IN"));
 const transfomedKeys = transformById(localizationLabels, "code");
@@ -24,6 +24,21 @@ export const searchApiCall = async (state, dispatch) => {
     "searchScreen",
     {}
   );
+ let workflowProperties = [];
+
+  if(searchScreenObject.mobileNumber)
+  {
+  let queryObject2 = [
+    {
+      key: "tenantId",
+      value: tenantId
+    },
+    { key: "mobileNumber", value: searchScreenObject.mobileNumber }
+  ];
+  const result = await getPropertySearchResults(queryObject2);
+   workflowProperties = result.Properties.filter(element=>
+    element.status==="INWORKFLOW")
+}
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children",
     state,
@@ -73,7 +88,7 @@ export const searchApiCall = async (state, dispatch) => {
     const responseFromAPI = await getPaymentSearchResults(queryObject, dispatch);
     dispatch(prepareFinalObject("receiptSearchResponse", responseFromAPI));
     const Payments = (responseFromAPI && responseFromAPI.Payments) || [];
-    const response = [];
+    let response = [];
     for (let i = 0; i < Payments.length; i++) {
       const serviceTypeLabel = getTransformedLocale(
         get(Payments[i], `paymentDetails[0].bill.businessService`)
@@ -96,15 +111,43 @@ export const searchApiCall = async (state, dispatch) => {
     uiConfigs.map(uiConfig=>{
       convertedConfig[uiConfig.code]={...uiConfig}
     })
+    let filetedresult = [];
+    if(searchScreenObject.mobileNumber && workflowProperties)
+    {    
+    let  results1 = response.filter(({ amount: id1 }) => workflowProperties.some(({ propertyId: id2 }) => id2 === id1));
+    let  results2 = response.filter(({ amount: id1 }) => !results1.some(({ amount: id2 }) => id1 === id2));
+     
+    for(let i=0;i<results1.length;i++)
+     {
+      results1[i].propertystatus = "INWORKFLOW"
+     }
+     for(let i=0;i<results2.length;i++)
+     {
+      results2[i].propertystatus = "ACTIVE"
+     } 
+     filetedresult = [...results1, ...results2 ];   
+}  
+
+    if(searchScreenObject.receiptNumbers)
+    {
+      /* let queryObject3 = [
+        {
+          key: "tenantId",
+          value: tenantId
+        },
+        { key: "propertyIds", value: filetedresult && filetedresult[0].amount }
+      ];
+      const result = await getPropertySearchResults(queryObject3);
+ */    }
     try {
-      let data = response.map(item => ({
+      let data = filetedresult.map(item => ({
         ['CR_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
         ['CR_COMMON_TABLE_COL_PAYEE_NAME']: item.payeeName || "-",
         ['CR_SERVICE_TYPE_LABEL']: getTextToLocalMapping(`BILLINGSERVICE_BUSINESSSERVICE_${item.serviceType}`) || "-",
         ['CR_COMMON_TABLE_COL_DATE']: convertEpochToDate(item.receiptdate) || "-",
         ['CR_COMMON_TABLE_CONSUMERCODE']: item.amount || "-",
         ['CR_COMMON_TABLE_COL_STATUS']: item.status || "-",
-        ['CR_COMMON_TABLE_ACTION']:(item.status!=="CANCELLED" && item.paymentMode!=="ONLINE") &&(item.instrumentStatus="APPROVED"||item.instrumentStatus=="REMITTED")&&(convertedConfig[item.businessService]?convertedConfig[item.businessService].cancelReceipt:convertedConfig['DEFAULT'].cancelReceipt)? "CANCEL":"NA",
+        ['CR_COMMON_TABLE_ACTION']:item.propertystatus==='ACTIVE'?((item.status!=="CANCELLED" && item.paymentMode!=="ONLINE") &&(item.instrumentStatus="APPROVED"||item.instrumentStatus=="REMITTED")&&(convertedConfig[item.businessService]?convertedConfig[item.businessService].cancelReceipt:convertedConfig['DEFAULT'].cancelReceipt)? "CANCEL":"NA"):"INWORKFLOW",
         ["RECEIPT_KEY"]: get(uiConfigs.filter(item => item.code === item.businessService), "0.receiptKey", "consolidatedreceipt"),
         ["TENANT_ID"]: item.tenantId || "-",
         ["SERVICE_TYPE"]: item.serviceType

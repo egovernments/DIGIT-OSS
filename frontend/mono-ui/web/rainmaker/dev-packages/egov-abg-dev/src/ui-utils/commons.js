@@ -584,3 +584,28 @@ export const findItemInArrayOfObject = (arr, conditionCheckerFn) => {
     }
   }
 };
+
+export const getPropertySearchResults = async (queryObject, requestBody) => {
+  try {
+    store.dispatch(toggleSpinner());
+    const response = await httpRequest(
+      "post",
+      "/property-services/property/_search",
+      "",
+      queryObject,
+      requestBody
+    );
+    store.dispatch(toggleSpinner());
+    return response;
+  } catch (error) {
+    store.dispatch(toggleSpinner());
+    store.dispatch(
+      toggleSnackbar(
+        true,
+        { labelName: error.message, labelKey: error.message },
+        "error"
+      )
+    );
+    throw error;
+  }
+};
