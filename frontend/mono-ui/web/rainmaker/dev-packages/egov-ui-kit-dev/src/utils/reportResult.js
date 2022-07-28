@@ -475,10 +475,10 @@ class ShowField extends Component {
           doc.content[0].text.push({ text: "mSeva System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
           if (doc.content[1] && !doc.content[2]) {
-            doc.content[1].margin = reportHeader.length > 6 ? null : [60, 10, 10, 12];
+            doc.content[1].margin = reportHeader.length > 6 ? null :reportHeader.length <3?[180, 10, 10, 12]: [60, 10, 10, 12];
           } else if (doc.content[1] && doc.content[2]) {
             doc.content[1].margin = reportHeader.length > 6 ? [380, 10, 10, 12] : [180, 10, 10, 12];
-            doc.content[2].margin = reportHeader.length > 6 ? null : [60, 10, 10, 12];
+            doc.content[2].margin = reportHeader.length > 6 ? null : reportHeader.length <3?[180, 10, 10, 12]: [60, 10, 10, 12];
           }
           if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
             const pdfData = pdfMake.createPdf(doc);
