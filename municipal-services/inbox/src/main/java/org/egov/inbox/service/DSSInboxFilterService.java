@@ -59,7 +59,8 @@ public class DSSInboxFilterService {
             aggRequest.setHeaders(headers);
 
             //mdms cala to fetch aggregation data
-            Object mdmsData = mdmsCall(request);
+            String tenantId = request.getTenantId().split("\\.")[0];
+            Object mdmsData = mdmsCall(tenantId, AGGREGATE_MASTER_CODE);
             List<Map> aggregationData = JsonPath.read(mdmsData, MDMS_AGGREGATE_PATH);
 
             aggregationData.forEach(aggData -> {
@@ -95,17 +96,17 @@ public class DSSInboxFilterService {
         return result;
     }
 
-    private Object mdmsCall(InboxMetricCriteria request) {
-        MdmsCriteriaReq mdmsCriteriaReq = enrichMdmsRequest(request);
+    public Object mdmsCall(String tenantId, String mastername) {
+        MdmsCriteriaReq mdmsCriteriaReq = enrichMdmsRequest(tenantId, mastername);
         StringBuilder url = new StringBuilder(config.getMdmsHost()).append(config.getMdmsSearchEndPoint());
         Object result = serviceRequestRepository.fetchResult(url,mdmsCriteriaReq);
         return result;
     }
 
-    private MdmsCriteriaReq enrichMdmsRequest(InboxMetricCriteria request) {
+    public MdmsCriteriaReq enrichMdmsRequest(String tenantId, String mastername) {
         List<MasterDetail> aggregateMasterDetails = new ArrayList<>();
 
-        aggregateMasterDetails.add(MasterDetail.builder().name(AGGREGATE_MASTER_CODE).build());
+        aggregateMasterDetails.add(MasterDetail.builder().name(mastername).build());
 
         ModuleDetail aggregateModuleDtls = ModuleDetail.builder().masterDetails(aggregateMasterDetails)
                 .moduleName(AGGREGATE_MODULE_NAME).build();
@@ -113,7 +114,7 @@ public class DSSInboxFilterService {
         List<ModuleDetail> moduleDetails = new ArrayList<>();
         moduleDetails.add(aggregateModuleDtls);
 
-        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(moduleDetails).tenantId(request.getTenantId().split("\\.")[0])
+        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(moduleDetails).tenantId(tenantId)
                 .build();
 
         return MdmsCriteriaReq.builder().requestInfo(new RequestInfo()).mdmsCriteria(mdmsCriteria).build();
