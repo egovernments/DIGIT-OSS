@@ -9,6 +9,7 @@ import { convertApplicationData, convertEditApplicationDetails } from "../../../
 import cloneDeep from "lodash/cloneDeep";
 
 const convertEditApplicationDetails1 = (data, appData, serviceType) => {
+  console.log("payload112",data,appData)
   data?.cpt?.details?.owners?.forEach(owner => {
     if (owner?.permanentAddress) owner.correspondenceAddress = owner?.permanentAddress
   });
@@ -197,7 +198,7 @@ const WSEditApplicationByConfig = () => {
       <FormComposer
         config={config.body}
         userType={"employee"}
-        onFormValueChange={onFormValueChange}
+        // onFormValueChange={onFormValueChange}
         isDisabled={!canSubmit}
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}

@@ -4,16 +4,18 @@ import { Header, MultiLink } from "@egovernments/digit-ui-react-components";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
 import * as func from "../../utils";
 import cloneDeep from "lodash/cloneDeep";
+import { ifUserRoleExists } from "../../utils";
 
 const GetDisconnectionDetails = () => {
   const { t } = useTranslation();
   let filters = func.getQueryStringParams(location.search);
   const [showOptions, setShowOptions] = useState(false);
   const [showToast, setShowToast] = useState(null);
-
+  const stateCode = Digit.ULBService.getStateId();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const applicationNumber = filters?.applicationNumber;
   const serviceType = filters?.service;
+  const { isServicesMasterLoading, data: servicesMasterData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["WSEditApplicationByConfigUser"]);
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useDisConnectionDetails(t, tenantId, applicationNumber, serviceType);
 
@@ -41,6 +43,9 @@ const GetDisconnectionDetails = () => {
     // setError(null);
   };
 
+  let dowloadOptions = [],
+  appStatus = applicationDetails?.applicationData?.applicationStatus || "";
+
   const mobileView = Digit.Utils.browser.isMobile();
 
   if ( 
@@ -58,7 +63,8 @@ const GetDisconnectionDetails = () => {
   }
 
   workflowDetails?.data?.actionState?.nextActions?.forEach((action) => {
-    if (action?.action === "EDIT") {
+    // if (action?.action === "EDIT") {
+    if (action?.action === "RESUBMIT_APPLICATION") {
       let pathName = `/digit-ui/employee/ws/edit-disconnection-application?applicationNumber=${applicationNumber}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}`;
 
       const userConfig = servicesMasterData?.["ws-services-masters"]?.WSEditApplicationByConfigUser || [];
@@ -126,8 +132,6 @@ const GetDisconnectionDetails = () => {
     const dataList = nxtActions?.filter(action => action?.action != "EDIT");
     workflowDetails.data.actionState.nextActions = dataList;
   }
-
-  let dowloadOptions = [];
 
   return (
     <Fragment>

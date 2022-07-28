@@ -74,12 +74,12 @@ const WSEditDisConnectionDetails = ({ config, onSelect, userType, formData, setE
 
     useEffect(() => {
         if (userType === "employee") {
-            onSelect(config.key, { ...formData[config.key], ...connectionDetails });
+            onSelect(config.key, { ...formData[config.key], ...disconnectionData });
         }
         if (connectionDetails?.[0]?.water) setWaterSewarageSelection({ water: true, sewerage: false })
 
         if (connectionDetails?.[0]?.sewerage) setWaterSewarageSelection({ water: false, sewerage: true })
-    }, [connectionDetails]);
+    }, [disconnectionData]);
 
     useEffect(() => {
         if (!formData?.ConnectionDetails) {
@@ -236,29 +236,6 @@ const ConnectionDetails = (_props) => {
                         labelKey="WS_DISCONNECTION_TYPE"
                         style={{display: "flex", gap: "0px 3rem"}}
                     />
-                    {/* <div className="field">
-                        <Controller
-                            control={control}
-                            name="applicationNo"
-                            defaultValue={connectionDetail?.applicationNo}
-                            isMandatory={true}
-                            render={(props) => (
-                                <TextInput
-                                    value={props.value}
-                                    autoFocus={focusIndex.index === connectionDetail?.key && focusIndex.type === "applicationNo"}
-                                    errorStyle={(localFormState.touched.applicationNo && errors?.applicationNo?.message) ? true : false}
-                                    onChange={(e) => {
-                                        props.onChange(e.target.value);
-                                        setFocusIndex({ index: connectionDetail?.key, type: "applicationNo" });
-                                    }}
-                                    labelStyle={{ marginTop: "unset" }}
-                                    onBlur={props.onBlur}
-                                    disabled={true}
-                                    disable={true}
-                                />
-                            )}
-                        />
-                    </div> */}
                 </LabelFieldPair>
                 <LabelFieldPair>
                     <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_DISCONECTION_DATE")}:`}</CardLabel>
@@ -269,21 +246,8 @@ const ConnectionDetails = (_props) => {
                             defaultValue={disconnectionData?.date}
                             isMandatory={true}
                             render={(props) => (
-                                // <TextInput
-                                //     value={props.value}
-                                //     autoFocus={focusIndex.index === connectionDetail?.key && focusIndex.type === "serviceName"}
-                                //     errorStyle={(localFormState.touched.serviceName && errors?.serviceName?.message) ? true : false}
-                                //     onChange={(e) => {
-                                //         props.onChange(e.target.value);
-                                //         setFocusIndex({ index: connectionDetail?.key, type: "serviceName" });
-                                //     }}
-                                //     labelStyle={{ marginTop: "unset" }}
-                                //     onBlur={props.onBlur}
-                                //     disabled={true}
-                                //     disable={true}
-                                // />
                                 <DatePicker
-                                    date={props?.date}
+                                    date={disconnectionData?.date}
                                     autoFocus={focusIndex.index === connectionDetail?.key && focusIndex.type === "datePicker"}
                                     onChange={(date) => {
                                       setDisconnectionData({ ...disconnectionData, date: date });
@@ -305,20 +269,6 @@ const ConnectionDetails = (_props) => {
                             defaultValue={disconnectionData.reason?.value}
                             isMandatory={true}
                             render={(props) => (
-                                // <TextInput
-                                //     value={props.value}
-                                //     autoFocus={focusIndex.index === connectionDetail?.key && focusIndex.type === "serviceName"}
-                                //     errorStyle={(localFormState.touched.serviceName && errors?.serviceName?.message) ? true : false}
-                                //     onChange={(e) => {
-                                //         props.onChange(e.target.value);
-                                //         setFocusIndex({ index: connectionDetail?.key, type: "serviceName" });
-                                //     }}
-                                //     labelStyle={{ marginTop: "unset" }}
-                                //     onBlur={props.onBlur}
-                                //     disabled={true}
-                                //     disable={true}
-                                // />
-
                                 <TextArea
                                     isMandatory={false}
                                     optionKey="i18nKey"
