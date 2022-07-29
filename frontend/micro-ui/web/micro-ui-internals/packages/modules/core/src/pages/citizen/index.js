@@ -16,6 +16,7 @@ import ErrorComponent from "../../components/ErrorComponent";
 import FAQsSection from "./FAQs/FAQs";
 import HowItWorks from "./HowItWorks/howItWorks";
 import StaticDynamicCard from "./StaticDynamicComponent/StaticDynamicCard";
+import FeedBack from "../../components/Feedback";
 
 const sidebarHiddenFor = [
   "digit-ui/citizen/register/name",
@@ -219,6 +220,7 @@ const Home = ({
           </ErrorBoundary>
         </Switch>
       </div>
+      <FeedBack/>  
       <div className="citizen-home-footer" style={window.location.href.includes("citizen/obps") ? { zIndex: "-1" } : {}}>
         <img
           alt="Powered by DIGIT"

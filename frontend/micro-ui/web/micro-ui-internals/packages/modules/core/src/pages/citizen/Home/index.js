@@ -169,7 +169,7 @@ const Home = () => {
             </div>
           )
         ) : null}
-         <div style={{ color: '#F47738', marginLeft: '10px' }} onClick={() => history.push("/digit-ui/citizen/cf-home")}>Having an issue/Feedback for us?</div>
+         <div style={{display:"flex",cursor:"pointer", color: '#F47738', marginLeft: '10px' }} onClick={() => history.push("/digit-ui/citizen/cf-home")}>Having an issue/Feedback for us?</div>
 
       </div>
     </div>
