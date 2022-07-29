@@ -281,4 +281,7 @@ public class WCConstants {
 
 	public static final String PENDING_FOR_PAYMENT_STATUS_CODE = "PENDING_FOR_PAYMENT";
 
+	public static final String DOCUMENT_ACCESS_AUDIT_MSG = "The documents for water connection application has been accessed";
+
+
 }

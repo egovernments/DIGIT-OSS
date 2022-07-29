@@ -8,6 +8,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.swservice.config.SWConfiguration;
+import org.egov.swservice.producer.SewarageConnectionProducer;
 import org.egov.swservice.repository.IdGenRepository;
 import org.egov.swservice.repository.ServiceRequestRepository;
 import org.egov.swservice.repository.SewerageDaoImpl;
@@ -30,6 +31,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
+
+import static org.egov.swservice.util.SWConstants.DOCUMENT_ACCESS_AUDIT_MSG;
 
 @Service
 @Slf4j
@@ -58,6 +61,10 @@ public class EnrichmentService {
 
 	@Autowired
 	private WorkflowService wfService;
+
+	@Autowired
+	private SewarageConnectionProducer producer;
+
 	/**
 	 * 
 	 * @param sewerageConnectionRequest
@@ -277,7 +284,7 @@ public class EnrichmentService {
 		if (CollectionUtils.isEmpty(connectionNumbers) || connectionNumbers.size() != 1) {
 			Map<String, String> errorMap = new HashMap<>();
 			errorMap.put("IDGEN_ERROR",
-					"The Id of WaterConnection returned by idgen is not equal to number of WaterConnection");
+					"The Id of Sewerage Connection returned by idgen is not equal to number of Sewerage Connection");
 			throw new CustomException(errorMap);
 		}
 
@@ -336,7 +343,7 @@ public class EnrichmentService {
 	 * 
 	 * @param userDetailResponse
 	 * @param sewerageConnectionList
-	 *            List of water connection whose owner's are to be populated from
+	 *            List of Sewerage connection whose owner's are to be populated from
 	 *            userDetailsResponse
 	 */
 	public void enrichConnectionHolderInfo(UserDetailResponse userDetailResponse,
@@ -489,6 +496,69 @@ public class EnrichmentService {
 					sewerageConnection.getProcessInstance().setAssignes(processInstance.get(0).getAssignes());
 			}
 		}
+	}
+
+	/**
+	 * Show the filestoreid for the respective document list based on the flag isFilestoreIdRequire
+	 * If the flag is false in search criteria, the filestoreId is set as null
+	 * and if it is true then filestore id is visible and details is log
+	 *
+	 * @param sewerageConnectionList
+	 * @param criteria
+	 * @param requestInfo
+	 *
+	 * @return
+	 */
+	public void enrichDocumentDetails(List<SewerageConnection> sewerageConnectionList, SearchCriteria criteria,
+									  RequestInfo requestInfo) {
+		if (CollectionUtils.isEmpty(sewerageConnectionList))
+			return;
+
+		if(!criteria.getIsFilestoreIdRequire() || sewerageConnectionList.size()>1){
+			for(int i= 0; i<sewerageConnectionList.size();i++){
+				List<Document> documentList = sewerageConnectionList.get(i).getDocuments();
+				for(int j =0; (documentList !=null && j<documentList.size()); j++){
+					documentList.get(j).setFileStoreId(null);
+				}
+				sewerageConnectionList.get(i).setDocuments(documentList);
+			}
+
+		}
+		else{
+			List<String> uuids = new ArrayList<>();
+			if(sewerageConnectionList.get(0).getConnectionHolders() != null){
+				for(OwnerInfo connectionHolder : sewerageConnectionList.get(0).getConnectionHolders()){
+					uuids.add(connectionHolder.getUuid());
+				}
+			}
+
+			PropertyCriteria propertyCriteria = new PropertyCriteria();
+			propertyCriteria.setPropertyIds(Collections.singleton(sewerageConnectionList.get(0).getPropertyId()));
+			propertyCriteria.setTenantId(sewerageConnectionList.get(0).getTenantId());
+
+			List<Property> propertyList = sewerageServicesUtil.getPropertyDetails(serviceRequestRepository.fetchResult(sewerageServicesUtil.getPropertyURL(propertyCriteria),
+					RequestInfoWrapper.builder().requestInfo(requestInfo).build()));
+			if(propertyList != null && propertyList.size()==1){
+				List<OwnerInfo> ownerInfoList = propertyList.get(0).getOwners();
+				for(OwnerInfo ownerInfo: ownerInfoList)
+					uuids.add(ownerInfo.getUuid());
+			}
+
+			for(String uuid : uuids){
+				Map<String, Object> auditObject = new HashMap<>();
+				auditObject.put("id",UUID.randomUUID().toString());
+				auditObject.put("timestamp",System.currentTimeMillis());
+				auditObject.put("userId",uuid);
+				auditObject.put("accessBy", requestInfo.getUserInfo().getUuid());
+				auditObject.put("purpose",DOCUMENT_ACCESS_AUDIT_MSG);
+
+				producer.push(config.getDocumentAuditTopic(), auditObject);
+			}
+
+
+		}
+
+
 	}
 
 }

@@ -225,4 +225,7 @@ public class WSConfiguration {
 
 	@Value("${egov.receipt.disconnection.businessservice.topic}")
 	private String receiptDisconnectionBusinessservice;
+
+	@Value("${egov.water.connection.document.access.audit.kafka.topic}")
+	private String documentAuditTopic;
 }

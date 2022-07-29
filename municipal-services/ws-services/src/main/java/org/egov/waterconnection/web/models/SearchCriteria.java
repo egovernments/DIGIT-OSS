@@ -100,6 +100,9 @@ public class SearchCriteria {
 	@JsonIgnore
 	private Boolean isCountCall = false;
 
+	@JsonProperty("isFilestoreIdRequire")
+	private Boolean isFilestoreIdRequire = false;
+
 	public enum SortOrder {
 	    ASC,
 	    DESC
