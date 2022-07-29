@@ -206,7 +206,6 @@ const DriverDetails = (props) => {
         queryClient.invalidateQueries("DSO_SEARCH");
         setTimeout(() => {
           closeToast;
-          window.location.reload(false);
         }, 3000);
       },
     });
@@ -216,6 +215,8 @@ const DriverDetails = (props) => {
   const handleEditVendor = () => {
     let dsoDetails = selectedOption;
     let driverDetails = driverData?.[0]?.driverData;
+    driverDetails.vendorDriverStatus = "ACTIVE";
+
     const formData = {
       vendor: {
         ...dsoDetails,
@@ -230,7 +231,7 @@ const DriverDetails = (props) => {
       },
       onSuccess: (data, variables) => {
         setShowToast({ key: "success", action: "EDIT_VENDOR" });
-        queryClient.invalidateQueries("FSM_DRIVER_SEARCH");
+        queryClient.invalidateQueries("DSO_SEARCH");
         setTimeout(closeToast, 5000);
       },
     });
