@@ -166,45 +166,45 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
   if(isModify === "MODIFY"){
 
     connectionDetails = connectionDetails?.map((value) => {
-      if(value.title == "WS_SERV_DETAIL_CONN_TYPE" && oldValueData?.connectionType) value["oldValue"] = [
+      if(value.title == "WS_SERV_DETAIL_CONN_TYPE" && oldValueData?.connectionType && oldValueData?.connectionType!==value?.value) value["oldValue"] = [
         { value:value?.value, className:"newValue", style:{ display:"inline"} },
         { 
           value:`${t("WS_OLD_LABEL_NAME")} ${oldValueData?.connectionType}`, 
           className:"oldValue", style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}
         }];
-      if(value.title == "WS_SERV_DETAIL_NO_OF_TAPS" && oldValueData?.noOfTaps) value["oldValue"] = [
+      if(value.title == "WS_SERV_DETAIL_NO_OF_TAPS" && oldValueData?.noOfTaps && oldValueData?.noOfTaps!==value?.value) value["oldValue"] = [
         {value:value?.value,className:"newValue", style:{ display:"inline"}},
         {value:`${t("WS_OLD_LABEL_NAME")} ${oldValueData?.noOfTaps}`, style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"},className:"oldValue"}
       ];
-      if(value.title == "WS_SERV_DETAIL_WATER_SOURCE" && oldValueData?.waterSource) value["oldValue"] = [
+      if(value.title == "WS_SERV_DETAIL_WATER_SOURCE" && oldValueData?.waterSource && oldValueData?.waterSource?.toUpperCase()?.split(".")[0]!==value?.value) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
           value: `${t("WS_OLD_LABEL_NAME")} ${t(oldValueData?.waterSource?.toUpperCase()?.split(".")[0])}`,
           style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
         }
       ];
-      if(value.title == "WS_PIPE_SIZE_IN_INCHES_LABEL" && oldValueData?.pipeSize) value["oldValue"] = [
+      if(value.title == "WS_PIPE_SIZE_IN_INCHES_LABEL" && oldValueData?.pipeSize && oldValueData?.pipeSize!==value?.value) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
           value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.pipeSize}`,
           style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
         }
       ];    
-      if(value.title == "WS_SERV_DETAIL_WATER_SUB_SOURCE" && oldValueData?.waterSource) value["oldValue"] = [
+      if(value.title == "WS_SERV_DETAIL_WATER_SUB_SOURCE" && oldValueData?.waterSource && oldValueData?.waterSource?.toUpperCase()?.split(".")[1]!==value?.value) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
           value: `${t("WS_OLD_LABEL_NAME")} ${t(oldValueData?.waterSource?.toUpperCase()?.split(".")[1])}`,
           style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
         }
       ];
-      if(value.title == "WS_NUMBER_WATER_CLOSETS_LABEL" && oldValueData?.noOfWaterClosets) value["oldValue"] = [
+      if(value.title == "WS_NUMBER_WATER_CLOSETS_LABEL" && oldValueData?.noOfWaterClosets && oldValueData?.noOfWaterClosets!==value?.value) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
           value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.noOfWaterClosets}`,
           style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
         }
       ];
-      if(value.title == "WS_SERV_DETAIL_NO_OF_TOILETS" && oldValueData?.noOfWaterClosets) value["oldValue"] = [
+      if(value.title == "WS_SERV_DETAIL_NO_OF_TOILETS" && oldValueData?.noOfWaterClosets && oldValueData?.noOfWaterClosets!==value?.value) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
           value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.noOfWaterClosets}`,
@@ -223,21 +223,21 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
           style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
         }
       ];
-      if(value.title == "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL" && oldValueData?.plumberInfo[0]?.licenseNo ) value["oldValue"] = [
+      if(value.title == "WS_ADDN_DETAILS_PLUMBER_LICENCE_NO_LABEL" && oldValueData?.plumberInfo[0]?.licenseNo && oldValueData?.plumberInfo[0]?.licenseNo!==value?.value) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
           value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.plumberInfo[0]?.licenseNo}`,
           style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
         }
       ];
-      if(value.title == "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL" && oldValueData?.plumberInfo[0]?.name ) value["oldValue"] = [
+      if(value.title == "WS_ADDN_DETAILS_PLUMBER_NAME_LABEL" && oldValueData?.plumberInfo[0]?.name && oldValueData?.plumberInfo[0]?.name!==value?.value) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
           value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.plumberInfo[0]?.name}`,
           style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
         }
       ];
-      if(value.title == "WS_PLUMBER_MOBILE_NO_LABEL" && oldValueData?.plumberInfo[0]?.mobileNumber ) value["oldValue"] = [
+      if(value.title == "WS_PLUMBER_MOBILE_NO_LABEL" && oldValueData?.plumberInfo[0]?.mobileNumber && oldValueData?.plumberInfo[0]?.mobileNumber!==value?.value) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
           value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.plumberInfo[0]?.mobileNumber}`,
@@ -249,14 +249,14 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
 
     roadCuttingDetails = roadCuttingDetails?.map((roadDetail) => {
       const roadDetailValues = roadDetail?.values?.map((value) => {
-        if(value.title == "WS_ADDN_DETAIL_ROAD_TYPE" && oldValueData?.roadCuttingInfo[0]?.roadType) value["oldValue"] = [
+        if(value.title == "WS_ADDN_DETAIL_ROAD_TYPE" && oldValueData?.roadCuttingInfo[0]?.roadType && t(`WS_ROADTYPE_${oldValueData?.roadCuttingInfo[0]?.roadType}`)!==value?.value) value["oldValue"] = [
           {value:value?.value, className:"newValue", style:{ display:"inline"}},
           {
             value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.roadCuttingInfo[0]?.roadType}`,
             style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
           }
         ];
-        if(value.title == "WS_ROAD_CUTTING_AREA_LABEL" && oldValueData?.roadCuttingInfo[0]?.roadCuttingArea) value["oldValue"] = [
+        if(value.title == "WS_ROAD_CUTTING_AREA_LABEL" && oldValueData?.roadCuttingInfo[0]?.roadCuttingArea && oldValueData?.roadCuttingInfo[0]?.roadCuttingArea!==value?.value) value["oldValue"] = [
           {value:value?.value, className:"newValue", style:{ display:"inline"}},
           {
             value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.roadCuttingInfo[0]?.roadCuttingArea}`,
@@ -269,7 +269,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
     })
 
     activationDetails = activationDetails?.map((value) => {
-      if(value.title == "WS_SERV_DETAIL_CONN_EXECUTION_DATE" && oldValueData?.connectionExecutionDate) value["oldValue"] = [
+      if(value.title == "WS_SERV_DETAIL_CONN_EXECUTION_DATE" && oldValueData?.connectionExecutionDate && oldValueData?.connectionExecutionDate!==value?.value) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
           value: `${t("WS_OLD_LABEL_NAME")} ${convertEpochToDate(oldValueData?.connectionExecutionDate)}`,
@@ -277,7 +277,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
         }
       ];
 
-      if(value.title == "WS_SERV_DETAIL_METER_ID" && oldValueData?.meterId) value["oldValue"] = [
+      if(value.title == "WS_SERV_DETAIL_METER_ID" && oldValueData?.meterId && oldValueData?.meterId!==value?.value) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
           value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.meterId}`,
@@ -285,7 +285,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
         }
       ];
 
-      if(value.title == "WS_INITIAL_METER_READING_LABEL" && oldValueData?.additionalDetails) value["oldValue"] = [
+      if(value.title == "WS_INITIAL_METER_READING_LABEL" && oldValueData?.additionalDetails && oldValueData?.additionalDetails!==value?.value) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
           value: `${t("WS_OLD_LABEL_NAME")} ${oldValueData?.initialMeterReading?oldValueData?.initialMeterReading:oldValueData?.additionalDetails?.initialMeterReading}`,
@@ -293,20 +293,20 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
         }
       ];
 
-      if(value.title == "WS_INSTALLATION_DATE_LABEL" && oldValueData?.meterInstallationDate) value["oldValue"] = [
+      if(value.title == "WS_INSTALLATION_DATE_LABEL" && oldValueData?.meterInstallationDate && oldValueData?.meterInstallationDate!==value?.value) value["oldValue"] = [
         {value:value?.value, className:"newValue", style:{ display:"inline"}},
         {
           value: `${t("WS_OLD_LABEL_NAME")} ${convertEpochToDate(oldValueData?.meterInstallationDate)}`,
           style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
         }
       ];
-      if(value.title == "WS_SERV_DETAIL_CONN_EXECUTION_DATE" && oldValueData?.connectionExecutionDate) value["oldValue"] = [
-        {value:value?.value, className:"newValue", style:{ display:"inline"}},
-        {
-          value: `${t("WS_OLD_LABEL_NAME")} ${convertEpochToDate(oldValueData?.connectionExecutionDate)}`,
-          style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
-        }
-      ];      
+      // if(value.title == "WS_SERV_DETAIL_CONN_EXECUTION_DATE" && oldValueData?.connectionExecutionDate && oldValueData?.connectionExecutionDate!==value?.value) value["oldValue"] = [
+      //   {value:value?.value, className:"newValue", style:{ display:"inline"}},
+      //   {
+      //     value: `${t("WS_OLD_LABEL_NAME")} ${convertEpochToDate(oldValueData?.connectionExecutionDate)}`,
+      //     style:{color:'gray', paddingLeft:"10px", display:"inline", fontSize:"13px"}, className:"oldValue"
+      //   }
+      // ];      
       return value;
     })
   };
