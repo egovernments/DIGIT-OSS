@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.egov.auditservice.persisterauditclient.models.contract.AuditAttributes;
 import org.egov.auditservice.persisterauditclient.models.contract.RowData;
 import org.egov.auditservice.web.models.AuditLog;
+import org.egov.auditservice.web.models.enums.OperationType;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -110,7 +111,7 @@ public class AuditUtil {
      * @param query The query which is going to be executed
      * @return
      */
-    private String getOperationType(String query){
+    private OperationType getOperationType(String query){
         String operationType = null;
         if (query.startsWith(INSERT_SQL_KEYWORD)){
             operationType = "CREATE";
@@ -124,7 +125,7 @@ public class AuditUtil {
         else {
             throw new CustomException("PARSING_ERROR","Failed to fetch table name from the query: "+query);
         }
-        return operationType;
+        return OperationType.fromValue(operationType);
     }
     private Boolean isAuditAttributeValid(AuditAttributes auditAttributes){
         if(auditAttributes.getModule() != null && auditAttributes.getObjectId() != null

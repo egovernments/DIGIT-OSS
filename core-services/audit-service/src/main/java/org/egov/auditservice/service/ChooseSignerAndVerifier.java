@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -25,22 +26,26 @@ public class ChooseSignerAndVerifier {
     @Autowired
     private AuditServiceRepository repository;
 
-
     private final Map<String, ConfigurableSignAndVerify> signerAndVerifierByImplementationName;
+
+    private ConfigurableSignAndVerify signAndVerifyUtil;
 
     @Autowired
     public ChooseSignerAndVerifier(List<ConfigurableSignAndVerify> customSignAndVerifyImplementations){
         this.signerAndVerifierByImplementationName = customSignAndVerifyImplementations.stream().collect(Collectors.toMap(ConfigurableSignAndVerify::getSigningAlgorithm, Function.identity()));
     }
 
-    public List<AuditLog> selectImplementationAndSign(AuditLogRequest auditLogRequest){
-        if(!signerAndVerifierByImplementationName.containsKey(signingAlgorithm)){
+    @PostConstruct
+    private void signAndVerifyUtilInit(){
+
+        if(!signerAndVerifierByImplementationName.containsKey(signingAlgorithm)) {
             throw new CustomException("EG_AUDIT_LOG_SIGNING_ERR", "Custom signer implementation is not present for the specified signing algorithm: " + signingAlgorithm);
         }
 
-        // Selects signing implementation according to the configured signing algorithm
-        ConfigurableSignAndVerify signAndVerifyUtil = signerAndVerifierByImplementationName.get(signingAlgorithm);
+        signAndVerifyUtil = signerAndVerifierByImplementationName.get(signingAlgorithm);
+    }
 
+    public List<AuditLog> selectImplementationAndSign(AuditLogRequest auditLogRequest){
         // Signs audit logs
         signAndVerifyUtil.sign(auditLogRequest);
 
@@ -48,10 +53,6 @@ public class ChooseSignerAndVerifier {
     }
 
     public void selectImplementationAndVerify(ObjectIdWrapper objectIdWrapper){
-
-        // Selects verification implementation according to the configured signing algorithm
-        ConfigurableSignAndVerify signAndVerifyUtil = signerAndVerifierByImplementationName.get(signingAlgorithm);
-
         // Verify audit log
         Boolean isUntampered = signAndVerifyUtil.verify(objectIdWrapper);
 

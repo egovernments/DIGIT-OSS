@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.auditservice.web.models.AuditLog;
+import org.egov.auditservice.web.models.enums.OperationType;
 import org.egov.tracer.model.CustomException;
 import org.postgresql.util.PGobject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class AuditRowMapper implements ResultSetExtractor<List<AuditLog>> {
                         .changeDate(rs.getLong("changedate"))
                         .entityName(rs.getString("entityname"))
                         .objectId(rs.getString("objectid"))
-                        .operationType(rs.getString("operationtype"))
+                        .operationType(OperationType.fromValue(rs.getString("operationtype")))
                         .integrityHash(rs.getString("integrityhash"))
                         .build();
 

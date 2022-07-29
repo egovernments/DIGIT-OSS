@@ -19,14 +19,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import java.util.ArrayList;
 
 import org.egov.auditservice.repository.AuditServiceRepository;
+import org.egov.auditservice.service.implementations.HmacImplementation;
 import org.egov.auditservice.web.models.AuditLog;
 import org.egov.auditservice.web.models.AuditLogRequest;
 import org.egov.auditservice.web.models.AuditLogSearchCriteria;
 import org.egov.auditservice.web.models.ObjectIdWrapper;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.tracer.model.CustomException;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -132,9 +131,9 @@ class HmacImplementationTest {
     //@Test
     void testHashData() {
         assertEquals("6994b07ba71815e45a67cf104bfbbc9458a13c7de80925126c1732133f822443",
-                hmacImplementation.hashData("Data", "Key"));
+                hmacImplementation.hashData("Data"));
         assertEquals("36ed0a3f878c039fe5282a04e36047bcc347b5c35b7a1435ae44de3d9e3e8401",
-                hmacImplementation.hashData("EG_AUDIT_LOG_VERIFICATION_ERR", "Key"));
+                hmacImplementation.hashData("EG_AUDIT_LOG_VERIFICATION_ERR"));
     }
 
 

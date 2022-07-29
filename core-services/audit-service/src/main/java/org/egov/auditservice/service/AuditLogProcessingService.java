@@ -9,6 +9,7 @@ import org.egov.auditservice.web.models.AuditLogSearchCriteria;
 import org.egov.auditservice.web.models.ObjectIdWrapper;
 import org.egov.common.contract.request.RequestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -18,6 +19,9 @@ import java.util.Map;
 
 @Service
 public class AuditLogProcessingService {
+
+    @Value("${persister.audit.kafka.topic}")
+    private String auditTopic;
 
     @Autowired
     private Producer producer;
@@ -39,6 +43,12 @@ public class AuditLogProcessingService {
         // Validate audit logs size
         validator.validateAuditRequestSize(request.getAuditLogs());
 
+        // Validate operation types present in audit log request
+        validator.validateOperationType(request.getAuditLogs());
+
+        // Validate keyValuePair has db fields
+        validator.validateKeyValueMap(request.getAuditLogs());
+
         // Enrich audit logs
         enrichmentService.enrichAuditLogs(request);
 
@@ -46,7 +56,7 @@ public class AuditLogProcessingService {
         List<AuditLog> signedAuditLogs = chooseSignerAndVerifier.selectImplementationAndSign(request);
 
         // Persister will handle persisting audit records
-        producer.push("persist-audit-logs", request);
+        producer.push(auditTopic, request);
 
         return signedAuditLogs;
     }
