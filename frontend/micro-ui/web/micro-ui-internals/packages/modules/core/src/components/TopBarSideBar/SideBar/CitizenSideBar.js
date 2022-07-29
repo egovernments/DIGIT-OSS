@@ -233,6 +233,17 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
         });
       }
     }
+     const indx = menuItems.findIndex(a => a.element === "HOME");
+     const home = menuItems.splice(indx,1);
+     const comp = menuItems.findIndex(a => a.element === "LANGUAGE");
+     const part = menuItems.splice(comp,menuItems?.length-comp);
+     menuItems.sort((a,b) => {
+      let c1 = a?.type === "dynamic" ? a?.moduleName : a?.text;
+      let c2 = b?.type === "dynamic" ? b?.moduleName : b?.text;
+      return c1.localeCompare(c2)
+     } );
+     home?.[0] && menuItems.splice(0,0,home[0]);
+     menuItems =  part?.length > 0 ? menuItems.concat(part) : menuItems;
   }
 
   /*  URL with openlink wont have sidebar and actions    */

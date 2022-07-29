@@ -52,6 +52,8 @@ export const WSMyApplications = () => {
   let { SewerageConnections: SWapplicationsList } = SWdata || {};
   WSapplicationsList = WSapplicationsList?.map((ob) => {return ({...ob,"sla":workflowDetails?.data?.processInstances?.filter((pi) => pi.businessId == ob.applicationNo)[0]?.businesssServiceSla})})
   SWapplicationsList = SWapplicationsList?.map((ob) => {return ({...ob,"sla":workflowDetails?.data?.processInstances?.filter((pi) => pi.businessId == ob.applicationNo)[0]?.businesssServiceSla})})
+  WSapplicationsList = WSapplicationsList?.filter((ob) => ob?.applicationType !== "MODIFY_WATER_CONNECTION");
+  SWapplicationsList = SWapplicationsList?.filter((ob) => ob?.applicationType !== "MODIFY_SEWERAGE_CONNECTION");
   let applicationsList =WSapplicationsList.concat(SWapplicationsList)
   applicationsList =
   applicationsList &&

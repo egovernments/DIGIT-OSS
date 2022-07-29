@@ -109,7 +109,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
           <TextInput
             key={config.key}
             value={propertyId}
-            isMandatory={true}
+            //isMandatory={true}
             onChange={(e) => {
               setPropertyId(e.target.value);
               onSelect(config.key, { id: e.target.value });

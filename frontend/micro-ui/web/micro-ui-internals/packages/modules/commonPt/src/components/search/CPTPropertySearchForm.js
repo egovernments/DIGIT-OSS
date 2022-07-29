@@ -50,7 +50,14 @@ const SearchPTID = ({ tenantId, t, onSubmit, onReset, searchBy, PTSearchFields, 
                   />
                 )}
                 />
-            :<TextInput
+            :
+            <div className="field-container">
+            {field?.componentInFront ? (
+              <span className="employee-card-input employee-card-input--front" style={{ flex: "none" }}>
+                {field?.componentInFront}
+              </span>
+            ) : null}
+                <TextInput
                   name={key}
                   type={field?.type}
                   inputRef={register({
@@ -58,7 +65,8 @@ const SearchPTID = ({ tenantId, t, onSubmit, onReset, searchBy, PTSearchFields, 
                     shouldUnregister: true,
                     ...validation,
                   })}
-                />}
+                />
+                </div>}
                 <CardLabelError style={{ marginTop: "-10px", marginBottom: "-10px" }}>{t(formState?.errors?.[key]?.message)}</CardLabelError>
               </SearchField>
             );

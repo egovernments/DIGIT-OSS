@@ -90,6 +90,11 @@ const EmployeeSideBar = () => {
         });
       }
     }
+    res.splice(0,1);
+    const indx = res.findIndex(a => a.moduleName === "HOME");
+    const home = res.splice(indx,1);
+    res.sort((a,b) => a.moduleName.localeCompare(b.moduleName));
+    home?.[0] && res.splice(0,0,home[0]);
     return res.map((item, index) => {
       return <SubMenu item={item} key={index + 1} />;
     });
