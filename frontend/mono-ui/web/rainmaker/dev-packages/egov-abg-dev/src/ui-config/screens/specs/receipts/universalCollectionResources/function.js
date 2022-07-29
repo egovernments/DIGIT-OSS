@@ -130,15 +130,46 @@ export const searchApiCall = async (state, dispatch) => {
 
     if(searchScreenObject.receiptNumbers)
     {
-      /* let queryObject3 = [
+       let queryObject3 = [
         {
           key: "tenantId",
           value: tenantId
         },
-        { key: "propertyIds", value: filetedresult && filetedresult[0].amount }
+        { key: "propertyIds", value: response && response[0].amount }
       ];
       const result = await getPropertySearchResults(queryObject3);
- */    }
+      if(result && result.Properties && result.Properties[0].status ==="INWORKFLOW")
+      {
+        response[0].propertystatus = "INWORKFLOW" 
+        filetedresult = response;
+      }
+      else      
+      {
+        response[0].propertystatus = "ACTIVE" 
+        filetedresult = response;
+      }
+     }
+     if(searchScreenObject.consumerCodes)
+     {
+        let queryObject4 = [
+         {
+           key: "tenantId",
+           value: tenantId
+         },
+         { key: "propertyIds", value: searchScreenObject.consumerCodes }
+       ];
+       const result = await getPropertySearchResults(queryObject4);
+       if(result && result.Properties && result.Properties[0].status ==="INWORKFLOW")
+       {
+         response[0].propertystatus = "INWORKFLOW" 
+         filetedresult = response;
+       }
+       else      
+       {
+         response[0].propertystatus = "ACTIVE" 
+         filetedresult = response;
+       }
+      }
     try {
       let data = filetedresult.map(item => ({
         ['CR_COMMON_TABLE_COL_RECEIPT_NO']: item.receiptNumber || "-",
