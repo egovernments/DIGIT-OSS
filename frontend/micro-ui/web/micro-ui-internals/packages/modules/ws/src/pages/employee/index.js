@@ -17,11 +17,12 @@ import EditApplication from "./EditApplication";
 import ConsumptionDetails from "./connectionDetails/ConsumptionDetails";
 import ModifyApplication from "./ModifyApplication";
 import EditModifyApplication from "./EditModifyApplication";
-import WSDisconnectionDocsRequired from "../../pageComponents/WSDisconnectionDocsRequired";
+import DisconnectionApplication from './DisconnectionApplication/'
 import WSEditApplicationByConfig from "./EditApplication/WSEditApplicationByConfig";
 import ResponseBillAmend from "./ResponseBillAmend";
 import BillIAmendMentInbox from "../../components/BillIAmendMentInbox";
 import GetDisconnectionDetails from "./DisconnectionDetails";
+import WSDisconnectionResponse from "./DisconnectionApplication/WSDisconnectionResponse";
 
 const BILLSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
@@ -80,7 +81,7 @@ const BILLSBreadCrumbs = ({ location }) => {
       show: location.pathname.includes("/new-application") ? true : false,
     },
     {
-      path: "/digit-ui/employee/ws/ws-response",
+      path: `${location?.pathname}${location.search}`,
       content: t("ACTION_TEST_RESPONSE"),
       show: location.pathname.includes("/ws-response") ? true : false,
     },
@@ -97,6 +98,12 @@ const BILLSBreadCrumbs = ({ location }) => {
       isBack: fromScreen && true,
     },
     {
+      path: "/digit-ui/employee/ws/disconnection-details",
+      content: fromScreen ? `${t(fromScreen)} / ${t("WS_APPLICATION_DETAILS_HEADER")}` : t("WS_APPLICATION_DETAILS_HEADER"),
+      show: location.pathname.includes("/disconnection-details") ? true : false,
+      isBack: fromScreen && true,
+    },
+    {
       path: "/digit-ui/employee/ws/connection-details",
       content: fromScreen ? `${t(fromScreen)} / ${t("WS_COMMON_CONNECTION_DETAIL")}` : t("WS_COMMON_CONNECTION_DETAIL"),
       show: location.pathname.includes("/connection-details") ? true : false,
@@ -109,10 +116,49 @@ const BILLSBreadCrumbs = ({ location }) => {
       isBack: true,
     },
     {
+      path: `${location?.pathname}${location.search}`,
+      content: `${t("WS_APPLICATION_DETAILS_HEADER")} / ${t("WF_EMPLOYEE_NEWSW1_ACTIVATE_CONNECTION")}`,
+      show: location.pathname.includes("/activate-connection") ? true : false,
+      isBack: true,
+    },
+    {
+      path: `/digit-ui/employee/ws/new-disconnection/docsrequired`,
+      content: t("WS_NEW_DISCONNECTION_DOCS_REQUIRED"),
+      show: location.pathname.includes("/new-disconnection/docsrequired") ? true : false,
+    },
+    {
+      path: `/digit-ui/employee/ws/new-disconnection/application-form`,
+      content: `${t("WS_NEW_DISCONNECTION_DOCS_REQUIRED")} / ${t("WS_NEW_DISCONNECTION_APPLICATION")}`,
+      show: location.pathname.includes("/new-disconnection/application-form") ? true : false,
+      isBack: true
+    },
+    {
+      path: `${location?.pathname}${location.search}`,
+      content: `${t("WS_NEW_DISCONNECTION_RESPONSE")}`,
+      show: location.pathname.includes("/ws-disconnection-response") ? true : false,
+      isBack: true
+    },
+    {
       path: "/digit-ui/employee/sewerage/bill-amendment/inbox",
       content: t("ES_COMMON_BILLS_SEWERAGE_INBOX_LABEL"),
       show: location.pathname.includes("/sewerage/bill-amendment/inbox") ? true : false,
     },
+    {
+      path: `${location?.pathname}${location.search}`,
+      content: fromScreen ? `${t(fromScreen)} / ${t("WS_MODIFY_CONNECTION_BUTTON")}`:t("WS_MODIFY_CONNECTION_BUTTON"),
+      show: location.pathname.includes("ws/modify-application") ? true : false,
+      isBack:true,
+    },
+    {
+      path: "/digit-ui/employee/ws/required-documents",
+      content: t("ES_COMMON_WS_DOCUMENTS_REQUIRED"),
+      show: location.pathname.includes("/required-documents") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/ws/bill-amendment",
+      content: t("WS_BILL_AMEND_APP"),
+      show: location.pathname.includes("ws/bill-amendment") ? true : false,
+    }
   ];
 
   return <BreadCrumb crumbs={crumbs} spanStyle={{ maxWidth: "min-content" }} />;
@@ -122,10 +168,23 @@ const App = ({ path }) => {
 
   const WSDocsRequired = Digit?.ComponentRegistryService?.getComponent("WSDocsRequired");
   const WSInbox = Digit?.ComponentRegistryService?.getComponent("WSInbox");
+  const WSDisconnectionDocsRequired = Digit?.ComponentRegistryService?.getComponent('WSDisconnectionDocsRequired');
+  
+  // const locationCheck = window.location.href.includes("/employee/ws/new-application") || window.location.href.includes("/employee/ws/create-application");
 
-  const locationCheck = window.location.href.includes("/employee/ws/new-application") 
+  const locationCheck = 
+  window.location.href.includes("/employee/ws/new-application") || 
+  window.location.href.includes("/employee/ws/modify-application") ||
+  window.location.href.includes("/employee/ws/edit-application") ||
+  window.location.href.includes("/employee/ws/activate-connection") ||
+  window.location.href.includes("/employee/ws/application-details") ||
+  window.location.href.includes("/employee/ws/ws-response") ||
+  window.location.href.includes("/employee/ws/new-disconnection/application-form") ||
+  window.location.href.includes("/employee/ws/ws-disconnection-response");
+  
 
-  const locationCheckReqDocs = window.location.href.includes("/employee/ws/create-application");
+
+  const locationCheckReqDocs = window.location.href.includes("/employee/ws/create-application") || window.location.href.includes("/employee/ws/new-disconnection/docsrequired");
 
   return (
     <Switch>
@@ -149,6 +208,7 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/water/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/sewerage/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/ws-response`} component={WSResponse} />
+          <PrivateRoute path={`${path}/ws-disconnection-response`} component={WSDisconnectionResponse} />
           <PrivateRoute path={`${path}/water/search-connection`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/sewerage/search-connection`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
 
@@ -156,6 +216,7 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/modify-application`} component={ModifyApplication} />
           <PrivateRoute path={`${path}/modify-application-edit`} component={EditModifyApplication} />
           <PrivateRoute path={`${path}/disconnection-application`} component={WSDisconnectionDocsRequired} />
+          <PrivateRoute path={`${path}/new-disconnection`} component={DisconnectionApplication} />
           <PrivateRoute path={`${path}/bill-amend/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/water/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/sewerage/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />

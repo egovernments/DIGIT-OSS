@@ -34,14 +34,14 @@ const EditModifyApplication = () => {
   );
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen);
+    const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isModify);
     config.head = "WS_WATER_AND_SEWERAGE_MODIFY_CONNECTION_LABEL";
     let bodyDetails = [];
     config?.body?.forEach(data => { if (data?.isModifyConnection) bodyDetails.push(data); });
     bodyDetails.forEach(bdyData => { if (bdyData?.head == "WS_COMMON_PROPERTY_DETAILS") bdyData.head = ""; })
     config.body = bodyDetails;
     setConfig(config);
-  });
+  }, []);
 
   useEffect(() => {
     !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
@@ -50,7 +50,7 @@ const EditModifyApplication = () => {
   useEffect(async () => {
     const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
     if (details?.applicationData?.id && !IsDetailsExists) {
-      const convertAppData = await convertApplicationData(details, serviceType, true, t);
+      const convertAppData = await convertApplicationData(details, serviceType, true, false, t);
       setSessionFormData({ ...sessionFormData, ...convertAppData });
       setAppData({ ...convertAppData })
       sessionStorage.setItem("IsDetailsExists", JSON.stringify(true));

@@ -398,7 +398,11 @@ public class FSMValidator {
 		});
 		List<String> updatedFields= new ArrayList<>();
 		deltas.forEach(delta -> {
+		if (!(delta.getFieldName().equalsIgnoreCase("possibleServiceDate"))
+					&& !(delta.getFieldName().equalsIgnoreCase("longitude"))
+					&& !(delta.getFieldName().equalsIgnoreCase("latitude"))) {
 			updatedFields.add(delta.getFieldName());
+			}
 		});
 		return updatedFields;
 	}

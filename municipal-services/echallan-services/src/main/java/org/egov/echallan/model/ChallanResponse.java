@@ -58,6 +58,10 @@ public class ChallanResponse {
   
 
   private List<Challan> challans = null;
+
+  @JsonProperty("totalCount")
+   private int totalCount;
+
   public ChallanResponse responseInfo(ResponseInfo responseInfo) {
     this.responseInfo = responseInfo;
     return this;

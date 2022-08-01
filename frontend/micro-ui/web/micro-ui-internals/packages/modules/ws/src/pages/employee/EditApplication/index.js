@@ -24,28 +24,30 @@ const EditApplication = () => {
   tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
 
   const applicationNumber = filters?.applicationNumber;
-  const serviceType = filters?.service;
+  const editApplicationDetails = JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS"));
+  const serviceType = filters?.service || editApplicationDetails?.applicationData?.serviceType;
 
-  const details = cloneDeep(state?.data?.applicationDetails);
+  let details = cloneDeep(state?.data?.applicationDetails);
   const actionData = cloneDeep(state?.data?.action);
-
+  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, details?.applicationNo, details?.applicationData?.serviceType,{privacy : Digit.Utils.getPrivacyObject() });
+  details = applicationDetails;
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
 
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_WS_NEW_FORM", {});
 
   const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId && propertyId != "" ? true : false }
+    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId && propertyId != "" ? true : false, privacy : Digit.Utils.getPrivacyObject() }
   );
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen);
+    const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isEdit);
     config.head = "WS_APP_FOR_WATER_AND_SEWERAGE_EDIT_LABEL";
     let bodyDetails = [];
     config?.body?.forEach(data => { if (data?.isEditConnection) bodyDetails.push(data); })
     config.body = bodyDetails;
     setConfig(config);
-  });
+  }, []);
 
   useEffect(() => {
     !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
@@ -53,20 +55,20 @@ const EditApplication = () => {
 
   useEffect(async () => {
     const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
-    if (details?.applicationData?.id && !IsDetailsExists) {
+    if (details?.applicationData?.id /* && !IsDetailsExists */) {
       const convertAppData = await convertApplicationData(details, serviceType, false, false, t);
       setSessionFormData({ ...sessionFormData, ...convertAppData });
       setAppData({ ...convertAppData })
       sessionStorage.setItem("IsDetailsExists", JSON.stringify(true));
     }
-  }, []);
+  }, [details,applicationDetails]);
 
   useEffect(() => {
     setSessionFormData({ ...sessionFormData, cpt: { details: propertyDetails?.Properties?.[0] } });
   }, [propertyDetails]);
 
   useEffect(() => {
-    if (sessionFormData?.DocumentsRequired?.documents?.length > 0 || sessionFormData?.ConnectionDetails?.[0]?.water || sessionFormData?.ConnectionDetails?.[0]?.sewerage) {
+    if (sessionFormData?.DocumentsRequired?.documents?.length > 0 || sessionFormData?.ConnectionDetails?.[0]?.water || sessionFormData?.ConnectionDetails?.[0]?.sewerage || sessionFormData?.cpt?.details && !isLoading) {
       setEnabledLoader(false);
     }
   }, [propertyDetails, sessionFormData, sessionFormData?.cpt]);
@@ -84,7 +86,7 @@ const EditApplication = () => {
     data: updateResponse,
     error: updateError,
     mutate,
-  } = Digit.Hooks.ws.useWSApplicationActions(filters?.service);
+  } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
 
   const onFormValueChange = (setValue, formData, formState) => {
     if (!_.isEqual(sessionFormData, formData)) {
@@ -137,6 +139,7 @@ const EditApplication = () => {
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}
         defaultValues={sessionFormData}
+        appData={appData}
       ></FormComposer>
       {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />}
     </React.Fragment>

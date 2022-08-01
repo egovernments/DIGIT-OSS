@@ -114,6 +114,9 @@ const useMDMS = (tenantId, moduleCode, type, config = {}, payload = []) => {
     case "VehicleType":
       return useVehicleType();
 
+    case "VehicleMakeModel":
+      return useVehicleType();
+
     case "Checklist":
       return useChecklist();
 

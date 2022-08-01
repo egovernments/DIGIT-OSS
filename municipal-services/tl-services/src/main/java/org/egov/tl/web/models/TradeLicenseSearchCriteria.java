@@ -88,12 +88,14 @@ public class TradeLicenseSearchCriteria {
     @JsonProperty("financialYear")
     private String financialYear;
 
+    @JsonProperty("tradeType")
+    private String tradeType = null;
 
     public boolean isEmpty() {
         return (this.tenantId == null && this.status == null && this.applicationType == null && this.ids == null && this.applicationNumber == null
                 && this.licenseNumbers == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
                 this.fromDate == null && this.toDate == null && this.ownerIds == null && this.locality == null && this.tradeName == null &&
-                this.ownerName == null && this.issuedFrom == null && this.issuedTo == null
+                this.ownerName == null && this.issuedFrom == null && this.issuedTo == null && this.tradeType == null
         );
     }
 
@@ -101,7 +103,7 @@ public class TradeLicenseSearchCriteria {
         return (this.tenantId != null && this.status == null && this.applicationType == null && this.ids == null && this.applicationNumber == null
                 && this.licenseNumbers == null && this.oldLicenseNumber == null && this.mobileNumber == null &&
                 this.fromDate == null && this.toDate == null && this.ownerIds == null && this.locality == null && this.tradeName == null &&
-                this.ownerName == null && this.issuedFrom == null && this.issuedTo == null
+                this.ownerName == null && this.issuedFrom == null && this.issuedTo == null && this.tradeType == null
         );
     }
     
@@ -109,7 +111,7 @@ public class TradeLicenseSearchCriteria {
     	return (this.tenantId == null && this.status == null && this.applicationType == null && this.ids == null && this.applicationNumber == null
                 && this.licenseNumbers == null && this.oldLicenseNumber == null && this.mobileNumber != null &&
                 this.fromDate == null && this.toDate == null && this.ownerIds == null && this.locality == null && this.tradeName == null &&
-                this.ownerName == null && this.issuedFrom == null && this.issuedTo == null
+                this.ownerName == null && this.issuedFrom == null && this.issuedTo == null && this.tradeType == null
         );
     }
 

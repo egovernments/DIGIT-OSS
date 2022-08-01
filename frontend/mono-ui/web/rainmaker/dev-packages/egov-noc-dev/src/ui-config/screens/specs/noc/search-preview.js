@@ -195,7 +195,7 @@ const setSearchResponse = async (
     { key: "tenantId", value: tenantId },
     { key: "businessServices", value: get(response, "Noc[0].additionalDetails.workflowCode") }
   ];
-  setBusinessServiceDataToLocalStorage(queryObject, dispatch);
+  await setBusinessServiceDataToLocalStorage(queryObject, dispatch);
 
   if (response && get(response, "Noc[0].nocNo")) {
     dispatch(
@@ -223,7 +223,7 @@ const setSearchResponse = async (
     `NOC_NOC_TYPE_${get(response, "Noc[0].nocType")}`
   );
 
-  requiredDocumentsData(state, dispatch, action);
+  await requiredDocumentsData(state, dispatch, action);
 };
 
 const getRequiredMdmsDetails = async (state, dispatch, action) => {

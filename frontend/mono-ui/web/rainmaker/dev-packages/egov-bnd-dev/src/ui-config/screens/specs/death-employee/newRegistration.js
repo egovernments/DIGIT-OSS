@@ -155,7 +155,7 @@ const newRegistration = {
               dispatch(
                 prepareFinalObject(
                   "bnd.death.newRegistration.isLegacyRecord",
-                  response.DeathCertificate[0].counter == 1
+                  response.DeathCertificate[0].isLegacyRecord
                 )
               );
               prepareEditScreenData(action, state, dispatch, response);

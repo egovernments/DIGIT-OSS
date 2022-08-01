@@ -41,25 +41,79 @@ const StaticDynamicCard = ({moduleCode}) => {
     }
     const mdmsConfigResult = mdmsData?.MdmsRes["common-masters"]?.StaticData[0]?.[`${moduleCode}`];
 
+    const StaticDataIconComponentOne = ({module}) => {
+
+      switch(module){
+        case 'PT':
+        case 'WS':
+          return (<span className="timerIcon">
+                    <TimerIcon/>
+                </span>)
+        default:
+          return null
+      }
+    };
+    const StaticDataIconComponentTwo = ({module}) => {
+
+      switch(module){
+        case 'PT':
+          return (<span className="rupeeSymbol">
+                    <RupeeSymbol/>
+                    </span>)
+        case 'WS':
+          return (<span className="timerIcon">
+                    <TimerIcon/>
+                  </span>)
+        default:
+          return null
+      }
+    }
     const staticContent = (module) => {
       switch(module){
         case 'TL':
         case 'PT':
         case 'MCOLLECT':
           return {
-            "staticCommonContent": t("COMMON_VALIDITY"),
+            staticCommonContent: t("COMMON_VALIDITY"),
+            validity: mdmsConfigResult?.validity + (mdmsConfigResult?.validity === "1" ? t("COMMON_DAY") : t("COMMON_DAYS"))
           }
         case 'PGR':
           return {
-            "staticCommonContent": t("ACTION_TEST_COMPLAINT_TYPES"),
+            staticCommonContent: t("ACTION_TEST_COMPLAINT_TYPES"),
+          }
+        case 'OBPS':
+          return {
+            staticCommonContent: t("BUILDING_PLAN_PERMIT_VALIDITY"),
+            validity: mdmsConfigResult?.validity  + " " + (mdmsConfigResult?.validity === "1" ? t("COMMON_DAY") : t("COMMON_DAYS"))
           }
         default:
           return {
-            "staticCommonContent" : "",
+            staticCommonContent : "",
           }
       }
     }
 
+    const staticData = (module) => {
+      switch(module){
+        case 'PT':
+          return {
+            staticDataOne : mdmsConfigResult?.staticDataOne + " " + t("COMMON_DAYS"),
+            staticDataOneHeader : t("APPLICATION_PROCESSING_TIME"),
+            staticDataTwo : mdmsConfigResult?.staticDataTwo,
+            staticDataTwoHeader : t("APPLICATION_PROCESSING_FEE"),
+          }
+        case 'WS':
+          return {
+            staticDataOne :  "",
+            staticDataOneHeader : t("PAY_WATER_CHARGES_BY") + " "+  mdmsConfigResult?.staticDataOne + " "+ t("COMMON_DAYS") + " "+ t("OF_BILL_GEN_TO_AVOID_LATE_FEE"),
+            staticDataTwo : mdmsConfigResult?.staticDataTwo + " " + t("COMMON_DAYS"),
+            staticDataTwoHeader : t("APPLICATION_PROCESSING_TIME"),
+          }
+        default:
+          return {}
+      }
+    }
+    
     if(isMdmsLoading || isSearchLoading){
       return <Loader/>
     }
@@ -132,35 +186,35 @@ const StaticDynamicCard = ({moduleCode}) => {
           </span>
         </div>
       </div>) }
-      { mdmsConfigResult && mdmsConfigResult?.applicationProcessingTime 
+      { mdmsConfigResult && mdmsConfigResult?.staticDataOne 
         ? <div className="staticDataCard">
             <div className="staticData">
-              <span className="timerIcon">
-                <TimerIcon/>
-              </span>
+              <StaticDataIconComponentOne module={moduleCode}/>
               <span className="static-data-content">
-                <span className="static-data-content-first">
-              {t("APPLICATION_PROCESSING_TIME")}
+                <span className="static-data-content-first" style={
+                  {
+                    marginTop: staticData(moduleCode)?.staticDataOne === "" ? "8px" : "unset"
+                  }
+                }>
+              {staticData(moduleCode)?.staticDataOneHeader}
               </span>
               <span className="static-data-content-second">
-                {`${mdmsConfigResult?.applicationProcessingTime}`}
+                {`${staticData(moduleCode)?.staticDataOne}`}
               </span>
               </span>
         </div>
       </div> : <div/>}
-      { mdmsConfigResult && mdmsConfigResult?.applicationProcessingFee 
+      { mdmsConfigResult && mdmsConfigResult?.staticDataTwo 
         ?
         <div className="staticDataCard">
         <div className="staticData">
-            <span className="rupeeSymbol">
-            <RupeeSymbol/>
-            </span>
+        <StaticDataIconComponentTwo module={moduleCode}/>
             <span className="static-data-content">
               <span className="static-data-content-first">
-            {t("APPLICATION_PROCESSING_FEE")}
+            {staticData(moduleCode)?.staticDataTwoHeader}
             </span>
             <span className="static-data-content-second">
-              {mdmsConfigResult?.applicationProcessingFee}
+              {staticData(moduleCode)?.staticDataTwo}
             </span>
             </span>
           </div>
@@ -176,7 +230,7 @@ const StaticDynamicCard = ({moduleCode}) => {
               {staticContent(moduleCode)?.staticCommonContent}
             </span>
           <span className="static-data-content-second">
-            {mdmsConfigResult?.validity}
+            {staticContent(moduleCode)?.validity}
           </span>
           </span>
         </div>

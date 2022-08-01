@@ -1,22 +1,5 @@
 import {
-  LogoutIcon,
-  NavBar,
-  EditPencilIcon,
-  Loader,
-  HomeIcon,
-  ComplaintIcon,
-  BPAHomeIcon,
-  PropertyHouse,
-  CaseIcon,
-  ReceiptIcon,
-  PersonIcon,
-  DocumentIconSolid,
-  DropIcon,
-  CollectionsBookmarIcons,
-  FinanceChartIcon,
-  CollectionIcon,
-  Phone,
-  LanguageIcon,
+  Loader, NavBar
 } from "@egovernments/digit-ui-react-components";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -24,27 +7,7 @@ import { useHistory } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
 import ChangeCity from "../../ChangeCity";
 import StaticCitizenSideBar from "./StaticCitizenSideBar";
-const IconsObject = {
-  home: <HomeIcon className="icon" />,
-  announcement: <ComplaintIcon className="icon" />,
-  business: <ComplaintIcon className="icon" />,
-  store: <PropertyHouse className="icon" />,
-  assignment: <CaseIcon className="icon" />,
-  receipt: <CollectionIcon className="icon" />,
-  "business-center": <PersonIcon className="icon" />,
-  description: <CollectionIcon className="icon" />,
-  "water-tap": <DropIcon className="icon" />,
-  "collections-bookmark": <CollectionsBookmarIcons className="icon" />,
-  "insert-chart": <FinanceChartIcon className="icon" />,
-  edcr: <CollectionIcon className="icon" />,
-  collections: <CollectionIcon className="icon" />,
-  "open-complaints": <ComplaintIcon className="icon" />,
-  HomeIcon: <HomeIcon className="icon" />,
-  EditPencilIcon: <EditPencilIcon className="icon" />,
-  LogoutIcon: <LogoutIcon className="icon" />,
-  Phone: <Phone className="icon" />,
-  LanguageIcon: <Phone className="icon" />,
-};
+
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
   "/" +
@@ -110,17 +73,21 @@ const Profile = ({ info, stateName, t }) => {
   );
 };
 const PoweredBy = () => (
-  <div className="digit-footer" style={{marginBottom:0}}>
+  <div className="digit-footer" style={{ marginBottom: 0 }}>
     <img
       alt="Powered by DIGIT"
       src={window?.globalConfigs?.getConfig?.("DIGIT_FOOTER")}
-      style={{ cursor: "pointer" }} 
+      style={{ cursor: "pointer" }}
       onClick={() => {
         window.open(window?.globalConfigs?.getConfig?.("DIGIT_HOME_URL"), "_blank").focus();
       }}
     />{" "}
   </div>
 );
+
+/* 
+Feature :: Citizen Webview sidebar
+*/
 export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogout, isEmployee = false, linkData, islinkDataLoading }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
@@ -205,16 +172,18 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
   let configEmployeeSideBar = {};
 
   if (!isEmployee) {
-    Object.keys(linkData)?.map((key) => {
-      if (linkData[key][0]?.sidebar === "digit-ui-links")
-        menuItems.splice(1, 0, {
-          type: "link",
-          text: key,
-          links: linkData[key],
-          icon: linkData[key][0]?.leftIcon,
-          link: linkData[key][0]?.sidebarURL,
-        });
-    });
+    Object.keys(linkData)
+      ?.sort((x, y) => y.localeCompare(x))
+      ?.map((key) => {
+        if (linkData[key][0]?.sidebar === "digit-ui-links")
+          menuItems.splice(1, 0, {
+            type: linkData[key][0]?.sidebarURL?.includes("digit-ui") ? "link" : "external-link",
+            text: t(`ACTION_TEST_${Digit.Utils.locale.getTransformedLocale(key)}`),
+            links: linkData[key],
+            icon: linkData[key][0]?.leftIcon,
+            link: linkData[key][0]?.sidebarURL,
+          });
+      });
   } else {
     data?.actions
       .filter((e) => e.url === "url" && e.displayName !== "Home")
@@ -259,11 +228,22 @@ export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogo
         menuItems.splice(1, 0, {
           type: "dynamic",
           moduleName: t(`ACTION_TEST_${getParentDisplayName}`),
-          links: configEmployeeSideBar[keys[i]],
+          links: configEmployeeSideBar[keys[i]]?.map((ob) => {return {...ob, displayName: t(`ACTION_TEST_${ob?.displayName?.toUpperCase()?.replace(/[ -]/g, "_")}`)}}),
           icon: configEmployeeSideBar[keys[i]][1]?.leftIcon,
         });
       }
     }
+     const indx = menuItems.findIndex(a => a.element === "HOME");
+     const home = menuItems.splice(indx,1);
+     const comp = menuItems.findIndex(a => a.element === "LANGUAGE");
+     const part = menuItems.splice(comp,menuItems?.length-comp);
+     menuItems.sort((a,b) => {
+      let c1 = a?.type === "dynamic" ? a?.moduleName : a?.text;
+      let c2 = b?.type === "dynamic" ? b?.moduleName : b?.text;
+      return c1.localeCompare(c2)
+     } );
+     home?.[0] && menuItems.splice(0,0,home[0]);
+     menuItems =  part?.length > 0 ? menuItems.concat(part) : menuItems;
   }
 
   /*  URL with openlink wont have sidebar and actions    */

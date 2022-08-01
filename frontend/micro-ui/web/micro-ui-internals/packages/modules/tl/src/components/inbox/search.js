@@ -29,9 +29,18 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
   },[setSearchFieldsBackToOriginalState])
 
   const setNotRemovedStateToSearchFields = () => {
-    const {applicationNumber, mobileNumber} = justToResetSearchFieldsInCaseOfFilterTrigger
-    setValue("applicationNumber", applicationNumber)
-    setValue("mobileNumber", mobileNumber)
+    if(Array.isArray(justToResetSearchFieldsInCaseOfFilterTrigger))
+    {
+      let [{applicationNumber, mobileNumber}] = justToResetSearchFieldsInCaseOfFilterTrigger
+      setValue("applicationNumber", applicationNumber)
+      setValue("mobileNumber", mobileNumber)
+    }
+    else
+    {
+      let {applicationNumber, mobileNumber} = justToResetSearchFieldsInCaseOfFilterTrigger
+      setValue("applicationNumber", applicationNumber)
+      setValue("mobileNumber", mobileNumber)
+    }
   }
 
   useEffect(() => {
@@ -87,6 +96,7 @@ const SearchApplication = ({ onSearch, type, onClose, searchFields, searchParams
       searchFields.forEach((e) => {
         _newParams.delete.push(e?.name);
       });
+      setSearchFieldsInCaseOfFilterTrigger({applicationNumber: "", mobileNumber: ""});
       onSearch({ ..._newParams });
     } else {
       _clearSearch();

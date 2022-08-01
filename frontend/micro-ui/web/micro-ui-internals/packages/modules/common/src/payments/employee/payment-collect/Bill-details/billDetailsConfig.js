@@ -160,9 +160,9 @@ export const BillDetailsKeyNoteConfig = () => ({
         keyPath: [
           "billDetails",
           (d) => {
-            const { expiryDate } = d[0];
-            if (expiryDate) {
-              return new Date(expiryDate).toLocaleDateString();
+            const { currentExpiryDate } = d[0];
+            if (currentExpiryDate) {
+              return new Date(currentExpiryDate).toLocaleDateString();
             } else return "N/A";
           },
         ],

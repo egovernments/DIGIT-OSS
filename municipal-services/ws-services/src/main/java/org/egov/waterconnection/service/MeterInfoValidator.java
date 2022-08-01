@@ -30,6 +30,9 @@ public class MeterInfoValidator implements WaterActionValidator {
 		case WCConstants.UPDATE_APPLICATION:
 			handleUpdateApplicationRequest(waterConnectionRequest, errorMap);
 			break;
+		case WCConstants.DISCONNECT_CONNECTION:
+			handleDisconnectionApplicationRequest(waterConnectionRequest, errorMap);
+			break;
 		default:
 			break;
 		}
@@ -37,7 +40,17 @@ public class MeterInfoValidator implements WaterActionValidator {
 			return new ValidatorResult(false, errorMap);
 		return new ValidatorResult(true, errorMap);
 	}
-	
+
+	private void handleDisconnectionApplicationRequest(WaterConnectionRequest waterConnectionRequest, Map<String, String> errorMap) {
+		if (WCConstants.EXECUTE_DISCONNECTION
+				.equalsIgnoreCase(waterConnectionRequest.getWaterConnection().getProcessInstance().getAction())) {
+			if (WCConstants.METERED_CONNECTION
+					.equalsIgnoreCase(waterConnectionRequest.getWaterConnection().getConnectionType())) {
+				validateMeteredConnectionRequst(waterConnectionRequest, errorMap);
+			}
+		}
+	}
+
 	private void handleUpdateApplicationRequest(WaterConnectionRequest waterConnectionRequest,
 			Map<String, String> errorMap) {
 		if (WCConstants.ACTIVATE_CONNECTION_CONST

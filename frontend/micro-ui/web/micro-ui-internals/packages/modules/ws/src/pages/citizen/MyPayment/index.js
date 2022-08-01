@@ -8,7 +8,7 @@ const WSMyPayments = () => {
 
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
-  const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   let filter = window.location.href.split("/").pop();
   let t1;
   let off;
@@ -45,7 +45,8 @@ const WSMyPayments = () => {
   const swpayment = swpayments && swpayments?.Payments || [];
 
   let applicationsList = wspayment.concat(swpayment);
-  applicationsList = applicationsList?.map(ob => ({...ob, property:totalApaplications?.filter(ob1 => properties?.Properties?.filter(prop => prop?.propertyId === ( ob1?.connectionNo === ob?.paymentDetails?.[0]?.bill?.consumerCode)?.[0]?.propertyId))?.[0]}))
+  applicationsList = applicationsList?.map(ob => ({...ob,details:totalApaplications?.filter(app => app?.connectionNo === ob?.paymentDetails?.[0]?.bill?.consumerCode)?.[0]}))
+  applicationsList = applicationsList?.map(ob => ({...ob,property:properties?.Properties?.filter(prop => prop?.propertyId === ob?.details?.propertyId)?.[0]}))
   return (
     <React.Fragment>
       <Header>{`${t("WS_MY_PAYMENTS_HEADER")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>

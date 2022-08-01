@@ -76,7 +76,7 @@ import {
         <StatusTable>
           <Row className="border-none" textStyle={isMobile ? {marginRight:"-10px"} : {}} label={t("WS_OWN_MOBILE_NO")} text={ConnectionHolderDetails?.mobileNumber}/>
           <Row className="border-none" label={t("WS_OWN_DETAIL_NAME")} text={ConnectionHolderDetails?.name}/>
-          <Row className="border-none" label={t("WS_OWN_DETAIL_GENDER_LABEL")} text={t(ConnectionHolderDetails?.gender?.i18nKey)}/>
+          <Row className="border-none" label={t("WS_OWN_DETAIL_GENDER_LABEL")} text={t(ConnectionHolderDetails?.gender?.i18nKey) || t("CS_NA")}/>
           <Row className="border-none" label={t("WS_FATHERS_HUSBAND_NAME")} text={ConnectionHolderDetails?.guardian || t("CS_NA")}/>
           <Row className="border-none" label={t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL")} text={t(ConnectionHolderDetails?.relationship?.i18nKey) || t("CS_NA")} />
           <Row className="border-none" label={t("WS_OWN_DETAIL_CROSADD")} text={ConnectionHolderDetails?.address || t("CS_NA")} />
@@ -94,7 +94,6 @@ import {
       </div>
         <StatusTable>
           <Row className="border-none" textStyle={isMobile ? {marginRight:"-10px"}:{}} label={t("WS_SERVICE_NAME_LABEL")} text={t(serviceName?.i18nKey)}/>
-          <Row className="border-none" label={t("WS_SERV_DETAIL_CONN_TYPE")} text={"NA"}  />
           {waterConectionDetails && Object.keys(waterConectionDetails)?.length>0 && <div>
             <Row className="border-none" label={t("WS_NO_OF_TAPS_PROPOSED")} text={waterConectionDetails?.proposedTaps} />
             <Row className="border-none" label={t("WS_SERV_DETAIL_PIPE_SIZE")} text={t(waterConectionDetails?.proposedPipeSize?.i18nKey)} />
@@ -103,8 +102,6 @@ import {
             <Row className="border-none" label={t("WS_NO_OF_WATER_CLOSETS")}   text={sewerageConnectionDetails?.proposedWaterClosets} />
             <Row className="border-none" label={t("WS_SERV_DETAIL_NO_OF_TOILETS")} text={sewerageConnectionDetails?.proposedToilets} />
           </div>}
-          <Row className="border-none" label={t("WS_SERV_DETAIL_WATER_SOURCE")}  text={"NA"} />
-          <Row className="border-none" label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")} text={"NA"} />
         </StatusTable>
     </Card>
     <Card style={{paddingRight:"16px"}}>
@@ -128,7 +125,7 @@ import {
           </div>
         ))}
       </Card>
-      <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} />
+      <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} style={{marginLeft:"10px",maxWidth:"95%"}}/>
     </React.Fragment>
     )
   }

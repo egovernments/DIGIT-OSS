@@ -23,7 +23,7 @@ export const mdmsData = async (tenantId,t) => {
   return obj
   }
 
-export const convertEpochToDateDMY = (dateEpoch) => {
+export const convertEpochToDateDMY = (dateEpoch, isModify = false) => {
   if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
     return "NA";
   }
@@ -33,7 +33,8 @@ export const convertEpochToDateDMY = (dateEpoch) => {
   let year = dateFromApi.getFullYear();
   month = (month > 9 ? "" : "0") + month;
   day = (day > 9 ? "" : "0") + day;
-  return `${day}/${month}/${year}`;
+  // return `${day}-${month}-${year}`;
+  return isModify ? `${year}-${month}-${day}` : `${day}-${month}-${year}`;
 };
 
 export const convertEpochToDate = (dateEpoch) => {
@@ -102,6 +103,23 @@ export const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
   try {
     const parts = dateString.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
     const DateObj = new Date(Date.UTC(parts[1], parts[2] - 1, parts[3]));
+    DateObj.setMinutes(DateObj.getMinutes() + DateObj.getTimezoneOffset());
+    if (dayStartOrEnd === "dayend") {
+      DateObj.setHours(DateObj.getHours() + 24);
+      DateObj.setSeconds(DateObj.getSeconds() - 1);
+    }
+    return DateObj.getTime();
+  } catch (e) {
+    return dateString;
+  }
+};
+
+export const convertDateToEpochNew = (dateString, dayStartOrEnd = "dayend") => {
+  //example input format : "2018-10-02"
+  try {
+    const parts = dateString.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+    const DateObj = new Date(Date.UTC(parts[1], parts[3] - 1, parts[2]));
+
     DateObj.setMinutes(DateObj.getMinutes() + DateObj.getTimezoneOffset());
     if (dayStartOrEnd === "dayend") {
       DateObj.setHours(DateObj.getHours() + 24);
@@ -265,7 +283,7 @@ export const updatePayloadOfWS = async (data, type) => {
     },
     documents: JSON.parse(sessionStorage.getItem("WS_DOCUMENTS_INOF")),
     property: JSON.parse(sessionStorage.getItem("WS_PROPERTY_INOF")),
-    connectionType: type === "WATER" ? null : "Non Metered",
+    connectionType: type === "WATER" ? data?.connectionType : "Non Metered",
   };
   return payload;
 };
@@ -377,7 +395,7 @@ export const convertToEditWSUpdate = (data) => {
       wfDocuments: [],
       assignee: [],
       action: data?.isEditApplication ? "RESUBMIT_APPLICATION" : "SUBMIT_APPLICATION",
-      assignees: [],
+      assignes: [],
     },
   };
   return formdata;
@@ -477,7 +495,7 @@ export const convertToEditSWUpdate = (data) => {
       wfDocuments: [],
       assignee: [],
       action: data?.isEditApplication ? "RESUBMIT_APPLICATION" : "SUBMIT_APPLICATION",
-      assignees: [],
+      assignes: [],
     },
   };
   return formdata;
@@ -487,6 +505,7 @@ export const convertToSWUpdate = (data) => {
   let formdata = {
     SewerageConnection: {
       ...data?.SewerageConnectionResult?.SewerageConnections?.[0],
+      connectionType:"Non Metered",
       documents: [...data?.documents?.documents],
       processInstance: {
         action: "SUBMIT_APPLICATION",
@@ -494,6 +513,98 @@ export const convertToSWUpdate = (data) => {
     },
   };
   return formdata;
+};
+export const createPayloadOfWSDisconnection = async (data, storeData, service) => {
+  let wsPayload = {
+    WaterConnection : {
+      id: storeData?.applicationData?.id,
+      applicationNo: storeData?.applicationData?.applicationNo,
+      applicationStatus: storeData?.applicationData?.applicationStatus,
+      status: storeData?.applicationData?.status,
+      connectionNo: storeData?.applicationData?.connectionNo,
+      applicationType: "NEW_WATER_CONNECTION",
+      dateEffectiveFrom: convertDateToEpoch(data?.date),
+      isdisconnection : true,
+      isDisconnectionTemporary: data?.type?.value?.code === "Temporary" ? true :false,
+      disconnectionReason: data?.reason.value,
+      documents: data?.documents,
+      water: true,
+      sewerage: false,
+      proposedTaps: storeData?.applicationData?.proposedTaps && Number(storeData?.applicationData?.proposedTaps),
+      proposedPipeSize: storeData?.applicationData?.proposedPipeSize?.size && Number(storeData?.applicationData?.proposedPipeSize?.size),
+      service: "Water",
+      property: storeData?.applicationData?.property,
+      propertyId: storeData?.applicationData?.propertyId,
+      oldConnectionNo: null,
+      plumberInfo: null,
+      roadCuttingArea: null,
+      roadType: null,
+      connectionExecutionDate: storeData?.applicationData?.connectionExecutionDate,
+      noOfTaps: storeData?.applicationData?.noOfTaps,
+      additionalDetails: storeData?.applicationData?.additionalDetails,
+      tenantId: storeData?.applicationData?.tenantId,
+      processInstance: {
+        ...storeData?.applicationData?.processInstance,
+        action: "INITIATE",
+      },
+      channel: "CFC_COUNTER",
+    },
+    disconnectRequest: true
+};
+
+  let swPayload = {
+    SewerageConnection: {
+      id: storeData?.applicationData?.id,
+      applicationNo: storeData?.applicationData?.applicationNo,
+      applicationStatus: storeData?.applicationData?.applicationStatus,
+      status: storeData?.applicationData?.status,
+      connectionNo: storeData?.applicationData?.connectionNo,
+      applicationType: "NEW_WATER_CONNECTION",
+      dateEffectiveFrom: convertDateToEpoch(data?.date),
+      isdisconnection : true,
+      isDisconnectionTemporary: data?.type?.value?.code === "Temporary" ? true :false,
+      disconnectionReason: data?.reason.value,
+      documents: data?.documents,
+      water: false,
+      sewerage: true,
+      proposedWaterClosets: storeData?.applicationData?.proposedWaterClosets && Number(storeData?.applicationData?.proposedWaterClosets),
+      proposedToilets: storeData?.applicationData?.proposedToilets && Number(storeData?.applicationData?.proposedToilets),
+      service: "Water",
+      property: storeData?.applicationData?.property,
+      propertyId: storeData?.applicationData?.propertyId,
+      oldConnectionNo: null,
+      plumberInfo: null,
+      roadCuttingArea: null,
+      roadType: null,
+      connectionExecutionDate: convertDateToEpoch(data?.date),
+      noOfWaterClosets: storeData?.applicationData?.noOfWaterClosets ,
+      noOfToilets : storeData?.applicationData?.noOfToilets,
+      additionalDetails: storeData?.applicationData?.additionalDetails,
+      tenantId: storeData?.applicationData?.tenantId,
+      processInstance: {
+        ...storeData?.applicationData?.processInstance,
+        action: "INITIATE",
+      },
+      channel: "CFC_COUNTER",
+    },
+    disconnectRequest: true
+  };
+
+
+  return service === "WATER" ?  wsPayload : swPayload;
+};
+
+export const updatePayloadOfWSDisconnection = async (data, type) => {
+  let payload = {
+    ...data,
+    applicationType: type === "WATER" ? "DISCONNECT_WATER_CONNECTION" : "DISCONNECT_SEWERAGE_CONNECTION",
+    processInstance: {
+      ...data?.processInstance,
+      businessService: type === "WATER" ? "DisconnectWSConnection" : "DisconnectSWConnection",
+      action: "SUBMIT_APPLICATION",
+    }
+  };
+  return payload;
 };
 
 export const getOwnersforPDF = (property, t) => {
@@ -745,12 +856,12 @@ export const convertApplicationData = (data, serviceType, modify = false, editBy
     },
   ];
 
-
   const ConnectionHolderDetails =
   data?.applicationData?.connectionHolders?.length > 0
     ? [
         {
           sameAsOwnerDetails: false,
+          uuid: data?.applicationData?.connectionHolders?.[0]?.uuid,
           name: data?.applicationData?.connectionHolders?.[0]?.name || "",
           mobileNumber: data?.applicationData?.connectionHolders?.[0]?.mobileNumber || "",
           guardian: data?.applicationData?.connectionHolders?.[0]?.fatherOrHusbandName || "",
@@ -844,20 +955,20 @@ export const convertApplicationData = (data, serviceType, modify = false, editBy
   if (modify) {
     const activationDetails = [
       {
-        meterId: data?.applicationData?.meterId || "",
+        meterId: data?.applicationData?.meterId ? Number(data?.applicationData?.meterId) : "",
         meterInstallationDate: data?.applicationData?.meterInstallationDate
-          ? convertEpochToDateDMY(data?.applicationData?.meterInstallationDate)
+          ? convertEpochToDateDMY(data?.applicationData?.meterInstallationDate, true)
           : null,
-        meterInitialReading: data?.applicationData?.additionalDetails?.initialMeterReading || "",
+        meterInitialReading: data?.applicationData?.additionalDetails?.initialMeterReading ? Number(data?.applicationData?.additionalDetails?.initialMeterReading) : "",
         connectionExecutionDate: data?.applicationData?.connectionExecutionDate
-          ? convertEpochToDateDMY(data?.applicationData?.connectionExecutionDate)
+          ? convertEpochToDateDMY(data?.applicationData?.connectionExecutionDate, true)
           : null,
       },
     ];
 
     if (window.location.href.includes("modify-application-edit"))
       activationDetails[0].dateEffectiveFrom = data?.applicationData?.dateEffectiveFrom
-        ? convertEpochToDateDMY(data?.applicationData?.dateEffectiveFrom)
+        ? convertEpochToDateDMY(data?.applicationData?.dateEffectiveFrom, true)
         : null;
 
     const sourceSubDataValue = data?.applicationData?.waterSource
@@ -924,8 +1035,45 @@ export const convertApplicationData = (data, serviceType, modify = false, editBy
       InfoLabel: "InfoLabel"
     }
 
+    let plumberDetails = [
+      {
+        detailsProvidedBy: data?.applicationData?.additionalDetails?.detailsProvidedBy
+        ? {
+            i18nKey: data?.applicationData?.additionalDetails?.detailsProvidedBy,
+            code: data?.applicationData?.additionalDetails?.detailsProvidedBy,
+            size: data?.applicationData?.additionalDetails?.detailsProvidedBy,
+          }
+        : "",
+        plumberName: data?.applicationData?.plumberInfo?.[0].name,
+        plumberMobileNo: data?.applicationData?.plumberInfo?.[0].mobileNumber,
+        plumberLicenseNo: data?.applicationData?.plumberInfo?.[0].licenseNo
+      }
+    ];
+
+    let roadCuttingDetails = data?.applicationData?.roadCuttingInfo ? data?.applicationData?.roadCuttingInfo?.map((rc, index) => {
+      return {
+        key: index + '_' + Date.now(),
+        roadType: {
+          i18nKey: `WS_ROADTYPE_`+rc?.roadType,
+          code: rc?.roadType,
+        },
+        area: rc?.roadCuttingArea,
+      }
+    }) : [
+      {
+        key: 99999 + '_' + Date.now(),
+        roadType: {
+          i18nKey: '',
+          code: '',
+        },
+        area: '',
+      }
+    ];
+
     if(editByConfig) { 
       payload.connectionDetails = [connectionDetails];
+      payload.plumberDetails = plumberDetails;
+      payload.roadCuttingDetails = roadCuttingDetails;
     }
   }
 
@@ -942,6 +1090,7 @@ export const convertEditApplicationDetails = async (data, appData, actionData) =
 
   let payload = {
     ...appData.applicationData,
+    propertyId: data?.cpt?.details?.propertyId,
     proposedTaps: data?.ConnectionDetails?.[0]?.proposedTaps && Number(data?.ConnectionDetails?.[0]?.proposedTaps),
     proposedPipeSize: data?.ConnectionDetails?.[0]?.proposedPipeSize?.size && Number(data?.ConnectionDetails?.[0]?.proposedPipeSize?.size),
     proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),
@@ -972,7 +1121,10 @@ export const convertEditApplicationDetails = async (data, appData, actionData) =
 };
 
 export const getConvertedDate = async (dateOfTime) => {
-  let dateOfReplace = stringReplaceAll(dateOfTime, "/", "-");
+  const splitStr = dateOfTime?.split("-")
+  const dateOfTimeReversedArr = splitStr?.reverse()
+  const dateOfTimeReversed = dateOfTimeReversedArr?.join("-")
+  let dateOfReplace = stringReplaceAll(dateOfTimeReversed, "/", "-");
   let formattedDate = "";
   if (dateOfReplace.split("-")[2] > 1900) {
     formattedDate = `${dateOfReplace.split("-")[2]}-${dateOfReplace.split("-")[1]}-${dateOfReplace.split("-")[0]}`;
@@ -1005,6 +1157,7 @@ export const convertModifyApplicationDetails = async (data, appData, actionData 
     formData.additionalDetails.initialMeterReading = data?.activationDetails?.[0]?.meterInitialReading;
   if (data?.activationDetails?.[0]?.connectionExecutionDate)
     formData.connectionExecutionDate = await getConvertedDate(data?.activationDetails?.[0]?.connectionExecutionDate);
+    
   if (data?.activationDetails?.[0]?.dateEffectiveFrom)
     formData.dateEffectiveFrom = await getConvertedDate(data?.activationDetails?.[0]?.dateEffectiveFrom);
 
@@ -1034,6 +1187,37 @@ export const convertModifyApplicationDetails = async (data, appData, actionData 
   sessionStorage.setItem("WS_PROPERTY_INOF", JSON.stringify(data?.cpt?.details));
 
   return formData;
+};
+
+export const downloadPdf = (blob, fileName) => {
+  if (window.mSewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
+    var reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function () {
+      var base64data = reader.result;
+      window.mSewaApp.downloadBase64File(base64data, fileName);
+    };
+  } else {
+    const link = document.createElement("a");
+    // create a blobURI pointing to our Blob
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    // some browser needs the anchor to be in the doc
+    document.body.append(link);
+    link.click();
+    link.remove();
+    // in case the Blob uses a lot of memory
+    setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+  }
+};
+export const downloadAndOpenPdf = async (connectionNo, filters) => {
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const response = await Digit.WSService.generateBillPdf({tenantId, filters});
+  const responseStatus = parseInt(response.status, 10);
+  if (responseStatus === 201 || responseStatus === 200) {
+    console.log("Func");
+    downloadPdf(new Blob([response.data], { type: "application/pdf" }), `BILL-${connectionNo}.pdf`);
+  }
 };
 
 export const ifUserRoleExists = (role) => {

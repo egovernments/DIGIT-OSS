@@ -12,7 +12,7 @@ public class WSConstants {
     public static final String WS_APPLICATION_STATUS_PARAM = "applicationStatus";
     public static final String WS_APPLICATION_TYPE_PARAM = "applicationType";
     public static final String WS_APPLICATION_SEARCH_TYPE_PARAM = "searchType";
-    public static final String ASSIGNEE_PARAM = "assignee";
+    public static final String WS_ASSIGNEE_PARAM = "assignee";
     public static final String STATUS_PARAM = "status";
     public static final String OFFSET_PARAM = "offset";
     public static final String NO_OF_RECORDS_PARAM = "noOfRecords";

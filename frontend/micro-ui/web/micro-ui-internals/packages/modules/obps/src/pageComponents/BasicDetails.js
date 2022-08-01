@@ -34,6 +34,7 @@ const BasicDetails = ({ formData, onSelect, config }) => {
 
   const handleKeyPress = async (event) => {
     if (event.key === "Enter") {
+      if (!scrutinyNumber?.edcrNumber) return;
       const details = await scrutinyDetailsData(scrutinyNumber?.edcrNumber, stateCode);
       if (details?.type == "ERROR") {
         setShowToast({ message: details?.message });
@@ -112,10 +113,10 @@ const BasicDetails = ({ formData, onSelect, config }) => {
         <TextInput
           className="searchInput"
           onKeyPress={handleKeyPress}
-          onChange={(event) => setScrutinyNumber({ edcrNumber: event.target.value })}
-          value={scrutinyNumber?.edcrNumber}
-          signature={true}
-          signatureImg={<SearchIconSvg className="signature-img" onClick={!disableVlaue ? () => handleSearch() : null} />}
+          onChange={event => setScrutinyNumber({ edcrNumber: event.target.value })} 
+          value={scrutinyNumber?.edcrNumber} 
+          signature={true} 
+          signatureImg={<SearchIconSvg className="signature-img" onClick={!disableVlaue && scrutinyNumber?.edcrNumber ? () => handleSearch() : null} />}
           disable={disableVlaue}
           style={{ marginBottom: "10px" }}
         />

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.*;
+import org.egov.hash.HashService;
 import org.egov.tracer.config.TracerConfiguration;
 import org.egov.web.notification.sms.config.*;
 import org.springframework.beans.factory.annotation.*;
@@ -50,6 +51,12 @@ public class EgovNotificationSmsApplication {
     @Bean
     public RestTemplate getRestTemplate() {
         return new RestTemplate();
+    }
+
+    @Primary
+    @Bean
+    public HashService getHashService() {
+        return new HashService();
     }
     
     @Bean

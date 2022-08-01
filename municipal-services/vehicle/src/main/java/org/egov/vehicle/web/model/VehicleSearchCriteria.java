@@ -61,16 +61,23 @@ public class VehicleSearchCriteria {
 	@JsonProperty("status")
     private List<String> status;   
 
-	  @JsonProperty("sortBy")
-	    private SortBy sortBy;
+	@JsonProperty("sortBy")
+	private SortBy sortBy;
 	    
-	    @JsonProperty("sortOrder")
-	    private SortOrder sortOrder;
-	    
-	    public enum SortOrder {
+	@JsonProperty("sortOrder")
+	private SortOrder sortOrder;
+	
+	@JsonProperty("vehicleWithNoVendor")
+	private boolean vehicleWithNoVendor; 
+	
+	@JsonProperty("vehicleVendorStatus")
+    private List<String> vehicleVendorStatus;   
+
+	   
+	public enum SortOrder {
 	        ASC,
 	        DESC
-	    }
+	}
 
 	    public enum SortBy {
 	        type,

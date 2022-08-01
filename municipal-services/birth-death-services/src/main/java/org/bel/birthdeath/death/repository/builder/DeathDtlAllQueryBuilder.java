@@ -23,9 +23,9 @@ public class DeathDtlAllQueryBuilder {
 
 	private static String QUERY_MASTER_FULL_ALL = "SELECT bdtl.id deathdtlid,bfat.id bfatid,bmot.id bmotid,bpmad.id bpmadid,bpsad.id bpsadid, bsps.id bspsid," +
 			"bdtl.tenantid tenantid, registrationno, dateofdeath, counter, gender ,  " + 
-			"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Others'  END AS genderstr , " +
+			"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Transgender'  END AS genderstr , " +
 			"(select bh.hospitalname from eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname, placeofdeath, dateofreport, remarks, " + 
-			"hospitalid , informantsname , informantsaddress , age,  eidno , icdcode , bdtl.nationality bdtlnationality, bdtl.religion bdtlreligion ," + 
+			"hospitalid , informantsname , informantsaddress , age,  eidno , icdcode, islegacyrecord, bdtl.nationality bdtlnationality, bdtl.religion bdtlreligion ," +
 			"bfat.firstname bfatfn ,bmot.firstname bmotfn , bdtl.firstname bdtlfn , bsps.firstname bspsfn ," + 
 			"bfat.middlename bfatmn ,bmot.middlename bmotmn , bdtl.middlename bdtlmn , bsps.middlename bspsmn ," + 
 			"bfat.lastname bfatln ,bmot.lastname bmotln , bdtl.lastname bdtlln , bsps.lastname bspsln ," + 
@@ -44,7 +44,7 @@ public class DeathDtlAllQueryBuilder {
 			"left join eg_death_presentaddr bpsad on bpsad.deathdtlid = bdtl.id";
 	
     private static String QUERY_MASTER_ALL = "SELECT bdtl.id deathdtlid, bdtl.tenantid tenantid, registrationno, dateofdeath, counter, gender , age , "
-    		+ "CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Others'  END AS genderstr ,"
+    		+ "CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Transgender'  END AS genderstr ,"
     		+ " (select bh.hospitalname from eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname, placeofdeath, dateofreport, remarks, "
     		+ "bfat.firstname bfatfn ,bmot.firstname bmotfn , bdtl.firstname bdtlfn ,bsps.firstname bspsfn , "
     		+ "bfat.middlename bfatmn ,bmot.middlename bmotmn , bdtl.middlename bdtlmn ,bsps.middlename bspsmn , "
@@ -62,7 +62,7 @@ public class DeathDtlAllQueryBuilder {
     		"left join eg_death_spouse_info bsps on bsps.deathdtlid = bdtl.id " ;
     
     private static final String QUERY_MASTER = "SELECT bdtl.id deathdtlid, tenantid, registrationno, dateofdeath, counter, gender, hospitalname, "+
-    		"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Others'  END AS genderstr ," +
+    		"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Transgender'  END AS genderstr ," +
     		"(select bh.hospitalname from eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname ,"+
     		"bfat.firstname bfatfn ,bmot.firstname bmotfn , bdtl.firstname bdtlfn ,bsps.firstname bspsfn , "+
     		"bfat.middlename bfatmn ,bmot.middlename bmotmn , bdtl.middlename bdtlmn ,bsps.middlename bspsmn , "+
@@ -171,7 +171,7 @@ public class DeathDtlAllQueryBuilder {
 		}
 		if (criteria.getSpouseName() != null) {
 			addClauseIfRequired(preparedStmtList, builder);
-			builder.append(" ( bfat.firstname ilike ? or bfat.middlename ilike ? or bfat.lastname ilike ? ) ");
+			builder.append(" ( bsps.firstname ilike ? or bsps.middlename ilike ? or bsps.lastname ilike ? ) ");
 			preparedStmtList.add("%"+criteria.getSpouseName()+"%");
 			preparedStmtList.add("%"+criteria.getSpouseName()+"%");
 			preparedStmtList.add("%"+criteria.getSpouseName()+"%");

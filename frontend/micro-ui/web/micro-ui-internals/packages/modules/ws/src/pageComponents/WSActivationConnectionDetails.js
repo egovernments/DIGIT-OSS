@@ -45,7 +45,6 @@ const WSActivationConnectionDetails = ({ config, onSelect, userType, formData, s
     const { isMdmsLoading, data: mdmsData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["connectionType", "waterSource"]);
     const { isWSServicesCalculationLoading, data: wsServicesCalculationData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-calculation", ["PipeSize"]);
 
-
     useEffect(() => {
         const data = connectionDetails.map((e) => {
             return e;
@@ -53,9 +52,8 @@ const WSActivationConnectionDetails = ({ config, onSelect, userType, formData, s
         onSelect(config?.key, data);
     }, [connectionDetails]);
 
-
     useEffect(() => {
-        const list = mdmsData?.["ws-services-calculation"]?.PipeSize || [];
+        const list = wsServicesCalculationData?.["ws-services-calculation"]?.PipeSize || [];
         list?.forEach(data => data.i18nKey = data.size);
 
         const connectionTypes = mdmsData?.["ws-services-masters"]?.connectionType || [];
@@ -210,6 +208,19 @@ const ConnectionDetails = (_props) => {
         <div >
             <div style={{ marginBottom: "16px" }}>
                 <div>
+                    { !window.location.href.includes("by-config") ?
+                        <LabelFieldPair>
+                            <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_ACK_COMMON_APP_NO_LABEL")}*:`}</CardLabel>
+                            <div className="field">
+                                <TextInput 
+                                    disabled={true} 
+                                    value={filters?.applicationNumber}>
+                                </TextInput>
+                            </div>
+                            
+                        </LabelFieldPair>
+                    : null 
+                    }
                     {filters?.service === "WATER" ? <div>
                         <LabelFieldPair>
                             <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_SERV_DETAIL_CONN_TYPE")}*:`}</CardLabel>

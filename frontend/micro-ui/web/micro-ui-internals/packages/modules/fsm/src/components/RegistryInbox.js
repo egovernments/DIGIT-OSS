@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import { Card, Loader, Menu, Toast } from "@egovernments/digit-ui-react-components";
+import { Link, useHistory } from "react-router-dom";
+import { Card, Dropdown, Loader, Menu, SubmitBar, Toast } from "@egovernments/digit-ui-react-components";
 import FSMLink from "./inbox/FSMLink";
 import ApplicationTable from "./inbox/ApplicationTable";
 import Filter from "./inbox/Filter";
@@ -12,82 +12,234 @@ import { useQueryClient } from "react-query";
 const RegisryInbox = (props) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
+  const history = useHistory();
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
   const GetCell = (value) => <span className="cell-text">{value}</span>;
   const FSTP = Digit.UserService.hasAccess("FSM_EMP_FSTPO") || false;
-  const [tableData, setTableData] = useState([])
+  const [tableData, setTableData] = useState([]);
   const [showToast, setShowToast] = useState(null);
+  const [vendors, setVendors] = useState([]);
   const queryClient = useQueryClient();
 
   const {
-    isLoading: isUpdateLoading,
-    isError: vendorCreateError,
-    data: updateResponse,
-    error: updateError,
-    mutate,
+    data: vendorData,
+    isLoading: isVendorLoading,
+    isSuccess: isVendorSuccess,
+    error: vendorError,
+    refetch: refetchVendor,
+  } = Digit.Hooks.fsm.useDsoSearch(tenantId, { status: "ACTIVE" }, { enabled: false });
+
+  const {
+    isLoading: isUpdateVendorLoading,
+    isError: vendorUpdateError,
+    data: updateVendorResponse,
+    error: updateVendorError,
+    mutate: mutateVendor,
   } = Digit.Hooks.fsm.useVendorUpdate(tenantId);
 
+  const {
+    isLoading: isUpdateVehicleLoading,
+    isError: vehicleUpdateError,
+    data: updateVehicleResponse,
+    error: updateVehicleError,
+    mutate: mutateVehicle,
+  } = Digit.Hooks.fsm.useUpdateVehicle(tenantId);
+
+  const {
+    isLoading: isDriverLoading,
+    isError: driverUpdateError,
+    data: updateDriverResponse,
+    error: updateDriverError,
+    mutate: mutateDriver,
+  } = Digit.Hooks.fsm.useDriverUpdate(tenantId);
+
   useEffect(() => {
-    setTableData(props?.data?.table || [])
-  }, [props])
+    setTableData(props?.data?.table || []);
+  }, [props]);
+
+  useEffect(() => {
+    if (props.selectedTab === "DRIVER") refetchVendor();
+  }, [props.selectedTab]);
+
+  useEffect(() => {
+    if (vendorData) {
+      let vendors = vendorData.map((data) => data.dsoDetails);
+      setVendors(vendors);
+    }
+  }, [vendorData]);
 
   const closeToast = () => {
     setShowToast(null);
   };
 
-  const onValueChange = (row) => {
-    let dsoDetails = row.original.dsoDetails
+  const onVendorUpdate = (row) => {
+    let formDetails = row.original.dsoDetails;
     const formData = {
       vendor: {
-        ...dsoDetails,
-        status: dsoDetails?.status === "ACTIVE" ? "DISABLED" : "ACTIVE",
+        ...formDetails,
+        status: formDetails?.status === "ACTIVE" ? "DISABLED" : "ACTIVE",
         owner: {
-          ...dsoDetails.owner,
-          gender: dsoDetails?.owner?.gender || 'OTHER',
-          dob: dsoDetails?.owner?.dob || new Date(`1/1/1970`).getTime(),
-          emailId: dsoDetails?.owner?.emailId || 'abc@egov.com',
-          relationship: dsoDetails?.owner?.relationship || 'OTHER'
+          ...formDetails.owner,
+          gender: formDetails?.owner?.gender || "OTHER",
+          dob: formDetails?.owner?.dob || new Date(`1/1/1970`).getTime(),
+          emailId: formDetails?.owner?.emailId || "abc@egov.com",
+          relationship: formDetails?.owner?.relationship || "OTHER",
         },
-      }
+      },
     };
 
-    mutate(formData, {
+    mutateVendor(formData, {
       onError: (error, variables) => {
         setShowToast({ key: "error", action: error });
         setTimeout(closeToast, 5000);
       },
       onSuccess: (data, variables) => {
-        setShowToast({ key: "success", action: 'VENDOR' });
+        setShowToast({ key: "success", action: "VENDOR" });
         queryClient.invalidateQueries("DSO_SEARCH");
         props.refetchData();
         setTimeout(closeToast, 3000);
       },
     });
-  }
+  };
+
+  const onVehicleUpdate = (row) => {
+    let formDetails = row.original;
+    delete formDetails.vendor;
+    const formData = {
+      vehicle: {
+        ...formDetails,
+        status: formDetails?.status === "ACTIVE" ? "DISABLED" : "ACTIVE",
+      },
+    };
+
+    mutateVehicle(formData, {
+      onError: (error, variables) => {
+        setShowToast({ key: "error", action: error });
+        setTimeout(closeToast, 5000);
+      },
+      onSuccess: (data, variables) => {
+        setShowToast({ key: "success", action: "VEHICLE" });
+        queryClient.invalidateQueries("FSM_VEICLES_SEARCH");
+        props.refetchData();
+        setTimeout(closeToast, 3000);
+      },
+    });
+  };
+
+  const onDriverUpdate = (row) => {
+    let formDetails = row.original;
+    const formData = {
+      driver: {
+        ...formDetails,
+        status: formDetails?.status === "ACTIVE" ? "DISABLED" : "ACTIVE",
+        owner: {
+          ...formDetails.owner,
+          gender: formDetails?.owner?.gender || "OTHER",
+          dob: formDetails?.owner?.dob || new Date(`1/1/1970`).getTime(),
+          emailId: formDetails?.owner?.emailId || "abc@egov.com",
+          relationship: formDetails?.owner?.relationship || "OTHER",
+        },
+      },
+    };
+
+    mutateDriver(formData, {
+      onError: (error, variables) => {
+        setShowToast({ key: "error", action: error });
+        setTimeout(closeToast, 5000);
+      },
+      onSuccess: (data, variables) => {
+        setShowToast({ key: "success", action: "DRIVER" });
+        queryClient.invalidateQueries("FSM_DRIVER_SEARCH");
+        props.refetchData();
+        setTimeout(closeToast, 3000);
+      },
+    });
+  };
+
+  const onVendorSelect = (row, selectedOption) => {
+    let driverData = row.original;
+    let formDetails = row.original.dsoDetails;
+
+    let existingVendor = driverData?.vendor;
+    let selectedVendor = selectedOption;
+    delete driverData.vendor;
+    driverData.vendorDriverStatus = "ACTIVE";
+    if (existingVendor) {
+      const drivers = existingVendor?.drivers;
+      drivers.splice(
+        drivers.findIndex((ele) => ele.id === driverData.id),
+        1
+      );
+      const formData = {
+        vendor: {
+          ...formDetails,
+          drivers: drivers,
+        },
+      };
+    }
+    const formData = {
+      vendor: {
+        ...selectedVendor,
+        drivers: selectedVendor.drivers ? [...selectedVendor.drivers, driverData] : [driverData],
+      },
+    };
+
+    mutateVendor(formData, {
+      onError: (error, variables) => {
+        setShowToast({ key: "error", action: error });
+        setTimeout(closeToast, 5000);
+      },
+      onSuccess: (data, variables) => {
+        setShowToast({ key: "success", action: "VENDOR" });
+        queryClient.invalidateQueries("DSO_SEARCH");
+        props.refetchData();
+        setTimeout(closeToast, 3000);
+      },
+    });
+  };
 
   const onCellClick = (row, column, length) => {
-    setTableData(old =>
+    setTableData((old) =>
       old.map((data, index) => {
-        if (index == row.id && (row.id !== data?.popup?.row && column.id !== data?.popup?.column && length)) {
+        if (index == row.id && row.id !== data?.popup?.row && column.id !== data?.popup?.column && length) {
           return {
             ...data,
             popup: {
               row: row.id,
-              column: column.id
+              column: column.id,
             },
-          }
+          };
         } else {
           return {
             ...data,
             popup: {},
-          }
+          };
         }
       })
-    )
-  }
+    );
+  };
 
-  const onActionSelect = (action) => {
-  }
+  const onActionSelect = (action, type, data) => {
+    if (type === "VEHICLE") {
+      history.push("/digit-ui/employee/fsm/registry/vehicle-details/" + action);
+    } else {
+      let driver = data.find((ele) => ele.name === action);
+      history.push("/digit-ui/employee/fsm/registry/driver-details/" + driver?.id);
+    }
+  };
+
+  const onSelectAdd = () => {
+    switch (props.selectedTab) {
+      case "VENDOR":
+        return history.push("/digit-ui/employee/fsm/registry/new-vendor");
+      case "VEHICLE":
+        return history.push("/digit-ui/employee/fsm/registry/new-vehicle");
+      case "DRIVER":
+        return history.push("/digit-ui/employee/fsm/registry/new-driver");
+      default:
+        break;
+    }
+  };
 
   const columns = React.useMemo(() => {
     switch (props.selectedTab) {
@@ -114,24 +266,31 @@ const RegisryInbox = (props) => {
           {
             Header: t("ES_FSM_REGISTRY_INBOX_DATE_VENDOR_CREATION"),
             disableSortBy: true,
-            Cell: ({ row }) => GetCell(row.original?.auditDetails?.createdTime ? Digit.DateUtils.ConvertEpochToDate(row.original?.auditDetails?.createdTime) : ''),
+            Cell: ({ row }) =>
+              GetCell(row.original?.auditDetails?.createdTime ? Digit.DateUtils.ConvertEpochToDate(row.original?.auditDetails?.createdTime) : ""),
           },
           {
             Header: t("ES_FSM_REGISTRY_INBOX_TOTAL_VEHICLES"),
             Cell: ({ row, column }) => {
               return (
-                <div className="action-bar-wrap-registry" style={{ position: 'relative' }}>
-                  <div className="cell-text" style={{ cursor: 'pointer' }} onClick={() => onCellClick(row, column, row.original?.allVehicles?.length)}>
+                <div className="action-bar-wrap-registry" style={{ position: "relative" }}>
+                  <div
+                    className={row.original?.allVehicles?.length ? "link" : "cell-text"}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => onCellClick(row, column, row.original?.allVehicles?.length)}
+                  >
                     {row.original?.allVehicles?.length || 0}
                     <br />
                   </div>
-                  {row.id === row.original?.popup?.row && column.id === row.original?.popup?.column && <Menu
-                    localeKeyPrefix={""}
-                    options={row.original?.allVehicles?.map((data) => data.registrationNumber)}
-                    onSelect={onActionSelect}
-                  />}
+                  {row.id === row.original?.popup?.row && column.id === row.original?.popup?.column && (
+                    <Menu
+                      localeKeyPrefix={""}
+                      options={row.original?.allVehicles?.map((data) => data.registrationNumber)}
+                      onSelect={(action) => onActionSelect(action, "VEHICLE")}
+                    />
+                  )}
                 </div>
-              )
+              );
             },
           },
           {
@@ -139,36 +298,87 @@ const RegisryInbox = (props) => {
             disableSortBy: true,
             Cell: ({ row, column }) => {
               return (
-                <div className="action-bar-wrap-registry" style={{ position: 'relative' }}>
-                  <div className="cell-text" style={{ cursor: 'pointer' }} onClick={() => onCellClick(row, column, row.original?.vehicles?.length)}>
+                <div className="action-bar-wrap-registry" style={{ position: "relative" }}>
+                  <div
+                    className={row.original?.vehicles?.length ? "link" : "cell-text"}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => onCellClick(row, column, row.original?.vehicles?.length)}
+                  >
                     {row.original?.vehicles?.length || 0}
                     <br />
                   </div>
-                  {row.id === row.original?.popup?.row && column.id === row.original?.popup?.column && <Menu
-                    localeKeyPrefix={""}
-                    options={row.original?.vehicles?.map((data) => data.registrationNumber)}
-                    onSelect={onActionSelect}
-                  />}
+                  {row.id === row.original?.popup?.row && column.id === row.original?.popup?.column && (
+                    <Menu
+                      localeKeyPrefix={""}
+                      options={row.original?.vehicles?.map((data) => data.registrationNumber)}
+                      onSelect={(action) => onActionSelect(action, "VEHICLE")}
+                    />
+                  )}
                 </div>
-              )
+              );
             },
           },
           {
             Header: t("ES_FSM_REGISTRY_INBOX_TOTAL_DRIVERS"),
             disableSortBy: true,
-            Cell: ({ row }) => GetCell(row.original?.drivers?.length || 0),
+            Cell: ({ row, column }) => {
+              return (
+                <div className="action-bar-wrap-registry" style={{ position: "relative" }}>
+                  <div
+                    className={row.original?.drivers?.length ? "link" : "cell-text"}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => onCellClick(row, column, row.original?.drivers?.length)}
+                  >
+                    {row.original?.drivers?.length || 0}
+                    <br />
+                  </div>
+                  {row.id === row.original?.popup?.row && column.id === row.original?.popup?.column && (
+                    <Menu
+                      localeKeyPrefix={""}
+                      options={row.original?.drivers?.map((data) => data.name)}
+                      onSelect={(action) => onActionSelect(action, "DRIVER", row.original?.drivers)}
+                    />
+                  )}
+                </div>
+              );
+            },
           },
           {
             Header: t("ES_FSM_REGISTRY_INBOX_ACTIVE_DRIVERS"),
             disableSortBy: true,
-            Cell: ({ row }) => GetCell(row.original?.activeDrivers?.length || 0),
+            Cell: ({ row, column }) => {
+              return (
+                <div className="action-bar-wrap-registry" style={{ position: "relative" }}>
+                  <div
+                    className={row.original?.activeDrivers?.length ? "link" : "cell-text"}
+                    style={{ cursor: "pointer" }}
+                    onClick={() => onCellClick(row, column, row.original?.activeDrivers?.length)}
+                  >
+                    {row.original?.activeDrivers?.length || 0}
+                    <br />
+                  </div>
+                  {row.id === row.original?.popup?.row && column.id === row.original?.popup?.column && (
+                    <Menu
+                      localeKeyPrefix={""}
+                      options={row.original?.activeDrivers?.map((data) => data.name)}
+                      onSelect={(action) => onActionSelect(action, "DRIVER", row.original?.activeDrivers)}
+                    />
+                  )}
+                </div>
+              );
+            },
           },
           {
             Header: t("ES_FSM_REGISTRY_INBOX_ENABLED"),
             disableSortBy: true,
             Cell: ({ row }) => {
               return (
-                <ToggleSwitch style={{ display: 'flex', justifyContent: 'center' }} value={row.original?.dsoDetails?.status === 'DISABLED' ? false : true} onChange={() => onValueChange(row)} name={`switch-${row.id}`} />
+                <ToggleSwitch
+                  style={{ display: "flex", justifyContent: "center" }}
+                  value={row.original?.dsoDetails?.status === "DISABLED" ? false : true}
+                  onChange={() => onVendorUpdate(row)}
+                  name={`switch-${row.id}`}
+                />
               );
             },
           },
@@ -194,21 +404,84 @@ const RegisryInbox = (props) => {
             },
           },
           {
-            Header: t("ES_FSM_REGISTRY_INBOX_DATE_VENDOR_CREATION"),
+            Header: t("ES_FSM_REGISTRY_INBOX_DATE_VEHICLE_CREATION"),
             disableSortBy: true,
-            Cell: ({ row }) => GetCell(row.original?.auditDetails?.createdTime ? Digit.DateUtils.ConvertEpochToDate(row.original?.auditDetails?.createdTime) : ''),
+            Cell: ({ row }) =>
+              GetCell(row.original?.auditDetails?.createdTime ? Digit.DateUtils.ConvertEpochToDate(row.original?.auditDetails?.createdTime) : ""),
           },
           {
             Header: t("ES_FSM_REGISTRY_INBOX_VENDOR_NAME"),
             disableSortBy: true,
-            Cell: ({ row }) => GetCell(row.original?.owner?.name),
+            Cell: ({ row }) => GetCell(row.original?.vendor?.name),
           },
           {
             Header: t("ES_FSM_REGISTRY_INBOX_ENABLED"),
             disableSortBy: true,
             Cell: ({ row }) => {
               return (
-                <ToggleSwitch style={{ display: 'flex', justifyContent: 'center' }} value={row.original?.dsoDetails?.status === 'DISABLED' ? false : true} onChange={() => onValueChange(row)} name={`switch-${row.id}`} />
+                <ToggleSwitch
+                  style={{ display: "flex", justifyContent: "center" }}
+                  value={row.original?.status === "DISABLED" ? false : true}
+                  onChange={() => onVehicleUpdate(row)}
+                  name={`switch-${row.id}`}
+                />
+              );
+            },
+          },
+        ];
+      case "DRIVER":
+        return [
+          {
+            Header: t("ES_FSM_REGISTRY_INBOX_DRIVER_NAME"),
+            disableSortBy: true,
+            accessor: "tripDetails",
+            Cell: ({ row }) => {
+              return (
+                <div>
+                  <span className="link">
+                    <Link to={"/digit-ui/employee/fsm/registry/driver-details/" + row.original["id"]}>
+                      <div>
+                        {row.original.name}
+                        <br />
+                      </div>
+                    </Link>
+                  </span>
+                </div>
+              );
+            },
+          },
+          {
+            Header: t("ES_FSM_REGISTRY_INBOX_DATE_DRIVER_CREATION"),
+            disableSortBy: true,
+            Cell: ({ row }) =>
+              GetCell(row.original?.auditDetails?.createdTime ? Digit.DateUtils.ConvertEpochToDate(row.original?.auditDetails?.createdTime) : ""),
+          },
+          {
+            Header: t("ES_FSM_REGISTRY_INBOX_VENDOR_NAME"),
+            Cell: ({ row }) => {
+              return (
+                <Dropdown
+                  className="fsm-registry-dropdown"
+                  selected={row.original.vendor}
+                  option={vendors}
+                  select={(value) => onVendorSelect(row, value)}
+                  optionKey="name"
+                  t={t}
+                />
+              );
+            },
+          },
+          {
+            Header: t("ES_FSM_REGISTRY_INBOX_ENABLED"),
+            disableSortBy: true,
+            Cell: ({ row }) => {
+              return (
+                <ToggleSwitch
+                  style={{ display: "flex", justifyContent: "center" }}
+                  value={row.original?.status === "DISABLED" ? false : true}
+                  onChange={() => onDriverUpdate(row)}
+                  name={`switch-${row.id}`}
+                />
               );
             },
           },
@@ -216,11 +489,32 @@ const RegisryInbox = (props) => {
       default:
         return [];
     }
-  }, [props.selectedTab]);
+  }, [props.selectedTab, vendors]);
 
   let result;
   if (props.isLoading) {
     result = <Loader />;
+  } else if (tableData.length === 0) {
+    let emptyCardText = "";
+    let emptyButtonText = "";
+    if (props.selectedTab === "VENDOR") {
+      emptyCardText = "ES_FSM_REGISTRY_EMPTY_CARD_VENDOR";
+      emptyButtonText = "ES_FSM_REGISTRY_EMPTY_BUTTON_VENDOR";
+    } else if (props.selectedTab === "VEHICLE") {
+      emptyCardText = "ES_FSM_REGISTRY_EMPTY_CARD_VEHICLE";
+      emptyButtonText = "ES_FSM_REGISTRY_EMPTY_BUTTON_VEHICLE";
+    } else {
+      emptyCardText = "ES_FSM_REGISTRY_EMPTY_CARD_DRIVER";
+      emptyButtonText = "ES_FSM_REGISTRY_EMPTY_BUTTON_DRIVER";
+    }
+    result = (
+      <Card style={{ display: "flex", justifyContent: "center", minHeight: "250px" }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div style={{ marginTop: "50px", marginBottom: "25px" }}>{t(emptyCardText)}</div>
+          <SubmitBar className="" label={t(emptyButtonText)} onSubmit={onSelectAdd} />
+        </div>
+      </Card>
+    );
   } else if (tableData.length > 0) {
     result = (
       <ApplicationTable
@@ -234,9 +528,6 @@ const RegisryInbox = (props) => {
               minWidth: cellInfo.column.Header === t("ES_INBOX_APPLICATION_NO") ? "240px" : "",
               padding: "20px 18px",
               fontSize: "16px",
-              // borderTop: "1px solid grey",
-              // textAlign: "left",
-              // verticalAlign: "middle",
             },
           };
         }}
@@ -259,7 +550,13 @@ const RegisryInbox = (props) => {
         <div className="filters-container">
           <FSMLink parentRoute={props.parentRoute} />
           <div style={{ marginTop: "24px" }}>
-            <Filter searchParams={props.searchParams} paginationParms={props.paginationParms} applications={props.data} onFilterChange={props.onFilterChange} type="desktop" />
+            <Filter
+              searchParams={props.searchParams}
+              paginationParms={props.paginationParms}
+              applications={props.data}
+              onFilterChange={props.onFilterChange}
+              type="desktop"
+            />
           </div>
         </div>
       )}

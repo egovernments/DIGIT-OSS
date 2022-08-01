@@ -15,13 +15,18 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
     { applicationNos: applicationNumber, uuid: userInfo.uuid },
     { staleTime: Infinity }
   );
+  const { pathname } = useLocation();
+  const presentInModifyApplication = pathname.includes("modify");
 
   const [vehicle, setVehicle] = useState({ label: formData?.tripData?.vehicleCapacity });
   const [billError, setError] = useState(false);
 
   const { isLoading: isVehicleMenuLoading, data: vehicleData } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
 
-  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: -1, status: 'ACTIVE' });
+  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, {
+    limit: -1,
+    status: "ACTIVE",
+  });
 
   const [vehicleMenu, setVehicleMenu] = useState([]);
 
@@ -31,13 +36,11 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
         return curr.vehicles && curr.vehicles.length ? acc.concat(curr.vehicles) : acc;
       }, []);
 
-      const cpacityMenu = Array.from(new Set(allVehicles.map(a => a.capacity)))
-        .map(capacity => allVehicles.find(a => a.capacity === capacity))
+      const cpacityMenu = Array.from(new Set(allVehicles.map((a) => a.capacity))).map((capacity) => allVehicles.find((a) => a.capacity === capacity));
 
       setVehicleMenu(cpacityMenu);
     }
   }, [dsoData, vehicleData]);
-
 
   const inputs = [
     {
@@ -48,6 +51,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
       validation: {
         isRequired: true,
         min: 1,
+        autoFocus: presentInModifyApplication,
       },
       default: formData?.tripData?.noOfTrips,
       disable: false,
@@ -95,7 +99,6 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   }
   useEffect(() => {
     (async () => {
-
       if (formData?.tripData?.vehicleType !== vehicle) {
         setVehicle({ label: formData?.tripData?.vehicleType?.capacity });
       }

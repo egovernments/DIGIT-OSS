@@ -111,6 +111,7 @@ public class LandRowMapper implements ResultSetExtractor<List<LandInfo>> {
 		String ownerId = rs.getString("landInfoowner_id");
 		if (ownerId != null) {
 			Boolean isPrimaryOwner = (Boolean) rs.getObject("isprimaryowner");
+			Boolean status = (Boolean) rs.getObject("ownerstatus");
 			Double val =  (Double) rs.getObject("ownershippercentage");
 			BigDecimal ownerShipPercentage = val != null ? new BigDecimal(val) : null;
 
@@ -121,6 +122,7 @@ public class LandRowMapper implements ResultSetExtractor<List<LandInfo>> {
 					.ownerShipPercentage(ownerShipPercentage)
 					.institutionId(rs.getString("institutionid"))
 					.auditDetails(auditdetails)
+					.status(status)
 					.relationship(rs.getString("relationship") != null
 							? Relationship.fromValue(rs.getString("relationship")) : null)
 					.build();

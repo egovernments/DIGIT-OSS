@@ -96,10 +96,18 @@ public class PaymentUpdateService {
 					paymentRequest.getRequestInfo().getUserInfo().getUuid(), paymentRequest.getRequestInfo()));
 			for (PaymentDetail paymentDetail : paymentRequest.getPayment().getPaymentDetails()) {
 				log.info("Consuming Business Service: {}", paymentDetail.getBusinessService());
+				SearchCriteria criteria = new SearchCriteria();
+				if (paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptDisconnectionBusinessservice())) {
+					criteria = SearchCriteria.builder()
+							.tenantId(paymentRequest.getPayment().getTenantId())
+							.connectionNumber(Stream.of(paymentDetail.getBill().getConsumerCode().toString()).collect(Collectors.toSet()))
+							.applicationStatus(Collections.singleton(PENDING_FOR_PAYMENT_STATUS_CODE)).build();
+				}
 				if (paymentDetail.getBusinessService().equalsIgnoreCase(config.getReceiptBusinessservice())) {
-					SearchCriteria criteria = SearchCriteria.builder()
+					criteria = SearchCriteria.builder()
 							.tenantId(paymentRequest.getPayment().getTenantId())
 							.applicationNumber(Stream.of(paymentDetail.getBill().getConsumerCode().toString()).collect(Collectors.toSet())).build();
+				}
 					List<SewerageConnection> sewerageConnections = sewerageService.search(criteria,
 							paymentRequest.getRequestInfo());
 					if (CollectionUtils.isEmpty(sewerageConnections)) {
@@ -127,7 +135,6 @@ public class PaymentUpdateService {
 					enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
 					repo.updateSewerageConnection(sewerageConnectionRequest, false);
 				}
-			}
 			sendNotificationForPayment(paymentRequest);
 		} catch (Exception ex) {
 			log.error("Failed to process Payment Update message.", ex);

@@ -14,7 +14,7 @@ public class VendorQueryBuilder {
 	@Autowired
 	private VendorConfiguration config;
 
-	private static final String Query = "select vendor.*,vendor_address.*,vendor_driver.*,vendor_vehicle.*, vendor.id as vendor_id,"
+	private static final String Query = "SELECT count(*) OVER() AS full_count, vendor.*,vendor_address.*,vendor_driver.*,vendor_vehicle.*, vendor.id as vendor_id,"
 			+ "  vendor.createdby as vendor_createdby,vendor.lastmodifiedby as vendor_lastmodifiedby,"
 			+ "  vendor.createdtime as vendor_createdtime," + "  vendor.lastmodifiedtime as vendor_lastmodifiedtime,"
 			+ "  vendor.additionaldetails as vendor_additionaldetails,"
@@ -25,12 +25,13 @@ public class VendorQueryBuilder {
 			+ "  vendor_vehicle.vendor_id=vendor_driver.vendor_id";
 
 	private final String paginationWrapper = "SELECT * FROM "
-			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY vendor_lastModifiedTime DESC) offset_ FROM " + "({})"
-			+ " result) result_offset " + "WHERE offset_ > ? AND offset_ <= ?";
+			+ "(SELECT *, DENSE_RANK() OVER (ORDER BY vendor_createdtime DESC) offset_ FROM " + "({})"
+			+ " result) result_offset " + " limit ? offset ?";
 
 	private static final String DRIVER_VEHICLE_QUERY = "SELECT %s FROM %s where %s = ? AND %s = ?";
 	private static final String VEHICLE_EXISTS = "SELECT vendor_id FROM eg_vendor_vehicle where vechile_id IN ";
-
+	private static final String DRIVER_EXISTS = "SELECT vendor_id FROM eg_vendor_driver where driver_id IN ";
+	
 	private static final String DRIVER_ID = "driver_id";
 	private static final String VEHICLE_ID = "vechile_id";
 	private static final String VENDOR_ID = "vendor_id";
@@ -64,6 +65,23 @@ public class VendorQueryBuilder {
 		
 		return builder.toString();
 	}
+	
+	 public String vendorsForDrivers(VendorSearchCriteria vendorSearchCriteria, List<Object> preparedStmtList) {
+		
+		StringBuilder builder = new StringBuilder(DRIVER_EXISTS);		
+		builder.append("(").append(createQuery(vendorSearchCriteria.getDriverIds())).append(")");
+		addToPreparedStatement(preparedStmtList, vendorSearchCriteria.getDriverIds());
+		
+		List<String> status=vendorSearchCriteria.getStatus();
+		if (!CollectionUtils.isEmpty(status)) {
+			addClauseIfRequired(preparedStmtList, builder);
+			builder.append(" vendordriverstatus IN (").append(createQuery(status)).append(")");
+			addToPreparedStatement(preparedStmtList, status);
+		}
+		
+		return builder.toString();
+	}
+
 
 	public String getvendorCount(List<String> ownerList,List<Object> preparedStmtList) {
 		StringBuilder builder = new StringBuilder(VENDOR_COUNT);		
@@ -135,10 +153,10 @@ public class VendorQueryBuilder {
 			offset = criteria.getOffset();
 
 		if (limit == -1) {
-			finalQuery = finalQuery.replace("WHERE offset_ > ? AND offset_ <= ?", "");
+			finalQuery = finalQuery.replace("limit ? offset ?", "");
 		} else {
+			preparedStmtList.add(limit);
 			preparedStmtList.add(offset);
-			preparedStmtList.add(limit + offset);
 		}
 
 		return finalQuery;

@@ -57,7 +57,7 @@ public class BulkDemandAndBillGenService {
 				request.getCalculationCriteria().get(0).getTenantId());
 		List<Calculation> calculations = wsCalculationService.getCalculations(request, masterMap);
 		BulkBillGenerator bulkBillGenerator = generateDemandInBulk(request.getRequestInfo(), calculations, masterMap,
-				true);
+				true, request.getMigrationCount().getLimit());
 		bulkBillGenerator.setMigrationCount(request.getMigrationCount());
 		kafkaTemplate.send(bulkBillGenTopic, bulkBillGenerator);
 	}
@@ -73,14 +73,14 @@ public class BulkDemandAndBillGenService {
 	 *            or updated
 	 */
 	public BulkBillGenerator generateDemandInBulk(RequestInfo requestInfo, List<Calculation> calculations,
-			Map<String, Object> masterMap, boolean isForConnectionNo) {
+			Map<String, Object> masterMap, boolean isForConnectionNo, Long limit) {
 
 
 			String tenantId = calculations.get(0).getTenantId();
 			List<String> consumerCodes = calculations.stream().map(calculation -> calculation.getConnectionNo())
 					.collect(Collectors.toList());
 
-		List<Demand> createDemands = createDemands(requestInfo, calculations, masterMap, isForConnectionNo);
+		List<Demand> createDemands = createDemands(requestInfo, calculations, masterMap, isForConnectionNo, limit);
 
 		GetBillCriteria updateDemandCriteria = GetBillCriteria.builder()
 				.consumerCodes(consumerCodes)
@@ -105,7 +105,7 @@ public class BulkDemandAndBillGenService {
 	 * @return Returns list of demands
 	 */
 	private List<Demand> createDemands (RequestInfo requestInfo, List<Calculation> calculations,
-			Map<String, Object> masterMap, boolean isForConnectionNO) {
+			Map<String, Object> masterMap, boolean isForConnectionNO, Long limit) {
 
 		List<Demand> demands = new LinkedList<>();
 		String tenantId = calculations.get(0).getTenantId();
@@ -114,7 +114,7 @@ public class BulkDemandAndBillGenService {
 			WaterConnection connection = calculation.getWaterConnection();
 			propertyIds.add(connection.getPropertyId());
 		}
-		List<Property> properties = wsCalculationUtil.propertySearch(requestInfo, propertyIds, tenantId);
+		List<Property> properties = wsCalculationUtil.propertySearch(requestInfo, propertyIds, tenantId, limit);
 		//Map<String, Property> propertyIdMap = properties.stream().filter(property -> property.getStatus().equals(Status.INACTIVE)).collect(Collectors.toMap(Property::getPropertyId, Function.identity()));
 
 		Map<String, Property> propertyIdMap = new HashMap<>();

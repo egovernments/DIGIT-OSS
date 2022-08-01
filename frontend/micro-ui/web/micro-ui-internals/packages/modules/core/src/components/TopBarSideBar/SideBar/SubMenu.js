@@ -63,9 +63,9 @@ const SubMenu = ({ item }) => {
               >
                 <span> {trimModuleName} </span>
 
-                <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
+               {trimModuleName?.includes("...") &&<ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
                   {t(`ACTION_TEST_${getModuleName}`)}
-                </ReactTooltip>
+                </ReactTooltip>}
               </a>
             ) : (
               // <a className="custom-link" href={getOrigin + "/employee/" + item.navigationURL}>
@@ -78,9 +78,9 @@ const SubMenu = ({ item }) => {
                 <div data-tip="React-tooltip" data-for={`jk-side-${getModuleName}`}>
                   <span> {trimModuleName} </span>
 
-                  <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
+                 {trimModuleName?.includes("...") && <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
                     {t(`ACTION_TEST_${getModuleName}`)}
-                  </ReactTooltip>
+                  </ReactTooltip>}
                 </div>
                 {/* <div className="tooltip">
                   <p className="p1">{trimModuleName}</p>
@@ -102,9 +102,9 @@ const SubMenu = ({ item }) => {
               <div data-tip="React-tooltip" data-for={`jk-side-${getModuleName}`}>
                 <span> {trimModuleName} </span>
 
-                <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
+                {trimModuleName?.includes("...") && <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${getModuleName}`}>
                   {t(`ACTION_TEST_${getModuleName}`)}
-                </ReactTooltip>
+                </ReactTooltip>}
               </div>
               {/* <div className="tooltip">
                 <p className="p1">{trimModuleName}</p>
@@ -117,6 +117,7 @@ const SubMenu = ({ item }) => {
 
         {subnav &&
           item.links
+          .sort((a, b) => a.orderNumber - b.orderNumber)
             .filter((item) => item.url === "url" || item.url !== "")
             .map((item, index) => {
               const getChildName = item?.displayName?.toUpperCase()?.replace(/[ -]/g, "_");
@@ -133,9 +134,9 @@ const SubMenu = ({ item }) => {
                   >
                     <div className="actions" data-tip="React-tooltip" data-for={`jk-side-${index}`}>
                       <span> {trimModuleName} </span>
-                      <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${index}`}>
+                    {trimModuleName?.includes("...") && <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${index}`}>
                         {t(`ACTION_TEST_${getChildName}`)}
-                      </ReactTooltip>
+                      </ReactTooltip>}
                     </div>
                     {/* <div className="actions">
                       <div className="tooltip">
@@ -154,9 +155,9 @@ const SubMenu = ({ item }) => {
                 >
                   <div className="actions" data-tip="React-tooltip" data-for={`jk-side-${index}`}>
                     <span> {trimModuleName} </span>
-                    <ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${index}`}>
+                   {trimModuleName?.includes("...") &&<ReactTooltip textColor="white" backgroundColor="grey" place="right" type="info" effect="solid" id={`jk-side-${index}`}>
                       {t(`ACTION_TEST_${getChildName}`)}
-                    </ReactTooltip>
+                    </ReactTooltip>}
                     {/* <div className="tooltip">
                       <p className="p1">{trimModuleName}</p>
                       <span className="tooltiptext">{t(`ACTION_TEST_${getChildName}`)}</span>

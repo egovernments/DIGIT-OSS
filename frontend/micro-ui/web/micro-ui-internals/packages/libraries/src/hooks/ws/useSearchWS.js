@@ -2,25 +2,33 @@ import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { WSService } from "../../services/elements/WS";
 import { PTService } from "../../services/elements/PT";
-
-const getAddress = (address,t) => {
-  return `${address?.doorNo ? address?.doorNo + ", " : ""}${address?.street ? address?.street + ", " : ""}${address?.landMark ? address?.landMark + ", " : ""}${address?.locality?.code ? t(address?.locality?.code) + ", " : ""}${address?.city ? address?.city : ""}${address?.pinCode ? ", " + address?.pinCode : ""}`
-}
+/*
+ * Feature :: Privacy
+ * Task 6502 to show only locality info without door no and street names
+ */
+const getAddress = (address, t, shortAddress) => {
+  if (shortAddress) return `${address?.locality?.code ? t(address?.locality?.code) + ", " : ""}${address?.city ? address?.city : ""}`;
+  return `${address?.doorNo ? address?.doorNo + ", " : ""}${address?.street ? address?.street + ", " : ""}${
+    address?.landMark ? address?.landMark + ", " : ""
+  }${address?.locality?.code ? t(address?.locality?.code) + ", " : ""}${address?.city ? address?.city : ""}${
+    address?.pinCode ? ", " + address?.pinCode : ""
+  }`;
+};
 
 const getOwnerNames = (propertyData) => {
-  const getActiveOwners = propertyData?.owners?.filter(owner => owner?.active);
-  const getOwnersList = getActiveOwners?.map(activeOwner => activeOwner?.name)?.join(",");
+  const getActiveOwners = propertyData?.owners?.filter((owner) => owner?.active);
+  const getOwnersList = getActiveOwners?.map((activeOwner) => activeOwner?.name)?.join(",");
   return getOwnersList ? getOwnersList : t("NA");
-}
+};
 
-const combineResponse = (WaterConnections, SewerageConnections, businessService, Properties, billData, t,count=undefined) => {
+const combineResponse = (WaterConnections, SewerageConnections, businessService, Properties, billData, t, count = undefined, shortAddress) => {
   const data = businessService ? (businessService === "WS" ? WaterConnections : SewerageConnections) : WaterConnections?.concat(SewerageConnections);
   if (billData) {
     data.forEach((app) => {
       const bill = billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0];
       if (bill) {
         app.due = bill.totalAmount;
-        app.dueDate = bill.billDate;
+        app.dueDate = bill?.billDetails?.[0]?.expiryDate;
       }
     });
   }
@@ -28,16 +36,17 @@ const combineResponse = (WaterConnections, SewerageConnections, businessService,
   data?.map((row) => {
     Properties?.map((property) => {
       if (row?.propertyId === property?.propertyId) {
-        row["owner"] = property?.owners[0]?.name;
-        row["address"] = getAddress(property?.address, t);
+        row["owner"] = property?.owners?.map((ob) => ob?.name).join(",");
+        row["address"] = getAddress(property?.address, t, shortAddress);
         row["ownerNames"] = getOwnerNames(property);
       }
     });
   });
-  return {data,count};
+
+  return { data, count, billData };
 };
 
-const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t }) => {
+const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t, shortAddress = false }) => {
   let responseSW = "";
   let responseWS = "";
   let propertyids = "";
@@ -97,8 +106,7 @@ const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t }) =>
       }),
     { ...config, enabled: consumercodes.length > 0 }
   );
-    
-  
+
   const properties = useQuery(
     ["WSP_SEARCH", tenantId, propertyfilter, bussinessService],
     async () => await PTService.search({ tenantId: tenantId, filters: propertyfilter, auth: true }),
@@ -110,12 +118,30 @@ const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t }) =>
 
   if (bussinessService === "WS") {
     return responseWS?.isLoading || properties?.isLoading || billData?.isLoading
-      ? {isLoading:true}
-      : combineResponse(responseWS?.data?.WaterConnection, [], bussinessService, properties?.data?.Properties, billData?.data?.Bill, t,responseWS?.data?.TotalCount);
+      ? { isLoading: true }
+      : combineResponse(
+          responseWS?.data?.WaterConnection,
+          [],
+          bussinessService,
+          properties?.data?.Properties,
+          billData?.data?.Bill,
+          t,
+          responseWS?.data?.TotalCount,
+          shortAddress
+        );
   } else if (bussinessService === "SW") {
     return responseSW?.isLoading || properties?.isLoading || billData?.isLoading
       ? { isLoading: true }
-      : combineResponse([], responseSW?.data?.SewerageConnections, bussinessService, properties?.data?.Properties, billData?.data?.Bill, t, responseSW?.data?.TotalCount);
+      : combineResponse(
+          [],
+          responseSW?.data?.SewerageConnections,
+          bussinessService,
+          properties?.data?.Properties,
+          billData?.data?.Bill,
+          t,
+          responseSW?.data?.TotalCount,
+          shortAddress
+        );
   } else {
     return responseWS?.isLoading || responseSW?.isLoading || properties?.isLoading || billData?.isLoading
       ? undefined
@@ -125,7 +151,9 @@ const useSearchWS = ({ tenantId, filters, config = {}, bussinessService, t }) =>
           bussinessService,
           properties?.data?.Properties,
           billData?.data?.Bill,
-          t
+          t,
+          undefined,
+          shortAddress
         );
   }
 };

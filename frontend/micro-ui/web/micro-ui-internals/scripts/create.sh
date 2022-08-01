@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./scripts/run.sh ws
+./scripts/run.sh ws pt

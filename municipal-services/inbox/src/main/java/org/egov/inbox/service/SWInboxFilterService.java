@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.egov.inbox.util.SWConstants.*;
-import static org.egov.inbox.util.WSConstants.ASSIGNEE_PARAM;
+import static org.egov.inbox.util.WSConstants.WS_ASSIGNEE_PARAM;
 import static org.egov.inbox.util.WSConstants.WS_APPLICATION_STATUS_PARAM;
 
 @Slf4j
@@ -104,7 +104,7 @@ public class SWInboxFilterService {
             }
             // Accomodating process search criteria in searcher request
             if(!ObjectUtils.isEmpty(processCriteria.getAssignee())){
-                searchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());
+                searchCriteria.put(WS_ASSIGNEE_PARAM, processCriteria.getAssignee());
             }
             if(!ObjectUtils.isEmpty(processCriteria.getStatus())){
                 searchCriteria.put(STATUS_PARAM, processCriteria.getStatus());
@@ -197,7 +197,7 @@ public class SWInboxFilterService {
             
             // Accomodating process search criteria in searcher request
             if(!ObjectUtils.isEmpty(processCriteria.getAssignee())){
-                searchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());
+                searchCriteria.put(WS_ASSIGNEE_PARAM, processCriteria.getAssignee());
             }
             if(!ObjectUtils.isEmpty(processCriteria.getStatus())){
                 searchCriteria.put(STATUS_PARAM, processCriteria.getStatus());

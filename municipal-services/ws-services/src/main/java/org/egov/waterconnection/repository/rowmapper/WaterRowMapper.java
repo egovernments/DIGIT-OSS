@@ -3,10 +3,7 @@ package org.egov.waterconnection.repository.rowmapper;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.tracer.model.CustomException;
@@ -45,7 +42,7 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 	
 	@Override
 	public List<WaterConnection> extractData(ResultSet rs) throws SQLException, DataAccessException {
-		Map<String, WaterConnection> connectionListMap = new HashMap<>();
+		Map<String, WaterConnection> connectionListMap = new LinkedHashMap<>();
 		WaterConnection currentWaterConnection = new WaterConnection();
 		while (rs.next()) {
 			String Id = rs.getString("connection_Id");

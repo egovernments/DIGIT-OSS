@@ -153,14 +153,14 @@ public class WSCalculationDaoImpl implements WSCalculationDao {
 	
 	@Override
 	public long getConnectionCount(String tenantid, Long fromDate, Long toDate){
-		List<Object> preparedStatement = new ArrayList<>();
+		//List<Object> preparedStatement = new ArrayList<>();
 		String query = queryBuilder.getCountQuery();
-		preparedStatement.add(tenantid);
+		//preparedStatement.add(tenantid);
 		/*preparedStatement.add(fromDate);
 		preparedStatement.add(toDate);
 		preparedStatement.add(tenantid);*/
 
-		long count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
+		long count = jdbcTemplate.queryForObject(query, Integer.class);
 		return count;
 	}
 }

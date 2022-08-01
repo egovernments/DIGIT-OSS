@@ -39,7 +39,7 @@ const App = () => {
     <span className={"tl-citizen"}>
       <Switch>
         <AppContainer>
-          <BackButton /* style={{ position: "fixed", top: "55px" }} */ isCommonPTPropertyScreen={isCommonPTPropertyScreen} isSuccessScreen={isSuccessScreen} getBackPageNumber={getBackPageNumber}>Back</BackButton>
+          {!(window.location.href.includes('/acknowledgement'))&&window.location.href.includes('tl/tradelicence')  &&<BackButton /* style={{ position: "fixed", top: "55px" }} */ isCommonPTPropertyScreen={isCommonPTPropertyScreen} isSuccessScreen={isSuccessScreen} getBackPageNumber={getBackPageNumber}>Back</BackButton>}
           <PrivateRoute path={`${path}/tradelicence/new-application`} component={CreateTradeLicence} />
           <PrivateRoute path={`${path}/tradelicence/edit-application/:id/:tenantId`} component={EditTrade} />
           <PrivateRoute path={`${path}/tradelicence/renew-trade/:id/:tenantId`} component={RenewTrade} />

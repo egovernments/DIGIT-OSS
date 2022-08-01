@@ -231,17 +231,33 @@ export const SuccessfulPayment = (props)=>{
       return "FY " + from + "-" + to;
     } else if (fromPeriod && toPeriod) {
       if (workflw === "mcollect") {
-        from =
+        let from =
           new Date(fromPeriod).getDate().toString() +
           " " +
           Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth() + 1].toString() +
           " " +
           new Date(fromPeriod).getFullYear().toString();
-        to =
+        let to =
           new Date(toPeriod).getDate() +
           " " +
           Digit.Utils.date.monthNames[new Date(toPeriod).getMonth() + 1] +
           " " +
+          new Date(toPeriod).getFullYear();
+        return from + " - " + to;
+      }
+      else if(workflw === "WNS")
+      {
+        let from =
+          new Date(fromPeriod).getDate().toString() +
+          "/" +
+          (new Date(fromPeriod).getMonth() + 1).toString() +
+          "/" +
+          new Date(fromPeriod).getFullYear().toString();
+        let to =
+          new Date(toPeriod).getDate() +
+          "/" +
+          (new Date(toPeriod).getMonth() + 1) +
+          "/" +
           new Date(toPeriod).getFullYear();
         return from + " - " + to;
       }
@@ -255,12 +271,14 @@ export const SuccessfulPayment = (props)=>{
   if (workflw) {
     bannerText = `CITIZEN_SUCCESS_UC_PAYMENT_MESSAGE`;
   } else {
-    if (paymentData?.paymentDetails?.[0]?.businessService?.includes("BPA")) {
+    if (paymentData?.paymentDetails?.[0]?.businessService && paymentData?.paymentDetails?.[0]?.businessService?.includes("BPA")) {
       let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
       let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
-      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_${parsedArchitectName}_PAYMENT_MESSAGE`;
+      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0]?.businessService.replace(/\./g, "_")}_${parsedArchitectName}_PAYMENT_MESSAGE`;
+    } else if (business_service?.includes("WS") || business_service?.includes("SW")) {
+      bannerText = t(`CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_WS_PAYMENT_MESSAGE`);
     } else {
-      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE`;
+      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0]?.businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE`;
     }
   }
 
@@ -311,7 +329,7 @@ export const SuccessfulPayment = (props)=>{
             rowContainerStyle={rowContainerStyle}
             last
             label={t("CS_PAYMENT_AMOUNT_PENDING")}
-            text={reciept_data?.paymentDetails?.[0]?.totalDue - reciept_data?.paymentDetails?.[0]?.totalAmountPaid}
+            text={`₹ ${reciept_data?.paymentDetails?.[0]?.totalDue - reciept_data?.paymentDetails?.[0]?.totalAmountPaid}`}
           />
         )}
 

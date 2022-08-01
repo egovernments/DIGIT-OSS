@@ -1,10 +1,11 @@
-import { Header, DownloadIcon } from "@egovernments/digit-ui-react-components";
+import { Header, DownloadIcon, MultiLink,Toast } from "@egovernments/digit-ui-react-components";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import DesktopInbox from "../../../components/inbox/BillsDesktopInbox";
 import MobileInbox from "../../../components/inbox/BillsMobileInbox";
 
 const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filterComponent, isInbox, keys }) => {
+  const [showToast,setShowToast] = useState(null)
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const [enableSarch, setEnableSearch] = useState(() => (isInbox ? {} : { enabled: false }));
 
@@ -133,6 +134,46 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
   //   filters,
   //   config:{}
   // })
+  
+  const startWSBillDownloadJob = async (isConsolidated) => {
+    const result = await Digit.WSService.wnsGroupBill({ key: "ws-bill", tenantId, locality: searchParams?.locality?.[0]?.code, isConsolidated, bussinessService: searchParams?.businesService });
+    setShowToast({
+      label: `${t("GRP_JOB_INITIATED_STATUS")} ${result?.jobId}`
+    })
+  };
+  const [showOptions, setShowOptions] = useState(false)
+  
+  const dowloadOptions = searchParams?.businesService === "WS" ? [
+    {
+      order: 1,
+      label: t("ABG_WATER_BILLS"),
+      onClick: () => startWSBillDownloadJob(false),
+    },
+    {
+      order: 2,
+      label: t("ABG_WATER_SEWERAGE_BILLS"),
+      onClick: () => startWSBillDownloadJob(true),
+    }
+
+  ] : searchParams?.businesService === "SW" ? [
+    {
+      order: 1,
+      label: t("ABG_SEWERAGE_BILLS"),
+      onClick: () => startWSBillDownloadJob(false),
+    },
+    {
+      order: 2,
+      label: t("ABG_WATER_SEWERAGE_BILLS"),
+      onClick: () => startWSBillDownloadJob(true),
+    }
+  ] : [
+    {
+      order: 1,
+      label: t("BILLS_MERGE_AND_DOWNLOAD"),
+      onclick: handleMergeAndDownload
+    }
+  ];
+
 
   if (isMobile) {
     return (
@@ -151,9 +192,20 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
   } else {
     return (
       <div className="groupBill-custom">
-        <div className="custom-group-merge-container">
+        <div className="custom-group-merge-container employee-application-details">
           {isInbox && <Header>{"Group Bills"}</Header>}
-          {GetLogo()}
+          {/* {GetLogo()} */}
+          {data && data?.Bills?.length >= 0 && (
+            <MultiLink
+              className="multilinkWrapper employee-mulitlink-main-div"
+              onHeadClick={() => setShowOptions(!showOptions)}
+              displayOptions={showOptions}
+              options={dowloadOptions}
+              downloadBtnClassName={"employee-download-btn-className"}
+              optionsClassName={"employee-options-btn-className"}
+              label={t("BILLS_MERGE_AND_DOWNLOAD")}
+            />
+          )}
         </div>
 
         <DesktopInbox
@@ -181,6 +233,7 @@ const GroupBillInbox = ({ parentRoute, initialStates = {}, businessService, filt
           totalRecords={totalRecords}
           filterComponent={filterComponent}
         />
+        {showToast && <Toast label={showToast?.label} onClose={()=> setShowToast(null)} />}
       </div>
     );
   }

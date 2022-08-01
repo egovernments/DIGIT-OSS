@@ -10,6 +10,9 @@ import {
   FSMIcon,
   WSICon,
   MCollectIcon,
+  BirthIcon,
+  DeathIcon,
+  FirenocIcon,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 
@@ -28,13 +31,15 @@ const CitizenSubMenuSideBar = ({ item }) => {
     PGRIcon: <PGRIcon />,
     FSMIcon: <FSMIcon />,
     WSIcon: <WSICon />,
+    BirthIcon: <BirthIcon className="icon" />,
+    DeathIcon: <DeathIcon className="icon" />,
+    FirenocIcon: <FirenocIcon className="icon" />,
     MCollectIcon: <MCollectIcon />,
     BillsIcon: <CollectionIcon />,
   };
 
   const leftIconArray = item.icon;
   const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.BillsIcon;
-
   return (
     <React.Fragment>
       <div className="submenu-container">

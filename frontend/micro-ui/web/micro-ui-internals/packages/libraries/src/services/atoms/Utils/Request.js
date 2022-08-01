@@ -1,5 +1,12 @@
 import Axios from "axios";
 
+/**
+ * Custom Request to make all api calls
+ *
+ * @author jagankumar-egov
+ *
+ */
+
 Axios.interceptors.response.use(
   (res) => res,
   (err) => {
@@ -81,6 +88,16 @@ export const Request = async ({
     if (reqTimestamp) {
       data.RequestInfo = { ...data.RequestInfo, ts: Number(ts) };
     }
+
+    /* 
+    Feature :: Privacy
+    
+    Desc :: To send additional field in HTTP Requests inside RequestInfo Object as plainAccessRequest
+    */
+    const privacy = Digit.Utils.getPrivacyObject();
+    if (privacy && !url.includes("/edcr/rest/dcr/")) {
+      data.RequestInfo = { ...data.RequestInfo, plainAccessRequest: { ...privacy } };
+    }
   }
 
   const headers1 = {
@@ -121,8 +138,11 @@ export const Request = async ({
     });
     return multipartFormDataRes;
   }
+  /* 
+  Feature :: Single Instance
 
-  /* Fix for central instance to send tenantID in all query params  */
+  Desc :: Fix for central instance to send tenantID in all query params
+  */
   const tenantInfo =
     Digit.SessionStorage.get("userType") === "citizen"
       ? Digit.ULBService.getStateId()

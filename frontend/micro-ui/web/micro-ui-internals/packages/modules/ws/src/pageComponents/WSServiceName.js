@@ -9,6 +9,7 @@ import Timeline from "../components/Timeline";
 const WSServiceName = ({ t, config, onSelect, userType, formData }) => {
     const [serviceName, setServiceName] = useState(formData?.serviceName || "");
     const [formDetails, setFormDetails] = useState(formData || {});
+    const isEdit = window.location.href.includes("/ws/edit-application/");
 
     const serviceNameList = [
         {
@@ -68,6 +69,7 @@ const WSServiceName = ({ t, config, onSelect, userType, formData }) => {
                     optionKey="i18nKey"
                     onSelect={onServiceNameSelect}
                     t={t}
+                    disabled={isEdit}
                 />
             </FormStep>
         </div>

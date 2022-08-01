@@ -83,6 +83,7 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
     if (isLoading || isSubmitBtnDisable) {
         return <Loader />;
     }
+    
     return (
         <FormStep
             t={t}
@@ -112,12 +113,12 @@ const EDCRForm = ({ t, config, onSelect, userType, formData, ownerIndex = 0, add
                 onChange={setApplicantName}
                 uploadMessage={uploadMessage}
                 value={name}
-                // {...(validation = {
-                //     isRequired: true,
-                //     pattern: "^[a-zA-Z-.`' ]*$",
-                //     type: "text",
-                //     title: t("TL_NAME_ERROR_MESSAGE"),
-                // })}
+                {...(validation = {
+                    isRequired: true,
+                    pattern: "^[a-zA-Z]+(( )+[a-zA-z]+)*$",
+                    type: "text",
+                    title: t("TL_NAME_ERROR_MESSAGE"),
+                })}
             />
             <CardLabel>{`${t("BPA_PLAN_DIAGRAM_LABEL")} *`}</CardLabel>
             <UploadFile

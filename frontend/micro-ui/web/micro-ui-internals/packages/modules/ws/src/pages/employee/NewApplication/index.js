@@ -34,12 +34,13 @@ const NewApplication = () => {
   );
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen);
+    const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isCreate);
+    config.head = "WS_APP_FOR_WATER_AND_SEWERAGE_LABEL";
     let bodyDetails = [];
     config?.body?.forEach(data => { if(data?.isCreateConnection) bodyDetails.push(data); })
     config.body = bodyDetails;
     setConfig(config);
-  });
+  }, []);
 
   useEffect(() => {
     !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);

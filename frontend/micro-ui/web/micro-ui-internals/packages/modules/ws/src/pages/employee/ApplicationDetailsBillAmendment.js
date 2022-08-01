@@ -18,11 +18,28 @@ const ApplicationDetailsBillAmendment = () => {
     applicationNumber,
     serviceType
   );
+  
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId,
     id: applicationNumber,
     moduleCode: applicationDetails?.processInstancesDetails?.[0]?.businessService,
+    config:{enabled:applicationDetails?.processInstancesDetails?.[0]?.businessService?true:false}
   });
+  
+ 
+  workflowDetails?.data?.actionState?.nextActions?.forEach((action) => {
+    if (action?.action === "RE-SUBMIT") {
+      let pathName = `/digit-ui/employee/ws/bill-amendment?connectionNumber=${applicationDetails?.applicationData?.connectionNo}&tenantId=${tenantId}&isEdit=true`;
+      action.redirectionUrll = {
+        action: "RE-SUBMIT-APPLICATION",
+        pathname: pathName,
+        state: {
+          applicationDetails: applicationDetails,
+          action: "RE-SUBMIT-APPLICATION"
+        },
+      };
+    }
+  })
   const {
     isLoading: updatingApplication,
     isError: updateApplicationError,
@@ -31,11 +48,10 @@ const ApplicationDetailsBillAmendment = () => {
     isSuccess,
     mutate,
   } = Digit.Hooks.ws.useApplicationActionsBillAmendUpdate();
-
-  useEffect(() => {
-    isSuccess && !updateApplicationError ? setShowToast(isSuccess) : null;
-    updateApplicationError && !isSuccess ? setShowToast(updateApplicationError) : null;
-  }, [updateApplicationError, isSuccess]);
+  // useEffect(() => {
+  //   isSuccess && !updateApplicationError ? setShowToast(isSuccess) : null;
+  //   updateApplicationError && !isSuccess ? setShowToast(updateApplicationError) : null;
+  // }, [updateApplicationError, isSuccess]);
 
   useEffect(() => {
     if (showToast) {
@@ -103,17 +119,17 @@ const ApplicationDetailsBillAmendment = () => {
           workflowDetails={workflowDetails}
           businessService={applicationDetails?.processInstancesDetails?.[0]?.businessService} // businessService
           moduleCode="WS"
-          showToast={false}
-          setShowToast={() => {}}
-          closeToast={() => {}}
+          showToast={showToast}
+          setShowToast={setShowToast}
+          closeToast={()=>setShowToast(null)}
           timelineStatusPrefix={`WF_${applicationDetails?.processInstancesDetails?.[0]?.businessService?.toUpperCase()}_`}
         />
       </div>
       {showToast ? (
         <Toast
           isDleteBtn={true}
-          error={updateApplicationError ? "WS_APPLICATION_UPDATE_ERROR" : "WS_APPLICATION_UPDATE_SUCCESS"}
-          label={isSuccess ? "WS_APPLICATION_UPDATE_SUCCESS" : updateError?.Error}
+          error={updateApplicationError ? "WS_APPLICATION_UPDATE_ERROR" : null}
+          label={isSuccess ? showToast?.label : updateError?.Error}
         />
       ) : null}
     </Fragment>

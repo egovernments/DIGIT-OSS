@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.swcalculation.config.SWCalculationConfiguration;
 import org.egov.swcalculation.constants.SWCalculationConstant;
@@ -174,13 +175,14 @@ public class DemandService {
 					.sewerageConnection(connection).requestInfo(requestInfo).build();
 			
 			Property property = sWCalculationUtil.getProperty(sewerageConnectionRequest);
-			
+			String tenantId = calculation.getTenantId();
 			String consumerCode = isForConnectionNO ?  calculation.getConnectionNo() : calculation.getApplicationNO();
 			sewerageConnectionIds.add(consumerCode);
 			User owner = property.getOwners().get(0).toCommonUser();
 			if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
 				owner = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).toCommonUser();
 			}
+			owner = getPlainOwnerDetails(requestInfo,owner.getUuid(), tenantId);
 			List<DemandDetail> demandDetails = new LinkedList<>();
 			
 			calculation.getTaxHeadEstimates().forEach(taxHeadEstimate -> {
@@ -218,6 +220,43 @@ public class DemandService {
 		if(isForConnectionNO)
 			fetchBill(demandRes, requestInfo,masterMap);
 		return demandRes;
+	}
+
+	private User getPlainOwnerDetails(RequestInfo requestInfo, String uuid, String tenantId){
+		User userInfoCopy = requestInfo.getUserInfo();
+		StringBuilder uri = new StringBuilder();
+		uri.append(configs.getUserHost()).append(configs.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		tenantId = tenantId.split("\\.")[0];
+
+		Role role = Role.builder()
+				.name("Internal Microservice Role").code("INTERNAL_MICROSERVICE_ROLE")
+				.tenantId(tenantId).build();
+
+		User userInfo = User.builder()
+				.uuid(configs.getEgovInternalMicroserviceUserUuid())
+				.type("SYSTEM")
+				.roles(Collections.singletonList(role)).id(0L).build();
+
+		requestInfo.setUserInfo(userInfo);
+
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("uuid",Collections.singletonList(uuid));
+		User user = null;
+		try {
+			LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>) serviceRequestRepository.fetchResult(uri, userSearchRequest);
+
+			List<LinkedHashMap<String, Object>> users = (List<LinkedHashMap<String, Object>>) responseMap.get("user");
+			String dobFormat = "yyyy-MM-dd";
+			utils.parseResponse(responseMap,dobFormat);
+			user = 	mapper.convertValue(users.get(0), User.class);
+
+		} catch (Exception e) {
+			throw new CustomException("EG_USER_SEARCH_ERROR", "Service returned null while fetching user");
+		}
+		requestInfo.setUserInfo(userInfoCopy);
+		return user;
 	}
 	
 	
@@ -409,6 +448,7 @@ public class DemandService {
 				throw new CustomException("EG_SW_INVALID_DEMAND_UPDATE", "No demand exists for Number: "
 						+ consumerCodes.toString());
 			Demand demand = searchResult.get(0);
+			String tenantId = calculation.getTenantId();
 			List<DemandDetail> demandDetails = demand.getDemandDetails();
 			List<DemandDetail> updatedDemandDetails = getUpdatedDemandDetails(calculation, demandDetails);
 			demand.setDemandDetails(updatedDemandDetails);
@@ -431,6 +471,7 @@ public class DemandService {
 					if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
 						owner = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).toCommonUser();
 					}
+					owner = getPlainOwnerDetails(requestInfo,owner.getUuid(), tenantId);
 					if(!(demand.getPayer().getUuid().equalsIgnoreCase(owner.getUuid())))
 						demand.setPayer(owner);
 				}
@@ -502,6 +543,7 @@ public class DemandService {
 
 		if (getBillCriteria.getAmountExpected() == null)
 			getBillCriteria.setAmountExpected(BigDecimal.ZERO);
+		RequestInfo requestInfo = requestInfoWrapper.getRequestInfo();
 		Map<String, JSONArray> billingSlabMaster = new HashMap<>();
 
 		Map<String, JSONArray> timeBasedExemptionMasterMap = new HashMap<>();
@@ -522,6 +564,7 @@ public class DemandService {
 		// Loop through the consumerCodes and re-calculate the time based applicable
 		Map<String, Demand> consumerCodeToDemandMap = res.getDemands().stream()
 				.collect(Collectors.toMap(Demand::getId, Function.identity()));
+		String tenantId = getBillCriteria.getTenantId();
 		List<Demand> demandsToBeUpdated = new LinkedList<>();
 		List<TaxPeriod> taxPeriods = masterDataService.getTaxPeriodList(requestInfoWrapper.getRequestInfo(), getBillCriteria.getTenantId(), SWCalculationConstant.SERVICE_FIELD_VALUE_SW);
 		consumerCodeToDemandMap.forEach((id, demand) ->{
@@ -529,6 +572,8 @@ public class DemandService {
 					&& SWCalculationConstant.DEMAND_CANCELLED_STATUS.equalsIgnoreCase(demand.getStatus().toString()))
 				throw new CustomException(SWCalculationConstant.EG_SW_INVALID_DEMAND_ERROR,
 						SWCalculationConstant.EG_SW_INVALID_DEMAND_ERROR_MSG);
+			User owner = getPlainOwnerDetails(requestInfo,demand.getPayer().getUuid(), tenantId);
+			demand.setPayer(owner);
 			applyTimeBasedApplicables(demand, requestInfoWrapper, timeBasedExemptionMasterMap, taxPeriods);
 			addRoundOffTaxHead(getBillCriteria.getTenantId(), demand.getDemandDetails());
 			demandsToBeUpdated.add(demand);

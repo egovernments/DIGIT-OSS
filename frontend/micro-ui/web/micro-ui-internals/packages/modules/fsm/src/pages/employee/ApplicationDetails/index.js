@@ -28,7 +28,6 @@ import TLCaption from "../../../components/TLCaption";
 import { useQueryClient } from "react-query";
 
 import { Link, useHistory, useParams } from "react-router-dom";
-import { actions } from "react-table";
 import { ViewImages } from "../../../components/ViewImages";
 
 const ApplicationDetails = (props) => {

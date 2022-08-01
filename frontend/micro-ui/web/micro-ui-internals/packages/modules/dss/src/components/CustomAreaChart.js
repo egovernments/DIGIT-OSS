@@ -89,7 +89,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
 
   useEffect(() => {
     if (response) {
-      const totalWaste = Math.round(response?.responseData?.data?.[0]?.plots[response?.responseData?.data?.[0]?.plots.length - 1]?.value);
+      const totalWaste = Digit.Utils.dss.formatter(Math.round(response?.responseData?.data?.[0]?.plots[response?.responseData?.data?.[0]?.plots.length - 1]?.value), 'number', value?.denomination, true, t);
       setTotalWaste(totalWaste);
       setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     }

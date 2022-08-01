@@ -203,4 +203,10 @@ public class WSCalculationConfiguration {
 
 	@Value("${bulk.demand.offset.value}")
 	private Integer batchOffset;
+
+	@Value("${egov.internal.microservice.user.uuid}")
+	private String egovInternalMicroserviceUserUuid;
+
+	@Value("${egov.bill.search.endpoint}")
+	private String searchBillEndPoint;
 }

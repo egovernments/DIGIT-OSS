@@ -44,7 +44,7 @@ const Search = ({ path }) => {
     enabled: !!(payload && Object.keys(payload).length > 0),
   };
 
-  const result = Digit.Hooks.ws.useSearchWS({ tenantId, filters: payload, config, bussinessService: businessServ, t });
+  const result = Digit.Hooks.ws.useSearchWS({ tenantId, filters: payload, config, bussinessService: businessServ, t ,shortAddress:true });
   
   return (
     <Fragment>

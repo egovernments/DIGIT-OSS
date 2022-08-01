@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
 import org.egov.common.contract.request.User;
 import org.egov.tracer.model.CustomException;
 import org.egov.wscalculation.config.WSCalculationConfiguration;
@@ -17,6 +18,7 @@ import org.egov.wscalculation.repository.DemandRepository;
 import org.egov.wscalculation.repository.ServiceRequestRepository;
 import org.egov.wscalculation.repository.WSCalculationDao;
 import org.egov.wscalculation.util.CalculatorUtil;
+import org.egov.wscalculation.util.NotificationUtil;
 import org.egov.wscalculation.util.WSCalculationUtil;
 import org.egov.wscalculation.validator.WSCalculationWorkflowValidator;
 import org.egov.wscalculation.web.models.*;
@@ -84,6 +86,9 @@ public class DemandService {
 
 	@Autowired
 	private EnrichmentService enrichmentService;
+
+	@Autowired
+	private NotificationUtil notificationUtil;
 
 	/**
 	 * Creates or updates Demand
@@ -176,6 +181,7 @@ public class DemandService {
 			if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
 				owner = waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).toCommonUser();
 			}
+			owner = getPlainOwnerDetails(requestInfo,owner.getUuid(), tenantId);
 			List<DemandDetail> demandDetails = new LinkedList<>();
 			calculation.getTaxHeadEstimates().forEach(taxHeadEstimate -> {
 				demandDetails.add(DemandDetail.builder().taxAmount(taxHeadEstimate.getEstimateAmount())
@@ -213,6 +219,43 @@ public class DemandService {
 		if(isForConnectionNO)
 		fetchBill(demandRes, requestInfo,masterMap);
 		return demandRes;
+	}
+
+	private User getPlainOwnerDetails(RequestInfo requestInfo, String uuid, String tenantId){
+		User userInfoCopy = requestInfo.getUserInfo();
+		StringBuilder uri = new StringBuilder();
+		uri.append(configs.getUserHost()).append(configs.getUserSearchEndpoint());
+		Map<String, Object> userSearchRequest = new HashMap<>();
+		tenantId = tenantId.split("\\.")[0];
+
+		Role role = Role.builder()
+				.name("Internal Microservice Role").code("INTERNAL_MICROSERVICE_ROLE")
+				.tenantId(tenantId).build();
+
+		User userInfo = User.builder()
+				.uuid(configs.getEgovInternalMicroserviceUserUuid())
+				.type("SYSTEM")
+				.roles(Collections.singletonList(role)).id(0L).build();
+
+		requestInfo.setUserInfo(userInfo);
+
+		userSearchRequest.put("RequestInfo", requestInfo);
+		userSearchRequest.put("tenantId", tenantId);
+		userSearchRequest.put("uuid",Collections.singletonList(uuid));
+		User user = null;
+		try {
+			LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>) serviceRequestRepository.fetchResult(uri, userSearchRequest);
+
+			List<LinkedHashMap<String, Object>> users = (List<LinkedHashMap<String, Object>>) responseMap.get("user");
+			String dobFormat = "yyyy-MM-dd";
+			notificationUtil.parseResponse(responseMap,dobFormat);
+			user = 	mapper.convertValue(users.get(0), User.class);
+
+		} catch (Exception e) {
+			throw new CustomException("EG_USER_SEARCH_ERROR", "Service returned null while fetching user");
+		}
+		requestInfo.setUserInfo(userInfoCopy);
+		return user;
 	}
 	
 	/**
@@ -475,6 +518,8 @@ public class DemandService {
 					&& WSCalculationConstant.DEMAND_CANCELLED_STATUS.equalsIgnoreCase(demand.getStatus().toString()))
 				throw new CustomException(WSCalculationConstant.EG_WS_INVALID_DEMAND_ERROR,
 						WSCalculationConstant.EG_WS_INVALID_DEMAND_ERROR_MSG);
+			User owner = getPlainOwnerDetails(requestInfo,demand.getPayer().getUuid(), tenantId);
+			demand.setPayer(owner);
 			applyTimeBasedApplicables(demand, requestInfoWrapper, timeBasedExemptionMasterMap, taxPeriods);
 			addRoundOffTaxHead(tenantId, demand.getDemandDetails());
 			demandsToBeUpdated.add(demand);
@@ -513,6 +558,7 @@ public class DemandService {
 				throw new CustomException("EG_WS_INVALID_DEMAND_UPDATE", "No demand exists for Number: "
 						+ consumerCodes.toString());
 			Demand demand = searchResult.get(0);
+			String tenantId = calculation.getTenantId();
 			demand.setDemandDetails(getUpdatedDemandDetails(calculation, demand.getDemandDetails()));
 
 			if(isForConnectionNo){
@@ -533,6 +579,7 @@ public class DemandService {
 					if (!CollectionUtils.isEmpty(waterConnectionRequest.getWaterConnection().getConnectionHolders())) {
 						owner = waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).toCommonUser();
 					}
+					owner = getPlainOwnerDetails(requestInfo,owner.getUuid(), tenantId);
 					if(!(demand.getPayer().getUuid().equalsIgnoreCase(owner.getUuid())))
 						demand.setPayer(owner);
 				}

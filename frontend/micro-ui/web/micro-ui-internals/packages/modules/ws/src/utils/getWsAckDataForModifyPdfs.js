@@ -39,19 +39,19 @@ const getConnectionDetails = (application, oldApplication, t) => {
         title: [t("WS_COMMON_CONNECTION_DETAILS"), t(""), t("")],
         values: application?.applicationType == "MODIFY_WATER_CONNECTION" ? [
             { val1: t("WS_SERV_DETAIL_CONN_TYPE"), val2: application?.connectionType, val3: compare(application?.connectionType, oldApplication?.connectionType, t) },
-            { val1: t("WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"), val2: application?.proposedTaps || t("CS_NA"), val3: compare(application?.proposedTaps, oldApplication?.proposedTaps, t) },
-            { val1: t("WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"), val2: application?.proposedPipeSize || t("CS_NA"), val3: compare(application?.proposedPipeSize, oldApplication?.proposedPipeSize, t) },
+            { val1: t("WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED"), val2: application?.noOfTaps || t("CS_NA"), val3: compare(application?.noOfTaps, oldApplication?.noOfTaps, t) },
+            { val1: t("WS_TASK_DETAILS_CONN_DETAIL_PIPE_SIZE_PROPOSED"), val2: application?.pipeSize || t("CS_NA"), val3: compare(application?.pipeSize, oldApplication?.pipeSize, t) },
             { val1: t("WS_SERV_DETAIL_WATER_SOURCE"), val2: t(`WS_SERVICES_MASTERS_WATERSOURCE_${application?.waterSource.split(".")[0]}`), val3: compare(t(`WS_SERVICES_MASTERS_WATERSOURCE_${application?.waterSource.split(".")[0]}`), t(`WS_SERVICES_MASTERS_WATERSOURCE_${oldApplication?.waterSource.split(".")[0]}`), t) },
             { val1: t("WS_SERV_DETAIL_WATER_SUB_SOURCE"), val2: t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(application?.waterSource, ".", "_")}`), val3: compare(t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(application?.waterSource, ".", "_")}`), t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(oldApplication?.waterSource, ".", "_")}`), t) },
-            { val1: t("WS_SERV_DETAIL_CONN_EXECUTION_DATE"), val2: convertEpochToDateDMY(application?.connectionExecutionDate), val3: compare(application?.connectionExecutionDate, oldApplication?.connectionExecutionDate, t) },
+            { val1: t("WS_SERV_DETAIL_CONN_EXECUTION_DATE"), val2: convertEpochToDateDMY(application?.connectionExecutionDate), val3: compare(application?.connectionExecutionDate, oldApplication?.connectionExecutionDate, t) !== t("WS_NO_CHANGE") ? convertEpochToDateDMY(compare(application?.connectionExecutionDate, oldApplication?.connectionExecutionDate, t)) : t("WS_NO_CHANGE") },
             { val1: t("WS_SERV_DETAIL_METER_ID"), val2: application?.meterId, val3: compare(application?.meterId, oldApplication?.meterId, t) },
             { val1: t("WS_ADDN_DETAIL_METER_INSTALL_DATE"), val2: convertEpochToDateDMY(application?.meterInstallationDate), val3: compare(convertEpochToDateDMY(application?.meterInstallationDate), convertEpochToDateDMY(oldApplication?.meterInstallationDate), t) },
             { val1: t("WS_INITIAL_METER_READING_LABEL"), val2: application?.additionalDetails?.initialMeterReading || t("CS_NA"), val3: compare(application?.additionalDetails?.initialMeterReading, oldApplication?.additionalDetails?.initialMeterReading, t) },
             { val1: t("WS_MODIFICATIONS_EFFECTIVE_DATE"), val2: convertEpochToDateDMY(application?.dateEffectiveFrom), val3: compare(convertEpochToDateDMY(application?.dateEffectiveFrom), convertEpochToDateDMY(oldApplication?.dateEffectiveFrom), t) }
         ] : [
             { val1: t("WS_SERV_DETAIL_CONN_TYPE"), val2: application?.connectionType, val3: compare(application?.connectionType, oldApplication?.connectionType, t) },
-            { val1: t("WS_NO_WATER_CLOSETS_LABEL"), val2: application?.proposedWaterClosets || t("CS_NA"), val3: compare(application?.proposedWaterClosets, oldApplication?.proposedWaterClosets, t) },
-            { val1: t("WS_SERV_DETAIL_NO_OF_TOILETS"), val2: application?.proposedToilets || t("CS_NA"), val3: compare(application?.proposedToilets, oldApplication?.proposedToilets, t) },
+            { val1: t("WS_NO_WATER_CLOSETS_LABEL"), val2: application?.noOfWaterClosets || t("CS_NA"), val3: compare(application?.noOfWaterClosets, oldApplication?.noOfWaterClosets, t) },
+            { val1: t("WS_SERV_DETAIL_NO_OF_TOILETS"), val2: application?.noOfToilets || t("CS_NA"), val3: compare(application?.noOfToilets, oldApplication?.noOfToilets, t) },
             { val1: t("WS_SERV_DETAIL_CONN_EXECUTION_DATE"), val2: convertEpochToDateDMY(application?.connectionExecutionDate), val3: compare(application?.connectionExecutionDate, oldApplication?.connectionExecutionDate, t) },
             { val1: t("WS_MODIFICATIONS_EFFECTIVE_DATE"), val2: convertEpochToDateDMY(application?.dateEffectiveFrom), val3: compare(convertEpochToDateDMY(application?.dateEffectiveFrom), convertEpochToDateDMY(oldApplication?.dateEffectiveFrom), t) }
         ],
@@ -69,7 +69,7 @@ const getConnectionHolderDetails =  (application, oldApplication, t) => {
                 { val1: t("WS_OWN_DETAIL_NAME"), val2: application?.connectionHolders?.[0]?.name || t("CS_NA"), val3: compare(application?.connectionHolders?.[0]?.name, oldApplication?.connectionHolders?.[0]?.name, t) },
                 { val1: t("CORE_COMMON_MOBILE_NUMBER"), val2: application?.connectionHolders?.[0]?.mobileNumber || t("CS_NA"), val3: compare(application?.connectionHolders?.[0]?.mobileNumber, oldApplication?.connectionHolders?.[0]?.mobileNumber, t) },
                 { val1: t("WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME"), val2: application?.connectionHolders?.[0]?.fatherOrHusbandName || t("CS_NA"), val3: compare(application?.connectionHolders?.[0]?.fatherOrHusbandName, oldApplication?.connectionHolders?.[0]?.fatherOrHusbandName, t) },
-                { val1: t("WS_CORRESPONDANCE_ADDRESS_LABEL"), val2: application?.connectionHolders?.[0]?.permanentAddress || t("CS_NA"), val3: compare(application?.connectionHolders?.[0]?.permanentAddress, oldApplication?.connectionHolders?.[0]?.permanentAddress, t) },
+                { val1: t("WS_CORRESPONDANCE_ADDRESS_LABEL"), val2: application?.connectionHolders?.[0]?.correspondenceAddress || t("CS_NA"), val3: compare(application?.connectionHolders?.[0]?.correspondenceAddress, oldApplication?.connectionHolders?.[0]?.correspondenceAddress, t) },
             ]
         }
     }
@@ -80,7 +80,7 @@ const getConnectionHolderDetails =  (application, oldApplication, t) => {
                     { val1: t("WS_OWN_DETAIL_NAME"), val2: application?.connectionHolders?.[0]?.name || t("CS_NA"), val3: t("WS_SAME_AS_PROPERTY_OWNERS") },
                     { val1: t("CORE_COMMON_MOBILE_NUMBER"), val2: application?.connectionHolders?.[0]?.mobileNumber || t("CS_NA"), val3: t("WS_SAME_AS_PROPERTY_OWNERS") },
                     { val1: t("WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME"), val2: application?.connectionHolders?.[0]?.fatherOrHusbandName || t("CS_NA"), val3: t("WS_SAME_AS_PROPERTY_OWNERS") },
-                    { val1: t("WS_CORRESPONDANCE_ADDRESS_LABEL"), val2: application?.connectionHolders?.[0]?.permanentAddress || t("CS_NA"), val3: t("WS_SAME_AS_PROPERTY_OWNERS") },
+                    { val1: t("WS_CORRESPONDANCE_ADDRESS_LABEL"), val2: application?.connectionHolders?.[0]?.correspondenceAddress || t("CS_NA"), val3: t("WS_SAME_AS_PROPERTY_OWNERS") },
                 ]
         }
     }
@@ -91,7 +91,7 @@ const getConnectionHolderDetails =  (application, oldApplication, t) => {
                 { val1: t("WS_OWN_DETAIL_NAME"), val3: oldApplication?.connectionHolders?.[0]?.name || t("CS_NA"), val2: t("WS_SAME_AS_PROPERTY_OWNERS") },
                 { val1: t("CORE_COMMON_MOBILE_NUMBER"), val3: oldApplication?.connectionHolders?.[0]?.mobileNumber || t("CS_NA"), val2: t("WS_SAME_AS_PROPERTY_OWNERS") },
                 { val1: t("WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME"), val3: oldApplication?.connectionHolders?.[0]?.fatherOrHusbandName || t("CS_NA"), val2: t("WS_SAME_AS_PROPERTY_OWNERS") },
-                { val1: t("WS_CORRESPONDANCE_ADDRESS_LABEL"), val3: oldApplication?.connectionHolders?.[0]?.permanentAddress || t("CS_NA"), val2: t("WS_SAME_AS_PROPERTY_OWNERS") },
+                { val1: t("WS_CORRESPONDANCE_ADDRESS_LABEL"), val3: oldApplication?.connectionHolders?.[0]?.correspondenceAddress || t("CS_NA"), val2: t("WS_SAME_AS_PROPERTY_OWNERS") },
             ]
         }
     }
@@ -133,6 +133,7 @@ const getDocumentDetails = (application, t) => {
 };
 
 const getWSAcknowledgementData = async (newApplication, property, tenantInfo, t, oldApplication) => {
+    
     const header = await getHeaderDetails(newApplication,t,tenantInfo)
     const oldPropertyData = await Digit.PTService.search({ tenantId: tenantInfo, filters: { propertyIds: oldApplication?.propertyId } })
     const oldProperty = oldPropertyData?.Properties?.[0]

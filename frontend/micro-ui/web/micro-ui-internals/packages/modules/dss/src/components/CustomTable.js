@@ -50,6 +50,7 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination }
       id === chartKey
         ? value?.filters
         : { ...value?.filters, [filterStack[filterStack.length - 1]?.filterKey]: filterStack[filterStack.length - 1]?.filterValue },
+    addlFilter: filterStack[filterStack.length - 1]?.addlFilter,
     moduleLevel: value?.moduleLevel,
   });
   const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
@@ -61,6 +62,8 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination }
       id === chartKey
         ? value?.filters
         : { ...value?.filters, [filterStack[filterStack.length - 1]?.filterKey]: filterStack[filterStack.length - 1]?.filterValue },
+    addlFilter: filterStack[filterStack.length - 1]?.addlFilter,
+    moduleLevel: value?.moduleLevel,
   });
   useEffect(() => {
     const { id } = data;
@@ -190,7 +193,7 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination }
     return t(code);
   };
 
-  const getDrilldownCharts = (value, filterKey, label) => {
+  const getDrilldownCharts = (value, filterKey, label, filters = []) => {
     if (response?.responseData?.drillDownChartId && response?.responseData?.drillDownChartId !== "none") {
       let currentValue = value;
       if (filterKey === "tenantId") {
@@ -205,7 +208,18 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination }
         */
         if (currentValue === undefined) return;
       }
-      setFilterStack([...filterStack, { id: response?.responseData?.drillDownChartId, name: value, filterKey, filterValue: currentValue, label }]);
+
+      let newStack = { id: response?.responseData?.drillDownChartId, name: value, filterKey, filterValue: currentValue, label };
+      if (filters.length > 1) {
+        let newFilter = filters.filter((ele) => ele.key != filterKey);
+        newStack["addlFilter"] = { [newFilter?.[0]?.key]: filterStack?.[filterStack?.length - 1]?.filterValue };
+        newFilter.map((fil) => {
+          newStack["addlFilter"][fil?.key] =
+            filterStack?.filter((e) => e.filterKey == fil?.key)?.[0]?.filterValue ||
+            filterStack?.filter((e) => e.filterKey == "tenantId")?.[0]?.filterValue;
+        });
+      }
+      setFilterStack([...filterStack, newStack]);
       setChartKey(response?.responseData?.drillDownChartId);
     }
   };
@@ -223,10 +237,14 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination }
     const name = t(`DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`);
     return (originalRow, rowIndex, columns) => {
       const cellValue = originalRow?.[name];
-      if (plot?.symbol === "amount" || plot?.symbol === "number" || plot?.symbol === "percentage") {
+      if (plot?.symbol === "amount") {
         return typeof cellValue === "object"
           ? { value: Digit.Utils.dss.formatter(convertDenomination(cellValue?.value), "number", "Lac", true, t), insight: cellValue?.insight }
           : String(Digit.Utils.dss.formatter(convertDenomination(cellValue), "number", "Lac", true, t));
+      } else if (plot?.symbol === "number" || plot?.symbol === "percentage") {
+        return typeof cellValue === "object"
+          ? { value: Digit.Utils.dss.formatter(cellValue?.value, "number", "Lac", true, t), insight: cellValue?.insight }
+          : String(Digit.Utils.dss.formatter(cellValue, "number", "Lac", true, t));
       }
 
       return originalRow[name];
@@ -303,7 +321,14 @@ const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination }
             return (
               <span
                 style={{ color: "#F47738", cursor: "pointer" }}
-                onClick={() => getDrilldownCharts(cellValue, filter?.key, t(`DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`))}
+                onClick={() =>
+                  getDrilldownCharts(
+                    cellValue?.includes("DSS_TB_")?row?.original?.key:cellValue,
+                    filter?.key,
+                    t(`DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`),
+                    response?.responseData?.filter
+                  )
+                }
               >
                 {t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(cellValue)}`)}
               </span>

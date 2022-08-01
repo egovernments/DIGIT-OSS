@@ -98,11 +98,23 @@ public class ChallanRepository {
     
     public List<Challan> getChallans(SearchCriteria criteria) {
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getChallanSearchQuery(criteria, preparedStmtList);
+        String query = queryBuilder.getChallanSearchQuery(criteria, preparedStmtList,false);
         List<Challan> challans =  jdbcTemplate.query(query, preparedStmtList.toArray(), rowMapper);
         return challans;
     }
 
+    /**
+     * gets the total count for a search request
+     *
+     * @param criteria The challan search criteria
+     */
+    public int getChallanSearchCount(SearchCriteria criteria) {
+        List<Object> preparedStmtList = new ArrayList<>();
+        String query = queryBuilder.getChallanSearchQuery(criteria, preparedStmtList,true);
+
+        int count = jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
+        return count;
+    }
 
 
 	public void updateFileStoreId(List<Challan> challans) {

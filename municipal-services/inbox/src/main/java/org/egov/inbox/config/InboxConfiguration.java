@@ -1,5 +1,6 @@
 package org.egov.inbox.config;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -77,5 +78,38 @@ public class InboxConfiguration {
 	
 	@Value("#{${bs.businesscode.service.search}}")
 	private Map<String, Map<String, String>> bsServiceSearchMapping;
+
+	@Value("${egov.mdms.host}")
+	private String mdmsHost;
+
+	@Value("${egov.mdms.search.endpoint}")
+	private String mdmsSearchEndPoint;
+
+	@Value("${egov.es.username}")
+	private String esUserName;
+
+	@Value("${egov.es.password}")
+	private String esPassword;
+
+	@Value("${services.esindexer.host}")
+	private String indexServiceHost;
+
+	@Value("${egov.services.esindexer.host.search}")
+	private String indexServiceHostSearchEndpoint;
+
+	@Value("${egov.user.host}")
+	private String userHost;
+
+	@Value("${egov.user.search.path}")
+	private String userSearchEndpoint;
+
+	@Value("${egov.user.create.path}")
+	private String userCreateEndpoint;
+
+	@Value("${egov.internal.microservice.user.uuid}")
+	private String egovInternalMicroserviceUserUuid;
+
+	@Value("${parent.level.tenant.id}")
+	private String parentLevelTenantId;
 
 }

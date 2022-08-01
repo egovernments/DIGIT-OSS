@@ -1,7 +1,8 @@
 import { Loader, Modal, FormComposer } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
-import { configWSApproverApplication } from "../config";
+import { configWSApproverApplication, configWSDisConnectApplication } from "../config";
 import * as predefinedConfig from "../config";
+import cloneDeep from "lodash/cloneDeep";
 
 
 const Heading = (props) => {
@@ -21,6 +22,23 @@ const CloseBtn = (props) => {
       <Close />
     </div>
   );
+};
+
+const convertDateToEpochNew = (dateString, dayStartOrEnd = "dayend") => {
+  //example input format : "2018-10-02"
+  try {
+    const parts = dateString.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+    const DateObj = new Date(Date.UTC(parts[1], parts[3] - 1, parts[2]));
+
+    DateObj.setMinutes(DateObj.getMinutes() + DateObj.getTimezoneOffset());
+    if (dayStartOrEnd === "dayend") {
+      DateObj.setHours(DateObj.getHours() + 24);
+      DateObj.setSeconds(DateObj.getSeconds() - 1);
+    }
+    return DateObj.getTime();
+  } catch (e) {
+    return dateString;
+  }
 };
 
 const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction, actionData, applicationData, businessService, moduleCode }) => {
@@ -53,7 +71,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     (async () => {
       setError(null);
       if (file) {
-        const allowedFileTypesRegex = /(.*?)(jpg|pdf)$/i
+        const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i
         if (file.size >= 5242880) {
           setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
         } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
@@ -77,6 +95,9 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
   function submit(data) {
     if(applicationData?.isBillAmend){
+      const comments = data?.comments ? data.comments : null
+     
+      const additionalDetails = { ...applicationData?.billAmendmentDetails?.additionalDetails, comments } 
      const amendment = {
        ...applicationData?.billAmendmentDetails,
         workflow:{
@@ -86,7 +107,33 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           businessService:"BS.AMENDMENT",
           moduleName:"BS"
         },
+       additionalDetails,
+       comment: data?.comments || "",
+       wfDocuments: uploadedFile
+         ? [
+           {
+             documentType: action?.action + " DOC",
+             fileName: file?.name,
+             fileStoreId: uploadedFile,
+           },
+         ]
+         : null,
+       processInstance: {
+         action: action?.action,
+         assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
+         comment: data?.comments || "",
+         documents: uploadedFile
+           ? [
+             {
+               documentType: action?.action + " DOC",
+               fileName: file?.name,
+               fileStoreId: uploadedFile,
+             },
+           ]
+           : []
+       }
       }
+      //amendment?.additionalDetails?.comments = comments
       submitAction({AmendmentUpdate:amendment})
       return
     }
@@ -96,7 +143,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       action: action?.action,
       comment: data?.comments || "",
       assignee: !selectedApprover?.uuid ? [] : [selectedApprover?.uuid],
-      assignees: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
+      assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
       wfDocuments: uploadedFile
         ? [
           {
@@ -107,8 +154,9 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
         ]
         : null,
       processInstance: {
+        ...applicationData?.processInstance,
         action: action?.action,
-        assignees: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
+        assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
         comment: data?.comments || "",
         documents: uploadedFile
           ? [
@@ -122,28 +170,62 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       }
     };
     
-
-    applicationData?.serviceType == "WATER" ?
-      submitAction({ WaterConnection: applicationData }) :
-      submitAction({ SewerageConnection: applicationData })
+    if (data?.date) {
+      const connectionExecutionDate = cloneDeep(data?.date);
+      applicationData.connectionExecutionDate = convertDateToEpochNew(connectionExecutionDate)
+    }
+    if (applicationData?.processInstance?.businessService == "DisconnectWSConnection" || applicationData?.processInstance?.businessService == "DisconnectSWConnection"){
+      applicationData?.serviceType == "WATER" ?
+      submitAction({ WaterConnection: applicationData, disconnectRequest: true }) :
+      submitAction({ SewerageConnection: applicationData, disconnectRequest: true })
+    } else {
+      const adhocRebateData = sessionStorage.getItem("Digit.ADHOC_ADD_REBATE_DATA");
+      const parsedAdhocRebateData = adhocRebateData ? JSON.parse(adhocRebateData) : "";
+      if (parsedAdhocRebateData?.value?.adhocPenalty) applicationData.additionalDetails.adhocPenalty = parseInt(parsedAdhocRebateData?.value?.adhocPenalty) || "";
+      if (parsedAdhocRebateData?.value?.adhocPenaltyComment) applicationData.additionalDetails.adhocPenaltyComment = parsedAdhocRebateData?.value?.adhocPenaltyComment || "";
+      if (parsedAdhocRebateData?.value?.adhocPenaltyReason) applicationData.additionalDetails.adhocPenaltyReason = parsedAdhocRebateData?.value?.adhocPenaltyReason || "";
+      if (parsedAdhocRebateData?.value?.adhocRebate) applicationData.additionalDetails.adhocRebate = parseInt(parsedAdhocRebateData?.value?.adhocRebate) || "";
+      if (parsedAdhocRebateData?.value?.adhocRebateComment) applicationData.additionalDetails.adhocRebateComment = parsedAdhocRebateData?.value?.adhocRebateComment || "";
+      if (parsedAdhocRebateData?.value?.adhocRebateReason) applicationData.additionalDetails.adhocRebateReason = parsedAdhocRebateData?.value?.adhocRebateReason || "";
+      applicationData?.serviceType == "WATER" ? submitAction({ WaterConnection: applicationData }) : submitAction({ SewerageConnection: applicationData });
+    }
   }
 
   useEffect(() => {
-    if (action) {
-      setConfig(
-        configWSApproverApplication({
-          t,
-          action,
-          approvers,
-          selectedApprover,
-          setSelectedApprover,
-          selectFile,
-          uploadedFile,
-          setUploadedFile,
-          businessService,
-          error
-        })
-      );
+    if (applicationData?.processInstance?.businessService == "DisconnectWSConnection" || applicationData?.processInstance?.businessService == "DisconnectSWConnection") {
+      if (action) {
+        setConfig(
+          configWSDisConnectApplication({
+            t,
+            action,
+            approvers,
+            selectedApprover,
+            setSelectedApprover,
+            selectFile,
+            uploadedFile,
+            setUploadedFile,
+            businessService,
+            error
+          })
+        );
+      }
+    } else {
+      if (action) {
+        setConfig(
+          configWSApproverApplication({
+            t,
+            action,
+            approvers,
+            selectedApprover,
+            setSelectedApprover,
+            selectFile,
+            uploadedFile,
+            setUploadedFile,
+            businessService,
+            error
+          })
+        );
+      }
     }
   }, [action, approvers, uploadedFile, error]);
 

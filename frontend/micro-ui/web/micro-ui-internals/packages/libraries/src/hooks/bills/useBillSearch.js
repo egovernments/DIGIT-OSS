@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "react-query";
 import BillingService from "../../services/elements/Bill";
 
-const useBillSearch = ({ filters }) => {
+const useBillSearch = ({ filters, config = {} }) => {
   const client = useQueryClient();
   const tenantId = Digit.SessionStorage.get("User")?.info?.tenantId;
 

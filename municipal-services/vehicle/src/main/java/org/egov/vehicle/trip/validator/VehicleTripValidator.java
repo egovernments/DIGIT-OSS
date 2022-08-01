@@ -76,51 +76,90 @@ public class VehicleTripValidator {
 
 	 
 	public void validateCreateOrUpdateRequest(VehicleTripRequest request) {
-		
-		request.getVehicleTrip().forEach(vehicleTrip->{
+
+		request.getVehicleTrip().forEach(vehicleTrip -> {
 			
-			
-				
-			if (StringUtils.isEmpty(vehicleTrip.getTenantId())) {
-				throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "TenantId is mandatory");
-			}
-			if (vehicleTrip.getTenantId().split("\\.").length == 1) {
-				throw new CustomException(VehicleTripConstants.INVALID_TENANT, " Invalid TenantId");
-			}
-			
-			if (vehicleTrip.getVehicle() == null  || StringUtils.isEmpty(vehicleTrip.getVehicle().getId())) {
-				throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "vehicleId is mandatory");
-			}else {
-				List<Vehicle> vehicles = vehicleService.search(VehicleSearchCriteria.builder()
-								.ids(Arrays.asList(vehicleTrip.getVehicle().getId()))
-								.tenantId(vehicleTrip.getTenantId()).build(), request.getRequestInfo()).getVehicle();
-				if(CollectionUtils.isEmpty(vehicles)) {
-					throw new CustomException(VehicleTripConstants.INVALID_VEHICLE,
-							"vehicle does not exists with id " + vehicleTrip.getVehicle().getId());
-				}else {
-					vehicleTrip.setVehicle(vehicles.get(0));
+			if (vehicleTrip.getTripDetails().get(0).getReferenceNo() != null) {
+				if (StringUtils.isEmpty(vehicleTrip.getTenantId())) {
+					throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "TenantId is mandatory");
 				}
-			}
-			
-			if (StringUtils.isEmpty(vehicleTrip.getBusinessService())) {
-				throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "bussinessService is mandaotry");
-			}
-			if(vehicleTrip.getTripOwner() != null) {
-				ownerExists(vehicleTrip,request.getRequestInfo());
-			}
-			
-			if(vehicleTrip.getDriver() != null) {
-				driverExists(vehicleTrip, request.getRequestInfo());
-			}
-			
-			if(vehicleTrip.getTripDetails() ==null || CollectionUtils.isEmpty(vehicleTrip.getTripDetails())) {
-				throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR, "atleast one trip detail is mandatory");
-			}
-		
+				if (vehicleTrip.getTenantId().split("\\.").length == 1) {
+					throw new CustomException(VehicleTripConstants.INVALID_TENANT, " Invalid TenantId");
+				}
+				if (StringUtils.isEmpty(vehicleTrip.getBusinessService())) {
+					throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR,
+							"Bussiness Service is mandatory");
+				}
+				if (vehicleTrip.getTripDetails() == null || CollectionUtils.isEmpty(vehicleTrip.getTripDetails())) {
+					throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR,
+							"atleast one trip detail is mandatory");
+				}
+				if (vehicleTrip.getVehicle() == null || StringUtils.isEmpty(vehicleTrip.getVehicle().getId())) {
+					throw new CustomException(VehicleTripConstants.INVALID_VEHICLELOG_ERROR, "vehicleId is mandatory");
+				} else {
+					List<Vehicle> vehicles = vehicleService
+							.search(VehicleSearchCriteria.builder().ids(Arrays.asList(vehicleTrip.getVehicle().getId()))
+									.tenantId(vehicleTrip.getTenantId()).build(), request.getRequestInfo())
+							.getVehicle();
+					if (CollectionUtils.isEmpty(vehicles)) {
+						throw new CustomException(VehicleTripConstants.INVALID_VEHICLE,
+								"vehicle does not exists with id " + vehicleTrip.getVehicle().getId());
+					} else {
+						vehicleTrip.setVehicle(vehicles.get(0));
+					}
+				}
+
+				if (vehicleTrip.getTripOwner() != null) {
+					ownerExists(vehicleTrip, request.getRequestInfo());
+				}
+
+				if (vehicleTrip.getDriver() != null) {
+					driverExists(vehicleTrip, request.getRequestInfo());
+				}
+
+			} else {
+	
+					if(vehicleTrip.getTripStartTime() <=0 || vehicleTrip.getTripEndTime() <= 0 
+							|| vehicleTrip.getTripStartTime() > vehicleTrip.getTripEndTime()) {
+						throw new CustomException(VehicleTripConstants.INVALID_TRIDETAIL_ERROR, "Trip Start and End Time are invalid: ");
+					}
+					
+					if (vehicleTrip.getVolumeCarried() == null || vehicleTrip.getVolumeCarried() <= 0) {
+						throw new CustomException(VehicleTripConstants.INVALID_VOLUME, "Invalid volume carried");
+					}
+					if (VehicleTripConstants.FSM_VEHICLE_TRIP_BusinessService
+							.equalsIgnoreCase(vehicleTrip.getBusinessService())) {
+						PlantMapping plantMapping = vehicleTripFSMService.getPlantMapping(request.getRequestInfo(),
+								vehicleTrip.getTenantId(), request.getRequestInfo().getUserInfo().getUuid());
+					if (null != plantMapping && StringUtils.isNotEmpty(plantMapping.getPlantCode())) {
+
+						Map<String, String> additionalDetails = vehicleTrip.getAdditionalDetails() != null
+								? (Map<String, String>) vehicleTrip.getAdditionalDetails()
+								: new HashMap<String, String>();
+
+						if (null != additionalDetails) {
+							log.info("FSTP Plant code" + plantMapping.getPlantCode());
+							additionalDetails.put("plantCode", plantMapping.getPlantCode());
+							vehicleTrip.setAdditionalDetails(additionalDetails);
+						}else{
+
+							ObjectMapper mapper = new ObjectMapper();
+							ObjectNode additionalDtlObjectNode = mapper.createObjectNode();
+							additionalDtlObjectNode.set("plantCode", TextNode.valueOf(plantMapping.getPlantCode()));
+							vehicleTrip.setAdditionalDetails(additionalDtlObjectNode);
+
+						}
+
+						log.info("FSTP Plant code" + plantMapping.getPlantCode());
+					} else {
+							log.error("Logged user to FSTP mapping doesn't exists. ");
+							throw new CustomException(VehicleTripConstants.EMPLOYEE_FSTP_MAP_NOT_EXISTS,
+									"Logged user to FSTP mapping doesn't exists.");
+						}
+					}
+				}
 		});
-		
-		
-		
+
 	}
 
 	public void ownerExists(VehicleTrip vehicleTrip, RequestInfo requestInfo) {
@@ -202,14 +241,24 @@ public class VehicleTripValidator {
 					PlantMapping plantMapping = vehicleTripFSMService.getPlantMapping(request.getRequestInfo(),
 							vehicleTrip.getTenantId(), request.getRequestInfo().getUserInfo().getUuid());
 					if (null != plantMapping && StringUtils.isNotEmpty(plantMapping.getPlantCode())) {
-						ObjectNode additionalDtlObjectNode = (ObjectNode) vehicleTrip.getAdditionalDetails();
-						if (null == additionalDtlObjectNode) {
+						
+						Map<String, String> additionalDetails = vehicleTrip.getAdditionalDetails() != null
+								? (Map<String, String>) vehicleTrip.getAdditionalDetails()
+								: new HashMap<String, String>();
+
+						if (null != additionalDetails) {
+							log.info("FSTP Plant code" + plantMapping.getPlantCode());
+							additionalDetails.put("plantCode", plantMapping.getPlantCode());
+							vehicleTrip.setAdditionalDetails(additionalDetails);
+						}else{
+
 							ObjectMapper mapper = new ObjectMapper();
-							additionalDtlObjectNode = mapper.createObjectNode();
+							ObjectNode additionalDtlObjectNode = mapper.createObjectNode();
+							additionalDtlObjectNode.set("plantCode", TextNode.valueOf(plantMapping.getPlantCode()));
+							vehicleTrip.setAdditionalDetails(additionalDtlObjectNode);
+
 						}
 						log.info("FSTP Plant code" + plantMapping.getPlantCode());
-						additionalDtlObjectNode.set("plantCode", TextNode.valueOf(plantMapping.getPlantCode()));
-						vehicleTrip.setAdditionalDetails(additionalDtlObjectNode);
 					} else {
 						log.error("Logged user to FSTP mapping doesn't exists. ");
 						throw new CustomException(VehicleTripConstants.EMPLOYEE_FSTP_MAP_NOT_EXISTS,

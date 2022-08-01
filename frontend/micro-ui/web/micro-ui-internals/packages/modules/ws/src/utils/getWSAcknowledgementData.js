@@ -58,7 +58,7 @@ const getPropertyDetails = (application, t) => {
   return {
     title: t("WS_COMMON_PROPERTY_DETAILS"),
     values: [
-      { title: t("WS_PROPERTY_ID_LABEL"), value: t(`${application?.acknowldgementNumber}`) || t("CS_NA") },
+      { title: t("WS_PROPERTY_ID_LABEL"), value: t(`${application?.propertyId}`) || t("CS_NA") },
       { title: t("WS_OWN_DETAIL_NAME"), value: names || t("CS_NA") },
       { title: t("WS_PROPERTY_ADDRESS_LABEL"), value: getPropertyAddress(application?.address) || t("CS_NA") }
     ],
@@ -106,7 +106,7 @@ const getConnectionHolderDetails = (owner, t) => {
       { title: t("WS_CONN_HOLDER_COMMON_FATHER_OR_HUSBAND_NAME"), value: owner?.connectionHolders?.[0]?.fatherOrHusbandName || t("CS_NA") },
       //{ title: t("WS_CONN_HOLDER_OWN_DETAIL_RELATION_LABEL"), value: t(owner?.connectionHolders?.[0]?.relationship) || t("CS_NA") },
       //{ title: t("WS_OWNER_SPECIAL_CATEGORY"), value: owner?.connectionHolders?.[0]?.ownerType ? t(`COMMON_MASTERS_OWNERTYPE_${owner?.ownerType}`) : t("CS_NA") },
-      { title: t("WS_CORRESPONDANCE_ADDRESS_LABEL"), value: owner?.connectionHolders?.[0]?.permanentAddress || t("CS_NA") },
+      { title: t("WS_CORRESPONDANCE_ADDRESS_LABEL"), value: owner?.connectionHolders?.[0]?.correspondenceAddress || t("CS_NA") },
     ] : [
       { title: t("WS_CONN_HOLDER_SAME_AS_OWNER_DETAILS"), value: t("SCORE_YES") || t("CS_NA") }
     ],

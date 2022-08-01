@@ -29,7 +29,11 @@ class Inbox extends Component {
     hasWorkflow: false,
     filterPopupOpen: false
   };
-
+  constructor(props){
+    super(props);
+    /* RAIN-7250 Always Navigate to new UI Incase user clicks on Home  */
+    window.location.href="/digit-ui/employee";
+  }
   componentDidMount = () => {
     const { fetchLocalizationLabel } = this.props
     const tenantId = getTenantId();

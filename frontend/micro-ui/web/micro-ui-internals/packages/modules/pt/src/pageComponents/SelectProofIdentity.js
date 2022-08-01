@@ -66,7 +66,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData, ownerInd
 
   const handleSubmit = () => {
     setmultipleownererror(null);
-    if (formData?.ownershipCategory?.code === "INDIVIDUAL.MULTIPLEOWNERS" && index == "0" && !isMutation) {
+    if (formData?.ownershipCategory?.code === "INDIVIDUAL.MULTIPLEOWNERS" && formData?.owners?.length <= 1 && index == "0" && !isMutation) {
       setmultipleownererror("PT_MULTI_OWNER_ADD_ERR_MSG");
     } else if (isMutation && formData?.owners?.length <= 1 && formData?.ownershipCategory?.code === "INDIVIDUAL.MULTIPLEOWNERS") {
       setmultipleownererror("PT_MULTI_OWNER_ADD_ERR_MSG");

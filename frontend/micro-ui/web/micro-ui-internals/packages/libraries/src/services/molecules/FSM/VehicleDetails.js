@@ -3,7 +3,7 @@ import { FSMService } from "../../elements/FSM";
 const getResponse = (data) => {
   let details = [
     {
-      name: '',
+      title: 'ES_FSM_REGISTRY_DETAILS_VEHICLE_DETAILS',
       values: [
         { title: "ES_FSM_REGISTRY_VEHICLE_NUMBER", value: data?.registrationNumber },
         { title: "ES_FSM_REGISTRY_VEHICLE_TYPE", value: data?.type },
@@ -13,7 +13,7 @@ const getResponse = (data) => {
         { title: "ES_FSM_REGISTRY_VEHICLE_ROAD_TAX", value: data?.roadTaxPaidTill && Digit.DateUtils.ConvertEpochToDate(data?.roadTaxPaidTill) },
         { title: "ES_FSM_REGISTRY_VEHICLE_INSURANCE", value: data?.InsuranceCertValidTill && Digit.DateUtils.ConvertEpochToDate(data?.InsuranceCertValidTill) },
         { title: "ES_FSM_REGISTRY_VEHICLE_STATUS", value: data.status },
-        { title: "ES_FSM_REGISTRY_VEHICLE_ADDITIONAL_DETAILS", value: '' }
+        { title: "ES_FSM_REGISTRY_VEHICLE_ADDITIONAL_DETAILS", value: data?.additionalDetails?.description }
       ],
     }
   ];

@@ -9,9 +9,9 @@ const Option = ({ name, Icon, onClick, className }) => {
   );
 };
 
-const CardBasedOptions = ({ header, sideOption, options, styles = {} }) => {
+const CardBasedOptions = ({ header, sideOption, options, styles = {}, style={} }) => {
   return (
-    <div className="CardBasedOptions">
+    <div className="CardBasedOptions" style={style}>
       <div className="headContent">
         <h2>{header}</h2>
         <p onClick={sideOption.onClick}>{sideOption.name}</p>

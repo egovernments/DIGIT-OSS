@@ -9,6 +9,7 @@ import {
   StatusTable,
   SubmitBar,
   Header,
+  EditIcon,
 } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -92,7 +93,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
   }
 
   const getCardSubHeadrStyles = () => {
-    return { fontSize: "24px", fontWeight: "700", lineHeight: "28px", margin: "20px 0px" }
+    return { fontSize: "24px", fontWeight: "700", lineHeight: "28px", margin: "20px 0px 16px 0px" }
   }
 
   let documentDate = t("CS_NA");
@@ -102,10 +103,17 @@ const CheckPage = ({ onSubmit, value = {} }) => {
     documentDate = `${date.getDate()} ${month} ${date.getFullYear()}`;
   }
   
+  const routeTo = (jumpTo) => location.href=jumpTo;
+
+  const [agree, setAgree] = useState(false);
+  const setdeclarationhandler = () => {
+    setAgree(!agree);
+  };
+  
   return (
     <React.Fragment>
     {window.location.href.includes("/citizen") ? <Timeline currentStep={4}/> : null}
-    <Header styles={{fontSize:"32px"}}>{t("WS_COMMON_SUMMARY")}</Header>
+    <Header styles={{fontSize:"32px", marginLeft: "8px"}}>{t("WS_COMMON_SUMMARY")}</Header>
     <Card style={{paddingRight:"16px"}}>
     <StatusTable>
         <Row className="border-none" label={t("PT_APPLICATION_NUMBER_LABEL")} text={property?.acknowldgementNumber} textStyle={{ whiteSpace: "pre" }} />
@@ -115,7 +123,7 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         <Row className="border-none" label={t("PT_PAYMENT_STATUS")} text={billStatus} textStyle={{ whiteSpace: "pre" }} />
     </StatusTable>
 
-    <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
+    <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_PROPERTY_ADDRESS_SUB_HEADER")}</CardSubHeader>
     <StatusTable>
         <Row className="border-none" label={t("PT_PROPERTY_ADDRESS_PINCODE")} text={property?.address?.pincode || t("CS_NA")} />
         <Row className="border-none" label={t("PT_COMMON_CITY")} text={property?.address?.city || t("CS_NA")} />
@@ -128,14 +136,12 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       <div>
         {Array.isArray(property?.owners) &&
           property?.owners.map((owner, index) => (
-            <div key={index}>
-              <CardSubHeader style={getCardSubHeadrStyles()}>
+            <div key={index} style={{margin:"none"}}>
                 {property?.owners.length != 1 && (
                   <span>
                     {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
                   </span>
                 )}
-              </CardSubHeader>
               <StatusTable>
                 <Row className="border-none" label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
                 <Row className="border-none" label={t("PT_FORM3_GUARDIAN_NAME")} text={owner?.fatherOrHusbandName || t("CS_NA")} />   
@@ -147,21 +153,24 @@ const CheckPage = ({ onSubmit, value = {} }) => {
             </div>
           ))}
       </div>
-
-      <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_MUTATION_TRANSFEREE_DETAILS")}</CardSubHeader>
+      <div style={{display:"flex",justifyContent:"space-between"}}> 
+        <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_MUTATION_TRANSFEREE_DETAILS")}</CardSubHeader>
+        <LinkButton
+          label={<EditIcon/>}
+          onClick={() => routeTo(`/digit-ui/citizen/pt/property/property-mutation/owner-ship-details@0`)}
+        />
+      </div>
       {
         ownershipCategory?.code?.includes("INSTITUTIONAL") ? (
           <div>
             {Array.isArray(Owners) &&
               Owners.map((owner, index) => (
                 <div key={index}>
-                  <CardSubHeader style={getCardSubHeadrStyles()}>
                     {Owners.length != 1 && (
                       <span>
                         {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
                       </span>
                     )}
-                  </CardSubHeader>
                   <StatusTable>
                     <Row className="border-none" label={t("PT_INSTITUTION_NAME")} text={transferorInstitution?.name || t("CS_NA")} />
                     <Row className="border-none" label={t("PT_TYPE_OF_INSTITUTION")} text={`${t(transferorInstitution?.type)}` || t("CS_NA")} />
@@ -180,13 +189,11 @@ const CheckPage = ({ onSubmit, value = {} }) => {
             {Array.isArray(Owners) &&
               Owners.map((owner, index) => (
                 <div key={index}>
-                  <CardSubHeader  style={getCardSubHeadrStyles()}>
                     {Owners.length != 1 && (
                       <span>
                         {t("PT_OWNER_SUB_HEADER")} - {index + 1}{" "}
                       </span>
                     )}
-                  </CardSubHeader>
                   <StatusTable>
                     <Row className="border-none" label={t("PT_COMMON_APPLICANT_NAME_LABEL")} text={owner?.name || t("CS_NA")} />
                     <Row className="border-none" label={t("PT_COMMON_GENDER_LABEL")} text={t(owner?.gender?.i18nKey) || t("CS_NA")} />
@@ -207,24 +214,36 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           </div>
         )
       }
-
-      <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_MUTATION_DETAILS")}</CardSubHeader>
-      <StatusTable>
-        <Row
-          className="border-none"
-          label={t("PT_MUTATION_PENDING_COURT")}
-          text={t(additionalDetails?.isMutationInCourt?.code) || t("CS_NA")}
+      <div style={{display:"flex",justifyContent:"space-between"}}>
+        <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_MUTATION_DETAILS")}</CardSubHeader>
+        <LinkButton
+          label={<EditIcon/>}
+          onClick={() => routeTo(`/digit-ui/citizen/pt/property/property-mutation/is-mutatation-pending`)}
         />
-        <Row className="border-none" label={t("PT_DETAILS_COURT_CASE")} text={additionalDetails?.caseDetails || t("CS_NA")} />
-        <Row
-          className="border-none"
-          label={t("PT_PROP_UNDER_GOV_AQUISITION")}
-          text={t(additionalDetails?.isPropertyUnderGovtPossession?.code) || t("CS_NA")}
+      </div>
+      <div>
+        <StatusTable>
+          <Row
+            className="border-none"
+            label={t("PT_MUTATION_PENDING_COURT")}
+            text={t(additionalDetails?.isMutationInCourt?.code) || t("CS_NA")}
+          />
+          <Row className="border-none" label={t("PT_DETAILS_COURT_CASE")} text={additionalDetails?.caseDetails || t("CS_NA")} />
+          <Row
+            className="border-none"
+            label={t("PT_PROP_UNDER_GOV_AQUISITION")}
+            text={t(additionalDetails?.isPropertyUnderGovtPossession?.code) || t("CS_NA")}
+          />
+          <Row className="border-none" label={t("PT_DETAILS_GOV_AQUISITION")} text={additionalDetails?.govtAcquisitionDetails || t("CS_NA")} />
+        </StatusTable>
+      </div>
+      <div style={{display:"flex",justifyContent:"space-between"}}>
+        <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_REGISTRATION_DETAILS")}</CardSubHeader>
+        <LinkButton
+          label={<EditIcon/>}
+          onClick={() => routeTo(`/digit-ui/citizen/pt/property/property-mutation/reason`)}
         />
-        <Row className="border-none" label={t("PT_DETAILS_GOV_AQUISITION")} text={additionalDetails?.govtAcquisitionDetails || t("CS_NA")} />
-      </StatusTable>
-
-      <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_REGISTRATION_DETAILS")}</CardSubHeader>
+      </div>
       <StatusTable>
         <Row
           className="border-none"
@@ -237,9 +256,14 @@ const CheckPage = ({ onSubmit, value = {} }) => {
         <Row className="border-none" label={t("PT_REG_DOC_VALUE")} text={additionalDetails?.documentValue || t("CS_NA")} />
         <Row className="border-none" label={t("PT_REMARKS")} text={additionalDetails?.remarks || t("CS_NA")} />
       </StatusTable>
-
-      <CardSubHeader style={{ fontSize: "24px" }}>{t("PT_COMMON_DOCS")}</CardSubHeader>
-      <div>
+      <div style={{display:"flex",justifyContent:"space-between"}}>
+        <CardSubHeader style={getCardSubHeadrStyles()}>{t("PT_COMMON_DOCS")}</CardSubHeader>
+        <LinkButton
+          label={<EditIcon/>}
+          onClick={() => routeTo(`/digit-ui/citizen/pt/property/property-mutation/transfer-reason-doc`)}
+        />
+      </div>
+      <div style={{marginTop:"0 important"}}>
         {Array.isArray(property?.documents) ? (
           property?.documents.length > 0 && <PropertyDocument property={property}></PropertyDocument>
         ) : ( 
@@ -248,7 +272,12 @@ const CheckPage = ({ onSubmit, value = {} }) => {
           </StatusTable>
         )}
       </div>
-      <SubmitBar label={t("PT_COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} />
+      <CheckBox
+        label={t("PT_MUTATION_FINAL_DECLARATION_MESSAGE")}
+        onChange={setdeclarationhandler}
+        styles={{ height: "auto", margin: '2rem 0' }}
+      />
+      <SubmitBar label={t("PT_COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} disabled={!agree} />
     </Card>
    </React.Fragment>
   );

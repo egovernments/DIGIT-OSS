@@ -8,7 +8,7 @@ const OBPSEmployeeHomeCard = () => {
 
     const [totalCount, setTotalCount] = useState(0);
     const [totalCountEs, setTotalCountEs] = useState(0);
-
+    
     const { t } = useTranslation();
     const location = useLocation()
   
@@ -124,7 +124,7 @@ const OBPSEmployeeHomeCard = () => {
           link: `/digit-ui/employee/obps/search/application`
         },
       ]
-    }),[isInboxLoading, isInboxLoadingOfStakeholder, dataOfStakeholder, dataOfBPA, totalCount]);
+    }),[isInboxLoading, isInboxLoadingOfStakeholder, dataOfStakeholder, dataOfBPA, totalCount, totalCountEs]);
 
     if (!checkingForStakeholderRoles) {
       propsForModuleCard.links = propsForModuleCard.links.filter(obj => {

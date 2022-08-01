@@ -7,7 +7,7 @@ import WSConnection from "./WSConnection";
 const MyConnections = ({ view }) => {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
-  const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   let filter = window.location.href.split("/").pop();
   let t1;
   let off;
@@ -34,7 +34,7 @@ const MyConnections = ({ view }) => {
   let applicationNos = applicationNoWS.concat(applicaionNoSW);
   const { isLoading: PTisLoading, isError: PTisError, error: PTerror, data: PTdata } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: applicationNos } },
-    { filters: { propertyIds: applicationNos }, enabled: applicationNos ? true : false }
+    { filters: { propertyIds: applicationNos }, enabled: applicationNos ? true : false, privacy: Digit.Utils.getPrivacyObject()}
   );
   connectionList =
     connectionList &&

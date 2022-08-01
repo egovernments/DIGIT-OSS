@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import TimePicker from "react-time-picker";
-import { Dropdown, MultiUploadWrapper, TextArea } from "@egovernments/digit-ui-react-components";
+import { Dropdown, Header, MultiUploadWrapper, TextArea } from "@egovernments/digit-ui-react-components";
 import {
   Card,
   CardLabel,
@@ -70,9 +70,9 @@ const FstpOperatorDetails = () => {
   const [file, setFile] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(Array);
   const [error, setError] = useState(null);
-  const [newVehicleNumber, setNewVehicleNumber] = useState("");
-  const [newLocality, setNewLocality] = useState("");
-  const [newDsoName, setNewDsoName] = useState("");
+  const [newVehicleNumber, setNewVehicleNumber] = useState(null);
+  const [newLocality, setNewLocality] = useState(null);
+  const [newDsoName, setNewDsoName] = useState(null);
   const [comments, setComments] = useState();
 
   const onChangeVehicleNumber = (value) => {
@@ -106,7 +106,7 @@ const FstpOperatorDetails = () => {
   });
 
   const mutation = Digit.Hooks.fsm.useVehicleUpdate(tenantId);
-  const create_mutation = Digit.Hooks.fsm.useVehicleCreate(tenantId);
+  const create_mutation = Digit.Hooks.fsm.useVehicleTripCreate(tenantId);
 
   useEffect(() => {
     if (isSuccess) {
@@ -201,9 +201,38 @@ const FstpOperatorDetails = () => {
   };
 
   const handleCreate = () => {
+    if (newVehicleNumber === null || newVehicleNumber?.trim()?.length === 0) {
+      setShowToast({ key: "error", action: `ES_FSTP_INVALID_VEHICLE_NUMBER` });
+      setTimeout(() => {
+        closeToast();
+      }, 2000);
+      return;
+    }
+    if (newDsoName === null || newDsoName?.trim()?.length === 0) {
+      setShowToast({ key: "error", action: `ES_FSTP_INVALID_DSO_NAME` });
+      setTimeout(() => {
+        closeToast();
+      }, 2000);
+      return;
+    }
+    if (newLocality === null || newLocality?.trim()?.length === 0) {
+      setShowToast({ key: "error", action: `ES_FSTP_INVALID_LOCALITY` });
+      setTimeout(() => {
+        closeToast();
+      }, 2000);
+      return;
+    }
     if (tripStartTime === null) {
       setErrors({ tripStartTime: "ES_FSTP_INVALID_START_TIME" });
       tripStartTimeRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+      return;
+    }
+
+    if (wasteCollected === null || wasteCollected?.trim()?.length === 0) {
+      setShowToast({ key: "error", action: `ES_FSTP_INVALID_WASTE_AMOUNT` });
+      setTimeout(() => {
+        closeToast();
+      }, 2000);
       return;
     }
 
@@ -279,7 +308,7 @@ const FstpOperatorDetails = () => {
     setShowToast({ key: "success", action: `ES_FSM_DISPOSE_UPDATE_SUCCESS` });
     setTimeout(() => {
       closeToast();
-      history.push(`/digit-ui/employee/fsm/fstp-inbox`);
+      history.push(`/digit-ui/employee/fsm/fstp-operations`);
     }, 5000);
   };
 
@@ -312,7 +341,7 @@ const FstpOperatorDetails = () => {
 
   const vehicleData = [
     {
-      title: t("ES_INBOX_VEHICLE_NO"),
+      title: `${t("ES_INBOX_VEHICLE_NO")} *`,
       value: vehicle?.vehicle?.registrationNumber || <TextInput
         //style={{ width: "40%" }}
         onChange={(e) => onChangeVehicleNumber(e.target.value)}
@@ -320,7 +349,7 @@ const FstpOperatorDetails = () => {
       />,
     },
     {
-      title: t("ES_INBOX_DSO_NAME"),
+      title: `${t("ES_INBOX_DSO_NAME")} *`,
       value: vehicle?.tripOwner?.name || <TextInput
         //style={{ width: "40%" }}
         onChange={(e) => onChangeDsoName(e.target.value)}
@@ -328,7 +357,7 @@ const FstpOperatorDetails = () => {
       />,
     },
     {
-      title: `${t("ES_INBOX_LOCALITY")}`,
+      title: `${t("ES_INBOX_LOCALITY")} *`,
       value: tripDetails && tripDetails[0]?.address?.locality?.name || <TextInput
         //style={{ width: "40%" }}
         onChange={(e) => onChangeLocality(e.target.value)}
@@ -369,10 +398,17 @@ const FstpOperatorDetails = () => {
 
   return (
     <div>
+      <Header styles={{ marginLeft: "16px" }}>{t("ES_INBOX_VEHICLE_LOG")}</Header>
       <Card>
         <StatusTable>
           {vehicleData?.map((row, index) => (
-            <Row rowContainerStyle={{ justifyContent: "space-between" }} key={row.title} label={row.title} text={row.value || "N/A"} last={false} />
+            <Row rowContainerStyle={isMobile && history.location.pathname.includes("new-vehicle-entry") ? { display: "block" } : { justifyContent: "space-between" }}
+              textStyle={isMobile && history.location.pathname.includes("new-vehicle-entry") ? { width: "100%" } : {}}
+              key={row.title} label={row.title}
+              text={row.value || "N/A"}
+              last={false}
+              labelStyle={{ fontWeight: "normal" }} />
+
           ))}
           <div ref={tripStartTimeRef}>
             <CardLabelError>{t(errors.tripStartTime)}</CardLabelError>
@@ -381,6 +417,7 @@ const FstpOperatorDetails = () => {
             <Row
               key={t("ES_VEHICLE_IN_TIME")}
               label={`${t("ES_VEHICLE_IN_TIME")} * `}
+              labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
               textStyle={isMobile ? { width: "100%" } : {}}
               rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
               text={
@@ -395,6 +432,7 @@ const FstpOperatorDetails = () => {
             <Row
               key={t("ES_VEHICLE_SEPTAGE_DUMPED")}
               label={`${t("ES_VEHICLE_SEPTAGE_DUMPED")} * `}
+              labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
               textStyle={isMobile ? { width: "100%" } : {}}
               text={
                 <div>
@@ -414,6 +452,7 @@ const FstpOperatorDetails = () => {
             <Row
               key={t("ES_VEHICLE_OUT_TIME")}
               label={`${t("ES_VEHICLE_OUT_TIME")} * `}
+              labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
               textStyle={isMobile ? { width: "100%" } : {}}
               rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
               text={
@@ -422,12 +461,13 @@ const FstpOperatorDetails = () => {
                 </div>
               }
             />
-            {!isSearchLoading && !isIdle && tripDetails && currentTrip ?
+            {/* {!isSearchLoading && !isIdle && tripDetails && currentTrip ?
               <Row
                 key={t("ES_VEHICLE_TRIP_NO")}
                 label={`${t("ES_VEHICLE_TRIP_NO")} * `}
                 rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between" }}
                 textStyle={isMobile ? { width: "100%" } : {}}
+                labelStyle={{ fontWeight: "normal" }}
                 text={
                   <div>
                     <Dropdown
@@ -439,9 +479,9 @@ const FstpOperatorDetails = () => {
                   </div>
                 }
               >
-              </Row> : null}
+              </Row> : null} */}
             <div className={!isMobile && "row"} style={isMobile ? {} : { diplay: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <CardLabel style={{ fontWeight: "700" }}> {t("ES_FSM_ADDITIONAL_DETAILS")} </CardLabel>
+              <CardLabel style={{ fontWeight: "normal" }}> {t("ES_FSM_ADDITIONAL_DETAILS")} </CardLabel>
               <TextArea className="form-field"
                 onChange={(e) => {
                   if (e.target.value.length > 1024) {
@@ -454,11 +494,20 @@ const FstpOperatorDetails = () => {
                 style={isMobile ? { width: "100%" } : { width: "100%", marginLeft: "35%" }} />
             </div>
 
-            <MultiUploadWrapper
-              t={t}
-              module="fsm"
-              tenantId={stateId}
-              getFormState={e => getData(e)}
+            <Row
+              key={t("ES_FSM_ATTACHMENTS")}
+              label={`${t("ES_FSM_ATTACHMENT")}`}
+              labelStyle={{ minWidth: "fit-content", fontWeight: "normal" }}
+              textStyle={isMobile ? { width: "100%" } : {}}
+              rowContainerStyle={isMobile ? { display: "block" } : { justifyContent: "space-between", alignItems: "center" }}
+              text={
+                <MultiUploadWrapper
+                  t={t}
+                  module="fsm"
+                  tenantId={stateId}
+                  getFormState={e => getData(e)}
+                />
+              }
             />
 
             {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
@@ -537,7 +586,7 @@ const FstpOperatorDetails = () => {
       {showToast && (
         <Toast
           error={showToast.key === "error" ? true : false}
-          label={t(showToast.key === "success" ? showToast.action : `ES_FSM_DISPOSE_UPDATE_FAILURE`)}
+          label={t(showToast.key === "success" ? showToast.action : showToast.action)}
           onClose={closeToast}
         />
       )}

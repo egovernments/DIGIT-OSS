@@ -7,7 +7,6 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
   const isMutation = url.includes("property-mutation");
-
   let index = isMutation ? ownerIndex : window.location.href.charAt(window.location.href.length - 1);
   const [permanentAddress, setPermanentAddress] = useState(
     (formData.owners && formData.owners[index] && formData.owners[index]?.permanentAddress) ||
@@ -36,7 +35,8 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
         city: address?.city?.code,
         pincode: address?.pincode,
       };
-      let addressDetails = "";
+
+      let addressDetails = formData?.searchResult?.data?.property_address?formData?.searchResult?.data?.property_address:"";
       for (const key in obj) {
         if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
         else addressDetails += obj[key] ? t(obj[key]) + ", " : "";

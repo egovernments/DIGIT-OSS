@@ -15,12 +15,16 @@ import {
   WSICon,
   MCollectIcon,
   Phone,
+  BirthIcon,
+  DeathIcon,
+  FirenocIcon,
 } from "@egovernments/digit-ui-react-components";
 import { Link, useLocation } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import LogoutDialog from "../../Dialog/LogoutDialog";
+import ChangeCity from "../../ChangeCity";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -44,7 +48,9 @@ const defaultImage =
   "Ue6ilunu8jF8pFwgv1FXp3mUt35OtRbr7eM4u4Gs6vUBXgeuHc5kfE/cbvWZtkROLm1DMtLCy80tzsu2PRj0hTI8fvrQuvsjlJkyutszq+m423wHaLTyniy/XuiGZ84LuT+m5ZfNfRxyGs7L" +
   "XZOvia7VujatUwVTrIt+Q/Csc7Tuhe+BOakT10b4TuoiiJjvgU9emTO42PwEfBa+cuodKkuf42DXr1D3JpXz73Hnn0j10evHKe+nufgfUm+7B84sX9FfdEzXux2DBpWuKokkCqN/5pa/8pmvn" +
   "L+RGKCddCGmatiPyPB/+ekO/M/q/7uvbt22kTt3zEnXPzCV13T3Gel4/6NduDu66xRvlPNkM1RjjxUdv+4WhGx6TftD19Q/dfzpwcHO+rE3fAAAAAElFTkSuQmCC";
-
+/* 
+Feature :: Citizen Webview sidebar
+*/
 const Profile = ({ info, stateName, t }) => (
   <div className="profile-section">
     <div className="imageloader imageloader-loaded">
@@ -77,6 +83,9 @@ const IconsObject = {
   WSIcon: <WSICon className="icon" />,
   MCollectIcon: <MCollectIcon className="icon" />,
   BillsIcon: <CollectionIcon className="icon" />,
+  BirthIcon: <BirthIcon className="icon" />,
+  DeathIcon: <DeathIcon className="icon" />,
+  FirenocIcon: <FirenocIcon className="icon" />,
   HomeIcon: <HomeIcon className="icon" />,
   EditPencilIcon: <EditPencilIcon className="icon" />,
   LogoutIcon: <LogoutIcon className="icon" />,
@@ -141,12 +150,11 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
         <div className="menu-label">{itemComponent}</div>
       </span>
     );
-
     if (item.type === "external-link") {
       return (
-        <Link to={item.link}>
+        <a href={item.link}>
           <Item />
-        </Link>
+        </a>
       );
     }
     if (item.type === "link") {
@@ -207,18 +215,19 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
       },
     ];
   }
-
-  Object.keys(linkData)?.map((key) => {
-    if (linkData[key][0]?.sidebar === "digit-ui-links") {
-      menuItems.splice(1, 0, {
-        type: "link",
-        text: key,
-        links: linkData[key],
-        icon: linkData[key][0]?.leftIcon,
-        link: linkData[key][0]?.sidebarURL,
-      });
-    }
-  });
+  Object.keys(linkData)
+    ?.sort((x, y) => y.localeCompare(x))
+    ?.map((key) => {
+      if (linkData[key][0]?.sidebar === "digit-ui-links") {
+        menuItems.splice(1, 0, {
+          type: linkData[key][0]?.sidebarURL?.includes("digit-ui") ? "link" : "external-link",
+          text: t(`ACTION_TEST_${Digit.Utils.locale.getTransformedLocale(key)}`),
+          links: linkData[key],
+          icon: linkData[key][0]?.leftIcon,
+          link: linkData[key][0]?.sidebarURL,
+        });
+      }
+    });
 
   return (
     <React.Fragment>

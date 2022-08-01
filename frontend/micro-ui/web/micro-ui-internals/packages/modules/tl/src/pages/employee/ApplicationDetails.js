@@ -113,13 +113,13 @@ const ApplicationDetails = () => {
     {
       return `${t("TL_ERROR_TOAST_RENEWAL_CANCEL")}`
     }
-    else if(latestRenewalYearofAPP && applicationDetails?.applicationData?.status === "MANUALEXPIRED")
+    else if((/* latestRenewalYearofAPP && */ applicationDetails?.applicationData?.status === "MANUALEXPIRED"))
     {
       return `${t("TL_ERROR_TOAST_MUTUALLY_EXPIRED")}`;
     }
   }
 
-  if (rolecheck && (applicationDetails?.applicationData?.status === "APPROVED" || applicationDetails?.applicationData?.status === "EXPIRED" || applicationDetails?.applicationData?.status === "CANCELLED" || (applicationDetails?.applicationData?.status === "MANUALEXPIRED" /* && renewalPending==="true" */)) && duration <= renewalPeriod) {
+  if (rolecheck && (applicationDetails?.applicationData?.status === "APPROVED" || applicationDetails?.applicationData?.status === "EXPIRED" || applicationDetails?.applicationData?.status === "CANCELLED" || (applicationDetails?.applicationData?.status === "MANUALEXPIRED" /* && renewalPending==="true" */)) /* && duration <= renewalPeriod */) {
     if(workflowDetails?.data /* && allowedToNextYear */) {
       if(!workflowDetails?.data?.actionState) {
         workflowDetails.data.actionState = {};
@@ -129,7 +129,7 @@ const ApplicationDetails = () => {
       if(flagData && flagData.length === 0) {
         workflowDetails?.data?.actionState?.nextActions?.push({
           action: "RENEWAL_SUBMIT_BUTTON",
-          isToast : allowedToNextYear == false || applicationDetails?.applicationData?.status === "CANCELLED" || (applicationDetails?.applicationData?.status === "MANUALEXPIRED" && latestRenewalYearofAPP) ? true : false,
+          isToast : allowedToNextYear == false || applicationDetails?.applicationData?.status === "CANCELLED" || (applicationDetails?.applicationData?.status === "MANUALEXPIRED" /* && latestRenewalYearofAPP */) ? true : false,
           toastMessage : getToastMessages(),
           redirectionUrl: {
             pathname: `/digit-ui/employee/tl/renew-application-details/${applicationNumber}`,
@@ -245,14 +245,16 @@ const ApplicationDetails = () => {
       ];
 
   return (
-    <div >
-      <div /* style={{marginLeft: "15px"}} */>
+    <div className={"employee-main-application-details"} >
+      <div className={"employee-application-details"} style={{ marginBottom: "15px" }}>
         <Header>{(applicationDetails?.applicationData?.workflowCode == "NewTL" && applicationDetails?.applicationData?.status !== "APPROVED") ? t("TL_TRADE_APPLICATION_DETAILS_LABEL") : t("TL_TRADE_LICENSE_DETAILS_LABEL")}</Header>
         <MultiLink
-                className="multilinkWrapper"
+                className="multilinkWrapper employee-mulitlink-main-div"
                 onHeadClick={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)}
                 displayOptions={isDisplayDownloadMenu}
                 options={dowloadOptions}
+                downloadBtnClassName={"employee-download-btn-className"}
+                optionsClassName={"employee-options-btn-className"}
         />
       </div>
       <ApplicationDetailsTemplate

@@ -177,11 +177,12 @@ public class WSCalculationUtil {
 	 *            WaterConnectionRequest containing property
 	 * @return List of Property
 	 */
-	public List<Property> propertySearch(RequestInfo requestInfo, Set<String> propertyIds, String tenantId) {
+	public List<Property> propertySearch(RequestInfo requestInfo, Set<String> propertyIds, String tenantId, Long limit) {
 
 		PropertyCriteria propertyCriteria = PropertyCriteria.builder()
 				.propertyIds(propertyIds)
 				.tenantId(tenantId)
+				.limit(limit)
 				.build();
 
 		StringBuilder url = getPropertyURL(propertyCriteria);
@@ -246,6 +247,12 @@ public class WSCalculationUtil {
 			String uuidString = criteria.getUuids().stream().map(uuid -> uuid).collect(Collectors.toSet()).stream()
 					.collect(Collectors.joining(","));
 			url.append(uuids).append(uuidString);
+		}
+		if ((criteria.getLimit()) != null) {
+			if (isanyparametermatch)
+				url.append("&");
+			isanyparametermatch = true;
+			url.append("limit=").append(criteria.getLimit());
 		}
 		return url;
 	}

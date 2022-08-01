@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import WSApplication from "./ws-application";
 import { propertyCardBodyStyle } from "../../../utils";
+import WSInfoLabel from "../../../pageComponents/WSInfoLabel";
 
 export const WSMyApplications = () => {
   const { t } = useTranslation();
   const user = Digit.UserService.getUser();
-  const tenantId = user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   let filter = window.location.href.split("/").pop();
   let t1;
   let off;
@@ -51,6 +52,8 @@ export const WSMyApplications = () => {
   let { SewerageConnections: SWapplicationsList } = SWdata || {};
   WSapplicationsList = WSapplicationsList?.map((ob) => {return ({...ob,"sla":workflowDetails?.data?.processInstances?.filter((pi) => pi.businessId == ob.applicationNo)[0]?.businesssServiceSla})})
   SWapplicationsList = SWapplicationsList?.map((ob) => {return ({...ob,"sla":workflowDetails?.data?.processInstances?.filter((pi) => pi.businessId == ob.applicationNo)[0]?.businesssServiceSla})})
+  WSapplicationsList = WSapplicationsList?.filter((ob) => ob?.applicationType !== "MODIFY_WATER_CONNECTION");
+  SWapplicationsList = SWapplicationsList?.filter((ob) => ob?.applicationType !== "MODIFY_SEWERAGE_CONNECTION");
   let applicationsList =WSapplicationsList.concat(SWapplicationsList)
   applicationsList =
   applicationsList &&
@@ -60,6 +63,7 @@ export const WSMyApplications = () => {
   return (
     <React.Fragment>
       <Header>{`${t("CS_HOME_MY_APPLICATIONS")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
+      <WSInfoLabel t={t} />
       <div>
         {applicationsList?.length > 0 &&
           applicationsList.sort((a, b) => b.auditDetails?.lastModifiedTime - a.auditDetails?.lastModifiedTime ).map((application, index) => (

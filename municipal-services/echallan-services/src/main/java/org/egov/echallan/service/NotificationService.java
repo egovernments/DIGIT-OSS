@@ -130,13 +130,13 @@ public class NotificationService {
  		Challan challan = request.getChallan();
 		String message="";
 		if(isSave)
-			message = util.getCustomizedMsg(request.getRequestInfo(), challan ,CREATE_CODE);
+			message = util.getCustomizedMsg(request.getRequestInfo(), challan ,CREATE_CODE_INAPP);
 		else if(challan.getApplicationStatus()==StatusEnum.ACTIVE)
-			message = util.getCustomizedMsg(request.getRequestInfo(),challan, UPDATE_CODE );
+			message = util.getCustomizedMsg(request.getRequestInfo(),challan, UPDATE_CODE_INAPP);
 		else if(challan.getApplicationStatus()==StatusEnum.CANCELLED)
-			message = util.getCustomizedMsg(request.getRequestInfo(),challan, CANCEL_CODE );
+			message = util.getCustomizedMsg(request.getRequestInfo(),challan, CANCEL_CODE_INAPP );
 		else if(challan.getApplicationStatus()==StatusEnum.PAID)
-			message = util.getCustomizedMsg(request.getRequestInfo(),challan, PAYMENT_CODE );
+			message = util.getCustomizedMsg(request.getRequestInfo(),challan, PAYMENT_CODE_INAPP );
 
 
         Map<String,String > mobileNumberToOwner = new HashMap<>();

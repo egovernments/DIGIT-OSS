@@ -10,6 +10,7 @@ import org.egov.common.contract.request.Role;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
+import org.egov.waterconnection.producer.WaterConnectionProducer;
 import org.egov.waterconnection.repository.IdGenRepository;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
 import org.egov.waterconnection.repository.WaterDaoImpl;
@@ -31,6 +32,8 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.egov.waterconnection.constants.WCConstants.*;
 
 
 @Service
@@ -63,6 +66,9 @@ public class EnrichmentService {
 
 	@Autowired
 	private WorkflowService wfService;
+
+	@Autowired
+	private WaterConnectionProducer producer;
 	/**
 	 * Enrich water connection
 	 * 
@@ -172,9 +178,16 @@ public class EnrichmentService {
 	 */
 	private void setApplicationIdGenIds(WaterConnectionRequest request) {
 		WaterConnection waterConnection = request.getWaterConnection();
-		List<String> applicationNumbers = getIdList(request.getRequestInfo(),
-				request.getWaterConnection().getTenantId(), config.getWaterApplicationIdGenName(),
-				config.getWaterApplicationIdGenFormat());
+		List<String> applicationNumbers = new ArrayList<>();
+		if (request.getWaterConnection().getApplicationStatus() != null && request.isDisconnectRequest()) {
+			applicationNumbers = getIdList(request.getRequestInfo(),
+					request.getWaterConnection().getTenantId(), config.getWaterDisconnectionIdGenName(),
+					config.getWaterDisconnectionIdGenFormat());
+		} else {
+			applicationNumbers = getIdList(request.getRequestInfo(),
+					request.getWaterConnection().getTenantId(), config.getWaterApplicationIdGenName(),
+					config.getWaterApplicationIdGenFormat());
+		}
 		if (applicationNumbers.size() != 1) {
 			Map<String, String> errorMap = new HashMap<>();
 			errorMap.put("IDGEN_ERROR",
@@ -404,7 +417,7 @@ public class EnrichmentService {
 	 * @return
 	 */
 	public List<WaterConnection> filterConnections(List<WaterConnection> connectionList) {
-		HashMap<String, Connection> connectionHashMap = new HashMap<>();
+		HashMap<String, Connection> connectionHashMap = new LinkedHashMap<>();
 		connectionList.forEach(connection -> {
 			if (!StringUtils.isEmpty(connection.getConnectionNo())) {
 				if (connectionHashMap.get(connection.getConnectionNo()) == null
@@ -505,4 +518,58 @@ public class EnrichmentService {
 			}
 		}
 	}
+
+	public void enrichDocumentDetails(List<WaterConnection> waterConnectionList, SearchCriteria criteria,
+									  RequestInfo requestInfo) {
+		if (CollectionUtils.isEmpty(waterConnectionList))
+			return;
+
+		if(!criteria.getIsFilestoreIdRequire() || waterConnectionList.size()>1){
+			for(int i= 0; i<waterConnectionList.size();i++){
+				List<Document> documentList = waterConnectionList.get(i).getDocuments();
+				for(int j =0; (documentList !=null && j<documentList.size()); j++){
+					documentList.get(j).setFileStoreId(null);
+				}
+				waterConnectionList.get(i).setDocuments(documentList);
+			}
+
+		}
+		else{
+			List<String> uuids = new ArrayList<>();
+			if(waterConnectionList.get(0).getConnectionHolders() != null){
+				for(OwnerInfo connectionHolder : waterConnectionList.get(0).getConnectionHolders()){
+					uuids.add(connectionHolder.getUuid());
+				}
+			}
+
+			PropertyCriteria propertyCriteria = new PropertyCriteria();
+			propertyCriteria.setPropertyIds(Collections.singleton(waterConnectionList.get(0).getPropertyId()));
+			propertyCriteria.setTenantId(waterConnectionList.get(0).getTenantId());
+
+			List<Property> propertyList = waterServicesUtil.getPropertyDetails(serviceRequestRepository.fetchResult(waterServicesUtil.getPropertyURL(propertyCriteria),
+					RequestInfoWrapper.builder().requestInfo(requestInfo).build()));
+			if(propertyList != null && propertyList.size()==1){
+				List<OwnerInfo> ownerInfoList = propertyList.get(0).getOwners();
+				for(OwnerInfo ownerInfo: ownerInfoList)
+					uuids.add(ownerInfo.getUuid());
+			}
+
+			for(String uuid : uuids){
+				Map<String, Object> auditObject = new HashMap<>();
+				auditObject.put("id",UUID.randomUUID().toString());
+				auditObject.put("timestamp",System.currentTimeMillis());
+				auditObject.put("userId",uuid);
+				auditObject.put("accessBy", requestInfo.getUserInfo().getUuid());
+				auditObject.put("purpose",DOCUMENT_ACCESS_AUDIT_MSG);
+
+				producer.push(config.getDocumentAuditTopic(), auditObject);
+			}
+
+
+		}
+
+
+	}
+
+
 }

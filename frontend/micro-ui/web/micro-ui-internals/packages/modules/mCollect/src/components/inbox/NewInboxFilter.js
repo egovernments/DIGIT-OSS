@@ -27,6 +27,7 @@ const Filter = ({ searchParams, onFilterChange,onRefresh, defaultSearchParams, .
   const clearAll = () => {
     setSearchParams(defaultSearchParams);
     onFilterChange(defaultSearchParams);
+    setselectedCategories([]);
     setclearCheck(true);
   };
 

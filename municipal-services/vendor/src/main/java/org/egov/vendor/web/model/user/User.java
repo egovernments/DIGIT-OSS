@@ -204,6 +204,5 @@ public class User {
     @JsonProperty("tenantId")
     private String tenantId;
     
-   	@JsonProperty("vendorDriverStatus")
-	private StatusEnum vendorDriverStatus = null;
+   	
 }

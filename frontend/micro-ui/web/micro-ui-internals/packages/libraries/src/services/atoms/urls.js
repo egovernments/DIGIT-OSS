@@ -44,7 +44,12 @@ const Urls = {
     vehilceUpdate: "/vehicle/trip/v1/_update",
     createVendor: "/vendor/v1/_create",
     updateVendor: "/vendor/v1/_update",
-    vehicleCreate: "/vehicle/trip/v1/_create",
+    createVehicle: "/vehicle/v1/_create",
+    updateVehicle: "/vehicle/v1/_update",
+    driverSearch: "/vendor/driver/v1/_search",
+    createDriver: "/vendor/driver/v1/_create",
+    updateDriver: "/vendor/driver/v1/_update",
+    vehicleTripCreate: "/vehicle/trip/v1/_create",
   },
 
   payment: {
@@ -59,6 +64,7 @@ const Urls = {
     reciept_search: "/collection-services/payments/:buisnessService/_search",
     obps_Reciept_Search: "/collection-services/payments/_search",
     billAmendmentSearch: "/billing-service/amendment/_search",
+    getBulkPdfRecordsDetails: "/pdf-service/v1/_getBulkPdfRecordsDetails",
   },
 
   pt: {
@@ -71,7 +77,7 @@ const Urls = {
     assessment_create: "/property-services/assessment/_create",
     assessment_search: "/property-services/assessment/_search",
     payment_search: "/collection-services/payments/PT/_search",
-    pt_calculate_mutation: "/pt-calculator-v2/propertytax/mutation/_calculate"
+    pt_calculate_mutation: "/pt-calculator-v2/propertytax/mutation/_calculate",
   },
 
   dss: {
@@ -124,6 +130,7 @@ const Urls = {
     bpaRegUpdate: "/tl-services/v1/BPAREG/_update",
     receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
     edcrreportdownload: "/bpa-services/v1/bpa/_permitorderedcr",
+    getSearchDetails: "/inbox/v1/dss/_search"
   },
 
   edcr: {
@@ -155,6 +162,12 @@ const Urls = {
     billAmendmentUpdate: "/billing-service/amendment/_update",
     ws_meter_conncetion_create: "/ws-calculator/meterConnection/_create",
     sw_meter_conncetion_create: "/sw-calculator/meterConnection/_create",
+    wns_group_bill: "/egov-pdf/download/WNS/wnsgroupbill",
+    cancel_group_bill: "/pdf-service/v1/_cancelProcess",
+    wns_generate_pdf: "/egov-pdf/download/WNS/wnsbill",
+    water_applyAdhocTax : "/ws-calculator/waterCalculator/_applyAdhocTax",
+    sewerage_applyAdhocTax: "/sw-calculator/sewerageCalculator/_applyAdhocTax",
+    getSearchDetails: "/inbox/v1/dss/_search",
   },
 
   engagement: {
@@ -177,8 +190,11 @@ const Urls = {
   noc: {
     nocSearch: "/noc-services/v1/noc/_search",
   },
-  reports:{
-    reportSearch:"/report/"
+  reports: {
+    reportSearch: "/report/",
+  },
+  bills:{
+    cancelBill:"/billing-service/bill/v2/_cancelbill"
   },
   access_control: "/access/v1/actions/mdms/_get",
   billgenie: "/egov-searcher",

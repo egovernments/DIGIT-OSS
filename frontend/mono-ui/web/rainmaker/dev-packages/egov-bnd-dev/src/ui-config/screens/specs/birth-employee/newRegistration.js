@@ -157,7 +157,7 @@ const newRegistration = {
               dispatch(
                 prepareFinalObject(
                   "bnd.birth.newRegistration.isLegacyRecord",
-                  response.BirthCertificate[0].counter == 1
+                  response.BirthCertificate[0].isLegacyRecord
                 )
               );
               prepareEditScreenData(action, state, dispatch, response);

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useRouteMatch } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import EmployeeApp from "./pages/employee";
@@ -18,9 +17,12 @@ import CitizenInbox from "./components/citizen/inbox";
 import CitizenMobileInbox from "./components/citizen/CitizenMobileInbox";
 import CitizenApp from "./pages/citizen";
 import { CitizenHomeCard, CollectionIcon } from "@egovernments/digit-ui-react-components";
+import CancelBills from "./components/CancelBill"; 
+import GroupBills from "./components/GroupBill"; 
 
 export const BillsModule = ({ stateCode, userType, tenants }) => {
-  const moduleCode = "abg";
+  const tenantId =  Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || Digit.ULBService.getCurrentTenantId();
+  const moduleCode = ["abg",tenantId];
 
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
@@ -58,6 +60,8 @@ const componentsToRegister = {
   SearchCitizenFilter,
   CitizenMobileInbox,
   BillsLinks,
+  CancelBills,
+  GroupBills,
   BILLS_INBOX_FILTER: (props) => <BillsFilter {...props} />,
   BILLS_GROUP_FILTER: (props) => <GroupFilter {...props} />,
   CITIZEN_SEARCH_FILTER: (props) => <SearchCitizenFilter {...props} />,

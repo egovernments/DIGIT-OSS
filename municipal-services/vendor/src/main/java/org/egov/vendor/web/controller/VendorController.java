@@ -72,10 +72,8 @@ public class VendorController {
 	@PostMapping(value = "/_search")
 	public ResponseEntity<VendorResponse> search(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute VendorSearchCriteria criteria){
-		List<Vendor> vendorList = vendorService.vendorsearch(criteria, requestInfoWrapper.getRequestInfo());
-		VendorResponse response = VendorResponse.builder().vendor(vendorList).responseInfo(
-				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
-				.build();
+		VendorResponse response = vendorService.vendorsearch(criteria, requestInfoWrapper.getRequestInfo());
+		response.setResponseInfo(responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
 		return new ResponseEntity<>(response, HttpStatus.OK);
 		
 	}

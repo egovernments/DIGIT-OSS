@@ -91,6 +91,14 @@
     }
   }
 }
+.fsm-registry-dropdown {
+  .select {
+    @apply flex;
+    input {
+      @apply text-center;
+    }
+  }
+}
 
 .employee-select-wrap--elipses {
   width: 85% !important;

@@ -66,7 +66,6 @@ public class VehicleTrip   {
   private String driverId = null;
   
 
-  @NotNull
   @JsonProperty("vehicle")
   @Valid
   private Vehicle vehicle;

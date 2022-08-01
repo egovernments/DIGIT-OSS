@@ -338,6 +338,7 @@ export const getBPAOwners = (data, isOCBPA) => {
     bpaownerarray?.forEach((newOwner) => {
       if (newOwner?.gender?.code) newOwner.gender = newOwner.gender?.code;
       if (!newOwner?.fatherOrHusbandName) newOwner.fatherOrHusbandName = "NAME";
+      newOwner.active = true;
     });
 
   data?.landInfo?.owners?.map((oldowner) => {
@@ -730,7 +731,7 @@ export const showHidingLinksForStakeholder = (roles = []) => {
   let checkedRoles = [];
   const rolearray = roles?.map((role) => {
     userInfo?.value?.info?.roles?.map((item) => {
-      if (item.code == role.code && item.tenantId === role.tenantId) {
+      if (item.code === role.code && item.tenantId === role.tenantId) {
         checkedRoles.push(item);
       }
     });

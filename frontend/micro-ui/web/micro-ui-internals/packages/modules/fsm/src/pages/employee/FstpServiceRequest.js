@@ -26,13 +26,13 @@ const FstpServiceRequest = () => {
     const vehicleNumber = location.pathname.split('/').at(-1)
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const [searchParams, setSearchParams] = useState({ applicationStatus: "WAITING_FOR_DISPOSAL" });
-    const [searchParamsApplication, setSearchParamsApplication] = useState({});
+    const [searchParamsApplication, setSearchParamsApplication] = useState(null);
     const [filterParam, setFilterParam] = useState();
-    const [sortParams, setSortParams] = useState([{ "id": "createdTime", "desc": true }]);
+    const [sortParams, setSortParams] = useState([{ "id": "applicationNo", "desc": true }]);
     const [pageOffset, setPageOffset] = useState(0);
     const [pageSize, setPageSize] = useState(100);
     const [isVehicleSearchCompleted, setIsVehicleSearchCompleted] = useState(false);
-    const [tripDetail, setTripDetail] = useState();
+    const [tripDetail, setTripDetail] = useState(null);
     const userInfo = Digit.UserService.getUser();
     let isMobile = window.Digit.Utils.browser.isMobile();
 
@@ -56,23 +56,27 @@ const FstpServiceRequest = () => {
         options: { searchWithDSO: true },
     });
 
-    useEffect(() => {
-        if (isSuccess) {
-            const applicationNos = vehicleLog?.map((i) => i?.tripDetails[0]?.referenceNo).join(",");
-            setSearchParamsApplication(applicationNos ? { applicationNos } : { applicationNos: "null" });
-            setIsVehicleSearchCompleted(true);
-        }
-    }, [isSuccess, vehicleLog, isLoading]);
-
     const { isLoading: isSearchLoading, isIdle, data: { data: { table: tripDetails } = {} } = {} } = Digit.Hooks.fsm.useSearchAll(tenantId, searchParamsApplication, null, {
         enabled: !!isVehicleSearchCompleted,
     });
 
     useEffect(() => {
+        // if (isSuccess || isIdle || isSearchLoading || isLoading || isVehiclesLoading) {
+        const applicationNos = vehicleLog?.map((i) => i?.tripDetails[0]?.referenceNo).join(",");
+        setSearchParamsApplication({
+            applicationNos: applicationNos ? applicationNos : "null",
+            sortOrder: sortParams[0]?.desc === false ? "ASC" : "DESC",
+        });
+        setIsVehicleSearchCompleted(true);
+        // }
+    }, [isSuccess, isSearchLoading, isVehiclesLoading, vehicleLog, isIdle, isLoading, sortParams, vehicles]);
+
+
+    useEffect(() => {
         if (tripDetails) {
             setTripDetail(tripDetails)
         }
-    }, [isIdle, isSearchLoading]);
+    }, [tripDetails, isSearchLoading, isIdle]);
 
     let applicationNoList = []
     vehicleLog?.map((i) => {
@@ -123,7 +127,7 @@ const FstpServiceRequest = () => {
         return <Loader />;
     }
 
-    if (vehicleLog?.length === 0 && tripDetails?.length === 0) {
+    if (vehicleLog?.length === 0 && tripDetails?.length === 0 && isSuccess && !isSearchLoading && tripDetail?.length === 0 && !isVehiclesLoading) {
         history.push("/digit-ui/employee/fsm/fstp/new-vehicle-entry")
     }
 

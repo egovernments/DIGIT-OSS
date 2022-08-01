@@ -122,10 +122,10 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
       isOwnerSame:isOwnerSame,
       name: formData?.cpt?.details?.owners?.[0]?.name,
       mobileNumber: formData?.cpt?.details?.owners?.[0]?.mobileNumber,
-      gender: {code:formData?.cpt?.details?.owners?.[0]?.gender, i18nKey:`COMMON_GENDER_${formData?.cpt?.details?.owners?.[0]?.gender}`},
+      gender: formData?.cpt?.details?.owners?.[0]?.gender ? {code:formData?.cpt?.details?.owners?.[0]?.gender, i18nKey:`COMMON_GENDER_${formData?.cpt?.details?.owners?.[0]?.gender}`} : null,
       guardian: formData?.cpt?.details?.owners?.[0]?.fatherOrHusbandName, 
       address: formData?.cpt?.details?.owners?.[0]?.permanentAddress,
-      relationship:{code : formData?.cpt?.details?.owners?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${formData?.cpt?.details?.owners?.[0]?.relationship}`},
+      relationship:formData?.cpt?.details?.owners?.[0]?.relationship ? {code : formData?.cpt?.details?.owners?.[0]?.relationship, i18nKey:`COMMON_MASTERS_OWNERTYPE_${formData?.cpt?.details?.owners?.[0]?.relationship}`} : null,
       specialCategoryType:ownerType,
       documentId:documentId,
       fileStoreId:uploadedFile,
@@ -221,6 +221,7 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
                 title: t("WS_NAME_ERROR_MESSAGE"),
               })}
             />
+            <CardLabel>{t("WS_OWN_DETAIL_RELATIONSHIP_LABEL")}</CardLabel>
             <RadioButtons
                 t={t}
                 optionsKey="i18nKey"
@@ -282,7 +283,7 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
                 <UploadFile
                     id={"ptm-doc"}
                     //extraStyleName={"propertyCreate"}
-                    accept=".jpg,.png,.pdf"
+                    accept=".jpg,.png,.pdf,.jpeg"
                     onUpload={selectfile}
                     onDelete={() => {
                     setUploadedFile(null);

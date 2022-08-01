@@ -57,11 +57,13 @@ import PopUp from "./atoms/PopUp";
 import { PrivateRoute } from "./atoms/PrivateRoute";
 import RadioButtons from "./atoms/RadioButtons";
 import Rating from "./atoms/Rating";
+import UnMaskComponent from "./atoms/UnMaskComponent";
 import RoundedLabel from "./atoms/RoundedLabel";
 import SectionalDropdown from "./atoms/SectionalDropdown";
 import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
 import SubmitBar from "./atoms/SubmitBar";
 import StandaloneSearchBar from "./atoms/StandaloneSearchBar";
+import ULBHomeCard from "./atoms/ULBHomeCard";
 import {
   AnnouncementIcon,
   ArrowDown,
@@ -164,7 +166,11 @@ import {
   AddIcon,
   AddNewIcon,
   InboxIcon,
-  ViewReportIcon
+  ViewReportIcon,
+  PrivacyMaskIcon,
+  DeathIcon,
+  BirthIcon,
+  FirenocIcon,
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -295,6 +301,7 @@ export {
   InboxLinks,
   PopupHeadingLabel,
   ToggleSwitch,
+  ULBHomeCard,
   // Icons
   GetApp,
   ArrowLeft,
@@ -434,4 +441,9 @@ export {
   AddNewIcon,
   ViewReportIcon,
   InboxIcon,
+  UnMaskComponent,
+  PrivacyMaskIcon,
+  DeathIcon,
+  BirthIcon,
+  FirenocIcon,
 };

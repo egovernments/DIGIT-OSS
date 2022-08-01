@@ -16,6 +16,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { useParams, useHistory, useLocation, Redirect } from "react-router-dom";
+import { stringReplaceAll } from "../bills/routes/bill-details/utils";
 
 const SelectPaymentType = (props) => {
   const optionFirst = {
@@ -38,7 +39,7 @@ const SelectPaymentType = (props) => {
   const history = useHistory();
   const { state, ...location } = useLocation();
   const { consumerCode, businessService, paymentAmt } = useParams();
-  const { workflow: wrkflow, tenantId: _tenantId } = Digit.Hooks.useQueryParams();
+  const { workflow: wrkflow, tenantId: _tenantId, ConsumerName } = Digit.Hooks.useQueryParams();
   const [bill, setBill] = useState(state?.bill);
   const tenantId = state?.tenantId || _tenantId || Digit.UserService.getUser().info?.tenantId;
 
@@ -84,10 +85,10 @@ const SelectPaymentType = (props) => {
   const onSubmit = () => {
     if(wrkflow === "WNS")
     {
-      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS`, {
+      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS&consumerCode=${stringReplaceAll(consumerCode, "+", "/")}`, {
         paymentAmount: paymentAmt,
         tenantId: billDetails.tenantId,
-        name: paymentType?.code !== optionSecound?.code ? bill?.payerName : userInfo ? payersActiveName : payersName,
+        name: paymentType?.code !== optionSecound?.code && ConsumerName !== "undefined" ? ConsumerName : userInfo ? payersActiveName : payersName,
         mobileNumber: paymentType?.code !== optionSecound?.code ? bill?.mobileNumber : userInfo ? payersActiveMobileNumber : payersMobileNumber,
       });
     }

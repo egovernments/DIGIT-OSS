@@ -141,6 +141,15 @@ export const OBPSService = {
       userService: false,
       userDownload: true,
     }),
+  BPAOpensearch: (data) =>
+    Request({
+     url: Urls.obps.getSearchDetails,
+     useCache: false,
+     method: "POST",
+     auth: false ,
+     userService: false,
+     data: data
+   }),
   LicenseDetails: async (tenantId, params) => {
     const response = await OBPSService.BPAREGSearch(tenantId, {}, params);
     if (!response?.Licenses?.length) {
@@ -468,9 +477,12 @@ export const OBPSService = {
       ]
     };
 
+    let envCitizenName = window.location.href.includes("/employee") ? "employee" : "citizen";
+
     if(BPA?.businessService.includes("BPA_OC"))
     {
-      applicationDetailsInfo["values"] = [...applicationDetailsInfo?.values,{ title: "BPA_PERMIT_APP_NUMBER", to:`/digit-ui/employee/obps/bpa/${bpaResponse?.BPA?.[0]?.applicationNo}`, value:bpaResponse?.BPA?.[0]?.applicationNo, isLink:true },];
+      applicationDetailsInfo["values"] = [...applicationDetailsInfo?.values,{ title: "BPA_PERMIT_APP_NUMBER", to:`/digit-ui/${envCitizenName}/obps/bpa/${bpaResponse?.BPA?.[0]?.applicationNo}`, value:bpaResponse?.BPA?.[0]?.approvalNo, isLink:true },];
+      applicationDetailsInfo["values"] = [...applicationDetailsInfo?.values,{ title: "BPA_PERMIT_VALIDITY", value: bpaResponse?.BPA?.[0]?.additionalDetails?.validityDate ? `${ConvertEpochToValidityDate(bpaResponse?.BPA?.[0]?.additionalDetails?.validityDate)} - ${format(new Date(bpaResponse?.BPA?.[0]?.additionalDetails?.validityDate), 'dd/MM/yyyy')}` : "NA" },];
     }
 
     let permitcondn = [];

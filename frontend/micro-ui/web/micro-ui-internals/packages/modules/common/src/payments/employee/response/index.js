@@ -28,6 +28,8 @@ export const SuccessfulPayment = (props) => {
       let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
       let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
       return t(`ES_PAYMENT_${businessService}_${parsedArchitectName}_SUCCESSFUL_DESCRIPTION`);
+    } else if (businessService?.includes("WS") || businessService?.includes("SW")) {
+      return t(`ES_PAYMENT_WS_${businessService?.replace(/\./g, "_")}_SUCCESSFUL_DESCRIPTION`);
     } else {
       return t("ES_PAYMENT_SUCCESSFUL_DESCRIPTION")
     }

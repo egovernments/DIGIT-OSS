@@ -1,6 +1,7 @@
 import { BPAHomeIcon, BPAIcon, CitizenHomeCard, EDCRIcon, EmployeeModuleCard, Loader, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router-dom";
 
 const BPACitizenHomeScreen = ({ parentRoute }) => {
   const userInfo = Digit.UserService.getUser();
@@ -15,6 +16,7 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
   const [bpaLinks, setBpaLinks] = useState([]);
   const state = Digit.ULBService.getStateId();
   const { t } = useTranslation();
+  const location = useLocation();
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("BPA_HOME_CREATE", {});
   const { data: homePageUrlLinks, isLoading: homePageUrlLinksLoading } = Digit.Hooks.obps.useMDMS(state, "BPA", ["homePageUrlLinks"]);
   const [showToast, setShowToast] = useState(null);
@@ -66,6 +68,13 @@ const BPACitizenHomeScreen = ({ parentRoute }) => {
     tenantId: stateCode,
     filters: { filterForm: {}, searchForm: {}, tableForm: { limit: 10, offset: 0 } },
   });
+
+  useEffect(()=>{
+    if (location.pathname === "/digit-ui/citizen/obps/home"){
+      Digit.SessionStorage.del("OBPS.INBOX")
+      Digit.SessionStorage.del("STAKEHOLDER.INBOX")
+    }
+  },[location.pathname])
 
   useEffect(() => {
     if (!bpaLoading) {

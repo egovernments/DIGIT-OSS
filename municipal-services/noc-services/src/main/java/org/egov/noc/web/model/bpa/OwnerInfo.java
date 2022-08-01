@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import lombok.Data;
 import org.egov.common.contract.request.Role;
 import org.egov.noc.web.model.AuditDetails;
 import org.hibernate.validator.constraints.SafeHtml;
@@ -30,6 +31,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class OwnerInfo {
  
 	@SafeHtml
@@ -62,6 +64,9 @@ public class OwnerInfo {
 
 	@JsonProperty("isPrimaryOwner")
 	private Boolean isPrimaryOwner = null;
+	
+	@JsonProperty("status")
+	private Boolean status = null;
 
 	@JsonProperty("ownerShipPercentage")
 	private BigDecimal ownerShipPercentage = null;
@@ -1080,113 +1085,6 @@ public class OwnerInfo {
 		this.auditDetails = auditDetails;
 	}
 
-	
-	@Override
-	public boolean equals(java.lang.Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (o == null || getClass() != o.getClass()) {
-			return false;
-		}
-		OwnerInfo ownerInfo = (OwnerInfo) o;
-		return  Objects.equals(this.tenantId, ownerInfo.tenantId)
-				&&Objects.equals(this.name, ownerInfo.name) 
-				&& Objects.equals(this.ownerId, ownerInfo.ownerId)
-				&& Objects.equals(this.mobileNumber, ownerInfo.mobileNumber)
-				&& Objects.equals(this.gender, ownerInfo.gender)
-				&& Objects.equals(this.fatherOrHusbandName, ownerInfo.fatherOrHusbandName)
-				&& Objects.equals(this.correspondenceAddress, ownerInfo.correspondenceAddress)
-				&& Objects.equals(this.isPrimaryOwner, ownerInfo.isPrimaryOwner)
-				&& Objects.equals(this.ownerShipPercentage, ownerInfo.ownerShipPercentage)
-				&& Objects.equals(this.ownerType, ownerInfo.ownerType)
-				&& Objects.equals(this.institutionId, ownerInfo.institutionId)
-				&& Objects.equals(this.documents, ownerInfo.documents)
-				&& Objects.equals(this.relationship, ownerInfo.relationship)
-				&& Objects.equals(this.additionalDetails, ownerInfo.additionalDetails)
-				
-				&& Objects.equals(this.id, ownerInfo.id)
-				&& Objects.equals(this.uuid, ownerInfo.uuid)
-				&& Objects.equals(this.salutation, ownerInfo.salutation)
-				&& Objects.equals(this.altContactNumber, ownerInfo.altContactNumber)
-				&& Objects.equals(this.pan, ownerInfo.pan)
-				&& Objects.equals(this.aadhaarNumber, ownerInfo.aadhaarNumber)
-				&& Objects.equals(this.permanentAddress, ownerInfo.permanentAddress)
-				&& Objects.equals(this.permanentCity, ownerInfo.permanentCity)
-				&& Objects.equals(this.permanentPincode, ownerInfo.permanentPincode)
-				&& Objects.equals(this.correspondenceCity, ownerInfo.correspondenceCity)
-				&& Objects.equals(this.correspondencePincode, ownerInfo.correspondencePincode)
-				&& Objects.equals(this.active, ownerInfo.active)
-				&& Objects.equals(this.dob, ownerInfo.dob)
-				&& Objects.equals(this.pwdExpiryDate, ownerInfo.pwdExpiryDate)
-				&& Objects.equals(this.locale, ownerInfo.locale)
-				&& Objects.equals(this.type, ownerInfo.type)
-				&& Objects.equals(this.signature, ownerInfo.signature)
-				&& Objects.equals(this.accountLocked, ownerInfo.accountLocked)
-				&& Objects.equals(this.roles, ownerInfo.roles)
-				&& Objects.equals(this.bloodGroup, ownerInfo.bloodGroup)
-				&& Objects.equals(this.identificationMark, ownerInfo.identificationMark)
-				&& Objects.equals(this.photo, ownerInfo.photo)
-				&& Objects.equals(this.otpReference, ownerInfo.otpReference)
-				&& Objects.equals(this.auditDetails, ownerInfo.auditDetails);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(name, mobileNumber, gender, fatherOrHusbandName, correspondenceAddress, isPrimaryOwner,
-				ownerShipPercentage, ownerType, institutionId, documents, relationship, additionalDetails, id, uuid, salutation, altContactNumber, pan, 
-				aadhaarNumber, permanentAddress, permanentCity, permanentPincode, correspondenceCity, correspondencePincode, 
-				active, dob, pwdExpiryDate, locale, type, signature, accountLocked, roles, bloodGroup, identificationMark,
-				photo, otpReference, auditDetails);
-		}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("class OwnerInfo {\n");
-		
-		sb.append("    tenantId: ").append(toIndentedString(tenantId)).append("\n");
-		sb.append("    name: ").append(toIndentedString(name)).append("\n");
-		sb.append("    ownerId: ").append(toIndentedString(ownerId)).append("\n");
-		sb.append("    mobileNumber: ").append(toIndentedString(mobileNumber)).append("\n");
-		sb.append("    gender: ").append(toIndentedString(gender)).append("\n");
-		sb.append("    fatherOrHusbandName: ").append(toIndentedString(fatherOrHusbandName)).append("\n");
-		sb.append("    correspondenceAddress: ").append(toIndentedString(correspondenceAddress)).append("\n");
-		sb.append("    isPrimaryOwner: ").append(toIndentedString(isPrimaryOwner)).append("\n");
-		sb.append("    ownerShipPercentage: ").append(toIndentedString(ownerShipPercentage)).append("\n");
-		sb.append("    ownerType: ").append(toIndentedString(ownerType)).append("\n");
-		sb.append("    institutionId: ").append(toIndentedString(institutionId)).append("\n");
-		sb.append("    documents: ").append(toIndentedString(documents)).append("\n");
-		sb.append("    relationship: ").append(toIndentedString(relationship)).append("\n");
-		sb.append("    additionalDetails: ").append(toIndentedString(additionalDetails)).append("\n");
-
-		sb.append("    id: ").append(toIndentedString(id)).append("\n");
-		sb.append("    uuid: ").append(toIndentedString(uuid)).append("\n");
-		sb.append("    salutation: ").append(toIndentedString(salutation)).append("\n");
-		sb.append("    altContactNumber: ").append(toIndentedString(altContactNumber)).append("\n");
-		sb.append("    pan: ").append(toIndentedString(pan)).append("\n");
-		sb.append("    aadhaarNumber: ").append(toIndentedString(aadhaarNumber)).append("\n");
-		sb.append("    permanentAddress: ").append(toIndentedString(permanentAddress)).append("\n");
-		sb.append("    permanentCity: ").append(toIndentedString(permanentCity)).append("\n");
-		sb.append("    permanentPincode: ").append(toIndentedString(permanentPincode)).append("\n");
-		sb.append("    correspondenceCity: ").append(toIndentedString(correspondenceCity)).append("\n");
-		sb.append("    correspondencePincode: ").append(toIndentedString(correspondencePincode)).append("\n");
-		sb.append("    active: ").append(toIndentedString(active)).append("\n");
-		sb.append("    dob: ").append(toIndentedString(dob)).append("\n");
-		sb.append("    pwdExpiryDate: ").append(toIndentedString(pwdExpiryDate)).append("\n");
-		sb.append("    locale: ").append(toIndentedString(locale)).append("\n");
-		sb.append("    type: ").append(toIndentedString(type)).append("\n");
-		sb.append("    signature: ").append(toIndentedString(signature)).append("\n");
-		sb.append("    accountLocked: ").append(toIndentedString(accountLocked)).append("\n");
-		sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
-		sb.append("    bloodGroup: ").append(toIndentedString(bloodGroup)).append("\n");
-		sb.append("    identificationMark: ").append(toIndentedString(identificationMark)).append("\n");
-		sb.append("    photo: ").append(toIndentedString(photo)).append("\n");
-		sb.append("    otpReference: ").append(toIndentedString(otpReference)).append("\n");
-		sb.append("    auditDetails: ").append(toIndentedString(auditDetails)).append("\n");
-		sb.append("}");
-		return sb.toString();
-	}
 
 	/**
 	 * Convert the given object to string with each line indented by 4 spaces
@@ -1314,4 +1212,12 @@ public class OwnerInfo {
          commonUser.setUuid(this.getUuid());
          return commonUser;
  }
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 }

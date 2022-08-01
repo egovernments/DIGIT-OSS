@@ -701,3 +701,11 @@ input[type="number"] {
   font-size: 24px;
   margin-bottom: 1rem;
 }
+.privacy-icon{
+  cursor: pointer;
+}
+.privacy-icon:hover{
+  path{
+    fill: rgba(244, 119, 56, 1);
+  }
+}

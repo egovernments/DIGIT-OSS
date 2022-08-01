@@ -143,5 +143,9 @@ public class PGRConstants {
     
     public static final String AVERAGE_RESOLUTION_TIME = "averageResolutionTime";
 
+    public static final String DESIGNATION = "designation";
+
+    public static final String DEPARTMENT = "department";
+
 
 }

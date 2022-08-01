@@ -94,7 +94,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
 
   function submit(data) {
     if (!action?.showFinancialYearsModal) {
-      let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
+      let workflow = { action: action?.action, comment: data?.comments, businessService, moduleName: moduleCode };
       workflow["assignes"] = action?.isTerminateState || !selectedApprover ? [] : [selectedApprover];
       if (uploadedFile)
         workflow["documents"] = [

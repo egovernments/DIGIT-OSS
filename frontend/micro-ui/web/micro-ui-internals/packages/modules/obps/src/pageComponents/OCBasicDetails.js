@@ -62,9 +62,13 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
   }
 
   const handleKeyPress = async (event) => {
+    if(!(scrutinyNumber?.edcrNumber?.startsWith("OC")))
+    setShowToast({ key: "true", message: t("BPA_INVALID_OCEDCR_NO"), labelName: "Please enter the valid OCeDCR Number." });
+    else{
     if (event.key === "Enter") {
       const handleData = await getOCEDCRTotalDetails();
     }
+  }
   }
 
 
@@ -82,7 +86,11 @@ const OCBasicDetails = ({ formData, onSelect, config }) => {
   };
 
   const handleSearch = async (event) => {
+    if(!(scrutinyNumber?.edcrNumber?.startsWith("OC")))
+    setShowToast({ key: "true", message: t("BPA_INVALID_OCEDCR_NO"), labelName: "Please enter the valid OCeDCR Number." });
+    else{
     const handleData = await getOCEDCRTotalDetails();
+    }
   }
 
   const getDetails = async () => {

@@ -2,12 +2,7 @@ package org.egov.bpa.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.egov.bpa.config.BPAConfiguration;
 import org.egov.bpa.repository.ServiceRequestRepository;
@@ -184,16 +179,19 @@ public class UserService {
      * @param bpa
      * @return uuids of the users
      */
-    public Set<String> getUUidFromUserName(BPA bpa){
+    public Set<String> getUUidFromUserName(BPA bpa, Map<String, String> mobilenumberToUUIDs){
 
         String tenantId = bpa.getTenantId();
         List<OwnerInfo> ownerInfos = bpa.getLandInfo().getOwners();
-
+       // List<OwnerInfo> ownerInfos = bpa.getLandInfo().getOwners().stream().filter(ow -> ow.getActive()).collect(Collectors.toList());
         Set<String> mobileNumbers = new HashSet<>();
 
         // Get all unique mobileNumbers in the license
         ownerInfos.forEach(owner -> {
-            mobileNumbers.add(owner.getMobileNumber());
+			if(owner.getActive())
+			{
+				mobileNumbers.add(owner.getMobileNumber());
+			}
         });
 
         Set<String> uuids = new HashSet<>();
@@ -202,9 +200,13 @@ public class UserService {
         mobileNumbers.forEach(mobileNumber -> {
             UserDetailResponse userDetailResponse = searchByUserName(mobileNumber, getStateLevelTenant(tenantId));
             if(!CollectionUtils.isEmpty(userDetailResponse.getUser())){
-                uuids.add(userDetailResponse.getUser().get(0).getUuid());
+					mobilenumberToUUIDs.put(mobileNumber,userDetailResponse.getUser().get(0).getUuid());
             }
         });
+
+		for(String value: mobilenumberToUUIDs.values()){
+			uuids.add(value);
+		}
 
         return uuids;
     }

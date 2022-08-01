@@ -251,7 +251,7 @@ const PTApplicationDetails = () => {
 
             {isPropertyTransfer && (
               <React.Fragment>
-                <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={billAmount || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+                <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={billAmount || t("₹0")} textStyle={{ whiteSpace: "pre" }} />
                 <Row className="border-none" label={t("PT_PAYMENT_STATUS")} text={billStatus} textStyle={{ whiteSpace: "pre" }} />
               </React.Fragment>
             )}

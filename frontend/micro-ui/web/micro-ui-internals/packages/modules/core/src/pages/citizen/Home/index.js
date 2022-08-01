@@ -134,17 +134,17 @@ const Home = () => {
         <StaticCitizenSideBar />
       </div> */}
       <div className="HomePageWrapper">
-        <div className="BannerWithSearch">
+        {<div className="BannerWithSearch">
           {isMobile ? <img src={appBannerMobObj?.bannerUrl} /> : <img src={appBannerWebObj?.bannerUrl} />}
-          <div className="Search">
+          {/* <div className="Search">
             <StandaloneSearchBar placeholder={t("CS_COMMON_SEARCH_PLACEHOLDER")} />
-          </div>
+          </div> */}
+          <div className="ServicesSection">
+          <CardBasedOptions style={{marginTop:"-30px"}} {...allCitizenServicesProps} />
+          <CardBasedOptions style={isMobile ? {} : {marginTop:"-30px"}} {...allInfoAndUpdatesProps} />
         </div>
+        </div>}
 
-        <div className="ServicesSection">
-          <CardBasedOptions {...allCitizenServicesProps} />
-          <CardBasedOptions {...allInfoAndUpdatesProps} />
-        </div>
 
         {(whatsAppBannerMobObj || whatsAppBannerWebObj) && (
           <div className="WhatsAppBanner">

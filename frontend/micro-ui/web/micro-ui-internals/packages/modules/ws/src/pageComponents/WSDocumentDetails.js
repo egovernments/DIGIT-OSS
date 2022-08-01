@@ -132,7 +132,7 @@ function SelectDocument({ t, key, document: doc, setDocuments, error, setError, 
       <UploadFile
         id={`noc-doc-${key}`}
         extraStyleName={"propertyCreate"}
-        accept=".jpg,.png,.pdf"
+        accept=".jpg,.png,.pdf,.jpeg"
         onUpload={selectfile}
         onDelete={() => {
           setUploadedFile(null);

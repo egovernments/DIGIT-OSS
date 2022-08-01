@@ -146,7 +146,7 @@ const AccessoriersForm = (_props) => {
     const formValue = watch();
     const { errors } = localFormState;
 
-    const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
+    const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code?.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
 
     useEffect(() => {
         trigger();

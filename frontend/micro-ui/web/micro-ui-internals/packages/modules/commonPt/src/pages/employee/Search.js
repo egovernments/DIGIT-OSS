@@ -30,6 +30,7 @@ const PTSearchFields = {
     mobileNumber: {
       type: "number",
       label: "PT_HOME_SEARCH_RESULTS_OWN_MOB_LABEL",
+      componentInFront: "+91",
       placeHolder: "PT_HOME_SEARCH_RESULTS_OWN_MOB_PLACEHOLDER",
       validation: {
         minLength: {

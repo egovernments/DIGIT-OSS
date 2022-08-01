@@ -11,7 +11,7 @@ const SearchFields = ({ register, control, reset, tenantId, t }) => {
   };
 
   const propsForOldConnectionNumberNpropertyId = {
-    pattern: /^[a-zA-Z0-9-]*$/i,
+    pattern: "[A-Za-z]{2}\-[A-Za-z]{2}\-[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-[0-9]{6}",
     title: t("ERR_DEFAULT_INPUT_FIELD_MSG"),
   };
   let validation = {}
@@ -48,6 +48,7 @@ const SearchFields = ({ register, control, reset, tenantId, t }) => {
         <p
           onClick={() => {
             reset({
+              searchType:"CONNECTION",
               mobileNumber: "",
               offset: 0,
               limit: 10,

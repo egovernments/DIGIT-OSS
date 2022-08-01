@@ -82,7 +82,7 @@ const PropertyLocationDetails = ({ t, config, onSelect, userType, formData, form
               className="form-field"
               selected={value}
               disable={userType === "employee"}
-              option={allCities}
+              option={allCities.sort((a,b) => (a.name > b.name)? 1 : (b.name>a.name)? -1 : 0)}
               select={(value)=>{
                 onChange(value);
                 setLocationDetails({...locationDetails, cityCode: value})

@@ -255,6 +255,7 @@ const OwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                 ownerStep?.owners?.map(owner => {
                     conversionOwners.push({
                         ...owner,
+                        active:true,
                         name: owner.name,
                         mobileNumber: owner.mobileNumber,
                         isPrimaryOwner: owner.isPrimaryOwner,

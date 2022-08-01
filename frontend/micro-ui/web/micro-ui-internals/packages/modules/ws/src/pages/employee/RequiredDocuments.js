@@ -43,7 +43,7 @@ const RequiredDocuments = ({path}) => {
 			</Card>
 		</div>
 		<ActionBar>
-			  <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => redirectToBillAmdmentPage()} />
+			<SubmitBar label={t("WS_COMMON_BUTTON_APPLY")} onSubmit={() => redirectToBillAmdmentPage()} />
 		</ActionBar>
 	</>
 }

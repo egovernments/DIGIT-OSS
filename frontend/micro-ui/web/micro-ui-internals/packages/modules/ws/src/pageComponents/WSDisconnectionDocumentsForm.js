@@ -11,24 +11,24 @@ import {
   CardHeader,
   SubmitBar
 } from "@egovernments/digit-ui-react-components";
-
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 function WSDisconnectionDocumentsForm({ t, config, onSelect, userType, formData  }) { 
   const tenantId = Digit.ULBService.getStateId();
-  const storedData = formData?.WSDisconnectionDocumentsForm?.WSDisconnectionDocumentsForm||formData?.WSDisconnectionDocumentsForm
+  const storedData = Digit.SessionStorage.get("WS_DISCONNECTION");
 
-  const [documents, setDocuments] = useState(storedData || []);
+  const [documents, setDocuments] = useState(storedData.WSDisconnectionForm.documents ?  storedData.WSDisconnectionForm.documents : []);
   const [error, setError] = useState(null);
-  const [enableSubmit, setEnableSubmit] = useState(true)
   const [checkRequiredFields, setCheckRequiredFields] = useState(false);
-
-  useEffect(() =>{
-      setDocuments(storedData||[])
-  },[]);
+  const history = useHistory();
+  const match = useRouteMatch();
 
   const handleSubmit = () => {
       onSelect(config.key, {WSDisconnectionDocumentsForm: documents});
   };
+  useEffect(() => {
+    Digit.SessionStorage.set("WS_DISCONNECTION", {...storedData, WSDisconnectionForm: {...storedData.WSDisconnectionForm, documents: documents}});
+  }, [documents]);
  
   const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId, 'DisconnectionDocuments');
  
@@ -46,7 +46,7 @@ function WSDisconnectionDocumentsForm({ t, config, onSelect, userType, formData 
         // isDisabled={enableSubmit}
       >
         <CardHeader>{t(`WS_DISCONNECTION_UPLOAD_DOCUMENTS`)}</CardHeader>
-        {wsDocs?.Documents?.map((document, index) => { 
+        {wsDocs?.DisconnectionDocuments?.map((document, index) => { 
           return (
             <SelectDocument
               key={index}
@@ -56,11 +56,17 @@ function WSDisconnectionDocumentsForm({ t, config, onSelect, userType, formData 
               setError={setError}
               setDocuments={setDocuments}
               documents={documents}
-            //   setCheckRequiredFields={setCheckRequiredFields}
+              setCheckRequiredFields={setCheckRequiredFields}
             />
           );
         })}
-        <SubmitBar label={t(`CS_COMMON_NEXT`)} submit={true} />
+        <SubmitBar 
+          label={t("CS_COMMON_NEXT")}
+          onSubmit={() => {
+            history.push(match.path.replace("documents-upload", "check"));
+          }}
+          disabled={documents.length < 2 ? true : false}
+         />
         {error && <Toast label={error} onClose={() => setError(null)} error />}
       </FormStep> 
     </div>
@@ -142,7 +148,7 @@ function SelectDocument({
 
   return (
       <div style={{ marginBottom: "24px" }}>
-          <CardLabel>{t(doc?.i18nKey)}</CardLabel>
+          <CardLabel>{t(doc?.i18nKey)+ "*"}</CardLabel>
           <Dropdown
               t={t}
               isMandatory={false}
@@ -154,7 +160,7 @@ function SelectDocument({
           <UploadFile
               id={`noc-doc-${key}`}
               extraStyleName={"propertyCreate"}
-              accept=".jpg,.png,.pdf"
+              accept=".jpg,.png,.pdf,.jpeg"
               onUpload={selectfile}
               onDelete={() => {
                   setUploadedFile(null);

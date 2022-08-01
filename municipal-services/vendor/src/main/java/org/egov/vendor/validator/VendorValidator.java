@@ -118,9 +118,11 @@ public class VendorValidator {
 		boundaryService.getAreaType(vendorRequest, config.getHierarchyTypeCode());
 		
 		vehicleService.manageVehicle(vendorRequest);
+		
 		if(isCreate) {
 			ownerService.manageOwner(vendorRequest);
 		}
+		
 		ownerService.manageDrivers(vendorRequest);
 		
 		

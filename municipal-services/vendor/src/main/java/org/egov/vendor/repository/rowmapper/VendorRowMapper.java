@@ -28,12 +28,23 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 
 	@Autowired
 	private ObjectMapper mapper;
+	
+	private int fullCount=0;
 
+	public int getFullCount() {
+		return fullCount;
+	}
+
+	public void setFullCount(int fullCount) {
+		this.fullCount = fullCount;
+	}
+	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public List<Vendor> extractData(ResultSet rs) throws SQLException, DataAccessException {
 		Map<String, Vendor> vendorMap = new LinkedHashMap<String, Vendor>();
-
+		this.setFullCount(0);
+		
 		while (rs.next()) {
 			Vendor currentvendor = new Vendor();
 			String id = rs.getString("vendor_id");
@@ -47,6 +58,8 @@ public class VendorRowMapper implements ResultSetExtractor<List<Vendor>> {
 			String status = rs.getString("status");
 			String agencytype = rs.getString("agencytype");
 			String paymentpreference = rs.getString("paymentpreference");
+			this.setFullCount(rs.getInt("full_count"));
+			
 			if (currentvendor == null) {
 				if(status==null) {
 					status="ACTIVE";

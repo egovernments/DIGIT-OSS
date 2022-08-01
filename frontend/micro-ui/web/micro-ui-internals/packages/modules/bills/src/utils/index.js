@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import { Toast } from "@egovernments/digit-ui-react-components";
+import React, { useEffect,useState,Fragment } from "react";
 import { useTranslation } from "react-i18next";
 
 export const printReciept = async (businessService, consumerCode) => {
@@ -9,6 +10,23 @@ export const printBill = async (businessService, consumerCode) => {
   await Digit.Utils.downloadBill(consumerCode, businessService, "consolidatedreceipt");
 };
 
+const retrywnsDownloadBill = async (key, tenantId, locality, isConsolidated, bussinessService, setShowToast,t) => {
+  const result = await Digit.WSService.wnsGroupBill({ key, tenantId, locality, isConsolidated, bussinessService });
+  
+  if(result){    
+    setShowToast(() => ({ label: `${t("GRP_JOB_INITIATED_STATUS")} ${result?.jobId}` }))
+  }
+  
+  //setTimeout(setShowToast(null), 5000)
+};
+
+const cancelwnsDownloadBill = async (jobid, setShowToast,t) => {
+  const result = await Digit.WSService.cancelGroupBill({ jobId:jobid });
+  if (result) {
+    setShowToast(() => ({ label: `${t("GRP_JOB_INITIATED_STATUS")} ${result?.jobId}` }))
+  }
+  //setTimeout(setShowToast(null),5000)
+};
 /* method to get date from epoch */
 export const convertEpochToDate = (dateEpoch) => {
   // Returning NA in else case because new Date(null) returns Current date from calender
@@ -71,7 +89,6 @@ export const getActionButton = (businessService, receiptNumber) => {
   const { t } = useTranslation();
   return (
     <a
-      href="javascript:void(0)"
       style={{
         color: "#FE7A51",
         cursor: "pointer",
@@ -115,4 +132,39 @@ export const printRecieptMobile = async (businessService, receiptNumber) => {
   }
   const fileStore = await Digit.PaymentService.printReciept(state, { fileStoreIds: response.filestoreIds[0] });
   window.open(fileStore[response.filestoreIds[0]], "_blank");
+};
+export const getRetryButton = (key, tenantId, locality, isConsolidated, businessService,setShowToast) => {
+  const { t } = useTranslation();
+  return (
+    <>
+    <div
+      style={{
+        color: "#FE7A51",
+        cursor: "pointer",
+      }}
+      onClick={() => {
+        retrywnsDownloadBill(key, tenantId, locality, isConsolidated, businessService,setShowToast,t);
+      }}
+    >
+      {t(`${"ABG_RETRY"}`)}
+    </div>
+    </>
+  );
+};
+
+export const getCancelButton = (jobid,setShowToast) => {
+  const { t } = useTranslation();
+  return (
+    <div
+      style={{
+        color: "#FE7A51",
+        cursor: "pointer",
+      }}
+      onClick={() => {
+        cancelwnsDownloadBill(jobid,setShowToast,t);
+      }}
+    >
+      {t(`${"GRP_BILL_ACT_CANCEL"}`)}
+    </div>
+  );
 };

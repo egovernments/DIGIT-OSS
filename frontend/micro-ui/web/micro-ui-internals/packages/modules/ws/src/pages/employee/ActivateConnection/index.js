@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useHistory } from "react-router-dom";
 import { newConfig as newConfigLocal } from "../../../config/wsActivationConfig";
-import { stringReplaceAll, convertDateToEpoch, convertEpochToDates } from "../../../utils";
+import { stringReplaceAll, convertDateToEpochNew, convertEpochToDates } from "../../../utils";
 import * as func from "../../../utils";
 import _ from "lodash";
 
@@ -31,6 +31,9 @@ const ActivateConnection = () => {
         mutate,
     } = Digit.Hooks.ws.useWSApplicationActions(filters?.service);
 
+    const waterSourceSubDataWithClone = state?.data?.waterSource ? cloneDeep(state?.data?.waterSource) : "";
+    const waterSourceSubDataWithUS = waterSourceSubDataWithClone ? stringReplaceAll(waterSourceSubDataWithClone?.toUpperCase(), " ", "_") : "";
+    const waterSourceSubDataWithCma = waterSourceSubDataWithUS ? stringReplaceAll(waterSourceSubDataWithUS?.toUpperCase(), ".", "_") : "";
     const connectionDetails = filters?.service === "WATER" ? {
         connectionType: state?.data?.connectionType ? {
             code: state?.data?.connectionType, i18nKey: `WS_CONNECTIONTYPE_${stringReplaceAll(state?.data?.connectionType?.toUpperCase(), " ", "_")}`
@@ -39,7 +42,7 @@ const ActivateConnection = () => {
             code: state?.data?.waterSource, i18nKey: `WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(state?.data?.waterSource?.split('.')[0]?.toUpperCase(), " ", "_")}`
         } : "",
         sourceSubData: state?.data?.waterSource ? {
-            code: state?.data?.waterSource, i18nKey: `WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(state?.data?.waterSource?.toUpperCase(), " ", "_")}`
+            code: state?.data?.waterSource, i18nKey: `WS_SERVICES_MASTERS_WATERSOURCE_${waterSourceSubDataWithCma}`
         } : "",
         pipeSize: state?.data?.pipeSize ? {
             code: state?.data?.pipeSize, i18nKey: state?.data?.pipeSize
@@ -106,7 +109,7 @@ const ActivateConnection = () => {
         } else {
             formattedDate = `${dateOfReplace.split("-")[0]}-${dateOfReplace.split("-")[2]}-${dateOfReplace.split("-")[1]}`;
         }
-        const convertedDate = await convertDateToEpoch(formattedDate);
+        const convertedDate = await convertDateToEpochNew(formattedDate);
         return convertedDate;
     }
 
@@ -122,7 +125,7 @@ const ActivateConnection = () => {
         const formData = { ...appDetails };
 
         if (formDetails?.connectionDetails?.[0]?.connectionType?.code) formData.connectionType = formDetails?.connectionDetails?.[0]?.connectionType?.code;
-        if (formDetails?.connectionDetails?.[0]?.waterSource?.code) formData.waterSource = formDetails?.connectionDetails?.[0]?.waterSource?.code;
+        if (formDetails?.connectionDetails?.[0]?.waterSource?.code) formData.waterSource = formDetails?.connectionDetails?.[0]?.sourceSubData?.code;
         if (formDetails?.connectionDetails?.[0]?.pipeSize?.size) formData.pipeSize = formDetails?.connectionDetails?.[0]?.pipeSize?.size;
         if (formDetails?.connectionDetails?.[0]?.noOfTaps) formData.noOfTaps = formDetails?.connectionDetails?.[0]?.noOfTaps;
 

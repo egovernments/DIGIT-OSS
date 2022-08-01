@@ -12,6 +12,7 @@ import org.egov.vendor.repository.querybuilder.VendorQueryBuilder;
 import org.egov.vendor.repository.rowmapper.VendorRowMapper;
 import org.egov.vendor.web.model.Vendor;
 import org.egov.vendor.web.model.VendorRequest;
+import org.egov.vendor.web.model.VendorResponse;
 import org.egov.vendor.web.model.VendorSearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -47,12 +48,19 @@ public class VendorRepository {
 		producer.push(configuration.getUpdateTopic(), vendorRequest);
 	}
 	
-	public List<Vendor> getVendorData(VendorSearchCriteria vendorSearchCriteria) {
+	public void updateVendorVehicleDriver(VendorRequest vendorRequest) {
+		producer.push(configuration.getSaveVendorVehicleDriverTopic(), vendorRequest);
+	}
+	
+	public VendorResponse getVendorData(VendorSearchCriteria vendorSearchCriteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
 		String query = vendorQueryBuilder.getVendorSearchQuery(vendorSearchCriteria, preparedStmtList);
 		List<Vendor> vendorData = jdbcTemplate.query(query, preparedStmtList.toArray(), vendorrowMapper);
+		//VehicleResponse response = VehicleResponse.builder().vehicle(vehicles).totalCount(Integer.valueOf(rowMapper.getFullCount())).build();
+		VendorResponse response= VendorResponse.builder().vendor(vendorData).totalCount(Integer.valueOf(vendorrowMapper.getFullCount())).build();
+		
 		System.out.println("query is " + query);
-		return vendorData;
+		return response;
 	}
 
 	public List<String> getDrivers(String id, String status) {
@@ -82,6 +90,15 @@ public class VendorRepository {
 				preparedStmtList.toArray(), String.class);
 		return vendorIds;
 	}
+	
+	public List<String> getVendorWithDrivers(VendorSearchCriteria vendorSearchCriteria) {
+		List<String> vendorIds = null;
+		List<Object> preparedStmtList = new ArrayList<>();
+		vendorIds = jdbcTemplate.queryForList(vendorQueryBuilder.vendorsForDrivers(vendorSearchCriteria, preparedStmtList),
+				preparedStmtList.toArray(), String.class);
+		return vendorIds;
+	}
+	
 
 	public List<String> fetchVendorIds(@Valid VendorSearchCriteria criteria) {
 		List<Object> preparedStmtList = new ArrayList<>();
@@ -116,3 +133,4 @@ public class VendorRepository {
 	}
 
 }
+ 

@@ -84,8 +84,8 @@ public class Vehicle {
 	@JsonProperty("gpsEnabled")
 	private Boolean gpsEnabled = null;
 
-	@JsonProperty("additionalDetail")
-	private Object additionalDetail = null;
+	@JsonProperty("additionalDetails")
+	private Object additionalDetails = null;
 
 	@SafeHtml
 	@JsonProperty("source")
@@ -101,9 +101,9 @@ public class Vehicle {
 	 */
 	public enum StatusEnum {
 		ACTIVE("ACTIVE"),
-
-		INACTIVE("INACTIVE");
-
+		INACTIVE("INACTIVE"),
+		DISABLED("DISABLED");
+		
 		private String value;
 
 		StatusEnum(String value) {

@@ -6,6 +6,7 @@ import org.egov.common.contract.request.RequestInfo;
 import org.egov.inbox.repository.ServiceRequestRepository;
 import org.egov.inbox.web.model.InboxSearchCriteria;
 import org.egov.inbox.web.model.workflow.ProcessInstanceSearchCriteria;
+import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -105,7 +106,7 @@ public class WSInboxFilterService {
             }
             // Accomodating process search criteria in searcher request
             if(!ObjectUtils.isEmpty(processCriteria.getAssignee())){
-                searchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());
+                searchCriteria.put(WS_ASSIGNEE_PARAM, processCriteria.getAssignee());
             }
             if(!ObjectUtils.isEmpty(processCriteria.getStatus())){
                 searchCriteria.put(STATUS_PARAM, processCriteria.getStatus());
@@ -193,7 +194,7 @@ public class WSInboxFilterService {
             }
             // Accomodating process search criteria in searcher request
             if(!ObjectUtils.isEmpty(processCriteria.getAssignee())){
-                searchCriteria.put(ASSIGNEE_PARAM, processCriteria.getAssignee());
+                searchCriteria.put(WS_ASSIGNEE_PARAM, processCriteria.getAssignee());
             }
             if(!ObjectUtils.isEmpty(processCriteria.getStatus())){
                 searchCriteria.put(STATUS_PARAM, processCriteria.getStatus());

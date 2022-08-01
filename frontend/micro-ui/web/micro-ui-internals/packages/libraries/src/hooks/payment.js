@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from "react-query";
+import { PaymentService } from "../services/elements/Payment";
 
 export const useFetchCitizenBillsForBuissnessService = ({ businessService, ...filters }, config = {}) => {
   const queryClient = useQueryClient();
@@ -145,11 +146,15 @@ export const useDemandSearch = ({ consumerCode, businessService, tenantId }, con
 
 export const useRecieptSearch = ({ tenantId, businessService, ...params }, config = {}) => {
   return useQuery(
-    ["reciept_search", { tenantId, businessService, params }],
+    ["reciept_search", { tenantId, businessService, params },config],
     () => Digit.PaymentService.recieptSearch(tenantId, businessService, params),
     {
       refetchOnMount: false,
       ...config,
     }
   );
+};
+
+export const useBulkPdfDetails = ({ filters }) => {
+  return useQuery(["BULK_PDF_DETAILS", filters], async () => await PaymentService.getBulkPdfRecordsDetails(filters));
 };

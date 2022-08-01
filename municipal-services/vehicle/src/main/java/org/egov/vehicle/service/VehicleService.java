@@ -82,29 +82,33 @@ public class VehicleService {
 		validator.validateSearch(requestInfo, criteria);
 		UserDetailResponse usersRespnse;
 		List<String> uuids = new ArrayList<String>();
-		
-		/*
-		 * if(criteria.tenantIdOnly() ) { throw new
-		 * CustomException(VehicleErrorConstants.INVALID_SEARCH,
-		 * " Atlest one parameter is mandatory!"); }
-		 */
-		
-		if( criteria.getMobileNumber() !=null) {
-			usersRespnse = userService.getOwner(criteria,requestInfo);
-			if(usersRespnse !=null && usersRespnse.getUser() != null && usersRespnse.getUser().size() >0) {
+
+		if (criteria.isVehicleWithNoVendor()) {
+			List<String> vehicleIds = repository.fetchVehicleIdsWithNoVendor(criteria);
+			if (CollectionUtils.isEmpty(criteria.getIds())) {
+				criteria.setIds(vehicleIds);
+			} else {
+				criteria.getIds().addAll(vehicleIds);
+			}
+
+		}		
+
+		if (criteria.getMobileNumber() != null) {
+			usersRespnse = userService.getOwner(criteria, requestInfo);
+			if (usersRespnse != null && usersRespnse.getUser() != null && usersRespnse.getUser().size() > 0) {
 				uuids = usersRespnse.getUser().stream().map(User::getUuid).collect(Collectors.toList());
-				if(CollectionUtils.isEmpty(criteria.getOwnerId())) {
+				if (CollectionUtils.isEmpty(criteria.getOwnerId())) {
 					criteria.setOwnerId(uuids);
-				}else {
+				} else {
 					criteria.getOwnerId().addAll(uuids);
 				}
 			}
 		}
-		
+
 		VehicleResponse response = repository.getVehicleData(criteria);
-		
-		if(!response.getVehicle().isEmpty()) {
-			enrichmentService.enrichSearchData(response.getVehicle(),requestInfo);
+
+		if (!response.getVehicle().isEmpty()) {
+			enrichmentService.enrichSearchData(response.getVehicle(), requestInfo);
 		}
 		return response;
 	}

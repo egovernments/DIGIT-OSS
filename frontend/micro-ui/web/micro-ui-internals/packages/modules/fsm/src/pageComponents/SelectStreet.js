@@ -22,6 +22,10 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
     config.inputs[1].disable = window.location.href.includes("edit-application");
     inputs[0].validation = { minLength : 0, maxLength:256};
     inputs[1].validation = { minLength : 0, maxLength:256};
+    if(checkLocation && formData?.tradedetils?.[0]?.structureType?.code === "MOVABLE")
+    {
+      inputs = inputs.filter((ob) => ob?.label !== "TL_LOCALIZATION_BUILDING_NO")
+    }
   } else {
     inputs = [
       {

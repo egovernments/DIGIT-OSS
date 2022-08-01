@@ -30,6 +30,10 @@ public class ChallanQueryBuilder {
             +INNER_JOIN_STRING
             +"eg_challan_address chaladdr ON chaladdr.echallanid = challan.id";
 
+    private static final String COUNT_QUERY = "SELECT COUNT(challan.id) " +
+            "FROM eg_echallan challan"
+            +INNER_JOIN_STRING
+            +"eg_challan_address chaladdr ON chaladdr.echallanid = challan.id";
 
       private final String paginationWrapper = "SELECT * FROM " +
               "(SELECT *, DENSE_RANK() OVER (ORDER BY challan_lastModifiedTime DESC , challan_id) offset_ FROM " +
@@ -49,9 +53,17 @@ public class ChallanQueryBuilder {
 
 
 
-    public String getChallanSearchQuery(SearchCriteria criteria, List<Object> preparedStmtList) {
+    public String getChallanSearchQuery(SearchCriteria criteria, List<Object> preparedStmtList, boolean isCountQuery) {
+        StringBuilder builder;
 
-        StringBuilder builder = new StringBuilder(QUERY);
+        if(isCountQuery)
+        {
+            builder = new StringBuilder(COUNT_QUERY);
+        }
+        else
+        {
+            builder = new StringBuilder(QUERY);
+        }
 
         addBusinessServiceClause(criteria,preparedStmtList,builder);
 
@@ -105,9 +117,16 @@ public class ChallanQueryBuilder {
 
         }
 
-        return addPaginationWrapper(builder.toString(),preparedStmtList,criteria);
-    }
+        if(isCountQuery)
+        {
+            return builder.toString();
+        }
+        else
+        {
+            return addPaginationWrapper(builder.toString(),preparedStmtList,criteria);
+        }
 
+    }
 
     private void addBusinessServiceClause(SearchCriteria criteria,List<Object> preparedStmtList,StringBuilder builder){
     	if(criteria.getBusinessService()!=null) {

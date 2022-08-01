@@ -42,6 +42,9 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   const [params, setParmas] = useState(isUserRegistered ? {} : location?.state?.data);
   const [errorTO, setErrorTO] = useState(null);
   const searchParams = Digit.Hooks.useQueryParams();
+  const [canSubmitName, setCanSubmitName] = useState(false);
+  const [canSubmitOtp, setCanSubmitOtp] = useState(true);
+  const [canSubmitNo, setCanSubmitNo] = useState(true);
 
   useEffect(() => {
     let errorTimeout;
@@ -68,7 +71,13 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
     Digit.UserService.setUser(user);
     setCitizenDetail(user?.info, user?.access_token, stateCode);
     const redirectPath = location.state?.from || DEFAULT_REDIRECT_URL;
-    history.replace(redirectPath);
+    if (!Digit.ULBService.getCitizenCurrentTenant(true)) {
+      history.replace("/digit-ui/citizen/select-location", {
+        redirectBackTo: redirectPath,
+      });
+    } else {
+      history.replace(redirectPath);
+    }
   }, [user]);
 
   const stepItems = useMemo(() =>
@@ -96,6 +105,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
   };
 
   const selectMobileNumber = async (mobileNumber) => {
+    setCanSubmitNo(false);
     setParmas({ ...params, ...mobileNumber });
     const data = {
       ...mobileNumber,
@@ -105,22 +115,27 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
     if (isUserRegistered) {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
       if (!err) {
+        setCanSubmitNo(true);
         history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams), role: location.state?.role });
         return;
       } else {
+        setCanSubmitNo(true);
         if (!(location.state && location.state.role === "FSM_DSO")) {
           history.push(`/digit-ui/citizen/register/name`, { from: getFromLocation(location.state, searchParams), data: data });
         }
       }
       if (location.state?.role) {
+        setCanSubmitNo(true);
         setError(location.state?.role === "FSM_DSO" ? t("ES_ERROR_DSO_LOGIN") : "User not registered.");
       }
     } else {
       const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
       if (!err) {
+        setCanSubmitNo(true);
         history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
         return;
       }
+      setCanSubmitNo(true);
     }
   };
 
@@ -132,15 +147,20 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
       ...name,
     };
     setParmas({ ...params, ...name });
+    setCanSubmitName(true);
     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
     if (res) {
+      setCanSubmitName(false);
       history.replace(`${path}/otp`, { from: getFromLocation(location.state, searchParams) });
+    } else {
+      setCanSubmitName(false);
     }
   };
 
   const selectOtp = async () => {
     try {
       setIsOtpValid(true);
+      setCanSubmitOtp(false);
       const { mobileNumber, otp, name } = params;
       if (isUserRegistered) {
         const requestData = {
@@ -149,7 +169,6 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
           tenantId: stateCode,
           userType: getUserType(),
         };
-
         const { ResponseInfo, UserRequest: info, ...tokens } = await Digit.UserService.authenticate(requestData);
 
         if (location.state?.role) {
@@ -182,6 +201,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
         setUser({ info, ...tokens });
       }
     } catch (err) {
+      setCanSubmitOtp(true);
       setIsOtpValid(false);
     }
   };
@@ -220,6 +240,7 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
               config={stepItems[0]}
               mobileNumber={params.mobileNumber || ""}
               onMobileChange={handleMobileChange}
+              canSubmit={canSubmitNo}
               showRegisterLink={isUserRegistered && !location.state?.role}
               t={t}
             />
@@ -232,11 +253,12 @@ const Login = ({ stateCode, isUserRegistered = true }) => {
               onSelect={selectOtp}
               otp={params.otp}
               error={isOtpValid}
+              canSubmit={canSubmitOtp}
               t={t}
             />
           </Route>
           <Route path={`${path}/name`}>
-            <SelectName config={stepItems[2]} onSelect={selectName} t={t} />
+            <SelectName config={stepItems[2]} onSelect={selectName} t={t} isDisabled={canSubmitName} />
           </Route>
           {error && <Toast error={true} label={error} onClose={() => setError(null)} />}
         </AppContainer>
