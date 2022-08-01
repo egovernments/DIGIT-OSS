@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.reflections.Reflections.log;
 
@@ -35,11 +36,11 @@ public class LocalizationUtil {
         if(locale == null)
             locale = defaultLocale;
         String uri = getUri(locale);
-        String response = restTemplate.postForObject(uri, requestInfo, String.class);
-        Object object = JsonPath.read(response,
+        Object responseobj = restTemplate.postForObject(uri, requestInfo, Map.class);
+        Object object = JsonPath.read(responseobj,
                 "$.messages[?(@.code==\"" + code + "\")].message");
-        List<String> messaages = (ArrayList<String>) object;
-        String message = messaages.get(0);
+        List<String> messages = (ArrayList<String>) object;
+        String message = messages.get(0);
         return message;
     }
 
