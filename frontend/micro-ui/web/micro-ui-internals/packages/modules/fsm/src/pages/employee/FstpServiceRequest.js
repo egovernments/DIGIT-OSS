@@ -137,7 +137,7 @@ const FstpServiceRequest = () => {
   }
 
   if (vehicleLog?.length === 0 && tripDetails?.length === 0 && isSuccess && !isSearchLoading && tripDetail?.length === 0 && !isVehiclesLoading) {
-    history.push("/digit-ui/employee/fsm/fstp/new-vehicle-entry");
+    history.push(`/digit-ui/employee/fsm/fstp/new-vehicle-entry/${vehicleNumber}`);
   }
 
   let citizenInfo = [];
