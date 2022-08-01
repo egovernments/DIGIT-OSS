@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { getActionButton, getBillNumber } from "../../utils";
 import { Link } from "react-router-dom";
 import SearchFields from "./SearchFields";
-import MobileCancelBill from "../CancelBill/MobileCancelBill";
+import MobileSearchApplication from "./MobileSearchApplication";
 
 const SearchApplication = ({showTable,showLoader,isLoading, tenantId, t, onSubmit, data, count,success }) => {
   const initialValues = Digit.SessionStorage.get("BILLS_SEARCH_APPLICATION_DETAIL") || {
@@ -89,7 +89,7 @@ const SearchApplication = ({showTable,showLoader,isLoading, tenantId, t, onSubmi
   const isMobile = window.Digit.Utils.browser.isMobile();
 
   if (isMobile) {
-    return <MobileCancelBill {...{showTable,showLoader,isLoading, Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit }} />;
+    return <MobileSearchApplication {...{showTable,showLoader,isLoading, Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit }} />;
   }
   //need to get from workflow
   const GetCell = (value) => <span className="cell-text">{value}</span>;
