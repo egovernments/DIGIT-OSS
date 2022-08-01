@@ -10,7 +10,7 @@ ENV HOME=/tmp
 # copy the project files
 COPY ${WORK_DIR} .
 RUN apk --update add git
-RUN npm i && npm run build
+# RUN npm i && npm run build
 
 # Create runtime image
 FROM nginx:mainline-alpine 
