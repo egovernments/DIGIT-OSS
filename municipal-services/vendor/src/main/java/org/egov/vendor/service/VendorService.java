@@ -210,6 +210,10 @@ public class VendorService {
 			vendorRequest.getVendor().setDrivers(vendorDriverToBeInserted);
 			callInsert=true;
 		}
+		if(!CollectionUtils.isEmpty(vendorDriverToBeUpdated)) {
+			vendorRequest.getVendor().setDrivers(vendorDriverToBeUpdated);
+			callInsert=true;
+		}
 		if(callInsert) {
 			vendorRepository.updateVendorVehicleDriver(vendorRequest);
 		}
