@@ -451,7 +451,7 @@ const WSApplicationDetails = () => {
                     <StatusTable>
                       {<WSDocument value={data?.SewerageConnections?.[0]?.documents} Code={doc?.documentType} index={index} />}
                       {data?.SewerageConnections?.[0]?.documents.length != index + 1 ? (
-                        <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
+                        <hr style={{ color: "white", backgroundColor: "white", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
                       ) : null}
                     </StatusTable>
                   </div>

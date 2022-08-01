@@ -119,7 +119,7 @@ import {
           <StatusTable>
           {
            <WSDocument value={value} Code={doc?.documentType} index={index} /> }
-          {documents?.documents.length != index+ 1 ? <hr style={{color:"#cccccc",backgroundColor:"#cccccc",height:"2px",marginTop:"20px",marginBottom:"20px"}}/> : null}
+          {documents?.documents.length != index+ 1 ? <hr style={{color:"white",backgroundColor:"white",height:"2px",marginTop:"20px",marginBottom:"20px"}}/> : null}
           </StatusTable>
           </div>}
           </div>
