@@ -10,7 +10,7 @@ ENV HOME=/tmp
 # copy the project files
 COPY ${WORK_DIR} .
 RUN apk --update add git
-# RUN npm i && npm run build
+RUN npm i && npm run build
 
 # Create runtime image
 FROM nginx:mainline-alpine 
@@ -18,5 +18,5 @@ ENV WEB_DIR=/var/web/dashboard
 
 RUN mkdir -p ${WEB_DIR}
 
-COPY --from=build /app/build ${WEB_DIR}/
-COPY --from=build /app/docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /build ${WEB_DIR}/
+COPY --from=build /docker/nginx.conf /etc/nginx/conf.d/default.conf
