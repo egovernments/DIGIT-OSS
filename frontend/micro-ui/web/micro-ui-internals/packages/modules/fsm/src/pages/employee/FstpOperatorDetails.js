@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, useLocation } from "react-router-dom";
 import TimePicker from "react-time-picker";
 import { Dropdown, Header, MultiUploadWrapper, TextArea } from "@egovernments/digit-ui-react-components";
 import {
@@ -74,6 +74,7 @@ const FstpOperatorDetails = () => {
   const [newLocality, setNewLocality] = useState(null);
   const [newDsoName, setNewDsoName] = useState(null);
   const [comments, setComments] = useState();
+  const location = useLocation();
 
   const onChangeVehicleNumber = (value) => {
     setNewVehicleNumber(value);
@@ -100,7 +101,7 @@ const FstpOperatorDetails = () => {
 
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: tenantId,
-    id: applicationNos,
+    id: location.pathname.includes("fstp-operator-details") ? applicationNos : null,
     moduleCode: "FSM_VEHICLE_TRIP",
     role: "FSM_EMP_FSTPO"
   });
@@ -201,13 +202,6 @@ const FstpOperatorDetails = () => {
   };
 
   const handleCreate = () => {
-    if (newVehicleNumber === null || newVehicleNumber?.trim()?.length === 0) {
-      setShowToast({ key: "error", action: `ES_FSTP_INVALID_VEHICLE_NUMBER` });
-      setTimeout(() => {
-        closeToast();
-      }, 2000);
-      return;
-    }
     if (newDsoName === null || newDsoName?.trim()?.length === 0) {
       setShowToast({ key: "error", action: `ES_FSTP_INVALID_DSO_NAME` });
       setTimeout(() => {
@@ -260,7 +254,7 @@ const FstpOperatorDetails = () => {
     temp.tripStartTime = tripStartTimestamp;
     temp.tripEndTime = timeStamp;
     temp.volumeCarried = wasteCollected;
-    temp.additionalDetails = { vehicleNumber: newVehicleNumber, dsoName: newDsoName, locality: newLocality, fileStoreId: uploadedFile, comments: comments };
+    temp.additionalDetails = { vehicleNumber: applicationNos, dsoName: newDsoName, locality: newLocality, fileStoreId: uploadedFile, comments: comments };
     temp.businessService = "FSM_VEHICLE_TRIP";
     temp.tripDetails = [{
       tenantId: tenantId,
@@ -342,11 +336,7 @@ const FstpOperatorDetails = () => {
   const vehicleData = [
     {
       title: `${t("ES_INBOX_VEHICLE_NO")} *`,
-      value: vehicle?.vehicle?.registrationNumber || <TextInput
-        //style={{ width: "40%" }}
-        onChange={(e) => onChangeVehicleNumber(e.target.value)}
-        value={newVehicleNumber}
-      />,
+      value: vehicle?.vehicle?.registrationNumber || applicationNos,
     },
     {
       title: `${t("ES_INBOX_DSO_NAME")} *`,

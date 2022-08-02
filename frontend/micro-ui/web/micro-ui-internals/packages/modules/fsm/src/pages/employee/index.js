@@ -192,7 +192,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute exact path={`${path}/fstp-add-vehicle`} component={() => <FstpAddVehicle />} />
           <PrivateRoute exact path={`${path}/fstp-fsm-request/:id`} component={() => <FstpServiceRequest />} />
           <PrivateRoute exact path={`${path}/home`} component={() => <ULBHomeCard module={module} />} />
-          <PrivateRoute path={`${path}/fstp/new-vehicle-entry`} component={FstpOperatorDetails} />
+          <PrivateRoute path={`${path}/fstp/new-vehicle-entry/:id`} component={FstpOperatorDetails} />
         </div>
       </React.Fragment>
     </Switch>
