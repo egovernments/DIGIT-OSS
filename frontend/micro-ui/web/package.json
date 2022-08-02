@@ -21,6 +21,7 @@
     "@egovernments/digit-ui-module-noc":"1.5.4",
     "@egovernments/digit-ui-module-pgr":"1.5.0",
     "@egovernments/digit-ui-module-pt":"1.5.0",
+    "@egovernments/digit-ui-module-br":"1.5.4",
     "@egovernments/digit-ui-module-receipts":"1.5.4",
     "@egovernments/digit-ui-module-tl":"1.5.0",
     "@egovernments/digit-ui-module-ws":"1.5.0",
