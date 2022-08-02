@@ -10,12 +10,10 @@ const BillDetails = ({ paymentRules, businessService }) => {
   const { t } = useTranslation();
   const history = useHistory();
   const { state, ...location } = useLocation();
-  let { consumerCode } = useParams();
-  const { workflow: wrkflow, tenantId: _tenantId, ConsumerName } = Digit.Hooks.useQueryParams();
+  const { consumerCode } = useParams();
+  const { workflow: wrkflow, tenantId: _tenantId } = Digit.Hooks.useQueryParams();
   const [bill, setBill] = useState(state?.bill);
   const tenantId = state?.tenantId || _tenantId || Digit.UserService.getUser().info?.tenantId;
-  if(wrkflow === "WNS" && consumerCode.includes("?"))
-  consumerCode = consumerCode.substring(0,consumerCode.indexOf("?"))
   const { data, isLoading } = state?.bill
     ? { isLoading: false }
     : Digit.Hooks.useFetchPayment({
@@ -37,17 +35,17 @@ const BillDetails = ({ paymentRules, businessService }) => {
     const { fromPeriod, toPeriod } = billDetails;
     if (fromPeriod && toPeriod) {
       let from, to;
-      if (wrkflow === "mcollect" || wrkflow === "WNS") {
+      if (wrkflow === "mcollect") {
         from =
           new Date(fromPeriod).getDate().toString() +
           " " +
-          Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth()]?.toString() +
+          Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth() + 1].toString() +
           " " +
           new Date(fromPeriod).getFullYear().toString();
         to =
           new Date(toPeriod).getDate() +
           " " +
-          Digit.Utils.date.monthNames[new Date(toPeriod).getMonth()] +
+          Digit.Utils.date.monthNames[new Date(toPeriod).getMonth() + 1] +
           " " +
           new Date(toPeriod).getFullYear();
         return from + " - " + to;
@@ -55,6 +53,20 @@ const BillDetails = ({ paymentRules, businessService }) => {
       from = new Date(billDetails.fromPeriod).getFullYear().toString();
       to = new Date(billDetails.toPeriod).getFullYear().toString();
       if (from === to) {
+        if(window.location.href.includes("BPA"))
+        {
+          if(new Date(data?.Bill?.[0]?.billDate).getMonth()+1 < 4)
+          {
+            let newfrom =  (parseInt(from)-1).toString();
+            return "FY " + newfrom + "-" + to;
+          }
+          else
+          {
+            let newTo = (parseInt(to)+1).toString();
+            return "FY " + from + "-" + newTo;
+          }
+        }
+        else
         return "FY " + from;
       }
       return "FY " + from + "-" + to;
@@ -101,11 +113,9 @@ const BillDetails = ({ paymentRules, businessService }) => {
         tenantId: billDetails.tenantId,
       });
     } else if (wrkflow === "WNS") {
-      history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}?workflow=WNS&ConsumerName=${ConsumerName}`, {
+      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS`, {
         paymentAmount,
         tenantId: billDetails.tenantId,
-        name: bill.payerName,
-        mobileNumber: bill.mobileNumber,
       });
     } else if (businessService === "PT") {
       history.push(`/digit-ui/citizen/payment/billDetails/${businessService}/${consumerCode}/${paymentAmount}`, {
@@ -143,8 +153,8 @@ const BillDetails = ({ paymentRules, businessService }) => {
             note={wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode}
           />
           {businessService !== "PT.MUTATION" && <KeyNote keyValue={t("CS_PAYMENT_BILLING_PERIOD")} note={getBillingPeriod()} />}
-          {businessService?.includes("PT") || wrkflow === "WNS" && billDetails?.currentBillNo && <KeyNote keyValue={t("CS_BILL_NO")} note={billDetails?.currentBillNo} />}
-          {businessService?.includes("PT") || wrkflow === "WNS" && billDetails?.currentExpiryDate && (
+          {businessService?.includes("PT") && billDetails?.currentBillNo && <KeyNote keyValue={t("CS_BILL_NO")} note={billDetails?.currentBillNo} />}
+          {businessService?.includes("PT") && billDetails?.currentExpiryDate && (
             <KeyNote keyValue={t("CS_BILL_DUEDATE")} note={new Date(billDetails?.currentExpiryDate).toLocaleDateString()} />
           )}
           <BillSumary billAccountDetails={getBillBreakDown()} total={getTotal()} businessService={businessService} arrears={Arrears} />

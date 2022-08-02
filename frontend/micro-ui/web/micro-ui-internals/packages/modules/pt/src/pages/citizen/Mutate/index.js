@@ -3,7 +3,6 @@ import { Redirect, Route, Switch, useHistory, useLocation, useRouteMatch } from 
 import { newConfigMutate } from "../../../config/Mutate/config";
 
 import { useTranslation } from "react-i18next";
-import CheckPage from "./CheckPage";
 
 const MutationCitizen = (props) => {
   const { t } = useTranslation();
@@ -82,7 +81,7 @@ const MutationCitizen = (props) => {
     });
 
     const newDocs = [...ownerDocs, ...otherDocs];
-    originalProperty.owners = originalProperty?.owners.filter((owner) => owner.status == "ACTIVE");
+    originalProperty.owners=originalProperty?.owners.filter(owner=>owner.status=="ACTIVE");
     const data = {
       Property: {
         ...params.searchResult.property,
@@ -143,16 +142,12 @@ const MutationCitizen = (props) => {
   };
 
   useEffect(() => {
-    if (formData) history.push(`${match.path}/check`);
+    if (formData) history.push(`${match.path}/acknowledgement`);
   }, [formData]);
-
-  const mutateProperty = () => {
-    history.push(`${match.path}/acknowledgement`);
-  };
 
   const handleSkip = () => {};
   config.indexRoute = "search-property";
-  const PTAcknowledgement = Digit?.ComponentRegistryService?.getComponent("PTAcknowledgement");
+  const PTAcknowledgement = Digit?.ComponentRegistryService?.getComponent('PTAcknowledgement');
   return (
     <React.Fragment>
       <Switch>
@@ -169,9 +164,6 @@ const MutationCitizen = (props) => {
             </Route>
           );
         })}
-        <Route path={`${match.path}/check`}>
-          <CheckPage onSubmit={mutateProperty} value={params} />
-        </Route>
         <Route path={`${match.path}/acknowledgement`}>
           <PTAcknowledgement
             data={formData}

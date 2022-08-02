@@ -4,7 +4,6 @@ import {format, formatDistanceToNow} from "date-fns";
 import { useTranslation } from 'react-i18next';
 
 const SurveyListCard = ({header, about, activeTime, postedAt, responseStatus, hasResponded, onCardClick }) => {
-    
     const {t} = useTranslation()
     return (
         <div className="WhatsNewCard" onClick={onCardClick}>
@@ -15,8 +14,7 @@ const SurveyListCard = ({header, about, activeTime, postedAt, responseStatus, ha
             </div>
             <div className="surveyListstatus">
                 <p>{formatDistanceToNow(new Date(postedAt),{addSuffix:true})}</p>
-                {/* <span className={hasResponded ? 'surveyLisResponded' : 'surveyLisNotResponded'}>{t(responseStatus)}</span> */}
-                <span className={responseStatus ==="CS_SURVEY_RESPONDED"?'surveyLisResponded':'surveyLisNotResponded'}>{t(responseStatus)}</span>
+                <span className={hasResponded ? 'surveyLisResponded' : 'surveyLisNotResponded'}>{t(responseStatus)}</span>
             </div>
         </div>
     )

@@ -52,7 +52,6 @@ const CustomHorizontalBarChart = ({
     tenantId,
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
-    moduleLevel: value?.moduleLevel
   });
   const constructChartData = (data,denomination) => {
     let result = {};
@@ -77,9 +76,9 @@ const CustomHorizontalBarChart = ({
 
   const tooltipFormatter = (value, name) => {
     if (id === "fsmMonthlyWasteCal") {
-      return [`${Digit.Utils.dss.formatter(Math.round((value + Number.EPSILON) * 100) / 100, 'number', value?.denomination, true, t)} ${t("DSS_KL")}`, name];
+      return [`${Math.round((value + Number.EPSILON) * 100) / 100} ${t("DSS_KL")}`, name];
     }
-    return [Digit.Utils.dss.formatter(Math.round((value + Number.EPSILON) * 100) / 100  , 'number', value?.denomination, true, t), name];
+    return [Math.round((value + Number.EPSILON) * 100) / 100, name];
   };
 
   useEffect(()=>{
@@ -95,8 +94,6 @@ const CustomHorizontalBarChart = ({
     if (typeof value === "string") {
       return value.replace("-", ", ");
     }
-    else if(typeof value === "number")
-      return Digit.Utils.dss.formatter(value, 'number', value?.denomination, true, t);
     return value;
   };
 
@@ -155,7 +152,7 @@ const CustomHorizontalBarChart = ({
                 fill: "#505A5F",
               }}
               tickCount={10}
-              tickFormatter={tickFormatter}
+              tickFormatter={(value) => formatXAxis(value)}
               unit={id === "fsmCapacityUtilization" ? "%" : ""}
               width={layout === "vertical" ? 120 : 60}
             />

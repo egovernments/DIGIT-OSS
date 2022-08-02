@@ -29,15 +29,14 @@ const getInitialRange = () => {
   const interval = Digit.Utils.dss.getDuration(startDate, endDate);
   const denomination = data?.denomination || "Lac";
   const tenantId = data?.filters?.tenantId || [];
-  const moduleLevel = data?.moduleLevel || "";
-  return { startDate, endDate, title, interval, denomination, tenantId, moduleLevel };
+  return { startDate, endDate, title, interval, denomination, tenantId };
 };
 
 const DashBoard = ({ stateCode }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
   const [filters, setFilters] = useState(() => {
-    const { startDate, endDate, title, interval, denomination, tenantId, moduleLevel } = getInitialRange();
+    const { startDate, endDate, title, interval, denomination, tenantId } = getInitialRange();
     return {
       denomination,
       range: { startDate, endDate, title, interval },
@@ -50,7 +49,6 @@ const DashBoard = ({ stateCode }) => {
       filters: {
         tenantId,
       },
-      moduleLevel: moduleLevel
     };
   });
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -60,25 +58,7 @@ const DashBoard = ({ stateCode }) => {
   const language = Digit.StoreData.getCurrentLanguage();
 
   const { isLoading: localizationLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
-  const { data: screenConfig, isLoading: isServicesLoading } = Digit.Hooks.dss.useMDMS(stateCode, "dss-dashboard", "DssDashboard", {
-    select: (data) => {
-      let screenConfig = data?.["dss-dashboard"]["dashboard-config"][0].MODULE_LEVEL;
-      let reduced_array = [];
-      for(let i = 0 ; i < screenConfig.length ; i++){
-        if(screenConfig[i].dashboard !== null ){
-          reduced_array.push(screenConfig[i]);
-        }
-      }
-
-      const serviceJS = reduced_array.map((obj, idx) => {
-        return {
-          code: obj[Object.keys(obj)[0]].filterKey,
-          name: Digit.Utils.locale.getTransformedLocale(`DSS_${obj[Object.keys(obj)[0]].services_name}`)
-        }
-      }) ;
-      return serviceJS
-    }
-  });
+  const { data: screenConfig } = Digit.Hooks.dss.useMDMS(stateCode, "dss-dashboard", "DssDashboard");
   const { data: nationalInfo, isLoadingNAT } = Digit.Hooks.dss.useMDMS(stateCode, "tenant", ["nationalInfo"], {
     select: (data) => {
       let nationalInfo = data?.tenant?.nationalInfo || [];
@@ -100,7 +80,6 @@ const DashBoard = ({ stateCode }) => {
     },
     enabled: isNational,
   });
-
   const { data: response, isLoading } = Digit.Hooks.dss.useDashboardConfig(moduleCode);
   const { data: ulbTenants, isLoading: isUlbLoading } = Digit.Hooks.useModuleTenants("DSS");
   const { isLoading: isMdmsLoading, data: mdmsData } = Digit.Hooks.useCommonMDMS(stateCode, "FSM", "FSTPPlantInfo");
@@ -119,9 +98,8 @@ const DashBoard = ({ stateCode }) => {
       setValue: handleFilters,
       ulbTenants: isNational ? nationalInfo : ulbTenants,
       fstpMdmsData: mdmsData,
-      screenConfig: screenConfig,
     }),
-    [filters, isUlbLoading, isMdmsLoading, isServicesLoading]
+    [filters, isUlbLoading, isMdmsLoading]
   );
 
   const mobileView = window.Digit.Utils.browser.isMobile();
@@ -149,13 +127,6 @@ const DashBoard = ({ stateCode }) => {
     });
   };
 
-  const removeService = () => {
-    handleFilters({
-      ...filters,
-      moduleLevel: "" ,
-    });
-  }
-
   const removeTenant = (id) => {
     handleFilters({
       ...filters,
@@ -173,9 +144,6 @@ const DashBoard = ({ stateCode }) => {
   const clearAllSt = () => {
     handleFilters({ ...filters, filters: { ...filters?.filters, state: [], ulb: [] } });
   };
-  const clearAllServices = () => {
-    handleFilters({ ...filters, moduleLevel: "" });
-  }
 
   const dashboardConfig = response?.responseData;
   let tabArrayObj =
@@ -259,9 +227,10 @@ const DashBoard = ({ stateCode }) => {
       },
     ];
 
-  if (isLoading || isUlbLoading || localizationLoading || isMdmsLoading || isLoadingNAT || isServicesLoading) {
+  if (isLoading || isUlbLoading || localizationLoading || isMdmsLoading || isLoadingNAT) {
     return <Loader />;
   }
+
   return (
     <FilterContext.Provider value={provided}>
       <div ref={fullPageRef} id="divToPrint">
@@ -280,7 +249,7 @@ const DashBoard = ({ stateCode }) => {
                   // setShowOptions(e)}
                   // }
                   onHeadClick={(e) => {
-                    setShowOptions(!showOptions);
+                    setShowOptions(e !== undefined ? e : !showOptions);
                   }}
                   displayOptions={showOptions}
                   options={shareOptions}
@@ -304,13 +273,10 @@ const DashBoard = ({ stateCode }) => {
         ) : (
           <Filters
             t={t}
-            showModuleFilter={!isNational && dashboardConfig?.[0]?.name.includes("OVERVIEW") ? true : false}
-            services={screenConfig}
             ulbTenants={isNational ? nationalInfo : ulbTenants}
             isOpen={isFilterModalOpen}
             closeFilters={() => setIsFilterModalOpen(false)}
             isNational={isNational}
-            showDateRange= {dashboardConfig?.[0]?.name.includes("DSS_FINANCE_DASHBOARD") ? false : true}
           />
         )}
         {filters?.filters?.tenantId?.length > 0 && (
@@ -420,16 +386,6 @@ const DashBoard = ({ stateCode }) => {
             )}
             <p className="clearText cursorPointer" onClick={clearAllTn}>
               {t(`DSS_FILTER_CLEAR_TN`)}
-            </p>
-          </div>
-        )}
-        {filters?.moduleLevel?.length > 0 && (
-          <div className="tag-container">
-            {!showFilters &&
-              filters?.moduleLevel &&
-              (<RemoveableTag key={filters?.moduleLevel} text={`${t(`DSS_HEADER_SERVICE`)}: ${t(filters?.moduleLevel)}`} onClick={() => removeService()} />)}
-            <p className="clearText cursorPointer" onClick={clearAllServices}>
-              {t(`DSS_FILTER_CLEAR`)}
             </p>
           </div>
         )}

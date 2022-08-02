@@ -6,7 +6,7 @@ import CitizenSurveyQuestion from "./CitizenSurveyQuestion";
 import { useTranslation } from "react-i18next";
 
 
-const CitizenSurveyForm = ({ surveyData, onFormSubmit,submitDisabled,formDisabled,formDefaultValues,isLoading }) => {
+const CitizenSurveyForm = ({ surveyData, onFormSubmit,submitDisabled,formDisabled,formDefaultValues }) => {
   //need to disable this form and fill with default values if formDisabled is true
   const {
     register: registerRef,
@@ -22,9 +22,6 @@ const CitizenSurveyForm = ({ surveyData, onFormSubmit,submitDisabled,formDisable
   });
 
   const {t} = useTranslation()
-  if(isLoading){
-    return <Loader/>
-  }
   return (
     <div className="citizenSurvey-wrapper">
       <Header>{surveyData?.title?.toUpperCase()}</Header>

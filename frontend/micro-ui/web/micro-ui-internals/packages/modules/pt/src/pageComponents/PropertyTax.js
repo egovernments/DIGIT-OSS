@@ -6,7 +6,6 @@ import { cardBodyStyle, stringReplaceAll } from "../utils";
 const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
-  sessionStorage.removeItem("docReqScreenByBack");
 
   const docType = config?.isMutation ? ["MutationDocuments"] : "Documents";
 
@@ -50,10 +49,10 @@ const PropertyTax = ({ t, config, onSelect, userType, formData }) => {
                   docs.map(({ code, dropdownData }, index) => (
                     <div key={index}>
                       <CardSubHeader>
-                        {index + 1}. {t("PROPERTYTAX_" + stringReplaceAll(code, ".", "_") + "_HEADING")}
+                        {index + 1}. {t("Birth Registration_" + stringReplaceAll(code, ".", "_") + "_HEADING")}
                       </CardSubHeader>
                       {dropdownData.map((dropdownData) => (
-                        <CardText className={"primaryColor"}>{t("PROPERTYTAX_" + stringReplaceAll(dropdownData?.code, ".", "_") + "_LABEL")}</CardText>
+                        <CardText className={"primaryColor"}>{t("Birth Registration_" + stringReplaceAll(dropdownData?.code, ".", "_") + "_LABEL")}</CardText>
                       ))}
                     </div>
                   ))

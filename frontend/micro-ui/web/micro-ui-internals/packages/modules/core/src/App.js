@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { Redirect, Route, Switch, useHistory, useLocation } from "react-router-dom";
-import EmployeeApp from "./pages/employee";
-import CitizenApp from "./pages/citizen";
+import EmployeeApp from "./pages/employee"
+import CitizenApp from "./pages/citizen"
 
-export const DigitApp = ({ stateCode, modules, appTenants, logoUrl, initData }) => {
+export const DigitApp = ({ stateCode, modules, appTenants, logoUrl }) => {
   const history = useHistory();
   const { pathname } = useLocation();
+
   const innerWidth = window.innerWidth;
   const cityDetails = Digit.ULBService.getCurrentUlb();
   const userDetails = Digit.UserService.getUser();
@@ -27,13 +28,6 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl, initData }) 
     }
     if (!pathname?.includes("dss")) {
       Digit.SessionStorage.del("DSS_FILTERS");
-    }
-    if (pathname?.toString() === "/digit-ui/employee") {
-      Digit.SessionStorage.del("SEARCH_APPLICATION_DETAIL");
-      Digit.SessionStorage.del("WS_EDIT_APPLICATION_DETAILS");
-    }
-    if (pathname?.toString() === "/digit-ui/citizen" || pathname?.toString() === "/digit-ui/employee") {
-      Digit.SessionStorage.del("WS_DISCONNECTION");
     }
   }, [pathname]);
 
@@ -60,13 +54,12 @@ export const DigitApp = ({ stateCode, modules, appTenants, logoUrl, initData }) 
     modules,
     appTenants,
     sourceUrl,
-    pathname,
-    initData,
-  };
+    pathname
+  }
   return (
     <Switch>
       <Route path="/digit-ui/employee">
-        <EmployeeApp {...commonProps} />
+        <EmployeeApp {...commonProps}  />
       </Route>
       <Route path="/digit-ui/citizen">
         <CitizenApp {...commonProps} />

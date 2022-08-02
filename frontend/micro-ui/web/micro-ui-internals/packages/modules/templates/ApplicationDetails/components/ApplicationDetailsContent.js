@@ -1,15 +1,7 @@
 import {
   BreakLine,
-  Card,
-  CardSectionHeader,
-  CardSubHeader,
-  CheckPoint,
-  ConnectingCheckPoints,
-  Loader,
-  Row,
-  StatusTable,
+  Card, CardSectionHeader, CardSubHeader, CheckPoint, ConnectingCheckPoints, Loader, Row, StatusTable
 } from "@egovernments/digit-ui-react-components";
-import { values } from "lodash";
 import React, { Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -26,12 +18,7 @@ import SubOccupancyTable from "./SubOccupancyTable";
 import TLCaption from "./TLCaption";
 import TLTradeAccessories from "./TLTradeAccessories";
 import TLTradeUnits from "./TLTradeUnits";
-import WSAdditonalDetails from "./WSAdditonalDetails";
-import WSFeeEstimation from "./WSFeeEstimation";
-import WSInfoLabel from "../../../ws/src/pageComponents/WSInfoLabel";
 import DocumentsPreview from "./DocumentsPreview";
-import InfoDetails from "./InfoDetails";
-import ViewBreakup from"./ViewBreakup";
 
 function ApplicationDetailsContent({
   applicationDetails,
@@ -40,56 +27,43 @@ function ApplicationDetailsContent({
   applicationData,
   businessService,
   timelineStatusPrefix,
-  showTimeLine = true,
+  showTimeLine=true,
   statusAttribute = "status",
-  paymentsList,
-  oldValue,
-  isInfoLabel = false
+  paymentsList
 }) {
   const { t } = useTranslation();
 
-  function OpenImage(imageSource, index, thumbnailsToShow) {
-    window.open(thumbnailsToShow?.fullImage?.[0], "_blank");
+  function OpenImage(imageSource, index,thumbnailsToShow){
+    window.open(thumbnailsToShow?.fullImage?.[0],"_blank");
   }
 
-  const convertEpochToDateDMY = (dateEpoch) => {
-    if (dateEpoch == null || dateEpoch == undefined || dateEpoch == "") {
-      return "NA";
-    }
-    const dateFromApi = new Date(dateEpoch);
-    let month = dateFromApi.getMonth() + 1;
-    let day = dateFromApi.getDate();
-    let year = dateFromApi.getFullYear();
-    month = (month > 9 ? "" : "0") + month;
-    day = (day > 9 ? "" : "0") + day;
-    return `${day}/${month}/${year}`;
-  };
   const getTimelineCaptions = (checkpoint) => {
-    if (checkpoint.state === "OPEN" || (checkpoint.status === "INITIATED" && !window.location.href.includes("/obps/"))) {
+    if (checkpoint.state === "OPEN" || checkpoint.status === "INITIATED" && !(window.location.href.includes("/obps/"))) {
       const caption = {
-        date: convertEpochToDateDMY(applicationData?.auditDetails?.createdTime),
+        date: Digit.DateUtils.ConvertTimestampToDate(applicationData?.auditDetails?.createdTime),
         source: applicationData?.channel || "",
       };
       return <TLCaption data={caption} />;
-    } else if (window.location.href.includes("/obps/") || window.location.href.includes("/noc/") || window.location.href.includes("/ws/")) {
-      //From BE side assigneeMobileNumber is masked/unmasked with connectionHoldersMobileNumber and not assigneeMobileNumber
-      const privacy = { uuid: checkpoint?.assignes?.[0]?.uuid, fieldName: ["connectionHoldersMobileNumber"], model: "WaterConnectionOwner" }
+    } 
+    else if(window.location.href.includes("/obps/") || window.location.href.includes("/noc/"))
+    {
       const caption = {
         date: checkpoint?.auditDetails?.lastModified,
         name: checkpoint?.assignes?.[0]?.name,
-        mobileNumber:applicationData?.processInstance?.assignes?.[0]?.uuid===checkpoint?.assignes?.[0]?.uuid && applicationData?.processInstance?.assignes?.[0]?.mobileNumber ? applicationData?.processInstance?.assignes?.[0]?.mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
+        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
-        wfComment: checkpoint.wfComment,
-        thumbnailsToShow: checkpoint?.thumbnailsToShow,
+        wfComment : checkpoint.wfComment,
+        thumbnailsToShow : checkpoint?.thumbnailsToShow,
       };
-      return <TLCaption data={caption} OpenImage={OpenImage} privacy={privacy} />;
-    } else {
+      return <TLCaption data={caption} OpenImage={OpenImage} />;
+    }
+    else {
       const caption = {
         date: Digit.DateUtils?.ConvertTimestampToDate(applicationData?.auditDetails?.lastModifiedTime),
         // name: checkpoint?.assigner?.name,
         name: checkpoint?.assignes?.[0]?.name,
         // mobileNumber: checkpoint?.assigner?.mobileNumber,
-        wfComment: checkpoint?.wfComment,
+        wfComment : checkpoint?.wfComment,
         mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
       };
       return <TLCaption data={caption} />;
@@ -108,7 +82,6 @@ function ApplicationDetailsContent({
     window.location.href.includes("employee/tl") || window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc");
   const isNocLocation = window.location.href.includes("employee/noc");
   const isBPALocation = window.location.href.includes("employee/obps");
-  const isWS = window.location.href.includes("employee/ws");
 
   const getRowStyles = () => {
     if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
@@ -131,11 +104,7 @@ function ApplicationDetailsContent({
   };
 
   const getMainDivStyles = () => {
-    if (
-      window.location.href.includes("employee/obps") ||
-      window.location.href.includes("employee/noc") ||
-      window.location.href.includes("employee/ws")
-    ) {
+    if (window.location.href.includes("employee/obps") || window.location.href.includes("employee/noc")) {
       return { lineHeight: "19px", maxWidth: "950px", minWidth: "280px" };
     } else if (checkLocation) {
       return { lineHeight: "19px", maxWidth: "600px", minWidth: "280px" };
@@ -146,28 +115,12 @@ function ApplicationDetailsContent({
 
   const getTextValue = (value) => {
     if (value?.skip) return value.value;
-    else if (value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
+    else if(value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
     else return value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("N/A");
-  };
-
-  const getClickInfoDetails = () => {
-    if (window.location.href.includes("disconnection") || window.location.href.includes("application")) {
-      return "WS_DISCONNECTION_CLICK_ON_INFO_LABEL"
-    } else {
-      return "WS_CLICK_ON_INFO_LABEL"
-    }
   }
 
-  const getClickInfoDetails1 = () => {
-    if (window.location.href.includes("disconnection") || window.location.href.includes("application")) {
-        return "WS_DISCONNECTION_CLICK_ON_INFO1_LABEL"
-    } else {
-        return ""
-    }
-  }
   return (
     <Card style={{ position: "relative" }} className={"employeeCard-override"}>
-      {isInfoLabel ? <InfoDetails t={t} userType={false} infoBannerLabel={"CS_FILE_APPLICATION_INFO_LABEL"} infoClickLable={"WS_CLICK_ON_LABEL"} infoClickInfoLabel={getClickInfoDetails()} infoClickInfoLabel1={getClickInfoDetails1()}/> : null}
       {applicationDetails?.applicationDetails?.map((detail, index) => (
         <React.Fragment key={index}>
           <div style={getMainDivStyles()}>
@@ -188,64 +141,20 @@ function ApplicationDetailsContent({
               </React.Fragment>
             )}
             {/* TODO, Later will move to classes */}
-            {/* Here Render the table for adjustment amount details detail.isTable is true for that table*/}
-            {detail?.isTable && (
-              <table style={{ tableLayout: "fixed", width: "100%", borderCollapse: "collapse" }}>
-                <tr style={{ textAlign: "left" }}>
-                  {detail?.headers.map((header) => (
-                    <th style={{ padding: "10px" }}>{t(header)}</th>
-                  ))}
-                </tr>
-
-                {detail?.tableRows.map((row,index)=>{
-                if(index===detail?.tableRows.length - 1){
-                  return <>
-                    <hr style={{ width: "370%",marginTop:"15px" }} className="underline" />
-                    <tr>
-                      {row.map(element => <td style={{ textAlign: "left" }}>{t(element)}</td>)}
-                    </tr>
-                    </>
-                }
-                return <tr>
-                  {row.map(element => <td style={{ paddingTop:"20px",textAlign:"left" }}>{t(element)}</td>)}
-                </tr>})}
-              </table>
-            )}
             <StatusTable style={getTableStyles()}>
               {detail?.title &&
                 !detail?.title.includes("NOC") &&
                 detail?.values?.map((value, index) => {
                   if (value.map === true && value.value !== "N/A") {
-                    return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" privacy={value?.privacy} />} />;
+                    return <Row key={t(value.title)} label={t(value.title)} text={<img src={t(value.value)} alt="" />} />;
                   }
-                  if (value?.isLink == true) {
+                  if (value?.isLink == true)
+                  {
                     return (
                       <Row
                         key={t(value.title)}
-                        label={
-                          window.location.href.includes("tl") || window.location.href.includes("ws") ? (
-                            <div style={{ width: "200%" }}>
-                              <Link to={value?.to}>
-                                <span className="link" style={{ color: "#F47738" }}>
-                                  {t(value?.title)}
-                                </span>
-                              </Link>
-                            </div>
-                          ) : isNocLocation || isBPALocation ? (
-                            `${t(value.title)}`
-                          ) : (
-                            t(value.title)
-                          )
-                        }
-                        text={
-                          <div>
-                            <Link to={value?.to}>
-                              <span className="link" style={{ color: "#F47738" }}>
-                                {value?.value}
-                              </span>
-                            </Link>
-                          </div>
-                        }
+                        label={window.location.href.includes("tl") ? <div style={{width:"200%"}}><Link to={value?.to}><span className="link" style={{color: "#F47738"}}>{t(value?.title)}</span></Link></div> : isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
+                        text={<div><Link to={value?.to}><span className="link" style={{color: "#F47738"}}>{value?.value}</span></Link></div>}
                         last={index === detail?.values?.length - 1}
                         caption={value.caption}
                         className="border-none"
@@ -256,13 +165,11 @@ function ApplicationDetailsContent({
                   return (
                     <Row
                       key={t(value.title)}
-                      label={isWS ? `${t(value.title)}:` : t(value.title)}
+                      label={isNocLocation || isBPALocation ? `${t(value.title)}` : t(value.title)}
                       text={getTextValue(value)}
                       last={index === detail?.values?.length - 1}
                       caption={value.caption}
                       className="border-none"
-                      /* privacy object set to the Row Component */
-                      privacy={value?.privacy}
                       // TODO, Later will move to classes
                       rowContainerStyle={getRowStyles()}
                     />
@@ -271,9 +178,7 @@ function ApplicationDetailsContent({
             </StatusTable>
           </div>
           {detail?.belowComponent && <detail.belowComponent />}
-          {detail?.additionalDetails?.inspectionReport && (
-            <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} paymentsList={paymentsList} />
-          )}
+          {detail?.additionalDetails?.inspectionReport && <ScruntinyDetails scrutinyDetails={detail?.additionalDetails} paymentsList={paymentsList}/>}
           {applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending?.length > 0 && detail?.additionalDetails?.fiReport && (
             <InspectionReport fiReport={applicationDetails?.applicationData?.additionalDetails?.fieldinspection_pending} />
           )}
@@ -324,20 +229,6 @@ function ApplicationDetailsContent({
           {detail?.additionalDetails?.taxHeadEstimatesCalculation && (
             <PropertyEstimates taxHeadEstimatesCalculation={detail?.additionalDetails?.taxHeadEstimatesCalculation} />
           )}
-          {detail?.isWaterConnectionDetails && <WSAdditonalDetails wsAdditionalDetails={detail} oldValue={oldValue} />}
-          {detail?.isLabelShow ? <WSInfoLabel t={t} /> : null}
-          {detail?.additionalDetails?.redirectUrl && (
-            <div style={{ fontSize: "16px", lineHeight: "24px", fontWeight: "400", padding: "10px 0px" }}>
-              <Link to={detail?.additionalDetails?.redirectUrl?.url}>
-                <span className="link" style={{ color: "#F47738" }}>
-                  {detail?.additionalDetails?.redirectUrl?.title}
-                </span>
-              </Link>
-            </div>
-          )}
-          {detail?.additionalDetails?.estimationDetails && <WSFeeEstimation wsAdditionalDetails={detail} workflowDetails={workflowDetails}/>}
-          {detail?.additionalDetails?.estimationDetails && <ViewBreakup wsAdditionalDetails={detail} workflowDetails={workflowDetails}/>}
-          
         </React.Fragment>
       ))}
       {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (

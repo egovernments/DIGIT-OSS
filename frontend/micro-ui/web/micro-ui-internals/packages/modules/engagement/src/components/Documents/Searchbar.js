@@ -10,7 +10,7 @@ const Searchbar = ({searchValue, onChange, handleKeyPress, handleSearch, t}) => 
 
     return (
         <div>
-            <TextInput textInputStyle={{maxWidth:"960px"}}
+            <TextInput 
             className="searchInput" 
             placeholder={t("CE_SERACH_DOCUMENTS")} 
             value={searchValue}

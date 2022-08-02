@@ -9,7 +9,7 @@ const useOBPSSearch = (selectedType, payload, tenantId, filters, params, config 
     }
     else
     {
-        return useBPASearch(tenantId, filters, config);
+        return useBPASearch(tenantId, filters);
     }
 }
 

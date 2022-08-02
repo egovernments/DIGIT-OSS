@@ -5,21 +5,21 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { getI18n } from "react-i18next";
 import { Body, Loader } from "@egovernments/digit-ui-react-components";
 import { DigitApp } from "./App";
-import SelectOtp from "./pages/citizen/Login/SelectOtp";
+import SelectOtp from './pages/citizen/Login/SelectOtp';
 
 import getStore from "./redux/store";
 import ErrorBoundary from "./components/ErrorBoundaries";
-import { useState } from "react";
 
-const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers }) => {
+const DigitUIWrapper = ({ stateCode, enabledModules }) => {
   const { isLoading, data: initData } = Digit.Hooks.useInitStore(stateCode, enabledModules);
+
   if (isLoading) {
     return <Loader page={true} />;
   }
 
   const i18n = getI18n();
   return (
-    <Provider store={getStore(initData, moduleReducers(initData))}>
+    <Provider store={getStore(initData)}>
       <Router>
         <Body>
           <DigitApp
@@ -36,14 +36,13 @@ const DigitUIWrapper = ({ stateCode, enabledModules, moduleReducers }) => {
 };
 
 export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers }) => {
-  const [privacy, setPrivacy] = useState(Digit.Utils.getPrivacyObject() || {});
   const userType = Digit.UserService.getType();
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
         staleTime: 15 * 60 * 1000,
         cacheTime: 50 * 60 * 1000,
-        retryDelay: (attemptIndex) => Infinity,
+        retryDelay: attemptIndex => Infinity
         /*
           enable this to have auto retry incase of failure
           retryDelay: attemptIndex => Math.min(1000 * 3 ** attemptIndex, 60000)
@@ -53,8 +52,6 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
   });
 
   const ComponentProvider = Digit.Contexts.ComponentProvider;
-  const PrivacyProvider = Digit.Contexts.PrivacyProvider;
-
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]);
 
   return (
@@ -62,42 +59,7 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
           <ComponentProvider.Provider value={registry}>
-            <PrivacyProvider.Provider
-              value={{
-                privacy: privacy?.[window.location.pathname],
-                resetPrivacy: (_data) => {
-                  Digit.Utils.setPrivacyObject({});
-                  setPrivacy({});
-                },
-                getPrivacy: () => {
-                  const privacyObj = Digit.Utils.getPrivacyObject();
-                  setPrivacy(privacyObj);
-                  return privacyObj;
-                },
-                /*  Descoped method to update privacy object  */
-                updatePrivacyDescoped: (_data) => {
-                  const privacyObj = Digit.Utils.getAllPrivacyObject();
-                  const newObj = { ...privacyObj, [window.location.pathname]: _data };
-                  Digit.Utils.setPrivacyObject({ ...newObj });
-                  setPrivacy(privacyObj?.[window.location.pathname] || {});
-                },
-                /**
-                 * Main Method to update the privacy object anywhere in the application
-                 *
-                 * @author jagankumar-egov
-                 *
-                 * Feature :: Privacy
-                 *
-                 * @example
-                 *    const { privacy , updatePrivacy } = Digit.Hooks.usePrivacyContext();
-                 */
-                updatePrivacy: (uuid, fieldName) => {
-                  setPrivacy(Digit.Utils.updatePrivacy(uuid, fieldName) || {});
-                },
-              }}
-            >
-              <DigitUIWrapper stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />
-            </PrivacyProvider.Provider>
+            <DigitUIWrapper stateCode={stateCode} enabledModules={enabledModules} moduleReducers={moduleReducers} />
           </ComponentProvider.Provider>
         </QueryClientProvider>
       </ErrorBoundary>
@@ -106,11 +68,11 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
 };
 
 const componentsToRegister = {
-  SelectOtp,
-};
+  SelectOtp
+}
 
 export const initCoreComponents = () => {
   Object.entries(componentsToRegister).forEach(([key, value]) => {
     Digit.ComponentRegistryService.setComponent(key, value);
   });
-};
+}

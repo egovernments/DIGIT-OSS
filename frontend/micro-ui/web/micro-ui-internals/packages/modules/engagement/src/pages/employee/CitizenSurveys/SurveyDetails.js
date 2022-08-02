@@ -15,10 +15,10 @@ import { answerTypeEnum } from "./NewSurvey";
  */
 const filterQuestion = (question) => {
   if (!question) return;
-  // if (question.type !== "Multiple Choice" || question.type !== "Check Boxes") {
-  //   delete question.options;
-  // }
-  return { ...question, type: answerTypeEnum[question.type],options:question?.options };
+  if (question.type !== "Multiple Choice" || question.type !== "Check Boxes") {
+    delete question.options;
+  }
+  return { ...question, type: answerTypeEnum[question.type] };
 };
 
 /**TODO : Think of better to do this possibly in service layer */
@@ -42,7 +42,7 @@ const SurveyDetails = ({ location, match }) => {
   const [displayMenu, setDisplayMenu] = useState(false);
   const [userAction, setUserAction] = useState(undefined);
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const tenantIdForInboxSearch = window?.Digit.SessionStorage?.get("CITIZENSURVEY.INBOX")?.searchForm?.tenantIds?.code || tenantId
+  const tenantIdForInboxSearch = window.Digit.SessionStorage.get("CITIZENSURVEY.INBOX").searchForm.tenantIds.code
   const { isLoading, data: surveyData } = Digit.Hooks.survey.useSearch(
     { tenantIds: tenantIdForInboxSearch, uuid: id },
     {
@@ -159,11 +159,9 @@ const SurveyDetails = ({ location, match }) => {
   const handleMarkInactive = () => {
     const details = {
       SurveyEntity: { ...surveyData,
-        tenantId,
         questions: surveyData.questions.map(filterQuestion), 
         status: "INACTIVE", 
-        collectCitizenInfo: surveyData.collectCitizenInfo.code,
-         },
+        collectCitizenInfo: surveyData.collectCitizenInfo.code },
     };
     history.push("/digit-ui/employee/engagement/surveys/update-response", details);
   };

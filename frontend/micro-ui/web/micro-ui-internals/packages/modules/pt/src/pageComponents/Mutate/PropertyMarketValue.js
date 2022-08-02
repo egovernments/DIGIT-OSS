@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
-import Timeline from "../../components/TLTimeline";
 
 const PropertyMarketValue = (props) => {
   const { t, config, onSelect, userType, formData, setError, clearErrors, errors } = props;
@@ -37,7 +36,6 @@ const PropertyMarketValue = (props) => {
 
   return (
     <React.Fragment>
-      <Timeline currentStep={2} flow="PT_MUTATE" />
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!marketValue}>
         <div className="field-container">
           <span className="citizen-card-input citizen-card-input--front">₹</span>

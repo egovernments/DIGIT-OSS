@@ -17,7 +17,6 @@ import {
   getFixedFilename, isPropertyIndependent, isPropertyselfoccupied,
   ispropertyunoccupied
 } from "../../../utils";
-import Timeline from "../../../components/TLTimeline";
 
 const ActionButton = ({ jumpTo }) => {
   const { t } = useTranslation();
@@ -41,7 +40,6 @@ const CheckPage = ({ onSubmit, value = {} }) => {
     noOofBasements,
     units = [{}],
     landarea,
-    landArea,
     UnOccupiedArea,
     city_complaint,
     locality_complaint,
@@ -82,8 +80,6 @@ const CheckPage = ({ onSubmit, value = {} }) => {
     setAgree(!agree);
   };
   return (
-    <React.Fragment>
-     {window.location.href.includes("/citizen") ? <Timeline currentStep={4}/> : null}
     <Card>
       <CardHeader>{t("PT_CHECK_CHECK_YOUR_ANSWERS")}</CardHeader>
       <div>
@@ -277,11 +273,6 @@ const CheckPage = ({ onSubmit, value = {} }) => {
             text={`${t(checkForNA(PropertyType?.i18nKey))}`}
             actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/property-type`} />}
           />
-          <Row
-            label={t("PT_ASSESMENT1_PLOT_SIZE")}
-            text={`${landArea?.floorarea}`}
-            actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/landarea`} />}
-          />
           {PropertyType?.code === "VACANT" && (
             <Row
               label={t("PT_ASSESMENT1_PLOT_SIZE")}
@@ -295,9 +286,9 @@ const CheckPage = ({ onSubmit, value = {} }) => {
               .map((unit, unitIndex) => {
                 return (
                   <div>
-                    {units.length > 1 && <CardSubHeader>{t(`PT_UNIT`)}-{unitIndex}</CardSubHeader>}
+                    {units.length > 1 && <CardSubHeader>{t(`PT_UNIT-${unitIndex}`)}</CardSubHeader>}
                     <Row
-                      label={t("PT_BUILT_UP_AREA")}
+                      label={t("PT_ASSESMENT1_PLOT_SIZE")}
                       text={`${unit?.constructionDetail?.builtUpArea}`}
                       actionButton={<ActionButton jumpTo={`/digit-ui/citizen/pt/property/${typeOfApplication}/PtUnits`} />}
                     />
@@ -593,7 +584,6 @@ const CheckPage = ({ onSubmit, value = {} }) => {
       </div>
       <SubmitBar label={t("PT_COMMON_BUTTON_SUBMIT")} onSubmit={onSubmit} disabled={!agree} />
     </Card>
-   </React.Fragment>
   );
 };
 

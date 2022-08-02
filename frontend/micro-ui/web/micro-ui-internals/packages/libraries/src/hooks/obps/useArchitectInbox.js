@@ -75,8 +75,7 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCoun
               edcr: application?.edcr,
               sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
           })),
-          totalCount: data.totalCount,
-          nearingSlaCount: data?.nearingSlaCount
+          totalCount: data.totalCount
         }), 
         ...config 
       }

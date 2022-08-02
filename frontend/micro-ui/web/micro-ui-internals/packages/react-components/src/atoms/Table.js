@@ -29,10 +29,7 @@ const Table = ({
   sortParams = [],
   showAutoSerialNo=false,
   customTableWrapperClassName="",
-  styles={},
-  tableTopComponent,
-  tableRef,
-  isReportTable=false
+  styles={}
 }) => {
   const {
     getTableProps,
@@ -87,9 +84,7 @@ const Table = ({
   return (
     <React.Fragment>
     <span className={customTableWrapperClassName}>
-    {tableTopComponent ? tableTopComponent:null}
-      <table className={className} {...getTableProps()} style={styles} ref={tableRef}>
-         
+      <table className={className} {...getTableProps()} style={styles}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>

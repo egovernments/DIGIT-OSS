@@ -18,14 +18,7 @@ const transformSurveyResponseData = (data) => {
 };
 
 const FillSurvey = ({ location }) => {
-  
-  //const surveyData = location?.state;
-  const { applicationNumber: surveyId, tenantId } = Digit.Hooks.useQueryParams();
-  const { data, isLoading } = Digit.Hooks.survey.useSearch({uuid:surveyId,tenantId},{})
-  const surveyData = data?.Surveys?.[0]
-  
-  //sort survey questions based on qorder field, in surveyData.questions array, here and then render
-  surveyData?.questions?.sort((a,b)=>a.qorder-b.qorder)
+  const surveyData = location?.state;
   const history = useHistory();
 
   const onSubmit = (data) => {
@@ -41,7 +34,7 @@ const FillSurvey = ({ location }) => {
   };
 
   
-  return <CitizenSurveyForm surveyData={surveyData} isLoading={isLoading} onFormSubmit={onSubmit} formDisabled={false} />;
+  return <CitizenSurveyForm surveyData={surveyData} onFormSubmit={onSubmit} formDisabled={false} />;
 };
 
 export default FillSurvey;

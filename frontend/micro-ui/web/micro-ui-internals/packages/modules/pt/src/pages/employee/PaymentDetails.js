@@ -23,9 +23,7 @@ const getBillPeriod = (billDetails = []) => {
 const PaymentDetails = () => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  let { id: applicationNumber } = useParams();
-  const index = applicationNumber.indexOf("?")
-  if(index!=-1) applicationNumber = applicationNumber.slice(0,index)
+  const { id: applicationNumber } = useParams();
   const [paymentObject, setPaymentObject] = useState([]);
   const isMobile = window.Digit.Utils.browser.isMobile();
 

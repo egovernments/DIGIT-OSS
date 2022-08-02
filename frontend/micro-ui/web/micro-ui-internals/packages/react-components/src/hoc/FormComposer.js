@@ -18,21 +18,13 @@ import LinkButton from "../atoms/LinkButton";
 
 import { useTranslation } from "react-i18next";
 import MobileNumber from "../atoms/MobileNumber";
-import _ from "lodash";
 
 export const FormComposer = (props) => {
-  const { register, handleSubmit, setValue, getValues, reset, watch, trigger, control, formState, errors, setError, clearErrors, unregister } = useForm({
+  const { register, handleSubmit, setValue, getValues, watch, control, formState, errors, setError, clearErrors, unregister } = useForm({
     defaultValues: props.defaultValues,
   });
   const { t } = useTranslation();
   const formData = watch();
-
-  useEffect(() => {
-    if(props?.appData && Object.keys(props?.appData)?.length>0 && !(_.isEqual(props?.appData,formData)))
-    {
-       reset({...props?.appData});
-    }
-  },[props?.appData])
 
   useEffect(() => {
     props.getFormAccessors && props.getFormAccessors({ setValue, getValues });

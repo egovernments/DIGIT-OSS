@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, CardLabel, RadioButtons, LabelFieldPair, Dropdown, Menu, MobileNumber } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
 import { useLocation, useRouteMatch } from "react-router-dom";
-import Timeline from "../components/TLTimeline";
 
 const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   const { pathname: url } = useLocation();
@@ -207,14 +206,6 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
   }
 
   return (
-    <React.Fragment>
-    {
-      window.location.href.includes("/citizen") ?
-        window.location.href.includes("/citizen/pt/property/property-mutation") ? 
-          <Timeline currentStep={1} flow="PT_MUTATE" /> : <Timeline currentStep={2} />
-    : null
-    }
-
     <FormStep
       config={config}
       onSelect={goNext}
@@ -295,7 +286,6 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData, ownerInde
         />
       </div>
     </FormStep>
-    </React.Fragment>
   );
 };
 

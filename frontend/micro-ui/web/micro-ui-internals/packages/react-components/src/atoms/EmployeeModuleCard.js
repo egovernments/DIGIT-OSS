@@ -2,11 +2,11 @@ import React, { Fragment } from "react";
 import { ArrowRightInbox } from "./svgindex";
 import { Link } from "react-router-dom";
 
-const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen = false, className, styles, longModuleName=false, FsmHideCount }) => {
+const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen = false, className, styles }) => {
   return (
-    <div className={className ? className : "employeeCard customEmployeeCard card-home home-action-cards"} style={styles ? styles : {}}>
+    <div className={className ? className : "employeeCard card-home customEmployeeCard"} style={styles ? styles : {}}>
       <div className="complaint-links-container">
-        <div className="header" style={isCitizen ? { padding: "0px" } : longModuleName ? {alignItems:"flex-start"}:{}}>
+        <div className="header" style={isCitizen ? { padding: "0px" } : {}}>
           <span className="text removeHeight">{moduleName}</span>
           <span className="logo removeBorderRadiusLogo">{Icon}</span>
         </div>
@@ -35,7 +35,7 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen
                 {link ? <Link to={link}>{label}</Link> : null}
                 {count ? (
                   <>
-                    {FsmHideCount ? null : <span className={"inbox-total"}>{count || "-"}</span>}
+                    <span className={"inbox-total"}>{count || "-"}</span>
                     <Link to={link}>
                       <ArrowRightInbox />
                     </Link>
@@ -52,7 +52,7 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen
 
 const ModuleCardFullWidth = ({ moduleName,  links = [], isCitizen = false, className, styles, headerStyle, subHeader, subHeaderLink }) => {
   return (
-    <div className={className ? className : "employeeCard card-home customEmployeeCard home-action-cards"} style={styles ? styles : {}}>
+    <div className={className ? className : "employeeCard card-home customEmployeeCard"} style={styles ? styles : {}}>
       <div className="complaint-links-container" style={{ padding: "10px" }}>
         <div className="header" style={isCitizen ? { padding: "0px" } : headerStyle}>
           <span className="text removeHeight">{moduleName}</span>

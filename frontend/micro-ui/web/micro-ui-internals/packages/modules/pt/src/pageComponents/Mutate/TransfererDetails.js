@@ -1,7 +1,6 @@
 import React from "react";
 import { FormStep, StatusTable, Row, CardHeader, KeyNote, CardCaption } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-import Timeline from "../../components/TLTimeline";
 // import { cardBodyStyle, stringReplaceAll } from "../utils";
 
 const TransfererDetails = ({ userType, formData, config, onSelect }) => {
@@ -43,7 +42,6 @@ const TransfererDetails = ({ userType, formData, config, onSelect }) => {
 
   return (
     <React.Fragment>
-      <Timeline currentStep={1} flow="PT_MUTATE" />
       <FormStep t={t} config={config} onSelect={onSelect} onSkip={() => {}} isDisabled={false}>
         <CardHeader>{t("PT_MUTATION_TRANSFEROR_DETAILS")}</CardHeader>
         {propertyDetails?.owners

@@ -1,7 +1,6 @@
 import { CardLabel, CardLabelError, FormStep, LabelFieldPair, TextInput } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Timeline from "../components/TLTimeline";
 
 const PTSelectPincode = ({ t, config, onSelect, formData = {}, userType, register, errors, setError, formState, clearErrors }) => {
   const tenants = Digit.Hooks.pt.useTenants();
@@ -17,7 +16,7 @@ const PTSelectPincode = ({ t, config, onSelect, formData = {}, userType, registe
   if (formData?.isUpdateProperty) isEditProperty = true;
   const inputs = [
     {
-      label: "PT_PROPERTY_ADDRESS_PINCODE",
+      label: "Baby’s First Name",
       type: "text",
       name: "pincode",
       disable: isEditProperty,
@@ -81,8 +80,6 @@ const PTSelectPincode = ({ t, config, onSelect, formData = {}, userType, registe
   }
   const onSkip = () => onSelect();
   return (
-    <React.Fragment>
-    {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
     <FormStep
       t={t}
       config={{ ...config, inputs }}
@@ -93,7 +90,6 @@ const PTSelectPincode = ({ t, config, onSelect, formData = {}, userType, registe
       forcedError={t(pincodeServicability)}
       isDisabled={!pincode || isEditProperty}
     ></FormStep>
-            </React.Fragment>
   );
 };
 

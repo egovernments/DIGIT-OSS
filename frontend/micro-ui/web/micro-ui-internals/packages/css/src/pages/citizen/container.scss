@@ -1,19 +1,20 @@
-.citizen-home-footer {
-  @apply flex  w-full  h-10 bg-grey-bg pb-md pt-sm justify-center;
-  img {
-    @apply ml-sm;
-  }
+.citizen-home-footer{
+  @apply flex absolute w-full right-0 h-10 bg-grey-bg pb-md pt-sm justify-center z-50;
+    img{
+      @apply ml-sm
+    }
 }
 
 .employee .citizen-home-footer {
   @apply fixed bottom-0;
 }
-.fill-path-primary-main {
-  path {
-    fill: #f47738;
+.fill-path-primary-main{
+  path{
+    fill: #F47738;
   }
 }
 
 .obps-search {
   margin: 8px;
 }
+

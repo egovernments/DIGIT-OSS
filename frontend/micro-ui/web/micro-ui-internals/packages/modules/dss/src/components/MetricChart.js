@@ -15,7 +15,7 @@ const MetricData = ({ t, data, code }) => {
         {code === "citizenAvgRating" ? (
           <Rating currentRating={Math.round(data?.headerValue * 10) / 10} styles={{ width: "unset" }} starStyles={{ width: "25px" }} />
         ) : (
-          `${Digit.Utils.dss.formatter(data?.headerValue, data?.headerSymbol, value?.denomination, true, t)} ${
+          `${Digit.Utils.dss.formatter(data?.headerValue, data?.headerSymbol, value?.denomination, true)} ${
             code === "totalSludgeTreated" ? t(`DSS_KL`) : ""
           }`
         )}
@@ -30,7 +30,7 @@ const MetricData = ({ t, data, code }) => {
         >
           {data?.insight?.indicator === "upper_green" ? ArrowUpwardElement("10px") : ArrowDownwardElement("10px")}
           <p className={`${data?.insight.colorCode}`} style={{ whiteSpace: "pre" }}>
-            {insight?.[0]&&`${Digit.Utils.dss.formatter(insight[0], 'number', value?.denomination, true, t)}% ${t(Digit.Utils.locale.getTransformedLocale('DSS'+insight?.[1]||""))}`}
+            {insight?.[0]&&`${insight[0]}% ${t(Digit.Utils.locale.getTransformedLocale('DSS'+insight?.[1]||""))}`}
           </p>
         </div>
       )}
@@ -51,7 +51,6 @@ const MetricChartRow = ({ data, setChartDenomination, index }) => {
     tenantId,
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: value?.filters,
-    moduleLevel: value?.moduleLevel
   });
 
   useEffect(() => {

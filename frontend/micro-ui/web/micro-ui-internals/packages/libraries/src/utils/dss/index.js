@@ -1,8 +1,9 @@
 import { addMonths, endOfYear, format, startOfYear, subYears,subSeconds,endOfToday } from "date-fns";
+import { useTranslation } from "react-i18next";
 
-const amountFormatter = (value, denomination, t) => {
+const amountFormatter = (value, denomination) => {
   const currencyFormatter = new Intl.NumberFormat("en-IN", { currency: "INR" });
-
+  const { t } = useTranslation();
   switch (denomination) {
     case "Lac":
       return `₹ ${currencyFormatter.format((value / 100000).toFixed(2) || 0)} ${t("ES_DSS_LAC")}`;
@@ -15,14 +16,14 @@ const amountFormatter = (value, denomination, t) => {
   }
 };
 
-export const formatter = (value, symbol, unit, commaSeparated = true, t) => {
+export const formatter = (value, symbol, unit, commaSeparated = false) => {
   if (!value && value !== 0) return "";
   switch (symbol) {
     case "amount":
-      return amountFormatter(value, unit, t);
+      return amountFormatter(value, unit);
     //this case needs to be removed as backend should handle case sensitiviy from their end
     case "Amount":
-      return amountFormatter(value, unit, t);
+      return amountFormatter(value, unit);
     case "number":
       if (!commaSeparated) {
         return parseInt(value);

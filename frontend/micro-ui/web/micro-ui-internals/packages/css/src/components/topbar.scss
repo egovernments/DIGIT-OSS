@@ -90,8 +90,8 @@
   .select-wrap,
   .employee-select-wrap {
     margin-bottom: 0px;
-    .profile-dropdown--item {
-      span {
+    .profile-dropdown--item{
+      span{
         white-space: pre;
       }
     }
@@ -100,15 +100,6 @@
 
 .cp {
   cursor: pointer;
-  .hamburger {
-    display: none;
-  }
-
-  @media (max-width: 780px) {
-    .hamburger {
-      display: none;
-    }
-  }
 }
 
 .citizen {
@@ -131,10 +122,9 @@
   flex-direction: row;
   padding: 10px;
   column-gap: 10px;
-  color: #505a5f;
 
   &:hover {
-    background: #eeeeee;
+    @apply bg-grey-mid;
   }
 }
 

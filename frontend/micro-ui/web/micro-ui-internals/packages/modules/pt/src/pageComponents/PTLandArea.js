@@ -1,7 +1,6 @@
 import { CardLabel, FormStep, LabelFieldPair, TextInput, CardLabelError } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Timeline from "../components/TLTimeline";
 
 const Area = ({ t, config, onSelect, value, userType, formData, setError: setFormError, clearErrors: clearFormErrors, formState, onBlur }) => {
   let validation = {};
@@ -30,8 +29,6 @@ const Area = ({ t, config, onSelect, value, userType, formData, setError: setFor
 
 
   return (
-    <React.Fragment>
-      {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
     <FormStep
       config={config}
       onChange={onChange}
@@ -54,7 +51,6 @@ const Area = ({ t, config, onSelect, value, userType, formData, setError: setFor
         {...(validation = { pattern: "^([0-9]){0,8}$", type: "number", title: t("PT_PLOT_SIZE_ERROR_MESSAGE") })}
       />
     </FormStep>
-    </React.Fragment>
   );
 };
 

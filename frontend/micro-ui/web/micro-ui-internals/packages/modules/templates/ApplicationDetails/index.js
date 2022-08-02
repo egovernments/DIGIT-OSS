@@ -22,7 +22,7 @@ const ApplicationDetails = (props) => {
   const [selectedAction, setSelectedAction] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [isEnableLoader, setIsEnableLoader] = useState(false);
-  const [isWarningPop, setWarningPopUp] = useState(false);
+  const [isWarningPop, setWarningPopUp ] = useState(false);
 
   const {
     applicationDetails,
@@ -43,12 +43,8 @@ const ApplicationDetails = (props) => {
     ActionBarStyle,
     MenuStyle,
     paymentsList,
-    showTimeLine = true,
-    oldValue,
-    isInfoLabel = false,
-    clearDataDetails
+    showTimeLine=true,
   } = props;
-  
   useEffect(() => {
     if (showToast) {
       workflowDetails.revalidate();
@@ -57,22 +53,11 @@ const ApplicationDetails = (props) => {
 
   function onActionSelect(action) {
     if (action) {
-      if(action?.isToast){
-        setShowToast({ key: "error", error: { message: action?.toastMessage } });
-        setTimeout(closeToast, 5000);
-      }
-      else if (action?.isWarningPopUp) {
+      if(action?.isWarningPopUp){
         setWarningPopUp(true);
-      } else if (action?.redirectionUrll) {
-        if (action?.redirectionUrll?.action === "ACTIVATE_CONNECTION") {
-          history.push(`${action?.redirectionUrll?.pathname}`, { data: action?.redirectionUrll?.state });
-        }
-        else if (action?.redirectionUrll?.action === "RE-SUBMIT-APPLICATION"){
-          history.push(`${action?.redirectionUrll?.pathname}`, { data: action?.redirectionUrll?.state });
-        }
-        else {
-          window.location.assign(`${window.location.origin}/digit-ui/employee/payment/collect/${action?.redirectionUrll?.pathname}`);
-        }
+      }
+      else if (action?.redirectionUrll) {
+        window.location.assign(`${window.location.origin}/digit-ui/employee/payment/collect/${action?.redirectionUrll?.pathname}`);
       } else if (!action?.redirectionUrl) {
         setShowModal(true);
       } else {
@@ -81,7 +66,7 @@ const ApplicationDetails = (props) => {
           state: { ...action.redirectionUrl?.state },
         });
       }
-    }
+    } 
     setSelectedAction(action);
     setDisplayMenu(false);
   }
@@ -95,7 +80,7 @@ const ApplicationDetails = (props) => {
 
   const closeWarningPopup = () => {
     setWarningPopUp(false);
-  };
+  }
 
   const submitAction = async (data, nocData = false, isOBPS = {}) => {
     setIsEnableLoader(true);
@@ -103,23 +88,21 @@ const ApplicationDetails = (props) => {
       data?.customFunctionToExecute({ ...data });
     }
     if (nocData !== false && nocMutation) {
-      const nocPrmomises = nocData?.map((noc) => {
-        return nocMutation?.mutateAsync(noc);
-      });
+      const nocPrmomises = nocData?.map(noc => {
+        return nocMutation?.mutateAsync(noc)
+      })
       try {
         setIsEnableLoader(true);
         const values = await Promise.all(nocPrmomises);
-        values &&
-          values.map((ob) => {
-            Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
-          });
-      } catch (err) {
+        values && values.map((ob) => {
+          Digit.SessionStorage.del(ob?.Noc?.[0]?.nocType);
+        })
+      }
+      catch (err) {
         setIsEnableLoader(false);
-        let errorValue = err?.response?.data?.Errors?.[0]?.code
-          ? t(err?.response?.data?.Errors?.[0]?.code)
-          : err?.response?.data?.Errors?.[0]?.message || err;
+        let errorValue = err?.response?.data?.Errors?.[0]?.code ? t(err?.response?.data?.Errors?.[0]?.code) : err?.response?.data?.Errors?.[0]?.message || err;
         closeModal();
-        setShowToast({ key: "error", error: { message: errorValue } });
+        setShowToast({ key: "error", error: {message: errorValue}});
         setTimeout(closeToast, 5000);
         return;
       }
@@ -145,30 +128,10 @@ const ApplicationDetails = (props) => {
           if (isOBPS?.isNoc) {
             history.push(`/digit-ui/employee/noc/response`, { data: data });
           }
-          if (data?.Amendments?.length > 0 ){
-            //RAIN-6981 instead just show a toast here with appropriate message
-          //show toast here and return 
-            //history.push("/digit-ui/employee/ws/response-bill-amend", { status: true, state: data?.Amendments?.[0] })
-            
-            if(variables?.AmendmentUpdate?.workflow?.action.includes("SEND_BACK")){
-              setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_SEND_BACK_UPDATE_SUCCESS")})
-            } else if (variables?.AmendmentUpdate?.workflow?.action.includes("RE-SUBMIT")){
-              setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_RE_SUBMIT_UPDATE_SUCCESS") })
-            } else if (variables?.AmendmentUpdate?.workflow?.action.includes("APPROVE")){
-              setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_APPROVE_UPDATE_SUCCESS") })
-            }
-            else if (variables?.AmendmentUpdate?.workflow?.action.includes("REJECT")){
-              setShowToast({ key: "success", label: t("ES_MODIFYWSCONNECTION_REJECT_UPDATE_SUCCESS") })
-            }            
-            return
-          }
           setShowToast({ key: "success", action: selectedAction });
-          clearDataDetails && setTimeout(clearDataDetails, 3000);
           setTimeout(closeToast, 5000);
           queryClient.clear();
           queryClient.refetchQueries("APPLICATION_SEARCH");
-          //push false status when reject
-          
         },
       });
     }
@@ -194,8 +157,6 @@ const ApplicationDetails = (props) => {
             statusAttribute={statusAttribute}
             paymentsList={paymentsList}
             showTimeLine={showTimeLine}
-            oldValue={oldValue}
-            isInfoLabel={isInfoLabel}
           />
           {showModal ? (
             <ActionModal
@@ -215,12 +176,12 @@ const ApplicationDetails = (props) => {
             />
           ) : null}
           {isWarningPop ? (
-            <ApplicationDetailsWarningPopup
-              action={selectedAction}
-              workflowDetails={workflowDetails}
-              businessService={businessService}
-              isWarningPop={isWarningPop}
-              closeWarningPopup={closeWarningPopup}
+            <ApplicationDetailsWarningPopup 
+            action={selectedAction}
+            workflowDetails={workflowDetails}
+            businessService={businessService}
+            isWarningPop={isWarningPop}
+            closeWarningPopup={closeWarningPopup}
             />
           ) : null}
           <ApplicationDetailsToast t={t} showToast={showToast} closeToast={closeToast} businessService={businessService} />

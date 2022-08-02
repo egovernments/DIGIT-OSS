@@ -9,10 +9,6 @@
 .employee-card-input {
   @apply mb-lg pl-sm outline-none block border w-full h-10 border-input-border border-solid bg-white leading-10 text-form-field text-text-primary;
 }
-.employee-card-input:disabled {
-  @apply border-grey-dark text-grey-dark !important;
-  pointer-events: none !important;
-}
 .employee-card-input--front {
   width: fit-content !important;
   display: flex;
@@ -32,7 +28,7 @@
 
 .inputWrapper {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   max-width: 500px;
 
   div {
@@ -41,8 +37,6 @@
 
   span {
     margin-top: 16px;
-    margin-left: 10%;
-    margin-right: 10%;
   }
 }
 
@@ -68,9 +62,7 @@
   }
 
   .card-textarea {
-   /* //width: 480px; */
-    @apply w-full;
-    max-width:540px;
+    width: 480px;
   }
 
   .employee-card-textarea {

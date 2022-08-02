@@ -1,6 +1,6 @@
 {
   "name": "@egovernments/digit-ui-libraries",
-  "version": "1.5.0",
+  "version": "1.5.3",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.js",
@@ -23,7 +23,7 @@
     "react-scripts": "^4.0.1"
   },
   "dependencies": {
-    "axios": "0.20.0",
+    "axios": "0.21.1",
     "babel-preset-react": "6.24.1",
     "date-fns": "2.28.0",
     "html2canvas": "1.4.1",

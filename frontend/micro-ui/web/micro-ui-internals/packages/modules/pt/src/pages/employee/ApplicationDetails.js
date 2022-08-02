@@ -197,7 +197,6 @@ const ApplicationDetails = () => {
         timelineStatusPrefix={"ES_PT_COMMON_STATUS_"}
         forcedActionPrefix={"WF_EMPLOYEE_PT.CREATE"}
         statusAttribute={"state"}
-        MenuStyle={{ color: "#FFFFFF", fontSize: "18px" }}
       />
     
     </div>

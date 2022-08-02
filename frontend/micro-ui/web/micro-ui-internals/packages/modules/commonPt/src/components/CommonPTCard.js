@@ -11,7 +11,7 @@ const CommonPTCard = () => {
 
   const propsForModuleCard = {
     Icon: <PropertyHouse />,
-    moduleName: t("ACTION_TEST_COMMON_PROPERTY_TAX"),
+    moduleName: t("Birth Registration"),
     links: [
       {
         label: t("PT_SEARCH_AND_PAY"),

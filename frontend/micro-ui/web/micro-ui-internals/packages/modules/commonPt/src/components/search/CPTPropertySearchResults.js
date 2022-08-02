@@ -46,7 +46,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
       {
         Header: t("PT_COMMON_TABLE_COL_OWNER_NAME"),
         disableSortBy: true,
-        Cell: ({ row }) => GetCell(row.original.ownerNames || ""),
+        Cell: ({ row }) => GetCell(row.original.name || ""),
       },
 
       {
@@ -76,8 +76,7 @@ const SearchPTID = ({ tenantId, t, payload, showToast, setShowToast, ptSearchCon
                     <span
                       onClick={() => {
                         history.push(`${redirectToUrl}?propertyId=${row.original["propertyId"]}&tenantId=${tenantId}`, { ...state });
-                        const scrollConst = redirectToUrl?.includes("employee/tl") ? 1600 : 300;
-                        setTimeout(() => window.scrollTo(0, scrollConst), 400);
+                        setTimeout(() => window.scrollTo(0, 1600), 400);
                       }}
                     >
                       {t("CPT_SELECT_PROPERTY")}

@@ -63,7 +63,6 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const [loading, setLoading] = useState(false);
   const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
   const [errors, setErrors] = React.useState({});
-  const isMobile = window.Digit.Utils.browser.isMobile();
 
   const getUserInfo = async () => {
     const uuid = userInfo?.uuid;
@@ -137,7 +136,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const setUserCurrentPassword = (value) => {
     setCurrentPassword(value);
 
-    if (!new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(value)) {
+    if (value.length && !new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(value) ) {
       setErrors({...errors, currentPassword: {type: "pattern", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID"}})
     }else{
       setErrors({...errors, currentPassword: null});
@@ -147,7 +146,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const setUserNewPassword = (value) => {
     setNewPassword(value);
 
-    if (!new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(value)) {
+    if (value.length && !new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(value)) {
       setErrors({...errors, newPassword: {type: "pattern", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID"}})
     }else{
       setErrors({...errors, newPassword: null});
@@ -157,7 +156,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   const setUserConfirmPassword = (value) => {
     setConfirmPassword(value);
 
-    if (!new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(value)) {
+    if (value.length && !new RegExp(/^([a-zA-Z0-9@#$%]{8,15})$/i).test(value)) {
       setErrors({...errors, confirmPassword: {type: "pattern", message: "CORE_COMMON_PROFILE_PASSWORD_INVALID"}})
     }else{
       setErrors({...errors, confirmPassword: null});
@@ -304,7 +303,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
   if (loading) return <Loader></Loader>;
 
   return (
-    <div className="user-profile">
+    <div>
       <section style={{ margin: userType === "citizen" ? "8px" : "24px" }}>
         {userType === "citizen" ? (
           <BackButton></BackButton>
@@ -335,7 +334,6 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
           boxShadow: userType === "citizen" ? "1px 1px 4px 0px rgba(0,0,0,0.2)" : "",
           background: userType === "citizen" ? "white" : "",
           borderRadius: userType === "citizen" ? "4px" : "",
-          maxWidth: userType === "citizen" ? "960px" : "",
         }}
       >
         <section
@@ -395,7 +393,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
             <React.Fragment>
               <LabelFieldPair>
                 <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_NAME")}`}*</CardLabel>
-                <div style={{ width: "100%", maxWidth:"960px" }}>
+                <div style={{ width: "100%" }}>
                   <TextInput
                     t={t}
                     style={{ width: "100%" }}
@@ -412,7 +410,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                     })}
                     disable={editScreen}
                   />
-                  {errors?.userName && <CardLabelError> {errors?.userName?.message} </CardLabelError>}
+                  {errors?.userName && <CardLabelError style={{ width: "70%", fontSize: "12px", marginTop: "-21px" }}> {t(errors?.userName?.message)} </CardLabelError>}
                 </div>
               </LabelFieldPair>
 
@@ -431,6 +429,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                   name="gender"
                 />
               </LabelFieldPair>
+              <CardLabelError></CardLabelError>
 
               <LabelFieldPair>
                 <CardLabel style={editScreen ? { color: "#B1B4B6" } : {}}>{`${t("CORE_COMMON_PROFILE_EMAIL")}`}</CardLabel>
@@ -446,7 +445,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                     onChange={(e)=>setUserEmailAddress(e.target.value)}
                     disable={editScreen}
                   />
-                  {errors?.emailAddress && <CardLabelError> {errors?.emailAddress?.message} </CardLabelError>}
+                  {errors?.emailAddress && <CardLabelError style={{ width: "70%", fontSize: "12px", marginTop: "-21px" }}> {t(errors?.emailAddress?.message)} </CardLabelError>}
                 </div>
               </LabelFieldPair>
               
@@ -458,8 +457,6 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                   width: "100%",
                   height: "40px",
                   color: "white",
-                  
-                  maxWidth : isMobile? "100%":"240px",
                   borderBottom: "1px solid black",
                 }}
               >
@@ -468,7 +465,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
             </React.Fragment>
           ) : (
             <React.Fragment>
-              <LabelFieldPair style={{ display: "flex" }}>
+              <LabelFieldPair style={{ display: "flex"}}>
                 <CardLabel className="profile-label-margin" style={editScreen ? { color: "#B1B4B6", width: "300px" } : { width: "300px" }}>
                   {`${t("CORE_COMMON_PROFILE_NAME")}`}*
                 </CardLabel>
@@ -489,7 +486,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                     })}
                     disable={editScreen}
                   />
-                  {errors?.userName && <CardLabelError style={{margin: 0, padding: 0}}> {errors?.userName?.message} </CardLabelError>}
+                  {errors?.userName && <CardLabelError style={{ width: "70%", fontSize: "12px", marginTop: "-21px" }}> {t(errors?.userName?.message)} </CardLabelError>}
                 </div>
               </LabelFieldPair>
 
@@ -520,7 +517,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                     type={"text"}
                     isMandatory={false}
                     name="city"
-                    value={t(city)}
+                    value={city}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="Enter Your City Name"
                     {...(validation = {
@@ -547,7 +544,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                     disable={true}
                     {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_PROFILE_MOBILE_NUMBER_INVALID") }}
                   />
-                  {errors?.mobileNumber && <CardLabelError style={{margin: 0, padding: 0}}> {errors?.mobileNumber?.message} </CardLabelError>}
+                  {errors?.mobileNumber && <CardLabelError style={{ width: "70%", fontSize: "12px", marginTop: "-21px" }}> {t(errors?.mobileNumber?.message)} </CardLabelError>}
                 </div>
               </LabelFieldPair>
               
@@ -567,7 +564,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                     onChange={(e)=>setUserEmailAddress(e.target.value)}
                     disable={editScreen}
                   />
-                  {errors?.emailAddress && <CardLabelError> {errors?.emailAddress?.message} </CardLabelError>}
+                  {errors?.emailAddress && <CardLabelError style={{ width: "70%", fontSize: "12px", marginTop: "-21px" }}> {t(errors?.emailAddress?.message)} </CardLabelError>}
                 </div>
               </LabelFieldPair>
 
@@ -592,7 +589,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                             onChange={(e) => setUserCurrentPassword(e.target.value)}
                             disable={editScreen}
                           />
-                          {errors?.currentPassword && <CardLabelError>{errors?.currentPassword?.message}</CardLabelError>}
+                          {errors?.currentPassword && <CardLabelError style={{ width: "70%", fontSize: "12px", marginTop: "-21px" }}>{t(errors?.currentPassword?.message)}</CardLabelError>}
                         </div>
                       </LabelFieldPair>
 
@@ -610,7 +607,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                             onChange={(e) => setUserNewPassword(e.target.value)}
                             disable={editScreen}
                           />
-                          {errors?.newPassword && <CardLabelError>{errors?.newPassword?.message}</CardLabelError>}
+                          {errors?.newPassword && <CardLabelError style={{ width: "70%", fontSize: "12px", marginTop: "-21px" }}>{t(errors?.newPassword?.message)}</CardLabelError>}
                       </div>
                       </LabelFieldPair>
 
@@ -628,7 +625,7 @@ const UserProfile = ({ stateCode, userType, cityDetails }) => {
                             onChange={(e) => setUserConfirmPassword(e.target.value)}
                             disable={editScreen}
                           />
-                          {errors?.confirmPassword && <CardLabelError>{errors?.confirmPassword?.message}</CardLabelError>}
+                          {errors?.confirmPassword && <CardLabelError style={{ width: "70%",  fontSize: "12px", marginTop: "-21px" }}>{t(errors?.confirmPassword?.message)}</CardLabelError>}
                         </div>
                       </LabelFieldPair>
                     </div>

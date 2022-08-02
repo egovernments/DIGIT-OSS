@@ -14,9 +14,6 @@ const hideBackButtonConfig = [
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
   const { t } = useTranslation();
-  const inboxInitialState = {
-    searchParams: {},
-  };
 
   const CreateProperty = Digit?.ComponentRegistryService?.getComponent("PTCreateProperty");
   const EditProperty = Digit?.ComponentRegistryService?.getComponent("PTEditProperty");
@@ -34,7 +31,7 @@ const App = () => {
       <Switch>
         <AppContainer>
           {!shouldHideBackButton(hideBackButtonConfig) ? <BackButton>Back</BackButton> : ""}
-          <PrivateRoute path={`${path}/property/new-application`} component={CreateProperty} />
+          <PrivateRoute path={`${path}/create`} component={CreateProperty} />
           <PrivateRoute path={`${path}/property/edit-application`} component={EditProperty} />
           <Route path={`${path}/property/citizen-search`} component={SearchPropertyComponent} />
           <Route path={`${path}/property/search-results`} component={SearchResultsComponent} />

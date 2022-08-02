@@ -47,7 +47,7 @@ const CreateNewSurvey = ({ t, initialFormValues, onSubmit, isFormDisabled = fals
               surveyFormState={surveyFormState}
               surveyFormData={getSurveyFormValues}
             />
-            <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} addOption={true} controlSurveyForm={controlSurveyForm} />
+            <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} addOption={true} />
             <SurveySettingsForms t={t} controlSurveyForm={controlSurveyForm} surveyFormState={surveyFormState} />
           </Card>
 

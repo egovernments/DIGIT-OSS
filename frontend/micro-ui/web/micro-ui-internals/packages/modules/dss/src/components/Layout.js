@@ -59,7 +59,7 @@ const Layout = ({ rowData,forHome=false }) => {
     switch (visualizer.vizType) {
       case "metric-collection":
         return (
-          <GenericChart header={visualizer.name} className="metricsTable" key={key} value={value} >
+          <GenericChart header={visualizer.name} className="metricsTable" key={key} value={value}>
             <MetricChart data={visualizer} />
           </GenericChart>
         );
@@ -103,7 +103,7 @@ const Layout = ({ rowData,forHome=false }) => {
         );
       case "collection":
       case "module":
-        return <Summary header={visualizer.name} className="metricsTable" key={key} value={value} data={visualizer} />;
+        return <Summary key={key} ttile={visualizer.name} data={visualizer} />;
       default:
         return null;
     }

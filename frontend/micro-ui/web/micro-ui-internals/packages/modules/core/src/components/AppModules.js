@@ -30,9 +30,7 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
       <Route key={index} path={`${path}/${code.toLowerCase()}`}>
         <Module stateCode={stateCode} moduleCode={code} userType={userType} tenants={getTenants(tenants, appTenants)} />
       </Route>
-    ) :   <Route key={index} path={`${path}/${code.toLowerCase()}`}>
-    <Redirect to={{ pathname: "/digit-ui/employee/user/error?type=notfound", state: { from: location.pathname + location.search } }} />
-  </Route>;
+    ) : null;
   });
 
   return (
@@ -40,12 +38,14 @@ export const AppModules = ({ stateCode, userType, modules, appTenants }) => {
       <Switch>
         {appRoutes}
         <Route path={`${path}/login`}>
+          {" "}
           <Redirect to={{ pathname: "/digit-ui/employee/user/login", state: { from: location.pathname + location.search } }} />
         </Route>
         <Route path={`${path}/forgot-password`}>
           <ForgotPassword />
         </Route>
         <Route path={`${path}/change-password`}>
+          {" "}
           <ChangePassword />
         </Route>
         <Route>

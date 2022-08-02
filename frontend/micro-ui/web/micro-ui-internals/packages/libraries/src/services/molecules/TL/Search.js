@@ -63,16 +63,6 @@ export const TLSearch = {
       propertyAddress = getAddress(propertyDetails?.Properties[0]?.address, t);
     }
     let employeeResponse = [];
-
-    const applicationNoAndChannel = {
-      title: " ",
-      asSectionHeader: false,
-      values: [
-        { title: "TL_LOCALIZATION_APPLICATION_NO", value: response?.applicationNumber ? `${response?.applicationNumber}` : "NA" },
-        { title: "TL_APPLICATION_CHALLAN_LABEL", value: response?.tradeLicenseDetail?.channel ? `TL_CHANNEL_${response?.tradeLicenseDetail?.channel}` : "NA" },
-      ]
-    }
-
     const tradedetails = {
       title: "TL_COMMON_TR_DETAILS",
       asSectionHeader: true,
@@ -271,7 +261,6 @@ export const TLSearch = {
       response && employeeResponse.push(details);
     }
 
-    response && employeeResponse.push(applicationNoAndChannel);
     response && employeeResponse.push(tradedetails);
     response?.tradeLicenseDetail?.tradeUnits && employeeResponse.push(tradeUnits);
     response?.tradeLicenseDetail?.accessories && employeeResponse.push(accessories);

@@ -24,26 +24,10 @@ const EmployeeApp = ({ path, url, userType }) => {
     else if (location.pathname.includes("/view-property")) return t("PT_PROPERTY_INFORMATION");
     else return t("PT_NEW_PROPERTY");
   };
-  const getRedirectBreadCrumb = (redirectUrl) => {
-    // switch(redirectUrl) {
-    //   case !!redirectUrl.includes("employee/tl/new-application"):
-    //     return t("ES_TITLE_NEW_TRADE_LICESE_APPLICATION")
-    //   case !!redirectUrl.includes("employee/ws/new-application"):
-    //     return t("ES_NEW_CONNECTION")
-    //   case !!(!redirectUrl.includes("employee/tl/new-application")):
-    //     return t("WF_EMPLOYEE_NEWTL_RENEWAL_SUBMIT_BUTTON")
-    //   default:
-    //     return null
-    //}
-    if (redirectUrl.includes("employee/tl/new-application")) return t("ES_TITLE_NEW_TRADE_LICESE_APPLICATION");
-    else if (redirectUrl.includes("employee/ws/new-application")) return t("ES_COMMON_WS_NEW_CONNECTION");
-    else if (redirectUrl.includes("employee/ws/modify-application")) return t("WS_WATER_AND_SEWERAGE_MODIFY_CONNECTION_LABEL");
-    else return t("WF_EMPLOYEE_NEWTL_RENEWAL_SUBMIT_BUTTON");
-  };
   const search = useLocation().search;
 
   const redirectUrl = new URLSearchParams(search).get("redirectToUrl");
-  const fromScreen = new URLSearchParams(search).get("from") || "";
+  const fromScreen = new URLSearchParams(search).get("from")||"";
 
   const crumbs = [
     {
@@ -53,9 +37,11 @@ const EmployeeApp = ({ path, url, userType }) => {
     },
     {
       path: { pathname: redirectUrl, state: { ...location.state } },
-      content: redirectUrl ? getRedirectBreadCrumb(redirectUrl) : (fromScreen && t(fromScreen)) || "NONE",
-      show: (redirectUrl || fromScreen) && true,
-      isBack: fromScreen && true,
+      content:redirectUrl?( redirectUrl?.includes("employee/tl/new-application")
+        ? t("ES_TITLE_NEW_TRADE_LICESE_APPLICATION")
+        : t("WF_EMPLOYEE_NEWTL_RENEWAL_SUBMIT_BUTTON")):(fromScreen&&t(fromScreen))||"NONE",
+      show: (redirectUrl || fromScreen) &&true,
+      isBack:fromScreen&& true
     },
     {
       path: "/digit-ui/employee/dss/drilldown",
@@ -64,7 +50,7 @@ const EmployeeApp = ({ path, url, userType }) => {
     },
   ];
 
-  const locationCheck = window.location.href.includes("/employee/commonpt/new-application");
+  const locationCheck = window.location.href.includes("/employee/commonpt/new-application")
 
   return (
     <Switch>
@@ -76,8 +62,8 @@ const EmployeeApp = ({ path, url, userType }) => {
             </Link>{" "}
             / <span>{getBreadCrumb()}</span>
           </p> */}
-          <div style={locationCheck ? { marginLeft: "12px" } : {}}>
-            <BreadCrumb crumbs={crumbs} />
+          <div style={locationCheck ? {marginLeft:"12px"} : {}}>
+          <BreadCrumb crumbs={crumbs} />
           </div>
           <PrivateRoute exact path={`${path}/`} component={() => <CommonPTLinks matchPath={path} userType={userType} />} />
           <PrivateRoute path={`${path}/new-application`} component={() => <NewApplication parentUrl={url} />} />

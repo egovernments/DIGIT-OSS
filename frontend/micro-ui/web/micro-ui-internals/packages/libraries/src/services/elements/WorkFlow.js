@@ -3,14 +3,13 @@ import { Request } from "../atoms/Utils/Request";
 import cloneDeep from "lodash/cloneDeep";
 
 const getThumbnails = async (ids, tenantId, documents = []) => {
-  tenantId = window.location.href.includes("/obps/") || window.location.href.includes("/pt/") ? Digit.ULBService.getStateId() : tenantId;
-  
+  tenantId = window.location.href.includes("/obps/") ? Digit.ULBService.getStateId() : tenantId;
   if (window.location.href.includes("/obps/")) {
     if (documents?.length > 0) {
       let workflowsDocs = [];
       documents?.map(doc => {
         if (doc?.url) {
-          const thumbs = doc?.url?.split(",")?.[3] || doc?.url?.split(",")?.[0]
+          const thumbs = doc.url.split(",")[3] || doc.url.split(",")[0]
           workflowsDocs.push({
             thumbs: [thumbs],
             images: [Digit.Utils.getFileUrl(doc.url)]
@@ -54,6 +53,7 @@ const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
       })
     });
   }
+
   for (const eventHappened of wf) {
     if (eventHappened?.documents) {
       eventHappened.thumbnailsToShow = await getThumbnails(eventHappened?.documents?.map(e => e?.fileStoreId), eventHappened?.tenantId, eventHappened?.documents)
@@ -70,22 +70,9 @@ const makeCommentsSubsidariesOfPreviousActions = async (wf) => {
       TimelineMap.delete("tlCommentStack")
     }
   }
+  // }
   const response = TimelineMap.get("tlActions")
   return response
-}
-
-const getAssignerDetails = (instance, nextStep, moduleCode) => {
-  let assigner = instance?.assigner
-  if (moduleCode === "FSM" || moduleCode === "FSM_POST_PAY_SERVICE") {
-    if (instance.state.applicationStatus === "CREATED") {
-      assigner = instance?.assigner
-    } else {
-      assigner = nextStep?.assigner || instance?.assigner
-    }
-  } else {
-    assigner = instance?.assigner
-  }
-  return assigner
 }
 
 export const WorkflowService = {
@@ -145,12 +132,6 @@ export const WorkflowService = {
           return { ...state, nextActions: _nextActions, roles: state?.action, roles: state?.actions?.reduce((acc, el) => [...acc, ...el.roles], []) };
         })?.[0];
 
-      // HANDLING ACTION for NEW VEHICLE LOG FROM UI SIDE
-      const action_newVehicle = [{
-        "action": "READY_FOR_DISPOSAL",
-        "roles": "FSM_EMP_FSTPO,FSM_EMP_FSTPO"
-      }]
-
       const actionRolePair = nextActions?.map((action) => ({
         action: action?.action,
         roles: action.state?.actions?.map((action) => action.roles).join(","),
@@ -161,9 +142,9 @@ export const WorkflowService = {
         let timeline = TLEnrichedWithWorflowData.map((instance, ind) => {
           let checkPoint = {
             performedAction: instance.action,
-            status: moduleCode === "BS.AMENDMENT" ? instance.state.state :instance.state.applicationStatus,
+            status: instance.state.applicationStatus,
             state: instance.state.state,
-            assigner: getAssignerDetails(instance, TLEnrichedWithWorflowData[ind - 1], moduleCode),
+            assigner: instance?.assigner,
             rating: instance?.rating,
             wfComment: instance?.wfComments.map(e => e?.comment),
             wfDocuments: instance?.documents,
@@ -261,8 +242,7 @@ export const WorkflowService = {
           } catch (err) { }
         }
 
-      // HANDLING ACTION FOR NEW VEHICLE LOG FROM UI SIDE
-        const nextActions = location.pathname.includes("new-vehicle-entry") ? action_newVehicle : actionRolePair;
+        const nextActions = actionRolePair;
 
         if (role !== "CITIZEN" && moduleCode === "PGR") {
           const onlyPendingForAssignmentStatusArray = timeline?.filter(e => e?.status === "PENDINGFORASSIGNMENT")

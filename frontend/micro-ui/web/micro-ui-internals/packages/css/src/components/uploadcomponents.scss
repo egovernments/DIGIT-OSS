@@ -1,6 +1,5 @@
 .upload-wrap {
   @apply flex w-full h-40 bg-grey-light relative mb-lg px-sm border border-border border-dashed;
-  max-width: 540px;
 
   img {
     display: block;
@@ -69,10 +68,6 @@
       @apply absolute w-full h-full opacity-0 top-0;
     }
   }
-}
-
-.upload-file-max-width {
-  max-width: 540px;
 }
 
 .upload-file {

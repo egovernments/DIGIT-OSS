@@ -173,7 +173,7 @@ const PropertyDetails = () => {
         asSectionHeader: true,
         belowComponent: () => (
           <LinkLabel
-            onClick={() => history.push({ pathname: `/digit-ui/employee/pt/ptsearch/payment-details/${applicationNumber}?from=PT_PROPERTY_INFORMATION` })}
+            onClick={() => history.push({ pathname: `/digit-ui/employee/pt/ptsearch/payment-details/${applicationNumber}` })}
             style={isMobile ? { marginTop: "15px", marginLeft: "0px" } : { marginTop: "15px" }}
           >
             {t("PT_VIEW_PAYMENT")}

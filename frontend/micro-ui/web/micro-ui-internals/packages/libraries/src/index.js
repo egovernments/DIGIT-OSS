@@ -6,7 +6,7 @@ import { initI18n } from "./translations/index";
 
 import { Storage, PersistantStorage } from "./services/atoms/Utils/Storage";
 import { UploadServices } from "./services/atoms/UploadServices";
-import JsDictionary from "./services/atoms/JsDictionary";
+import  JsDictionary  from "./services/atoms/JsDictionary";
 
 import { LocationService } from "./services/elements/Location";
 import { LocalityService } from "./services/elements/Localities";
@@ -25,7 +25,6 @@ import { PTService } from "./services/elements/PT";
 import { WSService } from "./services/elements/WS";
 import { TLService } from "./services/elements/TL";
 import { MCollectService } from "./services/elements/MCollect";
-import { ReportsService } from "./services/elements/Reports";
 import HrmsService from "./services/elements/HRMS";
 import { InboxGeneral } from "./services/elements/InboxService";
 import EventsServices from "./services/elements/Events";
@@ -45,8 +44,6 @@ import ReceiptsService from "./services/elements/Receipts";
 import { EDCRService } from "./services/elements/EDCR";
 import { OBPSService } from "./services/elements/OBPS";
 import { NOCService } from "./services/elements/NOC";
-import AccessControlService from "./services/elements/Access";
-import BillServices from "./services/elements/Bill";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -74,7 +71,6 @@ const initLibraries = () => {
   setupLibraries("HRMSService", HrmsService);
   setupLibraries("ReceiptsService", ReceiptsService);
   setupLibraries("MCollectService", MCollectService);
-  setupLibraries("ReportsService", ReportsService)
   setupLibraries("PaymentService", PaymentService);
   setupLibraries("EDCRService", EDCRService);
   setupLibraries("OBPSService", OBPSService);
@@ -82,7 +78,7 @@ const initLibraries = () => {
   setupLibraries("WorkflowService", WorkflowService);
   setupLibraries("MDMSService", MdmsService);
   setupLibraries("UploadServices", UploadServices);
-  setupLibraries("JsDictionary", JsDictionary);
+  setupLibraries("JsDictionary",JsDictionary);
   setupLibraries("GetServiceDefinitions", GetServiceDefinitions);
   setupLibraries("Complaint", Complaint);
   setupLibraries("FileDesludging", FileDesludging);
@@ -100,8 +96,6 @@ const initLibraries = () => {
   setupLibraries("Download", Download);
 
   setupLibraries("NOCService", NOCService);
-  setupLibraries("AccessControlService", AccessControlService);
-  setupLibraries("BillServices", BillServices);
 
   return new Promise((resolve) => {
     initI18n(resolve);

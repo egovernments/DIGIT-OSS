@@ -2,7 +2,7 @@ import React, { Fragment, useMemo } from "react"
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
-import { InfoBannerIcon } from "@egovernments/digit-ui-react-components";
+
 const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch }) => {
     const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
     const GetStatusCell = (value) => value?.toLowerCase() === "active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span>
@@ -39,17 +39,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
                 Cell: ({ row }) => row.original?.answersCount ? GetCell(Number(row.original?.answersCount)) : "-"
             },
             {
-                Header: <div>{t("EVENTS_STATUS_LABEL")}<div className="tooltip">
-                    <InfoBannerIcon fill="#0b0c0c" style />
-                    <span className="tooltiptext" style={{
-                        whiteSpace: "pre-wrap",
-                        fontSize: "small",
-                        wordWrap:"break-word",
-                        //overflow:"auto"
-                    }}>
-                        {`${t(`SURVEY_STATUS_TOOLTIP`)}`}
-                    </span>
-                </div></div>,
+                Header: t("EVENTS_STATUS_LABEL"),
                 accessor: "status",
                 Cell: ({row}) => GetStatusCell(row.original?.status),
             },
@@ -88,17 +78,17 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
             }
         },
         disableSort: false,
-        autoSort: true,
+        autoSort: false,
         manualPagination: true,
         initSortI: "endDate",
         onPageSizeChange: onPageSizeChange,
-        currentPage: parseInt(formState.tableForm?.offset / formState.tableForm?.limit),
+        currentPage: formState.tableForm?.offset / formState.tableForm?.limit,
         onNextPage: () => dispatch({ action: "mutateTableForm", data: { ...formState.tableForm, offset: (parseInt(formState.tableForm?.offset) + parseInt(formState.tableForm?.limit)) } }),
         onPrevPage: () => dispatch({ action: "mutateTableForm", data: { ...formState.tableForm, offset: (parseInt(formState.tableForm?.offset) - parseInt(formState.tableForm?.limit)) } }),
         pageSizeLimit: formState.tableForm?.limit,
         // onSort: onSort,
         // sortParams: [{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}],
-        totalRecords: parseInt(totalCount),
+        totalRecords: totalCount,
         onSearch: formState?.searchForm?.message,
         // globalSearch: {searchForItemsInTable},
         // searchQueryForTable,
