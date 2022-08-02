@@ -4,6 +4,7 @@ import useSessionStorage from "./useSessionStorage";
 import useQueryParams from "./useQueryParams";
 import useDocumentSearch from "./useDocumentSearch";
 import useClickOutside from "./useClickOutside";
+import useAudit from "./core/useAudit";
 import {
   useFetchPayment,
   usePaymentUpdate,
@@ -532,6 +533,7 @@ const Hooks = {
   useDynamicData,
   useBulkPdfDetails,
   useBillAmendmentInbox,
+  useAudit,
 };
 
 export default Hooks;

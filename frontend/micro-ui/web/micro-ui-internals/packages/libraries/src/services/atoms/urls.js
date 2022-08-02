@@ -198,6 +198,8 @@ const Urls = {
   },
   access_control: "/access/v1/actions/mdms/_get",
   billgenie: "/egov-searcher",
+  audit:"/inbox/v1/elastic/_search"
 };
+
 
 export default Urls;
