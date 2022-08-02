@@ -53,7 +53,7 @@ const DriverDetails = (props) => {
 
   const [selectedOption, setSelectedOption] = useState({});
 
-  const { data: driverData, isLoading: isLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDriverDetails(
+  const { data: driverData, isLoading: isLoading, isSuccess: isDsoSuccess, error: dsoError, refetch } = Digit.Hooks.fsm.useDriverDetails(
     tenantId,
     { ids: dsoId },
     { staleTime: Infinity }
@@ -142,6 +142,7 @@ const DriverDetails = (props) => {
       onSuccess: (data, variables) => {
         setShowToast({ key: "success", action: "DELETE_DRIVER" });
         queryClient.invalidateQueries("DSO_SEARCH");
+
         setTimeout(() => {
           closeToast, history.push(`/digit-ui/employee/fsm/registry`);
         }, 5000);
@@ -176,11 +177,9 @@ const DriverDetails = (props) => {
       },
       onSuccess: (data, variables) => {
         setShowToast({ key: "success", action: "DELETE_VENDOR" });
-        window.location.reload(false);
         queryClient.invalidateQueries("FSM_VENDOR_SEARCH");
-        setTimeout(() => {
-          closeToast;
-        }, 5000);
+        refetch();
+        setTimeout(closeToast, 5000);
       },
     });
     setShowModal(false);
@@ -199,14 +198,14 @@ const DriverDetails = (props) => {
     mutateVendor(formData, {
       onError: (error, variables) => {
         setShowToast({ key: "error", action: error });
+        refetch();
         setTimeout(closeToast, 5000);
       },
       onSuccess: (data, variables) => {
         setShowToast({ key: "success", action: "ADD_VENDOR" });
         queryClient.invalidateQueries("DSO_SEARCH");
-        setTimeout(() => {
-          closeToast;
-        }, 3000);
+        refetch();
+        setTimeout(closeToast, 5000);
       },
     });
     setShowModal(false);
@@ -231,6 +230,7 @@ const DriverDetails = (props) => {
       },
       onSuccess: (data, variables) => {
         setShowToast({ key: "success", action: "EDIT_VENDOR" });
+        refetch();
         queryClient.invalidateQueries("DSO_SEARCH");
         setTimeout(closeToast, 5000);
       },
