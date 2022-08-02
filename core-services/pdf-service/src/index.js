@@ -872,6 +872,9 @@ export const createAndSave = async (
         `Default font maping locale ${defaultFontMapping[locale]}`
       );
     }
+    
+    console.log(" Font type selected :::: " + formatconfig.defaultStyle.font);
+    console.log("Locale passed:::::::"+locale);
 
     createPdfBinary(
       key,
