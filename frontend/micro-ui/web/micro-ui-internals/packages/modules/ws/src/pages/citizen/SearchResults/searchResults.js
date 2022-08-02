@@ -72,7 +72,7 @@ const ChallanSearchResults = ({ template, header, actionButtonLabel }) => {
           <div>
             <p style={{ marginLeft: "16px", marginTop: "16px" }}>
               {t("WS_LOAD_MORE_MSG")}{" "}
-              <span className="link">{<Link to={`/digit-ui/citizen/ws/search-results?doorNumber=${doorNumber}&consumerName=${consumerName}&tenantId=${city.code}&locality=${locality.code}&PToffset=${t1}`}>{t("PT_COMMON_CLICK_HERE")}</Link>}</span>
+              <span className="link">{<Link to={`/digit-ui/citizen/ws/search-results?doorNumber=${doorNumber}&consumerName=${consumerName}&tenantId=${tenantId?.split(".")[0]}&locality=${locality.code}&PToffset=${t1}`}>{t("PT_COMMON_CLICK_HERE")}</Link>}</span>
             </p>
           </div>
         )}

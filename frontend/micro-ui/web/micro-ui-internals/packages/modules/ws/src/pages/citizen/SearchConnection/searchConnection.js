@@ -223,7 +223,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
         <div style={{display: "flex", gap: "0 4px"}}>
         <CardLabel>{`${t("WS_MYCONNECTIONS_CONSUMER_NO")}`}</CardLabel>
         <InfoBannerIcon fill="#0b0c0c" />
-        <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
+        <span className="tooltiptext" style={{ position:"absolute",width:"70%", marginLeft:"50%", fontSize:"medium" }}>
         {t("WS_CONSUMER_NO_DESCRIPTION") + " " + t("WS_CONSUMER_NO_FORMAT")}
         </span>
         </div>
@@ -249,7 +249,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
         <div style={{display: "flex", gap: "0 4px"}}>
         <CardLabel>{`${t("WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL")}`}</CardLabel>
         <InfoBannerIcon fill="#0b0c0c" />
-        <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
+        <span className="tooltiptext" style={{ position:"absolute",width:"55%", marginLeft:"50%", fontSize:"medium" }}>
         {t("WS_CONSUMER_NO_DESCRIPTION") + " " + t("WS_CONSUMER_NO_FORMAT")}
         </span>
         </div>

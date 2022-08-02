@@ -7,7 +7,7 @@ export const config = [
     },
     inputs: [
       {
-        label: "Owner Mobile Number",
+        label: "PT_OWNER_MOB_NO_LABEL",
         type: "mobileNumber",
         name: "mobileNumber",
         validation:{pattern:{  value: /[6789][0-9]{9}/,
@@ -15,7 +15,7 @@ export const config = [
         error: "CORE_COMMON_MOBILE_ERROR",
       },
       {
-        label: "Property ID",
+        label: "PT_PROPERTY_ID",
         description: "CS_PROPERTY_ID_FORMAT_MUST_BE",
         type: "text",
         name: "propertyIds",
@@ -28,7 +28,7 @@ export const config = [
         },
       },
       {
-        label: "Old Property ID",
+        label: "PT_PROPERTY_ADDRESS_OLDPID",
         type: "text",
         name: "oldPropertyId",
         error: "ERR_INVALID_PROPERTY_ID",
@@ -39,7 +39,7 @@ export const config = [
           },
         },
       }, {
-        label: "Consumer Name",
+        label: "PT_COMMON_PAYEE_NAME",
         type: "text",
         name: "name",
         validation: {
@@ -50,7 +50,7 @@ export const config = [
         },
         error: "PAYMENT_INVALID_NAME",
       }, {
-        label: "Door Number",
+        label: "PT_DOOR_NUM_LABEL",
         type: "text",
         name: "doorNumber",
         validation:{pattern: {

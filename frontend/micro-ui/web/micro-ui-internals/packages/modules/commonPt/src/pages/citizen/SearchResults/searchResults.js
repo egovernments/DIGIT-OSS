@@ -125,7 +125,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
     return {
       property_id: property?.propertyId,
       owner_name: (property?.owners || [])[0]?.name,
-      property_address: [addr.doorNo || "", addr.buildingName || "", addr.street || "", addr.locality?.name || "", addr.city || ""]
+      property_address: [addr.doorNo || "", addr.buildingName || "", addr.street || "", t(`TENANTS_MOHALLA_${addr.locality?.code}`) || "", t(addr.tenantId) || ""]
         .filter((a) => a)
         .join(", "),
       total_due: payment[property?.propertyId]?.total_due || 0,
