@@ -206,7 +206,7 @@ const newRegistration = {
       uiFramework: "custom-atoms",
       componentPath: "Div",
       props: {
-        className: "common-div-css",
+        className: "common-div-css bnd-footer",
       },
       children: {
         details: footer,
