@@ -1,4 +1,7 @@
 
+## 2.1.3
+- Removed critical vulnerabilities library
+
 ## 2.1.2
 - Added changes for privacy feature.
 
