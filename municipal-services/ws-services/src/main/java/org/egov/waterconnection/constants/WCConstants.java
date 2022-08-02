@@ -283,5 +283,8 @@ public class WCConstants {
 
 	public static final String DOCUMENT_ACCESS_AUDIT_MSG = "The documents for water connection application has been accessed";
 
+	public static final String WNS_ENCRYPTION_MODEL = "WnSConnection";
+
+	public static final String WNS_OWNER_ENCRYPTION_MODEL = "WnSConnectionOwner";
 
 }

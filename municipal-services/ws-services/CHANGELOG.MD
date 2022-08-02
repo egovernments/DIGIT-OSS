@@ -1,6 +1,10 @@
 # Change log
 All notable changes to this module will be documented in this file.
 
+## 1.4.5 - 2022-07-27
+
+- Added privacy changes for water applications
+
 ## 1.4.4 - 2022-07-07
 
 - Added disconnection flow for water applications

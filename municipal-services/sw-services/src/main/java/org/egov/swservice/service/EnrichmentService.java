@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.egov.common.contract.request.PlainAccessRequest;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.swservice.config.SWConfiguration;
@@ -12,6 +13,7 @@ import org.egov.swservice.producer.SewarageConnectionProducer;
 import org.egov.swservice.repository.IdGenRepository;
 import org.egov.swservice.repository.ServiceRequestRepository;
 import org.egov.swservice.repository.SewerageDaoImpl;
+import org.egov.swservice.util.EncryptionDecryptionUtil;
 import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.web.models.*;
@@ -33,6 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 
 import static org.egov.swservice.util.SWConstants.DOCUMENT_ACCESS_AUDIT_MSG;
+import static org.egov.swservice.util.SWConstants.WNS_OWNER_ENCRYPTION_MODEL;
 
 @Service
 @Slf4j
@@ -64,6 +67,9 @@ public class EnrichmentService {
 
 	@Autowired
 	private SewarageConnectionProducer producer;
+
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
 
 	/**
 	 * 
@@ -333,7 +339,34 @@ public class EnrichmentService {
 			return;
 		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(criteria.getTenantId(), requestInfo);
 		userSearchRequest.setUuid(connectionHolderIds);
+
+		PlainAccessRequest apiPlainAccessRequest = userSearchRequest.getRequestInfo().getPlainAccessRequest();
+		/* Creating a PlainAccessRequest object to get unmasked data from user service */
+		List<String> plainRequestFieldsList = new ArrayList<String>() {{
+			add("userName");
+			add("mobileNumber");
+			add("correspondenceAddress");
+			add("guardian");
+			add("fatherOrHusbandName");
+			add("name");
+		}};
+		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(connectionHolderIds.iterator().next())
+				.plainRequestFields(plainRequestFieldsList).build();
+
+		requestInfo.setPlainAccessRequest(plainAccessRequest);
+
 		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+		//Re-setting the original PlainAccessRequest object that came from api request
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
+
+		// Encrypting and decrypting the data as per sw-service requirement
+		/* encrypt here */
+		userDetailResponse.setUser((List<OwnerInfo>) encryptionDecryptionUtil.encryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class));
+
+		/* decrypt here */
+		userDetailResponse.setUser(encryptionDecryptionUtil.decryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, requestInfo));
+
+
 		enrichConnectionHolderInfo(userDetailResponse, sewerageConnectionList,requestInfo);
 	}
 
@@ -481,6 +514,9 @@ public class EnrichmentService {
 			RequestInfo requestInfo) {
 		if (CollectionUtils.isEmpty(sewerageConnectionList))
 			return;
+
+		PlainAccessRequest apiPlainAccessRequest = requestInfo.getPlainAccessRequest();
+
 		List<ProcessInstance> processInstance=null;
 		for (SewerageConnection sewerageConnection : sewerageConnectionList) {
 			if(criteria.getTenantId()!=null)
@@ -495,6 +531,7 @@ public class EnrichmentService {
 				if(!ObjectUtils.isEmpty(processInstance.get(0).getAssignes()))
 					sewerageConnection.getProcessInstance().setAssignes(processInstance.get(0).getAssignes());
 			}
+			requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 		}
 	}
 
@@ -555,10 +592,80 @@ public class EnrichmentService {
 				producer.push(config.getDocumentAuditTopic(), auditObject);
 			}
 
-
 		}
-
 
 	}
 
+	/**
+	 * Method to take un-mask the connectionHolder details coming in from _update api
+	 *
+	 * @param sewerageConnection SewerageConnection
+	 * @param requestInfo RequestInfo
+	 * @return unmasked ConnectionHolder details
+	 */
+	public OwnerInfo getConnectionHolderDetailsForUpdateCall(SewerageConnection sewerageConnection, RequestInfo requestInfo) {
+		if (ObjectUtils.isEmpty(sewerageConnection))
+			return null;
+		Set<String> connectionHolderIds = new HashSet<>();
+		if (!CollectionUtils.isEmpty(sewerageConnection.getConnectionHolders())) {
+			connectionHolderIds.addAll(sewerageConnection.getConnectionHolders().stream()
+					.map(OwnerInfo::getUuid).collect(Collectors.toSet()));
+		}
+		if (CollectionUtils.isEmpty(connectionHolderIds))
+			return null;
+
+		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(sewerageConnection.getTenantId(), requestInfo);
+		userSearchRequest.setUuid(connectionHolderIds);
+		PlainAccessRequest apiPlainAccessRequest = userSearchRequest.getRequestInfo().getPlainAccessRequest();
+		List<String> plainRequestFieldsList = new ArrayList<String>() {{
+			add("mobileNumber");
+			add("guardian");
+			add("fatherOrHusbandName");
+			add("correspondenceAddress");
+			add("userName");
+			add("name");
+			add("gender");
+		}};
+
+		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(connectionHolderIds.iterator().next())
+				.plainRequestFields(plainRequestFieldsList).build();
+
+		requestInfo.setPlainAccessRequest(plainAccessRequest);
+
+		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+		int k;
+		for (OwnerInfo connectionHolder : sewerageConnection.getConnectionHolders()) {
+			k = 0;
+			for (OwnerInfo userDetail : userDetailResponse.getUser()) {
+				if (connectionHolder.getUuid().equals(userDetail.getUuid())) {
+					if (!connectionHolder.getFatherOrHusbandName().contains("*")) {
+						userDetailResponse.getUser().get(0).setFatherOrHusbandName(connectionHolder.getFatherOrHusbandName());
+					}
+
+					if (!connectionHolder.getMobileNumber().contains("*")) {
+						userDetailResponse.getUser().get(0).setMobileNumber(connectionHolder.getMobileNumber());
+					}
+					if (!connectionHolder.getCorrespondenceAddress().contains("*")) {
+						userDetailResponse.getUser().get(0).setCorrespondenceAddress(connectionHolder.getCorrespondenceAddress());
+					}
+					if (!connectionHolder.getUserName().contains("*")) {
+						userDetailResponse.getUser().get(0).setUserName(connectionHolder.getUserName());
+					}
+					if (!connectionHolder.getName().contains("*")) {
+						userDetailResponse.getUser().get(0).setName(connectionHolder.getName());
+					}
+					if (!connectionHolder.getGender().contains("*")) {
+						userDetailResponse.getUser().get(0).setGender(connectionHolder.getGender());
+					}
+				}
+				k++;
+			}
+		}
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
+		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
+		sewerageConnectionList.add(sewerageConnection);
+		enrichConnectionHolderInfo(userDetailResponse, sewerageConnectionList, requestInfo);
+		return userDetailResponse.getUser().get(0);
+	}
+	
 }

@@ -32,6 +32,9 @@ public class UserService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	@Autowired
+	private EnrichmentService enrichmentService;
+
 	/**
 	 * Creates user of the connection holders of sewerage connection if it is not
 	 * created already
@@ -105,6 +108,35 @@ public class UserService {
 	private Set<String> getMobileNumbers(SewerageConnectionRequest sewerageConnectionRequest) {
 		Set<String> listOfMobileNumbers = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders()
 				.stream().map(OwnerInfo::getMobileNumber).collect(Collectors.toSet());
+
+		OwnerInfo maskedConnectionHolder = new OwnerInfo();
+		OwnerInfo plainConnectionHolderFromDb = new OwnerInfo();
+		OwnerInfo connectionHolder = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0);
+
+		SewerageConnection newSewerageConnection = new SewerageConnection();
+		if (!listOfMobileNumbers.isEmpty() &&
+				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).getMobileNumber().contains("*")) {
+			newSewerageConnection = sewerageConnectionRequest.getSewerageConnection();
+			maskedConnectionHolder = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0);
+			plainConnectionHolderFromDb = enrichmentService.getConnectionHolderDetailsForUpdateCall(newSewerageConnection,
+					sewerageConnectionRequest.getRequestInfo());
+			if (maskedConnectionHolder != null && maskedConnectionHolder.getMobileNumber().contains("*")) {
+				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).setMobileNumber(plainConnectionHolderFromDb.getMobileNumber());
+			}
+			if (maskedConnectionHolder != null && maskedConnectionHolder.getFatherOrHusbandName().contains("*")) {
+				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).setFatherOrHusbandName(plainConnectionHolderFromDb.getFatherOrHusbandName());
+			}
+			if (maskedConnectionHolder != null && maskedConnectionHolder.getCorrespondenceAddress().contains("*")) {
+				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).setCorrespondenceAddress(plainConnectionHolderFromDb.getCorrespondenceAddress());
+			}
+			if (maskedConnectionHolder != null && maskedConnectionHolder.getUserName().contains("*")) {
+				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).setUserName(plainConnectionHolderFromDb.getUserName());
+			}
+			if (maskedConnectionHolder != null && maskedConnectionHolder.getName().contains("*")) {
+				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).setName(plainConnectionHolderFromDb.getName());
+			}
+		}
+
 		StringBuilder uri = new StringBuilder(configuration.getUserHost())
 				.append(configuration.getUserSearchEndpoint());
 		UserSearchRequest userSearchRequest = UserSearchRequest.builder()

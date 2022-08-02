@@ -25,8 +25,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -207,4 +205,21 @@ public class WaterDaoImpl implements WaterDao {
 		return ids;
 	}
 
+	/* Method to push the encrypted data to the 'update' topic  */
+	@Override
+	public void updateOldWaterConnections(WaterConnectionRequest waterConnectionRequest) {
+		waterConnectionProducer.push(updateWaterConnection, waterConnectionRequest);
+	}
+
+	/* Method to find the total count of applications present in dB */
+	@Override
+	public Integer getTotalApplications(SearchCriteria criteria) {
+
+		String query = wsQueryBuilder.getTotalApplicationsCountQueryString(criteria);
+		if (query == null)
+			return 0;
+		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
+		return count;
+	}
+	
 }

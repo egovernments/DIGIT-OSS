@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.egov.common.contract.request.PlainAccessRequest;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.tracer.model.CustomException;
@@ -14,6 +15,7 @@ import org.egov.waterconnection.producer.WaterConnectionProducer;
 import org.egov.waterconnection.repository.IdGenRepository;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
 import org.egov.waterconnection.repository.WaterDaoImpl;
+import org.egov.waterconnection.util.EncryptionDecryptionUtil;
 import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.web.models.Connection.StatusEnum;
@@ -24,6 +26,7 @@ import org.egov.waterconnection.web.models.users.UserSearchRequest;
 import org.egov.waterconnection.web.models.workflow.ProcessInstance;
 import org.egov.waterconnection.workflow.WorkflowService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -33,8 +36,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.egov.waterconnection.constants.WCConstants.*;
-
+import static org.egov.waterconnection.constants.WCConstants.DOCUMENT_ACCESS_AUDIT_MSG;
+import static org.egov.waterconnection.constants.WCConstants.WNS_OWNER_ENCRYPTION_MODEL;
 
 @Service
 @Slf4j
@@ -52,12 +55,14 @@ public class EnrichmentService {
 	@Autowired
 	private ObjectMapper mapper;
 	
+	@Lazy
 	@Autowired
 	private WaterDaoImpl waterDao;
 	
 	@Autowired
 	private UserService userService;
 
+	@Lazy
 	@Autowired
 	private WaterServiceImpl waterService;
 
@@ -69,6 +74,10 @@ public class EnrichmentService {
 
 	@Autowired
 	private WaterConnectionProducer producer;
+
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
+
 	/**
 	 * Enrich water connection
 	 * 
@@ -131,8 +140,9 @@ public class EnrichmentService {
 				roadCuttingInfo.setAuditDetails(auditDetails);
 			});
 		}
-		
+
 	}
+
 	@SuppressWarnings("unchecked")
 	public void enrichingAdditionalDetails(WaterConnectionRequest waterConnectionRequest) {
 		HashMap<String, Object> additionalDetail = new HashMap<>();
@@ -158,9 +168,9 @@ public class EnrichmentService {
 					.equalsIgnoreCase(WCConstants.APPROVE_CONNECTION_CONST)) {
 				additionalDetail.put(WCConstants.ESTIMATION_DATE_CONST, System.currentTimeMillis());
 			}
-			additionalDetail.put(WCConstants.LOCALITY,addDetail.get(WCConstants.LOCALITY).toString());
+			additionalDetail.put(WCConstants.LOCALITY, addDetail.get(WCConstants.LOCALITY).toString());
 
-			for (Map.Entry<String, Object> entry: addDetail.entrySet()) {
+			for (Map.Entry<String, Object> entry : addDetail.entrySet()) {
 				if (additionalDetail.getOrDefault(entry.getKey(), null) == null) {
 					additionalDetail.put(entry.getKey(), addDetail.get(entry.getKey()));
 				}
@@ -303,31 +313,31 @@ public class EnrichmentService {
 		}
 		request.getWaterConnection().setConnectionNo(connectionNumbers.get(0));
 	}
+
 	/**
 	 * Enrich fileStoreIds
-	 * 
+	 *
 	 * @param waterConnectionRequest WaterConnectionRequest Object
 	 */
 	public void enrichFileStoreIds(WaterConnectionRequest waterConnectionRequest) {
 		try {
-			log.info("ACTION "+waterConnectionRequest.getWaterConnection().getProcessInstance().getAction());
-			log.info("ApplicationStatus "+waterConnectionRequest.getWaterConnection().getApplicationStatus());
+			log.info("ACTION " + waterConnectionRequest.getWaterConnection().getProcessInstance().getAction());
+			log.info("ApplicationStatus " + waterConnectionRequest.getWaterConnection().getApplicationStatus());
 			if (waterConnectionRequest.getWaterConnection().getApplicationStatus()
 					.equalsIgnoreCase(WCConstants.PENDING_APPROVAL_FOR_CONNECTION_CODE)
 					|| waterConnectionRequest.getWaterConnection().getProcessInstance().getAction()
-							.equalsIgnoreCase(WCConstants.ACTION_PAY)) {
+					.equalsIgnoreCase(WCConstants.ACTION_PAY)) {
 				waterDao.enrichFileStoreIds(waterConnectionRequest);
 			}
 		} catch (Exception ex) {
 			log.debug(ex.toString());
 		}
 	}
-	
+
 	/**
 	 * Sets status for create request
-	 * 
-	 * @param waterConnectionRequest
-	 *            The create request
+	 *
+	 * @param waterConnectionRequest The create request
 	 */
 	private void setStatusForCreate(WaterConnectionRequest waterConnectionRequest) {
 		if (waterConnectionRequest.getWaterConnection().getProcessInstance().getAction()
@@ -338,13 +348,13 @@ public class EnrichmentService {
 
 	/**
 	 * Enrich
-	 * 
+	 *
 	 * @param waterConnectionList - List Of WaterConnectionObject
-	 * @param criteria - Search Criteria
-	 * @param requestInfo - RequestInfo Object
+	 * @param criteria            - Search Criteria
+	 * @param requestInfo         - RequestInfo Object
 	 */
 	public void enrichConnectionHolderDeatils(List<WaterConnection> waterConnectionList, SearchCriteria criteria,
-			RequestInfo requestInfo) {
+											  RequestInfo requestInfo) {
 		if (CollectionUtils.isEmpty(waterConnectionList))
 			return;
 		Set<String> connectionHolderIds = new HashSet<>();
@@ -358,28 +368,53 @@ public class EnrichmentService {
 			return;
 		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(criteria.getTenantId(), requestInfo);
 		userSearchRequest.setUuid(connectionHolderIds);
+
+		PlainAccessRequest apiPlainAccessRequest = userSearchRequest.getRequestInfo().getPlainAccessRequest();
+		/* Creating a PlainAccessRequest object to get unmasked data from user service */
+		List<String> plainRequestFieldsList = new ArrayList<String>() {{
+			add("userName");
+			add("mobileNumber");
+			add("correspondenceAddress");
+			add("guardian");
+			add("fatherOrHusbandName");
+			add("name");
+		}};
+		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(connectionHolderIds.iterator().next())
+				.plainRequestFields(plainRequestFieldsList).build();
+
+		requestInfo.setPlainAccessRequest(plainAccessRequest);
+
 		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
-		enrichConnectionHolderInfo(userDetailResponse, waterConnectionList,requestInfo);
+		//Re-setting the original PlainAccessRequest object that came from api request
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
+		// Encrypting and decrypting the data as per ws-service requirement
+		/* encrypt here */
+		userDetailResponse.setUser((List<OwnerInfo>) encryptionDecryptionUtil.encryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class));
+
+		/* decrypt here */
+		userDetailResponse.setUser(encryptionDecryptionUtil.decryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, requestInfo));
+
+		enrichConnectionHolderInfo(userDetailResponse, waterConnectionList, requestInfo);
 	}
 
 	/**
-	 *Populates the owner fields inside of the water connection objects from the response got from calling user api
+	 * Populates the owner fields inside of the water connection objects from the response got from calling user api
 	 * @param userDetailResponse
 	 * @param waterConnectionList List of water connection whose owner's are to be populated from userDetailsResponse
 	 */
-	public void enrichConnectionHolderInfo(UserDetailResponse userDetailResponse, List<WaterConnection> waterConnectionList,RequestInfo requestInfo) {
+	public void enrichConnectionHolderInfo(UserDetailResponse userDetailResponse, List<WaterConnection> waterConnectionList, RequestInfo requestInfo) {
 		List<OwnerInfo> connectionHolderInfos = userDetailResponse.getUser();
 		Map<String, OwnerInfo> userIdToConnectionHolderMap = new HashMap<>();
 		connectionHolderInfos.forEach(user -> userIdToConnectionHolderMap.put(user.getUuid(), user));
 		waterConnectionList.forEach(waterConnection -> {
-			if(!CollectionUtils.isEmpty(waterConnection.getConnectionHolders())){
+			if (!CollectionUtils.isEmpty(waterConnection.getConnectionHolders())) {
 				waterConnection.getConnectionHolders().forEach(holderInfo -> {
 					if (userIdToConnectionHolderMap.get(holderInfo.getUuid()) == null)
 						throw new CustomException("OWNER SEARCH ERROR", "The owner of the water application"
 								+ waterConnection.getApplicationNo() + " is not coming in user search");
-					else{
+					else {
 						Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
-						if(isOpenSearch)
+						if (isOpenSearch)
 							holderInfo.addUserDetail(getMaskedOwnerInfo(userIdToConnectionHolderMap.get(holderInfo.getUuid())));
 						else
 							holderInfo.addUserDetail(userIdToConnectionHolderMap.get(holderInfo.getUuid()));
@@ -449,18 +484,18 @@ public class EnrichmentService {
 		return new ArrayList(connectionHashMap.values());
 	}
 
-	public List<WaterConnection> enrichPropertyDetails(List<WaterConnection> waterConnectionList, SearchCriteria criteria, RequestInfo requestInfo){
+	public List<WaterConnection> enrichPropertyDetails(List<WaterConnection> waterConnectionList, SearchCriteria criteria, RequestInfo requestInfo) {
 		List<WaterConnection> finalConnectionList = new ArrayList<>();
 		if (CollectionUtils.isEmpty(waterConnectionList))
 			return finalConnectionList;
 
 		Set<String> propertyIds = new HashSet<>();
-		Map<String,List<OwnerInfo>> propertyToOwner = new HashMap<>();
-		for(WaterConnection waterConnection : waterConnectionList){
-			if(!StringUtils.isEmpty(waterConnection.getPropertyId()))
+		Map<String, List<OwnerInfo>> propertyToOwner = new HashMap<>();
+		for (WaterConnection waterConnection : waterConnectionList) {
+			if (!StringUtils.isEmpty(waterConnection.getPropertyId()))
 				propertyIds.add(waterConnection.getPropertyId());
 		}
-		if(!CollectionUtils.isEmpty(propertyIds)){
+		if (!CollectionUtils.isEmpty(propertyIds)) {
 			PropertyCriteria propertyCriteria = new PropertyCriteria();
 			if (!StringUtils.isEmpty(criteria.getTenantId())) {
 				propertyCriteria.setTenantId(criteria.getTenantId());
@@ -469,25 +504,25 @@ public class EnrichmentService {
 			List<Property> propertyList = waterServicesUtil.getPropertyDetails(serviceRequestRepository.fetchResult(waterServicesUtil.getPropertyURL(propertyCriteria),
 					RequestInfoWrapper.builder().requestInfo(requestInfo).build()));
 
-			if(!CollectionUtils.isEmpty(propertyList)){
-				for(Property property: propertyList){
-					propertyToOwner.put(property.getPropertyId(),property.getOwners());
+			if (!CollectionUtils.isEmpty(propertyList)) {
+				for (Property property : propertyList) {
+					propertyToOwner.put(property.getPropertyId(), property.getOwners());
 				}
 			}
 
-			for(WaterConnection waterConnection : waterConnectionList){
+			for (WaterConnection waterConnection : waterConnectionList) {
 				HashMap<String, Object> additionalDetail = new HashMap<>();
 				HashMap<String, Object> addDetail = mapper
 						.convertValue(waterConnection.getAdditionalDetails(), HashMap.class);
 
-				for (Map.Entry<String, Object> entry: addDetail.entrySet()) {
+				for (Map.Entry<String, Object> entry : addDetail.entrySet()) {
 					if (additionalDetail.getOrDefault(entry.getKey(), null) == null) {
 						additionalDetail.put(entry.getKey(), addDetail.get(entry.getKey()));
 					}
 				}
 				List<OwnerInfo> ownerInfoList = propertyToOwner.get(waterConnection.getPropertyId());
-				if(!CollectionUtils.isEmpty(ownerInfoList)){
-					additionalDetail.put("ownerName",ownerInfoList.get(0).getName());
+				if (!CollectionUtils.isEmpty(ownerInfoList)) {
+					additionalDetail.put("ownerName", ownerInfoList.get(0).getName());
 				}
 				waterConnection.setAdditionalDetails(additionalDetail);
 				finalConnectionList.add(waterConnection);
@@ -499,23 +534,27 @@ public class EnrichmentService {
 	}
 
 	public void enrichProcessInstance(List<WaterConnection> waterConnectionList, SearchCriteria criteria,
-			RequestInfo requestInfo) {
+									  RequestInfo requestInfo) {
 		if (CollectionUtils.isEmpty(waterConnectionList))
 			return;
-		ProcessInstance processInstance=null;
+
+		PlainAccessRequest apiPlainAccessRequest = requestInfo.getPlainAccessRequest();
+
+		ProcessInstance processInstance = null;
 		for (WaterConnection waterConnection : waterConnectionList) {
-			if(criteria.getTenantId()!=null)
-				processInstance=wfService.getProcessInstance(requestInfo, waterConnection.getApplicationNo(), 
-					criteria.getTenantId(), null);
+			if (criteria.getTenantId() != null)
+				processInstance = wfService.getProcessInstance(requestInfo, waterConnection.getApplicationNo(),
+						criteria.getTenantId(), null);
 			else
-				processInstance=wfService.getProcessInstance(requestInfo, waterConnection.getApplicationNo(), 
+				processInstance = wfService.getProcessInstance(requestInfo, waterConnection.getApplicationNo(),
 						waterConnection.getTenantId(), null);
-			if(!ObjectUtils.isEmpty(processInstance)) {
+			if (!ObjectUtils.isEmpty(processInstance)) {
 				waterConnection.getProcessInstance().setBusinessService(processInstance.getBusinessService());
 				waterConnection.getProcessInstance().setModuleName(processInstance.getModuleName());
-				if(!ObjectUtils.isEmpty(processInstance.getAssignes()))
+				if (!ObjectUtils.isEmpty(processInstance.getAssignes()))
 					waterConnection.getProcessInstance().setAssignes(processInstance.getAssignes());
 			}
+			requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 		}
 	}
 
@@ -571,5 +610,77 @@ public class EnrichmentService {
 
 	}
 
+	/**
+	 * Method to take un-mask the connectionHolder details coming in from _update api
+	 *
+	 * @param waterConnection WaterConnection
+	 * @param requestInfo RequestInfo
+	 * @return unmasked ConnectionHolder details
+	 */
+	public OwnerInfo getConnectionHolderDetailsForUpdateCall(WaterConnection waterConnection, RequestInfo requestInfo) {
+		if (ObjectUtils.isEmpty(waterConnection))
+			return null;
+		Set<String> connectionHolderIds = new HashSet<>();
+		if (!CollectionUtils.isEmpty(waterConnection.getConnectionHolders())) {
+			connectionHolderIds.addAll(waterConnection.getConnectionHolders().stream()
+					.map(OwnerInfo::getUuid).collect(Collectors.toSet()));
+		}
+		if (CollectionUtils.isEmpty(connectionHolderIds))
+			return null;
+
+		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(waterConnection.getTenantId(), requestInfo);
+		userSearchRequest.setUuid(connectionHolderIds);
+		PlainAccessRequest apiPlainAccessRequest = userSearchRequest.getRequestInfo().getPlainAccessRequest();
+		List<String> plainRequestFieldsList = new ArrayList<String>() {{
+			add("mobileNumber");
+			add("guardian");
+			add("fatherOrHusbandName");
+			add("correspondenceAddress");
+			add("userName");
+			add("name");
+			add("gender");
+		}};
+
+		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(connectionHolderIds.iterator().next())
+				.plainRequestFields(plainRequestFieldsList).build();
+
+		requestInfo.setPlainAccessRequest(plainAccessRequest);
+
+		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+
+		int k;
+		for (OwnerInfo connectionHolder : waterConnection.getConnectionHolders()) {
+			k = 0;
+			for (OwnerInfo userDetail : userDetailResponse.getUser()) {
+				if (connectionHolder.getUuid().equals(userDetail.getUuid())) {
+					if (!connectionHolder.getFatherOrHusbandName().contains("*")) {
+						userDetailResponse.getUser().get(k).setFatherOrHusbandName(connectionHolder.getFatherOrHusbandName());
+					}
+					if (!connectionHolder.getMobileNumber().contains("*")) {
+						userDetailResponse.getUser().get(k).setMobileNumber(connectionHolder.getMobileNumber());
+					}
+					if (!connectionHolder.getCorrespondenceAddress().contains("*")) {
+						userDetailResponse.getUser().get(k).setCorrespondenceAddress(connectionHolder.getCorrespondenceAddress());
+					}
+					if (!connectionHolder.getUserName().contains("*")) {
+						userDetailResponse.getUser().get(k).setUserName(connectionHolder.getUserName());
+					}
+					if (!connectionHolder.getName().contains("*")) {
+						userDetailResponse.getUser().get(k).setName(connectionHolder.getName());
+					}
+					if (!connectionHolder.getGender().contains("*")) {
+						userDetailResponse.getUser().get(k).setGender(connectionHolder.getGender());
+					}
+				}
+				k++;
+			}
+		}
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
+		List<WaterConnection> waterConnectionList = new ArrayList<>();
+		waterConnectionList.add(waterConnection);
+		enrichConnectionHolderInfo(userDetailResponse, waterConnectionList, requestInfo);
+		return userDetailResponse.getUser().get(0);
+	}
 
 }
+

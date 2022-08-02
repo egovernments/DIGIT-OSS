@@ -1,26 +1,22 @@
 package org.egov.swservice.service;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.repository.SewerageDao;
 import org.egov.swservice.repository.SewerageDaoImpl;
+import org.egov.swservice.util.EncryptionDecryptionUtil;
 import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.validator.ActionValidator;
 import org.egov.swservice.validator.MDMSValidator;
 import org.egov.swservice.validator.SewerageConnectionValidator;
 import org.egov.swservice.validator.ValidateProperty;
-import org.egov.swservice.web.models.Property;
-import org.egov.swservice.web.models.SearchCriteria;
-import org.egov.swservice.web.models.SewerageConnection;
-import org.egov.swservice.web.models.SewerageConnectionRequest;
+import org.egov.swservice.web.models.*;
 import org.egov.swservice.web.models.workflow.BusinessService;
 import org.egov.swservice.workflow.WorkflowIntegrator;
 import org.egov.swservice.workflow.WorkflowService;
@@ -28,12 +24,14 @@ import org.egov.tracer.model.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import static org.egov.swservice.util.SWConstants.APPROVE_CONNECTION;
+import static org.egov.swservice.util.SWConstants.*;
 
+@Slf4j
 @Component
 public class SewerageServiceImpl implements SewerageService {
 
@@ -78,6 +76,9 @@ public class SewerageServiceImpl implements SewerageService {
 	
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
 	
 	/**
 	 * @param sewerageConnectionRequest
@@ -109,10 +110,18 @@ public class SewerageServiceImpl implements SewerageService {
 		mDMSValidator.validateMasterForCreateRequest(sewerageConnectionRequest);
 		enrichmentService.enrichSewerageConnection(sewerageConnectionRequest, reqType);
 		userService.createUser(sewerageConnectionRequest);
-		sewerageDao.saveSewerageConnection(sewerageConnectionRequest);
 		// call work-flow
 		if (config.getIsExternalWorkFlowEnabled())
 			wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
+
+		/* encrypt here */
+		sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.encryptObject(sewerageConnectionRequest.getSewerageConnection(), WNS_ENCRYPTION_MODEL, SewerageConnection.class));
+
+		sewerageDao.saveSewerageConnection(sewerageConnectionRequest);
+
+		/* decrypt here */
+		sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), WNS_ENCRYPTION_MODEL, SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
+
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
 	}
 
@@ -142,6 +151,10 @@ public class SewerageServiceImpl implements SewerageService {
 	 * @return List of matching sewerage connection
 	 */
 	public List<SewerageConnection> search(SearchCriteria criteria, RequestInfo requestInfo) {
+
+		/* encrypt here */
+		criteria = encryptionDecryptionUtil.encryptObject(criteria, WNS_ENCRYPTION_MODEL, SearchCriteria.class);
+
 		List<SewerageConnection> sewerageConnectionList = getSewerageConnectionsList(criteria, requestInfo);
 		if(!StringUtils.isEmpty(criteria.getSearchType()) &&
 				criteria.getSearchType().equals(SWConstants.SEARCH_TYPE_CONNECTION)){
@@ -158,7 +171,9 @@ public class SewerageServiceImpl implements SewerageService {
 		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
 		enrichmentService.enrichProcessInstance(sewerageConnectionList, criteria, requestInfo);
 		enrichmentService.enrichDocumentDetails(sewerageConnectionList, criteria, requestInfo);
-		return sewerageConnectionList;
+
+		/* decrypt here */
+		return encryptionDecryptionUtil.decryptObject(sewerageConnectionList, WNS_ENCRYPTION_MODEL, SewerageConnection.class, requestInfo);
 	}
 
 	/**
@@ -208,7 +223,7 @@ public class SewerageServiceImpl implements SewerageService {
 	 */
 	@Override
 	public List<SewerageConnection> updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest) {
-		
+
 		if(sewerageConnectionRequest.isDisconnectRequest()) {
 			return updateSewerageConnectionForDisconnectFlow(sewerageConnectionRequest);
 		}
@@ -241,11 +256,28 @@ public class SewerageServiceImpl implements SewerageService {
 		// Enrich file store Id After payment
 		enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
 		enrichmentService.postStatusEnrichment(sewerageConnectionRequest);
+
+		/* encrypt here */
+		sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.encryptObject(sewerageConnectionRequest.getSewerageConnection(), WNS_ENCRYPTION_MODEL, SewerageConnection.class));
+		if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
+			int k = 0;
+			for (OwnerInfo holderInfo : sewerageConnectionRequest.getSewerageConnection().getConnectionHolders()) {
+				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().set(k, encryptionDecryptionUtil.encryptObject(holderInfo, WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class));
+				k++;
+			}
+		}
+
 		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
 				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
 		if (!StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getTenantId()))
 			criteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
 		enrichmentService.enrichProcessInstance(Arrays.asList(sewerageConnectionRequest.getSewerageConnection()), criteria, sewerageConnectionRequest.getRequestInfo());
+
+		/* decrypt here */
+		sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), WNS_ENCRYPTION_MODEL, SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
+		if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders()))
+			sewerageConnectionRequest.getSewerageConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
+
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
 	}
 

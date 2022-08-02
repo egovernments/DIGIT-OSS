@@ -5,7 +5,7 @@
 	<artifactId>ws-services</artifactId>
 	<packaging>jar</packaging>
 	<name>water-services</name>
-	<version>1.4.4-SNAPSHOT</version>
+	<version>1.4.5-SNAPSHOT</version>
 	<properties>
 		<log4j2.version>2.17.1</log4j2.version>
 		<java.version>1.8</java.version>
@@ -74,6 +74,21 @@
 			<groupId>org.egov.services</groupId>
 			<artifactId>services-common</artifactId>
 			<version>1.1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.egov</groupId>
+			<artifactId>enc-client</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.kafka</groupId>
+					<artifactId>spring-kafka</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.kafka</groupId>
+					<artifactId>kafka-clients</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>

@@ -123,5 +123,7 @@ curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/b
              }
            ]
         }
+      ]
+    }
   ]
 }'

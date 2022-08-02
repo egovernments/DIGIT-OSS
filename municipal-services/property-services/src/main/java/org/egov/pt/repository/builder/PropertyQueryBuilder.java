@@ -56,6 +56,8 @@ public class PropertyQueryBuilder {
 	
 	private static String UnitSelectValues = "unit.id as unitid, unit.tenantid as unittenantid, unit.propertyid as unitpid, floorno, unittype, unit.usagecategory as unitusagecategory, occupancytype, occupancydate, carpetarea, builtuparea, plintharea, unit.superbuiltuparea as unitspba, arv, constructiontype, constructiondate, dimensions, unit.active as isunitactive, unit.createdby as unitcreatedby, unit.createdtime as unitcreatedtime, unit.lastmodifiedby as unitlastmodifiedby, unit.lastmodifiedtime as unitlastmodifiedtime ";
 
+	private static final String TOTAL_APPLICATIONS_COUNT_QUERY = "select count(*) from eg_pt_property where tenantid = '{}';";
+	
 	private static final String QUERY = SELECT 
 			
 			+	propertySelectValues    
@@ -407,4 +409,7 @@ public class PropertyQueryBuilder {
         return countQuery;
     }
 
+    public String getTotalApplicationsCountQueryString(PropertyCriteria criteria) {
+		return TOTAL_APPLICATIONS_COUNT_QUERY.replace("{}",criteria.getTenantId());
+    }
 }
