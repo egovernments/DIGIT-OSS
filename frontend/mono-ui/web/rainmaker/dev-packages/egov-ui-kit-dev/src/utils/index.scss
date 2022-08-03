@@ -93,8 +93,32 @@ position: unset;
   .unique-jk-report-btns{
     position: unset!important;
   }
-}
+  .dataTable{
+    thead{
+      tr{
+        th{
+          // display: unset !important;
+        }
+      }
+    }
+    tbody{
+      tr{
+        td{
+          display: unset !important;
+        }
+      }
+    }
+  }
 
+}
+.m-table-report{
+div{
+  div:nth-of-type(3){
+    width: 100%;
+    overflow: auto;
+  }
+}
+}
 
 
 .dt-button-collection{

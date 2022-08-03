@@ -26,6 +26,10 @@ import { connect } from "react-redux";
 import { getResultUrl, translate } from "./commons";
 import "./index.css";
 import { downloadPDFFileUsingBase64 } from "./pdfUtils/generatePDF";
+import{Table} from  "egov-ui-framework/ui-molecules";
+import { withStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 window.JSZip = JSZip;
@@ -33,7 +37,13 @@ window.JSZip = JSZip;
 var sumColumn = [];
 var footerexist = false;
 let rTable;
-
+const styles = theme => ({
+  paper: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3,
+    overflowX: 'auto',
+  },
+});
 const formatLocaleKeys = (key = "") => {
   if (typeof key != "string") {
     return key;
@@ -761,7 +771,7 @@ class ShowField extends Component {
     let { reportResult, metaData } = this.props;
     let { checkAllRows } = this;
     return (
-      <thead>
+      <thead  style={{display:"hidden"}}>
         <tr className="report-table-header">
           <th key={"S. No."} className="report-header-cell">
             <Label className="report-header-row-label" labelStyle={{ wordWrap: "unset", wordBreak: "unset", fontWeight: "bold" }} label={"RT_SNO"} />
@@ -773,6 +783,7 @@ class ShowField extends Component {
           )}
           {reportResult.hasOwnProperty("reportHeader") &&
             reportResult.reportHeader.map((item, i) => {
+              console.log(item,'item');
               if (item.showColumn) {
                 return (
                   <th key={i} className="report-header-cell">
@@ -897,7 +908,7 @@ class ShowField extends Component {
     let { reportResult, metaData } = this.props;
     let { drillDown, checkIfDate } = this;
     return (
-      <tbody>
+      <tbody style={{display:"hidden"}}>
         {reportResult.hasOwnProperty("reportData") &&
           reportResult.reportData.map((dataItem, dataIndex) => {
             //array of array
@@ -1028,7 +1039,7 @@ class ShowField extends Component {
 
     if (footerexist) {
       return (
-        <tfoot>
+        <tfoot style={{display:"hidden"}}>
           <tr className="total">
             {sumColumn.map((columnObj, index) => {
               return (
@@ -1097,14 +1108,89 @@ class ShowField extends Component {
     // return reportTitle;
     return [reportHeaderName];
   };
+getData(){
+  let { reportResult, metaData } = this.props;
+if(!reportResult||!reportResult.reportData||reportResult.reportData.length==0){
+  return [];
+}
+  return reportResult.reportData.map(e=>{
+    let n={};
+    reportResult.reportHeader.map((e1,i)=>{
+        if(e1.showColumn){
+            n[e1.label]=e[i];
+        }
+    })
+        
+        return {
+            ...n
+        }
+    })
 
+}
   render() {
     let { isTableShow, metaData, reportResult } = this.props;
     let self = this;
+    const classes = this.props.classes;
+
+    let result=reportResult&&this.getData()||[];
+    console.log(result,'result',result.length>0&&Object.keys(result[0]).map(e=>({labelKey:e,labelName:getLocaleLabels(e,e)})));
     const viewTabel = () => {
       return (
-        <div>
-          <table
+        <div className="m-table-report">
+          {result&&<Table 
+           visible={true}
+           data={result}
+             className={"appTab"}
+             columns={ 
+              result.length>0&&Object.keys(result[0]).map(e=>({labelKey:e,labelName:getLocaleLabels(e,e),options: {
+                filter: false,
+                customBodyRender: value => (
+                  <span style={{ color: '#000000' }}>
+                    {value}
+                  </span>
+                )
+              }}))
+            }
+             title={{labelKey:"CS_SEARCH_RESULTS", labelName:"Search Results for Property Application"}}
+             rows={result&&result.length||""}
+             exportCsv={(data, columns) => console.log(data, columns, '<== CSV')}
+             exportPdf={ (data, columns) => console.log(data, columns, '<== PDF')}
+
+             options={ {
+               filter: false,
+               exportButton: {
+                csv: true,
+                pdf: true,
+             },
+             exportCsv: (data, columns) => console.log(data, columns, '<== CSV'),
+             exportPdf: (data, columns) => console.log(data, columns, '<== PDF'),
+
+                         responsive: "stacked",
+               selectableRows: false,
+               hover: true,
+               rowsPerPageOptions: [10, 15, 20],
+               onRowClick: (row, index, dispatch) => {
+                 // onApplicationTabClick(row,index, dispatch);
+               }
+             }}
+             customSortColumn={ {
+               column: "Application Date",
+               sortingFn: (data, i, sortDateOrder) => {
+                 const epochDates = data.reduce((acc, curr) => {
+                   acc.push([...curr, getEpochForDate(curr[4], "dayend")]);
+                   return acc;
+                 }, []);
+                 const order = sortDateOrder === "asc" ? true : false;
+                 const finalData = sortByEpoch(epochDates, !order).map(item => {
+                   item.pop();
+                   return item;
+                 });
+                 return { data: finalData, currentOrder: !order ? "asc" : "desc" };
+               }
+              }
+           }
+          />}
+          {/* <table
             id="reportTable"
             style={{
               width: "100%",
@@ -1115,7 +1201,7 @@ class ShowField extends Component {
             {self.renderBody()}
 
             {this.renderFooter()}
-          </table>
+          </table> */}
           {metaData.reportDetails && metaData.reportDetails.viewPath && metaData.reportDetails.selectiveDownload && self.state.showPrintBtn ? (
             <div style={{ textAlign: "center" }}>
               <RaisedButton
@@ -1137,8 +1223,10 @@ class ShowField extends Component {
     return isTableShow ? (
       <div>
         <div className="report-result-table">
-          {isTableShow && !_.isEmpty(reportResult) && reportResult.hasOwnProperty("reportData") && viewTabel()}
+        {this.getExportOptions().map(e=>(e.footer?<button className={e.className} onClick={e.customize}>{e.text}</button>:<span className={e.className}>{e.text}</span>))}
         </div>
+          {isTableShow && !_.isEmpty(reportResult) && reportResult.hasOwnProperty("reportData") && viewTabel()}
+        {/* </div> */}
       </div>
     ) : null;
   }
@@ -1170,4 +1258,4 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShowField);
+export default  connect(mapStateToProps, mapDispatchToProps)(ShowField);
