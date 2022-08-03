@@ -209,6 +209,7 @@ const DriverDetails = (props) => {
       },
     });
     setShowModal(false);
+    setSelectedAction(null);
   };
 
   const handleEditVendor = () => {
@@ -236,6 +237,7 @@ const DriverDetails = (props) => {
       },
     });
     setShowModal(false);
+    setSelectedAction(null);
   };
 
   const closeModal = () => {
