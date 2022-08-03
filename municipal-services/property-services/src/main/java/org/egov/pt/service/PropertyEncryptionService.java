@@ -95,7 +95,7 @@ public class PropertyEncryptionService {
         while (startBatch < count) {
             long startTime = System.nanoTime();
             List<Property> propertyList = new LinkedList<>();
-            propertyList = propertyService.searchPropertyPlainSearch(criteria, requestInfo);
+            propertyList = propertyService.searchProperty(criteria, requestInfo);
             try {
                 for (Property property : propertyList) {
                     /* encrypt here */
