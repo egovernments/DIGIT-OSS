@@ -362,8 +362,8 @@ public class PropertyService {
 	public List<Property> searchProperty(PropertyCriteria criteria, RequestInfo requestInfo) {
 
 		List<Property> properties;
-		/* encrypt here */
-		criteria = encryptionDecryptionUtil.encryptObject(criteria, "Property", PropertyCriteria.class);
+//		/* encrypt here */
+//		criteria = encryptionDecryptionUtil.encryptObject(criteria, "Property", PropertyCriteria.class);
 
 		/*
 		 * throw error if audit request is with no proeprty id or multiple propertyids
@@ -399,7 +399,8 @@ public class PropertyService {
 		List<Property> encryptedProperties= new LinkedList<>();
 
 		/* decrypt here */
-		return encryptionDecryptionUtil.decryptObject(properties, "Property", Property.class, requestInfo);
+//		return encryptionDecryptionUtil.decryptObject(properties, "Property", Property.class, requestInfo);
+		return properties;
 	}
 
 	private void filterPropertiesForUser(List<Property> properties, Set<String> ownerIds) {
