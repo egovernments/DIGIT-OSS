@@ -1,30 +1,13 @@
 package org.egov.auditservice.persisterauditclient;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.zafarkhaja.semver.Version;
-
-import java.util.ArrayList;
-
-import java.util.HashMap;
-import java.util.List;
-
-import org.egov.auditservice.persisterauditclient.models.contract.JsonMap;
-import org.egov.auditservice.persisterauditclient.models.contract.Mapping;
-
-import org.egov.auditservice.persisterauditclient.models.contract.PersisterClientInput;
-import org.egov.auditservice.persisterauditclient.models.contract.QueryMap;
-import org.egov.auditservice.persisterauditclient.models.contract.TopicMap;
+import org.egov.auditservice.persisterauditclient.models.contract.*;
 import org.egov.auditservice.persisterauditclient.utils.AuditUtil;
 import org.egov.auditservice.service.ChooseSignerAndVerifier;
+import org.egov.auditservice.web.models.AuditLog;
 import org.egov.tracer.model.CustomException;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +15,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {PersisterAuditClientService.class})
 @ExtendWith(SpringExtension.class)
@@ -56,8 +47,8 @@ class PersisterAuditClientServiceTest {
 
 
 
-    ////@Test
-    void testGenerateAuditLogs2() {
+    @Test
+    void testGenerateAuditLogsWithError() {
         when(auditUtil.getSemVer((String) any())).thenReturn(Version.forIntegers(1));
         when(topicMap.getTopicMap()).thenThrow(new CustomException("$.RequestInfo.ver", "An error occurred"));
         assertThrows(CustomException.class,
@@ -65,9 +56,7 @@ class PersisterAuditClientServiceTest {
         verify(topicMap).getTopicMap();
     }
 
-
-
-    ////@Test
+    @Test
     void testGetRowData() {
         ArrayList<JsonMap> jsonMaps = new ArrayList<>();
 
@@ -89,9 +78,8 @@ class PersisterAuditClientServiceTest {
                 () -> persisterAuditClientService.getRowData(jsonMaps, "Json Obj", "Base Json Path", mapping));
     }
 
-
-    ////@Test
-    void testGetRowData2() {
+    @Test
+    void testGetRowDataWithAuditBasePath() {
         ArrayList<JsonMap> jsonMaps = new ArrayList<>();
         Mapping mapping = mock(Mapping.class);
         when(mapping.getAuditAttributeBasePath()).thenReturn("Audit Attribute Base Path");

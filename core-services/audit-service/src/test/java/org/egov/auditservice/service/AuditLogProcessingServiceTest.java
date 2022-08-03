@@ -21,6 +21,7 @@ import org.egov.auditservice.web.models.AuditLogRequest;
 import org.egov.auditservice.web.models.AuditLogSearchCriteria;
 import org.egov.auditservice.web.models.ObjectIdWrapper;
 import org.egov.common.contract.request.RequestInfo;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,20 +50,31 @@ class AuditLogProcessingServiceTest {
     @MockBean
     private Producer producer;
 
-
-    //@Test
+    /**
+     * Method under test: {@link AuditLogProcessingService#process(AuditLogRequest)}
+     */
+    @Test
     void testProcess() {
-        doNothing().when(chooseSignerAndVerifier).selectImplementationAndSign((AuditLogRequest) any());
+        ArrayList<AuditLog> auditLogList = new ArrayList<>();
+        when(chooseSignerAndVerifier.selectImplementationAndSign((AuditLogRequest) any())).thenReturn(auditLogList);
         doNothing().when(enrichmentService).enrichAuditLogs((AuditLogRequest) any());
         doNothing().when(producer).push((String) any(), (Object) any());
-        auditLogProcessingService.process(new AuditLogRequest());
+        doNothing().when(auditServiceValidator).validateAuditRequestSize((List<AuditLog>) any());
+        doNothing().when(auditServiceValidator).validateKeyValueMap((List<AuditLog>) any());
+        doNothing().when(auditServiceValidator).validateOperationType((List<AuditLog>) any());
+        List<AuditLog> actualProcessResult = auditLogProcessingService.process(new AuditLogRequest());
+        assertSame(auditLogList, actualProcessResult);
+        assertTrue(actualProcessResult.isEmpty());
         verify(chooseSignerAndVerifier).selectImplementationAndSign((AuditLogRequest) any());
         verify(enrichmentService).enrichAuditLogs((AuditLogRequest) any());
         verify(producer).push((String) any(), (Object) any());
+        verify(auditServiceValidator).validateAuditRequestSize((List<AuditLog>) any());
+        verify(auditServiceValidator).validateKeyValueMap((List<AuditLog>) any());
+        verify(auditServiceValidator).validateOperationType((List<AuditLog>) any());
     }
 
 
-    //@Test
+    @Test
     void testGetAuditLogs() {
         when(auditServiceRepository.getAuditLogsFromDb((AuditLogSearchCriteria) any())).thenReturn(new ArrayList<>());
         doNothing().when(auditServiceValidator).validateAuditLogSearch((AuditLogSearchCriteria) any());
@@ -73,14 +85,15 @@ class AuditLogProcessingServiceTest {
     }
 
 
-    //@Test
-    void testGetAuditLogsWithAuditLogList() {
+    @Test
+    void testGetAuditLogs2() {
         ArrayList<AuditLog> auditLogList = new ArrayList<>();
         auditLogList.add(new AuditLog());
         when(auditServiceRepository.getAuditLogsFromDb((AuditLogSearchCriteria) any())).thenReturn(auditLogList);
         doNothing().when(auditServiceValidator).validateAuditLogSearch((AuditLogSearchCriteria) any());
         RequestInfo requestInfo = new RequestInfo();
-        List<AuditLog> actualAuditLogs = auditLogProcessingService.getAuditLogs(requestInfo, new AuditLogSearchCriteria());
+        List<AuditLog> actualAuditLogs = auditLogProcessingService.getAuditLogs(requestInfo,
+                new AuditLogSearchCriteria());
         assertSame(auditLogList, actualAuditLogs);
         assertEquals(1, actualAuditLogs.size());
         verify(auditServiceRepository).getAuditLogsFromDb((AuditLogSearchCriteria) any());
@@ -88,7 +101,7 @@ class AuditLogProcessingServiceTest {
     }
 
 
-    //@Test
+    @Test
     void testVerifyDbEntity() {
         doNothing().when(chooseSignerAndVerifier).selectImplementationAndVerify((ObjectIdWrapper) any());
         auditLogProcessingService.verifyDbEntity("42", new HashMap<>());

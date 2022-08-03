@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 class PersisterConfigInitTest {
 
-    ////@Test
+    @Test
     void testResolveAllConfigFolders() {
 
         PersisterConfigInit persisterConfigInit = new PersisterConfigInit();
@@ -21,8 +21,8 @@ class PersisterConfigInitTest {
     }
 
 
-    ////@Test
-    void testResolveAllConfigFolders2() {
+    @Test
+    void testResolveAllConfigFolder() {
 
         PersisterConfigInit persisterConfigInit = new PersisterConfigInit();
 
@@ -32,12 +32,10 @@ class PersisterConfigInitTest {
                 () -> persisterConfigInit.resolveAllConfigFolders(stringList, "File Types To Resolve"));
     }
 
-
-    ////@Test
-    void testResolveAllConfigFolders3() {
+    @Test
+    void testResolveAllConfigFoldersWithID() {
 
         PersisterConfigInit persisterConfigInit = new PersisterConfigInit();
-
         ArrayList<String> stringList = new ArrayList<>();
         stringList.add("42");
         List<String> actualResolveAllConfigFoldersResult = persisterConfigInit.resolveAllConfigFolders(stringList, "42");
@@ -45,14 +43,15 @@ class PersisterConfigInitTest {
         assertEquals("42", actualResolveAllConfigFoldersResult.get(0));
     }
 
-    ////@Test
+
+    @Test
     void testGetFilesInFolder() {
+
 
         PersisterConfigInit persisterConfigInit = new PersisterConfigInit();
         assertThrows(RuntimeException.class,
                 () -> persisterConfigInit.getFilesInFolder("Base Folder Path", new ArrayList<>()));
     }
-
 
 }
 

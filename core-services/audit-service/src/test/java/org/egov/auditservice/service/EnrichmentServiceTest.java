@@ -27,7 +27,7 @@ class EnrichmentServiceTest {
 
 
 
-    //@Test
+    @Test
     void testEnrichAuditLogsWithEmptyRequest() {
         RequestInfo requestInfo = new RequestInfo();
         AuditLogRequest auditLogRequest = new AuditLogRequest(requestInfo, new ArrayList<>());

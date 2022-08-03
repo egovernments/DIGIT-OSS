@@ -28,14 +28,14 @@ class AuditQueryBuilderTest {
     private AuditServiceConfiguration auditServiceConfiguration;
 
 
-    ////@Test
+    @Test
     void testGetAuditLogQuery() {
         when(auditServiceConfiguration.getDefaultLimit()).thenReturn(1);
         when(auditServiceConfiguration.getDefaultOffset()).thenReturn(1);
         AuditLogSearchCriteria criteria = new AuditLogSearchCriteria();
         ArrayList<Object> objectList = new ArrayList<>();
         assertEquals(
-                "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluepairs,"
+                "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluemap,"
                         + " operationtype, integrityhash FROM eg_audit_logs  OFFSET ?  LIMIT ? ",
                 auditQueryBuilder.getAuditLogQuery(criteria, objectList));
         verify(auditServiceConfiguration).getDefaultLimit();
@@ -44,19 +44,19 @@ class AuditQueryBuilderTest {
     }
 
 
-    ////@Test
-    void testGetAuditLogQueryWithMaxSearchLimit() {
+    @Test
+    void testGetAuditLogQuery5() {
         when(auditServiceConfiguration.getMaxSearchLimit()).thenReturn(3);
         when(auditServiceConfiguration.getDefaultLimit()).thenReturn(1);
         when(auditServiceConfiguration.getDefaultOffset()).thenReturn(1);
         AuditLogSearchCriteria criteria = new AuditLogSearchCriteria("42", "42",
-                "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluepairs,"
+                "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluemap,"
                         + " operationtype, integrityhash FROM eg_audit_logs ",
                 "01234567-89AB-CDEF-FEDC-BA9876543210", "42", 2, 1);
 
         ArrayList<Object> objectList = new ArrayList<>();
         assertEquals(
-                "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluepairs,"
+                "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluemap,"
                         + " operationtype, integrityhash FROM eg_audit_logs  WHERE  tenantid = ?  AND  id = ?  AND  module = ? "
                         + " AND  objectid = ?  AND  useruuid = ?  OFFSET ?  LIMIT ? ",
                 auditQueryBuilder.getAuditLogQuery(criteria, objectList));
@@ -66,19 +66,20 @@ class AuditQueryBuilderTest {
         assertEquals(7, objectList.size());
     }
 
-    ////@Test
-    void testGetAuditLogQueryWithZeroMaxSearchLimt() {
+
+    @Test
+    void testGetAuditLogQuery6() {
         when(auditServiceConfiguration.getMaxSearchLimit()).thenReturn(0);
         when(auditServiceConfiguration.getDefaultLimit()).thenReturn(1);
         when(auditServiceConfiguration.getDefaultOffset()).thenReturn(1);
         AuditLogSearchCriteria criteria = new AuditLogSearchCriteria("42", "42",
-                "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluepairs,"
+                "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluemap,"
                         + " operationtype, integrityhash FROM eg_audit_logs ",
                 "01234567-89AB-CDEF-FEDC-BA9876543210", "42", 2, 1);
 
         ArrayList<Object> objectList = new ArrayList<>();
         assertEquals(
-                "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluepairs,"
+                "SELECT id, useruuid, module, tenantid, transactioncode, changedate, entityname, objectid, keyvaluemap,"
                         + " operationtype, integrityhash FROM eg_audit_logs  WHERE  tenantid = ?  AND  id = ?  AND  module = ? "
                         + " AND  objectid = ?  AND  useruuid = ?  OFFSET ?  LIMIT ? ",
                 auditQueryBuilder.getAuditLogQuery(criteria, objectList));
@@ -87,6 +88,7 @@ class AuditQueryBuilderTest {
         verify(auditServiceConfiguration, atLeast(1)).getMaxSearchLimit();
         assertEquals(7, objectList.size());
     }
+
 
 }
 

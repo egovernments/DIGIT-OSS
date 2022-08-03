@@ -13,6 +13,7 @@ import java.util.Map;
 import org.egov.auditservice.persisterauditclient.PersisterAuditClientService;
 import org.egov.auditservice.persisterauditclient.models.contract.PersisterClientInput;
 import org.egov.auditservice.service.AuditLogProcessingService;
+import org.egov.auditservice.web.models.AuditLog;
 import org.egov.auditservice.web.models.AuditLogRequest;
 import org.egov.auditservice.web.models.AuditLogSearchCriteria;
 import org.egov.auditservice.web.models.RequestInfoWrapper;
@@ -25,6 +26,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -46,9 +48,10 @@ class AuditServiceControllerTest {
     private PersisterAuditClientService persisterAuditClientService;
 
 
-    ////@Test
+
+    @Test
     void testCreate() throws Exception {
-        doNothing().when(auditLogProcessingService).process((AuditLogRequest) any());
+        when(auditLogProcessingService.process((AuditLogRequest) any())).thenReturn(new ArrayList<>());
 
         AuditLogRequest auditLogRequest = new AuditLogRequest();
         auditLogRequest.setAuditLogs(new ArrayList<>());
@@ -62,11 +65,31 @@ class AuditServiceControllerTest {
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content().string("{\"responseInfo\":null,\"AuditLogs\":null}"));
+                .andExpect(MockMvcResultMatchers.content().string("{\"responseInfo\":null,\"AuditLogs\":[]}"));
     }
 
 
-    ////@Test
+    @Test
+    void testCreateWithBadRequest() throws Exception {
+        when(auditLogProcessingService.process((AuditLogRequest) any())).thenReturn(new ArrayList<>());
+
+        ArrayList<AuditLog> auditLogList = new ArrayList<>();
+        auditLogList.add(new AuditLog());
+
+        AuditLogRequest auditLogRequest = new AuditLogRequest();
+        auditLogRequest.setAuditLogs(auditLogList);
+        auditLogRequest.setRequestInfo(new RequestInfo());
+        String content = (new ObjectMapper()).writeValueAsString(auditLogRequest);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/log/v1/_create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(auditServiceController)
+                .build()
+                .perform(requestBuilder);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().is(400));
+    }
+
+    @Test
     void testSearch() throws Exception {
         when(auditLogProcessingService.getAuditLogs((RequestInfo) any(), (AuditLogSearchCriteria) any()))
                 .thenReturn(new ArrayList<>());
@@ -86,7 +109,7 @@ class AuditServiceControllerTest {
     }
 
 
-    ////@Test
+    @Test
     void testTestNewAuditFlow() throws Exception {
         when(persisterAuditClientService.generateAuditLogs((PersisterClientInput) any())).thenReturn(new ArrayList<>());
 
@@ -106,7 +129,7 @@ class AuditServiceControllerTest {
     }
 
 
-    ////@Test
+    @Test
     void testVerify() throws Exception {
         doNothing().when(auditLogProcessingService).verifyDbEntity((String) any(), (Map<String, Object>) any());
 

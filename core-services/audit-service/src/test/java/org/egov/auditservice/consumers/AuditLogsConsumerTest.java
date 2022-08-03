@@ -1,16 +1,18 @@
 package org.egov.auditservice.consumers;
 
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.egov.auditservice.persisterauditclient.PersisterAuditClientService;
+import org.egov.auditservice.persisterauditclient.models.contract.PersisterClientInput;
 import org.egov.auditservice.service.AuditLogProcessingService;
-import org.egov.auditservice.web.models.AuditLogRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,22 +32,17 @@ class AuditLogsConsumerTest {
     @MockBean
     private ObjectMapper objectMapper;
 
-    //@Test
-    void testListen() throws IllegalArgumentException {
-        doNothing().when(auditLogProcessingService).process((AuditLogRequest) any());
-        when(objectMapper.convertValue((Object) any(), (Class<Object>) any())).thenReturn("Convert Value");
-        //auditLogsConsumer.listen(new HashMap<>(), "Topic");
-        verify(objectMapper).convertValue((Object) any(), (Class<Object>) any());
-    }
+    @MockBean
+    private PersisterAuditClientService persisterAuditClientService;
 
 
-    //@Test
-    void testListenWithAuditRequest() throws IllegalArgumentException {
-        doNothing().when(auditLogProcessingService).process((AuditLogRequest) any());
-        when(objectMapper.convertValue((Object) any(), (Class<Object>) any())).thenReturn(new AuditLogRequest());
-        //auditLogsConsumer.listen(new HashMap<>(), "Topic");
-        verify(auditLogProcessingService).process((AuditLogRequest) any());
-        verify(objectMapper).convertValue((Object) any(), (Class<Object>) any());
+    @Test
+    void testListen() throws JsonProcessingException {
+        when(persisterAuditClientService.generateAuditLogs((PersisterClientInput) any())).thenReturn(new ArrayList<>());
+        when(objectMapper.writeValueAsString((Object) any())).thenReturn("42");
+        auditLogsConsumer.listen(new HashMap<>(), "Topic");
+        verify(persisterAuditClientService).generateAuditLogs((PersisterClientInput) any());
+        verify(objectMapper).writeValueAsString((Object) any());
     }
 }
 

@@ -25,7 +25,7 @@ class ProducerTest {
     @Autowired
     private Producer producer;
 
-    ////@Test
+    @Test
     void testPush() {
         ProducerRecord<String, Object> producerRecord = new ProducerRecord<>("Topic", "Value");
 
