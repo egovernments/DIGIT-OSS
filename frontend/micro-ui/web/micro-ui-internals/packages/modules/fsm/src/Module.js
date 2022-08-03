@@ -49,7 +49,9 @@ import EditVehicle from "./pages/employee/FSMRegistry/Vehicle/EditVehicle";
 import DriverDetails from "./pages/employee/FSMRegistry/Driver/DriverDetails";
 import AddDriver from "./pages/employee/FSMRegistry/Driver/AddDriver";
 import EditDriver from "./pages/employee/FSMRegistry/Driver/EditDriver";
-import {FsmBreadCrumb} from "./pages/employee";
+import { FsmBreadCrumb } from "./pages/employee";
+import AdvanceCollection from "./pageComponents/AdvanceCollection";
+import SelectTrips from "./pageComponents/SelectTrips";
 
 const FSMModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = "FSM";
@@ -194,7 +196,9 @@ const componentsToRegister = {
   AddDriver,
   DriverDetails,
   EditDriver,
-  FsmBreadCrumb
+  FsmBreadCrumb,
+  AdvanceCollection,
+  SelectTrips,
 };
 
 export const initFSMComponents = () => {

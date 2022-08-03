@@ -4,7 +4,7 @@ import Timeline from "../components/TLTimelineInFSM";
 
 const isConventionalSpecticTank = (tankDimension) => tankDimension === "lbd";
 
-const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
+const SelectTankSize = ({ config, onSelect, t, formData = {}, userType, FSMTextFieldStyle }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const tankDimension = formData?.pitType?.dimension;
   const [disable, setDisable] = useState(true);
@@ -24,7 +24,7 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
       setSize({ ...formData?.pitDetail, length: 0, width: 0, ...(formData?.pitDetail?.diameter === 0 && { height: 0 }) });
     }
     if (formData && formData.pitDetail) {
-      setImages(formData?.pitDetail?.images || null)
+      setImages(formData?.pitDetail?.images || null);
     }
   }, [tankDimension]);
 
@@ -54,18 +54,23 @@ const SelectTankSize = ({ config, onSelect, t, formData = {}, userType }) => {
 
   const onSkip = () => onSelect();
   if (userType === "employee") {
-    return <PitDimension sanitationType={formData.pitType} size={size} handleChange={handleChange} t={t} disable={!formData?.pitType} />;
+    return (
+      <PitDimension
+        sanitationType={formData.pitType}
+        size={size}
+        handleChange={handleChange}
+        t={t}
+        disable={!formData?.pitType}
+        FSMTextFieldStyle={FSMTextFieldStyle}
+      />
+    );
   }
 
   return (
     <React.Fragment>
       <Timeline currentStep={1} flow="APPLY" />
       <FormStep config={config} onSkip={onSkip} onSelect={handleSubmit} isDisabled={disable} t={t}>
-        <ImageUploadHandler
-          tenantId={tenantId}
-          onPhotoChange={handleUpload}
-          uploadedImages={images}
-        />
+        <ImageUploadHandler tenantId={tenantId} onPhotoChange={handleUpload} uploadedImages={images} />
       </FormStep>
     </React.Fragment>
   );

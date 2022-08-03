@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/TLTimelineInFSM";
 
-const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register, errors, props }) => {
+const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register, errors, props, FSMTextFieldStyle }) => {
   const tenants = Digit.Hooks.fsm.useTenants();
   const [pincode, setPincode] = useState(() => formData?.address?.pincode || "");
 
@@ -65,7 +65,7 @@ const SelectPincode = ({ t, config, onSelect, formData = {}, userType, register,
             {config.isMandatory ? " * " : null}
           </CardLabel>
           <div className="field">
-            <TextInput key={input.name} value={pincode} onChange={onChange} {...input.validation} />
+            <TextInput key={input.name} value={pincode} onChange={onChange} {...input.validation} style={FSMTextFieldStyle} />
           </div>
         </LabelFieldPair>
       );

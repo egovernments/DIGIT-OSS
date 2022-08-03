@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { LabelFieldPair, CardLabel, TextInput, CardLabelError, Dropdown } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
-const SelectName = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
+const SelectName = ({ t, config, onSelect, formData = {}, userType, register, errors, FSMTextFieldStyle }) => {
   const stateId = Digit.ULBService.getStateId();
   const { data: GenderData, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "common-masters", "FSMGenderType");
   const { pathname: url } = useLocation();
@@ -76,6 +76,7 @@ const SelectName = ({ t, config, onSelect, formData = {}, userType, register, er
                     onChange={(e) => setValue(e.target.value, input.name)}
                     disable={editScreen}
                     {...input.validation}
+                    style={FSMTextFieldStyle}
                   />
                 </div>
               </LabelFieldPair>

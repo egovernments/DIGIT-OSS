@@ -4,7 +4,7 @@ import { useForm, Controller } from "react-hook-form";
 import _ from "lodash";
 import Timeline from "../components/TLTimelineInFSM";
 
-const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setError, clearErrors }) => {
+const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setError, clearErrors, FSMTextFieldStyle }) => {
   const onSkip = () => onSelect();
 
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
@@ -128,6 +128,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
                   disable={formData?.cpt?.details}
                   autoFocus={focusIndex?.index == index}
                   {...input?.validation}
+                  style={FSMTextFieldStyle}
                 />
               )}
             />

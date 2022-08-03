@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FormStep, TextArea, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/TLTimelineInFSM";
 
-const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
+const SelectLandmark = ({ t, config, onSelect, formData, userType, FSMTextFieldStyle }) => {
   const [landmark, setLandmark] = useState();
 
   const [error, setError] = useState("");
@@ -44,7 +44,7 @@ const SelectLandmark = ({ t, config, onSelect, formData, userType }) => {
             {t(input.label)}
             {config.isMandatory ? " * " : null}
           </CardLabel>
-          <TextArea className="form-field" id={input.name} value={landmark} onChange={onChange} name={input.name || ""} {...input.validation} />
+          <TextArea className="form-field" id={input.name} value={landmark} onChange={onChange} name={input.name || ""} {...input.validation} style={FSMTextFieldStyle} />
         </LabelFieldPair>
       );
     });

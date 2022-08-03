@@ -21,18 +21,31 @@ import MobileNumber from "../atoms/MobileNumber";
 import _ from "lodash";
 
 export const FormComposer = (props) => {
-  const { register, handleSubmit, setValue, getValues, reset, watch, trigger, control, formState, errors, setError, clearErrors, unregister } = useForm({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    reset,
+    watch,
+    trigger,
+    control,
+    formState,
+    errors,
+    setError,
+    clearErrors,
+    unregister,
+  } = useForm({
     defaultValues: props.defaultValues,
   });
   const { t } = useTranslation();
   const formData = watch();
 
   useEffect(() => {
-    if(props?.appData && Object.keys(props?.appData)?.length>0 && !(_.isEqual(props?.appData,formData)))
-    {
-       reset({...props?.appData});
+    if (props?.appData && Object.keys(props?.appData)?.length > 0 && !_.isEqual(props?.appData, formData)) {
+      reset({ ...props?.appData });
     }
-  },[props?.appData])
+  }, [props?.appData]);
 
   useEffect(() => {
     props.getFormAccessors && props.getFormAccessors({ setValue, getValues });
@@ -53,6 +66,7 @@ export const FormComposer = (props) => {
   const fieldSelector = (type, populators, isMandatory, disable = false, component, config) => {
     const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
 
+    console.log("type", component);
     switch (type) {
       case "text":
       case "date":
@@ -118,6 +132,7 @@ export const FormComposer = (props) => {
                 clearErrors={clearErrors}
                 formState={formState}
                 onBlur={props.onBlur}
+                FSMTextFieldStyle={{ backgroundColor: "transparent" }}
               />
             )}
             name={config.key}
@@ -193,6 +208,50 @@ export const FormComposer = (props) => {
   const formFields = useMemo(
     () =>
       props.config?.map((section, index, array) => {
+        if (props.FSM_inline_style)
+          return (
+            <Card className="card-with-background">
+              <React.Fragment key={index}>
+                {section.head && (
+                  <CardSectionHeader style={props?.sectionHeadStyle ? props?.sectionHeadStyle : {}} id={section.headId}>
+                    {t(section.head)}
+                  </CardSectionHeader>
+                )}
+                {section.body.map((field, index) => {
+                  return (
+                    <Fragment>
+                      <LabelFieldPair key={index}>
+                        {!field.withoutLabel && (
+                          <CardLabel style={{ color: field.isSectionText ? "#505A5F" : "", marginBottom: props.inline ? "8px" : "revert" }}>
+                            {t(field.label)}
+                            {field.isMandatory ? " * " : null}
+                          </CardLabel>
+                        )}
+                        <div style={field.withoutLabel ? { width: "100%", ...props?.fieldStyle } : {}} className="field">
+                          {fieldSelector(
+                            field.type,
+                            field.populators,
+                            field.isMandatory,
+                            field?.disable,
+                            field?.component,
+                            field,
+                            props.role ? field.style : null
+                          )}
+                          {field?.description && <CardText style={{ fontSize: "14px", marginTop: "-24px" }}>{t(field?.description)}</CardText>}
+                        </div>
+                      </LabelFieldPair>
+                      {field?.populators?.name && errors && errors[field?.populators?.name] && Object.keys(errors[field?.populators?.name]).length ? (
+                        <CardLabelError style={{ width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" }}>
+                          {t(field?.populators?.error)}
+                        </CardLabelError>
+                      ) : null}
+                    </Fragment>
+                  );
+                })}
+                {!props.noBreakLine && (array.length - 1 === index ? null : <BreakLine style={props?.breaklineStyle ? props?.breaklineStyle : {}} />)}
+              </React.Fragment>
+            </Card>
+          );
         return (
           <React.Fragment key={index}>
             {section.head && (
