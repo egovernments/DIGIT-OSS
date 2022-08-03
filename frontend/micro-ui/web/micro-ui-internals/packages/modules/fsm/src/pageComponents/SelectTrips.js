@@ -3,7 +3,7 @@ import { getVehicleType } from "../utils";
 import { LabelFieldPair, CardLabel, TextInput, Dropdown, Loader, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { useLocation, useParams } from "react-router-dom";
 
-const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
+const SelectTrips = ({ t, config, onSelect, formData = {}, userType,styles }) => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const state = Digit.ULBService.getStateId();
   const { pathname: url } = useLocation();
@@ -40,45 +40,45 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
 
 
   const inputs = [
+    {
+      label: "ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS",
+      type: "number",
+      name: "noOfTrips",
+      error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
+      validation: {
+        isRequired: true,
+        min: 1,
+      },
+      default: formData?.tripData?.noOfTrips,
+      disable: false,
+      isMandatory: true,
+    },
     // {
-    //   label: "ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS",
-    //   type: "number",
-    //   name: "noOfTrips",
-    //   error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
+    //   label: "ES_NEW_APPLICATION_AMOUNT_PER_TRIP",
+    //   type: "text",
+    //   name: "amountPerTrip",
+    //   error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
     //   validation: {
     //     isRequired: true,
-    //     min: 1,
+    //     pattern: "[0-9]{1,10}",
+    //     title: t("ES_APPLICATION_BILL_SLAB_ERROR"),
     //   },
-    //   default: formData?.tripData?.noOfTrips,
-    //   disable: false,
+    //   default: formData?.tripData?.amountPerTrip,
+    //   disable: true,
     //   isMandatory: true,
     // },
-    {
-      label: "ES_NEW_APPLICATION_AMOUNT_PER_TRIP",
-      type: "text",
-      name: "amountPerTrip",
-      error: t("ES_NEW_APPLICATION_AMOUNT_INVALID"),
-      validation: {
-        isRequired: true,
-        pattern: "[0-9]{1,10}",
-        title: t("ES_APPLICATION_BILL_SLAB_ERROR"),
-      },
-      default: formData?.tripData?.amountPerTrip,
-      disable: true,
-      isMandatory: true,
-    },
-    {
-      label: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT",
-      type: "text",
-      name: "amount",
-      validation: {
-        isRequired: true,
-        title: t("ES_APPLICATION_BILL_SLAB_ERROR"),
-      },
-      default: formData?.tripData?.amount,
-      disable: true,
-      isMandatory: true,
-    },
+    // {
+    //   label: "ES_PAYMENT_DETAILS_TOTAL_AMOUNT",
+    //   type: "text",
+    //   name: "amount",
+    //   validation: {
+    //     isRequired: true,
+    //     title: t("ES_APPLICATION_BILL_SLAB_ERROR"),
+    //   },
+    //   default: formData?.tripData?.amount,
+    //   disable: true,
+    //   isMandatory: true,
+    // },
   ];
 
   function setTripNum(value) {
@@ -132,10 +132,11 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
     <Loader />
   ) : (
     <div>
-      {/* <LabelFieldPair>
+      <LabelFieldPair>
         <CardLabel className="card-label-smaller">{t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED") + " * "}</CardLabel>
         <Dropdown
           className="form-field"
+          style={styles}
           isMandatory
           option={vehicleMenu?.map((vehicle) => ({ ...vehicle, label: vehicle.capacity }))}
           optionKey="label"
@@ -145,7 +146,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           t={t}
           disable={editScreen && applicationData?.applicationStatus != "CREATED" ? true : false}
         />
-      </LabelFieldPair> */}
+      </LabelFieldPair>
       {inputs?.map((input, index) => (
         <LabelFieldPair key={index}>
           <CardLabel className="card-label-smaller">
@@ -155,6 +156,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           <div className="field">
             <TextInput
               type={input.type}
+              style={styles}
               onChange={(e) => setTripNum(e.target.value)}
               key={input.name}
               value={input.default ? input.default : formData && formData[config.key] ? formData[config.key][input.name] : null}
@@ -169,4 +171,4 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   );
 };
 
-export default SelectTripData;
+export default SelectTrips;

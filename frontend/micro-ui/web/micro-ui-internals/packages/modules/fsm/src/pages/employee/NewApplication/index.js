@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FormComposer, Loader } from "@egovernments/digit-ui-react-components";
+import { FormComposer, Header, Loader } from "@egovernments/digit-ui-react-components";
 import { useHistory } from "react-router-dom";
 
 const isConventionalSpecticTank = (tankDimension) => tankDimension === "lbd";
@@ -43,7 +43,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-    
     if (
       formData?.propertyType &&
       formData?.subtype &&
@@ -75,6 +74,7 @@ export const NewApplication = ({ parentUrl, heading }) => {
   // }, [propertyType, subType, vehicle]);
 
   const onSubmit = (data) => {
+    console.log("data", data);
     const applicationChannel = data.channel;
     const sanitationtype = data?.pitType?.code;
     const pitDimension = data?.pitDetail;
@@ -93,13 +93,13 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const gender = data.applicationData.applicantGender;
-    const paymentPreference = data?.paymentPreference ? data?.paymentPreference : 'POST_PAY';
+    const paymentPreference = data?.paymentPreference ? data?.paymentPreference : "POST_PAY";
     const formData = {
       fsm: {
         citizen: {
           name: applicantName,
           mobileNumber,
-          gender: gender
+          gender: gender,
         },
         tenantId: tenantId,
         sanitationtype: sanitationtype,
@@ -153,20 +153,28 @@ export const NewApplication = ({ parentUrl, heading }) => {
   const configs = [...preFields, ...commonFields, ...postFields];
 
   return (
-    <FormComposer
-      heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
-      isDisabled={!canSubmit}
-      label={t("ES_COMMON_APPLICATION_SUBMIT")}
-      config={configs.filter((i) => !i.hideInEmployee).map((config) => {
-        return {
-          ...config,
-          body: config.body.filter((a) => !a.hideInEmployee),
-        };
-      })}
-      fieldStyle={{ marginRight: 0 }}
-      onSubmit={onSubmit}
-      defaultValues={defaultValues}
-      onFormValueChange={onFormValueChange}
-    />
+    <React.Fragment>
+      <Header styles={{ paddingLeft: "4px" }}>{t("ES_TITLE_NEW_DESULDGING_APPLICATION")}</Header>
+      <FormComposer
+        // heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
+        isDisabled={!canSubmit}
+        label={t("ES_COMMON_APPLICATION_SUBMIT")}
+        config={configs
+          .filter((i) => !i.hideInEmployee)
+          .map((config) => {
+            return {
+              ...config,
+              body: config.body.filter((a) => !a.hideInEmployee),
+            };
+          })}
+        fieldStyle={{ marginRight: 0 }}
+        onSubmit={onSubmit}
+        defaultValues={defaultValues}
+        onFormValueChange={onFormValueChange}
+        FSM_inline_style
+        className="fsm"
+        noBreakLine={true}
+      />
+    </React.Fragment>
   );
 };
