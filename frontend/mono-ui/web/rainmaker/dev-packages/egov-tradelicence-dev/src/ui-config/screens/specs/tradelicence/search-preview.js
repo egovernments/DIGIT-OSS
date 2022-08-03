@@ -12,6 +12,7 @@ import set from "lodash/set";
 import { handleScreenConfigurationFieldChange as handleField ,prepareFinalObject} from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import { fetchLocalizationLabel } from "egov-ui-kit/redux/app/actions";
 import { getLocale } from "egov-ui-kit/utils/localStorageUtils";
+import { ifUserRoleExists } from "../utils/index";
 import {
   getQueryArg,
   setBusinessServiceDataToLocalStorage,
@@ -337,6 +338,22 @@ export const beforeInitFn = async (action, state, dispatch, applicationNumber) =
       // );
 
       dispatch(
+        handleField(
+          "search-preview",
+          "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton",
+          "visible",
+          false
+        )
+      );
+    }
+
+    let applicationStatus =get(
+      state.screenConfiguration.preparedFinalObject,
+      "Licenses[0].status"
+    );
+    let roleexists = ifUserRoleExists("TL_DOC_VERIFIER");
+    if (applicationStatus === "PENDINGAPPROVAL" && roleexists) {
+        dispatch(
         handleField(
           "search-preview",
           "components.div.children.tradeReviewDetails.children.cardContent.children.addPenaltyRebateButton",
