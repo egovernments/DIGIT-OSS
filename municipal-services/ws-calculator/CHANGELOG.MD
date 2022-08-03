@@ -1,6 +1,10 @@
 # Change log
 All notable changes to this module will be documented in this file.
 
+## 1.3.4 - 2022-07-07
+
+- Added disconnection flow calculations for water applications
+
 ## 1.3.3 - 2022-03-03
 
 - Added demand and bill notification

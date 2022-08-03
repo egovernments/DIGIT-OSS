@@ -67,7 +67,9 @@ public class SWQueryBuilder {
 			+ "eg_sw_connectionholder connectionholder ON connectionholder.connectionid = conn.id"
 			+  LEFT_OUTER_JOIN_STRING
 			+ "eg_sw_roadcuttinginfo roadcuttingInfo ON roadcuttingInfo.swid = conn.id";
-	
+
+	private static final String TOTAL_APPLICATIONS_COUNT_QUERY = "select count(*) from eg_sw_connection where tenantid = '{}';";
+
 	private final String paginationWrapper = "SELECT * FROM " +
             "(SELECT *, DENSE_RANK() OVER (ORDER BY sc_appCreatedDate DESC) offset_ FROM " +
             "({})" +
@@ -363,5 +365,9 @@ public class SWQueryBuilder {
 		if (query.toString().contains("WHERE"))
 			 return addPaginationWrapper(query.toString(), preparedStatement, criteria);
 		return query.toString();
+	}
+
+	public String getTotalApplicationsCountQueryString(SearchCriteria criteria) {
+		return TOTAL_APPLICATIONS_COUNT_QUERY.replace("{}",criteria.getTenantId());
 	}
 }

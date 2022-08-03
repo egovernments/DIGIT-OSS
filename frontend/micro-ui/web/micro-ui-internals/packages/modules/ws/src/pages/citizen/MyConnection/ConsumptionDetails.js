@@ -32,8 +32,8 @@ const consumptionDetails = ({ view }) => {
           <div key={index}>
             <Card>
             <StatusTable>
-            <Row className="border-none" label={t("WS_MYCONNECTIONS_CONSUMER_NO")} text={application?.connectionNo || t("NA")} textStyle={{ whiteSpace: "pre" }} />
-            <Row className="border-none" label={t("WS_VIEW_BILL_BILLING_PERIOD_LABEL")} text={application?.billingPeriod || t("NA")} textStyle={{ whiteSpace: "pre" }} />
+            <Row className="border-none" label={t("WS_MYCONNECTIONS_CONSUMER_NO")} text={application?.connectionNo || t("NA")} textStyle={{}} />
+            <Row className="border-none" label={t("WS_VIEW_BILL_BILLING_PERIOD_LABEL")} text={application?.billingPeriod || t("NA")} textStyle={{ wordBreak:"break-word" }} />
             <Row className="border-none" label={t("WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL")} text={application?.meterStatus || t("NA")} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")} text={application?.lastReading || t("NA")} textStyle={{ whiteSpace: "pre" }} />
             <Row className="border-none" label={t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")} text={Digit.DateUtils.ConvertEpochToDate(application?.lastReadingDate) || t("NA")} textStyle={{ whiteSpace: "pre" }} />

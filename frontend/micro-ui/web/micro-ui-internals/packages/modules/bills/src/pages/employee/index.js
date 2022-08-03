@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Switch, useLocation } from "react-router-dom";
 import DownloadBillInbox from "./DownloadBill";
+
 import GroupBillInbox from "./GroupBill/index";
 
 import ResponseCancelBill from "./ResponseCancelBill";
@@ -44,12 +45,18 @@ const BILLSBreadCrumbs = ({ location }) => {
       path: "/digit-ui/employee/bills/inbox",
       content: t("ABG_SEARCH_BILL_COMMON_HEADER"),
       show: location.pathname.includes("/inbox") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/bills/download-bill-pdf",
+      content: t("ABG_VIEW_DOWNLOADS_HEADER"),
+      show: location.pathname.includes("/download-bill-pdf") ? true : false,
     }
     
   ];
 
   return <BreadCrumb crumbs={crumbs} spanStyle={{ maxWidth: "min-content" }} />;
 };
+
 
 const EmployeeApp = ({ path, url, userType }) => {
   const { t } = useTranslation();
@@ -84,6 +91,10 @@ const EmployeeApp = ({ path, url, userType }) => {
             component={() => <SearchApp parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
           />
           <PrivateRoute
+            path={`${path}/group-bill`}
+            component={() => <GroupBill parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
+          />
+          <PrivateRoute
             path={`${path}/group-billold`}
             component={() => (
               <GroupBillInbox
@@ -110,10 +121,6 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute
             path={`${path}/cancel-bill`}
             component={() => <CancelBill parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
-          />
-          <PrivateRoute
-            path={`${path}/group-bill`}
-            component={() => <GroupBill parentRoute={path} filterComponent="BILLS_INBOX_FILTER" initialStates={inboxInitialState} isInbox={true} />}
           />
           <PrivateRoute
             path={`${path}/response-cancelBill`}

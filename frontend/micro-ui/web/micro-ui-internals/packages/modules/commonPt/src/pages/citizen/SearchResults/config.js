@@ -6,7 +6,7 @@ export const config = [
     },
     labels: [
       {
-        label: "Amount Due",
+        label: "PT_DUES_ARE_PENDING",
         key: "total_due",
         noteStyle: {
           fontSize: "24px",
@@ -15,19 +15,19 @@ export const config = [
         notePrefix: "₹ ",
       },
       {
-        label: "Property ID",
+        label: "TL_PROPERTY_ID",
         key: "property_id",
       },
       {
-        label: "Owner's Name",
+        label: "PT_OWNERS_NAME",
         key: "owner_name",
       },
       {
-        label: "Address",
+        label: "PT_COMMON_COL_ADDRESS",
         key: "property_address",
       },
       {
-        label: "Status",
+        label: "PT_COMMON_TABLE_COL_STATUS_LABEL",
         key: "status",
       },
     ],

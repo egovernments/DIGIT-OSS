@@ -246,4 +246,19 @@ public class SWConstants {
 	public static final String CHANNEL = "Channel";
 	
 	public static final String ACTIVE = "ACTIVE";
+
+	public static final String EXECUTE_DISCONNECTION = "EXECUTE_DISCONNECTION";
+
+	public static final String APPROVE_DISCONNECTION_CONST = "APPROVE_FOR_DISCONNECTION";
+
+	public static final String APPLICATION_DISCONNECTION_CODE = "DC";
+
+	public static final String PENDING_FOR_PAYMENT_STATUS_CODE = "PENDING_FOR_PAYMENT";
+
+	public static final String DOCUMENT_ACCESS_AUDIT_MSG = "The documents for sewerage connection application has been accessed";
+
+	public static final String WNS_ENCRYPTION_MODEL = "WnSConnection";
+
+	public static final String WNS_OWNER_ENCRYPTION_MODEL = "WnSConnectionOwner";
+
 }

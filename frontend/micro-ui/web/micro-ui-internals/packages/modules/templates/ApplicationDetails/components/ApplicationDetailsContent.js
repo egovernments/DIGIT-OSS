@@ -30,6 +30,8 @@ import WSAdditonalDetails from "./WSAdditonalDetails";
 import WSFeeEstimation from "./WSFeeEstimation";
 import WSInfoLabel from "../../../ws/src/pageComponents/WSInfoLabel";
 import DocumentsPreview from "./DocumentsPreview";
+import InfoDetails from "./InfoDetails";
+import ViewBreakup from"./ViewBreakup";
 
 function ApplicationDetailsContent({
   applicationDetails,
@@ -42,6 +44,7 @@ function ApplicationDetailsContent({
   statusAttribute = "status",
   paymentsList,
   oldValue,
+  isInfoLabel = false
 }) {
   const { t } = useTranslation();
 
@@ -69,15 +72,17 @@ function ApplicationDetailsContent({
       };
       return <TLCaption data={caption} />;
     } else if (window.location.href.includes("/obps/") || window.location.href.includes("/noc/") || window.location.href.includes("/ws/")) {
+      //From BE side assigneeMobileNumber is masked/unmasked with connectionHoldersMobileNumber and not assigneeMobileNumber
+      const privacy = { uuid: checkpoint?.assignes?.[0]?.uuid, fieldName: ["connectionHoldersMobileNumber"], model: "WaterConnectionOwner" }
       const caption = {
         date: checkpoint?.auditDetails?.lastModified,
         name: checkpoint?.assignes?.[0]?.name,
-        mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
+        mobileNumber:applicationData?.processInstance?.assignes?.[0]?.uuid===checkpoint?.assignes?.[0]?.uuid && applicationData?.processInstance?.assignes?.[0]?.mobileNumber ? applicationData?.processInstance?.assignes?.[0]?.mobileNumber: checkpoint?.assignes?.[0]?.mobileNumber,
         comment: t(checkpoint?.comment),
         wfComment: checkpoint.wfComment,
         thumbnailsToShow: checkpoint?.thumbnailsToShow,
       };
-      return <TLCaption data={caption} OpenImage={OpenImage} />;
+      return <TLCaption data={caption} OpenImage={OpenImage} privacy={privacy} />;
     } else {
       const caption = {
         date: Digit.DateUtils?.ConvertTimestampToDate(applicationData?.auditDetails?.lastModifiedTime),
@@ -144,8 +149,25 @@ function ApplicationDetailsContent({
     else if (value?.isUnit) return value?.value ? `${getTranslatedValues(value?.value, value?.isNotTranslated)} ${t(value?.isUnit)}` : t("N/A");
     else return value?.value ? getTranslatedValues(value?.value, value?.isNotTranslated) : t("N/A");
   };
+
+  const getClickInfoDetails = () => {
+    if (window.location.href.includes("disconnection") || window.location.href.includes("application")) {
+      return "WS_DISCONNECTION_CLICK_ON_INFO_LABEL"
+    } else {
+      return "WS_CLICK_ON_INFO_LABEL"
+    }
+  }
+
+  const getClickInfoDetails1 = () => {
+    if (window.location.href.includes("disconnection") || window.location.href.includes("application")) {
+        return "WS_DISCONNECTION_CLICK_ON_INFO1_LABEL"
+    } else {
+        return ""
+    }
+  }
   return (
     <Card style={{ position: "relative" }} className={"employeeCard-override"}>
+      {isInfoLabel ? <InfoDetails t={t} userType={false} infoBannerLabel={"CS_FILE_APPLICATION_INFO_LABEL"} infoClickLable={"WS_CLICK_ON_LABEL"} infoClickInfoLabel={getClickInfoDetails()} infoClickInfoLabel1={getClickInfoDetails1()}/> : null}
       {applicationDetails?.applicationDetails?.map((detail, index) => (
         <React.Fragment key={index}>
           <div style={getMainDivStyles()}>
@@ -314,6 +336,8 @@ function ApplicationDetailsContent({
             </div>
           )}
           {detail?.additionalDetails?.estimationDetails && <WSFeeEstimation wsAdditionalDetails={detail} workflowDetails={workflowDetails}/>}
+          {detail?.additionalDetails?.estimationDetails && <ViewBreakup wsAdditionalDetails={detail} workflowDetails={workflowDetails}/>}
+          
         </React.Fragment>
       ))}
       {showTimeLine && workflowDetails?.data?.timeline?.length > 0 && (

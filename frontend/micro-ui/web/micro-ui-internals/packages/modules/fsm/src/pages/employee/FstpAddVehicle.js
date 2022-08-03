@@ -24,7 +24,7 @@ const FstpAddVehicle = ({ onSelect }) => {
                 "validation": {
                     // "pattern": "[a-zA-Z0-9 ]{1,20}",
                     "pattern": `[A-Z]{2}\\s{1}[0-9]{2}\\s{1}[A-Z]{2}\\s{1}[0-9]{4}`,
-                    "title": "Please provide valid vehicle number with proper spaces"
+                    "title": "Please use the correct format while adding the Vehicle No.(capital letters and spaces) e.g. AB 00 CD 1234"
                 }
             },
         ],

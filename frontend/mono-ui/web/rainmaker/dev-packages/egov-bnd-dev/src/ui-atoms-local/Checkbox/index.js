@@ -43,7 +43,7 @@ class CheckboxLabels extends React.Component {
   render() {
     const { classes, label } = this.props;
     return (
-      <div style={{ display: "table" }}>
+      <div style={{ display: "table" }} className="bnd-checkbox">
         <FormGroup row>
           <FormControlLabel
             classes={{ label: "checkbox-label" }}

@@ -97,6 +97,8 @@ const WSEditApplicationByConfig = () => {
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
 
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_WS_NEW_FORM", {});
+  const [sessionAhocFormData, setSessionAdhocFormData, clearSessionAdhocFormData] = Digit.Hooks.useSessionStorage("ADHOC_ADD_REBATE_DATA", {});
+
 
   const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
@@ -104,7 +106,7 @@ const WSEditApplicationByConfig = () => {
   );
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen);
+    const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isEditByConfig);
     config.head = "WS_APP_FOR_WATER_AND_SEWERAGE_EDIT_LABEL";
     let bodyDetails = [];
     config?.body?.forEach(data => { if (data?.isEditByConfigConnection) bodyDetails.push(data); })
@@ -162,6 +164,12 @@ const WSEditApplicationByConfig = () => {
   const onSubmit = async (data) => {
     const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
     let convertAppData = await convertEditApplicationDetails1(data, details, serviceType);
+    if (sessionAhocFormData?.adhocPenalty) convertAppData.additionalDetails.adhocPenalty = parseInt(sessionAhocFormData?.adhocPenalty);
+    if (sessionAhocFormData?.adhocPenaltyComment) convertAppData.additionalDetails.adhocPenaltyComment = sessionAhocFormData?.adhocPenaltyComment || "";
+    if (sessionAhocFormData?.adhocPenaltyReason) convertAppData.additionalDetails.adhocPenaltyReason = sessionAhocFormData?.adhocPenaltyReason || "";
+    if (sessionAhocFormData?.adhocRebate) convertAppData.additionalDetails.adhocRebate = parseInt(sessionAhocFormData?.adhocRebate);
+    if (sessionAhocFormData?.adhocRebateComment) convertAppData.additionalDetails.adhocRebateComment = sessionAhocFormData?.adhocRebateComment || "";
+    if (sessionAhocFormData?.adhocRebateReason) convertAppData.additionalDetails.adhocRebateReason = sessionAhocFormData?.adhocRebateReason || "";
     const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
     setSubmitValve(false);
     if (mutate) {
@@ -172,6 +180,8 @@ const WSEditApplicationByConfig = () => {
           setSubmitValve(true);
         },
         onSuccess: (data, variables) => {
+          clearSessionAdhocFormData();
+          setSessionAdhocFormData({});
           setShowToast({ key: false, message: "WS_APPLICATION_SUBMITTED_SUCCESSFULLY_LABEL" });
           setIsAppDetailsPage(true);
           // setTimeout(closeToast(), 5000);

@@ -15,10 +15,10 @@ import { answerTypeEnum } from "./NewSurvey";
  */
 const filterQuestion = (question) => {
   if (!question) return;
-  if (question.type !== "Multiple Choice" || question.type !== "Check Boxes") {
-    delete question.options;
-  }
-  return { ...question, type: answerTypeEnum[question.type] };
+  // if (question.type !== "Multiple Choice" || question.type !== "Check Boxes") {
+  //   delete question.options;
+  // }
+  return { ...question, type: answerTypeEnum[question.type],options:question?.options };
 };
 
 /**TODO : Think of better to do this possibly in service layer */
@@ -162,7 +162,8 @@ const SurveyDetails = ({ location, match }) => {
         tenantId,
         questions: surveyData.questions.map(filterQuestion), 
         status: "INACTIVE", 
-        collectCitizenInfo: surveyData.collectCitizenInfo.code },
+        collectCitizenInfo: surveyData.collectCitizenInfo.code,
+         },
     };
     history.push("/digit-ui/employee/engagement/surveys/update-response", details);
   };

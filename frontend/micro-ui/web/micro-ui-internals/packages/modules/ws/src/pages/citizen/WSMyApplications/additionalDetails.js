@@ -30,14 +30,15 @@ const WSAdditionalDetails = () => {
       <div className="hide-seperator">
         <Card>
           <CardSubHeader>{t("WS_COMMON_CONNECTION_DETAIL")}</CardSubHeader>
-          {data?.WaterConnection && data?.WaterConnection?.length > 0 && (<StatusTable>
+          <StatusTable>
             <Row
               className="border-none"
               label={t("WS_COMMON_TABLE_COL_CONNECTIONTYPE_LABEL")}
               text={data?.WaterConnection?.[0]?.connectionType || data?.SewerageConnections?.[0]?.connectionType || t("NA")}
               textStyle={{ whiteSpace: "pre" }}
             />
-            <Row
+            {data?.WaterConnection && data?.WaterConnection?.length > 0 && <div>
+              <Row
               className="border-none"
               label={t("WS_SERV_DETAIL_NO_OF_TAPS")}
               text={data?.WaterConnection?.[0]?.noOfTaps || data?.SewerageConnections?.[0]?.noOfTaps || t("CS_NA")}
@@ -65,7 +66,8 @@ const WSAdditionalDetails = () => {
               text={t(data?.WaterConnection?.[0]?.waterSource?.split(".")?.[1]) || t("CS_NA")}
               textStyle={{ whiteSpace: "pre" }}
             />
-          </StatusTable>)}
+            </div>}
+          </StatusTable>
           {data?.SewerageConnections && data?.SewerageConnections?.length > 0 && (
             <StatusTable>
               <Row
@@ -91,30 +93,30 @@ const WSAdditionalDetails = () => {
                 className="border-none"
                 label={t("WS_ADDN_DETAILS_PLUMBER_PROVIDED_BY")}
                 text={
-                  (data?.WaterConnection?.[0]?.plumberInfo ? t("WS_PLUMBER_ULB") : t("WS_PLUMBER_SELF")) ||
-                  (data?.SewerageConnections?.[0]?.plumberInfo ? t("WS_PLUMBER_ULB") : t("WS_PLUMBER_SELF")) ||
+                  (data?.WaterConnection?.[0]?.additionalDetails?.detailsProvidedBy === "ULB" ? t("WS_PLUMBER_ULB") : t("WS_PLUMBER_SELF")) ||
+                  (data?.SewerageConnections?.[0]?.additionalDetails?.detailsProvidedBy === "ULB" ? t("WS_PLUMBER_ULB") : t("WS_PLUMBER_SELF")) ||
                   t("NA")
                 }
                 textStyle={{ whiteSpace: "pre" }}
               />
-              {data?.WaterConnection?.[0]?.plumberInfo && (
+              {(data?.WaterConnection?.[0]?.additionalDetails?.detailsProvidedBy === "ULB" || data?.SewerageConnections?.[0]?.additionalDetails?.detailsProvidedBy === "ULB") && (
                 <div>
                   <Row
                     className="border-none"
                     label={t("WS_PLUMBER_LIC_NO")}
-                    text={data?.WaterConnection?.[0]?.plumberInfo?.licenseNo || data?.SewerageConnections?.[0]?.plumberInfo?.licenseNo || t("NA")}
+                    text={data?.WaterConnection?.[0]?.plumberInfo?.[0]?.licenseNo || data?.SewerageConnections?.[0]?.plumberInfo?.licenseNo || t("NA")}
                     textStyle={{ whiteSpace: "pre" }}
                   />
                   <Row
                     className="border-none"
                     label={t("WS_ADDN_DETAILS_PLUMBER_NAME_LABEL")}
-                    text={data?.WaterConnection?.[0]?.plumberInfo?.name || data?.SewerageConnections?.[0]?.plumberInfo?.name || "NA"}
+                    text={data?.WaterConnection?.[0]?.plumberInfo?.[0]?.name || data?.SewerageConnections?.[0]?.plumberInfo?.name || "NA"}
                     textStyle={{ whiteSpace: "pre" }}
                   />
                   <Row
                     className="border-none"
                     label={t("WS_PLUMBER_MOB_NO")}
-                    text={data?.WaterConnection?.[0]?.plumberInfo?.mobileNumber || data?.SewerageConnections?.[0]?.plumberInfo?.mobileNumber || "NA"}
+                    text={data?.WaterConnection?.[0]?.plumberInfo?.[0]?.mobileNumber || data?.SewerageConnections?.[0]?.plumberInfo?.mobileNumber || "NA"}
                     textStyle={{ whiteSpace: "pre" }}
                   />
                 </div>

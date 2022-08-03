@@ -66,7 +66,7 @@ export const updatePrivacy = (uuid, fieldName) => {
     privacyObj?.[window.location.pathname]?.recordId === uuid ? privacyObj?.[window.location.pathname]?.plainRequestFields || [] : [];
   const newObj = {
     ...privacyObj,
-    [window.location.pathname]: { recordId: uuid, plainRequestFields: [fieldName, ...plainRequestFields] },
+    [window.location.pathname]: { recordId: uuid, plainRequestFields: Array.isArray(fieldName) ? [...fieldName, ...plainRequestFields]  : [fieldName, ...plainRequestFields] },
   };
   Digit.Utils.setPrivacyObject({ ...newObj });
   return newObj;
@@ -87,7 +87,7 @@ export const updatePrivacy = (uuid, fieldName) => {
  */
 
 export const checkPrivacy = (mdmsObj, privacyDetail) => {
-  if (mdmsObj?.attributes?.some((ele) => ele?.name === privacyDetail?.fieldName && ele?.defaultVisibility === "MASKED")) {
+  if (mdmsObj?.attributes?.some((ele) => (ele?.name === privacyDetail?.fieldName || privacyDetail?.fieldName?.includes(ele?.name) )&& ele?.defaultVisibility === "MASKED")) {
     return true;
   }
   const userInfo = Digit.UserService.getUser();
@@ -97,7 +97,7 @@ export const checkPrivacy = (mdmsObj, privacyDetail) => {
       (ele) =>
         ele?.roles?.some((e) => userRoles?.includes(e)) &&
         ele?.attributeAccessList?.some(
-          (ele) => ele?.attribute === privacyDetail?.fieldName && ele?.firstLevelVisibility === "MASKED" && ele?.secondLevelVisibility === "PLAIN"
+          (ele) => (ele?.attribute === privacyDetail?.fieldName || privacyDetail?.fieldName?.includes(ele?.attribute)) && ele?.firstLevelVisibility === "MASKED" && ele?.secondLevelVisibility === "PLAIN"
         )
     )
   ) {

@@ -14,7 +14,7 @@ const ULBHomeCard = (props) => {
     <React.Fragment>
       <Card className="fsm" style={{ backgroundColor: "transparent", boxShadow: "none", paddingTop: "0" }}>
         <CardHeader> {t(props.title)} </CardHeader>
-        <div style={{ display: "grid", gridTemplateColumns: "33.3% 33.3% 33.3%", textAlign: "-webkit-center" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "30% 30% 30%", textAlign: "-webkit-center", justifyContent: "space-between" }}>
           {props.module.map((i) => {
             return (
               <Card

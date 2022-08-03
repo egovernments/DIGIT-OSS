@@ -514,6 +514,98 @@ export const convertToSWUpdate = (data) => {
   };
   return formdata;
 };
+export const createPayloadOfWSDisconnection = async (data, storeData, service) => {
+  let wsPayload = {
+    WaterConnection : {
+      id: storeData?.applicationData?.id,
+      applicationNo: storeData?.applicationData?.applicationNo,
+      applicationStatus: storeData?.applicationData?.applicationStatus,
+      status: storeData?.applicationData?.status,
+      connectionNo: storeData?.applicationData?.connectionNo,
+      applicationType: "NEW_WATER_CONNECTION",
+      dateEffectiveFrom: convertDateToEpoch(data?.date),
+      isdisconnection : true,
+      isDisconnectionTemporary: data?.type?.value?.code === "Temporary" ? true :false,
+      disconnectionReason: data?.reason.value,
+      documents: data?.documents,
+      water: true,
+      sewerage: false,
+      proposedTaps: storeData?.applicationData?.proposedTaps && Number(storeData?.applicationData?.proposedTaps),
+      proposedPipeSize: storeData?.applicationData?.proposedPipeSize?.size && Number(storeData?.applicationData?.proposedPipeSize?.size),
+      service: "Water",
+      property: storeData?.applicationData?.property,
+      propertyId: storeData?.applicationData?.propertyId,
+      oldConnectionNo: null,
+      plumberInfo: null,
+      roadCuttingArea: null,
+      roadType: null,
+      connectionExecutionDate: storeData?.applicationData?.connectionExecutionDate,
+      noOfTaps: storeData?.applicationData?.noOfTaps,
+      additionalDetails: storeData?.applicationData?.additionalDetails,
+      tenantId: storeData?.applicationData?.tenantId,
+      processInstance: {
+        ...storeData?.applicationData?.processInstance,
+        action: "INITIATE",
+      },
+      channel: "CFC_COUNTER",
+    },
+    disconnectRequest: true
+};
+
+  let swPayload = {
+    SewerageConnection: {
+      id: storeData?.applicationData?.id,
+      applicationNo: storeData?.applicationData?.applicationNo,
+      applicationStatus: storeData?.applicationData?.applicationStatus,
+      status: storeData?.applicationData?.status,
+      connectionNo: storeData?.applicationData?.connectionNo,
+      applicationType: "NEW_WATER_CONNECTION",
+      dateEffectiveFrom: convertDateToEpoch(data?.date),
+      isdisconnection : true,
+      isDisconnectionTemporary: data?.type?.value?.code === "Temporary" ? true :false,
+      disconnectionReason: data?.reason.value,
+      documents: data?.documents,
+      water: false,
+      sewerage: true,
+      proposedWaterClosets: storeData?.applicationData?.proposedWaterClosets && Number(storeData?.applicationData?.proposedWaterClosets),
+      proposedToilets: storeData?.applicationData?.proposedToilets && Number(storeData?.applicationData?.proposedToilets),
+      service: "Water",
+      property: storeData?.applicationData?.property,
+      propertyId: storeData?.applicationData?.propertyId,
+      oldConnectionNo: null,
+      plumberInfo: null,
+      roadCuttingArea: null,
+      roadType: null,
+      connectionExecutionDate: convertDateToEpoch(data?.date),
+      noOfWaterClosets: storeData?.applicationData?.noOfWaterClosets ,
+      noOfToilets : storeData?.applicationData?.noOfToilets,
+      additionalDetails: storeData?.applicationData?.additionalDetails,
+      tenantId: storeData?.applicationData?.tenantId,
+      processInstance: {
+        ...storeData?.applicationData?.processInstance,
+        action: "INITIATE",
+      },
+      channel: "CFC_COUNTER",
+    },
+    disconnectRequest: true
+  };
+
+
+  return service === "WATER" ?  wsPayload : swPayload;
+};
+
+export const updatePayloadOfWSDisconnection = async (data, type) => {
+  let payload = {
+    ...data,
+    applicationType: type === "WATER" ? "DISCONNECT_WATER_CONNECTION" : "DISCONNECT_SEWERAGE_CONNECTION",
+    processInstance: {
+      ...data?.processInstance,
+      businessService: type === "WATER" ? "DisconnectWSConnection" : "DisconnectSWConnection",
+      action: "SUBMIT_APPLICATION",
+    }
+  };
+  return payload;
+};
 
 export const getOwnersforPDF = (property, t) => {
   let interarray = [];
@@ -769,6 +861,7 @@ export const convertApplicationData = (data, serviceType, modify = false, editBy
     ? [
         {
           sameAsOwnerDetails: false,
+          uuid: data?.applicationData?.connectionHolders?.[0]?.uuid,
           name: data?.applicationData?.connectionHolders?.[0]?.name || "",
           mobileNumber: data?.applicationData?.connectionHolders?.[0]?.mobileNumber || "",
           guardian: data?.applicationData?.connectionHolders?.[0]?.fatherOrHusbandName || "",

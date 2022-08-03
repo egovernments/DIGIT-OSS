@@ -15,6 +15,7 @@ import org.egov.land.validator.LandValidator;
 import org.egov.land.web.models.LandInfo;
 import org.egov.land.web.models.LandInfoRequest;
 import org.egov.land.web.models.LandSearchCriteria;
+import org.egov.land.web.models.OwnerInfo;
 import org.egov.land.web.models.UserDetailResponse;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class LandService {
 	private LandUtil util;
 
 	public LandInfo create(@Valid LandInfoRequest landRequest) {
-				
+
 		Object mdmsData = util.mDMSCall(landRequest.getRequestInfo(), landRequest.getLandInfo().getTenantId());
 		if (landRequest.getLandInfo().getTenantId().split("\\.").length == 1) {
 			throw new CustomException(LandConstants.INVALID_TENANT, " Application cannot be create at StateLevel");
@@ -52,7 +53,16 @@ public class LandService {
 		landValidator.validateLandInfo(landRequest,mdmsData);
 		userService.manageUser(landRequest);
 		
-		enrichmentService.enrichLandInfoRequest(landRequest, false);		
+		enrichmentService.enrichLandInfoRequest(landRequest, false);
+
+		landRequest.getLandInfo().getOwners().forEach(owner -> {
+			if (owner.getActive()) {
+				owner.setStatus(true);
+			}else
+			{
+				owner.setStatus(false);
+			}
+		});
 		repository.save(landRequest);
 		return landRequest.getLandInfo();
 	}
@@ -73,8 +83,26 @@ public class LandService {
 		landValidator.validateLandInfo(landRequest, mdmsData);
 		userService.manageUser(landRequest);
 		enrichmentService.enrichLandInfoRequest(landRequest, true);
-		repository.update(landRequest);
+		
+			landRequest.getLandInfo().getOwners().forEach(owner -> {
+			if (owner.getActive()) {
+				owner.setStatus(true);
+			}else
+			{
+				owner.setStatus(false);
+			}
+		});
 
+		repository.update(landRequest);
+		List<OwnerInfo> activeOwnerList = new ArrayList<OwnerInfo>();
+		if(landRequest.getLandInfo().getOwners().size()>1) {
+			landRequest.getLandInfo().getOwners().forEach(owner -> {
+			if (owner.getStatus()) {
+				activeOwnerList.add(owner);
+			}
+		});
+		landRequest.getLandInfo().setOwners(activeOwnerList);
+		}
 		return landRequest.getLandInfo();
 	}
 	

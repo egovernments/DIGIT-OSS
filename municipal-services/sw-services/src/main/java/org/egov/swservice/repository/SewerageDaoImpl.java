@@ -153,4 +153,22 @@ public class SewerageDaoImpl implements SewerageDao {
 		}
 		return sewerageConnectionList;
 	}
+
+	/* Method to push the encrypted data to the 'update' topic  */
+	@Override
+	public void updateOldSewerageConnections(SewerageConnectionRequest sewerageConnectionRequest) {
+		sewarageConnectionProducer.push(updateSewarageConnection, sewerageConnectionRequest);
+
+	}
+
+	/* Method to find the total count of applications present in dB */
+	@Override
+	public Integer getTotalApplications(SearchCriteria criteria) {
+
+		String query = swQueryBuilder.getTotalApplicationsCountQueryString(criteria);
+		if (query == null)
+			return 0;
+		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
+		return count;
+	}
 }

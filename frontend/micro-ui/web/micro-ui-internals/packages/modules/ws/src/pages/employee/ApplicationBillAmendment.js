@@ -17,39 +17,40 @@ import {
   SubmitBar,
   CardLabelError,
   InfoBannerIcon,
-  Toast
+  Toast,
+  Table
 } from "@egovernments/digit-ui-react-components";
-import React, { Fragment, useEffect, useMemo, useReducer,useState } from "react";
+import React, { Fragment, useEffect, useMemo, useReducer, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useHistory,useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 
 
 const ApplicationBillAmendment = () => {
-  const [showToast,setShowToast] = useState(null)
+  const [showToast, setShowToast] = useState(null)
   //connectionNumber=WS/107/2021-22/227166&tenantId=pb.amritsar&service=WATER&connectionType=Metered
   const { t } = useTranslation();
   const { connectionNumber, tenantId, service, connectionType } = Digit.Hooks.useQueryParams();
   const stateId = Digit.ULBService.getStateId();
   const { state } = useLocation();
-  
+
   const { isLoading: BillAmendmentMDMSLoading, data: BillAmendmentMDMS } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSMDMSBillAmendment({
     tenantId: stateId,
   });
-  
+
   const servicev1 = connectionNumber.includes("WS") ? "WS" : "SW";
   const billSearchFilters = { tenantId, consumerCode: connectionNumber, service: servicev1 };
   const { data: preBillSearchData, isLoading: isBillSearchLoading } = Digit.Hooks.usePaymentSearch(tenantId, billSearchFilters);
-  
+
   const { data, isFetched } = Digit.Hooks.fsm.useMDMS(stateId, "DIGIT-UI", "WSTaxHeadMaster");
   const availableBillAmendmentTaxHeads = data?.BillingService?.TaxHeadMaster?.filter((w) => w.IsBillamend);
-  
+
   const billSearchData = preBillSearchData?.filter((e) =>
     availableBillAmendmentTaxHeads?.find((taxHeadMaster) => taxHeadMaster.code === e.taxHeadCode)
   );
-  const rebateAndPenaltyTaxHeads = data?.BillingService?.TaxHeadMaster?.filter(e=> e.code.includes("ADHOC") && e.IsBillamend && e.service===servicev1)
-  
+  const rebateAndPenaltyTaxHeads = data?.BillingService?.TaxHeadMaster?.filter(e => e.code.includes("ADHOC") && e.IsBillamend && e.service === servicev1)
+
   const {
     register,
     control,
@@ -57,14 +58,14 @@ const ApplicationBillAmendment = () => {
     setValue,
     unregister,
     handleSubmit,
-    formState: { errors,...rest },
+    formState: { errors, ...rest },
     reset,
     ...methods
   } = useForm({
-    defaultValues : {
+    defaultValues: {
       ...state?.data?.applicationDetails?.amendment?.additionalDetails?.editForm
-  },
-});
+    },
+  });
   const applicationDetailsFromState = state?.data?.applicationDetails
   const {
     isLoading: updatingApplication,
@@ -74,8 +75,8 @@ const ApplicationBillAmendment = () => {
     isSuccess,
     mutate,
   } = Digit.Hooks.ws.useApplicationActionsBillAmendUpdate();
- 
-  const [goToAppDetailsPage,setGoToAppDetailsPage] = useState(false)
+
+  const [goToAppDetailsPage, setGoToAppDetailsPage] = useState(false)
   const fromDateVal = watch("effectivefrom");
   const amendmentReason = watch("amendmentReason");
   const WS_REDUCED_AMOUNT = watch("WS_REDUCED_AMOUNT");
@@ -147,7 +148,7 @@ const ApplicationBillAmendment = () => {
 
   const getDemandDetailsComparingUpdates = (d) => {
     let actionPerformed;
-    const action = d?.[`${servicev1}_REDUCED_AMOUNT?`]?.VALUE ? "rebate":"penalty";
+    const action = d?.[`${servicev1}_REDUCED_AMOUNT?`]?.VALUE ? "rebate" : "penalty";
     if (servicev1 === "WS")
       actionPerformed = JSON.parse(JSON.stringify(d?.WS_REDUCED_AMOUNT?.VALUE ? d?.WS_REDUCED_AMOUNT : d?.WS_ADDITIONAL_AMOUNT));
     else actionPerformed = JSON.parse(JSON.stringify(d?.SW_REDUCED_AMOUNT?.VALUE ? d?.SW_REDUCED_AMOUNT : d?.SW_ADDITIONAL_AMOUNT));
@@ -163,16 +164,16 @@ const ApplicationBillAmendment = () => {
       return {
         taxHeadMasterCode: e[0],
         //taxAmount: e[1] - preUpdateDataAmount,
-        taxAmount:action==="rebate"? -e[1] : e[1]
+        taxAmount: action === "penalty" ? -e[1] : e[1]
       };
     });
-    
+
   };
 
   const getTotalDetailsOfUpdatedData = (d) => {
     const action = d?.[`${servicev1}_REDUCED_AMOUNT`]?.VALUE ? "REBATE" : "PENALTY";
     const originalDemand = {}
-     billSearchData.map(el => {
+    billSearchData.map(el => {
       originalDemand[el.taxHeadCode] = el.amount
     })
 
@@ -181,9 +182,9 @@ const ApplicationBillAmendment = () => {
       actionPerformed = JSON.parse(JSON.stringify(d?.WS_REDUCED_AMOUNT?.VALUE ? d?.WS_REDUCED_AMOUNT : d?.WS_ADDITIONAL_AMOUNT));
     else actionPerformed = JSON.parse(JSON.stringify(d?.SW_REDUCED_AMOUNT?.VALUE ? d?.SW_REDUCED_AMOUNT : d?.SW_ADDITIONAL_AMOUNT));
     delete actionPerformed?.VALUE;
-    actionPerformed[`${servicev1}_${action}`] = d?.[`${servicev1}_${action}`] ? d?.[`${servicev1}_${action}`]: 0;
-   
-    return { ...actionPerformed,actionPerformed, TOTAL: Object.values(actionPerformed).reduce((a, b) => parseInt(a) + parseInt(b), 0),originalDemand,action };
+    actionPerformed[`${servicev1}_${action}`] = d?.[`${servicev1}_${action}`] ? d?.[`${servicev1}_${action}`] : 0;
+
+    return { ...actionPerformed, actionPerformed, TOTAL: Object.values(actionPerformed).reduce((a, b) => parseInt(a) + parseInt(b), 0), originalDemand, action };
   };
 
   const closeToast = () => {
@@ -237,56 +238,56 @@ const ApplicationBillAmendment = () => {
     //send this workflow object inside and AmendmentUpdate object, AmendmentUpdate object will contain all the amendment details(current)
     //then call mutate wit this data
 
-    if (state?.data?.action === "RE-SUBMIT-APPLICATION"){
+    if (state?.data?.action === "RE-SUBMIT-APPLICATION") {
       //isme processInstance aur wfDocuments obj bhi bhejo RAIN-6981
-      const workflow= {
+      const workflow = {
         businessId: state?.data?.applicationDetails?.amendment?.amendmentId,
         action: "RE-SUBMIT",
         tenantId: tenantId,
         businessService: "BS.AMENDMENT",
         moduleName: "BS"
-    }
+      }
       const AmendmentUpdate = { ...state?.data?.applicationDetails?.applicationData?.billAmendmentDetails, workflow, ...data?.Amendment }
-      mutate({AmendmentUpdate}, {
-      onError: (error, variables) => {
-        //setIsEnableLoader(false);
+      mutate({ AmendmentUpdate }, {
+        onError: (error, variables) => {
+          //setIsEnableLoader(false);
           setShowToast({ key: "error", error, label: t("CS_WATER_UPDATE_APPLICATION_FAILED") });
-        setTimeout(closeToast, 5000);
-      },
-      onSuccess: (data, variables) => {
-        //setIsEnableLoader(false);
-        if (data?.Amendments?.length > 0) {
+          setTimeout(closeToast, 5000);
+        },
+        onSuccess: (data, variables) => {
+          //setIsEnableLoader(false);
+          if (data?.Amendments?.length > 0) {
             if (variables?.AmendmentUpdate?.workflow?.action.includes("RE-SUBMIT")) {
-            setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_RE_SUBMIT_UPDATE_SUCCESS") })
-          } 
-          //now goto application details page
-         
-          setGoToAppDetailsPage(true)
+              setShowToast({ key: "success", label: t("ES_MODIFYSWCONNECTION_RE_SUBMIT_UPDATE_SUCCESS") })
+            }
+            //now goto application details page
 
-         // history?.push(`/digit-ui/employee/ws/application-details-bill-amendment?applicationNumber=${data?.Amendments[0].amendmentId}`)
-          return
-        }
-      },
-    })
-    return
-  }
-    
+            setGoToAppDetailsPage(true)
+
+            // history?.push(`/digit-ui/employee/ws/application-details-bill-amendment?applicationNumber=${data?.Amendments[0].amendmentId}`)
+            return
+          }
+        },
+      })
+      return
+    }
+
     history.push("/digit-ui/employee/ws/response", data);
   };
 
- 
+
   const isValidToDate = (enteredValue) => {
     const enteredTs = new Date(enteredValue).getTime()
     const fromDate = fromDateVal ? new Date(fromDateVal).getTime() : new Date().getTime()
     // return ( toDate > enteredTs && enteredTs >= currentTs ) ? true : false 
-    return (enteredTs>fromDate) ? true : "Invalid format"
+    return (enteredTs > fromDate) ? true : "Invalid format"
 
   };
 
-  
+
   return (
     <form onSubmit={handleSubmit(onFormSubmit)}>
-      <Header>{state?.data?.action ? t("WS_APP_FOR_WATER_AND_SEWERAGE_EDIT_LABEL"):t("WS_BILL_AMENDMENT_BUTTON")}</Header>
+      <Header>{state?.data?.action ? t("WS_APP_FOR_WATER_AND_SEWERAGE_EDIT_LABEL") : t("WS_BILL_AMENDMENT_BUTTON")}</Header>
       <Card>
         <LabelFieldPair>
           <CardLabel style={{ fontWeight: "500" }}>{t(`WS_ACKNO_CONNECTION_NO_LABEL`)}</CardLabel>
@@ -296,7 +297,7 @@ const ApplicationBillAmendment = () => {
         <CardSectionSubText style={{ marginBottom: "16px" }}>{t(`WS_ADJUSTMENT_AMOUNT_ADDITION_TEXT`)}</CardSectionSubText>
 
         {!isBillSearchLoading ? (
-          <table>
+          <table cellPadding={"8px"} cellSpacing={"10px"}>
             <tr style={{ textAlign: "left" }}>
               <th>{t("WS_TAX_HEADS")}</th>
               <th>{t("WS_CURRENT_AMOUNT")}</th>
@@ -314,7 +315,7 @@ const ApplicationBillAmendment = () => {
                     render={(props) => {
                       return (
                         <CheckBox
-                          // className="form-field"
+                          style={{ "marginLeft": "35px" }}
                           label={t(`${servicev1}_REDUCED_AMOUNT`)}
                           onChange={(e) => {
                             if (e.target.checked) {
@@ -346,6 +347,7 @@ const ApplicationBillAmendment = () => {
                     render={(props) => {
                       return (
                         <CheckBox
+                          style={{ "marginLeft": "35px" }}
                           // className="form-field"
                           label={t(`${servicev1}_ADDITIONAL_AMOUNT`)}
                           onChange={(e) => {
@@ -392,12 +394,12 @@ const ApplicationBillAmendment = () => {
                       disabled={servicev1 === "WS" ? !WS_ADDITIONAL_AMOUNT?.VALUE : !SW_ADDITIONAL_AMOUNT?.VALUE}
                       name={`${servicev1}_ADDITIONAL_AMOUNT.${node.taxHeadCode}`}
                       inputRef={register()}
-                      // inputRef={register({
-                      //   min: {
-                      //     value: node.amount,
-                      //     message: t(`${servicev1}_ERROR_ENTER_MORE_THAN_MIN_VALUE`),
-                      //   },
-                      // })}
+                    // inputRef={register({
+                    //   min: {
+                    //     value: node.amount,
+                    //     message: t(`${servicev1}_ERROR_ENTER_MORE_THAN_MIN_VALUE`),
+                    //   },
+                    // })}
                     />
                     {/* {servicev1 === "WS"
                       ? errors?.WS_ADDITIONAL_AMOUNT?.WS_CHARGE && <CardLabelError>{errors?.WS_ADDITIONAL_AMOUNT?.WS_CHARGE?.message}</CardLabelError>
@@ -411,18 +413,18 @@ const ApplicationBillAmendment = () => {
             {<tr>
               <td colSpan={2} style={{ paddingRight: "60px" }}>{t("WS_REBATE_PENALTY")}
                 <div className="tooltip">
-                  <InfoBannerIcon fill="#0b0c0c" style/>
+                  <InfoBannerIcon fill="#0b0c0c" style />
                   <span className="tooltiptext" style={{
                     whiteSpace: "nowrap",
                     fontSize: "medium"
                   }}>
                     {`${t(`WS_ADHOC_REBATE_TOOLTIP`)}`}
-                    <br/><br/>
+                    <br /><br />
                     {`${t(`WS_ADHOC_PENALTY_TOOLTIP`)}`}
                   </span>
                 </div>
               </td>
-              
+
               <td style={{ paddingRight: "60px" }}>
                 <>
                   <TextInput
@@ -474,7 +476,7 @@ const ApplicationBillAmendment = () => {
               {errors?.amendmentReason ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             </LabelFieldPair>
             <LabelFieldPair>
-                <CardLabel style={{ fontWeight: "500" }}>{`${t("WS_GOVERNMENT_NOTIFICATION_NUMBER")} *`}</CardLabel>
+              <CardLabel style={{ fontWeight: "500" }}>{`${t("WS_GOVERNMENT_NOTIFICATION_NUMBER")} *`}</CardLabel>
               <div className="reasonDocumentNumber">
                 <TextInput style={{ width: "640px" }} name="reasonDocumentNumber" inputRef={register({ required: true })} />
               </div>
@@ -491,14 +493,14 @@ const ApplicationBillAmendment = () => {
               {errors?.effectiveFrom ? <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError> : null}
             </LabelFieldPair>
             <LabelFieldPair>
-                <CardLabel style={{ fontWeight: "500" }}>{`${t("WS_BILL_AMEND_EFFECTIVE_TILL")} *`}</CardLabel>
+              <CardLabel style={{ fontWeight: "500" }}>{`${t("WS_BILL_AMEND_EFFECTIVE_TILL")} *`}</CardLabel>
               <Controller
                 render={(props) => <DatePicker style={{ width: "640px" }} date={props.value} disabled={false} onChange={props.onChange} />}
                 name="effectiveTill"
-                rules={{ required: true,validate:{isValidToDate}}}
+                rules={{ required: true, validate: { isValidToDate } }}
                 control={control}
               />
-              {errors?.effectiveTill?.type==="required" && <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError>}
+              {errors?.effectiveTill?.type === "required" && <CardLabelError>{t("WS_REQUIRED_FIELD")}</CardLabelError>}
               {errors?.effectiveTill?.message === "Invalid format" && <CardLabelError>{t("ERR_DEFAULT_INPUT_FIELD_MSG")}</CardLabelError>}
 
             </LabelFieldPair>
@@ -537,14 +539,14 @@ const ApplicationBillAmendment = () => {
       {showToast ? (
         <Toast
           isDleteBtn={true}
-         // error={updateApplicationError ? "WS_APPLICATION_UPDATE_ERROR" : null}
+          // error={updateApplicationError ? "WS_APPLICATION_UPDATE_ERROR" : null}
           error={showToast?.error}
           label={showToast?.label}
           onClose={closeToast}
         />
       ) : null}
       <ActionBar>
-        <SubmitBar submit={true} label={state?.data?.action ?t("WF_CITIZEN_NEWSW1_RESUBMIT_APPLICATION"):t("WS_COMMON_BUTTON_SUBMIT")} />
+        <SubmitBar submit={true} label={state?.data?.action ? t("WF_CITIZEN_NEWSW1_RESUBMIT_APPLICATION") : t("WS_COMMON_BUTTON_SUBMIT")} />
       </ActionBar>
     </form>
   );

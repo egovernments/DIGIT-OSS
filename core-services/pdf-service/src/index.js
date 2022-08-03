@@ -49,7 +49,8 @@ import {
 } from "./kafka/consumer";
 import {
   convertFooterStringtoFunctionIfExist,
-  findLocalisation
+  findLocalisation,
+  getDateInRequiredFormat
 } from "./utils/commons";
 
 
@@ -1058,6 +1059,7 @@ const handleDerivedMapping = (dataconfig, variableTovalueMap) => {
   );
 
   for (var i = 0, len = derivedMappings.length; i < len; i++) {
+
     let mapping = derivedMappings[i];
     let expression = mustache
       .render(
@@ -1065,7 +1067,19 @@ const handleDerivedMapping = (dataconfig, variableTovalueMap) => {
         variableTovalueMap
       )
       .replace(/NA/g, "0");
-    variableTovalueMap[mapping.variable] = Function(`'use strict'; return (${expression})`)();
+    let type = mapping.type;
+    let format = mapping.format;
+    let variableValue = Function(`'use strict'; return (${expression})`)();
+    if(type == "date"){
+      let myDate = new Date(variableValue);
+      if (isNaN(myDate) || variableValue === 0) {
+        variableValue = "NA";
+      } else {
+        let replaceValue = getDateInRequiredFormat(variableValue,format);
+        variableValue = replaceValue;
+      }
+    }
+    variableTovalueMap[mapping.variable] = variableValue;
   }
 };
 

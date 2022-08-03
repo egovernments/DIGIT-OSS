@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { ArrowRightInbox } from "./svgindex";
 import { Link } from "react-router-dom";
 
-const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen = false, className, styles, longModuleName=false }) => {
+const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen = false, className, styles, longModuleName=false, FsmHideCount }) => {
   return (
     <div className={className ? className : "employeeCard customEmployeeCard card-home home-action-cards"} style={styles ? styles : {}}>
       <div className="complaint-links-container">
@@ -35,7 +35,7 @@ const EmployeeModuleCard = ({ Icon, moduleName, kpis = [], links = [], isCitizen
                 {link ? <Link to={link}>{label}</Link> : null}
                 {count ? (
                   <>
-                    <span className={"inbox-total"}>{count || "-"}</span>
+                    {FsmHideCount ? null : <span className={"inbox-total"}>{count || "-"}</span>}
                     <Link to={link}>
                       <ArrowRightInbox />
                     </Link>

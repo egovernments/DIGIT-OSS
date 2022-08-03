@@ -13,6 +13,7 @@ import {
   Toast,
   StatusTable,
   Row,
+  UnMaskComponent,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
@@ -42,7 +43,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
 
   const { isLoading, isError, error, data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: searchPropertyId }, tenantId: tenantId },
-    { filters: { propertyIds: searchPropertyId }, tenantId: tenantId, enabled: searchPropertyId ? true : false }
+    { filters: { propertyIds: searchPropertyId }, tenantId: tenantId, enabled: searchPropertyId ? true : false, privacy : Digit.Utils.getPrivacyObject() }
   );
 
   useEffect(() => {
@@ -108,7 +109,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
           <TextInput
             key={config.key}
             value={propertyId}
-            isMandatory={true}
+            //isMandatory={true}
             onChange={(e) => {
               setPropertyId(e.target.value);
               onSelect(config.key, { id: e.target.value });
@@ -146,12 +147,17 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
                 label={t(`OWNER_NAME`)}
                 text={getOwnerNames(propertyDetails?.Properties[0])}
               />
+               {/* <span style={{ display: "inline-flex", width: "fit-content"}}> */}
               <Row
                 className="border-none"
                 labelStyle={isMobile ? { width: "40%" } : {}}
                 textStyle={{ wordBreak: "break-word" }}
                 label={t(`PROPERTY_ADDRESS`)}
                 text={propertyAddress}
+                privacy={{ 
+                  uuid:propertyDetails?.Properties[0]?.propertyId, 
+                  fieldName: ["doorNo","street","landmark"], 
+                  model: "Property" }}
               />
             </div>
           </StatusTable>

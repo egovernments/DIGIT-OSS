@@ -1,7 +1,8 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardSectionHeader, CardLabel } from "@egovernments/digit-ui-react-components";
 import { Modal, Dropdown, Row, StatusTable, TextInput, Toast } from "@egovernments/digit-ui-react-components";
+import cloneDeep from "lodash/cloneDeep";
 
 const Penality_menu = [
     {
@@ -44,7 +45,8 @@ const Rebate_menu = [
 const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
     const { t } = useTranslation();
     const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_ADD_REBATE_DATA", {});
-    const isPaid = (wsAdditionalDetails?.additionalDetails?.appDetails?.applicationStatus === 'CONNECTION_ACTIVATED' || wsAdditionalDetails?.additionalDetails?.appDetails?.applicationStatus === 'PENDING_FOR_CONNECTION_ACTIVATION') ? true : false;
+    const [sessionBillFormData, setSessionBillFormData, clearBillSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_BILL_ADD_REBATE_DATA", {});
+    const isPaid = wsAdditionalDetails?.additionalDetails?.isPaid ? true : false;
     const [popup, showPopUp] = useState(false);
     const [fields, setFields] = useState(sessionFormData ? sessionFormData : {});
     const [showToast, setShowToast] = useState(null);
@@ -54,6 +56,20 @@ const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
     const stateCode = Digit.ULBService.getStateId();
     const { isMdmsLoading, data: mdmsRes } = Digit.Hooks.ws.useMDMS(stateCode, "BillingService", ["TaxHeadMaster"]);
 
+    useEffect(() => {
+        const data = { ...wsAdditionalDetails?.additionalDetails?.appDetails?.additionalDetails };
+        setSessionFormData(data);
+        setFields(data);
+        if (sessionFormData?.billDetails?.length > 0) {
+            const values = [
+                { title: "WS_APPLICATION_FEE_HEADER", value: sessionFormData?.billDetails?.[0]?.fee },
+                { title: "WS_SERVICE_FEE_HEADER", value: sessionFormData?.billDetails?.[0]?.charge },
+                { title: "WS_TAX_HEADER", value: sessionFormData?.billDetails?.[0]?.taxAmount },
+            ];
+            setValues(values);
+            setBillDetails(sessionFormData?.billDetails?.[0]);
+        }
+    }, []);
 
     let validation = {};
 
@@ -91,58 +107,54 @@ const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
             if (rebateAmount > totalAmount) {
                 setShowToast({ isError: false, isWarning: true, key: "error", message: t("ERR_WS_REBATE_GREATER_THAN_AMOUNT") });
             } else {
-                const businessService = wsAdditionalDetails?.additionalDetails?.appDetails?.serviceType == "WATER" ? "WS" : "SW";
-                const consumerCode = wsAdditionalDetails?.additionalDetails?.appDetails?.applicationNo;
-                const details = {
-                    demandId: demandId,
-                    adhocrebate: rebateAmount || 0,
-                    adhocpenalty: adhocAmount || 0,
-                    consumerCode: consumerCode,
-                    businessService: "WS.ONE_TIME_FEE"
-                }
+                const applicationNo = wsAdditionalDetails?.additionalDetails?.appDetails?.applicationNo;
+                const tenantId = wsAdditionalDetails?.additionalDetails?.appDetails?.tenantId;
+                const appAdditionalDetails = { ...wsAdditionalDetails?.additionalDetails?.appDetails?.additionalDetails, ...fields }
+                wsAdditionalDetails.additionalDetails.appDetails.additionalDetails = appAdditionalDetails;
 
-                Digit.WSService.wsCalculationApplyAdhoc(details, businessService)
+                const data = {
+                    CalculationCriteria:
+                        wsAdditionalDetails?.additionalDetails?.appDetails?.service == "WATER"
+                            ? [
+                                {
+                                    applicationNo: applicationNo,
+                                    tenantId: tenantId,
+                                    waterConnection: wsAdditionalDetails.additionalDetails.appDetails,
+                                },
+                            ]
+                            : [
+                                {
+                                    applicationNo: applicationNo,
+                                    tenantId: tenantId,
+                                    sewerageConnection: wsAdditionalDetails.additionalDetails.appDetails,
+                                },
+                            ],
+                    isconnectionCalculation: false,
+                };
+
+                let businessService = wsAdditionalDetails?.additionalDetails?.appDetails?.service == "WATER" ? "WS" : "SW";
+                Digit.WSService.wsCalculationEstimate(data, businessService)
                     .then((result, err) => {
-                        Digit.PaymentService.fetchBill(
-                            wsAdditionalDetails?.additionalDetails?.appDetails?.tenantId, {
-                            businessService: wsAdditionalDetails?.additionalDetails?.appDetails?.serviceType == "WATER" ? "WS.ONE_TIME_FEE" : "SW.ONE_TIME_FEE",
-                            consumerCode: wsAdditionalDetails?.additionalDetails?.appDetails?.applicationNo,
-                        }).then((resultData, err) => {
-                            if (resultData?.Bill?.length > 0) {
-                                let taxHeadMasterResponce = mdmsRes.BillingService.TaxHeadMaster;
-                                resultData.Bill[0].billDetails[0].billAccountDetails.forEach(data => {
-                                    taxHeadMasterResponce.forEach(taxHeadCode => { if (data.taxHeadCode == taxHeadCode.code) { data.category = taxHeadCode.category } });
-                                });
+                        if (result?.Calculation?.[0]?.taxHeadEstimates?.length > 0) {
+                            result?.Calculation?.[0]?.taxHeadEstimates?.forEach(data => data.amount = data.estimateAmount);
+                          }
 
-                                let fee = 0, charge = 0, taxAmount = 0;
-                                resultData.Bill[0].billSlabData = _.groupBy(resultData.Bill[0].billDetails[0].billAccountDetails, 'category')
-                                if (resultData?.Bill?.[0]?.billSlabData?.FEE?.length > 0) resultData.Bill[0].billSlabData.FEE?.map(amount => { fee += parseFloat(amount.amount); });
-                                if (resultData?.Bill?.[0]?.billSlabData?.CHARGES?.length > 0) resultData.Bill[0].billSlabData.CHARGES?.map(amount => { charge += parseFloat(amount.amount); });
-                                if (resultData?.Bill?.[0]?.billSlabData?.TAX?.length > 0) resultData.Bill[0].billSlabData.TAX?.map(amount => { taxAmount += parseFloat(amount.amount); });
-                                resultData.Bill[0].fee = fee;
-                                resultData.Bill[0].charge = charge
-                                resultData.Bill[0].taxAmount = taxAmount;
-                                resultData.Bill[0].totalAmount = fee + charge + taxAmount;
-
-                                const values = [
-                                    { title: "WS_APPLICATION_FEE_HEADER", value: resultData?.Bill?.[0]?.fee },
-                                    { title: "WS_SERVICE_FEE_HEADER", value: resultData?.Bill?.[0]?.charge },
-                                    { title: "WS_TAX_HEADER", value: resultData?.Bill?.[0]?.taxAmount },
-                                ];
-                                setBillDetails(resultData.Bill[0]);
-                                setValues(values);
-                                setSessionFormData(fields);
-                                showPopUp(false);
-                            }
-                        })
-                            .catch((e) => {
-                                setShowToast({ isError: true, isWarning: false, key: "error", message: e?.response?.data?.Errors[0]?.message ? t(`${e?.response?.data?.Errors[0]?.code}`) : t("PT_COMMON_ADD_REBATE_PENALITY") });
-                            })
+                        result.Calculation[0].billSlabData = _.groupBy(result?.Calculation?.[0]?.taxHeadEstimates, 'category');
+                        const values = [
+                            { title: "WS_APPLICATION_FEE_HEADER", value: result.Calculation?.[0]?.fee },
+                            { title: "WS_SERVICE_FEE_HEADER", value: result.Calculation?.[0]?.charge },
+                            { title: "WS_TAX_HEADER", value: result.Calculation?.[0]?.taxAmount },
+                        ];
+                        setSessionBillFormData(cloneDeep(result.Calculation[0]));
+                        setBillDetails(result?.Calculation?.[0]);
+                        setValues(values);
+                        fields.billDetails = result?.Calculation;
+                        setSessionFormData(fields);
+                        showPopUp(false);
                     })
                     .catch((e) => {
                         setShowToast({ isError: true, isWarning: false, key: "error", message: e?.response?.data?.Errors[0]?.message ? t(`${e?.response?.data?.Errors[0]?.code}`) : t("PT_COMMON_ADD_REBATE_PENALITY") });
                     });
-
             }
         } else {
             setShowToast({ isError: false, isWarning: true, key: "warning", message: t("ERR_WS_ENTER_ATLEAST_ONE_FIELD") });
@@ -151,7 +163,14 @@ const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
 
     const selectedValuesData = (value, isDropDownValue = false, e) => {
         let values = { ...fields };
-        if (isDropDownValue) {
+        if((value == "adhocPenalty"||value=="adhocRebate") && e.target.value){
+            const targetValueSign = e?.target?.value ==0 ? 1 : Math.sign(e?.target?.value)||-1;
+            if(targetValueSign == 1){
+                values[value] = e.target.value;
+            }else{
+                values[value] = '';
+            }
+        }else if (isDropDownValue) {
             values[`${value}_data`] = e;
             values[value] = e.title;
             if (e.title == "PT_OTHERS" && value == "adhocPenaltyReason") values[`adhocPenaltyComment`] = "";
@@ -169,23 +188,23 @@ const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
                     <StatusTable>
                         <div>
                             {values?.map((value, index) => {
-                                return <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.value ? value?.value : ""} />
+                                return <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.value ? Number(value?.value).toFixed(2) : ""} />
                             })}
                         </div>
                         <hr style={{ border: "1px solid #D6D5D4", color: "#D6D5D4", margin: "16px 0px" }}></hr>
                         <div>
-                            <Row className="border-none" key={`WS_COMMON_TOTAL_AMT`} label={`${t(`WS_COMMON_TOTAL_AMT`)}`} text={billDetails?.totalAmount || 0} />
+                            <Row className="border-none" key={`WS_COMMON_TOTAL_AMT`} label={`${t(`WS_COMMON_TOTAL_AMT`)}`} text={Number(billDetails?.totalAmount).toFixed(2) || 0} />
                             <Row className="border-none" key={`CS_INBOX_STATUS_FILTER`} label={`${t(`CS_INBOX_STATUS_FILTER`)}`} text={isPaid ? t("WS_COMMON_PAID_LABEL") : t("WS_COMMON_NOT_PAID")} textStyle={!isPaid ? { color: "#D4351C" } : { color: "#00703C" }} />
                         </div>
                     </StatusTable>}
                 {
                     wsAdditionalDetails?.additionalDetails?.isAdhocRebate ? <div
-                    onClick={(e) => {
-                        showPopUp(true)
-                    }}
-                >
-                    <span style={{ cursor: "pointer", color: "#F47738" }}>{t("WS_PAYMENT_ADD_REBATE_PENALTY")}</span>
-                </div> : null
+                        onClick={(e) => {
+                            showPopUp(true)
+                        }}
+                    >
+                        <span style={{ cursor: "pointer", color: "#F47738" }}>{t("WS_PAYMENT_ADD_REBATE_PENALTY")}</span>
+                    </div> : null
                 }
                 {popup &&
                     <Modal
@@ -219,13 +238,13 @@ const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
                                             option={Penality_menu}
                                             optionKey="title"
                                             select={(e) => selectedValuesData("adhocPenaltyReason", true, e)}
-                                            selected={fields?.adhocPenaltyReason || ""}
+                                            selected={fields?.adhocPenaltyReason_data || ""}
                                             isPropertyAssess={true}
                                             name={"adhocPenaltyReason_data"}
                                             t={t}
                                         />
                                     </div>
-                                    {fields?.adhocPenaltyReason?.title === "PT_OTHERS" && <div className="field">
+                                    {fields?.adhocPenaltyReason_data?.title === "PT_OTHERS" && <div className="field">
                                         <CardLabel>{t("PT_REASON")}</CardLabel>
                                         <div className="field">
                                             <TextInput
@@ -273,13 +292,13 @@ const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
                                             option={Rebate_menu}
                                             optionKey="title"
                                             select={(e) => selectedValuesData("adhocRebateReason", true, e)}
-                                            selected={fields?.adhocRebateReason || ""}
+                                            selected={fields?.adhocRebateReason_data || ""}
                                             name={"adhocRebateReason_data"}
                                             isPropertyAssess={true}
                                             t={t}
                                         />
                                     </div>
-                                    {fields?.adhocRebateReason?.title === "PT_OTHERS" && <div className="field">
+                                    {fields?.adhocRebateReason_data?.title === "PT_OTHERS" && <div className="field">
                                         <CardLabel>{t("PT_REASON")}</CardLabel>
                                         <TextInput
                                             style={{ background: "#FAFAFA" }}

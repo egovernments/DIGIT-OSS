@@ -5,12 +5,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.egov.common.contract.request.PlainAccessRequest;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.swservice.config.SWConfiguration;
+import org.egov.swservice.producer.SewarageConnectionProducer;
 import org.egov.swservice.repository.IdGenRepository;
 import org.egov.swservice.repository.ServiceRequestRepository;
 import org.egov.swservice.repository.SewerageDaoImpl;
+import org.egov.swservice.util.EncryptionDecryptionUtil;
 import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.util.SewerageServicesUtil;
 import org.egov.swservice.web.models.*;
@@ -30,6 +33,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
+
+import static org.egov.swservice.util.SWConstants.DOCUMENT_ACCESS_AUDIT_MSG;
+import static org.egov.swservice.util.SWConstants.WNS_OWNER_ENCRYPTION_MODEL;
 
 @Service
 @Slf4j
@@ -58,6 +64,13 @@ public class EnrichmentService {
 
 	@Autowired
 	private WorkflowService wfService;
+
+	@Autowired
+	private SewarageConnectionProducer producer;
+
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
+
 	/**
 	 * 
 	 * @param sewerageConnectionRequest
@@ -177,10 +190,16 @@ public class EnrichmentService {
 	 *            SewerageConnectionRequest which is to be created
 	 */
 	private void setSewarageApplicationIdgenIds(SewerageConnectionRequest request) {
-		List<String> applicationNumbers = getIdList(request.getRequestInfo(),
-				request.getSewerageConnection().getTenantId(), config.getSewerageApplicationIdGenName(),
-				config.getSewerageApplicationIdGenFormat(), 1);
-
+		List<String> applicationNumbers = new ArrayList<>();
+		if (request.getSewerageConnection().getApplicationStatus() != null && request.isDisconnectRequest()) {
+			applicationNumbers = getIdList(request.getRequestInfo(),
+					request.getSewerageConnection().getTenantId(), config.getSewerageDisconnectionIdGenName(),
+					config.getSewerageDisconnectionIdGenFormat(), 1);
+		} else {
+			applicationNumbers = getIdList(request.getRequestInfo(),
+					request.getSewerageConnection().getTenantId(), config.getSewerageApplicationIdGenName(),
+					config.getSewerageApplicationIdGenFormat(), 1);
+		}
 		if (CollectionUtils.isEmpty(applicationNumbers) || applicationNumbers.size() != 1) {
 			Map<String, String> errorMap = new HashMap<>();
 			errorMap.put("IDGEN ERROR ",
@@ -271,7 +290,7 @@ public class EnrichmentService {
 		if (CollectionUtils.isEmpty(connectionNumbers) || connectionNumbers.size() != 1) {
 			Map<String, String> errorMap = new HashMap<>();
 			errorMap.put("IDGEN_ERROR",
-					"The Id of WaterConnection returned by idgen is not equal to number of WaterConnection");
+					"The Id of Sewerage Connection returned by idgen is not equal to number of Sewerage Connection");
 			throw new CustomException(errorMap);
 		}
 
@@ -320,7 +339,34 @@ public class EnrichmentService {
 			return;
 		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(criteria.getTenantId(), requestInfo);
 		userSearchRequest.setUuid(connectionHolderIds);
+
+		PlainAccessRequest apiPlainAccessRequest = userSearchRequest.getRequestInfo().getPlainAccessRequest();
+		/* Creating a PlainAccessRequest object to get unmasked data from user service */
+		List<String> plainRequestFieldsList = new ArrayList<String>() {{
+			add("userName");
+			add("mobileNumber");
+			add("correspondenceAddress");
+			add("guardian");
+			add("fatherOrHusbandName");
+			add("name");
+		}};
+		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(connectionHolderIds.iterator().next())
+				.plainRequestFields(plainRequestFieldsList).build();
+
+		requestInfo.setPlainAccessRequest(plainAccessRequest);
+
 		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+		//Re-setting the original PlainAccessRequest object that came from api request
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
+
+		// Encrypting and decrypting the data as per sw-service requirement
+		/* encrypt here */
+		userDetailResponse.setUser((List<OwnerInfo>) encryptionDecryptionUtil.encryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class));
+
+		/* decrypt here */
+		userDetailResponse.setUser(encryptionDecryptionUtil.decryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, requestInfo));
+
+
 		enrichConnectionHolderInfo(userDetailResponse, sewerageConnectionList,requestInfo);
 	}
 
@@ -330,7 +376,7 @@ public class EnrichmentService {
 	 * 
 	 * @param userDetailResponse
 	 * @param sewerageConnectionList
-	 *            List of water connection whose owner's are to be populated from
+	 *            List of Sewerage connection whose owner's are to be populated from
 	 *            userDetailsResponse
 	 */
 	public void enrichConnectionHolderInfo(UserDetailResponse userDetailResponse,
@@ -382,7 +428,7 @@ public class EnrichmentService {
 	 * @return
 	 */
 	public List<SewerageConnection> filterConnections(List<SewerageConnection> connectionList) {
-		HashMap<String, Connection> connectionHashMap = new HashMap<>();
+		HashMap<String, Connection> connectionHashMap = new LinkedHashMap<>();
 		connectionList.forEach(connection -> {
 			if (!StringUtils.isEmpty(connection.getConnectionNo())) {
 				if (connectionHashMap.get(connection.getConnectionNo()) == null &&
@@ -468,6 +514,9 @@ public class EnrichmentService {
 			RequestInfo requestInfo) {
 		if (CollectionUtils.isEmpty(sewerageConnectionList))
 			return;
+
+		PlainAccessRequest apiPlainAccessRequest = requestInfo.getPlainAccessRequest();
+
 		List<ProcessInstance> processInstance=null;
 		for (SewerageConnection sewerageConnection : sewerageConnectionList) {
 			if(criteria.getTenantId()!=null)
@@ -482,7 +531,141 @@ public class EnrichmentService {
 				if(!ObjectUtils.isEmpty(processInstance.get(0).getAssignes()))
 					sewerageConnection.getProcessInstance().setAssignes(processInstance.get(0).getAssignes());
 			}
+			requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 		}
 	}
 
+	/**
+	 * Show the filestoreid for the respective document list based on the flag isFilestoreIdRequire
+	 * If the flag is false in search criteria, the filestoreId is set as null
+	 * and if it is true then filestore id is visible and details is log
+	 *
+	 * @param sewerageConnectionList
+	 * @param criteria
+	 * @param requestInfo
+	 *
+	 * @return
+	 */
+	public void enrichDocumentDetails(List<SewerageConnection> sewerageConnectionList, SearchCriteria criteria,
+									  RequestInfo requestInfo) {
+		if (CollectionUtils.isEmpty(sewerageConnectionList))
+			return;
+
+		if(!criteria.getIsFilestoreIdRequire() || sewerageConnectionList.size()>1){
+			for(int i= 0; i<sewerageConnectionList.size();i++){
+				List<Document> documentList = sewerageConnectionList.get(i).getDocuments();
+				for(int j =0; (documentList !=null && j<documentList.size()); j++){
+					documentList.get(j).setFileStoreId(null);
+				}
+				sewerageConnectionList.get(i).setDocuments(documentList);
+			}
+
+		}
+		else{
+			List<String> uuids = new ArrayList<>();
+			if(sewerageConnectionList.get(0).getConnectionHolders() != null){
+				for(OwnerInfo connectionHolder : sewerageConnectionList.get(0).getConnectionHolders()){
+					uuids.add(connectionHolder.getUuid());
+				}
+			}
+
+			PropertyCriteria propertyCriteria = new PropertyCriteria();
+			propertyCriteria.setPropertyIds(Collections.singleton(sewerageConnectionList.get(0).getPropertyId()));
+			propertyCriteria.setTenantId(sewerageConnectionList.get(0).getTenantId());
+
+			List<Property> propertyList = sewerageServicesUtil.getPropertyDetails(serviceRequestRepository.fetchResult(sewerageServicesUtil.getPropertyURL(propertyCriteria),
+					RequestInfoWrapper.builder().requestInfo(requestInfo).build()));
+			if(propertyList != null && propertyList.size()==1){
+				List<OwnerInfo> ownerInfoList = propertyList.get(0).getOwners();
+				for(OwnerInfo ownerInfo: ownerInfoList)
+					uuids.add(ownerInfo.getUuid());
+			}
+
+			for(String uuid : uuids){
+				Map<String, Object> auditObject = new HashMap<>();
+				auditObject.put("id",UUID.randomUUID().toString());
+				auditObject.put("timestamp",System.currentTimeMillis());
+				auditObject.put("userId",uuid);
+				auditObject.put("accessBy", requestInfo.getUserInfo().getUuid());
+				auditObject.put("purpose",DOCUMENT_ACCESS_AUDIT_MSG);
+
+				producer.push(config.getDocumentAuditTopic(), auditObject);
+			}
+
+		}
+
+	}
+
+	/**
+	 * Method to take un-mask the connectionHolder details coming in from _update api
+	 *
+	 * @param sewerageConnection SewerageConnection
+	 * @param requestInfo RequestInfo
+	 * @return unmasked ConnectionHolder details
+	 */
+	public OwnerInfo getConnectionHolderDetailsForUpdateCall(SewerageConnection sewerageConnection, RequestInfo requestInfo) {
+		if (ObjectUtils.isEmpty(sewerageConnection))
+			return null;
+		Set<String> connectionHolderIds = new HashSet<>();
+		if (!CollectionUtils.isEmpty(sewerageConnection.getConnectionHolders())) {
+			connectionHolderIds.addAll(sewerageConnection.getConnectionHolders().stream()
+					.map(OwnerInfo::getUuid).collect(Collectors.toSet()));
+		}
+		if (CollectionUtils.isEmpty(connectionHolderIds))
+			return null;
+
+		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(sewerageConnection.getTenantId(), requestInfo);
+		userSearchRequest.setUuid(connectionHolderIds);
+		PlainAccessRequest apiPlainAccessRequest = userSearchRequest.getRequestInfo().getPlainAccessRequest();
+		List<String> plainRequestFieldsList = new ArrayList<String>() {{
+			add("mobileNumber");
+			add("guardian");
+			add("fatherOrHusbandName");
+			add("correspondenceAddress");
+			add("userName");
+			add("name");
+			add("gender");
+		}};
+
+		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(connectionHolderIds.iterator().next())
+				.plainRequestFields(plainRequestFieldsList).build();
+
+		requestInfo.setPlainAccessRequest(plainAccessRequest);
+
+		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+		int k;
+		for (OwnerInfo connectionHolder : sewerageConnection.getConnectionHolders()) {
+			k = 0;
+			for (OwnerInfo userDetail : userDetailResponse.getUser()) {
+				if (connectionHolder.getUuid().equals(userDetail.getUuid())) {
+					if (!connectionHolder.getFatherOrHusbandName().contains("*")) {
+						userDetailResponse.getUser().get(0).setFatherOrHusbandName(connectionHolder.getFatherOrHusbandName());
+					}
+
+					if (!connectionHolder.getMobileNumber().contains("*")) {
+						userDetailResponse.getUser().get(0).setMobileNumber(connectionHolder.getMobileNumber());
+					}
+					if (!connectionHolder.getCorrespondenceAddress().contains("*")) {
+						userDetailResponse.getUser().get(0).setCorrespondenceAddress(connectionHolder.getCorrespondenceAddress());
+					}
+					if (!connectionHolder.getUserName().contains("*")) {
+						userDetailResponse.getUser().get(0).setUserName(connectionHolder.getUserName());
+					}
+					if (!connectionHolder.getName().contains("*")) {
+						userDetailResponse.getUser().get(0).setName(connectionHolder.getName());
+					}
+					if (!connectionHolder.getGender().contains("*")) {
+						userDetailResponse.getUser().get(0).setGender(connectionHolder.getGender());
+					}
+				}
+				k++;
+			}
+		}
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
+		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
+		sewerageConnectionList.add(sewerageConnection);
+		enrichConnectionHolderInfo(userDetailResponse, sewerageConnectionList, requestInfo);
+		return userDetailResponse.getUser().get(0);
+	}
+	
 }

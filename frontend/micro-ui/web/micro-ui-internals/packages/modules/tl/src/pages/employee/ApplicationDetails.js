@@ -245,15 +245,16 @@ const ApplicationDetails = () => {
       ];
 
   return (
-    <div >
-      <div /* style={{marginLeft: "15px"}} */>
+    <div className={"employee-main-application-details"} >
+      <div className={"employee-application-details"} style={{ marginBottom: "15px" }}>
         <Header>{(applicationDetails?.applicationData?.workflowCode == "NewTL" && applicationDetails?.applicationData?.status !== "APPROVED") ? t("TL_TRADE_APPLICATION_DETAILS_LABEL") : t("TL_TRADE_LICENSE_DETAILS_LABEL")}</Header>
         <MultiLink
-                className="multilinkWrapper"
+                className="multilinkWrapper employee-mulitlink-main-div"
                 onHeadClick={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)}
                 displayOptions={isDisplayDownloadMenu}
                 options={dowloadOptions}
-                downloadBtnClassName="employee-download-btn-className"
+                downloadBtnClassName={"employee-download-btn-className"}
+                optionsClassName={"employee-options-btn-className"}
         />
       </div>
       <ApplicationDetailsTemplate

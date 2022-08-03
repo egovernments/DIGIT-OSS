@@ -8,6 +8,7 @@ import com.tarento.analytics.helper.ComputedFieldHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,6 +35,11 @@ public class TableChartResponseHandler implements IResponseHandler {
 
     @Autowired
     ComputedFieldHelper computedFieldHelper;
+
+    @Value("${egov.targetacheivement.chartname.list}")
+    public String targetacheivementChartListString;
+
+
     @Override
     public AggregateDto translate(AggregateRequestDto requestDto, ObjectNode aggregations) throws IOException {
 
@@ -107,12 +113,14 @@ public class TableChartResponseHandler implements IResponseHandler {
                 Data data = new Data(plotMap.getKey(), Integer.parseInt(String.valueOf(plotMap.getValue().get(SERIAL_NUMBER).getLabel())), null);
                 data.setPlots(plotList);
 
-                if(requestDto.getVisualizationCode().equals(PT_DDR_BOUNDARY) || requestDto.getVisualizationCode().equals(PT_BOUNDARY) || requestDto.getVisualizationCode().equals(PT_BOUNDARY_DRILL)
-                        || requestDto.getVisualizationCode().equals(TL_DDR_BOUNDARY) || requestDto.getVisualizationCode().equals(TL_BOUNDARY) || requestDto.getVisualizationCode().equals(TL_BOUNDARY_DRILL)) {
-
+//                if(requestDto.getVisualizationCode().equals(PT_DDR_BOUNDARY) || requestDto.getVisualizationCode().equals(PT_BOUNDARY) || requestDto.getVisualizationCode().equals(PT_BOUNDARY_DRILL)
+//                        || requestDto.getVisualizationCode().equals(TL_DDR_BOUNDARY) || requestDto.getVisualizationCode().equals(TL_BOUNDARY) || requestDto.getVisualizationCode().equals(TL_BOUNDARY_DRILL)) {
+                List<String> targetacheivementChartList = Arrays.asList(this.targetacheivementChartListString.split(","));
+                if(targetacheivementChartList.contains(requestDto.getVisualizationCode()))
+                  {
                     computedFieldHelper.set(requestDto, postAggrTheoryName);
                     computedFieldHelper.add(data,TARGET_ACHIEVED, TOTAL_COLLECTION, TARGET_COLLECTION );
-                }
+                  }
                 dataList.add(data);
             }
 

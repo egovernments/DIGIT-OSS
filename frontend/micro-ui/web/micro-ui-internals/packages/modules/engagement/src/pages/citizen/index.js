@@ -19,7 +19,7 @@ const CitizenApp = ({ path, url, userType, tenants }) => {
   return (
     <React.Fragment>
       <div className="engagement-citizen-wrapper">
-        <BackButton>{t("CS_COMMON_BACK")}</BackButton>
+        {!location.pathname.includes("response") && <BackButton>{t("CS_COMMON_BACK")}</BackButton>}
         <Switch>
           <Route path={`${path}/notifications`} component={() => <NotificationsOrWhatsNew variant="notifications" parentRoute={path} />} />
           <PrivateRoute path={`${path}/whats-new`} component={() => <NotificationsOrWhatsNew variant="whats-new" parentRoute={path} />} />

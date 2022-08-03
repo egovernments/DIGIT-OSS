@@ -475,10 +475,10 @@ class ShowField extends Component {
           doc.content[0].text.push({ text: "mSeva System Reports\n\n", bold: true, fontSize: 20 });
           doc.content[0].text.push({ text: reportTitle, fontSize: 18 });
           if (doc.content[1] && !doc.content[2]) {
-            doc.content[1].margin = reportHeader.length > 6 ? null : [60, 10, 10, 12];
-          }else if (doc.content[1] && doc.content[2]) {
-            doc.content[1].margin = reportHeader.length > 6 ? null : [180, 10, 10, 12];
-            doc.content[2].margin = reportHeader.length > 6 ? null : [60, 10, 10, 12];
+            doc.content[1].margin = reportHeader.length > 6 ? null :reportHeader.length <3?[180, 10, 10, 12]: [60, 10, 10, 12];
+          } else if (doc.content[1] && doc.content[2]) {
+            doc.content[1].margin = reportHeader.length > 6 ? [380, 10, 10, 12] : [180, 10, 10, 12];
+            doc.content[2].margin = reportHeader.length > 6 ? null : reportHeader.length <3?[180, 10, 10, 12]: [60, 10, 10, 12];
           }
           if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
             const pdfData = pdfMake.createPdf(doc);
@@ -608,6 +608,19 @@ class ShowField extends Component {
         }
       ).then(
         function (response) {
+          if (response && response.reportHeader && response.reportData) {
+            let hiddenRows = [];
+            response.reportHeader.map((e, i) => {
+              if (!e.showColumn) {
+                hiddenRows.push(i);
+              }
+            });
+            response.reportHeader = response.reportHeader.filter((e) => e.showColumn);
+            response.reportData = response.reportData.map((ele) =>
+              ele.filter((e, i) => !hiddenRows.includes(i)).map((ele) => (ele == null ? "" : ele))
+            );
+          }
+
           if (response.viewPath && response.reportData && response.reportData[0]) {
             localStorage.reportData = JSON.stringify(response.reportData);
             setReturnUrl(window.location.hash.split("#/")[1]);
@@ -840,6 +853,19 @@ class ShowField extends Component {
           }
         ).then(
           function (response) {
+            if (response && response.reportHeader && response.reportData) {
+              let hiddenRows = [];
+              response.reportHeader.map((e, i) => {
+                if (!e.showColumn) {
+                  hiddenRows.push(i);
+                }
+              });
+              response.reportHeader = response.reportHeader.filter((e) => e.showColumn);
+              response.reportData = response.reportData.map((ele) =>
+                ele.filter((e, i) => !hiddenRows.includes(i)).map((ele) => (ele == null ? "" : ele))
+              );
+            }
+
             if (response.viewPath && response.reportData) {
               localStorage.reportData = JSON.stringify(response.reportData);
               setReturnUrl(window.location.hash.split("#/")[1]);
@@ -981,14 +1007,14 @@ class ShowField extends Component {
       for (let j = 0; j < reportResult.reportData[i].length; j++) {
         let val = intVal(reportResult.reportData[i][j]);
         if (i == 0) {
-          if (sumColumn[j + 1].total && typeof val === "number") {
+          if (sumColumn[j + 1] && sumColumn[j + 1].total && typeof val === "number") {
             total.push(val);
           } else {
             total.push("");
           }
           continue;
         }
-        if (sumColumn[j + 1].total) {
+        if (sumColumn[j + 1] && sumColumn[j + 1].total) {
           if (typeof val === "number") {
             if (typeof total[j] === "string") {
               total[j] = val;
@@ -1031,8 +1057,9 @@ class ShowField extends Component {
   };
 
   getReportTitle = (rptName) => {
-    let reportName = rptName || this.state.reportName;
-    let reportTitleArr = reportName && reportName.split(/(?=[A-Z])/);
+    let reportName = rptName || this.state.reportName || "";
+    reportName = reportName.toUpperCase();
+    let reportTitleArr = reportName && getLocaleLabels(reportName, reportName).split(/(?=[A-Z])/);
     let reportTitle = "";
     if (reportTitleArr) {
       reportTitle = reportTitleArr.map((char) => {
@@ -1048,8 +1075,9 @@ class ShowField extends Component {
   };
 
   getXlsReportTitle = (rptName) => {
-    let reportName = rptName || this.state.reportName;
-    let reportTitleArr = reportName && reportName.split(/(?=[A-Z])/);
+    let reportName = rptName || this.state.reportName || "";
+    reportName = reportName.toUpperCase();
+    let reportTitleArr = reportName && getLocaleLabels(reportName, reportName).split(/(?=[A-Z])/);
     let reportTitle = "";
     let reportHeaderName = "";
     if (reportTitleArr) {

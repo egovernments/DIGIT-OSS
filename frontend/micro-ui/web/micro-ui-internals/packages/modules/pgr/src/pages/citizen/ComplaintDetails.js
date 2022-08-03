@@ -22,7 +22,9 @@ import TimeLine from "../../components/TimeLine";
 
 const WorkflowComponent = ({ complaintDetails, id, getWorkFlow, zoomImage }) => {
   const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || complaintDetails.service.tenantId;
-  const workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: tenantId, id, moduleCode: "PGR" });
+  let workFlowDetails = Digit.Hooks.useWorkflowDetails({ tenantId: tenantId, id, moduleCode: "PGR" });
+  const { data: ComplainMaxIdleTime, isLoading: ComplainMaxIdleTimeLoading } = Digit.Hooks.pgr.useMDMS.ComplainClosingTime(tenantId?.split(".")[0]);
+
   useEffect(() => {
     getWorkFlow(workFlowDetails.data);
   }, [workFlowDetails.data]);
@@ -41,6 +43,7 @@ const WorkflowComponent = ({ complaintDetails, id, getWorkFlow, zoomImage }) => 
         rating={complaintDetails.audit.rating}
         zoomImage={zoomImage}
         complaintDetails={complaintDetails}
+        ComplainMaxIdleTime={ComplainMaxIdleTime}
       />
     )
   );

@@ -134,7 +134,7 @@ public class Connection {
 	private Long dateEffectiveFrom = null;
 	
 	@JsonProperty("connectionHolders")
-	@Valid
+//	@Valid
 	private List<OwnerInfo> connectionHolders;
 
 	@JsonProperty("oldApplication")

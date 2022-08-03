@@ -203,4 +203,16 @@ public class SWConfiguration {
 	
 	@Value("${egov.disconnect.businessservice}")
 	private String disconnectBusinessServiceName;
+
+	@Value("${egov.idgen.sdcid.name}")
+	private String sewerageDisconnectionIdGenName;
+
+	@Value("${egov.idgen.sdcid.format}")
+	private String sewerageDisconnectionIdGenFormat;
+
+	@Value("${egov.receipt.disconnection.businessservice.topic}")
+	private String receiptDisconnectionBusinessservice;
+
+	@Value("${egov.sewerage.connection.document.access.audit.kafka.topic}")
+	private String documentAuditTopic;
 }

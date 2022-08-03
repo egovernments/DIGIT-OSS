@@ -4,6 +4,7 @@ import useSessionStorage from "./useSessionStorage";
 import useQueryParams from "./useQueryParams";
 import useDocumentSearch from "./useDocumentSearch";
 import useClickOutside from "./useClickOutside";
+import useAudit from "./core/useAudit";
 import {
   useFetchPayment,
   usePaymentUpdate,
@@ -42,6 +43,7 @@ import useInboxData from "./pgr/useInboxData";
 import useLocalities from "./pgr/useLocalities";
 import useServiceDefs from "./pgr/useServiceDefs";
 import usePGRTenants from "./pgr/useTenants";
+import usePGRMDMS from "./pgr/useMDMS";
 import useComplaintSubType from "./pgr/useComplaintSubType";
 import useComplaintStatusCount from "./pgr/useComplaintStatusWithCount";
 
@@ -227,6 +229,8 @@ import useGetMeterStatusList from "./ws/useGetMeterStatusList";
 import useGetBillingPeriodValidation from "./ws/useBillingPeriodValidation";
 import useReportMeta from "./reports/useReport";
 import useWaterPropertySearch from "./ws/useWaterPropertySearch";
+import useDisconnectionWorkflow from "./ws/useDisconnectionWorkflow";
+import useDisConnectionDetails from "./ws/useDisConnectionDetails";
 
 import useGetHowItWorksJSON from "./useHowItWorksJSON";
 import useGetFAQsJSON from "./useGetFAQsJSON";
@@ -252,6 +256,7 @@ const pgr = {
   usePropertyMDMS,
   useComplaintStatusCount,
   useTradeLicenseBillingslab,
+  useMDMS : usePGRMDMS,
 };
 
 const fsm = {
@@ -461,6 +466,8 @@ const ws = {
   useGetMeterStatusList,
   useGetBillingPeriodValidation,
   useWaterPropertySearch,
+  useDisconnectionWorkflow,
+  useDisConnectionDetails,
 };
 
 const reports = {
@@ -526,6 +533,7 @@ const Hooks = {
   useDynamicData,
   useBulkPdfDetails,
   useBillAmendmentInbox,
+  useAudit,
 };
 
 export default Hooks;

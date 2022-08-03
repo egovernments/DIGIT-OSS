@@ -99,6 +99,7 @@ const GetConnectionDetails = () => {
   }, 10000);
 
   const checkApplicationStatus = applicationDetails?.applicationData?.status === "Active" ? true : false;
+  const checkWorkflow = applicationDetails?.isApplicationApproved;
 
   const getModifyConnectionButton = () => {
     if (!checkApplicationStatus) {
@@ -164,11 +165,21 @@ const GetConnectionDetails = () => {
   Digit.Hooks.useClickOutside(actionMenuRef, closeActionMenu, displayMenu);
 
   const getDisconnectionButton = () => {
-    let pathname = `/digit-ui/employee/ws/disconnection-application`;
-    if (billData[0]?.status === "ACTIVE" || due === "0") {
-      history.push(`${pathname}`);
-    } else {
-      setshowModal(true);
+    let pathname = `/digit-ui/employee/ws/new-disconnection`;
+
+    if(!checkWorkflow){
+      setshowActionToast({
+        key: "error",
+        label: "WORKFLOW_IN_PROGRESS",
+      });
+    }
+    else{
+        if (billData[0]?.status === "ACTIVE"  || due === "0") {
+          Digit.SessionStorage.set("WS_DISCONNECTION", applicationDetails);
+          history.push(`${pathname}`);
+        } else {
+          setshowModal(true);
+        }
     }
   };
   function onActionSelect(action) {
@@ -183,7 +194,9 @@ const GetConnectionDetails = () => {
 
   //all options needs to be shown
   //const showAction = due !== "0" ? actionConfig : actionConfig.filter((item) => item !== "BILL_AMENDMENT_BUTTON");
-  const showAction = actionConfig;
+  const checkApplicationStatusForDisconnection =  applicationDetails?.applicationData?.status === "Active" ? true : false
+  const showAction= checkApplicationStatusForDisconnection ? actionConfig : actionConfig.filter((item) => item !== "DISCONNECTION_BUTTON");
+
 
   async function getBillSearch() {
     if (applicationDetails?.fetchBillsData?.length > 0) {

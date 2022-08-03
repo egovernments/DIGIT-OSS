@@ -251,4 +251,13 @@ public class PropertyRepository {
         return count;
     }
 
+	/** Method to find the total count of applications present in dB */
+	public Integer getTotalApplications(PropertyCriteria criteria) {
+		String query = queryBuilder.getTotalApplicationsCountQueryString(criteria);
+		if (query == null)
+			return 0;
+		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
+		return count;
+	}
+	
 }

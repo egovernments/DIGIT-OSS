@@ -15,7 +15,7 @@ import ErrorComponent from "../../components/ErrorComponent";
 import FAQsSection from "./FAQs/FAQs";
 import HowItWorks from "./HowItWorks/howItWorks";
 import StaticDynamicCard from "./StaticDynamicComponent/StaticDynamicCard";
-
+import Search from "./SearchApp";
 const sidebarHiddenFor = [
   "digit-ui/citizen/register/name",
   "/digit-ui/citizen/select-language",
@@ -200,6 +200,9 @@ const Home = ({
             <UserProfile stateCode={stateCode} userType={"citizen"} cityDetails={cityDetails} />
           </Route>
 
+          <Route path={`${path}/Audit`}>
+            <Search/>
+          </Route>
           <ErrorBoundary initData={initData}>
             {appRoutes}
             {ModuleLevelLinkHomePages}

@@ -12,19 +12,21 @@ import {
   CardHeader,
   SubmitBar,
 } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 //import PropertyDocument from "../../pageComponents/PropertyDocument";
 import WSWFApplicationTimeline from "../../pageComponents/WSWFApplicationTimeline";
 import WSDocument from "../../pageComponents/WSDocument";
 import getPDFData from "../../utils/getWSAcknowledgementData";
+import getDisconnectPDFData from "../../utils/getWSDisconnectionApplicationForm"
 import { getFiles } from "../../utils";
 import { stringReplaceAll } from "../../utils";
 import WSInfoLabel from "../../pageComponents/WSInfoLabel";
 
 const WSApplicationDetails = () => {
   const { t } = useTranslation();
+  const menuRef = useRef();
   const user = Digit.UserService.getUser();
   const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
   const stateCode = Digit.ULBService.getStateId();
@@ -40,6 +42,12 @@ const WSApplicationDetails = () => {
     { filters: filter1 }
   );
 
+  const closeModal = () => {
+    setShowOptions(false);
+  };
+  Digit.Hooks.useClickOutside(menuRef, closeModal, showOptions);
+
+  // const fetchBillParams = { consumerCode: data?.WaterConnection?.[0]?.connectionNo };
   const fetchBillParams = { consumerCode: data?.WaterConnection?.[0]?.applicationNo || data?.SewerageConnections?.[0]?.applicationNo };
 
   const { data: generatePdfKey } = Digit.Hooks.useCommonMDMS(tenantId, "common-masters", "ReceiptKey", {
@@ -67,9 +75,17 @@ const WSApplicationDetails = () => {
 
   const handleDownloadPdf = async () => {
     const tenantInfo = data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId;
-    let res = data?.WaterConnection?.[0];
+    let res = data?.WaterConnection?.[0] || data?.SewerageConnections?.[0];
     const PDFdata = getPDFData({ ...res }, { ...PTData?.Properties?.[0] }, tenantInfo, t);
     PDFdata.then((ress) => Digit.Utils.pdf.generatev1(ress));
+    setShowOptions(false);
+  };
+
+  const handleDownloadDisconnectPdf = async () => {
+    const tenantInfo = data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId;
+    let res = data?.WaterConnection?.[0] || data?.SewerageConnections?.[0];
+    const PDFdata = getDisconnectPDFData({ ...res }, { ...PTData?.Properties?.[0] }, tenantInfo, t);
+    PDFdata.then((ress) => Digit.Utils.pdf.generate(ress));
     setShowOptions(false);
   };
 
@@ -118,11 +134,30 @@ const WSApplicationDetails = () => {
     label: t("WS_RECEIPT_APPLICATION_FEE"),
     onClick: printApplicationReceipts,
   };
+  
+  const disconnectionNoticeNApplicationFormOptions = [
+    {
+      order: 1,
+      label: t("WS_APPLICATION"),
+      onClick: handleDownloadDisconnectPdf,
+    },
+    {
+      order: 2,
+      label: t("WS_DISCONNECTION_NOTICE"),
+      onClick: null,
+    }
+];
 
-  const appStatus = data?.WaterConnection?.[0]?.applicationStatus || "";
-
+  const appStatus = data?.WaterConnection?.[0]?.applicationStatus || data?.SewerageConnections?.[0]?.applicationStatus;
   switch (appStatus) {
     case "PENDING_FOR_DOCUMENT_VERIFICATION":
+      if(data?.WaterConnection?.[0].applicationType === "DISCONNECT_WATER_CONNECTION" || data?.SewerageConnections?.[0].applicationType === "DISCONNECT_WATER_CONNECTION"){
+        downloadOptions = disconnectionNoticeNApplicationFormOptions
+      }
+      else{
+        downloadOptions = downloadOptions.concat(applicationDownloadObject);
+      }
+      break;
     case "PENDING_FOR_CITIZEN_ACTION":
     case "PENDING_FOR_FIELD_INSPECTION":
       downloadOptions = downloadOptions.concat(applicationDownloadObject);
@@ -158,12 +193,15 @@ const WSApplicationDetails = () => {
   return (
     <React.Fragment>
       {downloadOptions && downloadOptions.length > 0 && (
-          <MultiLink
-            className="multilinkWrapper"
-            onHeadClick={() => setShowOptions(!showOptions)}
-            displayOptions={showOptions}
-            options={downloadOptions}
-          />
+        <div ref={menuRef}>
+        <MultiLink
+        className="multilinkWrapper"
+        onHeadClick={() => setShowOptions(!showOptions)}
+        displayOptions={showOptions}
+        options={downloadOptions}
+        // optionsStyle={{margin: '0px'}}
+        />
+        </div>        
         )}
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
         <Header>{t("WS_APPLICATION_DETAILS_HEADER")}</Header>
@@ -178,6 +216,16 @@ const WSApplicationDetails = () => {
               text={data?.WaterConnection?.[0]?.applicationNo || data?.SewerageConnections?.[0]?.applicationNo}
               textStyle={{}}
             />
+            {(data?.WaterConnection?.[0].applicationType === "DISCONNECT_WATER_CONNECTION" || data?.SewerageConnections?.[0].applicationType === "DISCONNECT_WATER_CONNECTION") 
+              && (
+                <Row
+                  className="border-none"
+                  label={t("WS_MYCONNECTIONS_CONSUMER_NO")}
+                  text={data?.WaterConnection?.[0]?.connectionNo || data?.SewerageConnections?.[0]?.connectionNo}
+                  textStyle={{wordBreak:"break-word"}}
+            />
+              )
+            }
             <Row
               className="border-none"
               label={t("WS_SERVICE_NAME_LABEL")}
@@ -187,9 +235,35 @@ const WSApplicationDetails = () => {
             <Row
               className="border-none"
               label={t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")}
-              text={paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount || "NA"}
+              text={paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount ? Number(paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount).toFixed(2) : t("₹0")}
               textStyle={{ whiteSpace: "pre" }}
             />
+            {(data?.WaterConnection?.[0].applicationType === "DISCONNECT_WATER_CONNECTION" || data?.SewerageConnections?.[0].applicationType === "DISCONNECT_WATER_CONNECTION") 
+              && (
+                <Row
+                  className="border-none"
+                  label={t("WS_DISCONNECTION_PROPOSED_DATE")}
+                  text={ applicationNobyData?.includes("WS") 
+                          ? convertEpochToDate(data?.WaterConnection?.[0]?.dateEffectiveFrom) 
+                          : convertEpochToDate(data?.SewerageConnections?.[0]?.dateEffectiveFrom)}
+                  textStyle={{wordBreak:"break-word"}}
+                />
+              )
+            }
+             {(data?.WaterConnection?.[0].applicationType === "DISCONNECT_WATER_CONNECTION" || data?.SewerageConnections?.[0].applicationType === "DISCONNECT_WATER_CONNECTION") 
+              && (
+                <Row
+                  className="border-none"
+                  label={t("WS_DISCONNECTION_REASON")}
+                  text={data?.WaterConnection?.[0]?.disconnectionReason != null 
+                        ? data?.WaterConnection?.[0]?.disconnectionReason 
+                        : data?.SewerageConnections?.[0]?.disconnectionReason != null 
+                        ? data?.SewerageConnections?.[0]?.disconnectionReason 
+                        : t("NA") }
+                  textStyle={{wordBreak:"break-word"}}
+            />
+              )
+            }
           </StatusTable>
         </Card>
         {paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails.length > 0 && (
@@ -197,12 +271,12 @@ const WSApplicationDetails = () => {
             <CardHeader styles={{ fontSize: "28px" }}>{t("WS_FEE_DEATAILS_HEADER")}</CardHeader>
             <StatusTable>
               {paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails.map((bill) => (
-                <Row className="border-none" label={t(bill?.taxHeadCode)} text={`₹${bill?.amount}`} textStyle={{ textAlign: "right" }} />
+                <Row className="border-none" label={t(bill?.taxHeadCode)} text={`₹${Number(bill?.amount).toFixed(2)}`} textStyle={{ textAlign: "right" }} />
               ))}
               <Row
                 className="border-none"
                 label={t("WS_TOTAL_AMOUNT_DUE")}
-                text={`₹${isPaid? 0 : paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount}`}
+                text={`₹${Number(isPaid? 0 : paymentDetails?.data?.Bill?.[0]?.billDetails?.[0]?.amount).toFixed(2)}`}
                 textStyle={{ textAlign: "right", fontSize:"18px", fontWeight: "700" }}
               />
               <Row
@@ -311,12 +385,6 @@ const WSApplicationDetails = () => {
             <StatusTable>
               <Row
                 className="border-none"
-                label={t("WS_SERV_DETAIL_CONN_TYPE")}
-                text={data?.WaterConnection?.[0]?.connectionType || t("CS_NA")}
-                textStyle={{ whiteSpace: "pre" }}
-              />
-              <Row
-                className="border-none"
                 label={t("WS_TASK_DETAILS_CONN_DETAIL_NO_OF_TAPS_PROPOSED")}
                 text={data?.WaterConnection?.[0]?.proposedTaps || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
@@ -325,20 +393,6 @@ const WSApplicationDetails = () => {
                 className="border-none"
                 label={t("WS_SERV_DETAIL_PIPE_SIZE")}
                 text={`${data?.WaterConnection?.[0]?.proposedPipeSize} ${t("WS_INCHES_LABEL")}` || t("CS_NA")}
-                textStyle={{ whiteSpace: "pre" }}
-              />
-              <Row
-                className="border-none"
-                label={t("WS_SERV_DETAIL_WATER_SOURCE")}
-                text={t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.WaterConnection?.[0]?.waterSource?.split(".")?.[0], ".", "_")}`) ||
-                t(`WS_SERVICES_MASTERS_WATERSOURCE_${stringReplaceAll(data?.WaterConnection?.[0]?.WaterConnection?.[0]?.waterSource, ".", "_")}`) ||
-                t("CS_NA")}
-                textStyle={{ whiteSpace: "pre" }}
-              />
-              <Row
-                className="border-none"
-                label={t("WS_SERV_DETAIL_WATER_SUB_SOURCE")}
-                text={t(data?.WaterConnection?.[0]?.waterSource?.split(".")?.[1]) || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre" }}
               />
 
@@ -397,7 +451,7 @@ const WSApplicationDetails = () => {
                     <StatusTable>
                       {<WSDocument value={data?.SewerageConnections?.[0]?.documents} Code={doc?.documentType} index={index} />}
                       {data?.SewerageConnections?.[0]?.documents.length != index + 1 ? (
-                        <hr style={{ color: "#cccccc", backgroundColor: "#cccccc", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
+                        <hr style={{ color: "white", backgroundColor: "white", height: "2px", marginTop: "20px", marginBottom: "20px" }} />
                       ) : null}
                     </StatusTable>
                   </div>

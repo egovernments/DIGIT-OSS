@@ -133,7 +133,7 @@ const Inbox = ({
   };
 
   const fetchLastPage = () => {
-    setPageOffset(countData?.ChallanCount?.totalChallan && Math.ceil(countData?.ChallanCount?.totalChallan / 10) * 10 - pageSize);
+    setPageOffset(data?.totalCount && Math.ceil(data?.totalCount / 10) * 10 - pageSize);
   };
 
   const fetchFirstPage = () => {
@@ -238,7 +238,7 @@ const Inbox = ({
             parentRoute={parentRoute}
             searchParams={searchParams}
             sortParams={sortParams}
-            totalRecords={countData?.ChallanCount?.totalChallan}
+            totalRecords={data?.totalCount}
             filterComponent={filterComponent}
             isLoader={isLoader}
           />

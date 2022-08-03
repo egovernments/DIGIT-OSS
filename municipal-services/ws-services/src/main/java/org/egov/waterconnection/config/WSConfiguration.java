@@ -216,4 +216,16 @@ public class WSConfiguration {
 	
 	@Value("${egov.disconnect.businessservice}")
 	private String disconnectBusinessServiceName;
+
+	@Value("${egov.idgen.wdcid.name}")
+	private String waterDisconnectionIdGenName;
+
+	@Value("${egov.idgen.wdcid.format}")
+	private String waterDisconnectionIdGenFormat;
+
+	@Value("${egov.receipt.disconnection.businessservice.topic}")
+	private String receiptDisconnectionBusinessservice;
+
+	@Value("${egov.water.connection.document.access.audit.kafka.topic}")
+	private String documentAuditTopic;
 }

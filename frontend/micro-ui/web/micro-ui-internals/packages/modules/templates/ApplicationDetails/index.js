@@ -45,6 +45,8 @@ const ApplicationDetails = (props) => {
     paymentsList,
     showTimeLine = true,
     oldValue,
+    isInfoLabel = false,
+    clearDataDetails
   } = props;
   
   useEffect(() => {
@@ -161,6 +163,7 @@ const ApplicationDetails = (props) => {
             return
           }
           setShowToast({ key: "success", action: selectedAction });
+          clearDataDetails && setTimeout(clearDataDetails, 3000);
           setTimeout(closeToast, 5000);
           queryClient.clear();
           queryClient.refetchQueries("APPLICATION_SEARCH");
@@ -192,6 +195,7 @@ const ApplicationDetails = (props) => {
             paymentsList={paymentsList}
             showTimeLine={showTimeLine}
             oldValue={oldValue}
+            isInfoLabel={isInfoLabel}
           />
           {showModal ? (
             <ActionModal

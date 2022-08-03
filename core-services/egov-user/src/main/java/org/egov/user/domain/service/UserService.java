@@ -425,7 +425,7 @@ public class UserService {
 
         setFileStoreUrlsByFileStoreIds(Collections.singletonList(updatedUser));
         if(!(updatedUser.getEmailId().equalsIgnoreCase(existingUser.getEmailId()))){
-            notificationUtil.sendEmail(requestInfo, existingUser.getEmailId(), updatedUser.getEmailId(),updatedUser.getMobileNumber());
+            notificationUtil.sendEmail(requestInfo, existingUser, updatedUser);
         }
         return updatedUser;
     }

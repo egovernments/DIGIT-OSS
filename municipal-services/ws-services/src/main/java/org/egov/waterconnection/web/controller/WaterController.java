@@ -3,6 +3,7 @@ package org.egov.waterconnection.web.controller;
 import java.util.List;
 import javax.validation.Valid;
 
+import org.egov.waterconnection.service.WaterEncryptionService;
 import org.egov.waterconnection.web.models.RequestInfoWrapper;
 import org.egov.waterconnection.web.models.SearchCriteria;
 import org.egov.waterconnection.web.models.WaterConnection;
@@ -36,6 +37,9 @@ public class WaterController {
 
 	@Autowired
 	private final ResponseInfoFactory responseInfoFactory;
+
+	@Autowired
+	WaterEncryptionService waterEncryptionService;
 
 	@RequestMapping(value = "/_create", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<WaterConnectionResponse> createWaterConnection(
@@ -83,4 +87,22 @@ public class WaterController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
 	}
+
+	/**
+	 * Encrypts existing Water records
+	 *
+	 * @param requestInfoWrapper RequestInfoWrapper
+	 * @param criteria SearchCriteria
+	 * @return list of updated encrypted data
+	 */
+	/* To be executed only once */
+	@RequestMapping(value = "/_encryptOldData", method = RequestMethod.POST)
+	public ResponseEntity<WaterConnectionResponse> encryptOldData(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+			@Valid @ModelAttribute SearchCriteria criteria){
+		WaterConnectionResponse waterConnectionResponse = waterEncryptionService.updateOldData(criteria, requestInfoWrapper.getRequestInfo());
+		waterConnectionResponse.setResponseInfo(
+				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
+		return new ResponseEntity<>(waterConnectionResponse, HttpStatus.OK);
+	}
+
 }

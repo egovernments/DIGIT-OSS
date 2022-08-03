@@ -3,6 +3,7 @@ package org.egov.swservice.web.models;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -22,6 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchCriteria {
 
 	@JsonProperty("tenantId")
@@ -97,6 +99,9 @@ public class SearchCriteria {
 
 	@JsonIgnore
 	private Boolean isCountCall = false;
+
+	@JsonProperty("isFilestoreIdRequire")
+	private Boolean isFilestoreIdRequire = false;
 
 	public boolean isEmpty() {
 		return (StringUtils.isEmpty(this.tenantId) && StringUtils.isEmpty(this.mobileNumber)

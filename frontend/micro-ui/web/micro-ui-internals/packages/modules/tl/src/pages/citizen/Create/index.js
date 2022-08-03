@@ -59,6 +59,10 @@ const CreateTradeLicence = ({ parentRoute }) => {
     }
     if(nextStep === "know-your-property" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
     {
+      nextStep = "map";
+    }
+    if(nextStep === "street" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
+    {
       nextStep = "owner-ship-details";
     }
     if(nextStep === "owner-details" && (params?.ownershipCategory?.isSameAsPropertyOwner === true || sessionStorage.getItem("isSameAsPropertyOwner") === "true"))

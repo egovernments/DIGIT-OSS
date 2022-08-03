@@ -44,6 +44,9 @@ public class CalculationReq   {
 		@NotNull
         private Boolean isconnectionCalculation;
 
+        @JsonProperty("disconnectRequest")
+        private Boolean disconnectRequest = false;
+
     	/*
          * Used by the bulk bill generator to send batch information through kafka
          */

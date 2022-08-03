@@ -27,7 +27,7 @@ const useSearch = (filters, config) => {
     });
 
 
-    return useQuery(["search_surveys", title, tenantIds, postedBy, status, offset, limit], () => Surveys.search(finalFilters), { ...config });
+    return useQuery(["search_surveys", title, tenantIds, postedBy, status, offset, limit], () => Surveys.search(finalFilters), { ...config, refetchInterval: 6000 });
 };
 
 export default useSearch;

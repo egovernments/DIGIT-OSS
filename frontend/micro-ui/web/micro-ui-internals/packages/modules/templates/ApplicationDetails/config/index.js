@@ -10,6 +10,7 @@ import { configBPAREGApproverApplication } from "./BPAREGApproverApplication";
 import { configBPAApproverApplication } from "./BPAApproverApplication";
 import { configNOCApproverApplication } from "./NOCApproverApplication";
 import { configWSApproverApplication } from "./WSApproverApplication";
+import { configWSDisConnectApplication } from "./WSDisconnectApplication";
 
 export {
   configAssignDso,
@@ -23,5 +24,6 @@ export {
   configBPAREGApproverApplication,
   configBPAApproverApplication,
   configNOCApproverApplication,
-  configWSApproverApplication
+  configWSApproverApplication,
+  configWSDisConnectApplication
 };

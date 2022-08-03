@@ -83,7 +83,6 @@ public class ChallanService {
 	         }
 	       return challans;
 	    }
-	 
 	 public List<Challan> getChallansFromMobileNumber(SearchCriteria criteria, RequestInfo requestInfo){
 		 List<Challan> challans = new LinkedList<>();
 	        UserDetailResponse userDetailResponse = userService.getUser(criteria,requestInfo);
@@ -109,7 +108,40 @@ public class ChallanService {
 	        challans = enrichmentService.enrichChallanSearch(challans,criteria,requestInfo);
 	        return challans;
 	    }
-	 
+
+	/**
+	 * gets the total count for a search request
+	 *
+	 * @param criteria The challan search criteria
+	 * @param requestInfo requestInfo
+	 */
+	public int countForSearch(SearchCriteria criteria, RequestInfo requestInfo){
+		int count=0;
+
+		if(criteria.getMobileNumber()!=null){
+			count = getCountOfChallansFromMobileNumber(criteria,requestInfo);
+		}
+		else {
+			count = getCountOfChallansWithOwnerInfo(criteria,requestInfo);
+		}
+		return count;
+	}
+
+	public int getCountOfChallansFromMobileNumber(SearchCriteria criteria, RequestInfo requestInfo){
+		UserDetailResponse userDetailResponse = userService.getUser(criteria,requestInfo);
+		if(CollectionUtils.isEmpty(userDetailResponse.getUser())){
+			return 0;
+		}
+		enrichmentService.enrichSearchCriteriaWithOwnerids(criteria,userDetailResponse);
+
+		int count = repository.getChallanSearchCount(criteria);
+		return count;
+	}
+
+	public int getCountOfChallansWithOwnerInfo(SearchCriteria criteria,RequestInfo requestInfo){
+		int count = repository.getChallanSearchCount(criteria);
+		return count;
+	}
 	 public List<Challan> searchChallans(ChallanRequest request){
 	        SearchCriteria criteria = new SearchCriteria();
 	        List<String> ids = new LinkedList<>();

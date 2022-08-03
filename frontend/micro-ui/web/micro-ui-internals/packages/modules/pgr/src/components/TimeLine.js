@@ -22,7 +22,7 @@ const TLCaption = ({ data , comments}) => {
   );
 };
 
-const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating, zoomImage, complaintDetails }) => {
+const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating, zoomImage, complaintDetails, ComplainMaxIdleTime }) => {
   const { t } = useTranslation();
 
   function zoomImageWrapper(imageSource, index,thumbnailsToShow){
@@ -99,6 +99,8 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
             isCompleted={isCurrent}
             action={complaintWorkflow.action}
             nextActions={index <= 1 && timeLineActions}
+            complaintDetails={complaintDetails}
+            ComplainMaxIdleTime={ComplainMaxIdleTime}
             //rating={index <= 1 && rating}
             serviceRequestId={serviceRequestId}
             reopenDate={Digit.DateUtils.ConvertTimestampToDate(auditDetails.lastModifiedTime)}
@@ -112,6 +114,8 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
             isCompleted={isCurrent}
             action={complaintWorkflow.action}
             nextActions={index <= 1 && timeLineActions}
+            complaintDetails={complaintDetails}
+            ComplainMaxIdleTime={ComplainMaxIdleTime}
             //rating={index <= 1 && rating}
             serviceRequestId={serviceRequestId}
             reopenDate={Digit.DateUtils.ConvertTimestampToDate(auditDetails.lastModifiedTime)}

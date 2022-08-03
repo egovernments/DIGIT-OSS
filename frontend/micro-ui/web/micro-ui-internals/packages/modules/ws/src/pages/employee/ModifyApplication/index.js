@@ -25,19 +25,20 @@ const ModifyApplication = () => {
   const applicationNumber = filters?.applicationNumber;
   const serviceType = filters?.service;
 
-  const details = cloneDeep(state?.data);
-
+  let details = cloneDeep(state?.data);
+  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, details?.applicationNo, details?.applicationData?.serviceType,{privacy : Digit.Utils.getPrivacyObject() });
+  details = applicationDetails;
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
 
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_WS_NEW_FORM", {});
 
   const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId && propertyId != "" ? true : false }
+    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId && propertyId != "" ? true : false, privacy : Digit.Utils.getPrivacyObject() }
   );
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen);
+    const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isModify);
     config.head = "WS_WATER_AND_SEWERAGE_MODIFY_CONNECTION_LABEL";
     let bodyDetails = [];
     config?.body?.forEach(data => { if (data?.isModifyConnection) bodyDetails.push(data); });
@@ -52,13 +53,13 @@ const ModifyApplication = () => {
 
   useEffect(async () => {
     const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
-    if (details?.applicationData?.id && !IsDetailsExists) {
+    if (details?.applicationData?.id /* && !IsDetailsExists */) {
       const convertAppData = await convertApplicationData(details, serviceType, true, undefined,t);
       setSessionFormData({ ...sessionFormData, ...convertAppData });
       setAppData({ ...convertAppData })
       sessionStorage.setItem("IsDetailsExists", JSON.stringify(true));
     }
-  }, []);
+  }, [details,applicationDetails]);
 
   useEffect(() => {
     setSessionFormData({ ...sessionFormData, cpt: { details: propertyDetails?.Properties?.[0] } });
@@ -216,6 +217,7 @@ const ModifyApplication = () => {
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}
         defaultValues={sessionFormData}
+        appData={appData}
       // noBreakLine={true}
       ></FormComposer>
       {showToast && <Toast isDleteBtn={true} error={showToast?.key === "error" ? true : false} label={t(showToast?.message)} onClose={closeToast} />}

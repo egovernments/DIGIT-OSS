@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FormComposer, CardLabelDesc, Loader, Menu } from "@egovernments/digit-ui-react-components";
+import { FormComposer, CardLabelDesc, Loader, Menu, CardText } from "@egovernments/digit-ui-react-components";
 import { FormStep, CardLabel, RadioButtons, RadioOrSelect, Localities, InfoBannerIcon } from "@egovernments/digit-ui-react-components";
 import { TextInput, LabelFieldPair, Dropdown, Toast } from "@egovernments/digit-ui-react-components";
 import PropTypes from "prop-types";
@@ -44,8 +44,9 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
     {
       if (!city.code)
       setShowToast({ key: true, label: "WS_PLEASE_PROVIDE_CITY" });
-      else if(logginedUser == null && !locality)
-      setShowToast({ key: true, label: "WS_PLEASE_PROVIDE_LOCALITY" });
+      // If search type is consumer no whey do we need locality check? It will always fail for open search
+      // else if(logginedUser == null && !locality)
+      // setShowToast({ key: true, label: "WS_PLEASE_PROVIDE_LOCALITY" });
       else if (!mobileNumber && !consumerNumber && !oldconsumerNumber && !propertyId) {
       setShowToast({ key: true, label: "WS_HOME_SEARCH_CONN_RESULTS_DESC" });
       }
@@ -194,6 +195,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
                 disableLoader={false}
               />}
         {searchType && searchType?.code == "CONSUMER_NUMBER" && <div style={{border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA",marginBottom:"20px"}} >
+        <CardText>{t("WS_SEARCH_TEXT")}</CardText>
         <CardLabel>{`${t("WS_CONSUMER_NUMBER_LABEL")}`}</CardLabel>
         <div className="field-container">
           <span className="employee-card-input employee-card-input--front" style={{ marginTop: "-1px" }}>
@@ -221,7 +223,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
         <div style={{display: "flex", gap: "0 4px"}}>
         <CardLabel>{`${t("WS_MYCONNECTIONS_CONSUMER_NO")}`}</CardLabel>
         <InfoBannerIcon fill="#0b0c0c" />
-        <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
+        <span className="tooltiptext" style={{ position:"absolute",width:"70%", marginLeft:"50%", fontSize:"medium" }}>
         {t("WS_CONSUMER_NO_DESCRIPTION") + " " + t("WS_CONSUMER_NO_FORMAT")}
         </span>
         </div>
@@ -247,7 +249,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
         <div style={{display: "flex", gap: "0 4px"}}>
         <CardLabel>{`${t("WS_SEARCH_CONNNECTION_OLD_CONSUMER_LABEL")}`}</CardLabel>
         <InfoBannerIcon fill="#0b0c0c" />
-        <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
+        <span className="tooltiptext" style={{ position:"absolute",width:"55%", marginLeft:"50%", fontSize:"medium" }}>
         {t("WS_CONSUMER_NO_DESCRIPTION") + " " + t("WS_CONSUMER_NO_FORMAT")}
         </span>
         </div>
@@ -288,6 +290,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
         />
         </div>}
         {searchType && searchType?.code == "CONNECTION_DETAILS" && <div style={{border:"solid",borderRadius:"5px",padding:"10px",paddingTop:"20px",marginTop:"10px",borderColor:"#f3f3f3",background:"#FAFAFA",marginBottom:"20px"}} >
+        <CardText>{t("WS_SEARCH_TEXT")}</CardText>
         <CardLabel>{`${t("WS_DOOR_NO_LABEL")}`}</CardLabel>
         <TextInput
           t={t}

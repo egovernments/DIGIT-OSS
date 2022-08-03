@@ -1,5 +1,5 @@
-import { CardLabel, Dropdown, LabelFieldPair, TextInput, CardLabelError, CheckBox } from "@egovernments/digit-ui-react-components";
-import React, { useEffect, useState } from "react";
+import { CardLabel, Dropdown, LabelFieldPair, TextInput, CardLabelError, CheckBox, UnMaskComponent } from "@egovernments/digit-ui-react-components";
+import React, { useEffect, useMemo, useState } from "react";
 import { stringReplaceAll, getPattern } from "../utils";
 import * as func from "../utils";
 import { useForm, Controller } from "react-hook-form";
@@ -27,7 +27,7 @@ const WSConnectionHolderDetails = ({ config, onSelect, userType, formData, setEr
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const filters = func.getQueryStringParams(location.search);
-  const [connectionHolderDetails, setConnectionHolderDetails] = useState(formData?.ConnectionHolderDetails ? [formData?.ConnectionHolderDetails?.[0]] : [createConnectionHolderDetails()]);
+  const [connectionHolderDetails, setConnectionHolderDetails] = useState(formData?.ConnectionHolderDetails ? [{...formData?.ConnectionHolderDetails?.[0]}] : [createConnectionHolderDetails()]);
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
   const stateId = Digit.ULBService.getStateId();
   const [isErrors, setIsErrors] = useState(false);
@@ -75,9 +75,17 @@ const WSConnectionHolderDetails = ({ config, onSelect, userType, formData, setEr
 
   useEffect(() => {
     if (userType === "employee") {
-      onSelect(config.key, { ...formData[config.key], ...connectionHolderDetails });
+      //onSelect(config.key, { ...formData[config.key], ...connectionHolderDetails });
+      onSelect(config.key, [{ ...formData[config.key]?.[0], ...connectionHolderDetails?.[0] }]);
     }
   }, [connectionHolderDetails]);
+
+  useMemo(() => {
+    if((window.location.href.includes("edit") ||window.location.href.includes("modify")) && formData?.ConnectionHolderDetails && Object.values(formData?.ConnectionHolderDetails)?.length>1 && ((connectionHolderDetails?.[0]?.address && formData?.ConnectionHolderDetails?.[0]?.address !== connectionHolderDetails?.[0]?.address) || (connectionHolderDetails?.[0]?.name && formData?.ConnectionHolderDetails?.[0]?.name !== connectionHolderDetails?.[0]?.name) || (connectionHolderDetails?.[0]?.guardian && formData?.ConnectionHolderDetails?.[0]?.guardian !== connectionHolderDetails?.[0]?.guardian)|| (connectionHolderDetails?.[0]?.mobileNumber && formData?.ConnectionHolderDetails?.[0]?.mobileNumber !== connectionHolderDetails?.[0]?.mobileNumber)))
+    { 
+    window.location.reload();
+    }
+  },[formData?.ConnectionHolderDetails?.[0],connectionHolderDetails])
 
   useEffect(() => {
     if (!formData?.ConnectionHolderDetails) {
@@ -125,6 +133,7 @@ const ConnectionDetails = (_props) => {
     focusIndex,
     setFocusIndex,
     t,
+    formData,
     config,
     setError,
     clearErrors,
@@ -137,17 +146,26 @@ const ConnectionDetails = (_props) => {
     GuardianOptions,
     Menu
   } = _props;
-
+  
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger, getValues } = useForm();
-  const formValue = watch();
+  // const formValue = watch();
+  const [name,setName]=useState(connectionHolderDetail?.name);
+  const [gender,setGender]=useState(connectionHolderDetail?.gender);
+  const [mobileNumber,setMobileNumber]=useState(connectionHolderDetail?.mobileNumber);
+  const [guardian,setGuardian] =useState(connectionHolderDetail?.guardian);
+  const [relationship,setRelationship]=useState(connectionHolderDetail?.relationship)
+  const [address,setAddress]=useState(connectionHolderDetail?.address)
+  const [ownerType,setOwnerType]=useState(connectionHolderDetail?.ownerType)
+  const [sameAsOwnerDetails,setSameAsOwnerDetails]=useState(connectionHolderDetail?.sameAsOwnerDetails)
+  const formValue={name,gender,mobileNumber,guardian,relationship,ownerType,sameAsOwnerDetails,address}
   const { errors } = localFormState;
-
+  
   useEffect(() => {
     trigger();
   }, []);
 
   useEffect(() => {
-    if (Object.entries(formValue).length > 0) {
+    if (Object.entries(formValue).length > 0 && formValue?.name || formValue?.uuid) {
       const keys = Object.keys(formValue);
       const part = {};
       keys.forEach((key) => (part[key] = connectionHolderDetail[key]));
@@ -190,15 +208,21 @@ const ConnectionDetails = (_props) => {
     }
   }, [errors]);
 
-  const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
+  const checkifPrivacyValid = () => {
+    if(window.location.href.includes("edit") || window.location.href.includes("modify"))
+    return true;
+    else 
+    return false;
+  }
 
+  const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
   return (
     <div >
       <div className="field">
         <Controller
           control={control}
           name="sameAsOwnerDetails"
-          defaultValue={connectionHolderDetail?.sameAsOwnerDetails}
+          defaultValue={sameAsOwnerDetails}
           isMandatory={true}
           render={(props) => (
             <CheckBox
@@ -207,10 +231,11 @@ const ConnectionDetails = (_props) => {
               autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "sameAsOwnerDetails"}
               errorStyle={(localFormState.touched.sameAsOwnerDetails && errors?.sameAsOwnerDetails?.message) ? true : false}
               onChange={(e) => {
+                setSameAsOwnerDetails(e.target.checked)
                 props.onChange(e.target.checked);
                 setFocusIndex({ index: connectionHolderDetail?.key, type: "sameAsOwnerDetails" });
               }}
-              checked={connectionHolderDetails?.[0]?.sameAsOwnerDetails}
+              checked={sameAsOwnerDetails}
               style={{ paddingBottom: "10px", paddingTop: "3px" }}
               onBlur={props.onBlur}
             />
@@ -218,7 +243,7 @@ const ConnectionDetails = (_props) => {
         />
       </div>
 
-      {!connectionHolderDetails?.[0]?.sameAsOwnerDetails ? <div>
+      {!sameAsOwnerDetails ? <div>
 
         <LabelFieldPair>
           <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_OWN_DETAIL_NAME")}:*`}</CardLabel>
@@ -230,17 +255,23 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Name").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "name"}
                   errorStyle={(localFormState.touched.name && errors?.name?.message) ? true : false}
                   onChange={(e) => {
+                    setName(e.target.value)
                     props.onChange(e.target.value);
                     setFocusIndex({ index: connectionHolderDetail?.key, type: "name" });
                   }}
                   labelStyle={{ marginTop: "unset" }}
                   onBlur={props.onBlur}
                 />
+                {checkifPrivacyValid() && <div style={{marginRight:"-10px",marginLeft:"10px"}}>
+                <UnMaskComponent privacy={{ uuid:connectionHolderDetail?.uuid, fieldName: "name", model: "User" }}></UnMaskComponent>
+                </div>}
+                </div>
               )}
             />
           </div>
@@ -262,6 +293,7 @@ const ConnectionDetails = (_props) => {
                 option={menu}
                 errorStyle={(localFormState.touched.gender && errors?.gender?.message) ? true : false}
                 select={(e) => {
+                  setGender(e)
                   props.onChange(e);
                 }}
                 optionKey="i18nKey"
@@ -280,21 +312,27 @@ const ConnectionDetails = (_props) => {
               name="mobileNumber"
               defaultValue={connectionHolderDetail?.mobileNumber}
               rules={{ validate: (e) => ((e && getPattern("MobileNo").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
-              type="number"
+              //type="number"
               isMandatory={true}
               render={(props) => (
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
-                  type="number"
+                  //type="number"
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "mobileNumber"}
                   errorStyle={(localFormState.touched.mobileNumber && errors?.mobileNumber?.message) ? true : false}
                   onChange={(e) => {
+                    setMobileNumber(e.target.value)
                     props.onChange(e.target.value);
                     setFocusIndex({ index: connectionHolderDetail?.key, type: "mobileNumber" });
                   }}
                   labelStyle={{ marginTop: "unset" }}
                   onBlur={props.onBlur}
                 />
+                {checkifPrivacyValid() && <div style={{marginRight:"-10px",marginLeft:"10px"}}>
+                <UnMaskComponent privacy={{ uuid:connectionHolderDetail?.uuid, fieldName: "mobileNumber", model: "User" }}></UnMaskComponent>
+                </div>}
+                </div>
               )}
             />
           </div>
@@ -310,17 +348,23 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Name").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "guardian"}
                   errorStyle={(localFormState.touched.guardian && errors?.guardian?.message) ? true : false}
                   onChange={(e) => {
+                    setGuardian(e.target.value)
                     props.onChange(e.target.value);
                     setFocusIndex({ index: connectionHolderDetail?.key, type: "guardian" });
                   }}
                   labelStyle={{ marginTop: "unset" }}
                   onBlur={props.onBlur}
                 />
+                {checkifPrivacyValid() && <div style={{marginRight:"-10px",marginLeft:"10px"}}>
+                <UnMaskComponent privacy={{ uuid:connectionHolderDetail?.uuid, fieldName: "guardian", model: "User" }}></UnMaskComponent>
+                </div>}
+                </div>
               )}
             />
           </div>
@@ -342,6 +386,7 @@ const ConnectionDetails = (_props) => {
                 option={GuardianOptions}
                 errorStyle={(localFormState.touched.relationship && errors?.relationship?.message) ? true : false}
                 select={(e) => {
+                  setRelationship(e)
                   props.onChange(e);
                 }}
                 optionKey="i18nKey"
@@ -362,17 +407,23 @@ const ConnectionDetails = (_props) => {
               rules={{ validate: (e) => ((e && getPattern("Address").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
               isMandatory={true}
               render={(props) => (
+                <div style={{display:"flex",alignItems:"baseline",marginRight:checkifPrivacyValid() ? "-20px" : "unset"}}>
                 <TextInput
                   value={props.value}
                   autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "address"}
                   errorStyle={(localFormState.touched.address && errors?.address?.message) ? true : false}
                   onChange={(e) => {
+                    setAddress(e.target.value)
                     props.onChange(e.target.value);
                     setFocusIndex({ index: connectionHolderDetail?.key, type: "address" });
                   }}
                   labelStyle={{ marginTop: "unset" }}
                   onBlur={props.onBlur}
                 />
+                {checkifPrivacyValid() && <div style={{marginRight:"-10px",marginLeft:"10px"}}>
+                <UnMaskComponent privacy={{ uuid:connectionHolderDetail?.uuid, fieldName: "correspondenceAddress", model: "User" }}></UnMaskComponent>
+                </div>}
+                </div>
               )}
             />
           </div>
@@ -394,6 +445,7 @@ const ConnectionDetails = (_props) => {
                 option={Menu}
                 errorStyle={(localFormState.touched.ownerType && errors?.ownerType?.message) ? true : false}
                 select={(e) => {
+                  setOwnerType(e)
                   props.onChange(e);
                 }}
                 optionKey="i18nKey"

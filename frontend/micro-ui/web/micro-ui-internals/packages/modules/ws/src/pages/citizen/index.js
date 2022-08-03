@@ -22,6 +22,7 @@ const App = ({ path }) => {
   const { t } = useTranslation();
   let isCommonPTPropertyScreen = window.location.href.includes("/ws/create-application/property-details");
   let isAcknowledgement = window.location.href.includes("/acknowledgement");
+  const WSDisconnectAcknowledgement = Digit?.ComponentRegistryService?.getComponent("WSDisconnectAcknowledgement");
 
   const getBackPageNumber = () => {
     let goBacktoFromProperty = -1;
@@ -41,6 +42,7 @@ const App = ({ path }) => {
         <Switch>
           <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
           <PrivateRoute path={`${path}/disconnect-application`} component={WSDisconnection} />
+          <PrivateRoute path={`${path}/disconnect-acknowledge`} component={WSDisconnectAcknowledgement} />
           <Route path={`${path}/search`} component={SearchConnectionComponent} />
           <PrivateRoute path={`${path}/my-bills`} component={WNSMyBillsComponent} />
           <Route path={`${path}/search-results`} component={SearchResultsComponent} />

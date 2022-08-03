@@ -3,19 +3,15 @@ import { Card, CardHeader, SubmitBar, CitizenInfoLabel, CardText, Loader, CardSu
 import { useTranslation } from "react-i18next";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
-const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => {
+const WSDisconnectionDocsRequired = ({ userType }) => {
   const { t } = useTranslation();
-  const history = useHistory()
+  const history = useHistory();
   const match = useRouteMatch();
   const tenantId = Digit.ULBService.getStateId();
   const goNext = () => {
-    onSelect("DocsReq", "");
   }
 
-  sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
-  sessionStorage.removeItem("IsDetailsExists");
-
-  const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId, 'DisconnectionDocuments');
+  const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId, "DisconnectionDocuments");
 
   if (userType === "citizen") {
     return (
@@ -45,7 +41,9 @@ const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => 
               ))}
             </Fragment>
           }
-          <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={goNext} />
+          <SubmitBar label={t(`CS_COMMON_NEXT`)} onSubmit={() => {
+                history.push(match.path.replace("docsrequired", "application-form"));
+              }} />
         </Card>
       </Fragment>
     );
@@ -57,7 +55,7 @@ const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => 
       <Card >
         {wsDocsLoading ?
           <Loader /> :
-          <Fragment>
+          <div id="documents-div">
             {wsDocs?.DisconnectionDocuments?.map((doc, index) => (
               <div key={index} style={{ marginTop: "16px" }}>
                 <CardSectionHeader style={{ marginBottom: "16px", lineHeight: "28px", fontSize: "24px" }}>{t(doc?.code.replace('.', '_'))}</CardSectionHeader>
@@ -68,14 +66,14 @@ const WSDisconnectionDocsRequired = ({ onSelect, userType, onSkip, config }) => 
                 <p style={{fontSize: "16px"}}>{t(`${doc?.code.replace('.', '_')}_BELOW_DESCRIPTION`)}</p>
               </div>
             ))}
-          </Fragment>
+          </div>
         }
         <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
           {
             <SubmitBar
               label={t("ACTION_TEST_APPLY")}
               onSubmit={() => {
-                history.push(match.path.replace("create-application", "new-application"));
+                history.push(match.path.replace("docsrequired", "application-form"));
               }}
               style={{ margin: "10px 10px 0px 0px" }}
               disabled={wsDocsLoading ? true : false}

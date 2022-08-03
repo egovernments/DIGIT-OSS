@@ -1,6 +1,10 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.9 - 2022-03-27
+
+- Added privacy changes for Property applications
+
 ## 1.1.8 - 2022-03-03
 
 - Added channel based notification

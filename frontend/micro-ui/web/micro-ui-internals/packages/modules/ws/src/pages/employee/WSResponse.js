@@ -50,7 +50,7 @@ const WSResponse = (props) => {
     let result = waterApplicationData?.applicationData;
 
     if (waterApplicationData?.applicationData?.applicationType?.includes("MODIFY_")) {
-      const PDFdata = getModifyPDFData({ ...result }, { ...waterApplicationData?.propertyDetails }, tenantInfo, t, oldApplicationWater)
+      const PDFdata = getModifyPDFData({ ...oldDataWater?.WaterConnection?.[0] }, { ...waterApplicationData?.propertyDetails }, tenantInfo, t, oldApplicationWater)
       PDFdata.then((ress) => Digit.Utils.pdf.generateModifyPdf(ress))
       return
     }
@@ -63,7 +63,7 @@ const WSResponse = (props) => {
     let result = sewerageApplicationData?.applicationData;
 
     if (sewerageApplicationData?.applicationData?.applicationType?.includes("MODIFY_")) {
-      const PDFdata = getModifyPDFData({ ...result }, { ...sewerageApplicationData?.propertyDetails }, tenantInfo, t, oldApplicationSew)
+      const PDFdata = getModifyPDFData({ ...oldDataSew?.SewerageConnections?.[0] }, { ...sewerageApplicationData?.propertyDetails }, tenantInfo, t, oldApplicationSew)
       PDFdata.then((ress) => Digit.Utils.pdf.generateModifyPdf(ress))
       return
     }

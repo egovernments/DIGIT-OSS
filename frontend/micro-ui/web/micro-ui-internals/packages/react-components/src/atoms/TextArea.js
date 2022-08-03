@@ -7,6 +7,7 @@ const TextArea = (props) => {
   return (
     <React.Fragment>
     <textarea
+      placeholder={props.placeholder}
       name={props.name}
       ref={props.inputRef}
       style={props.style}

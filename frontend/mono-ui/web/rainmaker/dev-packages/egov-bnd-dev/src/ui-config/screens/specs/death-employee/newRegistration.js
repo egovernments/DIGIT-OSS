@@ -155,7 +155,7 @@ const newRegistration = {
               dispatch(
                 prepareFinalObject(
                   "bnd.death.newRegistration.isLegacyRecord",
-                  response.DeathCertificate[0].counter == 1
+                  response.DeathCertificate[0].isLegacyRecord
                 )
               );
               prepareEditScreenData(action, state, dispatch, response);
@@ -206,7 +206,7 @@ const newRegistration = {
       uiFramework: "custom-atoms",
       componentPath: "Div",
       props: {
-        className: "common-div-css",
+        className: "common-div-css bnd-footer",
       },
       children: {
         details: footer,

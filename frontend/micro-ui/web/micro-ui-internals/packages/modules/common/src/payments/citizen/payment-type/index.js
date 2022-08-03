@@ -22,7 +22,7 @@ export const SelectPaymentType = (props) => {
   const { state = {} } = useLocation();
   const userInfo = Digit.UserService.getUser();
   const [showToast, setShowToast] = useState(null);
-  const { tenantId: __tenantId, authorization, workflow: wrkflow } = Digit.Hooks.useQueryParams();
+  const { tenantId: __tenantId, authorization, workflow: wrkflow , consumerCode : connectionNo } = Digit.Hooks.useQueryParams();
   const paymentAmount = state?.paymentAmount;
   const { t } = useTranslation();
   const history = useHistory();
@@ -34,7 +34,7 @@ export const SelectPaymentType = (props) => {
   const { control, handleSubmit } = useForm();
   const { data: menu, isLoading } = Digit.Hooks.useCommonMDMS(stateTenant, "DIGIT-UI", "PaymentGateway");
   const { data: paymentdetails, isLoading: paymentLoading } = Digit.Hooks.useFetchPayment(
-    { tenantId: tenantId, consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode, businessService },
+    { tenantId: tenantId, consumerCode: wrkflow === "WNS" ? connectionNo : consumerCode, businessService },
     {}
   );
   useEffect(() => {
@@ -112,7 +112,7 @@ export const SelectPaymentType = (props) => {
         <Card>
           <div className="payment-amount-info" style={{ marginBottom: "26px" }}>
             <CardLabel className="dark">{t("PAYMENT_CS_TOTAL_AMOUNT_DUE")}</CardLabel>
-            <CardSectionHeader> ₹ {paymentAmount || billDetails?.totalAmount}</CardSectionHeader>
+            <CardSectionHeader> ₹ { paymentAmount !== undefined ? Number(paymentAmount).toFixed(2) : Number(billDetails?.totalAmount).toFixed(2)}</CardSectionHeader>
           </div>
           <CardLabel>{t("PAYMENT_CS_SELECT_METHOD")}</CardLabel>
           {menu?.length && (

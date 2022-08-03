@@ -336,7 +336,7 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
         <Row
           label={t("CS_PAYMENT_TOTAL_AMOUNT")}
           textStyle={{ fontWeight: "bold", textAlign: "right", maxWidth: "100px" }}
-          text={"₹ " + getTotal()}
+          text={"₹ " + Number(getTotal()).toFixed(2)}
         />
 
         {!showDetails && !ModuleWorkflow && businessService !== "TL" && yearWiseBills?.length > 1 && (
