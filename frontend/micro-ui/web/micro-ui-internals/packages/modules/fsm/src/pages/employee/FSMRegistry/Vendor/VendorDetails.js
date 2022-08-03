@@ -164,6 +164,7 @@ const VendorDetails = (props) => {
       },
     });
     setShowModal(false);
+    setSelectedAction(null);
   };
 
   const onEdit = (details, type, id) => {
