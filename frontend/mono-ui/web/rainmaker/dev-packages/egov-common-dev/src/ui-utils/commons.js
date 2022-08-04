@@ -802,7 +802,7 @@ export const download = (receiptQueryString, mode = "download") => {
 }
 
 
-export const downloadBill = async (consumerCode ,tenantId) => {
+export const downloadBill = async (consumerCode ,tenantId, businessService, url) => {
   const searchCriteria = {
     consumerCode ,
     tenantId
@@ -819,7 +819,7 @@ export const downloadBill = async (consumerCode ,tenantId) => {
           ACTION: "_get",
       },
   };
-  const billResponse = await httpRequest("post", FETCHBILL.GET.URL, FETCHBILL.GET.ACTION, [],{searchCriteria});
+  const billResponse = await httpRequest("post", url, FETCHBILL.GET.ACTION, [],{searchCriteria});
   const queryStr = [
             { key: "key", value: "consolidatedbill" },
             { key: "tenantId", value: "uk" }
