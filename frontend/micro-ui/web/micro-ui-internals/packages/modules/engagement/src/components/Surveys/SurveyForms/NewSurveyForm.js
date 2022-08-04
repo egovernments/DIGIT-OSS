@@ -98,9 +98,9 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
           {formState?.errors && <CardLabelError>{formState?.errors?.longAnsDescription?.message}</CardLabelError>}
               </div>;
       case "Date":
-        return <DatePicker stylesForInput={{ width: "calc(100% - 290px)" }}/>;
+        return <DatePicker stylesForInput={{ width: "calc(100% - 290px)" }} style={{width:"202px"}}/>;
       case "Time":
-        return <TimePicker />;
+        return <TextInput type="time" textInputStyle={{width:"202px"}}/>;
       case "Multiple Choice":
         return (
           <MultipleChoice
@@ -208,11 +208,19 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
               label={t("CS_COMMON_REQUIRED")}
               pageType={"employee"}
               disable={disableInputs}
+              style={{marginTop:"2px"}}
             />
           </div>
           {index!==0 && <div className="newSurveyForm_seprator" />}
           {index!==0 && <div className={`pointer ${disableInputs ? 'disabled-btn':''}`} onClick={() => dispatch({ type: "removeForm", payload: { index } })}>
+          <div className="tooltip" /* style={{position:"relative"}} */>
+              <div style={{display: "flex", /* alignItems: "center", */ gap: "0 4px"}}>
             <DustbinIcon />
+            <span className="tooltiptext" style={{ position:"absolute",width:"100px", marginLeft:"50%", fontSize:"medium" }}>
+              {t("CS_INFO_DELETE")}
+              </span>
+              </div>
+              </div>
           </div>}
           </div>
       </span>

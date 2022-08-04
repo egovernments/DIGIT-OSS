@@ -1,4 +1,4 @@
-import { CardLabelError, Dropdown, RemoveableTag, TextInput } from "@egovernments/digit-ui-react-components";
+import { CardLabelError, Dropdown, RemoveableTag, TextInput, MultiSelectDropdown } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
@@ -57,7 +57,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
             );
             return (
               <div style={{ display: "grid", gridAutoFlow: "row" }}>
-                <Dropdown
+                 {/* <Dropdown
                   allowMultiselect={true}
                   optionKey={"i18nKey"}
                   option={userUlbs}
@@ -69,8 +69,21 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
                   keepNull={true}
                   disable={disableInputs}
                   t={t}
+                />  */}
+                <MultiSelectDropdown
+                  options={userUlbs}
+                  isSurvey={true}
+                  optionsKey="i18nKey"
+                  props={props}
+                  isPropsNeeded={true}
+                  onSelect={(e) => {
+                    props.onChange([...(surveyFormData("tenantIds")?.filter?.((f) => e.code !== f?.code) || []), e]);
+                  }}
+                  selected={props?.value}
+                  defaultLabel={t("ES_COMMON_USER_ULBS")}
+                  defaultUnit={t("CS_SELECTED_TEXT")}
                 />
-                <div className="tag-container">{renderRemovableTokens}</div>
+                {/* <div className="tag-container">{renderRemovableTokens}</div> */}
               </div>
             );
           }}

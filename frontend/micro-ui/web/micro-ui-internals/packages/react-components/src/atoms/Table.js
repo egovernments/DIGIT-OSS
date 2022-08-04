@@ -32,7 +32,8 @@ const Table = ({
   styles={},
   tableTopComponent,
   tableRef,
-  isReportTable=false
+  isReportTable=false,
+  inboxStyles,
 }) => {
   const {
     getTableProps,
@@ -86,6 +87,7 @@ const Table = ({
   useEffect(() => setGlobalFilter(onSearch), [onSearch, setGlobalFilter]);
   return (
     <React.Fragment>
+    <div style={{...inboxStyles}}>
     <span className={customTableWrapperClassName}>
     {tableTopComponent ? tableTopComponent:null}
       <table className={className} {...getTableProps()} style={styles} ref={tableRef}>
@@ -143,6 +145,7 @@ const Table = ({
         </tbody>
       </table>
       </span>
+      </div>
       {isPaginationRequired && (
         <div className="pagination dss-white-pre" >
           {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}

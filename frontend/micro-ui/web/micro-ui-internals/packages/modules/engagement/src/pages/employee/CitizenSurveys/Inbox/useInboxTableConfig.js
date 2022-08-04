@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { InfoBannerIcon } from "@egovernments/digit-ui-react-components";
-const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch }) => {
+const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, inboxStyles={} }) => {
     const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
     const GetStatusCell = (value) => value?.toLowerCase() === "active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span>
     const { t } = useTranslation()
@@ -104,7 +104,8 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
         // searchQueryForTable,
         data: table,
         columns: tableColumnConfig,
-        noResultsMessage:"CS_NO_SURVEYS_FOUND"
+        noResultsMessage:"CS_NO_SURVEYS_FOUND",
+        inboxStyles:{...inboxStyles}
     }
 }
 

@@ -195,7 +195,7 @@ const CitizenSurveyQuestion = ({ t, question, control, register, values, formSta
   return (
     <Card>
       <div className="surveyQuestion-wrapper">
-        <span className="question-title">{question.questionStatement}</span>
+        <span className="question-title">{question.questionStatement} {question?.required? "*":""}</span>
         <span>{displayAnswerField(question.type)}</span>
       </div>
     </Card>
