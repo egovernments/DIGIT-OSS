@@ -85,7 +85,10 @@ public class NotificationUtil {
         message = message.replace("{challanno}", challan.getChallanNo());
 		if(message.contains("{ULB}"))
 			message = message.replace("{ULB}", capitalize(challan.getTenantId().split("\\.")[1]));
-		message = message.replace("{service}", capitalize(challan.getBusinessService().split("\\.")[1]));
+
+		String[] split_array = capitalize(challan.getBusinessService().split("\\.")[1]).split("_");
+		String service = String.join(" ", split_array);
+		message = message.replace("{service}", service);
 
         String UIHost = config.getUiAppHost();
 		String paymentPath = config.getPayLinkSMS();

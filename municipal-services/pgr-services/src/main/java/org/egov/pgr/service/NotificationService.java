@@ -165,6 +165,8 @@ public class NotificationService {
         String messageForEmployee = null;
         String defaultMessage = null;
 
+        String localisedStatus = notificationUtil.getCustomizedMsgForPlaceholder(localizationMessage,"CS_COMMON_"+serviceWrapper.getService().getApplicationStatus());
+
         /**
          * Confirmation SMS to citizens, when they will raise any complaint
          */
@@ -182,7 +184,7 @@ public class NotificationService {
             }
 
             if(defaultMessage.contains("{status}"))
-                defaultMessage = defaultMessage.replace("{status}", serviceWrapper.getService().getApplicationStatus());
+                defaultMessage = defaultMessage.replace("{status}", localisedStatus);
         }
 
         /**
@@ -208,7 +210,7 @@ public class NotificationService {
             }
 
             if(defaultMessage.contains("{status}"))
-                defaultMessage = defaultMessage.replace("{status}", serviceWrapper.getService().getApplicationStatus());
+                defaultMessage = defaultMessage.replace("{status}", localisedStatus);
 
 
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
@@ -222,8 +224,11 @@ public class NotificationService {
             if (messageForCitizen.contains("{emp_name}"))
                 messageForCitizen = messageForCitizen.replace("{emp_name}", fetchUserByUUID(request.getWorkflow().getAssignes().get(0), request.getRequestInfo(), request.getService().getTenantId()).getName());
 
-            if(messageForEmployee.contains("{ulb}"))
-                messageForEmployee = messageForEmployee.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
+            if(messageForEmployee.contains("{ulb}")) {
+                String localisationMessageForPlaceholder =  notificationUtil.getLocalizationMessages(request.getService().getTenantId(), request.getRequestInfo(),COMMON_MODULE);
+                String localisedULB = notificationUtil.getCustomizedMsgForPlaceholder(localisationMessageForPlaceholder,serviceWrapper.getService().getAddress().getDistrict());
+                messageForEmployee = messageForEmployee.replace("{ulb}",localisedULB);
+            }
 
             if (messageForEmployee.contains("{emp_name}"))
                 messageForEmployee = messageForEmployee.replace("{emp_name}", fetchUserByUUID(request.getWorkflow().getAssignes().get(0), request.getRequestInfo(), request.getService().getTenantId()).getName());
@@ -266,7 +271,7 @@ public class NotificationService {
             }
 
             if(defaultMessage.contains("{status}"))
-                defaultMessage = defaultMessage.replace("{status}", serviceWrapper.getService().getApplicationStatus());
+                defaultMessage = defaultMessage.replace("{status}", localisedStatus);
 
 
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
@@ -279,8 +284,11 @@ public class NotificationService {
             if (messageForCitizen.contains("{emp_name}"))
                 messageForCitizen = messageForCitizen.replace("{emp_name}", fetchUserByUUID(request.getWorkflow().getAssignes().get(0), request.getRequestInfo(), request.getService().getTenantId()).getName());
 
-            if(messageForEmployee.contains("{ulb}"))
-                messageForEmployee = messageForEmployee.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
+            if(messageForEmployee.contains("{ulb}")) {
+                String localisationMessageForPlaceholder =  notificationUtil.getLocalizationMessages(request.getService().getTenantId(), request.getRequestInfo(),COMMON_MODULE);
+                String localisedULB = notificationUtil.getCustomizedMsgForPlaceholder(localisationMessageForPlaceholder,serviceWrapper.getService().getAddress().getDistrict());
+                messageForEmployee = messageForEmployee.replace("{ulb}",localisedULB);
+            }
 
             if (messageForEmployee.contains("{emp_name}"))
                 messageForEmployee = messageForEmployee.replace("{emp_name}", fetchUserByUUID(request.getRequestInfo().getUserInfo().getUuid(), request.getRequestInfo(), request.getService().getTenantId()).getName());
@@ -317,7 +325,7 @@ public class NotificationService {
             }
 
             if(defaultMessage.contains("{status}"))
-                defaultMessage = defaultMessage.replace("{status}", serviceWrapper.getService().getApplicationStatus());
+                defaultMessage = defaultMessage.replace("{status}", localisedStatus);
 
             if (messageForCitizen.contains("{additional_comments}"))
                 messageForCitizen = messageForCitizen.replace("{additional_comments}", serviceWrapper.getWorkflow().getComments());
@@ -348,10 +356,13 @@ public class NotificationService {
             ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REASSIGN);
 
             if(defaultMessage.contains("{status}"))
-                defaultMessage = defaultMessage.replace("{status}", serviceWrapper.getService().getApplicationStatus());
+                defaultMessage = defaultMessage.replace("{status}", localisedStatus);
 
-            if(messageForEmployee.contains("{ulb}"))
-                messageForEmployee = messageForEmployee.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
+            if(messageForEmployee.contains("{ulb}")) {
+                String localisationMessageForPlaceholder =  notificationUtil.getLocalizationMessages(request.getService().getTenantId(), request.getRequestInfo(),COMMON_MODULE);
+                String localisedULB = notificationUtil.getCustomizedMsgForPlaceholder(localisationMessageForPlaceholder,serviceWrapper.getService().getAddress().getDistrict());
+                messageForEmployee = messageForEmployee.replace("{ulb}",localisedULB);
+            }
 
             if (messageForEmployee.contains("{emp_name}"))
                 messageForEmployee = messageForEmployee.replace("{emp_name}", processInstance.getAssignes().get(0).getName());
@@ -376,7 +387,7 @@ public class NotificationService {
             ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),ASSIGN);
 
             if(defaultMessage.contains("{status}"))
-                defaultMessage = defaultMessage.replace("{status}", serviceWrapper.getService().getApplicationStatus());
+                defaultMessage = defaultMessage.replace("{status}", localisedStatus);
 
             if (messageForCitizen.contains("{emp_name}"))
                 messageForCitizen = messageForCitizen.replace("{emp_name}", processInstance.getAssignes().get(0).getName());
@@ -403,7 +414,7 @@ public class NotificationService {
             ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),ASSIGN);
 
             if(defaultMessage.contains("{status}"))
-                defaultMessage = defaultMessage.replace("{status}", serviceWrapper.getService().getApplicationStatus());
+                defaultMessage = defaultMessage.replace("{status}", localisedStatus);
 
 
             if(messageForEmployee.contains("{rating}"))
@@ -436,7 +447,7 @@ public class NotificationService {
             }
 
             if(defaultMessage.contains("{status}"))
-                defaultMessage = defaultMessage.replace("{status}", serviceWrapper.getService().getApplicationStatus());
+                defaultMessage = defaultMessage.replace("{status}", localisedStatus);
 
 
             Map<String, String> reassigneeDetails  = getHRMSEmployee(request);
@@ -449,8 +460,11 @@ public class NotificationService {
             if (messageForCitizen.contains("{emp_name}"))
                 messageForCitizen = messageForCitizen.replace("{emp_name}", fetchUserByUUID(request.getWorkflow().getAssignes().get(0), request.getRequestInfo(), request.getService().getTenantId()).getName());
 
-            if(messageForEmployee.contains("{ulb}"))
-                messageForEmployee = messageForEmployee.replace("{ulb}", serviceWrapper.getService().getAddress().getDistrict());
+            if(messageForEmployee.contains("{ulb}")) {
+                String localisationMessageForPlaceholder =  notificationUtil.getLocalizationMessages(request.getService().getTenantId(), request.getRequestInfo(),COMMON_MODULE);
+                String localisedULB = notificationUtil.getCustomizedMsgForPlaceholder(localisationMessageForPlaceholder,serviceWrapper.getService().getAddress().getDistrict());
+                messageForEmployee = messageForEmployee.replace("{ulb}",localisedULB);
+            }
 
             if (messageForEmployee.contains("{emp_name}"))
                 messageForEmployee = messageForEmployee.replace("{emp_name}", fetchUserByUUID(request.getRequestInfo().getUserInfo().getUuid(), request.getRequestInfo(), request.getService().getTenantId()).getName());
