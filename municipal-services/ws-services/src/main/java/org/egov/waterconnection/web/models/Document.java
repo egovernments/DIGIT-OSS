@@ -29,7 +29,6 @@ public class Document {
   private String documentType ;
 
   @JsonProperty("fileStoreId")
-  @NotNull
   @SafeHtml
   private String fileStoreId ;
 
