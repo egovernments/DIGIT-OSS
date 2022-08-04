@@ -98,6 +98,10 @@ const EditDriver = ({ parentUrl, heading }) => {
         setShowToast({ key: "success", action: "UPDATE_DRIVER" });
         setTimeout(closeToast, 5000);
         queryClient.invalidateQueries("FSM_DRIVER_SEARCH");
+        setTimeout(() => {
+          closeToast();
+          history.push(`/digit-ui/employee/fsm/registry`);
+        }, 5000);
       },
     });
   };

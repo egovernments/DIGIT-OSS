@@ -25,13 +25,9 @@ const EditVendor = ({ parentUrl, heading }) => {
     { staleTime: Infinity }
   );
 
-  const {
-    isLoading: isLoading,
-    isError: vendorCreateError,
-    data: updateResponse,
-    error: updateError,
-    mutate,
-  } = Digit.Hooks.fsm.useVendorUpdate(tenantId);
+  const { isLoading: isLoading, isError: vendorCreateError, data: updateResponse, error: updateError, mutate } = Digit.Hooks.fsm.useVendorUpdate(
+    tenantId
+  );
 
   useEffect(() => {
     setMutationHappened(false);
@@ -41,8 +37,8 @@ const EditVendor = ({ parentUrl, heading }) => {
 
   useEffect(() => {
     if (dsoData && dsoData[0]) {
-      let dsoDetails = dsoData[0]
-      setDsoDetails(dsoDetails?.dsoDetails)
+      let dsoDetails = dsoData[0];
+      setDsoDetails(dsoDetails?.dsoDetails);
       let values = {
         vendorName: dsoDetails?.name,
         street: dsoDetails?.dsoDetails?.address?.street,
@@ -55,33 +51,32 @@ const EditVendor = ({ parentUrl, heading }) => {
           pincode: dsoDetails?.dsoDetails?.address?.pincode,
           locality: {
             ...dsoDetails?.dsoDetails?.address?.locality,
-            i18nkey: `${dsoDetails?.dsoDetails?.tenantId.toUpperCase().split(".").join("_")}_REVENUE_${dsoDetails?.dsoDetails?.address.locality.code}`,
-          }
+            i18nkey: `${dsoDetails?.dsoDetails?.tenantId.toUpperCase().split(".").join("_")}_REVENUE_${
+              dsoDetails?.dsoDetails?.address.locality.code
+            }`,
+          },
         },
         phone: dsoDetails?.mobileNumber,
         ownerName: dsoDetails?.dsoDetails?.owner?.name,
         fatherOrHusbandName: dsoDetails?.dsoDetails?.owner?.fatherOrHusbandName,
         relationship: dsoDetails?.dsoDetails?.owner?.relationship,
         selectGender: dsoDetails?.dsoDetails?.owner?.gender,
-        dob: dsoDetails?.dsoDetails?.owner?.dob && Digit.DateUtils.ConvertTimestampToDate(dsoDetails?.dsoDetails?.owner?.dob, 'yyyy-MM-dd'),
+        dob: dsoDetails?.dsoDetails?.owner?.dob && Digit.DateUtils.ConvertTimestampToDate(dsoDetails?.dsoDetails?.owner?.dob, "yyyy-MM-dd"),
         emailId: dsoDetails?.dsoDetails?.owner?.emailId,
         correspondenceAddress: dsoDetails?.dsoDetails?.owner?.correspondenceAddress,
-        additionalDetails: dsoDetails?.dsoDetails?.additionalDetails?.description
-      }
-      setDefaultValues(values)
+        additionalDetails: dsoDetails?.dsoDetails?.additionalDetails?.description,
+      };
+      setDefaultValues(values);
     }
-  }, [dsoData])
+  }, [dsoData]);
 
   const { t } = useTranslation();
   const history = useHistory();
 
-  const Config = VendorConfig(t, true)
+  const Config = VendorConfig(t, true);
 
   const onFormValueChange = (setValue, formData) => {
-    if (
-      formData?.phone &&
-      formData?.address?.locality
-    ) {
+    if (formData?.phone && formData?.address?.locality) {
       setSubmitValve(true);
     } else {
       setSubmitValve(false);
@@ -125,15 +120,15 @@ const EditVendor = ({ parentUrl, heading }) => {
           district,
           region,
           state,
-          country: 'in',
+          country: "in",
           pincode,
           buildingName,
           locality: {
             ...dsoDetails.address.locality,
-            code: localityCode || '',
-            name: localityName || '',
+            code: localityCode || "",
+            name: localityName || "",
             label: "Locality",
-            area: localityArea || ''
+            area: localityArea || "",
           },
           geoLocation: {
             ...dsoDetails.address.geoLocation,
@@ -143,16 +138,16 @@ const EditVendor = ({ parentUrl, heading }) => {
         },
         owner: {
           ...dsoDetails.owner,
-          gender: gender || dsoDetails.owner?.gender || 'OTHER',
+          gender: gender || dsoDetails.owner?.gender || "OTHER",
           dob: dob,
-          emailId: emailId || 'abc@egov.com',
-          relationship: dsoDetails.owner?.relationship || 'OTHER'
+          emailId: emailId || "abc@egov.com",
+          relationship: dsoDetails.owner?.relationship || "OTHER",
         },
         additionalDetails: {
           ...dsoDetails.additionalDetails,
           description: additionalDetails,
         },
-      }
+      },
     };
     mutate(formData, {
       onError: (error, variables) => {
@@ -160,9 +155,13 @@ const EditVendor = ({ parentUrl, heading }) => {
         setTimeout(closeToast, 5000);
       },
       onSuccess: (data, variables) => {
-        setShowToast({ key: "success", action: 'UPDATE_VENDOR' });
+        setShowToast({ key: "success", action: "UPDATE_VENDOR" });
         setTimeout(closeToast, 5000);
         queryClient.invalidateQueries("DSO_SEARCH");
+        setTimeout(() => {
+          closeToast();
+          history.push(`/digit-ui/employee/fsm/registry`);
+        }, 5000);
       },
     });
   };

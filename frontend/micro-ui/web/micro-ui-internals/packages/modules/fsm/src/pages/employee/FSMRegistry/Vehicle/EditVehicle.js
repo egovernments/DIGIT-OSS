@@ -119,6 +119,10 @@ const EditVehicle = ({ parentUrl, heading }) => {
         setShowToast({ key: "success", action: 'UPDATE_VEHICLE' });
         setTimeout(closeToast, 5000);
         queryClient.invalidateQueries("DSO_SEARCH");
+        setTimeout(() => {
+          closeToast();
+          history.push(`/digit-ui/employee/fsm/registry`);
+        }, 5000);
       },
     });
   };
