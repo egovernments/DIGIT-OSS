@@ -98,6 +98,14 @@
       @apply text-center;
     }
   }
+  .select-active {
+    text-align: left;
+  }
+  .options-card {
+    .profile-dropdown--item {
+      justify-content: center;
+    }
+  }
 }
 
 .employee-select-wrap--elipses {
