@@ -2,6 +2,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.0 - 2022-08-04
+- Unrestricted service request assignment in  ULB employee flow
+- Unrestricted service request assignment in  DSO flow
+
 ## 1.0.4 - 2022-01-13
 
 - Updated to log4j2 version 2.17.1
