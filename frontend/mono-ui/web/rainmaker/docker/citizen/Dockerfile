@@ -14,5 +14,5 @@ ENV WEB_DIR=/var/web/citizen
 
 RUN mkdir -p ${WEB_DIR}
 
-COPY --from=build /app/packages/citizen/build ${WEB_DIR}/
-COPY --from=build /app/docker/citizen/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build ./app/packages/citizen/build ${WEB_DIR}/
+COPY --from=build ./app/docker/citizen/nginx.conf /etc/nginx/conf.d/default.conf
