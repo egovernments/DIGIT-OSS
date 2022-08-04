@@ -206,7 +206,7 @@ const Inbox = ({ parentRoute, isSearch = false, isInbox = false }) => {
         <div>
           <Header>{t("ES_COMMON_INBOX")}</Header>
           <MobileInbox
-            data={isInbox ? applications?.table : data}
+            data={isInbox ? applications : data}
             isLoading={isInbox ? isLoading || isIdle : isSearchLoading}
             isSearch={isSearch}
             searchFields={getSearchFields(userRoles)}

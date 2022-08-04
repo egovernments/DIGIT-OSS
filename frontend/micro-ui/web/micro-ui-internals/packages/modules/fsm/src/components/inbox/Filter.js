@@ -72,15 +72,15 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
               </span>
             )}
           </div>
-          <div>
+          {/* <div>
             {!DSO && !isFstpOperator && searchParams && (
               <AssignedTo onFilterChange={onFilterChange} searchParams={searchParams} paginationParms={paginationParms} tenantId={tenantId} t={t} />
             )}
-            <div>
+            <div> */}
               {/* {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "code", onRemove, "locality", "name")} */}
-            </div>
+            {/* </div> */}
             {/* <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} fsmfilters={searchParams} /> */}
-          </div>
+          {/* </div> */}
 
           {mergedRoleDetails?.statuses?.length > 0 || isFstpOperatorRequest ? (
             <div>

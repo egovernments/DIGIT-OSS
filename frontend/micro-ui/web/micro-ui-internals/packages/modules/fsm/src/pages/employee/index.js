@@ -121,7 +121,8 @@ const EmployeeApp = ({ path, url, userType }) => {
       icon: <InboxIcon />
     },
     {
-      locate: "/employee/report/fsm/FSMDailyDesludingReport",
+      link: "/employee/report/fsm/FSMDailyDesludingReport",
+      hyperlink: true,
       name: "ES_FSM_VIEW_REPORTS_BUTTON",
       icon: <ViewReportIcon />
     },
