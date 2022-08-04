@@ -17,12 +17,9 @@ This service provides APIs to create , update and search such events for the use
 
 Link to the swagger API contract yaml and editor link like below
 
-<<<<<<< HEAD
 https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/user-events.yml#!/
-=======
 https://github.com/egovernments/DIGIT-Dev/blob/master/municipal-services/docs/user-events.yml
 
->>>>>>> c1e1e8ce24 (CORE-139 Merging user events enhancements in master (#2781))
 
 ## Service Details
 
