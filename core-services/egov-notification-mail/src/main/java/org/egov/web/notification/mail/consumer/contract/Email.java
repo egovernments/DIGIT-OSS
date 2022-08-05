@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -19,6 +21,7 @@ import lombok.Setter;
 @Builder
 public class Email {
 
+	@NotNull
 	private Set<String> emailTo;
 	private String subject;
 	private String body;

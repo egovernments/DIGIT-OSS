@@ -5,7 +5,11 @@ import com.jayway.jsonpath.*;
 import lombok.extern.slf4j.*;
 import org.apache.http.conn.ssl.*;
 import org.apache.http.impl.client.*;
+import org.egov.common.contract.response.ResponseInfo;
+import org.egov.tracer.kafka.CustomKafkaTemplate;
+import org.egov.tracer.model.CustomException;
 import org.egov.web.notification.sms.config.*;
+import org.egov.web.notification.sms.consumer.contract.SMSRequest;
 import org.egov.web.notification.sms.models.*;
 import org.springframework.asm.*;
 import org.springframework.beans.factory.annotation.*;
@@ -31,6 +35,9 @@ abstract public class BaseSMSService implements SMSService, SMSBodyBuilder {
 
     private static final String SMS_RESPONSE_NOT_SUCCESSFUL = "Sms response not successful";
 
+    @Value("${kafka.topics.expiry.sms}")
+    String expiredSmsTopic;
+
     @Autowired
     protected RestTemplate restTemplate;
 
@@ -39,6 +46,9 @@ abstract public class BaseSMSService implements SMSService, SMSBodyBuilder {
 
     @Autowired
     protected Environment env;
+
+    @Autowired
+    private CustomKafkaTemplate<String, SMSRequest> kafkaTemplate;
 
     @PostConstruct
     public void init() {
@@ -176,6 +186,27 @@ abstract public class BaseSMSService implements SMSService, SMSBodyBuilder {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(smsProperties.getContentType()));
         return headers;
+    }
+
+    public void initatiteSmsProcess(SMSRequest request){
+        try {
+            if (request.getExpiryTime() != null && request.getCategory() == Category.OTP) {
+                Long expiryTime = request.getExpiryTime();
+                Long currentTime = System.currentTimeMillis();
+                if (expiryTime < currentTime) {
+                    log.info("OTP Expired");
+                    throw new CustomException("OTP_ERROR", "SMS cannot be send as OTP is expired");
+                } else {
+                    sendSMS(request.toDomain());
+
+                }
+            } else {
+                sendSMS(request.toDomain());
+            }
+        }catch (Exception e){
+            throw new CustomException("SMS_ERROR", "Error in sending sms process");
+
+        }
     }
 
     @PostConstruct
