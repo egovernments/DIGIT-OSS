@@ -254,7 +254,7 @@ public class WaterServiceImpl implements WaterService {
 		//check for edit and send edit notification
 		waterDaoImpl.pushForEditNotification(waterConnectionRequest);
 		//Enrich file store Id After payment
-		enrichmentService.enrichFileStoreIds(waterConnectionRequest);
+//		enrichmentService.enrichFileStoreIds(waterConnectionRequest);
 //		userService.createUser(waterConnectionRequest);
 		enrichmentService.postStatusEnrichment(waterConnectionRequest);
 		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);

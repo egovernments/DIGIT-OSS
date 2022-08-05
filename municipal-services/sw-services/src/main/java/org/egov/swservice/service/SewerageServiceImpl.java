@@ -254,7 +254,7 @@ public class SewerageServiceImpl implements SewerageService {
 		// Call workflow
 		wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
 		// Enrich file store Id After payment
-		enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
+//		enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
 		enrichmentService.postStatusEnrichment(sewerageConnectionRequest);
 
 		/* encrypt here */
