@@ -1024,7 +1024,7 @@ const updateBorderlayout = (formatconfig) => {
 export const fillValues = (variableTovalueMap, formatconfig) => {
   let input = JSON.stringify(formatconfig).replace(/\\/g, "");
   
-  console.log(variableTovalueMap);
+  console.log("variableTovalueMap "+ variableTovalueMap);
   //console.log(mustache.render(input, variableTovalueMap).replace(/""/g,"\"").replace(/"\[/g,"\[").replace(/\]"/g,"\]").replace(/\]\[/g,"\],\[").replace(/"\{/g,"\{").replace(/\}"/g,"\}"));
   let output = JSON.parse(
     mustache
