@@ -53,6 +53,7 @@ public class SewerageRowMapper implements ResultSetExtractor<List<SewerageConnec
                 sewarageConnection.setRoadCuttingArea(rs.getFloat("roadcuttingarea"));
                 sewarageConnection.setRoadType(rs.getString("roadtype"));
                 sewarageConnection.setOldApplication(rs.getBoolean("isoldapplication"));
+                sewarageConnection.setDisconnectionReason(rs.getString("disconnectionReason"));
                 // get property id and get property object
                 PGobject pgObj = (PGobject) rs.getObject("additionaldetails");
 				ObjectNode addtionalDetails = null;
