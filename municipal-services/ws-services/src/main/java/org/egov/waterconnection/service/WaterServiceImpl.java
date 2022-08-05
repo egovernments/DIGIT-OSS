@@ -172,7 +172,7 @@ public class WaterServiceImpl implements WaterService {
 		waterConnectionValidator.validatePropertyForConnection(waterConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(waterConnectionList, criteria, requestInfo);
 		enrichmentService.enrichProcessInstance(waterConnectionList, criteria, requestInfo);
-		enrichmentService.enrichDocumentDetails(waterConnectionList, criteria, requestInfo);
+//		enrichmentService.enrichDocumentDetails(waterConnectionList, criteria, requestInfo);
 
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(waterConnectionList, WNS_ENCRYPTION_MODEL, WaterConnection.class, requestInfo);
@@ -254,7 +254,7 @@ public class WaterServiceImpl implements WaterService {
 		//check for edit and send edit notification
 		waterDaoImpl.pushForEditNotification(waterConnectionRequest);
 		//Enrich file store Id After payment
-//		enrichmentService.enrichFileStoreIds(waterConnectionRequest);
+		enrichmentService.enrichFileStoreIds(waterConnectionRequest);
 //		userService.createUser(waterConnectionRequest);
 		enrichmentService.postStatusEnrichment(waterConnectionRequest);
 		boolean isStateUpdatable = waterServiceUtil.getStatusForUpdate(businessService, previousApplicationStatus);

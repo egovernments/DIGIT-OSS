@@ -170,7 +170,7 @@ public class SewerageServiceImpl implements SewerageService {
 		validateProperty.validatePropertyForConnection(sewerageConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
 		enrichmentService.enrichProcessInstance(sewerageConnectionList, criteria, requestInfo);
-		enrichmentService.enrichDocumentDetails(sewerageConnectionList, criteria, requestInfo);
+//		enrichmentService.enrichDocumentDetails(sewerageConnectionList, criteria, requestInfo);
 
 		/* decrypt here */
 		return encryptionDecryptionUtil.decryptObject(sewerageConnectionList, WNS_ENCRYPTION_MODEL, SewerageConnection.class, requestInfo);
@@ -254,7 +254,7 @@ public class SewerageServiceImpl implements SewerageService {
 		// Call workflow
 		wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
 		// Enrich file store Id After payment
-//		enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
+		enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
 		enrichmentService.postStatusEnrichment(sewerageConnectionRequest);
 
 		/* encrypt here */
