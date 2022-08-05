@@ -1,26 +1,26 @@
 {
   "name": "micro-ui",
-  "version":"1.5.2",
+  "version": "1.5.2",
   "private": true,
   "homepage": "/digit-ui",
   "dependencies": {
     "@egovernments/digit-ui-css": "1.5.2",
-    "@egovernments/digit-ui-libraries":"1.5.2",
-    "@egovernments/digit-ui-module-common":"1.5.2",
-    "@egovernments/digit-ui-module-core":"1.5.2",
-    "@egovernments/digit-ui-module-commonpt":"1.5.2",
-    "@egovernments/digit-ui-module-engagement":"1.5.2",
-    "@egovernments/digit-ui-module-dss":"1.5.2",
-    "@egovernments/digit-ui-module-fsm":"1.5.2",
-    "@egovernments/digit-ui-module-hrms":"1.5.2",
-    "@egovernments/digit-ui-module-mcollect":"1.5.2",
-    "@egovernments/digit-ui-module-obps":"1.5.2",
-    "@egovernments/digit-ui-module-pgr":"1.5.2",
-    "@egovernments/digit-ui-module-pt":"1.5.2",
-    "@egovernments/digit-ui-module-receipts":"1.5.2",
-    "@egovernments/digit-ui-module-tl":"1.5.2",
-    "@egovernments/digit-ui-module-noc":"1.5.2", 
-    "@egovernments/digit-ui-react-components":"1.5.2",
+    "@egovernments/digit-ui-libraries": "1.5.2",
+    "@egovernments/digit-ui-module-common": "1.5.2",
+    "@egovernments/digit-ui-module-commonpt": "1.5.2",
+    "@egovernments/digit-ui-module-core": "1.5.2",
+    "@egovernments/digit-ui-module-dss": "1.5.2",
+    "@egovernments/digit-ui-module-engagement": "1.5.2",
+    "@egovernments/digit-ui-module-fsm": "1.5.2",
+    "@egovernments/digit-ui-module-hrms": "1.5.2",
+    "@egovernments/digit-ui-module-mcollect": "1.5.2",
+    "@egovernments/digit-ui-module-noc": "1.5.2",
+    "@egovernments/digit-ui-module-obps": "1.5.2",
+    "@egovernments/digit-ui-module-pgr": "1.5.2",
+    "@egovernments/digit-ui-module-pt": "1.5.2",
+    "@egovernments/digit-ui-module-receipts": "1.5.2",
+    "@egovernments/digit-ui-module-tl": "1.5.2",
+    "@egovernments/digit-ui-react-components": "1.5.2",
     "babel-loader": "8.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -29,12 +29,13 @@
     "web-vitals": "1.1.2"
   },
   "devDependencies": {
-    "http-proxy-middleware": "1.3.1"
+    "http-proxy-middleware": "^1.3.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:prepare": "./build.sh"
+    "build:prepare": "./build.sh",
+    "test": "jest"
   },
   "eslintConfig": {
     "extends": [
