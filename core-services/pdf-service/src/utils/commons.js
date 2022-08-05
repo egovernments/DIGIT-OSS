@@ -57,6 +57,7 @@ export const getTransformedLocale = (label) => {
 
 
   let url = egovLocHost + egovLocSearchCall;
+  console.log("url "+url)
 
   let request = { 
     RequestInfo: requestInfo,
@@ -66,6 +67,7 @@ export const getTransformedLocale = (label) => {
       codes: []
     }
   };
+  console.log("request to loaclization service "+ request)
 
   request.messageSearchCriteria.module = moduleList.toString();
   request.messageSearchCriteria.codes = codeList.toString().split(",");
