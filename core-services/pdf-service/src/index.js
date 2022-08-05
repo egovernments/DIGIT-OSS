@@ -858,6 +858,9 @@ export const createAndSave = async (
     // var util = require('util');
     // fs.writeFileSync('./data.txt', util.inspect(JSON.stringify(formatconfig)) , 'utf-8');
     //function to download pdf automatically
+    
+    console.log(" Font type selected before :::: " + formatconfig.defaultStyle.font);
+
     let locale = requestInfo.msgId.split('|')[1];
     if(!locale){
       locale = envVariables.DEFAULT_LOCALISATION_LOCALE;
@@ -873,7 +876,7 @@ export const createAndSave = async (
       );
     }
     
-    console.log(" Font type selected :::: " + formatconfig.defaultStyle.font);
+    console.log(" Font type selected after :::: " + formatconfig.defaultStyle.font);
     console.log("Locale passed:::::::"+locale);
 
     createPdfBinary(
