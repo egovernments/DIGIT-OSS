@@ -19,7 +19,7 @@ eChallan system enables employees to generate the challans for Adhoc services so
 
 Link to the swagger API contract yaml and editor link like below
 
-https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/e-Challan-v1.0.0.yaml#!/
+https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/municipal-services/develop/docs/e-Challan-v1.0.0.yaml#!/
 
 
 ## Service Details
