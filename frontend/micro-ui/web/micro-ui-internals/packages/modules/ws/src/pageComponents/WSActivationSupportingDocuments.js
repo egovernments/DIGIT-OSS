@@ -71,6 +71,7 @@ const WSActivationSupportingDocuments = ({ t, config, userType, formData, onSele
                         textStyles={{ width: "100%" }}
                         inputStyles={{ width: "280px" }}
                         buttonType="button"
+                        accept= "image/*, .pdf, .png, .jpeg, .jpg"
                     />
                 </div>
             </LabelFieldPair>

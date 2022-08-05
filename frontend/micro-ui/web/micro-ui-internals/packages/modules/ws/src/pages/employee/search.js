@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from "react";
 import { useTranslation } from "react-i18next";
-import { Toast } from "@egovernments/digit-ui-react-components";
+import { Loader, Toast } from "@egovernments/digit-ui-react-components";
 
 const Search = ({ path }) => {
   const [isBothCallsFinished, setIsBothCallFinished] = useState(true);
@@ -45,17 +45,39 @@ const Search = ({ path }) => {
   };
 
   const result = Digit.Hooks.ws.useSearchWS({ tenantId, filters: payload, config, bussinessService: businessServ, t ,shortAddress:true });
-  
+
+  const isMobile = window.Digit.Utils.browser.isMobile();
+
+  if (result?.isLoading && isMobile) {
+    return <Loader />
+  }
+
+  const getData = () => {
+    if (result?.data?.length == 0 ) {
+      return { display: "ES_COMMON_NO_DATA" }
+    } else if (result?.data?.length > 0) {
+      return result?.data
+    } else {
+      return [];
+    }
+  }
+
+  const isResultsOk = () => {
+    return result?.data?.length > 0 ? true : false;
+  }
+
+
   return (
     <Fragment>
       <Search
         t={t}
         tenantId={tenantId}
         onSubmit={onSubmit}
-        data={result?.data ? result?.data : { display: "ES_COMMON_NO_DATA" }}
+        data={getData()}
         count={result?.count}
-        resultOk={!result?.isLoading}
+        resultOk={isResultsOk()}
         businessService={businessServ}
+        isLoading={result?.isLoading}
       />
       {showToast && (
         <Toast

@@ -42,6 +42,26 @@ const SearchWater = ({ path }) => {
 
   let result = Digit.Hooks.ws.useSearchWS({ tenantId, filters: payload, config, bussinessService: businessServ, t ,shortAddress:true});
   
+  const isMobile = window.Digit.Utils.browser.isMobile();
+
+  if (result?.isLoading && isMobile) {
+    return <Loader />
+  }
+
+  const getData = () => {
+    if (result?.data?.length == 0 ) {
+      return { display: "ES_COMMON_NO_DATA" }
+    } else if (result?.data?.length > 0) {
+      return result?.data
+    } else {
+      return [];
+    }
+  }
+
+  const isResultsOk = () => {
+    return result?.data?.length > 0 ? true : false;
+  }
+
   if(!result?.isLoading)
     result.data = result?.data?.map((item) => {
       if (item?.connectionNo?.includes("WS")) {
@@ -58,10 +78,11 @@ const SearchWater = ({ path }) => {
         t={t}
         tenantId={tenantId}
         onSubmit={onSubmit}
-        data={result?.data ? result?.data : { display: "ES_COMMON_NO_DATA" }}
+        data={getData()}
         count={result?.count}
-        resultOk={!result?.isLoading}
+        resultOk={isResultsOk()}
         businessService={businessServ}
+        isLoading={result?.isLoading}
       />
 
       {showToast && (

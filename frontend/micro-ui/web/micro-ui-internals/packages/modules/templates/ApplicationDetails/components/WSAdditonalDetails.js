@@ -53,18 +53,18 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
     return (
       <div className="connection-details-old-value-wrapper">
         {oldValueData?.connectionType ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.connectionType} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.connectionType} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
 
         {oldValueData?.noOfWaterClosets ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.noOfWaterClosets} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.noOfWaterClosets} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.noOfToilets ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.noOfToilets} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.noOfToilets} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
@@ -75,11 +75,11 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
   const renderWSConnectionDetails = () => {
     return (
       <div className="connection-details-old-value-wrapper">
-        {oldValueData?.connectionType && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.connectionType} /> )}
-        {oldValueData?.noOfTaps && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.noOfTaps} /> )}
-        {oldValueData?.waterSource && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={t(oldValueData?.waterSource?.toUpperCase()?.split(".")[0])} /> )}
-        {oldValueData?.pipeSize && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.pipeSize} /> )}
-        {oldValueData?.waterSource && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={t(oldValueData?.waterSource?.toUpperCase()?.split(".")[1])} /> )}
+        {oldValueData?.connectionType && ( <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.connectionType} /> )}
+        {oldValueData?.noOfTaps && ( <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.noOfTaps} /> )}
+        {oldValueData?.waterSource && ( <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={t(oldValueData?.waterSource?.toUpperCase()?.split(".")[0])} /> )}
+        {oldValueData?.pipeSize && ( <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.pipeSize} /> )}
+        {oldValueData?.waterSource && ( <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={t(oldValueData?.waterSource?.toUpperCase()?.split(".")[1])} /> )}
       </div>
     );
   };
@@ -89,22 +89,22 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
       <div className="plumber-details-old-value-wrapper">
         {oldValueData?.additionalDetails?.detailsProvidedBy !== wsAdditionalDetails?.additionalDetails?.plumberDetails[0]?.value &&
         oldValueData?.additionalDetails?.detailsProvidedBy !== null ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.additionalDetails?.detailsProvidedBy} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.additionalDetails?.detailsProvidedBy} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.plumberInfo ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.plumberInfo[0]?.licenseNo} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.plumberInfo[0]?.licenseNo} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.plumberInfo ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.plumberInfo[0]?.name} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.plumberInfo[0]?.name} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
         {oldValueData?.plumberInfo ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.plumberInfo[0]?.mobileNumber} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.plumberInfo[0]?.mobileNumber} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
@@ -116,7 +116,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
     return (
       <div className="plumber-details-old-value-wrapper">
         {oldValueData?.additionalDetails?.detailsProvidedBy !== wsAdditionalDetails?.additionalDetails?.plumberDetails[0]?.value ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.additionalDetails?.detailsProvidedBy || "NA"} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.additionalDetails?.detailsProvidedBy || "NA"} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
@@ -129,8 +129,8 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
       oldValueData?.roadCuttingInfo?.map((info) => {
         return (
           <div className="plumber-details-old-value-wrapper">
-            <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={t(`WS_ROADTYPE_${info?.roadType}`) || "NA"} />
-            <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={info?.roadCuttingArea || "NA"} />
+            <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={t(`WS_ROADTYPE_${info?.roadType}`) || "NA"} />
+            <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={info?.roadCuttingArea || "NA"} />
           </div>
         );
       });
@@ -141,7 +141,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
     return (
       <div className="plumber-details-old-value-wrapper">
         {oldValueData?.connectionExecutionDate ? (
-          <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={convertEpochToDate(oldValueData?.connectionExecutionDate)} />
+          <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={convertEpochToDate(oldValueData?.connectionExecutionDate)} />
         ) : (
           <div className="old-value-null-wrapper ">{"NA"}</div>
         )}
@@ -152,10 +152,10 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
   const renderWSActivationDetails = () => {
     return (
       <div className="plumber-details-old-value-wrapper">
-        {oldValueData?.meterId && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.meterId} /> )}
-        {oldValueData?.additionalDetails?.initialMeterReading && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={oldValueData?.additionalDetails?.initialMeterReading} /> )}
-        {oldValueData?.meterInstallationDate && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={convertEpochToDate(oldValueData?.meterInstallationDate)} /> )}
-        {oldValueData?.connectionExecutionDate && ( <Row label={`${t("WS_OLD_LABEL_NAME")}:`} text={convertEpochToDate(oldValueData?.connectionExecutionDate)} /> )}
+        {oldValueData?.meterId && ( <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.meterId} /> )}
+        {oldValueData?.additionalDetails?.initialMeterReading && ( <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={oldValueData?.additionalDetails?.initialMeterReading} /> )}
+        {oldValueData?.meterInstallationDate && ( <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={convertEpochToDate(oldValueData?.meterInstallationDate)} /> )}
+        {oldValueData?.connectionExecutionDate && ( <Row label={`${t("WS_OLD_LABEL_NAME")}`} text={convertEpochToDate(oldValueData?.connectionExecutionDate)} /> )}
       </div>
     );
   };
@@ -322,7 +322,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
                 {connectionDetails?.map((value, index) => {
                   return (
                     <div>
-                      <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.oldValue ? value?.oldValue: value?.value ? value?.value : ""} />
+                      <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.oldValue ? value?.oldValue: value?.value ? value?.value : ""} />
                     </div>
                   );
                 })}
@@ -337,7 +337,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
               <div className="plumber-details-new-value-wrapper">
 
                 {plumberDetails?.map((value, index) => {
-                  return <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.oldValue ? value?.oldValue: value?.value ? value?.value : ""} privacy={value.privacy} />;
+                  return <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.oldValue ? value?.oldValue: value?.value ? value?.value : ""} privacy={value.privacy} />;
                 })}
               </div>
             </div>
@@ -366,7 +366,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
                         <Row
                           className="border-none"
                           key={`${roadValue.title}`}
-                          label={`${t(`${roadValue.title}`)}:`}
+                          label={`${t(`${roadValue.title}`)}`}
                           text={roadValue?.oldValue ? roadValue?.oldValue: roadValue?.value ? roadValue?.value : ""}
                         />
                       ))}
@@ -384,7 +384,7 @@ const WSAdditonalDetails = ({ wsAdditionalDetails, oldValue }) => {
               <div className="plumber-details-new-value-wrapper">
                 {activationDetails?.map((value, index) => {
                   return (
-                    <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}:`} text={value?.oldValue ? value?.oldValue: value?.value ? value?.value : ""} />
+                    <Row className="border-none" key={`${value.title}`} label={`${t(`${value.title}`)}`} text={value?.oldValue ? value?.oldValue: value?.value ? value?.value : ""} />
                   );
                 })}
               </div>              

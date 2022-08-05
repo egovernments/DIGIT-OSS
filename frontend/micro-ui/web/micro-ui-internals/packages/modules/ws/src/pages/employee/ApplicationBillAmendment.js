@@ -525,7 +525,7 @@ const ApplicationBillAmendment = () => {
                     onDelete={() => dispatch({ type: "remove", payload: { id: e?.documentType } })}
                     style={{ width: "640px" }}
                     message={functionToDisplayTheMessage}
-                    accept="image/*, .pdf, .png, .jpeg, .doc"
+                    accept= "image/*, .pdf, .png, .jpeg, .jpg"
                     textStyles={{ width: "100%" }}
                     inputStyles={{ width: "280px" }}
                   />

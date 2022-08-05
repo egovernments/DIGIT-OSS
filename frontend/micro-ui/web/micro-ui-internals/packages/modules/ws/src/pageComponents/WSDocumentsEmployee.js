@@ -225,7 +225,7 @@ function SelectDocument({
     <div style={{ marginBottom: "24px" }}>
       {doc?.hasDropdown ? (
         <LabelFieldPair>
-          <CardLabel style={{fontWeight: "700" }}>{doc?.required ? `${t(doc?.i18nKey)}:*` : `${t(doc?.i18nKey)}:`}</CardLabel>
+          <CardLabel style={{fontWeight: "700" }}>{doc?.required ? `${t(doc?.i18nKey)}*` : `${t(doc?.i18nKey)}`}</CardLabel>
           <Dropdown
             id={`doc-${doc?.code}`}
             key={`doc-${doc?.code}`}
@@ -252,6 +252,7 @@ function SelectDocument({
             inputStyles={{ width: "280px" }}
             buttonType="button"
             error={!uploadedFile}
+            accept= "image/*, .pdf, .png, .jpeg, .jpg"
           />
         </div>
       </LabelFieldPair>

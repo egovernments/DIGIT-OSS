@@ -5,7 +5,7 @@ import { CloseSvg, SearchForm, Table, Card, SearchAction, PopUp, DetailsCard, Lo
 import SearchFormFields from "./SearchFields";
 import { convertEpochToDateDMY } from "../../utils/index";
 
-const MobileSearchApplication = ({ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit }) => {
+const MobileSearchApplication = ({ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit, businessService }) => {
   function activateModal(state, action) {
     switch (action.type) {
       case "set":
@@ -29,8 +29,7 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
     </div>
   );
 
-  const searchFormFieldsComponentProps = { Controller, register, control, t, reset, previousPage };
-
+  const searchFormFieldsComponentProps = { Controller, register, control, t, reset, previousPage, businessService };
   const MobileComponentDirectory = ({ currentlyActiveMobileModal, searchFormFieldsComponentProps, tenantId, ...props }) => {
     const { closeMobilePopupModal } = props;
     switch (currentlyActiveMobileModal) {
@@ -41,7 +40,7 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
             <div className="MobilePopupHeadingWrapper">
               <h2>{t("ES_COMMON_SEARCH")}:</h2>
             </div>
-            <SearchFormFields {...searchFormFieldsComponentProps} {...{ closeMobilePopupModal, tenantId, t }} />
+            <SearchFormFields {...searchFormFieldsComponentProps } {...{ closeMobilePopupModal, tenantId, t }} />
             {/* <SearchField className="submit">
                       <SubmitBar label={t("ES_COMMON_SEARCH")} submit form="search-form"/>
                       <p onClick={onResetSearchForm}>{t(`ES_COMMON_CLEAR_ALL`)}</p>

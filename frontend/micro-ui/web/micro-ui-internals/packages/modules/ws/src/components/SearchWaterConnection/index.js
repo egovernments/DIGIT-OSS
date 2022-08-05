@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import MobileSearchWater from "./MobileSearchWater";
 
-const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, businessService }) => {
+const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, businessService, isLoading }) => {
   const replaceUnderscore = (str) => {
     str = str.replace(/_/g, " ");
     return str;
@@ -204,6 +204,7 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
       <SearchForm className="ws-custom-wrapper" onSubmit={onSubmit} handleSubmit={handleSubmit}>
         <SearchFields {...{ register, control, reset, tenantId, t }} />
       </SearchForm>
+      { isLoading ? <Loader /> : null } 
       {data?.display && resultOk ? (
         // <Card style={{ marginTop: 20 }}>
         //   {t(data?.display)
@@ -239,9 +240,7 @@ const SearchWaterConnection = ({ tenantId, onSubmit, data, count, resultOk, busi
           disableSort={false}
           sortParams={[{ id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false }]}
         />
-      ) : (
-        <Loader />
-      )}
+      ) : null}
     </>
   );
 };

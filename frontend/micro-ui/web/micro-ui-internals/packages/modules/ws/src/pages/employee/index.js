@@ -180,7 +180,8 @@ const App = ({ path }) => {
   window.location.href.includes("/employee/ws/application-details") ||
   window.location.href.includes("/employee/ws/ws-response") ||
   window.location.href.includes("/employee/ws/new-disconnection/application-form") ||
-  window.location.href.includes("/employee/ws/ws-disconnection-response");
+  window.location.href.includes("/employee/ws/ws-disconnection-response") ||
+  window.location.href.includes("/employee/ws/consumption-details");
   
 
 

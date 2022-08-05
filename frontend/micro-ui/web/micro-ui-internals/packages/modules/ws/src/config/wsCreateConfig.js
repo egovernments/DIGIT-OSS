@@ -248,6 +248,7 @@ export const newConfig = [
     },
     {
       head: "WS_COMMON_CONNECTION_DETAIL",
+      subHead: "WS_CONNECTION_DETAILS_HEADER_SUB_TEXT_LABEL",
       isEditConnection: false,
       isCreateConnection: true,
       body: [{

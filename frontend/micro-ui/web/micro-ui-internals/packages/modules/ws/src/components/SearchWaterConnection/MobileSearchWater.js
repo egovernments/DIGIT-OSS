@@ -109,14 +109,14 @@ const MobileSearchWater = ({ Controller, register, control, t, reset, previousPa
       return [];
     }
     return data?.map((data) => ({
-      [t("WS_MYCONNECTIONS_CONSUMER_NO")]: GetStatusLinkCell(data) || "NA",
+      [t("WS_MYCONNECTIONS_CONSUMER_NO")]: GetStatusLinkCell(data) || t(`${"WS_NA"}`),
       [t("WS_COMMON_TABLE_COL_SERVICE_LABEL")]: t(`WS_${data?.service}`),
-      [t("WS_COMMON_TABLE_COL_OWN_NAME_LABEL")]: data?.owner || "NA",
+      [t("WS_COMMON_TABLE_COL_OWN_NAME_LABEL")]: data?.owner || t(`${"WS_NA"}`),
       [t("WS_COMMON_TABLE_COL_STATUS_LABEL")]: t(`WS_${data?.status?.toUpperCase()}`),
-      [t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")]: data?.due || "NA",
-      [t("WS_COMMON_TABLE_COL_ADDRESS")]: data?.address || "NA",
-      [t("WS_COMMON_TABLE_COL_DUE_DATE_LABEL")]: convertEpochToDate(data?.dueDate) || "NA",
-      [t("WS_COMMON_TABLE_COL_ACTION_LABEL")]: getActionItems(data?.status, data),
+      [t("WS_COMMON_TABLE_COL_AMT_DUE_LABEL")]: data?.due || t(`${"WS_NA"}`),
+      [t("WS_COMMON_TABLE_COL_ADDRESS")]: data?.address || t(`${"WS_NA"}`),
+      [t("WS_COMMON_TABLE_COL_DUE_DATE_LABEL")]: convertEpochToDate(data?.dueDate) || t(`${"WS_NA"}`),
+      [t("WS_COMMON_TABLE_COL_ACTION_LABEL")]: data?.due ? getActionItems(data?.status, data) : t(`${"WS_NA"}`),
     }));
   }, [data]);
 

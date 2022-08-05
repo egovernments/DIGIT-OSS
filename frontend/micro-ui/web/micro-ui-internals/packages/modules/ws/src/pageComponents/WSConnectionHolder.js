@@ -283,7 +283,7 @@ const WSConnectionHolder = ({ t, config, onSelect, userType, formData, ownerInde
                 <UploadFile
                     id={"ptm-doc"}
                     //extraStyleName={"propertyCreate"}
-                    accept=".jpg,.png,.pdf,.jpeg"
+                    accept= "image/*, .pdf, .png, .jpeg, .jpg"
                     onUpload={selectfile}
                     onDelete={() => {
                     setUploadedFile(null);

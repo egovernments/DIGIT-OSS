@@ -177,12 +177,13 @@ const ConnectionDetails = (_props) => {
   }, [errors]);
 
   const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
-
+  const isMobile = window.Digit.Utils.browser.isMobile();
+  const titleStyle = isMobile ? { marginBottom: "40px", color: "#505A5F", fontWeight: "700", fontSize: "16px"}  :{marginTop: "-40px", marginBottom: "40px", color: "#505A5F", fontWeight: "700", fontSize: "16px"}
   return (
     <div >
-      {window.location.href.includes("/ws/new") ?  <div style={{marginTop: "-40px", marginBottom: "40px", color: "#505A5F", fontWeight: "700", fontSize: "16px"}}>{t("WS_CONNECTION_DETAILS_HEADER_SUB_TEXT_LABEL")}</div> : null}
+      {/* {window.location.href.includes("/ws/new") ?  <div style={titleStyle}>{t("WS_CONNECTION_DETAILS_HEADER_SUB_TEXT_LABEL")}</div> : null} */}
       <div style={{ marginBottom: "16px" }}>
-        <CardLabel style={{fontWeight: "700"}}>{`${t("WS_APPLY_FOR")}:*`}</CardLabel>
+        <CardLabel style={{fontWeight: "700"}}>{`${t("WS_APPLY_FOR")}*`}</CardLabel>
         <div style={{ display: "flex", gap: "0 3rem" }}>
           <Controller
             control={control}
@@ -237,7 +238,7 @@ const ConnectionDetails = (_props) => {
         {connectionDetail?.water && (
           <div>
             <LabelFieldPair>
-              <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_NO_OF_PROPOSED_TAPS_LABEL")}:*`}</CardLabel>
+              <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_NO_OF_PROPOSED_TAPS_LABEL")}*`}</CardLabel>
               <div className="field">
                 <Controller
                   control={control}
@@ -265,7 +266,7 @@ const ConnectionDetails = (_props) => {
             </LabelFieldPair>
             <CardLabelError style={errorStyle}>{localFormState.touched.proposedTaps ? errors?.proposedTaps?.message : ""}</CardLabelError>
             <LabelFieldPair>
-              <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_PROPOSED_PIPE_SIZE_IN_INCHES_LABEL")}:*`}</CardLabel>
+              <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_PROPOSED_PIPE_SIZE_IN_INCHES_LABEL")}*`}</CardLabel>
               <Controller
                 control={control}
                 name={"proposedPipeSize"}
@@ -295,7 +296,7 @@ const ConnectionDetails = (_props) => {
         {connectionDetail?.sewerage && (
           <div>
             <LabelFieldPair>
-              <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_PROPOSED_WATER_CLOSETS_LABEL")}:*`}</CardLabel>
+              <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_PROPOSED_WATER_CLOSETS_LABEL")}*`}</CardLabel>
               <div className="field">
                 <Controller
                   control={control}
@@ -323,7 +324,7 @@ const ConnectionDetails = (_props) => {
             </LabelFieldPair>
             <CardLabelError style={errorStyle}>{localFormState.touched.proposedWaterClosets ? errors?.proposedWaterClosets?.message : ""}</CardLabelError>
             <LabelFieldPair>
-              <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_PROPOSED_WATER_TOILETS_LABEL")}:*`}</CardLabel>
+              <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_PROPOSED_WATER_TOILETS_LABEL")}*`}</CardLabel>
               <div className="field">
                 <Controller
                   control={control}

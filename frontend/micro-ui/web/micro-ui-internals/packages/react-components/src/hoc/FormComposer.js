@@ -190,15 +190,38 @@ export const FormComposer = (props) => {
     }
   };
 
+  const titleStyle = { color: "#505A5F", fontWeight: "700", fontSize: "16px"};
+
+  const getCombinedComponent = (
+    (section) => {
+      if (section.head && section.subHead) {
+        return <>
+          <CardSectionHeader style={props?.sectionHeadStyle ? props?.sectionHeadStyle : {margin: "5px 0px"}} id={section.headId}>
+            {t(section.head)}
+          </CardSectionHeader>
+          <CardSectionHeader style={titleStyle} id={`${section.headId}_DES`}>
+            {t(section.subHead)}
+          </CardSectionHeader>
+        </>
+      } else if (section.head) {
+        return <>
+          <CardSectionHeader style={props?.sectionHeadStyle ? props?.sectionHeadStyle : {}} id={section.headId}>
+            {t(section.head)}
+          </CardSectionHeader>
+        </>
+      } else {
+        return <div></div>
+      }
+    }
+  )
+
   const formFields = useMemo(
     () =>
       props.config?.map((section, index, array) => {
         return (
           <React.Fragment key={index}>
-            {section.head && (
-              <CardSectionHeader style={props?.sectionHeadStyle ? props?.sectionHeadStyle : {}} id={section.headId}>
-                {t(section.head)}
-              </CardSectionHeader>
+            {section && (
+              getCombinedComponent(section)
             )}
             {section.body.map((field, index) => {
               if (props.inline)

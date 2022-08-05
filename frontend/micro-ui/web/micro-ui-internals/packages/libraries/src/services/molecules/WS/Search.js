@@ -973,6 +973,11 @@ export const WSSearch = {
     const propertyDataDetails = cloneDeep(properties?.Properties?.[0]);
     const workFlowDataDetails = cloneDeep(workflowDetails);
     const serviceDataType = cloneDeep(serviceType);
+    const wsApplicationType = cloneDeep(wsDataDetails?.applicationType);
+    let applicationType = "";
+    if (wsApplicationType.includes("DISCONNECT") && wsDataDetails?.isDisconnectionTemporary) applicationType = "WS_DISCONNECTIONTYPE_PERMANENT";
+    else applicationType = "WS_DISCONNECTIONTYPE_TEMPORARY";
+
 
     const applicationHeaderDetails = {
       title: " ",
@@ -982,6 +987,7 @@ export const WSSearch = {
           { title: "PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL", value: wsDataDetails?.applicationNo || t("NA") },
           { title: "PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL", value: wsDataDetails?.connectionNo || t("NA") },
           { title: "WS_SERVICE_NAME_LABEL", value: serviceType == "WATER" ? t("WATER") : t("SEWERAGE") },
+          { title: "PDF_STATIC_LABEL_WS_CONSOLIDATED_ACKNOWELDGMENT_DISCONNECTION_TYPE", value: t(`${applicationType}`) },
           { title: "WNS_COMMON_TABLE_COL_AMT_DUE_LABEL", value: fetchBillData.Bill[0]?.totalAmount ? fetchBillData.Bill[0]?.totalAmount : "NA" },
           { title: "WS_DISCONNECTION_PROPOSED_DATE", value: wsDataDetails?.dateEffectiveFrom ? convertEpochToDate(wsDataDetails?.dateEffectiveFrom) : t("NA") },
           { title: "WS_DISCONNECTION_REASON", value: wsDataDetails?.disconnectionReason || t("NA") },

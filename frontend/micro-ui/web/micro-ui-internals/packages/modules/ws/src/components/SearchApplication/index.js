@@ -5,7 +5,7 @@ import SearchFields from "./SearchFields";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import MobileSearchApplication from "./MobileSearchApplication";
-const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, businessService }) => {
+const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, businessService, isLoading }) => {
   
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_ADD_REBATE_DATA", {});
   const [sessionBillFormData, setSessionBillFormData, clearBillSessionFormData] = Digit.Hooks.useSessionStorage("ADHOC_BILL_ADD_REBATE_DATA", {});
@@ -65,7 +65,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
   const isMobile = window.Digit.Utils.browser.isMobile();
 
   if (isMobile) {
-    return <MobileSearchApplication {...{ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit }} />;
+    return <MobileSearchApplication {...{ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit, businessService }} />;
   }
 
   //need to get from workflow
@@ -191,7 +191,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
     ],
     []
   );
-
+  
   return (
     <>
       <Header styles={{ fontSize: "32px" }}>{businessService === "WS" ? t("WS_WATER_SEARCH_APPLICATION_SUB_HEADER") : t("WS_SEWERAGE_SEARCH_APPLICATION_SUB_HEADER")}</Header>
@@ -201,6 +201,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
       <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit} >
         <SearchFields {...{ register, control, reset, tenantId, t,businessService }} />
       </SearchForm>
+      { isLoading ? <Loader /> : null } 
       {data?.display && resultOk ? (
         <Card style={{ marginTop: 20 }}>
           {t(data?.display)
@@ -235,9 +236,7 @@ const SearchApplication = ({ tenantId, onSubmit, data, count, resultOk, business
           disableSort={false}
           sortParams={[{ id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false }]}
         />
-      ) : (
-        <Loader />
-      )}
+      ) : null}
     </>
   );
 };

@@ -318,58 +318,58 @@ const ConsumptionDetails = ({ view }) => {
   return (
     <React.Fragment>
       <div>
-        <Header>{`${t("WS_VIEW_CONSUMPTION")}`}</Header>
+        <Header styles={{ marginLeft: "15px" }}>{`${t("WS_VIEW_CONSUMPTION")}`}</Header>
         <div>
           {meterReadings?.length > 0 &&
             meterReadings.map((application, index) => (
               <div key={index}>
                 <Card>
-                  <StatusTable style={{ width: "960px" }}>
+                  <StatusTable>
                     <Row
                       key={t("WS_MYCONNECTIONS_CONSUMER_NO")}
-                      label={`${t("WS_MYCONNECTIONS_CONSUMER_NO")}:`}
+                      label={`${t("WS_MYCONNECTIONS_CONSUMER_NO")}`}
                       text={application?.connectionNo || t("NA")}
                       className="border-none"
                     />
                     <Row
                       key={t("WS_VIEW_BILL_BILLING_PERIOD_LABEL")}
-                      label={`${t("WS_VIEW_BILL_BILLING_PERIOD_LABEL")}:`}
+                      label={`${t("WS_VIEW_BILL_BILLING_PERIOD_LABEL")}`}
                       text={application?.billingPeriod || t("NA")}
                       className="border-none"
                     />
                     <Row
                       key={t("WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL")}
-                      label={`${t("WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL")}:`}
+                      label={`${t("WS_CONSUMPTION_DETAILS_METER_STATUS_LABEL")}`}
                       text={application?.meterStatus || t("NA")}
                       className="border-none"
                     />
                     <Row
                       key={t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")}
-                      label={`${t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")}:`}
+                      label={`${t("WS_CONSUMPTION_DETAILS_LAST_READING_LABEL")}`}
                       text={application?.lastReading || t("NA")}
                       className="border-none"
                     />
                     <Row
                       key={t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")}
-                      label={`${t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")}:`}
+                      label={`${t("WS_CONSUMPTION_DETAILS_LAST_READING_DATE_LABEL")}`}
                       text={application?.lastReadingDate ? Digit.DateUtils.ConvertEpochToDate(application?.lastReadingDate) : t("NA")}
                       className="border-none"
                     />
                     <Row
                       key={t("WS_SERV_DETAIL_CUR_METER_READ")}
-                      label={`${t("WS_SERV_DETAIL_CUR_METER_READ")}:`}
+                      label={`${t("WS_SERV_DETAIL_CUR_METER_READ")}`}
                       text={application?.currentReading || t("NA")}
                       className="border-none"
                     />
                     <Row
                       key={t("WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL")}
-                      label={`${t("WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL")}:`}
+                      label={`${t("WS_CONSUMPTION_DETAILS_CURRENT_READING_DATE_LABEL")}`}
                       text={application?.currentReadingDate ? Digit.DateUtils.ConvertEpochToDate(application?.currentReadingDate) : t("NA")}
                       className="border-none"
                     />
                     <Row
                       key={t("WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL")}
-                      label={`${t("WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL")}:`}
+                      label={`${t("WS_CONSUMPTION_DETAILS_CONSUMPTION_LABEL")}`}
                       text={consumption(application?.currentReading, application?.lastReading)}
                       className="border-none"
                     />
