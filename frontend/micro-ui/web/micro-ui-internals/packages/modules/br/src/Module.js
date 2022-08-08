@@ -1,15 +1,16 @@
-import { Header, CitizenHomeCard, PTIcon } from "@egovernments/digit-ui-react-components";
+import {  CitizenHomeCard, PTIcon } from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
-import CitizenApp from "./pages/citizen/index";
+import CitizenApp from "./pages/citizen";
 import Create from "./pages/citizen/create/index";
 import EmployeeApp from "./pages/employee";
-import BRCard from "./components/BRCard";
-
+import BrSelectName from "./pagecomponents/BrSelectName";
+import BrSelectHospital from "./pagecomponents/BrSelectHospital";
 const componentsToRegister = {
+  BrSelectHospital,
+  BrSelectName,
   BRCreate : Create,
- 
 };
 
 export const BRModule = ({ stateCode, userType, tenants }) => {
@@ -21,13 +22,13 @@ export const BRModule = ({ stateCode, userType, tenants }) => {
 
 
 
-  Digit.SessionStorage.set("BR_TENANTS", tenants);
-  useEffect(()=>userType === "employee"&&Digit.LocalizationService.getLocale({ 
-    modules: [`rainmaker-${Digit.ULBService.getCurrentTenantId()}`],
-     locale: Digit.StoreData.getCurrentLanguage(), 
-     tenantId: Digit.ULBService.getCurrentTenantId()
-    }),
-   []);
+  // Digit.SessionStorage.set("BR_TENANTS", tenants);
+  // useEffect(()=>userType === "employee"&&Digit.LocalizationService.getLocale({ 
+  //   modules: [`rainmaker-${Digit.ULBService.getCurrentTenantId()}`],
+  //    locale: Digit.StoreData.getCurrentLanguage(), 
+  //    tenantId: Digit.ULBService.getCurrentTenantId()
+  //   }),
+  //  []);
 
   if (userType === "employee") {
     return <EmployeeApp path={path} url={url} userType={userType} />;
@@ -36,11 +37,7 @@ export const BRModule = ({ stateCode, userType, tenants }) => {
 
 export const BRLinks = ({ matchPath, userType }) => {
   const { t } = useTranslation();
-  // const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("PT_CREATE_PROPERTY", {});
 
-  // useEffect(() => {
-  //   clearParams();
-  // }, []);
 
   const links = [
   
@@ -60,9 +57,4 @@ export const initBRComponents = () => {
     Digit.ComponentRegistryService.setComponent(key, value);
   });
 };
-export const BRComponents = {
 
-  BRModule,
-  BRLinks,
-
-};

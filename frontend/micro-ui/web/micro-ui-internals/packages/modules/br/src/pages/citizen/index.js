@@ -1,13 +1,13 @@
-import { AppContainer,BackButton, PrivateRoute } from "@egovernments/digit-ui-react-components";
+import { AppContainer, PrivateRoute } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import {  Switch, useRouteMatch } from "react-router-dom";
-import { shouldHideBackButton } from "../../utils";
+// import { shouldHideBackButton } from "../../utils";
 import { useTranslation } from "react-i18next";
 
-const hideBackButtonConfig = [
-  { screenPath: "property/new-application/acknowledgement" },
-  { screenPath: "property/edit-application/acknowledgement" },
-];
+// const hideBackButtonConfig = [
+//   { screenPath: "property/new-application/acknowledgement" },
+//   { screenPath: "property/edit-application/acknowledgement" },
+// ];
 
 const App = () => {
   const { path, url, ...match } = useRouteMatch();
@@ -19,7 +19,7 @@ const App = () => {
     <span className={"pt-citizen"}>
       <Switch>
         <AppContainer>
-        {!shouldHideBackButton(hideBackButtonConfig) ? <BackButton>Back</BackButton> : ""}
+        {/* {!shouldHideBackButton(hideBackButtonConfig) ? <BackButton>Back</BackButton> : ""} */}
           <PrivateRoute path={`${path}/birth`} component={Create} />
          
         </AppContainer>

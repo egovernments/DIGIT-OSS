@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { initLibraries } from "@egovernments/digit-ui-libraries";
- import { BRModule, initBRComponents ,BRComponents,BRLinks} from "@egovernments/digit-ui-module-br";
+ import { BRModule, initBRComponents ,BRLinks} from "@egovernments/digit-ui-module-br";
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { PaymentModule, PaymentLinks, paymentConfigs } from "@egovernments/digit-ui-module-common";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
@@ -60,7 +60,7 @@ const initDigitUI = () => {
     BRModule,
     PaymentLinks,
     BRLinks,
-    ...BRComponents,
+    
    
   
     // TLModule,

@@ -3,7 +3,7 @@ import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-const PTSelectStreet = ({ t, config, onSelect, userType, formData, formState, setError, clearErrors }) => {
+const BrSelectHospital = ({ t, config, onSelect, userType, formData, formState, setError, clearErrors }) => {
   const onSkip = () => onSelect();
   const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
   const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger } = useForm();
@@ -19,96 +19,47 @@ const PTSelectStreet = ({ t, config, onSelect, userType, formData, formState, se
     config.inputs[1].disable = window.location.href.includes("edit-application");
   } else {
     inputs = [
-      {
-        label: "Baby’s First Name",
-        type: "text",
-        name: "street",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_STREET_INVALID"),
-        },
-      },
-      {
-        label: "Baby’s Last Name",
-        type: "text",
-        name: "street",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_STREET_INVALID"),
-        },
-      },
-      {
-        label: "Father’s name",
-        type: "text",
-        name: "doorNo",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_DOOR_INVALID"),
-        },
-      },
-      {
-        label: "Mother’s name",
-        type: "text",
-        name: "doorNo",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_DOOR_INVALID"),
-        },
-      },
-      {
-        label: "Permanent Address",
-        type: "text",
-        name: "doorNo",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_DOOR_INVALID"),
-        },
-      },
-      {
-        label: "Hospital name",
-        type: "text",
-        name: "doorNo",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_DOOR_INVALID"),
-        },
-      },
-      {
-        label: "Hospital address",
-        type: "text",
-        name: "doorNo",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_DOOR_INVALID"),
-        },
-      },
-      {
-        label: "Attending doctor",
-        type: "text",
-        name: "doorNo",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_DOOR_INVALID"),
-        },
-      },
-      {
-        label: "City/Town/Village where baby was born",
-        type: "text",
-        name: "doorNo",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_DOOR_INVALID"),
-        },
-      },
+        {
+            label: "Hospital name",
+            type: "text",
+            name: "doorNo",
+            validation: {
+              pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
+              // maxlength: 256,
+              title: t("CORE_COMMON_DOOR_INVALID"),
+            },
+          },
+          {
+            label: "Hospital address",
+            type: "text",
+            name: "doorNo",
+            validation: {
+              pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
+              // maxlength: 256,
+              title: t("CORE_COMMON_DOOR_INVALID"),
+            },
+          },
+          {
+            label: "Attending doctor",
+            type: "text",
+            name: "doorNo",
+            validation: {
+              pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
+              // maxlength: 256,
+              title: t("CORE_COMMON_DOOR_INVALID"),
+            },
+          },
+          {
+            label: "City/Town/Village where baby was born",
+            type: "text",
+            name: "doorNo",
+            validation: {
+              pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
+              // maxlength: 256,
+              title: t("CORE_COMMON_DOOR_INVALID"),
+            },
+          },
+    
     ];
   }
 
@@ -165,7 +116,7 @@ const PTSelectStreet = ({ t, config, onSelect, userType, formData, formState, se
           <div className="field">
             <Controller
               control={control}
-              defaultValue={formData?.address?.[input.name]}
+              defaultValue={formData?.hospital?.[input.name]}
               name={input.name}
               rules={{ validate: convertValidationToRules(input) }}
               render={(_props) => (
@@ -189,15 +140,7 @@ const PTSelectStreet = ({ t, config, onSelect, userType, formData, formState, se
       );
     });
   }
-  return (
-    <FormStep
-      config={{ ...config, inputs }}
-      _defaultValues={{ street: formData?.address.street, doorNo: formData?.address.doorNo }}
-      onSelect={(data) => onSelect(config.key, data)}
-      onSkip={onSkip}
-      t={t}
-    />
-  );
+
 };
 
-export default PTSelectStreet;
+export default BrSelectHospital;

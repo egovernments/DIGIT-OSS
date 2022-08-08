@@ -9,7 +9,7 @@ import { initEngagementComponents } from "@egovernments/digit-ui-module-engageme
 // import { initWSComponents } from "@egovernments/digit-ui-module-ws"; 
 import {initCustomisationComponents} from "./Customisations";
 import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonpt";
-import { BRModule ,initBRComponents , BRComponents,BRLinks} from "@egovernments/digit-ui-module-br";
+import { BRModule ,initBRComponents ,BRLinks} from "@egovernments/digit-ui-module-br";
 
 initLibraries();
 //"WS" removed the ws enabledModules ;
@@ -23,8 +23,6 @@ window.Digit.ComponentRegistryService.setupRegistry({
   ...PTComponents,
   BRModule,
   BRLinks,
-  ...BRComponents,
-
 
 });
 

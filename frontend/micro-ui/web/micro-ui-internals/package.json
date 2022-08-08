@@ -23,10 +23,8 @@
     "dev:libraries": "cd packages/libraries && yarn start",
     "dev:components": "cd packages/react-components && yarn start",
     "dev:common": "cd packages/modules/common && yarn start",
-   
-    "dev:tl": "cd packages/modules/pt && yarn start",
     "dev:br": "cd packages/modules/br && yarn start",
-    
+    "dev:pt": "cd packages/modules/pt && yarn start",
     "dev:core": "cd packages/modules/core && yarn start",
     "dev:dss": "cd packages/modules/dss && yarn start",
     "dev:engagement": "cd packages/modules/engagement && yarn start",
@@ -38,6 +36,7 @@
     "build:core": "cd packages/modules/core && yarn build",
     "build:dss": "cd packages/modules/dss && yarn build",
     "build:br": "cd packages/modules/br && yarn build",    
+    "build:pt": "cd packages/modules/pt && yarn build",  
     "build:engagement": "cd packages/modules/engagement && yarn build",
     "deploy:jenkins": "./scripts/jenkins.sh"
   },
