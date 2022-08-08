@@ -32,7 +32,7 @@ const BannerPicker = (props) => {
     actionMessage = props.action === "SUBMIT" ? props.action : props.data?.fsm?.[0].applicationStatus;
   }
   let labelMessage = GetLabel(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t);
-  if (props.errorInfo && props.errorInfo !== null && props.errorInfo !== "" && typeof props.errorInfo === "string") {
+  if (props.errorInfo && props.errorInfo !== null && props.errorInfo !== "" && typeof props.errorInfo === "string" && props.action !== "SCHEDULE") {
     labelMessage = props.errorInfo;
   }
   return (
@@ -155,9 +155,9 @@ const Response = (props) => {
         <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
       </Link>
       {props.parentRoute.includes("employee") &&
-        (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
-        paymentAccess &&
-        isSuccess ? (
+      (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
+      paymentAccess &&
+      isSuccess ? (
         <div className="secondary-action">
           <Link to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`}>
             <SubmitBar label={t("ES_COMMON_PAY")} />
