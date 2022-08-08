@@ -1,156 +1,88 @@
-import { CardLabel, FormStep, LabelFieldPair, TextInput } from "@egovernments/digit-ui-react-components";
-import _ from "lodash";
-import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React from "react";
+import { LabelFieldPair, CardLabel, TextInput, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { useLocation } from "react-router-dom";
 
-const BrSelectName = ({ t, config, onSelect, userType, formData, formState, setError, clearErrors }) => {
-  const onSkip = () => onSelect();
-  const [focusIndex, setFocusIndex] = useState({ index: -1, type: "" });
-  const { control, formState: localFormState, watch, setError: setLocalError, clearErrors: clearLocalErrors, setValue, trigger } = useForm();
-  const formValue = watch();
-  const { errors } = localFormState;
-  const checkLocation = window.location.href.includes("tl/new-application") || window.location.href.includes("tl/renew-application-details");
-  const isRenewal = window.location.href.includes("edit-application") || window.location.href.includes("tl/renew-application-details");
+const BrSelectName = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
+  const { pathname: url } = useLocation();
+  const inputs = [
+    {
+      label: "Baby’s First Name",
+      type: "text",
+      name: "firstName",
+      validation: {
+        isRequired: true,
+        pattern: Digit.Utils.getPattern('Name'),
+        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
+      },
+      isMandatory: true,
+    },
+    {
+      label: "Baby’s Last Name",
+      type: "text",
+      name: "lastName",
+      validation: {
+        isRequired: true,
+        pattern: Digit.Utils.getPattern('Name'),
+        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
+      },
+      isMandatory: true,
+    },
+    {
+      label: "Father’s name",
+      type: "text",
+      name: "fatherName",
+      validation: {
+        isRequired: true,
+        pattern: Digit.Utils.getPattern('Name'),
+        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
+      },
+      isMandatory: true,
+    },
+    {
+      label: "Mother’s name",
+      type: "text",
+      name: "motherName",
+      validation: {
+        isRequired: true,
+        pattern: Digit.Utils.getPattern('Name'),
+        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
+      },
+      isMandatory: true,
+    },
+  ];
 
-  let inputs;
-  if (window.location.href.includes("tl")) {
-    inputs = config.inputs;
-    config.inputs[0].disable = window.location.href.includes("edit-application");
-    config.inputs[1].disable = window.location.href.includes("edit-application");
-  } else {
-    inputs = [
-      {
-        label: "Baby’s First Name",
-        type: "text",
-        name: "street",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_STREET_INVALID"),
-        },
-      },
-      {
-        label: "Baby’s Last Name",
-        type: "text",
-        name: "street",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_STREET_INVALID"),
-        },
-      },
-      {
-        label: "Father’s name",
-        type: "text",
-        name: "doorNo",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_DOOR_INVALID"),
-        },
-      },
-      {
-        label: "Mother’s name",
-        type: "text",
-        name: "doorNo",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_DOOR_INVALID"),
-        },
-      },
-      {
-        label: "Permanent Address",
-        type: "text",
-        name: "doorNo",
-        validation: {
-          pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-          // maxlength: 256,
-          title: t("CORE_COMMON_DOOR_INVALID"),
-        },
-      },
-    
-    ];
+  function setValue(value, input) {
+    onSelect(config.key, { ...formData[config.key], [input]: value });
   }
 
-  const convertValidationToRules = ({ validation, name, messages }) => {
-    if (validation) {
-      let { pattern: valPattern, maxlength, minlength, required: valReq } = validation || {};
-      let pattern = (value) => {
-        if (valPattern) {
-          if (valPattern instanceof RegExp) return valPattern.test(value) ? true : messages?.pattern || `${name.toUpperCase()}_PATTERN`;
-          else if (typeof valPattern === "string")
-            return new RegExp(valPattern)?.test(value) ? true : messages?.pattern || `${name.toUpperCase()}_PATTERN`;
-        }
-        return true;
-      };
-      let maxLength = (value) => (maxlength ? (value?.length <= maxlength ? true : messages?.maxlength || `${name.toUpperCase()}_MAXLENGTH`) : true);
-      let minLength = (value) => (minlength ? (value?.length >= minlength ? true : messages?.minlength || `${name.toUpperCase()}_MINLENGTH`) : true);
-      let required = (value) => (valReq ? (!!value ? true : messages?.required || `${name.toUpperCase()}_REQUIRED`) : true);
-
-      return { pattern, required, minLength, maxLength };
-    }
-    return {};
-  };
-
-  useEffect(() => {
-    trigger();
-  }, []);
-
-  useEffect(() => {
-    if (userType === "employee") {
-      if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) setError(config.key, { type: errors });
-      else if (!Object.keys(errors).length && formState.errors[config.key]) clearErrors(config.key);
-    }
-  }, [errors]);
-
-  useEffect(() => {
-    const keys = Object.keys(formValue);
-    const part = {};
-    keys.forEach((key) => (part[key] = formData[config.key]?.[key]));
-
-    if (!_.isEqual(formValue, part)) {
-      onSelect(config.key, { ...formData[config.key], ...formValue });
-      trigger();
-    }
-  }, [formValue]);
-
-  if (userType === "employee") {
-    return inputs?.map((input, index) => {
-      return (
-        <LabelFieldPair key={index}>
-          <CardLabel className="card-label-smaller">
-            {!checkLocation ? t(input.label) : `${t(input.label)}:`}
-            {config.isMandatory ? " * " : null}
-          </CardLabel>
-          <div className="field">
-            <Controller
-              control={control}
-              defaultValue={formData?.address?.[input.name]}
-              name={input.name}
-              rules={{ validate: convertValidationToRules(input) }}
-              render={(_props) => (
-                <TextInput
-                  id={input.name}
-                  key={input.name}
-                  value={_props.value}
-                  onChange={(e) => {
-                    setFocusIndex({ index });
-                    _props.onChange(e.target.value);
-                  }}
-                  onBlur={_props.onBlur}
-                  disable={isRenewal}
-                  autoFocus={focusIndex?.index == index}
-                  {...input.validation}
-                />
-              )}
-            />
-          </div>
-        </LabelFieldPair>
-      );
-    });
-  }
-
+  return (
+    <div>
+      {inputs?.map((input, index) => {
+        let currentValue=formData && formData[config.key] && formData[config.key][input.name]||'';
+        return(<React.Fragment key={index}>
+          {errors[input.name] && <CardLabelError>{t(input.error)}</CardLabelError>}
+          <LabelFieldPair>
+            <CardLabel className="card-label-smaller">
+              {t(input.label)}
+              {input.isMandatory ? " * " : null}
+            </CardLabel>
+            <div className="field">
+              <TextInput
+                key={input.name}
+                value={formData && formData[config.key] ? formData[config.key][input.name] : undefined}
+                onChange={(e) => setValue(e.target.value, input.name)}
+                disable={false}
+                defaultValue={undefined}
+                {...input.validation}
+              />
+              
+            {currentValue&&currentValue.length>0&&!currentValue.match(Digit.Utils.getPattern('Name'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px'}}>{t("CORE_COMMON_APPLICANT_NAME_INVALID")}</CardLabelError>}
+            </div>
+          </LabelFieldPair>
+        </React.Fragment>
+      )})}
+    </div>
+  );
 };
 
 export default BrSelectName;

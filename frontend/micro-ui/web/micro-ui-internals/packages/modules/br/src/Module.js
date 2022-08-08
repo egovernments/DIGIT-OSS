@@ -7,7 +7,9 @@ import Create from "./pages/citizen/create/index";
 import EmployeeApp from "./pages/employee";
 import BrSelectName from "./pagecomponents/BrSelectName";
 import BrSelectHospital from "./pagecomponents/BrSelectHospital";
+import BrSelectDocuments from "./pagecomponents/SelectDocuments";
 const componentsToRegister = {
+  BrSelectDocuments,
   BrSelectHospital,
   BrSelectName,
   BRCreate : Create,
@@ -43,7 +45,11 @@ export const BRLinks = ({ matchPath, userType }) => {
   
     {
       link: `${matchPath}/birth`,
-      i18nKey: t("Create_BirthRegistration"),
+      i18nKey: t("Create BirthRegistration"),
+    },
+    {
+      link: `${matchPath}/my-applications`,
+      i18nKey: t("ACTION_TEXT_WS_MY_APPLICATION"),
     },
 
    

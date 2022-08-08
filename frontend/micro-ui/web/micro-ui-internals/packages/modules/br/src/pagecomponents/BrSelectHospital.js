@@ -29,16 +29,16 @@ const BrSelectHospital = ({ t, config, onSelect, userType, formData, formState, 
               title: t("CORE_COMMON_DOOR_INVALID"),
             },
           },
-          {
-            label: "Hospital address",
-            type: "text",
-            name: "doorNo",
-            validation: {
-              pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
-              // maxlength: 256,
-              title: t("CORE_COMMON_DOOR_INVALID"),
-            },
-          },
+          // {
+          //   label: "Hospital address",
+          //   type: "text",
+          //   name: "doorNo",
+          //   validation: {
+          //     pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
+          //     // maxlength: 256,
+          //     title: t("CORE_COMMON_DOOR_INVALID"),
+          //   },
+          // },
           {
             label: "Attending doctor",
             type: "text",
@@ -49,8 +49,18 @@ const BrSelectHospital = ({ t, config, onSelect, userType, formData, formState, 
               title: t("CORE_COMMON_DOOR_INVALID"),
             },
           },
+          // {
+          //   label: "City/Town/Village where baby was born",
+          //   type: "text",
+          //   name: "doorNo",
+          //   validation: {
+          //     pattern: "[a-zA-Z0-9 !@#$%^&*()_+\-={};':\\\\|,.<>/?]{1,64}",
+          //     // maxlength: 256,
+          //     title: t("CORE_COMMON_DOOR_INVALID"),
+          //   },
+          // },
           {
-            label: "City/Town/Village where baby was born",
+            label: "Date Of Birth",
             type: "text",
             name: "doorNo",
             validation: {

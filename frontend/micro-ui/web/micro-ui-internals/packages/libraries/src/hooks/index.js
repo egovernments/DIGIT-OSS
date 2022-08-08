@@ -179,7 +179,12 @@ import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
 import usewsTenants from "./ws/useTenants";
 import useWaterSearch from "./ws/useWaterSearch";
 import useSewarageSearch from "./ws/useSewarageSearch";
+import userBRCreate from "./br/userBrcreate";
 
+const br = {
+userBRCreate,
+
+};
 const pgr = {
   useComplaintDetails,
   useComplaintsList,
@@ -406,7 +411,8 @@ const Hooks = {
   engagement,
   survey,
   noc,
-  ws
+  ws,
+  br,
 };
 
 export default Hooks;

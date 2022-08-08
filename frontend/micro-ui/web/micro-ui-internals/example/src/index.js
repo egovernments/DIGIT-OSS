@@ -6,8 +6,6 @@ import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
 import { PaymentModule, PaymentLinks, paymentConfigs } from "@egovernments/digit-ui-module-common";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
-import { PTModule, PTLinks, PTComponents } from "@egovernments/digit-ui-module-pt";
-import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonpt";
 
 // import {initCustomisationComponents} from "./customisations";
 
@@ -22,7 +20,7 @@ import "@egovernments/digit-ui-css/example/index.css";
 
 var Digit = window.Digit || {};
 
-const enabledModules = [ "Payment", "PT","QuickPayLinks","HRMS", "DSS","Engagement", "CommonPT","BR"];
+const enabledModules = [ "Payment","QuickPayLinks", "DSS","Engagement","BR"];
 
 const initTokens = (stateCode) => {
   const userType = window.sessionStorage.getItem("userType") || process.env.REACT_APP_USER_TYPE || "CITIZEN";
@@ -53,9 +51,7 @@ const initTokens = (stateCode) => {
 
 const initDigitUI = () => {
   window?.Digit.ComponentRegistryService.setupRegistry({
-    PTModule,
-    PTLinks,
-    ...PTComponents,
+
     PaymentModule,
     BRModule,
     PaymentLinks,
@@ -70,7 +66,6 @@ const initDigitUI = () => {
 
   initDSSComponents();
   initEngagementComponents();
-  initCommonPTComponents();
   initBRComponents();
 // initCustomisationComponents();
 

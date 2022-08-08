@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { initDSSComponents } from "@egovernments/digit-ui-module-dss";
-import { PTModule, PTLinks, PTComponents } from "@egovernments/digit-ui-module-pt";
 import { PaymentModule, PaymentLinks, paymentConfigs } from "@egovernments/digit-ui-module-common";
 import { DigitUI } from "@egovernments/digit-ui-module-core";
 import { initLibraries } from "@egovernments/digit-ui-libraries";
@@ -13,14 +12,11 @@ import { BRModule ,initBRComponents ,BRLinks} from "@egovernments/digit-ui-modul
 
 initLibraries();
 //"WS" removed the ws enabledModules ;
-const enabledModules = ["Payment", "PT","QuickPayLinks","HRMS", "DSS","Engagement", "CommonPT","BR"];
+const enabledModules = ["Payment","QuickPayLinks","HRMS", "DSS","Engagement", "CommonPT","BR"];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PaymentModule,
   PaymentLinks,
-  PTModule,
-  PTLinks,
-  ...PTComponents,
   BRModule,
   BRLinks,
 
@@ -29,7 +25,7 @@ window.Digit.ComponentRegistryService.setupRegistry({
 initBRComponents();
 initDSSComponents();
 initEngagementComponents();
-initCommonPTComponents();
+
 // initWSComponents();
 
 initCustomisationComponents();

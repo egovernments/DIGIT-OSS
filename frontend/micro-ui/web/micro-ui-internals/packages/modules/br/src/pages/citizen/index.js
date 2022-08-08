@@ -1,4 +1,4 @@
-import { AppContainer, PrivateRoute } from "@egovernments/digit-ui-react-components";
+import { AppContainer, BackButton,PrivateRoute } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import {  Switch, useRouteMatch } from "react-router-dom";
 // import { shouldHideBackButton } from "../../utils";
@@ -20,6 +20,7 @@ const App = () => {
       <Switch>
         <AppContainer>
         {/* {!shouldHideBackButton(hideBackButtonConfig) ? <BackButton>Back</BackButton> : ""} */}
+        <BackButton>Back</BackButton> 
           <PrivateRoute path={`${path}/birth`} component={Create} />
          
         </AppContainer>

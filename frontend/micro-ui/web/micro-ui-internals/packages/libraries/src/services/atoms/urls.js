@@ -93,6 +93,10 @@ const Urls = {
     create: "/egov-hrms/employees/_create",
     update: "/egov-hrms/employees/_update",
   },
+  br: {
+    create: "https://62f0e3e5e2bca93cd23f2ada.mockapi.io/user",
+    
+  },
   tl: {
     create: "/tl-services/v1/_create",
     search: "/tl-services/v1/_search",
