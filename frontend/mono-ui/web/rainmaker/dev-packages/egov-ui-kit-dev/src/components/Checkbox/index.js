@@ -11,7 +11,7 @@ const defaultStyle = {
 };
 
 const selectedIconStyle = {
-  fill: "#fe7a51",
+  fill: "#db251c",
 };
 
 const CheckboxUi = ({ options, labelStyle, onCheck, style = {}, checkedIcon, iconStyle, containerClassName, selected, id }) => {
@@ -22,7 +22,7 @@ const CheckboxUi = ({ options, labelStyle, onCheck, style = {}, checkedIcon, ico
           key={index}
           id={id + index}
           value={option.value}
-          label={<Label color={selected.indexOf(option.value) > -1 ? "#fe7a51" : "#767676"} label={option.label} />}
+          label={<Label color={selected.indexOf(option.value) > -1 ? "#db251c" : "#767676"} label={option.label} />}
           onCheck={() => {
             onCheck(option.value);
           }}

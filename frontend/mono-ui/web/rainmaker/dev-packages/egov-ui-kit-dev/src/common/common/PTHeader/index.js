@@ -78,7 +78,7 @@ download?download():generatePdfFromDiv("download", subHeaderValue, "#property-re
             },
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { height: 65, marginRight: 20, color: "#FE7A51" } },
+            props: { variant: "outlined", style: { height: 65, marginRight: 20, color: "#db251c" } },
             menu: downloadButton.menu,
           }}
         />
@@ -90,7 +90,7 @@ download?download():generatePdfFromDiv("download", subHeaderValue, "#property-re
             },
             leftIcon: "print",
             rightIcon: "arrow_drop_down",
-            props: { variant: "outlined", style: { height: 65, marginLeft: 10, color: "#FE7A51" } },
+            props: { variant: "outlined", style: { height: 65, marginLeft: 10, color: "#db251c" } },
             menu: printButton.menu,
           }}
         />

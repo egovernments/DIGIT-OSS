@@ -72,7 +72,7 @@ export const searchResults = {
 
                 setRoute(`/receipts/viewReceipt?receiptNumbers=${tableMeta.rowData[0]}&tenantId=${tableMeta.rowData[8]}&businessService=${tableMeta.rowData[9]}`);
               }
-            }} style={{ color: tableMeta.rowData[6] == 'CANCEL' ? 'rgb(254, 122, 81)' : "inherit", cursor: tableMeta.rowData[6] == 'CANCEL' ? 'pointer' : "initial" }}>
+            }} style={{ color: tableMeta.rowData[6] == 'CANCEL' ? 'rgb(225, 85, 76)' : "inherit", cursor: tableMeta.rowData[6] == 'CANCEL' ? 'pointer' : "initial" }}>
               {getLocaleLabels("NA", `RC_${value}`)}
             </div>
           )

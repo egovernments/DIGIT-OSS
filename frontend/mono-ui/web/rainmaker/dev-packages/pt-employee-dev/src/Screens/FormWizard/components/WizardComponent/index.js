@@ -16,7 +16,7 @@ const theme = createMuiTheme({
         color: '#39CB74!important',
       },
       active: {
-        color: '#fe7a51!important',
+        color: '#db251c!important',
       },
     },
   },
@@ -81,27 +81,27 @@ const WizardComponent = ({
         <div className="button-container col-xs-10" style={{ float: "right" }}>
 
           {selected != 5 && selected != 4 && <Button
-            label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
+            label={<Label buttonLabel={true} label={backLabel} color="#db251c" />}
             onClick={() => {
               selected - 1 === -1 ? history.push("/pt-mutation/propertySearch") : onTabClick(selected - 1);
             }}
-            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-            buttonStyle={{ border: "1px solid #fe7a51" }}
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#db251c" }}
+            buttonStyle={{ border: "1px solid #db251c" }}
             style={{ marginRight: 45, width: "30%" }}
           />}
           {/* {selected == 4 && <Button
-            label={<Label buttonLabel={true} label={backLabel} color="#fe7a51" />}
+            label={<Label buttonLabel={true} label={backLabel} color="#db251c" />}
             onClick={() => {
               downloadAcknowledgementForm();
             }}
-            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-            buttonStyle={{ border: "1px solid #fe7a51" }}
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#db251c" }}
+            buttonStyle={{ border: "1px solid #db251c" }}
             style={{ marginRight: 45, width: "30%" }}
           />} */}
           <Button
             label={<Label buttonLabel={true} label={nextLabel} color="#fff" />}
             style={{ width: "30%" }}
-            backgroundColor="#fe7a51"
+            backgroundColor="#db251c"
             labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fff" }}
             buttonStyle={{ border: 0 }}
             // onClick={

@@ -16,7 +16,7 @@ import orderby from "lodash/orderBy";
 import "./index.css";
 
 const iconStyle = {
-  color: "#fe7a51",
+  color: "#db251c",
   height: 45,
   width: 45,
   overflow: "visible"

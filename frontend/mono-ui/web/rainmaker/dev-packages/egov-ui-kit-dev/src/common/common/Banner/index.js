@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router";
 import { Icon, Image } from "components";
-import logo from "egov-ui-kit/assets/images/punjab-logo.png";
+import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
 
 const Banner = ({ children, hideBackButton, history, className = "",logoUrl,bannerUrl }) => {

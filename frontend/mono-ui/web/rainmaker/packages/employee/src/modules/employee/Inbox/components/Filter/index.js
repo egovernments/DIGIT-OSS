@@ -20,7 +20,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                     underlineStyle={{
                         position: "absolute",
                         bottom: -1,
-                        borderBottom: "1px solid #FE7A51",
+                        borderBottom: "1px solid #db251c",
                         width: "100%"
                     }}
                     prefix ={"CS_COMMON_INBOX_"}
@@ -39,7 +39,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                     underlineStyle={{
                         position: "absolute",
                         bottom: -1,
-                        borderBottom: "1px solid #FE7A51",
+                        borderBottom: "1px solid #db251c",
                         width: "90%"
                     }}
                 />
@@ -57,7 +57,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
                     underlineStyle={{
                         position: "absolute",
                         bottom: -1,
-                        borderBottom: "1px solid #FE7A51",
+                        borderBottom: "1px solid #db251c",
                         width: "100%"
                     }}
                     prefix ={"COMMON_"}
@@ -65,7 +65,7 @@ const Filter = ({ filter, handleChangeFilter, clearFilter }) => {
             </div>
             <div className="col-md-3">
                 <div className="rainmaker-displayInline filter-clear-icon" onClick={clearFilter} >
-                    <Label label="CS_INBOX_CLEAR" color="#fe7a51" fontSize="15px" />
+                    <Label label="CS_INBOX_CLEAR" color="#db251c" fontSize="15px" />
                 </div>
             </div>
         </div>

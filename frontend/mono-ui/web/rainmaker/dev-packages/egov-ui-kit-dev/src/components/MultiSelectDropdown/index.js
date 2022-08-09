@@ -40,7 +40,7 @@ class MultiSelectDropDown extends React.Component {
           value={option.value}
           primaryText={ <Label label={value} />}
           >
-          <Checkbox checked={value.indexOf(option.value) > -1} style={{color:'rgb(254, 122, 81)'}}/>
+          <Checkbox checked={value.indexOf(option.value) > -1} style={{color:'rgb(225, 85, 76)'}}/>
           <ListItemText primary={ <Label label={option.label} color="rgba(0,0,0,0.87)" /> }/>
         </MenuItem>
       );

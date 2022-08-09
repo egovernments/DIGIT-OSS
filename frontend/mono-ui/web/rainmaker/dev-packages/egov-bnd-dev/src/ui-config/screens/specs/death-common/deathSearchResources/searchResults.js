@@ -189,7 +189,7 @@ const getActionButton = (value, tableMeta) => {
     <a
       href="javascript:void(0)"
       style={{
-        color: "#FE7A51",
+        color: "#db251c",
         cursor: "pointer",
       }}
       onClick={(value) => {
@@ -230,7 +230,7 @@ const getViewButton = (value, tableMeta) => {
     <a
       href="javascript:void(0)"
       style={{
-        color: "#FE7A51",
+        color: "#db251c",
         cursor: "pointer",
       }}
       onClick={(value) => {

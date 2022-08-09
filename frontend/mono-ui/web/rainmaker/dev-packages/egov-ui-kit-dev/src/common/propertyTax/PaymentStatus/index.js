@@ -57,18 +57,18 @@ const PaymentStatus = ({ assessmentYear,
           <Button
             label={<Label buttonLabel={true}
               label='PT_ASSESS_PAY_FOR_NEW_YEAR'
-              color="#fe7a51" />
+              color="#db251c" />
             }
             className="pmt-status-back"
             onClick={() => { toggleYearDialogue(assessmentNumber) }}
-            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fe7a51" }}
-            buttonStyle={{ border: "1px solid #fe7a51" }}
+            labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#db251c" }}
+            buttonStyle={{ border: "1px solid #db251c" }}
             style={{}}
           />
           <Button
             label={<Label buttonLabel={true} label='PT_DOWNLOAD_RECEIPT' color="#fff" />}
             className="pmt-status-next"
-            backgroundColor="#fe7a51"
+            backgroundColor="#db251c"
             labelStyle={{ letterSpacing: 0.7, padding: 0, color: "#fff" }}
             buttonStyle={{ border: 0 }}
             onClick={() => {

@@ -10,9 +10,9 @@ import "./index.css";
 
 const styles = {
   root: {
-    color: "#FE7A51",
+    color: "#db251c",
     "&$checked": {
-      color: "#FE7A51"
+      color: "#db251c"
     }
   },
   checked: {}

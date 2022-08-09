@@ -155,7 +155,7 @@ export const chequeDetails = getCommonContainer({
     iconObj: {
       iconName: "search",
       position: "end",
-      color: "#FE7A51",
+      color: "#db251c",
       onClickDefination: {
         action: "condition",
         callBack: (state, dispatch) => {
@@ -235,7 +235,7 @@ export const demandDraftDetails = getCommonContainer({
     iconObj: {
       iconName: "search",
       position: "end",
-      color: "#FE7A51",
+      color: "#db251c",
       onClickDefination: {
         action: "condition",
         callBack: (state, dispatch) => {

@@ -3,7 +3,7 @@ import Field from "egov-ui-kit/utils/field";
 import { Button, Card, Image } from "components";
 import Label from "egov-ui-kit/utils/translationNode";
 import { startSMSRecevier } from "egov-ui-kit/utils/commons";
-import logo from "egov-ui-kit/assets/images/mseva-punjab.png";
+import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
 
 const LoginForm = ({ handleFieldChange, form }) => {

@@ -28,8 +28,8 @@ class LanguageSelection extends Component {
     const { onLanguageSelect, onClick } = this;
     const { bannerUrl, logoUrl, languages } = this.props;
     return (
-      <Banner className="language-selection" bannerUrl={bannerUrl} logoUrl={logoUrl}>
-        <LanguageSelectionForm items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} logoUrl={logoUrl}/>
+      <Banner className="language-selection" bannerUrl={bannerUrl} >
+        <LanguageSelectionForm items={languages} value={value} onLanguageSelect={onLanguageSelect} onClick={onClick} />
       </Banner>
     );
   }
@@ -38,9 +38,9 @@ class LanguageSelection extends Component {
 const mapStateToProps = ({ common }) => {
   const { stateInfoById } = common;
   let bannerUrl = get(stateInfoById, "0.bannerUrl");
-  let logoUrl = get(stateInfoById, "0.logoUrl");
+  // let logoUrl = get(stateInfoById, "0.logoUrl");
   let languages = get(stateInfoById, "0.languages", []);
-  return { bannerUrl, logoUrl, languages };
+  return { bannerUrl, languages };
 };
 
 const mapDispatchToProps = (dispatch) => {

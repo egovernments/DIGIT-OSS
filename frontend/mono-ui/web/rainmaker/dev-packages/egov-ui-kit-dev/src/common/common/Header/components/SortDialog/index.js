@@ -22,7 +22,7 @@ const styles = {
     height: "16px",
   },
   selectedLabelStyle: {
-    color: "#fe7a51",
+    color: "#db251c",
   },
   radioButtonLabelStyle: {
     fontSize: "16px",
@@ -44,14 +44,14 @@ class SortDialog extends Component {
       <Button
         id="logout-no-button"
         className="logout-no-button"
-        label={<Label buttonLabel={true} label={"CORE_LOGOUTPOPUP_CANCEL"} color="#FE7A51" />}
+        label={<Label buttonLabel={true} label={"CORE_LOGOUTPOPUP_CANCEL"} color="#db251c" />}
         backgroundColor={"#fff"}
         style={{ boxShadow: "none" }}
       />,
       <Button
         id="logout-yes-button"
         className="logout-yes-button"
-        label={<Label buttonLabel={true} label={"CORE_POPUP_OK"} color="#FE7A51" />}
+        label={<Label buttonLabel={true} label={"CORE_POPUP_OK"} color="#db251c" />}
         backgroundColor={"#fff"}
         onclick={() => {
           getComplaintDisplayOrder(this.state.valueSelected);
@@ -101,7 +101,7 @@ class SortDialog extends Component {
           <Button
             id="logout-no-button"
             className="logout-no-button"
-            label={<Label buttonLabel={true} label={"CORE_LOGOUTPOPUP_CANCEL"} color="#FE7A51" />}
+            label={<Label buttonLabel={true} label={"CORE_LOGOUTPOPUP_CANCEL"} color="#db251c" />}
             backgroundColor={"#fff"}
             onClick={closeSortDialog}
             style={{ boxShadow: "none" }}
@@ -109,7 +109,7 @@ class SortDialog extends Component {
           <Button
             id="logout-yes-button"
             className="logout-yes-button"
-            label={<Label buttonLabel={true} label={"CORE_POPUP_OK"} color="#FE7A51" />}
+            label={<Label buttonLabel={true} label={"CORE_POPUP_OK"} color="#db251c" />}
             backgroundColor={"#fff"}
             onClick={() => {
               getComplaintDisplayOrder(this.state.valueSelected);

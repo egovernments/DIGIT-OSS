@@ -105,7 +105,7 @@
   cursor: pointer;
   display: flex;
   justify-content: flex-end;
-  color: #fe7a51;
+  color: #db251c;
 }
 
 .grayout {
@@ -149,11 +149,11 @@
   }
 
   input[type="radio"]:checked {
-    border: 1px solid #fe7a51;
+    border: 1px solid #db251c;
   }
 
   input[type="radio"]:checked:before {
-    background: #fe7a51;
+    background: #db251c;
   }
 
   .rainmaker-card {
@@ -167,7 +167,7 @@
 .propertyAddress {
   .textfield-text div {
     width: 60px;
-    color: #fe7a51 !important;
+    color: #db251c !important;
     margin-right: 12px !important;
   }
 }
@@ -175,7 +175,7 @@
 .checkbox-container > div > div > div {
   margin-right: 4px !important;
   div > svg:nth-of-type(2) {
-    fill: #fe7a51 !important;
+    fill: #db251c !important;
   }
 }
 
@@ -187,7 +187,7 @@
   }
 }
 // input[type='radio']:checked:after {
-//   background-color: #fe7a51;
+//   background-color: #db251c;
 //   content: '';
 // }
 
@@ -218,7 +218,7 @@ div[class^="MuiPaper-root"],
   [class*="MuiStepIcon-active"] {
     circle,
     path {
-      color: #fe7a51;
+      color: #db251c;
     }
   }
   
@@ -336,9 +336,9 @@ div#typeOfOwnership div[class^="MuiFormControl-root"] {width: 100% !important;}
 
 }
 input[type="radio"]:checked {
-  border: 1px solid #fe7a51;
+  border: 1px solid #db251c;
 }
 
 input[type="radio"]:checked:before {
-  background: #fe7a51;
+  background: #db251c;
 }

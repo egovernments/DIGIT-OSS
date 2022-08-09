@@ -37,11 +37,11 @@ class ArrearsCardContainer extends Component {
         labelName={'CS_NO_ARREARS'}
         labelKey={'CS_NO_ARREARS'}
       /></div>}
-      {this.state.showArrearsCard && <button style={{ float: "right", color: '#FE7A51', border: '0px' }} onClick={this.buttonOnClick}><LabelContainer
+      {this.state.showArrearsCard && <button style={{ float: "right", color: '#db251c', border: '0px' }} onClick={this.buttonOnClick}><LabelContainer
         labelName={'CS_HIDE_CARD'}
         labelKey={'CS_HIDE_CARD'}
       /></button>}
-      {!this.state.showArrearsCard && <button style={{ float: "right", color: '#FE7A51', border: '0px' }} onClick={this.buttonOnClick}><LabelContainer
+      {!this.state.showArrearsCard && <button style={{ float: "right", color: '#db251c', border: '0px' }} onClick={this.buttonOnClick}><LabelContainer
         labelName={'CS_SHOW_CARD'}
         labelKey={'CS_SHOW_CARD'}
       /></button>}

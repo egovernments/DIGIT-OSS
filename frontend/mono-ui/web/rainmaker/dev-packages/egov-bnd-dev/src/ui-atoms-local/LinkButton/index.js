@@ -16,7 +16,7 @@ const styles = {
 const clickHereStyles = {
   cursor: "pointer",
   textDecoration: "none",
-  color: "#FE7A51"
+  color: "#db251c"
 }
 class LinkButton extends React.Component {
 

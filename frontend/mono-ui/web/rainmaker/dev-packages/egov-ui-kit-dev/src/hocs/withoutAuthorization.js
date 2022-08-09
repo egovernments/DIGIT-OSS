@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 // import AppBar from "@material-ui/core/AppBar";
 import "./index.css";
 import { getLocale, getTenantId, getUserInfo, setStoredModulesList, setLocale } from "egov-ui-kit/utils/localStorageUtils";
-import digitLogo from "egov-ui-kit/assets/images/Digit_logo.png";
+import digitLogo from "egov-ui-kit/assets/images/logo_black.png";
 import Label from "egov-ui-kit/utils/translationNode";
 import { isPublicSearch } from "egov-ui-framework/ui-utils/commons";
 import get from "lodash/get";
@@ -11,7 +11,7 @@ import { fetchLocalizationLabel, setLocalizationLabels } from "egov-ui-kit/redux
 import { DropDown, AppBar } from "components";
 import { getQueryArg } from "egov-ui-kit/utils/commons";
 import Toolbar from "material-ui/Toolbar";
-import msevaLogo from "egov-ui-kit/assets/images/mseva-punjab.png";
+import msevaLogo from "egov-ui-kit/assets/images/logo_black.png";
 import { getModuleName } from "../utils/commons";
 
 const getUlbGradeLabel = (ulbGrade) => {

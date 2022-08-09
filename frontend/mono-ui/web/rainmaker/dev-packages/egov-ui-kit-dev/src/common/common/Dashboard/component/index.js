@@ -56,7 +56,7 @@ const ModuleCard = ({ items, onButton1Click, onPGRClick, onButton2Click, history
                           primary={true}
                           style={{ align: "left" }}
                           style={item.button2 ? moduleCardButtonStyle1 : moduleCardButtonStyle2}
-                          buttonStyle={{ border: "1px solid #fe7a51" }}
+                          buttonStyle={{ border: "1px solid #db251c" }}
                           id={item.id}
                           labelStyle={{
                             padding: "0 12px 0 12px ",
@@ -74,10 +74,10 @@ const ModuleCard = ({ items, onButton1Click, onPGRClick, onButton2Click, history
                             onClick={() => {
                               onButton2Click(item, history);
                             }}
-                            label={<Label label={item.button2} color="#fe7a51" />}
+                            label={<Label label={item.button2} color="#db251c" />}
                             style={{ align: "right" }}
                             style={moduleCardButtonStyle1}
-                            buttonStyle={{ border: "1px solid #fe7a51" }}
+                            buttonStyle={{ border: "1px solid #db251c" }}
                             className="moduleSecondButton"
                             labelStyle={{
                               padding: "0 12px 0 12px ",

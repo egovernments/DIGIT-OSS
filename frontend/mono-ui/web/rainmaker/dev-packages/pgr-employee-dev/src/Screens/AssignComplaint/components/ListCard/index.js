@@ -164,9 +164,9 @@ export default class ListCard extends Component {
       if (dataSource[i].id === id) {
         dataSource[i] = {
           ...dataSource[i],
-          style: { background: "#f8f8f8", borderLeft: "3px solid #fe7a51" },
+          style: { background: "#f8f8f8", borderLeft: "3px solid #db251c" },
           leftAvatar: (
-            <div className="avatar-selected" style={{ width: 33, height: 33, background: "#fe7a51", borderRadius: "50%", top: 8, left: 17 }}>
+            <div className="avatar-selected" style={{ width: 33, height: 33, background: "#db251c", borderRadius: "50%", top: 8, left: 17 }}>
               <Icon action="navigation" name="check" color={"#ffffff"} style={{ width: 16, height: 16 }} />
             </div>
           ),

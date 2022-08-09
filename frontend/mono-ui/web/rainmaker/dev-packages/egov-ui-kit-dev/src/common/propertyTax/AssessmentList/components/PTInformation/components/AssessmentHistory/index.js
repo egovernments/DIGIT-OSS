@@ -73,7 +73,7 @@ class AssessmentHistory extends Component {
             height: "35px",
             backgroundColor: "rgb(242, 242, 242)",
             boxShadow: "none",
-            border: "1px solid rgb(254, 122, 81)",
+            border: "1px solid rgb(225, 85, 76)",
             borderRadius: "2px",
             outline: "none",
             alignItems: "right",
@@ -90,7 +90,7 @@ class AssessmentHistory extends Component {
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 1, marginTop: 1 }}>
                         <div className="assess-history" style={{ float: "right" }}>
                             <Button
-                                label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.REASSESS].parentButton} color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
+                                label={<Label buttonLabel={true} label={formWizardConstants[PROPERTY_FORM_PURPOSE.REASSESS].parentButton} color="rgb(225, 85, 76)" fontSize="16px" height="40px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
                                     if (this.props.selPropertyDetails.status != "ACTIVE") {

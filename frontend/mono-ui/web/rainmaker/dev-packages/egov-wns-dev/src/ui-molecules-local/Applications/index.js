@@ -139,7 +139,7 @@ class Applications extends React.Component {
                         <LabelContainer
                           labelKey="WS_VIEW_DETAILS"
                           style={{
-                            color: "#fe7a51",
+                            color: "#db251c",
                             fontSize: 14,
                           }}
                         />
@@ -156,7 +156,7 @@ class Applications extends React.Component {
                               labelName="VIEW DETAILS"
                                 // labelKey="CS_COMMON_PAY"
                                 style={{
-                                  color: "#fe7a51",
+                                  color: "#db251c",
                                   fontSize: 14,
                                 }}
                               />

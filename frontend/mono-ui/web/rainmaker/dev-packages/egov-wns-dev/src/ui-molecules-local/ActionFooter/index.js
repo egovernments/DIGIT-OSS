@@ -142,7 +142,7 @@ class Footer extends React.Component {
         variant: "outlined",
         style: {
           marginRight: 15,
-          backgroundColor: "#FE7A51",
+          backgroundColor: "#db251c",
           color: "#fff",
           border: "none",
           height: "60px",

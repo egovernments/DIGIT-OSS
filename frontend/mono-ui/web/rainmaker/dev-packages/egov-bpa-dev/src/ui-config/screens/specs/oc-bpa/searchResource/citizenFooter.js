@@ -83,7 +83,7 @@ export const sendToArchContainer = () => {
           data: {
             label: {labelName : "Take Action" , labelKey :"WF_TAKE_ACTION"},
             rightIcon: "arrow_drop_down",
-            props: { variant: "contained", style: { height: "60px", color : "#fff", backgroundColor: "#FE7A51", } },
+            props: { variant: "contained", style: { height: "60px", color : "#fff", backgroundColor: "#db251c", } },
             menu: {}
           }
         }

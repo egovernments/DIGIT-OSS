@@ -24,14 +24,14 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl,history,
         <div>
           <div className="rainmaker-displayInline" style={{ justifyContent: "center"  ,alignItems:"center",marginBottom: "24px"}}>
             <div style={{ }}>
-              <Image className="mseva-logo" source={logoUrl?logoUrl:`${logo}`} />
+              <Image className="mseva-logo" source={`${logo}`} />
             </div >
-          <div style={{marginLeft:"7px" }}>
-          <Label bold={true}  fontSize= "23px" label="|" />
-          </div>
-           <div style={{marginLeft:"7px" }}>
-              <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
-           </div>
+            {/* <div style={{marginLeft:"7px" }}>
+            <Label bold={true}  fontSize= "23px" label="|" />
+            </div>
+            <div style={{marginLeft:"7px" }}>
+                <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
+            </div> */}
           </div>
           <Label className="otp-heading text-center" bold={true} dark={true} fontSize={16} label="CORE_OTP_HEADING" />
           <div className="citizen-otp-sent-message">

@@ -53,7 +53,7 @@ export const TransferOwnership = ({ ownershipTransfer, openDialog }) => {
       <Button
         className="transfer-ownership"
         label={
-          <Label buttonLabel={true} label="PT_OWNERSHIP_TRANSFER" color="rgb(254, 122, 81)" fontSize="16px" height="40px" labelStyle={labelStyle} />
+          <Label buttonLabel={true} label="PT_OWNERSHIP_TRANSFER" color="rgb(225, 85, 76)" fontSize="16px" height="40px" labelStyle={labelStyle} />
         }
         buttonStyle={buttonStyle}
         onClick={() => {

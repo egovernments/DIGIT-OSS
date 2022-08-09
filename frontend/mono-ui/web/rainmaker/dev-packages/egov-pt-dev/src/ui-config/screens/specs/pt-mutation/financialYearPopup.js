@@ -140,9 +140,9 @@ import {
             props: {
               variant: "text",
               style: {
-                color: "#FE7A51",
+                color: "#db251c",
                 border: "1px solid rgb(255, 255, 255)",
-              //  borderColor: "#FE7A51",
+              //  borderColor: "#db251c",
               //  width: "50px",
               //  height: "48px",
               //  margin: "8px",
@@ -174,7 +174,7 @@ import {
                // margin: "8px",
                border: "1px solid rgb(255, 255, 255)",
                 backgroundColor: "#FFF",
-                color: "#FE7A51",
+                color: "#db251c",
                // borderRadius: "2px",
                // width: "50px",
                // height: "48px"

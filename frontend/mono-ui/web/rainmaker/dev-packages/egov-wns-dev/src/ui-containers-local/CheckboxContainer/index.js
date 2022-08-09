@@ -15,9 +15,9 @@ import { getQueryArg } from "egov-ui-framework/ui-utils/commons";
 
 const styles = {
   root: {
-    color: "#FE7A51",
+    color: "#db251c",
     "&$checked": {
-      color: "#FE7A51"
+      color: "#db251c"
     }
   },
   formControl: {

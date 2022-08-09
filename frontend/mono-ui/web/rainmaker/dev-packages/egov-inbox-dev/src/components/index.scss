@@ -5,7 +5,7 @@
     z-index: 100; }
   
   .jk-inbox-loader {
-    border: 0.4em solid #fe7a51;
+    border: 0.4em solid #db251c;
     border-radius: 50%;
     border-top: 0.4em solid #FFFFFF;
     width: 4em;
@@ -15,7 +15,7 @@
     animation: spin 1s linear infinite; }
   
   .jk-sm-inbox-loader {
-    border: 0.2em solid #fe7a51;
+    border: 0.2em solid #db251c;
     border-radius: 50%;
     border-top: 0.2em solid #FFFFFF;
     width: 2em;
@@ -68,7 +68,7 @@
 }
 .row-WF_INBOX_HEADER_APPLICATION_NO{
   cursor: pointer;
-  color:rgb(254, 122, 81);
+  color:rgb(225, 85, 76);
 }
 .row-WF_INBOX_HEADER_APPLICATION_NO:hover{
   text-decoration: underline;
@@ -159,7 +159,7 @@
     height: 35px;
 }
 .clear-button{
-  color:rgb(254, 122, 81);
+  color:rgb(225, 85, 76);
   height: 35px;
     background-color: unset;
     border: none;
@@ -190,9 +190,9 @@
 .cancel-inbox-api button{
   height: 40px;
   margin-top: 30px;
-  color: rgb(254, 122, 81);
+  color: rgb(225, 85, 76);
   background: none;
-  border: 1px solid rgb(254, 122, 81);
+  border: 1px solid rgb(225, 85, 76);
   width: 100px;
   cursor: pointer;
   font-size: 16px;
@@ -208,7 +208,7 @@ select{
 }
 
 .jk-selected-header{
-  color: #fe7a51;
+  color: #db251c;
   /* text-decoration: underline; */
   font-size: large;
   font-weight: 600;

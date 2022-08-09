@@ -286,7 +286,7 @@ class SingleApplication extends React.Component {
                               labelKey={"BND_DOWNLOAD_CERTIFICATE"}
                               textTransform={"uppercase"}
                               style={{
-                                color: "#fe7a51",
+                                color: "#db251c",
                                 fontSize: 14,
                                 textTransform: "uppercase",
                                 borderBottom: "1px solid"
@@ -297,7 +297,7 @@ class SingleApplication extends React.Component {
                               labelKey={"BND_DOWNLOAD_NOTE2"}
                               textTransform={"uppercase"}
                               style={{
-                                color: "#fe7a51",
+                                color: "#db251c",
                                 fontSize: 12,
                                 padding:2,
                               }}
@@ -314,7 +314,7 @@ class SingleApplication extends React.Component {
                               labelKey={"BND_DOWNLOAD_CERTIFICATE"}
                               textTransform={"uppercase"}
                               style={{
-                                color: "#fe7a51",
+                                color: "#db251c",
                                 fontSize: 14,
                                 textTransform: "uppercase",
                                 borderBottom: "1px solid"
@@ -325,7 +325,7 @@ class SingleApplication extends React.Component {
                               labelKey={"BND_DOWNLOAD_NOTE2"}
                               textTransform={"uppercase"}
                               style={{
-                                color: "#fe7a51",
+                                color: "#db251c",
                                 fontSize: 12,
                                 padding:2,
                               }}
@@ -343,7 +343,7 @@ class SingleApplication extends React.Component {
                             style={{
                               color: "#ff6f6f",
                               fontSize: 14,
-                              borderBottom: "1px solid #fe7a51"
+                              borderBottom: "1px solid #db251c"
                             }}
                           />
                         </div>}
@@ -356,10 +356,10 @@ class SingleApplication extends React.Component {
                             labelKey={"BND_GET_RECIEPT"}
                             textTransform={"uppercase"}
                             style={{
-                              color: "#fe7a51",
+                              color: "#db251c",
                               fontSize: 14,
                               textTransform: "uppercase",
-                              borderBottom: "1px solid #fe7a51"
+                              borderBottom: "1px solid #db251c"
                             }}
                           />
                         </div>}

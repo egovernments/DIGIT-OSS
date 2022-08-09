@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button, Card, TextField, Image } from "components";
 import { CityPicker } from "modules/common";
 import Label from "egov-ui-kit/utils/translationNode";
-import logo from "egov-ui-kit/assets/images/mseva-punjab.png";
+import logo from "egov-ui-kit/assets/images/logo_black.png";
 import "./index.css";
 
 const LoginForm = ({ handleFieldChange, form, onForgotPasswdCLick }) => {

@@ -43,7 +43,7 @@ export const getItemStatus = (due, paid, tenantId, consumerCode, history = "",bu
             <Label label={status} labelStyle={{ marginLeft: 10 }} color={"#22b25f"} />
             <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
           </div>
-          <div className="assessment-displayInline" style={{ color: '#fe7a51' }} onClick={() => downloadReceipt(tenantId, consumerCode,businessService)}>
+          <div className="assessment-displayInline" style={{ color: '#db251c' }} onClick={() => downloadReceipt(tenantId, consumerCode,businessService)}>
             <LabelContainer labelKey="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT" />
           </div>
         </div>
@@ -56,7 +56,7 @@ export const getItemStatus = (due, paid, tenantId, consumerCode, history = "",bu
             <Label label={status} labelStyle={{ marginLeft: "8px" }} color={"#22b25f"} />
             <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
           </div>
-          <div className="assessment-displayInline" style={{ color: '#fe7a51' }} onClick={() => downloadReceipt(tenantId, consumerCode,businessService)}>
+          <div className="assessment-displayInline" style={{ color: '#db251c' }} onClick={() => downloadReceipt(tenantId, consumerCode,businessService)}>
             <LabelContainer labelKey="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT" />
           </div>
         </div>
@@ -77,8 +77,8 @@ export const getItemStatus = (due, paid, tenantId, consumerCode, history = "",bu
             <Label label="paid" labelStyle={{ marginLeft: "8px" }} color={"#22b25f"} />
             <Icon action="navigation" name="check" style={styles.paidIconStyle} color={"#22b25f"} />
           </div>
-          <div className="assessment-displayInline" style={{ paddingTop: "10px", color: '#fe7a51' }} onClick={() => downloadReceipt(tenantId, consumerCode)}>
-            {/* <Link to="home" style={{ color: '#fe7a51' }}> */}
+          <div className="assessment-displayInline" style={{ paddingTop: "10px", color: '#db251c' }} onClick={() => downloadReceipt(tenantId, consumerCode)}>
+            {/* <Link to="home" style={{ color: '#db251c' }}> */}
             <LabelContainer labelKey="WS_COMMON_BUTTON_DOWNLOAD_RECEIPT" />
             {/* </Link> */}
           </div>

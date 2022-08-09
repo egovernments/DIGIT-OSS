@@ -1,6 +1,6 @@
 .actionMenuSearchBox {
   background-color: #34495E !important;
-  border: 1px solid #fe7a511f;
+  border: 1px solid #db251c1f;
   color: white;
   height: 40px !important;
   margin-top: 22px;
@@ -37,18 +37,18 @@
     div:nth-of-type(1) > span {
       background: none !important;
       div > div > div > span {
-        color: #fe7a51 !important;
+        color: #db251c !important;
       }
     }
     .iconClassHover {
-      fill: #fe7a51 !important;
+      fill: #db251c !important;
     }
  .label-container > .label-text{
-      color : #fe7a51 !important
+      color : #db251c !important
     } 
   }
   .selected {
-    border-left: 3px solid #fe7a51;
+    border-left: 3px solid #db251c;
   }
   .drawer-collapse-menu-item {
     position: absolute;
@@ -56,9 +56,9 @@
     height: 42px;
     width: 100%;
     .iconClassHover {
-      border: 1px solid #fe7a511f;
+      border: 1px solid #db251c1f;
       border-radius: 50%;
-      background: #fe7a511f;
+      background: #db251c1f;
       height: 28px !important;
       width: 28px !important;
     }

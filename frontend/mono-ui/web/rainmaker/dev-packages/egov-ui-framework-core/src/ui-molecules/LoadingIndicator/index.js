@@ -26,7 +26,7 @@ const style = {
     left: 0,
     right: 0,
     transform: "none",
-    color: "#FE7A51"
+    color: "#db251c"
   }
 };
 

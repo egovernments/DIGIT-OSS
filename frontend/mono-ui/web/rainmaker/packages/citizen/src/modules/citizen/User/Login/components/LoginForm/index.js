@@ -22,14 +22,14 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
         <div>
           <div className="rainmaker-displayInline" style={{ justifyContent: "center"  ,alignItems:"center",marginBottom: "24px"}}>
             <div style={{ }}>
-              <Image className="mseva-logo" source={logoUrl?logoUrl:`${logo}`} />
+              <Image className="mseva-logo" source={`${logo}`} />
             </div >
-          <div style={{marginLeft:"7px"}}>
+          {/* <div style={{marginLeft:"7px"}}>
           <Label bold={true}  fontSize= "23px" label="|" />
           </div>
            <div style={{marginLeft:"7px" }}>
               <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
-           </div>
+           </div> */}
           </div>
           <Label style={{ marginBottom: "12px" }} className="text-center" bold={true} dark={true} fontSize={16} label="CORE_COMMON_LOGIN" />
           <Field fieldKey="phone" field={fields.phone} handleFieldChange={handleFieldChange}  />
@@ -93,12 +93,12 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
             <div style={{ marginBottom: "24px" }}>
               <Image className="mseva-logo" source={`${logo}`} />
             </div >
-          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
+          {/* <div style={{marginLeft:"7px", marginBottom: "24px" }}>
           <Label bold={true}  fontSize= "23px" label="|" />
           </div>
            <div style={{marginLeft:"7px" }}>
               <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
-           </div>
+           </div> */}
           </div>
           <Label style={{ marginBottom: "12px" }} className="text-center" bold={true} dark={true} fontSize={16} label="CORE_COMMON_LOGIN" />
           <Field fieldKey="phone" field={fields.phone} handleFieldChange={handleFieldChange}  />
@@ -162,12 +162,12 @@ const LoginForm = ({ handleFieldChange, form, logoUrl,qrCodeURL,enableWhatsApp }
             <div style={{ marginBottom: "24px" }}>
               <Image className="mseva-logo" source={`${logo}`} />
             </div >
-          <div style={{marginLeft:"7px", marginBottom: "24px" }}>
-          <Label bold={true}  fontSize= "23px" label="|" />
-          </div>
-           <div style={{marginLeft:"7px" }}>
-              <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
-           </div>
+            {/* <div style={{marginLeft:"7px", marginBottom: "24px" }}>
+            <Label bold={true}  fontSize= "23px" label="|" />
+            </div>
+            <div style={{marginLeft:"7px" }}>
+                <Label bold={true} color="black" fontSize= "24px" label="STATE_LABEL" />
+            </div> */}
           </div>
           <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
           <div style={{ width: "50%",marginTop:"4%"}}>

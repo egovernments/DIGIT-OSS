@@ -74,7 +74,7 @@ class SingleProperty extends React.Component {
 
                 {/*                
                 <div onClick={onActionClick ? onActionClick : () => this.onCardClick(item)}>
-                  <Label label={action} textTransform={"uppercase"} color="#fe7a51" fontSize={14} labelStyle={{ textTransform: "uppercase" }} />
+                  <Label label={action} textTransform={"uppercase"} color="#db251c" fontSize={14} labelStyle={{ textTransform: "uppercase" }} />
                 </div> */}
               </div>
             }

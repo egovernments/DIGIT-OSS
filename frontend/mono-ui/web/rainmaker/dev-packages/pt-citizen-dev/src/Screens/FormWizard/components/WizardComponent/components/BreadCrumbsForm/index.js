@@ -44,7 +44,7 @@ const tabs = [
 ];
 
 const selectedTabStyle = {
-  background: "#fe7a51",
+  background: "#db251c",
 };
 
 const defaultTabStyle = {
@@ -72,7 +72,7 @@ const BreadCrumbsForm = ({ onTabClick, selected, formValidIndexArray }) => {
                 {formValidIndexArray.indexOf(index) > -1 ? (
                   <Icon style={checkIconStyle} action="navigation" name="check" color="#22b25f" />
                 ) : (
-                  <span className="form-tab-index" style={selected === index ? { color: "#fe7a51" } : { color: "#b3b3b3" }}>
+                  <span className="form-tab-index" style={selected === index ? { color: "#db251c" } : { color: "#b3b3b3" }}>
                     {index + 1}
                   </span>
                 )}

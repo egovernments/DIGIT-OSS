@@ -142,7 +142,7 @@ const screenConfig = {
           minWidth: "180px",
           height: "48px",
           color: "#fff",
-          backgroundColor: " #FE7A51"
+          backgroundColor: " #db251c"
         }
       })
     }
@@ -155,7 +155,7 @@ const screenConfig = {
           minWidth: "180px",
           height: "48px",
           color: "#fff",
-          backgroundColor: " #FE7A51"
+          backgroundColor: " #db251c"
         }
       })
     }

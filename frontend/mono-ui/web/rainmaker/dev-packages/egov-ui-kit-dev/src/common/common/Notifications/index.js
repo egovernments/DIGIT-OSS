@@ -31,7 +31,7 @@ const Notifications = ({ notifications = [], history }) => {
     return (
       <Card
         className="home-notification"
-        style={{ margin: "8px 0px", borderLeft: type === "EVENTSONGROUND" ? "none" : "4px solid #fe7a51" }}
+        style={{ margin: "8px 0px", borderLeft: type === "EVENTSONGROUND" ? "none" : "4px solid #db251c" }}
         key={index}
         id={`home-notification${index}`}
         style={{ padding: "12px 8px" }}

@@ -36,7 +36,7 @@ class PaymentHistory extends Component {
             height: "35px",
             backgroundColor: "rgb(242, 242, 242)",
             boxShadow: "none",
-            border: "1px solid rgb(254, 122, 81)",
+            border: "1px solid rgb(225, 85, 76)",
             borderRadius: "2px",
             outline: "none",
             alignItems: "right",
@@ -55,7 +55,7 @@ class PaymentHistory extends Component {
                     <div className="col-sm-6 col-xs-12" style={{ marginBottom: 10, marginTop: 5 }}>
                         <div className="assess-history" style={{ float: "right" }}>
                             <Button
-                                label={<Label buttonLabel={true} label="PT_DOWNLOAD_RECEIPT" color="rgb(254, 122, 81)" fontSize="16px" height="35px" labelStyle={labelStyle} />}
+                                label={<Label buttonLabel={true} label="PT_DOWNLOAD_RECEIPT" color="rgb(225, 85, 76)" fontSize="16px" height="35px" labelStyle={labelStyle} />}
                                 buttonStyle={buttonStyle}
                                 onClick={() => {
                                     const receiptQueryString = [

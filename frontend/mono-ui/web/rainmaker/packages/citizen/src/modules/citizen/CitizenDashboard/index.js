@@ -83,7 +83,7 @@ class CitizenDashboard extends Component {
             <div style={{ display: "flex", justifyContent: "space-between", paddingTop: 16 }}>
               <Label label="DASHBOARD_WHATS_NEW_LABEL" fontSize={16} color="rgba(0, 0, 0, 0.8700000047683716)" />
               <div onClick={() => history.push("whats-new")} style={{ cursor: "pointer" }}>
-                <Label label="DASHBOARD_VIEW_ALL_LABEL" color="#fe7a51" fontSize={14} />
+                <Label label="DASHBOARD_VIEW_ALL_LABEL" color="#db251c" fontSize={14} />
               </div>
             </div>
           )}

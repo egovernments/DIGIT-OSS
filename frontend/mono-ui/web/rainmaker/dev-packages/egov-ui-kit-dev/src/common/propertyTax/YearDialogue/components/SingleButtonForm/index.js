@@ -14,8 +14,8 @@ const SingleButtonForm = ({ label, form, handleFieldChange, history, urlToAppend
       }}
       className="year-range-button"
       label={label}
-      labelColor="#fe7a51"
-      buttonStyle={{ borderRadius: "50px", border: "1px solid #fe7a51" }}
+      labelColor="#db251c"
+      buttonStyle={{ borderRadius: "50px", border: "1px solid #db251c" }}
     />
   );
 };

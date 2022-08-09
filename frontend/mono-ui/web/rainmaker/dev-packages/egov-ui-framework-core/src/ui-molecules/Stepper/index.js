@@ -25,7 +25,7 @@ const theme = createMuiTheme({
         color: '#39CB74!important',
       },
       active: {
-        color: '#fe7a51!important',
+        color: '#db251c!important',
       },
       text:{
         fontSize: "12px!important",

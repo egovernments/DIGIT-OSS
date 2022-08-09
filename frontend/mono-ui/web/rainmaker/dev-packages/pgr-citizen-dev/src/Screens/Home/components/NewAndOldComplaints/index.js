@@ -29,7 +29,7 @@ const NewAndOldComplaints = ({ history }) => {
               history.push("/add-complaint");
             }}
           >
-            <Icon style={{ ...iconStyle, background: "#fe7a51" }} action="content" name="add" />
+            <Icon style={{ ...iconStyle, background: "#db251c" }} action="content" name="add" />
             <Label containerStyle={{ marginTop: "10px" }} color="#484848" bold={true} fontSize={16} label="CS_HOME_FILE_COMPLAINT" />
           </div>
           <div

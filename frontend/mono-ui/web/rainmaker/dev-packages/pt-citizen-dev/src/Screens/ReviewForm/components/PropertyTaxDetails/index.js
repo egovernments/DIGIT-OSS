@@ -161,7 +161,7 @@ class PropertyTaxDetails extends React.Component {
                     labelStyle={{
                       fontSize: "20px",
                       fontWeight: 500,
-                      color: "#fe7a51"
+                      color: "#db251c"
                     }}
                     label={
                       totalAmount
@@ -197,7 +197,7 @@ class PropertyTaxDetails extends React.Component {
                       label="PT_CALCULATION_DETAILS"
                       bold={true}
                       fontSize="12px"
-                      color="rgb(254, 122, 81)"
+                      color="rgb(225, 85, 76)"
                     />
                   }
                   primary={true}
@@ -270,7 +270,7 @@ class PropertyTaxDetails extends React.Component {
                 className="pt-tax-calc-details-btn"
                 onClick={this.toggleExpander}
               >
-                <Label label="PT_VIEW_DETAILS" color="#FE7A51" />
+                <Label label="PT_VIEW_DETAILS" color="#db251c" />
               </div>
             </div>
           }

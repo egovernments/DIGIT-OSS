@@ -13,7 +13,7 @@ const editIconStyle = {
     width: 19,
     height: 20,
     marginRight: 8,
-    fill: "#fe7a51",
+    fill: "#db251c",
 };
 
 export const getRequestInfo = (auth = null) => ({
@@ -39,7 +39,7 @@ const VerifyButton = (type, openDialog) => {
             </span>;
         case "LINKNUM":
             return <div className="text-alter-link">
-                <Label label="PT_SEC_LINK_NO_TEXT" fontSize="16px" labelStyle={{ color: "#FE7A51", fontWeight: '400' }} />
+                <Label label="PT_SEC_LINK_NO_TEXT" fontSize="16px" labelStyle={{ color: "#db251c", fontWeight: '400' }} />
                 <button type="button" className={"button-alter-link"} onClick={() => openDialog()} ><Label label="PT_SEC_LINK_NO_BTN"></Label></button>
             </div>;
         default:

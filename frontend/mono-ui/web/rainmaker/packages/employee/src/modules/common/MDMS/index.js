@@ -31,13 +31,13 @@ const MDMSForm = ({ handleFieldChange, form, handleClose }) => {
             label="CANCEL"
             onClick={handleClose}
             labelStyle={{ letterSpacing: 0.7, padding: 0 }}
-            buttonStyle={{ border: "1px solid #fe7a51" }}
+            buttonStyle={{ border: "1px solid #db251c" }}
             style={{ marginRight: 45, width: "36%" }}
           />
           <Button
             label="ADD"
             style={{ width: "36%" }}
-            backgroundColor="#fe7a51"
+            backgroundColor="#db251c"
             labelStyle={{ letterSpacing: 0.7, padding: 0 }}
             buttonStyle={{ border: 0 }}
             {...submit}

@@ -10,7 +10,7 @@ const activeStepperStyle = {
   width: 20,
   height: 20,
   boxShadow: "0 2px 2px 0 rgba(0, 0, 0, 0.24)",
-  backgroundColor: "#fe7a51",
+  backgroundColor: "#db251c",
   borderRadius: "50%",
   position: "relative",
   zIndex: 100,
@@ -83,7 +83,7 @@ const MobileWizard = ({ handleNext, handlePrev, iconAction, header, iconName, tr
               onClick={handlePrev}
               fullWidth={true}
               primary={true}
-              label={<Label buttonLabel={true} label="PT_COMMONS_GO_BACK" color="#fe7a51" />}
+              label={<Label buttonLabel={true} label="PT_COMMONS_GO_BACK" color="#db251c" />}
             />
           </div>
           <div className="flex-item">

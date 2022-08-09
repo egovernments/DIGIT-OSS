@@ -156,7 +156,7 @@ const getActionColumn = (value, tableMeta) => {
       return (
         <span class="jk-tooltip">
           <div
-            style={{ color: "#FE7A51", cursor: "pointer" }}
+            style={{ color: "#db251c", cursor: "pointer" }}
             onClick={() => {
               downloadMultipleFileFromFilestoreIds(
                 [value],
@@ -180,7 +180,7 @@ const getActionColumn = (value, tableMeta) => {
       let val = (meta.recordscompleted / meta.totalrecords) * 100;
       return val ? (
         <div
-          style={{ color: "#FE7A51", cursor: "pointer" }}
+          style={{ color: "#db251c", cursor: "pointer" }}
           onClick={() => {
             cancelGeneratedJob(store.dispatch, meta.jobid);
           }}
@@ -194,7 +194,7 @@ const getActionColumn = (value, tableMeta) => {
     case "EXPIRED":
       return (
         <div
-          style={{ color: "#FE7A51", cursor: "pointer" }}
+          style={{ color: "#db251c", cursor: "pointer" }}
           onClick={() => {
             const state = store.getState();
             const commonPayDetails = get(
@@ -231,7 +231,7 @@ const getActionColumn = (value, tableMeta) => {
         <span class="jk-tooltip">
           {value || meta.success || meta.failed || meta.expired ? (
             <div
-              style={{ color: "#FE7A51", cursor: "pointer" }}
+              style={{ color: "#db251c", cursor: "pointer" }}
               onClick={() => {
                 if (meta.success) {
                   const state = store.getState();
@@ -285,7 +285,7 @@ const getActionColumn = (value, tableMeta) => {
             </div>
           ) : meta && meta.recordscompleted > 0 ? (
             <div
-              style={{ color: "#FE7A51", cursor: "pointer" }}
+              style={{ color: "#db251c", cursor: "pointer" }}
               onClick={() => {
                 cancelGeneratedJob(store.dispatch, meta.jobid);
               }}

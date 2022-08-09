@@ -48,7 +48,7 @@ const WriteComment = ({ form, handleFieldChange, submitForm, userImage, currents
         inputStyle={{ fontSize: 14, paddingLeft: 5, paddingRight: 40 }}
         rowsMax={3}
       />
-      <Icon className="comment-send" action="content" name="send" style={iconStyle} color={"#fe7a51"} onClick={submitForm} />
+      <Icon className="comment-send" action="content" name="send" style={iconStyle} color={"#db251c"} onClick={submitForm} />
     </div>
   );
 };

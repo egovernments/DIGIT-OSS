@@ -4,8 +4,8 @@ import Label from "egov-ui-kit/utils/translationNode";
 import UserSettings from "../UserSettings";
 import Toolbar from "material-ui/Toolbar";
 import Badge from "@material-ui/core/Badge";
-import digitLogo from "egov-ui-kit/assets/images/Digit_logo.png";
-import pbLogo from "egov-ui-kit/assets/images/pblogo.png";
+import digitLogo from "egov-ui-kit/assets/images/logo_black.png";
+import pbLogo from "egov-ui-kit/assets/images/logo_black.png";
 import IconButton from "material-ui/IconButton";
 import { onNotificationClick } from "egov-ui-kit/utils/commons";
 import "./index.css";
@@ -58,24 +58,24 @@ const EgovAppBar = ({
         title={
           <div className="citizen-header-logo-label">
             <div className="citizen-header-logo">
-              <img src={ulbLogo ? ulbLogo : pbLogo} onError={(event) => event.target.setAttribute("src", pbLogo)} />
+              {/* <img src='/egov-ui-kit/assets/images/logo_black.png' onError={(event) => event.target.setAttribute("src", pbLogo)} /> */}
             </div>
-            <Label containerStyle={{ marginLeft: "0px" }} className="screenHeaderLabelStyle appbar-title-label" label={title} />
-            {titleAddon && (
+            {/* <Label containerStyle={{ marginLeft: "0px" }} className="screenHeaderLabelStyle appbar-title-label" label={title} /> */}
+            {/* {titleAddon && (
               <Label
                 containerStyle={{ display: "inline-block", marginLeft: 5 }}
                 className="screenHeaderLabelStyle appbar-title-label"
                 label={titleAddon}
               />
-            )}
-            {isUserSetting && <div className="rainmaker-displayInline">
+            )} */}
+            {/* {isUserSetting && <div className="rainmaker-displayInline">
               <Label
                 containerStyle={{ marginLeft: "10px" }}
                 className="screenHeaderLabelStyle appbar-municipal-label"
                 label={ulbName && `TENANT_TENANTS_${ulbName.toUpperCase().replace(/[.]/g, "_")}`}
               />
               <Label containerStyle={{ marginLeft: "4px" }} className="screenHeaderLabelStyle appbar-municipal-label" label={defaultTitle} />
-            </div>}
+            </div>} */}
           </div>
         }
         titleStyle={styles.titleStyle}
@@ -106,7 +106,7 @@ const EgovAppBar = ({
         )}
 
         <div className="appbar-right-logo">
-          <img src={logoImage?logoImage:digitLogo} />
+          <img src={digitLogo} />
         </div>
         <div className="icon-button">
           {refreshButton && (
