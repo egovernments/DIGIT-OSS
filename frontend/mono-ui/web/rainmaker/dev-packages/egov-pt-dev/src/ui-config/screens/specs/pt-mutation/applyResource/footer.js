@@ -331,7 +331,7 @@ if(!flag)
  enableField('apply', "components.div.children.footer.children.payButton", dispatch);
  store.dispatch(
  setRoute(
- `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}
+ `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}&moduleName=PT.MUTATION
  `
  )
  );
@@ -341,7 +341,7 @@ if(!flag)
  console.log(e);
  store.dispatch(
  setRoute(
- `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}
+ `acknowledgement?purpose=apply&status=failure&applicationNumber=${consumerCode}&tenantId=${tenantId}&moduleName=PT.MUTATION
  `
  )
  );
