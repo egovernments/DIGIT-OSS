@@ -44,6 +44,7 @@ import ReceiptsService from "./services/elements/Receipts";
 import { EDCRService } from "./services/elements/EDCR";
 import { OBPSService } from "./services/elements/OBPS";
 import { NOCService } from "./services/elements/NOC";
+import BRService from "./services/elements/BR";
 
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
@@ -67,6 +68,7 @@ const initLibraries = () => {
   setupLibraries("PGRService", PGRService);
   setupLibraries("FSMService", FSMService);
   setupLibraries("PTService", PTService);
+  setupLibraries("BRService", BRService);
   setupLibraries("TLService", TLService);
   setupLibraries("HRMSService", HrmsService);
   setupLibraries("ReceiptsService", ReceiptsService);

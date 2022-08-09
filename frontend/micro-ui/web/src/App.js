@@ -12,7 +12,7 @@ import { BRModule ,initBRComponents ,BRLinks} from "@egovernments/digit-ui-modul
 
 initLibraries();
 //"WS" removed the ws enabledModules ;
-const enabledModules = ["Payment","QuickPayLinks","HRMS", "DSS","Engagement", "CommonPT","BR"];
+const enabledModules = ["Payment","QuickPayLinks", "DSS","Engagement", "BR"];
 window.Digit.ComponentRegistryService.setupRegistry({
   ...paymentConfigs,
   PaymentModule,

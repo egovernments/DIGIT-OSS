@@ -6,11 +6,23 @@ import CitizenApp from "./pages/citizen";
 import Create from "./pages/citizen/create/index";
 import EmployeeApp from "./pages/employee";
 import BrSelectName from "./pagecomponents/BrSelectName";
-import BrSelectHospital from "./pagecomponents/BrSelectHospital";
-import BrSelectDocuments from "./pagecomponents/SelectDocuments";
+import BRSelectPhoneNumber from "./pagecomponents/BrSelectPhoneNumber";
+import BRSelectGender from "./pagecomponents/BRSelectGender";
+import BRSelectEmailId from "./pagecomponents/SelectEmailId";
+import BRSelectPincode from "./pagecomponents/BRSelectPincode";
+import BrSelectAddress from "./pagecomponents/BrSelectAddress";
+import SelectCorrespondenceAddress from "./pagecomponents/SelectCorrespondenceAddress";
+import SelectDocuments from "./pagecomponents/SelectDocuments";
+
+
 const componentsToRegister = {
-  BrSelectDocuments,
-  BrSelectHospital,
+  SelectDocuments,
+  SelectCorrespondenceAddress,
+  BrSelectAddress,
+  BRSelectPincode,
+  BRSelectEmailId,
+  BRSelectGender,
+  BRSelectPhoneNumber,
   BrSelectName,
   BRCreate : Create,
 };
@@ -48,8 +60,8 @@ export const BRLinks = ({ matchPath, userType }) => {
       i18nKey: t("Create BirthRegistration"),
     },
     {
-      link: `${matchPath}/my-applications`,
-      i18nKey: t("ACTION_TEXT_WS_MY_APPLICATION"),
+      link: `${matchPath}/br-applications`,
+      i18nKey: t("MY APPLICATION"),
     },
 
    

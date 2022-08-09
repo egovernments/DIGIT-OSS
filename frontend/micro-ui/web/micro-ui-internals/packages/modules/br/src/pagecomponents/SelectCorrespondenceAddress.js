@@ -2,32 +2,42 @@ import React from "react";
 import { LabelFieldPair, CardLabel, TextInput, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
-const BrSelectAddress = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
+const SelectCorrespondenceAddress = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
   const { pathname: url } = useLocation();
   const inputs = [
     {
-      label: "Permanent Address",
+      label: "Correspondence City ",
       type: "text",
-      name: "permanentAddress",
+      name: "correspondenceCity",
       validation: {
+        pattern: Digit.Utils.getPattern('Address'),
         isRequired: true,
-        pattern: Digit.Utils.getPattern('Name'),
-        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
+        title: t("APPLICANT NAME INVALID"),
       },
       isMandatory: true,
     },
     {
-      label: "City",
+      label: "Correspondence ADDRESS ",
       type: "text",
-      name: "permanentCity",
+      name: "correspondenceAddress",
       validation: {
+        pattern: Digit.Utils.getPattern('Address'),
         isRequired: true,
-        pattern: Digit.Utils.getPattern('Name'),
-        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
+        title: t("APPLICANT NAME INVALID"),
       },
       isMandatory: true,
     },
-  
+    {
+      label: "Blood Group",
+      type: "text",
+      name: "bloodGroup",
+      validation: {
+        pattern: Digit.Utils.getPattern('Address'),
+        isRequired: true,
+        title: t("APPLICANT NAME INVALID"),
+      },
+      isMandatory: true,
+    },
   ];
 
   function setValue(value, input) {
@@ -54,8 +64,7 @@ const BrSelectAddress = ({ t, config, onSelect, formData = {}, userType, registe
                 defaultValue={undefined}
                 {...input.validation}
               />
-              
-            {currentValue&&currentValue.length>0&&!currentValue.match(Digit.Utils.getPattern('Name'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px'}}>{t("CORE_COMMON_APPLICANT_NAME_INVALID")}</CardLabelError>}
+               {currentValue&&currentValue.length>0&&!currentValue.match(Digit.Utils.getPattern('Address'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px'}}>{t("CORE_COMMON_APPLICANT_ADDRESS_INVALID")}</CardLabelError>}
             </div>
           </LabelFieldPair>
         </React.Fragment>
@@ -64,4 +73,4 @@ const BrSelectAddress = ({ t, config, onSelect, formData = {}, userType, registe
   );
 };
 
-export default BrSelectAddress;
+export default SelectCorrespondenceAddress;

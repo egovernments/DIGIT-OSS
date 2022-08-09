@@ -49,6 +49,51 @@ const BrSelectName = ({ t, config, onSelect, formData = {}, userType, register, 
       },
       isMandatory: true,
     },
+    {
+      label: "Gender",
+      type: "text",
+      name: "gender",
+      validation: {
+        isRequired: true,
+        pattern: Digit.Utils.getPattern('Name'),
+        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
+      },
+      isMandatory: true,
+    },
+    {
+      label: "Doctor Name",
+      type: "text",
+      name: "doctorname",
+      validation: {
+        isRequired: true,
+        pattern: Digit.Utils.getPattern('Name'),
+        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
+      },
+      isMandatory: true,
+    },
+    {
+      label: "Hospital Name",
+      type: "text",
+      name: "hospitalname",
+      validation: {
+        isRequired: true,
+        pattern: Digit.Utils.getPattern('Name'),
+        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
+      },
+      isMandatory: true,
+    },
+    {
+      label: "Place Of Birth",
+      type: "text",
+      name: "placeofbirth",
+      validation: {
+        isRequired: true,
+        pattern: Digit.Utils.getPattern('Name'),
+        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
+      },
+      isMandatory: true,
+    },
+   
   ];
 
   function setValue(value, input) {

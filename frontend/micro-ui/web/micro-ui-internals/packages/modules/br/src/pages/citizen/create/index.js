@@ -11,9 +11,26 @@ const Create = () => {
   const history = useHistory();
   
 
+// const payload = {
+//   user: {
+//     firstname: data?.BrSelectName?.firstName,
+//     lastname: data?.BrSelectName?.lastName,
+//     fathername: data?.BrSelectName?.fatherName,
+//     mothername: data?.BrSelectName?.motherName,
+//     tenantId: tenantId,
+//   },
+// }
+
+
+// const createuser = ((payload)=>{
+// Digit.BRService.create(data , tenantId)
+
+
+// })
+
   const onSubmit = (data) => {
 
-    let Employees = [
+    let Users = [
       {
         tenantId: tenantId,
         employeeStatus: "EMPLOYED",
@@ -31,9 +48,9 @@ const Create = () => {
       },
     ];
       /* use customiseCreateFormData hook to make some chnages to the Employee object */
-
-
-    console.log("getting data",Employees)
+     
+   
+    console.log("getting data",Users)
    
   };
  

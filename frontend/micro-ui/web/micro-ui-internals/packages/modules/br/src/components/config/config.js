@@ -9,33 +9,57 @@ export const newConfig =[
                 key: "BrSelectName",
                 withoutLabel: true,
               },
-            //   {
-            //     type: "component",
-            //     component: "BrSelectHospital",
-            //     key: "hospital",
-            //     withoutLabel: true,
-            //   },
-              // {
-              //   type: "component",
-              //   component: "BRSelectAddress",
-              //   key: "address",
-              //   withoutLabel: true,
-              // },  
+              {
+                type: "component",
+                component: "BRSelectGender",
+                key: "BRSelectPhoneGender",
+                withoutLabel: true,
+              },
+              {
+                type: "component",
+                component: "BRSelectPhoneNumber",
+                key: "BRSelectPhoneNumber",
+                withoutLabel: true,
+              },
+              {
+                type: "component",
+                component: "BRSelectEmailId",
+                key: "BRSelectEmailId",
+                withoutLabel: true,
+              },
+              {
+                type: "component",
+                component: "BRSelectPincode",
+                key: "BRSelectPincode",
+                withoutLabel: true,
+              },
+              {
+                type: "component",
+                component: "BrSelectAddress",
+                key: "BrSelectAddress",
+                withoutLabel: true,
+              },
+              {
+                type: "component",
+                component: "SelectCorrespondenceAddress",
+                key: "SelectCorrespondenceAddress",
+                withoutLabel: true,
+              },
         ]
     },
 
 
-        //     {
-        //     head: "ES_NEW_APPLICATION_DOCUMENTS_REQUIRED",
-        //     body: [
-        //         {
-        //             component: "BrSelectDocuments",
-        //             withoutLabel: true,
-        //             key: "documents",
-        //             type: "component"
-        //         }
-        //     ]
-        // },
+            {
+            head: "DOCUMENTS REQUIRED",
+            body: [
+                {
+                    component: "SelectDocuments",
+                    withoutLabel: true,
+                    key: "documents",
+                    type: "component"
+                }
+            ]
+        },
 
       
 ];

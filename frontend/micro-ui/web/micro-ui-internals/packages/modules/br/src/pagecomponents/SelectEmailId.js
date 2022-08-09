@@ -2,32 +2,18 @@ import React from "react";
 import { LabelFieldPair, CardLabel, TextInput, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
-const BrSelectAddress = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
+const BRSelectEmailId = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
   const { pathname: url } = useLocation();
+
   const inputs = [
     {
-      label: "Permanent Address",
-      type: "text",
-      name: "permanentAddress",
+      label: "EMAIL",
+      type: "email",
+      name: "emailId",
       validation: {
-        isRequired: true,
-        pattern: Digit.Utils.getPattern('Name'),
         title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
       },
-      isMandatory: true,
     },
-    {
-      label: "City",
-      type: "text",
-      name: "permanentCity",
-      validation: {
-        isRequired: true,
-        pattern: Digit.Utils.getPattern('Name'),
-        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
-      },
-      isMandatory: true,
-    },
-  
   ];
 
   function setValue(value, input) {
@@ -47,6 +33,7 @@ const BrSelectAddress = ({ t, config, onSelect, formData = {}, userType, registe
             </CardLabel>
             <div className="field">
               <TextInput
+                type={input.type}
                 key={input.name}
                 value={formData && formData[config.key] ? formData[config.key][input.name] : undefined}
                 onChange={(e) => setValue(e.target.value, input.name)}
@@ -54,8 +41,7 @@ const BrSelectAddress = ({ t, config, onSelect, formData = {}, userType, registe
                 defaultValue={undefined}
                 {...input.validation}
               />
-              
-            {currentValue&&currentValue.length>0&&!currentValue.match(Digit.Utils.getPattern('Name'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px'}}>{t("CORE_COMMON_APPLICANT_NAME_INVALID")}</CardLabelError>}
+              {currentValue&&currentValue.length>0&&!currentValue.match(Digit.Utils.getPattern('Email'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px'}}>{t("CS_PROFILE_EMAIL_ERRORMSG")}</CardLabelError>}
             </div>
           </LabelFieldPair>
         </React.Fragment>
@@ -64,4 +50,4 @@ const BrSelectAddress = ({ t, config, onSelect, formData = {}, userType, registe
   );
 };
 
-export default BrSelectAddress;
+export default BRSelectEmailId;
