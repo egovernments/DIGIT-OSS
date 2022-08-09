@@ -32,24 +32,38 @@ const Create = () => {
 
     let Users = [
       {
-        tenantId: tenantId,
-        employeeStatus: "EMPLOYED",
-      
+
         user: {
           firstname: data?.BrSelectName?.firstName,
           lastname: data?.BrSelectName?.lastName,
           fathername: data?.BrSelectName?.fatherName,
           mothername: data?.BrSelectName?.motherName,
+          gender: data?.BrSelectGender?.gender,
+          doctorname: data?.BrSelectName?.doctorname,
+          hospitalname: data?.BrSelectName?.hospitalname,
+          placeofbirth: data?.BrSelectName?.placeofbirth,
+          applicantMobileNumber: data?.BRSelectPhoneNumber?.applicantMobileNumber,
+          altMobileNumber: data?.BRSelectPhoneNumber?.altMobileNumber,
+          emailId: data?.BRSelectEmailId?.emailId,
+          permanentAddress: data?.BrSelectAddress?.permanentAddress,
+          permanentCity: data?.BrSelectAddress?.permanentCity,
+          correspondenceCity: data?.SelectCorrespondenceAddress?.correspondenceCity,
+          correspondenceAddress: data?.SelectCorrespondenceAddress?.correspondenceAddress,
+          bloodGroup: data?.SelectCorrespondenceAddress?.bloodGroup,
           tenantId: tenantId,
         },
-        serviceHistory: [],
-        education: [],
-        tests: [],
+        
       },
     ];
       /* use customiseCreateFormData hook to make some chnages to the Employee object */
-     
-   
+     Digit.BRService.create(Users, tenantId).then((result,err)=>{
+       let getdata = {...data , get: result }
+       onSelect("", getdata, "", true);
+       console.log("daaaa",getdata);
+     })
+     .catch((e) => {
+     console.log("err");
+    });
     console.log("getting data",Users)
    
   };
