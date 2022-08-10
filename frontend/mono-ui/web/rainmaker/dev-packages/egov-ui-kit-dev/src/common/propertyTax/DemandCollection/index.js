@@ -106,13 +106,13 @@ class DemandCollection extends React.Component {
                                         
                                   } */
                                   if(isAssesment){
-                                    if (
+                                   /*  if (
                                       (taxData.code === "PT_TAX") &&
                                       get(preparedFinalObject, `DemandPropertiesResponse.Demands[${index}].demandDetails[0].taxAmount`) >
                                         e.target.value
                                     ) {
                                       alert("Tax value cannot be decrease");
-                                    }
+                                    } */
                                   }
                                   if (e.target.value.includes(".")) 
                                   {  

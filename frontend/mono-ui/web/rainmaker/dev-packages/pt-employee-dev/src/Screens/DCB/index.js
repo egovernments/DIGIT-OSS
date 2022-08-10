@@ -1341,7 +1341,7 @@ class FormWizardDataEntry extends Component {
                         data.demand[data1]
                       ) !== parseInt(data.demand[data1][data2].PT_COLLECTED)
                     ) {
-                      if(errorCode === "FINE")
+                      if(!isAssesment)
                       {
                       errorCode = "ERR03_DEMAND_ENTER_THE_DATA";
                       }
