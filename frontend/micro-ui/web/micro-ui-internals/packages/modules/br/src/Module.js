@@ -13,9 +13,12 @@ import BRSelectPincode from "./pagecomponents/BRSelectPincode";
 import BrSelectAddress from "./pagecomponents/BrSelectAddress";
 import SelectCorrespondenceAddress from "./pagecomponents/SelectCorrespondenceAddress";
 import SelectDocuments from "./pagecomponents/SelectDocuments";
-
+import BRCard from "./components/config/BRCard";
+import BRManageApplication from "./pages/employee/BRManageApplication";
 
 const componentsToRegister = {
+  BRManageApplication,
+  BRCard,
   SelectDocuments,
   SelectCorrespondenceAddress,
   BrSelectAddress,
@@ -44,9 +47,14 @@ export const BRModule = ({ stateCode, userType, tenants }) => {
   //   }),
   //  []);
 
-  if (userType === "employee") {
-    return <EmployeeApp path={path} url={url} userType={userType} />;
-  } else return <CitizenApp />;
+  // if (userType === "employee") {
+  //   return <EmployeeApp path={path} url={url} userType={userType} />;
+  // } else return <CitizenApp />;
+  if (userType === "citizen") {
+    return <CitizenApp path={path} stateCode={stateCode} />;
+  }
+
+  return <EmployeeApp path={path} stateCode={stateCode} />;
 };
 
 export const BRLinks = ({ matchPath, userType }) => {

@@ -8,7 +8,7 @@ const BrSelectName = ({ t, config, onSelect, formData = {}, userType, register, 
     {
       label: "Baby’s First Name",
       type: "text",
-      name: "firstName",
+      name: "babyFirstName",
       validation: {
         isRequired: true,
         pattern: Digit.Utils.getPattern('Name'),
@@ -19,7 +19,7 @@ const BrSelectName = ({ t, config, onSelect, formData = {}, userType, register, 
     {
       label: "Baby’s Last Name",
       type: "text",
-      name: "lastName",
+      name: "babyLastName",
       validation: {
         isRequired: true,
         pattern: Digit.Utils.getPattern('Name'),
@@ -50,20 +50,9 @@ const BrSelectName = ({ t, config, onSelect, formData = {}, userType, register, 
       isMandatory: true,
     },
     {
-      label: "Gender",
-      type: "text",
-      name: "gender",
-      validation: {
-        isRequired: true,
-        pattern: Digit.Utils.getPattern('Name'),
-        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
-      },
-      isMandatory: true,
-    },
-    {
       label: "Doctor Name",
       type: "text",
-      name: "doctorname",
+      name: "doctorName",
       validation: {
         isRequired: true,
         pattern: Digit.Utils.getPattern('Name'),
@@ -74,7 +63,7 @@ const BrSelectName = ({ t, config, onSelect, formData = {}, userType, register, 
     {
       label: "Hospital Name",
       type: "text",
-      name: "hospitalname",
+      name: "hospitalName",
       validation: {
         isRequired: true,
         pattern: Digit.Utils.getPattern('Name'),
@@ -85,7 +74,7 @@ const BrSelectName = ({ t, config, onSelect, formData = {}, userType, register, 
     {
       label: "Place Of Birth",
       type: "text",
-      name: "placeofbirth",
+      name: "placeOfBirth",
       validation: {
         isRequired: true,
         pattern: Digit.Utils.getPattern('Name'),
