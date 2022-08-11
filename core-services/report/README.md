@@ -12,7 +12,8 @@ couple of APIS.
 - `egov-mdms-service`: used by encryption library to load encryption configs
 
 ### Swagger API Contract
-http://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/egov-services/master/docs/reportinfra/contracts/reportinfra-1-0-0.yml#!/
+
+https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/core-services/docs/report-contract.yml#!/
 
 ## Service Details
 

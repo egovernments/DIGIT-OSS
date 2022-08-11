@@ -16,7 +16,7 @@ and returns applications and workflow data in paginated manner. The service also
 
 ### Swagger API Contract
 
-Link to the swagger API contract [yaml](https://raw.githubusercontent.com/egovernments/municipal-services/master/docs/inbox.yml) and editor link like below
+Link to the swagger API contract [yaml](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/inbox.yml#!/) and editor link like below
 
 
 ### Postman Collection

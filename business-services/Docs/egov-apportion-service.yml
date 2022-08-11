@@ -1,0 +1,315 @@
+swagger: "2.0"
+info:
+  version: 1.0.1
+  title: Apportion Servcie
+  description: Apportions the paid amount to respective tax heads. 
+  contact:
+    name: eGovernments Foundation
+    email: contact@egovernments.org
+
+schemes:
+  - https
+basePath: '/apportion'
+x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml'
+
+paths: 
+  /_apportion:
+    post:
+      summary: Divides the paid amount amoung the tax heads
+      description: This API divides the amount paid according to priority
+                   of the tax heads 
+      parameters:
+        - name: ApportionRequest
+          in: body
+          description: Receipt Creation Details passed with bill info and instrument info along with common request info.
+          required: true
+          schema:
+            $ref: '#/definitions/ApportionRequest'
+      tags:
+        - Receipt
+      responses:
+        '201':
+          description: Receipt created sucessfully.
+          schema:
+            $ref: '#/definitions/ApportionResponse'
+        '400':
+          description: Invalid input.
+
+
+definitions:
+  ApportionRequest:
+    type: object
+    description: Receipt Request with Request Info.
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      tenantId:
+        type: string
+        description: Unique id of tenant.
+        format: varchar
+      businessService:
+        type: string
+        description: BusinessService of the module
+        format: varchar
+      Bills:
+        type: array
+        items:
+          $ref: '#/definitions/BillInfo'
+
+  ApportionResponse:
+    type: object
+    description: Receipt Request with Request Info.
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      tenantId:
+        type: string
+        description: Unique id of tenant.
+        format: varchar
+      Bills:
+        type: array
+        items:
+          $ref: '#/definitions/BillInfo'
+
+  BillInfo:
+    type: object
+    properties:
+      id:
+        type: number
+        description: id of the billInfo object    
+      payeerName:
+        type: string
+        description: Owner/User which needs to be referred from UserService.
+      payeerAddress:
+        type: string
+        description: Consumer address defined in bill.
+      payeerEmail:
+        type: string
+        description: Consumer email defined in bill.
+      paidBy:
+        type: string
+        description: Name of the Person who is making payment.
+      isActive:
+        type: boolean
+        description: active status of the bill.
+      isCancelled:
+        type: boolean
+        description: cancellation state of the bill.
+      tenantId:
+        type: string
+        description: Tenant Id.
+      mobileNumber:
+        type: string
+        description: Consumer mobileNumber defined in bill.
+      auditDetails:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+      billDetails:
+        type: array
+        items:
+          $ref: '#/definitions/BillDetails'
+      collectionMap:
+        type: object
+        properties:
+          default:
+            type: string
+        required:
+          - default
+        additionalProperties:
+          type: number
+      additionalDetails:
+        type: object
+
+  BillDetails:
+    type: object
+    properties:
+      id:
+        type: number
+        description: id of the BillDetails object 
+      bill:
+        type: string
+        description: Bill.
+      demandId:
+        type: string
+        description: Bill.
+      billDate:
+        type: integer
+        format: int64
+        description: Bill date.
+      billNumber:
+        type: string
+        description: Bill Number.
+      consumerCode:
+        type: string
+        description: Consumer code defined in bill.
+      consumerType:
+        type: string
+        description: Consumer type defined in bill.
+      billDescription:
+        type: string
+        description: Summarized bill description.
+      minimumAmount:
+        type: number
+        format: bigdecimal
+        description: Minimum bill amount to be paid.
+      totalAmount:
+        type: number
+        format: bigdecimal
+        description: Total bill amount to be paid.
+      collectedAmount:
+        type: number
+        format: bigdecimal
+        description: Total bill amount to be paid.
+      amountPaid:
+        type: number
+        format: double
+        description: Amount paid by the citizen.
+      collectionModesNotAllowed:
+        type: array
+        items: 
+          type: string
+        description: List of collection modes not allowed.
+      event: 
+        type: string
+        description: CREATED, CANCELLED, INSTRUMENT_BOUNCED
+      receiptNumber:
+        type: string
+        description: Receipt Number generated in Collection system.
+      receiptDate:
+        type: string
+        format: date
+        description: Receipt Date.
+      receiptType:
+        description: Type of Receipt.
+        items:
+          type: string
+          enum:
+           - ADHOC
+           - BILLBASED
+           - CHALLAN
+      collectionType:
+        description: Type of collection.
+        items:
+          type: string
+          enum:
+           - COUNTER
+           - FIELD
+           - ONLINE
+      channel:
+        type: string
+        description: To be used by third party applications, to send the channel name.
+      fund:
+        type: string
+        description: To be used by third party applications, to send the channel name.
+      department:
+        type: string
+        description: To be used by third party applications, to send the channel name.
+      function:
+        type: string
+        description: To be used by third party applications, to send the channel name.
+      voucherHeader:
+        description: Voucher header  need to refer from Finanicals.
+      boundary:
+        description: Boundary need to refer from Core services.
+        items:
+          type: string
+      reasonForCancellation:
+        description: Remarks to describe Reason For Cancellation.
+        items:
+          type: string
+      cancellationRemarks:
+        description: Remarks to describe Reason For Cancellation.
+        items:
+          type: string
+      status:
+        description: Status of the BillDetail.
+        items:
+          type: string
+      displayMessage:
+        type: string
+        description: Remarks to be displayed on receipt.
+      tenantId:
+        type: string
+        description: Tenant Id.
+      businessService:
+        type: string
+        description: businessService details of the bill details.
+      callBackForApportioning:
+        type: boolean
+        description: apportioning call based on this value.
+      partPaymentAllowed:
+        type: boolean
+        description: decides if partpayment is allowed
+      manualReceiptNumber:
+        type: string
+        description: Manual Receipt Number for legacy reciepts.
+      manualReceiptDate:
+        type: integer
+        format: int64
+        description: Manual Receipt Date for legacy reciepts.
+      stateId:
+        type: integer
+        description: State id of receipt. Value is set while pushing to kafka from collection workflow and to read in collection services.
+      billAccountDetails:
+        type: array
+        items:
+          $ref: '#/definitions/BillAccountDetails'
+      fromPeriod:
+        type: number
+        format: int64
+        description: starting date of the demand period referred by the bill detail.
+      toPeriod:
+        type: number
+        format: int64
+        description: ending date of the demand period referred by the bill detail.
+      additionalDetails:
+        type: object
+
+
+  BillAccountDetails:
+    type: object
+    properties:
+      id:
+        type: number
+        description: id of the BillAccountDetails object 
+      glcode:
+        type: string
+        description: Chart of account code.
+      order:
+        type: integer
+        format: int32
+        description : Order number used for apportioning amount in case of part payment.
+      amount:
+        type: number
+        format: double
+        description: Credit account head amount to be paid.
+      adjustedAmount:
+        type: number
+        format: double
+        description: Credit account head amount.
+      isActualDemand:
+        type: boolean
+        description: True for tax/charges/penalty. False for advances(if any).
+      tenantId:
+        type: string
+        description: Tenant Id.
+      billDetail:
+        type: string
+        description: Bill Details.
+      demandDetailId:
+        type: string
+        description: unique id of the demand detail object.
+      purpose:
+        description: Purpose of Account head.
+        items:
+          type: string
+          enum:
+           - ARREAR_AMOUNT
+           - CURRENT_AMOUNT
+           - ADVANCE_AMOUNT
+           - ARREAR_LATEPAYMENT_CHARGES
+           - CURRENT_LATEPAYMENT_CHARGES
+           - CHEQUE_BOUNCE_PENALTY
+           - REBATE
+           - OTHERS
+      additionalDetails:
+        type: object
