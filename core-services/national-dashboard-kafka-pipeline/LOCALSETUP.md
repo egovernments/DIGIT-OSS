@@ -10,8 +10,8 @@ To setup the national-dashboard-kafka-pipeline service in your local system, clo
 - [ ] Redis
 - [ ] Elasticsearch
 - [x] Kafka
-    - [x] Consumer
-    - [x] Producer
+  - [x] Consumer
+  - [x] Producer
 
 ## Running Locally
 
