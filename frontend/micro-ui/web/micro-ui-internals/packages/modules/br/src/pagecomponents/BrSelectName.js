@@ -82,6 +82,17 @@ const BrSelectName = ({ t, config, onSelect, formData = {}, userType, register, 
       },
       isMandatory: true,
     },
+    // {
+    //   label: "Blood Group",
+    //   type: "text",
+    //   name: "bloodGroup",
+    //   validation: {
+    //     pattern: Digit.Utils.getPattern('Address'),
+    //     isRequired: true,
+    //     title: t("APPLICANT NAME INVALID"),
+    //   },
+    //   isMandatory: true,
+    // },
    
   ];
 

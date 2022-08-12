@@ -15,8 +15,12 @@ import SelectCorrespondenceAddress from "./pagecomponents/SelectCorrespondenceAd
 import SelectDocuments from "./pagecomponents/SelectDocuments";
 import BRCard from "./components/config/BRCard";
 import BRManageApplication from "./pages/employee/BRManageApplication";
+import RegisterDetails from "./pages/employee/RegisterDetails";
+import Response from "./pages/citizen/create/Response";
 
 const componentsToRegister = {
+ Response,
+  RegisterDetails,
   BRManageApplication,
   BRCard,
   SelectDocuments,
@@ -67,10 +71,10 @@ export const BRLinks = ({ matchPath, userType }) => {
       link: `${matchPath}/birth`,
       i18nKey: t("Create BirthRegistration"),
     },
-    {
-      link: `${matchPath}/br-applications`,
-      i18nKey: t("MY APPLICATION"),
-    },
+    // {
+    //   link: `${matchPath}/br-applications`,
+    //   i18nKey: t("MY APPLICATION"),
+    // },
 
    
   ];

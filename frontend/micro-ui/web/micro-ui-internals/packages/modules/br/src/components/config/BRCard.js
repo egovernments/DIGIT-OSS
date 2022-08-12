@@ -17,18 +17,14 @@ const BRCard = () => {
             {
                 // count:  isLoading ? "-" : data?.EmployeCount?.totalEmployee,
                 label: t("TOTAL Application"),
-                link: `/digit-ui/employee/myapplication`
+                link: `/digit-ui/employee/br/details`
             },
-            {
-            //   count:  isLoading ? "-" : data?.EmployeCount?.activeEmployee,
-                label: t("Track Application"),
-                link: `/digit-ui/employee/myapplication`
-            }  
+         
         ],
         links: [
             {
                 label: t("Inbox"),
-                link: `/digit-ui/employee/myapplication`
+                link: `/digit-ui/employee/br/inbox`
             },
             {
                 label: t("HR_COMMON_CREATE_EMPLOYEE_HEADER"),

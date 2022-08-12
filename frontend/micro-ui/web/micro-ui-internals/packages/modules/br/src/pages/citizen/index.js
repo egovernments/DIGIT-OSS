@@ -11,14 +11,16 @@ const App = () => {
   const { t } = useTranslation();
 
   const Create = Digit?.ComponentRegistryService?.getComponent("BRCreate");
+  const Response = Digit?.ComponentRegistryService?.getComponent("Response");
   
   return (
     <span className={"pt-citizen"}>
       <Switch>
         <AppContainer>
         <BackButton>Back</BackButton> 
-          <PrivateRoute path={`${path}/birth`} component={Create} />
         
+          <PrivateRoute path={`${path}/birth`} component={Create} />
+          <PrivateRoute path={`${path}/response`} component={Response} />
         </AppContainer>
       </Switch>
     </span>

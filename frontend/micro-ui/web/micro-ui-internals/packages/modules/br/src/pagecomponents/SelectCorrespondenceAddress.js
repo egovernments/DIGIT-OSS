@@ -27,17 +27,7 @@ const SelectCorrespondenceAddress = ({ t, config, onSelect, formData = {}, userT
       },
       isMandatory: true,
     },
-    {
-      label: "Blood Group",
-      type: "text",
-      name: "bloodGroup",
-      validation: {
-        pattern: Digit.Utils.getPattern('Address'),
-        isRequired: true,
-        title: t("APPLICANT NAME INVALID"),
-      },
-      isMandatory: true,
-    },
+   
   ];
 
   function setValue(value, input) {

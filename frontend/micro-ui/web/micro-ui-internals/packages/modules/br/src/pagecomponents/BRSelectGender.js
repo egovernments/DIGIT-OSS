@@ -18,18 +18,9 @@ const BRSelectGender = ({ t, config, onSelect, formData = {}, userType, register
     },
   ];
 
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = Digit.ULBService.getStateId();
 
-  const { data: Menu} = Digit.Hooks.hrms.useHRMSGenderMDMS(stateId, "common-masters", "GenderType");
-
-  let HRMenu = [];
-
-  Menu &&
-    Menu.map((comGender) => {
-      HRMenu.push({name: `COMMON_GENDER_${comGender.code}`, code: `${comGender.code}`})
-    }); 
-
+ 
+  
   function setValue(value, input) {
     onSelect(config.key, { ...formData[config.key], [input]: value });
   }
@@ -50,15 +41,15 @@ const BRSelectGender = ({ t, config, onSelect, formData = {}, userType, register
                 options={[
                   {
                     code: "MALE",
-                    name: "COMMON_GENDER_MALE",
+                    name: "MALE",
                   },
                   {
                     code: "FEMALE",
-                    name: "COMMON_GENDER_FEMALE",
+                    name: "FEMALE",
                   },
                   {
                     code: "TRANSGENDER",
-                    name: "COMMON_GENDER_TRANSGENDER",
+                    name: "TRANSGENDER",
                   },
                 ]}
                 // options={HRMenu}

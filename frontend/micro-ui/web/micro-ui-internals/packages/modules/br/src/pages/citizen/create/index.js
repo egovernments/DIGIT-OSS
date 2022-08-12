@@ -6,27 +6,9 @@ import { newConfig } from "../../../components/config/config";
 
 const Create = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
-  const [canSubmit, setSubmitValve] = useState(false);
   const { t } = useTranslation();
   const history = useHistory();
   
-
-// const payload = {
-//   user: {
-//     firstname: data?.BrSelectName?.firstName,
-//     lastname: data?.BrSelectName?.lastName,
-//     fathername: data?.BrSelectName?.fatherName,
-//     mothername: data?.BrSelectName?.motherName,
-//     tenantId: tenantId,
-//   },
-// }
-
-
-// const createuser = ((payload)=>{
-// Digit.BRService.create(data , tenantId)
-
-
-// })
 
   const onSubmit = (data) => {
 
@@ -42,14 +24,14 @@ const Create = () => {
           doctorName: data?.BrSelectName?.doctorName,
           hospitalName: data?.BrSelectName?.hospitalName,
           placeOfBirth: data?.BrSelectName?.placeOfBirth,
-          // applicantMobileNumber: data?.BRSelectPhoneNumber?.applicantMobileNumber,
-          // altMobileNumber: data?.BRSelectPhoneNumber?.altMobileNumber,
-          // emailId: data?.BRSelectEmailId?.emailId,
-          // permanentAddress: data?.BrSelectAddress?.permanentAddress,
-          // permanentCity: data?.BrSelectAddress?.permanentCity,
-          // correspondenceCity: data?.SelectCorrespondenceAddress?.correspondenceCity,
-          // correspondenceAddress: data?.SelectCorrespondenceAddress?.correspondenceAddress,
-          // bloodGroup: data?.SelectCorrespondenceAddress?.bloodGroup,
+          applicantMobileNumber: data?.BRSelectPhoneNumber?.applicantMobileNumber,
+          altMobileNumber: data?.BRSelectPhoneNumber?.altMobileNumber,
+          emailId: data?.BRSelectEmailId?.emailId,
+          permanentAddress: data?.BrSelectAddress?.permanentAddress,
+          permanentCity: data?.BrSelectAddress?.permanentCity,
+          correspondenceCity: data?.SelectCorrespondenceAddress?.correspondenceCity,
+          correspondenceAddress: data?.SelectCorrespondenceAddress?.correspondenceAddress,
+          bloodGroup: data?.SelectCorrespondenceAddress?.bloodGroup,
           tenantId: tenantId,
         },
         
@@ -64,8 +46,11 @@ const Create = () => {
      .catch((e) => {
      console.log("err");
     });
+
+    history.push("/digit-ui/citizen/br/response");
+
     console.log("getting data",Users)
-   
+    
   };
  
   

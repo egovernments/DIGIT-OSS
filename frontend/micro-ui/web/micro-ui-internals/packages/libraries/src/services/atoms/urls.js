@@ -95,6 +95,7 @@ const Urls = {
   },
   br: {
     create: "https://62f0e3e5e2bca93cd23f2ada.mockapi.io/user",
+    get:"https://62f0e3e5e2bca93cd23f2ada.mockapi.io/user",
     
   },
   tl: {
