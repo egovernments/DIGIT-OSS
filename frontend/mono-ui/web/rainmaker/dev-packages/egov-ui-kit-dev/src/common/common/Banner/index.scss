@@ -8,6 +8,7 @@
   left: 0;
   width: 100%;
   height: 100vh;
+  background-image: url(../../../assets/images/banner.png);
 }
 
 .banner-back-button {
@@ -28,7 +29,7 @@
 }
 
 .banner-image {
-  // background-image: url(../../../assets/images/banner.png);
+  background-image: url(../../../assets/images/banner.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -94,7 +95,7 @@
   // }
   .banner-image,
   .banner-overlay {
-    // background-image: url(../../../assets/images/Banner_image.jpg);
+    background-image: url(../../../assets/images/Banner_image.jpg);
     position: absolute;
     height: 100%;
     background: rgba(52, 73, 94, 0.9);

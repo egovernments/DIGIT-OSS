@@ -73,7 +73,7 @@ class App extends Component {
 
     const isPrivacyPolicy = location && location.pathname && location.pathname.includes("privacy-policy");
     if (nextProps.hasLocalisation !== this.props.hasLocalisation && !authenticated && !isPrivacyPolicy) {
-      nextProps.hasLocalisation && this.props.history.replace("/language-selection");
+      nextProps.hasLocalisation && this.props.history.replace("/user/login");
     }
   }
 

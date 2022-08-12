@@ -11,7 +11,7 @@ import { mapCompIDToName } from "egov-ui-kit/utils/commons";
 import { prepareFormData } from "egov-ui-kit/redux/common/actions";
 
 import { Image } from "components";
-import logo from "egov-ui-kit/assets/images/punjab-logo.png";
+import logo from "egov-ui-kit/assets/images/logo_black.png";
 import orderby from "lodash/orderBy";
 import "./index.css";
 

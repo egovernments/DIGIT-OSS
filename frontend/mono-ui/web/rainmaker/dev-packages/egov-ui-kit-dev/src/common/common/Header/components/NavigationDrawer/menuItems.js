@@ -30,7 +30,7 @@ const items = {
           },
           {
             primaryText: <Label label="CS_HOME_HEADER_LANGUAGE" />,
-            route: "/language-selection",
+            route: "/user/login",
             leftIcon: <Icon action="action" name="language" />,
             style: {
               borderBottom: "none",
@@ -131,7 +131,7 @@ const items = {
           },
           {
             primaryText: <Label label="CS_HOME_HEADER_LANGUAGE" />,
-            route: "/language-selection",
+            route: "/user/login",
             leftIcon: <Icon action="action" name="language" />,
             style: {
               borderBottom: "none",

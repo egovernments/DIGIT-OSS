@@ -13,7 +13,7 @@ const Main = ({ routes, hasLocalisation, defaultUrl }) => {
           }}
         />
 
-        <Redirect from="/" to={hasLocalisation ? "/language-selection" : defaultUrl.employee} />
+        <Redirect from="/" to={hasLocalisation ? "/user/login" : defaultUrl.employee} />
       </Switch>
     </main>
   );

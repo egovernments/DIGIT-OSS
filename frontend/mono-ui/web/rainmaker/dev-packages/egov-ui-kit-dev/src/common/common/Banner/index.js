@@ -8,14 +8,15 @@ const Banner = ({ children, hideBackButton, history, className = "",logoUrl,bann
   return (
     <div>
       <div className={`${className} user-screens-wrapper`}>
-        <div className="banner-image" style={bannerUrl && {backgroundImage:`url(${bannerUrl})`}}>
+        <div className="banner-image">
           <div className="banner-overlay" />
           <div className="banner-main-content">
-            {!hideBackButton && <Icon onClick={() => history.goBack()} className="banner-back-button" action="navigation" name="arrow-back" />}
-            {/* <div className="logo-wrapper user-logo-wrapper">
-              {<Image className="mseva-logo" source={logoUrl?logoUrl:logo} /> }
+            <Image src="egov-ui-kit/assets/images/logo_black.png" />
+            {/* {!hideBackButton && <Icon onClick={() => history.goBack()} className="banner-back-button" action="navigation" name="arrow-back" />} */}
+            <div className="logo-wrapper user-logo-wrapper">
+              {<Image className="mseva-logo" source={logo} /> }
               <Label label="" />
-            </div> */}
+            </div>
             <div className="banner-form-cont">{children}</div>
           </div>
         </div>
