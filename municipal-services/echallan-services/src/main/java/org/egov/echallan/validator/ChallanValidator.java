@@ -75,7 +75,7 @@ public class ChallanValidator {
 			for(Map<String,Object> financialYearProperties: taxPeriods){
 				Long startDate = (Long) financialYearProperties.get(MDMS_STARTDATE);
 				Long endDate = (Long) financialYearProperties.get(MDMS_ENDDATE);
-				if( challan.getTaxPeriodFrom() < challan.getTaxPeriodTo() && challan.getTaxPeriodFrom() >= startDate && challan.getTaxPeriodTo() <= endDate )
+				if( challan.getTaxPeriodFrom() <= challan.getTaxPeriodTo() && challan.getTaxPeriodFrom() >= startDate && challan.getTaxPeriodTo() <= endDate )
 				 	validFinancialYear = true;
 			}
 		 }
