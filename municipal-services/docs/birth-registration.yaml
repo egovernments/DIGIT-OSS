@@ -98,10 +98,14 @@ paths:
       tags:
         - Birth Registration Application
 definitions:
-  Applicant:
+  FatherApplicant:
     description: Details of the user applying for birth registration
     allOf:
       - $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-user/contracts/v1-0-0.yml#/definitions/User
+  MotherApplicant:
+    description: Details of the user applying for birth registration
+    allOf:
+      - $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-user/contracts/v1-0-0.yml#/definitions/User    
   BirthRegistrationApplication:
     type: object
     description: A Object holds the basic data for a Birth Registration Application
@@ -131,16 +135,6 @@ definitions:
       babyLastName:
         type: string
         description: Baby’s last name
-        maxLength: 128
-        minLength: 2
-      fatherOfApplicant:
-        type: string
-        description: Name of father
-        maxLength: 128
-        minLength: 2
-      motherOfApplicant:
-        type: string
-        description: Name of mother
         maxLength: 128
         minLength: 2
       fatherMobileNumber:
@@ -173,13 +167,14 @@ definitions:
         description: Date of birth epoch
       address:
         $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/Address  
-      applicant:
-        $ref: '#/definitions/Applicant'  
+      fatherOfApplicant:
+        $ref: '#/definitions/FatherApplicant' 
+      motherOfApplicant:
+        $ref: '#/definitions/MotherApplicant'  
       auditDetails:
         $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/AuditDetails
     required:
       - tenantId
-      - applicant
       - babyFirstName
       - babyLastName
       - fatherOfApplicant
