@@ -8,7 +8,7 @@
   left: 0;
   width: 100%;
   height: 100vh;
-  background-image: url(../../../assets/images/banner.png);
+  background-image: url(../../../assets/images/banner-muncipal.png);
 }
 
 .banner-back-button {
@@ -21,7 +21,7 @@
 
 .banner-overlay {
   position: absolute;
-  background: rgba(52, 73, 94, 0.9);
+  // background: rgba(52, 73, 94, 0.9);
   top: 0;
   left: 0;
   right: 0;
@@ -29,7 +29,7 @@
 }
 
 .banner-image {
-  background-image: url(../../../assets/images/banner.png);
+  background-image: url(../../../assets/images/banner-muncipal.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -95,10 +95,10 @@
   // }
   .banner-image,
   .banner-overlay {
-    background-image: url(../../../assets/images/Banner_image.jpg);
+    background-image: url(../../../assets/images/banner-muncipal.jpg);
     position: absolute;
     height: 100%;
-    background: rgba(52, 73, 94, 0.9);
+    // background: rgba(52, 73, 94, 0.9);
     top: 0;
     left: 0;
     right: 0;

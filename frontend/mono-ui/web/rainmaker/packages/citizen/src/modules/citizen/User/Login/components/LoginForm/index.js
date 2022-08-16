@@ -23,9 +23,9 @@ const LoginForm = ({ handleFieldChange, form, logoUrl, qrCodeURL, enableWhatsApp
           textChildren={
             <div>
               <div className="rainmaker-displayInline" style={{ justifyContent: "center", alignItems: "center", marginBottom: "24px" }}>
-                <div style={{}}>
+                {/* <div style={{}}>
                   <Image className="mseva-logo" source={`${logo}`} />
-                </div >
+                </div > */}
                 {/* <div style={{marginLeft:"7px"}}>
                   <Label bold={true}  fontSize= "23px" label="|" />
                   </div>
@@ -173,9 +173,9 @@ const LoginForm = ({ handleFieldChange, form, logoUrl, qrCodeURL, enableWhatsApp
             textChildren={
               <div>
                 <div className="rainmaker-displayInline" style={{ justifyContent: "center" }}>
-                  <div style={{ marginBottom: "24px" }}>
+                  {/* <div style={{ marginBottom: "24px" }}>
                     <Image className="mseva-logo" source={`${logo}`} />
-                  </div >
+                  </div > */}
                   {/* <div style={{marginLeft:"7px", marginBottom: "24px" }}>
             <Label bold={true}  fontSize= "23px" label="|" />
             </div>
