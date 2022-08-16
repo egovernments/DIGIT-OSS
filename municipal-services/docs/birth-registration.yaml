@@ -11,17 +11,15 @@ schemes:
   - https
 basePath: /birth-services
 x-api-id: org.egov.birth.services
-x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml'
+x-common-path: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml
 paths:
   /v1/registration/_search:
     post:
       summary: Get the list of Birth registration applications
-      description: 
-        1. Search and get birth registration applications(s) based on defined search criteria.
-        2. In case multiple parameters are passed voter registration applications will be searched as an AND combination of all the parameters.
+      description: 1. Search and get birth registration applications(s) based on defined search criteria. 2. In case multiple parameters are passed voter registration applications will be searched as an AND combination of all the parameters.
       parameters:
-        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/requestInfo'
-        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/tenantId'
+        - $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/requestInfo
+        - $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/tenantId
         - name: status
           in: query
           description: Search based on status.
@@ -34,10 +32,10 @@ paths:
             format: int64
           in: query
           maxItems: 50
-          description: unique identifier of birth registration 
+          description: unique identifier of birth registration
         - name: applicationNumber
           in: query
-          description:  Unique application number for the Birth Registration Application
+          description: Unique application number for the Birth Registration Application
           type: string
           minLength: 2
           maxLength: 64
@@ -49,7 +47,7 @@ paths:
         '400':
           description: Invalid input
           schema:
-            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes'
+            $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes
       tags:
         - Birth Registration Application
   /v1/registration/_create:
@@ -73,7 +71,7 @@ paths:
         '400':
           description: Birth Registration Application(s) creation failed
           schema:
-            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes'
+            $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes
       tags:
         - Birth Registration Application
   /v1/registration/_update:
@@ -96,19 +94,14 @@ paths:
         '400':
           description: (s) updation failed
           schema:
-            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes'
+            $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes
       tags:
         - Birth Registration Application
-        
 definitions:
-##############################################      
-  
- 
-
-
-
-##############################################
-  
+  Applicant:
+    description: Details of the user applying for birth registration
+    allOf:
+      - $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-user/contracts/v1-0-0.yml#/definitions/User
   BirthRegistrationApplication:
     type: object
     description: A Object holds the basic data for a Birth Registration Application
@@ -132,86 +125,98 @@ definitions:
         readOnly: true
       babyFirstName:
         type: string
-        description: Baby’s first name 
+        description: Baby’s first name
         maxLength: 128
         minLength: 2
       babyLastName:
         type: string
         description: Baby’s last name
         maxLength: 128
-        minLength: 2  
-      fatherName:
+        minLength: 2
+      fatherOfApplicant:
         type: string
         description: Name of father
         maxLength: 128
         minLength: 2
-      motherName:
+      motherOfApplicant:
         type: string
         description: Name of mother
         maxLength: 128
         minLength: 2
-      doctorName:
+      fatherMobileNumber:
         type: string
-        description: Name of doctor 
+        description: Number of father
         maxLength: 128
-        minLength: 2 
-      hospitalName:
+        minLength: 2
+      motherMobileNumber:
         type: string
-        description: Name of hospital 
+        description: Number of mother
         maxLength: 128
         minLength: 2  
+      doctorName:
+        type: string
+        description: Name of doctor
+        maxLength: 128
+        minLength: 2
+      hospitalName:
+        type: string
+        description: Name of hospital
+        maxLength: 128
+        minLength: 2
       placeOfBirth:
         type: string
-        description: Place of birth 
+        description: Place of birth
         maxLength: 128
         minLength: 2
       timeOfBirth:
         type: integer
         description: Date of birth epoch
-     
+      address:
+        $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/Address  
+      applicant:
+        $ref: '#/definitions/Applicant'  
       auditDetails:
-        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/AuditDetails'
+        $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/AuditDetails
     required:
       - tenantId
       - applicant
       - babyFirstName
       - babyLastName
-      - fatherName
-      - motherName
+      - fatherOfApplicant
+      - motherOfApplicant
+      - fatherMobileNumber
+      - motherMobileNumber
       - doctorName
       - hospitalName
       - placeOfBirth
       - timeOfBirth
-      
-      
   Workflow:
-      type: object
-      description: 'Fields related to workflow service'
-      properties:
-        action:
-          type: string
-          description: Action on the application in certain
-          minLength: 1
-          maxLength: 64
-        status:
-          type: string
-          description: status of the application          
-        comments:
-          type: string
-          description: Unique Identifier scrutinized number
-          minLength: 1
-          maxLength: 64
-        documents:
-          description: Attach the workflow verification documents.
-          type: array
-          items:
-            $ref: 'https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/Document'
-      
+    type: object
+    description: Fields related to workflow service
+    properties:
+      action:
+        type: string
+        description: Action on the application in certain
+        minLength: 1
+        maxLength: 64
+      status:
+        type: string
+        description: status of the application
+      comments:
+        type: string
+        description: Unique Identifier scrutinized number
+        minLength: 1
+        maxLength: 64
+      documents:
+        description: Attach the workflow verification documents.
+        type: array
+        items:
+          $ref: https://raw.githubusercontent.com/egovernments/municipal-services/common-contract/docs/common-contract-v2-0-0.yml#/components/schemas/Document
   BirthRegistrationRequest:
-    description: 'Contract class to receive request. Array of  items are used in case of create, whereas single  item is used for update'
+    description: Contract class to receive request. Array of  items are used in case of create, whereas single  item is used for update
     properties:
       RequestInfo:
-        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo'
+        $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/RequestInfo
       BirthRegistrationApplications:
         description: Used for search result and create only
         type: array
@@ -219,12 +224,11 @@ definitions:
         maximum: 100
         items:
           $ref: '#/definitions/BirthRegistrationApplication'
-          
   BirthRegistrationResponse:
-    description: 'Contract class to send response. Array of  items are used in case of search results or response for create, whereas single  item is used for update'
+    description: Contract class to send response. Array of  items are used in case of search results or response for create, whereas single  item is used for update
     properties:
       ResponseInfo:
-        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo'
+        $ref: https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ResponseInfo
       BirthRegistrationApplications:
         description: Used for search result and create only
         type: array
