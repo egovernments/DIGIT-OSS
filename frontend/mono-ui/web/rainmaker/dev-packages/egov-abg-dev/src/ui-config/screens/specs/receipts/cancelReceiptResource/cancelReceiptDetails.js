@@ -259,6 +259,25 @@ export const cancelReceiptDetailsCard = getCommonCard(
           pattern: getPattern("Address"),
           errorMessage: "Invalid Details.",
           jsonPath: "paymentWorkflows[0].additionalDetails"
+       }),
+
+        addtionalPenalty: getTextField({
+          label: {
+            labelName: "Comments",
+            labelKey: "CR_ADDITIONAL_PENALTY"
+          },
+          placeholder: {
+            labelName: "Enter Comment ",
+            labelKey: "CR_ADDITIONAL_PENALTY_PLACEHOLDER"
+          },
+          required: false,
+          gridDefination: {
+            xs: 12,
+            sm: 8
+          },
+          pattern: getPattern("Amount"),
+          jsonPath: "paymentWorkflows[0].additionalPenalty",
+          disabled: true
         })
       }
     )
