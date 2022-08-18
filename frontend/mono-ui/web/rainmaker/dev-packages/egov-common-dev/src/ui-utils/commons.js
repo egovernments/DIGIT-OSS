@@ -1,4 +1,5 @@
 import { convertDateToEpoch } from "egov-ui-framework/ui-config/screens/specs/utils";
+import commonConfig from "config/common.js";
 import {
   handleScreenConfigurationFieldChange as handleField,
   prepareFinalObject,
@@ -826,4 +827,25 @@ export const downloadBill = async (consumerCode ,tenantId, businessService, url)
         ]
   const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: billResponse.Bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
   downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0],'download');
+}
+
+export const downloadMultipleBill = async (bills = [], configKey) => {
+  try {
+    const DOWNLOADRECEIPT = {
+      GET: {
+        URL: "/pdf-service/v1/_create",
+        ACTION: "_get",
+      },
+    };
+    const queryStr = [
+      { key: "key", value: configKey },
+      { key: "tenantId", value: commonConfig.tenantId }
+    ]
+    const pfResponse = await httpRequest("post", DOWNLOADRECEIPT.GET.URL, DOWNLOADRECEIPT.GET.ACTION, queryStr, { Bill: bills }, { 'Accept': 'application/pdf' }, { responseType: 'arraybuffer' })
+    downloadReceiptFromFilestoreID(pfResponse.filestoreIds[0], 'download');
+  } catch (error) {
+    console.log(error);
+
+  }
+
 }
