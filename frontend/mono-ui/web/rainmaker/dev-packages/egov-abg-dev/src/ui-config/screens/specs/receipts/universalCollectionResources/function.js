@@ -161,12 +161,18 @@ export const searchApiCall = async (state, dispatch) => {
        const result = await getPropertySearchResults(queryObject4);
        if(result && result.Properties && result.Properties[0].status ==="INWORKFLOW")
        {
-         response[0].propertystatus = "INWORKFLOW" 
+         for(let i=0;i<response.length;i++)
+         {
+         response[i].propertystatus = "INWORKFLOW" 
+         }
          filetedresult = response;
        }
        else      
        {
-         response[0].propertystatus = "ACTIVE" 
+        for(let i=0;i<response.length;i++)
+         {
+         response[i].propertystatus = "ACTIVE" 
+         }
          filetedresult = response;
        }
       }
