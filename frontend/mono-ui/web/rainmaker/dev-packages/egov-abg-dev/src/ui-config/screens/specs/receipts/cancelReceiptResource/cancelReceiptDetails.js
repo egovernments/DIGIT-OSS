@@ -132,7 +132,7 @@ export const receiptPaymentDetails = {
     {
       jsonPath: "PaymentReceipt.transactionNumber",
       callBack: (value) => {
-        value = value.replaceAll("_", "");
+        value = value && value.replaceAll("_", "");
         checkValueForNA;
         return value;
       },
