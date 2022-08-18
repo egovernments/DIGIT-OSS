@@ -70,7 +70,7 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl,history,
                </span>
                </div>
             ) : (
-              <div style={{ marginBottom: "24px" ,display:"flex",float:"right"}} className="text-right">
+              <div style={{ marginBottom: "24px"}} className="text-right">
               <Label id="otp-resendt"className="otp-prompt" label="CORE_ANOTHER_OTP" />
               <CountdownTimer timeLeft={timeLeft} completeCallback={completed} tickCallback={tick} />
               <Label id="otp-resendt" label="CORE_OTP_SECONDS" />
@@ -80,9 +80,10 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl,history,
               <Button
               {...submit}
                 style={{
-                  height: "48px",     
+                  height: "auto",
+                  padding: '0.25rem 1.5rem',     
                   width:"auto",
-                  backgroundColor: '#337ab7'   
+                  backgroundColor: '#28a745'   
                 }}
                 variant={"contained"}
                 color={"#fff"}
