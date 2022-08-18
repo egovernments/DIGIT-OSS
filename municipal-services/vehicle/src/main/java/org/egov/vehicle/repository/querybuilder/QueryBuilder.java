@@ -220,6 +220,7 @@ public class QueryBuilder {
 		Vehicle vehicle = vehicleReq.getVehicle();
 		preparedStmtList.add(vehicle.getTenantId());
 		preparedStmtList.add(vehicle.getRegistrationNumber());
+		preparedStmtList.add(vehicle.getStatus().toString());
 		return VEH_EXISTS_QUERY;
 	}
 
