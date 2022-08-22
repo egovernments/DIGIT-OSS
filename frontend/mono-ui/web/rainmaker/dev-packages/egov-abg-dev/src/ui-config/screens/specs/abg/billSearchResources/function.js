@@ -99,7 +99,20 @@ export const searchApiCall = async (state, dispatch) => {
     const responseFromAPI = await getGroupBillSearch(dispatch, searchScreenObject)
     const bills = (responseFromAPI && responseFromAPI.Bills) || [];
     const billTableData = bills.map(item => {
-      return {
+      if(item.businessService!='PT'){
+        let locale = item.billNumber
+          .split("-")[1]
+          .trim()
+          .split(".")[1]
+          .split("_")
+          .toString()
+          .replaceAll(",", " ");
+        item.billNumber = item.billNumber.replace(
+          item.billNumber.split("-")[1].trim(),
+          locale
+        );
+      }
+       return {
         billNumber: get(item, "billNumber"),
         billId: get(item, "id"),
         consumerCode: get(item, "consumerCode"),
