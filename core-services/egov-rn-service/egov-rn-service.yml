@@ -1,0 +1,132 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: eGov Registration Service
+  description: >
+    This module facilitates registration of beneficiaries across different campaigns and missions.
+  contact:
+    name: Egovernments Foundation
+    email: contact@egovernments.org
+schemes:
+  - https
+basePath: /egov-rn-service
+x-common-path: >-
+  https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml
+paths:
+#########################################
+  /registration/v1/_create:
+    post:
+      summary: Registers an entity.
+      description: Registers an entity. On successful registration, Ok response is returned.
+      parameters:
+        - name: RegistrationRequest
+          in: "body"
+          description: Details of the registration and RequestInfo meta data.
+          required: true
+          schema:
+            $ref: '#/definitions/RegistrationRequest'
+      responses:
+        '200':
+          description: Entity registered successfully.
+          schema:
+            $ref: '#/definitions/RegistrationResponse'
+        '400':
+          description: Entity registration failed.
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+      tags:
+        - Registration
+#########################################
+definitions:
+  Registration:
+    type: object
+    discriminator: registrationType
+    properties:
+      name:
+        type: string
+      registrationType:
+        type: string
+        enum:
+          - Household
+    required:
+    - name
+    - registrationType
+  Household:
+    description: A representation of Household
+    allOf:
+    - $ref: '#/definitions/Registration'
+    - type: object
+      properties:
+        isHead:
+          type: boolean
+          description: Denotes the head of the household
+      required:
+      - isHead
+  User:
+    type: object
+    readOnly: true
+    properties:
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant to which user primarily belongs
+      uuid:
+        type: string
+        description: UUID for the user.
+      userName:
+        type: string
+        description: The unique username used of the user - this will be used for user login. This needs to be unique within the tenant.
+        minLength: 4
+        maxLength: 64
+      name:
+        type: string
+        description: The full name of the user.
+        minLength: 3
+        maxLength: 100
+      mobileNumber:
+        type: string
+        description: Mobile number of the user
+        maxLength: 10
+      emailId:
+        type: string
+        description: Email address of the user
+        maxLength: 128
+    required:
+     - uuid
+     - userName
+     - name
+     - mobileNumber
+     - tenantId
+
+#########################################
+  RegistrationRequest:
+    description: >-
+      The request object, containing all necessary information for registering an entity and the request body metadata
+    properties:
+      requestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+      Registration:
+        $ref: '#/definitions/Registration'
+
+  RequestInfoWrapper:
+    description: >-
+      Wrapper for Request Info
+    properties:
+      requestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+
+
+  RegistrationResponse:
+    description: >-
+      The registration response object denoting the status of registration.
+    properties:
+      responseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      registrationId:
+        type: string
+        required: true
+          
+#########################################        
