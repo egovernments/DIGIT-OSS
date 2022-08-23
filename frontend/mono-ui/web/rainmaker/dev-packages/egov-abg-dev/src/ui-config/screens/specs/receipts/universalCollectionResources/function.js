@@ -26,19 +26,6 @@ export const searchApiCall = async (state, dispatch) => {
   );
  let workflowProperties = [];
 
-  if(searchScreenObject.mobileNumber)
-  {
-  let queryObject2 = [
-    {
-      key: "tenantId",
-      value: tenantId
-    },
-    { key: "mobileNumber", value: searchScreenObject.mobileNumber }
-  ];
-  const result = await getPropertySearchResults(queryObject2);
-   workflowProperties = result.Properties.filter(element=>
-    element.status==="INWORKFLOW")
-}
   const isSearchBoxFirstRowValid = validateFields(
     "components.div.children.UCSearchCard.children.cardContent.children.searchContainer.children",
     state,
@@ -112,6 +99,40 @@ export const searchApiCall = async (state, dispatch) => {
       convertedConfig[uiConfig.code]={...uiConfig}
     })
     let filetedresult = [];
+
+  if(searchScreenObject.mobileNumber)
+    {
+    let queryObject2 = [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      { key: "mobileNumber", value: searchScreenObject.mobileNumber }
+    ];
+
+
+    let result = await getPropertySearchResults(queryObject2);
+    
+    let propertyIds = [];
+    if(result.Properties.length===0)
+    {     
+     for(let i=0;i<responseFromAPI.Payments.length;i++)
+     {
+      propertyIds[i] = responseFromAPI.Payments[i].paymentDetails[0].bill.consumerCode;
+     }    
+    let queryObj = [
+      {
+        key: "tenantId",
+        value: tenantId
+      },
+      { key: "propertyIds", value: propertyIds }
+    ];          
+    result = await getPropertySearchResults(queryObj);
+  }
+    workflowProperties = result && result.Properties.filter(element=>
+      element.status==="INWORKFLOW")  
+  }
+
     if(searchScreenObject.mobileNumber && workflowProperties)
     {    
     let  results1 = response.filter(({ amount: id1 }) => workflowProperties.some(({ propertyId: id2 }) => id2 === id1));
