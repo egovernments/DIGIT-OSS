@@ -1,15 +1,9 @@
 import { ActionBar, Banner, Card, CardText, Loader, SubmitBar } from "@egovernments/digit-ui-react-components";
-
 import React, { useEffect, useState } from "react";
-
 import { Link } from "react-router-dom";
 
 
-
 const Response = (props) => {
- 
-
-
     return (
       <Card>
       

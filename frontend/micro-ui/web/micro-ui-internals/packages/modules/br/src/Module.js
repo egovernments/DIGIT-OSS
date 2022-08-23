@@ -71,10 +71,7 @@ export const BRLinks = ({ matchPath, userType }) => {
       link: `${matchPath}/birth`,
       i18nKey: t("Create BirthRegistration"),
     },
-    // {
-    //   link: `${matchPath}/br-applications`,
-    //   i18nKey: t("MY APPLICATION"),
-    // },
+ 
 
    
   ];

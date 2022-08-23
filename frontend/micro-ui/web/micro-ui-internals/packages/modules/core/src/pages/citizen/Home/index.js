@@ -37,11 +37,7 @@ const Home = () => {
     },
     options: [
      
-      // {
-      //   name: t("Birth-Registration"),
-      //   Icon: <OBPSIcon />,
-      //   onClick: () => history.push("/digit-ui/citizen/pt-home"),
-      // },
+     
       {
         name: t("Birth-Registration"),
         Icon: <OBPSIcon />,
@@ -77,10 +73,7 @@ const Home = () => {
         Icon: <DocumentIcon />,
         onClick: () => history.push("/digit-ui/citizen/engagement/surveys/list"),
       },
-      // {
-      //     name: t("CS_COMMON_HELP"),
-      //     Icon: <HelpIcon/>
-      // }
+     
     ],
     styles: { display: "flex", flexWrap: "wrap", justifyContent: "flex-start", width: "100%" },
   };

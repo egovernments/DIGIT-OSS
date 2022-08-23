@@ -15,7 +15,6 @@
     "@egovernments/digit-ui-module-core":"1.5.3",
     "@egovernments/digit-ui-module-engagement":"1.5.3",
     "@egovernments/digit-ui-module-br":"1.5.4",
-    "@egovernments/digit-ui-module-commonpt":"1.5.4",
     "@egovernments/digit-ui-module-dss":"1.5.3",
     "@egovernments/digit-ui-react-components":"1.5.3",
     "babel-loader": "8.1.0",

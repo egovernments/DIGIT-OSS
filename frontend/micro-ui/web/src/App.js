@@ -7,7 +7,6 @@ import { initLibraries } from "@egovernments/digit-ui-libraries";
 import { initEngagementComponents } from "@egovernments/digit-ui-module-engagement";
 // import { initWSComponents } from "@egovernments/digit-ui-module-ws"; 
 import {initCustomisationComponents} from "./Customisations";
-import { initCommonPTComponents } from "@egovernments/digit-ui-module-commonpt";
 import { BRModule ,initBRComponents ,BRLinks} from "@egovernments/digit-ui-module-br";
 
 initLibraries();
