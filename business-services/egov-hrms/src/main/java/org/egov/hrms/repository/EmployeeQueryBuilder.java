@@ -67,8 +67,8 @@ public class EmployeeQueryBuilder {
 			builder.append(" employee.tenantid NOTNULL");
 		
 		if(!CollectionUtils.isEmpty(criteria.getCodes())){
-			List<String> codes = criteria.getCodes().stream().map(String::toLowerCase).collect(Collectors.toList());
-			builder.append(" and lower(employee.code) IN (").append(createQuery(codes)).append(")");
+			List<String> codes = criteria.getCodes().stream().collect(Collectors.toList());
+			builder.append(" and employee.code IN (").append(createQuery(codes)).append(")");
 			addToPreparedStatement(preparedStmtList, codes);
 		}
 		if(!CollectionUtils.isEmpty(criteria.getIds())){
