@@ -18,7 +18,7 @@
 # -
 config:
 # Business Services
-  - name: "builds/digit-dev/business-services/billing-service"
+  - name: "builds/health-DIGIT-OSS/business-services/billing-service"
     build:
       - work-dir: "business-services/billing-service"
         image-name: "billing-service"
@@ -26,7 +26,7 @@ config:
       - work-dir: "business-services/billing-service/src/main/resources/db"
         image-name: "billing-service-db"
 
-  - name: "builds/digit-dev/business-services/collection-services"
+  - name: "builds/health-DIGIT-OSS/business-services/collection-services"
     build:
       - work-dir: "business-services/collection-services"
         image-name: "collection-services"
@@ -34,7 +34,7 @@ config:
       - work-dir: "business-services/collection-services/src/main/resources/db"
         image-name: "collection-services-db"
 
-  - name: "builds/digit-dev/business-services/egf-instrument"
+  - name: "builds/health-DIGIT-OSS/business-services/egf-instrument"
     build:
       - work-dir: "business-services/egf-instrument"
         image-name: "egf-instrument"
@@ -42,7 +42,7 @@ config:
       - work-dir: "business-services/egf-instrument/src/main/resources/db"
         image-name: "egf-instrument-db"
 
-  - name: "builds/digit-dev/business-services/egf-master"
+  - name: "builds/health-DIGIT-OSS/business-services/egf-master"
     build:
       - work-dir: "business-services/egf-master"
         image-name: "egf-master"
@@ -50,7 +50,7 @@ config:
       - work-dir: "business-services/egf-master/src/main/resources/db"
         image-name: "egf-master-db"
 
-  - name: "builds/digit-dev/business-services/egov-apportion-service"
+  - name: "builds/health-DIGIT-OSS/business-services/egov-apportion-service"
     build:
       - work-dir: "business-services/egov-apportion-service"
         image-name: "egov-apportion-service"
@@ -58,7 +58,7 @@ config:
       - work-dir: "business-services/egov-apportion-service/src/main/resources/db"
         image-name: "egov-apportion-service-db"
         
-  - name: "builds/digit-dev/business-services/egov-hrms"
+  - name: "builds/health-DIGIT-OSS/business-services/egov-hrms"
     build:
       - work-dir: "business-services/egov-hrms"
         image-name: "egov-hrms"
@@ -66,7 +66,7 @@ config:
       - work-dir: "business-services/egov-hrms/src/main/resources/db"
         image-name: "egov-hrms-db"
 
-  - name: "builds/digit-dev/business-services/finance-collections-voucher-consumer"
+  - name: "builds/health-DIGIT-OSS/business-services/finance-collections-voucher-consumer"
     build:
       - work-dir: "business-services/finance-collections-voucher-consumer"
         image-name: "finance-collections-voucher-consumer"
@@ -74,31 +74,31 @@ config:
       - work-dir: "business-services/finance-collections-voucher-consumer/src/main/resources/db"
         image-name: "finance-collections-voucher-consumer-db"
 
-  - name: "builds/digit-dev/business-services/dashboard-analytics"
+  - name: "builds/health-DIGIT-OSS/business-services/dashboard-analytics"
     build:
       - work-dir: "business-services/dashboard-analytics"
         image-name: "dashboard-analytics"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/business-services/dashboard-ingest"
+  - name: "builds/health-DIGIT-OSS/business-services/dashboard-ingest"
     build:
       - work-dir: "business-services/dashboard-ingest"
         image-name: "dashboard-ingest"
         dockerfile: "build/maven/Dockerfile"
-  - name: "builds/digit-dev/core-services/egov-accesscontrol"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-accesscontrol"
     build:
       - work-dir: "core-services/egov-accesscontrol"
         image-name: "egov-accesscontrol"
         dockerfile: "build/maven/Dockerfile"
 # Core Services
-  - name: "builds/digit-dev/core-services/audit-service"
+  - name: "builds/health-DIGIT-OSS/core-services/audit-service"
     build:
       - work-dir: "core-services/audit-service"
         image-name: "audit-service"
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "core-services/audit-service/src/main/resources/db"
         image-name: "audit-service-db"
-  - name: "builds/digit-dev/core-services/egov-common-masters"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-common-masters"
     build:
       - work-dir: "core-services/egov-common-masters"
         image-name: "egov-common-masters"
@@ -106,7 +106,7 @@ config:
       - work-dir: "core-services/egov-common-masters/src/main/resources/db"
         image-name: "egov-common-masters-db"
 
-  - name: "builds/digit-dev/core-services/egov-data-uploader"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-data-uploader"
     build:
       - work-dir: "core-services/egov-data-uploader"
         image-name: "egov-data-uploader"
@@ -114,7 +114,7 @@ config:
       - work-dir: "core-services/egov-data-uploader/src/main/resources/db"
         image-name: "egov-data-uploader-db"
 
-  - name: "builds/digit-dev/core-services/egov-enc-service"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-enc-service"
     build:
       - work-dir: "core-services/egov-enc-service"
         image-name: "egov-enc-service"
@@ -122,7 +122,7 @@ config:
       - work-dir: "core-services/egov-enc-service/src/main/resources/db"
         image-name: "egov-enc-service-db"
 
-  - name: "builds/digit-dev/core-services/egov-filestore"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-filestore"
     build:
       - work-dir: "core-services/egov-filestore"
         image-name: "egov-filestore"
@@ -130,7 +130,7 @@ config:
       - work-dir: "core-services/egov-filestore/src/main/resources/db"
         image-name: "egov-filestore-db"
 
-  - name: "builds/digit-dev/core-services/egov-idgen"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-idgen"
     build:
       - work-dir: "core-services/egov-idgen"
         image-name: "egov-idgen"
@@ -138,7 +138,7 @@ config:
       - work-dir: "core-services/egov-idgen/src/main/resources/db"
         image-name: "egov-idgen-db"
 
-  - name: "builds/digit-dev/core-services/egov-indexer"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-indexer"
     build:
       - work-dir: "core-services/egov-indexer"
         image-name: "egov-indexer"
@@ -146,7 +146,7 @@ config:
       - work-dir: "core-services/egov-indexer/src/main/resources/db"
         image-name: "egov-indexer-db"
 
-  - name: "builds/digit-dev/core-services/egov-localization"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-localization"
     build:
       - work-dir: "core-services/egov-localization"
         image-name: "egov-localization"
@@ -154,7 +154,7 @@ config:
       - work-dir: "core-services/egov-localization/src/main/resources/db"
         image-name: "egov-localization-db"
 
-  - name: "builds/digit-dev/core-services/egov-location"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-location"
     build:
       - work-dir: "core-services/egov-location"
         image-name: "egov-location"
@@ -162,25 +162,25 @@ config:
       - work-dir: "core-services/egov-location/src/main/resources/db"
         image-name: "egov-location-db"
 
-  - name: "builds/digit-dev/core-services/egov-mdms-service"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-mdms-service"
     build:
       - work-dir: "core-services/egov-mdms-service"
         image-name: "egov-mdms-service"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/core-services/egov-notification-mail"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-notification-mail"
     build:
       - work-dir: "core-services/egov-notification-mail"
         image-name: "egov-notification-mail"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/core-services/egov-notification-sms"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-notification-sms"
     build:
       - work-dir: "core-services/egov-notification-sms"
         image-name: "egov-notification-sms"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/core-services/egov-otp"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-otp"
     build:
       - work-dir: "core-services/egov-otp"
         image-name: "egov-otp"
@@ -188,13 +188,13 @@ config:
       - work-dir: "core-services/egov-otp/src/main/resources/db"
         image-name: "egov-otp-db"
 
-  - name: "builds/digit-dev/core-services/egov-persister"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-persister"
     build:
       - work-dir: "core-services/egov-persister"
         image-name: "egov-persister"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/core-services/egov-pg-service"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-pg-service"
     build:
       - work-dir: "core-services/egov-pg-service"
         image-name: "egov-pg-service"
@@ -202,19 +202,19 @@ config:
       - work-dir: "core-services/egov-pg-service/src/main/resources/db"
         image-name: "egov-pg-service-db"
 
-  - name: "builds/digit-dev/core-services/egov-searcher"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-searcher"
     build:
       - work-dir: "core-services/egov-searcher"
         image-name: "egov-searcher"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/core-services/egov-telemetry"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-telemetry"
     build:
       - work-dir: "core-services/egov-telemetry"
         image-name: "egov-telemetry"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/core-services/egov-user"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-user"
     build:
       - work-dir: "core-services/egov-user"
         image-name: "egov-user"
@@ -222,7 +222,7 @@ config:
       - work-dir: "core-services/egov-user/src/main/resources/db"
         image-name: "egov-user-db"
 
-  - name: "builds/digit-dev/core-services/egov-workflow-v2"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-workflow-v2"
     build:
       - work-dir: "core-services/egov-workflow-v2"
         image-name: "egov-workflow-v2"
@@ -230,7 +230,7 @@ config:
       - work-dir: "core-services/egov-workflow-v2/src/main/resources/db"
         image-name: "egov-workflow-v2-db"
 
-  - name: "builds/digit-dev/core-services/egov-document-uploader"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-document-uploader"
     build:
       - work-dir: "core-services/egov-document-uploader"
         image-name: "egov-document-uploader"
@@ -238,7 +238,7 @@ config:
       - work-dir: "core-services/egov-document-uploader/src/main/resources/db"
         image-name: "egov-document-uploader-db"
 
-  - name: "builds/digit-dev/core-services/national-dashboard-ingest"
+  - name: "builds/health-DIGIT-OSS/core-services/national-dashboard-ingest"
     build:
       - work-dir: "core-services/national-dashboard-ingest"
         image-name: "national-dashboard-ingest"
@@ -246,13 +246,13 @@ config:
       - work-dir: "core-services/national-dashboard-ingest/src/main/resources/db"
         image-name: "national-dashboard-ingest-db"
 
-  - name: "builds/digit-dev/core-services/national-dashboard-kafka-pipeline"
+  - name: "builds/health-DIGIT-OSS/core-services/national-dashboard-kafka-pipeline"
     build:
       - work-dir: "core-services/national-dashboard-kafka-pipeline"
         image-name: "national-dashboard-kafka-pipeline"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/core-services/egov-survey-services"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-survey-services"
     build:
       - work-dir: "core-services/egov-survey-services"
         image-name: "egov-survey-services"
@@ -261,13 +261,13 @@ config:
         image-name: "egov-survey-services-db"
 
 
-  - name: "builds/digit-dev/core-services/report"
+  - name: "builds/health-DIGIT-OSS/core-services/report"
     build:
       - work-dir: "core-services/report"
         image-name: "report"
         dockerfile: "build/maven/Dockerfile"   
 
-  - name: "builds/digit-dev/core-services/tenant"
+  - name: "builds/health-DIGIT-OSS/core-services/tenant"
     build:
       - work-dir: "core-services/tenant"
         image-name: "tenant"
@@ -275,25 +275,25 @@ config:
       - work-dir: "core-services/tenant/src/main/resources/db"
         image-name: "tenant-db"
 
-  - name: "builds/digit-dev/core-services/user-otp"
+  - name: "builds/health-DIGIT-OSS/core-services/user-otp"
     build:
       - work-dir: "core-services/user-otp"
         image-name: "user-otp"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/core-services/zuul"
+  - name: "builds/health-DIGIT-OSS/core-services/zuul"
     build:
       - work-dir: "core-services/zuul"
         image-name: "zuul"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/core-services/internal-gateway"
+  - name: "builds/health-DIGIT-OSS/core-services/internal-gateway"
     build:
       - work-dir: "core-services/internal-gateway"
         image-name: "internal-gateway"
         dockerfile: "build/maven/Dockerfile"
         
-  - name: "builds/digit-dev/core-services/egov-user-event"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-user-event"
     build:
       - work-dir: "core-services/egov-user-event"
         image-name: "egov-user-event"
@@ -301,25 +301,25 @@ config:
       - work-dir: "core-services/egov-user-event/src/main/resources/db"
         image-name: "egov-user-event-db"       
 
-  - name: "builds/digit-dev/core-services/pdf-service"
+  - name: "builds/health-DIGIT-OSS/core-services/pdf-service"
     build:
       - work-dir: "core-services/pdf-service"
         image-name: "pdf-service"
       - work-dir: "core-services/pdf-service/migration"
         image-name: "pdf-service-db"
         
-  - name: "builds/digit-dev/core-services/telemetry/egov-telemetry-kafka-streams"
+  - name: "builds/health-DIGIT-OSS/core-services/telemetry/egov-telemetry-kafka-streams"
     build:
       - work-dir: "core-services/egov-telemetry/egov-telemetry-kafka-streams"
         image-name: "egov-telemetry-kafka-streams"
 
-  - name: "builds/digit-dev/core-services/telemetry/egov-telemetry-batch-process"
+  - name: "builds/health-DIGIT-OSS/core-services/telemetry/egov-telemetry-batch-process"
     build:
       - work-dir: "core-services/egov-telemetry/egov-telemetry-batch-process"
         image-name: "egov-telemetry-batch-process"
         dockerfile: "build/maven/Dockerfile"
   
-  - name: "builds/digit-dev/core-services/egov-url-shortening"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-url-shortening"
     build:
       - work-dir: "core-services/egov-url-shortening"
         image-name: "egov-url-shortening"
@@ -327,7 +327,7 @@ config:
       - work-dir: "core-services/egov-url-shortening/src/main/resources/db"
         image-name: "egov-url-shortening-db"
   
-  - name: "builds/digit-dev/core-services/chatbot"
+  - name: "builds/health-DIGIT-OSS/core-services/chatbot"
     build:
       - work-dir: "core-services/chatbot"
         image-name: "chatbot"
@@ -335,67 +335,74 @@ config:
       - work-dir: "core-services/chatbot/src/main/resources/db"
         image-name: "chatbot-db"
         
-  - name: "builds/digit-dev/core-services/http-to-kafka-connector"
+  - name: "builds/health-DIGIT-OSS/core-services/http-to-kafka-connector"
     build:
       - work-dir: "core-services/http-to-kafka-connector"
         image-name: "whatsapp-webhook"
 
-  - name: "builds/digit-dev/core-services/egov-user-chatbot"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-user-chatbot"
     build:
       - work-dir: "core-services/egov-user"
         image-name: "egov-user-chatbot"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/core-services/mailbot"
+  - name: "builds/health-DIGIT-OSS/core-services/mailbot"
     build:
       - work-dir: "core-services/mailbot"
         image-name: "mailbot"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/core-services/libraries/enc-client"
+  - name: "builds/health-DIGIT-OSS/core-services/libraries/enc-client"
     build:
       - work-dir: "core-services/libraries/enc-client"
         image-name: "enc-client"
 
-  - name: "builds/digit-dev/core-services/libraries/services-common"
+  - name: "builds/health-DIGIT-OSS/core-services/libraries/services-common"
     build:
       - work-dir: "core-services/libraries/services-common"
         image-name: "services-common"
         
-  - name: "builds/digit-dev/core-services/libraries/digit-models"
+  - name: "builds/health-DIGIT-OSS/core-services/libraries/digit-models"
     build:
       - work-dir: "core-services/libraries/digit-models"
         image-name: "digit-models"
         
-  - name: "builds/digit-dev/core-services/libraries/tracer"
+  - name: "builds/health-DIGIT-OSS/core-services/libraries/tracer"
     build:
       - work-dir: "core-services/libraries/tracer"
         image-name: "tracer"
 
-  - name: "builds/digit-dev/core-services/nlp-engine"
+  - name: "builds/health-DIGIT-OSS/core-services/nlp-engine"
     build:
       - work-dir: "core-services/nlp-engine"
         image-name: "nlp-engine"
         dockerfile: "nlp-engine/Dockerfile"
 
-  - name: "builds/digit-dev/core-services/xstate-chatbot"
+  - name: "builds/health-DIGIT-OSS/core-services/xstate-chatbot"
     build:
       - work-dir: "core-services/xstate-chatbot/nodejs"
         image-name: "xstate-chatbot"
       - work-dir: "core-services/xstate-chatbot/nodejs/db"
         image-name: "xstate-chatbot-db"
 
-  - name: "builds/digit-dev/core-services/xstate-webchat"
+  - name: "builds/health-DIGIT-OSS/core-services/xstate-webchat"
     build:
       - work-dir: "core-services/xstate-webchat/nodejs"
         image-name: "xstate-webchat"
       - work-dir: "core-services/xstate-webchat/nodejs/db"
         image-name: "xstate-webchat-db"
+  - name: "builds/health-DIGIT-OSS/core-services/egov-rn-service"
+    build:
+      - work-dir: "core-services/egov-rn-service"
+        image-name: "egov-rn-service"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "core-services/egov-rn-service/src/main/resources/db"
+        image-name: "egov-rn-service-db"
 
         
 #Municipal Services
 
-  - name: "builds/digit-dev/municipal-services/egov-user-event"
+  - name: "builds/health-DIGIT-OSS/municipal-services/egov-user-event"
     build:
       - work-dir: "municipal-services/egov-user-event"
         image-name: "egov-user-event"
@@ -403,7 +410,7 @@ config:
       - work-dir: "municipal-services/egov-user-event/src/main/resources/db"
         image-name: "egov-user-event-db"
 
-  - name: "builds/digit-dev/municipal-services/pt-calculator-v2"
+  - name: "builds/health-DIGIT-OSS/municipal-services/pt-calculator-v2"
     build:
       - work-dir: "municipal-services/pt-calculator-v2"
         image-name: "pt-calculator-v2"
@@ -411,7 +418,7 @@ config:
       - work-dir: "municipal-services/pt-calculator-v2/src/main/resources/db"
         image-name: "pt-calculator-v2-db"
 
-  - name: "builds/digit-dev/municipal-services/pt-services-v2"
+  - name: "builds/health-DIGIT-OSS/municipal-services/pt-services-v2"
     build:
       - work-dir: "municipal-services/pt-services-v2"
         image-name: "pt-services-v2"
@@ -419,7 +426,7 @@ config:
       - work-dir: "municipal-services/pt-services-v2/src/main/resources/db"
         image-name: "pt-services-v2-db"
 
-  - name: "builds/digit-dev/municipal-services/rainmaker-pgr"
+  - name: "builds/health-DIGIT-OSS/municipal-services/rainmaker-pgr"
     build:
       - work-dir: "municipal-services/rainmaker-pgr"
         image-name: "rainmaker-pgr"
@@ -427,7 +434,7 @@ config:
       - work-dir: "municipal-services/rainmaker-pgr/src/main/resources/db"
         image-name: "rainmaker-pgr-db"
 
-  - name: "builds/digit-dev/municipal-services/pgr-services"
+  - name: "builds/health-DIGIT-OSS/municipal-services/pgr-services"
     build:
       - work-dir: "municipal-services/pgr-services"
         image-name: "pgr-services"
@@ -435,7 +442,7 @@ config:
       - work-dir: "municipal-services/pgr-services/src/main/resources/db"
         image-name: "pgr-services-db"
 
-  - name: "builds/digit-dev/municipal-services/tl-calculator"
+  - name: "builds/health-DIGIT-OSS/municipal-services/tl-calculator"
     build:
       - work-dir: "municipal-services/tl-calculator"
         image-name: "tl-calculator"
@@ -443,7 +450,7 @@ config:
       - work-dir: "municipal-services/tl-calculator/src/main/resources/db"
         image-name: "tl-calculator-db"
         
-  - name: "builds/digit-dev/municipal-services/tl-services"
+  - name: "builds/health-DIGIT-OSS/municipal-services/tl-services"
     build:
       - work-dir: "municipal-services/tl-services"
         image-name: "tl-services"
@@ -451,21 +458,21 @@ config:
       - work-dir: "municipal-services/tl-services/src/main/resources/db"
         image-name: "tl-services-db"
 
-  - name: "builds/digit-dev/municipal-services/firenoc-services"
+  - name: "builds/health-DIGIT-OSS/municipal-services/firenoc-services"
     build:
       - work-dir: "municipal-services/firenoc-services"
         image-name: "firenoc-services"
       - work-dir: "municipal-services/firenoc-services/migration"
         image-name: "firenoc-services-db"
 
-  - name: "builds/digit-dev/municipal-services/firenoc-calculator"
+  - name: "builds/health-DIGIT-OSS/municipal-services/firenoc-calculator"
     build:
       - work-dir: "municipal-services/firenoc-calculator"
         image-name: "firenoc-calculator"
       - work-dir: "municipal-services/firenoc-calculator/migration"
         image-name: "firenoc-calculator-db"
 
-  - name: "builds/digit-dev/municipal-services/ws-services"
+  - name: "builds/health-DIGIT-OSS/municipal-services/ws-services"
     build:
       - work-dir: "municipal-services/ws-services"
         image-name: "ws-services"
@@ -473,7 +480,7 @@ config:
       - work-dir: "municipal-services/ws-services/src/main/resources/db"
         image-name: "ws-services-db"
         
-  - name: "builds/digit-dev/municipal-services/property-services"
+  - name: "builds/health-DIGIT-OSS/municipal-services/property-services"
     build:
       - work-dir: "municipal-services/property-services"
         image-name: "property-services"
@@ -481,7 +488,7 @@ config:
       - work-dir: "municipal-services/property-services/src/main/resources/db"
         image-name: "property-services-db"
 
-  - name: "builds/digit-dev/municipal-services/ws-calculator"
+  - name: "builds/health-DIGIT-OSS/municipal-services/ws-calculator"
     build:
       - work-dir: "municipal-services/ws-calculator"
         image-name: "ws-calculator"
@@ -489,7 +496,7 @@ config:
       - work-dir: "municipal-services/ws-calculator/src/main/resources/db"
         image-name: "ws-calculator-db"
 
-  - name: "builds/digit-dev/municipal-services/sw-services"
+  - name: "builds/health-DIGIT-OSS/municipal-services/sw-services"
     build:
       - work-dir: "municipal-services/sw-services"
         image-name: "sw-services"
@@ -497,7 +504,7 @@ config:
       - work-dir: "municipal-services/sw-services/src/main/resources/db"
         image-name: "sw-services-db"
 
-  - name: "builds/digit-dev/municipal-services/sw-calculator"
+  - name: "builds/health-DIGIT-OSS/municipal-services/sw-calculator"
     build:
       - work-dir: "municipal-services/sw-calculator"
         image-name: "sw-calculator"
@@ -505,7 +512,7 @@ config:
       - work-dir: "municipal-services/sw-calculator/src/main/resources/db"
         image-name: "sw-calculator-db"     
 
-  - name: "builds/digit-dev/municipal-services/bpa-services"
+  - name: "builds/health-DIGIT-OSS/municipal-services/bpa-services"
     build:
       - work-dir: "municipal-services/bpa-services"
         image-name: "bpa-services"
@@ -513,13 +520,13 @@ config:
       - work-dir: "municipal-services/bpa-services/src/main/resources/db"
         image-name: "bpa-services-db"         
 
-  - name: "builds/digit-dev/municipal-services/bpa-calculator"
+  - name: "builds/health-DIGIT-OSS/municipal-services/bpa-calculator"
     build:
       - work-dir: "municipal-services/bpa-calculator"
         image-name: "bpa-calculator"
         dockerfile: "build/maven/Dockerfile"     
 
-  - name: "builds/digit-dev/municipal-services/land-services"
+  - name: "builds/health-DIGIT-OSS/municipal-services/land-services"
     build:
       - work-dir: "municipal-services/land-services"
         image-name: "land-services"
@@ -527,7 +534,7 @@ config:
       - work-dir: "municipal-services/land-services/src/main/resources/db"
         image-name: "land-services-db"
 
-  - name: "builds/digit-dev/municipal-services/noc-services"
+  - name: "builds/health-DIGIT-OSS/municipal-services/noc-services"
     build:
       - work-dir: "municipal-services/noc-services"
         image-name: "noc-services"
@@ -535,7 +542,7 @@ config:
       - work-dir: "municipal-services/noc-services/src/main/resources/db"
         image-name: "noc-services-db"
 
-  - name: "builds/digit-dev/municipal-services/echallan-services"
+  - name: "builds/health-DIGIT-OSS/municipal-services/echallan-services"
     build:
       - work-dir: "municipal-services/echallan-services"
         image-name: "echallan-services"
@@ -543,13 +550,13 @@ config:
       - work-dir: "municipal-services/echallan-services/src/main/resources/db"
         image-name: "echallan-services-db"         
 
-  - name: "builds/digit-dev/municipal-services/echallan-calculator"
+  - name: "builds/health-DIGIT-OSS/municipal-services/echallan-calculator"
     build:
       - work-dir: "municipal-services/echallan-calculator"
         image-name: "echallan-calculator"
         dockerfile: "build/maven/Dockerfile"  
         
-  - name: "builds/digit-dev/municipal-services/fsm"
+  - name: "builds/health-DIGIT-OSS/municipal-services/fsm"
     build:
       - work-dir: "municipal-services/fsm"
         image-name: "fsm"
@@ -558,7 +565,7 @@ config:
         image-name: "fsm-db"
 
 
-  - name: "builds/digit-dev/municipal-services/vehicle"
+  - name: "builds/health-DIGIT-OSS/municipal-services/vehicle"
     build:
       - work-dir: "municipal-services/vehicle"
         image-name: "vehicle"
@@ -566,7 +573,7 @@ config:
       - work-dir: "municipal-services/vehicle/src/main/resources/db"
         image-name: "vehicle-db"
 
-  - name: "builds/digit-dev/municipal-services/vendor"
+  - name: "builds/health-DIGIT-OSS/municipal-services/vendor"
     build:
       - work-dir: "municipal-services/vendor"
         image-name: "vendor"
@@ -574,7 +581,7 @@ config:
       - work-dir: "municipal-services/vendor/src/main/resources/db"
         image-name: "vendor-db"
 
-  - name: "builds/digit-dev/municipal-services/fsm-calculator"
+  - name: "builds/health-DIGIT-OSS/municipal-services/fsm-calculator"
     build:
       - work-dir: "municipal-services/fsm-calculator"
         image-name: "fsm-calculator"
@@ -582,19 +589,19 @@ config:
       - work-dir: "municipal-services/fsm-calculator/src/main/resources/db"
         image-name: "fsm-calculator-db"
         
-  - name: "builds/digit-dev/municipal-services/turn-io-adapter"
+  - name: "builds/health-DIGIT-OSS/municipal-services/turn-io-adapter"
     build:
       - work-dir: "municipal-services/turn-io-adapter"
         image-name: "turn-io-adapter"
         dockerfile: "build/maven/Dockerfile"
         
-  - name: "builds/digit-dev/municipal-services/inbox"
+  - name: "builds/health-DIGIT-OSS/municipal-services/inbox"
     build:
       - work-dir: "municipal-services/inbox"
         image-name: "inbox"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/municipal-services/birth-death-services"
+  - name: "builds/health-DIGIT-OSS/municipal-services/birth-death-services"
     build:
       - work-dir: "municipal-services/birth-death-services"
         image-name: "birth-death-services"
@@ -604,40 +611,40 @@ config:
  
  # Utilities
  
-  - name: "builds/digit-dev/utilities/egov-weekly-impact-notifier"
+  - name: "builds/health-DIGIT-OSS/utilities/egov-weekly-impact-notifier"
     build:
       - work-dir: "utilities/egov-weekly-impact-notifier"
         image-name: "egov-weekly-impact-notifier"
         dockerfile: "build/maven/Dockerfile"
         
-  - name: "builds/digit-dev/utilities/zuul-kubernetes-discovery"
+  - name: "builds/health-DIGIT-OSS/utilities/zuul-kubernetes-discovery"
     build:
       - work-dir: "utilities/zuul-kubernetes-discovery"
         image-name: "zuul-kubernetes-discovery"  
 
-  - name: "builds/digit-dev/utilities/egov-api-cron-job"
+  - name: "builds/health-DIGIT-OSS/utilities/egov-api-cron-job"
     build:
       - work-dir: "utilities/egov-api-cron-job"
         image-name: "egov-api-cron-job"
         dockerfile: "build/python/Dockerfile"
 
-  - name: "builds/digit-dev/utilities/kuberhealthy-checks"
+  - name: "builds/health-DIGIT-OSS/utilities/kuberhealthy-checks"
     build:
       - work-dir: "utilities/kuberhealthy-checks"
         image-name: "kuberhealthy-checks"
 
-  - name: "builds/digit-dev/utilities/egov-pdf"
+  - name: "builds/health-DIGIT-OSS/utilities/egov-pdf"
     build:
       - work-dir: "utilities/egov-pdf"
         image-name: "egov-pdf"  
 
-  - name: "builds/digit-dev/utilities/epass-chatbot"
+  - name: "builds/health-DIGIT-OSS/utilities/epass-chatbot"
     build:
       - work-dir: "utilities/epass-chatbot"
         image-name: "epass-chatbot"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/utilities/case-management"
+  - name: "builds/health-DIGIT-OSS/utilities/case-management"
     build:
       - work-dir: "utilities/case-management"
         image-name: "case-management"
@@ -645,28 +652,28 @@ config:
       - work-dir: "utilities/case-management/src/main/resources/db"
         image-name: "case-management-db"
 
-  - name: "builds/digit-dev/utilities/data-upload"
+  - name: "builds/health-DIGIT-OSS/utilities/data-upload"
     build:
       - work-dir: "utilities/data-upload"
         image-name: "data-upload"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/utilities/egov-custom-consumer"
+  - name: "builds/health-DIGIT-OSS/utilities/egov-custom-consumer"
     build:
       - work-dir: "utilities/egov-custom-consumer"
         image-name: "egov-custom-consumer"
         dockerfile: "build/maven/Dockerfile"
 
-  - name: "builds/digit-dev/utilities/certificate_signer"
+  - name: "builds/health-DIGIT-OSS/utilities/certificate_signer"
     build:
       - work-dir: "utilities/certificate_signer"
         image-name: "certificate_signer"
 
-  - name: "builds/digit-dev/utilities/certificate-verification"
+  - name: "builds/health-DIGIT-OSS/utilities/certificate-verification"
     build:
       - work-dir: "utilities/certificate-verification"
         image-name: "certificate-verification"
-  - name: "builds/digit-dev/utilities/demo-utility"
+  - name: "builds/health-DIGIT-OSS/utilities/demo-utility"
     build:
       - work-dir: "utilities/demo-utility"
         image-name: "demo-utility"
@@ -674,54 +681,54 @@ config:
 
   # Frontend
 
-  - name: builds/digit-dev/frontend/mono-ui/citizen
+  - name: builds/health-DIGIT-OSS/frontend/mono-ui/citizen
     build:
       - work-dir: frontend/mono-ui/web/rainmaker/
         dockerfile: frontend/mono-ui/web/rainmaker/docker/citizen/Dockerfile
         image-name: citizen
 
-  - name: builds/digit-dev/frontend/mono-ui/employee
+  - name: builds/health-DIGIT-OSS/frontend/mono-ui/employee
     build:
       - work-dir: frontend/mono-ui/web/rainmaker/
         dockerfile: frontend/mono-ui/web/rainmaker/docker/employee/Dockerfile
         image-name: employee
 
-  - name: builds/digit-dev/frontend/mono-ui/employee-mcs
+  - name: builds/health-DIGIT-OSS/frontend/mono-ui/employee-mcs
     build:
       - work-dir: frontend/mono-ui/web/rainmaker/
         dockerfile: frontend/mono-ui/web/rainmaker/docker/employee-mcs/Dockerfile
         image-name: employee-mcs
 
-  - name: builds/digit-dev/frontend/mono-ui/localization
+  - name: builds/health-DIGIT-OSS/frontend/mono-ui/localization
     build:
       - work-dir: frontend/mono-ui/web/rainmaker/
         dockerfile: frontend/mono-ui/web/rainmaker/docker/localization/Dockerfile
         image-name: ui-localisation
 
-  - name: builds/digit-dev/frontend/mono-ui/ui-uploader
+  - name: builds/health-DIGIT-OSS/frontend/mono-ui/ui-uploader
     build:
       - work-dir: frontend/mono-ui/web/ui-uploader/
         image-name: ui-uploader
 
-  - name: builds/digit-dev/frontend/mono-ui/dss-dashboard
+  - name: builds/health-DIGIT-OSS/frontend/mono-ui/dss-dashboard
     build:
       - work-dir: frontend/mono-ui/web/dss-dashboard/
         dockerfile: frontend/mono-ui/web/dss-dashboard/docker/Dockerfile
         image-name: dss-dashboard
       
-  - name: builds/digit-dev/frontend/mono-ui/common-screen
+  - name: builds/health-DIGIT-OSS/frontend/mono-ui/common-screen
     build:
       - work-dir: frontend/mono-ui/web/egov-common-screen/
         dockerfile: frontend/mono-ui/web/egov-common-screen/docker/Dockerfile
         image-name: common-screen
 
-  - name: builds/digit-dev/frontend/micro-ui/digit-ui
+  - name: builds/health-DIGIT-OSS/frontend/micro-ui/digit-ui
     build:
       - work-dir: frontend/micro-ui/
         dockerfile: frontend/micro-ui/web/docker/Dockerfile
         image-name: digit-ui
 
-  - name: builds/digit-dev/frontend/micro-ui/storybook
+  - name: builds/health-DIGIT-OSS/frontend/micro-ui/storybook
     build:
     - work-dir: .
       dockerfile: frontend/micro-ui/web/micro-ui-internals/packages/react-components/docker/Dockerfile
@@ -730,13 +737,13 @@ config:
   
   #EDCR
   
-  - name: builds/digit-dev/edcr/dcr-client/egov-dcr
+  - name: builds/health-DIGIT-OSS/edcr/dcr-client/egov-dcr
     build:
       - work-dir: edcr/client/egov
         dockerfile: edcr/client/Dockerfile
         image-name: egov-edcr
         
-  - name: builds/digit-dev/edcr/dcr-service/egov-dcr
+  - name: builds/health-DIGIT-OSS/edcr/dcr-service/egov-dcr
     build:
       - work-dir: edcr/service/egov
         dockerfile: edcr/service/Dockerfile
@@ -744,7 +751,7 @@ config:
               
   #Finance
    
-  - name: builds/digit-dev/finance/egov-finance
+  - name: builds/health-DIGIT-OSS/finance/egov-finance
     build:
       - work-dir: finance/egov
         image-name: egov-finance
