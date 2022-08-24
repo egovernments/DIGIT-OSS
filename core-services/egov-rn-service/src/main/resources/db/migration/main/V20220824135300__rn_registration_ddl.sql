@@ -1,0 +1,1 @@
+DROP TABLE eg_rn_registration;
