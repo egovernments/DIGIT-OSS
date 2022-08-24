@@ -1,0 +1,108 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: ID Generation service
+  description: |
+    This service generates a unique ID/Code given the needed format e.g. an id wit format AP-PT-2017/04/11-000001-23 where format is can be decomposed as (- is used as a separator in the above example) -
+      
+      AP - Fixed string indicating the tenant
+      
+      PT - fixed string indicating module
+      
+      2017/04/11 - Date field indicating YYYY/MM/DD
+      
+      000001 - local sequence number
+      
+      23 - two random digits
+
+      This can be indicated to IDGen service as an ID needed in the format (square brackets indicate the parts that will be replaced by the svc to generate the new id) -
+      AP-PT-[YYYY/MM/DD]-[SEQ_ACK_NUM]-[d{2}]
+      
+      Please note that are replaceable elements will be enclosed within []. Following construct are supported - 
+          
+          1. Date patterns as per java SimpleDateFormat (https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html)
+          2. Regex patterns as per Java regex paterns (http://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html)
+          3. SEQ_ where X is the name of a sequence to be used, e.g. SEQ_ACK_NUM
+          4. Static elements will be without enclosing square brackets
+      
+  contact:
+    name: Pranav
+host: egov-micro-dev.egovernments.org
+schemes:
+  - https
+basePath: /id/v1/
+paths:
+  /_genearte:
+    post:
+      summary: Create new id.
+      description: API to generate new id based on the id formats passed.
+      parameters:
+        - name: idRequests
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/IdGenerationRequest'
+      responses:
+        '201':
+          description: Id generated sucessfully.
+          schema:
+            $ref: '#/definitions/IdGenerationResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/IDGenErrorRes'
+      tags:
+        - Property
+definitions:
+  IdRequest:
+    type: object
+    properties:
+      idName:
+        type: string
+        description: |
+          It would indicate the type of id, we would like to generate, ex upic no or acknowledgement number. Please nite that the id format can also be configured with idGen service with theis name in case calling services wishes to do so, so as to not needing to pass the format each time. In such a case if the format is passed at the runtime then the passed format will take precedence over configured format. idName should be namespaced with module/functionality e.g. propertytax.acknumber or propertytax.assessmentnumber
+      tenantId:
+        type: string
+        description: |
+          tenantid for which Id has to be generated. Please note that an id configuration can be overwritten for a particular tenant using tenantid prefix,  e.g. mycity.propertytax.acknumber configuration will be evaluated for mycity if both propertytax.acknumber and mycity.propertytax.acknumber are configured
+      format:
+        type: string
+        description: format of the id to be generated. Supported as per the description of the service.
+    required:
+      - tenantId
+      - idName
+  IdResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        description: This is the generated id
+  IdGenerationRequest:
+    description: Contract class to receive request.
+    properties:
+      requestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      idRequests:
+        type: array
+        items:
+          $ref: '#/definitions/IdRequest'
+  IdGenerationResponse:
+    description: Contract class to send response.
+    properties:
+      responseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      idResponses:
+        type: array
+        items:
+          $ref: '#/definitions/IdResponse'
+  IDGenErrorRes:
+    allOf:
+      - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      - type: object
+        properties:
+          codes:
+            type: string
+            enum:
+              - InvalidIDFormat
+              - IDSeqOverflow
+              - IDSeqNotFound

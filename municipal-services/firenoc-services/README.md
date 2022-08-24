@@ -14,7 +14,7 @@ The main objective of the Fire-NOC module is to provide **No Objection Certifica
 
 ### Swagger API Contract
 
-Please refer to the [Swagger API contarct](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/municipal-services/master/firenoc-services/docs/contract/fire_noc_contract.yaml#!/) for Fire-NOC service to understand the structure of APIs and to have visualization of all internal APIs.
+Please refer to the [Swagger API contarct](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/fire_noc_contract.yaml#!) for Fire-NOC service to understand the structure of APIs and to have visualization of all internal APIs.
 
 
 ## Service Details

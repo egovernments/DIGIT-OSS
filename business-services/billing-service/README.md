@@ -15,7 +15,7 @@ NA
 
 ### Swagger API Contract
 
-https://raw.githubusercontent.com/egovernments/business-services/master/Docs/billingservice/V-2.0.yml
+https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/business-services/Docs/billingservice/V-2.0.yml
 
 ## Service Details
 

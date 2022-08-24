@@ -2,10 +2,6 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.2.0 - 2022-08-04
-- Unrestricted service request assignment in  ULB employee flow
-- Unrestricted service request assignment in  DSO flow
-
 ## 1.1.0 - 2022-03-29
 
 - Pay now and post payment preference options provided at citizen and employee UI

@@ -1,6 +1,6 @@
 # National Dashboard Ingest service
 
-National dashboard ingest will be used by ULB employee for -
+National dashboard ingest will be used by ULB employee for - 
 
 1. To provide a one-stop framework for ingesting data regardless of data-source based on configuration.
 
@@ -18,7 +18,7 @@ Please refer to the [Swagger API contract](https://editor.swagger.io/?url=https:
 
 
 ### Functionalities
-1. When national dashboard ingest metrics API is hit, all the data payload lookup keys are first checked against the db to determine whether they already exist or not. The db table currently being used for storing lookup keys is nss-ingest-data.
+1. When national dashboard ingest metrics API is hit, all the data payload lookup keys are first checked against the db to determine whether they already exist or not. The db table currently being used for storing lookup keys is nss-ingest-data. 
 
 2. If the record for a given date and area details is not present, the payload is then flattened and pushed to nss-ingest-keydata topic.
 

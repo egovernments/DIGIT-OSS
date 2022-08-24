@@ -16,8 +16,7 @@ This service is used to calculate the Tradelicense fees based on the defined bil
 
 Link to the swagger API contract yaml and editor link like below
 
-http://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/egov-services/master/docs/rainmaker/trade-license/tl-calculator.yml#!/
-
+https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/tl-calculator.yml#!/
 
 ## Service Details
 

@@ -15,7 +15,7 @@ Module acts as a liaison between eGov apps and external payment gateways. It fac
 
 ### Swagger API Contract
 
-- Please refer to the [Swagger API contarct](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/egov-services/master/core/egov-pg-service/egov-pg-service.yml#!/) for egov-pg service to understand the structure of APIs and to have visualization of all internal APIs.
+- Please refer to the [Swagger API contarct](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/core-services/docs/egov-pg-contract.yml#!/) for egov-pg service to understand the structure of APIs and to have visualization of all internal APIs.
 
 
 ## Service Details

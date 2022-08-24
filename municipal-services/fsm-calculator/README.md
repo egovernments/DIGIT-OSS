@@ -20,7 +20,7 @@ Generates the Demand after calculating the charges for the given application usi
 
 ### Swagger API Contract
 
-Link to the swagger API contract [yaml](https://raw.githubusercontent.com/egovernments/municipal-services/master/docs/fsm/Fsm_Apply_Contract.yaml) and editor link like below
+Link to the swagger API contract [yaml](https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/municipal-services/docs/fsm/Fsm_Apply_Contract.yaml#!/) and editor link like below
 
 
 ### Postman Collection

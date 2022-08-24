@@ -13,7 +13,7 @@
 
 ### Swagger API Contract
 
-http://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/core-services/RAIN-1284/docs/indexer-contract.yml#!/
+https://editor.swagger.io/?url=https://raw.githubusercontent.com/egovernments/DIGIT-OSS/master/core-services/docs/indexer-contract.yml#!/
 
 ## Service Details
 

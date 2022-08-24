@@ -1,0 +1,246 @@
+swagger: '2.0'
+info:
+  version: 1.1.0
+  title: Location Service
+  contact:
+    name: eGov
+    email: info@egovernments.org
+schemes:
+  - https
+basePath: /location/v11
+x-api-id: org.egov.boundary
+paths:
+  /boundarys/_search:
+    post:
+      summary: >-
+        It Will provide the List of boundaries based on search criteria Like
+        "Srikakulam  Municipality","Zone-1","Zone-2" etc.
+      description: >
+        Provides a list of boundaries based on TenantId And List of Boundary
+        id's And List Of codes And BoundaryType And HierarchyType
+      parameters:
+        - $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo
+        - $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId
+        - name: boundaryType
+          in: query
+          type: integer
+          description: lable of boundary within the tenant boundary structure
+        - name: hierarchyTypeCode
+          in: query
+          description: 'Type Of the BoundaryType Like REVENUE, ADMIN'
+          required: false
+          type: string
+          format: varchar
+        - name: codes
+          in: query
+          description: Unique List of boundary codes.
+          required: false
+          type: array
+          items:
+            type: string
+            format: varchar
+      tags:
+        - Boundary
+      responses:
+        '200':
+          description: Successful Response.
+          schema:
+            $ref: '#/definitions/BoundaryResponse'
+        '400':
+          description: Tenantid was not provided or General service error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+  /geography/_search:
+    post:
+      summary: >-
+        Handles all requests related to Geographical boundaries by providing appropriate GeoJson and other associated data
+      description: >
+        Handles all requests related to Geographical boundaries by providing appropriate GeoJson and other associated data based on tenantId or lat/long etc
+      parameters:
+        - $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId
+        - name: filter
+          in: query
+          type: string
+          description: JSON path filter string for filtering the output
+          required: false
+        - name: requestInfoWapper
+          in: body
+          description: JSON path filter string for filtering the output
+          schema:
+           $ref: >-
+             #/definitions/RequestInfoWrapper
+      tags:
+        - Geography
+      responses:
+        '200':
+          description: Successful Response.
+          schema:
+            $ref: '#/definitions/GeographicalResponse'
+        '400':
+          description: Invalid tenant Id provided
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+  /tenant/_search:
+    post:
+      summary: >-
+        Resolves a given latitude / longitude to the corresponding tenant Id 
+      description: >
+        Tries to resolve a given lat, long to a corresponding tenant, provided there exists a mapping between the reverse geocoded city to tenant.
+      parameters:
+        - $ref: >-
+            https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId
+        - name: lat
+          in: query
+          type: number
+          description: Latitude
+          required: true
+        - name: lng
+          in: query
+          type: number
+          description: Longitude
+          required: true
+        - name: requestInfoWapper
+          in: body
+          description: JSON path filter string for filtering the output
+          schema:
+           $ref: >-
+             #/definitions/RequestInfoWrapper
+      tags:
+        - Tenant
+      responses:
+        '200':
+          description: Successful Response.
+          schema:
+            $ref: '#/definitions/TenantResponse'
+        '400':
+          description: Unable to resolve tenant
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+definitions:
+  HierarchyType:
+    type: object
+    properties:
+      id:
+        type: string
+        description: unique id for the HierarchyType.
+      code:
+        type: string
+        description: Unique Code for HierarchyType.
+      name:
+        type: string
+        format: varchar
+        description: HierarchyType Name.
+      label:
+        type: string
+        format: varchar
+        description: label in localization service
+    required:
+      - code
+      - name
+  Boundary:
+    type: object
+    properties:
+      code:
+        type: string
+        description: code of the boundary.
+      name:
+        type: string
+        description: name of the boundary.
+      label:
+        type: string
+        description: localized label for the boundry.
+      latitude:
+        type: string
+        description: latitude of the boundary.
+      longitude:
+        type: string
+        description: longitude of the boundary.
+      children:
+        type: array
+        items:
+          $ref: '#/definitions/Boundary'
+      materializedPath:
+        type: string
+        readOnly: true
+        description: >-
+          materialized path of the boundary - this would be of the format
+          tenantid.[code] from parentt till teh current boundary
+    required:
+      - code
+      - name
+  Geography:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name of the Geography.
+      division:
+        type: string
+        description: Geographical division such as State, District, City.
+      geoJson:
+        type: object
+        description: Json Node object containing geoJson of the requested tenant
+      geoJsonChildren:
+        type: object
+        description: Json Node object containing geoJson of the requested tenant's children
+      tenantId:
+        type: string
+        description: Tenant Id whose geographical data is requested.
+    required:
+      - name
+      - division
+      - geoJson
+      - tenantId
+  TenantBoundary:
+    type: object
+    properties:
+      tenantId:
+        type: string
+        description: Unique id of the boundary tenant.
+      hierarchyType:
+        $ref: '#/definitions/HierarchyType'
+      boundary:
+        type: array
+        items:
+          $ref: '#/definitions/Boundary'
+  BoundaryResponse:
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      Boundary:
+        type: array
+        items:
+          $ref: '#/definitions/TenantBoundary'
+  GeographicalResponse:
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      Geography:
+        type: array
+        items:
+          $ref: '#/definitions/Geography'
+    type: object
+  TenantResponse:
+    properties:
+      ResponseInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
+      Tenant:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/tenant/contracts/v1.0.1.yml#/definitions/Tenant
+    type: object
+  
+  RequestInfoWrapper:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: >-
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo

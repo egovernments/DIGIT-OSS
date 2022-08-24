@@ -1,0 +1,928 @@
+swagger: '2.0'
+info:
+  version: 2.0.0
+  title: eGov Property Tax Information System.
+  description: |
+    APIs for Property Tax module. This modules handles assessment of new properties, changes to existing properties (Detail Updates, division of property, etc.),  search of required properties and property tax calculation, demand generation, notices to enable ULBs to cmpletely manage the proeprties within their jurisdiction.
+  contact:
+    name: Ghanshyam Rawat
+    email: ghanshyam.rawat@egovernments.org
+schemes:
+  - https
+basePath: /properties/v2
+x-module: PT
+x-common-path: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml'
+paths:
+  /_search:
+    post:
+      summary: Get the list of properties defined in the system.
+      description: |
+        Get the properties list based on the input parameters.
+      parameters:
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/requestInfo'
+        - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/parameters/tenantId'
+        - name: name
+          in: query
+          description: Name of owner whose property is to be searched.
+          required: false
+          type: string
+          format: varchar
+          allowEmptyValue: true
+        - name: ids
+          in: query
+          description: List of system generated ids of properties.
+          required: false
+          type: string
+          format: varchar
+        - name: propertyDetailids
+          in: query
+          required: false
+          description: List of assessmentNumbers to search.
+          type: string
+          minLength: 4
+          maxLength: 128
+          exclusiveMinimum: true
+          exclusiveMaximum: false
+        - name: oldpropertyids
+          in: query
+          required: false
+          description: List of oldassessmentNumbers to search..
+          type: string
+          minLength: 4
+          maxLength: 128
+          exclusiveMinimum: true
+          exclusiveMaximum: false
+        - name: mobileNumber
+          in: query
+          description: MobileNumber of owner whose property is to be searched.
+          required: false
+          type: integer
+          format: int64
+        - name: accountId
+          in: query
+          required: false
+          description: The uuid of the user who created the property.
+          type: string
+          minLength: 1
+          maxLength: 64
+          exclusiveMinimum: true
+          exclusiveMaximum: false
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/PropertyResponse'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      tags:
+        - Property
+  /_create:
+    post:
+      summary: Create new properties.
+      description: API to create new properties.
+      parameters:
+        - name: property
+          in: body
+          description: Details for the new property + RequestInfo meta data.
+          required: true
+          schema:
+            $ref: '#/definitions/PropertyRequest'
+      responses:
+        '201':
+          description: Property(s) created sucessfully
+          schema:
+            $ref: '#/definitions/PropertyResponse'
+        '400':
+          description: Property(s) creation failed
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      tags:
+        - Property
+  /_update:
+    post:
+      summary: Update existing properties.
+      description: Updates a given `Property` with newer details.
+      parameters:
+        - name: property
+          in: body
+          description: Request header for the property Request.
+          required: true
+          schema:
+            $ref: '#/definitions/PropertyRequest'
+      tags:
+        - Property
+      responses:
+        '200':
+          description: Update Property(s) successful
+          schema:
+            $ref: '#/definitions/PropertyResponse'
+        '400':
+          description: Update Property(s) failed
+          schema:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+definitions:
+  PropertyType:
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the propertytype
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: code of the propertytype
+        maxLength: 64
+        minLength: 2
+      active:
+        type: boolean
+        description: describes Whether propertyType is Active or not.
+    required:
+      - code
+  Exemption:
+    type: object
+    properties:
+      isEnabled:
+        type: boolean
+        description: 'if Exemption are applicable, the value will be true.'
+      rate:
+        type: number
+        format: double
+        description: Exemption rate in percentage.
+        maxLength: 128
+        minLength: 2
+      maxAmount:
+        type: number
+        format: double
+        description: 'Maximum exemption amount, it is applicable if exemption are applied using exemptionRate.'
+        maxLength: 128
+        minLength: 2
+      flatAmount:
+        type: number
+        format: double
+        description: Flat amount exemption.
+        maxLength: 128
+        minLength: 2
+      fromFY:
+        type: string
+        description: Exemption are applicable from the defined date.
+        maxLength: 128
+        minLength: 2
+  Rebate:
+    type: object
+    properties:
+      rate:
+        type: number
+        format: double
+        description: Exemption rate in percentage.
+        maxLength: 128
+        minLength: 2
+      maxAmount:
+        type: number
+        format: double
+        description: 'Maximum exemption amount, it is applicable if exemption are applied using exemptionRate.'
+        maxLength: 128
+        minLength: 2
+      flatAmount:
+        type: number
+        format: double
+        description: Flat amount exemption.
+        maxLength: 128
+        minLength: 2
+      fromFY:
+        type: string
+        description: Exemption are applicable from the defined date.
+        maxLength: 128
+        minLength: 2
+      endDate:
+        type: string
+        description: 'this is the rebate end date, this will be date and month.'
+  Penalty:
+    type: object
+    properties:
+      rate:
+        type: number
+        format: double
+        description: Exemption rate in percentage.
+        maxLength: 128
+        minLength: 2
+      minAmount:
+        type: number
+        format: double
+        description: 'Maximum exemption amount, it is applicable if exemption are applied using exemptionRate.'
+        maxLength: 128
+        minLength: 2
+      flatAmount:
+        type: number
+        format: double
+        description: Flat amount exemption.
+        maxLength: 128
+        minLength: 2
+      fromFY:
+        type: string
+        description: Exemption are applicable from the defined date.
+        maxLength: 128
+        minLength: 2
+      startDate:
+        type: string
+        description: 'this is the rebate end date, this will be date and month.'
+  PropertySubType:
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the PropertySubType
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: code of the propertySubType
+        maxLength: 64
+        minLength: 2
+      propertyType:
+        $ref: '#/definitions/PropertyType'
+      active:
+        type: boolean
+        description: provides info on whether the propertySubType is active for usage.
+    required:
+      - code
+  UsageCategoryMajor:
+    allOf:
+      - $ref: '#/definitions/Exemption'
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the UsageCategoryMajor
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: code of the UsageCategoryMajor
+        maxLength: 64
+        minLength: 2
+      active:
+        type: boolean
+        description: Whether UsageCategoryMajor is Active or not.
+    required:
+      - code
+  UsageCategoryMinor:
+    allOf:
+      - $ref: '#/definitions/Exemption'
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the UsageCategoryMinor
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: code of the Sub UsageCategoryMinor
+        maxLength: 64
+        minLength: 2
+      usageCategoryMajor:
+        $ref: '#/definitions/UsageCategoryMajor'
+      active:
+        type: boolean
+        description: 'Whether UsageCategoryMinor is Active or not. If the value is TRUE, then UsageCategoryMinor is active, if the value is FALSE then UsageCategoryMinor is inactive, default value is TRUE'
+    required:
+      - code
+      - usageCategoryMajor
+  UsageCategorySubMinor:
+    allOf:
+      - $ref: '#/definitions/Exemption'
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the UsageCategorySubMinor
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: code of the UsageCategorySubMinor
+        maxLength: 64
+        minLength: 2
+      usageCategoryMinor:
+        $ref: '#/definitions/UsageCategoryMinor'
+      active:
+        type: boolean
+        description: 'Whether UsageCategorySubMinor is Active or not. If the value is TRUE, then UsageCategorySubMinor is active, if the value is FALSE then UsageCategorySubMinor is inactive, default value is TRUE'
+    required:
+      - code
+      - usageCategoryMinor
+  UsageCategoryDetail:
+    allOf:
+      - $ref: '#/definitions/Exemption'
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the UsageCategoryDetail
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: code for unique identification
+        maxLength: 64
+        minLength: 2
+      usageCategorySubMinor:
+        $ref: '#/definitions/UsageCategorySubMinor'
+      active:
+        type: boolean
+        description: 'Whether UsageCategorySubMinor is Active or not. If the value is TRUE, then UsageCategorySubMinor is active, if the value is FALSE then UsageCategorySubMinor is inactive, default value is TRUE'
+    required:
+      - code
+      - usageCategorySubMinor
+  ConstructionType:
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the construction type.
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: unique code of the construction type.
+        maxLength: 64
+        minLength: 2
+      active:
+        type: boolean
+        description: 'Whether UsageCategorySubMinor is Active or not. If the value is TRUE, then UsageCategorySubMinor is active, if the value is FALSE then UsageCategorySubMinor is inactive, default value is TRUE'
+    required:
+      - code
+  ConstructionSubType:
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: code of the UsageMaster
+        maxLength: 64
+        minLength: 2
+      constructionTypeCode:
+        $ref: '#/definitions/ConstructionType'
+      active:
+        type: boolean
+        description: 'Whether UsageCategorySubMinor is Active or not. If the value is TRUE, then UsageCategorySubMinor is active, if the value is FALSE then UsageCategorySubMinor is inactive, default value is TRUE'
+    required:
+      - code
+  OwnerShipCategory:
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the OwnerShipCategory
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: unique code for Ownership category.
+        maxLength: 64
+        minLength: 2
+      active:
+        type: boolean
+        description: 'Whether UsageCategorySubMinor is Active or not. If the value is TRUE, then UsageCategorySubMinor is active, if the value is FALSE then UsageCategorySubMinor is inactive, default value is TRUE'
+    required:
+      - code
+  SubOwnerShipCategory:
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the SubOwnerShipCategory
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: code of the Owner Type.
+        maxLength: 64
+        minLength: 2
+      ownerShipCategoryCode:
+        $ref: '#/definitions/OwnerShipCategory'
+      active:
+        type: boolean
+        description: 'Whether UsageCategorySubMinor is Active or not. If the value is TRUE, then UsageCategorySubMinor is active, if the value is FALSE then UsageCategorySubMinor is inactive, default value is TRUE'
+    required:
+      - code
+      - ownerShipCategoryCode
+  OwnerType:
+    allOf:
+      - $ref: '#/definitions/Exemption'
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: code of the Owner Type.
+        maxLength: 64
+        minLength: 2
+      active:
+        type: boolean
+        description: 'Whether UsageCategorySubMinor is Active or not. If the value is TRUE, then UsageCategorySubMinor is active, if the value is FALSE then UsageCategorySubMinor is inactive, default value is TRUE'
+    required:
+      - code
+  Floor:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Floor Number.
+        maxLength: 64
+        minLength: 2
+      code:
+        type: string
+        description: Code of Floor Number.
+        maxLength: 64
+        minLength: 2
+      active:
+        type: boolean
+        description: 'Whether UsageCategorySubMinor is Active or not. If the value is TRUE, then UsageCategorySubMinor is active, if the value is FALSE then UsageCategorySubMinor is inactive, default value is TRUE'
+    required:
+      - code
+  OccupancyType:
+    type: object
+    properties:
+      name:
+        type: string
+        description: name of the occupancy
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: code of the OccupancyType
+        maxLength: 64
+        minLength: 2
+      active:
+        type: boolean
+        description: 'Whether OccupancyType is Active or not. If the value is TRUE, then OccupancyType is active, if the value is FALSE then OccupancyType is inactive, default value is TRUE'
+    required:
+      - code
+  BillingSlab:
+    type: object
+    properties:
+      tenantId:
+        type: string
+        description: Unique ulb identifier
+        maxLength: 128
+        minLength: 4
+      name:
+        type: string
+        description: name of the slab
+        maxLength: 128
+        minLength: 2
+      code:
+        type: string
+        description: unique identifier of the billing slab object from business perspective
+        maxLength: 64
+        minLength: 2
+      propertyType:
+        type: string
+        description: Based on property type charges will change.
+        maxLength: 64
+        minLength: 2
+      usage:
+        type: string
+        description: Floor Number.
+        maxLength: 64
+        minLength: 2
+      fromFloor:
+        type: string
+        description: Floor Number.
+        maxLength: 64
+        minLength: 2
+      toFloor:
+        type: string
+        description: Floor Number.
+        maxLength: 64
+        minLength: 2
+      area:
+        type: string
+        description: Floor Number.
+        maxLength: 64
+        minLength: 2
+      fromPlotSize:
+        type: string
+        description: Floor Number.
+        maxLength: 64
+        minLength: 2
+      toPlotSize:
+        type: string
+        description: Floor Number.
+        maxLength: 64
+        minLength: 2
+      unitRate:
+        description: Floor Number.
+        type: number
+        format: double
+    required:
+      - tenantId
+      - code
+  DocumentType:
+    type: object
+    description: This object holds type of documents to be uploaded during the transaction for each application type.
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: unique id of the ApplicationType.
+      tenantId:
+        type: string
+        description: tenant id of the Property
+        maxLength: 128
+        minLength: 4
+      name:
+        type: string
+        description: name of the document
+      code:
+        type: string
+        description: 'code of the document, should be unique to the combination of name, application and tenentid'
+      application:
+        type: string
+        description: Application type.
+        enum:
+          - CREATE
+          - TITLE_TRANSFER
+          - BIFURCATION
+          - ALTER
+          - EDIT
+          - AMALGAMATION
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+    required:
+      - tenantId
+      - name
+      - code
+      - application
+  PropertyInfo:
+    type: object
+    description: This is lightweight property object that can be used as reference by definitions needing property linking. Actual Property Object extends this to include more elaborate attributes of the property.
+    properties:
+      propertyId:
+        type: string
+        description: Unique Identifier of the Property.
+        readOnly: true
+        minLength: 1
+        maxLength: 64
+      tenantId:
+        type: string
+        description: tenant id of the Property
+        maxLength: 256
+        minLength: 2
+      acknowldgementNumber:
+        type: string
+        description: Acknowldgement number given to citizen on submitting the application for creation or modification of the property.
+        maxLength: 64
+        minLength: 1
+        readOnly: true
+      oldPropertyId:
+        type: string
+        description: 'Old upic no of the Property. ULBs have the existing property in their system/manual records with their identification number, they want to continue the old reference number in this case the same identification number will be captured here.'
+        maxLength: 256
+        minLength: 1
+      status:
+        type: string
+        description: status of the Property
+        enum:
+          - ACTIVE
+          - INACTIVE
+      address:
+        $ref: '#/definitions/Address'
+    required:
+      - address
+  Property:
+    allOf:
+      - $ref: '#/definitions/PropertyInfo'
+      - type: object
+        description: A Object holds the basic data for a property
+        properties:
+          creationReason:
+            type: string
+            description: New property comes into system either property is newly constructed or existing property got sub divided. Here the reason for creation will be captured.
+            enum:
+              - NEWPROPERTY
+              - SUBDIVISION
+          occupancyDate:
+            type: integer
+            format: int64
+            description: Property is constructed but the tax will be applicable only from the occupation date (time in epoch). System capture that date here.
+          propertyDetail:
+            type: array
+            items:
+              $ref: '#/definitions/PropertyDetail'
+        required:
+          - propertyDetail
+  PropertyDetail:
+    description: Financial year wise property details will be capture here. For each financial year property details may change.
+    type: object
+    properties:
+      financialYear:
+        type: string
+        description: Latest tax paid year.
+      assessmentNumber:
+        type: string
+        description: unique assesment number for each financial year.
+        maxLength: 64
+        readOnly: true
+      assessmentDate:
+        type: integer
+        format: int64
+        description: There will be work flow to create a new property in a system. The assessment date is the final approval and UPIC no generation date.
+      propertyType:
+        type: string
+        description: 'Type of a property like Private, Vacant Land, State Government, Central Government etc.'
+        maxLength: 64
+      propertySubType:
+        type: string
+        description: Sub Type of a property defined in mdms 'PropertySubType' Masetr.
+        maxLength: 64
+      usageCategoryMajor:
+        type: string
+        description: 'This is about the usage of the property like Residential, Non-residential, Mixed(Property witch is gettiong used for Residential, Non-residential purpose)'
+        maxLength: 64
+      usageCategoryMinor:
+        type: string
+        description: Sub category of 'UsageCategoryMajor' defined in 'UsageCategoryMinor' master of mdms.
+        maxLength: 64
+      ownershipCategory:
+        type: string
+        description: The type of ownership of the property.
+        maxLength: 64
+      subOwnershipCategory:
+        type: string
+        description: Sub category of 'OwnershipCategory' defined in 'SubOwnershipCategory' master ofmdms.
+        maxLength: 64
+      owners:
+        description: 'Property owners, these will be citizen users in system.'
+        type: array
+        items:
+          $ref: '#/definitions/OwnerInfo'
+      citizenInfo:
+        description: 'The ownerInfo of the user to whose account the property is to be assigned in case of assessment done by employee.'
+        type: array
+        items:
+          $ref: '#/definitions/OwnerInfo'
+      source:
+        type: string
+        description: Source of a assessment data. The properties will be created in a system based on the data avaialble in their manual records or during field survey. There can be more from client to client.
+        enum:
+          - MUNICIPAL_RECORDS
+          - FIELD_SURVEY
+      noOfFloors:
+        type: integer
+        format: int64
+        description: no of floors in the property
+      landArea:
+        type: number
+        format: float
+        description: Land area of the property in sq ft
+      buildUpArea:
+        type: number
+        format: float
+        description: Total built up area in sq ft
+      adhocExemption:
+        type: number
+        format: double
+        description: 'Exemption applied by the employee.'
+      adhocPenalty:
+        type: number
+        format: double
+        description: 'Penalty applied by the employee.'
+      adhocExemptionReason:
+        type: string
+        description: The reason for giving adhocExemption.
+        maxLength: 1024
+      adhocPenaltyReason:
+        type: string
+        description: The type of ownership of the property.
+        maxLength: 1024
+      auditDetails:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/AuditDetails'
+      units:
+        description: 'List of Units in the property. E.g. A property might have 2 units in ground floor and 1 ion first floor. Unit can be Room, floor or any bounded area with a defined usage.'
+        type: array
+        items:
+          $ref: '#/definitions/Unit'
+      documents:
+        description: 'The documents attached during assessment, modification or any transaction happened on the property.'
+        type: array
+        items:
+          $ref: '#/definitions/Document'
+      additionalDetails:
+        type: string
+        description: 'The json (array of ''#/definitions/Factor'')'
+      channel:
+        type: string
+        description: 'Property can be created from different channels Eg. System (properties created by ULB officials), CFC Counter (From citizen faciliation counters) etc. Here we are defining some known channels, there can be more client to client.'
+        enum:
+          - SYSTEM
+          - CFC_COUNTER
+          - CITIZEN
+          - DATA_ENTRY
+          - MIGRATION
+      institution:
+        description: 'The details of institution if the ownershipCategory is institutional'
+        type: array
+        items:
+          $ref: '#/definitions/Institution'
+      calculation:
+        description: 'The calculation details of the property'
+        type: object
+        items:
+          $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/rainmaker/property-tax/property-calculation-service.yml#/definitions/Calculation'
+  Institution:
+    type: object
+    properties:
+      id:
+        type: string
+        maxLength: 64
+        description: Unique Identifier of the Property(UUID).
+      tenantId:
+        type: string
+        description: tenant id of the Property
+        maxLength: 256
+      name:
+        type: string
+        description: Name of the Instituion
+        maxLength: 64
+      type:
+        type: string
+        description: Institution type.
+        maxLength: 64
+      designation:
+        type: string
+        maxLength: 64
+        description: Designation of the person doing the assessment
+  OwnerInfo:
+    allOf:
+      - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-user/contracts/v1-0-0.yml#/definitions/User'
+      - type: object
+        properties:
+          isPrimaryOwner:
+            type: boolean
+            description: The owner is primary or not
+          ownerShipPercentage:
+            type: number
+            format: double
+            description: Ownership percentage.
+          ownerType:
+            type: string
+            description: 'Type of owner, based on this option Exemptions will be applied. This is master data defined in mdms.'
+            maxLength: 256
+          institutionId:
+            type: string
+            description: 'The id of the institution if the owner is the authorized person for one'
+            maxLength: 64
+          documents:
+            description: The documents attached by owner for exemption.
+            type: array
+            items:
+              $ref: '#/definitions/Document'
+          relationship:
+            type: string
+            description: 'The relationship of gaurdian.'
+            enum:
+              - FATHER
+              - HUSBAND
+  Address:
+    allOf:
+      - $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-0.yml#/definitions/Address'
+      - type: object
+        description: Address of the property.
+        properties:
+          buildingName:
+            type: string
+            description: Name of the building
+            maxLength: 64
+            minLength: 2
+          street:
+            type: string
+            description: Street Name
+            maxLength: 64
+            minLength: 2
+          locality:
+            $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/egov-location/contracts/v11-0-0.yml#/definitions/Boundary'
+  Document:
+    type: object
+    description: This object holds list of documents attached during the transaciton for a property
+    properties:
+      id:
+        type: string
+        maxLength: 64
+        description: system id of the Document.
+      documentType:
+        type: string
+        description: 'unique document type code, should be validated with document type master'
+      fileStore:
+        type: string
+        description: File store reference key.
+      documentUid:
+        type: string
+        maxLength: 64
+        description: The unique id(Pancard Number,Adhar etc.) of the given Document.
+        
+  Unit:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique Identifier of the Property(UUID).
+      tenantId:
+        type: string
+        description: tenant id of the Property
+        maxLength: 256
+        minLength: 2
+      floorNo:
+        type: string
+        description: floor no for the floor
+        maxLength: 64
+        minLength: 1
+      unitType:
+        type: string
+        description: Unit type.
+        maxLength: 64
+        minLength: 1
+      unitArea:
+        type: number
+        format: float
+        description: Area of the defined Unit.
+      usageCategoryMajor:
+        type: string
+        description: 'This is about the usage of the property like Residential, Non-residential, Mixed(Property witch is gettiong used for Residential, Non-residential purpose)'
+        maxLength: 64
+        minLength: 1
+      usageCategoryMinor:
+        type: string
+        description: Sub category of 'UsageCategoryMajor' defined in 'UsageCategoryMinor' master of mdms.
+        maxLength: 64
+        minLength: 1
+      usageCategorySubMinor:
+        type: string
+        description: Sub category of 'usageCategoryMinor' defined in 'UsageCategorySubMinor' master of mdms.
+        maxLength: 64
+        minLength: 1
+      usageCategoryDetail:
+        type: string
+        description: Sub category of 'usageCategorySubMinor' defined in 'usageCategoryDetail' master of mdms.
+        maxLength: 64
+        minLength: 1
+      occupancyType:
+        type: string
+        description: end date for the unit usage.
+        enum:
+          - Owner
+          - Tenant
+        maxLength: 64
+        minLength: 1
+      occupancyDate:
+        type: number
+        format: int64
+        description: Date on which unit is occupied.
+      constructionType:
+        type: string
+        description: Construction type is defined in MDMS ConstructionTypeMaster.
+        maxLength: 64
+        minLength: 1
+      constructionSubType:
+        type: string
+        description: 'Construction Sub type is defined in MDMS ''ConstructionSubType'' master, this is sub category of constructionType.'
+        maxLength: 64
+        minLength: 1
+      arv:
+        type: number
+        format: double
+        description: 'Annual rental value(arv), if occupancy type is Tenant.'
+  PropertyRequest:
+    description: Contract class to receive request. Array of Property items  are used in case of create . Where as single Property item is used for update
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      Properties:
+        description: Used for search result and create only
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+          $ref: '#/definitions/Property'
+  PropertyResponse:
+    description: Contract class to send response. Array of Property items  are used in case of search results or response for create. Where as single Property item is used for update
+    properties:
+      ResponseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      Properties:
+        description: Used for search result and create only
+        type: array
+        items:
+          $ref: '#/definitions/Property'

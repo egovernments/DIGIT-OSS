@@ -10,8 +10,8 @@ To setup the national-dashboard-ingest service in your local system, clone the [
 - [ ] Redis
 - [ ] Elasticsearch
 - [x] Kafka
-    - [ ] Consumer
-    - [x] Producer
+  - [ ] Consumer
+  - [x] Producer
 
 ## Running Locally
 

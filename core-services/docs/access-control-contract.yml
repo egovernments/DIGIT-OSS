@@ -1,0 +1,683 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based scoping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "1.0.1"
+  title: Access Control APIs
+  description: All APIs available from Access Control services.
+  contact:
+    name: eGov
+    email: info@egovernments.org
+
+# Describe your paths here
+paths:
+  # This is a path endpoint. Change it.
+  /access/v1/actions/_search:
+    # This is a HTTP operation
+    post:
+      # Describe this verb here. Note: you can use markdown 
+      summary: Get the list of actions based on either roles or features.
+      description: |
+        Get the list of actions based on the input parameters.
+      # This is array of GET operation parameters:
+      parameters:
+        - name: requestInfo
+          in: body
+          description: Request info for getting actions.
+          required: true
+          schema:
+            $ref: '#/definitions/RequestInfo'
+        - name: roles
+          in: query
+          required: false
+          description: The list of role codes.
+          type: array
+          items:
+            type: string
+          format: int64
+        - name: features
+          in: query
+          required: false
+          description: The list of feature id's.
+          type: array
+          items:
+            type: integer
+          format: int64  
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: "#/definitions/ActionResponse"
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/ErrorRes'
+      tags: 
+       - Action
+       
+  #####################################################     
+  /access/v1/actions/_create:
+    # This is a HTTP operation
+    post:
+      # Describe this verb here. Note: you can use markdown 
+      summary: Create a new action.
+      description: |
+        To create new action(s) in the system. An action entry is required for each and every path to authenticate the access based on the assigned role of an user.
+      parameters:
+        - name: actionRequest
+          in: body
+          description: Details for the new Action(s) entry + RequestInfo meta data.
+          required: true
+          schema:
+            $ref: '#/definitions/ActionRequest'
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        '200':
+          description: Action(s) created sucessfully
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: "#/definitions/ActionResponse"
+        '400':
+          description: Action(s) creation failed
+          schema:
+           $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      tags: 
+       - Action
+  #####################################################
+  /access/v1/actions/_update:
+    # This is a HTTP operation
+    put:
+      # Describe this verb here. Note: you can use markdown 
+      summary: Update existing action(s).
+      description: |
+        To update the existing action(s) in the system. 
+      parameters:
+        - name: actionRequest
+          in: body
+          description: Details for the Action(s) entry with new values + RequestInfo meta data.
+          required: true
+          schema:
+            $ref: '#/definitions/ActionRequest'
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        '200':
+          description: Update action(s) successful
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: "#/definitions/ActionResponse"
+        '400':
+          description: Update action(s) failed
+          schema:
+           $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      tags: 
+       - Action
+  #####################################################
+  /access/v1/actions/_validate:
+    # This is a HTTP operation
+    post:
+      # Describe this verb here. Note: you can use markdown
+      summary: Validate a particular action for a given tenant and roles of the tenant
+      description: |
+        Validate a particular action for a given tenant and roles of the tenant.
+      parameters:
+        - name: ValidateActionReq
+          in: body
+          description: Request info for getting actions.
+          required: true
+          schema:
+            $ref: '#/definitions/ValidateActionReq'
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response without any content
+          schema:
+            $ref: '#/definitions/ValidateActionRes'
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/ErrorRes'
+      tags:
+       - Action
+
+  /access/v1/feature-role/_create:
+    # This is a HTTP operation
+    post:
+      # Describe this verb here. Note: you can use markdown
+      summary: Create mapping for feature and role.
+      description: |
+        Create mapping for feature and role.
+      parameters:
+        - name: featureRoleRequest
+          in: body
+          description: Request info for getting actions.
+          required: true
+          schema:
+            $ref: '#/definitions/FeatureRoleReq'
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: "#/definitions/FeatureRoleRes"
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/ErrorRes'
+      tags:
+       - Feature-Role
+
+  /access/v1/roles/_search:
+    # This is a HTTP operation
+    post:
+      # Describe this verb here. Note: you can use markdown
+      summary: Get the list of roles based on role codes.
+      description: |
+        Get the list of roles based on role codes in the input parameters.
+      # This is array of GET operation parameters:
+      parameters:
+        - name: rolesReq
+          in: body
+          description: Request info for getting actions.
+          required: true
+          schema:
+            $ref: '#/definitions/RolesReq'
+        - name: code
+          in: query
+          required: false
+          description: The list of comma separated codes to filter Roles against. No providing any would end up in all Roles as there is nothing to filter against
+          type: array
+          items:
+            type: string
+          format: int64
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        200:
+          description: Successful response
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: "#/definitions/RoleResponse"
+        '400':
+          description: Invalid input.
+          schema:
+            $ref: '#/definitions/ErrorRes'
+      tags:
+       - Feature-Role
+  #####################################################     
+  /access/v1/roles/_create:
+    # This is a HTTP operation
+    post:
+      # Describe this verb here. Note: you can use markdown 
+      summary: Create a new role.
+      description: |
+        To create new Role(s) in the system.
+      parameters:
+        - name: roleRequest
+          in: body
+          description: Details for the new role(s) + RequestInfo meta data.
+          required: true
+          schema:
+            $ref: '#/definitions/RoleRequest'
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        '200':
+          description: Role(s) created sucessfully
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: "#/definitions/RoleResponse"
+        '400':
+          description: Role(s) creation failed
+          schema:
+           $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      tags: 
+       - Role
+  #####################################################
+  /access/v1/roles/_update:
+    # This is a HTTP operation
+    put:
+      # Describe this verb here. Note: you can use markdown 
+      summary: Update existing role(s).
+      description: |
+        To update the existing role(s) in the system. 
+      parameters:
+        - name: roleRequest
+          in: body
+          description: Details for the Role(s) entry with new values + RequestInfo meta data.
+          required: true
+          schema:
+            $ref: '#/definitions/RoleRequest'
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        '200':
+          description: Update role(s) successful
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: "#/definitions/RoleResponse"
+        '400':
+          description: Update role(s) failed
+          schema:
+           $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      tags: 
+       - Role
+  #####################################################
+  /access/v1/role-actions/_create:
+    # This is a HTTP operation
+    post:
+      # Describe this verb here. Note: you can use markdown
+      summary: Create mapping for role and action(s).
+      description: |
+        Create mapping for role and action(s).
+      parameters:
+        - name: roleActionsRequest
+          in: body
+          description: Details for the Role and Action(s) mapping + RequestInfo meta data.
+          required: true
+          schema:
+            $ref: '#/definitions/RoleActionsRequest'
+      # Expected responses for this operation:
+      responses:
+        # Response code
+        '200':
+          description: Role - Action(s) mapping created sucessfully
+          # A schema describing your response object.
+          # Use JSON Schema format
+          schema:
+            $ref: "#/definitions/RoleActionsResponse"
+        '400':
+          description: Role - Action(s) mapping failed
+          schema:
+           $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes'
+      tags:
+       - Role-Action
+  #####################################################
+definitions:
+
+  Action:
+    type: object
+    properties:
+      id:
+       type: integer
+       format: int64
+       description : Unique identifier of the Action.
+      name:
+        type: string
+        description: The Name of the Action.
+        minLength: 2
+        maxLength: 100
+      queryParams:
+        type: string
+        description: The Name of the Action.
+        minLength: 5
+        maxLength: 100
+      url:
+        type: string
+        description: The string url for the action.
+        minLength: 10
+        maxLength: 100
+      parentModule:
+       type: integer
+       format: int64
+       description : Unique identifier of the Parent.
+      orderNumber:
+       type: integer
+       format: int64
+       description : Defines order for actions.
+      displayName:
+        type: string
+        description: The Name which is used for displaying.
+        minLength: 2
+        maxLength: 100
+      enabled:
+        type: boolean
+        description: True if the action is required and False if the action is not required.
+      createdBy:
+        type: integer
+        format: int64
+        description: Id of the user who created the record.
+      createdDate:
+        type: string
+        format: date
+        description: Date on which the role master data was added into the system.
+      lastModifiedBy:
+        type: integer
+        format: int64
+        description: Id of the user who last modified the record.
+      lastModifiedDate:
+        type: string
+        format: date
+        description: Date on which the role master data was last modified.
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant, Like AP, AP.Kurnool etc.
+      serviceCode:
+       type: integer
+       format: int64
+       description : Defines service code.
+    required:
+      - name
+      - tenantId
+
+  Feature:
+    type: object
+    properties:
+      id:
+       type: integer
+       format: int64
+       description : Unique identifier of the Action.
+      code:
+        type: integer
+        format: int32
+        description : Unique code for service.
+      name:
+        type: string
+        description: The Name of the Action.
+        minLength: 2
+        maxLength: 100
+      description:
+        type: string
+        description: Description of the Feature.
+        minLength: 2
+        maxLength: 100
+      serviceCode:
+       type: integer
+       format: int64
+       description : Defines service code.
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant, Like AP, AP.Kurnool etc.
+    required:
+      - name
+      - code
+      - tenantId
+
+  Role:
+    type: object
+    properties:
+      id:
+       type: integer
+       format: int64
+       description : Unique identifier of the role.
+      name:
+        type: string
+        description: The Name of the Role.
+        minLength: 2
+        maxLength: 100
+  
+  RoleAction:
+    type: object
+    properties:
+      roleCode:
+       type: string
+       description : The Role Code which is mapped for the action.
+      actionId:
+        type: integer
+        format: int64
+        description: The Id of the Action which is mapped to the role.
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant to which the role action mapping is done.
+        
+  ActionRequest:
+    type: object
+    properties:
+      requestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      actions:
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+          $ref: "#/definitions/Action"
+    required:
+      - requestInfo 
+      - actions
+        
+  ActionResponse:
+    type: object
+    properties:
+      responseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      actions:
+        type: array
+        maximum: 500
+        items:
+         $ref: '#/definitions/Action'
+         
+  RoleRequest:
+    type: object
+    properties:
+      requestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      roles:
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+         $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/Role'
+    required:
+      - requestInfo 
+      - roles
+        
+  RoleResponse:
+    type: object
+    properties:
+      responseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      roles:
+        type: array
+        maximum: 500
+        items:
+         $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/Role'
+  
+  RoleActionsRequest:
+    type: object
+    properties:
+      requestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      role:
+         $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/Role'
+      actions: 
+        type: array
+        minimum: 1
+        maximum: 100
+        items:
+          $ref: '#/definitions/Action'
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant, Like AP, AP.Kurnool etc.
+    required:
+      - role
+      - actions
+      - tenantId
+      
+  RoleActionsResponse:
+    type: object
+    properties:
+      responseInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo'
+      roleActions:
+        type: array
+        maximum: 500
+        items:
+         $ref: '#/definitions/RoleAction'
+        
+  FeatureRoleReq:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: '#/definitions/RequestInfo'
+      roleId:
+        type: string
+        description: List of Role Id to be provided for mapping it to feature.
+      feature:
+        $ref: '#/definitions/Feature'
+      tenantId:
+        type: string
+        description: Unique Identifier of the tenant, Like AP, AP.Kurnool etc.
+    required:
+      - roleId
+      - feature
+      - tenantId
+
+  ValidateAction:
+    type: object
+    properties:
+      tenantRole:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/TenantRole'
+      actionUrl:
+        type: string
+        description: Url of the action to be validated for given tenant
+    required:
+      - tenantRole
+      - actionUrl
+
+  ValidateActionReq:
+    type: object
+    properties:
+      requestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+      validateAction:
+        $ref: '#/definitions/ValidateAction'
+
+  FeatureRoleRes:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: '#/definitions/ResponseInfo'
+      role:
+        $ref: '#/definitions/Role'
+      feature:
+        $ref: '#/definitions/Feature'
+        
+  RolesReq:
+    type: object
+    properties:
+      RequestInfo:
+        $ref: 'https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo'
+        
+  RequestInfo:
+    type: object
+    properties:
+      apiId:
+        type: string
+        description: unique API ID
+      ver:
+        type: string
+        description: API version
+      ts:
+        type: string
+        description: >-
+          response timestamp YYYY-MM-DDThh:mm:ss+/-nn:nn (timezone defaulted to
+          +5.30)
+      action:
+        type: string
+        description: api action like GET/POST/PUT/DELETE in case of http calls
+      did:
+        type: string
+        description: device UUID from which API is called
+      key:
+        type: string
+        description: API key (dynamic)
+      msgId:
+        type: string
+        description: 'unique request message id, UUID, for handling API idempotency'
+      requesterId:
+        type: string
+        description: UserId of the user calling
+      authToken:
+        type: string
+        description: //session/jwt/saml token/oauth token
+    required:
+      - apiId
+      - ver
+      - ts
+
+  ResponseInfo:
+    type: object
+    properties:
+      apiId:
+        type: string
+        description: unique API ID
+      ver:
+        type: string
+        description: API version
+      ts:
+        type: string
+        description: >-
+          response timestamp YYYY-MM-DDThh:mm:ss+/-nn:nn (timezone defaulted to
+          +5.30)
+      resMsgId:
+        type: string
+        description: unique response message id (UUID)
+      msgId:
+        type: string
+        description: message id of the request
+      status:
+        type: string
+        description: 'status of request e.g. successful, failed etc'
+    required:
+      - apiId
+      - ver
+      - ts
+      - status
+
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      description:
+        type: string
+      fields:
+        type: object
+    required:
+      - code
+      - message
+
+  ActionValidation:
+    type: object
+    properties:
+      allowed:
+        type: string
+        enum: ["TRUE", "FALSE"]
+    required:
+      - allowed
+
+  ErrorRes:
+    properties:
+      responseInfo:
+        $ref: '#/definitions/ResponseInfo'
+      error:
+        $ref: '#/definitions/Error'
+    type: object
+
+  ValidateActionRes:
+    properties:
+      responseInfo:
+        $ref: '#/definitions/ResponseInfo'
+      actionValidation:
+        $ref: '#/definitions/ActionValidation'
+    type: object
