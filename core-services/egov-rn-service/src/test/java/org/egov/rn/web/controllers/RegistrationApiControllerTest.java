@@ -38,19 +38,19 @@ class RegistrationApiControllerTest {
     }
 
     @Test
-    @DisplayName("should return Http status as 200 and registrationId on successful registration")
+    @DisplayName("should return Http status as 200 and registration details on successful registration")
     void shouldReturnHttpStatus200AndRegistrationIdOnSuccessfulRegistration() throws Exception {
         when(uuidProvider.uuid()).thenReturn(UUID.fromString("0000-00-00-00-000000"));
 
         RegistrationRequest registrationRequest = RegistrationRequest.builder()
-                .registration(Registration.builder().name("John Doe")
-                        .registrationType(Registration.RegistrationTypeEnum.HOUSEHOLD)
+                .registration(Registration.builder()
+                        .registrationType("household")
                         .build()).build();
         mockMvc.perform(post("/egov-rn-service/registration/v1/_create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registrationRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.registrationId")
+                .andExpect(jsonPath("$.RegistrationDetails.registrationId")
                         .value("00000000-0000-0000-0000-000000000000"));
     }
 }

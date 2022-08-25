@@ -13,7 +13,7 @@ basePath: /egov-rn-service
 x-common-path: >-
   https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml
 paths:
-#########################################
+  #########################################
   /registration/v1/_create:
     post:
       summary: Registers an entity.
@@ -40,29 +40,72 @@ paths:
 #########################################
 definitions:
   Registration:
+    description: A representation of registration. It can be of type Household
     type: object
     discriminator: registrationType
     properties:
-      name:
+      registrationId:
         type: string
+      dateOfRegistration:
+        type: string
+        format: date
       registrationType:
         type: string
-        enum:
-          - Household
+      auditDetails:
+        $ref: >- 
+          https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/AuditDetails
     required:
-    - name
-    - registrationType
-  Household:
+      - dateOfRegistration
+      - registrationType
+  HouseholdRegistration:
     description: A representation of Household
     allOf:
-    - $ref: '#/definitions/Registration'
-    - type: object
-      properties:
-        isHead:
-          type: boolean
-          description: Denotes the head of the household
-      required:
-      - isHead
+      - $ref: '#/definitions/Registration'
+      - type: object
+        properties:
+          name:
+            type: string
+          gender:
+            type: string
+            enum:
+              - Male
+              - Female
+          dateOfBirth:
+            type: string
+            format: date
+          householdId:
+            type: string
+            description: Household ID in case this is a member of the already registered Household
+          isHead:
+            type: boolean
+            description: Denotes the head of the Household
+        required:
+          - name
+          - gender
+          - dateOfBirth
+          - isHead
+  RegistrationDetails:
+    type: object
+    discriminator: registrationDetailsType
+    properties:
+      registrationId:
+        type: string
+      registrationDetailsType:
+        type: string
+    required:
+      - registrationDetailsType
+      - registrationId
+  HouseholdRegistrationDetails:
+    description: A representation of Household details
+    allOf:
+      - $ref: '#/definitions/RegistrationDetails'
+      - type: object
+        properties:
+          householdId:
+            type: string
+            description: Unique id of the Household
+        required:
+          - householdId
   User:
     type: object
     readOnly: true
@@ -92,13 +135,13 @@ definitions:
         description: Email address of the user
         maxLength: 128
     required:
-     - uuid
-     - userName
-     - name
-     - mobileNumber
-     - tenantId
+      - uuid
+      - userName
+      - name
+      - mobileNumber
+      - tenantId
 
-#########################################
+  #########################################
   RegistrationRequest:
     description: >-
       The request object, containing all necessary information for registering an entity and the request body metadata
@@ -106,9 +149,13 @@ definitions:
       requestInfo:
         $ref: >-
           https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
+      tenantId:
+        type: string
       Registration:
         $ref: '#/definitions/Registration'
-
+    required:
+      - tenantId
+      - Registration
   RequestInfoWrapper:
     description: >-
       Wrapper for Request Info
@@ -125,8 +172,7 @@ definitions:
       responseInfo:
         $ref: >-
           https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ResponseInfo
-      registrationId:
-        type: string
-        required: true
-          
+      RegistrationDetails:
+        $ref: '#/definitions/RegistrationDetails'
+
 #########################################        

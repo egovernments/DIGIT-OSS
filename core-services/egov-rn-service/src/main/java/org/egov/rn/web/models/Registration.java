@@ -1,26 +1,27 @@
 package org.egov.rn.web.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.experimental.SuperBuilder;
-import org.springframework.validation.annotation.Validated;
+import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Builder;
+import lombok.experimental.SuperBuilder;
+import org.springframework.validation.annotation.Validated;
+
+import java.time.LocalDate;
 
 /**
- * org.egov.rn.web.models.web.Registration
+ * A representation of registration. It can be of type Household
  */
+@ApiModel(description = "A representation of registration. It can be of type Household")
 @Validated
-@javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2022-08-23T14:53:48.053+05:30")
+@javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2022-08-25T17:44:31.550+05:30")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "registrationType", visible = true )
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = Household.class, name = "org.egov.rn.web.models.web.Household"),
+  @JsonSubTypes.Type(value = HouseholdRegistration.class, name = "HouseholdRegistration"),
 })
 
 @Getter
@@ -29,40 +30,17 @@ import lombok.Builder;
 @NoArgsConstructor
 @SuperBuilder
 public class Registration   {
-        @JsonProperty("name")
-        private String name = null;
+        @JsonProperty("registrationId")
+        private String registrationId = null;
 
-              /**
-   * Gets or Sets registrationType
-   */
-  public enum RegistrationTypeEnum {
-    HOUSEHOLD("org.egov.rn.web.models.web.Household");
-
-    private String value;
-
-    RegistrationTypeEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static RegistrationTypeEnum fromValue(String text) {
-      for (RegistrationTypeEnum b : RegistrationTypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
+        @JsonProperty("dateOfRegistration")
+        private LocalDate dateOfRegistration = null;
 
         @JsonProperty("registrationType")
-        private RegistrationTypeEnum registrationType = null;
+        private String registrationType = null;
+
+        @JsonProperty("auditDetails")
+        private AuditDetails auditDetails = null;
 
 
 }

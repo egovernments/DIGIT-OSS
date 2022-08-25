@@ -3,6 +3,7 @@ package org.egov.rn.web.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiParam;
 import org.egov.rn.utils.UuidProvider;
+import org.egov.rn.web.models.HouseholdRegistrationDetails;
 import org.egov.rn.web.models.RegistrationRequest;
 import org.egov.rn.web.models.RegistrationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,9 @@ public class RegistrationApiController {
     public ResponseEntity<RegistrationResponse> registrationV1CreatePost(@ApiParam(value = "Details of the registration and org.egov.rn.web.models.web.RequestInfo meta data.", required = true)
                                                                              @Valid @RequestBody RegistrationRequest registrationRequest) {
         String registrationId = uuidProvider.uuid().toString();
-        return ResponseEntity.ok(RegistrationResponse.builder().registrationId(registrationId).build());
+        return ResponseEntity.ok(RegistrationResponse.builder()
+                .registrationDetails(HouseholdRegistrationDetails.builder()
+                        .registrationId(registrationId).build()).build());
     }
 
 }
