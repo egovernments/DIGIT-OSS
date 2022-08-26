@@ -1,111 +1,84 @@
-import React, { Fragment, useState ,useEffect} from "react";
-import { useParams, useHistory } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { Header, Card, CardSectionHeader, PDFSvg, Loader, StatusTable, Menu, ActionBar, SubmitBar, Modal, CardText } from "@egovernments/digit-ui-react-components";
-import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
-import BRService from "../../../../../libraries/src/services/elements/BR";
+import { Header, ActionBar, SubmitBar, ExternalLinkIcon, Menu, GenericFileIcon, LinkButton } from '@egovernments/digit-ui-react-components';
+import React, { useState , useEffect } from 'react'
+import { useTranslation } from 'react-i18next';
+import { openDocumentLink, openUploadedDocument } from '../../utils';
+import axios from 'axios';
+import { useParams } from "react-router-dom";
 
-const Heading = (props) => {
-  return <h1 className="heading-m">{props.label}</h1>;
-};
 
-const Close = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF">
-    <path d="M0 0h24v24H0V0z" fill="none" />
-    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
-  </svg>
-);
 
-const CloseBtn = (props) => {
-  return (
-    <div className="icon-bg-secondary" onClick={props.onClick}>
-      <Close />
-    </div>
-  );
-};
+const RegisterDetails = ({ location, match, history, }) => {
 
-const RegisterDetails = () => {
-  const { id } = useParams();
-  const { t } = useTranslation();
-  const history = useHistory();
-  const [showModal, setShowModal] = useState(false);
-  const [displayMenu, setDisplayMenu] = useState(false);
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const { isLoading, data } = Digit.Hooks.events.useEventDetails(tenantId, { ids: id });
-
-  const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_EVENT_MUTATION_HAPPENED", false);
-  const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("EMPLOYEE_EVENT_ERROR_DATA", false);
-  const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_EVENT_MUTATION_SUCCESS_DATA", false);
+  const params = useParams();
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    setMutationHappened(false);
-    clearSuccessData();
-    clearError();
-  }, []);
+    (async () => {
+      const result = await axios(`https://62f0e3e5e2bca93cd23f2ada.mockapi.io/birth/${params.id}`);
+      setData(result.data);
+      console.log("gooo" ,result.data);
+    })();
+  }, [params.id]);
 
 
+    let isMobile = window.Digit.Utils.browser.isMobile();
+    const { t } = useTranslation();
+   
+    const [displayMenu, setDisplayMenu] = React.useState(false);
+    const [showModal, setShowModal] = useState(false);
 
 
-const Getdetails =  ()=>{
-  const  getdata = BRService.get(data , tenantId)
-
-  console.log("Getting APIII DATAS",getdata);
-
-}
-
-
- Getdetails();
-
-
-
-
-
-
-  
-
-  function onActionSelect(action) {
-
-  
-    // setSelectedAction(action);
-    if (action === "EDIT") {
-      history.push(`/digit-ui/employee/engagement/event/edit-event/${id}`)
+    function onActionSelect(action) {
+        // setSelectedAction(action);
+     
+          history.push(`/digit-ui/employee`)
     }
-    if (action === "DELETE") {
-      setShowModal(true);
-    }
-    setDisplayMenu(false);
-  }
 
-  const handleDelete = () => {
-    const details = {
-      events: [
-        {
-          ...data?.applicationData,
-          status: "CANCELLED",
-        },
-      ],
-    };
-    history.push("/digit-ui/employee/engagement/event/response?delete=true", details);
-  };
 
-  return (
-    <Fragment>
-      <Header>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
-      <ApplicationDetailsTemplate
+    return (
+        <div>
+            {/* {showModal ? <Confirmation
+                t={t}
+                heading={'CONFIRM_DELETE_DOC'}
+                docName={details?.name}
+                closeModal={() => setShowModal(!showModal)}
+                actionCancelLabel={'CS_COMMON_CANCEL'}
+                actionCancelOnSubmit={onModalCancel}
+                actionSaveLabel={'ES_COMMON_Y_DEL'}
+                actionSaveOnSubmit={onModalSubmit}
+            />
 
-      
-        // applicationData={data?.applicationData}
-        // applicationDetails={data}
-        // isLoading={isLoading}
-        // isDataLoading={isLoading}
-      // workflowDetails={workflowDetails}
-      // businessService={
-      //   workflowDetails?.data?.applicationBusinessService
-      //     ? workflowDetails?.data?.applicationBusinessService
-      //     : data?.applicationData?.businessService
-      // }
-      />
-      <ActionBar>
+                : null} */}
+            <Header>{t(`Birth-Registration Details`)}</Header>
+            <div className="notice_and_circular_main gap-ten">
+                <div className="documentDetails_wrapper">
+                    {/* <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('ULB')}:`}</p> <p>{data?.tenantId}</p> </div> */}
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Babys First NAME')}:`}</p> <p>{data?.babyFirstName}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Babys Last NAME')}:`}</p> <p>{t(data?.babyLastName)}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Father NAME')}:`}</p> <p>{t(data?.fatherName)}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Mother NAME')}:`}</p> <p>{t(data?.motherName)}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Doctor NAME')}:`}</p> <p>{t(data?.doctorName)}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Hospital NAME')}:`}</p> <p>{t(data?.hospitalName)}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Applicant MobileNumber')}:`}</p> <p>{t(data?.applicantMobileNumber)}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Correspondence Address')}:`}</p> <p>{t(data?.correspondenceAddress)}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Correspondence City')}:`}</p> <p>{t(data?.correspondenceCity)}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Permanent Address')}:`}</p> <p>{t(data?.permanentAddress)}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Place Of Birth')}:`}</p> <p>{t(data?.placeOfBirth)}</p> </div>
+    
+                    {/* <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('DCOUMENT_DESCRIPTION')}:`}</p> <p className="documentDetails__description">{details?.description?.length ? details?.description : 'NA'}</p> </div> */}
+                    {/* <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('ES_COMMON_LINK_LABEL')}:`}</p>
+                        {details?.documentLink ? <LinkButton
+                            label={
+                                <div className="link" onClick={() => openDocumentLink(details?.documentLink, details?.name)}>
+                                    <p>{t(`CE_DOCUMENT_OPEN_LINK`)}</p>
+                                </div>
+                            }
+                        /> : 'NA'}
+                    </div> */}
+                  
+                </div>
+            </div>
+            <ActionBar>
         {displayMenu ? (
           <Menu
             localeKeyPrefix={"BR"}
@@ -129,9 +102,9 @@ const Getdetails =  ()=>{
             <CardText>{t(`REJECT`)}</CardText>
           </Card>
         </Modal>
-      }
-    </Fragment>
-  );
-};
+          }
+        </div>
+    )
+}
 
 export default RegisterDetails;

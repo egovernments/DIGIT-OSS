@@ -1,12 +1,9 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback ,  useEffect  } from "react";
 import { useTranslation } from "react-i18next";
 import { format, isValid } from "date-fns";
 import { Header } from "@egovernments/digit-ui-react-components";
-import DesktopInbox from "../../employee/Inbox/Tableconfig";
-
-
-
-
+import DesktopInbox from "./DesktopInbox";
+import axios from 'axios';
 const Inbox = ({ tenants, parentRoute }) => {
   const { t } = useTranslation()
   Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
@@ -23,6 +20,16 @@ const Inbox = ({ tenants, parentRoute }) => {
     ulb: tenants?.find(tenant => tenant?.code === tenantId)
   });
   let isMobile = window.Digit.Utils.browser.isMobile();
+  const [data, setData] = useState([]);
+
+  // Using useEffect to call the API once mounted and set the data
+  useEffect(() => {
+    (async () => {
+      const result = await axios("https://62f0e3e5e2bca93cd23f2ada.mockapi.io/birth");
+      setData(result.data);
+      console.log("gooo" ,result.data);
+    })();
+  }, []);
 
   const getSearchFields = () => {
     return [
@@ -45,15 +52,16 @@ const Inbox = ({ tenants, parentRoute }) => {
     }
   ]
 
-  const { data, isLoading } = Digit.Hooks.events.useInbox(searchParams?.ulb?.code, {},
-    {
-      eventTypes: "EVENTSONGROUND", limit: pageSize,
-      offset: pageOffset,
-    },
-    {
-      select: (data) => ({ events: data?.events, totalCount: data?.totalCount })
-    });
+  // const { data, isLoading } = Digit.BRService.get(data , tenantId, {},
+  //   {
+  //     eventTypes: "EVENTSONGROUND", limit: pageSize,
+  //     offset: pageOffset,
+  //   },
+  //   {
+  //     select: (data) => ({ br: data?.br, totalCount: data?.totalCount })
+  //   });
 
+    
   const onSearch = (params) => {
     let updatedParams = { ...params };
     if (!params?.ulb) {
@@ -91,46 +99,33 @@ const Inbox = ({ tenants, parentRoute }) => {
 
 
 
-  if (isMobile) {
-    return (
-      <MobileInbox
-        data={data?.events}
-        searchParams={searchParams}
-        searchFields={getSearchFields()}
-        t={t}
-        onFilterChange={handleFilterChange}
-        onSearch={onSearch}
-        isLoading={isLoading}
-        title={"EVENTS_EVENTS_HEADER"}
-        iconName={"calender"}
-        links={links}
-      />
-    )
-  }
+  
 
   return (
     <div>
       <Header>
-        {t("EVENTS_EVENTS_HEADER")}
-        {Number(data?.totalCount) ? <p className="inbox-count">{Number(data?.totalCount)}</p> : null}
+        {t("Birth-registration")}
+      
       </Header>
+      <p>{}</p>
       <DesktopInbox
         t={t}
-        // data={data?.events}
-        // links={links}
-        // parentRoute={parentRoute}
-        // searchParams={searchParams}
-        // onSearch={onSearch}
-        // globalSearch={globalSearch}
-        // searchFields={getSearchFields()}
-        // onFilterChange={handleFilterChange}
-        // pageSizeLimit={pageSize}
-        // totalRecords={data?.totalCount}
-      
-        // currentPage={parseInt(pageOffset / pageSize)}
-        // onNextPage={fetchNextPage}
-        // onPrevPage={fetchPrevPage}
-        // onPageSizeChange={handlePageSizeChange}
+        data={data}
+        links={links}
+        parentRoute={parentRoute}
+        searchParams={searchParams}
+        onSearch={onSearch}
+        globalSearch={globalSearch}
+        searchFields={getSearchFields()}
+        onFilterChange={handleFilterChange}
+        pageSizeLimit={pageSize}
+        totalRecords={data?.totalCount}
+        title={"Birth-registration"}
+        iconName={"calender"}
+        currentPage={parseInt(pageOffset / pageSize)}
+        onNextPage={fetchNextPage}
+        onPrevPage={fetchPrevPage}
+        onPageSizeChange={handlePageSizeChange}
       />
     </div>
   );

@@ -17,8 +17,16 @@ import BRCard from "./components/config/BRCard";
 import BRManageApplication from "./pages/employee/BRManageApplication";
 import RegisterDetails from "./pages/employee/RegisterDetails";
 import Response from "./pages/citizen/create/Response";
+import Inbox from "./pages/employee/Inbox/Inbox";
+import Main from "./pages/employee/Inbox/Main";
+import Table from "./pages/employee/Inbox/Table";
+import DesktopInbox from "./pages/employee/Inbox/DesktopInbox";
 
 const componentsToRegister = {
+  DesktopInbox,
+  Main,
+  Table,
+  Inbox,
  Response,
   RegisterDetails,
   BRManageApplication,

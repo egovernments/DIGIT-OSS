@@ -24,11 +24,11 @@ const BRCard = () => {
         links: [
             {
                 label: t("Inbox"),
-                link: `/digit-ui/employee/br/inbox`
+                link: `/digit-ui/employee/br/Inbox`
             },
             {
-                label: t("HR_COMMON_CREATE_EMPLOYEE_HEADER"),
-                link: `/digit-ui/employee/myapplication`
+                label: t("Create Birth-Registration"),
+                link: `/digit-ui/citizen/br/birth`
             }           
         ]
     }

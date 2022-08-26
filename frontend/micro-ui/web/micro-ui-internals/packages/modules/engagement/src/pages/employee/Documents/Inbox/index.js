@@ -111,7 +111,7 @@ const Inbox = ({ tenants }) => {
                 totalRecords={response?.totalCount}
                 title={"DOCUMENTS_DOCUMENT_HEADER"}
                 iconName={"document"}
-                links={links}
+              
                 currentPage={parseInt(searchParams.offset / searchParams.limit)}
                 onNextPage={fetchNextPage}
                 onPrevPage={fetchPrevPage}

@@ -24,7 +24,16 @@ const BRService = {
       userService: true,
       params: { tenantId },
     }),
- 
+    showResults: (details) =>
+        Request({
+            url: Urls.engagement.surveys.showResults,
+           // data: details,
+            useCache: true,
+            userService: true,
+            method: "POST",
+            auth: true,
+            params:{surveyId:details.surveyId}
+        }),
     
  
 };
