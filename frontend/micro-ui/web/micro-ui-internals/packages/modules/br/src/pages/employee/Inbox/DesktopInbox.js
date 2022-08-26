@@ -7,9 +7,13 @@ import EventLink from "./EventLink";
 import axios from 'axios';
 import Search from "./Search";
 import DropdownUlb from "./DropdownUlb";
+import Filter from "./Filter";
 
 
 const DesktopInbox = ({ isLoading,  t, onSearch, parentRoute, title, iconName, links, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords, currentPage, onNextPage, onPrevPage, onPageSizeChange }) => {
+
+
+  
   const [data, setData] = useState([]);
   useEffect(() => {
     (async () => {
@@ -18,6 +22,8 @@ const DesktopInbox = ({ isLoading,  t, onSearch, parentRoute, title, iconName, l
       console.log("gooo" ,result.data);
     })();
   }, []);
+
+  
 
   const columns = React.useMemo(() => {
     return [
@@ -86,19 +92,19 @@ const DesktopInbox = ({ isLoading,  t, onSearch, parentRoute, title, iconName, l
     <div className="inbox-container">
       <div className="filters-container">
       <EventLink title={"Birth-registration"} icon={iconName} links={links} />
-        {/* <div>
+        <div>
           <Filter onFilterChange={onFilterChange} searchParams={searchParams} />
-        </div> */}
+        </div>
       </div>
       <div style={{ flex: 1 }}>
-        {/* <Search
+        <Search
           t={t}
           onSearch={onSearch}
           type="desktop"
           searchFields={searchFields}
           isInboxPage={true}
           searchParams={searchParams}
-        /> */}
+        />
         
         <div className="result" style={{ marginLeft: "24px", flex: 1 }}>
        {result}

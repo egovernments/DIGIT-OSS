@@ -39,27 +39,19 @@ const Inbox = ({ tenants, parentRoute }) => {
         type: "ulb",
       },
       {
-        label: t("EVENTS_NAME_LABEL"),
-        name: "eventName"
+        label: t("Baby's NAME"),
+        name: "babyLastName"
       }
     ]
   }
 
   const links = [
     {
-      text: t("ES_TITLE_NEW_EVENTS"),
-      link: "/digit-ui/employee/engagement/event/inbox/new-event",
+      text: t("Create Birth-Registration"),
+      link: "/digit-ui/citizen/br/birth",
     }
   ]
 
-  // const { data, isLoading } = Digit.BRService.get(data , tenantId, {},
-  //   {
-  //     eventTypes: "EVENTSONGROUND", limit: pageSize,
-  //     offset: pageOffset,
-  //   },
-  //   {
-  //     select: (data) => ({ br: data?.br, totalCount: data?.totalCount })
-  //   });
 
     
   const onSearch = (params) => {
@@ -77,13 +69,9 @@ const Inbox = ({ tenants, parentRoute }) => {
   const globalSearch = (rows, columnIds) => {
     // return rows;
     return rows?.filter(row =>
-      (searchParams?.eventStatus?.length > 0 ? searchParams?.eventStatus?.includes(row.original?.status) : true) &&
-      (searchParams?.eventName ? row.original?.name?.toUpperCase().startsWith(searchParams?.eventName.toUpperCase()) : true) &&
-      (searchParams?.ulb?.code ? row.original.tenantId === searchParams?.ulb?.code : true) &&
-      (searchParams?.eventCategory ? row.original.eventCategory === searchParams?.eventCategory?.code : true) &&
-      (isValid(searchParams?.range?.startDate) ? row.original.eventDetails?.fromDate >= new Date(searchParams?.range?.startDate).getTime() : true) &&
-      (isValid(searchParams?.range?.endDate) ? row.original.eventDetails?.toDate <= new Date(searchParams?.range?.endDate).getTime() : true))
-  }
+     
+      (searchParams?.babyLastName ? row.original?.babyLastName?.toUpperCase().startsWith(searchParams?.babyLastName.toUpperCase()) : true) 
+     ) }
 
   const fetchNextPage = useCallback(() => {
     setPageOffset((prevPageOffSet) => ((parseInt(prevPageOffSet) + parseInt(pageSize))));

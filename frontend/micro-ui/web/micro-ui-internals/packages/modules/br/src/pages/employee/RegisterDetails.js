@@ -31,7 +31,7 @@ const RegisterDetails = ({ location, match, history, }) => {
     function onActionSelect(action) {
         // setSelectedAction(action);
      
-          history.push(`/digit-ui/employee`)
+          history.push(`/digit-ui/employee/br/responseemp`)
     }
 
 

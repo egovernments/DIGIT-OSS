@@ -24,7 +24,7 @@ return (
         {links.map(({ link, text, hyperlink = false, accessTo = [] }, index) => {
           return (
             <span className="link" key={index}>
-              {hyperlink ? <a href={link}>{text}</a> : <Link to={"digit-ui/citizen/br/birth"}>{"create"}</Link>}
+        <Link to={"citizen/br/birth"}>{"create"}</Link>
             </span>
           );
         })}

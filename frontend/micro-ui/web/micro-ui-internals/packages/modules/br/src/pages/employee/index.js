@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Switch, useLocation , Route } from "react-router-dom";
 import Inbox from "./Inbox/Inbox";
+import ResponseEmployee from "./ResponseEmployee";
 
 const EmployeeApp = ({ path, url, userType ,tenants, parentRoute }) => {
   const { t } = useTranslation();
@@ -10,14 +11,14 @@ const EmployeeApp = ({ path, url, userType ,tenants, parentRoute }) => {
   const BRManageApplication = Digit?.ComponentRegistryService?.getComponent("BRManageApplication");
   const RegisterDetails = Digit?.ComponentRegistryService?.getComponent("RegisterDetails");
   const Inbox = Digit?.ComponentRegistryService?.getComponent("Inbox");
-  const Main = Digit?.ComponentRegistryService?.getComponent("Main");
+  const ResponseEmployee = Digit?.ComponentRegistryService?.getComponent("ResponseEmployee");
 
   return (
     <Switch>
       <React.Fragment>
         <div className="ground-container">
-        <PrivateRoute path={`${path}/table`} component={() => <Main />} />
-      
+       
+        <PrivateRoute path={`${path}/responseemp`} component={() => <ResponseEmployee/>} />
         <PrivateRoute path={`${path}/inbox`} component={props => <Inbox {...props} tenants={tenants} parentRoute={parentRoute} />} />
         {/* <PrivateRoute path={`${path}/details`} component={() => <RegisterDetails />} /> */}
           <PrivateRoute path={`${path}/myapplication`} component={() => <BRManageApplication />} />
