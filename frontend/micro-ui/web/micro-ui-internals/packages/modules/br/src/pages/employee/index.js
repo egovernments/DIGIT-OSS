@@ -21,7 +21,7 @@ const EmployeeApp = ({ path, url, userType ,tenants, parentRoute }) => {
         <PrivateRoute path={`${path}/inbox`} component={props => <Inbox {...props} tenants={tenants} parentRoute={parentRoute} />} />
         {/* <PrivateRoute path={`${path}/details`} component={() => <RegisterDetails />} /> */}
           <PrivateRoute path={`${path}/myapplication`} component={() => <BRManageApplication />} />
-          <PrivateRoute path={`${path}/inbox/details/:id`} component={(props) => <RegisterDetails {...props} />} />
+          <PrivateRoute path={`${path}/details/:id`} component={(props) => <RegisterDetails {...props} />} />
         </div>
       </React.Fragment>
     </Switch>
