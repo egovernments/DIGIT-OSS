@@ -141,6 +141,24 @@ definitions:
       - mobileNumber
       - tenantId
 
+  Workflow:
+    type: object
+    description: 'Fields related to workflow service'
+    properties:
+      action:
+        type: string
+        description: Action on the application
+        minLength: 1
+        maxLength: 64
+      status:
+        type: string
+        description: Status of the application
+      comments:
+        type: string
+        description: Unique Identifier scrutinized number
+        minLength: 1
+        maxLength: 64
+
   #########################################
   RegistrationRequest:
     description: >-
