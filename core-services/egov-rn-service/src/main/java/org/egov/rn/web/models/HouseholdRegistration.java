@@ -72,6 +72,8 @@ public class HouseholdRegistration extends Registration {
         @JsonProperty("isHead")
         private Boolean isHead = null;
 
+        @JsonProperty("md5Hash")
+        private String md5Hash = null;
 
 }
 

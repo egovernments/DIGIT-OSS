@@ -79,6 +79,9 @@ definitions:
           isHead:
             type: boolean
             description: Denotes the head of the Household
+          md5Hash:
+            type: string
+            description: md5 hash of name, gender and date of birth
         required:
           - name
           - gender
