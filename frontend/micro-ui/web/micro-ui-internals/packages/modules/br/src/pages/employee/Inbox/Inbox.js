@@ -1,7 +1,7 @@
 import React, { useState, useCallback ,  useEffect  } from "react";
 import { useTranslation } from "react-i18next";
 import { format, isValid } from "date-fns";
-import { Header } from "@egovernments/digit-ui-react-components";
+import { Header ,Loader } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "./DesktopInbox";
 import axios from 'axios';
 const Inbox = ({ tenants, parentRoute }) => {
@@ -21,7 +21,7 @@ const Inbox = ({ tenants, parentRoute }) => {
   });
   let isMobile = window.Digit.Utils.browser.isMobile();
   const [data, setData] = useState([]);
-
+const {isLoading } = data;
   // Using useEffect to call the API once mounted and set the data
   useEffect(() => {
     (async () => {
@@ -86,7 +86,11 @@ const Inbox = ({ tenants, parentRoute }) => {
   };
 
 
-
+  if (isLoading) {
+    return (
+      <Loader />
+    );
+  }
   
 
   return (

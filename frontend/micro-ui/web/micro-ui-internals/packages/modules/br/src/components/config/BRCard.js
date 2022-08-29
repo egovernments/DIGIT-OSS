@@ -17,7 +17,7 @@ const BRCard = () => {
             {
                 // count:  isLoading ? "-" : data?.EmployeCount?.totalEmployee,
                 label: t("TOTAL Application"),
-                link: `/digit-ui/employee/br/details`
+                link: `/digit-ui/employee/br/Inbox`
             },
          
         ],
