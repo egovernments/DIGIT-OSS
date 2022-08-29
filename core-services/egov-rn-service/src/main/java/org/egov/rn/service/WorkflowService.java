@@ -59,7 +59,7 @@ public class WorkflowService {
                 .businessId(registrationRequest.getRegistration().getRegistrationId())
                 .tenantId(registrationRequest.getTenantId())
                 .action("SUBMIT")
-                .moduleName("egov-rn-service")
+                .moduleName("rn-services")
                 .businessService("RNS")
                 .assignes(assignes)
                 .build();
