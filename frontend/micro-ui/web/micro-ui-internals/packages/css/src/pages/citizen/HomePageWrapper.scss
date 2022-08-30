@@ -18,13 +18,13 @@
 
   .ServicesSection {
     @apply flex flex-wrap;
-    padding: 0 15px 0 15px;
+    padding: 40px 15px 0 15px;
   }
 
   @screen dt {
     .ServicesSection {
       @apply flex flex-wrap;
-      padding: 0 15px 0 15px;
+      padding: 40px 15px 0 15px;
       width: 100%;
     }
   }

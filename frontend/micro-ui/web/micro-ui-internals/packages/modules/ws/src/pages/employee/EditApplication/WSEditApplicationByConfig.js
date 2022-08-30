@@ -178,14 +178,21 @@ const WSEditApplicationByConfig = () => {
       setSessionFormData({ ...sessionFormData, ...formData });
     }
     if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0 && !formData?.cpt?.details?.propertyId) setSubmitValve(true);
-    else if(formData.roadCuttingDetails?.[0]?.roadType?.code == "" 
+    else if( formData.ConnectionDetails?.[0]?.water && (formData.roadCuttingDetails?.[0]?.roadType?.code == "" 
     || formData.roadCuttingDetails?.[0]?.area == "" 
     || formData.plumberDetails?.[0]?.detailsProvidedBy == ""
     || formData.connectionDetails?.[0]?.connectionType == ""
     || formData.connectionDetails?.[0]?.waterSource == ""
-    || formData.connectionDetails?.[0]?.sourceSubData == ""
-    || formData.connectionDetails?.[0]?.pipeSize == ""
-    || formData.connectionDetails?.[0]?.noOfTaps == ""){
+    || formData.connectionDetails?.[0]?.sourceSubData == "")
+    ){
+      setSubmitValve(false);
+    }
+    else if( formData.ConnectionDetails?.[0]?.sewerage && (formData.roadCuttingDetails?.[0]?.roadType?.code == "" 
+    || formData.roadCuttingDetails?.[0]?.area == "" 
+    || formData.plumberDetails?.[0]?.detailsProvidedBy == ""
+    || formData.connectionDetails?.[0]?.noOfWaterClosets == ""
+    || formData.connectionDetails?.[0]?.noOfToilets == "")
+    ){
       setSubmitValve(false);
     }
     else setSubmitValve(!(Object.keys(formState.errors).length));
