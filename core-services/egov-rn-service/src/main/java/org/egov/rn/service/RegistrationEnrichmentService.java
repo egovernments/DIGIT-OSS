@@ -9,11 +9,15 @@ import org.egov.rn.service.models.IdRequest;
 import org.egov.rn.service.models.IdResponse;
 import org.egov.rn.web.models.AuditDetails;
 import org.egov.rn.web.models.HouseholdRegistration;
+import org.egov.rn.web.models.Registration;
 import org.egov.rn.web.models.RegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,10 +56,20 @@ public class RegistrationEnrichmentService {
             registrationRequest.getRegistration().setRegistrationId(registrationId.getId());
             if (registrationRequest.getRegistration() instanceof HouseholdRegistration) {
                 ((HouseholdRegistration) registrationRequest.getRegistration()).setHouseholdId(householdId.getId());
+                ((HouseholdRegistration) registrationRequest.getRegistration()).setMd5Hash(generateMd5Hash(registrationRequest.getRegistration()));
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex.getMessage());
         }
+    }
+
+    private String generateMd5Hash(Registration registration) throws NoSuchAlgorithmException {
+        HouseholdRegistration householdRegistration = (HouseholdRegistration) registration;
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] theMD5digest = md.digest(householdRegistration.getName()
+                .concat(householdRegistration.getDateOfBirth().toString())
+                .concat(householdRegistration.getGender().name()).getBytes(Charset.defaultCharset()));
+        return new String(theMD5digest);
     }
 
     private IdGenerationRequest getIdGenRequest(String tenantId) {
