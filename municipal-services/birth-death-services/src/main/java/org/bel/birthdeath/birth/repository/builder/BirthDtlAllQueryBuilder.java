@@ -25,7 +25,7 @@ public class BirthDtlAllQueryBuilder {
 			"bdtl.tenantid tenantid, registrationno, dateofbirth, counter, gender , " + 
 			"CASE WHEN gender = '1' THEN 'Male' WHEN gender = '2' THEN 'Female' WHEN gender = '3' THEN 'Others'  END AS genderstr ," +
 			"(select bh.hospitalname from eg_birth_death_hospitals bh where bh.id=hospitalid)  AS hospitalname, placeofbirth, dateofreport, remarks," + 
-			"hospitalid , informantsname , informantsaddress ," + 
+			"hospitalid , informantsname , informantsaddress , islegacyrecord, " +
 			"bfat.firstname bfatfn ,bmot.firstname bmotfn , bdtl.firstname bdtlfn ," + 
 			"bfat.middlename bfatmn ,bmot.middlename bmotmn , bdtl.middlename bdtlmn ," + 
 			"bfat.lastname bfatln ,bmot.lastname bmotln , bdtl.lastname bdtlln ," + 

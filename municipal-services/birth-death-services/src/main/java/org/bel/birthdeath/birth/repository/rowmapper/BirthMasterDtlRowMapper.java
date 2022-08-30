@@ -67,6 +67,7 @@ public class BirthMasterDtlRowMapper implements ResultSetExtractor<List<EgBirthD
 							.firstname(rs.getString("bdtlfn")).middlename(rs.getString("bdtlmn")).lastname(rs.getString("bdtlln")).birthMotherInfo(motherInfo).birthFatherInfo(fatherInfo)
 							.birthPermaddr(permaddr).birthPresentaddr(presentaddr).placeofbirth(rs.getString("placeofbirth")).remarks(rs.getString("remarks"))
 							.hospitalid(rs.getString("hospitalid")).informantsname(rs.getString("informantsname")).informantsaddress(rs.getString("informantsaddress"))
+							.isLegacyRecord(rs.getBoolean("islegacyrecord"))
 							.build();
 					birthDtl.setFullName(utils.addfullName(birthDtl.getFirstname(), birthDtl.getMiddlename(), birthDtl.getLastname()));
 					birthDtlMap.put(birthdtlid, birthDtl);

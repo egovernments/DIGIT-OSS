@@ -229,9 +229,11 @@ public class WCConstants {
 	public static final int CREATE_APPLICATION = 0;
 	public static final int UPDATE_APPLICATION = 1;
 	public static final int MODIFY_CONNECTION =  2;
+	public static final int DISCONNECT_CONNECTION =  3;
 	
 	public static final String NEW_WATER_CONNECTION = "NEW_WATER_CONNECTION";
 	public static final String MODIFY_WATER_CONNECTION = "MODIFY_WATER_CONNECTION";
+	public static final String DISCONNECT_WATER_CONNECTION = "DISCONNECT_WATER_CONNECTION";
 	
 	public static final String WATER_SERVICE_BUSINESS_ID = "WS";
 
@@ -240,6 +242,8 @@ public class WCConstants {
 	public static final String PAYMENT_NOTIFICATION_APP = "WS_PAYMENT_NOTIFICATION_APP";
 
 	public static final String PAYMENT_NOTIFICATION_SMS = "WS_PAYMENT_NOTIFICATION_SMS";
+
+	public static final String PAYMENT_NOTIFICATION_EMAIL = "WS_PAYMENT_NOTIFICATION_EMAIL";
 
 	public static final String MODIFIED_FINAL_STATE = "APPROVED";
 
@@ -266,5 +270,21 @@ public class WCConstants {
 	public static final String CHANNEL_LIST = "channelList";
 
 	public static final String CHANNEL = "Channel";
+	
+	public static final String ACTIVE = "ACTIVE";
+
+	public static final String EXECUTE_DISCONNECTION = "EXECUTE_DISCONNECTION";
+
+	public static final String APPROVE_DISCONNECTION_CONST = "APPROVE_FOR_DISCONNECTION";
+
+	public static final String APPLICATION_DISCONNECTION_CODE = "DC";
+
+	public static final String PENDING_FOR_PAYMENT_STATUS_CODE = "PENDING_FOR_PAYMENT";
+
+	public static final String DOCUMENT_ACCESS_AUDIT_MSG = "The documents for water connection application has been accessed";
+
+	public static final String WNS_ENCRYPTION_MODEL = "WnSConnection";
+
+	public static final String WNS_OWNER_ENCRYPTION_MODEL = "WnSConnectionOwner";
 
 }

@@ -56,21 +56,25 @@ public class IngestValidator {
         requestInfo.getUserInfo().getRoles().forEach(role -> {
             roles.add(role.getCode());
         });
-        if(roles.contains("SUPERUSER")){
-            String ulbPresentInRequest = data.getUlb();
-            log.info(ulbPresentInRequest.split("\\.")[0]);
-            if(!ulbPresentInRequest.split("\\.")[0].equals(employeeUlb.split("\\.")[0])){
-                throw new CustomException("EG_INGEST_ERR", "Superusers of one state cannot insert data for another state");
-            }
 
-        }else {
-            String ulbPresentInRequest = data.getUlb();
-            if (ulbPresentInRequest.contains(".")) {
-                if (!employeeUlb.equals(ulbPresentInRequest))
-                    throw new CustomException("EG_INGEST_ERR", "Employee of ulb: " + employeeUlb + " cannot insert data for ulb: " + ulbPresentInRequest);
+        // Skip validations in case the user is having adaptor ingest specific role
+        if(!roles.contains(applicationProperties.getAdaptorIngestSystemRole())) {
+            if (roles.contains("SUPERUSER")) {
+                String ulbPresentInRequest = data.getUlb();
+                log.info(ulbPresentInRequest.split("\\.")[0]);
+                if (!ulbPresentInRequest.split("\\.")[0].equals(employeeUlb.split("\\.")[0])) {
+                    throw new CustomException("EG_INGEST_ERR", "Superusers of one state cannot insert data for another state");
+                }
+
             } else {
-                if (!employeeUlb.contains(ulbPresentInRequest.toLowerCase()))
-                    throw new CustomException("EG_INGEST_ERR", "Employee of ulb: " + employeeUlb + " cannot insert data for ulb: " + ulbPresentInRequest);
+                String ulbPresentInRequest = data.getUlb();
+                if (ulbPresentInRequest.contains(".")) {
+                    if (!employeeUlb.equals(ulbPresentInRequest))
+                        throw new CustomException("EG_INGEST_ERR", "Employee of ulb: " + employeeUlb + " cannot insert data for ulb: " + ulbPresentInRequest);
+                } else {
+                    if (!employeeUlb.contains(ulbPresentInRequest.toLowerCase()))
+                        throw new CustomException("EG_INGEST_ERR", "Employee of ulb: " + employeeUlb + " cannot insert data for ulb: " + ulbPresentInRequest);
+                }
             }
         }
     }

@@ -18,5 +18,9 @@ public class TaxHeadEstimate {
 
     private BigDecimal estimateAmount;
 
+    private BigDecimal advanceAmount;
+    
+    private BigDecimal balanceAmount;
+    
     private Category category;
 }

@@ -116,6 +116,12 @@ public class WorkflowQueryBuilder {
             addToPreparedStatement(preparedStmtList, statuses);
         }
         
+        if(!ObjectUtils.isEmpty(criteria.getIsNearingSlaCount()) && criteria.getIsNearingSlaCount()){
+            builder.append(" AND ((select extract(epoch from current_timestamp)) * 1000 - pi.lastmodifiedTime) BETWEEN ? AND ? ");
+             preparedStmtList.add(0l);
+             preparedStmtList.add(criteria.getSlotPercentageSlaLimit());
+         }
+        
         if(!StringUtils.isEmpty(criteria.getAssignee())) {
         	
         	builder.append(" AND asg.assignee=? ");
@@ -126,7 +132,8 @@ public class WorkflowQueryBuilder {
 
 
     }
-
+    
+    
 
     public String getProcessInstanceIds(ProcessInstanceSearchCriteria criteria, List<Object> preparedStmtList){
         StringBuilder with_query_builder = new StringBuilder(WITH_CLAUSE);
@@ -338,6 +345,12 @@ public class WorkflowQueryBuilder {
         if(!StringUtils.isEmpty(criteria.getBusinessService())){
             with_query_builder.append(" AND pi_outer.businessservice =? ");
             preparedStmtList.add(criteria.getBusinessService());
+        }
+        
+        if(!ObjectUtils.isEmpty(criteria.getIsNearingSlaCount()) && criteria.getIsNearingSlaCount()){
+            with_query_builder.append(" AND ((select extract(epoch from current_timestamp)) * 1000 - pi_outer.lastmodifiedTime) BETWEEN ? AND ? ");
+            preparedStmtList.add(0l);
+            preparedStmtList.add(criteria.getSlotPercentageSlaLimit());
         }
         
 

@@ -15,6 +15,7 @@ import org.egov.pt.models.PropertyCriteria;
 import org.egov.pt.models.oldProperty.OldPropertyCriteria;
 import org.egov.pt.service.FuzzySearchService;
 import org.egov.pt.service.MigrationService;
+import org.egov.pt.service.PropertyEncryptionService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.util.ResponseInfoFactory;
 import org.egov.pt.validator.PropertyValidator;
@@ -53,6 +54,9 @@ public class PropertyController {
     @Autowired
     FuzzySearchService fuzzySearchService;
 
+    @Autowired
+    PropertyEncryptionService propertyEncryptionService;
+
     @PostMapping("/_create")
     public ResponseEntity<PropertyResponse> create(@Valid @RequestBody PropertyRequest propertyRequest) {
 
@@ -86,10 +90,24 @@ public class PropertyController {
         if(!configs.getIsInboxSearchAllowed() || !propertyCriteria.getIsInboxSearch()){
             propertyValidator.validatePropertyCriteria(propertyCriteria, requestInfoWrapper.getRequestInfo());
         }
-        List<Property> properties = propertyService.searchProperty(propertyCriteria,requestInfoWrapper.getRequestInfo());
-        PropertyResponse response = PropertyResponse.builder().properties(properties).count(properties.size()).responseInfo(
-                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+        
+    	List<Property> properties = null;
+    	Integer count = 0;
+        
+        if (propertyCriteria.getIsRequestForCount()) {
+        	count = propertyService.count(requestInfoWrapper.getRequestInfo(), propertyCriteria);
+        	
+        }else {
+        	 properties = propertyService.searchProperty(propertyCriteria,requestInfoWrapper.getRequestInfo());
+        }
+        
+        PropertyResponse response = PropertyResponse.builder()
+        		.responseInfo(
+                        responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+        		.properties(properties)
+        		.count(count)
                 .build();
+        
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -152,4 +170,21 @@ public class PropertyController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Encrypts existing property records
+     *
+     * @param requestInfoWrapper RequestInfoWrapper
+     * @param propertyCriteria PropertyCriteria
+     * @return list of updated encrypted data
+     */
+    /* To be executed only once */
+    @RequestMapping(value = "/_encryptOldData", method = RequestMethod.POST)
+    public ResponseEntity<PropertyResponse> encryptOldData(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+                                                         @Valid @ModelAttribute PropertyCriteria propertyCriteria) {
+        List<Property> properties = propertyEncryptionService.updateOldData(propertyCriteria, requestInfoWrapper.getRequestInfo());
+        PropertyResponse response = PropertyResponse.builder().properties(properties).responseInfo(
+                        responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

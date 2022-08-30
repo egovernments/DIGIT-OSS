@@ -66,7 +66,9 @@ public class SewerageServicesUtil {
 	private String URL = "url";
 	private String locality = "locality=";
 	private String localityCode = "locality";
-
+	private String doorNo = "doorNo=";
+	private String name = "name=";
+	
 	/**
 	 * 
 	 * @param sewerageConnectionRequest
@@ -132,12 +134,20 @@ public class SewerageServicesUtil {
 	public List<Property> propertySearchOnCriteria(SearchCriteria sewerageConnectionSearchCriteria,
 			RequestInfo requestInfo) {
 		if (StringUtils.isEmpty(sewerageConnectionSearchCriteria.getMobileNumber())
+				&& StringUtils.isEmpty(sewerageConnectionSearchCriteria.getDoorNo())
+				&& StringUtils.isEmpty(sewerageConnectionSearchCriteria.getOwnerName())
 				&& StringUtils.isEmpty(sewerageConnectionSearchCriteria.getPropertyId())) {
 			return Collections.emptyList();
 		}
 		PropertyCriteria propertyCriteria = new PropertyCriteria();
 		propertyCriteria.setMobileNumber(sewerageConnectionSearchCriteria.getMobileNumber());
 
+		if (!StringUtils.isEmpty(sewerageConnectionSearchCriteria.getDoorNo())) {
+			propertyCriteria.setDoorNo(sewerageConnectionSearchCriteria.getDoorNo());
+		}
+		if (!StringUtils.isEmpty(sewerageConnectionSearchCriteria.getOwnerName())) {
+			propertyCriteria.setName(sewerageConnectionSearchCriteria.getOwnerName());
+		}
 		if (!StringUtils.isEmpty(sewerageConnectionSearchCriteria.getTenantId())) {
 			propertyCriteria.setTenantId(sewerageConnectionSearchCriteria.getTenantId());
 		}
@@ -260,6 +270,16 @@ public class SewerageServicesUtil {
 			if (isanyparametermatch)url.append("&");
 			isanyparametermatch = true;
 			url.append(mobileNumber).append(criteria.getMobileNumber());
+		}
+		if (!StringUtils.isEmpty(criteria.getDoorNo())) {
+			if (isanyparametermatch)url.append("&");
+			isanyparametermatch = true;
+			url.append(doorNo).append(criteria.getDoorNo());
+		}
+		if (!StringUtils.isEmpty(criteria.getName())) {
+			if (isanyparametermatch)url.append("&");
+			isanyparametermatch = true;
+			url.append(name).append(criteria.getName());
 		}
 		if (!org.springframework.util.StringUtils.isEmpty(criteria.getLocality())) {
 			if (isanyparametermatch)url.append("&");

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.egov.inbox.web.model.AuditDetails;
 import org.springframework.validation.annotation.Validated;
 
@@ -63,6 +64,9 @@ public class Action   {
 
         private AuditDetails auditDetails;
 
+        @JsonProperty("active")
+        @JsonIgnore
+        private boolean active;
 
         public Action addRolesItem(String rolesItem) {
             if (this.roles == null) {

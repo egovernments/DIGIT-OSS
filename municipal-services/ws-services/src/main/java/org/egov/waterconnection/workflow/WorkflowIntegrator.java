@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
+import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.web.models.Property;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
@@ -57,7 +58,12 @@ public class WorkflowIntegrator {
 	 */
 	public void callWorkFlow(WaterConnectionRequest waterConnectionRequest, Property property) {
 		String wfBusinessServiceName = config.getBusinessServiceValue();
-		if(wsUtil.isModifyConnectionRequest(waterConnectionRequest)) {
+
+		if(waterConnectionRequest.isDisconnectRequest()
+				|| (waterConnectionRequest.getWaterConnection().getApplicationStatus().equalsIgnoreCase(WCConstants.PENDING_FOR_PAYMENT_STATUS_CODE)
+				&& waterConnectionRequest.getWaterConnection().getApplicationNo().contains(WCConstants.APPLICATION_DISCONNECTION_CODE))) {
+			wfBusinessServiceName = config.getDisconnectBusinessServiceName();
+		} else if(wsUtil.isModifyConnectionRequest(waterConnectionRequest)) {
 			wfBusinessServiceName = config.getModifyWSBusinessServiceName();
 		}
 		ProcessInstance processInstance = ProcessInstance.builder()
@@ -85,6 +91,7 @@ public class WorkflowIntegrator {
 		List<ProcessInstance> processInstances = new ArrayList<>();
 		processInstances.add(processInstance);
 		ProcessInstanceResponse processInstanceResponse = null;
+		log.info("PI :"+processInstances);
 		try {
 			processInstanceResponse = mapper.convertValue(
 					rest.postForObject(config.getWfHost().concat(config.getWfTransitionPath()),

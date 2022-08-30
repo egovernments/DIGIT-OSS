@@ -244,7 +244,7 @@ public class NotificationUtil {
 	 *            The localization messages
 	 * @return message for the specific code
 	 */
-	private String getMessageTemplate(String notificationCode, String localizationMessage) {
+	String getMessageTemplate(String notificationCode, String localizationMessage) {
 		String path = "$..messages[?(@.code==\"{}\")].message";
 		path = path.replace("{}", notificationCode);
 		String message = null;
@@ -568,6 +568,7 @@ public class NotificationUtil {
 	 */
 	public List<EmailRequest> createEmailRequest(RequestInfo requestInfo,String message, Map<String, String> mobileNumberToEmailId) {
 
+		log.info("Map of mobileNumberToEmailId ->  "+mobileNumberToEmailId.toString());
 		List<EmailRequest> emailRequest = new LinkedList<>();
 		for (Map.Entry<String, String> entryset : mobileNumberToEmailId.entrySet()) {
 			String customizedMsg = message.replace("XXXX",entryset.getValue());

@@ -6,6 +6,7 @@ import org.egov.tl.service.TradeLicenseService;
 import org.egov.tl.service.notification.PaymentNotificationService;
 import org.egov.tl.service.notification.TLNotificationService;
 import org.egov.tl.util.ResponseInfoFactory;
+import org.egov.tl.util.TLConstants;
 import org.egov.tl.web.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
@@ -73,10 +74,14 @@ import static org.egov.tl.util.TLConstants.businessService_TL;
         List<TradeLicense> licenses = tradeLicenseService.search(criteria, requestInfoWrapper.getRequestInfo(), servicename, headers);
         
         int count = tradeLicenseService.countLicenses(criteria, requestInfoWrapper.getRequestInfo(), servicename, headers);
+        
+        int applicationsIssued = tradeLicenseService.countApplications(criteria, requestInfoWrapper.getRequestInfo(), servicename, headers).get(TLConstants.ISSUED_COUNT);
+        int applicationsRenewed = tradeLicenseService.countApplications(criteria, requestInfoWrapper.getRequestInfo(), servicename, headers).get(TLConstants.RENEWED_COUNT);
+        int validity = tradeLicenseService.getApplicationValidity();
 
         TradeLicenseResponse response = TradeLicenseResponse.builder().licenses(licenses).responseInfo(
-                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true)).count(count)
-                .build();
+                responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true)).count(count).applicationsIssued(applicationsIssued)
+        		.applicationsRenewed(applicationsRenewed).validity(validity).build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

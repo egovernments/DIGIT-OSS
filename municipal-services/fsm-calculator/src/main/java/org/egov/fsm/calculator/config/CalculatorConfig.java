@@ -56,8 +56,12 @@ public class CalculatorConfig {
 
 
 
+   @Value("${advance.payment.type}")
+   private String advancePaymentType;
 
-
+   @Value("${cancellation.fee.type}")
+   private String cancellationFeeType;
+   
     //MDMS
     @Value("${egov.mdms.host}")
     private String mdmsHost;

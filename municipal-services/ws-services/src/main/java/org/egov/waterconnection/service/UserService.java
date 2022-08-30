@@ -2,13 +2,7 @@ package org.egov.waterconnection.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -37,6 +31,9 @@ public class UserService {
 
 	@Autowired
 	private ObjectMapper mapper;
+
+	@Autowired
+	private EnrichmentService enrichmentService;
 
 	/**
 	 * Creates user of the connection holders of water connection if it is not
@@ -106,11 +103,38 @@ public class UserService {
 	 *
 	 * @param waterConnectionRequest
 	 * @return list of all unique mobileNumbers in the given water connection holder
-	 *         details
+	 * details
 	 */
 	private Set<String> getMobileNumbers(WaterConnectionRequest waterConnectionRequest) {
 		Set<String> listOfMobileNumbers = waterConnectionRequest.getWaterConnection().getConnectionHolders().stream()
 				.map(OwnerInfo::getMobileNumber).collect(Collectors.toSet());
+		OwnerInfo maskedConnectionHolder = new OwnerInfo();
+		OwnerInfo plainConnectionHolderFromDb = new OwnerInfo();
+		OwnerInfo connectionHolder = waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0);
+
+		WaterConnection newWaterConnection = new WaterConnection();
+		if (!listOfMobileNumbers.isEmpty() &&
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).getMobileNumber().contains("*")) {
+			newWaterConnection = waterConnectionRequest.getWaterConnection();
+			maskedConnectionHolder = waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0);
+			plainConnectionHolderFromDb = enrichmentService.getConnectionHolderDetailsForUpdateCall(newWaterConnection,
+					waterConnectionRequest.getRequestInfo());
+			if (maskedConnectionHolder != null && maskedConnectionHolder.getMobileNumber().contains("*")) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).setMobileNumber(plainConnectionHolderFromDb.getMobileNumber());
+			}
+			if (maskedConnectionHolder != null && maskedConnectionHolder.getFatherOrHusbandName().contains("*")) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).setFatherOrHusbandName(plainConnectionHolderFromDb.getFatherOrHusbandName());
+			}
+			if (maskedConnectionHolder != null && maskedConnectionHolder.getCorrespondenceAddress().contains("*")) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).setCorrespondenceAddress(plainConnectionHolderFromDb.getCorrespondenceAddress());
+			}
+			if (maskedConnectionHolder != null && maskedConnectionHolder.getUserName().contains("*")) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).setUserName(plainConnectionHolderFromDb.getUserName());
+			}
+			if (maskedConnectionHolder != null && maskedConnectionHolder.getName().contains("*")) {
+				waterConnectionRequest.getWaterConnection().getConnectionHolders().get(0).setName(plainConnectionHolderFromDb.getName());
+			}
+		}
 		StringBuilder uri = new StringBuilder(configuration.getUserHost())
 				.append(configuration.getUserSearchEndpoint());
 		UserSearchRequest userSearchRequest = UserSearchRequest.builder()
@@ -182,7 +206,7 @@ public class UserService {
 
 	/**
 	 * Converts date to long
-	 * 
+	 *
 	 * @param date   date to be parsed
 	 * @param format Format of the date
 	 * @return Long value of date
@@ -201,8 +225,8 @@ public class UserService {
 	/**
 	 * Sets the role,type,active and tenantId for a Citizen
 	 *
-	 * @param tenantId  TenantId of the water connection
-	 * @param role      The role of the user set in this case to CITIZEN
+	 * @param tenantId   TenantId of the water connection
+	 * @param role       The role of the user set in this case to CITIZEN
 	 * @param holderInfo The user whose fields are to be set
 	 */
 	private void addUserDefaultFields(String tenantId, Role role, OwnerInfo holderInfo) {
@@ -224,7 +248,7 @@ public class UserService {
 	 * @param connectionHolderInfo ConnectionHolderInfo which is to be searched
 	 * @param requestInfo          RequestInfo from the waterConnectionRequest
 	 * @return UserDetailResponse containing the user if present and the
-	 *         responseInfo
+	 * responseInfo
 	 */
 	private UserDetailResponse userExists(OwnerInfo connectionHolderInfo, RequestInfo requestInfo) {
 		UserSearchRequest userSearchRequest = getBaseUserSearchRequest(connectionHolderInfo.getTenantId(), requestInfo);
@@ -249,7 +273,6 @@ public class UserService {
 	}
 
 	/**
-	 *
 	 * @param holderInfo         holder whose username has to be assigned
 	 * @param listOfMobileNumber list of unique mobileNumbers in the waterconnection
 	 *                           request
@@ -267,13 +290,12 @@ public class UserService {
 	}
 
 	/**
-	 *
 	 * @param holderInfo
 	 * @param userDetailResponse
 	 * @param requestInfo
 	 */
 	private void setOwnerFields(OwnerInfo holderInfo, UserDetailResponse userDetailResponse,
-			RequestInfo requestInfo) {
+								RequestInfo requestInfo) {
 
 		holderInfo.setUuid(userDetailResponse.getUser().get(0).getUuid());
 		holderInfo.setId(userDetailResponse.getUser().get(0).getId());
@@ -286,7 +308,6 @@ public class UserService {
 	}
 
 	/**
-	 *
 	 * @param userSearchRequest
 	 * @return serDetailResponse containing the user if present and the responseInfo
 	 */
@@ -296,7 +317,7 @@ public class UserService {
 		UserDetailResponse userDetailResponse = userCall(userSearchRequest, uri);
 		return userDetailResponse;
 	}
-	
+
 	/**
 	 * Get user based on given property
 	 * @param userSearchRequest
@@ -312,25 +333,24 @@ public class UserService {
 	}
 
 	/**
-	 *
 	 * @param mobileNumber
 	 * @param tenantId
 	 * @param requestInfo
 	 * @return
 	 */
-	public Set<String> getUUIDForUsers(String mobileNumber, String tenantId, RequestInfo requestInfo) {
+	public Set<String> getUUIDForUsers(String mobileNumber, String ownerName, String tenantId, RequestInfo requestInfo) {
 		//TenantId is not mandatory when Citizen searches. So it can be empty. Refer the value from UserInfo
 		tenantId = StringUtils.isEmpty(tenantId) ? requestInfo.getUserInfo().getTenantId() : tenantId;
 		UserSearchRequest userSearchRequest = UserSearchRequest.builder()
 				.requestInfo(requestInfo).userType("CITIZEN")
-				.tenantId(tenantId).mobileNumber(mobileNumber).build();
+				.tenantId(tenantId).mobileNumber(mobileNumber).name(ownerName).build();
 		return getUsersUUID(userSearchRequest);
 	}
 
 	public void updateUser(WaterConnectionRequest request, WaterConnection existingWaterConnection) {
-		if(!CollectionUtils.isEmpty(existingWaterConnection.getConnectionHolders())) {
+		if (!CollectionUtils.isEmpty(existingWaterConnection.getConnectionHolders())) {
 			// We have connection holder in the existing application.
-			if(CollectionUtils.isEmpty(request.getWaterConnection().getConnectionHolders())) {
+			if (CollectionUtils.isEmpty(request.getWaterConnection().getConnectionHolders())) {
 				// New update request removed the connectionHolder - need to clear the records.
 				OwnerInfo conHolder = new OwnerInfo();
 				request.getWaterConnection().addConnectionHolderInfo(conHolder);

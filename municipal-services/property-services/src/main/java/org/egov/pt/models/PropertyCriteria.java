@@ -61,6 +61,9 @@ public class PropertyCriteria {
 	private Boolean isInboxSearch = false;
 	
 	private Boolean isCitizen;
+
+	@Builder.Default
+	private Boolean isRequestForCount = false;
 	
 	
 }

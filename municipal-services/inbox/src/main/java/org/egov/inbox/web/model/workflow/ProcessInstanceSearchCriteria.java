@@ -49,6 +49,9 @@ public class ProcessInstanceSearchCriteria {
 
     @JsonIgnore
     private Boolean isProcessCountCall;
+    
+    @JsonIgnore
+    private Boolean isNearingSlaCount;
 
 
     public Boolean isNull(){

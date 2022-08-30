@@ -32,5 +32,7 @@ public class GetBillCriteria {
 	private String billId;
 
 	private List<String> consumerCodes;
+
+	private Boolean isPaymentCompleted;
 	
 }

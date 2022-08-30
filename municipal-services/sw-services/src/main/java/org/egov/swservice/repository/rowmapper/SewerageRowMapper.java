@@ -19,10 +19,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class SewerageRowMapper implements ResultSetExtractor<List<SewerageConnection>> {
@@ -33,7 +30,7 @@ public class SewerageRowMapper implements ResultSetExtractor<List<SewerageConnec
 	
 	@Override
     public List<SewerageConnection> extractData(ResultSet rs) throws SQLException, DataAccessException {
-        Map<String, SewerageConnection> connectionListMap = new HashMap<>();
+        Map<String, SewerageConnection> connectionListMap = new LinkedHashMap<>();
         SewerageConnection sewarageConnection = new SewerageConnection();
         while (rs.next()) {
             String Id = rs.getString("connection_Id");
@@ -56,6 +53,7 @@ public class SewerageRowMapper implements ResultSetExtractor<List<SewerageConnec
                 sewarageConnection.setRoadCuttingArea(rs.getFloat("roadcuttingarea"));
                 sewarageConnection.setRoadType(rs.getString("roadtype"));
                 sewarageConnection.setOldApplication(rs.getBoolean("isoldapplication"));
+                sewarageConnection.setDisconnectionReason(rs.getString("disconnectionReason"));
                 // get property id and get property object
                 PGobject pgObj = (PGobject) rs.getObject("additionaldetails");
 				ObjectNode addtionalDetails = null;

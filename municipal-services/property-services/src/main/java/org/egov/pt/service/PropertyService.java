@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,8 +22,9 @@ import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.user.UserDetailResponse;
 import org.egov.pt.models.user.UserSearchRequest;
 import org.egov.pt.models.workflow.State;
-import org.egov.pt.producer.Producer;
+import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.PropertyRepository;
+import org.egov.pt.util.EncryptionDecryptionUtil;
 import org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.validator.PropertyValidator;
@@ -36,11 +38,14 @@ import org.springframework.util.StringUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class PropertyService {
 
 	@Autowired
-	private Producer producer;
+	private PropertyProducer producer;
 	
 	@Autowired
 	private NotificationService notifService;
@@ -75,7 +80,8 @@ public class PropertyService {
 	@Autowired
 	private FuzzySearchService fuzzySearchService;
 
-
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
 
 	/**
 	 * Enriches the Request and pushes to the Queue
@@ -86,6 +92,8 @@ public class PropertyService {
 	public Property createProperty(PropertyRequest request) {
 
 		propertyValidator.validateCreateRequest(request);
+		/* encrypt here */
+		request.setProperty(encryptionDecryptionUtil.encryptObject(request.getProperty(), "Property", Property.class));
 		enrichmentService.enrichCreateRequest(request);
 		userService.createUser(request);
 		if (config.getIsWorkflowEnabled()
@@ -99,13 +107,16 @@ public class PropertyService {
 
 		producer.push(config.getSavePropertyTopic(), request);
 		request.getProperty().setWorkflow(null);
-		return request.getProperty();
+
+		/* decrypt here */
+		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
+		//return request.getProperty();
 	}
 
 	/**
 	 * Updates the property
 	 *
-	 * handles multiple processes 
+	 * handles multiple processes
 	 *
 	 * Update
 	 *
@@ -121,7 +132,10 @@ public class PropertyService {
 		boolean isRequestForOwnerMutation = CreationReason.MUTATION.equals(request.getProperty().getCreationReason());
 		
 		boolean isNumberDifferent = checkIsRequestForMobileNumberUpdate(request, propertyFromSearch);
-		
+
+		/* encrypt here */
+		request.setProperty(encryptionDecryptionUtil.encryptObject(request.getProperty(), "Property", Property.class));
+
 		if (isRequestForOwnerMutation)
 			processOwnerMutation(request, propertyFromSearch);
 		else if(isNumberDifferent)
@@ -131,7 +145,9 @@ public class PropertyService {
 			processPropertyUpdate(request, propertyFromSearch);
 
 		request.getProperty().setWorkflow(null);
-		return request.getProperty();
+
+		/* decrypt here */
+		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
 	}
 	
 	/*
@@ -352,6 +368,8 @@ public class PropertyService {
 	public List<Property> searchProperty(PropertyCriteria criteria, RequestInfo requestInfo) {
 
 		List<Property> properties;
+		/* encrypt here */
+		criteria = encryptionDecryptionUtil.encryptObject(criteria, "Property", PropertyCriteria.class);
 
 		/*
 		 * throw error if audit request is with no proeprty id or multiple propertyids
@@ -384,7 +402,10 @@ public class PropertyService {
 			enrichmentService.enrichBoundary(property, requestInfo);
 		});
 
-		return properties;
+		List<Property> encryptedProperties= new LinkedList<>();
+
+		/* decrypt here */
+		return encryptionDecryptionUtil.decryptObject(properties, "Property", Property.class, requestInfo);
 	}
 
 	private void filterPropertiesForUser(List<Property> properties, Set<String> ownerIds) {
@@ -489,5 +510,5 @@ public class PropertyService {
         Integer count = repository.getCount(propertyCriteria, requestInfo);
         return count;
 	}
-	
+
 }

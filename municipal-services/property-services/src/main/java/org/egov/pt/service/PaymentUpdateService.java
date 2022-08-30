@@ -15,7 +15,7 @@ import org.egov.pt.models.collection.PaymentRequest;
 import org.egov.pt.models.enums.Status;
 import org.egov.pt.models.workflow.ProcessInstanceRequest;
 import org.egov.pt.models.workflow.State;
-import org.egov.pt.producer.Producer;
+import org.egov.pt.producer.PropertyProducer;
 import org.egov.pt.repository.PropertyRepository;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -41,7 +41,7 @@ public class PaymentUpdateService {
 	private WorkflowService wfIntegrator;
 
 	@Autowired
-	private Producer producer;
+	private PropertyProducer producer;
 
 	@Autowired
 	private ObjectMapper mapper;

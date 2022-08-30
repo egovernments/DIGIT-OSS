@@ -1,41 +1,34 @@
 package org.egov.wscalculation.service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.tracer.model.CustomException;
 import org.egov.wscalculation.constants.WSCalculationConstant;
-import org.egov.wscalculation.web.models.AdhocTaxReq;
-import org.egov.wscalculation.web.models.Calculation;
-import org.egov.wscalculation.web.models.CalculationCriteria;
-import org.egov.wscalculation.web.models.CalculationReq;
-import org.egov.wscalculation.web.models.TaxHeadCategory;
-import org.egov.wscalculation.web.models.Property;
-import org.egov.wscalculation.web.models.TaxHeadEstimate;
-import org.egov.wscalculation.web.models.TaxHeadMaster;
-import org.egov.wscalculation.web.models.WaterConnection;
-import org.egov.wscalculation.web.models.WaterConnectionRequest;
+import org.egov.wscalculation.web.models.*;
 import org.egov.wscalculation.repository.ServiceRequestRepository;
 import org.egov.wscalculation.repository.WSCalculationDao;
 import org.egov.wscalculation.util.CalculatorUtil;
 import org.egov.wscalculation.util.WSCalculationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
 
 import static org.egov.wscalculation.constants.WSCalculationConstant.*;
+import static org.egov.wscalculation.web.models.TaxHeadCategory.CHARGES;
 
 @Service
 @Slf4j
@@ -65,6 +58,13 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 	@Autowired
 	private WSCalculationUtil wSCalculationUtil;
 
+	@Autowired
+	private CalculatorUtil util;
+
+	@Autowired
+	private ObjectMapper mapper;
+
+
 	/**
 	 * Get CalculationReq and Calculate the Tax Head on Water Charge And Estimation Charge
 	 */
@@ -72,8 +72,33 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 		List<Calculation> calculations;
 
 		Map<String, Object> masterMap;
-		if (request.getIsconnectionCalculation()) {
-			//Calculate and create demand for connection
+		boolean connectionRequest = false;
+		//Calculate and create demand for connection
+		if (request.getIsDisconnectionRequest() != null && request.getIsDisconnectionRequest()) {
+			MeterReadingSearchCriteria meterCriteria = new MeterReadingSearchCriteria();
+			meterCriteria.setTenantId(request.getCalculationCriteria().get(0).getTenantId());
+			meterCriteria.setConnectionNos(Collections.singleton(request.getCalculationCriteria().get(0).getConnectionNo()));
+			List<MeterReading> meterreadingList = wSCalculationDao.searchMeterReadings(meterCriteria);
+			if (!meterreadingList.isEmpty()) {
+				request.getCalculationCriteria().get(0).setLastReading(meterreadingList.get(0).getLastReading());
+				request.getCalculationCriteria().get(0).setCurrentReading(meterreadingList.get(0).getCurrentReading());
+				SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+				String dates[] = meterreadingList.get(0).getBillingPeriod().split("-");
+				try {
+					Date startDate = f.parse(dates[0]);
+					request.getCalculationCriteria().get(0).setFrom(startDate.getTime());
+					Date endDate = f.parse(dates[1]);
+					request.getCalculationCriteria().get(0).setTo(endDate.getTime());
+				} catch (ParseException e) {
+					throw new RuntimeException(e);
+				}
+			}
+			connectionRequest = request.getIsDisconnectionRequest();
+			masterMap = masterDataService.loadMasterData(request.getRequestInfo(),
+					request.getCalculationCriteria().get(0).getTenantId());
+			calculations = getCalculations(request, masterMap);
+		} else if (request.getIsconnectionCalculation()) {
+			connectionRequest = request.getIsconnectionCalculation();
 			masterMap = masterDataService.loadMasterData(request.getRequestInfo(),
 					request.getCalculationCriteria().get(0).getTenantId());
 			calculations = getCalculations(request, masterMap);
@@ -82,24 +107,13 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 			masterMap = masterDataService.loadExemptionMaster(request.getRequestInfo(),
 					request.getCalculationCriteria().get(0).getTenantId());
 			calculations = getFeeCalculation(request, masterMap);
+			connectionRequest = request.getIsconnectionCalculation();
 		}
-		demandService.generateDemand(request.getRequestInfo(), calculations, masterMap, request.getIsconnectionCalculation());
+		demandService.generateDemand(request.getRequestInfo(), calculations, masterMap, connectionRequest);
 		unsetWaterConnection(calculations);
 		return calculations;
 	}
 	
-	
-	/**
-	 * 
-	 * 
-	 * @param request - Calculation Request Object
-	 * @return List of calculation.
-	 */
-	public List<Calculation> bulkDemandGeneration(CalculationReq request, Map<String, Object> masterMap) {
-		List<Calculation> calculations = getCalculations(request, masterMap);
-		demandService.generateDemand(request.getRequestInfo(), calculations, masterMap, true);
-		return calculations;
-	}
 
 	/**
 	 * 
@@ -113,6 +127,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 		unsetWaterConnection(calculations);
 		return calculations;
 	}
+	
 	/**
 	 * It will take calculation and return calculation with tax head code 
 	 * 
@@ -123,18 +138,14 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 	 * @return Calculation With Tax head
 	 */
 	public Calculation getCalculation(RequestInfo requestInfo, CalculationCriteria criteria,
-			Map<String, List> estimatesAndBillingSlabs, Map<String, Object> masterMap, boolean isConnectionFee) {
+									  Map<String, List> estimatesAndBillingSlabs, Map<String, Object> masterMap, boolean isConnectionFee, boolean isLastElementWithDisconnectionRequest) {
 
 		@SuppressWarnings("unchecked")
 		List<TaxHeadEstimate> estimates = estimatesAndBillingSlabs.get("estimates");
 		@SuppressWarnings("unchecked")
 		List<String> billingSlabIds = estimatesAndBillingSlabs.get("billingSlabIds");
 		WaterConnection waterConnection = criteria.getWaterConnection();
-		Property property = wSCalculationUtil.getProperty(
-				WaterConnectionRequest.builder().waterConnection(waterConnection).requestInfo(requestInfo).build());
 		
-		String tenantId = null != property.getTenantId() ? property.getTenantId() : criteria.getTenantId();
-
 		@SuppressWarnings("unchecked")
 		Map<String, TaxHeadCategory> taxHeadCategoryMap = ((List<TaxHeadMaster>) masterMap
 				.get(WSCalculationConstant.TAXHEADMASTER_MASTER_KEY)).stream()
@@ -146,6 +157,37 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 		BigDecimal exemption = BigDecimal.ZERO;
 		BigDecimal rebate = BigDecimal.ZERO;
 		BigDecimal fee = BigDecimal.ZERO;
+
+		if(isLastElementWithDisconnectionRequest) {
+			if (waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.PENDING_FOR_PAYMENT) ||
+					waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.CONNECTION_INACTIVATED)) {
+
+				Map<String, Object> finalMap = new HashMap<>();
+				List<WaterConnection> waterConnectionList = calculatorUtil.getWaterConnection(requestInfo, criteria.getConnectionNo(), requestInfo.getUserInfo().getTenantId());
+				for (WaterConnection connection : waterConnectionList) {
+					if (connection.getApplicationType().equalsIgnoreCase(NEW_WATER_CONNECTION)) {
+						Map<String, Object> bills = util.getBillData(requestInfo, requestInfo.getUserInfo().getTenantId(), connection.getApplicationNo());
+						List<String> bill = (List<String>) bills.get(BILL_KEY);
+						Map<String, String> billMap = mapper.convertValue(bill.get(0), Map.class);
+						Double amount = 0.0;
+						List<Map<String, String>> billDetails = mapper.convertValue(billMap.get(BILL_DETAILS_KEY), List.class);
+
+						Collections.sort(billDetails, (l1, l2) -> {
+							return new Long(l1.get(TO_PERIOD_KEY)).compareTo(new Long(l2.get(TO_PERIOD_KEY)));
+						});
+						finalMap = mapper.convertValue(billDetails.get(0), Map.class);
+						Long billingPeriod = Long.parseLong(finalMap.get(TO_PERIOD_KEY).toString()) - Long.parseLong(finalMap.get(FROM_PERIOD_KEY).toString());
+						BigDecimal finalWaterCharge = waterCharge.add(BigDecimal.valueOf((Double.parseDouble(finalMap.get(AMOUNT_KEY).toString()) *
+								(Double.parseDouble(finalMap.get(TO_PERIOD_KEY).toString()) - waterConnection.getDateEffectiveFrom())) / billingPeriod));
+						estimates.stream().forEach(estimate -> {
+							if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
+								estimate.setEstimateAmount(finalWaterCharge);
+							}
+						});
+					}
+				}
+			}
+		}
 
 		for (TaxHeadEstimate estimate : estimates) {
 
@@ -190,7 +232,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 
 		BigDecimal totalAmount = taxAmt.add(penalty).add(rebate).add(exemption).add(waterCharge).add(fee);
 		return Calculation.builder().totalAmount(totalAmount).taxAmount(taxAmt).penalty(penalty).exemption(exemption)
-				.charge(waterCharge).fee(fee).waterConnection(waterConnection).rebate(rebate).tenantId(tenantId)
+				.charge(waterCharge).fee(fee).waterConnection(waterConnection).rebate(rebate).tenantId(criteria.getTenantId())
 				.taxHeadEstimates(estimates).billingSlabIds(billingSlabIds).connectionNo(criteria.getConnectionNo()).applicationNO(criteria.getApplicationNo())
 				.build();
 	}
@@ -201,15 +243,26 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 	 * @param masterMap master data
 	 * @return all calculations including water charge and taxhead on that
 	 */
-	List<Calculation> getCalculations(CalculationReq request, Map<String, Object> masterMap) {
+	public List<Calculation> getCalculations(CalculationReq request, Map<String, Object> masterMap) {
 		List<Calculation> calculations = new ArrayList<>(request.getCalculationCriteria().size());
 		for (CalculationCriteria criteria : request.getCalculationCriteria()) {
 			Map<String, List> estimationMap = estimationService.getEstimationMap(criteria, request.getRequestInfo(),
 					masterMap);
 			ArrayList<?> billingFrequencyMap = (ArrayList<?>) masterMap
 					.get(WSCalculationConstant.Billing_Period_Master);
-			masterDataService.enrichBillingPeriod(criteria, billingFrequencyMap, masterMap);
-			Calculation calculation = getCalculation(request.getRequestInfo(), criteria, estimationMap, masterMap, true);
+			masterDataService.enrichBillingPeriod(criteria, billingFrequencyMap, masterMap, criteria.getWaterConnection().getConnectionType());
+
+			Calculation calculation = null;
+
+			if (request.getIsDisconnectionRequest() != null) {
+				if (request.getIsDisconnectionRequest() &&
+						criteria.getApplicationNo().equals(request.getCalculationCriteria().get(request.getCalculationCriteria().size() - 1)
+								.getApplicationNo())) {
+					calculation = getCalculation(request.getRequestInfo(), criteria, estimationMap, masterMap, true, true);
+				}
+			} else {
+				calculation = getCalculation(request.getRequestInfo(), criteria, estimationMap, masterMap, true, false);
+			}
 			calculations.add(calculation);
 		}
 		return calculations;
@@ -274,16 +327,22 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 	/**
 	 * Generate Demand Based on Time (Monthly, Quarterly, Yearly)
 	 */
-	public void generateDemandBasedOnTimePeriod(RequestInfo requestInfo) {
+	public void generateDemandBasedOnTimePeriod(RequestInfo requestInfo, BulkBillCriteria bulkBillCriteria) {
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		LocalDateTime date = LocalDateTime.now();
 		log.info("Time schedule start for water demand generation on : " + date.format(dateTimeFormatter));
-		List<String> tenantIds = wSCalculationDao.getTenantId();
+		List<String> tenantIds = new ArrayList<>();
+		if(!CollectionUtils.isEmpty(bulkBillCriteria.getTenantIds())){
+			tenantIds = bulkBillCriteria.getTenantIds();
+		}
+		else
+			tenantIds = wSCalculationDao.getTenantId();
+
 		if (tenantIds.isEmpty())
 			return;
-		log.info("Tenant Ids : " + tenantIds.toString());
+		log.info("Tenant Ids : " + tenantIds);
 		tenantIds.forEach(tenantId -> {
-			demandService.generateDemandForTenantId(tenantId, requestInfo);
+			demandService.generateDemandForTenantId(tenantId, requestInfo, bulkBillCriteria);
 		});
 	}
 	
@@ -299,7 +358,7 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 			Map<String, List> estimationMap = estimationService.getFeeEstimation(criteria, request.getRequestInfo(),
 					masterMap);
 			masterDataService.enrichBillingPeriodForFee(masterMap);
-			Calculation calculation = getCalculation(request.getRequestInfo(), criteria, estimationMap, masterMap, false);
+			Calculation calculation = getCalculation(request.getRequestInfo(), criteria, estimationMap, masterMap, false, false);
 			calculations.add(calculation);
 		}
 		return calculations;

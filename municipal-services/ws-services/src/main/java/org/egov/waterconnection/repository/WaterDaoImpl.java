@@ -13,10 +13,7 @@ import org.egov.common.contract.request.User;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.repository.rowmapper.OpenWaterRowMapper;
-import org.egov.waterconnection.web.models.SearchCriteria;
-import org.egov.waterconnection.web.models.WaterConnection;
-import org.egov.waterconnection.web.models.WaterConnectionRequest;
-import org.egov.waterconnection.web.models.WaterConnectionResponse;
+import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.producer.WaterConnectionProducer;
 import org.egov.waterconnection.repository.builder.WsQueryBuilder;
 import org.egov.waterconnection.repository.rowmapper.WaterRowMapper;
@@ -25,8 +22,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -70,7 +65,7 @@ public class WaterDaoImpl implements WaterDao {
 		List<WaterConnection> waterConnectionList = new ArrayList<>();
 		List<Object> preparedStatement = new ArrayList<>();
 		String query = wsQueryBuilder.getSearchQueryString(criteria, preparedStatement, requestInfo);
-		
+
 		if (query == null)
 			return Collections.emptyList();
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
@@ -86,9 +81,23 @@ public class WaterDaoImpl implements WaterDao {
 		return waterConnectionList;
 	}
 
+	public Integer getWaterConnectionsCount(SearchCriteria criteria, RequestInfo requestInfo) {
+		List<Object> preparedStatement = new ArrayList<>();
+		String query = wsQueryBuilder.getSearchCountQueryString(criteria, preparedStatement, requestInfo);
+		
+		if (query == null)
+			return 0;
+
+		Integer count = jdbcTemplate.queryForObject(query, preparedStatement.toArray(), Integer.class);
+		return count;
+	}
+	
 	@Override
 	public void updateWaterConnection(WaterConnectionRequest waterConnectionRequest, boolean isStateUpdatable) {
 		if (isStateUpdatable) {
+				waterConnectionProducer.push(updateWaterConnection, waterConnectionRequest);
+		} else if (WCConstants.EXECUTE_DISCONNECTION.equalsIgnoreCase(waterConnectionRequest.getWaterConnection().getProcessInstance().getAction())) {
+			waterConnectionRequest.getWaterConnection().setStatus(Connection.StatusEnum.INACTIVE);
 			waterConnectionProducer.push(updateWaterConnection, waterConnectionRequest);
 		} else {
 			waterConnectionProducer.push(wsConfiguration.getWorkFlowUpdateTopic(), waterConnectionRequest);
@@ -196,5 +205,21 @@ public class WaterDaoImpl implements WaterDao {
 		return ids;
 	}
 
+	/* Method to push the encrypted data to the 'update' topic  */
+	@Override
+	public void updateOldWaterConnections(WaterConnectionRequest waterConnectionRequest) {
+		waterConnectionProducer.push(updateWaterConnection, waterConnectionRequest);
+	}
 
+	/* Method to find the total count of applications present in dB */
+	@Override
+	public Integer getTotalApplications(SearchCriteria criteria) {
+
+		String query = wsQueryBuilder.getTotalApplicationsCountQueryString(criteria);
+		if (query == null)
+			return 0;
+		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
+		return count;
+	}
+	
 }

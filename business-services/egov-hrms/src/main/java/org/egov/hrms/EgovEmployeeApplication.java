@@ -44,6 +44,7 @@ import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
 
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.tracer.config.TracerConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -57,7 +58,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
 @ComponentScan(basePackages = { "org.egov.hrms", "org.egov.hrms.web.controllers" , "org.egov.hrms.config"})
-@Import(TracerConfiguration.class)
+@Import({TracerConfiguration.class, MultiStateInstanceUtil.class})
 public class EgovEmployeeApplication {
 
     @Value("${app.timezone}")

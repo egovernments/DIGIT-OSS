@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.Valid;
-
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.Property;
@@ -243,12 +241,22 @@ public class PropertyRepository {
 		return false;
 	}
 
-	public Integer getCount(@Valid PropertyCriteria propertyCriteria, RequestInfo requestInfo) {
-		Boolean isOpenSearch = false ? false : util.isPropertySearchOpen(requestInfo.getUserInfo());
+	public Integer getCount(PropertyCriteria propertyCriteria, RequestInfo requestInfo) {
+		
+		Boolean isOpenSearch = util.isPropertySearchOpen(requestInfo.getUserInfo());
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getCountQuery(propertyCriteria, preparedStmtList, isOpenSearch);
+        String query = queryBuilder.getPropertySearchQuery(propertyCriteria, preparedStmtList, isOpenSearch, false);
         Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
     }
 
+	/** Method to find the total count of applications present in dB */
+	public Integer getTotalApplications(PropertyCriteria criteria) {
+		String query = queryBuilder.getTotalApplicationsCountQueryString(criteria);
+		if (query == null)
+			return 0;
+		Integer count = jdbcTemplate.queryForObject(query, Integer.class);
+		return count;
+	}
+	
 }

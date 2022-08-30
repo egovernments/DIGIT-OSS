@@ -23,46 +23,47 @@ public class SWConfiguration {
 
 	@Value("${egov.sewerageservice.pagination.default.offset}")
 	private Integer defaultOffset;
-	
 
-    	@Value("${egov.idgen.scid.name}")
-    	private String sewerageIdGenName;
+	@Value("${egov.sewerageservice.pagination.max.limit}")
+	private Integer maxLimit;
 
-    	@Value("${egov.idgen.scid.format}")
-    	private String sewerageIdGenFormat;
-    
-    	@Value("${egov.idgen.scapid.name}")
-    	private String sewerageApplicationIdGenName;
+	@Value("${egov.idgen.scid.name}")
+	private String sewerageIdGenName;
 
-    	@Value("${egov.idgen.scapid.format}")
-    	private String sewerageApplicationIdGenFormat;
-    
-    	//Idgen Config
-    	@Value("${egov.idgen.host}")
-    	private String idGenHost;
+	@Value("${egov.idgen.scid.format}")
+	private String sewerageIdGenFormat;
 
-    	@Value("${egov.idgen.path}")
-    	private String idGenPath;
-    
-    	// Workflow
-    	@Value("${create.sw.workflow.name}")
-    	private String businessServiceValue;
+	@Value("${egov.idgen.scapid.name}")
+	private String sewerageApplicationIdGenName;
 
-    	@Value("${workflow.context.path}")
-    	private String wfHost;
+	@Value("${egov.idgen.scapid.format}")
+	private String sewerageApplicationIdGenFormat;
 
-    	@Value("${workflow.transition.path}")
-    	private String wfTransitionPath;
+	//Idgen Config
+	@Value("${egov.idgen.host}")
+	private String idGenHost;
 
-    	@Value("${workflow.businessservice.search.path}")
-    	private String wfBusinessServiceSearchPath;
+	@Value("${egov.idgen.path}")
+	private String idGenPath;
 
-    	@Value("${is.external.workflow.enabled}")
-    	private Boolean isExternalWorkFlowEnabled;
-    
-    	@Value("${egov.sewerageservice.updatesewerageconnection.workflow.topic}")
-    	private String workFlowUpdateTopic;
-    
+	// Workflow
+	@Value("${create.sw.workflow.name}")
+	private String businessServiceValue;
+
+	@Value("${workflow.context.path}")
+	private String wfHost;
+
+	@Value("${workflow.transition.path}")
+	private String wfTransitionPath;
+
+	@Value("${workflow.businessservice.search.path}")
+	private String wfBusinessServiceSearchPath;
+
+	@Value("${is.external.workflow.enabled}")
+	private Boolean isExternalWorkFlowEnabled;
+
+	@Value("${egov.sewerageservice.updatesewerageconnection.workflow.topic}")
+	private String workFlowUpdateTopic;
 
 	// Localization
 	@Value("${egov.localization.host}")
@@ -200,4 +201,19 @@ public class SWConfiguration {
 
 	@Value("${egov.mdms.search.endpoint}")
 	private String mdmsUrl;
+	
+	@Value("${egov.disconnect.businessservice}")
+	private String disconnectBusinessServiceName;
+
+	@Value("${egov.idgen.sdcid.name}")
+	private String sewerageDisconnectionIdGenName;
+
+	@Value("${egov.idgen.sdcid.format}")
+	private String sewerageDisconnectionIdGenFormat;
+
+	@Value("${egov.receipt.disconnection.businessservice.topic}")
+	private String receiptDisconnectionBusinessservice;
+
+	@Value("${egov.sewerage.connection.document.access.audit.kafka.topic}")
+	private String documentAuditTopic;
 }

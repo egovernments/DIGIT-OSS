@@ -3,6 +3,7 @@ package org.egov.waterconnection.web.models;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -22,6 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchCriteria {
 
 	@JsonProperty("tenantId")
@@ -38,13 +40,13 @@ public class SearchCriteria {
 	private Set<String> ids;
 
 	@JsonProperty("applicationNumber")
-	private String applicationNumber;
-		
+	private Set<String> applicationNumber;
+	
 	@JsonProperty("applicationStatus")
-	private String applicationStatus;
+	private Set<String> applicationStatus;
 
 	@JsonProperty("connectionNumber")
-	private String connectionNumber;
+	private Set<String> connectionNumber;
 
 	@JsonProperty("oldConnectionNumber")
 	private String oldConnectionNumber;
@@ -93,20 +95,46 @@ public class SearchCriteria {
 	    DESC
 	}
 
+	@JsonProperty("doorNo")
+	private String doorNo;
+	
+	@JsonProperty("ownerName")
+	private String ownerName;
+	
+	@JsonProperty("assignee")
+	private String assignee;
+	
+	@JsonProperty("sortOrder")
+	private SortOrder sortOrder;
+
+	@JsonIgnore
+	private Boolean isCountCall = false;
+
+	@JsonProperty("isFilestoreIdRequire")
+	private Boolean isFilestoreIdRequire = false;
+
+	public enum SortOrder {
+	    ASC,
+	    DESC
+	}
+	
 	public boolean isEmpty() {
 		return (StringUtils.isEmpty(this.tenantId) && StringUtils.isEmpty(this.mobileNumber)
 				&& StringUtils.isEmpty(this.propertyId) && CollectionUtils.isEmpty(this.ids)
 				&& StringUtils.isEmpty(this.oldConnectionNumber) && StringUtils.isEmpty(this.connectionNumber)
 				&& StringUtils.isEmpty(this.status) && StringUtils.isEmpty(this.applicationNumber)
 				&& StringUtils.isEmpty(this.applicationStatus) && StringUtils.isEmpty(this.fromDate)
-				&& StringUtils.isEmpty(this.toDate) && StringUtils.isEmpty(this.applicationType));
+				&& StringUtils.isEmpty(this.toDate) && StringUtils.isEmpty(this.applicationType)
+				&& StringUtils.isEmpty(this.doorNo) && StringUtils.isEmpty(this.ownerName)
+				&& StringUtils.isEmpty(this.assignee));
 	}
 
 	public boolean tenantIdOnly() {
 		return (this.tenantId != null && this.status == null && this.ids == null && this.applicationNumber == null
 				&& this.connectionNumber == null && this.oldConnectionNumber == null && this.mobileNumber == null
 				&& this.fromDate == null && this.toDate == null && this.ownerIds == null && this.propertyId == null
-				&& this.applicationType == null);
+				&& this.applicationType == null && this.doorNo == null && this.ownerName == null
+				&& this.assignee == null);
 	}
 
 }

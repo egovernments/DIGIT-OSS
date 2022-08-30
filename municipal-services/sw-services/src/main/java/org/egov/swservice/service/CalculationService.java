@@ -59,6 +59,24 @@ public class CalculationService {
 				throw new CustomException("SEWERAGE_CALCULATION_EXCEPTION", "Calculation response can not parsed!!!");
 			}
 		}
-
-	}
+		if (request.getSewerageConnection().getProcessInstance().getAction().equalsIgnoreCase("APPROVE_FOR_DISCONNECTION")){
+				StringBuilder uri = sewerageServicesUtil.getCalculatorURL();
+				CalculationCriteria criteria = CalculationCriteria.builder()
+						.applicationNo(request.getSewerageConnection().getApplicationNo())
+						.sewerageConnection(request.getSewerageConnection())
+						.connectionNo(request.getSewerageConnection().getConnectionNo())
+						.tenantId(property.getTenantId()).build();
+				List<CalculationCriteria> calculationCriterias = Arrays.asList(criteria);
+				CalculationReq calRequest = CalculationReq.builder().calculationCriteria(calculationCriterias)
+						.requestInfo(request.getRequestInfo()).isconnectionCalculation(false).disconnectRequest(true).build();
+				try {
+					Object response = serviceRequestRepository.fetchResult(uri, calRequest);
+					CalculationRes calResponse = mapper.convertValue(response, CalculationRes.class);
+					log.info(mapper.writeValueAsString(calResponse));
+				} catch (Exception ex) {
+					log.error("Calculation response error!!", ex);
+					throw new CustomException("SEWERAGE_CALCULATION_EXCEPTION", "Calculation response can not parsed!!!");
+				}
+			}
+		}
 }

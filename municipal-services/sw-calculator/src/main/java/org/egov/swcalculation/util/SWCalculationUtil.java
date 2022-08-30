@@ -112,9 +112,10 @@ public class SWCalculationUtil {
 	 * @return - Returns the Search URL
 	 */
 	public StringBuilder getDemandSearchUrl(GetBillCriteria getBillCriteria) {
-
+		StringBuilder url;
+		
 		if (CollectionUtils.isEmpty(getBillCriteria.getConsumerCodes()))
-			return new StringBuilder().append(configurations.getBillingServiceHost())
+			url = new StringBuilder().append(configurations.getBillingServiceHost())
 					.append(configurations.getDemandSearchEndPoint()).append(SWCalculationConstant.URL_PARAMS_SEPARATER)
 					.append(SWCalculationConstant.TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
 					.append(SWCalculationConstant.SEPARATER)
@@ -122,16 +123,42 @@ public class SWCalculationUtil {
 					.append(getBillCriteria.getConnectionId()).append(SWCalculationConstant.SW_CONSUMER_CODE_SEPARATOR)
 					.append(getBillCriteria.getConnectionNumber());
 
-		else
-			return new StringBuilder().append(configurations.getBillingServiceHost())
+		else{
+			url = new StringBuilder().append(configurations.getBillingServiceHost())
 					.append(configurations.getDemandSearchEndPoint()).append(SWCalculationConstant.URL_PARAMS_SEPARATER)
 					.append(SWCalculationConstant.TENANT_ID_FIELD_FOR_SEARCH_URL).append(getBillCriteria.getTenantId())
 					.append(SWCalculationConstant.SEPARATER)
 					.append(SWCalculationConstant.CONSUMER_CODE_SEARCH_FIELD_NAME)
 					.append(StringUtils.join(getBillCriteria.getConsumerCodes(), ","));
 
+			if(getBillCriteria.getIsPaymentCompleted() != null)
+				url.append(SWCalculationConstant.SEPARATER)
+						.append(SWCalculationConstant.PAYMENT_COMPLETED_SEARCH_FIELD_NAME)
+						.append(getBillCriteria.getIsPaymentCompleted());
+		}
+
+		return url;
 	}
 
+
+	public List<Property> propertySearch(RequestInfo requestInfo, Set<String> propertyIds, String tenantId, Long limit) {
+
+		PropertyCriteria propertyCriteria = PropertyCriteria.builder()
+				.propertyIds(propertyIds)
+				.tenantId(tenantId)
+				.limit(limit)
+				.build();
+
+		StringBuilder url = getPropertyURL(propertyCriteria);
+		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder()
+				.requestInfo(requestInfo)
+				.build();
+
+		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+		List<Property> propertyList = getPropertyDetails(result);
+		return propertyList;
+	}
+	
 	/**
 	 * Returns url for demand update Api
 	 *
@@ -420,6 +447,12 @@ public class SWCalculationUtil {
 					.collect(Collectors.joining(","));
 			url.append(uuids).append(uuidString);
 		}
+		if ((criteria.getLimit()) != null) {
+			if (isAnyParameterMatch)
+				url.append("&");
+			isAnyParameterMatch = true;
+			url.append("limit=").append(criteria.getLimit());
+		}
 		return url;
 	}
 
@@ -555,7 +588,7 @@ public class SWCalculationUtil {
 	 * Parses date formats to long for all users in responseMap
 	 * @param responeMap LinkedHashMap got from user api response
 	 */
-	private void parseResponse(LinkedHashMap responeMap,String dobFormat){
+	public void parseResponse(LinkedHashMap responeMap,String dobFormat){
 		List<LinkedHashMap> users = (List<LinkedHashMap>)responeMap.get("user");
 		String formatForDate = "dd-MM-yyyy HH:mm:ss";
 		if(users!=null){

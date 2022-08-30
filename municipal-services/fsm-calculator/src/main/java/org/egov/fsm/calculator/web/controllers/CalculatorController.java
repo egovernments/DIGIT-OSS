@@ -1,10 +1,12 @@
 package org.egov.fsm.calculator.web.controllers;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.fsm.calculator.services.CalculationService;
 import org.egov.fsm.calculator.services.DemandService;
 import org.egov.fsm.calculator.web.models.Calculation;
@@ -55,6 +57,27 @@ public class CalculatorController {
 		 List<Calculation> calculations = calculationService.calculate(calculationReq);
 		 CalculationRes calculationRes = CalculationRes.builder().calculations(calculations).build();
 		 return new ResponseEntity<CalculationRes>(calculationRes,HttpStatus.OK);
+	}
+	
+	/**
+	 * advanceBalanceCalculate the FSM fee and creates Demand
+	 * @param TotalTripAmount ,tenantId and The RequestInfo
+	 * @return adavnceamount Response
+	 */
+	@PostMapping(value = "/_advanceBalanceCalculate")
+	public ResponseEntity<BigDecimal> advanceBalanceCalculate(@Valid BigDecimal TotalTripAmount , @Valid String tenantId, RequestInfo requestInfo) {
+		BigDecimal advanceAmount = calculationService.advanceCalculate(TotalTripAmount ,tenantId,requestInfo);
+		return new ResponseEntity<BigDecimal>(advanceAmount,HttpStatus.OK);
+	}
+	/**
+	 * cancellationFee of the FSM and creates Demand
+	 * @param TotalTripAmount ,tenantId and The RequestInfo
+	 * @return cancellationfee Response
+	 */
+	@PostMapping(value = "/_cancellationFee")
+	public ResponseEntity<BigDecimal> cancellationFee(@Valid BigDecimal TotalTripAmount , @Valid String tenantId, RequestInfo requestInfo) {
+		BigDecimal cancellationAmount = calculationService.cancellationAmount(TotalTripAmount ,tenantId,requestInfo);
+		return new ResponseEntity<BigDecimal>(cancellationAmount,HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/_estimate")

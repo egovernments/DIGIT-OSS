@@ -142,7 +142,7 @@ public class UserService {
 
         /* encrypt here */
 
-        userSearchCriteria = encryptionDecryptionUtil.encryptObject(userSearchCriteria, "UserSearchCriteria", UserSearchCriteria.class);
+        userSearchCriteria = encryptionDecryptionUtil.encryptObject(userSearchCriteria, "User", UserSearchCriteria.class);
         List<User> users = userRepository.findAll(userSearchCriteria);
 
         if (users.isEmpty())
@@ -193,7 +193,7 @@ public class UserService {
         	altmobnumber = searchCriteria.getMobileNumber();
         }
 
-        searchCriteria = encryptionDecryptionUtil.encryptObject(searchCriteria, "UserSearchCriteria", UserSearchCriteria.class);
+        searchCriteria = encryptionDecryptionUtil.encryptObject(searchCriteria, "User", UserSearchCriteria.class);
         
         if(altmobnumber!=null) {
         	searchCriteria.setAlternatemobilenumber(altmobnumber);
@@ -203,7 +203,7 @@ public class UserService {
 
         /* decrypt here / final reponse decrypted*/
 
-        list = encryptionDecryptionUtil.decryptObject(list, "UserList", User.class, requestInfo);
+        list = encryptionDecryptionUtil.decryptObject(list, null, User.class, requestInfo);
 
         setFileStoreUrlsByFileStoreIds(list);
         return list;
@@ -231,7 +231,7 @@ public class UserService {
         user.setDefaultPasswordExpiry(defaultPasswordExpiryInDays);
         user.setTenantId(getStateLevelTenantForCitizen(user.getTenantId(), user.getType()));
         User persistedNewUser = persistNewUser(user);
-        return encryptionDecryptionUtil.decryptObject(persistedNewUser, "User", User.class, requestInfo);
+        return encryptionDecryptionUtil.decryptObject(persistedNewUser, "UserSelf", User.class, requestInfo);
 
         /* decrypt here  because encrypted data coming from DB*/
 
@@ -336,7 +336,7 @@ public class UserService {
     public Boolean validateOtp(User user) {
         Otp otp = Otp.builder().otp(user.getOtpReference()).identity(user.getMobileNumber()).tenantId(user.getTenantId())
                 .userType(user.getType()).build();
-        RequestInfo requestInfo = RequestInfo.builder().action("validate").ts(new Date()).build();
+        RequestInfo requestInfo = RequestInfo.builder().action("validate").ts(System.currentTimeMillis()).build();
         OtpValidateRequest otpValidationRequest = OtpValidateRequest.builder().requestInfo(requestInfo).otp(otp)
                 .build();
         return otpRepository.validateOtp(otpValidationRequest);
@@ -367,7 +367,7 @@ public class UserService {
             resetFailedLoginAttempts(user);
 
         User encryptedUpdatedUserfromDB = getUserByUuid(user.getUuid());
-        User decryptedupdatedUserfromDB = encryptionDecryptionUtil.decryptObject(encryptedUpdatedUserfromDB, "User", User.class, requestInfo);
+        User decryptedupdatedUserfromDB = encryptionDecryptionUtil.decryptObject(encryptedUpdatedUserfromDB, "UserSelf", User.class, requestInfo);
         return decryptedupdatedUserfromDB;
     }
 
@@ -420,12 +420,12 @@ public class UserService {
         User updatedUser = getUserByUuid(user.getUuid());
         
         /* decrypt here */
-        existingUser = encryptionDecryptionUtil.decryptObject(existingUser, "User", User.class, requestInfo);
-        updatedUser = encryptionDecryptionUtil.decryptObject(updatedUser, "User", User.class, requestInfo);
+        existingUser = encryptionDecryptionUtil.decryptObject(existingUser, "UserSelf", User.class, requestInfo);
+        updatedUser = encryptionDecryptionUtil.decryptObject(updatedUser, "UserSelf", User.class, requestInfo);
 
         setFileStoreUrlsByFileStoreIds(Collections.singletonList(updatedUser));
         if(!(updatedUser.getEmailId().equalsIgnoreCase(existingUser.getEmailId()))){
-            notificationUtil.sendEmail(requestInfo, existingUser.getEmailId(), updatedUser.getEmailId(),updatedUser.getMobileNumber());
+            notificationUtil.sendEmail(requestInfo, existingUser, updatedUser);
         }
         return updatedUser;
     }

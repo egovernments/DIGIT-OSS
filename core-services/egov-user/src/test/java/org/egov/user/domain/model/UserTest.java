@@ -274,6 +274,8 @@ public class UserTest {
         User user = User.builder()
                 .id(1L)
                 .loggedInUserId(1L)
+                .uuid("asd")
+                .loggedInUserUuid("asd")
                 .build();
 
         assertFalse(user.isLoggedInUserDifferentFromUpdatedUser());

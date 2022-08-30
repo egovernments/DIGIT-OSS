@@ -1,5 +1,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
+## 1.2.0 - 2022-04-20
+- Added bulk bill feature for w&s
+
+## 1.1.3 - 2022-04-28
+
+- Added new api for birth and death download certificate
 
 ## 1.1.3 - 2022-04-28
 
@@ -8,7 +14,7 @@ All notable changes to this module will be documented in this file.
 ## 1.1.2 - 2021-12-14
 
 - Added support for download receipt by receipt number 
- 
+
 ## 1.1.1 - 2021-07-26
 
 - Added fetch bill api for expired bill

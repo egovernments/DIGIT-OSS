@@ -13,6 +13,7 @@ import org.egov.tl.config.TLConfiguration;
 import org.egov.tl.repository.ServiceRequestRepository;
 import org.egov.tl.util.*;
 import org.egov.tl.web.models.*;
+import org.egov.tl.web.models.property.Property;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ import static com.jayway.jsonpath.Criteria.where;
 import static com.jayway.jsonpath.Filter.filter;
 import static org.egov.tl.util.BPAConstants.BUSINESS_SERVICE_BPAREG;
 import static org.egov.tl.util.TLConstants.*;
+import static org.egov.tl.util.TLConstants.PROPERTY_ID;
 
 
 @Slf4j
@@ -44,6 +46,8 @@ public class TLNotificationService {
 
 	private TLRenewalNotificationUtil tlRenewalNotificationUtil;
 
+	private PropertyUtil propertyUtil;
+
 	@Value("${egov.mdms.host}")
 	private String mdmsHost;
 
@@ -54,12 +58,13 @@ public class TLNotificationService {
 	private RestTemplate restTemplate;
 
 	@Autowired
-	public TLNotificationService(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, NotificationUtil util, BPANotificationUtil bpaNotificationUtil, TLRenewalNotificationUtil tlRenewalNotificationUtil) {
+	public TLNotificationService(TLConfiguration config, ServiceRequestRepository serviceRequestRepository, NotificationUtil util, BPANotificationUtil bpaNotificationUtil, TLRenewalNotificationUtil tlRenewalNotificationUtil, PropertyUtil propertyUtil) {
 		this.config = config;
 		this.serviceRequestRepository = serviceRequestRepository;
 		this.util = util;
 		this.bpaNotificationUtil = bpaNotificationUtil;
 		this.tlRenewalNotificationUtil = tlRenewalNotificationUtil;
+		this.propertyUtil = propertyUtil;
 	}
 
 	/**
@@ -82,6 +87,12 @@ public class TLNotificationService {
 		});
 		}
 
+		String propertyId = "";
+		if(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID) != null)
+			propertyId = request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID).asText();
+		Property property = propertyUtil.getPropertyDetails(request.getLicenses().get(0), propertyId, requestInfo);
+		String source = property.getSource().name();
+
 		String businessService = request.getLicenses().isEmpty() ? null : request.getLicenses().get(0).getBusinessService();
 		if (businessService == null)
 			businessService = businessService_TL;
@@ -89,21 +100,59 @@ public class TLNotificationService {
 		switch (businessService) {
 			case businessService_TL:
 				List<SMSRequest> smsRequestsTL = new LinkedList<>();
-					if (null != config.getIsTLSMSEnabled()) {
-						if (config.getIsTLSMSEnabled()) {
-							enrichSMSRequest(request, smsRequestsTL,configuredChannelList);
-							if (!CollectionUtils.isEmpty(smsRequestsTL))
-								util.sendSMS(smsRequestsTL, true);
-						}
-					}
+				if (config.getIsTLSMSEnabled()) {
+					if (!propertyId.isEmpty()) {
+						List<SMSRequest> smsRequestsPT = new ArrayList<>();
+						String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
+						String message = propertyUtil.getPropertySearchMsg(request.getLicenses().get(0), localizationMessages, CHANNEL_NAME_SMS, propertyId, source);
+						log.info("Message to be sent: ", message);
+						smsRequestsPT.addAll(propertyUtil.createPropertySMSRequest(message, property));
+						if (!CollectionUtils.isEmpty(smsRequestsPT))
+							util.sendSMS(smsRequestsPT, true);
 
-					if (null != config.getIsUserEventsNotificationEnabledForTL()) {
-						if (config.getIsUserEventsNotificationEnabledForTL()) {
-							EventRequest eventRequest = getEventsForTL(request);
-							if (null != eventRequest)
-								util.sendEventNotification(eventRequest);
-						}
 					}
+					enrichSMSRequest(request, smsRequestsTL, configuredChannelList);
+					if (!CollectionUtils.isEmpty(smsRequestsTL))
+						util.sendSMS(smsRequestsTL, true);
+				}
+
+				if (config.getIsUserEventsNotificationEnabledForTL()) {
+					if (!propertyId.isEmpty()) {
+						String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
+						String message = propertyUtil.getPropertySearchMsg(request.getLicenses().get(0), localizationMessages, CHANNEL_NAME_EVENT, propertyId, source);
+						log.info("Message to be sent: ", message);
+						EventRequest eventRequest = propertyUtil.getEventsForPropertyOwner(property, message, request);
+						if (null != eventRequest)
+							util.sendEventNotification(eventRequest);
+					}
+					EventRequest eventRequest = getEventsForTL(request);
+					if (null != eventRequest)
+						util.sendEventNotification(eventRequest);
+				}
+
+				List<EmailRequest> emailRequests = new LinkedList<>();
+				if (config.getIsEmailNotificationEnabled()) {
+					if (!propertyId.isEmpty()) {
+						List<EmailRequest> emailRequestsPT = new LinkedList<>();
+						String localizationMessages = util.getLocalizationMessages(tenantId, request.getRequestInfo());
+						Set<String> propertyMobileNumbers = new HashSet<>();
+						property.getOwners().forEach(owner -> {
+							if (owner.getMobileNumber() != null)
+								propertyMobileNumbers.add(owner.getMobileNumber());
+						});
+						Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(propertyMobileNumbers, request.getRequestInfo(), tenantId);
+						String message = propertyUtil.getPropertySearchMsg(request.getLicenses().get(0), localizationMessages, CHANNEL_NAME_EMAIL, String.valueOf(request.getLicenses().get(0).getTradeLicenseDetail().getAdditionalDetail().get(PROPERTY_ID)), source);
+						emailRequestsPT.addAll(propertyUtil.createPropertyEmailRequest(request.getRequestInfo(), message, mapOfPhnoAndEmail, property));
+						if (!CollectionUtils.isEmpty(emailRequestsPT))
+							util.sendEmail(emailRequestsPT, config.getIsEmailNotificationEnabled());
+					}
+					Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(mobileNumbers, requestInfo, tenantId);
+					enrichEmailRequest(request, emailRequests, mapOfPhnoAndEmail, configuredChannelList);
+
+					if (!CollectionUtils.isEmpty(emailRequests))
+						util.sendEmail(emailRequests, config.getIsEmailNotificationEnabled());
+				}
+
 				break;
 
 			case businessService_BPA:
@@ -179,7 +228,7 @@ public class TLNotificationService {
 			if(message==null || message == "") continue;
 
 				license.getTradeLicenseDetail().getOwners().forEach(owner -> {
-					if (owner.getMobileNumber() != null)
+					if (owner.getMobileNumber() != null && !StringUtils.isEmpty(owner.getEmailId()))
 						mapOfPhnoAndEmail.put(owner.getMobileNumber(), owner.getEmailId());
 				});
 			emailRequests.addAll(util.createEmailRequest(request.getRequestInfo(),message,mapOfPhnoAndEmail));

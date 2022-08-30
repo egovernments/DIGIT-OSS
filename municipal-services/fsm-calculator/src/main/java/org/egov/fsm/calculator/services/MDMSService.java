@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.fsm.calculator.config.CalculatorConfig;
 import org.egov.fsm.calculator.repository.ServiceRequestRepository;
 import org.egov.fsm.calculator.utils.CalculatorConstants;
@@ -34,7 +35,21 @@ public class MDMSService {
         Object result = serviceRequestRepository.fetchResult(url , mdmsCriteriaReq);
         return result;
     }
-    
+    /**
+     *  returns the url for mdms search endpoint for advancePayment
+     *
+     * @return MDMS Search URL
+     */
+    public Object mDMSCall(RequestInfo requestInfo,String tenantId){
+    	List<ModuleDetail> moduleRequest = getFSMModuleRequest();
+        List<ModuleDetail> moduleDetails = new ArrayList<>();
+        moduleDetails.addAll(moduleRequest);
+    	MdmsCriteriaReq mdmsCriteriaReq = getAdvanceMDMSRequest(requestInfo,tenantId);
+       
+        StringBuilder url = getMdmsSearchUrl();
+        Object result = serviceRequestRepository.fetchResult(url , mdmsCriteriaReq);
+        return result;
+    }
 
     /**
      * Creates and returns the url for mdms search endpoint
@@ -63,6 +78,18 @@ public class MDMSService {
         return MdmsCriteriaReq.builder().requestInfo(calculationReq.getRequestInfo()).mdmsCriteria(mdmsCriteria).build();
     }
     
+    
+    private MdmsCriteriaReq getAdvanceMDMSRequest(RequestInfo requestInfo,String tenantId) {  	
+    	List<ModuleDetail> moduleRequest = getFSMModuleRequest();
+    	
+        List<ModuleDetail> moduleDetails = new ArrayList<>();
+        moduleDetails.addAll(moduleRequest);
+        
+        // TODO for product there is no need to query mdms data
+        MdmsCriteria mdmsCriteria = MdmsCriteria.builder().moduleDetails(moduleDetails).tenantId(tenantId)
+                .build();
+        return MdmsCriteriaReq.builder().requestInfo(requestInfo).mdmsCriteria(mdmsCriteria).build();
+    }
 
 	public List<ModuleDetail> getFSMModuleRequest() {
 
@@ -70,7 +97,11 @@ public class MDMSService {
 				final String filterCode = "$.[?(@.active==true)]";
 				List<MasterDetail> fsmMasterDtls = new ArrayList<>();
 				fsmMasterDtls.add(MasterDetail.builder().name(CalculatorConstants.FSM_CONFIG).filter(filterCode).build());
-
+				
+				//advance balance mdms 
+				fsmMasterDtls.add(MasterDetail.builder().name(CalculatorConstants.FSM_ADVANCEPAYMENT).filter(filterCode).build());
+				fsmMasterDtls.add(MasterDetail.builder().name(CalculatorConstants.FSM_CANCELLATIONFEE).filter(filterCode).build());
+				
 				ModuleDetail fsmMasterMDtl = ModuleDetail.builder().masterDetails(fsmMasterDtls)
 						.moduleName(CalculatorConstants.MODULE_CODE).build();
 				

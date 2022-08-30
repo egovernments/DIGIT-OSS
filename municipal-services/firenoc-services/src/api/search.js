@@ -4,6 +4,7 @@ import { mergeSearchResults, searchByMobileNumber } from "../utils/search";
 import isEmpty from "lodash/isEmpty";
 import get from "lodash/get";
 import some from "lodash/some";
+import keys from "lodash/keys";
 import { actions } from "../utils/search";
 import { validateFireNOCSearchModel } from "../utils/modelValidation";
 import envVariables from "../envVariables";
@@ -40,9 +41,9 @@ export const searchApiResponse = async (request, next = {}) => {
     });
     return;
   }
-  // console.log(queryObj);
+  console.log(queryObj);
   let text =
-    "SELECT FN.uuid as FID,FN.tenantid,FN.fireNOCNumber,FN.provisionfirenocnumber,FN.oldfirenocnumber,FN.dateofapplied,FN.createdBy,FN.createdTime,FN.lastModifiedBy,FN.lastModifiedTime,FD.uuid as firenocdetailsid,FD.action,FD.applicationnumber,FD.fireNOCType,FD.applicationdate,FD.financialYear,FD.firestationid,FD.issuedDate,FD.validFrom,FD.validTo,FD.action,FD.status,FD.channel,FD.propertyid,FD.noofbuildings,FD.additionaldetail,FBA.uuid as puuid,FBA.doorno as pdoorno,FBA.latitude as platitude,FBA.longitude as plongitude,FBA.buildingName as pbuildingname,FBA.addressnumber as paddressnumber,FBA.pincode as ppincode,FBA.locality as plocality,FBA.city as pcity,FBA.street as pstreet,FB.uuid as buildingid ,FB.name as buildingname,FB.usagetype,FO.uuid as ownerid,FO.ownertype,FO.applicantcategory,FO.useruuid,FO.relationship,FUOM.uuid as uomuuid,FUOM.code,FUOM.value,FUOM.activeuom,FBD.uuid as documentuuid,FUOM.active,FBD.documentType,FBD.filestoreid,FBD.documentuid,FBD.createdby as documentCreatedBy,FBD.lastmodifiedby as documentLastModifiedBy,FBD.createdtime as documentCreatedTime,FBD.lastmodifiedtime as documentLastModifiedTime FROM eg_fn_firenoc FN JOIN eg_fn_firenocdetail FD ON (FN.uuid = FD.firenocuuid) JOIN eg_fn_address FBA ON (FD.uuid = FBA.firenocdetailsuuid) JOIN eg_fn_owner FO ON (FD.uuid = FO.firenocdetailsuuid) JOIN eg_fn_buidlings FB ON (FD.uuid = FB.firenocdetailsuuid) JOIN eg_fn_buildinguoms FUOM ON (FB.uuid = FUOM.buildinguuid) LEFT OUTER JOIN eg_fn_buildingdocuments FBD on(FB.uuid = FBD.buildinguuid)";
+    " SELECT * FROM (SELECT FN.uuid as FID,FN.tenantid,FN.fireNOCNumber,FN.provisionfirenocnumber,FN.oldfirenocnumber,FN.dateofapplied,FN.createdBy,FN.createdTime,FN.lastModifiedBy,FN.lastModifiedTime,FD.uuid as firenocdetailsid,FD.action,FD.applicationnumber,FD.fireNOCType,FD.applicationdate,FD.financialYear,FD.firestationid,FD.issuedDate,FD.validFrom,FD.validTo,FD.action,FD.status,FD.channel,FD.propertyid,FD.noofbuildings,FD.additionaldetail,FBA.uuid as puuid,FBA.doorno as pdoorno,FBA.latitude as platitude,FBA.longitude as plongitude,FBA.buildingName as pbuildingname,FBA.addressnumber as paddressnumber,FBA.pincode as ppincode,FBA.locality as plocality,FBA.city as pcity,FBA.street as pstreet,FB.uuid as buildingid ,FB.name as buildingname,FB.usagetype,FO.uuid as ownerid,FO.ownertype,FO.applicantcategory,FO.useruuid,FO.relationship,FUOM.uuid as uomuuid,FUOM.code,FUOM.value,FUOM.activeuom,FBD.uuid as documentuuid,FUOM.active,FBD.documentType,FBD.filestoreid,FBD.documentuid,FBD.createdby as documentCreatedBy,FBD.lastmodifiedby as documentLastModifiedBy,FBD.createdtime as documentCreatedTime,FBD.lastmodifiedtime as documentLastModifiedTime,DENSE_RANK () OVER(ORDER BY FN.uuid) rn FROM eg_fn_firenoc FN JOIN eg_fn_firenocdetail FD ON (FN.uuid = FD.firenocuuid) JOIN eg_fn_address FBA ON (FD.uuid = FBA.firenocdetailsuuid) JOIN eg_fn_owner FO ON (FD.uuid = FO.firenocdetailsuuid) JOIN eg_fn_buidlings FB ON (FD.uuid = FB.firenocdetailsuuid) JOIN eg_fn_buildinguoms FUOM ON (FB.uuid = FUOM.buildinguuid) LEFT OUTER JOIN eg_fn_buildingdocuments FBD on(FB.uuid = FBD.buildinguuid) ";
   // FBD.active=true AND FO.active=true AND FUOM.active=true AND";
   //if citizen
   const roles = get(request.body, "RequestInfo.userInfo.roles");
@@ -67,7 +68,8 @@ export const searchApiResponse = async (request, next = {}) => {
     else
       text = `${text} where FN.tenantid = '${queryObj.tenantId}' AND`;
   } else {
-    if (!isEmpty(queryObj)) {
+    if (!isEmpty(queryObj) && !(keys(queryObj).length==2 && 
+    queryObj.hasOwnProperty("offset") && queryObj.hasOwnProperty("limit"))) {
       text = text + " where ";
     }
     if (queryObj.tenantId) {
@@ -154,7 +156,9 @@ export const searchApiResponse = async (request, next = {}) => {
           item != "tenantId" &&
           // item != "status" &&
           item != "ids" &&
-          item != "mobileNumber"
+          item != "mobileNumber" &&
+          item != "offset" &&
+          item != "limit"
         ) {
           queryObj[item]=queryObj[item].toUpperCase();
           sqlQuery = `${sqlQuery} ${item}='${queryObj[item]}' AND`;
@@ -162,20 +166,48 @@ export const searchApiResponse = async (request, next = {}) => {
       }
     });
   }
+
   if (
     queryObj.hasOwnProperty("fromDate") &&
     queryObj.hasOwnProperty("toDate")
   ) {
-    sqlQuery = `${sqlQuery} FN.createdtime >= ${queryObj.fromDate} AND FN.createdtime <= ${queryObj.toDate} ORDER BY FN.uuid`;
+    sqlQuery = `${sqlQuery} FN.createdtime >= ${queryObj.fromDate} AND FN.createdtime <= ${queryObj.toDate} `;
   } else if (
     queryObj.hasOwnProperty("fromDate") &&
     !queryObj.hasOwnProperty("toDate")
   ) {
-    sqlQuery = `${sqlQuery} FN.createdtime >= ${queryObj.fromDate} ORDER BY FN.uuid`;
-  } else if (!isEmpty(queryObj)) {
-    sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ORDER BY FN.uuid`;
+    sqlQuery = `${sqlQuery} FN.createdtime >= ${queryObj.fromDate} `;
   }
-  //console.log("SQL QUery:" +sqlQuery);
+
+  
+  
+
+  if (!isEmpty(queryObj) && ( queryObj.hasOwnProperty("limit" || queryObj.hasOwnProperty("offset")))) {
+    let offset =0;
+    let limit =10;
+    if( queryObj.hasOwnProperty("offset") ){
+      offset = queryObj.offset*1;
+      
+   }
+  if( queryObj.hasOwnProperty("limit") ){
+    limit = (queryObj.limit*1)+offset;
+ }
+ if( offset !=0){
+  offset = offset+1;
+}
+ if(keys(queryObj).length!=2){
+  sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)} ) s WHERE s.rn  BETWEEN ${offset} AND ${limit+offset}   `;
+ }else{
+  sqlQuery = `${sqlQuery}  ) s WHERE s.rn  BETWEEN ${offset} AND ${limit} ORDER BY fid `;
+ }
+  
+}else if(isEmpty(queryObj)){
+  sqlQuery = `${sqlQuery}  ) s`;
+}else if(!isEmpty(queryObj)){
+  sqlQuery = `${sqlQuery.substring(0, sqlQuery.length - 3)}  ) s ORDER BY fid `;
+}
+
+  console.log("SQL QUery:" +sqlQuery);
   const dbResponse = await db.query(sqlQuery);
   //console.log("dbResponse"+JSON.stringify(dbResponse));
   if (dbResponse.err) {

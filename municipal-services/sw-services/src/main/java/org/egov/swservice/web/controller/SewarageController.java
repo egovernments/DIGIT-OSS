@@ -3,6 +3,8 @@ package org.egov.swservice.web.controller;
 import java.util.List;
 
 import javax.validation.Valid;
+
+import org.egov.swservice.service.SewerageEncryptionService;
 import org.egov.swservice.web.models.RequestInfoWrapper;
 import org.egov.swservice.web.models.SearchCriteria;
 import org.egov.swservice.web.models.SewerageConnection;
@@ -34,6 +36,9 @@ public class SewarageController {
     SewerageService sewarageService;
 
 	@Autowired
+	SewerageEncryptionService sewerageEncryptionService;
+
+	@Autowired
 	private final ResponseInfoFactory responseInfoFactory;
 
 	@RequestMapping(value = "/_create", method = RequestMethod.POST, produces = "application/json")
@@ -52,9 +57,9 @@ public class SewarageController {
 			@Valid @ModelAttribute SearchCriteria criteria) {
 		List<SewerageConnection> sewerageConnectionList = sewarageService.search(criteria,
 				requestInfoWrapper.getRequestInfo());
-
+		Integer count = sewarageService.countAllSewerageApplications(criteria,	requestInfoWrapper.getRequestInfo());
 		SewerageConnectionResponse response = SewerageConnectionResponse.builder()
-				.sewerageConnections(sewerageConnectionList).totalCount(sewerageConnectionList.size())
+				.sewerageConnections(sewerageConnectionList).totalCount(count)
 				.responseInfo(responseInfoFactory
 						.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true))
 				.build();
@@ -87,6 +92,27 @@ public class SewarageController {
 				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 
+	}
+
+
+	/**
+	 * Encrypts existing Sewerage records
+	 *
+	 * @param requestInfoWrapper RequestInfoWrapper
+	 * @param criteria SearchCriteria
+	 * @return list of updated encrypted data
+	 */
+	/* To be executed only once */
+	@RequestMapping(value = "/_encryptOldData", method = RequestMethod.POST)
+	public ResponseEntity<SewerageConnectionResponse> encryptOldData(@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
+																  @Valid @ModelAttribute SearchCriteria criteria){
+		SewerageConnectionResponse sewerageConnectionResponse = new SewerageConnectionResponse();
+		List<SewerageConnection> sewerageConnectionList = sewerageEncryptionService.updateOldData(criteria, requestInfoWrapper.getRequestInfo());
+
+		sewerageConnectionResponse.setSewerageConnections(sewerageConnectionList);
+		sewerageConnectionResponse.setResponseInfo(
+				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
+		return new ResponseEntity<>(sewerageConnectionResponse, HttpStatus.OK);
 	}
 
 }

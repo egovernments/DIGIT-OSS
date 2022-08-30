@@ -31,6 +31,11 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>5.2.20.RELEASE</version>
+		</dependency>
+		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 			<version>${commons-lang-version}</version>
@@ -46,18 +51,6 @@
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-mockito</artifactId>
-			<version>1.6.5</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-module-junit4</artifactId>
-			<version>1.6.5</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -86,12 +79,12 @@
 		<dependency>
 			<groupId>org.egov.services</groupId>
 			<artifactId>services-common</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.egov.services</groupId>
 			<artifactId>tracer</artifactId>
-			<version>2.0.0-SNAPSHOT</version>
+			<version>2.1.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>

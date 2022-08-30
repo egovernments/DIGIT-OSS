@@ -1,22 +1,19 @@
 package org.egov.echallan.service;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.echallan.config.ChallanConfiguration;
-import org.egov.echallan.model.Challan;
+import org.egov.echallan.model.*;
 import org.egov.echallan.model.Challan.StatusEnum;
-import org.egov.echallan.model.ChallanRequest;
-import org.egov.echallan.model.SMSRequest;
 import org.egov.echallan.producer.Producer;
 import org.egov.echallan.repository.ServiceRequestRepository;
 import org.egov.echallan.util.NotificationUtil;
+import org.egov.echallan.web.models.collection.PaymentDetail;
+import org.egov.echallan.web.models.collection.PaymentRequest;
+import org.egov.echallan.web.models.collection.PaymentResponse;
 import org.egov.echallan.web.models.user.User;
 import org.egov.echallan.web.models.uservevents.Action;
 import org.egov.echallan.web.models.uservevents.ActionItem;
@@ -37,6 +34,8 @@ import org.springframework.web.client.RestTemplate;
 import com.jayway.jsonpath.JsonPath;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.echallan.util.ChallanConstants.*;
 
 
 @Service
@@ -76,67 +75,70 @@ public class NotificationService {
 	}
 	
 	public void sendChallanNotification(ChallanRequest challanRequest,boolean isSave) {
-		if(null != config.getIsSMSEnabled()) {
-			if(config.getIsSMSEnabled()) {
-				HashMap<String, String> msgDetail = null;
-				String tenantId = challanRequest.getChallan().getTenantId();
-				List<String> businessServiceAllowed = fetchBusinessServiceFromMDMS(challanRequest.getRequestInfo(), tenantId);
-				if(!CollectionUtils.isEmpty(businessServiceAllowed)) {
-					Challan challan = challanRequest.getChallan();
-						if (businessServiceAllowed.contains(challan.getBusinessService())) {
-							String mobilenumber = challan.getCitizen().getMobileNumber();
-							String[] users = new String[] {challan.getCitizen().getUuid()};
- 							if(isSave)
-								msgDetail = util.getCustomizedMsg(challanRequest.getRequestInfo(), challan );
-							else if(challan.getApplicationStatus()==StatusEnum.ACTIVE)
-								msgDetail = util.getCustomizedMsgForUpdate(challanRequest.getRequestInfo(), challan );
-							else if(challan.getApplicationStatus()==StatusEnum.CANCELLED)
-								msgDetail = util.getCustomizedMsgForCancel(challanRequest.getRequestInfo(), challan );
-							if (msgDetail!=null && !StringUtils.isEmpty(msgDetail.get(NotificationUtil.MSG_KEY))) {
-								SMSRequest smsRequest = SMSRequest.builder().
-										mobileNumber(mobilenumber).
-										message(msgDetail.get(NotificationUtil.MSG_KEY)).
-										templateId(msgDetail.get(NotificationUtil.TEMPLATE_KEY)).
-										users(users).build();
-								producer.push(config.getSmsNotifTopic(), smsRequest);
-							} else {
-								log.error("No message configured! Notification will not be sent.");
-							}
-						} else {
-							log.info("Notification not configured for this business service!");
-						}
+		String action="",code = null;
 
-				}else {
-					log.info("Business services to which notifs are to be sent, couldn't be retrieved! Notification will not be sent.");
+		if (isSave) {
+			action = CREATE_ACTION;
+			code = CREATE_CODE;
+		} else if (challanRequest.getChallan().getApplicationStatus() == StatusEnum.ACTIVE) {
+			action = UPDATE_ACTION;
+			code = UPDATE_CODE;
+		} else if (challanRequest.getChallan().getApplicationStatus() == StatusEnum.CANCELLED) {
+			action = CANCEL_ACTION;
+			code = CANCEL_CODE;
+		} else if (challanRequest.getChallan().getApplicationStatus() == StatusEnum.PAID) {
+			action = PAYMENT_ACTION;
+			code = PAYMENT_CODE;
+		}
+
+		List<String> configuredChannelNames =  util.fetchChannelList(new RequestInfo(), challanRequest.getChallan().getTenantId(), MCOLLECT_BUSINESSSERVICE, action);
+		if(configuredChannelNames.contains(CHANNEL_NAME_SMS)){
+			List<SMSRequest> smsRequests = new LinkedList<>();
+			if (null != config.getIsSMSEnabled()) {
+				if (config.getIsSMSEnabled()) {
+					enrichSMSRequest(challanRequest, smsRequests, code);
+					if (!CollectionUtils.isEmpty(smsRequests))
+						util.sendSMS(smsRequests, config.getIsSMSEnabled());
 				}
 			}
-			
-			if(null != config.getIsUserEventEnabled()) {
-				if(config.getIsUserEventEnabled()) {
+		}
+
+		if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
+			if (null != config.getIsUserEventEnabled()) {
+				if (config.getIsUserEventEnabled()) {
 					EventRequest eventRequest = getEventsForChallan(challanRequest,isSave);
 					if(null != eventRequest)
-						sendEventNotification(eventRequest);
+						util.sendEventNotification(eventRequest);
 				}
 			}
-			
+		}
+
+		if(configuredChannelNames.contains(CHANNEL_NAME_EMAIL)){
+			List<EmailRequest> emailRequests = new LinkedList<>();
+			if (null != config.getIsEmailNotificationEnabled()) {
+				if (config.getIsEmailNotificationEnabled()) {
+					enrichEmailRequest(challanRequest, emailRequests, code.replace(".sms",".email"));
+					if (!CollectionUtils.isEmpty(emailRequests))
+						util.sendEmail(emailRequests);
+				}
+			}
 		}
 	}
-	
-	
-	
+
 	private EventRequest getEventsForChallan(ChallanRequest request,boolean isSave) {
     	List<Event> events = new ArrayList<>();
-        String tenantId = request.getChallan().getTenantId();
  		Challan challan = request.getChallan();
-		HashMap<String, String> msgDetail =null; 
+		String message="";
 		if(isSave)
-			msgDetail = util.getCustomizedMsg(request.getRequestInfo(), challan );
+			message = util.getCustomizedMsg(request.getRequestInfo(), challan ,CREATE_CODE_INAPP);
 		else if(challan.getApplicationStatus()==StatusEnum.ACTIVE)
-			msgDetail = util.getCustomizedMsgForUpdate(request.getRequestInfo(), challan );
+			message = util.getCustomizedMsg(request.getRequestInfo(),challan, UPDATE_CODE_INAPP);
 		else if(challan.getApplicationStatus()==StatusEnum.CANCELLED)
-			msgDetail = util.getCustomizedMsgForCancel(request.getRequestInfo(), challan );
-		else
-			return null;
+			message = util.getCustomizedMsg(request.getRequestInfo(),challan, CANCEL_CODE_INAPP );
+		else if(challan.getApplicationStatus()==StatusEnum.PAID)
+			message = util.getCustomizedMsg(request.getRequestInfo(),challan, PAYMENT_CODE_INAPP );
+
+
         Map<String,String > mobileNumberToOwner = new HashMap<>();
         String mobile = challan.getCitizen().getMobileNumber();
         if(mobile!=null)
@@ -162,7 +164,16 @@ public class NotificationService {
            items.add(item);
            action = Action.builder().actionUrls(items).build();
     	}
-    	events.add(Event.builder().tenantId(challan.getTenantId()).description(msgDetail.get(NotificationUtil.MSG_KEY))
+		if(challan.getApplicationStatus()==StatusEnum.PAID) {
+			List<ActionItem> items = new ArrayList<>();
+			PaymentResponse paymentResponse = util.getPaymentObject(request);
+			String actionLink = util.getRecepitDownloadLink(request,paymentResponse,mobile);
+			ActionItem item = ActionItem.builder().actionUrl(actionLink).code(DOWNLOAD_RECEIPT_CODE).build();
+			items.add(item);
+			action = Action.builder().actionUrls(items).build();
+		}
+
+    	events.add(Event.builder().tenantId(challan.getTenantId()).description(message)
 						.eventType(USREVENTS_EVENT_TYPE).name(USREVENTS_EVENT_NAME)
 						.postedBy(USREVENTS_EVENT_POSTEDBY).source(Source.WEBAPP).recepient(recepient)
     					.eventDetails(null).actions(action).build());
@@ -175,8 +186,7 @@ public class NotificationService {
 		
     }
 	
-	
-	
+
 	private List<String> fetchBusinessServiceFromMDMS(RequestInfo requestInfo, String tenantId){
 		List<String> masterData = new ArrayList<>();
 		StringBuilder uri = new StringBuilder();
@@ -233,11 +243,70 @@ public class NotificationService {
     	}
     	return mapOfPhnoAndUUIDs;
     }
-	
-	
 
-	public void sendEventNotification(EventRequest request) {
-		producer.push(config.getSaveUserEventsTopic(), request);
+	/**
+	 * Enriches the smsRequest with the customized messages
+	 *
+	 * @param challanRequest
+	 *            The challanRequest
+	 * @param smsRequestslist
+	 *            List of SMSRequets
+	 * @param code
+	 *            Notification Template Code
+	 */
+	private void enrichSMSRequest(ChallanRequest challanRequest, List<SMSRequest> smsRequestslist, String code) {
+		String message = util.getCustomizedMsg(challanRequest.getRequestInfo(), challanRequest.getChallan(), code);
+		String mobilenumber = challanRequest.getChallan().getCitizen().getMobileNumber();
+
+		if (message != null && !StringUtils.isEmpty(message)) {
+			SMSRequest smsRequest = SMSRequest.builder().
+					mobileNumber(mobilenumber).
+					message(message).build();
+			smsRequestslist.add(smsRequest);
+		} else {
+			log.error("No message configured! Notification will not be sent.");
+		}
 	}
+		/**
+		 * Enriches the emailRequests with the customized messages
+		 *
+		 * @param challanRequest
+		 *            The challanRequest
+		 * @param emailRequestList
+		 *            List of EmailRequests
+		 * @param code
+		 *            Notification Template Code
+		 */
+		private void enrichEmailRequest(ChallanRequest challanRequest, List<EmailRequest> emailRequestList, String code) {
+			Set<String> mobileNumbers = new HashSet<>();
+			String mobilenumber = challanRequest.getChallan().getCitizen().getMobileNumber();
+
+			mobileNumbers.add(mobilenumber);
+			Map<String, String> mapOfPhnoAndEmail = util.fetchUserEmailIds(mobileNumbers, challanRequest.getRequestInfo(), challanRequest.getChallan().getTenantId());
+
+			if(challanRequest.getChallan().getCitizen().getEmail()!=null && !StringUtils.isEmpty(challanRequest.getChallan().getCitizen().getEmail()) )
+				mapOfPhnoAndEmail.put(mobilenumber, challanRequest.getChallan().getCitizen().getEmail());
+
+			String message = util.getEmailCustomizedMsg(challanRequest.getRequestInfo(), challanRequest.getChallan(), code);
+
+			if (message!=null && !StringUtils.isEmpty(message)) {
+				String subject = message.substring(message.indexOf("<h2>")+4,message.indexOf("</h2>"));
+				String body = message.substring(message.indexOf("</h2>")+5);
+				Email emailobj=null;
+				EmailRequest email = null;
+				if(mapOfPhnoAndEmail.get(mobilenumber)!=null) {
+					emailobj = Email.builder().emailTo(Collections.singleton(mapOfPhnoAndEmail.get(mobilenumber))).isHTML(true).body(body).subject(subject).build();
+					email = new EmailRequest(challanRequest.getRequestInfo(),emailobj);
+					emailRequestList.add(email);
+				}
+				else
+				{
+					log.error("No email for username - "+mobilenumber);
+				}
+			} else {
+				log.error("No message configured! Notification will not be sent.");
+			}
+	}
+	
 
 }

@@ -1,0 +1,206 @@
+swagger: "2.0"
+info:
+  version: 2.0.0
+  title: Filestore serivce APIs
+  description: |
+    APIs available for filestore service
+      -  Uploads different kinds of files to server including images and different document types.
+  contact:
+    name: eGovernments Foundation
+    email: contacts@egovernments.org
+schemes:
+  - https
+basePath: /filestore/v1
+paths:
+  /files:
+    post:
+      summary: Uploads different kinds of files to server.
+      description: The endpoint for uploading file in the system.
+      tags:
+        - Upload File
+      consumes:
+         - multipart/form-data
+      parameters:
+         - in: formData
+           name: file
+           type: file
+           required: true
+           description: The file to upload.
+         - in: formData
+           name: tenantId
+           type: string
+           required: true
+           description: Unique ulb identifier.
+         - in: formData
+           name: module
+           type: string
+           required: false
+           description: module name.
+         - in: formData
+           name: tag
+           type: string
+           required: false
+           description: tag name.
+      responses:
+        "200":
+          description: Success response with filestoreid and tenantid.
+          schema:
+            $ref: "#/definitions/UploadFileResponse"
+        "400":
+          description: Error response in case of failures.
+          schema:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
+  /files/url:
+    get:
+      summary: Search file url based on tenantid and filestoreid.
+      description: Search file url.
+      tags:
+        - Search
+      parameters:
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/tenantId"
+        - name: fileStoreIds
+          in: query
+          description: Unique filestoreids.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: List of urls to access the uploaded file which is map to particular fielstoreid.
+          schema:
+            $ref: "#/definitions/FilestoreIdResponse"
+            
+        "400":
+          description: Error response in case of failures.
+          schema:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
+  /files/tag:
+    get:
+      summary: Search file url based on tenantid and tag name.
+      description: Search file url.
+      tags:
+        - Search
+      parameters:
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/tenantId"
+        - name: tag
+          in: query
+          description: tag name.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: List of urls to access the uploaded file which is map to particular tag name.
+          schema:
+            $ref: "#/definitions/TagFileResponse"
+            
+        "400":
+          description: Error response in case of failures.
+          schema:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
+  /files/metaData:
+    get:
+      summary: Get metadata of file based on tenantId and filestoreId.
+      description:  metadata of file.
+      tags:
+        - Search
+      parameters:
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/tenantId"
+        - name: fileStoreId
+          in: query
+          description: Unique fileStoreId.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Metadata of file map to particulare filestoreId.
+          schema:
+            $ref: "#/definitions/MetaDataResponse"
+            
+        "400":
+          description: Error response in case of failures.
+          schema:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
+  /files/id:
+    get:
+      summary: Search file url based on tenantid and filestoreid.
+      description: Search file url.
+      tags:
+        - Search
+      parameters:
+        - $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/parameters/tenantId"
+        - name: fileStoreId
+          in: query
+          description: fileStore id.
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Return file binary.
+            
+        "400":
+          description: Error response in case of failures.
+          schema:
+            $ref: "https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/ErrorRes"
+definitions:
+  FilestoreIdResponse:
+    type: object
+    description: A list of values
+    required:
+      - filestoreId
+    properties:
+      filestoreId:
+        type: array
+        items:
+            type: string
+  UploadFileResponse:
+    type: object
+    properties:
+      files:
+        type: array
+        items:
+          $ref: "#/definitions/UploadFile"
+  TagFileResponse:
+    type: object
+    properties:
+      files:
+        type: array
+        items:
+          $ref: "#/definitions/TagFile"        
+  MetaDataResponse:
+    description: Response data cobtains details of files.
+    type: object
+    properties:
+      fileName: 
+        description: file name.
+        type: string
+      contetntType: 
+       description: contetnt type of file.
+       type: string
+      tenantId: 
+       description: Unique ulb identifier.
+       type: string
+      resource: 
+       description: resource.
+       type: string
+      fileSize: 
+       description: file size.
+       type: string
+  UploadFile:
+    description: Upload file response data with filestoreid and tenantid.
+    type: object
+    properties:
+      fileStoreId: 
+        description: filestore id of the particular file.
+        type: string
+      tenantId: 
+       description: Unique ulb identifier.
+       type: string
+  TagFile:
+    description: Upload file response data with url and contetnt type of file.
+    type: object
+    properties:
+      url: 
+        description: url to access the particular file belong to the tag.
+        type: string
+      contetntType: 
+       description: contetnt type of file.
+       type: string

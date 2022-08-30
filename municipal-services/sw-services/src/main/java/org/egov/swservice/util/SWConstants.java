@@ -201,17 +201,21 @@ public class SWConstants {
 	public static final int UPDATE_APPLICATION = 1;
 
 	public static final int MODIFY_CONNECTION = 2;
+	
+	public static final int DISCONNECT_CONNECTION =  3;
 
 	public static final String APPROVE_CONNECTION = "APPROVE_CONNECTION";
 
 	public static final String NEW_SEWERAGE_CONNECTION ="NEW_SEWERAGE_CONNECTION";
 	public static final String MODIFY_SEWERAGE_CONNECTION = "MODIFY_SEWERAGE_CONNECTION";
+	public static final String DISCONNECT_SEWERAGE_CONNECTION = "DISCONNECT_SEWERAGE_CONNECTION";
 	
 	public static final String SEWERAGE_SERVICE_BUSINESS_ID = "SW";
 
 	public static final String PAYMENT_NOTIFICATION_APP = "SW_PAYMENT_NOTIFICATION_APP";
 
 	public static final String PAYMENT_NOTIFICATION_SMS = "SW_PAYMENT_NOTIFICATION_SMS";
+	public static final String PAYMENT_NOTIFICATION_EMAIL = "SW_PAYMENT_NOTIFICATION_EMAIL";
 
 	public static final String NEW_SEWERAGE_APP_STATUS ="NEW_SEWERAGE_APPLICATION";
 
@@ -240,4 +244,21 @@ public class SWConstants {
 	public static final String CHANNEL_LIST = "channelList";
 
 	public static final String CHANNEL = "Channel";
+	
+	public static final String ACTIVE = "ACTIVE";
+
+	public static final String EXECUTE_DISCONNECTION = "EXECUTE_DISCONNECTION";
+
+	public static final String APPROVE_DISCONNECTION_CONST = "APPROVE_FOR_DISCONNECTION";
+
+	public static final String APPLICATION_DISCONNECTION_CODE = "DC";
+
+	public static final String PENDING_FOR_PAYMENT_STATUS_CODE = "PENDING_FOR_PAYMENT";
+
+	public static final String DOCUMENT_ACCESS_AUDIT_MSG = "The documents for sewerage connection application has been accessed";
+
+	public static final String WNS_ENCRYPTION_MODEL = "WnSConnection";
+
+	public static final String WNS_OWNER_ENCRYPTION_MODEL = "WnSConnectionOwner";
+
 }

@@ -110,4 +110,10 @@ public class PropertiesManager {
 
 	@Value("${state.level.tenant.id}")
 	public String stateLevelTenantId;
+
+	@Value("${parent.level.tenant.id}")
+	private String parentLevelTenantId;
+
+	@Value("${decryption.abac.enable}")
+	private Boolean isDecryptionEnable;
 }

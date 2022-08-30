@@ -56,9 +56,9 @@ public class UserRequestTest {
     @Test
     public void test_contract_to_domain_conversion() {
         UserRequest userRequest = buildUserRequest();
-
+        final String loggedInUserUuid = "518eb2f9-1175-4e7b-9408-4a62355e860b";
         final long loggedInUserId = 345L;
-        User userForCreate = userRequest.toDomain(loggedInUserId, true);
+        User userForCreate = userRequest.toDomain(loggedInUserId, loggedInUserUuid, true);
 
         Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         c.set(2017, 1, 1, 1, 1, 1);

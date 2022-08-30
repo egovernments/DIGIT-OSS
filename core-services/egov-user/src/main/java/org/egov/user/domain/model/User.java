@@ -81,6 +81,7 @@ public class User {
     private Long createdBy;
     private Long lastModifiedBy;
     private Long loggedInUserId;
+    private String loggedInUserUuid;
     private boolean otpValidationMandatory;
     private boolean mobileValidationMandatory = true;
     private String alternateMobileNumber;
@@ -202,7 +203,7 @@ public class User {
 
     @JsonIgnore
     public boolean isLoggedInUserDifferentFromUpdatedUser() {
-        return !id.equals(loggedInUserId);
+        return !id.equals(loggedInUserId) || !uuid.equals(loggedInUserUuid);
     }
 
     public void setRoleToCitizen() {

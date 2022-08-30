@@ -1,6 +1,8 @@
 # Changelog
 
 All notable changes to this module will be documented in this file.
+## 1.1.6 - 2022-08-03
+- Added channel based notification
 
 ## 1.0.5 - 2022-03-03
 - Removed unnecessary validation for invalid access.

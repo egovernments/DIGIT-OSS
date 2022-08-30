@@ -96,5 +96,8 @@ public class VehicleTripDetail {
 	  
 	  @JsonProperty("auditDetails")
 	  private AuditDetails auditDetails = null;
+
+	@JsonProperty("trip_id")
+	private String trip_id = null;
 	  
 }

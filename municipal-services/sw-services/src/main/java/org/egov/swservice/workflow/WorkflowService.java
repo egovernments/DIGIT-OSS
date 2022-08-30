@@ -1,14 +1,18 @@
 package org.egov.swservice.workflow;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.egov.common.contract.request.PlainAccessRequest;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.User;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.repository.ServiceRequestRepository;
+import org.egov.swservice.util.EncryptionDecryptionUtil;
 import org.egov.swservice.web.models.RequestInfoWrapper;
 import org.egov.swservice.web.models.SewerageConnection;
 import org.egov.swservice.web.models.workflow.BusinessService;
@@ -21,6 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
+
+import static org.egov.swservice.util.SWConstants.WNS_OWNER_ENCRYPTION_MODEL;
 
 @Service
 public class WorkflowService {
@@ -30,6 +38,9 @@ public class WorkflowService {
 	private ServiceRequestRepository serviceRequestRepository;
 
 	private ObjectMapper mapper;
+
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
 
 	@Autowired
 	public WorkflowService(SWConfiguration config, ServiceRequestRepository serviceRequestRepository,
@@ -127,13 +138,49 @@ public class WorkflowService {
 			StringBuilder url = getProcessInstanceSearchURL(tenantId, applicationNo, businessServiceValue);
 			RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 			Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+
+			PlainAccessRequest apiPlainAccessRequest = requestInfo.getPlainAccessRequest();
+			/* Creating a PlainAccessRequest object to get unmasked mobileNumber for Assignee */
+			List<String> plainRequestFieldsList = new ArrayList<String>() {{
+				add("mobileNumber");
+			}};
+
 			ProcessInstanceResponse response;
 			try {
 				response = mapper.convertValue(result, ProcessInstanceResponse.class);
+				if (!CollectionUtils.isEmpty(response.getProcessInstances())) {
+					if (response.getProcessInstances().get(0).getAssignes() != null) {
+						PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(response.
+										getProcessInstances().get(0).getAssignes().get(0).getUuid())
+								.plainRequestFields(plainRequestFieldsList).build();
+
+						requestInfo.setPlainAccessRequest(plainAccessRequest);
+						requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+					}
+				}
+				Object resultNew = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+				response = mapper.convertValue(resultNew, ProcessInstanceResponse.class);
+				//Re-setting the original PlainAccessRequest object that came from api request
+				requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 			} catch (IllegalArgumentException e) {
 				throw new CustomException("PARSING_ERROR", "Failed to parse response of process instance");
 			}
-			return response.getProcessInstances();
+
+			if (!ObjectUtils.isEmpty(response.getProcessInstances())) {
+				Optional<ProcessInstance> processInstance = response.getProcessInstances().stream().findFirst();
+				if(processInstance.get().getAssignes()!=null) {
+					/* encrypt here */
+					processInstance.get().setAssignes((List<org.egov.common.contract.request.User>) encryptionDecryptionUtil.encryptObject(processInstance.get().getAssignes(), WNS_OWNER_ENCRYPTION_MODEL, User.class));
+
+					/* decrypt here */
+					processInstance.get().setAssignes(encryptionDecryptionUtil.decryptObject(processInstance.get().getAssignes(), WNS_OWNER_ENCRYPTION_MODEL, User.class, requestInfo));
+				}
+				List<ProcessInstance> processInstanceList = new ArrayList<>();
+				processInstanceList.add(processInstance.get());
+				return processInstanceList;
+			}
+			return null;
+			//return response.getProcessInstances();
 		}
 		/**
 		 * 
@@ -147,8 +194,10 @@ public class WorkflowService {
 			url.append(config.getWfProcessSearchPath());
 			url.append("?tenantId=");
 			url.append(tenantId);
-			url.append("&businessServices=");
-			url.append(businessServiceValue);
+			if(businessServiceValue!=null) {
+				url.append("&businessServices=");
+				url.append(businessServiceValue);
+			}
 			url.append("&businessIds=");
 			url.append(applicationNo);
 			return url;

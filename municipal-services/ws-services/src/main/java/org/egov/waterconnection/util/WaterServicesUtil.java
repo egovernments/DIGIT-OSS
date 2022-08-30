@@ -67,7 +67,8 @@ public class WaterServicesUtil {
 	private String locality = "locality=";
 	private String URL = "url";
 	private String localityCode = "locality";
-
+	private String doorNo = "doorNo=";
+	private String name = "name=";
 	
 
 	/**
@@ -136,6 +137,8 @@ public class WaterServicesUtil {
 	public List<Property> propertySearchOnCriteria(SearchCriteria waterConnectionSearchCriteria,
 			RequestInfo requestInfo) {
 		if (StringUtils.isEmpty(waterConnectionSearchCriteria.getMobileNumber())
+				&& StringUtils.isEmpty(waterConnectionSearchCriteria.getDoorNo())
+				&& StringUtils.isEmpty(waterConnectionSearchCriteria.getOwnerName())
 				&& StringUtils.isEmpty(waterConnectionSearchCriteria.getPropertyId())) {
 			return Collections.emptyList();
 		}
@@ -145,6 +148,12 @@ public class WaterServicesUtil {
 		}
 		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getMobileNumber())) {
 			propertyCriteria.setMobileNumber(waterConnectionSearchCriteria.getMobileNumber());
+		}
+		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getDoorNo())) {
+			propertyCriteria.setDoorNo(waterConnectionSearchCriteria.getDoorNo());
+		}
+		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getOwnerName())) {
+			propertyCriteria.setName(waterConnectionSearchCriteria.getOwnerName());
 		}
 		if (!StringUtils.isEmpty(waterConnectionSearchCriteria.getPropertyId())) {
 			HashSet<String> propertyIds = new HashSet<>();
@@ -230,6 +239,16 @@ public class WaterServicesUtil {
 			if (isanyparametermatch)url.append("&");
 			isanyparametermatch = true;
 			url.append(mobileNumber).append(criteria.getMobileNumber());
+		}
+		if (!StringUtils.isEmpty(criteria.getDoorNo())) {
+			if (isanyparametermatch)url.append("&");
+			isanyparametermatch = true;
+			url.append(doorNo).append(criteria.getDoorNo());
+		}
+		if (!StringUtils.isEmpty(criteria.getName())) {
+			if (isanyparametermatch)url.append("&");
+			isanyparametermatch = true;
+			url.append(name).append(criteria.getName());
 		}
 		if (!StringUtils.isEmpty(criteria.getLocality())) {
 			if (isanyparametermatch)url.append("&");

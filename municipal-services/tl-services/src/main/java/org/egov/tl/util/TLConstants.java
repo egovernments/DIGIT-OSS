@@ -138,6 +138,19 @@ public class TLConstants {
 
     public static final String NOTIFICATION_TL_REMINDER_EMAIL = "tl.en.reminder.email";
 
+    //Property tagged
+    public static final String NOTIFICATION_PROPERTY_TAGGED = "tl.en.counter.property.owner.tagged";
+
+    public static final String NOTIFICATION_PROPERTY_TAGGED_EMAIL = "tl.en.counter.property.owner.tagged.email";
+
+    public static final String NOTIFICATION_PROPERTY_CREATED = "tl.en.counter.property.owner.created";
+
+    public static final String NOTIFICATION_PROPERTY_CREATED_EMAIL = "tl.en.counter.property.owner.created.email";
+
+    public static final String PROPERTY_ID = "propertyId";
+
+    public static final String NOTIF_PROPERTY_OWNER_NAME_KEY = "{PROPERTY_OWNER_NAME}";
+
     public static final List<String> NOTIFICATION_CODES = Collections.unmodifiableList(Arrays.asList(
             NOTIFICATION_INITIATED_EMAIL,  RENEWAL_NOTIFICATION_INITIATED,RENEWAL_NOTIFICATION_INITIATED_EMAIL, RENEWAL_NOTIFICATION_APPLIED, RENEWAL_NOTIFICATION_FIELD_INSPECTION, RENEWAL_NOTIFICATION_PENDINGAPPROVAL,
             RENEWAL_NOTIFICATION_REJECTED,RENEWAL_NOTIFICATION_APPROVED,NOTIFICATION_INITIATED,NOTIFICATION_APPLIED,NOTIFICATION_FIELD_INSPECTION,
@@ -150,7 +163,8 @@ public class TLConstants {
             NOTIFICATION_RENEWAL_PAYMENT_OWNER_EMAIL,NOTIFICATION_PAYMENT_PAYER_EMAIL,NOTIFICATION_PAYMENT_OWNER_EMAIL,NOTIFICATION_FIELD_INSPECTION_EMAIL,
             NOTIFICATION_APPLIED_EMAIL,RENEWAL_NOTIFICATION_APPROVED_EMAIL,RENEWAL_NOTIFICATION_APPLIED_EMAIL,RENEWAL_NOTIFICATION_FIELD_INSPECTION_EMAIL,
             RENEWAL_NOTIFICATION_PENDINGAPPROVAL_EMAIL,RENEWAL_NOTIFICATION_REJECTED_EMAIL,NOTIFICATION_PENDING_APPROVAL,NOTIFICATION_PENDING_APPROVAL_EMAIL,
-            NOTIFICATION_EXPIRED,NOTIFICATION_EXPIRED_EMAIL,NOTIFICATION_MANUAL_EXPIRED,NOTIFICATION_MANUAL_EXPIRED_EMAIL));
+            NOTIFICATION_EXPIRED,NOTIFICATION_EXPIRED_EMAIL,NOTIFICATION_MANUAL_EXPIRED,NOTIFICATION_MANUAL_EXPIRED_EMAIL,NOTIFICATION_PROPERTY_TAGGED,NOTIFICATION_PROPERTY_TAGGED_EMAIL,NOTIFICATION_PROPERTY_CREATED,NOTIFICATION_PROPERTY_CREATED_EMAIL));
+
 
 
     public static final String DEFAULT_OBJECT_MODIFIED_MSG = "Dear {1},Your Trade License with application number {APPLICATION_NUMBER} was modified.";
@@ -387,6 +401,23 @@ public class TLConstants {
 
     public static final String ACTION_STATUS_MANUAL_EXPIRED = "MANUALEXPIRE_MANUALEXPIRED";
 
+
+    //property related
+    public static final String SALUTATION_MR = "Mr. ";
+
+    public static final String SALUTATION_MS = "Ms. ";
+
+    public static final String GENDER_MALE = "Male";
+
+    public static final String NOTIF_TRADE_PROPERTY_ID_KEY = "{PROPERTY_ID}";
+
+    public static final String NOTIF_TENANT_KEY = "XYZ";
+
+    public static final String PROPERTY_JSON_KEY = "Properties";
+    
+    public static final String ISSUED_COUNT = "issuedCount";
+    
+    public static final String RENEWED_COUNT = "renewedCount";
 
     public TLConstants() {}
 

@@ -80,7 +80,7 @@ curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/b
             },
             {
               "action": "SEND_BACK",
-              "nextState": "INITIATED",
+              "nextState": "PENDING_FOR_COUNTER_EMPLOYEE_ACTION",
               "roles": [
                 "WS_APPROVER"
               ]
@@ -104,6 +104,24 @@ curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/b
           "docUploadRequired": false,
           "isStartState": false,
           "isTerminateState": true
+        },
+        {
+        "sla": null,
+        "state": "PENDING_FOR_COUNTER_EMPLOYEE_ACTION",
+        "applicationStatus": "PENDING_FOR_COUNTER_EMPLOYEE_ACTION",
+        "isStateUpdatable": true,
+        "docUploadRequired": false,
+        "isStartState": false,
+        "isTerminateState": false,
+        "actions": [
+             {
+              "action": "SUBMIT_APPLICATION",
+              "nextState": "PENDING_FOR_APPROVAL",
+              "roles": [
+                  "WS_CEMP"
+                ]
+             }
+           ]
         }
       ]
     }
