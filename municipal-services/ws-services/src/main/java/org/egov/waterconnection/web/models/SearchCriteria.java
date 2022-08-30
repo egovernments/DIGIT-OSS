@@ -28,9 +28,9 @@ public class SearchCriteria {
 
 	@JsonProperty("tenantId")
 	private String tenantId;
-	
+
 	private Set<String> propertyIds;
-	
+
 	private Set<String> userIds;
 
 	@JsonProperty("status")
@@ -41,7 +41,7 @@ public class SearchCriteria {
 
 	@JsonProperty("applicationNumber")
 	private Set<String> applicationNumber;
-	
+
 	@JsonProperty("applicationStatus")
 	private Set<String> applicationStatus;
 
@@ -53,7 +53,7 @@ public class SearchCriteria {
 
 	@JsonProperty("mobileNumber")
 	private String mobileNumber;
-	
+
 	@JsonProperty("propertyId")
 	private String propertyId;
 
@@ -71,7 +71,7 @@ public class SearchCriteria {
 
 	@JsonProperty("limit")
 	private Integer limit;
-	
+
 	@JsonProperty("applicationType")
 	private String applicationType;
 
@@ -86,24 +86,16 @@ public class SearchCriteria {
 
 	@JsonIgnore
 	private List<String> ownerIds;
-	
-	@JsonProperty("sortOrder")
-	private SortOrder sortOrder;
-
-	public enum SortOrder {
-	    ASC,
-	    DESC
-	}
 
 	@JsonProperty("doorNo")
 	private String doorNo;
-	
+
 	@JsonProperty("ownerName")
 	private String ownerName;
-	
+
 	@JsonProperty("assignee")
 	private String assignee;
-	
+
 	@JsonProperty("sortOrder")
 	private SortOrder sortOrder;
 
@@ -114,10 +106,10 @@ public class SearchCriteria {
 	private Boolean isFilestoreIdRequire = false;
 
 	public enum SortOrder {
-	    ASC,
-	    DESC
+		ASC,
+		DESC
 	}
-	
+
 	public boolean isEmpty() {
 		return (StringUtils.isEmpty(this.tenantId) && StringUtils.isEmpty(this.mobileNumber)
 				&& StringUtils.isEmpty(this.propertyId) && CollectionUtils.isEmpty(this.ids)
