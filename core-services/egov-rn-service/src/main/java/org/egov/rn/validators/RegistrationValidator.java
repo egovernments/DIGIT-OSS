@@ -39,26 +39,26 @@ public class RegistrationValidator {
     public void validate(RegistrationRequest registrationRequest) {
         try {
             if (registrationRequest == null || registrationRequest.getRegistration() == null) {
-                throw new ValidationException(ExceptionUtils.getErrorMessage("null payload"));
+                throw new ValidationException("null payload");
             }
             if (registrationRequest.getRequestInfo() == null) {
-                throw new ValidationException(ExceptionUtils.getErrorMessage("requestInfo cannot be null"));
+                throw new ValidationException("requestInfo cannot be null");
             }
             if (registrationRequest.getRequestInfo().getUserInfo().getUuid() == null) {
-                throw new ValidationException(ExceptionUtils.getErrorMessage("user-uuid cannot be null"));
+                throw new ValidationException("user-uuid cannot be null");
             }
             if (registrationRequest.getRegistration().getTenantId() == null) {
-                throw new ValidationException(ExceptionUtils.getErrorMessage("tenantId cannot be null"));
+                throw new ValidationException("tenantId cannot be null");
             }
             Registration registration = registrationRequest.getRegistration();
             if (registration instanceof HouseholdRegistration) {
                 HouseholdRegistration householdRegistration = (HouseholdRegistration) registration;
                 if (householdRegistration.getName() == null) {
-                    throw new ValidationException(ExceptionUtils.getErrorMessage("name cannot be null"));
+                    throw new ValidationException("name cannot be null");
                 }
                 if (Boolean.FALSE.equals(householdRegistration.getIsHead())
                         && householdRegistration.getHouseholdId() == null) {
-                    throw new ValidationException(ExceptionUtils.getErrorMessage("a member of a household needs to have a householdId"));
+                    throw new ValidationException("a member of a household needs to have a householdId");
                 }
             }
             Object response = serviceRequestRepository.fetchResult(new StringBuilder(mdmsHost + mdmsUrl),

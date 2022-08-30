@@ -78,13 +78,13 @@ class RegistrationApiControllerTest {
                 .build();
 
         when(registrationService.register(any(RegistrationRequest.class)))
-                .thenThrow(new EnrichmentException(ExceptionUtils.getErrorMessage("Error in enrichment")));
+                .thenThrow(new EnrichmentException("Error in enrichment"));
 
         mockMvc.perform(post("/egov-rn-service/registration/v1/_create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registrationRequest)))
                 .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error")
+                .andExpect(jsonPath("$.Errors[0].message")
                         .value("Error in enrichment"));
     }
 
@@ -98,13 +98,13 @@ class RegistrationApiControllerTest {
                 .build();
 
         when(registrationService.register(any(RegistrationRequest.class)))
-                .thenThrow(new WorkflowException(ExceptionUtils.getErrorMessage("Error in workflow")));
+                .thenThrow(new WorkflowException("Error in workflow"));
 
         mockMvc.perform(post("/egov-rn-service/registration/v1/_create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registrationRequest)))
                 .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error")
+                .andExpect(jsonPath("$.Errors[0].message")
                         .value("Error in workflow"));
     }
 
@@ -118,13 +118,13 @@ class RegistrationApiControllerTest {
                 .build();
 
         when(registrationService.register(any(RegistrationRequest.class)))
-                .thenThrow(new ValidationException(ExceptionUtils.getErrorMessage("Error in validation")));
+                .thenThrow(new ValidationException("Error in validation"));
 
         mockMvc.perform(post("/egov-rn-service/registration/v1/_create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registrationRequest)))
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.error")
+                .andExpect(jsonPath("$.Errors[0].message")
                         .value("Error in validation"));
     }
 
@@ -138,13 +138,13 @@ class RegistrationApiControllerTest {
                 .build();
 
         when(registrationService.register(any(RegistrationRequest.class)))
-                .thenThrow(new ProducerException(ExceptionUtils.getErrorMessage("Error in producing to kafka")));
+                .thenThrow(new ProducerException("Error in producing to kafka"));
 
         mockMvc.perform(post("/egov-rn-service/registration/v1/_create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registrationRequest)))
                 .andExpect(status().is5xxServerError())
-                .andExpect(jsonPath("$.error")
+                .andExpect(jsonPath("$.Errors[0].message")
                         .value("Error in producing to kafka"));
     }
 }

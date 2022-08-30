@@ -9,7 +9,6 @@ import org.egov.rn.service.models.ProcessInstanceResponse;
 import org.egov.rn.service.models.State;
 import org.egov.rn.web.models.RegistrationRequest;
 import org.egov.rn.web.models.User;
-import org.egov.rn.web.utils.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -44,7 +43,7 @@ public class WorkflowService {
                     Collections.singletonList(processInstance));
             return callWorkflow(processInstanceRequest);
         } catch (Exception ex) {
-            throw new WorkflowException(ExceptionUtils.getErrorMessage(ex.getMessage()), ex);
+            throw new WorkflowException(ex.getMessage(), ex);
         }
     }
 

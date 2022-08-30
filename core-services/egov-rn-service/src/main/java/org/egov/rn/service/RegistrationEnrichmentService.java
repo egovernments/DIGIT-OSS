@@ -11,7 +11,6 @@ import org.egov.rn.web.models.AuditDetails;
 import org.egov.rn.web.models.HouseholdRegistration;
 import org.egov.rn.web.models.Registration;
 import org.egov.rn.web.models.RegistrationRequest;
-import org.egov.rn.web.utils.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -60,7 +59,7 @@ public class RegistrationEnrichmentService {
                 ((HouseholdRegistration) registrationRequest.getRegistration()).setMd5Hash(generateMd5Hash(registrationRequest.getRegistration()));
             }
         } catch (Exception ex) {
-            throw new EnrichmentException(ExceptionUtils.getErrorMessage(ex.getMessage()), ex);
+            throw new EnrichmentException(ex.getMessage(), ex);
         }
     }
 
