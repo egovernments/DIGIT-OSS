@@ -63,7 +63,7 @@ public class WorkflowService {
         assignes.add(user);
         return ProcessInstance.builder()
                 .businessId(registrationRequest.getRegistration().getRegistrationId())
-                .tenantId(registrationRequest.getTenantId())
+                .tenantId(registrationRequest.getRegistration().getTenantId())
                 .action("SUBMIT")
                 .moduleName("rn-services")
                 .businessService("RNS")

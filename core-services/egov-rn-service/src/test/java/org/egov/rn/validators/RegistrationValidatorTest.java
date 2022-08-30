@@ -2,6 +2,7 @@ package org.egov.rn.validators;
 
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
+import org.egov.rn.exception.ValidationException;
 import org.egov.rn.helper.RegistrationRequestTestBuilder;
 import org.egov.rn.repository.ServiceRequestRepository;
 import org.egov.rn.web.models.HouseholdRegistration;
@@ -14,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +70,7 @@ class RegistrationValidatorTest {
     @Test
     @DisplayName("should throw InvalidParameterException if registrationReuqest is null")
     void shouldThrowInvalidParameterExceptionIfRegistrationRequestIsNull() {
-        assertThrows(InvalidParameterException.class, () -> registrationValidator.validate(null));
+        assertThrows(ValidationException.class, () -> registrationValidator.validate(null));
     }
 
     @Test
@@ -80,7 +80,7 @@ class RegistrationValidatorTest {
                 .requestInfo(RequestInfo.builder().build())
                 .registration(null)
                 .build();
-        assertThrows(InvalidParameterException.class, () -> registrationValidator.validate(registrationRequest));
+        assertThrows(ValidationException.class, () -> registrationValidator.validate(registrationRequest));
     }
 
     @Test
@@ -90,7 +90,7 @@ class RegistrationValidatorTest {
                 .requestInfo(RequestInfo.builder().userInfo(User.builder().uuid("user-uuid").build()).build())
                 .registration(HouseholdRegistration.builder().name(null).build())
                 .build();
-        assertThrows(InvalidParameterException.class, () -> registrationValidator.validate(registrationRequest));
+        assertThrows(ValidationException.class, () -> registrationValidator.validate(registrationRequest));
     }
 
     @Test
@@ -101,7 +101,7 @@ class RegistrationValidatorTest {
                 .withRequestInfo()
                 .withNullTenantId()
                 .build();
-        assertThrows(InvalidParameterException.class, () -> registrationValidator.validate(registrationRequest));
+        assertThrows(ValidationException.class, () -> registrationValidator.validate(registrationRequest));
     }
 
     @Test
@@ -112,7 +112,7 @@ class RegistrationValidatorTest {
                 .withRequestInfo()
                 .withMemberWithoutHouseholdId()
                 .build();
-        assertThrows(InvalidParameterException.class, () -> registrationValidator.validate(registrationRequest));
+        assertThrows(ValidationException.class, () -> registrationValidator.validate(registrationRequest));
     }
 
     @Test
@@ -122,7 +122,7 @@ class RegistrationValidatorTest {
                 .builder()
                 .withMemberWithoutHouseholdId()
                 .build();
-        assertThrows(InvalidParameterException.class, () -> registrationValidator.validate(registrationRequest));
+        assertThrows(ValidationException.class, () -> registrationValidator.validate(registrationRequest));
     }
 
     @Test
@@ -133,7 +133,7 @@ class RegistrationValidatorTest {
                 .withRequestInfoAndNullUuid()
                 .withMemberWithoutHouseholdId()
                 .build();
-        assertThrows(InvalidParameterException.class, () -> registrationValidator.validate(registrationRequest));
+        assertThrows(ValidationException.class, () -> registrationValidator.validate(registrationRequest));
     }
 
     @Test

@@ -22,9 +22,6 @@ public class RegistrationRequest   {
         @JsonProperty("requestInfo")
         private RequestInfo requestInfo = null;
 
-        @JsonProperty("tenantId")
-        private String tenantId = null;
-
         @JsonProperty("Registration")
         private Registration registration = null;
 

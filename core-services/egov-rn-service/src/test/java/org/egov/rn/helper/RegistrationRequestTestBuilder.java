@@ -20,8 +20,9 @@ public class RegistrationRequestTestBuilder {
 
     public RegistrationRequestTestBuilder withHeadOfHousehold() {
         builder
-                .tenantId("mq")
                 .registration(HouseholdRegistration.builder()
+                        .tenantId("mq")
+                        .registrationType("Household")
                         .name("John Doe")
                         .gender(HouseholdRegistration.GenderEnum.MALE)
                         .dateOfRegistration(LocalDate.of(2022, 8, 22))
@@ -48,8 +49,9 @@ public class RegistrationRequestTestBuilder {
 
     public RegistrationRequestTestBuilder withMemberOfHousehold() {
         builder
-                .tenantId("mq")
                 .registration(HouseholdRegistration.builder()
+                        .registrationType("Household")
+                        .tenantId("mq")
                         .name("John Doe")
                         .gender(HouseholdRegistration.GenderEnum.MALE)
                         .dateOfRegistration(LocalDate.of(2022, 8, 22))
@@ -61,8 +63,8 @@ public class RegistrationRequestTestBuilder {
 
     public RegistrationRequestTestBuilder withNullTenantId() {
         builder
-                .tenantId(null)
                 .registration(HouseholdRegistration.builder()
+                        .registrationType("Household")
                         .name("John Doe")
                         .gender(HouseholdRegistration.GenderEnum.MALE)
                         .dateOfRegistration(LocalDate.of(2022, 8, 22))
@@ -74,8 +76,9 @@ public class RegistrationRequestTestBuilder {
 
     public RegistrationRequestTestBuilder withMemberWithoutHouseholdId() {
         builder
-                .tenantId(null)
                 .registration(HouseholdRegistration.builder()
+                        .registrationType("Household")
+                        .tenantId("mq")
                         .name("John Doe")
                         .gender(HouseholdRegistration.GenderEnum.MALE)
                         .dateOfRegistration(LocalDate.of(2022, 8, 22))

@@ -30,6 +30,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @SuperBuilder
 public class Registration   {
+        @JsonProperty("tenantId")
+        private String tenantId = null;
+
         @JsonProperty("registrationId")
         private String registrationId = null;
 

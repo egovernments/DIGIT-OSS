@@ -47,7 +47,7 @@ public class RegistrationValidator {
             if (registrationRequest.getRequestInfo().getUserInfo().getUuid() == null) {
                 throw new ValidationException(ExceptionUtils.getErrorMessage("user-uuid cannot be null"));
             }
-            if (registrationRequest.getTenantId() == null) {
+            if (registrationRequest.getRegistration().getTenantId() == null) {
                 throw new ValidationException(ExceptionUtils.getErrorMessage("tenantId cannot be null"));
             }
             Registration registration = registrationRequest.getRegistration();
@@ -63,7 +63,7 @@ public class RegistrationValidator {
             }
             Object response = serviceRequestRepository.fetchResult(new StringBuilder(mdmsHost + mdmsUrl),
                     getMdmsRequestForValidationList(registrationRequest.getRequestInfo(),
-                            registrationRequest.getTenantId()));
+                            registrationRequest.getRegistration().getTenantId()));
             log.info(JsonPath.read(response, "$.MdmsRes.egov-rn-service.validations.[0]"));
         } catch (Exception ex) {
             throw new ValidationException(ex.getMessage(), ex);

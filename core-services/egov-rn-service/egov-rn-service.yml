@@ -44,6 +44,8 @@ definitions:
     type: object
     discriminator: registrationType
     properties:
+      tenantId:
+        type: string
       registrationId:
         type: string
       dateOfRegistration:
@@ -55,6 +57,7 @@ definitions:
         $ref: >- 
           https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/AuditDetails
     required:
+      - tenantId
       - dateOfRegistration
       - registrationType
   HouseholdRegistration:
@@ -170,12 +173,9 @@ definitions:
       requestInfo:
         $ref: >-
           https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/RequestInfo
-      tenantId:
-        type: string
       Registration:
         $ref: '#/definitions/Registration'
     required:
-      - tenantId
       - Registration
   RequestInfoWrapper:
     description: >-

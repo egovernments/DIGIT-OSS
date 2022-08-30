@@ -48,7 +48,7 @@ public class RegistrationEnrichmentService {
                     .build();
             registrationRequest.getRegistration().setAuditDetails(auditDetails);
             Object response = serviceRequestRepository.fetchResult(new StringBuilder(idGenHost + idGenUrl),
-                    getIdGenRequest(registrationRequest.getTenantId()));
+                    getIdGenRequest(registrationRequest.getRegistration().getTenantId()));
             ObjectMapper objectMapper = new ObjectMapper();
             IdResponse registrationId = objectMapper.readValue((String) JsonPath.read(response,
                     "$.idResponses.[0]"), IdResponse.class);
