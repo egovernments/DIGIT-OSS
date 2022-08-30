@@ -1,5 +1,7 @@
 package org.egov.rn.kafka;
 
+import org.egov.rn.exception.ProducerException;
+import org.egov.rn.web.utils.ExceptionUtils;
 import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,11 @@ public class Producer {
 
 
     public void send(String topic, Object payload) {
-        kafkaTemplate.send(topic, payload);
+        try {
+            kafkaTemplate.send(topic, payload);
+        } catch (Exception ex) {
+            throw new ProducerException(ExceptionUtils.getErrorMessage("Topic: " + topic + " " +
+                    ex.getMessage()), ex);
+        }
     }
 }

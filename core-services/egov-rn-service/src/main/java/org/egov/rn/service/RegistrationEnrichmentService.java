@@ -2,6 +2,7 @@ package org.egov.rn.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import org.egov.rn.exception.EnrichmentException;
 import org.egov.rn.repository.ServiceRequestRepository;
 import org.egov.rn.service.models.IdGenerationRequest;
 import org.egov.rn.service.models.IdRequest;
@@ -10,6 +11,7 @@ import org.egov.rn.web.models.AuditDetails;
 import org.egov.rn.web.models.HouseholdRegistration;
 import org.egov.rn.web.models.Registration;
 import org.egov.rn.web.models.RegistrationRequest;
+import org.egov.rn.web.utils.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -58,7 +60,7 @@ public class RegistrationEnrichmentService {
                 ((HouseholdRegistration) registrationRequest.getRegistration()).setMd5Hash(generateMd5Hash(registrationRequest.getRegistration()));
             }
         } catch (Exception ex) {
-            throw new RuntimeException(ex.getMessage());
+            throw new EnrichmentException(ExceptionUtils.getErrorMessage(ex.getMessage()), ex);
         }
     }
 

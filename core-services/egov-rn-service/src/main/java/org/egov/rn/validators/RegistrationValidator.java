@@ -7,10 +7,12 @@ import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
+import org.egov.rn.exception.ValidationException;
 import org.egov.rn.repository.ServiceRequestRepository;
 import org.egov.rn.web.models.HouseholdRegistration;
 import org.egov.rn.web.models.Registration;
 import org.egov.rn.web.models.RegistrationRequest;
+import org.egov.rn.web.utils.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -35,33 +37,37 @@ public class RegistrationValidator {
     }
 
     public void validate(RegistrationRequest registrationRequest) {
-        if (registrationRequest == null || registrationRequest.getRegistration() == null) {
-            throw new InvalidParameterException("null payload");
-        }
-        if (registrationRequest.getRequestInfo() == null) {
-            throw new InvalidParameterException("requestInfo cannot be null");
-        }
-        if (registrationRequest.getRequestInfo().getUserInfo().getUuid() == null) {
-            throw new InvalidParameterException("user-uuid cannot be null");
-        }
-        if (registrationRequest.getTenantId() == null) {
-            throw new InvalidParameterException("tenantId cannot be null");
-        }
-        Registration registration = registrationRequest.getRegistration();
-        if (registration instanceof HouseholdRegistration) {
-            HouseholdRegistration householdRegistration = (HouseholdRegistration) registration;
-            if (householdRegistration.getName() == null) {
-                throw new InvalidParameterException("name cannot be null");
+        try {
+            if (registrationRequest == null || registrationRequest.getRegistration() == null) {
+                throw new ValidationException(ExceptionUtils.getErrorMessage("null payload"));
             }
-            if (Boolean.FALSE.equals(householdRegistration.getIsHead())
-                    && householdRegistration.getHouseholdId() == null) {
-                throw new InvalidParameterException("a member of a household needs to have a householdId");
+            if (registrationRequest.getRequestInfo() == null) {
+                throw new ValidationException(ExceptionUtils.getErrorMessage("requestInfo cannot be null"));
             }
+            if (registrationRequest.getRequestInfo().getUserInfo().getUuid() == null) {
+                throw new ValidationException(ExceptionUtils.getErrorMessage("user-uuid cannot be null"));
+            }
+            if (registrationRequest.getTenantId() == null) {
+                throw new ValidationException(ExceptionUtils.getErrorMessage("tenantId cannot be null"));
+            }
+            Registration registration = registrationRequest.getRegistration();
+            if (registration instanceof HouseholdRegistration) {
+                HouseholdRegistration householdRegistration = (HouseholdRegistration) registration;
+                if (householdRegistration.getName() == null) {
+                    throw new ValidationException(ExceptionUtils.getErrorMessage("name cannot be null"));
+                }
+                if (Boolean.FALSE.equals(householdRegistration.getIsHead())
+                        && householdRegistration.getHouseholdId() == null) {
+                    throw new ValidationException(ExceptionUtils.getErrorMessage("a member of a household needs to have a householdId"));
+                }
+            }
+            Object response = serviceRequestRepository.fetchResult(new StringBuilder(mdmsHost + mdmsUrl),
+                    getMdmsRequestForValidationList(registrationRequest.getRequestInfo(),
+                            registrationRequest.getTenantId()));
+            log.info(JsonPath.read(response, "$.MdmsRes.egov-rn-service.validations.[0]"));
+        } catch (Exception ex) {
+            throw new ValidationException(ex.getMessage(), ex);
         }
-        Object response = serviceRequestRepository.fetchResult(new StringBuilder(mdmsHost + mdmsUrl),
-                getMdmsRequestForValidationList(registrationRequest.getRequestInfo(),
-                        registrationRequest.getTenantId()));
-        log.info(JsonPath.read(response, "$.MdmsRes.egov-rn-service.validations.[0]"));
     }
 
     private MdmsCriteriaReq getMdmsRequestForValidationList(RequestInfo requestInfo, String tenantId) {

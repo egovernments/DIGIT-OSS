@@ -1,6 +1,7 @@
 package org.egov.rn.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.egov.rn.exception.WorkflowException;
 import org.egov.rn.repository.ServiceRequestRepository;
 import org.egov.rn.service.models.ProcessInstance;
 import org.egov.rn.service.models.ProcessInstanceRequest;
@@ -8,6 +9,7 @@ import org.egov.rn.service.models.ProcessInstanceResponse;
 import org.egov.rn.service.models.State;
 import org.egov.rn.web.models.RegistrationRequest;
 import org.egov.rn.web.models.User;
+import org.egov.rn.web.utils.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,10 +38,14 @@ public class WorkflowService {
 
 
     public State updateWorkflowStatus(RegistrationRequest registrationRequest) {
-        ProcessInstance processInstance = getProcessInstanceForRegistration(registrationRequest);
-        ProcessInstanceRequest processInstanceRequest = new ProcessInstanceRequest(registrationRequest.getRequestInfo(),
-                Collections.singletonList(processInstance));
-        return callWorkflow(processInstanceRequest);
+        try {
+            ProcessInstance processInstance = getProcessInstanceForRegistration(registrationRequest);
+            ProcessInstanceRequest processInstanceRequest = new ProcessInstanceRequest(registrationRequest.getRequestInfo(),
+                    Collections.singletonList(processInstance));
+            return callWorkflow(processInstanceRequest);
+        } catch (Exception ex) {
+            throw new WorkflowException(ExceptionUtils.getErrorMessage(ex.getMessage()), ex);
+        }
     }
 
     private State callWorkflow(ProcessInstanceRequest processInstanceRequest) {
