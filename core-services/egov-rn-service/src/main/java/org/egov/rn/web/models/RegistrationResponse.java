@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class RegistrationResponse   {
         @JsonProperty("responseInfo")
         private ResponseInfo responseInfo = null;

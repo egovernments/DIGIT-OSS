@@ -5,14 +5,10 @@ import io.swagger.annotations.ApiModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.*;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.Builder;
 
 /**
  * This is acting ID token of the authenticated user on the server. Any value provided by the clients will be ignored and actual user based on authtoken will be used on the server.
@@ -26,6 +22,7 @@ import lombok.Builder;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class UserInfo   {
         @JsonProperty("tenantId")
         private String tenantId = null;

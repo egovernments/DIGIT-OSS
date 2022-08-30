@@ -3,6 +3,7 @@ package org.egov.rn.service;
 import org.egov.rn.helper.RegistrationRequestTestBuilder;
 import org.egov.rn.kafka.Producer;
 import org.egov.rn.repository.ServiceRequestRepository;
+import org.egov.rn.service.models.State;
 import org.egov.rn.validators.RegistrationValidator;
 import org.egov.rn.web.models.HouseholdRegistrationDetails;
 import org.egov.rn.web.models.RegistrationRequest;
@@ -50,6 +51,10 @@ class RegistrationServiceTest {
                 .withRequestInfo()
                 .withHeadOfHousehold()
                 .build();
+        when(workflowService.updateWorkflowStatus(any(RegistrationRequest.class)))
+                .thenReturn(State.builder()
+                        .state("SUBMITTED")
+                        .build());
 
         HouseholdRegistrationDetails registrationDetails = (HouseholdRegistrationDetails)
                 registrationService.register(registrationRequest);

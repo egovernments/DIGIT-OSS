@@ -22,6 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class ErrorRes   {
         @JsonProperty("org.egov.rn.web.models.web.ResponseInfo")
         private ResponseInfo responseInfo = null;

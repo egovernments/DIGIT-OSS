@@ -1,6 +1,7 @@
 package org.egov.rn.web.exceptionhandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.rn.exception.EnrichmentException;
 import org.egov.rn.exception.ProducerException;
 import org.egov.rn.exception.ValidationException;
@@ -23,6 +24,7 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import java.util.Collections;
 
 @ControllerAdvice
+@Slf4j
 public class RestResponseEntityExceptionHandler
         extends ResponseEntityExceptionHandler {
 
@@ -45,6 +47,7 @@ public class RestResponseEntityExceptionHandler
                         .message(ex.getMessage()).build()))
                 .responseInfo(ModelMapper.map(registrationRequest.getRequestInfo(), false))
                 .build();
+        log.error("Error occurred", ex);
         return handleExceptionInternal(ex, errorRes,
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
@@ -60,6 +63,7 @@ public class RestResponseEntityExceptionHandler
                         .message(ex.getMessage()).build()))
                 .responseInfo(ModelMapper.map(registrationRequest.getRequestInfo(), false))
                 .build();
+        log.error("Error occurred", ex);
         return handleExceptionInternal(ex, errorRes,
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }

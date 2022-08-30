@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class AuditDetails   {
         @JsonProperty("createdBy")
         private String createdBy = null;

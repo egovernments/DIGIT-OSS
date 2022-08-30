@@ -15,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class User   {
         @JsonProperty("tenantId")
         private String tenantId = null;

@@ -5,14 +5,10 @@ import io.swagger.annotations.ApiModel;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.*;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.Builder;
 
 /**
  * org.egov.rn.web.models.web.Error object will be returned as a part of reponse body in conjunction with org.egov.rn.web.models.web.ResponseInfo as part of ErrorResponse whenever the request processing status in the org.egov.rn.web.models.web.ResponseInfo is FAILED. HTTP return in this scenario will usually be HTTP 400.
@@ -26,6 +22,7 @@ import lombok.Builder;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class Error   {
         @JsonProperty("code")
         private String code = null;
