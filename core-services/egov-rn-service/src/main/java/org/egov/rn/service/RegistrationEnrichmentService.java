@@ -1,6 +1,5 @@
 package org.egov.rn.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.egov.rn.repository.ServiceRequestRepository;
