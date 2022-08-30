@@ -278,8 +278,33 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
           )
         );
       }
+      const getIndexofActive = (item) => {
 
+        if(item && item.status=="INWORKFLOW")
+        {
+          for(let i=0;i<item.owners.length;i++)
+          {
+            if(item.owners[i].status=='INACTIVE')
+            {
+            return i;
+            }
+            else{
+              return i;
+            }
+          }
+        }
+        else if(item && item.status==="ACTIVE")
+        {
+          for(let i=0;i<item.owners.length;i++)
+          {          
+            if(item.owners[i].status==="ACTIVE")
+            {
+            return i;
+            }
+          }
+        }
       
+      }
       // const response = searchSampleResponse();
       const billResponse = await fetchBill(dispatch, response, searchScreenObject.tenantId, "PT");
       const finalResponse = getPropertyWithBillAmount(response, billResponse);
@@ -288,7 +313,7 @@ let tenantUniqueId = filterTenant && filterTenant[0] && filterTenant[0].city && 
       let propertyData = finalResponse.Properties.map(item => ({
         ["PT_MUTATION_PID"]:
           item.propertyId || "-",
-        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[0].name || "-",
+        ["PT_COMMON_TABLE_COL_OWNER_NAME"]: item.owners[getIndexofActive(item)].name || "-",
         ["PT_COMMON_COL_ADDRESS"]:
           getAddress(item) || "-",
         ["TENANT_ID"]: item.tenantId,
