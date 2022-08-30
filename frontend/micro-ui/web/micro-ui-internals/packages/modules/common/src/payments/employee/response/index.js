@@ -28,6 +28,8 @@ export const SuccessfulPayment = (props) => {
       let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
       let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
       return t(`ES_PAYMENT_${businessService}_${parsedArchitectName}_SUCCESSFUL_DESCRIPTION`);
+    } else if (businessService?.includes("WS") || businessService?.includes("SW")) {
+      return t(`ES_PAYMENT_WS_${businessService?.replace(/\./g, "_")}_SUCCESSFUL_DESCRIPTION`);
     } else {
       return t("ES_PAYMENT_SUCCESSFUL_DESCRIPTION")
     }
@@ -162,7 +164,7 @@ export const SuccessfulPayment = (props) => {
                 {t("CS_COMMON_PRINT_CERTIFICATE")}
               </div>
             ) : null}
-            {data?.[0]?.businessService === "BPA_OC" && ( data?.[0]?.status==="APPROVED" || data?.[0]?.status==="PENDING_SANC_FEE_PAYMENT" ) ? (
+            {data?.[0]?.businessService === "BPA_OC" && (data?.[0]?.status==="APPROVED" || data?.[0]?.status==="PENDING_SANC_FEE_PAYMENT") ? (
               <div className="primary-label-btn d-grid" style={{ marginLeft: "unset" }} onClick={e => getPermitOccupancyOrderSearch("occupancy-certificate")}>
                 <DownloadPrefixIcon />
                 {t("BPA_OC_CERTIFICATE")}

@@ -1,5 +1,6 @@
 import { CardLabel, Dropdown, FormStep, LinkButton, Loader, TextInput, DeleteIcon } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState ,Fragment} from "react";
+import Timeline from "../components/TLTimeline";
 
 
 const getUsageCategory = (usageCategory = "") => {
@@ -33,7 +34,7 @@ const formatUnits = (units = [], currentFloor, isFloor) => {
       usageCategory: usageCategory ? { code: usageCategory, i18nKey: `PROPERTYTAX_BILLING_SLAB_${usageCategory}` } : {},
       occupancyType: unit?.occupancyType ? { code: unit.occupancyType, i18nKey: `PROPERTYTAX_OCCUPANCYTYPE_${unit?.occupancyType}` } : "",
       floorNo: unit?.floorNo || Number.isInteger(unit?.floorNo) ? { code: unit.floorNo, i18nKey: `PROPERTYTAX_FLOOR_${unit?.floorNo}` } : {},
-      unitType: unit?.unitType ? { code: unit.unitType, i18nKey: `PROPERTYTAX_BILLING_SLAB_${unit?.unitType}` } : "",
+      unitType: unit?.unitType ? { code: unit.unitType, i18nKey: `PROPERTYTAX_BILLING_SLAB_${unit?.unitType?.code || unit?.unitType}` } : "",
     };
   });
 };
@@ -217,7 +218,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
   function isAllowedNext (){
     let valueNotthere=0;
     fields && fields?.map((ob) => {
-      if((!(ob?.usageCategory) || Object.keys(ob?.usageCategory) == 0) || !(ob?.occupancyType) || !(ob?.builtUpArea) || (!(ob?.floorNo)|| Object.keys(ob?.floorNo) == 0))
+      if((!(ob?.usageCategory) || Object.keys(ob?.usageCategory) == 0) || !(ob?.occupancyType) || !(ob?.builtUpArea) /* || (!(ob?.floorNo)|| Object.keys(ob?.floorNo) == 0 )*/)
       valueNotthere=1;
       else if(!(ob?.usageCategory?.code === "RESIDENTIAL") && !(ob?.unitType))
       valueNotthere=1;
@@ -231,6 +232,8 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
   }
 
   return (
+    <React.Fragment>
+    {window.location.href.includes("/citizen") ? <Timeline currentStep={1}/> : null}
     <FormStep
     config={((config.texts.header = getheader()), config)}
       onSelect={goNext}
@@ -317,7 +320,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
                   />
                 </>
               )}
-              <CardLabel>{`${t("PT_FORM2_BUILT_UP_AREA")}*`}</CardLabel>
+              <CardLabel>{formData?.PropertyType?.i18nKey === "COMMON_PROPTYPE_BUILTUP_SHAREDPROPERTY" ? `${t("PT_FORM2_BUILT_UP_AREA")}*`:`${t("PT_BUILT_UP_AREA_HEADER")}*`}</CardLabel>
               <TextInput
                 style={{ background: "#FAFAFA" }}
                 t={t}
@@ -359,6 +362,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
         </button>
       </div>
     </FormStep>
+    </React.Fragment>
   );
 });
 export default SelectPTUnits;

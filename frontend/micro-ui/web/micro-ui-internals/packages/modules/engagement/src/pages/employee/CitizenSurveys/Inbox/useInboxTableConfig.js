@@ -2,8 +2,8 @@ import React, { Fragment, useMemo } from "react"
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
-
-const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch }) => {
+import { InfoBannerIcon } from "@egovernments/digit-ui-react-components";
+const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCount, table, dispatch, inboxStyles={} }) => {
     const GetCell = (value) => <span className="cell-text styled-cell">{value}</span>;
     const GetStatusCell = (value) => value?.toLowerCase() === "active" ? <span className="sla-cell-success">{value}</span> : <span className="sla-cell-error">{value}</span>
     const { t } = useTranslation()
@@ -39,7 +39,17 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
                 Cell: ({ row }) => row.original?.answersCount ? GetCell(Number(row.original?.answersCount)) : "-"
             },
             {
-                Header: t("EVENTS_STATUS_LABEL"),
+                Header: <div>{t("EVENTS_STATUS_LABEL")}<div className="tooltip">
+                    <InfoBannerIcon fill="#0b0c0c" style />
+                    <span className="tooltiptext" style={{
+                        whiteSpace: "pre-wrap",
+                        fontSize: "small",
+                        wordWrap:"break-word",
+                        //overflow:"auto"
+                    }}>
+                        {`${t(`SURVEY_STATUS_TOOLTIP`)}`}
+                    </span>
+                </div></div>,
                 accessor: "status",
                 Cell: ({row}) => GetStatusCell(row.original?.status),
             },
@@ -78,23 +88,24 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
             }
         },
         disableSort: false,
-        autoSort: false,
+        autoSort: true,
         manualPagination: true,
         initSortI: "endDate",
         onPageSizeChange: onPageSizeChange,
-        currentPage: formState.tableForm?.offset / formState.tableForm?.limit,
+        currentPage: parseInt(formState.tableForm?.offset / formState.tableForm?.limit),
         onNextPage: () => dispatch({ action: "mutateTableForm", data: { ...formState.tableForm, offset: (parseInt(formState.tableForm?.offset) + parseInt(formState.tableForm?.limit)) } }),
         onPrevPage: () => dispatch({ action: "mutateTableForm", data: { ...formState.tableForm, offset: (parseInt(formState.tableForm?.offset) - parseInt(formState.tableForm?.limit)) } }),
         pageSizeLimit: formState.tableForm?.limit,
         // onSort: onSort,
         // sortParams: [{id: getValues("sortBy"), desc: getValues("sortOrder") === "DESC" ? true : false}],
-        totalRecords: totalCount,
+        totalRecords: parseInt(totalCount),
         onSearch: formState?.searchForm?.message,
         // globalSearch: {searchForItemsInTable},
         // searchQueryForTable,
         data: table,
         columns: tableColumnConfig,
-        noResultsMessage:"CS_NO_SURVEYS_FOUND"
+        noResultsMessage:"CS_NO_SURVEYS_FOUND",
+        inboxStyles:{...inboxStyles}
     }
 }
 

@@ -53,9 +53,10 @@ const useBPAInbox = ({ tenantId, filters, config={} }) => {
               status: application?.ProcessInstance?.state?.state,
               state:  application?.ProcessInstance?.state?.state,
               owner: application?.ProcessInstance?.assignes?.[0]?.name || "NA",
-              sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
+              sla: application?.businessObject?.status.match(/^(APPROVED)$/) ? "CS_NA" : Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
           })),
-          totalCount: data.totalCount
+          totalCount: data.totalCount,
+          nearingSlaCount: data?.nearingSlaCount
         }), 
         ...config 
       }

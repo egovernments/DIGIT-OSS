@@ -6,16 +6,20 @@ import { Link } from "react-router-dom";
 import Timeline from "../../components/CPTTimeline";
 
 const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
-  const tenantId = (formData?.knowyourproperty?.KnowProperty?.code === "YES" ? formData?.cptSearchQuery?.city : formData?.cpt?.details?.tenantId ) || Digit.ULBService.getCitizenCurrentTenant();
+  const tenantId = (formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptSearchQuery?.city : formData?.cpt?.details?.tenantId ) || Digit.ULBService.getCitizenCurrentTenant();
   if (window.location.href.includes("/tl/tradelicence/edit-application/") || window.location.href.includes("/renew-trade/")) {
     sessionStorage.setItem("EditFormData", JSON.stringify(formData));
   }
   const { isLoading, isError, error, data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     {
-      filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId },
+      filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId },
       tenantId: tenantId,
+      privacy: Digit.Utils.getPrivacyObject(),
     },
-    { filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId }, tenantId: tenantId }
+    { 
+      filters: { propertyIds: formData?.knowyourproperty?.KnowProperty?.code === "YES" || sessionStorage.getItem("VisitedLightCreate") === "false" ? formData?.cptId?.id : formData?.cpt?.details?.propertyId }, 
+      tenantId: tenantId,
+      privacy: Digit.Utils.getPrivacyObject(), }
   );
 
   const onSkip = () => onSelect();
@@ -51,9 +55,22 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
     return <Loader />;
   }
 
+  function getChangePropertyPath() {
+    if(window.location.href.includes("/ws/modify-connection/"))
+    return `/digit-ui/citizen/ws/modify-connection/${formData?.tenantId}/search-property`
+    else if(window.location.href.includes("/ws/edit-application/"))
+    return `/digit-ui/citizen/ws/edit-application/${formData?.tenantId}/search-property`
+    else if(window.location.href.includes("/ws/"))
+    return `/digit-ui/citizen/ws/create-application/search-property`
+    else if(window.location.href.includes("/edit-application/") || window.location.href.includes("/renew-trade/"))
+    return `/digit-ui/citizen/tl/tradelicence/edit-application/${formData?.applicationNumber}/${formData?.tenantId}/know-your-property`
+    else
+    return `/digit-ui/citizen/tl/tradelicence/new-application/know-your-property`
+  }
+
   return (
     <React.Fragment>
-      {window.location.href.includes("/citizen") ? <Timeline currentStep={2} /> : null}
+      {window.location.href.includes("/citizen") ? <Timeline currentStep={window.location.href.includes("/ws/") ? 1 : 2} flow={window.location.href.includes("/ws/") ? "WS":""} businessService={"WS"} /> : null}
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
         {propertyDetails && propertyDetails?.Properties.length && (
           <React.Fragment>
@@ -61,8 +78,13 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
             <StatusTable>
               <Row className="border-none" label={t(`PROPERTY_ID`)} text={propertyDetails?.Properties[0]?.propertyId} />
               <Row className="border-none" label={t(`OWNER_NAME`)} text={propertyDetails?.Properties[0]?.owners[0]?.name} />
-              <Row className="border-none" textStyle={{ wordBreak: "break-word" }} label={t(`PROPERTY_ADDRESS`)} text={propAddArr.join(', ')} />
-              <Row className="border-none" label={t(`PT_MUTATION_STATUS`)} text={propertyDetails?.Properties[0]?.status} />
+              <Row className="border-none" textStyle={{ wordBreak: "break-word" }} label={t(`PROPERTY_ADDRESS`)} text={propAddArr.join(', ')} 
+              privacy={ {
+                uuid: propertyDetails?.Properties[0]?.propertyId,
+                fieldName: ["doorNo" , "street" , "landmark"], 
+                model: "Property"
+              }}/>
+              <Row className="border-none" label={t(`PT_MUTATION_STATUS`)} text={t(propertyDetails?.Properties[0]?.status)} />
               <div style={{ textAlign: "left" }}>
                 <Link
                   to={`/digit-ui/citizen/commonpt/view-property?propertyId=${propertyDetails?.Properties[0]?.propertyId}&tenantId=${propertyDetails?.Properties[0]?.tenantId}`}
@@ -70,13 +92,9 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
                   <LinkButton style={{ textAlign: "left" }} label={t("PT_VIEW_MORE_DETAILS")} />
                 </Link>
                 <Link
-                  to={
-                    window.location.href.includes("/edit-application/") || window.location.href.includes("/renew-trade/")
-                      ? `/digit-ui/citizen/tl/tradelicence/edit-application/${formData?.applicationNumber}/${formData?.tenantId}/know-your-property`
-                      : `/digit-ui/citizen/tl/tradelicence/new-application/know-your-property`
-                  }
+                  to={getChangePropertyPath()}
                 >
-                  <LinkButton style={{ textAlign: "left" }} label={t("PT_CHANGE_PROPERTY")} />
+                  <LinkButton style={{ textAlign: "left" }} label={t("PT_CHANGE_PROPERTY")} onClick={() => sessionStorage.setItem("changePropertySelected", "yes")} />
                 </Link>
               </div>
             </StatusTable>

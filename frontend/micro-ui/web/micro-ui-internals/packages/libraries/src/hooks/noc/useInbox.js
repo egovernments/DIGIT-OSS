@@ -64,9 +64,10 @@ const useNOCInbox = ({ tenantId, filters, config={} }) => {
               status: `WF_${application.businessObject.additionalDetails.workflowCode}_${application.businessObject.applicationStatus}`,//application.businessObject.applicationStatus,
               owner: application?.ProcessInstance?.assignes?.[0]?.name || "-",
               source: application.businessObject.source,
-              sla: Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
+              sla: application?.businessObject?.applicationStatus.match(/^(APPROVED)$/) ? "CS_NA" : Math.round(application.ProcessInstance?.businesssServiceSla / (24 * 60 * 60 * 1000))
           })),
-          totalCount: data.totalCount
+          totalCount: data.totalCount,
+          nearingSlaCount: data.nearingSlaCount
         }), 
         ...config 
       }

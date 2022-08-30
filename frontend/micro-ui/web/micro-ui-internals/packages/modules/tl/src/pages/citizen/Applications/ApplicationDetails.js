@@ -22,9 +22,8 @@ import TLDocument from "../../../pageComponents/TLDocumets";
 const getAddress = (address, t) => {
   return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`
-} 
-
+  }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`;
+};
 
 const TLApplicationDetails = () => {
   const { t } = useTranslation();
@@ -58,6 +57,7 @@ const TLApplicationDetails = () => {
   );
 
   useEffect(() => {
+    localStorage.setItem("TLAppSubmitEnabled", "true");
     setMutationHappened(false);
   }, []);
 
@@ -75,20 +75,19 @@ const TLApplicationDetails = () => {
   const [showOptions, setShowOptions] = useState(false);
   useEffect(() => {}, [application, errorApplication]);
 
-  const businessService= application?.[0]?.businessService;
-  const { isLoading : iswfLoading, data : wfdata } = Digit.Hooks.useWorkflowDetails({
+  const businessService = application?.[0]?.businessService;
+  const { isLoading: iswfLoading, data: wfdata } = Digit.Hooks.useWorkflowDetails({
     tenantId: application?.[0]?.tenantId,
     id: id,
     moduleCode: businessService,
   });
 
-let workflowDocs = [];
-if(wfdata)
-{
-  wfdata?.timeline?.map((ob) => {
-    if(ob?.wfDocuments?.length>0) workflowDocs.push(ob?.wfDocuments?.[0])
-  })
-}
+  let workflowDocs = [];
+  if (wfdata) {
+    wfdata?.timeline?.map((ob) => {
+      if (ob?.wfDocuments?.length > 0) workflowDocs.push(ob?.wfDocuments?.[0]);
+    });
+  }
 
   if (isLoading || iswfLoading) {
     return <Loader />;
@@ -129,11 +128,11 @@ if(wfdata)
 
   let propertyAddress = "";
   if (PTData && PTData?.Properties?.length) {
-    propertyAddress=getAddress(PTData?.Properties[0]?.address,t);
+    propertyAddress = getAddress(PTData?.Properties[0]?.address, t);
   }
 
   const dowloadOptions =
-    paymentsHistory?.Payments?.length > 0
+    paymentsHistory?.Payments?.length > 0 && application?.[0]?.status !== "EXPIRED" && application?.[0]?.status !== "CANCELLED" && application?.[0]?.status !== "PENDINGPAYMENT"
       ? [
           {
             label: t("TL_CERTIFICATE"),
@@ -143,10 +142,14 @@ if(wfdata)
             label: t("CS_COMMON_PAYMENT_RECEIPT"),
             onClick: downloadPaymentReceipt,
           },
+          {
+            label: t("TL_APPLICATION"),
+            onClick: handleDownloadPdf,
+          },
         ]
       : [
           {
-            label: t("CS_COMMON_APPLICATION_ACKNOWLEDGEMENT"),
+            label: t("TL_APPLICATION"),
             onClick: handleDownloadPdf,
           },
         ];
@@ -298,40 +301,44 @@ if(wfdata)
                 </div>
               )}
               <Row label="" />
-             { !(PTData?.Properties && PTData?.Properties.length > 0 )&&<Row
-                style={{ border: "none" }}
-                label={t("TL_NEW_TRADE_ADDRESS_LABEL")}
-                text={`${
-                  application?.tradeLicenseDetail?.address?.doorNo?.trim() ? `${application?.tradeLicenseDetail?.address?.doorNo?.trim()}, ` : ""
-                } ${
-                  application?.tradeLicenseDetail?.address?.street?.trim() ? `${application?.tradeLicenseDetail?.address?.street?.trim()}, ` : ""
-                }${t(application?.tradeLicenseDetail?.address?.locality?.name)}, ${t(application?.tradeLicenseDetail?.address?.city)} ${
-                  application?.tradeLicenseDetail?.address?.pincode?.trim() ? `,${application?.tradeLicenseDetail?.address?.pincode?.trim()}` : ""
-                }`}
-                textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
-              />}
+              {!(PTData?.Properties && PTData?.Properties.length > 0) && (
+                <Row
+                  style={{ border: "none" }}
+                  label={t("TL_NEW_TRADE_ADDRESS_LABEL")}
+                  text={`${
+                    application?.tradeLicenseDetail?.address?.doorNo?.trim() ? `${application?.tradeLicenseDetail?.address?.doorNo?.trim()}, ` : ""
+                  } ${
+                    application?.tradeLicenseDetail?.address?.street?.trim() ? `${application?.tradeLicenseDetail?.address?.street?.trim()}, ` : ""
+                  }${t(application?.tradeLicenseDetail?.address?.locality?.name)}, ${t(application?.tradeLicenseDetail?.address?.city)} ${
+                    application?.tradeLicenseDetail?.address?.pincode?.trim() ? `,${application?.tradeLicenseDetail?.address?.pincode?.trim()}` : ""
+                  }`}
+                  textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
+                />
+              )}
               <CardSubHeader>{t("TL_COMMON_DOCS")}</CardSubHeader>
               <div>
                 {application?.tradeLicenseDetail?.applicationDocuments?.length > 0 ? (
-                  <TLDocument value={{...application}}></TLDocument>
+                  <TLDocument value={{ ...application }}></TLDocument>
                 ) : (
                   <StatusTable>
                     <Row text={t("TL_NO_DOCUMENTS_MSG")} />
                   </StatusTable>
                 )}
               </div>
-              {workflowDocs?.length > 0 && <div>
-              <CardSubHeader>{t("TL_TIMELINE_DOCS")}</CardSubHeader>
-              <div>
-                {workflowDocs?.length > 0 ? (
-                  <TLDocument value={{"workflowDocs":workflowDocs}}></TLDocument>
-                ) : (
-                  <StatusTable>
-                    <Row text={t("TL_NO_DOCUMENTS_MSG")} />
-                  </StatusTable>
-                )}
-              </div>
-              </div>}
+              {workflowDocs?.length > 0 && (
+                <div>
+                  <CardSubHeader>{t("TL_TIMELINE_DOCS")}</CardSubHeader>
+                  <div>
+                    {workflowDocs?.length > 0 ? (
+                      <TLDocument value={{ workflowDocs: workflowDocs }}></TLDocument>
+                    ) : (
+                      <StatusTable>
+                        <Row text={t("TL_NO_DOCUMENTS_MSG")} />
+                      </StatusTable>
+                    )}
+                  </div>
+                </div>
+              )}
               <TLWFApplicationTimeline application={application} id={id} />
               {application?.status === "CITIZENACTIONREQUIRED" ? (
                 <Link

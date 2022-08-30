@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import NewSurveyForm from "./NewSurveyForm";
 
-const SurveyFormsMaker = ({ t, formsConfig, setSurveyConfig, disableInputs,isPartiallyEnabled,addOption,formDisabled}) => {
+const SurveyFormsMaker = ({ t, formsConfig, setSurveyConfig, disableInputs, isPartiallyEnabled, addOption, formDisabled, controlSurveyForm }) => {
 const defaultFormsConfig = {
   question: "",
   answerType: "Short Answer",
@@ -40,7 +40,9 @@ const surveyFormReducer = (state, { type, payload }) => {
   const renderPreviewForms = () => {
     return surveyState.length
       ? surveyState.map((config, index) => (
-          <NewSurveyForm key={index} {...config} addOption={addOption} t={t} index={index} disableInputs={disableInputs} dispatch={passingSurveyConfigInDispatch} isPartiallyEnabled={isPartiallyEnabled} formDisabled={formDisabled} />
+        <NewSurveyForm key={index} {...config}
+        //  type={config?.formConfig?.type} 
+         addOption={addOption} t={t} index={index} disableInputs={disableInputs} dispatch={passingSurveyConfigInDispatch} isPartiallyEnabled={isPartiallyEnabled} formDisabled={formDisabled} controlSurveyForm={controlSurveyForm} />
         ))
       : null;
   };
@@ -50,14 +52,15 @@ const surveyFormReducer = (state, { type, payload }) => {
       <div className="heading">{t("CS_SURVEYS_QUESTIONS")}</div>
       {renderPreviewForms()}
       <div className="pointer">
-        <button 
+        {surveyState.length < 30  && <button 
           // disabled={surveyState.length >= 30 ? "true":""}
           className={`unstyled-button link ${disableInputs ? "disabled-btn" : ""} ${surveyState.length >= 30 ? "disabled-btn":""} `}
           type="button"
           onClick={() => passingSurveyConfigInDispatch({ type: "addNewForm" })}
+          disabled={surveyState.length >= 30?true:false}
         >
           {t("CS_COMMON_ADD_QUESTION")}
-        </button>
+        </button>}
       </div>
     </div>
   );

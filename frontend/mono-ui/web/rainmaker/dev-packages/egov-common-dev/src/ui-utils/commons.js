@@ -799,7 +799,16 @@ export const download = (
             )}.pdf`,
             onSuccess
           )
-        : printConReceipt(queryStr, configKey, pdfModule);
+        : mode == "open"?downloadConReceipt(
+          queryStr,
+          configKey,
+          pdfModule,
+          `RECEIPT-${get(
+            payloadReceiptDetails,
+            "Payments[0].paymentDetails[0].receiptNumber"
+          )}.pdf`,
+          onSuccess
+        ):printConReceipt(queryStr, configKey, pdfModule);
     });
   } catch (exception) {
     console.log("Some Error Occured while downloading Receipt!");

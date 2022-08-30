@@ -1,5 +1,6 @@
 import React from "react";
-import { DatePicker, RadioButtons } from "@egovernments/digit-ui-react-components";
+import { DatePicker } from "@egovernments/digit-ui-react-components";
+import { RadioButtons } from "@egovernments/digit-ui-react-components";
 
 
 export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTrips, applicationCreatedTime = 0, receivedPaymentType, action }) => ({
@@ -49,6 +50,7 @@ export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTri
           route: "property-type",
           key: "propertyType",
           component: "SelectPropertyType",
+          disable: true,
           texts: {
             headerCaption: "",
             header: "CS_FILE_APPLICATION_PROPERTY_LABEL",
@@ -64,6 +66,7 @@ export const configCompleteApplication = ({ t, vehicle, vehicleCapacity, noOfTri
           route: "property-subtype",
           key: "subtype",
           component: "SelectPropertySubtype",
+          disable: true,
           texts: {
             headerCaption: "",
             header: "CS_FILE_APPLICATION_PROPERTY_SUBTYPE_LABEL",

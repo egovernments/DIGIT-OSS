@@ -43,7 +43,7 @@ const MobileInbox = ({
         [t("ES_INBOX_STATUS")]: GetCell(t(`CS_COMMON_FSM_${applicationStatus}`)),
       }));
     } else {
-      return data?.map(({ locality, applicationNo, createdTime, tenantId, status, sla }) => ({
+      return data?.table?.map(({ locality, applicationNo, createdTime, tenantId, status, sla }) => ({
         [t("ES_INBOX_APPLICATION_NO")]: applicationNo,
         [t("ES_INBOX_APPLICATION_DATE")]: `${createdTime.getDate()}/${createdTime.getMonth() + 1}/${createdTime.getFullYear()}`,
         [t("ES_INBOX_LOCALITY")]: GetCell(t(Digit.Utils.locale.getRevenueLocalityCode(locality, tenantId))),
@@ -86,6 +86,7 @@ const MobileInbox = ({
           </div>
           <ApplicationCard
             t={t}
+            filterData={data}
             data={!data ? (isFstpOperator && isFSMRequest ? fstp_citizen_data : fstpOperatorData) : getData()}
             onFilterChange={isFSMRequest || !isFstpOperator ? onFilterChange : false}
             serviceRequestIdKey={isFstpOperator ? t("ES_INBOX_VEHICLE_LOG") : DSO ? t("ES_INBOX_APPLICATION_NO") : t("ES_INBOX_APPLICATION_NO")}

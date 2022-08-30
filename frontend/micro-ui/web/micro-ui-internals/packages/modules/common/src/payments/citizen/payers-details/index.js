@@ -11,57 +11,52 @@ import {
   InfoBanner,
   Loader,
   TextInput,
-  MobileNumber
+  MobileNumber,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useForm, Controller } from "react-hook-form";
 import { useParams, useHistory, useLocation, Redirect } from "react-router-dom";
+import { stringReplaceAll } from "../bills/routes/bill-details/utils";
 
 const SelectPaymentType = (props) => {
-  
-
-
-  const optionFirst = { 
-    code : "PAY_BY_OWNER",
-    i18nKey : "PT_PAY_BY_OWNER",
-    name : 'I am making the payment as the owner/ consumer of the service'
-  }
+  const optionFirst = {
+    code: "PAY_BY_OWNER",
+    i18nKey: "PT_PAY_BY_OWNER",
+    name: "I am making the payment as the owner/ consumer of the service",
+  };
 
   const optionSecound = {
-    code : "PAY_BEHALF_OWNER",
+    code: "PAY_BEHALF_OWNER",
     i18nKey: "PT_PAY_BEHALF_OWNER",
-    name : 'I am making the payment on behalf of the owner/ consumer of the service',
-  }
+    name: "I am making the payment on behalf of the owner/ consumer of the service",
+  };
 
   const userInfo = Digit.UserService.getUser()?.info;
-  const payersActiveName=userInfo?.name;
-  const payersActiveMobileNumber=userInfo?.mobileNumber;
+  const payersActiveName = userInfo?.name;
+  const payersActiveMobileNumber = userInfo?.mobileNumber;
 
   const { t } = useTranslation();
   const history = useHistory();
   const { state, ...location } = useLocation();
   const { consumerCode, businessService, paymentAmt } = useParams();
-  const { workflow: wrkflow, tenantId: _tenantId } = Digit.Hooks.useQueryParams();
-  const [bill, setBill] = useState(state ?.bill);
-  const tenantId = state ?.tenantId || _tenantId || Digit.UserService.getUser().info ?.tenantId;
+  const { workflow: wrkflow, tenantId: _tenantId, ConsumerName } = Digit.Hooks.useQueryParams();
+  const [bill, setBill] = useState(state?.bill);
+  const tenantId = state?.tenantId || _tenantId || Digit.UserService.getUser().info?.tenantId;
 
-  const { data, isLoading } = state ?.bill ? { isLoading: false } : Digit.Hooks.useFetchPayment({ tenantId, businessService, consumerCode });
+  const { data, isLoading } = state?.bill ? { isLoading: false } : Digit.Hooks.useFetchPayment({ tenantId, businessService, consumerCode });
 
-
-  const billDetails = bill ?.billDetails ?.sort((a, b) => b.fromPeriod - a.fromPeriod) ?.[0] || [];
+  const billDetails = bill?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod)?.[0] || [];
   const Arrears =
-    bill ?.billDetails
+    bill?.billDetails
       ?.sort((a, b) => b.fromPeriod - a.fromPeriod)
-        ?.reduce((total, current, index) => (index === 0 ? total : total + current.amount), 0) || 0;
-
+      ?.reduce((total, current, index) => (index === 0 ? total : total + current.amount), 0) || 0;
 
   const [paymentType, setPaymentType] = useState(optionFirst);
-  const [payersName, setPayersName] = useState('')
-  const [payersMobileNumber, setPayersMobileNumber] = useState('')
+  const [payersName, setPayersName] = useState("");
+  const [payersMobileNumber, setPayersMobileNumber] = useState("");
   const { control, handleSubmit } = useForm();
   const [canSubmit, setCanSubmit] = useState(false);
   const [mobileNumberError, setmobileNumberError] = useState(null);
-
 
   useEffect(() => {
     if (!bill && data) {
@@ -70,39 +65,42 @@ const SelectPaymentType = (props) => {
     }
   }, [isLoading]);
 
-  
-
-
   const onChangePayersMobileNumber = (e) => {
- 
-    setmobileNumberError(null)
+    setmobileNumberError(null);
     let validation = "^\\d{10}$";
-    if(!e.match(validation))
-    {
+    if (!e.match(validation)) {
       setmobileNumberError("CORE_COMMON_PHONENO_INVALIDMSG");
-      setCanSubmit(false)
+      setCanSubmit(false);
     }
     setPayersMobileNumber(e);
-   
-   e.length==10 && payersName!='' ? setCanSubmit(true) : setCanSubmit(false) 
 
-  }
-
-  const onChangePayersName = (value) => {
-    setPayersName(value)
-    value.length!==0 &&  mobileNumberError!='CORE_COMMON_PHONENO_INVALIDMSG' && payersName!=''  ? setCanSubmit(true) : setCanSubmit(false) 
-  }
-
-  const onSubmit = () => {
-     history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, {
-      paymentAmount: paymentAmt,
-      tenantId: billDetails.tenantId,
-      name: paymentType?.code !== optionSecound?.code ? bill?.payerName :(userInfo? payersActiveName: payersName),
-      mobileNumber: paymentType?.code !== optionSecound?.code ? bill?.mobileNumber :(userInfo? payersActiveMobileNumber : payersMobileNumber),
-    }); 
-
+    e.length == 10 && payersName != "" ? setCanSubmit(true) : setCanSubmit(false);
   };
 
+  const onChangePayersName = (value) => {
+    setPayersName(value);
+    value.length !== 0 && mobileNumberError != "CORE_COMMON_PHONENO_INVALIDMSG" && payersName != "" ? setCanSubmit(true) : setCanSubmit(false);
+  };
+
+  const onSubmit = () => {
+    if(wrkflow === "WNS")
+    {
+      history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}?workflow=WNS&consumerCode=${stringReplaceAll(consumerCode, "+", "/")}`, {
+        paymentAmount: paymentAmt,
+        tenantId: billDetails.tenantId,
+        name: paymentType?.code !== optionSecound?.code && ConsumerName !== "undefined" ? ConsumerName : userInfo ? payersActiveName : payersName,
+        mobileNumber: paymentType?.code !== optionSecound?.code ? bill?.mobileNumber : userInfo ? payersActiveMobileNumber : payersMobileNumber,
+      });
+    }
+    else{
+    history.push(`/digit-ui/citizen/payment/collect/${businessService}/${consumerCode}`, {
+      paymentAmount: paymentAmt,
+      tenantId: billDetails.tenantId,
+      name: paymentType?.code !== optionSecound?.code ? bill?.payerName : userInfo ? payersActiveName : payersName,
+      mobileNumber: paymentType?.code !== optionSecound?.code ? bill?.mobileNumber : userInfo ? payersActiveMobileNumber : payersMobileNumber,
+    });
+  }
+  };
 
   /* if (isLoading || paymentLoading) {
     return <Loader />;
@@ -115,17 +113,16 @@ const SelectPaymentType = (props) => {
         {/*  <Header>{t("PAYMENT_CS_HEADER")}</Header> */}
         <Header>{t("PT_PAYERS_DETAILS_HEADER")}</Header>
         <Card>
-        <span className='card-label-error'>{t(mobileNumberError)}</span>
+          <span className="card-label-error">{t(mobileNumberError)}</span>
           <RadioButtons
             selectedOption={paymentType}
             onSelect={setPaymentType}
             options={[optionFirst, optionSecound]}
             optionsKey="name"
-            inputStyle={{marginTop:"11px"}}
-            innerStyles={{display:"flex"}}
+            inputStyle={{ marginTop: "11px" }}
+            innerStyles={{ display: "flex" }}
           />
           <div style={{ position: "relative" }}>
-
             {paymentType?.code !== optionFirst?.code && !userInfo ? (
               <div style={{ position: "relative" }}>
                 <span>
@@ -134,31 +131,27 @@ const SelectPaymentType = (props) => {
                     // className="text-indent-xl"
                     onChange={onChangePayersMobileNumber}
                     value={payersMobileNumber}
-
                   />
-                 
                 </span>
                 <span>
                   <span>{t("PT_PAYERS_NAME")}</span>
                   <TextInput
                     //style={{ width: "40%" }}
-                   
+
                     onChange={(e) => onChangePayersName(e.target.value)}
                     value={payersName}
-                  
                   />
                 </span>
-
               </div>
-            ) : (
-                null
-              )}
-
+            ) : null}
           </div>
-          <SubmitBar label={t("CS_COMMON_NEXT")}  disabled={paymentType?.code !== optionSecound?.code ? false : (userInfo? false : !canSubmit)} submit={true} />
+          <SubmitBar
+            label={t("CS_COMMON_NEXT")}
+            disabled={paymentType?.code !== optionSecound?.code ? false : userInfo ? false : !canSubmit}
+            submit={true}
+          />
         </Card>
       </form>
-
     </React.Fragment>
   );
 };

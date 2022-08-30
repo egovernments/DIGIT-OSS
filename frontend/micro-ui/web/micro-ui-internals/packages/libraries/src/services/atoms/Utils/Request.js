@@ -1,5 +1,12 @@
 import Axios from "axios";
 
+/**
+ * Custom Request to make all api calls
+ *
+ * @author jagankumar-egov
+ *
+ */
+
 Axios.interceptors.response.use(
   (res) => res,
   (err) => {
@@ -8,10 +15,21 @@ Axios.interceptors.response.use(
       for (const error of err.response.data.Errors) {
         if (error.message.includes("InvalidAccessTokenException")) {
           localStorage.clear();
-          sessionStorage.clear()
+          sessionStorage.clear();
           window.location.href =
             (isEmployee ? "/digit-ui/employee/user/login" : "/digit-ui/citizen/login") +
             `?from=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+        } else if (
+          error?.message?.toLowerCase()?.includes("internal server error") ||
+          error?.message?.toLowerCase()?.includes("some error occured")
+        ) {
+          window.location.href =
+            (isEmployee ? "/digit-ui/employee/user/error" : "/digit-ui/citizen/error") +
+            `?type=maintenance&from=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+        } else if (error.message.includes("ZuulRuntimeException")) {
+          window.location.href =
+            (isEmployee ? "/digit-ui/employee/user/error" : "/digit-ui/citizen/error") +
+            `?type=notfound&from=${encodeURIComponent(window.location.pathname + window.location.search)}`;
         }
       }
     }
@@ -47,14 +65,15 @@ export const Request = async ({
   userDownload = false,
   noRequestInfo = false,
   multipartFormData = false,
-  multipartData = {}
+  multipartData = {},
+  reqTimestamp = false,
 }) => {
   if (method.toUpperCase() === "POST") {
-    const ts = new Date().getTime()
+    const ts = new Date().getTime();
     data.RequestInfo = {
       apiId: "Rainmaker",
     };
-    if (auth) {
+    if (auth || !!Digit.UserService.getUser()?.access_token) {
       data.RequestInfo = { ...data.RequestInfo, ...requestInfo() };
     }
     if (userService) {
@@ -66,11 +85,24 @@ export const Request = async ({
     if (noRequestInfo) {
       delete data.RequestInfo;
     }
+    if (reqTimestamp) {
+      data.RequestInfo = { ...data.RequestInfo, ts: Number(ts) };
+    }
+
+    /* 
+    Feature :: Privacy
+    
+    Desc :: To send additional field in HTTP Requests inside RequestInfo Object as plainAccessRequest
+    */
+    const privacy = Digit.Utils.getPrivacyObject();
+    if (privacy && !url.includes("/edcr/rest/dcr/") && !noRequestInfo) {
+      data.RequestInfo = { ...data.RequestInfo, plainAccessRequest: { ...privacy } };
+    }
   }
 
   const headers1 = {
     "Content-Type": "application/json",
-    Accept: window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")?"application/pdf,application/json":"application/pdf",
+    Accept: window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE") ? "application/pdf,application/json" : "application/pdf",
   };
 
   if (authHeader) headers = { ...headers, ...authHeaders() };
@@ -95,18 +127,29 @@ export const Request = async ({
       return urlParams[key] ? urlParams[key] : path;
     })
     .join("/");
-  
+
   if (multipartFormData) {
-    const multipartFormDataRes = await Axios({ method, url: _url, data: multipartData.data, params, headers: { "Content-Type": "multipart/form-data", "auth-token": Digit.UserService.getUser()?.access_token || null  } });
+    const multipartFormDataRes = await Axios({
+      method,
+      url: _url,
+      data: multipartData.data,
+      params,
+      headers: { "Content-Type": "multipart/form-data", "auth-token": Digit.UserService.getUser()?.access_token || null },
+    });
     return multipartFormDataRes;
   }
+  /* 
+  Feature :: Single Instance
 
- 
-    /* Fix for central instance to send tenantID in all query params  */
-    const tenantInfo = Digit.SessionStorage.get("userType") === "citizen" ? Digit.ULBService.getStateId():Digit.ULBService.getCurrentTenantId() || Digit.ULBService.getStateId() ;
-    if ((!params["tenantId"])&&(window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE"))) {
-      params["tenantId"]=tenantInfo;
-    }
+  Desc :: Fix for central instance to send tenantID in all query params
+  */
+  const tenantInfo =
+    Digit.SessionStorage.get("userType") === "citizen"
+      ? Digit.ULBService.getStateId()
+      : Digit.ULBService.getCurrentTenantId() || Digit.ULBService.getStateId();
+  if (!params["tenantId"] && window?.globalConfigs?.getConfig("ENABLE_SINGLEINSTANCE")) {
+    params["tenantId"] = tenantInfo;
+  }
 
   const res = userDownload
     ? await Axios({ method, url: _url, data, params, headers, responseType: "arraybuffer" })

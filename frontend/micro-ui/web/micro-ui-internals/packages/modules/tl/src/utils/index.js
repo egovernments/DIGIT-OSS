@@ -292,6 +292,7 @@ export const gettradeupdateaccessories = (data) => {
 
 export const convertToTrade = (data = {}) => {
   let Financialyear = sessionStorage.getItem("CurrentFinancialYear");
+  let isSameAsPropertyOwner = sessionStorage.getItem("isSameAsPropertyOwner");
   const formdata = {
     Licenses: [
       {
@@ -332,6 +333,7 @@ export const convertToTrade = (data = {}) => {
           tradeUnits: gettradeunits(data),
           additionalDetail: {
             propertyId: !data?.cpt ? "" :data?.cpt?.details?.propertyId,
+            isSameAsPropertyOwner: isSameAsPropertyOwner
           }
         },
         tradeName: data?.TradeDetails?.TradeName,
@@ -520,6 +522,7 @@ export const convertToEditTrade = (data, fy = []) => {
   const currrentFYending = fy?.filter(item => item?.code === data?.financialYear)?.[0]?.endingDate;
   const nextFinancialYearForRenewal = fy?.filter(item => item?.startingDate === currrentFYending)?.[0]?.code;
   let isDirectrenewal = stringToBoolean(sessionStorage.getItem("isDirectRenewal"));
+  let isSameAsPropertyOwner = sessionStorage.getItem("isSameAsPropertyOwner"); 
   let formdata = {
     Licenses: [
       {
@@ -549,7 +552,9 @@ export const convertToEditTrade = (data, fy = []) => {
           structureType: isDirectrenewal ? data.tradeLicenseDetail.structureType : (data?.TradeDetails?.VehicleType ? data?.TradeDetails?.VehicleType.code : data?.TradeDetails?.BuildingType.code),
           subOwnerShipCategory: data?.ownershipCategory?.code.includes("INSTITUTIONAL") ? data?.owners?.owners?.[0]?.subOwnerShipCategory.code : data?.ownershipCategory?.code,
           tradeUnits: gettradeupdateunits(data),
-          additionalDetail: data.tradeLicenseDetail.additionalDetail,
+          additionalDetail: {
+            ...data.tradeLicenseDetail.additionalDetail,
+            isSameAsPropertyOwner : isSameAsPropertyOwner},
           auditDetails: data.tradeLicenseDetail.auditDetails,
           channel: data.tradeLicenseDetail.channel,
           id: data.tradeLicenseDetail.id,
@@ -610,13 +615,13 @@ export const convertToResubmitTrade = (data) => {
           auditDetails: data.tradeLicenseDetail.auditDetails,
           channel: data.tradeLicenseDetail.channel,
           id: data.tradeLicenseDetail.id,
-          institution:data?.ownershipCategory?.code.includes("INSTITUTIONAL") ? {
+          institution: {
             designation: data?.owners?.owners?.[0]?.designation,
             ContactNo: data?.owners?.owners?.[0]?.altContactNumber,
             mobileNumber: data?.owners?.owners?.[0]?.mobilenumber,
             instituionName: data?.owners?.owners?.[0]?.institutionName,
             name: data?.owners?.owners?.[0]?.name,
-           } : null,
+           },
         },
         calculation: null,
         auditDetails: data?.auditDetails,
@@ -906,3 +911,75 @@ export const convertEpochToDateDMY = (dateEpoch) => {
   day = (day > 9 ? "" : "0") + day;
   return `${day}/${month}/${year}`;
 };
+
+export const getOwnersForNewApplication = (formdata,t) => {
+  let owners = [];
+  if(formdata?.ownershipCategory?.code?.includes("SINGLEOWNER") || formdata?.ownershipCategory?.code?.includes("MULTIPLEOWNER"))
+  formdata?.cpt?.details?.owners?.map((ow) => {
+    owners.push({
+      name: ow?.name,
+      designation: "",
+      mobileNumber: ow?.mobileNumber,
+      altContactNumber: "",
+      instituionName: "",
+      fatherOrHusbandName: ow?.fatherOrHusbandName,
+      relationship: {code : ow?.relationship, i18nKey : `COMMON_RELATION_${ow?.relationship}`},
+      emailId: ow?.emailId,  
+      permanentAddress: ow?.permanentAddress,
+      ownerType: {code : ow?.ownerType, i18nKey : ow?.ownerType, name : t(`PROPERTYTAX_OWNERTYPE_${ow?.ownerType}`)},
+      gender: {code : ow?.gender, i18nKey : `TL_GENDER_${ow?.gender}`},
+      subOwnerShipCategory:"",
+      correspondenceAddress: ow?.correspondenceAddress,
+    })
+  })
+  else if(formdata?.ownershipCategory?.code?.includes("INSTITUTIONAL"))
+  {
+    owners.push({
+      name: formdata?.cpt?.details?.institution?.nameOfAuthorizedPerson,
+      designation: formdata?.cpt?.details?.institution?.designation,
+      mobileNumber: formdata?.cpt?.details?.owners?.[0]?.mobileNumber,
+      altContactNumber: formdata?.cpt?.details?.owners?.[0]?.altContactNumber,
+      instituionName: formdata?.cpt?.details?.institution?.name,
+      fatherOrHusbandName: "",
+      relationship: "",
+      emailId: formdata?.cpt?.details?.owners?.[0]?.emailId,  
+      permanentAddress: formdata?.cpt?.details?.owners?.[0]?.permanentAddress,
+      ownerType: "",
+      gender: "",
+      subOwnerShipCategory:{active : true, code : `${formdata?.cpt?.details?.ownershipCategory}.${formdata?.cpt?.details?.institution?.type}`, i18nKey : `COMMON_MASTERS_OWNERSHIPCATEGORY_${formdata?.cpt?.details?.ownershipCategory}_${formdata?.cpt?.details?.institution?.type}`},
+      correspondenceAddress: formdata?.cpt?.details?.owners?.[0]?.correspondenceAddress,
+    })
+  }
+  return owners;
+}
+
+export const getOwnersfromProperty = (formdata) => {
+let owners = [];
+if((formdata?.ownershipCategory?.code?.includes("SINGLEOWNER") || formdata?.ownershipCategory?.code?.includes("MULTIPLEOWNER")))
+  formdata?.cpt?.details?.owners?.map((ow) => {
+    owners.push({
+      name: ow?.name,
+      fatherOrHusbandName: ow?.fatherOrHusbandName,
+      gender: {code : ow?.gender, i18nKey : `TL_GENDER_${ow?.gender}`},
+      isprimaryowner : false,
+      emailId: ow?.emailId, 
+      mobilenumber: ow?.mobileNumber,
+      relationship: {code : ow?.relationship, i18nKey : `COMMON_RELATION_${ow?.relationship}`},
+    })
+  })
+else if(formdata?.ownershipCategory?.code?.includes("INSTITUTIONAL"))
+{
+  owners.push({
+    name: formdata?.cpt?.details?.institution?.nameOfAuthorizedPerson,
+    designation: formdata?.cpt?.details?.institution?.designation,
+    mobilenumber: formdata?.cpt?.details?.owners?.[0]?.mobileNumber,
+    altContactNumber: formdata?.cpt?.details?.owners?.[0]?.altContactNumber,
+    instituionName: formdata?.cpt?.details?.institution?.name,
+    emailId: formdata?.cpt?.details?.owners?.[0]?.emailId,  
+    subOwnerShipCategory:{active : true, code : `${formdata?.cpt?.details?.ownershipCategory}.${formdata?.cpt?.details?.institution?.type}`, i18nKey : `COMMON_MASTERS_OWNERSHIPCATEGORY_${formdata?.cpt?.details?.ownershipCategory}_${formdata?.cpt?.details?.institution?.type}`},
+    id : "",
+    uuid: "",
+  })
+}
+return owners;
+}

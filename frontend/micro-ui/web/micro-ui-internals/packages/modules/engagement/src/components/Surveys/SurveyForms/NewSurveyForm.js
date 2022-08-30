@@ -6,50 +6,66 @@ import TimePicker from "react-time-picker";
 import Checkboxes from "./AnswerTypes/Checkboxes";
 import MultipleChoice from "./AnswerTypes/MultipleChoice";
 
-const answerTypeEnum = {
-  "Short Answer": "SHORT_ANSWER_TYPE",
-  Paragraph: "LONG_ANSWER_TYPE",
-  "Multiple Choice": "MULTIPLE_ANSWER_TYPE",
-  "Check Boxes": "CHECKBOX_ANSWER_TYPE",
-  Date: "DATE_ANSWER_TYPE",
-  Time: "TIME_ANSWER_TYPE",
-};
+// const answerTypeEnum = {
+//   "Short Answer": "SHORT_ANSWER_TYPE",
+//   Paragraph: "LONG_ANSWER_TYPE",
+//   "Multiple Choice": "MULTIPLE_ANSWER_TYPE",
+//   "Check Boxes": "CHECKBOX_ANSWER_TYPE",
+//   Date: "DATE_ANSWER_TYPE",
+//   Time: "TIME_ANSWER_TYPE",
+// };
 
-const dropdownOptions = [
-  {
-    title: "Short Answer",
-    value: "SHORT_ANSWER_TYPE",
-  },
-  {
-    title: "Multiple Choice",
-    value: "MULTIPLE_ANSWER_TYPE",
-  },
-  {
-    title: "Check Boxes",
-    value: "CHECKBOX_ANSWER_TYPE",
-  },
-  {
-    title: "Paragraph",
-    value: "LONG_ANSWER_TYPE",
-  },
-  {
-    title: "Date",
-    value: "DATE_ANSWER_TYPE",
-  },
-  {
-    title: "Time",
-    value: "TIME_ANSWER_TYPE",
-  },
-];
 
-const NewSurveyForm = ({ t, index, questionStatement, type, required, options, disableInputs, dispatch,isPartiallyEnabled,addOption,formDisabled}) => {
-  const [surveyQuestionConfig, setSurveyQuestionConfig] = useState({ questionStatement, type, required, options:["option 1"] });
+const NewSurveyForm = ({ t, index, questionStatement, type, required, options, disableInputs, dispatch, isPartiallyEnabled, addOption, formDisabled, controlSurveyForm }) => {
+  
+  const dropdownOptions = [
+    {
+      title: t("Surveys_Short_Answer"),
+      i18Key: "SHORT_ANSWER_TYPE",
+      value: "SHORT_ANSWER_TYPE",
+    },
+    {
+      title: t("Surveys_Multiple_Choice"),
+      i18Key: "MULTIPLE_ANSWER_TYPE",
+      value:  "MULTIPLE_ANSWER_TYPE",
+    },
+    {
+      title: t("Surveys_Check_Boxes"),
+      i18Key: "CHECKBOX_ANSWER_TYPE",
+      value:  "CHECKBOX_ANSWER_TYPE",
+    },
+    {
+      title: t("Surveys_Paragraph"),
+      i18Key: "LONG_ANSWER_TYPE",
+      value:  "LONG_ANSWER_TYPE",
+    },
+    {
+      title: t("Surveys_Date"),
+      i18Key: "DATE_ANSWER_TYPE",
+      value:  "DATE_ANSWER_TYPE",
+    },
+    {
+      title: t("Surveys_Time"),
+      i18Key: "TIME_ANSWER_TYPE",
+      value:  "TIME_ANSWER_TYPE",
+    },
+  ];
+
+
+  const selectedType = dropdownOptions.filter(option => option?.value === type) 
+  
+  const [surveyQuestionConfig, setSurveyQuestionConfig] = useState({
+    questionStatement, type: type ? selectedType?.[0]  : {
+      title: t("SHORT_ANSWER_TYPE"),
+      i18Key: "SHORT_ANSWER_TYPE",
+      value: "SHORT_ANSWER_TYPE",
+    }, required, options:options?.length>0?options:[`${t("CMN_OPTION")} 1`] });
   const { register, formState  } = useFormContext();
 
   const handleAddOption = () =>
     setSurveyQuestionConfig((prevState) => {
       const updatedState = { ...prevState };
-      updatedState.options.push(`option ${updatedState.options.length + 1}`);
+      updatedState.options.push(`${t("CMN_OPTION")} ${updatedState.options.length + 1}`);
       return updatedState;
     });
   const handleUpdateOption = ({ value, id }) => {
@@ -71,18 +87,31 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
   useEffect(() => {
     dispatch({ type: "updateForm", payload: { index: index, formConfig: surveyQuestionConfig } });
   }, [surveyQuestionConfig]);
-
   const renderAnswerComponent = (type) => {
-    switch (type) {
-      case "Paragraph":
-        return <TextArea value="LONG ANSWER"/>;
-      case "Date":
-        return <DatePicker stylesForInput={{ width: "calc(100% - 290px)" }}/>;
-      case "Time":
-        return <TimePicker />;
-      case "Multiple Choice":
+    switch (type?.value) {
+      case "LONG_ANSWER_TYPE":
+        return <div>
+          <TextArea 
+            placeholder={t("LONG_ANSWER_TYPE")}
+            name={"longAnsDescription"}
+            inputRef={register({
+              maxLength: {
+                value: 500,
+                message: t("EXCEEDS_500_CHAR_LIMIT"),
+              }
+            })}
+              />
+          {formState?.errors && <CardLabelError>{formState?.errors?.longAnsDescription?.message}</CardLabelError>}
+              </div>;
+      case "DATE_ANSWER_TYPE":
+        return <DatePicker stylesForInput={{ width: "calc(100% - 290px)" }} style={{width:"202px"}}/>;
+      case "TIME_ANSWER_TYPE":
+        return <TextInput type="time" textInputStyle={{width:"202px"}}/>;
+      case "MULTIPLE_ANSWER_TYPE":
         return (
           <MultipleChoice
+            maxLength={60}
+            titleHover={t("MAX_LENGTH_60")}
             t={t}
             addOption={handleAddOption}
             updateOption={handleUpdateOption}
@@ -93,8 +122,9 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
             formDisabled={formDisabled}
           />
         );
-      case "Check Boxes":
+      case "CHECKBOX_ANSWER_TYPE":
         return (
+          <div>
           <Checkboxes
             t={t}
             addOption={handleAddOption}
@@ -104,22 +134,45 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
             isPartiallyEnabled={isPartiallyEnabled}
             createNewSurvey={addOption}
             formDisabled={formDisabled}
+            maxLength={60}
+            titleHover={t("MAX_LENGTH_60")}
+            // name={"checkBoxDesc"}
+            // inputRef={register({
+            //     maxLength: {
+            //       value: 10,
+            //       message: t("EXCEEDS_10_CHAR_LIMIT"),
+            //     }
+            //   })}
           />
+            {/* {formState?.errors && <CardLabelError>{formState?.errors?.checkBoxDesc?.message}</CardLabelError>} */}
+          </div>
         );
       default:
-        return <TextInput value="SHORT ANSWER" />;
+        return<div> 
+                <TextInput 
+                placeholder={t("SHORT_ANSWER_TYPE")} 
+                name={"shortAnsDescription"}
+                inputRef={register({
+                  maxLength: {
+                    value: 200,
+                    message: t("EXCEEDS_200_CHAR_LIMIT"),
+                  }
+                })}
+                />
+                {formState?.errors && <CardLabelError>{formState?.errors?.shortAnsDescription?.message}</CardLabelError>}
+              </div>;
     }
   };
-
+  
   return (
     <div className="newSurveyForm_wrapper">
-      <span className="newSurveyForm_quesno">{`${t("CS_COMMON_QUESTION")} ${index + 1}`}</span>
+      <span className="newSurveyForm_quesno">{`${t("CS_COMMON_QUESTION")} ${index + 1} * :`}</span>
       <span className="newSurveyForm_mainsection">
         <div className="newSurveyForm_questions">
           <div style={{width: "80%"}}>
             <TextInput
               placeholder={t("CS_COMMON_TYPE_QUESTION")}
-              value={surveyQuestionConfig.questionStatement}
+              value={t(Digit.Utils.locale.getTransformedLocale(surveyQuestionConfig.questionStatement))}
               onChange={(ev) => {
                 setSurveyQuestionConfig((prevState) => ({ ...prevState, questionStatement: ev.target.value }));
               }}
@@ -129,28 +182,31 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
               inputRef={register({
                 required: t("ES_ERROR_REQUIRED"),
                 maxLength: {
-                  value: 60,
-                  message: t("EXCEEDS_60_CHAR_LIMIT"),
+                  value: 100,
+                  message: t("EXCEEDS_100_CHAR_LIMIT"),
                 },
                 pattern:{
-                  value: /^[A-Za-z_-][A-Za-z0-9_\ -]*$/,
+                  value: /^[A-Za-z_-][A-Za-z0-9_\ -?]*$/,
                   message: t("ES_SURVEY_DONT_START_WITH_NUMBER")
                 }
               })}
             />
-            {formState?.errors?.title && <CardLabelError>{formState?.errors?.[`QUESTION_SURVEY_${index}`]?.message}</CardLabelError>}
+            {formState?.errors && <CardLabelError>{formState?.errors?.[`QUESTION_SURVEY_${index}`]?.message}</CardLabelError>}
           </div>
           <Dropdown
+          t={t}
             option={dropdownOptions}
             select={(ev) => {
-              setSurveyQuestionConfig((prevState) => ({ ...prevState, type: ev.title }));
+              setSurveyQuestionConfig((prevState) => ({ ...prevState, type: {title:ev.title,i18Key:ev.i18Key,value:ev.value} }));
             }}
-            selected={surveyQuestionConfig.type || {title: "Short Answer",value: "SHORT_ANSWER_TYPE"}}
-            optionKey="title"
+            //placeholder={"Short Answer"}
+            //selected={surveyQuestionConfig.type || {title: "Short Answer",value: "SHORT_ANSWER_TYPE"}}
+            optionKey="i18Key"
             disable={disableInputs}
+            selected={surveyQuestionConfig?.type}
           />
         </div>
-        <div className="newSurveyForm_answer">{renderAnswerComponent(surveyQuestionConfig.type)}</div>
+        <div className="newSurveyForm_answer">{renderAnswerComponent(surveyQuestionConfig?.type)}</div>
         <div className="newSurveyForm_actions">
           <div>
             <CheckBox
@@ -159,13 +215,21 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
               label={t("CS_COMMON_REQUIRED")}
               pageType={"employee"}
               disable={disableInputs}
+              style={{marginTop:"2px"}}
             />
           </div>
-          <div className="newSurveyForm_seprator" />
-          <div className={`pointer ${disableInputs ? 'disabled-btn':''}`} onClick={() => dispatch({ type: "removeForm", payload: { index } })}>
+          {index!==0 && <div className="newSurveyForm_seprator" />}
+          {index!==0 && <div className={`pointer ${disableInputs ? 'disabled-btn':''}`} onClick={() => dispatch({ type: "removeForm", payload: { index } })}>
+          <div className="tooltip" /* style={{position:"relative"}} */>
+              <div style={{display: "flex", /* alignItems: "center", */ gap: "0 4px"}}>
             <DustbinIcon />
+            <span className="tooltiptext" style={{ position:"absolute",width:"100px", marginLeft:"50%", fontSize:"medium" }}>
+              {t("CS_INFO_DELETE")}
+              </span>
+              </div>
+              </div>
+          </div>}
           </div>
-        </div>
       </span>
     </div>
   );

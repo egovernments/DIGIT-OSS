@@ -6,12 +6,14 @@ import { useTranslation } from "react-i18next";
 import { useHistory ,Link} from "react-router-dom";
 
 const description = {
-  description: "(or)",
+  description: "PT_SEARCH_OR_DESC",
   descriptionStyles: {
     fontWeight: "300",
     color: "#505A5F",
     marginTop: "0px",
     textAlign: "center",
+    marginBottom: "20px",
+    maxWidth: "540px",
   },
 };
 
@@ -22,11 +24,14 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   const [searchData, setSearchData] = useState({});
   const [showToast, setShowToast] = useState(null);
   sessionStorage.setItem("VisitedCommonPTSearch",true);
+  sessionStorage.setItem("VisitedLightCreate",false);
   let allCities = Digit.Hooks.pt.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));
   // if called from tl module get tenants from tl usetenants
   allCities = allCities ? allCities : Digit.Hooks.tl.useTenants()?.sort((a, b) => a?.i18nKey?.localeCompare?.(b?.i18nKey));  
   const [cityCode, setCityCode] = useState();
   const [formValue, setFormValue] = useState();
+  const [errorShown, seterrorShown] = useState(false);
+  let isMobile = window.Digit.Utils.browser.isMobile();
   const { data: propertyData, isLoading: propertyDataLoading, error, isSuccess, billData } = Digit.Hooks.pt.usePropertySearchWithDue({
     tenantId: searchData?.city,
     filters: searchData?.filters,
@@ -35,7 +40,18 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   });
 
   useEffect(() => {
-    showToast && setShowToast(null);
+    if ( !(searchData?.filters?.mobileNumber && Object.values(searchData?.filters)?.filter(ob => ob !== undefined)?.length == 1) && 
+      propertyData?.Properties.length > 0 &&
+      ptSearchConfig.maxResultValidation &&
+      propertyData?.Properties.length > ptSearchConfig.maxPropertyResult &&
+      !errorShown
+    ) {
+      setShowToast({ error: true, warning: true, label: "ERR_PLEASE_REFINED_UR_SEARCH" });
+    }
+  }, [propertyData]);
+
+  useEffect(() => {
+    showToast && showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH" && setShowToast(null);
   }, [action, propertyDataLoading]);
 
   useLayoutEffect(() => {
@@ -47,6 +63,8 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         el.style.padding = "8px 0";
         el.style.boxShadow = "none";
         el.style.marginBottom = "16px";
+        el.style.textAlign = "left";
+        el.style.zIndex = "0";
       } else {
         setTimeout(() => {
           getActionBar();
@@ -149,9 +167,9 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
           labelChildren: (
             <div className="tooltip" /* style={{position:"relative"}} */>
               <div style={{display: "flex", /* alignItems: "center", */ gap: "0 4px"}}>
-              <h2>{property.label}</h2>
+              <h2>{t(property.label)}</h2>
               <InfoBannerIcon fill="#0b0c0c" />
-              <span className="tooltiptext" style={{ position:"absolute",width:"100%", marginLeft:"50%", fontSize:"medium" }}>
+              <span className="tooltiptext" style={{ position:"absolute",width:"72%", marginLeft:"50%", fontSize:"medium" }}>
               {t(property.description) + " " + ptSearchConfig?.propertyIdFormat}
               </span>
               </div>
@@ -257,7 +275,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
                 tenantId={cityCode}
                 boundaryType="revenue"
                 keepNull={false}
-                optionCardStyles={{ height: "600px", overflow: "auto", zIndex: "10" }}
+                optionCardStyles={{ height: "600px", overflow: "auto", zIndex: "10", maxHeight: "300px" }}
                 selected={formValue?.locality}
                 disable={!cityCode}
                 disableLoader={true}
@@ -300,6 +318,15 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   ];
 
   const onPropertySearch = async (data) => {
+    if (
+      ptSearchConfig.maxResultValidation &&
+      propertyData?.Properties.length > 0 &&
+      propertyData?.Properties.length > ptSearchConfig.maxPropertyResult &&
+      errorShown
+    ) {
+      seterrorShown(true);
+      return;
+    }
     if (!data?.city?.code) {
       setShowToast({ error: true, label: "ERR_PT_FILL_VALID_FIELDS" });
       return;
@@ -342,12 +369,16 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
       }
     }
 
-    setShowToast(null);
+    if (showToast?.label !== "ERR_PLEASE_REFINED_UR_SEARCH") setShowToast(null);
+    if (data?.doorNumber && data?.doorNumber !== "" && data?.propertyIds !== "") {
+      data["propertyIds"] = "";
+    }
 
     let tempObject = Object.keys(data)
       .filter((k) => data[k])
       .reduce((acc, key) => ({ ...acc, [key]: typeof data[key] === "object" ? data[key].code : data[key] }), {});
     let city = tempObject.city;
+    tempObject.doorNo = tempObject.doorNumber;
     delete tempObject.addParam;
     delete tempObject.addParam1;
     delete tempObject.city;
@@ -389,11 +420,13 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
     return <Loader />;
   }
 
-  if (propertyData && !propertyDataLoading && !error) {
+  let validation = ptSearchConfig.maxResultValidation && !(searchData?.filters?.mobileNumber && Object.values(searchData?.filters)?.filter(ob => ob !== undefined)?.length == 1)   ? propertyData?.Properties.length<ptSearchConfig.maxPropertyResult && (showToast == null || (showToast !== null && !showToast?.error)) : true;
+
+  if (propertyData && !propertyDataLoading && !error && validation) {
     let qs = {};
     qs = { ...searchData.filters, city: searchData.city };
 
-    if (
+    if ( !(searchData?.filters?.mobileNumber && Object.values(searchData?.filters)?.filter(ob => ob !== undefined)?.length == 1) && 
       ptSearchConfig?.ptSearchCount &&
       searchData?.filters?.locality &&
       propertyDataLoading &&
@@ -453,7 +486,7 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
   }
 
   return (
-    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white"}}>
+    <div style={{ marginTop: "16px", marginBottom: "16px" ,backgroundColor:"white", maxWidth:"960px"}}>
       <FormComposer
         onSubmit={onPropertySearch}
         noBoxShadow
@@ -464,10 +497,10 @@ const SearchProperty = ({ config: propsConfig, onSelect, redirectToUrl }) => {
         text={t(propsConfig.texts.text)}
         headingStyle={{ fontSize: "32px", marginBottom: "16px", fontFamily: "Roboto Condensed,sans-serif" }}
         onFormValueChange={onFormValueChange}
-        cardStyle={{marginBottom:"0"}}
+        cardStyle={{marginBottom:"0",maxWidth:"960px"}}
       ></FormComposer>
-      <span className="link" style={{display:"flex", justifyContent:"center",paddingBottom:"16px"}}>
-        <Link to={window.location.href.includes("/tl/tradelicence/") ? "/digit-ui/citizen/tl/tradelicence/new-application/create-property" : "/digit-ui/citizen/commonpt/property/new-application"}>{t("CPT_REG_NEW_PROPERTY")}</Link>
+      <span className="link" style={isMobile ? {display:"flex", justifyContent:"center",paddingBottom:"16px"} : {display:"flex", justifyContent:"left",paddingBottom:"16px", marginLeft: "45px"}}>
+        <Link to={window.location.href.includes("/ws/")?"/digit-ui/citizen/ws/create-application/create-property" : (window.location.href.includes("/tl/tradelicence/") ? "/digit-ui/citizen/tl/tradelicence/new-application/create-property" : "/digit-ui/citizen/commonpt/property/new-application")}>{t("CPT_REG_NEW_PROPERTY")}</Link>
       </span>
       {showToast && (
         <Toast

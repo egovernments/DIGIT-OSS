@@ -1,4 +1,4 @@
-import { Card, CardSubHeader, Header, Row, StatusTable, SubmitBar, ActionBar, Menu, Toast} from "@egovernments/digit-ui-react-components";
+import { Card, CardSubHeader, Header, Row, StatusTable, SubmitBar, ActionBar, Menu, Toast,MultiLink,DownloadBtnCommon} from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useHistory, useRouteMatch } from "react-router-dom";
@@ -97,6 +97,21 @@ const EmployeeChallan = (props) => {
     }
   }, [data]);
 
+  const challanDownload = {
+    order: 1,
+    label: t("PDF_STATIC_LABEL_CONSOLIDATED_RECEIPT_LETTER_HEAD"),
+    onClick: () => downloadAndPrintChallan(challanno),
+  };
+
+  const receiptDownload = {
+    order: 2,
+    label: t("RECEIPT"),
+    onClick: () => downloadAndPrintReciept(challanDetails?.businessService, challanno),
+  };
+
+  let dowloadOptions = []
+  dowloadOptions = challanDetails?.applicationStatus === "PAID" ? [challanDownload , receiptDownload] : [challanDownload];
+
   const workflowActions = ["CANCEL_CHALLAN", "UPDATE_CHALLAN", "BUTTON_PAY"];
 
   function onDownloadActionSelect(action) {
@@ -105,37 +120,16 @@ const EmployeeChallan = (props) => {
 
   return (
     <React.Fragment>
-      <div style={{ width: "100%", fontFamily: "calibri", color: "#FF0000", display: "flex", justifyContent: "space-between" }}>
+      <div className={"employee-application-details"} style={{ marginBottom: "15px" }}>
         <Header>{`${t("CHALLAN_DETAILS")}`} </Header>
-        <div>
-          <SubmitBar label={t("TL_DOWNLOAD")} onSubmit={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)} />
-          
-          {isDisplayDownloadMenu ? (
-            <div
-              style={{
-                boxShadow: "0 8px 10px 1px rgb(0 0 0 / 14%), 0 3px 14px 2px rgb(0 0 0 / 12%), 0 5px 5px -3px rgb(0 0 0 / 20%)",
-                height: "auto",
-                backgroundColor: "#fff",
-                textAlign: "left",
-                marginBottom: "4px",
-                width: "240px",
-                padding: "0px 10px",
-                lineHeight: "30px",
-                cursor: "pointer",
-                position: "absolute",
-                color: "black",
-                fontSize: "18px",
-              }}
-            >
-              <Menu
-                localeKeyPrefix="UC"
-                options={challanDetails?.applicationStatus === "PAID" ? ["CHALLAN", "RECEIPT"] : ["CHALLAN"]}
-                t={t}
-                onSelect={onDownloadActionSelect}
-              />
-            </div>
-          ) : null}
-        </div>
+          <MultiLink
+              className="multilinkWrapper employee-mulitlink-main-div"
+              onHeadClick={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)}
+              displayOptions={isDisplayDownloadMenu}
+              options={challanDetails?.applicationStatus === "PAID" ? [challanDownload , receiptDownload] : [challanDownload]}
+              downloadBtnClassName={"employee-download-btn-className"}
+              optionsClassName={"employee-options-btn-className"}
+            />
       </div>
 
       <div>

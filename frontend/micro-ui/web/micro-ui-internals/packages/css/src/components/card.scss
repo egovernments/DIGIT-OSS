@@ -1,6 +1,7 @@
 .card {
   @apply bg-white m-sm px-md pt-md pb-lg shadow-card;
   border-radius: 4px;
+  max-width: 960px;
 
   .card-header {
     @apply text-text-primary text-heading-xl font-bold font-rc align-middle text-left mb-md;
@@ -31,7 +32,7 @@
   }
 
   .card-label {
-    @apply text-legend text-text-primary mb-md;
+    @apply text-legend text-text-primary mb-sm;
   }
 
   .card-label-error {
@@ -47,13 +48,13 @@
   }
 }
 
-.validation-error{
+.validation-error {
   @apply block text-body-s text-error;
 }
 
 .docsDescription {
-  color: #0B0C0C !important;
-} 
+  color: #0b0c0c !important;
+}
 
 .field-container {
   @apply flex  items-center;
@@ -75,6 +76,10 @@
 
   .card-section-header {
     @apply text-text-primary text-heading-m font-bold;
+  }
+
+  .card-section-sub-text{
+    @apply text-text-primary text-body-s;
   }
 
   .card-caption {
@@ -113,7 +118,7 @@
     @apply block text-center text-link text-link-normal mt-md;
   }
 
-  .card-search-heading{
+  .card-search-heading {
     margin-right: 0px !important;
     margin-left: 0px !important;
     margin-bottom: 0px !important;
@@ -125,7 +130,6 @@
   margin-bottom: 16px !important;
   margin-left: 0px !important;
   margin-right: 16px !important; }
-  
 .header-wrap {
   @apply flex mb-md;
 
@@ -151,7 +155,7 @@
 
 .submit-bar {
   @apply h-10 bg-primary-main text-center w-full outline-none;
-  box-shadow: inset 0px -2px 0px #0B0C0C;
+  box-shadow: inset 0px -2px 0px #0b0c0c;
 
   &:focus {
     @apply outline-none;
@@ -181,13 +185,8 @@
   }
 
   .card {
-    margin-right: auto;
-    padding-right: 300px;
-    padding-left: 16px;
-    padding-top: 16px;
-    max-width: 960px;
-    min-width: 640px;
-    margin-left: 0px;
+    display: flex;
+    flex-direction: column;
 
     .card-header {
       @apply text-heading-xl-dt;
@@ -237,7 +236,11 @@
       @apply text-heading-m-dt;
     }
 
-    .card-search-heading{
+    .card-section-sub-text{
+      @apply text-text-primary text-body-s-dt;
+    }
+
+    .card-search-heading {
       margin-right: 0px !important;
       margin-left: 0px !important;
       margin-bottom: 0px !important;
@@ -309,7 +312,7 @@
   @apply text-text-primary text-heading-m font-bold;
 }
 
-.card-search-heading{
+.card-search-heading {
   margin-right: 0px !important;
   margin-left: 0px !important;
   margin-bottom: 0px !important;
@@ -337,12 +340,10 @@
     margin-bottom: 24px;
   }
   .info-banner-wrap-citizen-override {
-    min-width: 640px;
-    max-width: 960px
   }
   .oc-aknowledgement-screen {
     width: auto;
-    min-width: 240px; 
+    min-width: 240px;
     max-width: 100%;
     padding: 0px 10px;
   }
@@ -366,14 +367,14 @@
   display: flex !important;
   justify-content: space-between !important;
   max-height: 60px !important;
-  height: 60px !important
+  height: 60px !important;
 }
 .employee-main-application-details {
   padding: 10px !important;
 }
 
 .employee-mulitlink-main-div {
-  z-index: 10 !important; 
+  z-index: 10 !important;
   max-width: 41% !important;
 }
 

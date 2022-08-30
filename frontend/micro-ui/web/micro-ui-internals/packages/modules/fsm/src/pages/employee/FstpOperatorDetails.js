@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect, useRef } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory, useLocation } from "react-router-dom";
 import TimePicker from "react-time-picker";
 import { Dropdown, Header, MultiUploadWrapper, TextArea } from "@egovernments/digit-ui-react-components";
 import {
@@ -74,6 +74,7 @@ const FstpOperatorDetails = () => {
   const [newLocality, setNewLocality] = useState(null);
   const [newDsoName, setNewDsoName] = useState(null);
   const [comments, setComments] = useState();
+  const location = useLocation();
 
   const onChangeVehicleNumber = (value) => {
     setNewVehicleNumber(value);
@@ -100,7 +101,7 @@ const FstpOperatorDetails = () => {
 
   const workflowDetails = Digit.Hooks.useWorkflowDetails({
     tenantId: tenantId,
-    id: location.pathname.includes("fstp-operator-details") ? applicationNos : "",
+    id: location.pathname.includes("fstp-operator-details") ? applicationNos : null,
     moduleCode: "FSM_VEHICLE_TRIP",
     role: "FSM_EMP_FSTPO"
   });

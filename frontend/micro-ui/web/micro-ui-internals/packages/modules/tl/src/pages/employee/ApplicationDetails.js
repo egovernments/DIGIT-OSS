@@ -3,11 +3,14 @@ import { useTranslation } from "react-i18next";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
 import cloneDeep from "lodash/cloneDeep";
 import { useParams } from "react-router-dom";
-import { Header } from "@egovernments/digit-ui-react-components";
+import { Header,MultiLink } from "@egovernments/digit-ui-react-components";
 import get from "lodash/get";
 import orderBy from "lodash/orderBy";
+import getPDFData from "../../utils/getTLAcknowledgementData"
 
 const ApplicationDetails = () => {
+  const { data: storeData } = Digit.Hooks.useStore.getInitData();
+  const { tenants } = storeData || {};
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { id: applicationNumber } = useParams();
@@ -16,6 +19,8 @@ const ApplicationDetails = () => {
   const [businessService, setBusinessService] = useState("NewTL"); //DIRECTRENEWAL
   const [numberOfApplications, setNumberOfApplications] = useState([]);
   const [allowedToNextYear, setAllowedToNextYear] = useState(false);
+  const [oldRenewalAppNo, setoldRenewalAppNo] = useState("");
+  const [latestRenewalYearofAPP, setlatestRenewalYearofAPP] = useState("");
   sessionStorage.setItem("applicationNumber", applicationNumber)
   const { renewalPending: renewalPending } = Digit.Hooks.useQueryParams();
 
@@ -51,8 +56,13 @@ const ApplicationDetails = () => {
       let financialYear = cloneDeep(applicationDetails?.applicationData?.financialYear);
       const financialYearDate = financialYear?.split('-')[1];
       const finalFinancialYear = `20${Number(financialYearDate)}-${Number(financialYearDate)+1}`
+      const latestFinancialYear = Math.max.apply(Math, applicationDetails?.numOfApplications?.filter(ob => ob.licenseNumber === applicationDetails?.applicationData?.licenseNumber)?.map(function(o){return parseInt(o.financialYear.split("-")[0])}))
       const isAllowedToNextYear = applicationDetails?.numOfApplications?.filter(data => (data.financialYear == finalFinancialYear && data?.status !== "REJECTED"));
-      if (isAllowedToNextYear?.length > 0) setAllowedToNextYear(false);
+      if (isAllowedToNextYear?.length > 0){
+         setAllowedToNextYear(false);
+         setoldRenewalAppNo(isAllowedToNextYear?.[0]?.applicationNumber);
+      }
+      if(!(applicationDetails?.applicationData?.financialYear.includes(`${latestFinancialYear}`))) setlatestRenewalYearofAPP(applicationDetails?.applicationData?.financialYear);
       if (!isAllowedToNextYear || isAllowedToNextYear?.length == 0) setAllowedToNextYear(true);
       setNumberOfApplications(applicationDetails?.numOfApplications);
     }
@@ -94,8 +104,23 @@ const ApplicationDetails = () => {
   const duration = validTo - currentDate;
   const renewalPeriod = TradeRenewalDate?.TradeLicense?.TradeRenewal?.[0]?.renewalPeriod;
 
-  if (rolecheck && (applicationDetails?.applicationData?.status === "APPROVED" || applicationDetails?.applicationData?.status === "EXPIRED" || (applicationDetails?.applicationData?.status === "MANUALEXPIRED" && renewalPending==="true")) && duration <= renewalPeriod) {
-    if(workflowDetails?.data && allowedToNextYear) {
+  const getToastMessages = () => {
+    if(allowedToNextYear == false && oldRenewalAppNo && applicationDetails?.applicationData?.status !== "MANUALEXPIRED")
+    {
+      return `${t("TL_ERROR_TOAST_RENEWAL_1")} ${oldRenewalAppNo} ${t("TL_ERROR_TOAST_RENEWAL_2")}`;
+    }
+    else if(applicationDetails?.applicationData?.status === "CANCELLED")
+    {
+      return `${t("TL_ERROR_TOAST_RENEWAL_CANCEL")}`
+    }
+    else if((/* latestRenewalYearofAPP && */ applicationDetails?.applicationData?.status === "MANUALEXPIRED"))
+    {
+      return `${t("TL_ERROR_TOAST_MUTUALLY_EXPIRED")}`;
+    }
+  }
+
+  if (rolecheck && (applicationDetails?.applicationData?.status === "APPROVED" || applicationDetails?.applicationData?.status === "EXPIRED" || applicationDetails?.applicationData?.status === "CANCELLED" || (applicationDetails?.applicationData?.status === "MANUALEXPIRED" /* && renewalPending==="true" */)) /* && duration <= renewalPeriod */) {
+    if(workflowDetails?.data /* && allowedToNextYear */) {
       if(!workflowDetails?.data?.actionState) {
         workflowDetails.data.actionState = {};
         workflowDetails.data.actionState.nextActions = [];
@@ -104,6 +129,8 @@ const ApplicationDetails = () => {
       if(flagData && flagData.length === 0) {
         workflowDetails?.data?.actionState?.nextActions?.push({
           action: "RENEWAL_SUBMIT_BUTTON",
+          isToast : allowedToNextYear == false || applicationDetails?.applicationData?.status === "CANCELLED" || (applicationDetails?.applicationData?.status === "MANUALEXPIRED" /* && latestRenewalYearofAPP */) ? true : false,
+          toastMessage : getToastMessages(),
           redirectionUrl: {
             pathname: `/digit-ui/employee/tl/renew-application-details/${applicationNumber}`,
             state: applicationDetails
@@ -170,12 +197,64 @@ const ApplicationDetails = () => {
     }];
   }
 
+    const handleDownloadPdf = async () => {
+      const tenantInfo = tenants.find((tenant) => tenant.code === applicationDetails.tenantId);
+      const data = await getPDFData(applicationDetails?.applicationData, tenantInfo, t);
+      //data.then((ress) => Digit.Utils.pdf.generate(ress));
+      Digit.Utils.pdf.generate(data);
+      setIsDisplayDownloadMenu(false)
+    };
 
+  const printReciept = async (businessService="TL", consumerCode=applicationDetails?.applicationData?.applicationNumber) => {
+    await Digit.Utils.downloadReceipt(consumerCode, businessService, 'tradelicense-receipt');
+    setIsDisplayDownloadMenu(false)
+  };
+
+  const printCertificate = async () => {
+     let res = await Digit.TLService.TLsearch({ tenantId: applicationDetails?.tenantId, filters: { applicationNumber:applicationDetails?.applicationData?.applicationNumber } });
+     const TLcertificatefile = await Digit.PaymentService.generatePdf(tenantId, { Licenses: res?.Licenses }, "tlcertificate");
+     const receiptFile = await Digit.PaymentService.printReciept(tenantId, { fileStoreIds: TLcertificatefile.filestoreIds[0] });
+     window.open(receiptFile[TLcertificatefile.filestoreIds[0]], "_blank");
+     setIsDisplayDownloadMenu(false)
+  }
+  const [isDisplayDownloadMenu, setIsDisplayDownloadMenu] = useState(false);
+  const applicationStatus = applicationDetails?.applicationData?.status
+  
+  const dowloadOptions =
+    applicationStatus==="APPROVED"
+      ? [
+        {
+          label: t("TL_CERTIFICATE"),
+          onClick: printCertificate,
+        },
+        {
+          label: t("TL_RECEIPT"),
+          onClick: printReciept,
+        },
+        {
+          label: t("TL_APPLICATION"),
+          onClick: handleDownloadPdf,
+        }
+      ]
+      : [
+        {
+          label: t("TL_APPLICATION"),
+          onClick: handleDownloadPdf,
+        },
+      ];
 
   return (
-    <div >
-      <div /* style={{marginLeft: "15px"}} */>
+    <div className={"employee-main-application-details"} >
+      <div className={"employee-application-details"} style={{ marginBottom: "15px" }}>
         <Header>{(applicationDetails?.applicationData?.workflowCode == "NewTL" && applicationDetails?.applicationData?.status !== "APPROVED") ? t("TL_TRADE_APPLICATION_DETAILS_LABEL") : t("TL_TRADE_LICENSE_DETAILS_LABEL")}</Header>
+        <MultiLink
+                className="multilinkWrapper employee-mulitlink-main-div"
+                onHeadClick={() => setIsDisplayDownloadMenu(!isDisplayDownloadMenu)}
+                displayOptions={isDisplayDownloadMenu}
+                options={dowloadOptions}
+                downloadBtnClassName={"employee-download-btn-className"}
+                optionsClassName={"employee-options-btn-className"}
+        />
       </div>
       <ApplicationDetailsTemplate
         applicationDetails={applicationDetails}

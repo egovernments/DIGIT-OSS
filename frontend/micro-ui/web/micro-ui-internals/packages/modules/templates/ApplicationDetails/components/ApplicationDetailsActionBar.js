@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import { useTranslation } from "react-i18next";
 import { SubmitBar, ActionBar, Menu } from "@egovernments/digit-ui-react-components";
 
 function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSelect, setDisplayMenu, businessService, forcedActionPrefix,ActionBarStyle={},MenuStyle={} }) {
   const { t } = useTranslation();
   let user = Digit.UserService.getUser();
+  const menuRef = useRef();
   if (window.location.href.includes("/obps") || window.location.href.includes("/noc")) {
     const userInfos = sessionStorage.getItem("Digit.citizen.userRequestObject");
     const userInfo = userInfos ? JSON.parse(userInfos) : {};
@@ -13,10 +14,16 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
   const userRoles = user?.info?.roles?.map((e) => e.code);
   let isSingleButton = false;
   let isMenuBotton = false;
-
   let actions = workflowDetails?.data?.actionState?.nextActions?.filter((e) => {
     return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
+  }) || workflowDetails?.data?.nextActions?.filter((e) => {
+    return userRoles.some((role) => e.roles?.includes(role)) || !e.roles;
   });
+
+    const closeMenu = () => {
+          setDisplayMenu(false);
+      }
+    Digit.Hooks.useClickOutside(menuRef, closeMenu, displayMenu );
 
   if (((window.location.href.includes("/obps") || window.location.href.includes("/noc")) && actions?.length == 1) || (actions?.[0]?.redirectionUrl?.pathname.includes("/pt/property-details/")) && actions?.length == 1) {
     isMenuBotton = false;
@@ -30,7 +37,7 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
     <React.Fragment>
       {!workflowDetails?.isLoading && isMenuBotton && !isSingleButton && (
         <ActionBar style={{...ActionBarStyle}}>
-          {displayMenu && workflowDetails?.data?.actionState?.nextActions ? (
+          {displayMenu && (workflowDetails?.data?.actionState?.nextActions || workflowDetails?.data?.nextActions) ? (
             <Menu
               localeKeyPrefix={forcedActionPrefix || `WF_EMPLOYEE_${businessService?.toUpperCase()}`}
               options={actions}
@@ -40,13 +47,13 @@ function ApplicationDetailsActionBar({ workflowDetails, displayMenu, onActionSel
               style={MenuStyle}
             />
           ) : null}
-          <SubmitBar label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+          <SubmitBar ref={menuRef} label={t("WF_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
         </ActionBar>
       )}
       {!workflowDetails?.isLoading && !isMenuBotton && isSingleButton && (
         <ActionBar style={{...ActionBarStyle}}>
           <button
-              style={{ color: "#FFFFFF", fontSize: "19px" }}
+              style={{ color: "#FFFFFF", fontSize: "18px" }}
               className={"submit-bar"}
               name={actions?.[0]?.action}
               value={actions?.[0]?.action}

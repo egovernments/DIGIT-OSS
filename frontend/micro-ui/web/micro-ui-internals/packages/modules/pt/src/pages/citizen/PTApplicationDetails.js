@@ -251,7 +251,7 @@ const PTApplicationDetails = () => {
 
             {isPropertyTransfer && (
               <React.Fragment>
-                <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={billAmount || t("CS_NA")} textStyle={{ whiteSpace: "pre" }} />
+                <Row className="border-none" label={t("PT_FEE_AMOUNT")} text={billAmount || t("₹0")} textStyle={{ whiteSpace: "pre" }} />
                 <Row className="border-none" label={t("PT_PAYMENT_STATUS")} text={billStatus} textStyle={{ whiteSpace: "pre" }} />
               </React.Fragment>
             )}
@@ -446,9 +446,8 @@ const PTApplicationDetails = () => {
                               label={t("PT_ASSESSMENT_UNIT_USAGE_TYPE")}
                               text={
                                 `${t(
-                                  (property?.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPSUBUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPSUBUSGTYPE_") +
-                                    (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property?.usageCategory) +
-                                    (property?.usageCategory !== "RESIDENTIAL" ? "_" + unit?.usageCategory.split(".").pop() : "")
+                                  (property?.usageCategory !== "RESIDENTIAL" ? "COMMON_PROPUSGTYPE_NONRESIDENTIAL_" : "COMMON_PROPUSGTYPE_") +
+                                    (property?.usageCategory?.split(".")[1] ? property?.usageCategory?.split(".")[1] : property?.usageCategory)
                                 )}` || t("CS_NA")
                               }
                             />

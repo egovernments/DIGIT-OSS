@@ -31,7 +31,7 @@ const MCollectCard = () => {
       {
         label: t("UC_GENERATE_NEW_CHALLAN"),
         link: `/digit-ui/employee/mcollect/new-application`
-      }
+      },
     ]
   }
   return <EmployeeModuleCard {...propsForModuleCard} />

@@ -138,9 +138,9 @@ export const Search = {
             child:
               response?.address?.geoLocation?.latitude && response?.address?.geoLocation?.longitude
                 ? {
-                  element: "img",
-                  src: Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude),
-                }
+                    element: "img",
+                    src: Digit.Utils.getStaticMapUrl(response?.address?.geoLocation?.latitude, response?.address?.geoLocation?.longitude),
+                  }
                 : null,
           },
         ],
@@ -190,9 +190,9 @@ export const Search = {
     if (userType !== "CITIZEN" && userType !== "DSO") {
       employeeResponse.map((data) => {
         if (data.title === "ES_TITLE_APPLICANT_DETAILS" || data.title === "Applicant Details") {
-          data.values.push({ title: "COMMON_APPLICANT_GENDER", value: response?.citizen?.gender })
+          data.values.push({ title: "COMMON_APPLICANT_GENDER", value: response?.citizen?.gender });
         }
-      })
+      });
     }
 
     if (userType !== "CITIZEN")
@@ -242,12 +242,13 @@ export const Search = {
   },
 
   combineResponse: (vehicleTrip, vendorOwnerKey) => {
-    return vehicleTrip.map((trip) => {
-      if (vendorOwnerKey[trip.tripOwnerId]) {
-        return { ...trip, dsoName: vendorOwnerKey[trip.tripOwnerId].name };
-      } else return {}
-    }).filter(e => e.tripOwnerId);
-
+    return vehicleTrip
+      .map((trip) => {
+        if (vendorOwnerKey[trip.tripOwnerId]) {
+          return { ...trip, dsoName: vendorOwnerKey[trip.tripOwnerId].name };
+        } else return {};
+      })
+      .filter((e) => e.tripOwnerId);
   },
 
   applicationWithBillSlab: async (t, tenantId, applicationNos) => {

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import { Card, KeyNote, Loader, SubmitBar, Header } from "@egovernments/digit-ui-react-components";
 import { Fragment } from "react";
 import { Link, useHistory } from "react-router-dom";
-import {getBPAFormData} from "../../../utils/index";
+import { getBPAFormData } from "../../../utils/index";
 
 const getServiceType = () => {
-  return `BPA_APPLICATIONTYPE_BUILDING_PLAN_SCRUTINY`
-}
+  return `BPA_APPLICATIONTYPE_BUILDING_PLAN_SCRUTINY`;
+};
 
 const MyApplication = () => {
   const { t } = useTranslation();
@@ -16,68 +16,87 @@ const MyApplication = () => {
   const [labelMessage, setLableMessage] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const userInfo = Digit.UserService.getUser();
-  const requestor =  userInfo?.info?.mobileNumber;
-  const { data, isLoading ,revalidate} = Digit.Hooks.obps.useBPAREGSearch(tenantId);
-  const { data: bpaData, isLoading: isBpaSearchLoading,revalidate:bpaRevalidate } = Digit.Hooks.obps.useBPASearch(tenantId, { requestor , limit: -1, offset: 0});
+  const requestor = userInfo?.info?.mobileNumber;
+  const { data, isLoading, revalidate } = Digit.Hooks.obps.useBPAREGSearch(tenantId);
+  const { data: bpaData, isLoading: isBpaSearchLoading, revalidate: bpaRevalidate } = Digit.Hooks.obps.useBPASearch(tenantId, {
+    requestor,
+    limit: -1,
+    offset: 0,
+  });
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.obps.useMDMS(Digit.ULBService.getStateId(), "BPA", ["RiskTypeComputation"]);
 
   const getBPAREGFormData = (data) => {
     let license = data;
     let intermediateData = {
-      "Correspondenceaddress":license?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress || `${license?.tradeLicenseDetail?.address?.doorNo ? `${license?.tradeLicenseDetail?.address?.doorNo}, ` : ""} ${license?.tradeLicenseDetail?.address?.street ? `${license?.tradeLicenseDetail?.address?.street}, ` : ""}${
-        license?.tradeLicenseDetail?.address?.landmark ? `${license?.tradeLicenseDetail?.address?.landmark}, ` : ""
-      }${t(license?.tradeLicenseDetail?.address?.locality.code)}, ${t(license?.tradeLicenseDetail?.address?.city?license?.tradeLicenseDetail?.address?.city.code:"")},${t(license?.tradeLicenseDetail?.address?.pincode) ? `${license.tradeLicenseDetail?.address?.pincode}` : " "}`,
-      "formData":{
-        "LicneseDetails":{
-          "PanNumber":license?.tradeLicenseDetail?.owners?.[0]?.pan,
-          "PermanentAddress":license?.tradeLicenseDetail?.owners?.[0]?.permanentAddress,
-          "email":license?.tradeLicenseDetail?.owners?.[0]?.emailId,
-          "gender":{code:license?.tradeLicenseDetail?.owners?.[0]?.gender, i18nKey:`COMMON_GENDER_${license?.tradeLicenseDetail?.owners?.[0]?.gender}`,value:license?.tradeLicenseDetail?.owners?.[0]?.gender},
-          "mobileNumber":license?.tradeLicenseDetail?.owners?.[0]?.mobileNumber,
-          "name":license?.tradeLicenseDetail?.owners?.[0]?.name,
+      Correspondenceaddress:
+        license?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress ||
+        `${license?.tradeLicenseDetail?.address?.doorNo ? `${license?.tradeLicenseDetail?.address?.doorNo}, ` : ""} ${
+          license?.tradeLicenseDetail?.address?.street ? `${license?.tradeLicenseDetail?.address?.street}, ` : ""
+        }${license?.tradeLicenseDetail?.address?.landmark ? `${license?.tradeLicenseDetail?.address?.landmark}, ` : ""}${t(
+          license?.tradeLicenseDetail?.address?.locality.code
+        )}, ${t(license?.tradeLicenseDetail?.address?.city ? license?.tradeLicenseDetail?.address?.city.code : "")},${
+          t(license?.tradeLicenseDetail?.address?.pincode) ? `${license.tradeLicenseDetail?.address?.pincode}` : " "
+        }`,
+      formData: {
+        LicneseDetails: {
+          PanNumber: license?.tradeLicenseDetail?.owners?.[0]?.pan,
+          PermanentAddress: license?.tradeLicenseDetail?.owners?.[0]?.permanentAddress,
+          email: license?.tradeLicenseDetail?.owners?.[0]?.emailId,
+          gender: {
+            code: license?.tradeLicenseDetail?.owners?.[0]?.gender,
+            i18nKey: `COMMON_GENDER_${license?.tradeLicenseDetail?.owners?.[0]?.gender}`,
+            value: license?.tradeLicenseDetail?.owners?.[0]?.gender,
+          },
+          mobileNumber: license?.tradeLicenseDetail?.owners?.[0]?.mobileNumber,
+          name: license?.tradeLicenseDetail?.owners?.[0]?.name,
         },
-        "LicneseType":{
-          LicenseType:{i18nKey:`TRADELICENSE_TRADETYPE_${license?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.split(".")[0]}`, role:[`BPA_${license?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.split(".")[0]}`],tradeType:license?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType},
-          ArchitectNo:license?.tradeLicenseDetail?.additionalDetail?.counsilForArchNo || null,
-        }
+        LicneseType: {
+          LicenseType: {
+            i18nKey: `TRADELICENSE_TRADETYPE_${license?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.split(".")[0]}`,
+            role: [`BPA_${license?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType.split(".")[0]}`],
+            tradeType: license?.tradeLicenseDetail?.tradeUnits?.[0]?.tradeType,
+          },
+          ArchitectNo: license?.tradeLicenseDetail?.additionalDetail?.counsilForArchNo || null,
+        },
       },
-      "isAddressSame":license?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress === license?.tradeLicenseDetail?.owners?.[0]?.permanentAddress ? true : false,
-      "result":{
-        Licenses:[{...data}],
+      isAddressSame:
+        license?.tradeLicenseDetail?.owners?.[0]?.correspondenceAddress === license?.tradeLicenseDetail?.owners?.[0]?.permanentAddress ? true : false,
+      result: {
+        Licenses: [{ ...data }],
       },
-      "initiationFlow":true
+      initiationFlow: true,
     };
 
-    sessionStorage.setItem("BPAREGintermediateValue",JSON.stringify(intermediateData));
+    sessionStorage.setItem("BPAREGintermediateValue", JSON.stringify(intermediateData));
     history.push("/digit-ui/citizen/obps/stakeholder/apply/stakeholder-docs-required");
-  }
+  };
   useEffect(() => {
     return () => {
       setFinalData([]);
       revalidate?.();
       bpaRevalidate?.();
-    }
+    };
   }, []);
-  
+
   useEffect(() => {
-    if(!isLoading && !isBpaSearchLoading) {
+    if (!isLoading && !isBpaSearchLoading) {
       let searchConvertedArray = [];
       let sortConvertedArray = [];
-      if(data?.Licenses?.length) {
-        data?.Licenses?.forEach(license => {
+      if (data?.Licenses?.length) {
+        data?.Licenses?.forEach((license) => {
           license.sortNumber = 0;
           license.modifiedTime = license.auditDetails.lastModifiedTime;
-          license.type = "BPAREG"
+          license.type = "BPAREG";
           searchConvertedArray.push(license);
-        })
+        });
       }
-      if(bpaData?.length) {
-        bpaData?.forEach(bpaDta => {
+      if (bpaData?.length) {
+        bpaData?.forEach((bpaDta) => {
           bpaDta.sortNumber = 0;
           bpaDta.modifiedTime = bpaDta.auditDetails.lastModifiedTime;
-          bpaDta.type = "BPA"
+          bpaDta.type = "BPA";
           searchConvertedArray.push(bpaDta);
-        })
+        });
       }
       sortConvertedArray = [].slice.call(searchConvertedArray).sort(function (a, b) {
         return new Date(b.modifiedTime) - new Date(a.modifiedTime) || a.sortNumber - b.sortNumber;
@@ -87,11 +106,10 @@ const MyApplication = () => {
       const userInfoDetails = userInfos ? JSON.parse(userInfos) : {};
       if (userInfoDetails?.value?.info?.roles?.length == 1 && userInfoDetails?.value?.info?.roles?.[0]?.code == "CITIZEN") setLableMessage(true);
     }
-  },[isLoading, isBpaSearchLoading, bpaData, data]);
-
+  }, [isLoading, isBpaSearchLoading, bpaData, data]);
 
   if (isLoading || isBpaSearchLoading) {
-    return <Loader />
+    return <Loader />;
   }
 
   return (
@@ -137,7 +155,7 @@ const MyApplication = () => {
         }
       })}
     </Fragment>
-  )
+  );
 };
 
 export default MyApplication;

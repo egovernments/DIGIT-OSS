@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardText, Loader } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import TradeLicenseList from "./TradeLicenseList";
@@ -7,26 +7,30 @@ import TradeLicenseList from "./TradeLicenseList";
 export const TLList = () => {
   const { t } = useTranslation();
   const userInfo = Digit.UserService.getUser();
-  const tenantId = userInfo?.info?.permanentCity;
-  const { mobileNumber: mobileno, LicenseNumber: licenseno, tenantId:tenantID } = Digit.Hooks.useQueryParams();
+  const tenantId = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || userInfo?.info?.permanentCity;
+  const { mobileNumber: mobileno, LicenseNumber: licenseno, tenantId: tenantID } = Digit.Hooks.useQueryParams();
   let filter1 = {};
   if (licenseno) filter1.licenseNumbers = licenseno;
   if (licenseno) filter1.tenantId = tenantID;
   if (!licenseno) filter1.mobileNumber = userInfo?.info?.mobileNumber;
-  if (!licenseno) filter1.RenewalPending = true;
+  filter1 = { ...filter1, tenantId: tenantId || tenantID, status: "APPROVED,CANCELLED,EXPIRED,MANUALEXPIRED" };
   const { isLoading, isError, error, data } = Digit.Hooks.tl.useTradeLicenseSearch({ filters: filter1 }, {});
+  useEffect(() => {
+    localStorage.setItem("TLAppSubmitEnabled", "true");
+  }, []);
   if (isLoading) {
     return <Loader />;
   }
   let { Licenses: applicationsList } = data || {};
   let newapplicationlist = applicationsList;
+
   return (
     <React.Fragment>
       <Card>
         <CardHeader>{`${t("TL_RENEW_TRADE_HEADER")}`}</CardHeader>
         <CardText>{`${t("TL_RENEW_TRADE_TEXT")}`}</CardText>
       </Card>
-      <div >
+      <div>
         {newapplicationlist?.length > 0 &&
           newapplicationlist.map((application, index) => (
             <div key={index}>

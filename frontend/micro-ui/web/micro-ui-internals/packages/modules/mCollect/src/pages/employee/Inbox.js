@@ -26,7 +26,7 @@ const Inbox = ({
   const [pageOffset, setPageOffset] = useState(initialStates.pageOffset || 0);
   const [pageSize, setPageSize] = useState(initialStates.pageSize || 10);
   const [sortParams, setSortParams] = useState(initialStates.sortParams || [{ id: "createdTime", desc: false }]);
-  const { isLoading, isError: isCountError, error : counterror, data: countData } = Digit.Hooks.mcollect.useMCollectCount(tenantId);
+  const { isLoading, isError: isCountError, error: counterror, data: countData } = Digit.Hooks.mcollect.useMCollectCount(tenantId);
 
   const [searchParams, setSearchParams] = useState(() => {
     return initialStates.searchParams || {};
@@ -60,8 +60,8 @@ const Inbox = ({
   });
 
   useEffect(() => {
-    if(!hookLoading && !data?.challans?.length > 0) setIsLoader(false);
-    else if(hookLoading || data?.challans?.length) setIsLoader(true);
+    if (!hookLoading && !data?.challans?.length > 0) setIsLoader(false);
+    else if (hookLoading || data?.challans?.length) setIsLoader(true);
   }, [hookLoading, data]);
 
   let formedData = [];
@@ -133,7 +133,7 @@ const Inbox = ({
   };
 
   const fetchLastPage = () => {
-    setPageOffset(countData?.ChallanCount?.totalChallan && Math.ceil(countData?.ChallanCount?.totalChallan / 10) * 10 - pageSize);
+    setPageOffset(data?.totalCount && Math.ceil(data?.totalCount / 10) * 10 - pageSize);
   };
 
   const fetchFirstPage = () => {
@@ -238,7 +238,7 @@ const Inbox = ({
             parentRoute={parentRoute}
             searchParams={searchParams}
             sortParams={sortParams}
-            totalRecords={countData?.ChallanCount?.totalChallan}
+            totalRecords={data?.totalCount}
             filterComponent={filterComponent}
             isLoader={isLoader}
           />

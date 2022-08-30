@@ -24,7 +24,6 @@ const CreateNewSurvey = ({ t, initialFormValues, onSubmit, isFormDisabled = fals
   useEffect(() => {
     registerRef("questions");
   }, []);
-
   return (
     <div style={{margin:"8px"}}>
       <FormProvider {...{
@@ -47,7 +46,7 @@ const CreateNewSurvey = ({ t, initialFormValues, onSubmit, isFormDisabled = fals
               surveyFormState={surveyFormState}
               surveyFormData={getSurveyFormValues}
             />
-            <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} addOption={true} />
+            <SurveyFormsMaker t={t} setSurveyConfig={setSurveyFormValue} addOption={true} controlSurveyForm={controlSurveyForm} />
             <SurveySettingsForms t={t} controlSurveyForm={controlSurveyForm} surveyFormState={surveyFormState} />
           </Card>
 

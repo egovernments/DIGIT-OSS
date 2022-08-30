@@ -18,7 +18,16 @@ const useSearch = (filters, config) => {
         limit,
         offset
     }
-    return useQuery(["search_surveys", title, tenantIds, postedBy, status, offset, limit], () => Surveys.search(finalFilters), { ...config });
+
+    //clearing out empty string params from payload
+    Object.keys(finalFilters).forEach(key => {
+        if (finalFilters[key] === '') {
+            delete finalFilters[key];
+        }
+    });
+
+
+    return useQuery(["search_surveys", title, tenantIds, postedBy, status, offset, limit], () => Surveys.search(finalFilters), { ...config, refetchInterval: 6000 });
 };
 
 export default useSearch;

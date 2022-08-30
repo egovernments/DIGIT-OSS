@@ -32,13 +32,16 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
 
   const { isLoading, data: Data = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "TradeLicense", "AccessoryCategory");
   const [accessories, SetAccessories] = useState([]);
-  const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: TenantId, filters: {} });
+  const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId: TenantId, filters: {} }, {
+    select: (data) => {
+    return data?.billingSlab.filter((e) => e.accessoryCategory && e.applicationType === "NEW" && e.uom);
+    }});
 
   useEffect(() => {
-    if (billingSlabData && billingSlabData?.billingSlab && billingSlabData?.billingSlab?.length > 0) {
+    if (billingSlabData  && billingSlabData?.length > 0) {
       const processedData =
-        billingSlabData.billingSlab &&
-        billingSlabData.billingSlab.reduce(
+        billingSlabData &&
+        billingSlabData.reduce(
           (acc, item) => {
             let accessory = { active: true };
             let tradeType = { active: true };
@@ -113,15 +116,15 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
     setFeilds(acc);
     acc[i].accessorycount = "";
     acc[i].uom = "";
-    acc[i].unit = null;
+    acc[i].unit = value?.uom != null ?  value.uom : "";
     Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
-    setUnitOfMeasure(null);
-    Data?.TradeLicense?.AccessoriesCategory.map((ob) => {
-      if (value.code === ob.code && ob.uom != null) {
-        acc[i].unit = ob.uom;
-        setUnitOfMeasure(ob.uom);
-      }
-    });
+    setUnitOfMeasure(value?.uom != null ? value.uom : null);
+    // Data?.TradeLicense?.AccessoriesCategory.map((ob) => {
+    //   if (value.code === ob.code && ob.uom != null) {
+    //     acc[i].unit = ob.uom;
+    //     setUnitOfMeasure(ob.uom);
+    //   }
+    // });
   }
   function selectAccessoryCount(i, e) {
     setAccCountError(null);
@@ -220,7 +223,7 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
                       optionKey="i18nKey"
                       isMandatory={config.isMandatory}
                       //options={[{ i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }, { i18nKey: "a" }]}
-                      options={sortDropdownNames(accessories.length !== 0 ? accessories : getAccessoryCategoryDropDown(), "i18nKey", t)}
+                      options={sortDropdownNames( accessories, "i18nKey", t) || []}
                       selectedOption={field.accessory}
                       onSelect={(e) => selectAccessory(index, e)}
                       isPTFlow={true}

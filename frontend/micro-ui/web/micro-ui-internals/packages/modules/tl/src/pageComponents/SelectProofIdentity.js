@@ -1,6 +1,7 @@
 import { CardLabel, CardLabelDesc, FormStep, UploadFile } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import Timeline from "../components/TLTimeline";
+import { getOwnersfromProperty } from "../utils";
 
 const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
   const [uploadedFile, setUploadedFile] = useState(formData?.owners?.documents?.ProofOfIdentity?.fileStoreId || null);
@@ -32,12 +33,16 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
     let fileDetails = file;
     if (fileDetails) fileDetails.documentType = "OWNERIDPROOF";
     if (fileDetails) fileDetails.fileStoreId = fileStoreId ? fileStoreId : null;
-    let owners = formData?.owners;
+    let owners = formData?.owners || {};
     if (owners && owners.documents) {
       owners.documents["ProofOfIdentity"] = fileDetails;
     } else {
       owners["documents"] = [];
       owners.documents["ProofOfIdentity"] = fileDetails;
+    }
+    if(window.location.href.includes("/citizen/tl") && formData?.ownershipCategory?.isSameAsPropertyOwner == true)
+    {
+      owners = {...owners, owners : getOwnersfromProperty(formData), permanentAddress: formData?.cpt?.details?.owners?.[0]?.permanentAddress || formData?.cpt?.details?.owners?.[0]?.correspondenceAddress}
     }
     onSelect(config.key, owners);
   };
@@ -93,7 +98,7 @@ const SelectProofIdentity = ({ t, config, onSelect, userType, formData }) => {
       <UploadFile
         id={"tl-doc"}
         extraStyleName={"propertyCreate"}
-        accept=".jpg,.png,.pdf"
+        accept=".jpg,.png,.pdf,.jpeg"
         onUpload={selectfile}
         onDelete={() => {
           setUploadedFile(null);

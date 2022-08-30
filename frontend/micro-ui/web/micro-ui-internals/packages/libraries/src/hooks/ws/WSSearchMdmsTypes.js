@@ -1,10 +1,21 @@
 import { useQuery } from "react-query";
-import { MdmsService } from "../../services/elements/MDMS";
+import { getMultipleTypes, MdmsService, getGeneralCriteria } from "../../services/elements/MDMS"
 
 const WSSearchMdmsTypes = {
-  useWSServicesMasters: (tenantId) =>
+  useWSMDMSBillAmendment: ({tenantId, config={}}) => {
+    const BillAmendmentMdmsDetails = getMultipleTypes(tenantId, "BillAmendment", ["documentObj", "DemandRevisionBasis"])
+    return useQuery([tenantId, "WS_BILLAMENDMENT_MDMS"], () => MdmsService.getDataByCriteria(tenantId, BillAmendmentMdmsDetails, "BillAmendment"), {
+      select: ({BillAmendment}) => {
+        return BillAmendment?.DemandRevisionBasis.map( (e, index) => {
+          return { ...e, i18nKey: `DEMAND_REVISION_BASIS_${e.code}`, allowedDocuments: BillAmendment?.documentObj[index] }
+        })
+      },
+      ...config
+    });
+  },
+  useWSServicesMasters: (tenantId, type) =>
     useQuery(
-      [tenantId, "WS_WS_SERVICES_MASTERS"],
+      [tenantId, type, "WS_WS_SERVICES_MASTERS"],
       () =>
         MdmsService.getDataByCriteria(
           tenantId,
@@ -16,7 +27,7 @@ const WSSearchMdmsTypes = {
                   moduleName: "ws-services-masters",
                   masterDetails: [
                     {
-                      name: "Documents",
+                      name: type ?  type : "Documents"
                     },
                   ],
                 },
@@ -27,7 +38,8 @@ const WSSearchMdmsTypes = {
         ),
       {
         select: (data) => {
-          data?.["ws-services-masters"]?.Documents?.forEach(type => {
+          const wsDocsData = type ? type : "Documents";
+          data?.["ws-services-masters"]?.[wsDocsData]?.forEach(type => {
             type.code = type.code;
             type.i18nKey = type.code ? type.code.replaceAll('.', '_') : "";
             type.dropdownData.forEach(value => {

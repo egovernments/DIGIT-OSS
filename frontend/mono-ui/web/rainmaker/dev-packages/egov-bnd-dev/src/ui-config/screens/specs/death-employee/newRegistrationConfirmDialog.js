@@ -6,6 +6,29 @@ import { postData } from "./newRegistrationFooter";
 
 export const confirmationDialog = getCommonContainer(
   {
+    closeButton: {
+      componentPath: "Button",
+      props: {
+        style: {
+          float: "right",
+          color: "rgba(0, 0, 0, 0.60)",
+        },
+      },
+      children: {
+        previousButtonIcon: {
+          uiFramework: "custom-atoms",
+          componentPath: "Icon",
+          props: {
+            iconName: "close",
+          },
+        },
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) =>
+          showHideConfirmationPopup(state, dispatch, "newRegistration"),
+      },
+    },
     header: getCommonHeader(
       {
         labelName: "Confirm Download",

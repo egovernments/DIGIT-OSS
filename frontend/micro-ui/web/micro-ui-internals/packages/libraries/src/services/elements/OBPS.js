@@ -141,6 +141,16 @@ export const OBPSService = {
       userService: false,
       userDownload: true,
     }),
+  BPAOpensearch: (data) =>
+    Request({
+     url: Urls.obps.getSearchDetails,
+     useCache: false,
+     method: "POST",
+     auth: false ,
+     noRequestInfo: true,
+     userService: false,
+     data: data
+   }),
   LicenseDetails: async (tenantId, params) => {
     const response = await OBPSService.BPAREGSearch(tenantId, {}, params);
     if (!response?.Licenses?.length) {

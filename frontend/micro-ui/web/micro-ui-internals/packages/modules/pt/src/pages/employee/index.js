@@ -68,6 +68,8 @@ const EmployeeApp = ({ path, url, userType }) => {
 
   const PTBreadCrumbs = ({ location }) => {
     const { t } = useTranslation();
+    const search = useLocation().search;
+    const fromScreen = new URLSearchParams(search).get("from") || null;
     const crumbs = [
       {
         path: "/digit-ui/employee",
@@ -106,8 +108,9 @@ const EmployeeApp = ({ path, url, userType }) => {
       },
       {
         path: `/digit-ui/employee/pt/ptsearch/property-details/${sessionStorage.getItem("propertyIdinPropertyDetail")}`,
-        content: t("PT_PROPERTY_INFORMATION"),
+        content: fromScreen ? `${t(fromScreen)} / ${t("PT_PROPERTY_INFORMATION")}`:t("PT_PROPERTY_INFORMATION"),
         show: location.pathname.includes("/pt/property-details/") || location.pathname.includes("/pt/ptsearch/property-details/") || location.pathname.includes("/pt/ptsearch/payment-details/") || location.pathname.includes("/pt/ptsearch/assessment-details/")  ? true : false,
+        isBack:fromScreen && true,
       },
       {
         path: `/digit-ui/employee/pt/applicationsearch/application-details/${sessionStorage.getItem("applicationNoinAppDetails")}`,
@@ -116,8 +119,10 @@ const EmployeeApp = ({ path, url, userType }) => {
       },
       {
         path: "/digit-ui/employee/pt/payment-details/",
-        content: t("PT_PAYMENT_HISTORY"),
+        content: fromScreen ? `${t(fromScreen)} / ${t("PT_PAYMENT_HISTORY")
+} `: t("PT_PAYMENT_HISTORY"),
         show: location.pathname.includes("/pt/ptsearch/payment-details") ? true : false,
+        isBack:fromScreen && true,
       },
       {
         path: "/digit-ui/employee/pt/assessment-details/",

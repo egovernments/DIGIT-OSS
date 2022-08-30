@@ -18,6 +18,11 @@ const FSMLink = ({ parentRoute, isMobile, data }) => {
       text: t("ES_TITILE_SEARCH_APPLICATION"),
       link: `${parentRoute}/search`,
     },
+    {
+      text: t("ES_TITLE_REPORTS"),
+      link: `/employee/report/fsm/FSMDailyDesludingReport`,
+      hyperlink: true,
+    },
   ];
 
   const [links, setLinks] = useState([]);

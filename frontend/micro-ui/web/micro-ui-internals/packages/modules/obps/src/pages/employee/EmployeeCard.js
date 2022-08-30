@@ -6,7 +6,9 @@ import { useLocation } from "react-router-dom";
 
 const OBPSEmployeeHomeCard = () => {
 
-  const [totalCount, setTotalCount] = useState(0);
+    const [totalCount, setTotalCount] = useState(0);
+    const [totalCountEs, setTotalCountEs] = useState(0);
+    
     const { t } = useTranslation();
     const location = useLocation()
   
@@ -80,6 +82,7 @@ const OBPSEmployeeHomeCard = () => {
       const bpaCount = dataOfBPA?.totalCount ? dataOfBPA?.totalCount : 0;
       const stakeHolderCount = dataOfStakeholder?.totalCount ? dataOfStakeholder?.totalCount : 0;
       setTotalCount(bpaCount + stakeHolderCount);
+      setTotalCountEs(dataOfBPA?.nearingSlaCount||0 + dataOfStakeholder?.nearingSlaCount||0  )
     }
   }, [dataOfBPA, dataOfStakeholder]);
 
@@ -98,7 +101,7 @@ const OBPSEmployeeHomeCard = () => {
             label: t("TOTAL_FSM"),
             link: `/digit-ui/employee/obps/inbox`
         },
-        {   count:"-",
+        {   count:!isInboxLoading && !isInboxLoadingOfStakeholder ? totalCountEs : "",
             label: t("TOTAL_NEARING_SLA"),
             link: `/digit-ui/employee/obps/inbox`
         }  
@@ -121,7 +124,7 @@ const OBPSEmployeeHomeCard = () => {
           link: `/digit-ui/employee/obps/search/application`
         },
       ]
-    }),[isInboxLoading, isInboxLoadingOfStakeholder, dataOfStakeholder, dataOfBPA, totalCount]);
+    }),[isInboxLoading, isInboxLoadingOfStakeholder, dataOfStakeholder, dataOfBPA, totalCount, totalCountEs]);
 
     if (!checkingForStakeholderRoles) {
       propsForModuleCard.links = propsForModuleCard.links.filter(obj => {

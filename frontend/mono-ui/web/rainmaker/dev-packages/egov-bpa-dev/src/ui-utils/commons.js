@@ -40,7 +40,7 @@ export const download = (receiptQueryString, mode = "download", configKey = "con
   }
   const FETCHRECEIPT = {
     GET: {
-      URL: businessService ? `/collection-services/payments/${businessService}/_search`  :"/collection-services/payments/_search",
+      URL: businessService ? `/collection-services/payments/${businessService}_search`  :"/collection-services/payments/_search",
       ACTION: "_get",
     },
   };

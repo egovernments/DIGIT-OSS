@@ -105,14 +105,11 @@ const SearchApplication = ({ onSearch, type, onClose, isFstpOperator, searchFiel
             {(type === "mobile" || mobileView) && (
               <div className="complaint-header">
                 <h2>{t("ES_COMMON_SEARCH_BY")}</h2>
-                <span
-                  style={{
-                    position: "absolute",
-                    top: "2%",
-                    right: "8px",
-                  }}
-                  onClick={onClose}
-                >
+                <span style={{
+                  position: "absolute",
+                  top: "2%",
+                  right: "8px",
+                }} onClick={onClose}>
                   <CloseSvg />
                 </span>
               </div>

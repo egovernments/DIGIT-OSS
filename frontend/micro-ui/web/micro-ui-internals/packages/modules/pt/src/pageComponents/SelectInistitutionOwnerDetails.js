@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { CardHeader, CardLabel, Dropdown, FormStep, TextInput } from "@egovernments/digit-ui-react-components";
 import { cardBodyStyle } from "../utils";
+import Timeline from "../components/TLTimeline";
+
 const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
@@ -89,122 +91,131 @@ const SelectInistitutionOwnerDetails = ({ t, config, onSelect, userType, formDat
     }
   };
 
+  const checkMutatePT = window.location.href.includes("citizen/pt/property/property-mutation/") ? (
+    <Timeline currentStep={1} flow="PT_MUTATE" />
+  ) : (
+    <Timeline currentStep={2} />
+  );
+
   return (
-    <FormStep
-      config={config}
-      t={t}
-      onSelect={goNext}
-      isDisabled={!inistitutionName || !inistitutetype || !name || !designation || !mobileNumber || !altContactNumber}
-    >
-      <div>
-        <CardLabel>{`${t("PT_COMMON_INSTITUTION_NAME")}`}</CardLabel>
-        <TextInput
-          isMandatory={false}
-          optionKey="i18nKey"
-          t={t}
-          name="institutionName"
-          onChange={setInistitution}
-          value={inistitutionName}
-          disable={isUpdateProperty || isEditProperty}
-          {...(validation = {
-            isRequired: true,
-            pattern: "^[a-zA-Z-.`' ]*$",
-            title: t("PT_NAME_ERROR_MESSAGE"),
-          })}
-        />
-        <CardLabel>{`${t("PT_TYPE_OF_INSTITUTION")}`}</CardLabel>
-        <Dropdown
-          t={t}
-          isMandatory={false}
-          option={getDropdwonForInstitution() || []}
-          selected={inistitutetype}
-          optionKey="code"
-          select={setTypeOfInistituteName}
-          disabled={isUpdateProperty || isEditProperty}
-        />
-        <CardHeader>{t("PT_AUTH_PERSON_DETAILS")}</CardHeader>
-        <CardLabel>{`${t("PT_OWNER_NAME")}`}</CardLabel>
-        <TextInput
-          isMandatory={false}
-          optionKey="i18nKey"
-          t={t}
-          name="name"
-          onChange={setInistituteName}
-          value={name}
-          disable={isUpdateProperty || isEditProperty}
-          {...(validation = {
-            isRequired: true,
-            pattern: "^[a-zA-Z-.`' ]*$",
-            title: t("PT_NAME_ERROR_MESSAGE"),
-          })}
-        />
-        <CardLabel>{`${t("PT_COMMON_AUTHORISED_PERSON_DESIGNATION")}`}</CardLabel>
-        <TextInput
-          isMandatory={false}
-          optionKey="i18nKey"
-          t={t}
-          name="designation"
-          onChange={setDesignationName}
-          value={designation}
-          disable={isUpdateProperty || isEditProperty}
-          {...(validation = {
-            isRequired: true,
-            pattern: "^[a-zA-Z-.`' ]*$",
-            title: t("PT_DESIGNATION_ERROR_MESSAGE"),
-          })}
-        />
-        <CardLabel>{`${t("PT_FORM3_MOBILE_NUMBER")}`}</CardLabel>
-        <TextInput
-          isMandatory={false}
-          optionKey="i18nKey"
-          t={t}
-          name="setMobileNo"
-          onChange={setMobileNo}
-          value={mobileNumber}
-          type={"tel"}
-          disable={isUpdateProperty || isEditProperty}
-          {...(validation = {
-            isRequired: true,
-            pattern: "[6-9]{1}[0-9]{9}",
-            type: "tel",
-            title: t("CORE_COMMON_APPLICANT_ALT_NUMBER_INVALID"),
-          })}
-        />
-        <CardLabel>{`${t("PT_OWNERSHIP_INFO_TEL_PHONE_NO")}`}</CardLabel>
-        <TextInput
-          isMandatory={false}
-          optionKey="i18nKey"
-          t={t}
-          name="altContactNumber"
-          onChange={setAltContactNo}
-          value={altContactNumber}
-          type={"tel"}
-          disable={isUpdateProperty || isEditProperty}
-          {...(validation = {
-            isRequired: true,
-            pattern: "^[0-9]{11}$",
-            type: "tel",
-            title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
-          })}
-        />
-        <CardLabel>{t("PT_FORM3_EMAIL_ID")}</CardLabel>
-        <TextInput
-          isMandatory={false}
-          optionKey="i18nKey"
-          t={t}
-          name="email"
-          onChange={setEmail}
-          type="email"
-          value={emailId}
-          disable={isUpdateProperty || isEditProperty}
-          // {...(validation = {
-          //   isRequired: true,
-          //   type: "email",
-          //   title: t("PT_EMAIL_ID_ERROR_MESSAGE"),
-          // })}
-        />
-      </div>
-    </FormStep>
+    <React.Fragment>
+      {window.location.href.includes("/citizen") ? checkMutatePT : null}
+      <FormStep
+        config={config}
+        t={t}
+        onSelect={goNext}
+        isDisabled={!inistitutionName || !inistitutetype || !name || !designation || !mobileNumber || !altContactNumber}
+      >
+        <div>
+          <CardLabel>{`${t("PT_COMMON_INSTITUTION_NAME")}`}</CardLabel>
+          <TextInput
+            isMandatory={false}
+            optionKey="i18nKey"
+            t={t}
+            name="institutionName"
+            onChange={setInistitution}
+            value={inistitutionName}
+            disable={isUpdateProperty || isEditProperty}
+            {...(validation = {
+              isRequired: true,
+              pattern: "^[a-zA-Z-.`' ]*$",
+              title: t("PT_NAME_ERROR_MESSAGE"),
+            })}
+          />
+          <CardLabel>{`${t("PT_TYPE_OF_INSTITUTION")}`}</CardLabel>
+          <Dropdown
+            t={t}
+            isMandatory={false}
+            option={getDropdwonForInstitution() || []}
+            selected={inistitutetype}
+            optionKey="code"
+            select={setTypeOfInistituteName}
+            disabled={isUpdateProperty || isEditProperty}
+          />
+          <CardHeader>{t("PT_AUTH_PERSON_DETAILS")}</CardHeader>
+          <CardLabel>{`${t("PT_OWNER_NAME")}`}</CardLabel>
+          <TextInput
+            isMandatory={false}
+            optionKey="i18nKey"
+            t={t}
+            name="name"
+            onChange={setInistituteName}
+            value={name}
+            disable={isUpdateProperty || isEditProperty}
+            {...(validation = {
+              isRequired: true,
+              pattern: "^[a-zA-Z-.`' ]*$",
+              title: t("PT_NAME_ERROR_MESSAGE"),
+            })}
+          />
+          <CardLabel>{`${t("PT_COMMON_AUTHORISED_PERSON_DESIGNATION")}`}</CardLabel>
+          <TextInput
+            isMandatory={false}
+            optionKey="i18nKey"
+            t={t}
+            name="designation"
+            onChange={setDesignationName}
+            value={designation}
+            disable={isUpdateProperty || isEditProperty}
+            {...(validation = {
+              isRequired: true,
+              pattern: "^[a-zA-Z-.`' ]*$",
+              title: t("PT_DESIGNATION_ERROR_MESSAGE"),
+            })}
+          />
+          <CardLabel>{`${t("PT_FORM3_MOBILE_NUMBER")}`}</CardLabel>
+          <TextInput
+            isMandatory={false}
+            optionKey="i18nKey"
+            t={t}
+            name="setMobileNo"
+            onChange={setMobileNo}
+            value={mobileNumber}
+            type={"tel"}
+            disable={isUpdateProperty || isEditProperty}
+            {...(validation = {
+              isRequired: true,
+              pattern: "[6-9]{1}[0-9]{9}",
+              type: "tel",
+              title: t("CORE_COMMON_APPLICANT_ALT_NUMBER_INVALID"),
+            })}
+          />
+          <CardLabel>{`${t("PT_OWNERSHIP_INFO_TEL_PHONE_NO")}`}</CardLabel>
+          <TextInput
+            isMandatory={false}
+            optionKey="i18nKey"
+            t={t}
+            name="altContactNumber"
+            onChange={setAltContactNo}
+            value={altContactNumber}
+            type={"tel"}
+            disable={isUpdateProperty || isEditProperty}
+            {...(validation = {
+              isRequired: true,
+              pattern: "^[0-9]{11}$",
+              type: "tel",
+              title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID"),
+            })}
+          />
+          <CardLabel>{t("PT_FORM3_EMAIL_ID")}</CardLabel>
+          <TextInput
+            isMandatory={false}
+            optionKey="i18nKey"
+            t={t}
+            name="email"
+            onChange={setEmail}
+            type="email"
+            value={emailId}
+            disable={isUpdateProperty || isEditProperty}
+            // {...(validation = {
+            //   isRequired: true,
+            //   type: "email",
+            //   title: t("PT_EMAIL_ID_ERROR_MESSAGE"),
+            // })}
+          />
+        </div>
+      </FormStep>
+    </React.Fragment>
   );
 };
 

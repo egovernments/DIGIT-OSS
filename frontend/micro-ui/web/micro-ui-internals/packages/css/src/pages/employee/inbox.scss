@@ -49,9 +49,9 @@
   }
 }
 
-.MobilePopupHeadingWrapper{
+.MobilePopupHeadingWrapper {
   @apply flex place-content-between mb-md;
-  h2{
+  h2 {
     @apply text-heading-l font-bold;
   }
 }
@@ -85,8 +85,8 @@
     padding: 10px;
 
     .heading {
-      justify-content: unset ;
-      @apply flex ;
+      justify-content: unset;
+      @apply flex;
 
       .clearAll {
         display: none;
@@ -96,17 +96,17 @@
     .filter-label {
       @apply font-bold text-heading-l flex gap-3;
       padding-bottom: 6px;
-      svg{
-        fill: #0b0c0c
+      svg {
+        fill: #0b0c0c;
       }
     }
-    .sub-filter-label{
+    .sub-filter-label {
       font-weight: 400;
       font-size: 16px;
     }
   }
-  .filter-form-field{
-    p{
+  .filter-form-field {
+    p {
       @apply text-form-field text-text-primary block mb-md;
     }
   }
@@ -118,7 +118,7 @@
       .filter-card {
         @apply bg-white;
         padding: 10px;
-        .filter-card-close-button{
+        .filter-card-close-button {
           @apply flex flex-row-reverse;
         }
         .heading {
@@ -132,12 +132,12 @@
         .filter-label {
           @apply text-heading-m block flex gap-3 items-center;
           padding-bottom: 6px;
-          svg{
-            fill: #0b0c0c
+          svg {
+            fill: #0b0c0c;
           }
         }
 
-        .sub-filter-label{
+        .sub-filter-label {
           font-weight: 400;
           font-size: 16px;
         }
@@ -274,6 +274,9 @@
           }
         }
       }
+      .citizen-filter {
+        margin-top: unset;
+      }
     }
 
     .search-container {
@@ -332,7 +335,6 @@
             }
           }
 
-    
           .input-fields {
             /*width: calc(50% - 16px);*/
 
@@ -368,8 +370,6 @@
           }
         }
 
-      
-
         .search-action-wrapper {
           width: 33%;
           margin-top: 28px;
@@ -388,15 +388,13 @@
   }
 }
 
-.document-clear-all{
+.document-clear-all {
   grid-area: 2/2;
   display: flex;
   justify-content: flex-end;
   padding-right: 16px;
   align-items: center;
-}         
-
-
+}
 
 .cell-text {
   color: #505a5f;
@@ -441,15 +439,146 @@
 }
 @screen dt {
   .customEmployeeCard {
-    width: 273px !important;
+    width: 230px !important;
     height: 263px !important;
   }
 }
-.employeeTotalLink{
-  color: #505A5F;
+.employeeTotalLink {
+  color: #505a5f;
   font-size: 16px;
+}
+
+@screen dt {
+  .groupBill-custom {
+    .custom-group-merge-container {
+      display: flex !important;
+      justify-content: space-between !important;
+      .header {
+        display: flex;
+        align-items: baseline;
+        .logo {
+          margin-right: 1rem;
+          svg {
+            path {
+              fill: #f47738;
+            }
+          }
+        }
+        .h1 {
+          font-size: 24px;
+          line-height: 28px;
+          font-weight: 400;
+          color: #f47738;
+        }
+      }
+    }
+    .inbox-container {
+      .search-container {
+        .search-complaint-container {
+          display: flex;
+          flex-direction: row;
+        }
+        .group-complaint-input-container {
+          width: 33% !important;
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
+    .inbox-action-container {
+      display: flex;
+      flex-direction: row-reverse;
+      .clear-search {
+        margin-top: 65px;
+        margin-left: 16px;
+        padding-top: unset !important;
+      }
+      .submit-bar-search {
+        margin-top: 55px !important;
+      }
+    }
+  }
 }
 
 .inboxLinksFSM {
   margin: 0 !important;
+}
+
+.plumber-details-new-value-wrapper {
+  flex: 2 1 auto;
+}
+
+.connection-details-new-value-wrapper {
+  flex: 1 1 auto;
+}
+
+.connection-details-old-value-wrapper,
+.plumber-details-old-value-wrapper {
+  flex: 1 1 auto;
+
+  .old-value-null-wrapper {
+    visibility: hidden;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+  .row {
+    color: #b1b4b6;
+    font-weight: 700;
+    font-size: 16px;
+  }
+}
+
+.search-tabs-container {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  margin-bottom: 35px;
+  display: flex;
+  justify-content: space-between;
+
+  .search-tab-head {
+    padding: 10px 35px;
+  }
+
+  .search-tab-head-selected {
+    padding: 10px 35px;
+    color: rgb(244, 119, 56);
+    border-bottom: 4px solid rgb(244, 119, 56);
+    font-weight: bold;
+  }
+
+  .search-tab-head-selected:focus {
+    outline: 0;
+  }
+}
+
+.card-with-background {
+  background: rgb(250, 250, 250);
+  border: 1px solid rgb(214, 213, 212);
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+
+  h2 {
+    font-size: 16px;
+    font-weight: 700;
+  }
+}
+
+.registryTable {
+  tHead {
+    tr {
+      th {
+        text-align: center;
+      }
+    }
+  }
+  tBody {
+    tr {
+      td {
+        text-align: center;
+      }
+    }
+  }
 }

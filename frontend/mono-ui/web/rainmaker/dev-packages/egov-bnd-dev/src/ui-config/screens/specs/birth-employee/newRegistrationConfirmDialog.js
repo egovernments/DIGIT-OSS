@@ -1,11 +1,36 @@
 import {
-  getCommonContainer, getCommonHeader, getLabel
+  getCommonContainer,
+  getCommonHeader,
+  getLabel,
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { showHideConfirmationPopup } from "./newRegistration";
 import { postData } from "./newRegistrationFooter";
 
 export const confirmationDialog = getCommonContainer(
   {
+    closeButton: {
+      componentPath: "Button",
+      props: {
+        style: {
+          float: "right",
+          color: "rgba(0, 0, 0, 0.60)",
+        },
+      },
+      children: {
+        previousButtonIcon: {
+          uiFramework: "custom-atoms",
+          componentPath: "Icon",
+          props: {
+            iconName: "close",
+          },
+        },
+      },
+      onClickDefination: {
+        action: "condition",
+        callBack: (state, dispatch) =>
+          showHideConfirmationPopup(state, dispatch, "getCertificate"),
+      },
+    },
     header: getCommonHeader(
       {
         labelName: "Confirm Download",

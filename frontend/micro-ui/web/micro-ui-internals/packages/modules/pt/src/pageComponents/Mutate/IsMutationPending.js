@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FormStep, RadioButtons, LabelFieldPair, CardLabel, Dropdown, Loader, TextInput, CheckBox } from "@egovernments/digit-ui-react-components";
+import Timeline from "../../components/TLTimeline";
 
 const IsMutationPending = (props) => {
   const { t, config, onSelect, userType, formData, setError, clearErrors, errors } = props;
@@ -27,9 +28,9 @@ const IsMutationPending = (props) => {
 
   function setIsMutationInCourt(e) {
     if (e.target.checked == true) {
-      setMutationInCourt({ code: "YES"});
+      setMutationInCourt({ code: "YES" });
     } else {
-      setMutationInCourt({ code: "NO"});
+      setMutationInCourt({ code: "NO" });
     }
   }
 
@@ -40,8 +41,8 @@ const IsMutationPending = (props) => {
           {/* <CardLabel style={{ fontWeight: "bold" }} className="card-label-smaller">
             {t("PT_MUTATION_COURT_PENDING_OR_NOT") + " *"}
           </CardLabel> */}
-          <div className="field" style={{width: "55%"}}>
-          <CheckBox
+          <div className="field" style={{ width: "55%" }}>
+            <CheckBox
               label={`${t("PT_MUTATION_COURT_PENDING_OR_NOT")}*`}
               name={"isMutationInCourt"}
               onChange={setIsMutationInCourt}
@@ -78,6 +79,7 @@ const IsMutationPending = (props) => {
 
   return (
     <React.Fragment>
+      <Timeline currentStep={2} flow="PT_MUTATE" />
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!isMutationInCourt}>
         <div>
           <RadioButtons

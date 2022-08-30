@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { FormStep, TextInput, CheckBox, CardLabel, LabelFieldPair, TextArea } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
+import Timeline from "../components/TLTimeline";
 
 const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerIndex = 0 }) => {
   const { pathname: url } = useLocation();
   const editScreen = url.includes("/modify-application/");
   const isMutation = url.includes("property-mutation");
-
   let index = isMutation ? ownerIndex : window.location.href.charAt(window.location.href.length - 1);
   const [permanentAddress, setPermanentAddress] = useState(
-    (formData.owners && formData.owners[index] && formData.owners[index]?.permanentAddress) || (formData.owners[index]?.correspondenceAddress) || formData?.owners?.permanentAddress || ""
+    (formData.owners && formData.owners[index] && formData.owners[index]?.permanentAddress) ||
+      formData.owners[index]?.correspondenceAddress ||
+      formData?.owners?.permanentAddress ||
+      ""
   );
   const [isCorrespondenceAddress, setIsCorrespondenceAddress] = useState(
     formData.owners && formData.owners[index] && formData.owners[index]?.isCorrespondenceAddress
@@ -32,7 +35,8 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
         city: address?.city?.code,
         pincode: address?.pincode,
       };
-      let addressDetails = "";
+
+      let addressDetails = formData?.searchResult?.data?.property_address?formData?.searchResult?.data?.property_address:"";
       for (const key in obj) {
         if (key == "pincode") addressDetails += obj[key] ? obj[key] : "";
         else addressDetails += obj[key] ? t(obj[key]) + ", " : "";
@@ -57,12 +61,11 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
   };
 
   useEffect(() => {
-    if( !isCorrespondenceAddress && isUpdateProperty)
-    {
-      let e = {target: {checked:true}}
-    setCorrespondenceAddress(e);
+    if (!isCorrespondenceAddress && isUpdateProperty) {
+      let e = { target: { checked: true } };
+      setCorrespondenceAddress(e);
     }
-  })
+  });
 
   useEffect(() => {
     if (userType === "employee") {
@@ -82,28 +85,35 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData, ownerInde
       </LabelFieldPair>
     );
   }
-
+  const checkMutatePT = window.location.href.includes("citizen/pt/property/property-mutation/") ? (
+    <Timeline currentStep={1} flow="PT_MUTATE" />
+  ) : (
+    <Timeline currentStep={2} />
+  );
   return (
-    <FormStep config={config} t={t} onSelect={goNext} isDisabled={!permanentAddress}>
-      <TextArea
-        isMandatory={false}
-        optionKey="i18nKey"
-        t={t}
-        name="address"
-        onChange={setOwnerPermanentAddress}
-        value={permanentAddress}
-        disable={isUpdateProperty || isEditProperty}
-      />
-      {/* <CardLabel>{t("PT_OWNER_S_ADDRESS")}</CardLabel> */}
-      <CheckBox
-        label={t("PT_COMMON_SAME_AS_PROPERTY_ADDRESS")}
-        onChange={setCorrespondenceAddress}
-        value={isCorrespondenceAddress}
-        checked={isCorrespondenceAddress || false}
-        style={{ paddingTop: "10px" }}
-        disable={isUpdateProperty || isEditProperty}
-      />
-    </FormStep>
+    <React.Fragment>
+      {window.location.href.includes("/citizen") ? checkMutatePT : null}
+      <FormStep config={config} t={t} onSelect={goNext} isDisabled={!permanentAddress}>
+        <TextArea
+          isMandatory={false}
+          optionKey="i18nKey"
+          t={t}
+          name="address"
+          onChange={setOwnerPermanentAddress}
+          value={permanentAddress}
+          disable={isUpdateProperty || isEditProperty}
+        />
+        {/* <CardLabel>{t("PT_OWNER_S_ADDRESS")}</CardLabel> */}
+        <CheckBox
+          label={t("PT_COMMON_SAME_AS_PROPERTY_ADDRESS")}
+          onChange={setCorrespondenceAddress}
+          value={isCorrespondenceAddress}
+          checked={isCorrespondenceAddress || false}
+          style={{ paddingTop: "10px" }}
+          disable={isUpdateProperty || isEditProperty}
+        />
+      </FormStep>
+    </React.Fragment>
   );
 };
 

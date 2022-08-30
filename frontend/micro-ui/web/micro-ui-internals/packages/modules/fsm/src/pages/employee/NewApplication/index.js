@@ -43,7 +43,6 @@ export const NewApplication = ({ parentUrl, heading }) => {
   };
 
   const onFormValueChange = (setValue, formData) => {
-
     if (
       formData?.propertyType &&
       formData?.subtype &&
@@ -93,13 +92,13 @@ export const NewApplication = ({ parentUrl, heading }) => {
     const localityCode = data?.address?.locality?.code;
     const localityName = data?.address?.locality?.name;
     const gender = data.applicationData.applicantGender;
-    const paymentPreference = data?.paymentPreference ? data?.paymentPreference : 'POST_PAY';
+    const paymentPreference = data?.paymentPreference ? data?.paymentPreference : "POST_PAY";
     const formData = {
       fsm: {
         citizen: {
           name: applicantName,
           mobileNumber,
-          gender: gender
+          gender: gender,
         },
         tenantId: tenantId,
         sanitationtype: sanitationtype,
@@ -150,23 +149,29 @@ export const NewApplication = ({ parentUrl, heading }) => {
     return <Loader />;
   }
 
-  const configs = [...preFields, ...commonFields, ...postFields];
+  const configs = [...preFields, ...commonFields];
 
   return (
-    <FormComposer
-      heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
-      isDisabled={!canSubmit}
-      label={t("ES_COMMON_APPLICATION_SUBMIT")}
-      config={configs.filter((i) => !i.hideInEmployee).map((config) => {
-        return {
-          ...config,
-          body: config.body.filter((a) => !a.hideInEmployee),
-        };
-      })}
-      fieldStyle={{ marginRight: 0 }}
-      onSubmit={onSubmit}
-      defaultValues={defaultValues}
-      onFormValueChange={onFormValueChange}
-    />
+    <div className="skskskk">
+      <FormComposer
+        heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
+        isDisabled={!canSubmit}
+        label={t("ES_COMMON_APPLICATION_SUBMIT")}
+        config={configs
+          .filter((i) => !i.hideInEmployee)
+          .map((config) => {
+            return {
+              ...config,
+              body: config.body.filter((a) => !a.hideInEmployee),
+            };
+          })}
+        fieldStyle={{ marginRight: 0 }}
+        onSubmit={onSubmit}
+        defaultValues={defaultValues}
+        onFormValueChange={onFormValueChange}
+        noBreakLine={true}
+        fms_inline
+      />
+    </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FormStep, RadioButtons, LabelFieldPair, CardLabel, TextInput, CheckBox } from "@egovernments/digit-ui-react-components";
+import Timeline from "../../components/TLTimeline";
 
 const PTPropertyUnderStateAquire = ({ ...props }) => {
   const { t, config, onSelect, userType, formData, setError, clearErrors, errors } = props;
@@ -27,9 +28,9 @@ const PTPropertyUnderStateAquire = ({ ...props }) => {
 
   function setPropertyUnderGovtPossession(e) {
     if (e.target.checked == true) {
-      setSelected({ code: "YES"});
+      setSelected({ code: "YES" });
     } else {
-      setSelected({ code: "NO"});
+      setSelected({ code: "NO" });
     }
   }
 
@@ -40,7 +41,7 @@ const PTPropertyUnderStateAquire = ({ ...props }) => {
           {/* <CardLabel style={{ fontWeight: "bold" }} className="card-label-smaller">
             {t("PT_MUTATION_STATE_ACQUISITION") + " *"}
           </CardLabel> */}
-          <div className="field" style={{width: "55%"}}>
+          <div className="field" style={{ width: "55%" }}>
             <CheckBox
               label={`${t("PT_MUTATION_STATE_ACQUISITION")}*`}
               name={"isPropertyUnderGovtPossession"}
@@ -83,6 +84,7 @@ const PTPropertyUnderStateAquire = ({ ...props }) => {
 
   return (
     <React.Fragment>
+      <Timeline currentStep={2} flow="PT_MUTATE" />
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!isPropertyUnderGovtPossession?.code}>
         <RadioButtons
           t={t}

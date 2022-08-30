@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { Card, Banner, CardText, SubmitBar, Loader, LinkButton } from "@egovernments/digit-ui-react-components";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Card, Banner, CardText, SubmitBar, Loader, LinkButton, Toast, ActionBar, Menu } from "@egovernments/digit-ui-react-components";
+import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
 import getPDFData from "../getPDFData";
@@ -32,6 +32,7 @@ const BannerPicker = (props) => {
     actionMessage = props.action === "SUBMIT" ? props.action : props.data?.fsm?.[0].applicationStatus;
   }
   let labelMessage = GetLabel(props.data?.fsm?.[0].applicationStatus || props.action, props.isSuccess, props.isEmployee, props.t);
+
   if (props.errorInfo && props.errorInfo !== null && props.errorInfo !== "" && typeof props.errorInfo === "string" && props.action !== "SCHEDULE") {
     labelMessage = props.errorInfo;
   }
@@ -46,11 +47,13 @@ const BannerPicker = (props) => {
 };
 
 const Response = (props) => {
+  const history = useHistory();
+  const [showToast, setShowToast] = useState(null);
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   const paymentAccess = Digit.UserService.hasAccess("FSM_COLLECTOR");
-
+  const FSM_EDITOR = Digit.UserService.hasAccess("FSM_EDITOR_EMP") || false;
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const { state } = props.location;
@@ -61,6 +64,8 @@ const Response = (props) => {
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("FSM_MUTATION_HAPPENED", false);
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("FSM_ERROR_DATA", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("FSM_MUTATION_SUCCESS_DATA", false);
+  const [displayMenu, setDisplayMenu] = useState(false);
+  const [selectedAction, setSelectedAction] = useState(null);
 
   const onError = (error, variables) => {
     setErrorInfo(error?.response?.data?.Errors[0]?.code || error?.message || "ERROR");
@@ -87,6 +92,21 @@ const Response = (props) => {
 
     const data = getPDFData({ ...applicationDetails, slum, pdfVehicleType }, tenantInfo, t);
     Digit.Utils.pdf.generate(data);
+  };
+
+  const handleResponse = () => {
+    if (Data?.fsm?.[0].paymentPreference === "POST_PAY") {
+      setShowToast({ key: "error", action: `ES_FSM_PAYMENT_BEFORE_SCHEDULE_FAILURE` });
+      setTimeout(() => {
+        closeToast();
+      }, 5000);
+    } else {
+      history.push(`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`);
+    }
+  };
+
+  const closeToast = () => {
+    setShowToast(null);
   };
 
   useEffect(() => {
@@ -119,9 +139,32 @@ const Response = (props) => {
     }
   }, []);
 
+  function onActionSelect(action) {
+    setSelectedAction(action);
+    setDisplayMenu(false);
+  }
+  let getApplicationNo = Data.fsm?.[0].applicationNo;
+  useEffect(() => {
+    switch (selectedAction) {
+      case "GO_TO_HOME":
+        return history.push("/digit-ui/employee");
+      case "ASSIGN_TO_DSO":
+        return history.push(`/digit-ui/employee/fsm/application-details/${getApplicationNo}`);
+      case "PAY":
+        return handleResponse();
+    }
+  }, [selectedAction]);
+
   if (mutation.isLoading || (mutation.isIdle && !mutationHappened)) {
     return <Loader />;
   }
+  let ACTIONS = ["GO_TO_HOME"];
+  if (paymentAccess) {
+    ACTIONS = [...ACTIONS, "PAY"];
+  } else if (FSM_EDITOR) {
+    ACTIONS = [...ACTIONS, "ASSIGN_TO_DSO"];
+  }
+
   const isSuccess = !successData ? mutation?.isSuccess : true;
   return (
     <Card>
@@ -151,19 +194,21 @@ const Response = (props) => {
           onClick={handleDownloadPdf}
         />
       )}
-      <Link to={`${props.parentRoute.includes("employee") ? "/digit-ui/employee" : "/digit-ui/citizen"}`}>
-        <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
-      </Link>
-      {props.parentRoute.includes("employee") &&
-      (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
-      paymentAccess &&
-      isSuccess ? (
-        <div className="secondary-action">
-          <Link to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`}>
-            <SubmitBar label={t("ES_COMMON_PAY")} />
-          </Link>
-        </div>
-      ) : null}
+      <ActionBar>
+        {/* <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
+        <SubmitBar onSubmit={handleResponse} label={t("ES_COMMON_PAY")} />
+        <SubmitBar onSubmit={handleResponse} label={t("CS_COMMON_FSM_ASSIGN")} /> */}
+        {displayMenu ? <Menu localeKeyPrefix={"ES_COMMON"} options={ACTIONS} t={t} onSelect={onActionSelect} /> : null}
+        <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
+      </ActionBar>
+
+      {showToast && (
+        <Toast
+          error={showToast.key === "error" ? true : false}
+          label={t(showToast.key === "success" ? showToast.action : `ES_FSM_PAYMENT_BEFORE_SCHEDULE_FAILURE`)}
+          onClose={closeToast}
+        />
+      )}
     </Card>
   );
 };

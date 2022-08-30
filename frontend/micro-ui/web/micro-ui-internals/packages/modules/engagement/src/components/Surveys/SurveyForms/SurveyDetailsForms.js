@@ -1,4 +1,4 @@
-import { CardLabelError, Dropdown, RemoveableTag, TextInput } from "@egovernments/digit-ui-react-components";
+import { CardLabelError, Dropdown, RemoveableTag, TextInput, MultiSelectDropdown } from "@egovernments/digit-ui-react-components";
 import React, { Fragment, useMemo } from "react";
 import { Controller } from "react-hook-form";
 
@@ -14,6 +14,20 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
     const filtered = ulbs.filter((item) => item.code === tenantId);
     return filtered;
   }, [ulbs]);
+  const checkRemovableTagDisabled = (isFormDisabled, isActiveSurveyEdit) => {
+
+    //survey details page 
+    if (!isActiveSurveyEdit && isFormDisabled){
+      return true
+    }
+    //active survey editing
+    else if(isActiveSurveyEdit){
+      return true
+    }
+    //inactive survey editing
+    return false
+  }
+
 
   return (
     <div className="surveydetailsform-wrapper">
@@ -32,6 +46,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
                     <RemoveableTag
                       key={index}
                       text={ulb.name}
+                      disabled = {checkRemovableTagDisabled(disableInputs,enableDescriptionOnly)}
                       onClick={() => {
                         props.onChange(props?.value?.filter((loc) => loc.code !== ulb.code));
                       }}
@@ -42,10 +57,11 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
             );
             return (
               <div style={{ display: "grid", gridAutoFlow: "row" }}>
-                <Dropdown
+                 {/* <Dropdown
                   allowMultiselect={true}
                   optionKey={"i18nKey"}
                   option={userUlbs}
+                  placeholder={t("ES_COMMON_USER_ULBS")}
                   select={(e) => {
                     props.onChange([...(surveyFormData("tenantIds")?.filter?.((f) => e.code !== f?.code) || []), e]);
                   }}
@@ -53,8 +69,21 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
                   keepNull={true}
                   disable={disableInputs}
                   t={t}
+                />  */}
+                <MultiSelectDropdown
+                  options={userUlbs}
+                  isSurvey={true}
+                  optionsKey="i18nKey"
+                  props={props}
+                  isPropsNeeded={true}
+                  onSelect={(e) => {
+                    props.onChange([...(surveyFormData("tenantIds")?.filter?.((f) => e.code !== f?.code) || []), e]);
+                  }}
+                  selected={props?.value}
+                  defaultLabel={t("ES_COMMON_USER_ULBS")}
+                  defaultUnit={t("CS_SELECTED_TEXT")}
                 />
-                <div className="tag-container">{renderRemovableTokens}</div>
+                {/* <div className="tag-container">{renderRemovableTokens}</div> */}
               </div>
             );
           }}
@@ -63,7 +92,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
       </span>
 
       <span className="surveyformfield">
-        <label>{t("CS_SURVEY_NAME")}</label>
+        <label>{`${t("CS_SURVEY_NAME")} * :`}</label>
         <TextInput
           name="title"
           type="text"
@@ -83,15 +112,15 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
         {surveyFormState?.errors?.title && <CardLabelError>{surveyFormState?.errors?.["title"]?.message}</CardLabelError>}
       </span>
       <span className="surveyformfield">
-        <label>{t("CS_SURVEY_DESCRIPTION")}</label>
+        <label>{`${t("CS_SURVEY_DESCRIPTION")} :`}</label>
         <TextInput
           name="description"
           type="text"
           inputRef={registerRef({
-            required: t("ES_ERROR_REQUIRED"),
+            //required: t("ES_ERROR_REQUIRED"),
             maxLength: {
-              value: 250,
-              message: t("EXCEEDS_250_CHAR_LIMIT"),
+              value: 140,
+              message: t("EXCEEDS_140_CHAR_LIMIT"),
             },
             pattern:{
               value: /^[A-Za-z_-][A-Za-z0-9_\ -]*$/,

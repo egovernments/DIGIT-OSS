@@ -68,9 +68,9 @@ const TLSelectPincode = ({ t, config, onSelect, formData = {}, userType, registe
           <div className="field">
             <TextInput 
               key={input.name} 
-              value={pincode} 
+              value={formData?.cpt?.details?.address?.pincode || pincode} 
               onChange={onChange}
-              disable={isRenewal}
+              disable={formData?.cpt?.details || isRenewal}
               {...input.validation} 
               autoFocus={presentInModifyApplication} 
             />

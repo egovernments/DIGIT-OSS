@@ -22,7 +22,7 @@ const TLCaption = ({ data , comments}) => {
   );
 };
 
-const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating, zoomImage, complaintDetails }) => {
+const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating, zoomImage, complaintDetails, ComplainMaxIdleTime }) => {
   const { t } = useTranslation();
 
   function zoomImageWrapper(imageSource, index,thumbnailsToShow){
@@ -34,13 +34,14 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
   const totalTimelineLength = useMemo(()=> timeline?.length ,[timeline])
 
   useEffect(() => {
-    const [{auditDetails}] = timeline?.filter((status, index, array) => {
+    let filteredTimeline = timeline?.filter((status, index, array) => {
       if (index === array.length - 1 && status.status === "PENDINGFORASSIGNMENT") {
         return true;
       } else {
         return false;
       }
     });
+    const [{auditDetails}] = filteredTimeline?.length>0 ? filteredTimeline : [{}];
 
     const onlyPendingForAssignmentStatusArray = timeline?.filter( e => e?.status === "PENDINGFORASSIGNMENT")
     const duplicateCheckpointOfPendingForAssignment = onlyPendingForAssignmentStatusArray.at(-1)
@@ -98,6 +99,8 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
             isCompleted={isCurrent}
             action={complaintWorkflow.action}
             nextActions={index <= 1 && timeLineActions}
+            complaintDetails={complaintDetails}
+            ComplainMaxIdleTime={ComplainMaxIdleTime}
             //rating={index <= 1 && rating}
             serviceRequestId={serviceRequestId}
             reopenDate={Digit.DateUtils.ConvertTimestampToDate(auditDetails.lastModifiedTime)}
@@ -111,6 +114,8 @@ const TimeLine = ({ isLoading, data, serviceRequestId, complaintWorkflow, rating
             isCompleted={isCurrent}
             action={complaintWorkflow.action}
             nextActions={index <= 1 && timeLineActions}
+            complaintDetails={complaintDetails}
+            ComplainMaxIdleTime={ComplainMaxIdleTime}
             //rating={index <= 1 && rating}
             serviceRequestId={serviceRequestId}
             reopenDate={Digit.DateUtils.ConvertTimestampToDate(auditDetails.lastModifiedTime)}

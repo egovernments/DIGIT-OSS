@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from "react-query";
+import { PaymentService } from "../services/elements/Payment";
 
 export const useFetchCitizenBillsForBuissnessService = ({ businessService, ...filters }, config = {}) => {
   const queryClient = useQueryClient();
@@ -54,14 +55,14 @@ export const useFetchPayment = ({ tenantId, consumerCode, businessService }, con
 
   const fetchBill = async () => {
     /*  Currently enabled the logic to get bill no and expiry date for PT Module  */
-    if (businessService?.includes("PT")) {
+    if (businessService?.includes("PT") || businessService?.includes("SW") || businessService?.includes("WS")) {
       const fetchedBill = await Digit.PaymentService.fetchBill(tenantId, { consumerCode, businessService });
-      const billdetail=fetchedBill?.Bill?.[0]?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod)?.[0]||{};
-      fetchedBill.Bill[0].billDetails=fetchedBill.Bill[0].billDetails.map(ele=>({
+      const billdetail = fetchedBill?.Bill?.[0]?.billDetails?.sort((a, b) => b.fromPeriod - a.fromPeriod)?.[0] || {};
+      fetchedBill.Bill[0].billDetails = fetchedBill?.Bill[0]?.billDetails?.map((ele) => ({
         ...ele,
         currentBillNo: fetchedBill?.Bill?.[0]?.billNumber,
         currentExpiryDate: billdetail?.expiryDate,
-      }))
+      }));
       if (fetchedBill && fetchedBill?.Bill?.[0]?.billDetails?.length > 1) {
         fetchedBill?.Bill?.[0]?.billDetails?.map(async (billdet) => {
           const searchBill = await Digit.PaymentService.searchBill(tenantId, {
@@ -110,6 +111,32 @@ export const useGetPaymentRulesForBusinessServices = (tenantId) => {
   return useQuery(["getPaymentRules", tenantId], () => Digit.MDMSService.getPaymentRules(tenantId));
 };
 
+export const usePaymentSearch = (tenantId, filters, config = {}) => {
+  return useQuery(["PAYMENT_SERACH", tenantId], () => Digit.PaymentService.searchBill(tenantId, filters), {
+    select: (data) => {
+      return data?.Bill?.[0]?.billDetails?.[0]?.billAccountDetails.filter((e) => {
+        switch (e.taxHeadCode) {
+          case "WS_CHARGE":
+          case "WS_TIME_PENALTY":
+          case "WS_TIME_INTEREST":
+          case "SW_TIME_INTEREST":
+          case "SW_TIME_PENALTY":
+          case "SW_CHARGE":
+          case "WS_WATER_CESS":
+          case "WS_TIME_ADHOC_PENALTY":
+          case "WS_TIME_ADHOC_REBATE":
+          case "SW_TIME_ADHOC_PENALTY":
+          case "SW_TIME_ADHOC_REBATE":
+            return true;
+          default:
+            return false;
+        }
+      });
+    },
+    ...config,
+  });
+};
+
 export const useDemandSearch = ({ consumerCode, businessService, tenantId }, config = {}) => {
   if (!tenantId) tenantId = Digit.ULBService.getCurrentTenantId();
   const queryFn = () => Digit.PaymentService.demandSearch(tenantId, consumerCode, businessService);
@@ -119,11 +146,15 @@ export const useDemandSearch = ({ consumerCode, businessService, tenantId }, con
 
 export const useRecieptSearch = ({ tenantId, businessService, ...params }, config = {}) => {
   return useQuery(
-    ["reciept_search", { tenantId, businessService, params }],
+    ["reciept_search", { tenantId, businessService, params },config],
     () => Digit.PaymentService.recieptSearch(tenantId, businessService, params),
     {
       refetchOnMount: false,
       ...config,
     }
   );
+};
+
+export const useBulkPdfDetails = ({ filters }) => {
+  return useQuery(["BULK_PDF_DETAILS", filters], async () => await PaymentService.getBulkPdfRecordsDetails(filters));
 };

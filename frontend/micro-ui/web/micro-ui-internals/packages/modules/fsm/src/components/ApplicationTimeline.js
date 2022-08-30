@@ -75,9 +75,9 @@ export const ApplicationTimeline = (props) => {
       const caption = {
         date: checkpoint?.auditDetails?.created,
         name: checkpoint?.assigner,
-        mobileNumber: checkpoint?.assigner?.mobileNumber,
+        mobileNumber: checkpoint?.assigner?.mobileNumber
       };
-      if (checkpoint?.numberOfTrips) caption.comment = `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`;
+      if (checkpoint?.numberOfTrips) caption.comment= `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`
       return <TLCaption data={caption} />;
     }
   };

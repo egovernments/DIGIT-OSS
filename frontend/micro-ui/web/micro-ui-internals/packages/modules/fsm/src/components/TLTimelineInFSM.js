@@ -15,6 +15,13 @@ const getAction = (flow) => {
       'FSM_TIMELINE_SUMMARY',
     ]
       break;
+      case "PT_APPLY": actions = [
+        'ES_NEW_APPLICATION_PROPERTY_DETAILS',
+        'PT_OWNERSHIP_INFO_SUB_HEADER',
+        'CE_DOCUMENT_DETAILS',
+        'PT_COMMON_SUMMARY',
+      ]
+        break;
     default: actions = [
       'TL_COMMON_TR_DETAILS',
       'TL_LOCATION_AND_OWNER_DETAILS',

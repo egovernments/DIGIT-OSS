@@ -21,20 +21,20 @@ export const getLocale = () => {
 export const getModule = () => {
   return localStorage.getItem("module");
 };
-export const getLocalizationLabels = () =>{
+export const getLocalizationLabels = () => {
   return localStorage.getItem(`localization_${getLocale()}`);
 };
-export const getStoredModulesList = () =>{
+export const getStoredModulesList = () => {
   return localStorage.getItem("storedModulesList");
 };
 
 //SET methods
 export const setUserInfo = (userInfo) => {
-  if(process.env.REACT_APP_NAME=="Citizen"){
+  if (process.env.REACT_APP_NAME == "Citizen") {
     localStorageSet("user-info", userInfo, null);
-  }else{
-    let userObject = JSON.parse(userInfo)||{};
-    userObject.roles=userObject.roles&&userObject.roles.filter(role=>role.tenantId==userObject.tenantId);
+  } else {
+    let userObject = JSON.parse(userInfo) || {};
+    userObject.roles = userObject.roles && userObject.roles.filter((role) => role.tenantId == userObject.tenantId);
     localStorageSet("user-info", JSON.stringify(userObject), null);
   }
 };
@@ -44,22 +44,28 @@ export const setAccessToken = (token) => {
 export const setRefreshToken = (refreshToken) => {
   localStorageSet("refresh-token", refreshToken, null);
 };
+export const setUserObj = (user = {}) => {
+  localStorage.setItem("citizen.userRequestObject", user );
+  sessionStorage.setItem("Digit.citizen.userRequestObject", JSON.stringify({ value: { info: JSON.parse(user ) } }));
+};
 export const setTenantId = (tenantId) => {
   localStorageSet("tenant-id", tenantId, null);
-   if(process.env.REACT_APP_NAME!="Citizen"){
-      window.sessionStorage.clear();
-      Object.keys(window.localStorage).filter(key=>key.startsWith('Digit')).map(key=>localStorage.removeItem(key));
-      const userObj=getUserSearchedResponse();
-      let user=userObj&&userObj.user&&userObj.user[0] || {};
-      user={...user,tenantId:tenantId};
-      localStorage.setItem("citizen.userRequestObject",JSON.stringify({...user}));
-      setUserInfo(JSON.stringify({...user}));
-   }
+  if (process.env.REACT_APP_NAME != "Citizen") {
+    window.sessionStorage.clear();
+    Object.keys(window.localStorage)
+      .filter((key) => key.startsWith("Digit"))
+      .map((key) => localStorage.removeItem(key));
+    const userObj = getUserSearchedResponse();
+    let user = (userObj && userObj.user && userObj.user[0]) || {};
+    user = { ...user, tenantId: tenantId };
+    setUserObj(JSON.stringify(user));
+    setUserInfo(JSON.stringify({ ...user }));
+  }
 };
 export const setLocale = (locale) => {
   localStorageSet("locale", locale);
   localStorage.setItem("locale", locale);
-  sessionStorage.setItem("Digit.locale",JSON.stringify({"value":locale}));
+  sessionStorage.setItem("Digit.locale", JSON.stringify({ value: locale }));
 };
 export const setModule = (moduleName) => {
   localStorageSet("module", moduleName);
@@ -67,14 +73,14 @@ export const setModule = (moduleName) => {
 export const setReturnUrl = (url) => {
   localStorageSet("returnUrl", url);
 };
-export const setStoredModulesList =(storedModuleList) =>{
+export const setStoredModulesList = (storedModuleList) => {
   localStorage.setItem("storedModulesList", storedModuleList);
 };
 
 //Remove Items (LOGOUT)
 export const clearUserDetails = () => {
- window.localStorage.clear();
- window.sessionStorage.clear();
+  window.localStorage.clear();
+  window.sessionStorage.clear();
 };
 //Role specific get-set Methods
 export const localStorageGet = (key, path) => {
@@ -107,8 +113,7 @@ export const lSRemoveItem = (key) => {
   window.localStorage.removeItem(appName + "." + key);
 };
 
-
 // get tenantId for Employee/Citizen
 export const getTenantIdCommon = () => {
-    return process.env.REACT_APP_NAME === "Citizen"?JSON.parse(getUserInfo()).permanentCity:getTenantId();
-}
+  return process.env.REACT_APP_NAME === "Citizen" ? JSON.parse(getUserInfo()).permanentCity : getTenantId();
+};

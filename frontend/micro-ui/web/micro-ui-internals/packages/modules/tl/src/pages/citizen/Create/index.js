@@ -57,6 +57,18 @@ const CreateTradeLicence = ({ parentRoute }) => {
           }
       }
     }
+    if(nextStep === "know-your-property" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
+    {
+      nextStep = "map";
+    }
+    if(nextStep === "street" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
+    {
+      nextStep = "owner-ship-details";
+    }
+    if(nextStep === "owner-details" && (params?.ownershipCategory?.isSameAsPropertyOwner === true || sessionStorage.getItem("isSameAsPropertyOwner") === "true"))
+    {
+      nextStep = "proof-of-identity"
+    }
     if( (params?.cptId?.id || params?.cpt?.details?.propertyId || (isReneworEditTrade && params?.cpt?.details?.propertyId ))  && nextStep === "know-your-property" )
     { 
       nextStep = "property-details";

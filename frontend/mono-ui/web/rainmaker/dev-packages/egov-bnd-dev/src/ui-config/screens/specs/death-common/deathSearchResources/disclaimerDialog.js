@@ -5,7 +5,7 @@ import {
   getCommonGrayCard,
   getCommonHeader,
   getDivider,
-  getLabel,
+  getLabel
 } from "egov-ui-framework/ui-config/screens/specs/utils";
 import { toggleSnackbar } from "egov-ui-framework/ui-redux/screen-configuration/actions";
 import get from "lodash/get";

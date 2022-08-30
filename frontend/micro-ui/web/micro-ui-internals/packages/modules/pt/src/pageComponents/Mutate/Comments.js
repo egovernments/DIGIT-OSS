@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { TextInput, FormStep, TextArea, LabelFieldPair, CardLabel } from "@egovernments/digit-ui-react-components";
+import Timeline from "../../components/TLTimeline";
 
 const Comments = (props) => {
   const { t, config, onSelect, userType, formData } = props;
@@ -28,6 +29,7 @@ const Comments = (props) => {
 
   return (
     <React.Fragment>
+      <Timeline currentStep={2} flow="PT_MUTATE" />
       <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip}>
         <div>
           <TextArea onChange={(e) => setSelected(e.target.value)} value={remarks} />

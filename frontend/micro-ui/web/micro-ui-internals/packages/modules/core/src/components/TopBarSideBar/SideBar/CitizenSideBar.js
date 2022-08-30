@@ -1,10 +1,12 @@
-import { LogoutIcon, NavBar, EditPencilIcon } from "@egovernments/digit-ui-react-components";
-import React from "react";
+import {
+  Loader, NavBar
+} from "@egovernments/digit-ui-react-components";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
-import { Phone } from "@egovernments/digit-ui-react-components";
 import ChangeCity from "../../ChangeCity";
+import StaticCitizenSideBar from "./StaticCitizenSideBar";
 
 const defaultImage =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAO4AAADUCAMAAACs0e/bAAAAM1BMVEXK0eL" +
@@ -28,24 +30,21 @@ const defaultImage =
   "Ue6ilunu8jF8pFwgv1FXp3mUt35OtRbr7eM4u4Gs6vUBXgeuHc5kfE/cbvWZtkROLm1DMtLCy80tzsu2PRj0hTI8fvrQuvsjlJkyutszq+m423wHaLTyniy/XuiGZ84LuT+m5ZfNfRxyGs7L" +
   "XZOvia7VujatUwVTrIt+Q/Csc7Tuhe+BOakT10b4TuoiiJjvgU9emTO42PwEfBa+cuodKkuf42DXr1D3JpXz73Hnn0j10evHKe+nufgfUm+7B84sX9FfdEzXux2DBpWuKokkCqN/5pa/8pmvn" +
   "L+RGKCddCGmatiPyPB/+ekO/M/q/7uvbt22kTt3zEnXPzCV13T3Gel4/6NduDu66xRvlPNkM1RjjxUdv+4WhGx6TftD19Q/dfzpwcHO+rE3fAAAAAElFTkSuQmCC";
-
 const Profile = ({ info, stateName, t }) => {
   const [profilePic, setProfilePic] = React.useState(null);
-
   React.useEffect(async () => {
     const tenant = Digit.ULBService.getCurrentTenantId();
-    const uuid=info?.uuid;
-    if(uuid){
-    const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
+    const uuid = info?.uuid;
+    if (uuid) {
+      const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
 
-    if (usersResponse && usersResponse.user && usersResponse.user.length) {
-      const userDetails = usersResponse.user[0];
-      const thumbs = userDetails?.photo?.split(",");
-      setProfilePic(thumbs?.at(0));
+      if (usersResponse && usersResponse.user && usersResponse.user.length) {
+        const userDetails = usersResponse.user[0];
+        const thumbs = userDetails?.photo?.split(",");
+        setProfilePic(thumbs?.at(0));
+      }
     }
-  }
   }, [profilePic !== null]);
-
   return (
     <div className="profile-section">
       <div className="imageloader imageloader-loaded">
@@ -66,15 +65,15 @@ const Profile = ({ info, stateName, t }) => {
           <div className="label-text"> {info.emailId} </div>
         </div>
       )}
+      <div className="profile-divider"></div>
       {window.location.href.includes("/employee") &&
         !window.location.href.includes("/employee/user/login") &&
         !window.location.href.includes("employee/user/language-selection") && <ChangeCity t={t} mobileView={true} />}
     </div>
   );
 };
-
 const PoweredBy = () => (
-  <div className="digit-footer">
+  <div className="digit-footer" style={{ marginBottom: 0 }}>
     <img
       alt="Powered by DIGIT"
       src={window?.globalConfigs?.getConfig?.("DIGIT_FOOTER")}
@@ -86,31 +85,38 @@ const PoweredBy = () => (
   </div>
 );
 
-export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEmployee = false }) => {
+/* 
+Feature :: Citizen Webview sidebar
+*/
+export const CitizenSideBar = ({ isOpen, isMobile = false, toggleSidebar, onLogout, isEmployee = false, linkData, islinkDataLoading }) => {
   const { data: storeData, isFetched } = Digit.Hooks.useStore.getInitData();
   const { stateInfo } = storeData || {};
   const user = Digit.UserService.getUser();
+  const [search, setSearch] = useState("");
+
   const { t } = useTranslation();
   const history = useHistory();
-
   const closeSidebar = () => {
     Digit.clikOusideFired = true;
     toggleSidebar(false);
   };
-  const tenantId = Digit.ULBService.getCurrentTenantId();
 
+  const { isLoading, data } = Digit.Hooks.useAccessControl();
+  const tenantId = Digit.ULBService.getCurrentTenantId();
   const showProfilePage = () => {
     const redirectUrl = isEmployee ? "/digit-ui/employee/user/profile" : "/digit-ui/citizen/user/profile";
     history.push(redirectUrl);
     closeSidebar();
   };
-
   const redirectToLoginPage = () => {
     // localStorage.clear();
     // sessionStorage.clear();
     history.push("/digit-ui/citizen/login");
     closeSidebar();
   };
+  if (islinkDataLoading || isLoading) {
+    return <Loader />;
+  }
 
   let menuItems = [...SideBarMenu(t, closeSidebar, redirectToLoginPage, isEmployee)];
   let profileItem;
@@ -122,7 +128,7 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
       {
         text: t("EDIT_PROFILE"),
         element: "PROFILE",
-        icon: <EditPencilIcon className="icon edit-btn-ico" width="16" height="16"/>,
+        icon: "EditPencilIcon",
         populators: {
           onClick: showProfilePage,
         },
@@ -130,7 +136,7 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
       {
         text: t("CORE_COMMON_LOGOUT"),
         element: "LOGOUT",
-        icon: <LogoutIcon className="icon" />,
+        icon: "LogoutIcon",
         populators: {
           onClick: onLogout,
         },
@@ -158,9 +164,86 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
           </React.Fragment>
         ),
         element: "Helpline",
-        icon: <Phone className="icon" />,
+        icon: "Phone",
       },
     ];
+  }
+
+  let configEmployeeSideBar = {};
+
+  if (!isEmployee) {
+    Object.keys(linkData)
+      ?.sort((x, y) => y.localeCompare(x))
+      ?.map((key) => {
+        if (linkData[key][0]?.sidebar === "digit-ui-links")
+          menuItems.splice(1, 0, {
+            type: linkData[key][0]?.sidebarURL?.includes("digit-ui") ? "link" : "external-link",
+            text: t(`ACTION_TEST_${Digit.Utils.locale.getTransformedLocale(key)}`),
+            links: linkData[key],
+            icon: linkData[key][0]?.leftIcon,
+            link: linkData[key][0]?.sidebarURL,
+          });
+      });
+  } else {
+    data?.actions
+      .filter((e) => e.url === "url" && e.displayName !== "Home")
+      .forEach((item) => {
+        if (search == "" && item.path !== "") {
+          let index = item.path.split(".")[0];
+          if (index === "TradeLicense") index = "Trade License";
+          if (!configEmployeeSideBar[index]) {
+            configEmployeeSideBar[index] = [item];
+          } else {
+            configEmployeeSideBar[index].push(item);
+          }
+        } else if (item.path !== "" && item?.displayName?.toLowerCase().includes(search.toLowerCase())) {
+          let index = item.path.split(".")[0];
+          if (index === "TradeLicense") index = "Trade License";
+          if (!configEmployeeSideBar[index]) {
+            configEmployeeSideBar[index] = [item];
+          } else {
+            configEmployeeSideBar[index].push(item);
+          }
+        }
+      });
+    const keys = Object.keys(configEmployeeSideBar);
+    for (let i = 0; i < keys.length; i++) {
+      const getSingleDisplayName = configEmployeeSideBar[keys[i]][0]?.displayName?.toUpperCase()?.replace(/[ -]/g, "_");
+      const getParentDisplayName = keys[i]?.toUpperCase()?.replace(/[ -]/g, "_");
+
+      if (configEmployeeSideBar[keys[i]][0].path.indexOf(".") === -1) {
+        menuItems.splice(1, 0, {
+          type: "link",
+          text: t(`ACTION_TEST_${getSingleDisplayName}`),
+          link: configEmployeeSideBar[keys[i]][0]?.navigationURL,
+          icon: configEmployeeSideBar[keys[i]][0]?.leftIcon?.split?.(":")[1],
+          populators: {
+            onClick: () => {
+              history.push(configEmployeeSideBar[keys[i]][0]?.navigationURL);
+              closeSidebar();
+            },
+          },
+        });
+      } else {
+        menuItems.splice(1, 0, {
+          type: "dynamic",
+          moduleName: t(`ACTION_TEST_${getParentDisplayName}`),
+          links: configEmployeeSideBar[keys[i]]?.map((ob) => {return {...ob, displayName: t(`ACTION_TEST_${ob?.displayName?.toUpperCase()?.replace(/[ -]/g, "_")}`)}}),
+          icon: configEmployeeSideBar[keys[i]][1]?.leftIcon,
+        });
+      }
+    }
+     const indx = menuItems.findIndex(a => a.element === "HOME");
+     const home = menuItems.splice(indx,1);
+     const comp = menuItems.findIndex(a => a.element === "LANGUAGE");
+     const part = menuItems.splice(comp,menuItems?.length-comp);
+     menuItems.sort((a,b) => {
+      let c1 = a?.type === "dynamic" ? a?.moduleName : a?.text;
+      let c2 = b?.type === "dynamic" ? b?.moduleName : b?.text;
+      return c1.localeCompare(c2)
+     } );
+     home?.[0] && menuItems.splice(0,0,home[0]);
+     menuItems =  part?.length > 0 ? menuItems.concat(part) : menuItems;
   }
 
   /*  URL with openlink wont have sidebar and actions    */
@@ -168,10 +251,19 @@ export const CitizenSideBar = ({ isOpen, isMobile, toggleSidebar, onLogout, isEm
     profileItem = <span></span>;
     menuItems = menuItems.filter((ele) => ele.element === "LANGUAGE");
   }
-
-  return (
-    <div>
-      <NavBar open={isOpen} profileItem={profileItem} menuItems={menuItems} onClose={closeSidebar} Footer={<PoweredBy />} />
-    </div>
+  return isMobile ? (
+    <NavBar
+      open={isOpen}
+      toggleSidebar={toggleSidebar}
+      profileItem={profileItem}
+      onClose={closeSidebar}
+      menuItems={menuItems}
+      Footer={<PoweredBy />}
+      isEmployee={isEmployee}
+      search={search}
+      setSearch={setSearch}
+    />
+  ) : (
+    <StaticCitizenSideBar logout={onLogout} />
   );
 };

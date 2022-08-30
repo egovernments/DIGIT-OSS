@@ -1,4 +1,5 @@
 import React from "react";
+import { UnMaskComponent } from "..";
 
 export const LastRow = (props) => {
   return (
@@ -19,21 +20,56 @@ export const Row = (props) => {
         return (
           <p className={val?.className} style={val?.style} key={index}>
             {val?.value}
+            {/*  
+              Feature :: Privacy
+              privacy object set to the Mask Component
+             */}
+            {props?.privacy && (
+              <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
+                <UnMaskComponent privacy={props?.privacy}></UnMaskComponent>
+              </span>
+            )}
           </p>
         );
       }
-      return <p key={index}>{val}</p>;
+      return (
+        <p key={index}>
+          {val}
+          {props?.privacy && (
+            <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
+              {/*  
+                Feature :: Privacy
+                privacy object set to the Mask Component
+              */}
+              <UnMaskComponent privacy={props?.privacy}></UnMaskComponent>
+            </span>
+          )}
+        </p>
+      );
     });
   }
+  // display: inline-flex;
+  // width: fit-content;
+  // margin-left: 10px;
+  // }
 
   return (
     <div style={props.rowContainerStyle} className={`${props.last ? "row last" : "row"} ${props?.className || ""}`}>
       <h2 style={labelStyle}>{props.label}</h2>
-      <div className="value" style={valueStyle}>
+      <div className="value" style={{...valueStyle, wordBreak: "break-word"}}>
         {value}
+        {props?.privacy && (
+          <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
+            <UnMaskComponent privacy={props?.privacy}></UnMaskComponent>
+          </span>
+        )}
         {props.caption && <div className="caption">{props.caption}</div>}
       </div>
-      {props.actionButton ? <div style={props.actionButtonStyle} className="action-button">{props.actionButton}</div> : null}
+      {props.actionButton ? (
+        <div style={props.actionButtonStyle} className="action-button">
+          {props.actionButton}
+        </div>
+      ) : null}
     </div>
   );
 };

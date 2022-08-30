@@ -19,7 +19,7 @@ import {
   Rating,
   ActionLinks,
   Header,
-  ImageViewer,
+  ImageViewer
 } from "@egovernments/digit-ui-react-components";
 
 import ActionModal from "./Modal";
@@ -28,7 +28,6 @@ import TLCaption from "../../../components/TLCaption";
 import { useQueryClient } from "react-query";
 
 import { Link, useHistory, useParams } from "react-router-dom";
-import { actions } from "react-table";
 import { ViewImages } from "../../../components/ViewImages";
 
 const ApplicationDetails = (props) => {
@@ -46,13 +45,7 @@ const ApplicationDetails = (props) => {
   const [imageZoom, setImageZoom] = useState(null);
   const DSO = Digit.UserService.hasAccess(["FSM_DSO"]) || false;
 
-  const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(
-    t,
-    tenantId,
-    applicationNumber,
-    {},
-    props.userType
-  );
+  const { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.fsm.useApplicationDetail(t, tenantId, applicationNumber, {}, props.userType);
   const { isLoading: isDataLoading, isSuccess, data: applicationData } = Digit.Hooks.fsm.useSearch(
     tenantId,
     { applicationNos: applicationNumber },
@@ -73,7 +66,7 @@ const ApplicationDetails = (props) => {
     moduleCode: DSO || applicationData?.paymentPreference === "POST_PAY" ? "FSM_POST_PAY_SERVICE" : "FSM",
     role: DSO ? "FSM_DSO" : "FSM_EMPLOYEE",
     serviceData: applicationDetails,
-    getTripData: DSO ? false : true,
+    getTripData: DSO ? false : true
   });
 
   useEffect(() => {
@@ -117,6 +110,7 @@ const ApplicationDetails = (props) => {
         break;
     }
   }, [selectedAction]);
+
 
   const closeModal = () => {
     setSelectedAction(null);
@@ -166,8 +160,6 @@ const ApplicationDetails = (props) => {
       return <TLCaption data={caption} />;
     } else if (
       checkpoint.status === "PENDING_APPL_FEE_PAYMENT" ||
-      checkpoint.status === "ASSING_DSO" ||
-      checkpoint.status === "PENDING_DSO_APPROVAL" ||
       checkpoint.status === "DSO_REJECTED" ||
       checkpoint.status === "CANCELED" ||
       checkpoint.status === "REJECTED"
@@ -195,18 +187,16 @@ const ApplicationDetails = (props) => {
           </Link>
         </div>
       );
-    } else if (
-      checkpoint.status === "WAITING_FOR_DISPOSAL" ||
-      checkpoint.status === "DISPOSED" ||
+    } else if (checkpoint.status === "WAITING_FOR_DISPOSAL" ||
       checkpoint.status === "DISPOSAL_IN_PROGRESS" ||
-      checkpoint.status === "CITIZEN_FEEDBACK_PENDING"
-    ) {
+      checkpoint.status === "DISPOSED" ||
+      checkpoint.status === "CITIZEN_FEEDBACK_PENDING") {
       const caption = {
         date: checkpoint?.auditDetails?.created,
         name: checkpoint?.assigner,
-        mobileNumber: checkpoint?.assigner?.mobileNumber,
+        mobileNumber: checkpoint?.assigner?.mobileNumber
       };
-      if (checkpoint?.numberOfTrips) caption.comment = `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`;
+      if (checkpoint?.numberOfTrips) caption.comment = `${t("NUMBER_OF_TRIPS")}: ${checkpoint?.numberOfTrips}`
       return <TLCaption data={caption} />;
     }
   };
@@ -219,8 +209,8 @@ const ApplicationDetails = (props) => {
     <React.Fragment>
       {!isLoading ? (
         <React.Fragment>
-          {/* <Header style={{ marginBottom: "16px" }}>{t("ES_TITLE_APPLICATION_DETAILS")}</Header> */}
-          <Card style={{ position: "relative" }}>
+          <Header style={{ marginBottom: "16px" }}>{t("ES_TITLE_APPLICATION_DETAILS")}</Header>
+          <Card className="fsm" style={{ position: "relative" }}>
             {/* {!DSO && (
               <LinkButton
                 label={<span style={{ color: "#f47738", marginLeft: "8px" }}>{t("ES_APPLICATION_DETAILS_VIEW_AUDIT_TRAIL")}</span>}
@@ -233,7 +223,8 @@ const ApplicationDetails = (props) => {
             {applicationDetails?.applicationDetails.map((detail, index) => (
               <React.Fragment key={index}>
                 {index === 0 ? (
-                  <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
+                  // <CardSubHeader style={{ marginBottom: "16px" }}>{t(detail.title)}</CardSubHeader>
+                  null
                 ) : (
                   <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t(detail.title)}</CardSectionHeader>
                 )}
@@ -256,26 +247,18 @@ const ApplicationDetails = (props) => {
                 </StatusTable>
               </React.Fragment>
             ))}
-            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN?.length && (
+            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN?.length &&
               <>
-                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t("ES_FSM_SUB_HEADING_CITIZEN_UPLOADS")}</CardSectionHeader>
-                <ViewImages
-                  fileStoreIds={applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN}
-                  tenantId={state}
-                  onClick={(source, index) => zoomImageWrapper(source, index)}
-                />
+                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t('ES_FSM_SUB_HEADING_CITIZEN_UPLOADS')}</CardSectionHeader>
+                <ViewImages fileStoreIds={applicationData?.pitDetail?.additionalDetails?.fileStoreId?.CITIZEN} tenantId={state} onClick={(source, index) => zoomImageWrapper(source, index)} />
               </>
-            )}
-            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO?.length && (
+            }
+            {applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO?.length &&
               <>
-                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t("ES_FSM_SUB_HEADING_DSO_UPLOADS")}</CardSectionHeader>
-                <ViewImages
-                  fileStoreIds={applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO}
-                  tenantId={tenantId}
-                  onClick={(source, index) => zoomImageWrapper(source, index)}
-                />
+                <CardSectionHeader style={{ marginBottom: "16px", marginTop: "32px" }}>{t('ES_FSM_SUB_HEADING_DSO_UPLOADS')}</CardSectionHeader>
+                <ViewImages fileStoreIds={applicationData?.pitDetail?.additionalDetails?.fileStoreId?.FSM_DSO} tenantId={tenantId} onClick={(source, index) => zoomImageWrapper(source, index)} />
               </>
-            )}
+            }
             {imageZoom ? <ImageViewer imageSrc={imageZoom} onClose={onCloseImageZoom} /> : null}
 
             <BreakLine />
@@ -331,7 +314,7 @@ const ApplicationDetails = (props) => {
             />
           )}
           {!workflowDetails?.isLoading && workflowDetails?.data?.nextActions?.length > 0 && (
-            <ActionBar style={{ zIndex: "19" }}>
+            <ActionBar style={{ zIndex: '19' }}>
               {displayMenu && workflowDetails?.data?.nextActions ? (
                 <Menu
                   localeKeyPrefix={"ES_FSM"}

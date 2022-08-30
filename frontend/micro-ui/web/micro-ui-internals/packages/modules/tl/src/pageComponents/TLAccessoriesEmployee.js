@@ -16,6 +16,7 @@ const createAccessoriesDetails = () => ({
     key: Date.now(),
 });
 
+
 const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError, formState, clearErrors }) => {
     const { t } = useTranslation();
     const { pathname } = useLocation();
@@ -31,7 +32,10 @@ const TLAccessoriesEmployee = ({ config, onSelect, userType, formData, setError,
     if(window.location.href.includes("edit-application-details")) isRenewal = true;
 
 
-    const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId, filters: {} });
+    const { data: billingSlabData } = Digit.Hooks.tl.useTradeLicenseBillingslab({ tenantId, filters: {} }, {
+        select: (data) => {
+        return data?.billingSlab.filter((e) => e.accessoryCategory && e.applicationType === "NEW" && e.uom);
+    }});
 
     const addAccessories = () => {
         const newAccessor = createAccessoriesDetails();
@@ -142,7 +146,7 @@ const AccessoriersForm = (_props) => {
     const formValue = watch();
     const { errors } = localFormState;
 
-    const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
+    const isIndividualTypeOwner = useMemo(() => formData?.ownershipCategory?.code?.includes("INDIVIDUAL"), [formData?.ownershipCategory?.code]);
 
     useEffect(() => {
         trigger();
@@ -153,10 +157,10 @@ const AccessoriersForm = (_props) => {
     }, [accessor?.accessoryCategory?.uom, formData?.accessories]);
 
     useEffect(() => {
-        if (billingSlabData && billingSlabData?.billingSlab && billingSlabData?.billingSlab?.length > 0) {
+        if (billingSlabData &&  billingSlabData?.length > 0) {
             const processedData =
-                billingSlabData.billingSlab &&
-                billingSlabData.billingSlab.reduce(
+                billingSlabData &&
+                billingSlabData.reduce(
                     (acc, item) => {
                         let accessory = { active: true };
                         let tradeType = { active: true };

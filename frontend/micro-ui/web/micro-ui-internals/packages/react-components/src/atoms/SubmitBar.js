@@ -1,9 +1,10 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import PropTypes from "prop-types";
 
-const SubmitBar = (props) => {
+const SubmitBar = forwardRef((props, ref) => {
   return (
     <button
+      ref={ref}
       disabled={props.disabled ? true : false}
       className={`${props.disabled ? "submit-bar-disabled" : "submit-bar"} ${props.className ? props.className : ""}`}
       type={props.submit ? "submit" : "button"}
@@ -14,7 +15,7 @@ const SubmitBar = (props) => {
       <header>{props.label}</header>
     </button>
   );
-};
+});
 
 SubmitBar.propTypes = {
   /**

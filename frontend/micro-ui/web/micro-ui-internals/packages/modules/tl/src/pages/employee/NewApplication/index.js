@@ -14,6 +14,8 @@ const NewApplication = () => {
   const history = useHistory();
   // delete
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
+  const isEmpNewApplication = window.location.href.includes("/employee/tl/new-application");
+  const isEmpRenewLicense = window.location.href.includes("/employee/tl/renew-application-details") || window.location.href.includes("/employee/tl/edit-application-details"); 
 
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_TRADE_NEW_FORM", {});
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_MUTATION_HAPPENED", false);
@@ -57,6 +59,7 @@ const NewApplication = () => {
     }
   };
   const onSubmit = (data) => {
+    let isSameAsPropertyOwner = sessionStorage.getItem("isSameAsPropertyOwner"); 
     if(data?.cpt?.id){
       if (!data?.cpt?.details || !propertyDetails) {
           setShowToast({ key: "error" });
@@ -148,7 +151,7 @@ const NewApplication = () => {
     let operationalArea = Number(data?.tradedetils?.["0"]?.operationalArea) || "";
     let structureType = data?.tradedetils?.["0"]?.structureSubType?.code || "";
     let tradeName = data?.tradedetils?.["0"]?.tradeName || "";
-    let subOwnerShipCategory = data?.owners?.[0]?.subOwnerShipCategory?.code || "";
+    let subOwnerShipCategory = data?.ownershipCategory?.code || "";
     let licenseType = data?.tradedetils?.["0"]?.licenseType?.code || "PERMANENT";
 
     let formData = {
@@ -189,7 +192,11 @@ const NewApplication = () => {
       formData.tradeLicenseDetail.institution["name"] = data?.owners?.[0]?.name;
     if (data?.owners?.length && subOwnerShipCategory.includes("INSTITUTIONAL"))
       formData.tradeLicenseDetail.institution["contactNo"] = data?.owners?.[0]?.altContactNumber;
-    if (data?.cpt) formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId;
+    if (data?.cpt) 
+    {
+      formData.tradeLicenseDetail.additionalDetail.propertyId = data?.cpt?.details?.propertyId,
+      formData.tradeLicenseDetail.additionalDetail.isSameAsPropertyOwner = isSameAsPropertyOwner
+    };
 
     // setFormData(formData)
     /* use customiseCreateFormData hook to make some chnages to the licence object */
@@ -238,7 +245,10 @@ const NewApplication = () => {
       return "TL_CHECK_ADDRESS";
     } else if (head === "ES_NEW_APPLICATION_OWNERSHIP_DETAILS") {
       return "TL_OWNERSHIP_DETAILS_HEADER";
-    } else {
+    } else if (head === "TL_NEW_APPLICATION_PROPERTY" && (sessionFormData?.tradedetils?.[0]?.structureType?.code === "MOVABLE" && (isEmpNewApplication || isEmpRenewLicense))) {
+      return "";
+    }
+     else {
       return head;
     }
   }

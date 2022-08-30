@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useGlobalFilter, usePagination, useRowSelect, useSortBy, useTable } from "react-table";
 import { ArrowBack, ArrowForward, ArrowToFirst, ArrowToLast, SortDown, SortUp } from "./svgindex";
 
@@ -29,7 +29,11 @@ const Table = ({
   sortParams = [],
   showAutoSerialNo=false,
   customTableWrapperClassName="",
-  styles={}
+  styles={},
+  tableTopComponent,
+  tableRef,
+  isReportTable=false,
+  inboxStyles,
 }) => {
   const {
     getTableProps,
@@ -81,10 +85,16 @@ const Table = ({
   }, [onSort, sortBy]);
 
   useEffect(() => setGlobalFilter(onSearch), [onSearch, setGlobalFilter]);
+
+  const tref = useRef();
+  
   return (
     <React.Fragment>
+    <div ref={tref} style={tref.current && tref.current.offsetWidth < tref.current.scrollWidth ? {...inboxStyles}: {}}>
     <span className={customTableWrapperClassName}>
-      <table className={className} {...getTableProps()} style={styles}>
+    {tableTopComponent ? tableTopComponent:null}
+      <table className={className} {...getTableProps()} style={styles} ref={tableRef}>
+         
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -138,6 +148,7 @@ const Table = ({
         </tbody>
       </table>
       </span>
+      </div>
       {isPaginationRequired && (
         <div className="pagination dss-white-pre" >
           {`${t("CS_COMMON_ROWS_PER_PAGE")} :`}

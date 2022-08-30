@@ -2,7 +2,7 @@ import React, {Fragment} from "react"
 import { Controller, useWatch } from "react-hook-form";
 import { TextInput, SubmitBar, DatePicker, SearchField, Dropdown, Loader } from "@egovernments/digit-ui-react-components";
 
-const SearchFields = ({register, control, reset, tenantId, t }) => {
+const SearchFields = ({register, control, reset, tenantId, t, previousPage }) => {
   let validation = {};
 
     return <>

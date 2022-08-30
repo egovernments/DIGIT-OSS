@@ -90,6 +90,15 @@ export const PTService = {
       params: { tenantId },
       auth: true,
     }),
+  PTOpenSearch : ({ tenantId, filters }) =>
+  Request({
+   url: Urls.pt.search,
+   useCache: false,
+   method: "POST",
+   auth: false ,
+   userService: false,
+   params: { tenantId, ...filters },
+ }),
 };
 
 // export const PTService = {

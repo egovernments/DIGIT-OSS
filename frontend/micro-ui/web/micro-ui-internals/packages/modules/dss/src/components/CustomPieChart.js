@@ -1,5 +1,5 @@
 import { Loader, RemoveableTag } from "@egovernments/digit-ui-react-components";
-import React, { useContext, useMemo, useState, Fragment } from "react";
+import React, { useContext, useMemo, useState, Fragment, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import FilterContext from "./FilterContext";
@@ -8,7 +8,7 @@ import NoData from "./NoData";
 const COLORS = ["#048BD0", "#FBC02D", "#8E29BF", "#EA8A3B", "#0BABDE", "#6E8459", "#D4351C", "#0CF7E4", "#F80BF4", "#22F80B"];
 const mobileView = innerWidth <= 640;
 
-const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
+const CustomPieChart = ({ dataKey = "value", data, setChartDenomination, moduleCode }) => {
   const { id } = data;
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
@@ -22,25 +22,26 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
     tenantId,
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters: isPieClicked ? { ...value?.filters, selectedType: pieSelected } : value?.filters,
+    moduleLevel: value?.moduleLevel || moduleCode,
   });
 
   const chartData = useMemo(() => {
     if (!response) return null;
     setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
     const compareFn = (a, b) => b.value - a.value;
-    return (drillDownId === "deathByCategoryDrilldownAge" || response?.responseData?.visualizationCode === "nssNumberOfDeathsByAge"    )// || drillDownId === "nssDeathByCategoryDrillDownAge") 
-    ? response?.responseData?.data?.[0]?.plots.reduce((acc, plot, index) => {
-      acc = acc.concat(plot);
-      return acc;
-    }, []) 
-    : response?.responseData?.data?.[0]?.plots.sort(compareFn).reduce((acc, plot, index) => {
-      // if (index < 4) acc = acc.concat(plot);
-      //else if (index === 4) acc = acc.concat({ label: null, name: "DSS.OTHERS", value: plot?.value, symbol: "amount" });
-      // else acc[3].value += plot?.value;
-      /* Commnted logic of pie chart which hides more that 4 and show max of 4*/
-      acc = acc.concat(plot);
-      return acc;
-    }, []);
+    return drillDownId === "deathByCategoryDrilldownAge" || response?.responseData?.visualizationCode === "nssNumberOfDeathsByAge" // || drillDownId === "nssDeathByCategoryDrillDownAge")
+      ? response?.responseData?.data?.[0]?.plots.reduce((acc, plot, index) => {
+          acc = acc.concat(plot);
+          return acc;
+        }, [])
+      : response?.responseData?.data?.[0]?.plots.sort(compareFn).reduce((acc, plot, index) => {
+          // if (index < 4) acc = acc.concat(plot);
+          //else if (index === 4) acc = acc.concat({ label: null, name: "DSS.OTHERS", value: plot?.value, symbol: "amount" });
+          // else acc[3].value += plot?.value;
+          /* Commnted logic of pie chart which hides more that 4 and show max of 4*/
+          acc = acc.concat(plot);
+          return acc;
+        }, []);
   }, [response]);
 
   const renderLegend = (value) => (
@@ -103,7 +104,7 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
       >
         <p className="recharts-tooltip-label">{`${t(
           `COMMON_MASTERS_${payload?.[0]?.name && Digit.Utils.locale.getTransformedLocale(payload?.[0]?.name)}`
-        )}: ${Digit.Utils.dss.formatter(payload?.[0]?.value, payload?.[0]?.payload?.payload?.symbol, value?.denomination, false)}`}</p>
+        )}: ${Digit.Utils.dss.formatter(payload?.[0]?.value, payload?.[0]?.payload?.payload?.symbol, value?.denomination, true, t)}`}</p>
         <p>{`(${Number((payload?.[0]?.value / response?.responseData?.data?.[0]?.headerValue) * 100).toFixed(1)}%)`}</p>
       </div>
     );
@@ -140,16 +141,22 @@ const CustomPieChart = ({ dataKey = "value", data, setChartDenomination }) => {
     setIsPieClicked(false);
   };
 
+  useEffect(() => {
+    setIsPieClicked(false);
+    setdrillDownId(null);
+    setPieSelected(null);
+  }, [id]);
+
   if (isLoading) {
     return <Loader />;
   }
   return (
     <Fragment>
-      { (id === "deathByCategory" ) && (  //|| id === "nssNumberOfDeathsByCategory") && ( 
-            <span className={"dss-pie-subheader" } style={{position:"sticky" ,left:0}}>
-              {t('DSS_CMN_PIE_INFO')}
-            </span>
-          )}
+      {id === "deathByCategory" && ( //|| id === "nssNumberOfDeathsByCategory") && (
+        <span className={"dss-pie-subheader"} style={{ position: "sticky", left: 0 }}>
+          {t("DSS_CMN_PIE_INFO")}
+        </span>
+      )}
       {isPieClicked && (
         <div>
           <div className="tag-container" style={{ marginBottom: "unset" }}>

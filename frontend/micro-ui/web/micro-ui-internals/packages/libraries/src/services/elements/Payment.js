@@ -27,6 +27,16 @@ export const PaymentService = {
       userService: true,
       params: { tenantId, ...filters },
     }),
+  searchAmendment: (tenantId, filters = {}) => {
+    return Request({
+      url: Urls.payment.billAmendmentSearch,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: true,
+      params: { tenantId, ...filters },
+    });
+  },
   createReciept: (tenantId, details = {}) =>
     Request({
       url: Urls.payment.create_reciept,
@@ -41,7 +51,10 @@ export const PaymentService = {
 
   getReciept: (tenantId, businessservice, filters = {}) =>
     Request({
-      url: businessservice && businessservice !=="BPAREG" ? `${Urls.payment.print_reciept}/${businessservice}/_search` : `${Urls.payment.print_reciept}/_search`,
+      url:
+        businessservice && businessservice !== "BPAREG"
+          ? `${Urls.payment.print_reciept}/${businessservice}/_search`
+          : `${Urls.payment.print_reciept}/_search`,
       useCache: false,
       method: "POST",
       auth: true,
@@ -104,11 +117,27 @@ export const PaymentService = {
 
   recieptSearch: (tenantId, businessService, params) =>
     Request({
-      url: (businessService === "BPAREG" && !params?.isEmployee) /* || businessService.includes("BPA.") && !params?.isEmployee ) */ ? Urls.payment.obps_Reciept_Search : Urls.payment.reciept_search,
-      urlParams: (businessService === "BPAREG" && !params?.isEmployee) /* || businessService.includes("BPA.") && !params?.isEmployee) */ ? {}:{ buisnessService: businessService },
+      url:
+        businessService === "BPAREG" && !params?.isEmployee /* || businessService.includes("BPA.") && !params?.isEmployee ) */
+          ? Urls.payment.obps_Reciept_Search
+          : Urls.payment.reciept_search,
+      urlParams:
+        businessService === "BPAREG" && !params?.isEmployee /* || businessService.includes("BPA.") && !params?.isEmployee) */
+          ? {}
+          : { buisnessService: businessService },
       method: "POST",
       // do not change this directly add a param if needed
       auth: true,
       params: { tenantId, ...params },
+    }),
+
+  getBulkPdfRecordsDetails: (filters) =>
+    Request({
+      url: Urls.payment.getBulkPdfRecordsDetails,
+      useCache: false,
+      method: "POST",
+      auth: true,
+      userService: true,
+      params: { ...filters },
     }),
 };

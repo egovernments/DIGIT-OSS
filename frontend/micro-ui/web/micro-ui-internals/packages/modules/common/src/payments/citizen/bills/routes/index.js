@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
-
 import { BillList } from "./my-bills/my-bills";
 import BillDetails from "./bill-details/bill-details";
 import { BackButton } from "@egovernments/digit-ui-react-components";

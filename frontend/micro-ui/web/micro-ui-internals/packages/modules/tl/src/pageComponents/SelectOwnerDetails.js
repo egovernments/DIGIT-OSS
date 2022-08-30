@@ -371,7 +371,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     : {}
                 }
               >
-                <CardLabel style={typeOfOwner === "MULTIOWNER" ? { marginBottom: "-15px" } : {}}>{`${t(
+                <CardLabel style={{}}>{`${t(
                   "TL_NEW_OWNER_DETAILS_NAME_LABEL"
                 )}*`}</CardLabel>
                 {typeOfOwner === "MULTIOWNER" && (
@@ -441,7 +441,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     +91
                   </span>
                   <TextInput
-                    style={typeOfOwner === "MULTIOWNER" ? { background: "#FAFAFA" } : {}}
+                    style={typeOfOwner === "MULTIOWNER" ? { background: "#FAFAFA",maxWidth:"500px" } : {maxWidth:"500px"}}
                     type={"text"}
                     t={t}
                     isMandatory={false}

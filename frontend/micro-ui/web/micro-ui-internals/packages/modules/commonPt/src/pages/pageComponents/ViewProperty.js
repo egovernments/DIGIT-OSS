@@ -29,7 +29,8 @@ const ViewProperty = () => {
   let workflowDetails = {};
 
   const onSubmit = () => {
-    setTimeout(() => window.scrollTo(0, 1600), 400);
+    const scrollConst = redirectToUrl?.includes("employee/tl") ? 1600 : 300;
+    setTimeout(() => window.scrollTo(0, scrollConst), 400);
     return history.push(`${redirectToUrl}?propertyId=${propertyId}&tenantId=${applicationDetails?.tenantId || tenantId}`, { ...state });
   };
 

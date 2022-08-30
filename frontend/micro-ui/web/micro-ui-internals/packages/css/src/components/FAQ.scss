@@ -1,0 +1,64 @@
+.searchInputFAQs {
+    @apply mr-lg;
+    margin-bottom: 10px;
+    input{
+      margin-bottom: 0;
+      background: border-box;
+      @apply pr-xl;
+    }
+  }
+
+.faq-page{
+  width: 92%;
+  margin: 16px;
+}
+
+.faqs{
+  cursor: pointer;
+  .faq-question{
+    font-weight: 400;
+    margin: 16px;
+    background: #fff;
+    justify-content: space-between;
+    display: flex;
+    font-size: 16px;
+  }
+
+  .faqicon{
+    float: right;
+  }
+
+  .faq-answer{
+    background: #fff;
+    overflow: hidden;
+    margin: 5px;
+    @apply text-form-field text-text-secondary mb-sm;
+
+    span {
+      display: block; 
+      font-size: 14px;
+      font-weight: 400;
+      margin: 0px 12px 5px
+    }
+  }
+  .cs-box-border {
+    height: 1px;
+    position: relative;
+    border-bottom: 1px solid lightgray;;
+    background: lightgray;
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+}
+
+.faq-list{
+  background: #fff;
+  margin: 5px 0;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+  
+.rotate {
+  transform: rotate(90deg);
+}
+  

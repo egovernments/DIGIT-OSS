@@ -21,7 +21,7 @@ body {
 }*/
 
 .h1 {
-  @apply text-heading-l text-text-primary font-bold mb-md ml-md ;
+  @apply text-heading-l text-text-primary font-bold mb-md ml-md;
 }
 
 .link-label {
@@ -91,9 +91,25 @@ body {
   }
 
   .app-container {
-    width: 960px;
-    margin-left: 8px;
-    margin-right: auto;
+    width: 100%;
+    form {
+      .card {
+        max-width: 960px;
+        h2 {
+          text-align: left;
+        }
+        .field-container {
+          max-width: 540px;
+        }
+        button {
+          max-width: 240px;
+        }
+        .input-otp-wrap,
+        .card-text-button {
+          text-align: left;
+        }
+      }
+    }
   }
 
   .h1 {

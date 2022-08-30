@@ -155,7 +155,6 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
     return result;
   }
 
-
   function submit(data) {
     let workflow = { action: action?.action, comments: data?.comments, businessService, moduleName: moduleCode };
     applicationData = {

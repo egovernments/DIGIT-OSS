@@ -125,14 +125,14 @@ export const SuccessfulPayment = (props)=>{
     //const tenantId = Digit.ULBService.getCurrentTenantId();
     const state = tenantId;
     const applicationDetails = await Digit.TLService.search({ applicationNumber: consumerCode, tenantId });
-    const generatePdfKeyForTL = "tlcertificate"
+    const generatePdfKeyForTL = "tlcertificate";
 
     if (applicationDetails) {
       let response = await Digit.PaymentService.generatePdf(state, { Licenses: applicationDetails?.Licenses }, generatePdfKeyForTL);
       const fileStore = await Digit.PaymentService.printReciept(state, { fileStoreIds: response.filestoreIds[0] });
       window.open(fileStore[response.filestoreIds[0]], "_blank");
     }
-  }
+  };
 
   const printReciept = async () => {
     if (printing) return;
@@ -198,7 +198,6 @@ export const SuccessfulPayment = (props)=>{
       setTimeout(() => URL.revokeObjectURL(link.href), 7000);
     }
   };
-  
 
   const getPermitOccupancyOrderSearch = async(order, mode="download") => {
     let queryObj = { applicationNo: bpaData?.[0]?.applicationNo };
@@ -206,21 +205,23 @@ export const SuccessfulPayment = (props)=>{
     const edcrResponse = await Digit.OBPSService.scrutinyDetails(bpaData?.[0]?.tenantId, { edcrNumber: bpaData?.[0]?.edcrNumber });
     let bpaDataDetails = bpaResponse?.BPA?.[0], edcrData = edcrResponse?.edcrDetail?.[0];
     let currentDate = new Date();
-    bpaDataDetails.additionalDetails.runDate = convertDateToEpoch(currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1) + '-' + currentDate.getDate());
-    let reqData = {...bpaDataDetails, edcrDetail: [{...edcrData}]};
+    bpaDataDetails.additionalDetails.runDate = convertDateToEpoch(
+      currentDate.getFullYear() + "-" + (currentDate.getMonth() + 1) + "-" + currentDate.getDate()
+    );
+    let reqData = { ...bpaDataDetails, edcrDetail: [{ ...edcrData }] };
     let response = await Digit.PaymentService.generatePdf(bpaDataDetails?.tenantId, { Bpa: [reqData] }, order);
     const fileStore = await Digit.PaymentService.printReciept(bpaDataDetails?.tenantId, { fileStoreIds: response.filestoreIds[0] });
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
 
     reqData["applicationType"] = bpaDataDetails?.additionalDetails?.applicationType;
-    let edcrresponse = await Digit.OBPSService.edcr_report_download({BPA: {...reqData}});
+    let edcrresponse = await Digit.OBPSService.edcr_report_download({ BPA: { ...reqData } });
     const responseStatus = parseInt(edcrresponse.status, 10);
     if (responseStatus === 201 || responseStatus === 200) {
       mode == "print"
         ? printPdf(new Blob([edcrresponse.data], { type: "application/pdf" }))
         : downloadPdf(new Blob([edcrresponse.data], { type: "application/pdf" }), `edcrReport.pdf`);
     }
-  }
+  };
 
   const getBillingPeriod = (billDetails) => {
     const { taxPeriodFrom, taxPeriodTo, fromPeriod, toPeriod } = billDetails || {};
@@ -230,13 +231,13 @@ export const SuccessfulPayment = (props)=>{
       return "FY " + from + "-" + to;
     } else if (fromPeriod && toPeriod) {
       if (workflw === "mcollect") {
-        from =
+        let from =
           new Date(fromPeriod).getDate().toString() +
           " " +
           Digit.Utils.date.monthNames[new Date(fromPeriod).getMonth() + 1].toString() +
           " " +
           new Date(fromPeriod).getFullYear().toString();
-        to =
+        let to =
           new Date(toPeriod).getDate() +
           " " +
           Digit.Utils.date.monthNames[new Date(toPeriod).getMonth() + 1] +
@@ -244,10 +245,25 @@ export const SuccessfulPayment = (props)=>{
           new Date(toPeriod).getFullYear();
         return from + " - " + to;
       }
+      else if(workflw === "WNS")
+      {
+        let from =
+          new Date(fromPeriod).getDate().toString() +
+          "/" +
+          (new Date(fromPeriod).getMonth() + 1).toString() +
+          "/" +
+          new Date(fromPeriod).getFullYear().toString();
+        let to =
+          new Date(toPeriod).getDate() +
+          "/" +
+          (new Date(toPeriod).getMonth() + 1) +
+          "/" +
+          new Date(toPeriod).getFullYear();
+        return from + " - " + to;
+      }
       let from = new Date(fromPeriod).getFullYear().toString();
       let to = new Date(toPeriod).getFullYear().toString();
       return "FY " + from + "-" + to;
-
     } else return "N/A";
   };
 
@@ -255,12 +271,14 @@ export const SuccessfulPayment = (props)=>{
   if (workflw) {
     bannerText = `CITIZEN_SUCCESS_UC_PAYMENT_MESSAGE`;
   } else {
-    if(paymentData?.paymentDetails?.[0]?.businessService?.includes("BPA")) {
+    if (paymentData?.paymentDetails?.[0]?.businessService && paymentData?.paymentDetails?.[0]?.businessService?.includes("BPA")) {
       let nameOfAchitect = sessionStorage.getItem("BPA_ARCHITECT_NAME");
       let parsedArchitectName = nameOfAchitect ? JSON.parse(nameOfAchitect) : "ARCHITECT";
-      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_${parsedArchitectName}_PAYMENT_MESSAGE`;
+      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0]?.businessService.replace(/\./g, "_")}_${parsedArchitectName}_PAYMENT_MESSAGE`;
+    } else if (business_service?.includes("WS") || business_service?.includes("SW")) {
+      bannerText = t(`CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_WS_PAYMENT_MESSAGE`);
     } else {
-      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0].businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE`;
+      bannerText = `CITIZEN_SUCCESS_${paymentData?.paymentDetails[0]?.businessService.replace(/\./g, "_")}_PAYMENT_MESSAGE`;
     }
   }
 
@@ -311,7 +329,7 @@ export const SuccessfulPayment = (props)=>{
             rowContainerStyle={rowContainerStyle}
             last
             label={t("CS_PAYMENT_AMOUNT_PENDING")}
-            text={reciept_data?.paymentDetails?.[0]?.totalDue - reciept_data?.paymentDetails?.[0]?.totalAmountPaid}
+            text={`₹ ${reciept_data?.paymentDetails?.[0]?.totalDue - reciept_data?.paymentDetails?.[0]?.totalAmountPaid}`}
           />
         )}
 
@@ -367,17 +385,19 @@ export const SuccessfulPayment = (props)=>{
           <DownloadPrefixIcon />
             {t("BPA_PERMIT_ORDER")}
           </div>
-      ) : null}
+        ) : null}
       </div>
       {!(business_service == "TL") && <SubmitBar onSubmit={printReciept} label={t("COMMON_DOWNLOAD_RECEIPT")} />}
-      {!(business_service == "TL") &&<div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : { marginTop: "8px" }}>
-        <Link to={`/digit-ui/citizen`}>{t("CORE_COMMON_GO_TO_HOME")}</Link>
-      </div>}
-      {business_service == "TL" && 
-      <Link to={`/digit-ui/citizen`}>
-      <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
-      </Link>
-      }
+      {!(business_service == "TL") && (
+        <div className="link" style={isMobile ? { marginTop: "8px", width: "100%", textAlign: "center" } : { marginTop: "8px" }}>
+          <Link to={`/digit-ui/citizen`}>{t("CORE_COMMON_GO_TO_HOME")}</Link>
+        </div>
+      )}
+      {business_service == "TL" && (
+        <Link to={`/digit-ui/citizen`}>
+          <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
+        </Link>
+      )}
     </Card>
   );
 };
