@@ -601,6 +601,14 @@ config:
         dockerfile: "build/maven/Dockerfile"
       - work-dir: "municipal-services/birth-death-services/src/main/resources/db"
         image-name: "birth-death-services-db"
+  
+  - name: "builds/digit-dev/municipal-services/birth-registration"
+    build:
+      - work-dir: "municipal-services/birth-registration"
+        image-name: "birth-registration"
+        dockerfile: "build/maven/Dockerfile"
+      - work-dir: "municipal-services/birth-registration/src/main/resources/db"
+        image-name: "birth-registration-db"
  
  # Utilities
  
