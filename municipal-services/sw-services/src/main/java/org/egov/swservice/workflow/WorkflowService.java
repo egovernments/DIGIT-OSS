@@ -170,11 +170,11 @@ public class WorkflowService {
 				Optional<ProcessInstance> processInstance = response.getProcessInstances().stream().findFirst();
 				if(processInstance.get().getAssignes()!=null) {
 					/* encrypt here */
-					processInstance.get().setAssignes((List<org.egov.common.contract.request.User>) encryptionDecryptionUtil.encryptObject(processInstance.get().getAssignes(), WNS_OWNER_ENCRYPTION_MODEL, User.class));
+					/*processInstance.get().setAssignes((List<org.egov.common.contract.request.User>) encryptionDecryptionUtil.encryptObject(processInstance.get().getAssignes(), WNS_OWNER_ENCRYPTION_MODEL, User.class));
 
-					/* decrypt here */
+					*//* decrypt here *//*
 					processInstance.get().setAssignes(encryptionDecryptionUtil.decryptObject(processInstance.get().getAssignes(), WNS_OWNER_ENCRYPTION_MODEL, User.class, requestInfo));
-				}
+				*/}
 				List<ProcessInstance> processInstanceList = new ArrayList<>();
 				processInstanceList.add(processInstance.get());
 				return processInstanceList;

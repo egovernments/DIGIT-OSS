@@ -100,8 +100,8 @@ public class SewerageEncryptionService {
             try {
                 for (SewerageConnection sewerageConnection : sewerageConnectionList) {
                     /* encrypt here */
-                    sewerageConnection = encryptionDecryptionUtil.encryptObject(sewerageConnection, WNS_ENCRYPTION_MODEL, SewerageConnection.class);
-
+                    /*sewerageConnection = encryptionDecryptionUtil.encryptObject(sewerageConnection, WNS_ENCRYPTION_MODEL, SewerageConnection.class);
+*/
                     SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
                             .requestInfo(requestInfo)
                             .sewerageConnection(sewerageConnection)
@@ -110,7 +110,7 @@ public class SewerageEncryptionService {
                     sewerageDao.updateOldSewerageConnections(sewerageConnectionRequest);
 
                     /* decrypt here */
-                    sewerageConnection = encryptionDecryptionUtil.decryptObject(sewerageConnection, WNS_ENCRYPTION_MODEL, SewerageConnection.class, requestInfo);
+                   /* sewerageConnection = encryptionDecryptionUtil.decryptObject(sewerageConnection, WNS_ENCRYPTION_MODEL, SewerageConnection.class, requestInfo);*/
                 }
             } catch (Exception e) {
                 log.error("Encryption failed at batch count of : " + startBatch);

@@ -93,7 +93,7 @@ public class PropertyService {
 
 		propertyValidator.validateCreateRequest(request);
 		/* encrypt here */
-		request.setProperty(encryptionDecryptionUtil.encryptObject(request.getProperty(), "Property", Property.class));
+		/*request.setProperty(encryptionDecryptionUtil.encryptObject(request.getProperty(), "Property", Property.class));*/
 		enrichmentService.enrichCreateRequest(request);
 		userService.createUser(request);
 		if (config.getIsWorkflowEnabled()
@@ -109,8 +109,8 @@ public class PropertyService {
 		request.getProperty().setWorkflow(null);
 
 		/* decrypt here */
-		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
-		//return request.getProperty();
+		/*return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());*/
+		return request.getProperty();
 	}
 
 	/**
@@ -134,7 +134,7 @@ public class PropertyService {
 		boolean isNumberDifferent = checkIsRequestForMobileNumberUpdate(request, propertyFromSearch);
 
 		/* encrypt here */
-		request.setProperty(encryptionDecryptionUtil.encryptObject(request.getProperty(), "Property", Property.class));
+		/*request.setProperty(encryptionDecryptionUtil.encryptObject(request.getProperty(), "Property", Property.class));*/
 
 		if (isRequestForOwnerMutation)
 			processOwnerMutation(request, propertyFromSearch);
@@ -147,7 +147,8 @@ public class PropertyService {
 		request.getProperty().setWorkflow(null);
 
 		/* decrypt here */
-		return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());
+		/*return encryptionDecryptionUtil.decryptObject(request.getProperty(), "Property", Property.class, request.getRequestInfo());*/
+		return request.getProperty();
 	}
 	
 	/*
@@ -369,7 +370,7 @@ public class PropertyService {
 
 		List<Property> properties;
 		/* encrypt here */
-		criteria = encryptionDecryptionUtil.encryptObject(criteria, "Property", PropertyCriteria.class);
+		/*criteria = encryptionDecryptionUtil.encryptObject(criteria, "Property", PropertyCriteria.class);*/
 
 		/*
 		 * throw error if audit request is with no proeprty id or multiple propertyids
@@ -405,7 +406,8 @@ public class PropertyService {
 		List<Property> encryptedProperties= new LinkedList<>();
 
 		/* decrypt here */
-		return encryptionDecryptionUtil.decryptObject(properties, "Property", Property.class, requestInfo);
+		/*return encryptionDecryptionUtil.decryptObject(properties, "Property", Property.class, requestInfo);*/
+		return properties;
 	}
 
 	private void filterPropertiesForUser(List<Property> properties, Set<String> ownerIds) {

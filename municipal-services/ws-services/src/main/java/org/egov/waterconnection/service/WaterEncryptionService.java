@@ -100,8 +100,8 @@ public class WaterEncryptionService {
             try {
                 for (WaterConnection waterConnection : waterConnectionResponse.getWaterConnection()) {
                     /* encrypt here */
-                    waterConnection = encryptionDecryptionUtil.encryptObject(waterConnection, WNS_ENCRYPTION_MODEL, WaterConnection.class);
-
+                   /* waterConnection = encryptionDecryptionUtil.encryptObject(waterConnection, WNS_ENCRYPTION_MODEL, WaterConnection.class);
+*/
                     WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder()
                             .requestInfo(requestInfo)
                             .waterConnection(waterConnection)
@@ -110,7 +110,7 @@ public class WaterEncryptionService {
                     waterDao.updateOldWaterConnections(waterConnectionRequest);
                     countPushed++;
                     /* decrypt here */
-                    waterConnection = encryptionDecryptionUtil.decryptObject(waterConnection, WNS_ENCRYPTION_MODEL, WaterConnection.class, requestInfo);
+                   /* waterConnection = encryptionDecryptionUtil.decryptObject(waterConnection, WNS_ENCRYPTION_MODEL, WaterConnection.class, requestInfo);*/
                     waterConnectionList.add(waterConnection);
                 }
             } catch (Exception e) {

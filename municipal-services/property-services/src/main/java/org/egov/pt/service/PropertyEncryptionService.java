@@ -99,7 +99,7 @@ public class PropertyEncryptionService {
             try {
                 for (Property property : propertyList) {
                     /* encrypt here */
-                    property = encryptionDecryptionUtil.encryptObject(property, "Property", Property.class);
+                    /*property = encryptionDecryptionUtil.encryptObject(property, "Property", Property.class);*/
 
                     PropertyRequest request = PropertyRequest.builder()
                             .requestInfo(requestInfo)
@@ -109,7 +109,7 @@ public class PropertyEncryptionService {
                     producer.push(config.getUpdatePropertyTopic(), request);
                     countPushed++;
                     /* decrypt here */
-                    property = encryptionDecryptionUtil.decryptObject(property, "Property", Property.class, requestInfo);
+                    /*property = encryptionDecryptionUtil.decryptObject(property, "Property", Property.class, requestInfo);*/
                 }
             } catch (Exception e) {
 
