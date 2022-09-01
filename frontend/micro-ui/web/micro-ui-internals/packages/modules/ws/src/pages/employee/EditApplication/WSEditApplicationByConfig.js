@@ -209,25 +209,25 @@ const WSEditApplicationByConfig = () => {
     if (sessionAhocFormData?.adhocRebateReason) convertAppData.additionalDetails.adhocRebateReason = sessionAhocFormData?.adhocRebateReason || "";
     const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
     setSubmitValve(false);
-    // window.location.assign(`${window.location.origin}${state?.url}`);
+    sessionStorage.setItem("WS_SESSION_APPLICATION_DETAILS", JSON.stringify(convertAppData));
+     window.location.assign(`${window.location.origin}${state?.url}`);
 
-    if (mutate) {
-      mutate(reqDetails, {
-        onError: (error, variables) => {
-          setShowToast({ key: "error", message: error?.message ? error.message : error });
-          setTimeout(closeToastOfError, 5000);
-          setSubmitValve(true);
-        },
-        onSuccess: (res, variables) => {
-          clearSessionAdhocFormData();
-          setSessionAdhocFormData({});
-          sessionStorage.setItem("WS_SESSION_APPLICATION_DETAILS", data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? JSON.stringify(res?.WaterConnection?.[0]) : JSON.stringify(res?.SewerageConnections?.[0]));
-          setShowToast({ key: false, message: "WS_APPLICATION_SUBMITTED_SUCCESSFULLY_LABEL" });
-          setIsAppDetailsPage(true);
-          // setTimeout(closeToast(), 5000);
-        },
-      });
-    }
+    // if (mutate) {
+    //   mutate(reqDetails, {
+    //     onError: (error, variables) => {
+    //       setShowToast({ key: "error", message: error?.message ? error.message : error });
+    //       setTimeout(closeToastOfError, 5000);
+    //       setSubmitValve(true);
+    //     },
+    //     onSuccess: (data, variables) => {
+    //       clearSessionAdhocFormData();
+    //       setSessionAdhocFormData({});
+    //       setShowToast({ key: false, message: "WS_APPLICATION_SUBMITTED_SUCCESSFULLY_LABEL" });
+    //       setIsAppDetailsPage(true);
+    //       // setTimeout(closeToast(), 5000);
+    //     },
+    //   });
+    // }
   };
 
 
