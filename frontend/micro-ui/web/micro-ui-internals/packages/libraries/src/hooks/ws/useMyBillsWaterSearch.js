@@ -15,7 +15,7 @@ const getBillingPeriod = (fromPeriod, toPeriod) => {
 const getAddress = (address, t) => {
   return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${t(address?.locality.code)}, ${t(address?.city.code || address?.city)}${t(address?.pincode) ? `, ${address.pincode}` : " "}`
+  }${t(`TENANTS_MOHALLA_${address?.locality.code}`)}, ${t(address?.city.code || address?.city)}${t(address?.pincode) ? `, ${address.pincode}` : " "}`
 } 
 
 const combineResponse = (WaterConnections, properties, billData, t) => {

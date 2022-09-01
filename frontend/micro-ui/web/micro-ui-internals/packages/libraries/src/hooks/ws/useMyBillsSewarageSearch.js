@@ -17,7 +17,7 @@ const getBillingPeriod = (fromPeriod, toPeriod) => {
 const getAddress = (address, t) => {
     return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
       address?.landmark ? `${address?.landmark}, ` : ""
-    }${ address.locality.code ?  t(address?.locality.code) : ""}, ${ address.city.code ?  t(address?.city.code) : ""},${address?.pincode ? `${address.pincode}` : " "}`
+    }${ address.locality.code ?  t(`TENANTS_MOHALLA_${address?.locality.code}`) : ""}${ address.city.code ?  `, ${t(address?.city.code)}` : ""}${address?.pincode ? `, ${address.pincode}` : " "}`
 } 
   
 const combineResponse = (SewerageConnections, properties, billData, t) => {
@@ -59,7 +59,7 @@ const useMyBillsSewarageSearch = ({tenantId, filters = {}, BusinessService="WS",
   , config)
   const { isLoading : isBillLoading, error : isBillError, data: bill , isSuccess : isBillSuccess } = useQuery(['BILL_SEARCH', tenantId, consumercodes,BusinessService, config ], async () => await Digit.PaymentService.fetchBill(tenantId, {
     businessService: BusinessService,
-    consumerCode: consumercodes.substring(0, consumercodes.length-2),
+    consumerCode: consumercodes.substring(0, consumercodes.length-1),
   })
   , config)
 
