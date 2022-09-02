@@ -22,6 +22,8 @@
         <tracer.version>2.0.0-SNAPSHOT</tracer.version>
         <services-common.version>1.0.1-SNAPSHOT</services-common.version>
         <mdms-client.version>0.0.2-SNAPSHOT</mdms-client.version>
+        <!--<kafka-clients.version>3.2.0</kafka-clients.version>
+        <spring-kafka.version>2.9.0</spring-kafka.version>-->
     </properties>
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -112,6 +114,12 @@
             <groupId>org.egov</groupId>
             <artifactId>mdms-client</artifactId>
             <version>${mdms-client.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.egov.services</groupId>
+                    <artifactId>tracer</artifactId>
+                </exclusion>
+            </exclusions>
             <scope>compile</scope>
         </dependency>
         <dependency>

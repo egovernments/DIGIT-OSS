@@ -2,6 +2,8 @@ package org.egov.rn.service;
 
 import org.egov.rn.helper.RegistrationRequestTestBuilder;
 import org.egov.rn.repository.ServiceRequestRepository;
+import org.egov.rn.service.models.IdGenerationResponse;
+import org.egov.rn.service.models.IdResponse;
 import org.egov.rn.web.models.HouseholdRegistration;
 import org.egov.rn.web.models.RegistrationRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,23 +59,22 @@ class RegistrationEnrichmentServiceTest {
         assertEquals("MQ-RN-2022-08-26-000002", registrationRequest.getRegistration().getRegistrationId());
         assertEquals("MQ-RN-2022-08-26-HHID-000001", ((HouseholdRegistration) registrationRequest.getRegistration()).getHouseholdId());
         verify(serviceRequestRepository, times(1))
-                .fetchResult(any(StringBuilder.class), any(Object.class));
+                .fetchResult(any(StringBuilder.class), any(Object.class), any(Class.class));
     }
 
     private void setupIdGenResMock() {
-        Map idGenRes = getIdGenRes();
-        when(serviceRequestRepository.fetchResult(any(StringBuilder.class), any(Object.class)))
-                .thenReturn(idGenRes);
+        IdGenerationResponse response = getIdGenResponse();
+        when(serviceRequestRepository.fetchResult(any(StringBuilder.class), any(Object.class),
+                any(Class.class)))
+                .thenReturn(response);
     }
 
-    private Map getIdGenRes() {
-        String registrationId = "{\"id\": \"MQ-RN-2022-08-26-000002\"}";
-        String householdId = "{\"id\": \"MQ-RN-2022-08-26-HHID-000001\"}";
-        List<String> idResponses = new ArrayList<>();
+    private IdGenerationResponse getIdGenResponse() {
+        IdResponse registrationId = IdResponse.builder().id("MQ-RN-2022-08-26-000002").build();
+        IdResponse householdId = IdResponse.builder().id("MQ-RN-2022-08-26-HHID-000001").build();
+        List<IdResponse> idResponses = new ArrayList<>();
         idResponses.add(registrationId);
         idResponses.add(householdId);
-        Map idGenRes = new HashMap();
-        idGenRes.put("idResponses", idResponses);
-        return idGenRes;
+        return IdGenerationResponse.builder().idResponses(idResponses).build();
     }
 }

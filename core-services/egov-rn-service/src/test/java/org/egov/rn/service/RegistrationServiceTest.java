@@ -1,7 +1,7 @@
 package org.egov.rn.service;
 
 import org.egov.rn.helper.RegistrationRequestTestBuilder;
-import org.egov.rn.kafka.Producer;
+import org.egov.rn.kafka.RnProducer;
 import org.egov.rn.repository.ServiceRequestRepository;
 import org.egov.rn.service.models.State;
 import org.egov.rn.validators.RegistrationValidator;
@@ -33,7 +33,7 @@ class RegistrationServiceTest {
     private WorkflowService workflowService;
 
     @Mock
-    private Producer producer;
+    private RnProducer rnProducer;
 
     @InjectMocks
     private RegistrationService registrationService;
@@ -41,7 +41,7 @@ class RegistrationServiceTest {
     @BeforeEach
     void setUp() {
         registrationService = new RegistrationService(registrationValidator,
-                registrationEnrichmentService, workflowService, producer);
+                registrationEnrichmentService, workflowService, rnProducer);
     }
 
     @Test
@@ -61,7 +61,7 @@ class RegistrationServiceTest {
 
         verify(registrationValidator, times(1)).validate(registrationRequest);
         verify(registrationEnrichmentService, times(1)).enrich(registrationRequest);
-        verify(producer, times(1)).send(anyString(), any());
+        verify(rnProducer, times(1)).send(anyString(), any());
         verify(workflowService, times(1)).updateWorkflowStatus(registrationRequest);
     }
 }

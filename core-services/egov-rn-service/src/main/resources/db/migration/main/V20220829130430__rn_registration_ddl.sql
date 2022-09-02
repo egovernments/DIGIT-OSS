@@ -1,1 +1,0 @@
-DROP TABLE eg_rn_household;

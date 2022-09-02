@@ -1,14 +1,10 @@
 package org.egov.rn.web.models;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.validation.annotation.Validated;
-
-import java.time.LocalDate;
 
 /**
  * A representation of Household
@@ -24,45 +20,15 @@ import java.time.LocalDate;
 @SuperBuilder
 @ToString(callSuper = true)
 public class HouseholdRegistration extends Registration {
-              /**
-   * Gets or Sets gender
-   */
-  public enum GenderEnum {
-    MALE("Male"),
-    
-    FEMALE("Female");
-
-    private String value;
-
-    GenderEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static GenderEnum fromValue(String text) {
-      for (GenderEnum b : GenderEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
 
         @JsonProperty("name")
         private String name = null;
 
         @JsonProperty("gender")
-        private GenderEnum gender = null;
+        private String gender = null;
 
         @JsonProperty("dateOfBirth")
-        private LocalDate dateOfBirth = null;
+        private Long dateOfBirth = null;
 
         @JsonProperty("householdId")
         private String householdId = null;

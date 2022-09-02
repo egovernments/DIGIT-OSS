@@ -15,10 +15,10 @@ import java.util.List;
 @Builder
 public class IdGenerationResponse {
 
-    @JsonProperty("ResponseInfo")
+    @JsonProperty("responseInfo")
     private ResponseInfo responseInfo;
 
-    @JsonProperty("IdResponses")
+    @JsonProperty("idResponses")
     private List<IdResponse> idResponses;
 
 }

@@ -5,8 +5,6 @@ import org.egov.common.contract.request.User;
 import org.egov.rn.web.models.HouseholdRegistration;
 import org.egov.rn.web.models.RegistrationRequest;
 
-import java.time.LocalDate;
-
 public class RegistrationRequestTestBuilder {
     private RegistrationRequest.RegistrationRequestBuilder builder;
 
@@ -22,11 +20,11 @@ public class RegistrationRequestTestBuilder {
         builder
                 .registration(HouseholdRegistration.builder()
                         .tenantId("mq")
-                        .registrationType("Household")
+                        .registrationType("HouseholdRegistration")
                         .name("John Doe")
-                        .gender(HouseholdRegistration.GenderEnum.MALE)
-                        .dateOfRegistration(LocalDate.of(2022, 8, 22))
-                        .dateOfBirth(LocalDate.of(1991, 5, 5))
+                        .gender("Male")
+                        .dateOfRegistration(20220822L)
+                        .dateOfBirth(19910505L)
                         .isHead(true).build());
         return this;
     }
@@ -50,12 +48,12 @@ public class RegistrationRequestTestBuilder {
     public RegistrationRequestTestBuilder withMemberOfHousehold() {
         builder
                 .registration(HouseholdRegistration.builder()
-                        .registrationType("Household")
+                        .registrationType("HouseholdRegistration")
                         .tenantId("mq")
                         .name("John Doe")
-                        .gender(HouseholdRegistration.GenderEnum.MALE)
-                        .dateOfRegistration(LocalDate.of(2022, 8, 22))
-                        .dateOfBirth(LocalDate.of(1991, 5, 5))
+                        .gender("Male")
+                        .dateOfRegistration(20220822L)
+                        .dateOfBirth(19910505L)
                         .isHead(false)
                         .householdId("household-id").build());
         return this;
@@ -64,11 +62,11 @@ public class RegistrationRequestTestBuilder {
     public RegistrationRequestTestBuilder withNullTenantId() {
         builder
                 .registration(HouseholdRegistration.builder()
-                        .registrationType("Household")
+                        .registrationType("HouseholdRegistration")
                         .name("John Doe")
-                        .gender(HouseholdRegistration.GenderEnum.MALE)
-                        .dateOfRegistration(LocalDate.of(2022, 8, 22))
-                        .dateOfBirth(LocalDate.of(1991, 5, 5))
+                        .gender("Male")
+                        .dateOfRegistration(20220822L)
+                        .dateOfBirth(19910505L)
                         .isHead(false)
                         .householdId("household-id").build());
         return this;
@@ -77,12 +75,12 @@ public class RegistrationRequestTestBuilder {
     public RegistrationRequestTestBuilder withMemberWithoutHouseholdId() {
         builder
                 .registration(HouseholdRegistration.builder()
-                        .registrationType("Household")
+                        .registrationType("HouseholdRegistration")
                         .tenantId("mq")
                         .name("John Doe")
-                        .gender(HouseholdRegistration.GenderEnum.MALE)
-                        .dateOfRegistration(LocalDate.of(2022, 8, 22))
-                        .dateOfBirth(LocalDate.of(1991, 5, 5))
+                        .gender("Male")
+                        .dateOfRegistration(20220822L)
+                        .dateOfBirth(19910505L)
                         .isHead(false)
                         .householdId(null).build());
         return this;

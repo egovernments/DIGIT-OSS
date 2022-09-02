@@ -1,6 +1,8 @@
 package org.egov.rn.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.rn.exception.WorkflowException;
 import org.egov.rn.repository.ServiceRequestRepository;
 import org.egov.rn.service.models.ProcessInstance;
@@ -18,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@Slf4j
 public class WorkflowService {
 
     private ServiceRequestRepository serviceRequestRepository;
@@ -47,8 +50,9 @@ public class WorkflowService {
         }
     }
 
-    private State callWorkflow(ProcessInstanceRequest processInstanceRequest) {
+    private State callWorkflow(ProcessInstanceRequest processInstanceRequest) throws JsonProcessingException {
         StringBuilder url = new StringBuilder(wfHost + wfTransitionUrl);
+        log.info(objectMapper.writeValueAsString(processInstanceRequest));
         Object optional = serviceRequestRepository.fetchResult(url, processInstanceRequest);
         ProcessInstanceResponse response = objectMapper.convertValue(optional,
                 ProcessInstanceResponse.class);

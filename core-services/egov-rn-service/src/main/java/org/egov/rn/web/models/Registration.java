@@ -8,8 +8,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.validation.annotation.Validated;
 
-import java.time.LocalDate;
-
 /**
  * A representation of registration. It can be of type Household
  */
@@ -35,7 +33,7 @@ public class Registration   {
         private String registrationId = null;
 
         @JsonProperty("dateOfRegistration")
-        private LocalDate dateOfRegistration = null;
+        private Long dateOfRegistration = null;
 
         @JsonProperty("registrationType")
         private String registrationType = null;

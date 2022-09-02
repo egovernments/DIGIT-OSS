@@ -1,7 +1,7 @@
 package org.egov.rn.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.egov.rn.kafka.Producer;
+import org.egov.rn.kafka.RnProducer;
 import org.egov.rn.service.models.State;
 import org.egov.rn.validators.RegistrationValidator;
 import org.egov.rn.web.models.HouseholdRegistration;
@@ -20,17 +20,17 @@ public class RegistrationService {
 
     private WorkflowService workflowService;
 
-    private Producer producer;
+    private RnProducer rnProducer;
 
     @Autowired
     public RegistrationService(RegistrationValidator registrationValidator,
                                RegistrationEnrichmentService registrationEnrichmentService,
                                WorkflowService workflowService,
-                               Producer producer) {
+                               RnProducer rnProducer) {
         this.registrationValidator = registrationValidator;
         this.registrationEnrichmentService = registrationEnrichmentService;
         this.workflowService = workflowService;
-        this.producer = producer;
+        this.rnProducer = rnProducer;
     }
 
     public RegistrationDetails register(RegistrationRequest registrationRequest) {
@@ -38,7 +38,7 @@ public class RegistrationService {
         log.info("Request validated successfully");
         registrationEnrichmentService.enrich(registrationRequest);
         log.info("Enrichment successful {}", registrationRequest);
-        producer.send("save-hh-registration", registrationRequest);
+        rnProducer.send("save-hh-registration", registrationRequest);
         log.info("Registration saved successfully");
         State state = workflowService.updateWorkflowStatus(registrationRequest);
         log.info("Workflow updated successfully to state {}", state.getState());

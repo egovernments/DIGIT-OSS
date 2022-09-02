@@ -54,8 +54,8 @@ definitions:
       registrationId:
         type: string
       dateOfRegistration:
-        type: string
-        format: date
+        type: integer
+        example: 20190517
       registrationType:
         type: string
       auditDetails:
@@ -75,12 +75,9 @@ definitions:
             type: string
           gender:
             type: string
-            enum:
-              - Male
-              - Female
           dateOfBirth:
-            type: string
-            format: date
+            type: integer
+            example: 20190517
           householdId:
             type: string
             description: Household ID in case this is a member of the already registered Household

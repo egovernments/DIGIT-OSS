@@ -18,7 +18,7 @@ public class IdGenerationRequest {
     @JsonProperty("RequestInfo")
     private RequestInfo requestInfo;
 
-    @JsonProperty("IdRequests")
+    @JsonProperty("idRequests")
     private List<IdRequest> idRequests;
 
 }

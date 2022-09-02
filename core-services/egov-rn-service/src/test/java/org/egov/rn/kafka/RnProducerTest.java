@@ -1,5 +1,6 @@
 package org.egov.rn.kafka;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.egov.tracer.kafka.CustomKafkaTemplate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,27 +11,28 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
-class ProducerTest {
+class RnProducerTest {
 
     @Mock
     private CustomKafkaTemplate<String, Object> kafkaTemplate;
 
+    private ObjectMapper objectMapper;
+
     @InjectMocks
-    private Producer producer;
+    private RnProducer rnProducer;
 
 
     @BeforeEach
     void setUp() {
-        producer = new Producer(kafkaTemplate);
+        objectMapper = new ObjectMapper();
+        rnProducer = new RnProducer(kafkaTemplate, objectMapper);
     }
 
     @Test
     @DisplayName("should send message on the given kafka topic")
     void shouldSendMessageOnTheGivenKafkaTopic() {
-        assertDoesNotThrow(() -> producer.send("some_topic", new Object()));
+        assertDoesNotThrow(() -> rnProducer.send("some_topic", "string"));
     }
 }

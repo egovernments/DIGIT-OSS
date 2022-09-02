@@ -1,10 +1,11 @@
 package org.egov.rn.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.rn.exception.EnrichmentException;
 import org.egov.rn.repository.ServiceRequestRepository;
 import org.egov.rn.service.models.IdGenerationRequest;
+import org.egov.rn.service.models.IdGenerationResponse;
 import org.egov.rn.service.models.IdRequest;
 import org.egov.rn.service.models.IdResponse;
 import org.egov.rn.web.models.AuditDetails;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class RegistrationEnrichmentService {
 
     @Value("${egov.idgen.host}")
@@ -46,13 +48,11 @@ public class RegistrationEnrichmentService {
                     .lastModifiedBy(registrationRequest.getRequestInfo().getUserInfo().getUuid())
                     .build();
             registrationRequest.getRegistration().setAuditDetails(auditDetails);
-            Object response = serviceRequestRepository.fetchResult(new StringBuilder(idGenHost + idGenUrl),
-                    getIdGenRequest(registrationRequest.getRegistration().getTenantId()));
-            ObjectMapper objectMapper = new ObjectMapper();
-            IdResponse registrationId = objectMapper.readValue((String) JsonPath.read(response,
-                    "$.idResponses.[0]"), IdResponse.class);
-            IdResponse householdId = objectMapper.readValue((String) JsonPath.read(response,
-                    "$.idResponses.[1]"), IdResponse.class);
+            IdGenerationResponse response = (IdGenerationResponse) serviceRequestRepository.fetchResult(new StringBuilder(idGenHost + idGenUrl),
+                    getIdGenRequest(registrationRequest.getRequestInfo(), registrationRequest.getRegistration().getTenantId()), IdGenerationResponse.class);
+            log.info(response.toString());
+            IdResponse registrationId = response.getIdResponses().get(0);
+            IdResponse householdId = response.getIdResponses().get(1);
             registrationRequest.getRegistration().setRegistrationId(registrationId.getId());
             if (registrationRequest.getRegistration() instanceof HouseholdRegistration) {
                 ((HouseholdRegistration) registrationRequest.getRegistration()).setHouseholdId(householdId.getId());
@@ -68,11 +68,11 @@ public class RegistrationEnrichmentService {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] theMD5digest = md.digest(householdRegistration.getName()
                 .concat(householdRegistration.getDateOfBirth().toString())
-                .concat(householdRegistration.getGender().name()).getBytes(Charset.defaultCharset()));
+                .concat(householdRegistration.getGender()).getBytes(Charset.defaultCharset()));
         return new String(theMD5digest);
     }
 
-    private IdGenerationRequest getIdGenRequest(String tenantId) {
+    private IdGenerationRequest getIdGenRequest(RequestInfo requestInfo, String tenantId) {
         IdRequest registrationIdRequest = IdRequest.builder()
                 .tenantId(tenantId)
                 .idName("rn.registrationId").build();
@@ -84,6 +84,7 @@ public class RegistrationEnrichmentService {
         idRequestList.add(registrationIdRequest);
         idRequestList.add(householdIdRequest);
         return IdGenerationRequest.builder()
+                .requestInfo(requestInfo)
                 .idRequests(idRequestList)
                 .build();
     }

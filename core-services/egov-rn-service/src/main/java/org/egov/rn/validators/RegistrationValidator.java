@@ -64,7 +64,7 @@ public class RegistrationValidator {
             Object response = serviceRequestRepository.fetchResult(new StringBuilder(mdmsHost + mdmsUrl),
                     getMdmsRequestForValidationList(registrationRequest.getRequestInfo(),
                             registrationRequest.getRegistration().getTenantId()));
-            log.info(JsonPath.read(response, "$.MdmsRes.egov-rn-service.validations.[0]"));
+            log.info(JsonPath.read(response, "$.MdmsRes.egov-rn-service.validations.[0]").toString());
         } catch (Exception ex) {
             throw new ValidationException(ex.getMessage(), ex);
         }
