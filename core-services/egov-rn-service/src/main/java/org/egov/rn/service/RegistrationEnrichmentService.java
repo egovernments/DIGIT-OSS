@@ -50,7 +50,6 @@ public class RegistrationEnrichmentService {
             registrationRequest.getRegistration().setAuditDetails(auditDetails);
             IdGenerationResponse response = (IdGenerationResponse) serviceRequestRepository.fetchResult(new StringBuilder(idGenHost + idGenUrl),
                     getIdGenRequest(registrationRequest.getRequestInfo(), registrationRequest.getRegistration().getTenantId()), IdGenerationResponse.class);
-            log.info(response.toString());
             IdResponse registrationId = response.getIdResponses().get(0);
             IdResponse householdId = response.getIdResponses().get(1);
             registrationRequest.getRegistration().setRegistrationId(registrationId.getId());

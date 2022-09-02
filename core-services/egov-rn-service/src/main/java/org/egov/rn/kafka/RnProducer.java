@@ -24,7 +24,7 @@ public class RnProducer {
     public void send(String topic, Object payload) {
         try {
             String json = objectMapper.writeValueAsString(payload);
-            log.info(json);
+            log.debug(json);
             kafkaTemplate.send(topic, objectMapper.writeValueAsString(payload));
         } catch (Exception ex) {
             throw new ProducerException("Topic: " + topic + " " +

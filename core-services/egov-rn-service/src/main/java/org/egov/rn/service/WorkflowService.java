@@ -50,9 +50,8 @@ public class WorkflowService {
         }
     }
 
-    private State callWorkflow(ProcessInstanceRequest processInstanceRequest) throws JsonProcessingException {
+    private State callWorkflow(ProcessInstanceRequest processInstanceRequest) {
         StringBuilder url = new StringBuilder(wfHost + wfTransitionUrl);
-        log.info(objectMapper.writeValueAsString(processInstanceRequest));
         Object optional = serviceRequestRepository.fetchResult(url, processInstanceRequest);
         ProcessInstanceResponse response = objectMapper.convertValue(optional,
                 ProcessInstanceResponse.class);
@@ -61,9 +60,6 @@ public class WorkflowService {
 
     private ProcessInstance getProcessInstanceForRegistration(RegistrationRequest registrationRequest) {
         List<User> assignes = new ArrayList<>();
-        User user = new User();
-        user.setUuid(registrationRequest.getRequestInfo().getUserInfo().getUuid());
-        assignes.add(user);
         return ProcessInstance.builder()
                 .businessId(registrationRequest.getRegistration().getRegistrationId())
                 .tenantId(registrationRequest.getRegistration().getTenantId())

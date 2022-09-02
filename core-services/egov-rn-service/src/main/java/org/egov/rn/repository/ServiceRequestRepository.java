@@ -22,13 +22,11 @@ public class ServiceRequestRepository {
 
     public Object fetchResult(StringBuilder uri, Object request) {
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        log.info(uri.toString() + "----" + request.toString());
         return restTemplate.postForObject(uri.toString(), request, Map.class);
     }
 
     public Object fetchResult(StringBuilder uri, Object request, Class clazz) {
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
-        log.info(uri.toString() + "----" + request.toString());
         return restTemplate.postForObject(uri.toString(), request, clazz);
     }
 }
