@@ -39,6 +39,28 @@ public class DHIS2Service {
 
     private RestTemplate restTemplate;
 
+    private static String config = "{\n" +
+            "  \"orgUnit\": \"LJX5GuypkKy\",\n" +
+            "  \"name\": {\n" +
+            "    \"dhis2DataElementId\": \"YDeCE3dFlrH\"\n" +
+            "  },\n" +
+            "  \"dateOfRegistration\": {\n" +
+            "    \"dhis2DataElementId\": \"random-date-of-registration\"\n" +
+            "  },\n" +
+            "  \"registrationType\": {\n" +
+            "    \"dhis2DataElementId\": \"random-registration-type\"\n" +
+            "  },\n" +
+            "  \"gender\": {\n" +
+            "    \"dhis2DataElementId\": \"WeqK1J3Olk6\"\n" +
+            "  },\n" +
+            "  \"dateOfBirth\": {\n" +
+            "    \"dhis2DataElementId\": \"ZZF2tgZtV2A\"\n" +
+            "  },\n" +
+            "  \"isHead\": {\n" +
+            "    \"dhis2DataElementId\": \"VOKjiHnbhby\"\n" +
+            "  }\n" +
+            "}";
+
     @Autowired
     public DHIS2Service(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -143,8 +165,6 @@ public class DHIS2Service {
 
     private String getOrgUnit() {
         try {
-            File file = ResourceUtils.getFile("classpath:formFieldsConfig.json");
-            String config = new String(Files.readAllBytes(file.toPath()));
             Map<String, Object> mapping = new ObjectMapper().readValue(config, HashMap.class);
             return mapping.get("orgUnit").toString();
         } catch (Exception err) {
@@ -153,10 +173,8 @@ public class DHIS2Service {
 
     }
 
-    public String getDhis2FormId(String dataElementName) {
+    public static String getDhis2FormId(String dataElementName) {
         try {
-            File file = ResourceUtils.getFile("classpath:formFieldsConfig.json");
-            String config = new String(Files.readAllBytes(file.toPath()));
             Map<String, Object> mapping = new ObjectMapper().readValue(config, HashMap.class);
             Map<String, Object> formElement = (Map<String, Object>) mapping.get(dataElementName);
             return formElement.get("dhis2DataElementId").toString();
