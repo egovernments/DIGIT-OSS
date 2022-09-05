@@ -1,11 +1,13 @@
 package org.egov.rn.web.exceptionhandler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.rn.exception.EnrichmentException;
 import org.egov.rn.exception.ProducerException;
 import org.egov.rn.exception.ValidationException;
 import org.egov.rn.exception.WorkflowException;
+import org.egov.rn.service.dhis2.errors.ErrorResponse;
 import org.egov.rn.web.models.Error;
 import org.egov.rn.web.models.ErrorRes;
 import org.egov.rn.web.models.RegistrationRequest;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -76,5 +79,16 @@ public class RestResponseEntityExceptionHandler
         } catch (Exception ex) {
             throw new RuntimeException(ex.getMessage());
         }
+    }
+
+
+    @ExceptionHandler(HttpStatusCodeException.class)
+    protected ResponseEntity<ErrorResponse> handleEntityNotFound(
+            HttpStatusCodeException ex) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        log.error(ex.toString());
+        ErrorResponse r = mapper.readValue(ex.getResponseBodyAsString(), ErrorResponse.class);
+        return new ResponseEntity<ErrorResponse>(r, HttpStatus.valueOf(ex.getRawStatusCode()));
+
     }
 }

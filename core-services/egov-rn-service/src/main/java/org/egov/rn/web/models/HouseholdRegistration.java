@@ -39,5 +39,28 @@ public class HouseholdRegistration extends Registration {
         @JsonProperty("md5Hash")
         private String md5Hash = null;
 
+        public String getName() {
+                return name;
+        }
+
+        public String getGender() {
+                return gender;
+        }
+
+        public Long getDateOfBirth() {
+                return dateOfBirth;
+        }
+
+        public String getHouseholdId() {
+                return householdId;
+        }
+
+        public Boolean getHead() {
+                return isHead;
+        }
+
+        public String getMd5Hash() {
+                return md5Hash;
+        }
 }
 

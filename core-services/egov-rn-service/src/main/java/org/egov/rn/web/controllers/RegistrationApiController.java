@@ -20,7 +20,7 @@ import javax.validation.Valid;
 
 @Controller
 @Slf4j
-@RequestMapping("/egov-rn-service")
+@RequestMapping("/registration/v1")
 public class RegistrationApiController {
 
     private final RegistrationService registrationService;
@@ -30,7 +30,7 @@ public class RegistrationApiController {
         this.registrationService = registrationService;
     }
 
-    @RequestMapping(value = "/registration/v1/_create", method = RequestMethod.POST)
+    @RequestMapping(value = "/_create", method = RequestMethod.POST)
     public ResponseEntity<RegistrationResponse> registrationV1CreatePost(@ApiParam(value = "Details of the registration and org.egov.rn.web.models.web.RequestInfo meta data.", required = true)
                                                                              @Valid @RequestBody RegistrationRequest registrationRequest) {
         log.info("Request received on controller with payload {}", registrationRequest);

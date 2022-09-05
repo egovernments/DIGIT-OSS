@@ -35,13 +35,16 @@ class RegistrationServiceTest {
     @Mock
     private RnProducer rnProducer;
 
+    @Mock
+    private DHIS2Service dhis2Service;
+
     @InjectMocks
     private RegistrationService registrationService;
 
     @BeforeEach
     void setUp() {
         registrationService = new RegistrationService(registrationValidator,
-                registrationEnrichmentService, workflowService, rnProducer);
+                registrationEnrichmentService, workflowService, rnProducer,dhis2Service);
     }
 
     @Test

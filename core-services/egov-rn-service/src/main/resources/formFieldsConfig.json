@@ -1,0 +1,21 @@
+{
+  "orgUnit": "LJX5GuypkKy",
+  "name": {
+    "dhis2DataElementId": "YDeCE3dFlrH"
+  },
+  "dateOfRegistration": {
+    "dhis2DataElementId": "random-date-of-registration"
+  },
+  "registrationType": {
+    "dhis2DataElementId": "random-registration-type"
+  },
+  "gender": {
+    "dhis2DataElementId": "WeqK1J3Olk6"
+  },
+  "dateOfBirth": {
+    "dhis2DataElementId": "ZZF2tgZtV2A"
+  },
+  "isHead": {
+    "dhis2DataElementId": "VOKjiHnbhby"
+  }
+}

@@ -22,15 +22,19 @@ public class RegistrationService {
 
     private RnProducer rnProducer;
 
+    private DHIS2Service dhis2Service;
+
     @Autowired
     public RegistrationService(RegistrationValidator registrationValidator,
                                RegistrationEnrichmentService registrationEnrichmentService,
                                WorkflowService workflowService,
-                               RnProducer rnProducer) {
+                               RnProducer rnProducer,
+                               DHIS2Service dhis2Service) {
         this.registrationValidator = registrationValidator;
         this.registrationEnrichmentService = registrationEnrichmentService;
         this.workflowService = workflowService;
         this.rnProducer = rnProducer;
+        this.dhis2Service = dhis2Service;
     }
 
     public RegistrationDetails register(RegistrationRequest registrationRequest) {
@@ -40,6 +44,7 @@ public class RegistrationService {
         log.info("Enrichment successful {}", registrationRequest);
         rnProducer.send("save-hh-registration", registrationRequest);
         log.info("Registration saved successfully");
+        dhis2Service.submitDataToDhis2(registrationRequest);
         State state = workflowService.updateWorkflowStatus(registrationRequest);
         log.info("Workflow updated successfully to state {}", state.getState());
         return HouseholdRegistrationDetails.builder()

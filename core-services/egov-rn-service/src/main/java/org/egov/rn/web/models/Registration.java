@@ -41,6 +41,9 @@ public class Registration   {
         @JsonProperty("auditDetails")
         private AuditDetails auditDetails = null;
 
+        @JsonProperty("campaginId")
+        private String campaginId = null;
+
 
 }
 

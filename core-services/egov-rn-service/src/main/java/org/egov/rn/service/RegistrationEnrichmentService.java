@@ -17,9 +17,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -50,6 +52,7 @@ public class RegistrationEnrichmentService {
             registrationRequest.getRegistration().setAuditDetails(auditDetails);
             IdGenerationResponse response = (IdGenerationResponse) serviceRequestRepository.fetchResult(new StringBuilder(idGenHost + idGenUrl),
                     getIdGenRequest(registrationRequest.getRequestInfo(), registrationRequest.getRegistration().getTenantId()), IdGenerationResponse.class);
+            System.out.println(response);
             IdResponse registrationId = response.getIdResponses().get(0);
             IdResponse householdId = response.getIdResponses().get(1);
             registrationRequest.getRegistration().setRegistrationId(registrationId.getId());
@@ -67,8 +70,8 @@ public class RegistrationEnrichmentService {
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] theMD5digest = md.digest(householdRegistration.getName()
                 .concat(householdRegistration.getDateOfBirth().toString())
-                .concat(householdRegistration.getGender()).getBytes(Charset.defaultCharset()));
-        return new String(theMD5digest);
+                .concat(householdRegistration.getGender()).getBytes());
+        return new String(Base64.getEncoder().encode(theMD5digest));
     }
 
     private IdGenerationRequest getIdGenRequest(RequestInfo requestInfo, String tenantId) {
