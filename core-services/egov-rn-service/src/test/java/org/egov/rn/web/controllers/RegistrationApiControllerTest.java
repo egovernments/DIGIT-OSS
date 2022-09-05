@@ -58,7 +58,7 @@ class RegistrationApiControllerTest {
 
         when(registrationService.register(any(RegistrationRequest.class))).thenReturn(registrationDetails);
 
-        mockMvc.perform(post("/egov-rn-service/registration/v1/_create")
+        mockMvc.perform(post("/registration/v1/_create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registrationRequest)))
                 .andExpect(status().isOk())
@@ -80,7 +80,7 @@ class RegistrationApiControllerTest {
         when(registrationService.register(any(RegistrationRequest.class)))
                 .thenThrow(new EnrichmentException("Error in enrichment"));
 
-        mockMvc.perform(post("/egov-rn-service/registration/v1/_create")
+        mockMvc.perform(post("/registration/v1/_create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registrationRequest)))
                 .andExpect(status().is5xxServerError())
@@ -100,7 +100,7 @@ class RegistrationApiControllerTest {
         when(registrationService.register(any(RegistrationRequest.class)))
                 .thenThrow(new WorkflowException("Error in workflow"));
 
-        mockMvc.perform(post("/egov-rn-service/registration/v1/_create")
+        mockMvc.perform(post("/registration/v1/_create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registrationRequest)))
                 .andExpect(status().is5xxServerError())
@@ -120,7 +120,7 @@ class RegistrationApiControllerTest {
         when(registrationService.register(any(RegistrationRequest.class)))
                 .thenThrow(new ValidationException("Error in validation"));
 
-        mockMvc.perform(post("/egov-rn-service/registration/v1/_create")
+        mockMvc.perform(post("/registration/v1/_create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registrationRequest)))
                 .andExpect(status().is4xxClientError())
@@ -140,7 +140,7 @@ class RegistrationApiControllerTest {
         when(registrationService.register(any(RegistrationRequest.class)))
                 .thenThrow(new ProducerException("Error in producing to kafka"));
 
-        mockMvc.perform(post("/egov-rn-service/registration/v1/_create")
+        mockMvc.perform(post("/registration/v1/_create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registrationRequest)))
                 .andExpect(status().is5xxServerError())
