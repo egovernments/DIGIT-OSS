@@ -2,6 +2,7 @@ package org.egov.rn.service;
 
 import org.egov.rn.helper.RegistrationRequestTestBuilder;
 import org.egov.rn.kafka.RnProducer;
+import org.egov.rn.repository.Registration.RegistrationRepository;
 import org.egov.rn.repository.ServiceRequestRepository;
 import org.egov.rn.service.models.State;
 import org.egov.rn.validators.RegistrationValidator;
@@ -41,10 +42,13 @@ class RegistrationServiceTest {
     @InjectMocks
     private RegistrationService registrationService;
 
+    @Mock
+    private RegistrationRepository registrationRepository;
+
     @BeforeEach
     void setUp() {
         registrationService = new RegistrationService(registrationValidator,
-                registrationEnrichmentService, workflowService, rnProducer,dhis2Service);
+                registrationEnrichmentService, workflowService, rnProducer,dhis2Service,registrationRepository);
     }
 
     @Test

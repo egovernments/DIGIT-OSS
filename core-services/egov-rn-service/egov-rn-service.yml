@@ -42,6 +42,81 @@ paths:
               https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
       tags:
         - Registration
+  /registration/v1/_list:
+    get:
+      summary: Get all registries.
+      description: Get All Registries Ok response is returned.
+      responses:
+        '200':
+          description: Feteched registration successfully.
+          schema:
+            $ref: '#/definitions/RegistrationData'
+        '400':
+          description: Bad request
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+        '500':
+          description: Internal server error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+      tags:
+        - Registration
+  /registration/v1/_list/{registrationId}:
+    get:
+      summary: Get registration by Id.
+      description: Get registration by Id Ok response is returned.
+      parameters:
+        - name: registrationId
+          in: path
+          description: ID of registration to return
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Feteched Registration Data.
+          schema:
+            $ref: '#/definitions/RegistrationData'
+        '400':
+          description: Bad request
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+        '500':
+          description: Internal server error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+      tags:
+        - Registration
+  /registration/v1/_search:
+    get:
+      summary: Search Registrations.
+      description: Search Registrations Ok response is returned.
+      parameters:
+        - name: lastModifiedTime
+          in: query
+          description: Last Modified Time for the Registration
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Feteched Registration Data.
+          schema:
+            $ref: '#/definitions/RegistrationData'
+        '400':
+          description: Bad request
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+        '500':
+          description: Internal server error
+          schema:
+            $ref: >-
+              https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml#/definitions/ErrorRes
+      tags:
+        - Registration
 #########################################
 definitions:
   Registration:
@@ -59,7 +134,7 @@ definitions:
       registrationType:
         type: string
       auditDetails:
-        $ref: >- 
+        $ref: >-
           https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-1-1.yml#/definitions/AuditDetails
     required:
       - tenantId
@@ -92,6 +167,43 @@ definitions:
           - gender
           - dateOfBirth
           - isHead
+
+  RegistrationData:
+    description: A representation of Household
+    type: object
+    properties:
+      tenantId:
+        type: string
+      registrationId:
+        type: string
+      dateOfRegistration:
+        type: integer
+        example: 20190517
+      registrationType:
+        type: string
+      name:
+        type: string
+      gender:
+        type: string
+      dateOfBirth:
+        type: integer
+        example: 20190517
+      householdId:
+        type: string
+        description: Household ID in case this is a member of the already registered Household
+      isHead:
+        type: boolean
+        description: Denotes the head of the Household
+      createdBy:
+        type: string
+      lastModifiedBy:
+        type: string
+      createdTime:
+        type: integer
+      lastModifiedTime:
+        type: integer
+
+
   RegistrationDetails:
     type: object
     discriminator: registrationDetailsType

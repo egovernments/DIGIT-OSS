@@ -13,6 +13,7 @@ import org.egov.rn.web.models.ErrorRes;
 import org.egov.rn.web.models.RegistrationRequest;
 import org.egov.rn.web.utils.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +56,21 @@ public class RestResponseEntityExceptionHandler
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
+
+    @ExceptionHandler(value
+            = { EmptyResultDataAccessException.class})
+    protected ResponseEntity<Object> handleNoDataFound(
+            RuntimeException ex, WebRequest request) {
+
+
+        ErrorRes errorRes = ErrorRes.builder().errors(Collections.singletonList(Error.builder()
+                        .message("Record Not Found").build()))
+                .build();
+        log.error("Error occurred", ex);
+        return handleExceptionInternal(ex, errorRes,
+                new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
     @ExceptionHandler(value
             = { ValidationException.class })
     protected ResponseEntity<Object> handleValidationErrors(
@@ -89,6 +105,5 @@ public class RestResponseEntityExceptionHandler
         log.error(ex.toString());
         ErrorResponse r = mapper.readValue(ex.getResponseBodyAsString(), ErrorResponse.class);
         return new ResponseEntity<ErrorResponse>(r, HttpStatus.valueOf(ex.getRawStatusCode()));
-
     }
 }
