@@ -111,7 +111,7 @@ const Home = ({
       </div>
       <div className="citizen-home-footer" style={window.location.href.includes("citizen/obps") ? { zIndex: "-1" } : {}}>
         <img
-          alt="Powered by DIGIT"
+          alt="Powered by TCP"
           src={window?.globalConfigs?.getConfig?.("DIGIT_FOOTER")}
           style={{ height: "1.2em", cursor: "pointer" }}
           onClick={() => {
