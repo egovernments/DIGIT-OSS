@@ -61,7 +61,7 @@ public class RegistrationService {
         return registrationRepository.getRegistrations();
     }
 
-    public RegistrationData getRegistrationBy(String registrationId){
+    public List<RegistrationData> getRegistrationBy(String registrationId){
         return registrationRepository.getRegistrationsBy(registrationId);
     }
 

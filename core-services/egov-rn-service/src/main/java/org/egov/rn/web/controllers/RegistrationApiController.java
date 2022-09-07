@@ -3,10 +3,7 @@ package org.egov.rn.web.controllers;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.rn.service.RegistrationService;
-import org.egov.rn.web.models.RegistrationData;
-import org.egov.rn.web.models.RegistrationDetails;
-import org.egov.rn.web.models.RegistrationRequest;
-import org.egov.rn.web.models.RegistrationResponse;
+import org.egov.rn.web.models.*;
 import org.egov.rn.web.utils.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,20 +38,19 @@ public class RegistrationApiController {
                 .registrationDetails(registrationDetails).build());
     }
 
-    @RequestMapping(value = "/_list/{registrationId}", method = RequestMethod.GET)
-    public ResponseEntity<RegistrationData> getRegistrationById(@PathVariable("registrationId") String registrationId) {
-        RegistrationData registrationData = registrationService.getRegistrationBy(registrationId);
-        return ResponseEntity.ok(registrationData);
-    }
 
-    @RequestMapping(value = "/_list", method = RequestMethod.GET)
+    @RequestMapping(value = "/_list", method = RequestMethod.POST)
     public ResponseEntity<List<RegistrationData>> getAllRegistration() {
         return ResponseEntity.ok(registrationService.getAllRegistration());
     }
 
-    @RequestMapping(value = "/_search", method = RequestMethod.GET)
-    public ResponseEntity<List<RegistrationData>> getResgistrationOnCriteria(@RequestParam(required = true) Long lastModifiedTime) {
-        return ResponseEntity.ok(registrationService.getRegistrationPast(lastModifiedTime));
+    @RequestMapping(value = "/_search", method = RequestMethod.POST)
+    public ResponseEntity<List<RegistrationData>> getResgistrationOnCriteria( @RequestBody RegistrationSearchRequest registrationSearchRequest) {
+        if(registrationSearchRequest.getRegistrationId()!=null){
+            return ResponseEntity.ok(registrationService.getRegistrationBy(registrationSearchRequest.getRegistrationId()));
+        }
+        return ResponseEntity.ok(registrationService.getRegistrationPast(registrationSearchRequest.getLastModifiedTime()));
+
     }
 
 }

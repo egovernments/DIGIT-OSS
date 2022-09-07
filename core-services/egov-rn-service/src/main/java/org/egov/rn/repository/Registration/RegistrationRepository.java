@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -27,12 +28,13 @@ public class RegistrationRepository {
         return (List<RegistrationData>) jdbcTemplate.query("SELECT * FROM eg_rn_household", preparedStmtList.toArray(), rowMapper);
     }
 
-    public RegistrationData getRegistrationsBy(String registrationId){
+    public List<RegistrationData> getRegistrationsBy(String registrationId){
         String sql = "SELECT * FROM eg_rn_household WHERE ID = ?";
-        return (RegistrationData) jdbcTemplate.queryForObject(
+        RegistrationData registrationData = (RegistrationData) jdbcTemplate.queryForObject(
                 sql,
                 new Object[]{registrationId},
                 new BeanPropertyRowMapper(RegistrationData.class));
+        return new ArrayList<RegistrationData>(Arrays.asList(registrationData));
     }
 
 

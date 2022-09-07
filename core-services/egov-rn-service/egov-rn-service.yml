@@ -91,14 +91,19 @@ paths:
       tags:
         - Registration
   /registration/v1/_search:
-    get:
+    post:
       summary: Search Registrations.
       description: Search Registrations Ok response is returned.
       parameters:
         - name: lastModifiedTime
           in: query
           description: Last Modified Time for the Registration
-          required: true
+          required: false
+          type: string
+        - name: registrationId
+          in: query
+          description: Registration Id for the Registration
+          required: false
           type: string
       responses:
         '200':
