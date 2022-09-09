@@ -499,21 +499,13 @@ export const WSSearch = {
                 {
                   title: "WS_SERV_DETAIL_CONN_EXECUTION_DATE",
                   value: wsDataDetails?.connectionExecutionDate ? convertEpochToDate(wsDataDetails?.connectionExecutionDate) : t("NA"),
-                },
-              ...(wsDataDetails?.dateEffectiveFrom ? [{
-                  title: "WS_MODIFICATIONS_EFFECTIVE_FROM",
-                  value: wsDataDetails?.dateEffectiveFrom ? convertEpochToDate(wsDataDetails?.dateEffectiveFrom) : t("NA"),
-                }]:[]),
+                }
               ]
             : [
                 {
                   title: "WS_SERV_DETAIL_CONN_EXECUTION_DATE",
                   value: wsDataDetails?.connectionExecutionDate ? convertEpochToDate(wsDataDetails?.connectionExecutionDate) : t("NA"),
-                },
-              ...(wsDataDetails?.dateEffectiveFrom ? [{
-                  title: "WS_MODIFICATIONS_EFFECTIVE_FROM",
-                  value: wsDataDetails?.dateEffectiveFrom ? convertEpochToDate(wsDataDetails?.dateEffectiveFrom) : t("NA"),
-              }]:[])
+                }
               ],
       },
     };
