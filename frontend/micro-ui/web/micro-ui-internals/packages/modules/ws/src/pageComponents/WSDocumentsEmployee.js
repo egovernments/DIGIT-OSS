@@ -16,7 +16,7 @@ const WSDocumentsEmployee = ({ t, config, onSelect, userType, formData, setError
   const stateId = Digit.ULBService.getStateId();
   const [documents, setDocuments] = useState(formData?.DocumentsRequired?.documents || []);
   const [error, setError] = useState(null);
-  const wsDocsData = window.location.href.includes("modify") ? "ModifyConnectionDocuments" : "Documents";
+  const wsDocsData = window.location.href.includes("modify") ? "ModifyConnectionDocuments" : window.location.href.includes("disconnection") ? "DisconnectionDocuments" : "Documents";
   let action = "create";
 
   const { pathname } = useLocation();

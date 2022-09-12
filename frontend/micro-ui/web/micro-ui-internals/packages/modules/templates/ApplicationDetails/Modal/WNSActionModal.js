@@ -185,7 +185,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
       const connectionExecutionDate = cloneDeep(data?.date);
       applicationData.connectionExecutionDate = convertDateToEpochNew(connectionExecutionDate)
     }
-    if (applicationData?.processInstance?.businessService == "DisconnectWSConnection" || applicationData?.processInstance?.businessService == "DisconnectSWConnection"){
+    if ((applicationData?.processInstance?.businessService == "DisconnectWSConnection" || applicationData?.processInstance?.businessService == "DisconnectSWConnection") || window.location.href.includes("disconnection")){
+      
       applicationData?.serviceType == "WATER" ?
       submitAction({ WaterConnection: applicationData, disconnectRequest: true }) :
       submitAction({ SewerageConnection: applicationData, disconnectRequest: true })

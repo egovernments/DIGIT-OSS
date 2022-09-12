@@ -1415,6 +1415,24 @@ export const WSSearch = {
 
     const response = await WSSearch.application(tenantId, filters, serviceType);
 
+    const appSessionDetails = sessionStorage.getItem("WS_SESSION_APPLICATION_DETAILS");
+    const wsApplicationDetails = appSessionDetails ? JSON.parse(appSessionDetails) : "";
+    if (
+      response?.WaterConnection?.[0] && 
+      wsApplicationDetails?.applicationType &&
+      wsApplicationDetails?.applicationNo == response?.WaterConnection?.[0]?.applicationNo
+      ) {
+      response.WaterConnection[0] = wsApplicationDetails;
+    }
+
+    if (
+      response?.SewerageConnections?.[0] && 
+      wsApplicationDetails?.applicationType && 
+      wsApplicationDetails?.applicationNo == response?.SewerageConnections?.[0]?.applicationNo
+      ) {
+      response.SewerageConnections[0] = wsApplicationDetails;
+    }
+
     const wsData = cloneDeep(serviceType == "WATER" ? response?.WaterConnection : response?.SewerageConnections);
 
     wsData?.forEach((item) => { propertyids = propertyids + item?.propertyId + ","; consumercodes = consumercodes + item?.applicationNo + ","; });
@@ -1437,14 +1455,14 @@ export const WSSearch = {
 
     const fetchBillData = await WSSearch.fetchBillData({ tenantId, serviceTypeOfData, collectionNumber });
 
-    const wsDataDetails = cloneDeep(serviceType == "WATER" ? response?.WaterConnection?.[0] : response?.SewerageConnections?.[0]);
+    const wsDataDetails = cloneDeep(wsData?.[0]);
     const propertyDataDetails = cloneDeep(properties?.Properties?.[0]);
     const workFlowDataDetails = cloneDeep(workflowDetails);
     const serviceDataType = cloneDeep(serviceType);
     const wsApplicationType = cloneDeep(wsDataDetails?.applicationType);
     let applicationType = "";
-    if (wsApplicationType.includes("DISCONNECT") && wsDataDetails?.isDisconnectionTemporary) applicationType = "WS_DISCONNECTIONTYPE_PERMANENT";
-    else applicationType = "WS_DISCONNECTIONTYPE_TEMPORARY";
+    if (wsApplicationType.includes("DISCONNECT") && wsDataDetails?.isDisconnectionTemporary) applicationType = "WS_DISCONNECTIONTYPE_TEMPORARY";
+    else applicationType = "WS_DISCONNECTIONTYPE_PERMANENT";
 
 
     const applicationHeaderDetails = {

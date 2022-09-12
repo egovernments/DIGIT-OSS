@@ -1151,6 +1151,93 @@ export const convertEditApplicationDetails = async (data, appData, actionData) =
   return payload;
 };
 
+export const convertDisonnectApplicationData = (data, serviceType, editByConfig = false, t) => {
+  const temp = "TEMPORARY", perm = "PERMANENT";
+
+  let disConnectionDetails = [
+    {
+      consumerNumber: data?.applicationData?.connectionNo,
+      disConnectionType: data?.applicationData?.isDisconnectionTemporary ? temp : perm,
+      disConnectionReason: data?.applicationData?.disconnectionReason || "",
+      disConnectionProposeDate: data?.applicationData?.dateEffectiveFrom
+        ? convertEpochToDateDMY(data?.applicationData?.dateEffectiveFrom, true)
+        : null
+    }
+  ];
+
+  let documents = [];
+  if (data?.applicationData?.documents) {
+    data.applicationData.documents.forEach((data) => {
+      documents.push({
+        active: true,
+        code: data?.documentType,
+        i18nKey: data?.documentType?.replaceAll(".", "_"),
+        documentType: data?.documentType,
+        id: data.id,
+        documentUid: data?.documentUid,
+        fileStoreId: data?.fileStoreId,
+      });
+    });
+  }
+  let DocumentsRequired = { documents: documents };
+
+  let payload = {};
+  payload.disConnectionDetails = disConnectionDetails;
+  payload.DocumentsRequired = DocumentsRequired;
+
+  if (editByConfig) {
+    let plumberDetails = [
+      {
+        detailsProvidedBy: data?.applicationData?.additionalDetails?.detailsProvidedBy
+          ? {
+            i18nKey: data?.applicationData?.additionalDetails?.detailsProvidedBy,
+            code: data?.applicationData?.additionalDetails?.detailsProvidedBy,
+            size: data?.applicationData?.additionalDetails?.detailsProvidedBy,
+          }
+          : "",
+        plumberName: data?.applicationData?.plumberInfo?.[0].name,
+        plumberMobileNo: data?.applicationData?.plumberInfo?.[0].mobileNumber,
+        plumberLicenseNo: data?.applicationData?.plumberInfo?.[0].licenseNo
+      }
+    ];
+    payload.plumberDetails = plumberDetails;
+  }
+
+  sessionStorage.setItem("Digit.PT_CREATE_EMP_WS_NEW_FORM", JSON.stringify(payload));
+  sessionStorage.setItem("WS_EDIT_APPLICATION_DETAILS", JSON.stringify(data));
+
+  return payload;
+};
+
+export const convertDisonnectEditApplicationDetails = async (data, appData, actionData) => {
+  const plumberInfo = [{
+    licenseNo: data?.plumberDetails?.[0]?.plumberLicenseNo,
+    mobileNumber: data?.plumberDetails?.[0]?.plumberMobileNo,
+    name: data?.plumberDetails?.[0]?.plumberName,
+  }];
+
+  let payload = {
+    ...appData.applicationData,
+    documents: data?.DocumentsRequired?.documents,
+    isDisconnectionTemporary: data?.disConnectionDetails?.[0]?.disConnectionType == "TEMPORARY" ? true : false,
+    disconnectionReason: data?.disConnectionDetails?.[0]?.disConnectionReason || "",
+    dateEffectiveFrom: await getConvertedDate(data?.disConnectionDetails?.[0]?.disConnectionProposeDate),
+    processInstance: {
+      action: actionData ? actionData : "RESUBMIT_APPLICATION",
+    },
+    action: actionData ? actionData : "RESUBMIT_APPLICATION",
+
+  };
+  if (data?.plumberDetails?.[0]?.detailsProvidedBy?.code) {
+    payload.additionalDetails.detailsProvidedBy = data?.plumberDetails?.[0]?.detailsProvidedBy?.code;
+    if (data?.plumberDetails?.[0]?.detailsProvidedBy?.code == "ULB") {
+      payload.plumberInfo = plumberInfo
+    }
+  }
+
+  return payload;
+};
+
 export const getConvertedDate = async (dateOfTime) => {
   const splitStr = dateOfTime?.split("-")
   const dateOfTimeReversedArr = splitStr?.reverse()

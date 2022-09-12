@@ -100,7 +100,7 @@ const PlumberDetails = (_props) => {
         //   trigger();
         // }
         trigger();
-      }, [plumberDetails?.[0]?.detailsProvidedBy]);
+      }, [plumberDetails?.[0]?.detailsProvidedBy, formData?.disConnectionDetails?.[0]]);
 
     useEffect(() => {
         if (Object.entries(formValue).length > 0) {

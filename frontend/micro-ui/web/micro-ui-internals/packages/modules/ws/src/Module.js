@@ -45,7 +45,7 @@ import WSDisconnectionForm from "./pageComponents/WSDisconnectionForm";
 import WSDisconnectionDocumentsForm from "./pageComponents/WSDisconnectionDocumentsForm";
 import WSDisconnectionCheckPage from "./pages/citizen/WSDisconnection/CheckPage";
 import WSDisconnectAcknowledgement from "./pageComponents/WSDisconnectAcknowledgement";
-
+import WSDisconnectionAppDetails from "./pageComponents/WSDisconnectionAppDetails";
 import WSInbox from "./components/WSInbox";
 import WSEditApplicationByConfig from './pages/employee/EditApplication/WSEditApplicationByConfig';
 
@@ -153,7 +153,8 @@ const componentsToRegister = {
   WSDisconnectionDocumentsForm,
   WSDisconnectionCheckPage,
   WSDisconnectAcknowledgement,
-  BillAmendmentCard
+  BillAmendmentCard,
+  WSDisconnectionAppDetails
 };
 
 export const initWSComponents = () => {

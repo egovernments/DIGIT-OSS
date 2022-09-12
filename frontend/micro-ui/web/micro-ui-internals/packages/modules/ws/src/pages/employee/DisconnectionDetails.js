@@ -5,6 +5,7 @@ import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails
 import * as func from "../../utils";
 import cloneDeep from "lodash/cloneDeep";
 import getPDFData from "../../utils/getWSDisconnectionApplicationForm";
+import { ifUserRoleExists } from "../../utils";
 
 const GetDisconnectionDetails = () => {
   const { t } = useTranslation();
@@ -15,8 +16,15 @@ const GetDisconnectionDetails = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const applicationNumber = filters?.applicationNumber;
   const serviceType = filters?.service;
+  const stateCode = Digit.ULBService.getStateId();
+
+  sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
+  sessionStorage.removeItem("IsDetailsExists");
+  sessionStorage.setItem("disconnectionURL", JSON.stringify({url : `${location?.pathname}${location.search}`}));
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useDisConnectionDetails(t, tenantId, applicationNumber, serviceType);
+  const { isServicesMasterLoading, data: servicesMasterData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["WSEditApplicationByConfigUser"]);
+  const appStatus = applicationDetails?.applicationData?.applicationStatus || "";
 
   let workflowDetails = Digit.Hooks.useWorkflowDetails(
     {
@@ -86,18 +94,34 @@ const GetDisconnectionDetails = () => {
     }
   });
 
-
-  if (workflowDetails?.data?.nextActions?.length > 0) {
-    const nextActionsData = cloneDeep(workflowDetails?.data?.nextActions);
-    const nextActionsList = nextActionsData?.filter(action => action.action != "EDIT");
-    workflowDetails.data.nextActions = nextActionsList;
-  }
-
-  if (workflowDetails?.data?.actionState?.nextActions?.length > 0) {
-    const nxtActions = cloneDeep(workflowDetails.data.actionState.nextActions);
-    const dataList = nxtActions?.filter(action => action?.action != "EDIT");
-    workflowDetails.data.actionState.nextActions = dataList;
-  }
+  workflowDetails?.data?.actionState?.nextActions?.forEach((action) => {
+    let pathName = `/digit-ui/employee/ws/edit-disconnection-application?applicationNumber=${applicationNumber}&service=${serviceType}`;
+    if (action?.action === "EDIT") {
+      const userConfig = servicesMasterData?.["ws-services-masters"]?.WSEditApplicationByConfigUser || [];
+      const editApplicationUserRole = userConfig?.[0]?.roles || [];
+      const mdmsApplicationStatus = userConfig?.[0]?.status;
+      let isFieldInspector = false;
+      editApplicationUserRole.every((role, index) => {
+        isFieldInspector = ifUserRoleExists(role);
+        if (isFieldInspector) return false;
+        else return true;
+      })
+      if (isFieldInspector) { //&& appStatus === mdmsApplicationStatus
+        pathName = `/digit-ui/employee/ws/config-by-disconnection-application?applicationNumber=${applicationNumber}&service=${serviceType}`;
+      }
+    }
+    if (action?.action === "RESUBMIT_APPLICATION") {
+      pathName = `/digit-ui/employee/ws/resubmit-disconnection-application?applicationNumber=${applicationNumber}&service=${serviceType}`;
+    }
+    action.redirectionUrll = {
+      action: "ACTIVATE_CONNECTION",
+      pathname: pathName,
+      state: {
+        applicationDetails: applicationDetails,
+        action: "VERIFY_AND_FORWARD"
+      },
+    };
+  });
 
   const handleDownloadPdf = async () => {
     const tenantInfo = applicationDetails?.applicationData?.tenantId;
@@ -131,7 +155,6 @@ const GetDisconnectionDetails = () => {
   };
 
   let dowloadOptions = [];
-  const appStatus = applicationDetails?.applicationData?.applicationStatus || "";
   switch (appStatus) {
     case "DISCONNECTION_EXECUTED":
       dowloadOptions = [applicationDownloadObject, disconnectionNoticeObject];
@@ -161,8 +184,8 @@ const GetDisconnectionDetails = () => {
         </div>
         <ApplicationDetailsTemplate
           applicationDetails={applicationDetails}
-          isLoading={isLoading}
-          isDataLoading={isLoading}
+          isLoading={isLoading || isServicesMasterLoading}
+          isDataLoading={isLoading || isServicesMasterLoading}
           applicationData={applicationDetails?.applicationData}
           mutate={mutate}
           workflowDetails={workflowDetails}

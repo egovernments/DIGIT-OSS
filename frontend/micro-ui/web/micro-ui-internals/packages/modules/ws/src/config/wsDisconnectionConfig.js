@@ -2,15 +2,15 @@ export const newConfig = [
   {
     head: "",
     body: [
-      {       
+      {
         route: "docsrequired",
         component: "WSDisconnectionDocsRequired",
         key: "data",
-        type: "component",       
+        type: "component",
         withoutLabel: true,
         nextStep: "application-form"
       },
-      {         
+      {
         route: "application-form",
         component: "WSDisconnectionForm",
         key: "WSDisconnectionForm",
@@ -18,7 +18,7 @@ export const newConfig = [
         withoutLabel: true,
         nextStep: "documents-upload",
       },
-      {         
+      {
         route: "documents-upload",
         component: "WSDisconnectionDocumentsForm",
         key: "WSDisconnectionDocumentsForm",
@@ -28,7 +28,7 @@ export const newConfig = [
         nextStep: "check",
         hideInEmployee: true,
       },
-      {         
+      {
         route: "check",
         component: "WSDisconnectionCheckPage",
         key: "WSDisconnectionCheckPage",
@@ -38,7 +38,7 @@ export const newConfig = [
         nextStep: "disconnect-acknowledge",
         hideInEmployee: true,
       },
-      {         
+      {
         route: "disconnect-acknowledge",
         component: "WSDisconnectAcknowledgement",
         key: "WSDisconnectAcknowledgement",
@@ -46,7 +46,51 @@ export const newConfig = [
         isMandatory: true,
         withoutLabel: true,
         hideInEmployee: true,
-      }           
-  ]
-}
+      }
+    ]
+  },
+  {
+    head: "WS_APP_FOR_WATER_AND_SEWERAGE_LABEL",
+    isEditByConfig: true,
+    hideInCitizen: true,
+    isDisonnectionEdit: true,
+    isDisonnectionEditByConfig: true,
+    body: [
+      {
+        head: "",
+        isDisonnectionEdit: true,
+        isDisonnectionEditByConfig: true,
+        body: [
+          {
+            type: "component",
+            key: "disConnectionDetails",
+            component: "WSDisconnectionAppDetails",
+            isDisonnectionEdit: true,
+            withoutLabel: true
+          }
+        ]
+      },
+      {
+        head: "WS_COMMON_PLUMBER_DETAILS",
+        isDisonnectionEditByConfig: true,
+        body: [{
+          type: "component",
+          key: "plumberDetails",
+          component: "WSActivationPlumberDetails",
+          withoutLabel: true,
+        }]
+      },
+      {
+        head: "WS_COMMON_DOCS",
+        isDisonnectionEdit: true,
+        isDisonnectionEditByConfig: true,
+        body: [{
+          type: "component",
+          key: "DocumentsRequired",
+          component: "WSDocumentsEmployee",
+          withoutLabel: true
+        }]
+      }
+    ]
+  }
 ]

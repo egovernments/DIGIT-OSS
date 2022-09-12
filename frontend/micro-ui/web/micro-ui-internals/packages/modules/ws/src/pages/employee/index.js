@@ -24,6 +24,9 @@ import BillIAmendMentInbox from "../../components/BillIAmendMentInbox";
 import GetDisconnectionDetails from "./DisconnectionDetails";
 import WSDisconnectionResponse from "./DisconnectionApplication/WSDisconnectionResponse";
 import ModifyApplicationDetails from "./ModifyApplicationDetails";
+import EditDisconnectionApplication from "./EditDisconnectionApplication";
+import EditDisconnectionByConfig from "./EditDisconnectionApplication/EditDisconnectionByConfig"
+import ResubmitDisconnection from "./EditDisconnectionApplication/ResubmitDisconnection";
 
 const BILLSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
@@ -131,6 +134,24 @@ const BILLSBreadCrumbs = ({ location }) => {
       isBack: true,
     },
     {
+      path: `${location?.pathname}${location.search}`,
+      content: `${t("WS_APPLICATION_DETAILS_HEADER")} / ${t("WS_WATER_SEWERAGE_DISCONNECTION_EDIT_LABEL")}`,
+      show: location.pathname.includes("edit-disconnection-application") ? true : false,
+      isBack: true,
+    },
+    {
+      path: `${location?.pathname}${location.search}`,
+      content: `${t("WS_APPLICATION_DETAILS_HEADER")} / ${t("WS_WATER_SEWERAGE_DISCONNECTION_EDIT_LABEL")}`,
+      show: location.pathname.includes("config-by-disconnection-application") ? true : false,
+      isBack: true,
+    },
+    {
+      path: `${location?.pathname}${location.search}`,
+      content: `${t("WS_APPLICATION_DETAILS_HEADER")} / ${t("WS_WATER_SEWERAGE_DISCONNECTION_EDIT_LABEL")}`,
+      show: location.pathname.includes("resubmit-disconnection-application") ? true : false,
+      isBack: true,
+    },
+    {
       path: `/digit-ui/employee/ws/new-disconnection/docsrequired`,
       content: t("WS_NEW_DISCONNECTION_DOCS_REQUIRED"),
       show: location.pathname.includes("/new-disconnection/docsrequired") ? true : false,
@@ -201,7 +222,11 @@ const App = ({ path }) => {
   window.location.href.includes("/employee/ws/ws-response") ||
   window.location.href.includes("/employee/ws/new-disconnection/application-form") ||
   window.location.href.includes("/employee/ws/ws-disconnection-response") ||
-  window.location.href.includes("/employee/ws/consumption-details");
+  window.location.href.includes("/employee/ws/consumption-details") || 
+  window.location.href.includes("/employee/ws/edit-disconnection-application") ||
+  window.location.href.includes("/employee/ws/config-by-disconnection-application");
+  window.location.href.includes("/employee/ws/resubmit-disconnection-application");
+  
   
 
 
@@ -218,6 +243,9 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/create-application`} component={WSDocsRequired} />
           <PrivateRoute path={`${path}/new-application`} component={NewApplication} />
           <PrivateRoute path={`${path}/edit-application`} component={EditApplication} />
+          <PrivateRoute path={`${path}/edit-disconnection-application`} component={EditDisconnectionApplication} />
+          <PrivateRoute path={`${path}/resubmit-disconnection-application`} component={ResubmitDisconnection} />
+          <PrivateRoute path={`${path}/config-by-disconnection-application`} component={EditDisconnectionByConfig} />
           <PrivateRoute path={`${path}/application-details`} component={ApplicationDetails} />
           <PrivateRoute path={`${path}/modify-details`} component={ModifyApplicationDetails} />
           <PrivateRoute path={`${path}/connection-details`} component={GetConnectionDetails} />
