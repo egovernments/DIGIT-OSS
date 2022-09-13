@@ -179,10 +179,16 @@ import WSSearchMdmsTypes from "./ws/WSSearchMdmsTypes";
 import usewsTenants from "./ws/useTenants";
 import useWaterSearch from "./ws/useWaterSearch";
 import useSewarageSearch from "./ws/useSewarageSearch";
-import userBRCreate from "./br/userBrcreate";
+import userBRCreate from "./br/useBRCreate";
+import useBrInbox from "./br/useBrInbox";
+import useBRSearch from "./br/useBRSearch";
+import useBRDetails from "./br/useBRDetails";
 
 const br = {
 userBRCreate,
+useBrInbox,
+useBRSearch,
+useBRDetails
 
 };
 const pgr = {

@@ -6,7 +6,7 @@ import CitizenApp from "./pages/citizen";
 import Create from "./pages/citizen/create/index";
 import EmployeeApp from "./pages/employee";
 import BrSelectName from "./pagecomponents/BrSelectName";
-import BRSelectPhoneNumber from "./pagecomponents/BrSelectPhoneNumber";
+import BrSelectPhoneNumber from "./pagecomponents/BrSelectPhoneNumber";
 import BRSelectGender from "./pagecomponents/BRSelectGender";
 import BRSelectEmailId from "./pagecomponents/SelectEmailId";
 import BRSelectPincode from "./pagecomponents/BRSelectPincode";
@@ -20,6 +20,8 @@ import Response from "./pages/citizen/create/Response";
 import Inbox from "./pages/employee/Inbox/Inbox";
 import DesktopInbox from "./pages/employee/Inbox/DesktopInbox";
 import ResponseEmployee from "./pages/employee/ResponseEmployee";
+import BrSelectFather from "./pagecomponents/BrSelectFather";
+import BrSelectMother from "./pagecomponents/BrSelectMother";
 
 const componentsToRegister = {
   ResponseEmployee,
@@ -35,8 +37,10 @@ const componentsToRegister = {
   BRSelectPincode,
   BRSelectEmailId,
   BRSelectGender,
-  BRSelectPhoneNumber,
+  BrSelectPhoneNumber,
   BrSelectName,
+  BrSelectFather,
+  BrSelectMother,
   BRCreate : Create,
 };
 

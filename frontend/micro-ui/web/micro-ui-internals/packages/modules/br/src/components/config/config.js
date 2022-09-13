@@ -9,22 +9,32 @@ export const newConfig =[
                 key: "BrSelectName",
                 withoutLabel: true,
               },
+
               {
                 type: "component",
-                component: "BRSelectGender",
-                key: "BRSelectPhoneGender",
+                component: "BrSelectFather",
+                key: "BrSelectFather",
                 withoutLabel: true,
               },
+              
               {
                 type: "component",
-                component: "BRSelectPhoneNumber",
-                key: "BRSelectPhoneNumber",
+                component: "BrSelectPhoneNumber",
+                key: "BrSelectPhoneNumber",
                 withoutLabel: true,
               },
+
+              // {
+              //   type: "component",
+              //   component: "BrSelectPhoneNumber",
+              //   key: "BrSelectPhoneNumber",
+              //   withoutLabel: true,
+              // },
+              
               {
                 type: "component",
-                component: "BRSelectEmailId",
-                key: "BRSelectEmailId",
+                component: "BrSelectMother",
+                key: "BrSelectMother",
                 withoutLabel: true,
               },
             //   {
@@ -33,18 +43,18 @@ export const newConfig =[
             //     key: "BRSelectPincode",
             //     withoutLabel: true,
             //   },
-              {
-                type: "component",
-                component: "BrSelectAddress",
-                key: "BrSelectAddress",
-                withoutLabel: true,
-              },
-              {
-                type: "component",
-                component: "SelectCorrespondenceAddress",
-                key: "SelectCorrespondenceAddress",
-                withoutLabel: true,
-              },
+              // {
+              //   type: "component",
+              //   component: "BrSelectAddress",
+              //   key: "BrSelectAddress",
+              //   withoutLabel: true,
+              // },
+              // {
+              //   type: "component",
+              //   component: "SelectCorrespondenceAddress",
+              //   key: "SelectCorrespondenceAddress",
+              //   withoutLabel: true,
+              // },
         ]
     },
 

@@ -4,6 +4,7 @@ import { format, isValid } from "date-fns";
 import { Header ,Loader } from "@egovernments/digit-ui-react-components";
 import DesktopInbox from "./DesktopInbox";
 import axios from 'axios';
+import { useQuery } from "react-query";
 const Inbox = ({ tenants, parentRoute }) => {
   const { t } = useTranslation()
   Digit.SessionStorage.set("ENGAGEMENT_TENANTS", tenants);
@@ -23,13 +24,19 @@ const Inbox = ({ tenants, parentRoute }) => {
   const [data, setData] = useState([]);
 const {isLoading } = data;
   // Using useEffect to call the API once mounted and set the data
-  useEffect(() => {
-    (async () => {
-      const result = await axios("https://62f0e3e5e2bca93cd23f2ada.mockapi.io/birth");
-      setData(result.data);
-      console.log("gooo" ,result.data);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const result = await axios("http://localhost:8280/birth-registration/birth-services/v1/registration/_search");
+  //     setData(result.data);
+  //     console.log("gooo" ,result.data);
+  //   })();
+  // }, []);
+ 
+
+  const brData= useQuery(["BR_SEARCH", tenantId, data], () => Digit.BRService.search(tenantId ,data))
+
+  
+  console.log(brData?.data?.BirthRegistrationApplications);
 
   const getSearchFields = () => {
     return [
@@ -86,11 +93,11 @@ const {isLoading } = data;
   };
 
 
-  if (isLoading) {
-    return (
-      <Loader />
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <Loader />
+  //   );
+  // }
   
 
   return (
@@ -102,7 +109,7 @@ const {isLoading } = data;
       <p>{}</p>
       <DesktopInbox
         t={t}
-        data={data}
+        data={brData?.data?.BirthRegistrationApplications}
         links={links}
         parentRoute={parentRoute}
         searchParams={searchParams}

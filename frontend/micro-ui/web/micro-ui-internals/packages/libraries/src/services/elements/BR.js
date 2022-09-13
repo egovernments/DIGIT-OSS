@@ -14,27 +14,18 @@ const BRService = {
       userService: true,
       params: { tenantId },
     }),
-    get: (data, tenantId) =>
-    Request({
-      data: data,
-      url: Urls.br.get,
-      useCache: false,
-      method: "GET",
-      auth: true,
-      userService: true,
-      params: { tenantId },
-    }),
-    showResults: (details) =>
-        Request({
-            url: Urls.engagement.surveys.showResults,
-           // data: details,
-            useCache: true,
-            userService: true,
-            method: "POST",
-            auth: true,
-            params:{surveyId:details.surveyId}
-        }),
-    
+    search: ({tenantId, data, filter= {}, auth = false}) => {
+      return Request({
+          url: Urls.br.search,
+          useCache: false,
+          data: data,
+          method: "POST",
+          auth,
+          userService: false,
+          params: { tenantId, ...filter },
+      })
+  },
+   
  
 };
 

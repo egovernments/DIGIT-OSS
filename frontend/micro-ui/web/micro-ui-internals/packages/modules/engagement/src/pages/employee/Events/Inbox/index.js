@@ -55,6 +55,7 @@ const Inbox = ({ tenants, parentRoute }) => {
     });
 
   const onSearch = (params) => {
+    console.log("gettinggg", data);
     let updatedParams = { ...params };
     if (!params?.ulb) {
       updatedParams = { ...params, ulb: { code: tenantId } }

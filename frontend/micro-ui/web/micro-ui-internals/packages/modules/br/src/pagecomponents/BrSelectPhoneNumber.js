@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { LabelFieldPair, CardLabel, TextInput, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
-const BRSelectPhoneNumber = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
+const BrSelectPhoneNumber = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
   const { pathname: url } = useLocation();
   const [iserror, setError] = useState(false);
   let isMobile = window.Digit.Utils.browser.isMobile();
@@ -11,21 +11,7 @@ const BRSelectPhoneNumber = ({ t, config, onSelect, formData = {}, userType, reg
       label: t("Mobile Number"),
       isMandatory: true,
       type: "text",
-      name: "applicantMobileNumber",
-      populators: {
-        validation: {
-          required: true,
-          pattern: /^[6-9]\d{9}$/,
-        },
-        componentInFront: <div className="employee-card-input employee-card-input--front">+91</div>,
-        error: t("CORE_COMMON_MOBILE_ERROR"),
-      },
-    },
-    {
-      label: t("Alternate Mobile Number"),
-      isMandatory: false,
-      type: "text",
-      name: "altMobileNumber",
+      name: "mobileNumber",
       populators: {
         validation: {
           required: true,
@@ -73,7 +59,7 @@ const BRSelectPhoneNumber = ({ t, config, onSelect, formData = {}, userType, reg
                   background: "none",
                   justifyContent: "start"
                 }}>
-                  {t("MOBILE NO CHECK")}
+                  {t("HR_MOBILE_NO_CHECK")}
                 </span>}</div>
               </div>
             </div>
@@ -84,4 +70,4 @@ const BRSelectPhoneNumber = ({ t, config, onSelect, formData = {}, userType, reg
   );
 };
 
-export default BRSelectPhoneNumber;
+export default BrSelectPhoneNumber;
