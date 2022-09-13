@@ -94,10 +94,8 @@ const Urls = {
     update: "/egov-hrms/employees/_update",
   },
   br: {
-    create: "https://dev.digit.org/birth-registration/birth-services/v1/registration/_create",
-    // get:"https://62f0e3e5e2bca93cd23f2ada.mockapi.io/birth",
-    // showResults:"https://62f0e3e5e2bca93cd23f2ada.mockapi.io/birth",
-    search:"http://localhost:8280/birth-registration/birth-services/v1/registration/_search",
+    create: "/birth-registration/birth-services/v1/registration/_create",
+    search:"/birth-registration/birth-services/v1/registration/_search",
   },
   tl: {
     create: "/tl-services/v1/_create",

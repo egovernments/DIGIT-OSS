@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 const ResponseEmployee = (props) => {
     return (
       <Card>
-      
         <CardText>
-       <h1>Birth Registration Approved Success !!!</h1>
-       <h1>DOWNLOAD BR PDF</h1>
+       Birth Registration Approved Success !!!
+       <Banner></Banner>
+       DOWNLOAD BR PDF
         </CardText>
         <ActionBar>
           <Link to={"/digit-ui/employee"}>

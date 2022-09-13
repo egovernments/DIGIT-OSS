@@ -11,27 +11,6 @@ const Create = () => {
   
 
   const onSubmit = (data) => {
-    // if (data.Jurisdictions.filter(juris => juris.tenantId == tenantId).length == 0) {
-    //   setShowToast({ key: true, label: "ERR_BASE_TENANT_MANDATORY" });
-    //   return;
-    // }
-    // if (!Object.values(data.Jurisdictions.reduce((acc, sum) => {
-    //   if (sum && sum?.tenantId) {
-    //     acc[sum.tenantId] = acc[sum.tenantId] ? acc[sum.tenantId] + 1 : 1;
-    //   }
-    //   return acc;
-    // }, {})).every(s => s == 1)) {
-    //   setShowToast({ key: true, label: "ERR_INVALID_JURISDICTION" });
-    //   return;
-    // }
-    // let roles = data?.Jurisdictions?.map((ele) => {
-    //   return ele.roles?.map((item) => {
-    //     item["tenantId"] = ele.boundary;
-    //     return item;
-    //   });
-    // });
-
-    // const mappedroles = [].concat.apply([], roles);
     let roles = data?.Jurisdictions?.map((ele) => {
       return ele.roles?.map((item) => {
         item["tenantId"] = ele.boundary;
