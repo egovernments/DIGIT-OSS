@@ -10,18 +10,22 @@ import DropdownUlb from "./DropdownUlb";
 import Filter from "./Filter";
 
 
-const DesktopInbox = ({ isLoading,  t, onSearch, parentRoute, title, iconName, links, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords, currentPage, onNextPage, onPrevPage, onPageSizeChange }) => {
+const DesktopInbox = ({ isLoading ,data, t, onSearch, parentRoute, title, iconName, links, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords, currentPage, onNextPage, onPrevPage, onPageSizeChange }) => {
 
 
   
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    (async () => {
-      const result = await axios("https://62f0e3e5e2bca93cd23f2ada.mockapi.io/birth");
-      setData(result.data);
-      console.log("gooo" ,result.data);
-    })();
-  }, []);
+  // const [data, setData] = useState([]);
+  // useEffect(() => {
+  //   (async () => {
+  //     const result = await axios("https://62f0e3e5e2bca93cd23f2ada.mockapi.io/birth");
+  //     setData(result.data);
+  //     console.log("gooo" ,result.data);
+  //   })();
+  // }, []);
+
+//   const {isLoading, data } = Digit.Hooks.br.useBrInbox(tenantId );
+
+
 
   
 
@@ -47,8 +51,8 @@ const DesktopInbox = ({ isLoading,  t, onSearch, parentRoute, title, iconName, l
       },
      
       {
-        Header: "City",
-        accessor: "permanentCity"
+        Header: "Place Of Birth",
+        accessor: "placeOfBirth"
       },
       {
         Header: "Hospital Name",

@@ -2,24 +2,13 @@ import React from "react";
 import { LabelFieldPair, CardLabel, TextInput, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
-const BrSelectName = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
+const BrSelectFather = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
   const { pathname: url } = useLocation();
   const inputs = [
     {
-      label: "Baby’s First Name",
+      label: "Father Name",
       type: "text",
-      name: "babyFirstName",
-      validation: {
-        isRequired: true,
-        pattern: Digit.Utils.getPattern('Name'),
-        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
-      },
-      isMandatory: true,
-    },
-    {
-      label: "Baby’s Last Name",
-      type: "text",
-      name: "babyLastName",
+      name: "name",
       validation: {
         isRequired: true,
         pattern: Digit.Utils.getPattern('Name'),
@@ -28,9 +17,9 @@ const BrSelectName = ({ t, config, onSelect, formData = {}, userType, register, 
       isMandatory: true,
     },
     // {
-    //   label: "Time of Birth",
+    //   label: "Father UserName",
     //   type: "text",
-    //   name: "timeOfBirth",
+    //   name: "userName",
     //   validation: {
     //     isRequired: true,
     //     pattern: Digit.Utils.getPattern('Name'),
@@ -38,41 +27,14 @@ const BrSelectName = ({ t, config, onSelect, formData = {}, userType, register, 
     //   },
     //   isMandatory: true,
     // },
-   
-    {
-      label: "Doctor Name",
-      type: "text",
-      name: "doctorName",
-      validation: {
-        isRequired: true,
-        pattern: Digit.Utils.getPattern('Name'),
-        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
-      },
-      isMandatory: true,
-    },
-    {
-      label: "Hospital Name",
-      type: "text",
-      name: "hospitalName",
-      validation: {
-        isRequired: true,
-        pattern: Digit.Utils.getPattern('Name'),
-        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
-      },
-      isMandatory: true,
-    },
-    {
-      label: "Place Of Birth",
-      type: "text",
-      name: "placeOfBirth",
-      validation: {
-        isRequired: true,
-        pattern: Digit.Utils.getPattern('Name'),
-        title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
-      },
-      isMandatory: true,
-    },
-   
+    // {
+    //   label: t("Father Mobile Number"),
+    //   isMandatory: true,
+    //   type: "number",
+    //   name: "mobileNumber",
+     
+    // },
+  
   ];
 
   function setValue(value, input) {
@@ -109,4 +71,4 @@ const BrSelectName = ({ t, config, onSelect, formData = {}, userType, register, 
   );
 };
 
-export default BrSelectName;
+export default BrSelectFather;
