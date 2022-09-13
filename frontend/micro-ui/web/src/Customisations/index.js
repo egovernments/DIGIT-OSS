@@ -1,12 +1,12 @@
 import { ptComponents } from "./pt";
 import { tlComponents } from "./tl";
-import { obpsComponent } from "./obps";
+// import { obpsComponent } from "./obps";
 var Digit = window.Digit || {};
 
 const customisedComponent = {
     ...ptComponents,
     ...tlComponents,
-    ...obpsComponent
+    // ...obpsComponent
 }
 
 
