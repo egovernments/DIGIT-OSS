@@ -31,13 +31,14 @@ const EventDetails = () => {
   const [displayMenu, setDisplayMenu] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { isLoading, data } = Digit.Hooks.events.useEventDetails(tenantId, { ids: id });
-
+console.log("gg",data?.applicationData);
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("EMPLOYEE_EVENT_MUTATION_HAPPENED", false);
   const [errorInfo, setErrorInfo, clearError] = Digit.Hooks.useSessionStorage("EMPLOYEE_EVENT_ERROR_DATA", false);
   const [successData, setsuccessData, clearSuccessData] = Digit.Hooks.useSessionStorage("EMPLOYEE_EVENT_MUTATION_SUCCESS_DATA", false);
 
   useEffect(() => {
     setMutationHappened(false);
+    console.log("gg",data);
     clearSuccessData();
     clearError();
   }, []);
