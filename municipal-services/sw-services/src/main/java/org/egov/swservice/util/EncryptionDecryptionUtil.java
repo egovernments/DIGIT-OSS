@@ -31,7 +31,7 @@ public class EncryptionDecryptionUtil {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Value(("${egov.state.level.tenant.id}"))
+    @Value(("${state.level.tenant.id}"))
     private String stateLevelTenantId;
 
     @Value(("${decryption.abac.enabled}"))
