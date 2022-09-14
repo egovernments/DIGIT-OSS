@@ -6,6 +6,7 @@ import CreateNewSurvey from "../../../components/Surveys/SurveyForms";
 
 export const answerTypeEnum = {
   "Short Answer": "SHORT_ANSWER_TYPE",
+  "Short answer": "SHORT_ANSWER_TYPE",
   Paragraph: "LONG_ANSWER_TYPE",
   "Multiple Choice": "MULTIPLE_ANSWER_TYPE",
   "Check Boxes": "CHECKBOX_ANSWER_TYPE",
@@ -29,8 +30,7 @@ export const mapQuestions = (questions =[]) =>{
   if(!questions.length) return;
   return questions.map(({formConfig},index)=>{
       const {options:choices, questionStatement,required, type:stringType} = formConfig;
-
-      const finalQuestion = {questionStatement, required, type:answerTypeEnum[stringType.title]};
+      const finalQuestion = {questionStatement, required, type: typeof stringType === "object" && stringType !== null ? stringType.value : (stringType.title ?  answerTypeEnum[stringType.title] : answerTypeEnum[stringType])};
       if(stringType?.title === "Multiple Choice" || stringType?.title ==="Check Boxes") {
         finalQuestion["options"] = choices;
       }

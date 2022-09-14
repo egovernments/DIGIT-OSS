@@ -67,6 +67,7 @@ const SurveyDetails = ({ location, match }) => {
             surveyId
           })),
           status: surveyObj.status,
+          tenantId: { code: surveyObj.tenantId },
         };
       },
     }
@@ -113,7 +114,7 @@ const SurveyDetails = ({ location, match }) => {
       SurveyEntity: {
         uuid: surveyData.uuid,
         //tenantIds: tenantIds.map(({ code }) => code),
-        tenantId: tenantIds[0]?.code,
+        tenantId: tenantIds[0]?.code ? tenantIds[0]?.code : surveyData.tenantId.code,
         title,
         description,
         collectCitizenInfo: collectCitizenInfo.code,
