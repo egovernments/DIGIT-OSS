@@ -95,8 +95,8 @@ const GetDisconnectionDetails = () => {
   });
 
   workflowDetails?.data?.actionState?.nextActions?.forEach((action) => {
-    let pathName = `/digit-ui/employee/ws/edit-disconnection-application?applicationNumber=${applicationNumber}&service=${serviceType}`;
     if (action?.action === "EDIT") {
+      let pathName = `/digit-ui/employee/ws/edit-disconnection-application?applicationNumber=${applicationNumber}&service=${serviceType}`;
       const userConfig = servicesMasterData?.["ws-services-masters"]?.WSEditApplicationByConfigUser || [];
       const editApplicationUserRole = userConfig?.[0]?.roles || [];
       const mdmsApplicationStatus = userConfig?.[0]?.status;
@@ -109,18 +109,26 @@ const GetDisconnectionDetails = () => {
       if (isFieldInspector) { //&& appStatus === mdmsApplicationStatus
         pathName = `/digit-ui/employee/ws/config-by-disconnection-application?applicationNumber=${applicationNumber}&service=${serviceType}`;
       }
+      action.redirectionUrll = {
+        action: "ACTIVATE_CONNECTION",
+        pathname: pathName,
+        state: {
+          applicationDetails: applicationDetails,
+          action: "VERIFY_AND_FORWARD"
+        },
+      };
     }
     if (action?.action === "RESUBMIT_APPLICATION") {
-      pathName = `/digit-ui/employee/ws/resubmit-disconnection-application?applicationNumber=${applicationNumber}&service=${serviceType}`;
+      let pathName = `/digit-ui/employee/ws/resubmit-disconnection-application?applicationNumber=${applicationNumber}&service=${serviceType}`;
+      action.redirectionUrll = {
+        action: "ACTIVATE_CONNECTION",
+        pathname: pathName,
+        state: {
+          applicationDetails: applicationDetails,
+          action: "VERIFY_AND_FORWARD"
+        },
+      };
     }
-    action.redirectionUrll = {
-      action: "ACTIVATE_CONNECTION",
-      pathname: pathName,
-      state: {
-        applicationDetails: applicationDetails,
-        action: "VERIFY_AND_FORWARD"
-      },
-    };
   });
 
   const handleDownloadPdf = async () => {
