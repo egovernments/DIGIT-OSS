@@ -43,20 +43,20 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
   }, [dsoData, vehicleData]);
 
   const inputs = [
-    // {
-    //   label: "ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS",
-    //   type: "number",
-    //   name: "noOfTrips",
-    //   error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
-    //   validation: {
-    //     isRequired: true,
-    //     min: 1,
-    //     autoFocus: presentInModifyApplication,
-    //   },
-    //   default: formData?.tripData?.noOfTrips,
-    //   disable: false,
-    //   isMandatory: true,
-    // },
+    {
+      label: "ES_NEW_APPLICATION_PAYMENT_NO_OF_TRIPS",
+      type: "number",
+      name: "noOfTrips",
+      error: t("ES_NEW_APPLICATION_NO_OF_TRIPS_INVALID"),
+      validation: {
+        isRequired: true,
+        min: 1,
+        autoFocus: presentInModifyApplication,
+      },
+      default: formData?.tripData?.noOfTrips,
+      disable: false,
+      isMandatory: true,
+    },
     {
       label: "ES_NEW_APPLICATION_AMOUNT_PER_TRIP",
       type: "text",
@@ -135,7 +135,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
     <Loader />
   ) : (
     <div>
-      {/* <LabelFieldPair>
+      <LabelFieldPair>
         <CardLabel className="card-label-smaller">{t("ES_NEW_APPLICATION_LOCATION_VEHICLE_REQUESTED") + " * "}</CardLabel>
         <Dropdown
           className="form-field"
@@ -148,7 +148,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
           t={t}
           disable={editScreen && applicationData?.applicationStatus != "CREATED" ? true : false}
         />
-      </LabelFieldPair> */}
+      </LabelFieldPair>
       {inputs?.map((input, index) => (
         <LabelFieldPair key={index}>
           <CardLabel className="card-label-smaller">

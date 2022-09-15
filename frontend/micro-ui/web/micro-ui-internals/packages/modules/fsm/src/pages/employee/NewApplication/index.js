@@ -149,29 +149,25 @@ export const NewApplication = ({ parentUrl, heading }) => {
     return <Loader />;
   }
 
-  const configs = [...preFields, ...commonFields];
+  const configs = [...preFields, ...commonFields, ...postFields];
 
   return (
-    <div className="skskskk">
-      <FormComposer
-        heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
-        isDisabled={!canSubmit}
-        label={t("ES_COMMON_APPLICATION_SUBMIT")}
-        config={configs
-          .filter((i) => !i.hideInEmployee)
-          .map((config) => {
-            return {
-              ...config,
-              body: config.body.filter((a) => !a.hideInEmployee),
-            };
-          })}
-        fieldStyle={{ marginRight: 0 }}
-        onSubmit={onSubmit}
-        defaultValues={defaultValues}
-        onFormValueChange={onFormValueChange}
-        noBreakLine={true}
-        fms_inline
-      />
-    </div>
+    <FormComposer
+      heading={t("ES_TITLE_NEW_DESULDGING_APPLICATION")}
+      isDisabled={!canSubmit}
+      label={t("ES_COMMON_APPLICATION_SUBMIT")}
+      config={configs
+        .filter((i) => !i.hideInEmployee)
+        .map((config) => {
+          return {
+            ...config,
+            body: config.body.filter((a) => !a.hideInEmployee),
+          };
+        })}
+      fieldStyle={{ marginRight: 0 }}
+      onSubmit={onSubmit}
+      defaultValues={defaultValues}
+      onFormValueChange={onFormValueChange}
+    />
   );
 };

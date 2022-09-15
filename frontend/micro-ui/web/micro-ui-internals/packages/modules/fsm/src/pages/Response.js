@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Banner, CardText, SubmitBar, Loader, LinkButton, Toast, ActionBar, Menu } from "@egovernments/digit-ui-react-components";
+import { Card, Banner, CardText, SubmitBar, Loader, LinkButton, Toast } from "@egovernments/digit-ui-react-components";
 import { Link, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "react-query";
@@ -139,30 +139,8 @@ const Response = (props) => {
     }
   }, []);
 
-  function onActionSelect(action) {
-    setSelectedAction(action);
-    setDisplayMenu(false);
-  }
-  let getApplicationNo = Data.fsm?.[0].applicationNo;
-  useEffect(() => {
-    switch (selectedAction) {
-      case "GO_TO_HOME":
-        return history.push("/digit-ui/employee");
-      case "ASSIGN_TO_DSO":
-        return history.push(`/digit-ui/employee/fsm/application-details/${getApplicationNo}`);
-      case "PAY":
-        return handleResponse();
-    }
-  }, [selectedAction]);
-
   if (mutation.isLoading || (mutation.isIdle && !mutationHappened)) {
     return <Loader />;
-  }
-  let ACTIONS = ["GO_TO_HOME"];
-  if (paymentAccess) {
-    ACTIONS = [...ACTIONS, "PAY"];
-  } else if (FSM_EDITOR) {
-    ACTIONS = [...ACTIONS, "ASSIGN_TO_DSO"];
   }
 
   const isSuccess = !successData ? mutation?.isSuccess : true;
@@ -194,14 +172,21 @@ const Response = (props) => {
           onClick={handleDownloadPdf}
         />
       )}
-      <ActionBar>
-        {/* <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
-        <SubmitBar onSubmit={handleResponse} label={t("ES_COMMON_PAY")} />
-        <SubmitBar onSubmit={handleResponse} label={t("CS_COMMON_FSM_ASSIGN")} /> */}
-        {displayMenu ? <Menu localeKeyPrefix={"ES_COMMON"} options={ACTIONS} t={t} onSelect={onActionSelect} /> : null}
-        <SubmitBar label={t("ES_COMMON_TAKE_ACTION")} onSubmit={() => setDisplayMenu(!displayMenu)} />
-      </ActionBar>
-
+      <Link to={`${props.parentRoute.includes("employee") ? "/digit-ui/employee" : "/digit-ui/citizen"}`}>
+        <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
+      </Link>
+      {props.parentRoute.includes("employee") &&
+      (state?.applicationData?.applicationNo || (isSuccess && Data?.fsm?.[0].applicationNo)) &&
+      paymentAccess &&
+      isSuccess ? (
+        <div className="secondary-action">
+          {/* <Link
+            to={`/digit-ui/employee/payment/collect/FSM.TRIP_CHARGES/${state?.applicationData?.applicationNo || Data?.fsm?.[0].applicationNo}`}
+          > */}
+          <SubmitBar onSubmit={handleResponse} label={t("ES_COMMON_PAY")} />
+          {/* </Link> */}
+        </div>
+      ) : null}
       {showToast && (
         <Toast
           error={showToast.key === "error" ? true : false}
