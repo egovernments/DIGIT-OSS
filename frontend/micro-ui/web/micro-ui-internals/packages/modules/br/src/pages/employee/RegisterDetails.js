@@ -22,6 +22,8 @@ const CloseBtn = (props) => {
   );
 };
 
+
+
 const RegisterDetails = ({ location, match }) => {
   const { id } = useParams();
   const { t } = useTranslation();
@@ -68,12 +70,12 @@ console.log("iDddd",id);
             <div className="notice_and_circular_main gap-ten">
                 <div className="documentDetails_wrapper">
                     {/* <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('ULB')}:`}</p> <p>{data?.tenantId}</p> </div> */}
-                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Babys First NAME')}:`}</p> <p>{data?.BirthRegistrationApplications?.filter((na)=> na.id === id)?.[0].babyFirstName}</p> </div>
-                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Babys Last NAME')}:`}</p> <p>{t(data?.BirthRegistrationApplications?.filter((na)=> na.id === id)?.[0].babyLastName)}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Baby First Name')}:`}</p> <p>{data?.BirthRegistrationApplications?.filter((na)=> na.id === id)?.[0].babyFirstName}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Baby Last Name')}:`}</p> <p>{t(data?.BirthRegistrationApplications?.filter((na)=> na.id === id)?.[0].babyLastName)}</p> </div>
                     {/* <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Father NAME')}:`}</p> <p>{t(data?.BirthRegistrationApplications[0].fatherName)}</p> </div>
                     <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Mother NAME')}:`}</p> <p>{t(data?.BirthRegistrationApplications[0].motherName)}</p> </div> */}
-                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Doctor NAME')}:`}</p> <p>{t(data?.BirthRegistrationApplications?.filter((na)=> na.id === id)?.[0].doctorName)}</p> </div>
-                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Hospital NAME')}:`}</p> <p>{t(data?.BirthRegistrationApplications?.filter((na)=> na.id === id)?.[0].hospitalName)}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Doctor Name')}:`}</p> <p>{t(data?.BirthRegistrationApplications?.filter((na)=> na.id === id)?.[0].doctorName)}</p> </div>
+                    <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Hospital Name')}:`}</p> <p>{t(data?.BirthRegistrationApplications?.filter((na)=> na.id === id)?.[0].hospitalName)}</p> </div>
                     {/* <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Applicant MobileNumber')}:`}</p> <p>{t(data?.BirthRegistrationApplications.applicantMobileNumber)}</p> </div>
                     <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Correspondence Address')}:`}</p> <p>{t(data?.correspondenceAddress)}</p> </div>
                     <div className="documentDetails_row_items"><p className="documentDetails_title">{`${t('Correspondence City')}:`}</p> <p>{t(data?.BirthRegistrationApplications.correspondenceCity)}</p> </div>
@@ -98,7 +100,7 @@ console.log("iDddd",id);
           headerBarEnd={<CloseBtn onClick={() => setShowModal(false)} />}
           actionCancelLabel={t("CS_COMMON_CANCEL")}
           actionCancelOnSubmit={() => setShowModal(false)}
-          actionSaveLabel={t('APPROVE')}
+          actionSaveLabel={t('Reject')}
           actionSaveOnSubmit={handleDelete}
         >
           <Card style={{ boxShadow: "none" }}>

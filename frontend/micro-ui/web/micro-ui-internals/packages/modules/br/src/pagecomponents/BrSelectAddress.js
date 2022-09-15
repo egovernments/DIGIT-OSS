@@ -10,11 +10,11 @@ const BrSelectAddress = ({ t, config, onSelect, formData = {}, userType, registe
       type: "text",
       name: "permanentAddress",
       validation: {
-        isRequired: true,
+       
         pattern: Digit.Utils.getPattern('Name'),
         title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
       },
-      isMandatory: true,
+    
     },
     {
       label: "City",
@@ -25,7 +25,7 @@ const BrSelectAddress = ({ t, config, onSelect, formData = {}, userType, registe
         pattern: Digit.Utils.getPattern('Name'),
         title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
       },
-      isMandatory: true,
+      
     },
   
   ];

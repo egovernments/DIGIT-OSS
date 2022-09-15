@@ -1,4 +1,4 @@
-import {  CitizenHomeCard, PTIcon } from "@egovernments/digit-ui-react-components";
+import {  CitizenHomeCard, PTIcon , Loader} from "@egovernments/digit-ui-react-components";
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
@@ -22,12 +22,14 @@ import DesktopInbox from "./pages/employee/Inbox/DesktopInbox";
 import ResponseEmployee from "./pages/employee/ResponseEmployee";
 import BrSelectFather from "./pagecomponents/BrSelectFather";
 import BrSelectMother from "./pagecomponents/BrSelectMother";
+import BrSelectMotherPhone from "./pagecomponents/BrSelectMotherPhone";
 
 const componentsToRegister = {
+  BrSelectMotherPhone,
   ResponseEmployee,
   DesktopInbox,
   Inbox,
- Response,
+  Response,
   RegisterDetails,
   BRManageApplication,
   BRCard,
@@ -51,24 +53,16 @@ export const BRModule = ({ stateCode, userType, tenants }) => {
   const language = Digit.StoreData.getCurrentLanguage();
   const { isLoading, data: store } = Digit.Services.useStore({ stateCode, moduleCode, language });
 
+  if (isLoading) {
+    return <Loader />;
+  }
+  Digit.SessionStorage.set("BR_TENANTS", tenants);
 
-
-  // Digit.SessionStorage.set("BR_TENANTS", tenants);
-  // useEffect(()=>userType === "employee"&&Digit.LocalizationService.getLocale({ 
-  //   modules: [`rainmaker-${Digit.ULBService.getCurrentTenantId()}`],
-  //    locale: Digit.StoreData.getCurrentLanguage(), 
-  //    tenantId: Digit.ULBService.getCurrentTenantId()
-  //   }),
-  //  []);
-
-  // if (userType === "employee") {
-  //   return <EmployeeApp path={path} url={url} userType={userType} />;
-  // } else return <CitizenApp />;
   if (userType === "citizen") {
-    return <CitizenApp path={path} stateCode={stateCode} />;
+    return <CitizenApp path={path} stateCode={stateCode}  userType={userType} tenants={tenants} />;
   }
 
-  return <EmployeeApp path={path} stateCode={stateCode} />;
+  return <EmployeeApp path={path} stateCode={stateCode} userType={userType} tenants={tenants} />;
 };
 
 export const BRLinks = ({ matchPath, userType }) => {

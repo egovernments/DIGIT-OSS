@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { LabelFieldPair, CardLabel, TextInput, CardLabelError } from "@egovernments/digit-ui-react-components";
 import { useLocation } from "react-router-dom";
 
-const BrSelectPhoneNumber = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
+const BrSelectMotherPhone = ({ t, config, onSelect, formData = {}, userType, register, errors }) => {
   const { pathname: url } = useLocation();
   const [iserror, setError] = useState(false);
   let isMobile = window.Digit.Utils.browser.isMobile();
@@ -10,7 +10,7 @@ const BrSelectPhoneNumber = ({ t, config, onSelect, formData = {}, userType, reg
     {
       label: t("Mobile Number"),
       type: "text",
-      name: "fatherMobileNumber",
+      name: "motherMobileNumber",
       populators: {
         validation: {
           required: true,
@@ -69,4 +69,4 @@ const BrSelectPhoneNumber = ({ t, config, onSelect, formData = {}, userType, reg
   );
 };
 
-export default BrSelectPhoneNumber;
+export default BrSelectMotherPhone ;

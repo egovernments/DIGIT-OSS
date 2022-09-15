@@ -24,22 +24,12 @@ const Create = () => {
 let Users ={
   BirthRegistrationApplications :[
     {
-          // timeOfBirth: data?.BrSelectName?.timeOfBirth,
+          
           babyFirstName: data?.BrSelectName?.babyFirstName,
           babyLastName: data?.BrSelectName?.babyLastName,
           doctorName: data?.BrSelectName?.doctorName,
           hospitalName: data?.BrSelectName?.hospitalName,
           placeOfBirth: data?.BrSelectName?.placeOfBirth,
-
-          // applicantMobileNumber: data?.BRSelectPhoneNumber?.applicantMobileNumber,
-          // altMobileNumber: data?.BRSelectPhoneNumber?.altMobileNumber,
-          // emailId: data?.BRSelectEmailId?.emailId,
-          // permanentAddress: data?.BrSelectAddress?.permanentAddress,
-          // permanentCity: data?.BrSelectAddress?.permanentCity,
-          // correspondenceCity: data?.SelectCorrespondenceAddress?.correspondenceCity,
-          // correspondenceAddress: data?.SelectCorrespondenceAddress?.correspondenceAddress,
-          // bloodGroup: data?.SelectCorrespondenceAddress?.bloodGroup,
-          // roles: mappedroles,
           tenantId: tenantId,
           address: {
             tenantId: tenantId,
@@ -52,6 +42,11 @@ let Users ={
             name:data?.BrSelectFather?.name,
             userName:"91300114",
             mobileNumber:"9230011254",
+            emailId:data?.BRSelectEmailId?.emailId,
+            permanentAddress:data?.BrSelectAddress?.permanentAddress,
+            permanentCity:data?.BrSelectAddress?.permanentCity,
+            correspondenceCity:data?.SelectCorrespondenceAddress?.correspondenceCity,
+            correspondenceAddress:data?.SelectCorrespondenceAddress?.correspondenceAddress,
             roles: mappedroles,
 
           },

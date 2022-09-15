@@ -10,8 +10,10 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
   });
   const mobileView = innerWidth <= 640;
   const ulb = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
+  console.log("geee",ulb);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const userInfo = Digit.UserService.getUser().info;
+  console.log("geeeinfo",userInfo);
   const userUlbs = ulb.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(alphabeticalSortFunctionForTenantsBasedOnName)
   
   const getFields = (input) => {

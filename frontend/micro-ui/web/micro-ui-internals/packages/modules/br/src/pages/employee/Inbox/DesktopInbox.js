@@ -4,30 +4,11 @@ import { Link } from "react-router-dom";
 import { Loader } from "@egovernments/digit-ui-react-components";
 import ApplicationTable from "./ApplicationTable";
 import EventLink from "./EventLink";
-import axios from 'axios';
 import Search from "./Search";
-import DropdownUlb from "./DropdownUlb";
 import Filter from "./Filter";
 
 
 const DesktopInbox = ({ isLoading ,data, t, onSearch, parentRoute, title, iconName, links, globalSearch, searchFields, searchParams, onFilterChange, pageSizeLimit, totalRecords, currentPage, onNextPage, onPrevPage, onPageSizeChange }) => {
-
-
-  
-  // const [data, setData] = useState([]);
-  // useEffect(() => {
-  //   (async () => {
-  //     const result = await axios("https://62f0e3e5e2bca93cd23f2ada.mockapi.io/birth");
-  //     setData(result.data);
-  //     console.log("gooo" ,result.data);
-  //   })();
-  // }, []);
-
-//   const {isLoading, data } = Digit.Hooks.br.useBrInbox(tenantId );
-
-
-
-  
 
   const columns = React.useMemo(() => {
     return [
@@ -101,7 +82,7 @@ const DesktopInbox = ({ isLoading ,data, t, onSearch, parentRoute, title, iconNa
         </div>
       </div>
       <div style={{ flex: 1 }}>
-        <Search
+      <Search
           t={t}
           onSearch={onSearch}
           type="desktop"

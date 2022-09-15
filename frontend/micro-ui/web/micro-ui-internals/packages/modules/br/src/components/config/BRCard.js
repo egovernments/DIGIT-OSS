@@ -9,13 +9,15 @@ const BRCard = () => {
   }
     const { t } = useTranslation();
     const tenantId = Digit.ULBService.getCurrentTenantId();
+    const { isLoading, isError, error, data, ...rest } = Digit.Hooks.hrms.useHRMSCount(tenantId);
+
    
     const propsForModuleCard = {
         Icon : <PersonIcon/>,
         moduleName: t("Birth Registration"),
         kpis: [
             {
-                // count:  isLoading ? "-" : data?.EmployeCount?.totalEmployee,
+                count:  isLoading ? "-" : data?.EmployeCount?.totalEmployee,
                 label: t("TOTAL Application"),
                 link: `/digit-ui/employee/br/Inbox`
             },

@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { ActionBar, RemoveableTag, CloseSvg, Loader, DateRange, Localities, ApplyFilterBar, SubmitBar, Dropdown, RefreshIcon } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
-
 
 const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchParams }) => {
   const { t } = useTranslation();
@@ -20,9 +19,10 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
     onFilterChange(localSearchParams);
     onClose?.();
   };
-  const handleChange = (data) => {
-    setLocalSearchParams({ ...localSearchParams, ...data });
-  };
+  const handleChange = useCallback((data) => {
+    setLocalSearchParams((prevLocalSearchParams) => ({ ...prevLocalSearchParams, ...data }));
+  },[])
+
   const onStatusChange = (e, type) => {
     if (e.target.checked) handleChange({ eventStatus: [...(localSearchParams?.eventStatus || []), type] })
     else handleChange({ eventStatus: localSearchParams?.eventStatus?.filter(status => status !== type) })
@@ -33,7 +33,6 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
       <Loader />
     );
   }
-  
   return (
     <div className="filter">
       <div className="filter-card">
@@ -53,8 +52,8 @@ const Filter = ({ type = "desktop", onClose, onSearch, onFilterChange, searchPar
             </span>
           )}
         </div>
-        <div className="filter-label">{`${t(`BR `)}`}</div>
-        <Dropdown option={data?.mseva?.EventCategories} optionKey="code" t={t} selected={localSearchParams?.eventCategory} select={val => handleChange({ eventCategory: val })} />
+        {/* <div className="filter-label">{`${t(`EVENTS_CATEGORY_LABEL`)}`}</div> */}
+        {/* <Dropdown option={data?.mseva?.EventCategories} optionKey="code" t={t} selected={localSearchParams?.eventCategory} select={val => handleChange({ eventCategory: val })} /> */}
         <DateRange t={t} values={localSearchParams?.range} onFilterChange={handleChange} labelClass="filter-label" />
         {/* <div>
           <Status onAssignmentChange={onStatusChange} searchParams={localSearchParams} />

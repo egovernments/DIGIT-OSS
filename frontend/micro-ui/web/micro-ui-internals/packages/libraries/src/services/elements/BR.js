@@ -25,7 +25,15 @@ const BRService = {
           params: { tenantId, ...filter },
       })
   },
-   
+  count: (tenantId) =>
+  Request({
+    url: Urls.br.count,
+    useCache: false,
+    method: "POST",
+    auth: true,
+    userService: true,
+    params: { tenantId },
+  }),
  
 };
 

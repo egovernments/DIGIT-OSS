@@ -9,67 +9,73 @@ export const newConfig =[
                 key: "BrSelectName",
                 withoutLabel: true,
               },
-
               {
                 type: "component",
-                component: "BrSelectFather",
-                key: "BrSelectFather",
+                component: "BRSelectGender",
+                key: "BRSelectGender",
                 withoutLabel: true,
               },
               
-              {
-                type: "component",
-                component: "BrSelectPhoneNumber",
-                key: "BrSelectPhoneNumber",
-                withoutLabel: true,
-              },
-
-              // {
-              //   type: "component",
-              //   component: "BrSelectPhoneNumber",
-              //   key: "BrSelectPhoneNumber",
-              //   withoutLabel: true,
-              // },
-              
-              {
-                type: "component",
-                component: "BrSelectMother",
-                key: "BrSelectMother",
-                withoutLabel: true,
-              },
-            //   {
-            //     type: "component",
-            //     component: "BRSelectPincode",
-            //     key: "BRSelectPincode",
-            //     withoutLabel: true,
-            //   },
-              // {
-              //   type: "component",
-              //   component: "BrSelectAddress",
-              //   key: "BrSelectAddress",
-              //   withoutLabel: true,
-              // },
-              // {
-              //   type: "component",
-              //   component: "SelectCorrespondenceAddress",
-              //   key: "SelectCorrespondenceAddress",
-              //   withoutLabel: true,
-              // },
+          
         ]
     },
 
+           {
+            head: "Father Details",
+            body: [
+                {
+                    component: "BrSelectFather",
+                    withoutLabel: true,
+                    key: "BrSelectFather",
+                    type: "component"
+                },
+                {
+                  type: "component",
+                  component: "BrSelectPhoneNumber",
+                  key: "BrSelectPhoneNumber",
+                  withoutLabel: true,
+                },
+                   {
+                type: "component",
+                component: "BrSelectAddress",
+                key: "BrSelectAddress",
+                withoutLabel: true,
+              },
+              {
+                type: "component",
+                component: "SelectCorrespondenceAddress",
+                key: "SelectCorrespondenceAddress",
+                withoutLabel: true,
+              },
+              {
+                type: "component",
+                component: "BRSelectEmailId",
+                key: "BRSelectEmailId",
+                withoutLabel: true,
+              },
+            ]
+        },
 
-        //     {
-        //     head: "DOCUMENTS REQUIRED",
-        //     body: [
-        //         {
-        //             component: "SelectDocuments",
-        //             withoutLabel: true,
-        //             key: "documents",
-        //             type: "component"
-        //         }
-        //     ]
-        // },
+        {
+          head: "Mother Details",
+          body: [
+              {
+                  component: "BrSelectMother",
+                  withoutLabel: true,
+                  key: "BrSelectMother",
+                  type: "component"
+              },
+              {
+                type: "component",
+                component: "BrSelectMotherPhone",
+                key: "BrSelectMotherPhone",
+                withoutLabel: true,
+              },
+           
+          ]
+      },
+
+    
 
       
 ];

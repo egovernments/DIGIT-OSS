@@ -9,10 +9,13 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
     defaultValues: searchParams,
   });
   const mobileView = innerWidth <= 640;
-  const ulb = Digit.SessionStorage.get("ENGAGEMENT_TENANTS");
+  const ulb = Digit.SessionStorage.get("BR_TENANTS");
+  console.log("geee",ulb);
   const tenantId = Digit.ULBService.getCurrentTenantId();
+
   const userInfo = Digit.UserService.getUser().info;
-  // const userUlbs = ulb.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(alphabeticalSortFunctionForTenantsBasedOnName)
+  console.log("geeeinfo",userInfo);
+  const userUlbs = ulb.filter(ulb => userInfo?.roles?.some(role => role?.tenantId === ulb?.code)).sort(alphabeticalSortFunctionForTenantsBasedOnName)
   
   const getFields = (input) => {
     switch(input.type) {
@@ -24,7 +27,7 @@ const Search = ({ onSearch, searchParams, searchFields, type, onClose, isInboxPa
               <DropdownUlb
                 onAssignmentChange={props.onChange}
                 value={props.value}
-                // ulb={userUlbs}
+                ulb={userUlbs}
                 t={t}
               />
             )}

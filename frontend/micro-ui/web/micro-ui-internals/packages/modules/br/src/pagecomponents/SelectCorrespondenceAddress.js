@@ -11,10 +11,10 @@ const SelectCorrespondenceAddress = ({ t, config, onSelect, formData = {}, userT
       name: "correspondenceCity",
       validation: {
         pattern: Digit.Utils.getPattern('Address'),
-        isRequired: true,
+       
         title: t("APPLICANT NAME INVALID"),
       },
-      isMandatory: true,
+     
     },
     {
       label: "Correspondence ADDRESS ",
@@ -25,7 +25,7 @@ const SelectCorrespondenceAddress = ({ t, config, onSelect, formData = {}, userT
         isRequired: true,
         title: t("APPLICANT NAME INVALID"),
       },
-      isMandatory: true,
+      
     },
    
   ];

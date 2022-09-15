@@ -93,6 +93,7 @@ const Urls = {
     create: "/egov-hrms/employees/_create",
     update: "/egov-hrms/employees/_update",
   },
+
   br: {
     create: "/birth-registration/birth-services/v1/registration/_create",
     search:"/birth-registration/birth-services/v1/registration/_search",
