@@ -21,7 +21,7 @@ const EditSurveyForms = ({ t, onEdit, menuOptions, initialSurveysConfig, isFormD
     formState: surveyFormState,
     clearErrors: clearSurveyFormsErrors,
   } = useForm({
-    defaultValues: { ...initialSurveysConfig, collectCitizenInfo: initialSurveysConfig?.collectCitizenInfo?.code ? { code: true, name: t("ES_COMMON_YES") } : { code: false, name: t("ES_COMMON_NO") } },
+    defaultValues: { ...initialSurveysConfig },
   });
 
   useEffect(() => {

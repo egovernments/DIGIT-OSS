@@ -42,7 +42,6 @@ const SurveyResults = () => {
           uuid: surveyObj.uuid,
           title: surveyObj.title,
           description: surveyObj.description,
-          collectCitizenInfo: { code: surveyObj.collectCitizenInfo },
           fromDate: format(new Date(surveyObj.startDate), "yyyy-MM-dd"),
           toDate: format(new Date(surveyObj.endDate), "yyyy-MM-dd"),
           fromTime: format(new Date(surveyObj.startDate), "hh:mm"),

@@ -50,7 +50,6 @@ const NewSurveys = () => {
         tenantIds: tenantIds.map(({code})=>(code)),
         title,
         description,
-        collectCitizenInfo: collectCitizenInfo.code,
         startDate: new Date(`${fromDate} ${fromTime}`).getTime(),
         endDate: new Date(`${toDate} ${toTime}`).getTime(),
         questions:mappedQuestions
@@ -72,7 +71,6 @@ const NewSurveys = () => {
     toDate: "",
     toTime: "",
     questions: {},
-    collectCitizenInfo: "",
     // tenantIds:[]
     tenantIds:userUlbs,
   };

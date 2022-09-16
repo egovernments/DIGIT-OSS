@@ -53,7 +53,6 @@ const SurveyDetails = ({ location, match }) => {
           uuid: surveyObj.uuid,
           title: surveyObj.title,
           description: surveyObj.description,
-          collectCitizenInfo: { code: surveyObj.collectCitizenInfo },
           fromDate: format(new Date(surveyObj.startDate), "yyyy-MM-dd"),
           toDate: format(new Date(surveyObj.endDate), "yyyy-MM-dd"),
           fromTime: format(new Date(surveyObj.startDate), "hh:mm"),
@@ -117,7 +116,6 @@ const SurveyDetails = ({ location, match }) => {
         tenantId: tenantIds[0]?.code ? tenantIds[0]?.code : surveyData.tenantId.code,
         title,
         description,
-        collectCitizenInfo: collectCitizenInfo.code,
         startDate: new Date(`${fromDate} ${fromTime}`).getTime(),
         endDate: new Date(`${toDate} ${toTime}`).getTime(),
         questions: mappedQuestions,
@@ -135,7 +133,7 @@ const SurveyDetails = ({ location, match }) => {
 
   const handleDelete = () => {
     const details = {
-      SurveyEntity: { ...surveyData, collectCitizenInfo: surveyData.collectCitizenInfo.code },
+      SurveyEntity: { ...surveyData },
     };
     history.push("/digit-ui/employee/engagement/surveys/delete-response", details);
   };
@@ -149,7 +147,6 @@ const SurveyDetails = ({ location, match }) => {
         status: "ACTIVE",
         startDate: new Date(`${fromDate} ${fromTime}`).getTime(),
         endDate: new Date(`${toDate} ${toTime}`).getTime(),
-        collectCitizenInfo: surveyData.collectCitizenInfo.code,
         questions: surveyData.questions.map(filterQuestion),
         tenantId,
       },
@@ -163,7 +160,6 @@ const SurveyDetails = ({ location, match }) => {
         tenantId,
         questions: surveyData.questions.map(filterQuestion), 
         status: "INACTIVE", 
-        collectCitizenInfo: surveyData.collectCitizenInfo.code,
          },
     };
     history.push("/digit-ui/employee/engagement/surveys/update-response", details);

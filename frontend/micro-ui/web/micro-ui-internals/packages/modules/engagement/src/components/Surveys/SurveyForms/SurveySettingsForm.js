@@ -111,30 +111,6 @@ const SurveySettingsForms = ({ t, controlSurveyForm, surveyFormState, disableInp
           <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_INVALID`)}</CardLabelError>
         )}
       </span>
-      <span className="surveyformfield">
-        <label>{`${t("LABEL_SURVEY_EMAIL_MOBILE")} * :`}</label>
-        <Controller
-          control={controlSurveyForm}
-          name="collectCitizenInfo"
-          defaultValue={surveyFormState?.collectCitizenInfo}
-          rules={{ required: true }}
-          render={({ onChange, value }) => (
-            <RadioButtons
-              onSelect={onChange}
-              selectedOption={value}
-              optionsKey="name"
-              options={[
-                { code: true, name: t("ES_COMMON_YES") },
-                { code: false, name: t("ES_COMMON_NO") },
-              ]}
-              disabled={disableInputs}
-            />
-          )}
-        />
-        {formErrors && formErrors?.collectCitizenInfo && formErrors?.collectCitizenInfo?.type === "required" && (
-          <CardLabelError>{t(`EVENTS_TO_DATE_ERROR_REQUIRED`)}</CardLabelError>
-        )}
-      </span>
     </div>
   );
 };
