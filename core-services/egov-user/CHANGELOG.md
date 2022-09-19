@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.3.0 - 2022-06-22
+
+- Enhanced user service for the implementation of privacy feature.
+
+
 ## 1.2.7 - 2022-02-02
 - Added security fixes for user enumerration issue.
 - Added size validation on user models

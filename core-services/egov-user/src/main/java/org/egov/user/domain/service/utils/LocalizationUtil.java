@@ -23,7 +23,7 @@ public class LocalizationUtil {
     private String localizationServiceHost;
     @Value("${egov.localization.search.endpoint}")
     private String localizationServiceSearchPath;
-    @Value("${egov.state.level.tenant.id}")
+    @Value("${state.level.tenant.id}")
     private String tenantId;
     @Value("${egov.localization.module}")
     private String module;
