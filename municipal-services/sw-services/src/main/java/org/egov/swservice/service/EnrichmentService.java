@@ -26,6 +26,7 @@ import org.egov.swservice.web.models.workflow.ProcessInstance;
 import org.egov.swservice.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -53,6 +54,7 @@ public class EnrichmentService {
 	@Autowired
 	private ObjectMapper mapper;
 
+	@Lazy
 	@Autowired
 	private SewerageDaoImpl sewerageDao;
 
