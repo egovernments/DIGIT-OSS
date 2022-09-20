@@ -59,27 +59,6 @@ public class CalculatorController {
 		 return new ResponseEntity<CalculationRes>(calculationRes,HttpStatus.OK);
 	}
 	
-	/**
-	 * advanceBalanceCalculate the FSM fee and creates Demand
-	 * @param TotalTripAmount ,tenantId and The RequestInfo
-	 * @return adavnceamount Response
-	 */
-	@PostMapping(value = "/_advanceBalanceCalculate")
-	public ResponseEntity<BigDecimal> advanceBalanceCalculate(@Valid BigDecimal TotalTripAmount , @Valid String tenantId, RequestInfo requestInfo) {
-		BigDecimal advanceAmount = calculationService.advanceCalculate(TotalTripAmount ,tenantId,requestInfo);
-		return new ResponseEntity<BigDecimal>(advanceAmount,HttpStatus.OK);
-	}
-	/**
-	 * cancellationFee of the FSM and creates Demand
-	 * @param TotalTripAmount ,tenantId and The RequestInfo
-	 * @return cancellationfee Response
-	 */
-	@PostMapping(value = "/_cancellationFee")
-	public ResponseEntity<BigDecimal> cancellationFee(@Valid BigDecimal TotalTripAmount , @Valid String tenantId, RequestInfo requestInfo) {
-		BigDecimal cancellationAmount = calculationService.cancellationAmount(TotalTripAmount ,tenantId,requestInfo);
-		return new ResponseEntity<BigDecimal>(cancellationAmount,HttpStatus.OK);
-	}
-	
 	@PostMapping(value = "/_estimate")
 	public ResponseEntity<CalculationRes> estimate(@Valid @RequestBody CalculationReq calculationReq) {
 		log.debug("CalculationReaquest:: " + calculationReq);

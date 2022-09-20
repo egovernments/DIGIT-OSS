@@ -26,19 +26,13 @@ public class CalculatorConstants {
 
  	public static final String PROPERTY_TYPE = "PropertyType";
  	public static final String FSM_CONFIG = "Config";
-	public static final String FSM_ADVANCEPAYMENT = "AdvancePayment";
-	public static final String FSM_CANCELLATIONFEE = "CancellationFee";
-	
+
 	// Error messages in FSM Calculator
 	
 	public static final String PARSING_ERROR = "PARSING ERROR";
 	
 	public static final String INVALID_PRICE = "INVALID PRICE";
-	
-	public static final String INVALID_MIN_ADVANCE_AMOUNT = "INVALID MIN ADVANCE AMOUNT";
-	
-	public static final String INVALID_MAX_ADVANCE_AMOUNT = "INVALID MAX ADVANCE AMOUNT";
-	
+		
 	public static final String INVALID_CAPACITY = "INVALID CAPACITY";
 	
 	public static final String INVALID_UPDATE = "INVALID UPDATE";
@@ -69,15 +63,9 @@ public class CalculatorConstants {
 
 	public static final String CITIZEN = "CITIZEN";
 	
-	public  final String FIXED_VALUE = "FIXEDVALUE";
-	
-	public final String PERCENTAGE_VALUE = "PERCENTAGEVALUE";
-	
 	public static final String VEHICLE_MODULE_CODE = "Vehicle";
 	public static final String VEHICLE_MAKE_MODEL = "VehicleMakeModel";
 	public static final String VEHICLE_MAKE_MODEL_JSON_PATH = "$.MdmsRes.Vehicle.VehicleMakeModel";
-	public static final String Advance_Payment_MODEL_JSON_PATH = "$.MdmsRes.FSM.AdvancePayment";
-	public static final String Cancellation_FEE_MODEL_JSON_PATH = "$.MdmsRes.FSM.CancellationFee";
 
 	public static final String FSM_SLUM_OVERRIDE_ALLOWED = "$.MdmsRes.FSM.Config[?(@.active==true && @.code==\"slumName\" && @.override==true )]";
 	public static final String FSM_TRIP_AMOUNT_OVERRIDE_ALLOWED = "$.MdmsRes.FSM.Config[?(@.active==true && @.code==\"additionalDetails.tripAmount\" && @.override==true )]";

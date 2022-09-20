@@ -64,9 +64,6 @@ public class CalculationService {
 	@Autowired
 	private BillingSlabRepository billingSlabRepository;
 
-//	@Autowired
-//	private CalculatorConstants constant;
-
 	/**
 	 * Calculates tax estimates and creates demand
 	 * 
@@ -84,60 +81,6 @@ public class CalculationService {
 		CalculationRes calculationRes = CalculationRes.builder().calculations(calculations).build();
 //		producer.push(config.getSaveTopic(), calculationRes);
 		return calculations;
-	}
-
-	/**
-	 * AdvanceBalanceCalculates tax estimates and creates demand
-	 * 
-	 * @param TotalTripAmount ,tenantId,RequestInfo
-	 * @return cancellationAmount
-	 */
-	public BigDecimal advanceCalculate(BigDecimal TotalTripAmount, String tenantId, RequestInfo requestInfo) {
-		Object mdmsData = mdmsService.mDMSCall(requestInfo, tenantId);
-		BigDecimal advanceAmount = null;
-		List<Map> advancePayment = JsonPath.read(mdmsData, CalculatorConstants.Advance_Payment_MODEL_JSON_PATH);
-		for (Map advancePayemntMap : advancePayment) {
-			if (advancePayemntMap.get("code").equals("FIXEDVALUE")
-					&& config.getAdvancePaymentType().equals("FIXEDVALUE")) {
-				log.debug((String) advancePayemntMap.get("name"));
-				advanceAmount = new BigDecimal((String) advancePayemntMap.get("advanceAmount"));
-				break;
-			} else if (advancePayemntMap.get("code").equals("PERCENTAGEVALUE")
-					&& config.getAdvancePaymentType().equals("PERCENTAGEVALUE")) {
-				final BigDecimal ONE_HUNDRED = new BigDecimal(100);
-				BigDecimal percentageValue = new BigDecimal((String) advancePayemntMap.get("advancePercantage"));
-				advanceAmount = TotalTripAmount.multiply(percentageValue).divide(ONE_HUNDRED);
-				log.debug("Total Amount:: " + advancePayemntMap.get("advanceAmount"));
-				break;
-			}
-		}
-		return advanceAmount;
-	}
-
-	/**
-	 * cancellationFeeCalculates and creates demand
-	 * 
-	 * @param TotalTripAmount ,tenantId,RequestInfo
-	 * @return cancellationAmount
-	 */
-	public BigDecimal cancellationAmount(BigDecimal TotalTripAmount, String tenantId, RequestInfo requestInfo) {
-		Object mdmsData = mdmsService.mDMSCall(requestInfo, tenantId);
-		BigDecimal cancellationAmount = null;
-		List<Map> cancellationFee = JsonPath.read(mdmsData, CalculatorConstants.Cancellation_FEE_MODEL_JSON_PATH);
-		for (Map cancellationFeeMap : cancellationFee) {
-			if (cancellationFeeMap.get("code").equals("FIXEDVALUE")
-					&& config.getCancellationFeeType().equals("FIXEDVALUE")) {
-				cancellationAmount = new BigDecimal((String) cancellationFeeMap.get("cancellationAmount"));
-				break;
-			} else if (cancellationFeeMap.get("code").equals("PERCENTAGEVALUE")
-					&& config.getCancellationFeeType().equals("PERCENTAGEVALUE")) {
-				final BigDecimal ONE_HUNDRED = new BigDecimal(100);
-				BigDecimal percentageValue = new BigDecimal((String) cancellationFeeMap.get("cancellationPercentage"));
-				cancellationAmount = TotalTripAmount.multiply(percentageValue).divide(ONE_HUNDRED);
-				break;
-			}
-		}
-		return cancellationAmount;
 	}
 
 	/**
@@ -226,8 +169,6 @@ public class CalculationService {
 		TaxHeadEstimate estimate = new TaxHeadEstimate();
 
 		BigDecimal amount = null;
-		BigDecimal advance = null;
-		BigDecimal dueAmount=null;
 
 		/*
 		 * String capacity = getAmountForVehicleType(fsm.getVehicleType(), mdmsData); if
@@ -242,7 +183,6 @@ public class CalculationService {
 				CalculatorConstants.FSM_TRIP_AMOUNT_OVERRIDE_ALLOWED);
 		List<Map<String, Object>> noOftripsAllowed = JsonPath.read(mdmsData,
 				CalculatorConstants.FSM_NO_OF_TRIPS_AMOUNT_OVERRIDE_ALLOWED);
-		List<Map> advancePayment = JsonPath.read(mdmsData, CalculatorConstants.Advance_Payment_MODEL_JSON_PATH);
 
 		SlumEnum slumName = null;
 		if (!CollectionUtils.isEmpty(slumNameAllowed)) {
@@ -251,22 +191,12 @@ public class CalculationService {
 			slumName = SlumEnum.NO;
 		}
 
-
-		// fetch advance amount from fsm application
-		String advAmount = fsm.getAdvanceAmount(); 
-		Long rate1=Long.valueOf((advAmount ));
-		advance=BigDecimal.valueOf(rate1);
-
-        
 		if (!CollectionUtils.isEmpty(tripAountAllowed)) {
 			Map<String, String> oldAdditionalDetails = fsm.getAdditionalDetails() != null
 					? (Map<String, String>) fsm.getAdditionalDetails()
 					: new HashMap<String, String>();
 			if (oldAdditionalDetails != null || oldAdditionalDetails.get("tripAmount") != null) {
 				amount = BigDecimal.valueOf(Double.valueOf((String) oldAdditionalDetails.get("tripAmount")));
-
-				// fetch advance amount from fsm application
-//				advance = BigDecimal.valueOf(Double.valueOf((String) oldAdditionalDetails.get("advanceAmount")));
 			} else {
 				List<BillingSlab> billingSlabs = billingSlabRepository.getBillingSlabData(BillingSlabSearchCriteria
 						.builder().capacity(NumberUtils.toDouble(fsm.getVehicleCapacity())).slum(slumName)
@@ -289,11 +219,7 @@ public class CalculationService {
 			throw new CustomException(CalculatorConstants.INVALID_PRICE,
 					"Price not found in Billing Slab for the given propertyType and slumName");
 		}
-		
-//		if (advance == null) {
-//			throw new CustomException(CalculatorConstants.INVALID_PRICE,
-//					"Price not found in Billing Slab for the given propertyType and slumName");
-//		}
+
 
 		Integer noOfTrips = 1;
 		if (!CollectionUtils.isEmpty(noOftripsAllowed)) {
@@ -304,25 +230,7 @@ public class CalculationService {
 
 		if (calculatedAmout.compareTo(BigDecimal.ZERO) == -1)
 			throw new CustomException(CalculatorConstants.INVALID_PRICE, "Tax amount is negative");
-		
-		//If advance amount if greater then the total trip amount 
-		
-		BigDecimal advanceAmount = advanceCalculate(calculatedAmout ,fsm.getTenantId(),requestInfo);
-		
-		if (advance.compareTo(calculatedAmout) == 1  ) {
-            //(advance + " is greater than " + calculatedAmout + ".");
-			throw new CustomException(CalculatorConstants.INVALID_MAX_ADVANCE_AMOUNT, "AdvanceAmount should not be greater than the total trip amount :" + calculatedAmout);
-        }
-		else if(advanceAmount.compareTo(advance) == 1  ) {
-            //(advanceAmount + " is greater than " + advance + ".");
-			throw new CustomException(CalculatorConstants.INVALID_MIN_ADVANCE_AMOUNT, "Advance amount should not be less than :" + advanceAmount );
-        }
-		
-		// claculation of due amount
-		dueAmount = calculatedAmout.subtract(advance);
-		
-		estimate.setBalanceAmount(dueAmount);
-		estimate.setAdvanceAmount(advance);
+
 		estimate.setEstimateAmount(calculatedAmout);
 		estimate.setCategory(Category.FEE);
 
