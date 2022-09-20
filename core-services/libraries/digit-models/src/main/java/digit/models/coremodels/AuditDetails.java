@@ -8,8 +8,6 @@ import lombok.*;
  * Collection of audit related fields used by most models
  */
 
-@javax.annotation.Generated(value = "org.egov.codegen.SpringBootCodegen", date = "2022-05-22T11:09:12.469+05:30")
-
 @Getter
 @Setter
 @AllArgsConstructor
