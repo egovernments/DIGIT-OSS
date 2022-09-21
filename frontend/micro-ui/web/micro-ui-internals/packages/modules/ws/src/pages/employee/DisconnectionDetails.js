@@ -140,10 +140,10 @@ const GetDisconnectionDetails = () => {
 
   async function getDisconnectionNoticeSearch() {
     let key = "ws-waterdisconnectionnotice";
-    let details = { WaterConnection: [{ ...applicationDetails?.applicationData }] }
+    let details = { WaterConnection: [{ ...applicationDetails?.applicationData, property: applicationDetails.propertyDetails }] }
     if (!applicationDetails?.applicationData?.applicationType?.includes("WATER")) {
       key = "ws-seweragedisconnectionnotice";
-      details = { SewerageConnection: [{ ...applicationDetails?.applicationData }] }
+      details = { SewerageConnection: [{ ...applicationDetails?.applicationData, property: applicationDetails.propertyDetails }] }
     }
     let response = await Digit.WSService.WSDisconnectionNotice(applicationDetails?.applicationData?.tenantId, details, key);
     const fileStore = await Digit.PaymentService.printReciept(applicationDetails?.applicationData?.tenantId, { fileStoreIds: response.filestoreIds[0] });
