@@ -45,12 +45,13 @@ const useNOCInbox = ({ tenantId, filters, config={} }) => {
           ...(sourceRefId ? {sourceRefId}: {}),
           ...(applicationNo ? {applicationNo} : {}),
           ...(sortOrder ? {sortOrder} : {}),
+          ...(sortBy ? {sortBy} : {}),
           ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
         },
-        sortBy,
+        // sortBy,
         limit,
         offset,
-        sortOrder
+        // sortOrder
     }
 
     return useInbox({tenantId, filters: _filters, config:{
