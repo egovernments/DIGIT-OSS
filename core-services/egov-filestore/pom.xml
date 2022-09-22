@@ -12,7 +12,7 @@
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>egov-filestore</artifactId>
-	<version>1.2.4-SNAPSHOT</version>
+	<version>1.2.5-SNAPSHOT</version>
 	<name>egov-filestore</name>
 	<description>eGov File store project for eGov services</description>
 	<properties>

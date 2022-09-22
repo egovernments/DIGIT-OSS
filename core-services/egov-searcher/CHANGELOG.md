@@ -3,6 +3,7 @@ All notable changes to this module will be documented in this file.
 
 ## 1.1.6 - 2022-06-22
 - Enhanced searcher service for the implementation of privacy feature.
+- Upgraded spring-boot-starter-parent to 2.2.13 and spring beans to 5.2.20.RELEASE
 
 ## 1.1.5 - 2022-01-13
 - Updated to log4j2 version 2.17.1

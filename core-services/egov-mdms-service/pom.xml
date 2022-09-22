@@ -10,7 +10,7 @@
   </parent>
   <groupId>org.egov.mdms</groupId>
   <artifactId>egov-mdms-service-test</artifactId>
-  <version>1.3.2-SNAPSHOT</version>
+  <version>1.3.3-SNAPSHOT</version>
   <name>egov-infra-mdms-service</name>
   <url>http://maven.apache.org</url>
   <properties>

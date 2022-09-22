@@ -1,3 +1,9 @@
+All notable changes to this module will be documented in this file.
+
+## 1.1.4 - 2022-09-20
+
+- Upgraded spring-boot-starter-parent to 2.2.13 and spring beans to 5.2.20.RELEASE
+
 ## 1.1.3 - 15-12-2021
 
 - Added flag for sms enable
