@@ -288,6 +288,7 @@ const ConnectionDetails = (_props) => {
             render={(props) => (
               <Dropdown
                 className="form-field"
+                style={sessionStorage.getItem("isPrivacyEnabled") !== "true" ? {width:"51.5%"} : {}}
                 selected={getValues("gender")}
                 disable={false}
                 option={menu}
@@ -362,6 +363,7 @@ const ConnectionDetails = (_props) => {
                   }}
                   labelStyle={{ marginTop: "unset" }}
                   onBlur={props.onBlur}
+                  style={{width:"96%"}}
                 />
                 {checkifPrivacyValid() && <div style={{marginRight:"-10px",marginLeft:"10px"}}>
                 <UnMaskComponent privacy={{ uuid:connectionHolderDetail?.uuid, fieldName: "guardian", model: "User" }}></UnMaskComponent>
@@ -383,6 +385,7 @@ const ConnectionDetails = (_props) => {
             render={(props) => (
               <Dropdown
                 className="form-field"
+                style={sessionStorage.getItem("isPrivacyEnabled") !== "true" ? {width:"51.5%"} : {}}
                 selected={getValues("relationship")}
                 disable={false}
                 option={GuardianOptions}
@@ -442,6 +445,7 @@ const ConnectionDetails = (_props) => {
             render={(props) => (
               <Dropdown
                 className="form-field"
+                style={sessionStorage.getItem("isPrivacyEnabled") !== "true" ? {width:"51.5%"} : {}}
                 selected={getValues("ownerType")}
                 disable={false}
                 option={Menu}

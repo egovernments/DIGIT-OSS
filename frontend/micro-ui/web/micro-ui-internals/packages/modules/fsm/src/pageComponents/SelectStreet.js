@@ -106,7 +106,7 @@ const SelectStreet = ({ t, config, onSelect, userType, formData, formState, setE
       return (
         <LabelFieldPair key={index}>
           <CardLabel className="card-label-smaller">
-            {!checkLocation ? t(input.label) : `${t(input.label)}:`}
+            {t(input.label)}
             {config.isMandatory ? " * " : null}
           </CardLabel>
           <div className="field">

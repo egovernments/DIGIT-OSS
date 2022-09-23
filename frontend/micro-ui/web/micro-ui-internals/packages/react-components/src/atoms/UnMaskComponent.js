@@ -28,6 +28,7 @@ const UnMaskComponent = React.memo(({ privacy = {}, style = {} }) => {
   }
 
   if (Digit.Utils.checkPrivacy(data, privacy)) {
+    sessionStorage.setItem("isPrivacyEnabled","true");
     return (
       <span
         onClick={() => {

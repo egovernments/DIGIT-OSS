@@ -41,16 +41,17 @@ const EmployeeSideBar = () => {
   data?.actions
     .filter((e) => e.url === "url")
     .forEach((item) => {
+      let index = item.path.split(".")[0];
       if (search == "" && item.path !== "") {
-        let index = item.path.split(".")[0];
+         index = item.path.split(".")[0];
         if (index === "TradeLicense") index = "Trade License";
         if (!configEmployeeSideBar[index]) {
           configEmployeeSideBar[index] = [item];
         } else {
           configEmployeeSideBar[index].push(item);
         }
-      } else if (item.path !== "" && item?.displayName?.toLowerCase().includes(search.toLowerCase())) {
-        let index = item.path.split(".")[0];
+      } else if (item.path !== "" && t(`ACTION_TEST_${index?.toUpperCase()?.replace(/[ -]/g, "_")}`)?.toLowerCase().includes(search.toLowerCase())) {
+         index = item.path.split(".")[0];
         if (index === "TradeLicense") index = "Trade License";
         if (!configEmployeeSideBar[index]) {
           configEmployeeSideBar[index] = [item];
@@ -90,12 +91,19 @@ const EmployeeSideBar = () => {
         });
       }
     }
-    res.splice(0,1);
-    const indx = res.findIndex(a => a.moduleName === "HOME");
-    const home = res.splice(indx,1);
-    res.sort((a,b) => a.moduleName.localeCompare(b.moduleName));
-    home?.[0] && res.splice(0,0,home[0]);
-    return res.map((item, index) => {
+    if(res.find(a => a.moduleName === "HOME"))
+    {
+      res.splice(0,1);
+      const indx = res.findIndex(a => a.moduleName === "HOME");
+      const home = res.splice(indx,1);
+      res.sort((a,b) => a.moduleName.localeCompare(b.moduleName));
+      home?.[0] && res.splice(0,0,home[0]);
+    }
+    else
+    {
+      res.sort((a,b) => a.moduleName.localeCompare(b.moduleName));
+    }
+    return res.sort((a,b) => a.moduleName.localeCompare(b.moduleName)).map((item, index) => {
       return <SubMenu item={item} key={index + 1} />;
     });
   };
