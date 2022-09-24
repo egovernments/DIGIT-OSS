@@ -75,11 +75,13 @@
   },
   "common-masters": {
     
-    "purpose": {
-      "masterName": "purpose",
+    "Purpose": {
+      "masterName": "Purpose",
       "moduleDefinition": null,
       "isStateLevel": true,
-      "uniqueKeys": []
+      "uniqueKeys": [
+        "$.purposeId"
+      ]
     },
     "Ui-Common-Config": {
       "masterName": "Ui-Common-Config",
