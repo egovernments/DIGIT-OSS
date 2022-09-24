@@ -3,7 +3,7 @@
     "actions-test": {
       "masterName": "actions-test",
       "isStateLevel": true,
-      "uniqueKeys": [xx
+      "uniqueKeys": [
         "$.id"
       ]
     }
@@ -75,7 +75,6 @@
   },
   "common-masters": {
     
-    
     "Ui-Common-Config": {
       "masterName": "Ui-Common-Config",
       "moduleDefinition": null,
@@ -88,6 +87,15 @@
       "isStateLevel": true,
       "uniqueKeys": [
         "$.code",
+        "$.tenantId"
+      ]
+    },
+    "Purpose": {
+      "masterName": "Purpose",
+      "moduleDefinition": null,
+      "isStateLevel": true,
+      "uniqueKeys": [
+        "$.purposeId",
         "$.tenantId"
       ]
     },
