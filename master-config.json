@@ -407,6 +407,14 @@
       "uniqueKeys": [
         "$.code"
       ]
+    },
+    "tenantInfo": {
+      "masterName": "tenantInfo",
+      "isStateLevel": true,
+      "moduleDefinition": null,
+      "uniqueKeys": [
+        "$.distKey"
+      ]
     }
   },
   "works": {
