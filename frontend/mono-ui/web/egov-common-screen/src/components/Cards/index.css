@@ -1,0 +1,402 @@
+
+#card1{
+    background: #FFFFFF;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+}
+#card2{
+    background: #FFFFFF;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+
+}
+#card3{
+    background: #FFFFFF;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+
+}
+#paylink1
+{
+    background: #F47738;
+    border-radius: 32px;
+    width: 168px;
+    height: 32px;
+    left: 146px;
+    top: 504px;
+    color:#FFFFFF;
+    margin-top: 10%;
+
+}
+#arrowicon1{
+    height: 12px;
+    width: 12px;
+}
+#arrowicon2{
+    height: 12px;
+    width: 12px;   
+}
+#arrowicon3{
+    height: 12px;
+    width: 12px;
+}
+
+#paylink2
+{
+    background: #F47738;
+    border-radius: 32px;
+    width: 168px;
+    height: 32px;
+    left: 146px;
+    top: 504px;
+    color:#FFFFFF;
+    margin-top: 5%;
+
+}
+#paylink3
+{   
+    background: #F47738;
+    border-radius: 32px;
+    width: 95px;
+    height: 32px;
+    left: 146px;
+    top: 504px;
+    color:#FFFFFF;
+    margin-top: 10%;
+}
+#cardheadingsnew
+{
+    width: 104px;
+    height: 8px;
+    left: 200px;
+    top: 369px;
+    margin-left: 71px;
+    font-weight: 500;
+}
+
+#carddescription
+{
+    font-family: Roboto;
+font-style: normal;
+font-weight: normal;
+font-size: 14px;
+line-height: 20px;
+}
+@media only screen and (max-width: 576px) {
+    
+    
+    #card1
+            {
+                height: auto !important;
+                width: auto !important;
+                margin-top: 10px!important;
+                margin-left: auto !important; 
+            }
+            #card2
+            {
+                height: auto !important;
+                width: auto !important; 
+                margin-top: auto !important; 
+                margin-left: auto !important; 
+              
+            }
+            #card3
+            {
+                height: auto !important;
+                margin-top: auto !important; 
+                margin-left: auto !important; 
+                width: 100% !important;
+              
+            }
+
+
+}
+
+
+@media only screen and (max-width: 1920px) {
+
+  /*   #container
+   {
+       margin-left: 2%;
+   margin-right: 2%;
+
+   }  */
+
+
+   #griditem
+   {
+       z-index: 100;
+   }
+
+   #card1
+   {
+       height: 270px;
+       margin-top: -114px;
+   }
+   #card2
+   {
+       height: 270px;
+       margin-top: -114px;
+     
+   }
+   #card3
+   {
+       height: 270px;
+       margin-top: -114px;
+   }
+
+}
+
+
+@media only screen and (max-width: 1600px) {
+
+     #container
+    {
+        margin-left: 2%;
+    margin-right: 2%;
+
+    } 
+
+
+    #griditem
+    {
+        z-index: 100;
+    }
+
+    #card1
+    {
+        height: 265px;
+        margin-top: -114px;
+    }
+    #card2
+    {
+        height: 265px;
+        margin-top: -114px;
+      
+    }
+    #card3
+    {
+        height: 265px;
+        margin-top: -114px;
+    }
+
+}
+
+
+@media only screen and (max-width: 1367px) {
+
+
+    #card1
+    {
+        height: 285px;
+        margin-top: -114px;
+    }
+    #card2
+    {
+        height: 285px;
+        margin-top: -114px;
+      
+    }
+    #card3
+    {
+        height: 285px;
+        margin-top: -114px;
+    }
+
+
+}
+@media only screen and (max-width: 1280px) {
+
+
+
+    #card1
+    {
+        height: 270px;
+        margin-top: -114px;
+    }
+    #card2
+    {
+        height: 270px;
+        margin-top: -114px;
+      
+    }
+    #card3
+    {
+        height: 270px;
+        margin-top: -114px;
+    }
+
+}
+
+
+@media only screen and (max-width: 1200px) {
+
+    /* #container
+    {
+        //margin-left: 50px;
+
+    } */
+    #griditem
+    {
+        width: auto;
+        z-index: 100;
+    }
+
+    #card1
+    {
+        height: 280px;
+        margin-top: -114px;
+    }
+    #card2
+    {
+        height: 280px;
+        margin-top: -114px;
+    }
+    #card3
+    {
+        height: 280px;
+        margin-top: -114px;
+    }
+
+}
+
+
+@media only screen and (max-width: 1152px) {
+
+    /* #container
+    {
+        //margin-left: 50px;
+
+    } */
+    #griditem
+    {
+        width: auto;
+        z-index: 100;
+    }
+
+    #card1
+    {
+        height: 326px;
+        margin-top: -114px;
+    }
+    #card2
+    {
+        height: 326px;;
+        margin-top: -114px;
+    }
+    #card3
+    {
+        height: 326px;
+        margin-top: -114px;
+
+    }
+
+}
+
+
+
+@media only screen and (max-width: 1025px)
+{
+    #card1
+    {
+        height: 310px;
+        margin-top: -114px;
+    }
+    #card2
+    {
+        height: 310px;
+        margin-top: -114px;
+    }
+    #card3
+    {
+        height: 310px;
+        margin-top: -114px;
+    }
+   
+}
+
+@media only screen and (max-width: 900px)
+{
+    #container
+    {
+        margin-left: 0%;
+    margin-right: 0%;
+
+    } 
+    #card1
+    {
+        height: 250px;
+        margin-top: -50px;
+    }
+    #card2
+    {
+        height: 250px;
+        margin-top: 0px;
+    }
+    #card3
+    {
+        height: 250px;
+        margin-top: 0px;
+
+    }
+    #paylink1 {
+        background: #F47738;
+        border-radius: 32px;
+        width: 168px;
+        height: 32px;
+        left: 146px;
+        top: 504px;
+        color: #FFFFFF;
+        margin-top: 7%;
+    }
+    #paylink2 {
+        background: #F47738;
+        border-radius: 32px;
+        width: 168px;
+        height: 32px;
+        left: 146px;
+        top: 504px;
+        color: #FFFFFF;
+        margin-top: 7%;
+    }
+    #paylink3 {
+        background: #F47738;
+        border-radius: 32px;
+        width: 95px;
+        height: 32px;
+        left: 146px;
+        top: 504px;
+        color: #FFFFFF;
+        margin-top: 7%;
+    }
+  
+}
+
+
+@media only screen and (max-width: 800px)
+{
+    #container
+    {
+        margin-left: 0%;
+    margin-right: 0%;
+
+    } 
+    #card1
+    {
+        height: 250px;
+        margin-top: -50px;
+    }
+    #card2
+    {
+        height: 250px;
+        margin-top: 0px;
+    }
+    #card3
+    {
+        height: 250px;
+        margin-top: 0px;
+
+    }
+    
+}
+

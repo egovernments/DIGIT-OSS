@@ -43,7 +43,6 @@ class LandingPage extends React.Component {
   state = {
     backgroundUrl: "",
     logoUrl: "",
-    stateLogoUrl :"",
   };
 
   componentDidMount() {
@@ -93,11 +92,6 @@ class LandingPage extends React.Component {
           "logoUrl",
           response.data.MdmsRes["common-masters"].StateInfo[0].logoUrl
         );
-
-        this.setValuestoState(
-          "stateLogoUrl",
-          response.data.MdmsRes["common-masters"].StateInfo[0].stateLogoUrl
-        );        
       })
       .catch((err) => {
         console.log(err, "error");
@@ -110,7 +104,7 @@ class LandingPage extends React.Component {
   };
   render() {
     const { classes } = this.props;
-    const { backgroundUrl, logoUrl, stateLogoUrl} = this.state;
+    const { backgroundUrl, logoUrl } = this.state;
 
     console.log("state", this.state);
 
@@ -124,10 +118,11 @@ class LandingPage extends React.Component {
       >
         <Grid container className={classes.root}>
           <Grid container style={{ marginBottom: "10px" }}>
-          <Grid
+            <Grid
               item
               md={12}
               style={{
+                textAlign: "center",
                 backgroundColor: "#FFF",
                 paddingTop: "20px",
                 height: "80px",
@@ -135,22 +130,10 @@ class LandingPage extends React.Component {
               }}
             >
               <img
-                className="header-logo-right"
-                src={stateLogoUrl}
-                alt="company-logo"
-                width="20%"
-                style={{ float: 'left',
-                height: "61px",
-                width: "75px",
-                marginTop: "-7px",
-                marginLeft: "174px" }}
-              />
-              <img
-                className="header-logo-left"
+                className="header-logo"
                 src={logoUrl}
                 alt="company-logo"
                 width="20%"
-                style={{ float: 'right', marginRight: "173px" }}
               />
             </Grid>
           </Grid>
@@ -342,7 +325,6 @@ class LandingPage extends React.Component {
                     APPLY HERE
                   </a>
                 </p>
-                <p style={{ color: "#fff", fontSize: "16px" }}><b>The information provided online is updated, and no physical visit is required.</b></p>
               </Grid>
             </Grid>
             <Grid item md={1}></Grid>

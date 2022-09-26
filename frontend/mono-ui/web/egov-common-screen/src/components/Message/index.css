@@ -1,0 +1,169 @@
+
+/*  #message{
+    background-color: #f3e5de;
+    color: #F47738;
+    border-radius: 10px;            
+} */
+#message{
+/* position: absolute;
+width: 1180px;
+height: 56px;
+left: 130px;
+top: 578px; */
+background-color: #f3e5de;
+color: #F47738;
+opacity: 0.8;
+border-radius: 8px;
+margin-left: 10%;
+margin-right: 10%;
+margin-top: 2%;
+margin-bottom: 2%;  
+
+}
+/* 
+@media only screen and (max-width: 576px) {
+    
+
+
+            #message{     
+                margin-left: 19px !important;
+                width: 89% !important;
+                background-color: #f3e5de !important;
+                color: #F47738 !important;
+                border-radius: 15px !important;
+                opacity: .8 !important;
+            }
+
+}
+
+
+@media only screen and (max-width: 1920px) {
+
+   #message{
+    margin-left: 116px;
+    width: 90%;
+    background-color: #f3e5de;
+    color: #F47738;
+    border-radius: 15px;
+    opacity: .8;
+   }
+
+}
+
+
+@media only screen and (max-width: 1600px) {
+
+
+    #message{
+        margin-left: 111px;
+        width: 89%;
+        background-color: #f3e5de;
+        color: #F47738;
+        border-radius: 15px;
+        opacity: .8;
+    }
+
+}
+
+
+@media only screen and (max-width: 1367px) {
+    #message
+    {
+        margin-left: 108px;
+    width: 88%;
+    background-color: #f3e5de;
+    color: #F47738;
+    border-radius: 15px;
+    opacity: .8;
+    }
+
+ 
+
+
+}
+@media only screen and (max-width: 1280px) {
+
+    #message
+    {
+        margin-left: 108px;
+    width: 88%;
+    background-color: #f3e5de;
+    color: #F47738;
+    border-radius: 15px;
+    opacity: .8;
+    }
+
+}
+
+
+@media only screen and (max-width: 1200px) {
+
+
+    #message{
+        margin-left: 118px;
+        width: 87%;
+        background-color: #f3e5de;
+        color: #F47738;
+        border-radius: 15px;     
+        opacity: .8;
+    }
+
+}
+
+
+@media only screen and (max-width: 1152px) {
+
+
+    #message{
+        margin-left: 82px;
+        width: 87%;
+        background-color: #f3e5de;
+        color: #F47738;
+        border-radius: 15px;     
+        opacity: .8;
+    }
+   
+
+
+
+@media only screen and (max-width: 1025px)
+{
+
+    #message{
+        margin-left: 74px;
+    width: 89%;
+    background-color: #f3e5de;
+    color: #F47738;
+    border-radius: 15px;
+    opacity: .8;
+    }
+}
+
+@media only screen and (max-width: 900px)
+{
+
+    #message{
+        margin-left: 80px;
+        width: 79%;
+        background-color: #f3e5de;
+        color: #F47738;
+        border-radius: 15px;
+        opacity: .8;
+    }
+}
+
+
+@media only screen and (max-width: 800px)
+{
+    
+    #message{
+        margin-left: 80px;
+        width: 79%;
+        background-color: #f3e5de;
+        color: #F47738;
+        border-radius: 15px;
+        opacity: .8;
+    }
+}
+
+} */
