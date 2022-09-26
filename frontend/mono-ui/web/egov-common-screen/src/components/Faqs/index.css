@@ -1,0 +1,142 @@
+
+.faq-row 
+{
+    margin-left: 15px;
+}
+
+.row-title-text 
+{
+    border-bottom: 10px #f49666;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+
+}
+.styles_row-content-text__2sgAB
+{
+    font-family: Roboto;
+    font-style: normal;
+    font-size: 14px !important;
+    font-weight: 400;
+    line-height: 20px;
+    color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.faq-row-wrapper
+{
+    background: #FFFFFF;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;
+}
+
+
+#flex-container {
+    display: flex;
+    background-color: #FFF;
+    height: 64px;
+}
+
+#flex-container>div {
+    margin: 1px;    
+    font-size: 16px;
+}
+
+/* #cardparagraph{
+       font-family: Roboto;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 16px;
+        letter-spacing: 0px;
+        text-align: left;
+}
+*/
+
+
+.styles_faq-row-wrapper__3vA1D .styles_row-body__1NvUo .styles_faq-row__2YF3c .styles_row-title__1YiiY .styles_icon-wrapper__2cftw {
+    color: #F47738 !important;
+    }
+    
+    #faqs {
+        margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 3%;
+
+    }
+
+
+@media only screen and (max-width: 1920px) {
+
+    #faqs {
+        margin-left: 10%;
+    margin-right: 10%;
+    }
+
+
+}
+@media only screen and (max-width: 1600px) {
+
+    #faqs {
+        margin-left: 10%;
+    margin-right: 10%;
+    }
+}
+
+
+@media only screen and (max-width: 1440px) {
+
+    #faqs {
+        margin-left: 10%;
+    margin-right: 10%;
+    }
+   
+
+}
+
+@media only screen and (max-width: 1367px) {
+
+
+/*     #links {
+        display: inline-flex;
+        margin-left: 58%;
+    }
+   */
+
+}
+
+
+
+
+
+
+@media only screen and (max-width: 900px) {
+
+    
+        #faqs {
+            margin-left: 10%;
+    margin-right: 10%;
+        }
+
+}
+
+
+@media only screen and (max-width: 800px) {
+
+
+    #faqs {
+        margin-left: 10%;
+    margin-right: 10%;
+    }
+
+}
+
+@media only screen and (max-width: 576px) {
+
+    #faqs {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
+}
+

@@ -1,0 +1,50 @@
+#testimonials
+{
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+    z-index: 1;
+
+
+}
+#testmonialimg
+{
+    border-radius: 50%;
+    z-index: 3;
+    margin-top: -14%;
+    width: 30%;
+    box-shadow: 0 5px 15px -8px rgb(0 0 0 / 24%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+}
+
+img.center {
+    display: block;
+    margin: 0 auto;
+}
+#testmonialcard
+{
+    background: #FFFFFF;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12);
+    border-radius: 8px;    
+    z-index: 2;
+    overflow: visible;
+
+}
+
+@media only screen and (max-width: 900px) {
+
+    #testmonialcard
+    {
+      margin-top: 10%;
+    }
+    }
+
+@media only screen and (max-width: 551px) {
+
+#testmonialcard
+{
+  margin-top: 10%;
+}
+}
+
+
+
