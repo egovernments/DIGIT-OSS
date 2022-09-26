@@ -23,10 +23,7 @@ const SelectTripData = ({ t, config, onSelect, formData = {}, userType }) => {
 
   const { isLoading: isVehicleMenuLoading, data: vehicleData } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
 
-  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, {
-    limit: -1,
-    status: "ACTIVE",
-  });
+  const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: -1 });
 
   const [vehicleMenu, setVehicleMenu] = useState([]);
 

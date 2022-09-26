@@ -65,7 +65,6 @@ export const configAssignDso = ({ t, dsoData, dso, selectDSO, vehicleMenu, vehic
                   id="dso"
                   selected={dso}
                   select={selectDSO}
-                  disable={getFilteredDsoData(dsoData, vehicle, vehicleCapacity) && !getFilteredDsoData(dsoData, vehicle, vehicleCapacity).length ? true : false}
                 />
               </React.Fragment>
             ),

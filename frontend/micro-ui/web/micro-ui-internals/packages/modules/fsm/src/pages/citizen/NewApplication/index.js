@@ -65,7 +65,6 @@ const FileComplaint = ({ parentRoute }) => {
   if (isLoading) {
     return <Loader />;
   }
-
   commonFields.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });

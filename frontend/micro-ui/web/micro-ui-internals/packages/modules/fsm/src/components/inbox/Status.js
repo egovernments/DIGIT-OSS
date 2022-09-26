@@ -29,8 +29,8 @@ const Status = ({ onAssignmentChange, fsmfilters, mergedRoleDetails, statusMap }
       ))}
       {moreStatus
         ? moreApplicationWithCount?.map((option, index) => (
-          <StatusCount key={index} onAssignmentChange={onAssignmentChange} status={option} fsmfilters={fsmfilters} statusMap={statusMap} />
-        ))
+            <StatusCount key={index} onAssignmentChange={onAssignmentChange} status={option} fsmfilters={fsmfilters} statusMap={statusMap} />
+          ))
         : null}
       {mergedRoleDetails.fixed === false && moreApplicationWithCount.length > 0 ? (
         <div className="filter-button" onClick={() => showMoreStatus(!moreStatus)}>

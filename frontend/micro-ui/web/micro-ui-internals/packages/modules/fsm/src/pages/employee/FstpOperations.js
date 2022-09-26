@@ -18,8 +18,7 @@ const FstpOperations = () => {
         },
         {
             name: "ES_FSM_VIEW_REPORTS_BUTTON",
-            link: "/employee/report/fsm/FSMFSTPPlantWithVehicleLogReport",
-            hyperlink: true,
+            locate: "/employee/report/fsm/FSMFSTPPlantWithVehicleLogReport",
             icon: <ViewReportIcon />
         },
         {

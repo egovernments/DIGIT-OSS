@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FormStep, Dropdown, Loader, RadioOrSelect, CardText } from "@egovernments/digit-ui-react-components";
+import { FormStep, Dropdown, Loader, RadioOrSelect, CitizenInfoLabel, CardText } from "@egovernments/digit-ui-react-components";
 
 const SelectTripNo = ({ config, formData, t, onSelect, userType }) => {
-    const state = Digit.ULBService.getStateId();
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const stateId = Digit.ULBService.getStateId();
     const { data: tripNumberData, isLoading } = Digit.Hooks.fsm.useMDMS(stateId, "FSM", "TripNumber");
     const { data: dsoData, isLoading: isDsoLoading, isSuccess: isDsoSuccess, error: dsoError } = Digit.Hooks.fsm.useDsoSearch(tenantId, { limit: -1, status: 'ACTIVE' });
-    const { isLoading: isVehicleMenuLoading, data: vehicleData } = Digit.Hooks.fsm.useMDMS(state, "Vehicle", "VehicleType", { staleTime: Infinity });
+    const { isLoading: isVehicleMenuLoading, data: vehicleData } = Digit.Hooks.fsm.useMDMS(stateId, "Vehicle", "VehicleType", { staleTime: Infinity });
     const [tripNo, setTripNo] = useState(formData?.tripNo);
     const [vehicleCapacity, setVehicleCapacity] = useState(formData?.capacity);
     const [vehicleMenu, setVehicleMenu] = useState([]);
@@ -17,10 +16,8 @@ const SelectTripNo = ({ config, formData, t, onSelect, userType }) => {
             const allVehicles = dsoData.reduce((acc, curr) => {
                 return curr.vehicles && curr.vehicles.length ? acc.concat(curr.vehicles) : acc;
             }, []);
-
             const cpacityMenu = Array.from(new Set(allVehicles.map(a => a.capacity)))
                 .map(capacity => allVehicles.find(a => a.capacity === capacity))
-
             setVehicleMenu(cpacityMenu);
         }
     }, [dsoData, vehicleData]);

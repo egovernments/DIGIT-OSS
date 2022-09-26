@@ -119,7 +119,15 @@ const CheckPage = ({ onSubmit, value }) => {
             <Row
               label={t("CS_CHECK_SIZE")}
               text={[
-                pitMeasurement
+                pitMeasurement,
+                {
+                  value:
+                    pitDetailValues?.length === 3
+                      ? `${t(`CS_COMMON_LENGTH`)} x ${t(`CS_COMMON_BREADTH`)} x ${t(`CS_COMMON_DEPTH`)}`
+                      : `${t(`CS_COMMON_DIAMETER`)} x ${t(`CS_COMMON_DEPTH`)}`,
+                  className: "card-text",
+                  style: { fontSize: "16px" },
+                },
               ]}
               actionButton={<ActionButton jumpTo="/digit-ui/citizen/fsm/new-application/tank-size" />}
             />

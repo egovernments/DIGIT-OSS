@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { CitizenInfoLabel, Loader, Dropdown, FormStep, CardLabel, RadioOrSelect } from "@egovernments/digit-ui-react-components";
 import Timeline from "../components/TLTimelineInFSM";
-import { useLocation } from "react-router-dom";
 
 const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
-  const { pathname: url } = useLocation();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const select = (items) => items.map((item) => ({ ...item, i18nKey: t(item.i18nKey) }));
@@ -46,7 +44,7 @@ const SelectPropertyType = ({ config, onSelect, t, userType, formData }) => {
     return <Loader />;
   }
   if (userType === "employee") {
-    return <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} t={t} disable={url.includes("/modify-application/") || url.includes("/new-application") ? false : true} />;
+    return <Dropdown option={propertyTypesData.data} optionKey="i18nKey" id="propertyType" selected={propertyType} select={selectedType} t={t} />;
   } else {
     return (
       <React.Fragment>

@@ -1,5 +1,5 @@
 import React from "react";
-import { CardLabelError, Dropdown } from "@egovernments/digit-ui-react-components";
+import { Dropdown } from "@egovernments/digit-ui-react-components";
 
 export const configAcceptDso = ({ t, dsoData, dso, selectVehicleNo, vehicleNoList, vehicleNo, vehicle, noOfTrips, action }) => {
   return {
@@ -16,20 +16,14 @@ export const configAcceptDso = ({ t, dsoData, dso, selectVehicleNo, vehicleNoLis
             isMandatory: true,
             type: "dropdown",
             populators: (
-              <React.Fragment>
-                {!vehicleNoList?.length ? (
-                  <CardLabelError>{t("ES_FSM_NO_VEHICLE_AVAILABLE")}</CardLabelError>
-                ) : null}
-                <Dropdown
-                  option={vehicleNoList}
-                  autoComplete="off"
-                  optionKey="registrationNumber"
-                  id="vehicle"
-                  select={selectVehicleNo}
-                  selected={vehicleNo}
-                  disable={vehicleNoList?.length > 0 ? false : true}
-                />
-              </React.Fragment>
+              <Dropdown
+                option={vehicleNoList}
+                autoComplete="off"
+                optionKey="registrationNumber"
+                id="vehicle"
+                select={selectVehicleNo}
+                selected={vehicleNo}
+              />
             ),
           },
           {

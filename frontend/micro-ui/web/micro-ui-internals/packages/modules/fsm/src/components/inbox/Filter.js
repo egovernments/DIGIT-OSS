@@ -36,7 +36,9 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
   );
 
   const selectLocality = (d) => {
-    isFstpOperator ? onFilterChange({ locality: [d] }) : onFilterChange({ locality: [...searchParams?.locality, d] });
+    isFstpOperator ?
+      onFilterChange({ locality: [d] }) :
+      onFilterChange({ locality: [...searchParams?.locality, d] });
   };
 
   const onStatusChange = (e, type) => {
@@ -46,81 +48,71 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
 
   const clearAll = () => {
     if (isFstpOperator) return onFilterChange();
-    onFilterChange({ applicationStatus: [], locality: [] });
+    // onFilterChange({ applicationStatus: [], locality: [], uuid: { code: "ASSIGNED_TO_ME", name: "Assigned to Me" } });
     // props?.onClose?.();
   };
 
   return (
     <React.Fragment>
-      {((!DSO && !isFstpOperator && searchParams && (searchParams?.applicationStatus?.length > 0 || searchParams?.locality?.length > 0)) ||
-        mergedRoleDetails?.statuses?.length > 0 ||
-        isFstpOperatorRequest) && (
-        <div className="filter" style={{ marginTop: isFstpOperator ? "-0px" : "revert" }}>
-          <div className="filter-card">
-            <div className="heading">
-              <div className="filter-label">{t("ES_COMMON_FILTER_BY")}:</div>
-              <div className="clearAll" onClick={clearAll}>
-                {t("ES_COMMON_CLEAR_ALL")}
-              </div>
-              {props.type === "desktop" && (
-                <span className="clear-search" onClick={clearAll}>
-                  {t("ES_COMMON_CLEAR_ALL")}
-                </span>
-              )}
-              {props.type === "mobile" && (
-                <span onClick={props.onClose}>
-                  <CloseSvg />
-                </span>
-              )}
+      {((!DSO && !isFstpOperator && searchParams) || (mergedRoleDetails?.statuses?.length > 0) || (isFstpOperatorRequest)) && <div className="filter" style={{ marginTop: isFstpOperator ? "-0px" : "revert" }}>
+        <div className="filter-card">
+          <div className="heading">
+            <div className="filter-label">{t("ES_COMMON_FILTER_BY")}:</div>
+            <div className="clearAll" onClick={clearAll}>
+              {t("ES_COMMON_CLEAR_ALL")}
             </div>
-            {/* <div>
+            {props.type === "desktop" && (
+              <span className="clear-search" onClick={clearAll}>
+                {t("ES_COMMON_CLEAR_ALL")}
+              </span>
+            )}
+            {props.type === "mobile" && (
+              <span onClick={props.onClose}>
+                <CloseSvg />
+              </span>
+            )}
+          </div>
+          <div>
             {!DSO && !isFstpOperator && searchParams && (
               <AssignedTo onFilterChange={onFilterChange} searchParams={searchParams} paginationParms={paginationParms} tenantId={tenantId} t={t} />
             )}
-            <div> */}
-            {/* {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "code", onRemove, "locality", "name")} */}
-            {/* </div> */}
-            {/* <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} fsmfilters={searchParams} /> */}
-            {/* </div> */}
-
-            {mergedRoleDetails?.statuses?.length > 0 || isFstpOperatorRequest ? (
-              <div>
-                <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
-                {/* <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} /> */}
-                <Localities selectLocality={selectLocality} tenantId={tenantId} boundaryType="revenue" />
-                <div className="tag-container">
-                  {searchParams?.locality.map((locality, index) => {
-                    return (
-                      <RemoveableTag
-                        key={index}
-                        text={locality.i18nkey}
-                        onClick={() => {
-                          onFilterChange({ locality: searchParams?.locality.filter((loc) => loc.code !== locality.code) });
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            ) : null}
             <div>
-              {isRoleStatusFetched && mergedRoleDetails && props?.applications?.statuses ? (
-                <Status
-                  onAssignmentChange={onStatusChange}
-                  fsmfilters={searchParams}
-                  mergedRoleDetails={mergedRoleDetails}
-                  statusMap={props?.applications?.statuses}
-                />
-              ) : !location.pathname.includes("fstp-fsm-request") ? (
-                <Loader />
-              ) : (
-                ""
-              )}
+              {/* {GetSelectOptions(t("ES_INBOX_LOCALITY"), localities, selectedLocality, onSelectLocality, "code", onRemove, "locality", "name")} */}
             </div>
+            {/* <Status applications={props.applications} onAssignmentChange={handleAssignmentChange} fsmfilters={searchParams} /> */}
+          </div>
+
+          {mergedRoleDetails?.statuses?.length > 0 || isFstpOperatorRequest ? (
+            <div>
+              <div className="filter-label">{t("ES_INBOX_LOCALITY")}</div>
+              {/* <Dropdown option={localities} keepNull={true} selected={null} select={selectLocality} optionKey={"name"} /> */}
+              <Localities selectLocality={selectLocality} tenantId={tenantId} boundaryType="revenue" />
+              <div className="tag-container">
+                {searchParams?.locality.map((locality, index) => {
+                  return (
+                    <RemoveableTag
+                      key={index}
+                      text={locality.i18nkey}
+                      onClick={() => {
+                        onFilterChange({ locality: searchParams?.locality.filter((loc) => loc.code !== locality.code) });
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
+          <div>
+            {isRoleStatusFetched && mergedRoleDetails && props?.applications?.statuses ? (
+              <Status onAssignmentChange={onStatusChange} fsmfilters={searchParams} mergedRoleDetails={mergedRoleDetails} statusMap={props?.applications?.statuses} />
+            ) : (
+              !location.pathname.includes("fstp-fsm-request") ? <Loader /> : ""
+            )}
           </div>
         </div>
-      )}
-      {props.type === "mobile" && (
+      </div>
+      }
+      {props.type === "mobile" && props.onClose && (
         <ActionBar>
           <ApplyFilterBar
             submit={false}
@@ -128,7 +120,8 @@ const Filter = ({ searchParams, paginationParms, onFilterChange, onSearch, remov
             buttonLink={t("ES_COMMON_FILTER")}
             onClear={clearAll}
             onSubmit={() => {
-              onSearch();
+              if (props.type === "mobile") onSearch({ delete: ["applicationNos"] });
+              else onSearch();
             }}
             style={{ flex: 1 }}
           />
