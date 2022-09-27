@@ -73,7 +73,7 @@ public class NotificationService {
             String employeeMobileNumber = null;
 
             if(applicationStatus.equalsIgnoreCase(PENDINGFORASSIGNMENT) && action.equalsIgnoreCase(PGR_WF_REOPEN)) {
-                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REASSIGN);
+                ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),ASSIGN);
                 employeeMobileNumber = processInstance.getAssignes().get(0).getMobileNumber();
             }
             else if(applicationStatus.equalsIgnoreCase(PENDINGFORASSIGNMENT) && action.equalsIgnoreCase(APPLY)) {
@@ -353,7 +353,7 @@ public class NotificationService {
                 return null;
             }
 
-            ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),REASSIGN);
+            ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),ASSIGN);
 
             if(defaultMessage.contains("{status}"))
                 defaultMessage = defaultMessage.replace("{status}", localisedStatus);
@@ -493,8 +493,6 @@ public class NotificationService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
 
         String appLink = notificationUtil.getShortnerURL(config.getMobileDownloadLink());
-
-        ProcessInstance processInstance = getEmployeeName(serviceWrapper.getService().getTenantId(),serviceWrapper.getService().getServiceRequestId(),request.getRequestInfo(),request.getWorkflow().getAction());
 
         if(messageForCitizen != null) {
             messageForCitizen = messageForCitizen.replace("{complaint_type}", localisedComplaint);
