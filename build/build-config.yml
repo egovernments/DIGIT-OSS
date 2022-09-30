@@ -678,12 +678,7 @@ config:
     build:
       - work-dir: "utilities/demo-utility"
         image-name: "demo-utility"
-        dockerfile: "build/maven/Dockerfile"
-  - name: "builds/digit-dev/utilities/test-demo"
-    build:
-      - work-dir: "utilities/egov-api-cron-job"
-        image-name: "test-demo"
-        dockerfile: "build/python/Dockerfile"      
+        dockerfile: "build/maven/Dockerfile"      
 
   # Frontend
 
