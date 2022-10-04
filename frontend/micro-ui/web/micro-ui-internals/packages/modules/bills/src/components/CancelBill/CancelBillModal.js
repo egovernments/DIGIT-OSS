@@ -78,7 +78,7 @@ const CancelBillModal = ({ t, closeModal, actionCancelLabel, actionCancelOnSubmi
             <Card style={{ boxShadow: "none" }}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     {!isReasonsLoading && isReasonsFetched ?<span>
-                        <label>{t("BC_RECEIPT_CANCELLATION_REASON_LABEL")}</label>
+                        <label>{`${t("BC_RECEIPT_CANCELLATION_REASON_LABEL")}*`}</label>
                         <Controller
                             control={control}
                             rules={{ required: t("REQUIRED_FIELD") }}
@@ -96,11 +96,11 @@ const CancelBillModal = ({ t, closeModal, actionCancelLabel, actionCancelOnSubmi
                                 />
                             )}
                         />
-                        {formErrors && formErrors?.businesService && formErrors?.businesService?.type === "required" && (
-                            <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>)}
+                        {formErrors && formErrors?.reason && formErrors?.reason?.type === "required" && (
+                            <CardLabelError>{t(`CS_COMMON_REQUIRED_ERROR`)}</CardLabelError>)}
                     </span>:<Loader/>}
                     {selectedReason?.code==="OTHER" && <span className="surveyformfield">
-                        <label>{t("BC_MORE_DETAILS_LABEL")}</label>
+                        <label>{`${t("BC_MORE_DETAILS_LABEL")}*`}</label>
                         <Controller
                             control={control}
                             rules={othersSelected?{ required: t("REQUIRED_FIELD") }:{}}
@@ -108,7 +108,7 @@ const CancelBillModal = ({ t, closeModal, actionCancelLabel, actionCancelOnSubmi
                             render={({ onChange }) => <TextArea disabled={othersSelected?false:true} onChange={onChange} />}
                         />
                         {formErrors && formErrors?.details && formErrors?.details?.type === "required" && (
-                            <CardLabelError>{t(`CS_COMMON_REQUIRED`)}</CardLabelError>)}
+                            <CardLabelError>{t(`CS_COMMON_REQUIRED_ERROR`)}</CardLabelError>)}
                     </span>}
                 </form>
             </Card>

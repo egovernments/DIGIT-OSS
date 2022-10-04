@@ -9,7 +9,7 @@ const ResponseCancelBill = () => {
     const { state } = useLocation()
     const { t } = useTranslation() 
     
-    const {filters,currentBill} = state
+    const {filters,currentBill, bill} = state
 
     const { isLoading: hookLoading, data, ...rest } = Digit.Hooks.useCancelBill({
         filters: { ...filters },
@@ -19,7 +19,7 @@ const ResponseCancelBill = () => {
         {hookLoading  ? <Loader /> : <Card>
             <Banner
                 message={!hookLoading && data?.Message ? t("ABG_BILL_CANCELLED") : t("AGB_BILL_CANCEL_FAILED")}
-                applicationNumber={currentBill?.billNumber}
+                applicationNumber={currentBill?.billNumber || bill?.billNumber}
                 info={!hookLoading && data?.Message ? t("ABG_BILL_NUMBER_LABEL") : ""}
                 successful={!hookLoading && data?.Message ? true : false}
             />
