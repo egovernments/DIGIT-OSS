@@ -604,10 +604,10 @@ app.post(
 
       let data = await getBulkPdfRecordsDetails(uuid, offset, limit, jobId);
       if(data.length<=0){
-        res.status(500);
+        res.status(400);
         res.json({
             ResponseInfo: requestInfo,
-            message: `Group bill pdf records details are not present for the employee ${requestInfo.userInfo.name}`,
+            message: `Group bill pdf records details are not present for the employee ${requestInfo.userInfo.name} .Please trigger a bulk bill creation process`,
           });
       }
       else{
