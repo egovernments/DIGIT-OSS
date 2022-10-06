@@ -1,6 +1,45 @@
-import React, { useEffect, useState } from "react";
+import { BackButton, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, TextInput } from "@egovernments/digit-ui-react-components";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import Timeline from "../components/Timeline";
+import Form from "react-bootstrap/Form";
+import Table from "react-bootstrap/Table";
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import { Button } from 'react-bootstrap';
+import Popup from "reactjs-popup";
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "reactstrap";
+import axios from "axios";
+const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, ownerIndex }) => {
+  const { pathname: url } = useLocation();
+  const userInfo = Digit.UserService.getUser();
+  let validation = {};
+  let isOpenLinkFlow = window.location.href.includes("openlink");
+  
+  
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = Digit.ULBService.getStateId();
 
-function AddInfo() {
+  
+  const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
+
+  if(isOpenLinkFlow)  
+    window.onunload = function () {
+      sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+    }
+    const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
+
+    let menu = [];
+    genderTypeData &&
+    genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
+      menu.push({ i18nKey: `COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
+    });
+    
     const [modal, setmodal] = useState(false);
     const [data, setData] = useState([])
     const [devDetail, setdevDetail] = useState([])
@@ -13,16 +52,7 @@ function AddInfo() {
     //   })
     // }, [])
     // console.warn(data)
-    const {
-      register,
-      handleSumit,
-      formState: { error },
-    } = useForm([
-      { Sr: "", name: "", mobileNumber: "", email: "", PAN: "", Aadhar: "" },
-    ]);
-    const formSubmit = (data) => {
-      console.log("data", data);
-    };
+    
   
     // onchange = (e) => {
     //   this.setState({ value: e.target.value });
@@ -33,12 +63,12 @@ function AddInfo() {
     const [showhide0, setShowhide0] = useState("No");
     const [FormSubmitted, setFormSubmitted] = useState(false);
     const [showhide, setShowhide] = useState("No");
-    const [cin_Number, setCinNo] = useState("");
-    const [companyName, setCompanyName] = useState("");
-    const [dateOfCorporation, setIncorporation] = useState("");
-    const [registeredAddress, setRegistered] = useState("");
-    const [email, setEmail] = useState("");
-    const [mobileNumber, setMobile] = useState("");
+    const [cin_Number, setCinNo] = useState(formTab?.LicenseAddInfo?.cin_Number || formTab?.LicenseAddInfo?.cin_Number || "");
+    const [companyName, setCompanyName] = useState(formTab?.LicenseAddInfo?.companyName || formTab?.LicenseAddInfo?.companyName || "");
+    const [dateOfCorporation, setIncorporation] = useState(formTab?.LicenseAddInfo?.dateOfCorporation || formTab?.LicenseAddInfo?.dateOfCorporation || "");
+    const [registeredAddress, setRegistered] = useState(formTab?.LicenseAddInfo?.registeredAddress || formTab?.LicenseAddInfo?.registeredAddress || "");
+    const [email, setEmail] = useState(formTab?.LicenseAddInfo?.email || formTab?.LicenseAddInfo?.email || "");
+    const [mobileNumber, setMobile] = useState(formTab?.LicenseAddInfo?.mobileNumber || formTab?.LicenseAddInfo?.mobileNumber || "");
     const [gst_Number, setGST] = useState("");
     const [sharName, setTbName] = useState("");
     const [designition, setDesignition] = useState("");
@@ -49,7 +79,7 @@ function AddInfo() {
     const [modalNAme,setModalNAme]=useState("");
     const [modaldesignition,setModaldesignition]=useState("");
     const [modalPercentage,setModalPercentage]=useState("");
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     
     const [modalValuesArray,setModalValuesArray]= useState([]);
     const [financialCapacity,setFinancialCapacity]= useState([]);
@@ -66,14 +96,14 @@ function AddInfo() {
     const HandleGetMCNdata=async()=>{
       try{
         if (cin_Number.length===21) {
-          const Resp = await axios.get("/mca/v1/companies/U72200CH1998PTC022006", {headers:{
+          const Resp = await axios.get(`https://apisetu.gov.in/mca/v1/companies/U72200CH1998PTC022006`, {headers:{
             'Content-Type': 'application/json',
             'X-APISETU-APIKEY':'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
             'X-APISETU-CLIENTID':'in.gov.tcpharyana',
             'Access-Control-Allow-Origin':"*",
           }})
   
-          const Directory = await axios.get("/mca-directors/v1/companies/U72200CH1998PTC022006", {headers:{
+          const Directory = await axios.get(`https://apisetu.gov.in/mca-directors/v1/companies/U72200CH1998PTC022006`, {headers:{
             'Content-Type': 'application/json',
             'X-APISETU-APIKEY':'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
             'X-APISETU-CLIENTID':'in.gov.tcpharyana',
@@ -139,7 +169,7 @@ function AddInfo() {
     const [noofRows, setNoOfRows] = useState(1);
     const [aoofRows, setAoOfRows] = useState(1);
     const AddInfoForm = async (e) => {
-      e.preventDefault();
+      // e.preventDefault();
       setFormSubmitted(true);
       let barArray = []
       const formTab = {
@@ -164,75 +194,81 @@ function AddInfo() {
         // ]
           
       };
-  
+      onSelect(config.key, formTab);
     //   dispatch(setAddinfoData(
     //     formTab
     //   ))
       console.log("FORMARRAL",formTab);
-      // try {
-      //   let res = await axios.post("http://localhost:8081/user/developer/_registration",formTab,{
-      //     headers:{
-      //       'Content-Type': 'application/json',
-      //       'Access-Control-Allow-origin':"*",
-      //   }
-      //   }).then((response)=>{
-      //     return response
-      //   });
-        
-        
-      // } catch (err) {
-      //   console.log(err);
-      // }
-      // console.log("FORMARRAL",formTab);
-      // console.log("director data",DirectorData);
-      // const formData = ("formTab",JSON.stringify(formTab));
-      // console.log("sdsdsds",formData);
-      // localStorage.setItem("devDetail", JSON.stringify(devDetail));
-      // devDetail.push();
-      // let frmData = JSON.parse(localStorage.getItem("step1a") || "[]");
-  
-  
-  
-  
-      // useEffect(()=>{
-      //   postAddInfo();
-      // },[]);
-    };
-  
-    return (
-  
-      <div>
-  
-  
-        <Form onSubmit={AddInfoForm}>
+
+  // if (isLoading) return <Loader />;
+  const AddInfoForm = async (e) => {
+
+    if (!(formTab?.result && formTab?.result?.Licenses[0]?.id)) {
+      let licenseDet = { 
+        cin_Number: cin_Number,
+        companyName: companyName,
+        dateOfCorporation: dateOfCorporation,
+        registeredAddress: registeredAddress,
+        email: email,
+        mobileNumber: mobileNumber,
+        gst_Number: gst_Number,
+        directorsInformation: DirectorData,
+        shareHoldingPatterens:modalValuesArray,
+        financialCapacity:financialCapacity
+      }
+      onSelect(config.key, licenseDet);
+    }
+    else {
+      let data = formTab?.formTab;
+      data.LicneseAddInfo.cin_Number = cin_Number;
+      data.LicneseAddInfo.companyName = companyName;
+      data.LicneseAddInfo.dateOfCorporation = dateOfCorporation;
+      data.LicneseAddInfo.registeredAddress = registeredAddress;
+      data.LicneseAddInfo.mobileNumber = mobileNumber;
+      onSelect("", formTab)
+    }
+
+  };
+
+};
+const onSkip = () => onSelect();
+
+  return (
+    <div>
+      <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
+
+        {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
+        <Timeline currentStep={3} flow="STAKEHOLDER" />
+        {!isLoading ? 
+        <FormStep 
+          // onSubmit={AddInfoForm}
+          config={config}
+          onSelect={AddInfoForm}
+          onSkip={onSkip}
+          t={t}
+        >
           {/* <div className="container my-5">
           <div className="row mt-4">
             <div className=" col-12 m-auto"> */}
-  
+
           <div className="happy">
-            <div className="bigCard">
+            {/* <div className="bigCard"> */}
               <div className="card">
                 <div>
-                  <h4 className="card-h">
-                    {" "}
-                    &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;Developer
-                  </h4>
                   <div className="card">
+                    <h5 className="card-title">Developer's type</h5>
                     <div className="card-body">
-                      {/* <h5 className="card-title">
-                        (i) Details of following documents
-                      </h5> */}
                       <div className="row">
                         <div className="col-sm-12">
                           {/* <h4 className='mt-3 text-center mb-3'>Output  </h4> */}
-  
+
                           {/* <div className="form-group row">
                                     <label className="col-sm-3 col-form-label">Name</label>
                                     <div className="col-sm-6">
                                         <input type="text" className="form-control" id="inputPassword" placeholder="Enter Name" />
                                     </div>
                                 </div> */}
-  
+
                           <div className="form-group row">
                             {/* <label className="col-sm-3 col-form-label">Full Address</label> */}
                             <div className="col-sm-3">
@@ -269,13 +305,13 @@ function AddInfo() {
                               />
                             </div>
                           </div>
-  
+
                           {showhide0 === "1" && (
                             <div className="form-group row mb-12">
                               {/* <label className="col-sm-3 col-form-label">Individual</label> */}
                               <div className="col-sm-12">
                                 {/* <textarea type="text" className="form-control" id="details" placeholder="Enter Details" /> */}
-                                <Table className="table table-bordered" size="sm">
+                                <table className="table table-bordered" size="sm">
                                   <thead>
                                     <tr>
                                       <th>S.No.</th>
@@ -304,17 +340,17 @@ function AddInfo() {
                                       </td>
                                     </tr>
                                   </tbody>
-                                </Table>
+                                </table>
                               </div>
                             </div>
                           )}
-  
+
                           {showhide0 === "0" && (
                             <div className="form-group row">
                               {/* <label className="col-sm-3 col-form-label">Company</label> */}
                               <div className="col-sm-12">
                                 {/* <input type="text" className="form-control" id="Email" placeholder="Enter Email" /> */}
-                                <Table className="table table-bordered" size="sm">
+                                <table className="table table-bordered" size="sm">
                                   <thead>
                                     <tr>
                                       <th>S.No.</th>
@@ -355,7 +391,7 @@ function AddInfo() {
                                       </td>
                                     </tr>
                                   </tbody>
-                                </Table>
+                                </table>
                               </div>
                             </div>
                           )}
@@ -364,7 +400,7 @@ function AddInfo() {
                               {/* <label className="col-sm-3 col-form-label">LLP</label> */}
                               <div className="col-sm-12">
                                 {/* <input type="text" className="form-control" id="llp" placeholder="Enter Email" /> */}
-                                <Table className="table table-bordered" size="sm">
+                                <table className="table table-bordered" size="sm">
                                   <thead>
                                     <tr>
                                       <th>S.No.</th>
@@ -405,7 +441,7 @@ function AddInfo() {
                                       </td>
                                     </tr>
                                   </tbody>
-                                </Table>
+                                </table>
                               </div>
                             </div>
                           )}
@@ -422,7 +458,7 @@ function AddInfo() {
                   {/* <div className="card-header">
                   <h5 className="card-title"> Developer</h5>
                 </div> */}
-  
+
                   <div className="card-body">
                     <div className="row">
                       <div className="col col-4">
@@ -456,9 +492,9 @@ function AddInfo() {
                       </div>
                       <div className="col col-4">
                         <div className="form-group">
-  
+
                           <label htmlFor="name">Company Name/LLP Pin</label>
-  
+
                           <input
                             type="text"
                             value={companyName}
@@ -514,14 +550,14 @@ function AddInfo() {
                           />
                         </div>
                       </div>
-  
+
                       <div className="col col-4">
                         <div className="form-group">
                           <label htmlFor="name">Registered Address</label>
                           <input
                             type="text"
                             value={registeredAddress}
-                           placeholder={registeredAddress}
+                          placeholder={registeredAddress}
                             className="form-control"
                           // name="name"
                           // className={`form-control`}
@@ -552,7 +588,7 @@ function AddInfo() {
                           <input
                             type="text"
                             value={email}
-                           placeholder={email}
+                          placeholder={email}
                             className="form-control"
                           // name="email"
                           // className={`form-control`}
@@ -610,7 +646,7 @@ function AddInfo() {
                           <input
                             type="text"
                             value={gst_Number}
-                           placeholder={gst_Number}
+                          placeholder={gst_Number}
                             className="form-control"
                           // className={`form-control`}
                           // placeholder=""
@@ -647,7 +683,7 @@ function AddInfo() {
                 <div className="card shadow">
                   <div className="card-body">
                     <div className="table-bd">
-                      <Table className="table table-bordered">
+                      <table className="table table-bordered">
                         <thead>
                           <tr>
                             <th>Sr. No</th>
@@ -703,14 +739,14 @@ function AddInfo() {
                             <p>Click on the Add More Button</p>
                           }
                         </tbody>
-                      </Table>
+                      </table>
                     </div>
                     {/* <div className="form-group col-md2 mt-4">
                           <button  className="btn btn-success" >Add More
                             
                           </button>
                         </div> */}
-  
+
                     {/* <button
                         type="button"
                         style={{ float: "left" }}
@@ -731,9 +767,9 @@ function AddInfo() {
                       >
                         Add More
                       </button>
-  
+
                       <div>
-                        {/* <Modal
+                        <Modal
                           size="lg"
                           isOpen={modal}
                           toggle={() => setmodal(!modal)}
@@ -741,7 +777,7 @@ function AddInfo() {
                           <ModalHeader
                             toggle={() => setmodal(!modal)}
                           ></ModalHeader>
-  
+
                           <ModalBody>
                             <div className="card2">
                               <div className="popupcard">
@@ -768,7 +804,7 @@ function AddInfo() {
                                         class="form-control"
                                       />
                                     </Col>
-  
+
                                     <Col md={3} xxl lg="4">
                                       <label htmlFor="name" className="text">Percentage</label>
                                       <input
@@ -788,10 +824,10 @@ function AddInfo() {
                                         class="form-control"
                                       />
                                     </Col>
-  
+
                                   </Row>
                                 </form>
-  
+
                               </div>
                               <div className="submit-btn">
                                 <div className="form-group col-md6 mt-6">
@@ -810,7 +846,7 @@ function AddInfo() {
                           <ModalFooter
                             toggle={() => setmodal(!modal)}
                           ></ModalFooter>
-                        </Modal> */}
+                        </Modal>
                       </div>
                     </div>
                     {/* <button
@@ -821,7 +857,7 @@ function AddInfo() {
                       >
                         Remove
                       </button> */}
-  
+
                     {/* <div className="form-group">
                           <button type="submit" className="btn btn-success">
                             {" "}
@@ -837,7 +873,7 @@ function AddInfo() {
                 <div className="card shadow">
                   <div className="card-body">
                     <div className="table-bd">
-                      <Table className="table table-bordered">
+                      <table className="table table-bordered">
                         <thead>
                           <tr>
                             <th>Sr. No</th>
@@ -888,7 +924,7 @@ function AddInfo() {
                             );
                           })}
                         </tbody>
-                      </Table>
+                      </table>
                     </div>
                     
                   </div>
@@ -903,17 +939,16 @@ function AddInfo() {
                   </button>
                 </div>
               </div>
-            </div>
+            {/* </div> */}
           </div>
           {/* </div>
           </div>
         </div> */}
-  
-        </Form>
-  
-      </div>
-  
-    );
-}
 
-export default AddInfo;
+        </FormStep>:<Loader />}
+      </div>
+    </div>
+  );
+};
+
+export default LicenseAddInfo;
