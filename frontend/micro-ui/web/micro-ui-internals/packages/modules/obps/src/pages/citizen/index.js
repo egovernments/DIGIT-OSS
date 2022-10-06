@@ -12,6 +12,8 @@ import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-component
 // import StakeholderRegistration from "./StakeholderRegistration";
 import MyApplication from "./MyApplication";
 import ApplicationDetails from "./ApplicationDetail";
+import AddInfoForm from "./DeveloperRegistration/AddInfoForm/addInfo";
+// import LicenseAddInfo from "../../pageComponents/LicenseAddInfo";
 // import OCBuildingPermit from "./OCBuildingPermit";
 // import BpaApplicationDetail from "./BpaApplicationDetail";
 // import BPASendToArchitect from "./BPASendToArchitect";
@@ -32,6 +34,7 @@ const App = ({ path }) => {
   const NewBuildingPermit = Digit?.ComponentRegistryService?.getComponent('ObpsNewBuildingPermit');
   const OCBuildingPermit = Digit?.ComponentRegistryService?.getComponent('ObpsOCBuildingPermit');
   const StakeholderRegistration = Digit?.ComponentRegistryService?.getComponent('ObpsStakeholderRegistration');
+  // const AddInfoForm = Digit?.ComponentRegistryService?.getComponent('ObpsAddInfoForm');
   const EdcrInbox = Digit?.ComponentRegistryService?.getComponent('ObpsEdcrInbox');
   const BpaApplicationDetail = Digit?.ComponentRegistryService?.getComponent('ObpsCitizenBpaApplicationDetail');
   const BPASendToArchitect = Digit?.ComponentRegistryService?.getComponent('ObpsBPASendToArchitect');
@@ -53,6 +56,8 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/stakeholder/apply`} component={StakeholderRegistration} />
         <Route path={`${path}/openlink/stakeholder/apply`} component={StakeholderRegistration} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplication} />
+        <PrivateRoute path={`${path}/add-info`} component={AddInfoForm} />
+        {/* <PrivateRoute path={`${path}/license-add-info`} component={LicenseAddInfo} /> */}
         <PrivateRoute path={`${path}/bpa/inbox`} component={Inbox} />
         <PrivateRoute path={`${path}/edcr/inbox`} component={(props) => <EdcrInbox {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/stakeholder/:id`} component={ApplicationDetails} />

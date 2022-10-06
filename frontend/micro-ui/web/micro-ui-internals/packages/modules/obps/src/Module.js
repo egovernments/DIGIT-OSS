@@ -26,6 +26,7 @@ import CreateEDCR from "./pages/citizen/EDCR";
 import CreateOCEDCR from "./pages/citizen/OCEDCR";
 import NewBuildingPermit from "./pages/citizen/NewBuildingPermit";
 import OCBuildingPermit from "./pages/citizen/OCBuildingPermit";
+import AddInfoForm from "./pages/citizen/DeveloperRegistration/AddInfoForm/addInfo";
 import StakeholderRegistration from "./pages/citizen/StakeholderRegistration";
 import CitizenBpaApplicationDetail from "./pages/citizen/BpaApplicationDetail";
 import BPASendToArchitect from "./pages/citizen/BPASendToArchitect";
@@ -36,6 +37,9 @@ import EdcrInbox from "./pages/citizen/EdcrInbox";
 
 import LicenseType from "./pageComponents/LicenseType";
 import LicenseDetails from "./pageComponents/LicenseDetails";
+import LicenseAddInfo from "./pageComponents/LicenseAddInfo";
+import AddAuthorizedUser from "./pageComponents/AddAuthorizedUser";
+import DeveloperCapacity from "./pageComponents/DeveloperCapacity";
 import CorrospondenceAddress from "./pageComponents/CorrospondenceAddress";
 import PermanentAddress from "./pageComponents/PermanentAddress";
 import StakeholderDocuments from "./pageComponents/StakeholderDocuments";
@@ -122,7 +126,11 @@ const componentsToRegister = {
   OCUploadPlanDiagram,
   StakeholderDocsRequired,
   LicenseType,
+  AddInfoForm,
   LicenseDetails,
+  LicenseAddInfo,
+  AddAuthorizedUser,
+  DeveloperCapacity,
   CorrospondenceAddress,
   PermanentAddress,
   StakeholderDocuments,
