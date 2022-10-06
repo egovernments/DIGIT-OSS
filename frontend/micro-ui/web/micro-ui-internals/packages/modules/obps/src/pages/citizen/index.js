@@ -1,6 +1,7 @@
 // import React from "react";
 import React, { useEffect, useState } from "react";
 import OBPSSearchApplication from "../../components/SearchApplication";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Search from "../employee/Search";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation, Route } from "react-router-dom";
@@ -10,8 +11,17 @@ import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-component
 // import CreateOCEDCR from "./OCEDCR";
 // import BPACitizenHomeScreen from "./home";
 // import StakeholderRegistration from "./StakeholderRegistration";
+import Formcontainer from "../citizen/NewLicense/FormContainer/FormContainer";
+import Step1 from"../citizen/NewLicense/Step1/Step1";
+import Step2 from"../citizen/NewLicense/Step2/Step2";
+import Step3 from "../citizen/NewLicense/Step3/Step3";
+import Step4 from"../citizen/NewLicense/Step4/Step4";
+import Step5 from "../citizen/NewLicense/Step5/Step5";
+import AddInfoForm from "../citizen/DeveloperRegistration/AddInfoForm/addInfo";
 import MyApplication from "./MyApplication";
 import ApplicationDetails from "./ApplicationDetail";
+import AddInfoForm from "./DeveloperRegistration/AddInfoForm/addInfo";
+// import LicenseAddInfo from "../../pageComponents/LicenseAddInfo";
 // import OCBuildingPermit from "./OCBuildingPermit";
 // import BpaApplicationDetail from "./BpaApplicationDetail";
 // import BPASendToArchitect from "./BPASendToArchitect";
@@ -32,6 +42,7 @@ const App = ({ path }) => {
   const NewBuildingPermit = Digit?.ComponentRegistryService?.getComponent('ObpsNewBuildingPermit');
   const OCBuildingPermit = Digit?.ComponentRegistryService?.getComponent('ObpsOCBuildingPermit');
   const StakeholderRegistration = Digit?.ComponentRegistryService?.getComponent('ObpsStakeholderRegistration');
+  // const AddInfoForm = Digit?.ComponentRegistryService?.getComponent('ObpsAddInfoForm');
   const EdcrInbox = Digit?.ComponentRegistryService?.getComponent('ObpsEdcrInbox');
   const BpaApplicationDetail = Digit?.ComponentRegistryService?.getComponent('ObpsCitizenBpaApplicationDetail');
   const BPASendToArchitect = Digit?.ComponentRegistryService?.getComponent('ObpsBPASendToArchitect');
@@ -52,7 +63,17 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/ocbpa/:applicationType/:serviceType`} component={OCBuildingPermit}/>
         <PrivateRoute path={`${path}/stakeholder/apply`} component={StakeholderRegistration} />
         <Route path={`${path}/openlink/stakeholder/apply`} component={StakeholderRegistration} />
+        <PrivateRoute path={`${path}/add-info`} component={AddInfoForm} />
+        {/* <PrivateRoute path={`${path}/common`} component={Common} /> */}
+        <PrivateRoute path={`${path}/tab`} component={Formcontainer} />
+        <PrivateRoute path={`${path}/step-one`} component={Step1} />
+        <PrivateRoute path={`${path}/step-two`} component={Step2} />
+        <PrivateRoute path={`${path}/step-three`} component={Step3} />
+        <PrivateRoute path={`${path}/step-four`} component={Step4} />
+        <PrivateRoute path={`${path}/step-five`} component={Step5} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplication} />
+        <PrivateRoute path={`${path}/add-info`} component={AddInfoForm} />
+        {/* <PrivateRoute path={`${path}/license-add-info`} component={LicenseAddInfo} /> */}
         <PrivateRoute path={`${path}/bpa/inbox`} component={Inbox} />
         <PrivateRoute path={`${path}/edcr/inbox`} component={(props) => <EdcrInbox {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/stakeholder/:id`} component={ApplicationDetails} />

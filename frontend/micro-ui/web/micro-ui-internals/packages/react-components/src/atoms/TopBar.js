@@ -7,14 +7,14 @@ const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDeta
   return (
     <div className="navbar">
       <div className="center-container">
-        {isMobile && <Hamburger handleClick={toggleSidebar} />}
+      {/* <h3>{cityOfCitizenShownBesideLogo}</h3> */}
+      {isMobile && <Hamburger handleClick={toggleSidebar} />}
         <img
           className="city"
           id="topbar-logo" 
-          src={img || "https://cdn.jsdelivr.net/npm/@egovernments/digit-ui-css@1.0.7/img/m_seva_white_logo.png"}
-          alt="mSeva"
+          src={"http://10.1.1.10:7001/tcp/assets/img/logo-white.png"}
+          alt="TCP"
         />
-        <h3>{cityOfCitizenShownBesideLogo}</h3>
         <div className="RightMostTopBarOptions">
           {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? <div className="EventNotificationWrapper" onClick={onNotificationIconClick}>
             { notificationCountLoaded && notificationCount ? <span><p>{notificationCount}</p></span> : null }

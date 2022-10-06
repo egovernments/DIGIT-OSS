@@ -12,7 +12,6 @@
 @import "react-date-range/dist/theme/default.css";
 
 @import "./components/loader.scss";
-
 @import "./components/body.scss";
 @import "./components/navbar.scss";
 @import "./components/card.scss";
@@ -100,6 +99,8 @@
 @import "./pages/citizen/updatePropertyNumber.scss";
 @import "./pages/citizen/citizenDocument.scss";
 @import "./pages/employee/surveys.scss";
+@import "./pages/citizen/addInfo.css";
+@import "./index.css";
 
 .display-none{
   display: none;
@@ -542,3 +543,4 @@ input[type="number"] {
 .employee-app-wrapper{
 min-height: calc(100vh - 8em);
 }
+
