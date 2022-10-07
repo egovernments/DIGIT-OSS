@@ -74,9 +74,12 @@ public class UserController {
      * @return
      */
     @PostMapping("/citizen/_create")
-    public Object createCitizen(@RequestBody @Valid CreateUserRequest createUserRequest) {
+    public Object createCitizen(@RequestBody  CreateUserRequest createUserRequest) {
+    	
+    	 System.out.println("Received Citizen Registration Request  " + createUserRequest);
         log.info("Received Citizen Registration Request  " + createUserRequest);
         User user = createUserRequest.toDomain(true);
+        System.out.println("1");
         user.setOtpValidationMandatory(IsValidationMandatory);
         if (isRegWithLoginEnabled) {
             Object object = userService.registerWithLogin(user, createUserRequest.getRequestInfo());
@@ -94,12 +97,16 @@ public class UserController {
      * @return
      */
     @PostMapping("/users/_createnovalidate")
-    public UserDetailResponse createUserWithoutValidation(@RequestBody @Valid CreateUserRequest createUserRequest,
+    public UserDetailResponse createUserWithoutValidation(@RequestBody  CreateUserRequest createUserRequest,
                                                           @RequestHeader HttpHeaders headers) {
 
+    	//System.out.println("request info : " + createUserRequest.getUser().getAadhaarNumber());
+    	System.out.println("create user req : " + createUserRequest.getUser().getAadhaarNumber());
         User user = createUserRequest.toDomain(true);
         user.setMobileValidationMandatory(isMobileValidationRequired(headers));
+       
         user.setOtpValidationMandatory(false);
+        
         final User newUser = userService.createUser(user, createUserRequest.getRequestInfo());
         return createResponse(newUser);
     }

@@ -10,6 +10,7 @@ import org.egov.user.domain.model.User;
 import org.egov.user.domain.model.enums.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.SafeHtml;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -27,7 +28,8 @@ import javax.validation.constraints.Size;
 public class UserRequest {
 
     private Long id;
-
+    
+    private Long parentId;
     @SafeHtml
     @Size(max = 64)
     private String userName;
@@ -134,6 +136,7 @@ public class UserRequest {
     @Size(max = 50)
     private String tenantId;
 
+    @Value("roles")
     private Set<RoleRequest> roles;
 
     @SafeHtml
@@ -152,6 +155,7 @@ public class UserRequest {
 
     public UserRequest(User user) {
 
+    	System.out.println("==========================User Request Method");
         this.id = user.getId();
         this.userName = user.getUsername();
         this.salutation = user.getSalutation();
@@ -210,6 +214,7 @@ public class UserRequest {
 
     @JsonIgnore
     public User toDomain(Long loggedInUserId, boolean isCreate) {
+    	System.out.println("to Domain method");
         BloodGroup bloodGroup = null;
         try {
             if (this.bloodGroup != null)
@@ -219,7 +224,7 @@ public class UserRequest {
         }
         return User.builder()
                 .uuid(this.uuid)
-                .id(this.id)
+                .id(this.id).parentId(this.parentId)
                 .name(this.name)
                 .username(this.userName)
                 .salutation(this.salutation)
