@@ -114,6 +114,21 @@ definitions:
       userType:
         type: string
         description: User type of either citizen or employee 
+      gender:
+        type: string
+        description: Gender of the user
+      password:
+        type: string
+        description: Password of the user
+      salutation:
+        type: string
+        description: Salutation prefix for the user
+      pan:
+        type: string
+        description: User PAN number if available. 
+      aadhaarNumber:
+        type: string
+        description: Aadhar number of the user if available
       mobileNumber:
         type: string
         description: mobile number of the autheticated user
@@ -125,6 +140,48 @@ definitions:
         description: List of all the roles
         items:
           $ref: '#/definitions/Role'
+      permanentAddress:
+        type: string
+        description: Address of the user if available
+      permanentCity:
+        type: string
+        description: Permanent residence city of user
+      permanentPincode:
+        type: string
+        description: Permanent pincode of user
+      correspondencePincode:
+        type: string
+        description: Pincode for correspondence
+      active:
+        type: boolean
+        description: Denotes whether useri s active or not
+      locale:
+        type: string
+        description: Locale
+      signature:
+        type: string
+        description: Signature of the user
+      accountLocked:
+        type: boolean
+        description: Whether user account is locked or not
+      fatherOrSpouseName:
+        type: string
+        description: Father's name or spouse's name
+      bloodGroup:
+        type: string
+        description: Blood group if available
+      identificationMark:
+        type: string
+        description: Any identifying marks for the user
+      photo:
+        type: string
+        description: Path to the uploaded photo
+      createdBy:
+        type: long
+        description: ID of user who created this user
+      lastModifiedBy:
+        type: long
+        description: ID of user who last modified details
     required:
       - tenantId
       - userName
