@@ -10,6 +10,10 @@ const assetsProxy = createProxyMiddleware({
   target: process.env.REACT_APP_PROXY_ASSETS || "https://qa.digit.org",
   changeOrigin: true,
 });
+const apiSetuProxy = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_API_SETU || "https://qa.digit.org",
+  changeOrigin: true,
+});
 module.exports = function (app) {
   [
     "/egov-mdms-service",
@@ -54,4 +58,11 @@ module.exports = function (app) {
     "/sw-services",
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
+  [
+    "/mca/v1/companies",
+    "/mca-directors/v1/companies",
+    "/certificate/v3/pan",
+  ].forEach((location) => app.use(location,apiSetuProxy ));
+  // ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
+  
 };

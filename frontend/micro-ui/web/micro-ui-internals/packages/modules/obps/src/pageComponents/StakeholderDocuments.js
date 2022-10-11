@@ -30,7 +30,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
     const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
     
-
+    
     useEffect(() => {
         let filtredBpaDocs = [];
         if (data?.StakeholderRegistraition?.TradeTypetoRoleMapping) {
@@ -38,7 +38,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
         //    let  formData = {formdata:{LicenseType:{LicenseType:{tradeType : "ENGINEER.CLASSA",}}}}
             filtredBpaDocs = data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.filter(ob => (ob.tradeType === formData?.formData?.LicneseType?.LicenseType?.tradeType))
         }
-
+        console.log("BPADOClist",filtredBpaDocs);
         let documentsList = [];
         filtredBpaDocs?.[0]?.docTypes?.forEach(doc => {
             let code = doc.code; doc.dropdownData = [];
@@ -53,7 +53,6 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
             documentsList.push(doc);
         });
         setBpaTaxDocuments(documentsList);
-
     }, [!isLoading]);
 
     const handleSubmit = () => {
@@ -99,7 +98,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
             {/* {isopenlink &&<OpenLinkContainer />} */}
             {/* <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}> */}
             {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-            <Timeline currentStep={6} flow="STAKEHOLDER" />
+            <Timeline currentStep={5} flow="STAKEHOLDER" />
             {!isLoading ?
                 <FormStep
                     t={t}

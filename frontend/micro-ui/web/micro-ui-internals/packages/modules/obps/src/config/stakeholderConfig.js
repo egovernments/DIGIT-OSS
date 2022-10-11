@@ -95,8 +95,8 @@ export const newConfig = [
         component: "AddAuthorizedUser",
         texts: {
         headerCaption: "Add Authorized User",
-        header: "Add Authorized User",
-        cardText: "BPA_LICENSEE_CORRESPONDENCE_TEXT",
+        header: "",
+        cardText: "",
         submitBarLabel: "CS_COMMON_NEXT"
         },
         nextStep: "developer-capacity",
@@ -111,8 +111,8 @@ export const newConfig = [
         component: "DeveloperCapacity",
         texts: {
         headerCaption: "Developer Capacity",
-        header: "Developer Capacity",
-        cardText: "BPA_LICENSEE_CORRESPONDENCE_TEXT",
+        header: "",
+        cardText: "",
         submitBarLabel: "CS_COMMON_NEXT"
         },
         nextStep: "stakeholder-document-details",
