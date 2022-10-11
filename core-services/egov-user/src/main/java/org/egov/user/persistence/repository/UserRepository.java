@@ -475,6 +475,7 @@ public class UserRepository {
         userInputs.put("emailid", entityUser.getEmailId());
         userInputs.put("active", entityUser.getActive());
         userInputs.put("name", entityUser.getName());
+        userInputs.put("parentId", entityUser.getParentId());
 
         if (Gender.FEMALE.equals(entityUser.getGender())) {
             userInputs.put("gender", 1);

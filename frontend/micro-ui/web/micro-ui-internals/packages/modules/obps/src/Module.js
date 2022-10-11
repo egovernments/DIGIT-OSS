@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.css';
 import { Loader, CitizenHomeCard, OBPSIcon, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 import CitizenApp from "./pages/citizen";
 import Inbox from "./pages/employee/Inbox";
@@ -97,6 +98,14 @@ const OBPSLinks = ({ matchPath, userType }) => {
       link: `${matchPath}/home`,
       i18nKey: t("BPA_CITIZEN_HOME_ARCHITECT_LOGIN_LABEL"),
     },
+    {
+      link: `${matchPath}/step-two`,
+      i18nKey: "Developer Registration",
+    },
+    // {
+    //   link: `${matchPath}/step-two`,
+    //   i18nKey: "Developer Registration",
+    // },
   ];
 
   return (

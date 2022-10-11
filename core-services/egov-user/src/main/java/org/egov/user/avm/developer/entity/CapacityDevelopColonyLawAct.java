@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LicencesPermissionGrantedToDeveloper {
+public class CapacityDevelopColonyLawAct {
 	
 	private int serialNumber;
 	private String coloniesDeveloped;

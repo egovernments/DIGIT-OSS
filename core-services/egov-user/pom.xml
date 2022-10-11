@@ -44,7 +44,7 @@
             <version>0.12.1</version>
         </dependency>
 
-        <dependency>
+         <dependency>
             <groupId>org.egov</groupId>
             <artifactId>enc-client</artifactId>
             <version>1.0-SNAPSHOT</version>
@@ -121,6 +121,18 @@
             <artifactId>flyway-core</artifactId>
             <version>4.1.0</version>
         </dependency>
+        
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.vladmihalcea</groupId>
+			<artifactId>hibernate-types-52</artifactId>
+			<version>2.14.1</version>
+		</dependency>
+		
         <dependency>
             <groupId>org.egov</groupId>
             <artifactId>mdms-client</artifactId>
