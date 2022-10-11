@@ -232,7 +232,11 @@ const GroupBills = ({ tenantId, onSubmit, data, count, isLoading, resultOk,servi
                 <SearchFields {...{ register, control, reset, tenantId, t, formState }} />
             </SearchForm>
             {isLoading && <Loader />}
-            {isLoading===false && data  &&
+            {data && data?.length == 0 ?  (
+    <Card style={{ backgroundColor: "white", textAlign:"center" }}>
+    {t("ES_COMMON_NO_DATA")}
+  </Card>):(
+            isLoading===false && data  &&
                 <div style={{ backgroundColor: "white" }}>
                     <div className="sideContent" style={{ float: "left", padding:"20px 10px", fontSize:"24px", fontWeight:"700", fontFamily:"Roboto"}}>
                         {t("ABG_SEARCH_RESULTS_HEADER")}
@@ -258,7 +262,7 @@ const GroupBills = ({ tenantId, onSubmit, data, count, isLoading, resultOk,servi
                         }}
                         manualPagination={false}
                     />
-                </div>}
+                </div>)}
             {showToast && <Toast label={showToast?.label} onClose={() => setShowToast(null)} />}
         </>
     )

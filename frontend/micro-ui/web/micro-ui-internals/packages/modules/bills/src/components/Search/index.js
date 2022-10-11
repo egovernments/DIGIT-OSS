@@ -201,9 +201,9 @@ const SearchApplication = ({showTable,showLoader,isLoading, tenantId, t, onSubmi
       </SearchForm>
       {isLoading && <Loader/>}
       {data && data?.length == 0 ?  (
-    <div style={{ backgroundColor: "white", textAlign:"center" }}>
+    <Card style={{ backgroundColor: "white", textAlign:"center" }}>
     {t("ES_COMMON_NO_DATA")}
-        </div>
+        </Card>
       ) : (
    success && data && data.length>0 &&
    (
