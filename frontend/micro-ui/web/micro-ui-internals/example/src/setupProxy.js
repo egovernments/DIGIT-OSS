@@ -3,11 +3,19 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const createProxy = createProxyMiddleware({
   //target: process.env.REACT_APP_PROXY_API || "https://uat.digit.org",
   // target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
-  target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
+  target: process.env.REACT_APP_PROXY_API || "https://upyog.niua.org",
   changeOrigin: true,
 });
 const assetsProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_ASSETS || "https://qa.digit.org",
+  target: process.env.REACT_APP_PROXY_ASSETS || "https://upyog.niua.org",
+  changeOrigin: true,
+});
+const apiSetuProxy = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_SETU || "https://upyog.niua.org",
+  changeOrigin: true,
+});
+const LicProxy = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_MDMS || "https://upyog.niua.org",
   changeOrigin: true,
 });
 module.exports = function (app) {
@@ -54,4 +62,10 @@ module.exports = function (app) {
     "/sw-services",
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
+  [
+    "/mca/v1/companies",
+    "/mca-directors/v1/companies",
+    "/pancr"
+  ].forEach((location) => app.use(location, apiSetuProxy));
+  ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
 };

@@ -25,8 +25,11 @@ const style = {
 const FeesChargesForm=(props)=> {
     // const [show, setShow] = useState(false);
 
-   
-    // const handleShow = () => setShow(true);
+   const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+    const handleShow1 = () => setShow(true);
 
     const[form,setForm]=useState([]);
     const [feeDetail,setFeeDetail]=useState('');
@@ -37,11 +40,17 @@ const FeesChargesForm=(props)=> {
     const [aggregator,setAggregator]=useState('');
     const[previousLic,setPreviousLic]=useState('');
     const[amount,setAmount]=useState('');
-
+    let frmData = JSON.parse(localStorage.getItem('key') || "[]")
+    let step2 = JSON.parse(localStorage.getItem('step2') || "[]")
+    let step3 = JSON.parse(localStorage.getItem('step3') || "[]")
+    let step4 = JSON.parse(localStorage.getItem('step4') || "[]")
     const [FeesChargesFormSubmitted,SetFeesChargesFormSubmitted] = useState(false);
     const FeesChrgesFormSubmitHandler=(e)=>{
         e.preventDefault();
         SetFeesChargesFormSubmitted(true);
+       
+      
+        
        
         let forms={
             feeDetail:feeDetail,
@@ -55,8 +64,8 @@ const FeesChargesForm=(props)=> {
         }
         console.log("FRMDATA",forms);
         localStorage.setItem('step5',JSON.stringify(forms))
-        form.push(forms)
-        let frmData = JSON.parse(localStorage.getItem('step5') || "[]")
+      
+      
     };
     useEffect(()=>{
         if (FeesChargesFormSubmitted) {
@@ -73,7 +82,7 @@ const FeesChargesForm=(props)=> {
         setShowhide0(getshow);
     }
 //     const [open, setOpen] = React.useState(false);
-//   const handleOpen = () => setOpen(true);
+  const handleOpen = () => setOpen(true);
 //   const handleClose = () => setOpen(false);
  
     const [showhide,setShowhide]=useState("No");
@@ -122,15 +131,14 @@ const FeesChargesForm=(props)=> {
      const[noOfRows,setNoOfRows]=useState(1);
      const[noOfRow,setNoOfRow]=useState(1);
      const[noOfRow1,setNoOfRow1]=useState(1);
-     const [show, setShow] = useState(false);
+    
      const [payShow,setPayShow]=useState(false);
-     const handleClose = () => setShow(false);
-     const handleShow = () => setShow(true);
+     
      
      
      return (
         <Form onSubmit={FeesChrgesFormSubmitHandler}>
-  <Card style={{width:"126%",marginLeft:"-88px",paddingRight:"10px"}}>
+  <Card style={{width:"126%",marginLeft:"12px",paddingRight:"10px"}}>
 <Form.Group className="justify-content-center" controlId="formBasicEmail">
                 <Row className="ml-auto" style={{marginBottom:5}}>
                 <Col col-12>
@@ -138,28 +146,34 @@ const FeesChargesForm=(props)=> {
                                     <thead>
                                         <tr>
                                             <th><b>Total Area</b></th>
+                                            <td><input type="text" className="form-control"/></td>
                                             {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                         <th ><b>Purpose</b></th>
+                                        <td><input type="text" className="form-control"/></td>
                                             {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                         </tr>
                                         <tr>
                                         <th><b>Dev Plan</b></th>
+                                        <td><input type="text" className="form-control"/></td>
                                             {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                         </tr>
                                         <tr>
                                         <th><b>Scrutiny Fee</b></th>
+                                        <td><input type="text" className="form-control"/></td>
                                             {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                         </tr>
                                         <tr>
                                         <th><b>License Fee</b></th>
+                                        <td><input type="text" className="form-control"/></td>
                                             {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                         </tr>
                                         <tr>
                                         <th><b>Conversion Chrges</b></th>
+                                        <td><input type="text" className="form-control"/></td>
                                             {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                         </tr>
                                     </tbody>
@@ -255,8 +269,8 @@ const FeesChargesForm=(props)=> {
                                onChange1={handleAmountChange  } />
                                {errors.amount && <p></p>}
                    </div> */}
-                             </div>
-                             <hr/>
+                             </div><br></br>
+                             <hr/><br></br>
                              <h5 className="text-black"><b>1.Undertakings:-</b></h5>
                              <div className="px-2">
                                     <p className="text-black">The following is undertaken: </p>
@@ -272,61 +286,34 @@ const FeesChargesForm=(props)=> {
                                             for non completion of the external development works. </li>
                                         <li>I/We solemnly affirm and declare that the contents of the above application
                                             are correct to the best of my/ our knowledge and belief and no information
-                                            has been concealed therein.  <button  className="btn btn-primary"onClick={()=>setShow(true)}>Read More</button>
-                                            {/* <span class="readMoreLink" data-toggle="modal"
-                                                data-target="#licenceAgreement" >Read more</span> */}
+                                            has been concealed therein.  
+                                           
                                                 </li></ul>
-                                                </div>
-                                                    
-                            <Modal show={show} onHide={handleClose} size="lg">
-                            <Modal.Header closeButton>
-                                <Modal.Title id="example-modal-sizes-title-show"></Modal.Title>
-                            </Modal.Header>
-
-                            <Modal.Body>
-                            <ul>
-                                                                                <li>Morbi in sem quis dui placerat ornare. Pellentesque odio
-                                                                                    nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.
-                                                                                    Cras consequat.</li>
-                                                                                <li>Praesent dapibus, neque id cursus faucibus, tortor neque
-                                                                                    egestas augue, eu vulputate magna eros eu erat. Aliquam erat
-                                                                                    volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
-                                                                                    facilisis luctus, metus.</li>
-                                                                                <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                                                                                    consectetuer ligula vulputate sem tristique cursus. Nam
-                                                                                    nulla quam, gravida non, commodo a, sodales sit amet, nisi.
-                                                                                </li>
-                                                                                <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                                                                                    auctor, ultrices ut, elementum vulputate, nunc.</li>
-                                                                                <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                                                                                    consectetuer ligula vulputate sem tristique cursus. Nam
-                                                                                    nulla quam, gravida non, commodo a, sodales sit amet, nisi.
-                                                                                </li>
-                                                                                <li>Morbi in sem quis dui placerat ornare. Pellentesque odio
-                                                                                    nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.
-                                                                                    Cras consequat.</li>
-                                                                                <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                                                                                    auctor, ultrices ut, elementum vulputate, nunc.</li>
-                                                                                <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                                                                                    consectetuer ligula vulputate sem tristique cursus. Nam
-                                                                                    nulla quam, gravida non, commodo a, sodales sit amet, nisi.
-                                                                                </li>
-                                                                                <li>Praesent dapibus, neque id cursus faucibus, tortor neque
-                                                                                    egestas augue, eu vulputate magna eros eu erat. Aliquam erat
-                                                                                    volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
-                                                                                    facilisis luctus, metus.</li>
-                                                                                <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                                                                                    auctor, ultrices ut, elementum vulputate, nunc.</li>
-                                                                                <li>Morbi in sem quis dui placerat ornare. Pellentesque odio
-                                                                                    nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.
-                                                                                    Cras consequat.</li>
-                                                                                <li>Praesent dapibus, neque id cursus faucibus, tortor neque
-                                                                                    egestas augue, eu vulputate magna eros eu erat. Aliquam erat
-                                                                                    volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
-                                                                                    facilisis luctus, metus.</li>
-                            </ul>
-                            </Modal.Body> 
-                            </Modal>
+                                                </div> 
+                                                <button  className="btn btn-primary" onClick={handleShow}>Read More</button>
+                                                <Modal
+        show={show}
+        onHide={() => setShow(false)}
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-custom-modal-styling-title">
+            Custom Modal Styling
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
+            commodi aspernatur enim, consectetur. Cumque deleniti temporibus
+            ipsam atque a dolores quisquam quisquam adipisci possimus
+            laboriosam. Quibusdam facilis doloribus debitis! Sit quasi quod
+            accusamus eos quod. Ab quos consequuntur eaque quo rem! Mollitia
+            reiciendis porro quo magni incidunt dolore amet atque facilis ipsum
+            deleniti rem!
+          </p>
+        </Modal.Body>
+      </Modal>
                                          <div className="">
                                         
                                             <div className="form-group">
@@ -497,11 +484,13 @@ const FeesChargesForm=(props)=> {
                                   
                                    </div> */}
                              </div>
-                             <Button style={{alignSelf:"center", marginTop:20, marginright:867}} variant="primary" type="submit">
-                Save 
+                             <Button style={{ alignSelf: "center", marginTop: "25px",marginLeft:"-1198px" }} 
+                             variant="primary" type="submit"  onClick={()=>props.Step5Continue({"data":true})}>
+                Save as Draft
             </Button>
-            <Button style={{alignSelf:"center", marginTop:20,marginLeft:1115}} variant="primary" type="submit">
-               Submit
+            <Button style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "2279px" }}
+             variant="primary" type="submit" onClick={FeesChrgesFormSubmitHandler} >
+                Continue
             </Button>
              
         </Col>
