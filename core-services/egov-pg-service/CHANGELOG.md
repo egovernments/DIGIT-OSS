@@ -5,6 +5,7 @@ All notable changes to this module will be documented in this file.
 
 ## 1.2.4 - 2022-09-20
 - Upgraded spring-boot-starter-parent to 2.2.13 and spring beans to 5.2.20.RELEASE
+- Added internal microservice role to support plain access user search
 
 ## 1.2.3 - 2022-01-13
 - Updated to log4j2 version 2.17.1

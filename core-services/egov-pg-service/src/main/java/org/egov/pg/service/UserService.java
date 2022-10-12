@@ -2,8 +2,11 @@ package org.egov.pg.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
+import org.egov.common.utils.MultiStateInstanceUtil;
 import org.egov.pg.config.AppProperties;
 import org.egov.pg.models.Transaction;
+import org.egov.pg.repository.ServiceCallRepository;
 import org.egov.pg.web.models.TransactionRequest;
 import org.egov.pg.web.models.User;
 import org.egov.pg.web.models.UserResponse;
@@ -13,9 +16,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.util.*;
 
 import static java.util.Objects.isNull;
+import static org.egov.pg.constants.PgConstants.*;
 import static org.springframework.util.StringUtils.isEmpty;
 
 @Service
@@ -27,6 +32,74 @@ public class UserService {
 
     @Autowired
     private AppProperties appProperties;
+
+
+    @Autowired
+    private MultiStateInstanceUtil centralInstanceUtil;
+
+
+    private String internalMicroserviceRoleUuid = null;
+
+    private Long internalMicroserviceRoleUserid = null;
+
+
+    @PostConstruct
+    void initalizeSystemuser(){
+        RequestInfo requestInfo = new RequestInfo();
+        StringBuilder uri = new StringBuilder();
+        UserResponse userResponse = null;
+        uri.append(appProperties.getUserServiceHost()).append(appProperties.getUserServiceSearchPath()); // URL for user search call
+        Map<String, Object> userSearchRequest = new HashMap<>();
+        userSearchRequest.put("RequestInfo", requestInfo);
+        userSearchRequest.put("tenantId", appProperties.getStateLevelTenantId());
+        userSearchRequest.put("roleCodes", Collections.singletonList(appProperties.getInternalMicroserviceRoleCode()));
+        try {
+            userResponse = restTemplate.postForObject(uri.toString(), userSearchRequest, UserResponse.class);
+            if(userResponse != null && userResponse.getUser().size() == 0)
+                createInternalMicroserviceUser(requestInfo);
+            else{
+                internalMicroserviceRoleUuid = userResponse.getUser().get(0).getUuid();
+                internalMicroserviceRoleUserid = userResponse.getUser().get(0).getId();
+            }
+
+        }catch (Exception e) {
+            throw new CustomException("EG_USER_SEARCH_ERROR", "Service returned null while fetching user");
+        }
+
+    }
+
+    private void createInternalMicroserviceUser(RequestInfo requestInfo){
+        Map<String, Object> userCreateRequest = new HashMap<>();
+        UserResponse userResponse = null;
+        //Creating role with INTERNAL_MICROSERVICE_ROLE
+        Role role = Role.builder()
+                .name(appProperties.getInternalMicroserviceRoleName()).code(appProperties.getInternalMicroserviceRoleCode())
+                .tenantId(appProperties.getStateLevelTenantId()).build();
+        org.egov.common.contract.request.User user = org.egov.common.contract.request.User.builder().userName(appProperties.getInternalMicroserviceUserUsername())
+                .name(appProperties.getInternalMicroserviceUserName()).mobileNumber(appProperties.getInternalMicroserviceUserMobilenumber())
+                .type(appProperties.getInternalMicroserviceUserType()).tenantId(appProperties.getStateLevelTenantId())
+                .roles(Collections.singletonList(role)).build();
+
+        userCreateRequest.put("RequestInfo", requestInfo);
+        userCreateRequest.put("user", user);
+
+        StringBuilder uri = new StringBuilder();
+        uri.append(appProperties.getUserServiceHost()).append(appProperties.getUserServiceCreatePath()); // URL for user create call
+
+        try {
+            userResponse = restTemplate.postForObject(uri.toString(), userCreateRequest, UserResponse.class);
+        }catch (Exception e) {
+            throw new CustomException("EG_USER_CREATE_ERROR", "Service throws error while creating user");
+        }
+
+        if(userResponse != null && userResponse.getUser().size() > 0){
+            internalMicroserviceRoleUuid = userResponse.getUser().get(0).getUuid();
+            internalMicroserviceRoleUserid = userResponse.getUser().get(0).getId();
+        }
+        else
+            throw new CustomException("EG_USER_CREATE_ERROR", "Service throws error while creating user");
+
+    }
 
 
     public User createOrSearchUser(TransactionRequest transactionRequest) {
@@ -59,6 +132,21 @@ public class UserService {
      */
     public List<User> getUser(RequestInfo requestInfo, String phoneNo, String tenantId, String name){
         Map<String, Object> request = new HashMap<>();
+        org.egov.common.contract.request.User userInfoCopy = requestInfo.getUserInfo();
+
+        //Creating role with INTERNAL_MICROSERVICE_ROLE
+        Role role = Role.builder()
+                .name(appProperties.getInternalMicroserviceRoleName()).code(appProperties.getInternalMicroserviceRoleCode())
+                .tenantId(centralInstanceUtil.getStateLevelTenant(tenantId)).build();
+
+        //Creating userinfo with uuid and role of internal micro service role
+        org.egov.common.contract.request.User userInfo = org.egov.common.contract.request.User.builder()
+                .uuid(internalMicroserviceRoleUuid)
+                .type(appProperties.getInternalMicroserviceUserType())
+                .roles(Collections.singletonList(role)).id(internalMicroserviceRoleUserid).build();
+
+        requestInfo.setUserInfo(userInfo);
+
         UserResponse userResponse = null;
         request.put("RequestInfo", requestInfo);
         request.put("name", name);
@@ -73,6 +161,7 @@ public class UserService {
             log.error("Exception while fetching user: ", e);
         }
 
+        requestInfo.setUserInfo(userInfoCopy);
         return userResponse.getUser();
 
     }
