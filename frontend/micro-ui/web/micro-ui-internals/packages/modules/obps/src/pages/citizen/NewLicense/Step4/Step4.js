@@ -9,6 +9,9 @@ import IndustrialPlottedForm from "./IndustrialPlotted";
 // import DeleteIcon from "@material-ui/icons/Delete";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col} from "react-bootstrap";
+import CalculateIcon from '@mui/icons-material/Calculate';
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import InfoIcon from '@mui/icons-material/Info';
 // import CalculateIcon from '@mui/icons-material/Calculate';
 // import DDJAYForm from "./DDJAY";
 // import NilpForm from "./Nilp";
@@ -671,9 +674,9 @@ onchange = e => {
           <tr>
             <td><b>Type of plots</b></td>
             <td ><b>Plot No.</b></td>
-            <td ><b>Length in mtr</b></td>
-            <td ><b>Width in mtr</b></td>
-            <td ><b>Area in sqmtr</b></td>
+            <td ><b>Length in mtr <CalculateIcon color="primary"/></b></td>
+            <td ><b>Width in mtr <CalculateIcon color="primary"/></b></td>
+            <td ><b>Area in sqmtr <CalculateIcon color="primary"/></b></td>
           </tr>
         </thead>
         <tbody>
@@ -939,7 +942,7 @@ onchange = e => {
         <thead>
           <tr>
           <td><b>Details of Plot</b></td>
-            <td><b>Dimensions (in mtr)</b></td>
+            <td><b>Dimensions (in mtr) <CalculateIcon color="primary"/></b></td>
             <td ><b>Entered Area</b></td>
           </tr>
         </thead>
@@ -973,8 +976,8 @@ onchange = e => {
           <tr>
             <td><b>Detail of plots</b></td>
             <td ><b> Plot No.</b></td>
-            <td ><b>Length (in mtr)</b></td>
-            <td ><b>Dimension (in mtr)</b></td>
+            <td ><b>Length (in mtr) <CalculateIcon color="primary"/></b></td>
+            <td ><b>Dimension (in mtr) <CalculateIcon color="primary"/></b></td>
             <td ><b>Entered Area</b></td>
           </tr>
         </thead>
@@ -1128,7 +1131,7 @@ onchange = e => {
                                               showhide13==="Yes" && (
                                                   <div className="row " >
                                                           <div className="col col-6">
-                                                              <label for="areaAcre" className="font-weight-bold"> Dimension (in mtr) </label>
+                                                              <label for="areaAcre" className="font-weight-bold"> Dimension (in mtr)&nbsp;&nbsp;<CalculateIcon color="primary"/></label>
                                                               
                                                               <input type="text" className="form-control" />
                                                           </div>
@@ -1158,7 +1161,7 @@ onchange = e => {
                                               showhide1==="Yes" && (
                                                   <div className="row " >
                                                           <div className="col col-12">
-                                                              <label for="areaAcre" className="font-weight-bold">Area in Acres </label>
+                                                              <label for="areaAcre" className="font-weight-bold">Area in Acres &nbsp;&nbsp;<CalculateIcon color="primary"/></label>
                                                               
                                                               <input type="text" className="form-control" />
                                                           </div>
@@ -1183,7 +1186,7 @@ onchange = e => {
                                               showhide14==="Yes" && (
                                                   <div className="row " >
                                                           <div className="col col-12">
-                                                              <label for="areaAcre" className="font-weight-bold">Dimension(in mtr)</label>
+                                                              <label for="areaAcre" className="font-weight-bold">Dimension(in mtr) &nbsp;&nbsp;<CalculateIcon color="primary"/></label>
                                                               
                                                               <input type="text" className="form-control" />
                                                           </div>
@@ -1206,20 +1209,24 @@ onchange = e => {
                                        <h5 className="text-black"><b>Mandatory Documents</b></h5><br></br>
                       <div className="row">
                           <div className="col col-3">
-                                      <h6 ><b>Site plan.</b></h6>
+                          <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Site plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                     
                                     <input type="file" className="form-control">
                                       </input>
                           </div>
                           <div className="col col-3">
-                                      <h6 ><b>Democratic Plan.</b></h6>
+                          <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Democratic Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                  
                                     <input type="file" className="form-control"></input>
                           </div>
                           <div className="col col-3">
-                                      <h6 ><b>Sectoral Plan/Layout Plan.</b></h6>
+                          <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Sectoral Plan/Layout Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                   
                                     <input type="file" className="form-control"></input>
                           </div>
                           <div className="col col-3">
-                                      <h6 ><b>Development Plan. </b></h6>
+                          <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Development Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                   
                                     <input type="file" className="form-control"></input>
                           </div>
                         
@@ -1227,18 +1234,14 @@ onchange = e => {
                        <div className="row">
                                           <div className="col col-4">
                                               <div className="form-group" >
-                                                  <h6 ><b>Upload Layout Plan <span className="text-primary"> (Click here for instructions to capture DGPS points)</span></b>&nbsp;&nbsp;
+                                                  <h6 data-toggle="tooltip" data-placement="top" title="Upload Document" ><b>Upload Layout Plan  &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> <span className="text-primary"> (Click here for instructions to capture DGPS points)</span></b>&nbsp;&nbsp;
                                                      <input type="file" className="form-control"/><b/></h6>
                                               </div>
                                           </div>
                                        </div>
-
-                                           
-                                  
                                  
-                                     
-                                 
-                                                                <Button style={{ alignSelf: "center", marginTop: "43px",marginLeft:"5px" }} variant="primary" type="submit"  > Save as Draft </Button>
+                                                                <Button style={{ alignSelf: "center", marginTop: "43px",marginLeft:"5px" }} 
+                                                                variant="primary" type="submit"  > Back </Button>
            
                                                              <Button 
                                                              style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "1194px" }} 

@@ -213,8 +213,9 @@ const ApllicantFormStep1 = (props) => {
                             </div>
                             <ReactMultiSelect 
                         listOfData={optionsArrList}
-                        labels="text" />
-
+                        labels="Developer"
+                        getSelectedValue={setDeveloper} />
+                       
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
@@ -312,7 +313,8 @@ const ApllicantFormStep1 = (props) => {
                             </div>
                             <ReactMultiSelect 
                         listOfData={optionsVillageList}
-                        labels="text" />
+                        labels="text"
+                        getSelectedValue={setvillage1} />
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
@@ -331,7 +333,8 @@ const ApllicantFormStep1 = (props) => {
                             </div>
                             <ReactMultiSelect 
                         listOfData={optionsTehsilList}
-                        labels="text" />
+                        labels="text" 
+                        getSelectedValue={setTehsil}/>
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
@@ -339,7 +342,8 @@ const ApllicantFormStep1 = (props) => {
                             </div>
                             <ReactMultiSelect 
                         listOfData={optionsDistrictList}
-                        labels="text" />
+                        labels="text"
+                        getSelectedValue={setDistrict} />
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
@@ -347,7 +351,8 @@ const ApllicantFormStep1 = (props) => {
                             </div>
                             <ReactMultiSelect 
                         listOfData={optionsStateList}
-                        labels="text" />
+                        labels="text" 
+                        getSelectedValue={setState}/>
                         </Col>
                     </Row><br></br>
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -415,13 +420,13 @@ const ApllicantFormStep1 = (props) => {
 
                 </Form.Group>
                 <Button 
-                    style={{ alignSelf: "center", marginTop: "25px",marginLeft:"-1053px" }} 
+                    style={{ alignSelf: "center", marginTop: "25px",marginLeft:"-1249px" }} 
                     variant="primary" type="submit" 
                     >
               Back
             </Button>
             <Button 
-            style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "1028px" }} 
+            style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "1163px" }} 
             variant="primary"  
             onClick={ApplicantFormSubmitHandlerForm}>
                 Continue

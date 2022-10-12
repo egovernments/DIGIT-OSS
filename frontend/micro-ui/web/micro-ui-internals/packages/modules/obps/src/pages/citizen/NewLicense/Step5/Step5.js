@@ -490,7 +490,7 @@ const FeesChargesForm=(props)=> {
             </Button>
             <Button style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "2279px" }}
              variant="primary" type="submit" onClick={FeesChrgesFormSubmitHandler} >
-                Continue
+              Submit
             </Button>
              
         </Col>

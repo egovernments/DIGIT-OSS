@@ -3,19 +3,19 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const createProxy = createProxyMiddleware({
   //target: process.env.REACT_APP_PROXY_API || "https://uat.digit.org",
   // target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
-  target: process.env.REACT_APP_PROXY_API || "https://upyog.niua.org",
+  target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
   changeOrigin: true,
 });
 const assetsProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_ASSETS || "https://upyog.niua.org",
+  target: process.env.REACT_APP_PROXY_ASSETS || "https://qa.digit.org",
   changeOrigin: true,
 });
 const apiSetuProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_SETU || "https://upyog.niua.org",
+  target: process.env.REACT_APP_PROXY_SETU || "https://qa.digit.org",
   changeOrigin: true,
 });
 const LicProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_MDMS || "https://upyog.niua.org",
+  target: process.env.REACT_APP_PROXY_MDMS || "https://qa.digit.org",
   changeOrigin: true,
 });
 module.exports = function (app) {
