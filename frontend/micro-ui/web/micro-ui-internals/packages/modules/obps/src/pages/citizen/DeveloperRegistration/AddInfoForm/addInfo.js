@@ -49,7 +49,7 @@ function AddInfo() {
     const [modalNAme,setModalNAme]=useState("");
     const [modaldesignition,setModaldesignition]=useState("");
     const [modalPercentage,setModalPercentage]=useState("");
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     
     const [modalValuesArray,setModalValuesArray]= useState([]);
     const [financialCapacity,setFinancialCapacity]= useState([]);

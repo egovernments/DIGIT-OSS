@@ -47,14 +47,14 @@ const Home = () => {
         onClick: () => history.push("/digit-ui/citizen/pt-home"),
       },
       {
-        name:"Department",
+        name: t("MODULE_TL"),
         Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/scrutiny"),
+        onClick: () => history.push("/digit-ui/citizen/tl-home"),
       },
       {
           name: "New License Services",
           Icon: <CaseIcon className="fill-path-primary-main" />,
-          onClick: () => history.push("/digit-ui/citizen/obps/tab")
+          onClick: () => history.push("/digit-ui/citizen/obps/step-one")
       },
       {
         name: t("CS_COMMON_INBOX_BPA"),

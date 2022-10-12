@@ -3,9 +3,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { useForm } from "react-hook-form";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col} from "react-bootstrap";
-import CalculateIcon from '@mui/icons-material/Calculate';
-import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
-import InfoIcon from '@mui/icons-material/Info';
 // import CalculateIcon from '@mui/icons-material/Calculate';
 // import InfoIcon from '@mui/icons-material/Info';
 // import { selectDeveloper } from "../../Redux/Slicer/Slicer";
@@ -121,7 +118,6 @@ const LandScheduleForm=(props)=>{
 
     const[form,setForm]=useState([]);
     const [licenseApplied1,setLicenseApplied1]=useState('');
-    const [licenseApplied,setLicenseApplied]=useState('');
     const[migrationLic,setMigrationLic]=useState('');
     const[potential,setPotential]=useState('');
     const[siteLoc,setSiteLoc]=useState('');
@@ -184,55 +180,66 @@ const LandScheduleForm=(props)=>{
      const landScheduleFormSubmitHandler=(e)=>{
         e.preventDefault();
         SetLandFormSubmitted(true);
-        props.Step3Continue({"data":true})
-        let Landforms={
-            licenseApplied:licenseApplied,
-            migrationLic:migrationLic,
-            "step3Data1" :
-                    {"potential":"",
-                    "siteLoc":"",
-                    "approach":"",
-                    "specify":"",
-                    "existingCase":"",
-                    "typeLand":"",
-                    "thirdParty":""},
-            "step3Data2":{
-                    "rehan":"",
-                    "patta":"",
-                    "gair":"",
-                    "any":"",
-                    "litigation":"",
-                    "court":"",
-                    "appliedLand":"",
-                    "revenuerasta":"",
+        // let Landforms={
+        //     licenseApplied:licenseApplied,
+        //     migrationLic:migrationLic,
+        //     "step3Data1" :
+        //             {"potential":"",
+        //             "siteLoc":"",
+        //             "approach":"",
+        //             "specify":"",
+        //             "existingCase":"",
+        //             "typeLand":"",
+        //             "thirdParty":""},
+        //     "step3Data2":{
+        //             "rehan":"",
+        //             "patta":"",
+        //             "gair":"",
+        //             "any":"",
+        //             "litigation":"",
+        //             "court":"",
+        //             "appliedLand":"",
+        //             "revenuerasta":"",
                   
-                    "watercourse":"",
+        //             "watercourse":"",
                    
-                    "compactBlock":"",
-                    "sandwiched":"",
-                    "acquistion":"",
-                    "exclusion":"",
-                    "compensation":"",
-                    "section4":"",
-                    "section6":"",
-                    "statusRelease":"",
-                    "award":"",
-                    "dateRelease":"",
-                    "site":"",
-                    "approachable":"",
-                    "vacant":"",
-                    "construction":"",
-                    "ht":"",
-                    "gas":"",
-                    "nallah":"",
-                    "road":"",
-                    "land":"",
+        //             "compactBlock":"",
+        //             "sandwiched":"",
+        //             "acquistion":"",
+        //             "exclusion":"",
+        //             "compensation":"",
+        //             "section4":"",
+        //             "section6":"",
+        //             "statusRelease":"",
+        //             "award":"",
+        //             "dateRelease":"",
+        //             "site":"",
+        //             "approachable":"",
+        //             "vacant":"",
+        //             "construction":"",
+                   
+        //             "ht":"",
                     
-                    "layoutPlan":"",
-                    }
-        }
-        localStorage.setItem('step3',JSON.stringify(Landforms))
-       
+        //             "gas":"",
+                    
+        //             "nallah":"",
+                   
+        //             "road":"",
+                    
+        //             "land":"",
+                    
+        //             "layoutPlan":"",
+        //             }
+        // }
+        // dispatch(setLandScheduleFormData(
+          
+        //     Landforms
+        //   ))
+        // console.log("FRMDATA",forms);
+        // localStorage.setItem('step3',JSON.stringify(forms))
+        // form.push(forms)
+        // let frmData = JSON.parse(localStorage.getItem('step3') || "[]")
+    
     };
     useEffect(()=>{
         if (LandFormSubmitted) {
@@ -360,9 +367,9 @@ const LandScheduleForm=(props)=>{
         setShowhide23(getshow);
     }
     return (
-        <Form >
+        <Form onSubmit={landScheduleFormSubmitHandler}>
        
-       <Card style={{width:"126%",marginLeft:"11px",paddingRight:"10px"}}>
+       <Card style={{width:"126%",marginLeft:"-88px",paddingRight:"10px"}}>
 
        <Form.Group className="justify-content-center" controlId="formBasicEmail">
                 <Row className="ml-auto" style={{marginBottom:5}}>
@@ -423,7 +430,7 @@ const LandScheduleForm=(props)=>{
                                     </div>
                                     <div className="col col-3">
                                         <div className="form-group ">
-                                            <label htmlFor="roadwidth"><h6><b>Approach Road Width</b><CalculateIcon color="primary"/>&nbsp;&nbsp;</h6> </label>
+                                            <label htmlFor="roadwidth"><h6><b>Approach Road Width</b>&nbsp;&nbsp;</h6> </label>
                                             <input
                                                 type="number"
                                                 name="roadwidth"
@@ -496,7 +503,7 @@ const LandScheduleForm=(props)=>{
 
                                             )
                                                 }
-                                                </div><br></br><br></br>
+                                                </div>
                                             {
                                                 showhide==="No" && (
                                                 <div className="row" >
@@ -515,13 +522,13 @@ const LandScheduleForm=(props)=>{
                                             showhide23==="Yes" && (
                                       <div className="col col=12 ">
                                     
-                                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Another Copy of Shahjra Plan&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b> </h6>
+                                    <h6 ><b>Another Copy of Shahjra Plan</b> </h6>
                                   <input type="file" className="form-control"/>
                         </div>)}
                    </div>
                    </div>)}
-                           </div><br></br>
-                           <hr></hr><br></br>
+                           </div>
+                           <hr></hr>
                   <h5 className="text-black"><b>2. Any encumbrance with respect to following :</b><br></br><br></br>
                   <label htmlFor="gen">Rehan / Mortgage</label>&nbsp;&nbsp;
                   <input type="radio"  id="Yes" value="1"
@@ -542,18 +549,20 @@ const LandScheduleForm=(props)=>{
                         <div className="col col-4">
                     <label htmlFor="npnl"><h6><b>Any other, please specify</b></h6></label>
                     <input type="text" className="form-control"/></div>
-                    </div><br></br>
-                    <hr/><br></br>
-                    <h6 ><b>(ii) Existing litigation, if any, concerning applied land including co-sharers  and collaborator :</b>&nbsp;&nbsp;
+                    </div>
+                    <hr/>
+                    <h6 ><b>(ii) Existing litigation, if any, concerning applied land including co-sharers   and collaborator :</b></h6>
+                  <div className="row">
+                  <div className="col col-12 ">
+                              
+                           
                               <input type="radio" value="Yes" id="Yes"
                                       onChange1={handleChange} name="Yes" onClick={handleshow10}   />&nbsp;&nbsp;
                                       <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
 
                                       <input type="radio" value="No" id="No"
                                       onChange1={handleChange} name="Yes"onClick={handleshow10}  />&nbsp;&nbsp;
-                                      <label for="No"><h6>No</h6></label></h6>
-                                      <div className="row">
-                  <div className="col col-12 ">
+                                      <label for="No"><h6>No</h6></label>
                                       {
                                             showhide10==="Yes" && (
                                                 <div className="row " >
@@ -562,7 +571,7 @@ const LandScheduleForm=(props)=>{
                                                             <input type="text" className="form-control"/>
                                                         </div>
                                                         <div className="col col-6">
-                                                           <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                                            <label for="parentLicense" className="font-weight-bold"> Document Upload </label>
                                                             <input type="file" className="form-control"/>
                                                         </div>
                                                        
@@ -570,18 +579,20 @@ const LandScheduleForm=(props)=>{
                                             )
                                         }
                    </div>
-                   </div><br></br>
-                   <hr/><br></br>
-                    <h6 ><b>(iii) Court orders, if any, affecting applied land :</b>&nbsp;&nbsp;
+                   </div>
+                   <hr/>
+                    <h6 ><b>(iii) Court orders, if any, affecting applied land :</b></h6>
+                  <div className="row">
+                  <div className="col col-12 ">
+                              
+                           
                               <input type="radio" value="Yes" id="Yes"
                                       onChange1={handleChange} name="Yes" onClick={handleshow11}  />&nbsp;&nbsp;
                                       <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
 
                                       <input type="radio" value="No" id="No"
                                       onChange1={handleChange} name="Yes"onClick={handleshow11 }/>&nbsp;&nbsp;
-                                      <label for="No"><h6>No</h6></label></h6>
-                                      <div className="row">
-                                        <div className="col col-12 ">
+                                      <label for="No"><h6>No</h6></label>
                                       {
                                             showhide11==="Yes" && (
                                                 <div className="row " >
@@ -590,7 +601,7 @@ const LandScheduleForm=(props)=>{
                                                             <input type="text" className="form-control"/>
                                                         </div>
                                                         <div className="col col-6">
-                                                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                                            <label for="parentLicense" className="font-weight-bold"> Document Upload </label>
                                                             <input type="file" className="form-control"/>
                                                         </div>
                                                        
@@ -599,18 +610,20 @@ const LandScheduleForm=(props)=>{
                                             )
                                         }
                    </div>
-                   </div><br></br>
-                   <hr/><br></br>
-                    <h6 ><b>(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed :</b>&nbsp;&nbsp;
+                   </div>
+                   <hr/>
+                    <h6 ><b>(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed :</b></h6>
+                  <div className="row">
+                  <div className="col col-12 ">
+                              
+                           
                               <input type="radio" value="Yes" id="Yes"
                                       onChange1={handleChange} name="Yes" onClick={handleshow12} />&nbsp;&nbsp;
                                       <label for="Yes">Yes</label>&nbsp;&nbsp;
 
                                       <input type="radio" value="No" id="No"
                                       onChange1={handleChange} name="Yes"onClick={handleshow12}/>&nbsp;&nbsp;
-                                      <label for="No">No</label></h6>
-                                      <div className="row">
-                                     <div className="col col-12 ">
+                                      <label for="No">No</label>
                                       {
                                             showhide12==="Yes" && (
                                                 <div className="row " >
@@ -619,7 +632,7 @@ const LandScheduleForm=(props)=>{
                                                             <input type="text" className="form-control"/>
                                                         </div>
                                                         <div className="col col-6">
-                                                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                                            <label for="parentLicense" className="font-weight-bold"> Document Upload </label>
                                                             <input type="file" className="form-control"/>
                                                         </div>
                                                        
@@ -629,8 +642,8 @@ const LandScheduleForm=(props)=>{
                                         }
                    </div>
                    </div>
-                   <hr/><br></br>
-                   <h5 className="text-black"><b>3.Shajra Plan</b></h5><br></br>
+                   <hr/>
+                   <h5 className="text-black"><b>3.Shajra Plan</b></h5>
                    <div className="row">
                         <div className="col col-3 ">
                                     
@@ -649,7 +662,7 @@ const LandScheduleForm=(props)=>{
                                                 <div className="row " >
                                                         
                                                         <div className="col col-12">
-                                                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                                            <label for="parentLicense" className="font-weight-bold"> Document Upload </label>
                                                             <input type="file" className="form-control"/>
                                                         </div>
                                                        
@@ -660,7 +673,7 @@ const LandScheduleForm=(props)=>{
                         </div>
                      
                         <div className="col col-3 ">
-                        <h6  data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?"><b>(b)&nbsp;Revenue rasta&nbsp;&nbsp;<InfoIcon/> </b>&nbsp;&nbsp;</h6>
+                        <h6  data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?"><b>(b)&nbsp;Revenue rasta&nbsp; </b>&nbsp;&nbsp;</h6>
                         <input type="radio" value="Yes" id="Yes"
                                             onChange1={handleChange} name="Yes"onClick={handleshow1}  />&nbsp;&nbsp;
                                             <label for="Yes">Yes</label>&nbsp;&nbsp;
@@ -671,7 +684,7 @@ const LandScheduleForm=(props)=>{
                                             showhide1==="Yes" && (
                                                 <div className="row " >
                                                         <div className="col col">
-                                                            <label for="parentLicense" className="font-weight-bold"> Width of revenue rasta &nbsp;<CalculateIcon/></label>
+                                                            <label for="parentLicense" className="font-weight-bold"> Width of revenue rasta </label>
                                                             <input type="number" className="form-control"/>
                                                         </div>
                                                     </div> 
@@ -680,7 +693,7 @@ const LandScheduleForm=(props)=>{
                         </div>
                         <div className="col col-3 ">
                         <h6 
-                         data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?"><b>(c)&nbsp;Watercourse running&nbsp;&nbsp;<InfoIcon/>
+                         data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?"><b>(c)&nbsp;Watercourse running&nbsp;
                             </b></h6>
                         <input type="radio" value="Yes" id="Yes"
                                             onChange1={handleChange} name="Yes" onClick={handleshow2} />&nbsp;&nbsp;
@@ -728,7 +741,7 @@ const LandScheduleForm=(props)=>{
                         </div>  <br></br>
                         <div className="row">
                         <div className="col col-3 ">
-                        <h6 onChange={(e)=>setsandwiched1(e.target.value)} value={sandwiched} data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land."><b>(e)&nbsp;Land Sandwiched&nbsp;&nbsp;<InfoIcon/>
+                        <h6 onChange={(e)=>setsandwiched1(e.target.value)} value={sandwiched} data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land."><b>(e)&nbsp;Land Sandwiched&nbsp;
                           </b>  </h6>
                         <input type="radio" value="Yes" id="Yes"
                                             onChange1={handleChange} name="Yes" onClick={handleshow20}  />&nbsp;&nbsp;
@@ -923,7 +936,7 @@ const LandScheduleForm=(props)=>{
                                             )
                                         }
                         </div>
-                        </div><br></br>
+                        </div>
                         <div className="row">
                         <div className="col col-3">
                         <h6 
@@ -937,9 +950,9 @@ const LandScheduleForm=(props)=>{
                                             onChange1={handleChange} name="Yes"/>
                                             <label for="No">No</label> 
                         </div>
-                     </div><br></br>
-                    <hr/><br></br>
-                    <h5 className="text-black"><b>4.Site condition</b></h5><br></br>
+                     </div>
+                    <hr/>
+                    <h5 className="text-black"><b>4.Site condition</b></h5>
                     <div className="row">
                         <div className="col col-3">
                                     
@@ -1134,9 +1147,9 @@ const LandScheduleForm=(props)=>{
                                             )
                                         }
                         </div>
-                     </div><br></br>
-                     <hr></hr><br></br>
-                     <h5 className="text-black"><b>5. Enclose the following documents as Annexures</b></h5><br></br>
+                     </div>
+                     <hr></hr>
+                     <h5 className="text-black"><b>5. Enclose the following documents as Annexures</b></h5>
                     <div className="row">
                         <div className="col col-3">
                                     <h6 ><b>Land schedule</b></h6>
@@ -1172,11 +1185,10 @@ const LandScheduleForm=(props)=>{
                                   <input type="file" className="form-control"></input>
                         </div>
                      </div>
-                     <Button style={{ alignSelf: "center", marginTop: "43px",marginLeft:"-992px" }} variant="primary" type="submit">
-                Back
+                     <Button style={{ alignSelf: "center",marginTop:"20px" }} variant="primary" type="submit">
+                Save as Draft
             </Button>
-            <Button style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "1028px" }}
-             variant="primary" type="submit" onClick={landScheduleFormSubmitHandler} >
+            <Button style={{ alignSelf: "center" ,marginTop:"20px", marginLeft:"593px"}} variant="primary" type="submit">
                 Continue
             </Button>
                         </Col>

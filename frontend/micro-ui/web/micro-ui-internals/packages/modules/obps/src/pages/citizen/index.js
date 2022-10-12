@@ -11,7 +11,7 @@ import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-component
 // import CreateOCEDCR from "./OCEDCR";
 // import BPACitizenHomeScreen from "./home";
 // import StakeholderRegistration from "./StakeholderRegistration";
-import common from "../citizen/NewLicense/common/index";
+import Formcontainer from "../citizen/NewLicense/FormContainer/FormContainer";
 import Step1 from"../citizen/NewLicense/Step1/Step1";
 import Step2 from"../citizen/NewLicense/Step2/Step2";
 import Step3 from "../citizen/NewLicense/Step3/Step3";
@@ -20,9 +20,7 @@ import Step5 from "../citizen/NewLicense/Step5/Step5";
 import AddInfoForm from "../citizen/DeveloperRegistration/AddInfoForm/addInfo";
 import MyApplication from "./MyApplication";
 import ApplicationDetails from "./ApplicationDetail";
-import CommonForm from "../citizen/NewLicense/common/index";
-import ScrutinyFormcontainer from "./Scrutiny/ScrutinyFormContainer";
-// import AddInfoForm from "./DeveloperRegistration/AddInfoForm/addInfo";
+import AddInfoForm from "./DeveloperRegistration/AddInfoForm/addInfo";
 // import LicenseAddInfo from "../../pageComponents/LicenseAddInfo";
 // import OCBuildingPermit from "./OCBuildingPermit";
 // import BpaApplicationDetail from "./BpaApplicationDetail";
@@ -66,8 +64,8 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/stakeholder/apply`} component={StakeholderRegistration} />
         <Route path={`${path}/openlink/stakeholder/apply`} component={StakeholderRegistration} />
         <PrivateRoute path={`${path}/add-info`} component={AddInfoForm} />
-        <PrivateRoute path={`${path}/Scrutiny`} component={ScrutinyFormcontainer} />
-        <PrivateRoute path={`${path}/tab`} component={CommonForm} />
+        {/* <PrivateRoute path={`${path}/common`} component={Common} /> */}
+        <PrivateRoute path={`${path}/tab`} component={Formcontainer} />
         <PrivateRoute path={`${path}/step-one`} component={Step1} />
         <PrivateRoute path={`${path}/step-two`} component={Step2} />
         <PrivateRoute path={`${path}/step-three`} component={Step3} />

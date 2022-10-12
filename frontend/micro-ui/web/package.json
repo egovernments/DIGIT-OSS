@@ -37,7 +37,11 @@
     "build:prepare": "./build.sh",
     "test": "jest"
   },
-
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
   "browserslist": {
     "production": [
       ">0.2%",

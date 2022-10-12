@@ -598,7 +598,6 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="pincodeCorrespondence"
                   value={pincodeCorrespondence}
-                  placeholder={pincodeCorrespondence}
                   onChange={selectPincodeCorrespondence}
                   disable={isAddressSame}
                   />
