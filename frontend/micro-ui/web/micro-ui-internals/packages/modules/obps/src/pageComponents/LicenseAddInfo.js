@@ -17,7 +17,7 @@ import {
   ModalFooter,
 } from "reactstrap";
 import axios from "axios";
-import ReactMultiSelct from "../../../../react-components/src/atoms/ReactMultiSelect";
+// import ReactMultiSelct from "../../../../react-components/src/atoms/ReactMultiSelect";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
@@ -284,11 +284,11 @@ const onSkip = () => onSelect();
                     <div className="form-group row">
                       <div className="col-sm-3">
 
-                        <ReactMultiSelct
+                        {/* <ReactMultiSelct
                           listOfData={optionsArrList}
                           labels="Selct Type"
                           getSelectedValue={devType}
-                        />
+                        /> */}
                         {/* <MuiDropdown 
                           listOfData={optionsArrList}
                           labels="text"
