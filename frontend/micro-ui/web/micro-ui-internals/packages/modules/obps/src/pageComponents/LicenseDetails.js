@@ -1,4 +1,4 @@
-import { BackButton, Card, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, TextInput, TextArea, CheckBox, DatePicker } from "@egovernments/digit-ui-react-components";
+import { BackButton, Card, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, RadioOrSelect, TextInput, TextArea, CheckBox, DatePicker } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { Form, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
@@ -80,11 +80,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         "txnId": "f7f1469c-29b0-4325-9dfc-c567200a70f7",
         "format": "xml",
         "certificateParameters": {
-          "panno": "BVEPT7937D",
-          "PANFullName": "SUDEEP TAMTA",
-          "FullName": "SUDEEP TAMTA",
-          "DOB": "15-01-1997",
-          "GENDER": "Male"
+          "panno": PanNumber,
+          "PANFullName": name,
+          "FullName": name,
+          "DOB": dob,
+          "GENDER": gender.value
         },
         "consentArtifact": {
           "consent": {
@@ -332,6 +332,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               <Form.Group className="col-md-5">
                 <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")}*`}</CardLabel>
                 <div className="row">
+                  
                   <RadioButtons
                   t={t}
                   options={menu}

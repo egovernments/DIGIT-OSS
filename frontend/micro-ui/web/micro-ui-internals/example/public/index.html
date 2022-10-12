@@ -13,13 +13,123 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" 
 integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" 
 crossorigin="anonymous">
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+/>
+
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="theme-color" content="#00bcd1"/>
     <title>TCP - Haryana</title>
     <!-- <link rel="stylesheet" href="https://unpkg.com/@egovernments/digit-ui-css/dist/index.css"/> -->
     <!-- <link rel="stylesheet" href="../public/index.css"/> -->
-    <script src="https://s3.ap-south-1.amazonaws.com/egov-dev-assets/globalConfigs.js"></script>
+    <!-- <script src="https://s3.ap-south-1.amazonaws.com/egov-dev-assets/globalConfigs.js"></script> -->
     <!-- <script src="%REACT_APP_GLOBAL%"></script> -->
+    <script>
+      var globalConfigs = (function () {
+        var stateTenantId = "pg";
+        var gmaps_api_key = "AIzaSyAQOd09-vjmk1sXFb_ZQYDz2nlfhXq7Wf8";
+        var finEnv = "qa";
+        var getConfig = function (key) {
+          if (key === "STATE_LEVEL_TENANT_ID") {
+            return stateTenantId;
+          } else if (key === "GMAPS_API_KEY") {
+            return gmaps_api_key;
+          } else if (key === "FIN_ENV") {
+            return finEnv;
+          }
+        };
+ 
+        let loginAgain = (loginDetails = {}) => {
+          console.warn("This is only for Testing Purpose");
+          loginDetails.server = loginDetails?.server
+            ? loginDetails?.server
+            : window.location.host;
+          loginDetails.tenantId = loginDetails?.tenantId
+            ? loginDetails?.tenantId
+            : localStorage.getItem("tenant-id") ||
+              localStorage.getItem("Employee.tenant-id") ||
+              "";
+          loginDetails.password = loginDetails?.password
+            ? loginDetails?.password
+            : "eGov@123";
+          loginDetails.username = loginDetails?.username
+            ? loginDetails?.username
+            : JSON.parse(localStorage.getItem("user-info"))?.userName ||
+              JSON.parse(localStorage.getItem("Employee.user-info"))
+                ?.userName ||
+              "";
+ 
+          var myHeaders = new Headers();
+          myHeaders.append("authority", loginDetails.server);
+          myHeaders.append("accept", "application/json, text/plain, */*");
+          myHeaders.append("origin", `https://${loginDetails.server}`);
+          myHeaders.append("authorization", "Basic ZWdvdi11c2VyLWNsaWVudDo=");
+          myHeaders.append(
+            "user-agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36"
+          );
+          myHeaders.append("content-type", "application/x-www-form-urlencoded");
+          myHeaders.append("sec-fetch-site", "same-origin");
+          myHeaders.append("sec-fetch-mode", "cors");
+          myHeaders.append(
+            "referer",
+            `https://${loginDetails.server}/user/login`
+          );
+          myHeaders.append("accept-encoding", "gzip, deflate, br");
+          myHeaders.append("accept-language", "en-US,en;q=0.9");
+ 
+          var urlencoded = new URLSearchParams();
+          urlencoded.append("username", loginDetails.username);
+          urlencoded.append("password", loginDetails.password);
+          urlencoded.append("grant_type", "password");
+          urlencoded.append("scope", "read");
+          urlencoded.append("tenantId", loginDetails.tenantId);
+          urlencoded.append("userType", "EMPLOYEE");
+ 
+          var requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: urlencoded,
+            redirect: "follow",
+          };
+ 
+          fetch(
+            `https://${loginDetails.server}/user/oauth/token`,
+            requestOptions
+          )
+            .then((response) => response.text())
+            .then((result) => {
+              let responseObject = JSON.parse(result);
+              let token = responseObject["access_token"];
+              if (!token && responseObject["error_description"]) {
+                throw Error(responseObject["error_description"]);
+              }
+              console.info("Successfully Logged in Again");
+              console.log("Token : ", token);
+              console.warn("This is only for Testing Purpose");
+ 
+              localStorage.setItem("token", token);
+              sessionStorage.setItem("token", token);
+              localStorage.setItem("Employee.token", token);
+            })
+            .catch((error) => console.error(error));
+        };
+ 
+        let setInboxTotalRecords = (count = 0) => {
+          localStorage.setItem(
+            "jk-test-inbox-record-count",
+            count != 0 ? count : 300
+          );
+        };
+ 
+        return {
+          getConfig,
+          loginAgain,
+          setInboxTotalRecords,
+        };
+      })();
+    </script>
     <style>
       iframe{display: none!important;}
     </style>

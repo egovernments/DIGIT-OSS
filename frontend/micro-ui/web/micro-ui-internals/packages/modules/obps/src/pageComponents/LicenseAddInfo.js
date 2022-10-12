@@ -1,4 +1,4 @@
-import { BackButton, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, TextInput } from "@egovernments/digit-ui-react-components";
+import { BackButton, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, TextInput, ViewsIcon, DownloadIcon } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
@@ -18,6 +18,9 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import ReactMultiSelct from "../../../../react-components/src/atoms/ReactMultiSelect";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, ownerIndex }) => {
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
@@ -63,7 +66,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
       control
     } = useForm();
 
-    const dealAnalysisArr = [
+    
+    const optionsArrList = [
       {
         label: "Individual",
         value: "01",
@@ -84,7 +88,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
         value: "04",
         id: "3",
       },
-    ];
+    ]
     // onchange = (e) => {
     //   this.setState({ value: e.target.value });
     // };
@@ -130,23 +134,18 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     // function setUserEmail(e) {
     //   setUserEmailId(e.target.value);
     // }
-    const devType = (e) => {
-      const valField = e.target.value;
-      console.log(valField);
-      setShowDevTypeFields(valField);
-    }
+    
     const handleshow0 = (e) => {
       const getshow = e.target.value;
       setShowhide0(getshow);
       localStorage.setItem('devTypeFlag',getshow)
     };
 
-    // const devType = (e) => {
-    //   console.log(e.target.value)
-    //   const getDevTypeValue = e.target.value;
-    //   setShowDevTypeFields(getDevTypeValue);
-    //   localStorage.setItem('devTypeValueFlag',getDevTypeValue)
-    // }
+    const devType = (data) => {
+      const getDevTypeValue = data.data;
+      setShowDevTypeFields(getDevTypeValue);
+      localStorage.setItem('devTypeValueFlag',getDevTypeValue)
+    }
   
     const HandleGetMCNdata=async()=>{
       try{
@@ -286,11 +285,14 @@ const onSkip = () => onSelect();
                       <div className="col-sm-3">
 
                         <ReactMultiSelct
-                          data={dealAnalysisArr}
-                          name="test"
-                          value={dealAnalysisArr?.value}
-                          onChange={devType}
+                          listOfData={optionsArrList}
+                          labels="Selct Type"
+                          getSelectedValue={devType}
                         />
+                        {/* <MuiDropdown 
+                          listOfData={optionsArrList}
+                          labels="text"
+                        /> */}
                       </div>
                     </div>
                   </div>
@@ -378,7 +380,8 @@ const onSkip = () => onSelect();
                       <input
                         type="text"
                         value={emailUser}
-                      placeholder={emailUser}
+                        placeholder={emailUser}
+                        disabled="disabled"
                         className="employee-card-input"
                       // name="email"
                       // className={`employee-card-input`}
@@ -483,6 +486,7 @@ const onSkip = () => onSelect();
                         type="text"
                         value={companyName}
                         placeholder={companyName}
+                        disabled="disabled"
                         className="employee-card-input"
                       // placeholder=""
                       // {...register("name", {
@@ -512,6 +516,7 @@ const onSkip = () => onSelect();
                         type="text"
                         value={incorporationDate}
                         placeholder={incorporationDate}
+                        disabled="disabled"
                         className="employee-card-input"
                       // placeholder=""
                       // {...register("name", {
@@ -540,7 +545,8 @@ const onSkip = () => onSelect();
                       <input
                         type="text"
                         value={registeredAddress}
-                      placeholder={registeredAddress}
+                        placeholder={registeredAddress}
+                        disabled="disabled"
                         className="employee-card-input"
                       // name="name"
                       // className={`employee-card-input`}
@@ -571,7 +577,8 @@ const onSkip = () => onSelect();
                       <input
                         type="text"
                         value={email}
-                      placeholder={email}
+                        placeholder={email}
+                        disabled="disabled"
                         className="employee-card-input"
                       // name="email"
                       // className={`employee-card-input`}
@@ -596,6 +603,7 @@ const onSkip = () => onSelect();
                         type="text"
                         value={registeredContactNo}
                         placeholder={registeredContactNo}
+                        disabled="disabled"
                         className="employee-card-input"
                       // name="name"
                       // className={`employee-card-input`}
@@ -688,6 +696,7 @@ const onSkip = () => onSelect();
                                   value={elementInArray.name}
                                   placeholder={elementInArray.name}
                                   readOnly
+                                  disabled="disabled"
                                   class="employee-card-input"
                                 />
                               </td>
@@ -697,6 +706,7 @@ const onSkip = () => onSelect();
                                   value={elementInArray.designition}
                                   placeholder={elementInArray.designition}
                                   readOnly
+                                  disabled="disabled"
                                   class="employee-card-input"
                                 />
                               </td>
@@ -706,12 +716,19 @@ const onSkip = () => onSelect();
                                   value={elementInArray.percentage}
                                   placeholder={elementInArray.percentage}
                                   readOnly
+                                  disabled="disabled"
                                   class="employee-card-input"
                                 />
                               </td>
                               <td>
-                                <div className="text-center">
-                                  <button className="btn btn-success btn-sm">View</button>
+                                <div className="row">
+                                  <button className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </button>
+                                  <button className="btn btn-sm col-md-6">
+                                    <FileDownloadIcon color="primary"  />
+                                  </button>
+                                
                                 </div>
                               </td>
                             </tr>
@@ -868,10 +885,11 @@ const onSkip = () => onSelect();
                       {DirectorData.map((elementInArray, input) => {
                         return (
                           <tr key={input}>
-                            <td>{input}</td>
+                            <td>{input+1}</td>
                             <td>
                               <input
                                 type="text"
+                                disabled="disabled"
                                 value={elementInArray.din}
                                 placeholder={elementInArray.din}
                                 class="employee-card-input"
@@ -880,6 +898,7 @@ const onSkip = () => onSelect();
                             <td>
                               <input
                                 type="text"
+                                disabled="disabled"
                                 value={elementInArray.name}
                                 placeholder={elementInArray.name}
                                 class="employee-card-input"
@@ -957,6 +976,7 @@ const onSkip = () => onSelect();
 
                       <input
                         type="text"
+                        disabled="disabled"
                         value={companyName}
                         placeholder={companyName}
                         className="employee-card-input"
@@ -986,6 +1006,7 @@ const onSkip = () => onSelect();
                       <label htmlFor="name">Date of Incorporation</label>
                       <input
                         type="text"
+                        disabled="disabled"
                         value={incorporationDate}
                         placeholder={incorporationDate}
                         className="employee-card-input"
@@ -1015,8 +1036,9 @@ const onSkip = () => onSelect();
                       <label htmlFor="name">Registered Address</label>
                       <input
                         type="text"
+                        disabled="disabled"
                         value={registeredAddress}
-                      placeholder={registeredAddress}
+                        placeholder={registeredAddress}
                         className="employee-card-input"
                       // name="name"
                       // className={`employee-card-input`}
@@ -1046,8 +1068,9 @@ const onSkip = () => onSelect();
                       <label htmlFor="email"> Email </label>
                       <input
                         type="text"
+                        disabled="disabled"
                         value={email}
-                      placeholder={email}
+                        placeholder={email}
                         className="employee-card-input"
                       // name="email"
                       // className={`employee-card-input`}
@@ -1070,6 +1093,7 @@ const onSkip = () => onSelect();
                       <label htmlFor="name">Mobile No.</label>
                       <input
                         type="text"
+                        disabled="disabled"
                         value={registeredContactNo}
                         placeholder={registeredContactNo}
                         className="employee-card-input"
@@ -1164,6 +1188,7 @@ const onSkip = () => onSelect();
                                   value={elementInArray.name}
                                   placeholder={elementInArray.name}
                                   readOnly
+                                  disabled="disabled"
                                   class="employee-card-input"
                                 />
                               </td>
@@ -1173,6 +1198,7 @@ const onSkip = () => onSelect();
                                   value={elementInArray.designition}
                                   placeholder={elementInArray.designition}
                                   readOnly
+                                  disabled="disabled"
                                   class="employee-card-input"
                                 />
                               </td>
@@ -1182,6 +1208,7 @@ const onSkip = () => onSelect();
                                   value={elementInArray.percentage}
                                   placeholder={elementInArray.percentage}
                                   readOnly
+                                  disabled="disabled"
                                   class="employee-card-input"
                                 />
                               </td>
@@ -1348,6 +1375,7 @@ const onSkip = () => onSelect();
                             <td>
                               <input
                                 type="text"
+                                disabled="disabled"
                                 value={elementInArray.din}
                                 placeholder={elementInArray.din}
                                 class="employee-card-input"
@@ -1356,6 +1384,7 @@ const onSkip = () => onSelect();
                             <td>
                               <input
                                 type="text"
+                                disabled="disabled"
                                 value={elementInArray.name}
                                 placeholder={elementInArray.name}
                                 class="employee-card-input"
@@ -1364,6 +1393,7 @@ const onSkip = () => onSelect();
                             <td>
                               <input
                                 type="text"
+                                disabled="disabled"
                                 value={elementInArray.contactNumber}
                                 placeholder={elementInArray.contactNumber}
                                 class="employee-card-input"
