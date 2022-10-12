@@ -46,6 +46,12 @@
     "dist"
   ],
   "dependencies": {
+    "@babel/plugin-syntax-jsx": "^7.18.6",
+    "@babel/preset-flow": "^7.18.6",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
     "@googlemaps/js-api-loader": "1.13.10",
     "react-date-range": "1.3.0",
     "react-hook-form": "6.15.8",

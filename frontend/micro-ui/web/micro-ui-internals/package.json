@@ -74,6 +74,11 @@
     "@mui/material": "^5.10.9",
     "bootstrap": "^5.2.1",
     "lodash": "4.17.21",
-    "microbundle-crl": "0.13.11"
+    "microbundle-crl": "0.13.11",
+    "react-bootstrap": "^2.5.0",
+    "react-bootstrap-icons": "^1.9.1",
+    "react-select": "^5.4.0",
+    "reactjs-popup": "^2.0.5",
+    "reactstrap": "^9.1.4"
   }
 }
