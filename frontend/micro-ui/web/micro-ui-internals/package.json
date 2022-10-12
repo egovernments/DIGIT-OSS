@@ -72,9 +72,12 @@
     "bootstrap": "^5.2.1",
     "lodash": "4.17.21",
     "microbundle-crl": "0.13.11",
+<<<<<<< HEAD
     "react-bootstrap": "^2.5.0",
     "react-bootstrap-icons": "^1.9.1",
     "react-select": "^5.4.0",
+=======
+>>>>>>> 2205a7fff41c53cb71871c45b263d3ff5c656265
     "reactjs-popup": "^2.0.5",
     "reactstrap": "^9.1.4"
   }

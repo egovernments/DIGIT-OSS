@@ -23,9 +23,9 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl,history,
       textChildren={
         <div>
           <div className="rainmaker-displayInline" style={{ justifyContent: "center"  ,alignItems:"center",marginBottom: "24px"}}>
-            <div style={{ }}>
+            {/* <div style={{ }}>
               <Image className="mseva-logo" source={`${logo}`} />
-            </div >
+            </div > */}
             {/* <div style={{marginLeft:"7px" }}>
             <Label bold={true}  fontSize= "23px" label="|" />
             </div>
@@ -70,23 +70,27 @@ const OTP = ({ handleFieldChange, form, phoneNumber, resendOTP ,logoUrl,history,
                </span>
                </div>
             ) : (
-              <div style={{ marginBottom: "24px" ,display:"flex",float:"right"}} className="text-right">
+              <div style={{ marginBottom: "24px"}} className="text-right">
               <Label id="otp-resendt"className="otp-prompt" label="CORE_ANOTHER_OTP" />
               <CountdownTimer timeLeft={timeLeft} completeCallback={completed} tickCallback={tick} />
               <Label id="otp-resendt" label="CORE_OTP_SECONDS" />
               </div>
-            )}         
-           <Button
-           {...submit}
-            style={{
-              height: "48px",     
-              width:"100%"        
-            }}
-            variant={"contained"}
-            color={"primary"}
-          >
-            <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
-          </Button>
+            )}   
+            <div style={{textAlign: 'center', width: '100%'}}>      
+              <Button
+              {...submit}
+                style={{
+                  height: "auto",
+                  padding: '0.25rem 1.5rem',     
+                  width:"auto",
+                  backgroundColor: '#28a745'   
+                }}
+                variant={"contained"}
+                color={"#fff"}
+              >
+                <Label buttonLabel={true}   labelStyle={{fontWeight:500 }}  label="CORE_COMMON_CONTINUE" />
+              </Button>
+            </div>
           {/* <Button {...submit} primary={true} fullWidth={true} /> */}
         </div>
       }

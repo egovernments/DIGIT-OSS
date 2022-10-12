@@ -58,7 +58,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
         alignItems: "center",
       },
       baseTenantStyle: {
-        background: "#ffffff",
+        background: "#0572bb",
         height: "65px",
         marginRight: "30px",
         width: "120px",
@@ -160,9 +160,9 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
                       </div>
                     )}
                   </Toolbar>
-                  <div className="appbar-right-logo">
+                  {/* <div className="appbar-right-logo">
                     <img src={digitLogo} />
-                  </div>
+                  </div> */}
                 </AppBar>
               </div>
               <div>
@@ -189,7 +189,7 @@ const withoutAuthorization = (redirectionUrl) => (Component) => {
     const ulbGrade = userTenant && get(userTenant[0], "city.ulbGrade");
     const ulbName = userTenant && get(userTenant[0], "code");
     const defaultTitle = ulbGrade && getUlbGradeLabel(ulbGrade);
-    const ulbLogo = isPublicSearch() ? msevaLogo : (userTenant.length > 0 ? get(userTenant[0], "logoId") : "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png");
+    const ulbLogo = isPublicSearch() ? msevaLogo : (userTenant.length > 0 ? get(userTenant[0], "logoId") : "");
     if (stateInfoById && stateInfoById.length > 0) {
       hasLocalisation = stateInfoById[0].hasLocalisation;
       defaultUrl = stateInfoById[0].defaultUrl;

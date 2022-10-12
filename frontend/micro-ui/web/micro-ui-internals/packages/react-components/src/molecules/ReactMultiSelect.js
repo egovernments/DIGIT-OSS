@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-import {Autocomplete,TextField} from '@mui/material';
+import { Autocomplete,TextField} from '@mui/material';
 
 
 
@@ -24,9 +24,9 @@ const MultiSelectField = (props) => {
         <Autocomplete
           id="combo-box-demo"
           options={(ApiList.length>0)?ApiList:[{"label":"none","id":null}]}
-          sx={{ width: 250 }}
-          onChange={(e,v)=>props.getSelectedValue({"data":v.value})}
-          renderInput={(params) => <TextField {...params} label={props.labels} variant="standard" />}>
+          sx={{ width: 300 }}
+          onChange={(e,v)=>{console.log("selected value is",v.label)}}
+          renderInput={(params) => <TextField {...params} label={props.labels} />}>
 
       </Autocomplete>
         

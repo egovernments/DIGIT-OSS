@@ -46,10 +46,13 @@
     "dist"
   ],
   "dependencies": {
+<<<<<<< HEAD
     "@babel/plugin-syntax-jsx": "^7.18.6",
     "@babel/preset-flow": "^7.18.6",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
+=======
+>>>>>>> 2205a7fff41c53cb71871c45b263d3ff5c656265
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@googlemaps/js-api-loader": "1.13.10",

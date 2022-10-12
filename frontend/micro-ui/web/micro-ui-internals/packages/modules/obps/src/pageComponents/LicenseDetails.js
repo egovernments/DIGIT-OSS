@@ -360,7 +360,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               {inputs?.map((input, index) => (
               <Form.Group className="col-md-5">
               <CardLabel>{`${"Enter Date of Birth"}*`}</CardLabel>
-                {/* <DatePicker 
+                <DatePicker 
                   t={t}
                   type="date"
                   isMandatory={false}
@@ -368,8 +368,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   value={dob}
                   name="dob"
                   onChange={setDateofBirth}
-                /> */}
-                <DatePicker
+                />
+                {/* <DatePicker
                 key={input.name}
                 date={formData && formData[config.key] ? formData[config.key][input.name] : undefined}
                 onChange={(e) => setValue(e, input.name)}
@@ -377,7 +377,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
                 defaultValue={undefined}
                 {...input.validation}
-              />
+              /> */}
               </Form.Group>
               )
               )}
@@ -598,6 +598,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="pincodeCorrespondence"
                   value={pincodeCorrespondence}
+                  placeholder={pincodeCorrespondence}
                   onChange={selectPincodeCorrespondence}
                   disable={isAddressSame}
                   />

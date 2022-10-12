@@ -11,7 +11,11 @@ const assetsProxy = createProxyMiddleware({
   changeOrigin: true,
 });
 const apiSetuProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_API_SETU || "https://qa.digit.org",
+  target: process.env.REACT_APP_PROXY_SETU || "https://upyog.niua.org",
+  changeOrigin: true,
+});
+const LicProxy = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_MDMS || "https://upyog.niua.org",
   changeOrigin: true,
 });
 module.exports = function (app) {
@@ -63,6 +67,6 @@ module.exports = function (app) {
     "/mca-directors/v1/companies",
     "/certificate/v3/pan",
   ].forEach((location) => app.use(location,apiSetuProxy ));
-  // ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
+  ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
   
 };

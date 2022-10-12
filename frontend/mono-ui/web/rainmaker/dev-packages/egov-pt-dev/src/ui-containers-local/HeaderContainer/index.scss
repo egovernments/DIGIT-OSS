@@ -58,7 +58,7 @@
 
 @media only screen and (min-width: 768px) {
   .rainmaker-header {
-    background-color: #ffffff !important;
+    background-color: #0572bb !important;
     position: fixed !important;
     width: 100vw !important;
     padding-left: 53px !important;
@@ -66,7 +66,7 @@
     background-image: none !important;
   }
   .rainmaker-header-home-small-screen {
-    background-color: #ffffff !important;
+    background-color: #0572bb !important;
     position: fixed !important;
     width: 100vw !important;
     padding-left: 53px !important;
@@ -116,8 +116,8 @@
 }
 
 .citizen-header-logo > img {
-  width: 40px;
-  height: 49px;
+  width: auto;
+  height: 55px;
 }
 
 .appbar-municipal-label {
