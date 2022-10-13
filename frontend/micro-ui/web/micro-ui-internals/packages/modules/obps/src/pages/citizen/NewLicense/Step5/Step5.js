@@ -6,6 +6,7 @@ import { Button, Form } from "react-bootstrap";
 // import Typography from '@material-ui/core/Typography'
 import Modal from 'react-bootstrap/Modal';
 import { Card, Row, Col} from "react-bootstrap";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 // import InfoIcon from '@mui/icons-material/Info';
 // import TextField from '@mui/material/TextField';
 const style = {
@@ -69,7 +70,7 @@ const FeesChargesForm=(props)=> {
     };
     useEffect(()=>{
         if (FeesChargesFormSubmitted) {
-            props.FeesChrgesFormSubmit(true);
+            // props.FeesChrgesFormSubmit(true);
         }
     },[FeesChargesFormSubmitted]);
     const { register, handleSubmit, formState: { errors } } = useForm([{XLongitude:'',YLatitude:''}]);
@@ -90,6 +91,9 @@ const FeesChargesForm=(props)=> {
         const getshow=e.target.value;
         setShowhide(getshow);
     }
+
+  
+    
     const handleFeesChange = event => {
 
         setFeeDetail(event.target.value);
@@ -219,21 +223,7 @@ const FeesChargesForm=(props)=> {
                                          onChange={(e)=>setRemark(e.target.value)} value={remark} onChange1={handleRemarkChange} />
                                          {errors.remark && <p></p>}
                              </div>
-                             {/* <div className="col col-3">
-                              
-                                        <h6 ><b>(vi)Select Aggregator</b></h6>
-                                        <select className="form-control" id="developer"
-                                                        name="developer"  onChange={(e)=>setAggregator(e.target.value)} value={aggregator}
-                                                        onChange1={handleAggregatorChange} >
-                               {errors.aggregator && <p></p>}
-                                                    
-                                                        <option value="" >
-                                                        </option>
-                                                        <option ></option>
-                                                        <option ></option>
-                                                      
-                                                    </select>
-                             </div> */}
+                            
                              <div className="col col-4">
                              <h6  onChange={(e)=>setPreviousLic(e.target.value)} value={previousLic} data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)"><b>(iii)&nbsp;Adjust Fees&nbsp;</b>&nbsp;&nbsp;</h6>
                              
@@ -261,58 +251,38 @@ const FeesChargesForm=(props)=> {
                                             )
                                         }
                    </div>
-                   {/* <div className="col col-3">
-                              
-                              <h6><b>(viii)Amount (previous)</b></h6>
-                              <input type="number" className="form-control"  required  minLength={1} maxLength={20} pattern="[0-9]*"
-                               onChange={(e)=>setAmount(e.target.value)} value={amount}
-                               onChange1={handleAmountChange  } />
-                               {errors.amount && <p></p>}
-                   </div> */}
+                
                              </div><br></br>
                              <hr/><br></br>
                              <h5 className="text-black"><b>1.Undertakings:-</b></h5>
                              <div className="px-2">
                                     <p className="text-black">The following is undertaken: </p>
                                     <ul className="Undertakings">
-                                        <li>I, alongwith the expert team have gone through the applicable Acts/ Rules/
-                                            Policies/statutory provisions related to development of colony and the
-                                            application is being submitted after going through the same.</li>
-                                        <li>I/We have not applied for any other licence/ CLU permission for this land
-                                            anywhere else.</li>
-                                        <li>I understand that execution of External Development Works involves long
-                                            gestation period as the same are town level facilities and I / we shall not,
-                                            at any point of time, claim any damages against the Department
-                                            for non completion of the external development works. </li>
-                                        <li>I/We solemnly affirm and declare that the contents of the above application
-                                            are correct to the best of my/ our knowledge and belief and no information
-                                            has been concealed therein.  
+                                        <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge</li>
+                                      .<button  className="btn btn-primary" onClick={handleShow}>Read More</button>
                                            
-                                                </li></ul>
+                                                </ul>
                                                 </div> 
-                                                <button  className="btn btn-primary" onClick={handleShow}>Read More</button>
+                                           
+                                              
                                                 <Modal
-        show={show}
-        onHide={() => setShow(false)}
-        dialogClassName="modal-90w"
-        aria-labelledby="example-custom-modal-styling-title"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="example-custom-modal-styling-title">
-            Custom Modal Styling
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
-            commodi aspernatur enim, consectetur. Cumque deleniti temporibus
-            ipsam atque a dolores quisquam quisquam adipisci possimus
-            laboriosam. Quibusdam facilis doloribus debitis! Sit quasi quod
-            accusamus eos quod. Ab quos consequuntur eaque quo rem! Mollitia
-            reiciendis porro quo magni incidunt dolore amet atque facilis ipsum
-            deleniti rem!
-          </p>
-        </Modal.Body>
+                                                        show={show}
+                                                        onHide={() => setShow(false)}
+                                                        dialogClassName="modal-90w"
+                                                        aria-labelledby="example-custom-modal-styling-title"
+                                                       
+                                                    >
+                                                        <Modal.Header closeButton>
+                                                      
+                                                        </Modal.Header>
+                                                        <Modal.Body>
+                                                        <p>
+                                                        I hereby declare that the details furnished above are true and correct to the best of my 
+                                                        knowledge and belief and I undertake to inform you of any changes therein, immediately.
+                                                            In case any of the above information is found to be false or untrue or misleading or misrepresenting, 
+                                                            I am aware that I may be held liable for it.
+                                                        </p>
+                                                        </Modal.Body>
       </Modal>
                                          <div className="">
                                         
@@ -326,135 +296,39 @@ const FeesChargesForm=(props)=> {
                                                             className="text-danger"><b>*</b></span>
                                                     </label>
                                                 </div>
-                                                <div class="my-2">
-                                                    <button className="btn btn-success" onClick={()=>setPayShow(true)}
-                                                        data-toggle="modal" data-target="#payemtModal">Pay Now</button>
+                                                <div class="my-2"> 
+                                                 .<button  className="btn btn-primary" onClick={setPayShow}>Pay Now</button>
+                                                    {/* <button className="btn btn-success" onClick={()=>setPayShow(true)}
+                                                        data-toggle="modal" data-target="#payemtModal">Pay Now</button> */}
                                                 </div>
-                                                {/* <Modal show={Payshow} onHide={handleClose} size="lg">
-                            <Modal.Header closeButton>
-                                <Modal.Title id="example-modal-sizes-title-Payshow"></Modal.Title>
-                            </Modal.Header>
-
-                            <Modal.Body>
-                            <ul>
-                                                                                <li>Morbi in sem quis dui placerat ornare. Pellentesque odio
-                                                                                    nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.
-                                                                                    Cras consequat.</li>
-                                                                                <li>Praesent dapibus, neque id cursus faucibus, tortor neque
-                                                                                    egestas augue, eu vulputate magna eros eu erat. Aliquam erat
-                                                                                    volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
-                                                                                    facilisis luctus, metus.</li>
-                                                                                <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                                                                                    consectetuer ligula vulputate sem tristique cursus. Nam
-                                                                                    nulla quam, gravida non, commodo a, sodales sit amet, nisi.
-                                                                                </li>
-                                                                                <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                                                                                    auctor, ultrices ut, elementum vulputate, nunc.</li>
-                                                                                <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                                                                                    consectetuer ligula vulputate sem tristique cursus. Nam
-                                                                                    nulla quam, gravida non, commodo a, sodales sit amet, nisi.
-                                                                                </li>
-                                                                                <li>Morbi in sem quis dui placerat ornare. Pellentesque odio
-                                                                                    nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.
-                                                                                    Cras consequat.</li>
-                                                                                <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                                                                                    auctor, ultrices ut, elementum vulputate, nunc.</li>
-                                                                                <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                                                                                    consectetuer ligula vulputate sem tristique cursus. Nam
-                                                                                    nulla quam, gravida non, commodo a, sodales sit amet, nisi.
-                                                                                </li>
-                                                                                <li>Praesent dapibus, neque id cursus faucibus, tortor neque
-                                                                                    egestas augue, eu vulputate magna eros eu erat. Aliquam erat
-                                                                                    volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
-                                                                                    facilisis luctus, metus.</li>
-                                                                                <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                                                                                    auctor, ultrices ut, elementum vulputate, nunc.</li>
-                                                                                <li>Morbi in sem quis dui placerat ornare. Pellentesque odio
-                                                                                    nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.
-                                                                                    Cras consequat.</li>
-                                                                                <li>Praesent dapibus, neque id cursus faucibus, tortor neque
-                                                                                    egestas augue, eu vulputate magna eros eu erat. Aliquam erat
-                                                                                    volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
-                                                                                    facilisis luctus, metus.</li>
-                            </ul>
-                            </Modal.Body> 
-                            </Modal> */}
+                                                      
+                                              
+                                                <Modal
+                                                        show={show}
+                                                        onHide={() => setShow(false)}
+                                                        dialogClassName="modal-90w"
+                                                        aria-labelledby="example-custom-modal-styling-title"
+                                                       
+                                                    >
+                                                        <Modal.Header closeButton>
+                                                      
+                                                        </Modal.Header>
+                                                        <Modal.Body>
+                                                        <p>
+                                                        I hereby declare that the details furnished above are true and correct to the best of my 
+                                                        knowledge and belief and I undertake to inform you of any changes therein, immediately.
+                                                            In case any of the above information is found to be false or untrue or misleading or misrepresenting, 
+                                                            I am aware that I may be held liable for it.
+                                                        </p>
+                                                        </Modal.Body>
+      </Modal>
+                                              
                                            </div>
-                                    {/* <div class="modal" tabindex="-1" id="licenceAgreement" role="modal">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header text-right">
-                                                    <h5 class="modal-title">Modal title</h5> 
-                                                    <i class="fa fa-close"
-                                                        style="font-size: 24px; cursor:pointer;font-weight: 800;"
-                                                        data-dismiss="modal" aria-label="Close">&times;</i>
-                                                </div>
-                                                <div class="modal-body ">
-                                                    <ul>
-                                                        <li>Morbi in sem quis dui placerat ornare. Pellentesque odio
-                                                            nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.
-                                                            Cras consequat.</li>
-                                                        <li>Praesent dapibus, neque id cursus faucibus, tortor neque
-                                                            egestas augue, eu vulputate magna eros eu erat. Aliquam erat
-                                                            volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
-                                                            facilisis luctus, metus.</li>
-                                                        <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                                                            consectetuer ligula vulputate sem tristique cursus. Nam
-                                                            nulla quam, gravida non, commodo a, sodales sit amet, nisi.
-                                                        </li>
-                                                        <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                                                            auctor, ultrices ut, elementum vulputate, nunc.</li>
-                                                        <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                                                            consectetuer ligula vulputate sem tristique cursus. Nam
-                                                            nulla quam, gravida non, commodo a, sodales sit amet, nisi.
-                                                        </li>
-                                                        <li>Morbi in sem quis dui placerat ornare. Pellentesque odio
-                                                            nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.
-                                                            Cras consequat.</li>
-                                                        <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                                                            auctor, ultrices ut, elementum vulputate, nunc.</li>
-                                                        <li>Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec
-                                                            consectetuer ligula vulputate sem tristique cursus. Nam
-                                                            nulla quam, gravida non, commodo a, sodales sit amet, nisi.
-                                                        </li>
-                                                        <li>Praesent dapibus, neque id cursus faucibus, tortor neque
-                                                            egestas augue, eu vulputate magna eros eu erat. Aliquam erat
-                                                            volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
-                                                            facilisis luctus, metus.</li>
-                                                        <li>Pellentesque fermentum dolor. Aliquam quam lectus, facilisis
-                                                            auctor, ultrices ut, elementum vulputate, nunc.</li>
-                                                        <li>Morbi in sem quis dui placerat ornare. Pellentesque odio
-                                                            nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.
-                                                            Cras consequat.</li>
-                                                        <li>Praesent dapibus, neque id cursus faucibus, tortor neque
-                                                            egestas augue, eu vulputate magna eros eu erat. Aliquam erat
-                                                            volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
-                                                            facilisis luctus, metus.</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> */}
-                                    {/* <div class="">
-                                        <form ></form>
-                                            <div class="form-group">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" formControlName="agreeCheck"
-                                                        type="checkbox" value="" 
-                                                        id="flexCheckDefault"/>
-                                                    <label class="form-check-label" for="flexCheckDefault">
-                                                        I agree and accept the terms and conditions.<span
-                                                            class="text-danger"><b>*</b></span>
-                                                    </label>
-                                                </div>
-                                                <div class="my-2">
-                                                    <button class="btn btn-success" 
-                                                        data-toggle="modal" data-target="#payemtModal">Pay Now</button>
-                                                </div>
-                                            </div>
+
+                                   
                                       
 
-                                        <div class="modal" tabindex="-1" id="payemtModal" role="modal">
+                                        {/* <div class="modal" tabindex="-1" id="payemtModal" role="modal">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -482,13 +356,13 @@ const FeesChargesForm=(props)=> {
                                         </div>
                                     
                                   
-                                   </div> */}
+                                   </div>  */}
                              </div>
-                             <Button style={{ alignSelf: "center", marginTop: "25px",marginLeft:"-1198px" }} 
+                             <Button style={{ alignSelf: "center", marginTop: "-32px",marginLeft:"1061px" }} 
                              variant="primary" type="submit"  onClick={()=>props.Step5Continue({"data":true})}>
-                Save as Draft
-            </Button>
-            <Button style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "2279px" }}
+              View as PDF &nbsp;&nbsp; <VisibilityIcon color="white"/>
+            </Button> &nbsp;&nbsp;&nbsp;
+            <Button style={{ alignSelf: "center", marginTop:"-32px"}}
              variant="primary" type="submit" onClick={FeesChrgesFormSubmitHandler} >
               Submit
             </Button>

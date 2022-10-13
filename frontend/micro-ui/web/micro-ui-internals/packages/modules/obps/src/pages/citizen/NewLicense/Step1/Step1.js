@@ -313,7 +313,7 @@ const ApllicantFormStep1 = (props) => {
                             </div>
                             <ReactMultiSelect 
                         listOfData={optionsVillageList}
-                        labels="text"
+                        labels="Village"
                         getSelectedValue={setvillage1} />
                         </Col>
                         <Col md={4} xxl lg="4">
@@ -333,7 +333,7 @@ const ApllicantFormStep1 = (props) => {
                             </div>
                             <ReactMultiSelect 
                         listOfData={optionsTehsilList}
-                        labels="text" 
+                        labels="Tehsil" 
                         getSelectedValue={setTehsil}/>
                         </Col>
                         <Col md={4} xxl lg="4">
@@ -342,7 +342,7 @@ const ApllicantFormStep1 = (props) => {
                             </div>
                             <ReactMultiSelect 
                         listOfData={optionsDistrictList}
-                        labels="text"
+                        labels="District"
                         getSelectedValue={setDistrict} />
                         </Col>
                         <Col md={4} xxl lg="4">
@@ -351,7 +351,7 @@ const ApllicantFormStep1 = (props) => {
                             </div>
                             <ReactMultiSelect 
                         listOfData={optionsStateList}
-                        labels="text" 
+                        labels="State" 
                         getSelectedValue={setState}/>
                         </Col>
                     </Row><br></br>
@@ -419,12 +419,12 @@ const ApllicantFormStep1 = (props) => {
                     </Row>
 
                 </Form.Group>
-                <Button 
+                {/* <Button 
                     style={{ alignSelf: "center", marginTop: "25px",marginLeft:"-1249px" }} 
                     variant="primary" type="submit" 
                     >
               Back
-            </Button>
+            </Button> */}
             <Button 
             style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "1163px" }} 
             variant="primary"  

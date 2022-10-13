@@ -123,6 +123,7 @@ const ApllicantPuropseForm = (props) => {
     const [tehsil, setTehsil] = useState('');
     const [revenueName, setRevenueName] = useState('');
     const [mustil, setMustil] = useState('');
+    const[khewat,setKhewat]=useState('');
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [district2, setDistrict2] = useState('');
@@ -141,12 +142,14 @@ const ApllicantPuropseForm = (props) => {
     const[tehsilData,setTehsilData]=useState([]);
     const[revenueStateData,setRevenuStateData]=useState([]);
     const[mustilData,setMustilData]=useState([]);
+    const[khewatData,setKhewatData]=useState([]);
     const[killaData,setKillaData]=useState([]);
     const[khasraData,setKhasraData]=useState([]);
     const [districtDataLbels,setDistrictDataLabels]=useState([]);
     const[tehsilDataLabels,setTehsilDataLabels]=useState([]);
     const[revenueDataLabels,setRevenueDataLabels]=useState([]);
-    const[mustilDataLabels,setMustilDataLabels]=useState([])
+    const[mustilDataLabels,setMustilDataLabels]=useState([]);
+    const[khewatDataLabels,setKhewatDataLabels]=useState([])
 
 
     const [modal, setmodal] = useState(false);
@@ -247,7 +250,8 @@ const ApllicantPuropseForm = (props) => {
                 setTehsilData(Resp.data)
                 if (Resp.data.length>0 && Resp.data!==undefined && Resp.data!==null) {
                     Resp.data.map((el,i)=>{
-                        setTehsilDataLabels((prev)=>[...prev,{"label":el.name,"id":el.code,"value":el.name}])
+                        setTehsilDataLabels((prev)=>[...prev,{"label":el.name,"id":el.code,"value":el.code}])
+                        
                     })
                     
                 }
@@ -256,7 +260,6 @@ const ApllicantPuropseForm = (props) => {
             }
         }
     }
-
     const getRevenuStateData = async () => {
         if (tehsil !== "") {
             const datatopost = {
@@ -281,9 +284,12 @@ const ApllicantPuropseForm = (props) => {
                     return response
                 });
                 setRevenuStateData(Resp.data)
+                
                 if (Resp.data.length>0 && Resp.data!==undefined && Resp.data!==null) {
                     Resp.data.map((el,i)=>{
-                        setRevenueDataLabels((prev)=>[...prev,{"label":el.name,"id":el.code,"value":el.code}])
+                        setRevenueDataLabels((prev)=>[...prev,{"label":el.name,"id":el.khewats,"value":el.code}])
+                        
+
                     })
                     
                 }
@@ -329,67 +335,42 @@ const ApllicantPuropseForm = (props) => {
             }
         }
     }
-    // const getKillaData = async () => {
-    //     if (mustil !== "") {
-    //         const datatopost = {
-    //             "RequestInfo": {
-    //                 "apiId": "Rainmaker",
-    //                 "ver": "v1",
-    //                 "ts": 0,
-    //                 "action": "_search",
-    //                 "did": "",
-    //                 "key": "",
-    //                 "msgId": "090909",
-    //                 "requesterId": "",
-    //                 "authToken": ""
-    //             }
 
-    //         }
+    const getLandOwnerStateData = async () => {
+       
+            const datatopost = {
+                "RequestInfo": {
+                    "apiId": "Rainmaker",
+                    "ver": "v1",
+                    "ts": 0,
+                    "action": "_search",
+                    "did": "",
+                    "key": "",
+                    "msgId": "090909",
+                    "requesterId": "",
+                    "authToken": ""
+                }
 
-    //         try {
-    //             const Resp = await axios.post("/egov-mdms-service/v1/_khasra?" + "dCode=" + district2 + "&" + "tCode=" + tehsil + "&NVCode=" + revenueName + "&murba=" + mustil, datatopost, {
+            }
+
+            try {
+                const Resp = await axios.post("http://localhost:8094/egov-mdms-service/v1/_owner?" + "dCode=" + district2 + "&" + "tCode=" + tehsil + "&NVCode=" + revenueName + "&khewat=161", datatopost, {
+                  
+                }).then((response) => {
+                    return response
+                });
+                setKhewatData(Resp.data)
+                if (Resp.data.length>0 && Resp.data!==undefined && Resp.data!==null) {
+                    Resp.data.map((el,i)=>{
+                        setKhewatDataLabels((prev)=>[...prev,{"label":el.name,"id":el.code,"value":el.khewats}])
+                    })
                     
-    //             }).then((response) => {
-    //                 return response
-    //             });
-    //             setKillaData(Resp.data);
-    //             console.log("KILLADATA", Resp.data)
-    //         } catch (error) {
-    //             console.log(error.message);
-    //         }
-    //     }
-    // }
-    // const getKhasraData = async () => {
-    //     if (Khasra !== "") {
-    //         const datatopost = {
-    //             "RequestInfo": {
-    //                 "apiId": "Rainmaker",
-    //                 "ver": "v1",
-    //                 "ts": 0,
-    //                 "action": "_search",
-    //                 "did": "",
-    //                 "key": "",
-    //                 "msgId": "090909",
-    //                 "requesterId": "",
-    //                 "authToken": ""
-    //             }
-
-    //         }
-
-    //         try {
-    //             const Resp = await axios.post("/egov-mdms-service/v1/_owner?dCode=01&tCode=001&NVCode=02786&khewat=161", datatopost, {
-                    
-    //             }).then((response) => {
-    //                 return response
-    //             });
-    //             setKhasraData(Resp.data);
-    //             console.log("KILLADATA", Resp.data)
-    //         } catch (error) {
-    //             console.log(error.message);
-    //         }
-    //     }
-    // }
-
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        
+    }
     useEffect(() => {
         DistrictApiCall();
     }, []);
@@ -403,15 +384,13 @@ const ApllicantPuropseForm = (props) => {
 
     useEffect(() => {
         getMustilData();
+    }, [district2, tehsil, revenueName, khewat])
+
+    useEffect(() => {
+        getLandOwnerStateData();
     }, [district2, tehsil, revenueName])
 
 
-    // useEffect(() => {
-    //     getKillaData();
-    // }, [district2, tehsil, revenueName])
-    // useEffect(() => {
-    //     getKhasraData();
-    // }, [district2, tehsil, revenueName,mustil])
 
     const handleChange = (e) => {
         this.setState({ isRadioSelected: true });
@@ -437,6 +416,7 @@ const ApllicantPuropseForm = (props) => {
         let forms = {
         //  purposeDd:purposeDd,
         //    tehsil1:tehsil1,
+        
 
                         
                       }
@@ -474,7 +454,7 @@ const ApllicantPuropseForm = (props) => {
                     <label htmlFor="potential"><h6><b>Potential Zone:</b></h6></label>
                     <ReactMultiSelect 
                 listOfData={optionsPotentialList}
-                labels="text" 
+                labels="Potential" 
                 getSelectedValue={setPotential}
                 />
                 </div>
@@ -485,7 +465,7 @@ const ApllicantPuropseForm = (props) => {
                 <ReactMultiSelect
 
                     listOfData={districtDataLbels}
-                    labels="district"
+                    labels="District"
                     getSelectedValue={(data)=>setDistrict2(data.data)}
                     
                 ></ReactMultiSelect>
@@ -603,7 +583,8 @@ const ApllicantPuropseForm = (props) => {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td ><input type="text" className="form-control"  placeholder="" onChange={(e)=>setModalKilla(e.target.value)}></input></td>
+                                    <td >
+                                     <input type="text" className="form-control"  placeholder="" onChange={(e)=>setModalKilla(e.target.value)}></input></td>
                                     <td ><input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalKhewat(e.target.value)}></input> </td>
                                     <td > <input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalKanal(e.target.value)}></input></td>
                                     {/* <td > <input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalMarla(e.target.value)}></input></td> */}
@@ -651,8 +632,17 @@ const ApllicantPuropseForm = (props) => {
                                 </div>
                             </Col>
                             <Col md={4} xxl lg="6">
-                            <input type="text"  placeholder="" className="form-control"
-                                    onChange={(e)=>setModalLand(e.target.value)}/>
+                            <ReactMultiSelect
+
+                                listOfData={khewatDataLabels}
+                                labels="Owner Name"
+                                getSelectedValue={(data)=>setModalLand(data.data)}
+
+                                ></ReactMultiSelect>
+                            {/* <input type="text"  placeholder="Owner Name" className="form-control" 
+                                    onChange={(e)=>setModalLand(e.target.value)}
+                                /> */}
+                                
 
                             </Col>
                         </Row>
@@ -808,7 +798,7 @@ const ApllicantPuropseForm = (props) => {
                         );
                     })
                     :
-                    <p>Click on the Add More Button</p>
+                    <p>Click on Enter Details to Add More </p>
                     }
                 </tbody>
             </table>
