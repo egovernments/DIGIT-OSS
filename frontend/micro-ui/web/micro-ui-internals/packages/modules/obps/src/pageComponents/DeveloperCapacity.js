@@ -9,7 +9,8 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
 import { FormStep } from "@egovernments/digit-ui-react-components";
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) => {
     const { pathname: url } = useLocation();
     const userInfo = Digit.UserService.getUser();
@@ -550,7 +551,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                 (capacityDevelopColonyHdruAct.length > 0) ?
                                     capacityDevelopColonyHdruAct.map((elementInArray, input) => {
                                     return (
-                                        <tr>
+                                    <tr>
 
                                         <td>{input + 1}</td>
                                         <td>
@@ -578,35 +579,28 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                             />
                                         </td>
                                         <td>
-                                            {/* <input
-                                        type="file"
-                                        name="upload"
-                                        placeholder=""
-                                        class="employee-card-input"
-                                    /> */}
-                                            <button className="btn btn-success btn-sm">View</button>
+                                            <div className="row">
+                                            <button className="btn btn-sm col-md-6">
+                                                <VisibilityIcon color="info" className="icon" />
+                                            </button>
+                                            <button className="btn btn-sm col-md-6">
+                                                <FileDownloadIcon color="primary"  />
+                                            </button>
+                                            
+                                            </div>
                                         </td>
                                         <td>
-                                            {/* <input
-                                        type="file"
-                                        name="upload"
-                                        placeholder=""
-                                        class="employee-card-input"
-                                    /> */}
-                                            <button className="btn btn-success btn-sm">View</button>
+                                            <div className="row">
+                                            <button className="btn btn-sm col-md-6">
+                                                <VisibilityIcon color="info" className="icon" />
+                                            </button>
+                                            <button className="btn btn-sm col-md-6">
+                                                <FileDownloadIcon color="primary"  />
+                                            </button>
+                                            
+                                            </div>
                                         </td>
-
-                                        {/* <td>
-                                    <button
-                                        type="button"
-                                        style={{ float: "right" }}
-                                        className="btn btn-danger"
-                                        onClick={() => setNoOfRows(noofRows - 1)}
-                                    >
-                                        <DeleteIcon />
-                                    </button>
-                                    </td> */}
-                                        </tr>
+                                    </tr>
                                     )
                                     }) : <p>Click on Add more</p>
                                 }
@@ -645,7 +639,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                         <form className="text1">
                                         <Row>
                                             <Col md={4} xxl lg="4">
-                                            <label htmlFor="name" className="text">Licence No / year and date of grant of licence</label>
+                                            <label htmlFor="name" className="text">Licence No / year of licence</label>
                                             <input
                                                 type="text"
                                                 onChange={(e) => setModalLcNo(e.target.value)}
@@ -683,7 +677,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                             />
                                             </Col>
                                             <Col md={4} xxl lg="4">
-                                            <label htmlFor="name" className="text">Validity of licence including renewals if any</label>
+                                            <label htmlFor="name" className="text">Validity of licence </label>
                                             <input
                                                 type="file"
                                                 onChange={(e) => setModalDevValidity(e.target.value)}
@@ -753,62 +747,55 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                 (capacityDevelopColonyLawAct.length > 0) ?
                                 capacityDevelopColonyLawAct.map((elementInArray, input) => {
                                     return (
-                                <tr>
-                                <td>{input+1}</td>
-                                    <td>
-                                    <input
-                                        type="text"
-                                        value={elementInArray.coloniesDeveloped}
-                                        placeholder={elementInArray.coloniesDeveloped}
-                                        class="employee-card-input"
-                                    />
-                                    </td>
-                                    <td>
-                                    <input
-                                        type="text"
-                                        value={elementInArray.area}
-                                        placeholder={elementInArray.area}
-                                        class="employee-card-input"
-                                    />
-                                    </td>
-                                    <td>
-                                    <input
-                                        type="text"
-                                        value={elementInArray.purpose}
-                                        placeholder={elementInArray.purpose}
-                                        class="employee-card-input"
-                                    />
-                                    </td>
-                                    <td>
-                                    {/* <input
-                                        type="file"
-                                        name="upload"
-                                        placeholder=""
-                                        class="employee-card-input"
-                                    /> */}
-                                    <button className="btn btn-success btn-sm">View</button>
-                                    </td>
-                                    <td>
-                                    {/* <input
-                                        type="file"
-                                        name="upload"
-                                        placeholder=""
-                                        class="employee-card-input"
-                                    /> */}
-                                    <button className="btn btn-success btn-sm">View</button>
-                                    </td>
-
-                                    {/* <td>
-                            <button
-                            type="button"
-                            style={{ float: "right" }}
-                            className="btn btn-danger"
-                            onClick={() => setNoOfRows(noofRows - 1)}
-                            >
-                            <DeleteIcon />
-                            </button>
-                        </td> */}
-                                </tr>
+                                    <tr>
+                                        <td>{input+1}</td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                value={elementInArray.coloniesDeveloped}
+                                                placeholder={elementInArray.coloniesDeveloped}
+                                                class="employee-card-input"
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                value={elementInArray.area}
+                                                placeholder={elementInArray.area}
+                                                class="employee-card-input"
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="text"
+                                                value={elementInArray.purpose}
+                                                placeholder={elementInArray.purpose}
+                                                class="employee-card-input"
+                                            />
+                                        </td>
+                                        <td>
+                                            <div className="row">
+                                                <button className="btn btn-sm col-md-6">
+                                                    <VisibilityIcon color="info" className="icon" />
+                                                </button>
+                                                <button className="btn btn-sm col-md-6">
+                                                    <FileDownloadIcon color="primary"  />
+                                                </button>
+                                                
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="row">
+                                                <button className="btn btn-sm col-md-6">
+                                                    <VisibilityIcon color="info" className="icon" />
+                                                </button>
+                                                <button className="btn btn-sm col-md-6">
+                                                    <FileDownloadIcon color="primary"  />
+                                                </button>
+                                                
+                                            </div>
+                                        </td>
+                                    </tr>
                                     )}
                                     ):<p>Click on add more</p>
                         }

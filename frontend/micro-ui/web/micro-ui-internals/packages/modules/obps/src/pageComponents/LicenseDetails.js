@@ -390,6 +390,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="email"
                   value={email}
+                  placeholder={email}
                   onChange={selectEmail}
                   //disable={editScreen}
                   {...{ required: true, pattern: "[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$", type: "email", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
@@ -404,6 +405,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="PanNumber"
                   value={PanNumber}
+                  placeholder={PanNumber}
                   onChange={selectPanNumber}
                   {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
                   />
@@ -434,6 +436,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="houseNumber"
                   value={houseNumber}
+                  placeholder={houseNumber}
                   onChange={selectHouseNumber}
                   />
               </Form.Group>
@@ -446,6 +449,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="colonyName"
                   value={colonyName}
+                  placeholder={colonyName}
                   onChange={selectColonyName}
                   />
               </Form.Group>
@@ -458,6 +462,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="streetName"
                   value={streetName}
+                  placeholder={streetName}
                   onChange={selectStreetName}
                   />
               </Form.Group>
@@ -470,6 +475,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="locality"
                   value={locality}
+                  placeholder={locality}
                   onChange={selectLocality}
                   />
               </Form.Group>
@@ -482,6 +488,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="city"
                   value={city}
+                  placeholder={city}
                   onChange={selectCity}
                   />
               </Form.Group>
@@ -494,6 +501,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="pincode"
                   value={pincode}
+                  placeholder={pincode}
                   onChange={selectPincode}
                   />
               </Form.Group>
@@ -533,6 +541,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="houseNumberCorrespondesnce"
                   value={houseNumberCorrespondesnce}
+                  placeholder={houseNumberCorrespondesnce}
                   onChange={selecthouseNumberCorrespondenceaddress}
                   disable={isAddressSame}
                   />
@@ -546,6 +555,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="colonyNameCorrespondesnce"
                   value={colonyNameCorrespondesnce}
+                  placeholder={colonyNameCorrespondesnce}
                   onChange={selectColonyNameCorrespondesnce}
                   disable={isAddressSame}
                   />
@@ -559,6 +569,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="streetNameCorrespondesnce"
                   value={streetNameCorrespondesnce}
+                  placeholder={streetNameCorrespondesnce}
                   onChange={selectStreetNameCorrespondesnce}
                   disable={isAddressSame}
                   />
@@ -572,6 +583,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="localityCorrespondence"
                   value={localityCorrespondence}
+                  placeholder={localityCorrespondence}
                   onChange={selectLocalityCorrespondence}
                   disable={isAddressSame}
                   />
@@ -585,6 +597,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="cityCorrespondence"
                   value={cityCorrespondence}
+                  placeholder={cityCorrespondence}
                   onChange={selectCityCorrespondence}
                   disable={isAddressSame}
                   />
@@ -598,6 +611,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   optionKey="i18nKey"
                   name="pincodeCorrespondence"
                   value={pincodeCorrespondence}
+                  placeholder={pincodeCorrespondence}
                   onChange={selectPincodeCorrespondence}
                   disable={isAddressSame}
                   />

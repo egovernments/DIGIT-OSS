@@ -17,9 +17,8 @@ import {
   ModalFooter,
 } from "reactstrap";
 
-
-// import AddIcon from "@material-ui/icons/Add";
-// import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 
 //for Redux use only
@@ -153,59 +152,65 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                         aurthorizedUserInfoArray.map((elementInArray, input) => {
                         return (
                             <tr>
-                            <td>{input+1}</td>
-                            <td>
-                                <input
-                                type="text"
-                                name="name[]"
-                                placeholder={elementInArray.name}
-                                value={elementInArray.name}
-                                class="employee-card-input"
-                                />
-                            </td>
-                            <td>
-                                <input
-                                type="text"
-                                name="mobile[]"
-                                placeholder={elementInArray.mobile}
-                                value={elementInArray.mobile}
-                                class="employee-card-input"
-                                />
-                            </td>
-                            <td>
-                                <input
-                                type="email"
-                                name="email[]"
-                                placeholder={elementInArray.email}
-                                value={elementInArray.email}
-                                class="employee-card-input"
-                                />
-                            </td>
-                            <td>
-                                <input
-                                type="text"
-                                name="pan[]"
-                                placeholder="{elementInArray.pan}"
-                                value={elementInArray.pan}
-                                class="employee-card-input"
-                                />
-                            </td>
-                            <td>
-                                <input
-                                type="file"
-                                name="upload"
-                                placeholder=""
-                                class="employee-card-input"
-                                />
-                            </td>
-                            <td>
-                                <input
-                                type="file"
-                                name="upload"
-                                placeholder=""
-                                class="employee-card-input"
-                                />
-                            </td>
+                                <td>{input+1}</td>
+                                <td>
+                                    <input
+                                    type="text"
+                                    name="name[]"
+                                    placeholder={elementInArray.name}
+                                    value={elementInArray.name}
+                                    class="employee-card-input"
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                    type="text"
+                                    name="mobile[]"
+                                    placeholder={elementInArray.mobile}
+                                    value={elementInArray.mobile}
+                                    class="employee-card-input"
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                    type="email"
+                                    name="email[]"
+                                    placeholder={elementInArray.email}
+                                    value={elementInArray.email}
+                                    class="employee-card-input"
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                    type="text"
+                                    name="pan[]"
+                                    placeholder="{elementInArray.pan}"
+                                    value={elementInArray.pan}
+                                    class="employee-card-input"
+                                    />
+                                </td>
+                                <td>
+                                    <div className="row">
+                                    <button className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                    </button>
+                                    <button className="btn btn-sm col-md-6">
+                                        <FileDownloadIcon color="primary"  />
+                                    </button>
+                                    
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className="row">
+                                    <button className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                    </button>
+                                    <button className="btn btn-sm col-md-6">
+                                        <FileDownloadIcon color="primary"  />
+                                    </button>
+                                    
+                                    </div>
+                                </td>
                             </tr>
                         );
                         })

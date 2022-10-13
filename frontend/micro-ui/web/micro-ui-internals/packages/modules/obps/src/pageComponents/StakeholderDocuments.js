@@ -29,7 +29,9 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     }
 
     const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
-    
+    const addInfo = localStorage.getItem("addInfo")
+    const addAuthUser = localStorage.getItem("data_user")
+    const developerCapacity = localStorage.getItem("capacity")
     
     useEffect(() => {
         let filtredBpaDocs = [];
@@ -92,6 +94,46 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     //     return <Loader />;
     // }
 
+    const submitTechdevData = async (e) => {
+        //   e.preventDefault();
+          const formDataValues = {
+            "developerDetail" :[
+              {
+                "devDetail":{
+                  addInfo:addInfo,
+                  addRemoveAuthoizedUsers:addAuthUser,
+                  capacityDevelopAColony:developerCapacity,
+                    
+                }
+              }
+            ]
+            
+          }
+          onSelect(config.key, formDataValues);
+          try {
+            let res = await axios.post("http://localhost:8081/user/developer/_registration",formDataValues,{
+              headers:{
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-origin':"*",
+            }
+            }).then((response)=>{
+              return response
+            });
+            
+            
+          } catch (err) {
+            console.log(err);
+          }
+          
+          console.log("FINAL SUBMIT",formDataValues)
+          localStorage.setItem("developerRegistration",JSON.stringify(formDataValues));
+          
+          // dispatch(setTechnicalData(
+          //   formDataValues
+          // ))
+          
+        }
+
     return (
         <div>
             <div className={isopenlink? "OpenlinkContainer":""}>
@@ -109,7 +151,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                     onAdd={onAdd}
                     cardStyle={{paddingRight:"16px"}}
                 >
-                    {bpaTaxDocuments?.map((document, index) => {
+                    {/* {bpaTaxDocuments?.map((document, index) => {
                         return (
                             <SelectDocument
                                 key={index}
@@ -123,7 +165,73 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                                 isCitizenUrl={isCitizenUrl}
                             />
                         );
-                    })}
+                    })} */}
+                    <div className="table-bd">
+                        <table className="table table-bordered" size="sm">
+                            <tbody>
+                                <tr>
+                                    <td> 1 &nbsp;&nbsp;</td>
+                                    <td>Copy of SPA/GPA/Board Resolution</td>
+                                    <td>
+                                    <input
+                                        type="file"
+                                        name="upload"
+                                        placeholder=""
+                                        class="form-control"
+                                    />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td> 2&nbsp;&nbsp; </td>
+                                    <td>
+                                    Copy of memorandum/Articles of Association/ any other
+                                    document of developer (if other than individual)*
+                                    </td>
+                                    <td>
+                                    <input
+                                        type="file"
+                                        name="upload"
+                                        placeholder=""
+                                        class="form-control"
+                                    />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td> 3 &nbsp;&nbsp;</td>
+                                
+                                    <td>
+                                    In case of firm/LLP, copy of registered irrevocable
+                                    partnership deed
+                                    </td>
+                                    <td>
+                                    <input
+                                        type="file"
+                                        name="upload"
+                                        placeholder=""
+                                        class="form-control"
+                                    />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td> 4&nbsp;&nbsp; </td>
+                                    <td>
+                                    In case of HUF, copy of affidavit and copy of PAN card
+                                    </td>
+                                    <td>
+                                    <input
+                                        type="file"
+                                        name="upload"
+                                        placeholder=""
+                                        class="form-control"
+                                    />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {/* <div className="col-md-4">
+                            <button onClick={submitTechdevData} className="btn btn-success">Submit</button>
+                        </div> */}
+                    </div>
                     {error && <Toast label={error} isDleteBtn={true} onClose={() => setError(null)} error  />}
                 </FormStep> : <Loader />}
                 {!(formData?.initiationFlow) && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={`${t("BPA_APPLICATION_NUMBER_LABEL")} ${formData?.result?.Licenses?.[0]?.applicationNumber} ${t("BPA_DOCS_INFORMATION")}`} className={"info-banner-wrap-citizen-override"}/>}

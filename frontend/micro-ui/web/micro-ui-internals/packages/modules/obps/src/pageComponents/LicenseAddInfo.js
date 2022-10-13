@@ -17,7 +17,7 @@ import {
   ModalFooter,
 } from "reactstrap";
 import axios from "axios";
-// import ReactMultiSelct from "../../../../react-components/src/atoms/ReactMultiSelect";
+import ReactMultiSelct from "../../../../react-components/src/atoms/ReactMultiSelect";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
@@ -284,11 +284,12 @@ const onSkip = () => onSelect();
                     <div className="form-group row">
                       <div className="col-sm-3">
 
-                        {/* <ReactMultiSelct
+                        <ReactMultiSelct
                           listOfData={optionsArrList}
                           labels="Selct Type"
                           getSelectedValue={devType}
-                        /> */}
+                          placeholder={showDevTypeFields}
+                        />
                         {/* <MuiDropdown 
                           listOfData={optionsArrList}
                           labels="text"
@@ -404,6 +405,7 @@ const onSkip = () => onSelect();
                       <label htmlFor="name">Mobile No.</label>
                       <input
                         value={mobileNumberUser}
+                        placeholder={mobileNumberUser}
                         name="mobileNumberUser"
                         onChange={(value) => setMobileNo({ target: { value } })}
                         disabled="disabled"
@@ -455,6 +457,7 @@ const onSkip = () => onSelect();
                         type="text"
                         onChange={(e) => setCinNo(e.target.value)}
                         value={cin_Number}
+                        placeholder={cin_Number}
                         className="employee-card-input"
                       // placeholder=""
                       // {...register("name", {
@@ -735,7 +738,7 @@ const onSkip = () => onSelect();
                           );
                         })
                         :
-                        <p>Click on the Add More Button</p>
+                        <p className="text-danger text-center">Click on the Add More Button</p>
                       }
                     </tbody>
                   </table>
@@ -942,7 +945,7 @@ const onSkip = () => onSelect();
                 <div className="row">
                   <div className="col col-4">
                     <div className="form-group">
-                      <label htmlFor="name">CIN Number</label>
+                      <label htmlFor="name">LLP Pin</label>
                       <input
                         type="text"
                         onChange={(e) => setCinNo(e.target.value)}
@@ -972,7 +975,7 @@ const onSkip = () => onSelect();
                   <div className="col col-4">
                     <div className="form-group">
 
-                      <label htmlFor="name">LLP Pin</label>
+                      <label htmlFor="name">LLP Name</label>
 
                       <input
                         type="text"
@@ -1221,7 +1224,7 @@ const onSkip = () => onSelect();
                           );
                         })
                         :
-                        <p>Click on the Add More Button</p>
+                        <p className="text-danger text-center">Click on the Add More Button</p>
                       }
                     </tbody>
                   </table>

@@ -95,7 +95,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
 .navbar {
   margin-bottom: 16px; }
   .navbar img {
-    height: 24px; }
+    height: 60px; }
 
 .h1 {
   font-size: 24px;
@@ -198,7 +198,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   width: 100%; }
   .navbar img {
     min-width: 78px;
-    height: 24px; }
+    height: 60px; }
   .navbar h3, .navbar img {
     display: inline-block; }
   .navbar h3 {
@@ -1789,9 +1789,9 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
     vertical-align: middle;
     text-align: left; }
     .table thead th:first-child {
-      min-width: 256px; }
+      min-width: 0px!important; }
     .table thead th:nth-child(2) {
-      min-width: 200px; }
+      min-width: 0px!important; }
   .table tbody {
     border: none;
     padding: 0;
@@ -7117,7 +7117,7 @@ code, kbd, pre, samp {
   font-family: SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace; }
 
 audio, canvas, embed, iframe, img, object, svg, video {
-  display: block;
+  display: inline-block;
   vertical-align: middle; }
 
 img, video {
@@ -7910,7 +7910,7 @@ img, video {
 
 .navbar img {
   min-width: 78px;
-  height: 24px; }
+  height: 60px; }
 
 .navbar h3, .navbar img {
   display: inline-block; }
@@ -9881,10 +9881,10 @@ img, video {
   text-align: left; }
 
 .table thead th:first-child {
-  min-width: 256px; }
+  min-width: 0px!important; }
 
 .table thead th:nth-child(2) {
-  min-width: 200px; }
+  min-width: 0px!important; }
 
 .table tbody {
   border: none;
