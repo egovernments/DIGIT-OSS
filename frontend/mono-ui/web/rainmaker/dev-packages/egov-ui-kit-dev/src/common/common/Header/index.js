@@ -172,7 +172,7 @@ class Header extends Component {
     const tenantId = role.toLowerCase() === "citizen" ? userInfo.permanentCity : getTenantId();
     const currentCity = cities.filter((item) => item.code === tenantId);
     const ulbLogo =
-      currentCity.length > 0 ? get(currentCity[0], "logoId") : "https://s3.ap-south-1.amazonaws.com/pb-egov-assets/pb.amritsar/logo.png";
+      currentCity.length > 0 ? get(currentCity[0], "logoId") : "../../assets/images/logo_black.png";
     return (
       <div style={headerStyle}>
         <AppBar

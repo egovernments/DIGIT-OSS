@@ -17,9 +17,8 @@ import {
   ModalFooter,
 } from "reactstrap";
 
-
-// import AddIcon from "@material-ui/icons/Add";
-// import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 
 //for Redux use only
@@ -114,7 +113,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
   return (
      
     <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
-        <Timeline currentStep={4} flow="STAKEHOLDER" />
+        <Timeline currentStep={3} flow="STAKEHOLDER" />
         <FormStep 
             className="card" 
             // onSubmit={handleAurthorizedUserFormSubmit}
@@ -123,13 +122,13 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
             onSkip={onSkip}
             t={t}
         >
-            <div>
+            {/* <div>
                 <h5 className="card-h"> Developer</h5>
-            </div>
+            </div> */}
             {/* <div className="card shadow"> */}
 
             <div className="card-body">
-                <h5 className="card-h">Add/Remove Authorized Users</h5>
+                {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
                 <div className="table-bd">
                 {/* { inputFields.map((data, index)=>{
                     const {}
@@ -153,59 +152,65 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                         aurthorizedUserInfoArray.map((elementInArray, input) => {
                         return (
                             <tr>
-                            <td>{input+1}</td>
-                            <td>
-                                <input
-                                type="text"
-                                name="name[]"
-                                placeholder={elementInArray.name}
-                                value={elementInArray.name}
-                                class="form-control"
-                                />
-                            </td>
-                            <td>
-                                <input
-                                type="text"
-                                name="mobile[]"
-                                placeholder={elementInArray.mobile}
-                                value={elementInArray.mobile}
-                                class="form-control"
-                                />
-                            </td>
-                            <td>
-                                <input
-                                type="email"
-                                name="email[]"
-                                placeholder={elementInArray.email}
-                                value={elementInArray.email}
-                                class="form-control"
-                                />
-                            </td>
-                            <td>
-                                <input
-                                type="text"
-                                name="pan[]"
-                                placeholder="{elementInArray.pan}"
-                                value={elementInArray.pan}
-                                class="form-control"
-                                />
-                            </td>
-                            <td>
-                                <input
-                                type="file"
-                                name="upload"
-                                placeholder=""
-                                class="form-control"
-                                />
-                            </td>
-                            <td>
-                                <input
-                                type="file"
-                                name="upload"
-                                placeholder=""
-                                class="form-control"
-                                />
-                            </td>
+                                <td>{input+1}</td>
+                                <td>
+                                    <input
+                                    type="text"
+                                    name="name[]"
+                                    placeholder={elementInArray.name}
+                                    value={elementInArray.name}
+                                    class="employee-card-input"
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                    type="text"
+                                    name="mobile[]"
+                                    placeholder={elementInArray.mobile}
+                                    value={elementInArray.mobile}
+                                    class="employee-card-input"
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                    type="email"
+                                    name="email[]"
+                                    placeholder={elementInArray.email}
+                                    value={elementInArray.email}
+                                    class="employee-card-input"
+                                    />
+                                </td>
+                                <td>
+                                    <input
+                                    type="text"
+                                    name="pan[]"
+                                    placeholder="{elementInArray.pan}"
+                                    value={elementInArray.pan}
+                                    class="employee-card-input"
+                                    />
+                                </td>
+                                <td>
+                                    <div className="row">
+                                    <button className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                    </button>
+                                    <button className="btn btn-sm col-md-6">
+                                        <FileDownloadIcon color="primary"  />
+                                    </button>
+                                    
+                                    </div>
+                                </td>
+                                <td>
+                                    <div className="row">
+                                    <button className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                    </button>
+                                    <button className="btn btn-sm col-md-6">
+                                        <FileDownloadIcon color="primary"  />
+                                    </button>
+                                    
+                                    </div>
+                                </td>
                             </tr>
                         );
                         })
@@ -279,7 +284,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                         type="text"
                         name="name[]"
                         placeholder=""
-                        class="form-control"
+                        class="employee-card-input"
                         />
                     </td>
                     <td>
@@ -287,7 +292,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                         type="text"
                         name="mobile[]"
                         placeholder=""
-                        class="form-control"
+                        class="employee-card-input"
                         />
                     </td>
                     <td>
@@ -295,7 +300,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                         type="email"
                         name="email[]"
                         placeholder=""
-                        class="form-control"
+                        class="employee-card-input"
                         />
                     </td>
                     <td>
@@ -303,7 +308,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                         type="file"
                         name="upload"
                         placeholder=""
-                        class="form-control"
+                        class="employee-card-input"
                         />
                     </td>
                     <td>
@@ -311,7 +316,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                         type="file"
                         name="upload"
                         placeholder=""
-                        class="form-control"
+                        class="employee-card-input"
                         />
                     </td>
 
@@ -340,7 +345,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                                         type="text"
                                         name="name[]"
                                         placeholder=""
-                                        class="form-control"
+                                        class="employee-card-input"
                                         onChange={(e)=>setAurtorizedUserName(e.target.value)}
                                     />
                                     </Col>
@@ -350,7 +355,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                                         type="number"
                                         name="name[]"
                                         placeholder=""
-                                        class="form-control"
+                                        class="employee-card-input"
                                         onChange={(e)=>setAurthorizedMobileNumber(e.target.value)}
                                     />
                                     </Col>
@@ -360,7 +365,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                                         type="email"
                                         name="name[]"
                                         placeholder=""
-                                        class="form-control"
+                                        class="employee-card-input"
                                         onChange={(e)=>setAurthorizedEmail(e.target.value)}
                                     />
                                     </Col>
@@ -372,7 +377,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                                         type="text"
                                         name="name[]"
                                         placeholder=""
-                                        class="form-control"
+                                        class="employee-card-input"
                                         onChange={(e)=>setAurthorizedPan(e.target.value)}
                                     />
                                     </Col>
@@ -382,7 +387,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                                         type="file"
                                         name="name[]"
                                         placeholder=""
-                                        class="form-control"
+                                        class="employee-card-input"
                                     />
                                     </Col>
                                     <Col md={4} xxl lg="4">
@@ -391,7 +396,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                                         type="file"
                                         name="name[]"
                                         placeholder=""
-                                        class="form-control"
+                                        class="employee-card-input"
                                     />
                                     </Col>
                                 </Row>
@@ -427,16 +432,16 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                 >
                 Add More
                 </button> */}
-                <button
+                {/* <button
                 type="button"
                 style={{ float: "right" }}
                 className="btn btn-danger"
                 onClick={() => setNoOfRows(noofRows - 1)}
                 >
                 Remove
-                </button>
+                </button> */}
             </div>
-            <div className="form-group col-md6 mt-6">
+            {/* <div className="form-group col-md6 mt-6">
                 <button
                 type="submit"
                 style={{ float: "right" }}
@@ -446,7 +451,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                 >
                 Submit
                 </button>
-            </div>
+            </div> */}
         </FormStep>
     </div>
   );

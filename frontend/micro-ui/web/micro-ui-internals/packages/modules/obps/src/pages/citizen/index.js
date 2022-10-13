@@ -20,7 +20,6 @@ import Step5 from "../citizen/NewLicense/Step5/Step5";
 import AddInfoForm from "../citizen/DeveloperRegistration/AddInfoForm/addInfo";
 import MyApplication from "./MyApplication";
 import ApplicationDetails from "./ApplicationDetail";
-import AddInfoForm from "./DeveloperRegistration/AddInfoForm/addInfo";
 // import LicenseAddInfo from "../../pageComponents/LicenseAddInfo";
 // import OCBuildingPermit from "./OCBuildingPermit";
 // import BpaApplicationDetail from "./BpaApplicationDetail";

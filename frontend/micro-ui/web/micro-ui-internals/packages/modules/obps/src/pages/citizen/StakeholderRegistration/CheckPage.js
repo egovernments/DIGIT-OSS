@@ -49,7 +49,7 @@ const CheckPage = ({ onSubmit, value }) => {
         {/* <div style={isopenlink?{ width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}> */}
         <div>
           {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-          <Timeline currentStep={4} flow="STAKEHOLDER" />
+          <Timeline currentStep={6} flow="STAKEHOLDER" />
           <Header styles={{ fontSize: "32px" }}>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
           <Card style={{ paddingRight: "16px" }}>
             <StatusTable>
@@ -116,7 +116,7 @@ const CheckPage = ({ onSubmit, value }) => {
             />
             <Row className="border-none" text={t(value?.Correspondenceaddress)} />
           </Card>
-          <Card style={{ paddingRight: "16px" }}>
+          {/* <Card style={{ paddingRight: "16px" }}>
             <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -148,7 +148,7 @@ const CheckPage = ({ onSubmit, value }) => {
             <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_COMMON_TOTAL_AMT")}</CardHeader>
             <CardHeader>₹ {paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount}</CardHeader>
             <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} disabled={paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount ? false : true} />
-          </Card>
+          </Card> */}
         </div>
       </div>
     </React.Fragment>

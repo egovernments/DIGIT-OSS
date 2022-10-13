@@ -11,7 +11,6 @@ const Banner = ({ children, hideBackButton, history, className = "",logoUrl,bann
         <div className="banner-image">
           <div className="banner-overlay" />
           <div className="banner-main-content">
-            <Image src="egov-ui-kit/assets/images/logo_black.png" />
             {/* {!hideBackButton && <Icon onClick={() => history.goBack()} className="banner-back-button" action="navigation" name="arrow-back" />} */}
             <div className="logo-wrapper user-logo-wrapper">
               {<Image className="mseva-logo" source={logo} /> }

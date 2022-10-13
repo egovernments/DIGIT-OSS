@@ -11,7 +11,7 @@ const getAction = (flow) => {
     // 'BPA_NEW_ADDRESS_HEADER_DETAILS',
     'Add Info',
     'Authorized User',
-    'Technical Capacity',
+    'Developer Capacity',
     'BPA_DOC_DETAILS_SUMMARY',
     'BPA_STEPPER_SUMMARY_HEADER',
     ]

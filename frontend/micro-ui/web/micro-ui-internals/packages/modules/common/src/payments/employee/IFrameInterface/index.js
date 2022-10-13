@@ -42,7 +42,7 @@ const IFrameInterface = (props) => {
     <React.Fragment>
       <Header>{t(title)}</Header>
       <div className="app-iframe-wrapper">
-        <iframe src={url} title={title} className="app-iframe" />
+        {/* <iframe src={url} title={title} className="app-iframe" /> */}
       </div>
     </React.Fragment>
   );

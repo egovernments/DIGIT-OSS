@@ -61,6 +61,11 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       onSelect("", formData)
     }
   }
+
+  
+
+  
+
   return (
     <div>
       <div className={isopenlink ? "OpenlinkContainer" : ""}>
@@ -81,6 +86,14 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                     selectedOption={LicenseType}
                     onSelect={selectLicenseType}
                   />
+                  // <RadioOrSelect
+                  //   t={t}
+                  //   optionKey="i18nKey"
+                  //   isMandatory={config.isMandatory}
+                  //   options={getLicenseType() || {}}
+                  //   selectedOption={LicenseType}
+                  //   onSelect={selectLicenseType}
+                  // />
                 )}
               </div>
             </Form.Group>
@@ -97,6 +110,11 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
                   onChange={selectArchitectNo}
                 />
               </div>}
+            </Form.Group>
+
+            <Form.Group>
+            
+             
             </Form.Group>
           </Row>
         </FormStep>
