@@ -41,7 +41,9 @@ const Home = () => {
   });
 
   if (!tenantId) {
-    history.push(`/digit-ui/citizen/select-language`);
+    Digit.SessionStorage.get("locale") === null
+      ? history.push(`/digit-ui/citizen/select-language`)
+      : history.push(`/digit-ui/citizen/select-location`);
   }
 
   const appBannerWebObj = uiHomePage?.appBannerDesktop;
