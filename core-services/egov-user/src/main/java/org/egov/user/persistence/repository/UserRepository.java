@@ -147,20 +147,27 @@ public class UserRepository {
     public User create(User user) {
         validateAndEnrichRoles(Collections.singletonList(user));
         final Long newId = getNextSequence();
+    	//user.setParentid(newId);
         user.setId(newId);
+        System.out.println("New Id =========>" + newId);
+       
+   
         user.setUuid(UUID.randomUUID().toString());
         user.setCreatedDate(new Date());
         user.setLastModifiedDate(new Date());
         user.setCreatedBy(user.getLoggedInUserId());
         user.setLastModifiedBy(user.getLoggedInUserId());
+       System.out.println("Parent id : " + user.getParentid());
         final User savedUser = save(user);
         if (user.getRoles().size() > 0) {
             saveUserRoles(user);
         }
         final Address savedCorrespondenceAddress = saveAddress(user.getCorrespondenceAddress(), savedUser.getId(),
                 savedUser.getTenantId());
+        
         final Address savedPermanentAddress = saveAddress(user.getPermanentAddress(), savedUser.getId(),
                 savedUser.getTenantId());
+        
         savedUser.setPermanentAddress(savedPermanentAddress);
         savedUser.setCorrespondenceAddress(savedCorrespondenceAddress);
         return savedUser;
@@ -475,7 +482,8 @@ public class UserRepository {
         userInputs.put("emailid", entityUser.getEmailId());
         userInputs.put("active", entityUser.getActive());
         userInputs.put("name", entityUser.getName());
-        userInputs.put("parentId", entityUser.getParentId());
+        System.out.println("Parent id : " + entityUser.getParentid());
+        userInputs.put("parentid", entityUser.getParentid());
 
         if (Gender.FEMALE.equals(entityUser.getGender())) {
             userInputs.put("gender", 1);

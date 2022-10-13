@@ -222,7 +222,11 @@ public class UserService {
         conditionallyValidateOtp(user);
         /* encrypt here */
         System.out.println("Encrypted method");
-        user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
+        
+        //commented encryption
+        //rahul 
+       // user = encryptionDecryptionUtil.encryptObject(user, "User", User.class);
+        
         validateUserUniqueness(user);
         if (isEmpty(user.getPassword())) {
             user.setPassword(UUID.randomUUID().toString());

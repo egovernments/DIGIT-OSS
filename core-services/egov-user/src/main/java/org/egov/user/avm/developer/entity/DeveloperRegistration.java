@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 
 import lombok.Getter;
@@ -45,6 +46,8 @@ public class DeveloperRegistration {
 	@Column(name="updated_date")
 	private Date updatedDate;
 
+	
+	 //@JsonProperty("developerDetail")
 	@Type(type = "jsonb")
 	@Column(columnDefinition = "jsonb")
 	private List<Developerdetail> developerDetail;

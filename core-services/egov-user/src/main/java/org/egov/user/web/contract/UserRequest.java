@@ -29,7 +29,7 @@ public class UserRequest {
 
     private Long id;
     
-    private Long parentId;
+    private Long parentid;
     @SafeHtml
     @Size(max = 64)
     private String userName;
@@ -187,6 +187,7 @@ public class UserRequest {
         this.relationship = user.getGuardianRelation();
         this.uuid = user.getUuid();
         this.alternatemobilenumber=user.getAlternateMobileNumber();
+        this.parentid = user.getParentid();
         mapPermanentAddress(user);
         mapCorrespondenceAddress(user);
     }
@@ -224,7 +225,8 @@ public class UserRequest {
         }
         return User.builder()
                 .uuid(this.uuid)
-                .id(this.id).parentId(this.parentId)
+                .id(this.id)
+                .parentid(this.parentid)
                 .name(this.name)
                 .username(this.userName)
                 .salutation(this.salutation)

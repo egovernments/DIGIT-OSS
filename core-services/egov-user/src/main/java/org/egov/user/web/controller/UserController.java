@@ -78,7 +78,9 @@ public class UserController {
     	
     	 System.out.println("Received Citizen Registration Request  " + createUserRequest);
         log.info("Received Citizen Registration Request  " + createUserRequest);
+        
         User user = createUserRequest.toDomain(true);
+        
         System.out.println("1");
         user.setOtpValidationMandatory(IsValidationMandatory);
         if (isRegWithLoginEnabled) {
@@ -100,15 +102,18 @@ public class UserController {
     public UserDetailResponse createUserWithoutValidation(@RequestBody  CreateUserRequest createUserRequest,
                                                           @RequestHeader HttpHeaders headers) {
 
-    	//System.out.println("request info : " + createUserRequest.getUser().getAadhaarNumber());
-    	System.out.println("create user req : " + createUserRequest.getUser().getAadhaarNumber());
-        User user = createUserRequest.toDomain(true);
+    	
+       
+    	User user = createUserRequest.toDomain(true);
+    	
         user.setMobileValidationMandatory(isMobileValidationRequired(headers));
        
         user.setOtpValidationMandatory(false);
         
         final User newUser = userService.createUser(user, createUserRequest.getRequestInfo());
-        return createResponse(newUser);
+        System.out.println("parent id : " + newUser.getParentid());
+       return createResponse(newUser);
+        
     }
 
     /**
@@ -127,6 +132,8 @@ public class UserController {
         }
         return searchUsers(request, headers);
     }
+    
+    
 
     /**
      * end-point to search the users by providing userSearchRequest. In Request

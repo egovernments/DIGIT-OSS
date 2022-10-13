@@ -2,6 +2,8 @@ package org.egov.user.avm.developer.entity;
 
 import java.util.List;
 
+import org.egov.user.web.contract.UserRequest;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +14,7 @@ public class DevDetail {
 
 	private AddInfo addInfo;
 	private UploadDocument uploadDocument;
-	private List<AddRemoveAuthoizedUsers> addRemoveAuthoizedUsers;	
+	private List<UserRequest> addRemoveAuthoizedUsers;	
 	private CapcityDevelopAColony capcityDevelopAColony;
 	
 	
