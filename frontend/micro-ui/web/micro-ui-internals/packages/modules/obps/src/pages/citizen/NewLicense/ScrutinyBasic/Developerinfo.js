@@ -7,6 +7,7 @@ import { Card, Row, Col} from "react-bootstrap";
 import * as Icon from "react-bootstrap-icons";
 import { XCircleFill } from "react-bootstrap-icons";
 import { CheckCircleFill } from "react-bootstrap-icons";
+import { ArrowDownCircleFill } from "react-bootstrap-icons";
 
 
 
@@ -121,11 +122,11 @@ const Developerinfo=(props)=>{
                            
                             name="group41" inline></Form.Check> <br></br>
                             <input type="radio" value="Yes" id="Yes"  
-                            onChange1={handleChange} name="Yes" onClick={handleshow} />
+                            onChange1={handleChange} name="Yes" onClick={handleshow}  readOnly/>
                             <label for="Yes">Yes</label>&nbsp;&nbsp;
 
                             <input type="radio" value="No" id="No"
-                            onChange1={handleChange} name="Yes" onClick={handleshow}/>
+                            onChange1={handleChange} name="Yes" onClick={handleshow} readOnly/>
                             <label for="No">No</label>
                             {
                         showhide1==="Yes" && (
@@ -143,7 +144,7 @@ const Developerinfo=(props)=>{
                             type="radio" id = "default-radio"  onChange1={handleChange} onClick={handleshow}
                             label={  <XCircleFill class="text-danger" />}
                             name="group41" inline></Form.Check>
-                               <input type="number" className="form-control"/>
+                               <input type="number" className="form-control" />
                             </div>
                     <div className="col col-3">
                         <label htmlFor="potential"><h6><b>Potential Zone:</b></h6></label>
@@ -157,7 +158,7 @@ const Developerinfo=(props)=>{
                                     label={  <XCircleFill class="text-danger" />} 
                                     name="group43" inline></Form.Check>
                         <select className="form-control" id="potential"
-                            name="potential"
+                            name="potential" readOnly
                         >
                             <option value="" >--Potential Zone--
                             </option>
@@ -181,7 +182,7 @@ const Developerinfo=(props)=>{
                                     id = "default-radio" 
                                     label={  <XCircleFill class="text-danger" />} 
                                     name="group44" inline></Form.Check>
-                               <input type="text" className="form-control" disabled/>
+                               <input type="text" className="form-control" disabled="disabled"/>
                      </div>
                      <div className="col col-3">
             <div className="form-group">
@@ -209,7 +210,7 @@ const Developerinfo=(props)=>{
         </div>
         <div className="col col-3">
             <div className="form-group ">
-                <label htmlFor="roadwidth"><h6><b>Approach Road Width</b>&nbsp;&nbsp;<CalculateIcon color="primary"/></h6> </label>
+                <label htmlFor="roadwidth"><h6><b>Approach Road Width</b>&nbsp;&nbsp;</h6> </label>
                 <Form.Check value="Approach Road Width " type="radio" 
                                     id = "default-radio" 
                                     label={  <CheckCircleFill class="text-success" />} 
@@ -222,7 +223,7 @@ const Developerinfo=(props)=>{
                 <input
                     type="number"
                     name="roadwidth"
-                    className="form-control"></input>
+                    className="form-control" readOnly></input>
             </div>
         </div>
         <div className="col col-3">
@@ -375,7 +376,7 @@ const Developerinfo=(props)=>{
                                     <div className="row">
                                         <div className="col col-4">
                                     <label htmlFor="npnl"><h6><b>Any other, please specify</b></h6></label>
-                                    <input type="text" className="form-control"/></div>
+                                    <input type="text" className="form-control" readOnly/></div>
                                     </div>
                                     
              
@@ -483,7 +484,7 @@ const Developerinfo=(props)=>{
                                                 <div className="row " >
                                                         <div className="col col">
                                                             <label for="parentLicense" className="font-weight-bold"> Width of revenue rasta </label>
-                                                            <input type="number" className="form-control"/>
+                                                            <input type="number" className="form-control" readOnly/>
                                                         </div>
                                                        
                                                     </div> 
@@ -1066,8 +1067,7 @@ const Developerinfo=(props)=>{
                                     id = "default-radio" 
                                     label={  <XCircleFill class="text-danger" />} 
                                     name="group75" inline></Form.Check>
-                                  <input type="file" className="form-control">
-                                    </input>
+                                  <input type="file" className="form-control" readOnly/>{<ArrowDownCircleFill class="text-primary" />}
                         </div>
                         <div className="col col-3">
                                     <h6 ><b>Copy of Mutation</b></h6>&nbsp;&nbsp;
@@ -1080,7 +1080,7 @@ const Developerinfo=(props)=>{
                                     id = "default-radio" 
                                     label={  <XCircleFill class="text-danger" />} 
                                     name="group75" inline></Form.Check>
-                                  <input type="file" className="form-control"></input>
+                                  <input type="file" className="form-control" readOnly/>{<ArrowDownCircleFill class="text-primary" />}
                         </div>
                         <div className="col col-3">
                                     <h6 ><b>Copy of Jamabandi</b></h6>&nbsp;&nbsp;
@@ -1093,7 +1093,7 @@ const Developerinfo=(props)=>{
                                     id = "default-radio" 
                                     label={  <XCircleFill class="text-danger" />} 
                                     name="group75" inline></Form.Check>
-                                  <input type="file" className="form-control"></input>
+                                  <input type="file" className="form-control" readOnly/>{<ArrowDownCircleFill class="text-primary" />}
                         </div>
                         <div className="col col-3">
                                     <h6 ><b>Details of lease / patta, if any</b></h6>&nbsp;&nbsp;
@@ -1106,7 +1106,7 @@ const Developerinfo=(props)=>{
                                     id = "default-radio" 
                                     label={  <XCircleFill class="text-danger" />} 
                                     name="group75" inline></Form.Check>
-                                  <input type="file" className="form-control"></input>
+                                  <input type="file" className="form-control" readOnly/>{<ArrowDownCircleFill class="text-primary" />}
                         </div>
                       
                      </div><br></br>
@@ -1122,8 +1122,8 @@ const Developerinfo=(props)=>{
                                     id = "default-radio" 
                                     label={  <XCircleFill class="text-danger" />} 
                                     name="group75" inline></Form.Check>
-                                  <input type="file" className="form-control">
-                                    </input>
+                                  <input type="file" className="form-control" readOnly/>{<ArrowDownCircleFill class="text-primary" />}
+                                   
                         </div>
                         <div className="col col-3">
                                     <h6 ><b>Proposed Layout of Plan /site plan for area applied for migration.</b></h6>&nbsp;&nbsp;
@@ -1136,7 +1136,7 @@ const Developerinfo=(props)=>{
                                     id = "default-radio" 
                                     label={  <XCircleFill class="text-danger" />} 
                                     name="group75" inline></Form.Check>
-                                  <input type="file" className="form-control"></input>
+                                  <input type="file" className="form-control" readOnly/>{<ArrowDownCircleFill class="text-primary" />}
                         </div>
                         <div className="col col-3">
                                     <h6 ><b>Revised Land Schedule</b></h6>&nbsp;&nbsp;
@@ -1149,7 +1149,7 @@ const Developerinfo=(props)=>{
                                     id = "default-radio" 
                                     label={  <XCircleFill class="text-danger" />} 
                                     name="group75" inline></Form.Check>
-                                  <input type="file" className="form-control"></input>
+                                  <input type="file" className="form-control" readOnly/>{<ArrowDownCircleFill class="text-primary" />}
                         </div>
                      </div>
                      <br></br>

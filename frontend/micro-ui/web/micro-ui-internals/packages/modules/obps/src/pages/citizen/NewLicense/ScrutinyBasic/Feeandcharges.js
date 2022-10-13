@@ -117,7 +117,7 @@ const Feeandcharges=(props)=>{
                             label={  <XCircleFill class="text-danger" />}
                             name="group110" inline></Form.Check></h6>
                                         <input type="text" className="form-control"required  minLength={1} maxLength={20} pattern="[0-9]*"
-                                         onChange={(e)=>setFeeDetail(e.target.value)} value={feeDetail} onChange1={handleFeesChange} />
+                                         onChange={(e)=>setFeeDetail(e.target.value)} value={feeDetail} onChange1={handleFeesChange} readOnly />
                                          {errors.feeDetail && <p>Please check the First Name</p>}
                              </div>
                              <div className="col col-3">
@@ -135,7 +135,7 @@ const Feeandcharges=(props)=>{
                             label={  <XCircleFill class="text-danger" />} 
                             name="group111" inline></Form.Check></h6>
                                         <input type="text" className="form-control" required  minLength={1} maxLength={20} pattern="[0-9]*"
-                                         onChange={(e)=>setLicenseFee(e.target.value)} value={licenseFee} onChange1={handleLicFeesChange} />
+                                         onChange={(e)=>setLicenseFee(e.target.value)} value={licenseFee} onChange1={handleLicFeesChange} readOnly/>
                                          {errors.licenseFee && <p>Please check the First Name</p>}
                              </div>
                              <div className="col col-3">
@@ -154,7 +154,7 @@ const Feeandcharges=(props)=>{
                             label={  <XCircleFill class="text-danger" />} 
                             name="group112" inline></Form.Check></h6>
                               <input type="text" className="form-control" required  minLength={1} maxLength={20} pattern="[0-9]*"
-                               onChange={(e)=>setScrutinyFee(e.target.value)} value={ScrutinyFee} onChange1={handleScrutinyFeesChange} />
+                               onChange={(e)=>setScrutinyFee(e.target.value)} value={ScrutinyFee} onChange1={handleScrutinyFeesChange} readOnly />
                                {errors.ScrutinyFee && <p></p>}
                    </div>
                    <div className="col col-3">
@@ -175,7 +175,7 @@ const Feeandcharges=(props)=>{
                             label={  <XCircleFill class="text-danger" />} 
                             name="group113" inline></Form.Check></h6>
                               <input type="text" className="form-control" required  minLength={1} maxLength={20} pattern="[0-9]*"
-                               onChange={(e)=>setTotalFee(e.target.value)} value={totalFee}onChange1={handleTotalFeesChange} />
+                               onChange={(e)=>setTotalFee(e.target.value)} value={totalFee}onChange1={handleTotalFeesChange} readOnly />
                                {errors.totalFee && <p></p>}
                    </div>
                              </div><br></br>
@@ -195,7 +195,7 @@ const Feeandcharges=(props)=>{
                             label={  <XCircleFill class="text-danger" />} 
                             name="group114" inline></Form.Check></h6>
                                         <input type="number" className="form-control" minLength={2} maxLength={100}
-                                         onChange={(e)=>setRemark(e.target.value)} value={remark} onChange1={handleRemarkChange} />
+                                         onChange={(e)=>setRemark(e.target.value)} value={remark} onChange1={handleRemarkChange} readOnly />
                                          {errors.remark && <p></p>}
                              </div>
                           
@@ -229,9 +229,9 @@ const Feeandcharges=(props)=>{
                                                 <div className="row "  >
                                                         <div className="col col-12">
                                                             <label for="parentLicense" className="font-weight-bold">Enter License Number/LOI number</label>
-                                                            <input type="text" className="form-control"/>
+                                                            <input type="text" className="form-control" readOnly/>
                                                             <label for="parentLicense" className="font-weight-bold">Amount (previous)</label>
-                                                            <input type="text" className="form-control" disabled/>
+                                                            <input type="text" className="form-control"  readOnly/>
                                                             
                                                         </div>
                                                        
@@ -362,10 +362,10 @@ const Feeandcharges=(props)=>{
                                                             className="text-danger"><b>*</b></span>
                                                     </label>
                                                 </div>
-                                                <div class="my-2">
+                                                {/* <div class="my-2">
                                                     <button className="btn btn-success" 
                                                         data-toggle="modal" data-target="#payemtModal">Pay Now</button>
-                                                </div>
+                                                </div> */}
                                            </div>
                              
                                     

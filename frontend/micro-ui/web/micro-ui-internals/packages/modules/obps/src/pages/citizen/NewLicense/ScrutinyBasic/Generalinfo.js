@@ -62,7 +62,9 @@ const Genarelinfo = (props) => {
                 inline
               ></Form.Check>
             </div>
-            <Form.Select type="text" placeholder="Puropse">
+            {/* <Form.Select type="text" placeholder="Puropse"  readOnly> */}
+            <select className="form-control" id="Puropse" name="potential" readOnly>
+            <option value="">--Puropse--</option>
               <option value="01">Plotted Commercial</option>
               <option value="02">Group Housing Commercial</option>
               <option value="03">AGH </option>
@@ -72,7 +74,8 @@ const Genarelinfo = (props) => {
               <option value="07">IT Colony Commercial</option>
               <option value="08">DDJAY</option>
               <option value="12">TOD Group housing</option>
-            </Form.Select>
+              </select>
+            {/* </Form.Select> */}
           </Col>
           <div className="col col-3">
             <label htmlFor="potential">
@@ -98,7 +101,7 @@ const Genarelinfo = (props) => {
               name="group20"
               inline
             ></Form.Check>
-            <select className="form-control" id="potential" name="potential">
+            <select className="form-control" id="potential" name="potential" readOnly>
               <option value="">--Potential Zone--</option>
               <option value="K.Mishra">Hyper</option>
               <option value="potential 1">High I</option>
@@ -132,7 +135,7 @@ const Genarelinfo = (props) => {
                 inline
               ></Form.Check>
             </div>
-            <Form.Select type="text" defaultValue="Select" placeholder="District">
+            <Form.Select type="text" defaultValue="Select" placeholder="District" readOnly>
               <option value="1">no district</option>
             </Form.Select>
           </Col>
@@ -197,7 +200,7 @@ const Genarelinfo = (props) => {
             Enter Details
           </Button>
           <div>
-            <Modal {...props} size="xl" show={show} style={{"max-width":"80%"}} onHide={handleClose} backdrop="static" keyboard={false}>
+            <Modal {...props} size="xl" show={show}  onHide={handleClose} backdrop="static" keyboard={false}>
               <Modal.Header closeButton></Modal.Header>
 
               <Modal.Body>
@@ -228,7 +231,7 @@ const Genarelinfo = (props) => {
                         inline
                       ></Form.Check>
                     </div>
-                    <Form.Select type="text" defaultValue="Select">
+                    <Form.Select type="text" defaultValue="Select" readOnly>
                       <option value="1">--Select Tehsil--</option>
                     </Form.Select>
                   </Col>
@@ -258,7 +261,7 @@ const Genarelinfo = (props) => {
                         inline
                       ></Form.Check>
                     </div>
-                    <Form.Select type="text" defaultValue="Select">
+                    <Form.Select type="text" defaultValue="Select" readOnly>
                       <option value="1">--Select Revenue State--</option>
                     </Form.Select>
                   </Col>
@@ -360,7 +363,7 @@ const Genarelinfo = (props) => {
                 <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                   <thead>
                     <tr>
-                      {/* {(khasraData !== undefined && khasraData.length > 0)?(khasraData.)} */}
+                      
                       <th>
                         <b>
                           Killa&nbsp;&nbsp;
@@ -554,7 +557,7 @@ const Genarelinfo = (props) => {
                             value="Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered"
                             type="radio"
                             id="default-radio"
-                            llabel={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleFill class="text-success" />}
                             name="group35"
                             inline
                           ></Form.Check>
@@ -580,7 +583,7 @@ const Genarelinfo = (props) => {
                             value="Date of registering collaboration agreement"
                             type="radio"
                             id="default-radio"
-                            llabel={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleFill class="text-success" />}
                             name="group36"
                             inline
                           ></Form.Check>
@@ -606,7 +609,7 @@ const Genarelinfo = (props) => {
                             value="Date of validity of collaboration agreement"
                             type="radio"
                             id="default-radio"
-                            llabel={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleFill class="text-success" />}
                             name="group37"
                             inline
                           ></Form.Check>
@@ -644,7 +647,7 @@ const Genarelinfo = (props) => {
                             value="Whether collaboration agreement irrevocable"
                             type="radio"
                             id="default-radio"
-                            llabel={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleFill class="text-success" />}
                             name="group38"
                             inline
                           ></Form.Check>
@@ -670,7 +673,7 @@ const Genarelinfo = (props) => {
                             value="Name of authorized signatory on behalf of land owner(s)"
                             type="radio"
                             id="default-radio"
-                            llabel={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleFill class="text-success" />}
                             name="group39"
                             inline
                           ></Form.Check>
@@ -696,7 +699,7 @@ const Genarelinfo = (props) => {
                             value="Name of authorized signatory on behalf of developer to sign Collaboration agreement"
                             type="radio"
                             id="default-radio"
-                            llabel={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleFill class="text-success" />}
                             name="group40"
                             inline
                           ></Form.Check>
@@ -722,7 +725,7 @@ const Genarelinfo = (props) => {
                             value="Registring Authority"
                             type="radio"
                             id="default-radio"
-                            llabel={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleFill class="text-success" />}
                             name="group41"
                             inline
                           ></Form.Check>
@@ -773,6 +776,29 @@ const Genarelinfo = (props) => {
               </Modal.Footer>
             </Modal>
           </div>
+          
+{/* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div> */}
+
         </div>
         <br></br>
 
