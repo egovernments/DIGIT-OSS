@@ -28,7 +28,8 @@ CREATE TABLE eg_user (
     bloodgroup character varying(32),
     photo character varying(36),
     identificationmark character varying(300),
-    tenantid character varying(256) not null
+    tenantid character varying(256) not null,
+    parentid bigint
 );
 
 CREATE SEQUENCE seq_eg_user

@@ -90,7 +90,7 @@ public class DeveloperRegistrationService {
 		for(int i=0;i<authorizedUserList;i++) {
 			
 			User user = new User();
-			user.setAadhaarNumber(developerRegistration.getDeveloperDetail().get(0).getDevDetail().getAddRemoveAuthoizedUsers().get(i).getUploadAadharPdf());
+			//user.setAadhaarNumber(developerRegistration.getDeveloperDetail().get(0).getDevDetail().getAddRemoveAuthoizedUsers().get(i).getUploadAadharPdf());
 			user.setMobileNumber(developerRegistration.getDeveloperDetail().get(0).getDevDetail().getAddRemoveAuthoizedUsers().get(i).getMobileNumber());
 			user.setName("RahulTiwar09");
 			user.setActive(true);
@@ -110,10 +110,10 @@ public class DeveloperRegistrationService {
 			user.setRoles(roles);
 			
 			//user.setPermanentAddress("permanent address");
-			user.setEmailId(developerRegistration.getDeveloperDetail().get(0).getDevDetail().getAddRemoveAuthoizedUsers().get(i).getEmail());
-			user.setPan(developerRegistration.getDeveloperDetail().get(0).getDevDetail().getAddRemoveAuthoizedUsers().get(i).getUploadAadharPdf());
-			user.setSignature(developerRegistration.getDeveloperDetail().get(0).getDevDetail().getAddRemoveAuthoizedUsers().get(i).getUploadDigitalSignaturePdf());
-			user.setParentId(developerRegistration.getId());
+			user.setEmailId(developerRegistration.getDeveloperDetail().get(0).getDevDetail().getAddRemoveAuthoizedUsers().get(i).getEmailId());
+			user.setPan(developerRegistration.getDeveloperDetail().get(0).getDevDetail().getAddRemoveAuthoizedUsers().get(i).getPan());
+			user.setSignature(developerRegistration.getDeveloperDetail().get(0).getDevDetail().getAddRemoveAuthoizedUsers().get(i).getSignature());
+			//user.setParentId(developerRegistration.getId());
 			userList.add(userService.createUser(user, requestInfo));
 		}
 		

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.egov.common.contract.request.RequestInfo;
 import org.egov.user.avm.developer.entity.AddRemoveAuthoizedUsers;
 import org.egov.user.avm.developer.entity.DeveloperInfo;
 import org.egov.user.avm.developer.entity.DeveloperRegistration;
@@ -12,6 +13,8 @@ import org.egov.user.avm.developer.repo.DeveloperRegistrationRepo;
 import org.egov.user.avm.developer.services.DeveloperRegistrationService;
 import org.egov.user.domain.model.User;
 import org.egov.user.domain.service.UserService;
+import org.egov.user.web.contract.CreateUserRequest;
+import org.egov.user.web.contract.UserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,18 +37,63 @@ public class DeveloperRegistrationController {
 	
 	@PostMapping("/_registration")
 	public DeveloperRegistration createDeveloperRegistraion(@RequestBody DeveloperRegistration developerRegistration) throws JsonProcessingException {
-		
-		//System.out.println("Request Info : " + developerInfo.getDeveloperRegistration().getDeveloperDetail().size());
-		
+
 		System.out.println("Registration Api..");
+		System.out.println("developer detail size ==== : " + developerRegistration.getDeveloperDetail().size());
 		//DeveloperRegistration insertedDeveloper = this.developerRegistrationService.addDeveloperRegistraion(developerRegistration);
 		//List<User> userList = this.developerRegistrationService.setUserInfo(developerRegistration);
 		
 		//User createdUser = userService.createCitizen(user, createUserRequest.getRequestInfo());
-		return developerRegistrationService.addDeveloperRegistraion(developerRegistration);
-		//return null;
+		DeveloperRegistration developerRegistration1 = developerRegistrationService.addDeveloperRegistraion(developerRegistration); 
+	
+		
+		System.out.println("developer1 detail size ==== : " + developerRegistration1.getDeveloperDetail().size());
+		
+		
+		
+		
+		User newUser = null;
+		Long devId=developerRegistration1.getId();
+		UserRequest userRequest ;
+		
+		for(int i =0;i<developerRegistration1.getDeveloperDetail().size();i++) {		
+			
+			for(int j =0; j<developerRegistration1.getDeveloperDetail().get(i).getDevDetail().getAddRemoveAuthoizedUsers().size();j++ ) {
+				
+				userRequest = new UserRequest();
+				
+				CreateUserRequest createUserRequest = new CreateUserRequest();
+				RequestInfo requestInfo = new RequestInfo();
+				requestInfo.setApiId("1");
+				requestInfo.setVer("1");
+				requestInfo.setDid("");
+				requestInfo.setAction("_create");
+				requestInfo.setAuthToken("null");
+				createUserRequest.setRequestInfo(requestInfo);
+				
+				userRequest = developerRegistration1.getDeveloperDetail().get(i).getDevDetail().getAddRemoveAuthoizedUsers().get(j);
+				
+				createUserRequest.setUser(userRequest);
+				createUserRequest.getUser().setParentid(devId);
+				
+				User user = createUserRequest.toDomain(true);
+				System.out.println("dev Id ======> " + devId);
+				
+				//user.setParentid(devId);
+				//user.setMobileValidationMandatory(isMobileValidationRequired(headers));
+				newUser = userService.createUser(user, requestInfo);
+				 
+			}
+		}
+		
+
+		//return developerRegistrationService.addDeveloperRegistraion(developerRegistration);
+		return developerRegistration1;
 		
 	}
+	
+	
+	
 	
 	
 	
@@ -81,12 +129,12 @@ public class DeveloperRegistrationController {
 		
 	}
 	
-	@GetMapping("/_getAuthorizedUser")
-	public String getAuthorizeUser() {
+	
+	public Developerdetail getAuthorizeUser() {
 		
-		Developerdetail d = developerRegistrationRepo.findAuthorizedUser("7895877833");
+		Developerdetail d = developerRegistrationRepo.findAuthorizedUser("12312312");
 		System.out.println("user : " + d.getVersion());
-		return null;
+		return d;
 	}
 	
 	
@@ -95,14 +143,19 @@ public class DeveloperRegistrationController {
 	
 	
 	
-	public AddRemoveAuthoizedUsers getAuthorize(@RequestParam(value = "mobileNumber") String mobileNumber) {
+
+	
+	@GetMapping("/_getAuthorizedUser")
+	public UserRequest getAuthorize() {
 		
-		//String mobileNumber = "7895877833";
+		String mobileNumber = "12312312";
 		List<DeveloperRegistration> d = developerRegistrationRepo.findAll();
 		
 		if(d.size()>0) {
 			for(int i=0;i<d.size();i++) {
 				if(d.get(i).getDeveloperDetail().size()>0) {
+					
+					
 					System.out.println("1 : " + d.get(i).getDeveloperDetail().size());
 				
 					for(int j=0;j<d.get(i).getDeveloperDetail().size();j++) {
@@ -133,6 +186,21 @@ public class DeveloperRegistrationController {
 		return null;
 	}
 	
+	
+	@PostMapping("/_create")
+	public DeveloperRegistration createDeveloperRegistraion1(@RequestBody DeveloperRegistration developerRegistration) throws JsonProcessingException {
+		
+		//System.out.println("Request Info : " + developerInfo.getDeveloperRegistration().getDeveloperDetail().size());
+		
+		System.out.println("Registration Api..");
+		//DeveloperRegistration insertedDeveloper = this.developerRegistrationService.addDeveloperRegistraion(developerRegistration);
+		//List<User> userList = this.developerRegistrationService.setUserInfo(developerRegistration);
+		
+		//User createdUser = userService.createCitizen(user, createUserRequest.getRequestInfo());
+		return developerRegistrationService.addDeveloperRegistraion(developerRegistration);
+		//return null;
+		
+	}
 		
 		
 

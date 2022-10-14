@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -39,7 +41,7 @@ import redis.clients.jedis.JedisShardInfo;
 @Slf4j
 @Import({TracerConfiguration.class, EncryptionConfiguration.class})
 
-public class EgovUserApplication {
+public class EgovUserApplication extends SpringBootServletInitializer {
 
 
     private static final String DATE_FORMAT = "dd-MM-yyyy HH:mm:ss";
@@ -116,6 +118,12 @@ public class EgovUserApplication {
              
             }
         };
+    }
+    
+    
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(EgovUserApplication.class);
     }
     
     
