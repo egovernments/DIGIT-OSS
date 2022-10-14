@@ -1,7 +1,7 @@
 // import React from "react";
 import React, { useEffect, useState } from "react";
 import OBPSSearchApplication from "../../components/SearchApplication";
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Search from "../employee/Search";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation, Route } from "react-router-dom";
@@ -11,7 +11,7 @@ import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-component
 // import CreateOCEDCR from "./OCEDCR";
 // import BPACitizenHomeScreen from "./home";
 // import StakeholderRegistration from "./StakeholderRegistration";
-import Formcontainer from "../citizen/NewLicense/FormContainer/FormContainer";
+// import Formcontainer from "../citizen/NewLicense/FormContainer/FormContainer";
 import Step1 from"../citizen/NewLicense/Step1/Step1";
 import Step2 from"../citizen/NewLicense/Step2/Step2";
 import Step3 from "../citizen/NewLicense/Step3/Step3";
@@ -20,7 +20,6 @@ import Step5 from "../citizen/NewLicense/Step5/Step5";
 import AddInfoForm from "../citizen/DeveloperRegistration/AddInfoForm/addInfo";
 import MyApplication from "./MyApplication";
 import ApplicationDetails from "./ApplicationDetail";
-// import AddInfoForm from "./DeveloperRegistration/AddInfoForm/addInfo";
 // import LicenseAddInfo from "../../pageComponents/LicenseAddInfo";
 // import OCBuildingPermit from "./OCBuildingPermit";
 // import BpaApplicationDetail from "./BpaApplicationDetail";
@@ -31,8 +30,8 @@ import ApplicationDetails from "./ApplicationDetail";
 import Inbox from "./ArchitectInbox";
 //import EdcrInbox from "./EdcrInbox";
 import OBPSResponse from "../employee/OBPSResponse";
+import CommonForm from "../citizen/NewLicense/common/index";
 import ScrutinyFormcontainer from "./NewLicense/ScrutinyContainer/scrutinyformcontainer";
-
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
@@ -66,7 +65,7 @@ const App = ({ path }) => {
         <Route path={`${path}/openlink/stakeholder/apply`} component={StakeholderRegistration} />
         <PrivateRoute path={`${path}/add-info`} component={AddInfoForm} />
         {/* <PrivateRoute path={`${path}/common`} component={Common} /> */}
-        <PrivateRoute path={`${path}/tab`} component={Formcontainer} />
+        <PrivateRoute path={`${path}/tab`} component={CommonForm} />
         <PrivateRoute path={`${path}/step-one`} component={Step1} />
         <PrivateRoute path={`${path}/step-two`} component={Step2} />
         <PrivateRoute path={`${path}/step-three`} component={Step3} />
