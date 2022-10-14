@@ -11,7 +11,7 @@ import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-component
 // import CreateOCEDCR from "./OCEDCR";
 // import BPACitizenHomeScreen from "./home";
 // import StakeholderRegistration from "./StakeholderRegistration";
-import Formcontainer from "../citizen/NewLicense/FormContainer/FormContainer";
+// import Formcontainer from "../citizen/NewLicense/FormContainer/FormContainer";
 import Step1 from"../citizen/NewLicense/Step1/Step1";
 import Step2 from"../citizen/NewLicense/Step2/Step2";
 import Step3 from "../citizen/NewLicense/Step3/Step3";
@@ -30,6 +30,7 @@ import ApplicationDetails from "./ApplicationDetail";
 import Inbox from "./ArchitectInbox";
 //import EdcrInbox from "./EdcrInbox";
 import OBPSResponse from "../employee/OBPSResponse";
+import CommonForm from "./NewLicense/common";
 
 const App = ({ path }) => {
   const location = useLocation();
@@ -64,7 +65,7 @@ const App = ({ path }) => {
         <Route path={`${path}/openlink/stakeholder/apply`} component={StakeholderRegistration} />
         <PrivateRoute path={`${path}/add-info`} component={AddInfoForm} />
         {/* <PrivateRoute path={`${path}/common`} component={Common} /> */}
-        <PrivateRoute path={`${path}/tab`} component={Formcontainer} />
+        <PrivateRoute path={`${path}/tab`} component={CommonForm} />
         <PrivateRoute path={`${path}/step-one`} component={Step1} />
         <PrivateRoute path={`${path}/step-two`} component={Step2} />
         <PrivateRoute path={`${path}/step-three`} component={Step3} />

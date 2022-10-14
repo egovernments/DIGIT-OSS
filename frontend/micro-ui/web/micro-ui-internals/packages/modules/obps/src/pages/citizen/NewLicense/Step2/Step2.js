@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Collapse } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
-
 import { useForm } from "react-hook-form";
-import Modal from 'react-bootstrap/Modal';
+import Popup from "reactjs-popup";
+import CalculateIcon from '@mui/icons-material/Calculate';
+import InfoIcon from '@mui/icons-material/Info';
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "reactstrap";
 import axios from 'axios';
 
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect"

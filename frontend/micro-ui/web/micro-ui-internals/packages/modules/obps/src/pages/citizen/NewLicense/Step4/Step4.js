@@ -1,7 +1,10 @@
 import React, { useState,useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import { useForm } from "react-hook-form";
-// import { TableRow, TableHead, TableContainer, TableCell, TableBody, Table, Paper } from '@material-ui/core';
+import DDJAYForm from "../Step4/DdjayForm";
+import ResidentialPlottedForm from "./ResidentialPlotted";
+import IndustrialPlottedForm from "./IndustrialPlotted";
+// import { tr, thead, TableContainer, td, tbody, Table, Paper } from '@material-ui/core';
 // import AddIcon from "@material-ui/icons/Add";
 // import DeleteIcon from "@material-ui/icons/Delete";
 import { Button, Form } from "react-bootstrap";
@@ -233,12 +236,15 @@ const AppliedDetailForm =(props)=> {
   const[nczTruthingReport,setNczTruthingReport]=useState('');
   const[dlscRecommend,setDlscRecommend]=useState('');
   const[exemption,setExemption]=useState('');
-//   const DdjayFormDisplay=useSelector(selectDdjayFormShowDisplay);
+  const[DdjayFormDisplay,setDdjayFormDisplay]=useState("")
+  const[ResidentialFormDisplay,setResidentialFormDisplay]=useState("")
+  const[IndustrialPlottedFormDisplay,setIndustrialPlottedFormDisplay]=useState("")
+  // const DdjayFormDisplay=useSelector(selectDdjayFormShowDisplay);
 //   const ResidentialFormDisplay=useSelector(selectResidentialFormShowDisplay);
 //   const IndustrialPlottedFormDisplay=useSelector(selectIndustrialFormDisplay);
 //   const CommercialPlottedFormDisplay=useSelector(selectCommercialFormDisplay)
-
-
+const Purpose=localStorage.getItem('purpose')
+console.log("adf",Purpose)
     
     const { register, handleSubmit, formState: { errors } } = useForm([{XLongitude:'',YLatitude:''}]);
     const formSubmit = (data) => {
@@ -257,6 +263,14 @@ const AppliedDetailForm =(props)=> {
 
     // },[IndustrialPlottedFormDisplay])
     // useEffect(()=>{
+    //   console.log("dff",ResidentialFormDisplay)
+
+    // },[ResidentialFormDisplay])
+    // useEffect(()=>{
+    //   console.log("dff",IndustrialPlottedFormDisplay)
+
+    // },[IndustrialPlottedFormDisplay])
+    // useEffect(()=>{
     //   console.log("dff",CommercialPlottedFormDisplay)
 
     // },[CommercialPlottedFormDisplay])
@@ -265,6 +279,7 @@ const AppliedDetailForm =(props)=> {
     const AppliedDetailFormSubmitHandler=(e)=>{
         e.preventDefault();
         SetAppliedDetailFormSubmitted(true);
+        props.Step4Continue({"data":true})
         let forms={
                dgps:dgps,
                "step4Data1":
@@ -380,17 +395,14 @@ const AppliedDetailForm =(props)=> {
                           exemption:exemption},
 
         } 
-         console.log("FRMDATA",forms);
         localStorage.setItem('step4',JSON.stringify(forms))
-        form.push(forms)
-        let frmData = JSON.parse(localStorage.getItem('step4') || "[]")
-    
+       
     };
-    useEffect(()=>{
-        if (AppliedDetailFormSubmitted) {
-            props.AppliedDetailsFormSubmit(true);
-        }
-    },[AppliedDetailFormSubmitted]);
+    // useEffect(()=>{
+    //     if (AppliedDetailFormSubmitted) {
+    //         props.AppliedDetailsFormSubmit(true);
+    //     }
+    // },[AppliedDetailFormSubmitted]);
     const [showhide,setShowhide]=useState("No");
     const [showhide1,setShowhide1]=useState("No");
     const [showhide0,setShowhide0]=useState("No");
@@ -493,13 +505,13 @@ onchange = e => {
      
      
      return (
-        <Form onSubmit={AppliedDetailFormSubmitHandler}>
-                <Card style={{width:"126%",marginLeft:"-88px",paddingRight:"10px"}}>
+        <Form >
+                <Card style={{width:"126%",marginLeft:"12px",paddingRight:"10px"}}>
          <Form.Group className="justify-content-center" controlId="formBasicEmail">
                 <Row className="ml-auto" style={{marginBottom:5}}>
                 <Col col-12>
                    
-                            <h5 className="text-black" onChange={(e)=>setDgps(e.target.value)} value={dgps}>1. DGPS points <span className="text-primary"> (Click here for instructions to capture DGPS points)</span></h5>
+                            <h5 className="text-black" onChange={(e)=>setDgps(e.target.value)} value={dgps}>1. DGPS points <span className="text-primary"> (Click here for instructions to capture DGPS points)</span></h5><br></br>
 {/*                            
                                     <div className="col col-4">
                                         <label for="pitentialZone" className="font-weight-bold"><b>Number of DGPS point</b></label>
@@ -616,8 +628,8 @@ onchange = e => {
                                             
 
                                         </div>
-                                         <button type="button" style={{ float: 'right'}} className="btn btn-primary" onClick={()=>setNoOfRows(noOfRows-1)}> </button>&nbsp;&nbsp;&nbsp;
-                                             <button type="button" style={{ float: 'right',marginRight:15}} className="btn btn-primary" onClick={()=>setNoOfRows(noOfRows+1)}></button> 
+                                         <button type="button" style={{ float: 'right'}} className="btn btn-primary" onClick={()=>setNoOfRows(noOfRows-1)}>Delete</button>&nbsp;&nbsp;&nbsp;
+                                             <button type="button" style={{ float: 'right',marginRight:15}} className="btn btn-primary" onClick={()=>setNoOfRows(noOfRows+1)}>Add</button> 
                                             
                                             
                                         </div>
@@ -639,9 +651,9 @@ onchange = e => {
                                         </div>);
                                     })}
                                         
-                                    </div>
+                                    </div><br></br>
 
-                                    <hr/>
+                                    <hr/><br></br>
                                     <h5 className="text-black"><b>2.Details of Plots</b>&nbsp;&nbsp;
                                    
                                                                 <input type="radio"  id="Yes" value="1"
