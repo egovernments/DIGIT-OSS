@@ -6,6 +6,9 @@ import { useForm } from "react-hook-form";
 // import DeleteIcon from "@material-ui/icons/Delete";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col} from "react-bootstrap";
+import CalculateIcon from '@mui/icons-material/Calculate';
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import InfoIcon from '@mui/icons-material/Info';
 // import CalculateIcon from '@mui/icons-material/Calculate';
 // import DDJAYForm from "./DDJAY";
 // import NilpForm from "./Nilp";
@@ -649,20 +652,590 @@ onchange = e => {
                                                                 <input type="radio"  id="Yes" value="2"
                                                                     onChange={handleChange} name="Yes" onClick={handleshow18}/>&nbsp;&nbsp;
                                                                 <label for="Yes"></label>
-                                                                <label htmlFor="npnl">Irregular</label></h5>
-                                           
+                                                                <label htmlFor="npnl">Irregular</label></h5>  {
+                                            showhide18==="1" && (
+                                                           
+                                                                      
+                                   
+      <div className="table table-bordered table-responsive">
+        <thead>
+          <tr>
+            <td><b>Type of plots</b></td>
+            <td ><b>Plot No.</b></td>
+            <td ><b>Length in mtr <CalculateIcon color="primary"/></b></td>
+            <td ><b>Width in mtr <CalculateIcon color="primary"/></b></td>
+            <td ><b>Area in sqmtr <CalculateIcon color="primary"/></b></td>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td >
+                            <div className="px-2">
+                                 <p className="mb-2" onChange={(e)=>setResPlotno(e.target.value)} value={resplotno}><b>Residential
+                                                            </b></p>
+                                                            {/* <div className="row">
+                                                                <div className="col col-3">
+                                                                <input type="radio" value="Yes" id="Yes"
+                                                                    onChange={handleChange} name="Yes" />
+                                                                <label for="Yes"></label>
+                                                                <label htmlFor="gen">Gen</label>
+                                                            </div>
+                                                            <div className="col col-3">
+                                                                <input type="radio" value="Yes" id="Yes"
+                                                                    onChange={handleChange} name="Yes" />
+                                                                <label for="Yes"></label>
+                                                                <label htmlFor="npnl">NPNL</label>
+                                                            </div>
+                                                            
+                                                            <div className="col col-3">
+                                                                <input type="radio" value="Yes" id="Yes"
+                                                                    onChange={handleChange} name="Yes" />
+                                                                <label for="Yes"></label>
+                                                                <label htmlFor="gen">EWS</label>
+                                                            </div>
+                                                            </div> */}
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+           
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" ><b>Gen
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" ><b>NPNL
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" ><b>EWS
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" onChange={(e)=>setComPlotno(e.target.value)} value={complotno}><b>Commercial
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" onChange={(e)=>setSitePlotno(e.target.value)} value={siteplotno}><b>Community Sites
+
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" onChange={(e)=>setParkPlotno(e.target.value)} value={parkplotno}><b>Parks
+
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" onChange={(e)=>setPublicPlotno(e.target.value)} value={publicplotno}><b>Public Utilities
+                                                            </b></p>
+                                                              
+                                                         
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" ><b>STP
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" ><b>ETP
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" ><b>WTP
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" ><b>UGT
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" ><b>Milk Booth
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" ><b>GSS
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+             
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+             
+            </tr>
+        </tbody>
+      </div>
+                                  )}
+                                     {
+                                            showhide18==="2" && (
+                                    // <div></div><h5 className="text-black"><b>Irregular Plots</b></h5>
+                                   
+           <div>                      
+      <div  className="table table-bordered table-responsive ">
+        <thead>
+          <tr>
+          <td><b>Details of Plot</b></td>
+            <td><b>Dimensions (in mtr) <CalculateIcon color="primary"/></b></td>
+            <td ><b>Entered Area</b></td>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" onChange={(e)=>setIrPlotDimen(e.target.value)} value={irPlotDimen}><b>Residential
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              </tr>
+              <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" onChange={(e)=>setIrSizeDimen(e.target.value)} value={irSizeDimen}><b>Commercial
+                                                            </b></p>
+                                                        </div>
+                </td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              </tr>
+             
+        </tbody>
+      </div>
+      <h5 className="text-black"><b>Area Under</b></h5>
+      <div className="table table-bordered table-responsive">
+        <thead>
+          <tr>
+            <td><b>Detail of plots</b></td>
+            <td ><b> Plot No.</b></td>
+            <td ><b>Length (in mtr) <CalculateIcon color="primary"/></b></td>
+            <td ><b>Dimension (in mtr) <CalculateIcon color="primary"/></b></td>
+            <td ><b>Entered Area</b></td>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2"onChange={(e)=>setNpnlNo(e.target.value)} value={npnlNo}><b>Sectoral Plan Road
+                                                            </b></p>
+                                                        </div>
+                </td>
+                <td align="right">  <input type="number" className="form-control"/></td>
+                <td align="right">  <input type="number" className="form-control"/></td>
+                <td align="right">  <input type="number" className="form-control"/></td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" onChange={(e)=>setEwsNo(e.target.value)} value={ewsNo}><b>Green Belt
+
+                                                            </b></p>
+                                                        </div>
+                </td>
+                <td align="right">  <input type="number" className="form-control"/></td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" onChange={(e)=>setEwsNo(e.target.value)} value={ewsNo}><b>24/18 mtr wide internal circulation Plan road
+
+                                                            </b></p>
+                                                        </div>
+                </td>
+                <td align="right">  <input type="number" className="form-control"/></td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" onChange={(e)=>setEwsNo(e.target.value)} value={ewsNo}><b>Other Roads
+
+                                                            </b></p>
+                                                        </div>
+                </td>
+                <td align="right">  <input type="number" className="form-control"/></td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+            </tr>
+            <tr>
+                <td >
+                                                        <div className="px-2">
+                                                            <p className="mb-2" onChange={(e)=>setEwsNo(e.target.value)} value={ewsNo}><b>Undetermined use(UD)
+
+                                                            </b></p>
+                                                        </div>
+                </td>
+                <td align="right">  <input type="number" className="form-control"/></td>
+              <td component="th" scope="row">
+                <input type="text" className="form-control"/>
+              </td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+              <td align="right">  <input type="number" className="form-control"/></td>
+            </tr>
+        </tbody>
+      </div>
+      </div>   )}
+         <div>
+          {Purpose === "08" &&(
+
+         <DDJAYForm ></DDJAYForm>
+          )}
+         </div>
+         <div>
+         {Purpose === "03" &&(
+         
+         <ResidentialPlottedForm ></ResidentialPlottedForm>
+          )}
+         </div>
+         <div>
+         {Purpose === "06" &&(
+         <IndustrialPlottedForm ></IndustrialPlottedForm>
+          )}
+         </div>
                                   
-                                 
+
+<h5 className="text-black"><b>NILP :-</b></h5><br></br>
+                                      
                                      
+        <div className ="table table-bordered table-responsive">
+          <thead>
+            <tr>
+              <td><b>S.No.</b></td>
+              <td ><b>NLP Details</b></td>
+              <td ><b>Yes/No</b></td>
+           
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td >1. </td>
+                  <td > Whether you want to surrender the 10% area of license colony to Govt. the instead of providing 10% under EWS and NPNL plots  </td>
+                   <td component="th" scope="row">
+                   <input type="radio" value="Yes" id="Yes"
+                                                  onChange={handleChange} name="Yes" onClick={handleshow0}/>
+                                                  <label for="Yes">Yes</label>
+  
+                                                  <input type="radio" value="No" id="No"
+                                                  onChange={handleChange} name="Yes" onClick={handleshow0}/>
+                                                  <label for="No">No</label>
+                                                   {
+                                              showhide0==="Yes" && (
+                                                  <div className="row " >
+                                                          <div className="col col-12">
+                                                              <label for="areaAcre" className="font-weight-bold">Area in Acres </label>
+                                                              
+                                                              <input type="text" className="form-control" />
+                                                          </div>
+                                                      </div> 
+                                              )
+                                          } 
+           
+                </td>
+              </tr>
+              <tr>
+                  <td >2. </td>
+                  <td >Whether any pocket proposed to be transferred less than 1 acre </td>
+                   <td component="th" scope="row">
+                   <input type="radio" value="Yes" id="Yes"
+                                                  onChange={handleChange} name="Yes" onClick={handleshow13}/>
+                                                  <label for="Yes">Yes</label>
+  
+                                                  <input type="radio" value="No" id="No"
+                                                  onChange={handleChange} name="Yes" onClick={handleshow13}/>
+                                                  <label for="No">No</label>
+                                                   {
+                                              showhide13==="Yes" && (
+                                                  <div className="row " >
+                                                          <div className="col col-6">
+                                                              <label for="areaAcre" className="font-weight-bold"> Dimension (in mtr)&nbsp;&nbsp;<CalculateIcon color="primary"/></label>
+                                                              
+                                                              <input type="text" className="form-control" />
+                                                          </div>
+                                                          <div className="col col-6">
+                                                              <label for="areaAcre" className="font-weight-bold"> Entered Area </label>
+                                                              
+                                                              <input type="text" className="form-control" />
+                                                          </div>
+                                                      </div> 
+                                              )
+                                          } 
+           
+                </td>
+              </tr>
+              <tr>
+                  <td >3. </td>
+                  <td >Whether you want to deposit an amount @ of 3 times of collector rate instead of the surrender 10% land to Govt. </td>
+                   <td component="th" scope="row">
+                   <input type="radio" value="Yes" id="Yes"
+                                                  onChange={handleChange} name="Yes" onClick={handleshow1}/>
+                                                  <label for="Yes">Yes</label>
+  
+                                                  <input type="radio" value="No" id="No"
+                                                  onChange={handleChange} name="Yes"onClick={handleshow1}/>
+                                                  <label for="No">No</label>
+                                                  {
+                                              showhide1==="Yes" && (
+                                                  <div className="row " >
+                                                          <div className="col col-12">
+                                                              <label for="areaAcre" className="font-weight-bold">Area in Acres &nbsp;&nbsp;<CalculateIcon color="primary"/></label>
+                                                              
+                                                              <input type="text" className="form-control" />
+                                                          </div>
+                                                      </div> 
+                                              )
+                                          } 
+           
+                </td>
+              </tr>
+              <tr>
+                  <td >4. </td>
+                  <td >Whether the surrendered area is having a minimum of 18 mtr independent access   </td>
+                   <td component="th" scope="row">
+                   <input type="radio" value="Yes" id="Yes"
+                                                  onChange={handleChange} name="Yes" onClick={handleshow14}/>
+                                                  <label for="Yes">Yes</label>
+  
+                                                  <input type="radio" value="No" id="No"
+                                                  onChange={handleChange} name="Yes"onClick={handleshow14}/>
+                                                  <label for="No">No</label>
+                                                  {
+                                              showhide14==="Yes" && (
+                                                  <div className="row " >
+                                                          <div className="col col-12">
+                                                              <label for="areaAcre" className="font-weight-bold">Dimension(in mtr) &nbsp;&nbsp;<CalculateIcon color="primary"/></label>
+                                                              
+                                                              <input type="text" className="form-control" />
+                                                          </div>
+                                                          <div className="col col-12">
+                                                              <label for="areaAcre" className="font-weight-bold">Entered Area</label>
+                                                              
+                                                              <input type="text" className="form-control" />
+                                                          </div>
+                                                      </div> 
+                                              )
+                                          } 
+           
+                </td>
+              </tr>
+             
+          </tbody>
+        </div>
+                                      
+                                       <hr/><br></br>
+                                       <h5 className="text-black"><b>Mandatory Documents</b></h5><br></br>
+                      <div className="row">
+                          <div className="col col-3">
+                          <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Site plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                     
+                                    <input type="file" className="form-control">
+                                      </input>
+                          </div>
+                          <div className="col col-3">
+                          <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Democratic Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                  
+                                    <input type="file" className="form-control"></input>
+                          </div>
+                          <div className="col col-3">
+                          <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Sectoral Plan/Layout Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                   
+                                    <input type="file" className="form-control"></input>
+                          </div>
+                          <div className="col col-3">
+                          <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Development Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                   
+                                    <input type="file" className="form-control"></input>
+                          </div>
+                        
+                       </div><br></br>
+                       <div className="row">
+                                          <div className="col col-4">
+                                              <div className="form-group" >
+                                                  <h6 data-toggle="tooltip" data-placement="top" title="Upload Document" ><b>Upload Layout Plan  &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> <span className="text-primary"> (Click here for instructions to capture DGPS points)</span></b>&nbsp;&nbsp;
+                                                     <input type="file" className="form-control"/><b/></h6>
+                                              </div>
+                                          </div>
+                                       </div>
                                  
-                                    
-                                     <Button style={{alignSelf:"center", marginTop:20, marginright:867}} variant="primary" type="submit">
-                Save as Draft
-            </Button>
-            <Button style={{alignSelf:"center", marginTop:8,marginLeft:1025}} variant="primary" type="submit">
-               Continue
-            </Button>
-                         
+                                                                <Button style={{ alignSelf: "center", marginTop: "43px",marginLeft:"5px" }} 
+                                                                variant="primary" type="submit"  > Back </Button>
+           
+                                                             <Button 
+                                                             style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "1194px" }} 
+                                                             variant="primary" type="button" onClick={AppliedDetailFormSubmitHandler}
+                                                             >   Continue
+            </Button> 
                 </Col>
             </Row>
          </Form.Group>

@@ -97,11 +97,11 @@ const OBPSLinks = ({ matchPath, userType }) => {
     {
       link: `${matchPath}/home`,
       i18nKey: t("BPA_CITIZEN_HOME_ARCHITECT_LOGIN_LABEL"),
-    },
-    {
-      link: `${matchPath}/step-two`,
-      i18nKey: "Developer Registration",
-    },
+    }
+    // {
+    //   link: `${matchPath}/step-two`,
+    //   i18nKey: "Developer Registration",
+    // },
     // {
     //   link: `${matchPath}/step-two`,
     //   i18nKey: "Developer Registration",

@@ -520,7 +520,7 @@ const LandScheduleForm=(props)=>{
                                       <label for="No"><h6>No</h6></label></h6>
                                       {
                                             showhide23==="Yes" && (
-                                      <div className="col col=12 ">
+                                      <div className="col col-6 ">
                                     
                                     <h6 ><b>Another Copy of Shahjra Plan</b> </h6>
                                   <input type="file" className="form-control"/>
@@ -673,7 +673,7 @@ const LandScheduleForm=(props)=>{
                         </div>
                      
                         <div className="col col-3 ">
-                        <h6  data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?"><b>(b)&nbsp;Revenue rasta&nbsp; </b>&nbsp;&nbsp;</h6>
+                        <h6  data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?"><b>(b)&nbsp;Revenue rasta&nbsp;&nbsp;<InfoIcon color="primary"/> </b>&nbsp;&nbsp;</h6>
                         <input type="radio" value="Yes" id="Yes"
                                             onChange1={handleChange} name="Yes"onClick={handleshow1}  />&nbsp;&nbsp;
                                             <label for="Yes">Yes</label>&nbsp;&nbsp;
@@ -684,7 +684,7 @@ const LandScheduleForm=(props)=>{
                                             showhide1==="Yes" && (
                                                 <div className="row " >
                                                         <div className="col col">
-                                                            <label for="parentLicense" className="font-weight-bold"> Width of revenue rasta </label>
+                                                            <label for="parentLicense" className="font-weight-bold"> Width of revenue rasta &nbsp;<CalculateIcon color="primary"/></label>
                                                             <input type="number" className="form-control"/>
                                                         </div>
                                                     </div> 
@@ -693,7 +693,7 @@ const LandScheduleForm=(props)=>{
                         </div>
                         <div className="col col-3 ">
                         <h6 
-                         data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?"><b>(c)&nbsp;Watercourse running&nbsp;
+                         data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?"><b>(c)&nbsp;Watercourse running&nbsp;&nbsp;<InfoIcon color="primary"/>
                             </b></h6>
                         <input type="radio" value="Yes" id="Yes"
                                             onChange1={handleChange} name="Yes" onClick={handleshow2} />&nbsp;&nbsp;
@@ -741,7 +741,7 @@ const LandScheduleForm=(props)=>{
                         </div>  <br></br>
                         <div className="row">
                         <div className="col col-3 ">
-                        <h6 onChange={(e)=>setsandwiched1(e.target.value)} value={sandwiched} data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land."><b>(e)&nbsp;Land Sandwiched&nbsp;
+                        <h6 onChange={(e)=>setsandwiched1(e.target.value)} value={sandwiched} data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land."><b>(e)&nbsp;Land Sandwiched&nbsp;&nbsp;<InfoIcon color="primary"/>
                           </b>  </h6>
                         <input type="radio" value="Yes" id="Yes"
                                             onChange1={handleChange} name="Yes" onClick={handleshow20}  />&nbsp;&nbsp;
@@ -830,7 +830,7 @@ const LandScheduleForm=(props)=>{
                          </div> <br></br>
                      <div className="row">
                         <div className="col col-12">
-                        <h6 onChange={(e)=>setExclusion1(e.target.value)} value={exclusion} data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded."><b>(g)&nbsp;Orders Upload &nbsp;
+                        <h6 onChange={(e)=>setExclusion1(e.target.value)} value={exclusion} data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded."><b>(g)&nbsp;Orders Upload &nbsp;&nbsp;<InfoIcon color="primary"/>
                           </b>  </h6>
                         <input type="radio" value="Yes" id="Yes"
                                             onChange1={handleChange} name="Yes"  onClick={handleshow16}/>&nbsp;&nbsp;
@@ -941,7 +941,7 @@ const LandScheduleForm=(props)=>{
                         <div className="col col-3">
                         <h6 
                          data-toggle="tooltip" data-placement="top" title="whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)
-"><b>(h)&nbsp;Site Approachable Road &nbsp;
+"><b>(h)&nbsp;Site Approachable Road &nbsp;&nbsp; <InfoIcon color="primary"/>
      </b></h6>
                         <input  type="radio" value="Yes" id="Yes"
                                             onChange1={handleChange} name="Yes"  />
@@ -1089,7 +1089,7 @@ const LandScheduleForm=(props)=>{
                                             showhide8==="Yes" && (
                                                 <div className="row " >
                                                         <div className="col col">
-                                                            <label for="parentLicense" className="font-weight-bold">Width of Revenue rasta/road</label>
+                                                            <label for="parentLicense" className="font-weight-bold">Width of Revenue rasta/road &nbsp;&nbsp;<CalculateIcon color="primary"/></label>
                                                             <input type="text" className="form-control"/>
                                                         </div>
                                                        
@@ -1124,7 +1124,7 @@ const LandScheduleForm=(props)=>{
                         </div>
                         <div className="col col-3">
                         <h6 onChange={(e)=>setLayoutPlan1(e.target.value)} value={layoutPlan} data-toggle="tooltip" data-placement="top" title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)
-"><b>(h)&nbsp;Utility Line &nbsp;
+"><b>(h)&nbsp;Utility Line &nbsp; &nbsp;<InfoIcon color="primary"/>
      </b></h6>
                                                                       
                                     <input type="radio" value="Yes" id="Yes"
@@ -1138,7 +1138,7 @@ const LandScheduleForm=(props)=>{
                                             showhide0==="Yes" && (
                                                 <div className="row " >
                                                         <div className="col col">
-                                                            <label for="parentLicense" className="font-weight-bold">Width of row</label>
+                                                            <label for="parentLicense" className="font-weight-bold">Width of row &nbsp;&nbsp;<CalculateIcon color="primary"/></label>
                                                             <input type="text" className="form-control"/>
                                                         </div>
                                                        
@@ -1152,43 +1152,56 @@ const LandScheduleForm=(props)=>{
                      <h5 className="text-black"><b>5. Enclose the following documents as Annexures</b></h5>
                     <div className="row">
                         <div className="col col-3">
-                                    <h6 ><b>Land schedule</b></h6>
+                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Land schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                  
                                   <input type="file" className="form-control">
                                     </input>
                         </div>
                         <div className="col col-3">
-                                    <h6 ><b>Copy of Mutation</b></h6>
+                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Copy of Mutation &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                  
                                   <input type="file" className="form-control"></input>
                         </div>
                         <div className="col col-3">
-                                    <h6 ><b>Copy of Jamabandi</b></h6>
+                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Copy of Jamabandi &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                   
                                   <input type="file" className="form-control"></input>
                         </div>
                         <div className="col col-3">
-                                    <h6 ><b>Details of lease / patta, if any</b></h6>
+                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Details of lease / patta, if any &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                  
                                   <input type="file" className="form-control"></input>
                         </div>
                       
                      </div><br></br>
                      <div className="row">
                         <div className="col col-3">
-                                    <h6 ><b>Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration </b></h6>
+                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration  &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                   
                                   <input type="file" className="form-control">
                                     </input>
                         </div>
                         <div className="col col-3">
-                                    <h6 ><b>Proposed Layout of Plan /site plan for area applied for migration.</b></h6>
+                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Proposed Layout of Plan /site plan for area applied for migration. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                   
                                   <input type="file" className="form-control"></input>
                         </div>
                         <div className="col col-3">
-                                    <h6 ><b>Revised Land Schedule</b></h6>
+                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Revised Land Schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                                    
                                   <input type="file" className="form-control"></input>
                         </div>
                      </div>
-                     <Button style={{ alignSelf: "center",marginTop:"20px" }} variant="primary" type="submit">
-                Save as Draft
+                     <Button 
+                    style={{ alignSelf: "center", marginTop: "25px",marginLeft:"-11px" }} 
+                    variant="primary" type="submit" 
+                    >
+              Back
             </Button>
-            <Button style={{ alignSelf: "center" ,marginTop:"20px", marginLeft:"593px"}} variant="primary" type="submit">
+            <Button 
+            style={{ alignSelf: "center", marginTop: "13px", marginLeft: "1176px" }} 
+            variant="primary"  
+            onClick={landScheduleFormSubmitHandler}>
                 Continue
             </Button>
                         </Col>
@@ -1200,5 +1213,4 @@ const LandScheduleForm=(props)=>{
     )
 };
 export default LandScheduleForm;
-
 

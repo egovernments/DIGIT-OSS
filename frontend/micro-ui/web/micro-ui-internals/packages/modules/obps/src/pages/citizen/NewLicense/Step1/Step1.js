@@ -118,11 +118,11 @@ const ApllicantForm = (props) => {
                             <div>
                                 <Form.Label><b>Developer</b> <span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Select type="text" className="form-control" defaultValue="Select"  onChange={(e) => setDeveloper(e.target.value)} value={developer} >
-                                <option value="K.Mishra">K.Mishra</option>
-                                <option value="Developer 1">Developer 1</option>
-                                <option value="Developer 2">Developer 2</option>
-                            </Form.Select>
+                            <ReactMultiSelect 
+                        listOfData={optionsArrList}
+                        labels="Developer"
+                        getSelectedValue={setDeveloper} />
+                       
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
@@ -216,11 +216,10 @@ const ApllicantForm = (props) => {
                             <div>
                                 <Form.Label><b>Village/City </b><span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Select type="text"className="form-control" defaultValue="Select" placeholder="Village/City"  onChange={(e) => setvillage1(e.target.value)} value={village1}>
-                                <option value="1">Ballabgarh</option>
-                                <option value="2">Village</option>
-                                <option value="3">City</option>
-                            </Form.Select>
+                            <ReactMultiSelect 
+                        listOfData={optionsVillageList}
+                        labels="Village"
+                        getSelectedValue={setvillage1} />
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
@@ -237,34 +236,28 @@ const ApllicantForm = (props) => {
                             <div>
                                 <Form.Label><b>Tehshil </b><span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Select type="text" className="form-control" defaultValue="Select" placeholder="Tehshil" required onChange={(e) => setTehsil(e.target.value)} value={tehsil} >
-                                <option value="1">Tehshil 1</option>
-                                <option value="2">Tehshil 2</option>
-                                <option value="3">Tehshil 3</option>
-                                <option value="3">Tehshil 4</option>
-                            </Form.Select>
+                            <ReactMultiSelect 
+                        listOfData={optionsTehsilList}
+                        labels="Tehsil" 
+                        getSelectedValue={setTehsil}/>
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
                                 <Form.Label><b>District</b> <span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Select type="text" className="form-control" defaultValue="Select" placeholder="Tehshil" required onChange={(e) => setDistrict(e.target.value)} value={district} >
-                                <option value="1">District 1</option>
-                                <option value="2">District 2</option>
-                                <option value="3">District 3</option>
-                                <option value="3">District 4</option>
-                            </Form.Select>
+                            <ReactMultiSelect 
+                        listOfData={optionsDistrictList}
+                        labels="District"
+                        getSelectedValue={setDistrict} />
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
                                 <Form.Label><b>State</b> <span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Select type="text" className="form-control" defaultValue="Select" placeholder="Tehshil" required onChange={(e) => setState(e.target.value)} value={state}  >
-                                <option value="1">State 1</option>
-                                <option value="2">State 2</option>
-                                <option value="3">State 3</option>
-                                <option value="3">State 4</option>
-                            </Form.Select>
+                            <ReactMultiSelect 
+                        listOfData={optionsStateList}
+                        labels="State" 
+                        getSelectedValue={setState}/>
                         </Col>
                     </Row><br></br>
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -331,10 +324,16 @@ const ApllicantForm = (props) => {
                     </Row>
 
                 </Form.Group>
-                <Button style={{ alignSelf: "center", marginTop: "25px",marginLeft:"-694px" }} variant="primary" type="submit">
-                Save as Draft
-            </Button>
-            <Button style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "715px" }} variant="primary" type="submit">
+                {/* <Button 
+                    style={{ alignSelf: "center", marginTop: "25px",marginLeft:"-1249px" }} 
+                    variant="primary" type="submit" 
+                    >
+              Back
+            </Button> */}
+            <Button 
+            style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "1163px" }} 
+            variant="primary"  
+            onClick={ApplicantFormSubmitHandlerForm}>
                 Continue
             </Button>
                
