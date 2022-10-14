@@ -31,7 +31,7 @@ import Inbox from "./ArchitectInbox";
 //import EdcrInbox from "./EdcrInbox";
 import OBPSResponse from "../employee/OBPSResponse";
 import CommonForm from "./NewLicense/common";
-
+import ScrutinyFormcontainer from "./NewLicense/ScrutinyContainer/scrutinyformcontainer";
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
@@ -83,6 +83,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/sendbacktocitizen/bpa/:tenantId/:applicationNo`} component={BPASendBackToCitizen} />
         <PrivateRoute path={`${path}/sendbacktocitizen/ocbpa/:tenantId/:applicationNo`} component={OCSendBackToCitizen} />
         <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
+        <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} />
       </Switch>
     </React.Fragment>
   )
