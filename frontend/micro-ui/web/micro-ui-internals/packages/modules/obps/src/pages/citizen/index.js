@@ -1,7 +1,7 @@
 // import React from "react";
 import React, { useEffect, useState } from "react";
 import OBPSSearchApplication from "../../components/SearchApplication";
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import Search from "../employee/Search";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation, Route } from "react-router-dom";
@@ -20,7 +20,7 @@ import Step5 from "../citizen/NewLicense/Step5/Step5";
 import AddInfoForm from "../citizen/DeveloperRegistration/AddInfoForm/addInfo";
 import MyApplication from "./MyApplication";
 import ApplicationDetails from "./ApplicationDetail";
-import AddInfoForm from "./DeveloperRegistration/AddInfoForm/addInfo";
+// import AddInfoForm from "./DeveloperRegistration/AddInfoForm/addInfo";
 // import LicenseAddInfo from "../../pageComponents/LicenseAddInfo";
 // import OCBuildingPermit from "./OCBuildingPermit";
 // import BpaApplicationDetail from "./BpaApplicationDetail";
@@ -31,6 +31,7 @@ import AddInfoForm from "./DeveloperRegistration/AddInfoForm/addInfo";
 import Inbox from "./ArchitectInbox";
 //import EdcrInbox from "./EdcrInbox";
 import OBPSResponse from "../employee/OBPSResponse";
+import ScrutinyFormcontainer from "./NewLicense/ScrutinyContainer/scrutinyformcontainer";
 
 const App = ({ path }) => {
   const location = useLocation();
@@ -83,6 +84,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/sendbacktocitizen/bpa/:tenantId/:applicationNo`} component={BPASendBackToCitizen} />
         <PrivateRoute path={`${path}/sendbacktocitizen/ocbpa/:tenantId/:applicationNo`} component={OCSendBackToCitizen} />
         <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
+        <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} />
       </Switch>
     </React.Fragment>
   )
