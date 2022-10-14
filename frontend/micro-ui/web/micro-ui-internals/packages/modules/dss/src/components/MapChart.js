@@ -100,12 +100,44 @@ const MapChart = ({
     },
     enabled: true,
   });
+
+  const mapData = get(topoJSON, "objects.india.geometries", [])?.map(
+    (ee) => {
+      return { state: ee.properties.name, value: 0, id: ee.id };
+    }
+  );
+  let DataObj =
+    mapData?.reduce((acc, curr) => {
+      acc[curr.state] = { ...curr };
+      return { ...acc };
+    }, {}) || {};
+
   const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
     key: id,
     type: "metric",
     tenantId,
     requestDate: requestDate,
   });
+
+  let data1 = !isLoading ? response?.responseData?.data?.filter((dat) => 
+  {
+    let totalCount = dat.plots[3].value;
+    let liveCount = dat.plots[4].value;
+    let live = dat.plots[4].strValue > 0 ? true : false;
+    DataObj[dat.headerName] = {
+      ...DataObj?.[dat.headerName],
+      status: dat.plots[2].strValue,
+      value: live ? liveCount : totalCount,
+      live,
+      totalCount,
+      liveCount,
+    };
+  }) : null; 
+  
+
+  if (!data1) {
+    return <div>Loading...</div>;
+  }
 
 
   const onMouseEnter = (geo, current = { value: "0" }, event) => {
@@ -123,23 +155,12 @@ const MapChart = ({
     settooltipContent("");
   }
 
-  const mapData = get(topoJSON, "objects.india.geometries", [])?.map(
-    (ee) => {
-      return { state: ee.properties.name, value: 0, id: ee.id };
-    }
-  );
-  let DataObj =
-    mapData?.reduce((acc, curr) => {
-      acc[curr.state] = { ...curr };
-      return { ...acc };
-    }, {}) || {};
-
 
   if (isLoading || isLoadingNAT) {
     return <Loader />
   }
 
-  return (
+    return (
     <ResponsiveContainer
       width="40%"
       height={220}
