@@ -30,7 +30,7 @@ import ApplicationDetails from "./ApplicationDetail";
 import Inbox from "./ArchitectInbox";
 //import EdcrInbox from "./EdcrInbox";
 import OBPSResponse from "../employee/OBPSResponse";
-import CommonForm from "./NewLicense/common";
+import CommonForm from "../citizen/NewLicense/common/index";
 import ScrutinyFormcontainer from "./NewLicense/ScrutinyContainer/scrutinyformcontainer";
 const App = ({ path }) => {
   const location = useLocation();
