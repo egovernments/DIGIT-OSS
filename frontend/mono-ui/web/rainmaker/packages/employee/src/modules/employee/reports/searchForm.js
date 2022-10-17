@@ -50,7 +50,7 @@ class ShowForm extends Component {
         if (fromDateIndex !== undefined) searchParams[fromDateIndex].maxValue = new Date();
         if (toDateIndex !== undefined) {
           searchParams[toDateIndex].minValue = undefined;
-          searchParams[toDateIndex].maxValue = undefined;
+          searchParams[toDateIndex].maxValue = new Date();
         }
         setSearchParams(searchParams);
       }
@@ -246,6 +246,8 @@ class ShowForm extends Component {
           item.minValue = this.toDateObj(item.minValue);
           item.maxValue = this.toDateObj(item.maxValue);
         } else if (item.type === "epoch" && item.name == "fromDate" && item.maxValue === null) {
+          item.maxValue = new Date();
+        } else if (item.type === "epoch" && item.name == "toDate" && item.maxValue === null) {
           item.maxValue = new Date();
         }
         if (item.type === "singlevaluelist") {
