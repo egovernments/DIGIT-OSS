@@ -9,13 +9,10 @@ const DisApprovalList=(props)=>{
     const developerInfoList = props.disapprovallistDeveloper
     const generalInfoList = props.disapprovallistGeneral
     const appliedLandInfoList = props.disapprovallistAppliedLand
+    console.log(personalInfoList)
     
     return(
-        <Container className="justify-content-center"  style={{
-                            
-                            top:windowHeight*0.3,
-                            minWidth:"40%",
-                            maxWidth:"45%"}}>
+        <Container>
             <Row>
                 <Card>
                     <Card.Header>

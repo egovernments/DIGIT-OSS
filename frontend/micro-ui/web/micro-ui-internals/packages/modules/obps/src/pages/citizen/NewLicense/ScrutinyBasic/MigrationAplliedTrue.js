@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col} from "react-bootstrap";
-import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
+// import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
 
 
 const MigrationAppliedTrue=()=>{

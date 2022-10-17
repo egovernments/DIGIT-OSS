@@ -54,7 +54,7 @@ const Home = () => {
       {
           name: "New License Services",
           Icon: <CaseIcon className="fill-path-primary-main" />,
-          onClick: () => history.push("/digit-ui/citizen/obps/step-one")
+          onClick: () => history.push("/digit-ui/citizen/obps/tab")
       },
       {
         name: t("CS_COMMON_INBOX_BPA"),

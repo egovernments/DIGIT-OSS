@@ -1,12 +1,15 @@
 import React,{useState} from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col} from "react-bootstrap";
-import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
+// import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
 // import Box from '@material-ui/core//Box';
 import { useForm } from "react-hook-form";
 // import Typography from '@material-ui/core/Typography'
-// import Modal from '@material-ui/core//Modal';
+import Modal from "react-bootstrap/Modal";
 // import InfoIcon from '@mui/icons-material/Info';
+import * as Icon from "react-bootstrap-icons";
+import { XCircleFill } from "react-bootstrap-icons";
+import { CheckCircleFill } from "react-bootstrap-icons";
 
 const style = {
     position: 'absolute',
@@ -105,16 +108,16 @@ const Feeandcharges=(props)=>{
                         <Form.Check value="Fees/Charges" 
                                     type="radio"  onChange1={handleChange} onClick={handleshow}
                                     id = "default-radio" 
-                                    label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>} 
+                                    label={  <CheckCircleFill class="text-success" />} 
                                     name="group110" inline></Form.Check>
                         <Form.Check 
                             onChange={(e)=>setUncheckedVlue((prev)=>[...prev,e.target.value])} 
                             value="Fees/Charges" 
                             type="radio" id = "default-radio"  onChange1={handleChange} onClick={handleshow}
-                            label={<AiFillCloseCircle class="fa fa-times text-danger"  size={18}></AiFillCloseCircle>} 
+                            label={  <XCircleFill class="text-danger" />}
                             name="group110" inline></Form.Check></h6>
                                         <input type="text" className="form-control"required  minLength={1} maxLength={20} pattern="[0-9]*"
-                                         onChange={(e)=>setFeeDetail(e.target.value)} value={feeDetail} onChange1={handleFeesChange} />
+                                         onChange={(e)=>setFeeDetail(e.target.value)} value={feeDetail} onChange1={handleFeesChange} readOnly />
                                          {errors.feeDetail && <p>Please check the First Name</p>}
                              </div>
                              <div className="col col-3">
@@ -123,16 +126,16 @@ const Feeandcharges=(props)=>{
                         <Form.Check value="Licence Fees" 
                                     type="radio"  onChange1={handleChange} onClick={handleshow}
                                     id = "default-radio" 
-                                    label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>} 
+                                    label={  <CheckCircleFill class="text-success" />}
                                     name="group111" inline></Form.Check>
                         <Form.Check 
                             onChange={(e)=>setUncheckedVlue((prev)=>[...prev,e.target.value])} 
                             value="Licence Fees" 
                             type="radio" id = "default-radio"  onChange1={handleChange} onClick={handleshow}
-                            label={<AiFillCloseCircle class="fa fa-times text-danger"  size={18}></AiFillCloseCircle>} 
+                            label={  <XCircleFill class="text-danger" />} 
                             name="group111" inline></Form.Check></h6>
                                         <input type="text" className="form-control" required  minLength={1} maxLength={20} pattern="[0-9]*"
-                                         onChange={(e)=>setLicenseFee(e.target.value)} value={licenseFee} onChange1={handleLicFeesChange} />
+                                         onChange={(e)=>setLicenseFee(e.target.value)} value={licenseFee} onChange1={handleLicFeesChange} readOnly/>
                                          {errors.licenseFee && <p>Please check the First Name</p>}
                              </div>
                              <div className="col col-3">
@@ -142,35 +145,37 @@ const Feeandcharges=(props)=>{
                         <Form.Check value="Scrutiny Fees" 
                                     type="radio"  onChange1={handleChange} onClick={handleshow}
                                     id = "default-radio" 
-                                    label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>} 
+                                    label={  <CheckCircleFill class="text-success" />} 
                                     name="group112" inline></Form.Check>
                         <Form.Check 
                             onChange={(e)=>setUncheckedVlue((prev)=>[...prev,e.target.value])} 
                             value="Scrutiny Fees" 
                             type="radio" id = "default-radio"  onChange1={handleChange} onClick={handleshow}
-                            label={<AiFillCloseCircle class="fa fa-times text-danger"  size={18}></AiFillCloseCircle>} 
+                            label={  <XCircleFill class="text-danger" />} 
                             name="group112" inline></Form.Check></h6>
                               <input type="text" className="form-control" required  minLength={1} maxLength={20} pattern="[0-9]*"
-                               onChange={(e)=>setScrutinyFee(e.target.value)} value={ScrutinyFee} onChange1={handleScrutinyFeesChange} />
+                               onChange={(e)=>setScrutinyFee(e.target.value)} value={ScrutinyFee} onChange1={handleScrutinyFeesChange} readOnly />
                                {errors.ScrutinyFee && <p></p>}
                    </div>
                    <div className="col col-3">
                               
-                   <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)"><b>(iv)&nbsp;Total Fees&nbsp;<InfoIcon style={{color:"blue"}}/> </b>&nbsp;&nbsp;
+                   <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)"><b>(iv)&nbsp;Total Fees&nbsp;
+                   {/* <InfoIcon style={{color:"blue"}}/>  */}
+                   </b>&nbsp;&nbsp;
                               &nbsp;&nbsp;
                         <Form.Check value="Total Fees" 
                                     type="radio"  onChange1={handleChange} onClick={handleshow}
                                     id = "default-radio" 
-                                    label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>} 
+                                    label={  <CheckCircleFill class="text-success" />} 
                                     name="group113" inline></Form.Check>
                         <Form.Check 
                             onChange={(e)=>setUncheckedVlue((prev)=>[...prev,e.target.value])} 
                             value="Total Fees" 
                             type="radio" id = "default-radio"  onChange1={handleChange} onClick={handleshow}
-                            label={<AiFillCloseCircle class="fa fa-times text-danger"  size={18}></AiFillCloseCircle>} 
+                            label={  <XCircleFill class="text-danger" />} 
                             name="group113" inline></Form.Check></h6>
                               <input type="text" className="form-control" required  minLength={1} maxLength={20} pattern="[0-9]*"
-                               onChange={(e)=>setTotalFee(e.target.value)} value={totalFee}onChange1={handleTotalFeesChange} />
+                               onChange={(e)=>setTotalFee(e.target.value)} value={totalFee}onChange1={handleTotalFeesChange} readOnly />
                                {errors.totalFee && <p></p>}
                    </div>
                              </div><br></br>
@@ -181,33 +186,35 @@ const Feeandcharges=(props)=>{
                                         <Form.Check value="Remark" 
                                     type="radio"  onChange1={handleChange} onClick={handleshow}
                                     id = "default-radio" 
-                                    label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>} 
+                                    label={  <CheckCircleFill class="text-success" />} 
                                     name="group114" inline></Form.Check>
                         <Form.Check 
                             onChange={(e)=>setUncheckedVlue((prev)=>[...prev,e.target.value])} 
                             value="Remark" 
                             type="radio" id = "default-radio"  onChange1={handleChange} onClick={handleshow}
-                            label={<AiFillCloseCircle class="fa fa-times text-danger"  size={18}></AiFillCloseCircle>} 
+                            label={  <XCircleFill class="text-danger" />} 
                             name="group114" inline></Form.Check></h6>
                                         <input type="number" className="form-control" minLength={2} maxLength={100}
-                                         onChange={(e)=>setRemark(e.target.value)} value={remark} onChange1={handleRemarkChange} />
+                                         onChange={(e)=>setRemark(e.target.value)} value={remark} onChange1={handleRemarkChange} readOnly />
                                          {errors.remark && <p></p>}
                              </div>
                           
                              <div className="col col-3">
                               
-                             <h6  data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)"><b>(vi)&nbsp;Adjust Fees&nbsp;<InfoIcon style={{color:"blue"}}/> </b>&nbsp;&nbsp;
+                             <h6  data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)"><b>(vi)&nbsp;Adjust Fees&nbsp;
+                             {/* <InfoIcon style={{color:"blue"}}/> */}
+                              </b>&nbsp;&nbsp;
                                  &nbsp;&nbsp;
                                         <Form.Check value="adjust" 
                                     type="radio"  onChange1={handleChange} onClick={handleshow}
                                     id = "default-radio" 
-                                    label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>} 
+                                    label={  <CheckCircleFill class="text-success" />} 
                                     name="group116" inline></Form.Check>
                         <Form.Check 
                             onChange={(e)=>setUncheckedVlue((prev)=>[...prev,e.target.value])} 
                             value="adjust" 
                             type="radio" id = "default-radio"  onChange1={handleChange} onClick={handleshow}
-                            label={<AiFillCloseCircle class="fa fa-times text-danger"  size={18}></AiFillCloseCircle>} 
+                            label={  <XCircleFill class="text-danger" />} 
                             name="group116" inline></Form.Check></h6>
                               <input type="radio" value="Yes" id="Yes"
                                                 onChange1={handleChange} name="Yes" onClick={handleshow0}
@@ -222,9 +229,9 @@ const Feeandcharges=(props)=>{
                                                 <div className="row "  >
                                                         <div className="col col-12">
                                                             <label for="parentLicense" className="font-weight-bold">Enter License Number/LOI number</label>
-                                                            <input type="text" className="form-control"/>
+                                                            <input type="text" className="form-control" readOnly/>
                                                             <label for="parentLicense" className="font-weight-bold">Amount (previous)</label>
-                                                            <input type="text" className="form-control" disabled/>
+                                                            <input type="text" className="form-control"  readOnly/>
                                                             
                                                         </div>
                                                        
@@ -260,13 +267,13 @@ const Feeandcharges=(props)=>{
                                         <Form.Check value="Undertakings" 
                                     type="radio"  onChange1={handleChange} onClick={handleshow}
                                     id = "default-radio" 
-                                    label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>} 
+                                    label={  <CheckCircleFill class="text-success" />} 
                                     name="group118" inline></Form.Check>
                         <Form.Check 
                             onChange={(e)=>setUncheckedVlue((prev)=>[...prev,e.target.value])} 
                             value="Undertakings" 
                             type="radio" id = "default-radio"  onChange1={handleChange} onClick={handleshow}
-                            label={<AiFillCloseCircle class="fa fa-times text-danger"  size={18}></AiFillCloseCircle>} 
+                            label={  <XCircleFill class="text-danger" />} 
                             name="group118" inline></Form.Check></h5>
                              <div className="px-2">
                                     <p className="text-black">The following is undertaken: </p>
@@ -293,11 +300,11 @@ const Feeandcharges=(props)=>{
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        {/* <Box sx={style}> */}
           {/* <Typography id="modal-modal-title" variant="h6" component="h2">
             Text in a modal
           </Typography> */}
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}> */}
           <ul>
                                                         <li>Morbi in sem quis dui placerat ornare. Pellentesque odio
                                                             nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.
@@ -339,8 +346,8 @@ const Feeandcharges=(props)=>{
                                                             volutpat. Nam dui mi, tincidunt quis, accumsan porttitor,
                                                             facilisis luctus, metus.</li>
                                                     </ul>
-          </Typography>
-        </Box>
+          {/* </Typography> */}
+        {/* </Box> */}
       </Modal>
                            
                                     <div className="">
@@ -355,10 +362,10 @@ const Feeandcharges=(props)=>{
                                                             className="text-danger"><b>*</b></span>
                                                     </label>
                                                 </div>
-                                                <div class="my-2">
+                                                {/* <div class="my-2">
                                                     <button className="btn btn-success" 
                                                         data-toggle="modal" data-target="#payemtModal">Pay Now</button>
-                                                </div>
+                                                </div> */}
                                            </div>
                              
                                     

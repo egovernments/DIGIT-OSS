@@ -2,18 +2,106 @@
 
 import React, { useState, useEffect } from "react";
 import { Component } from "react";
-
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import axios from 'axios';
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
+import TextField from '@mui/material/TextField';
+
+import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect"
+
+const optionsArrList = [
+    {
+        label: "K.Mishra",
+        value: "01",
+        id: "1"
+    },
+    {
+        label: "Developer 1",
+        value: "02",
+        id: "2"
+    },
+    {
+        label: "Developer 2",
+        value: "03",
+        id: "3"
+    },
+]
+const optionsVillageList = [
+    {
+        label: "Balabgarh",
+        value: "01",
+        id: "1"
+    },
+    {
+        label: "Village",
+        value: "02",
+        id: "2"
+    },
+    {
+        label: "City",
+        value: "03",
+        id: "3"
+    },
+]
+const optionsTehsilList = [
+    {
+        label: "Tehsil 1",
+        value: "01",
+        id: "1"
+    },
+    {
+        label: "Tehsil 2",
+        value: "02",
+        id: "2"
+    },
+    {
+        label: "Tehsil 3",
+        value: "03",
+        id: "3"
+    },
+]
+const optionsDistrictList = [
+    {
+        label: "District 1",
+        value: "01",
+        id: "1"
+    },
+    {
+        label: "District 2",
+        value: "02",
+        id: "2"
+    },
+    {
+        label: "District 3",
+        value: "03",
+        id: "3"
+    },
+]
+const optionsStateList = [
+    {
+        label: "State 1",
+        value: "01",
+        id: "1"
+    },
+    {
+        label: "State 2",
+        value: "02",
+        id: "2"
+    },
+    {
+        label: "State 3",
+        value: "03",
+        id: "3"
+    },
+]
 // import { selectAurthorizedUserValuesArray } from "../../Redux/Slicer/Slicer";
 // import {setApplicantFormData} from "../../Redux/Slicer/Slicer";
 // import { useDispatch } from "react-redux";
-const ApllicantForm = (props) => {
+const ApllicantFormStep1 = (props) => {
     const [post, setPost] = useState([]);
-    // const [form, setForm] = useState([]);
+    const [form, setForm] = useState([]);
     const [developer, setDeveloper] = useState('');
     const [name, setName] = useState('');
     const [mobile, setMobile] = useState('');
@@ -55,6 +143,10 @@ const ApllicantForm = (props) => {
 
         setAddress(event.target.value);
     };
+    const handleVillageChange = event => {
+
+        setvillage1(event.target.value);
+    };
     const handlePinChange = event => {
 
         setPincode(event.target.value);
@@ -69,8 +161,8 @@ const ApllicantForm = (props) => {
     const ApplicantFormSubmitHandlerForm = async(e) => {
         e.preventDefault();
         SetFormSubmitted(true);
-        let barArray = []
-        const applicantForm = {
+        props.Step1Continue({"data":true})
+        const forms = {
             developer: developer,
             name: name,
             mobile: mobile,
@@ -86,10 +178,9 @@ const ApllicantForm = (props) => {
             nameOwner: nameOwner
 
         };
-        dispatch(setApplicantFormData(
-            // formTab.developerDetail[0].devDetail
-            applicantForm
-          ))
+        localStorage.setItem("key",JSON.stringify(forms))
+       
+        
         // console.log("FRMDATA",forms);
         // localStorage.setItem('step1', JSON.stringify(forms))
         // form.push(forms)
@@ -110,25 +201,29 @@ const ApllicantForm = (props) => {
     },[aurthorizedUserData]);
 
     return (
-        <Form onSubmit={ApplicantFormSubmitHandlerForm} autoComplete="off">
-            <Card style={{width:"126%",marginLeft:"-88px",paddingRight:"10px"}}>
+      
+        <Form  autoComplete="off">
+            <Card style={{width:"126%",marginLeft:"19px",paddingRight:"10px"}}>
                 <Form.Group className="justify-content-center" controlId="formBasicEmail">
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
+              
                 <Col md={4} xxl lg="4">
                             <div>
                                 <Form.Label><b>Developer</b> <span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Select type="text" className="form-control" defaultValue="Select"  onChange={(e) => setDeveloper(e.target.value)} value={developer} >
-                                <option value="K.Mishra">K.Mishra</option>
-                                <option value="Developer 1">Developer 1</option>
-                                <option value="Developer 2">Developer 2</option>
-                            </Form.Select>
+                            <ReactMultiSelect 
+                        listOfData={optionsArrList}
+                        labels="Developer"
+                        getSelectedValue={setDeveloper} />
+                       
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
                                 <Form.Label><b>Authorized Person Name </b><span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Control type="text" className="form-control"  pattern="[A-Za-z]*" name="authorizedPerson" minLength={10} maxLength={99}
+                          
+               
+                            <input   type="text" className="form-control"  pattern="[A-Za-z]*" name="authorizedPerson" minLength={10} maxLength={99}
 
                                 onChange={(e) => setName(e.target.value)} 
                                 placeholder={(aurthorizedUserData!==null && aurthorizedUserData!==undefined)?
@@ -160,7 +255,7 @@ const ApllicantForm = (props) => {
                             <div>
                                 <Form.Label><b>Authorized Mobile No 2 </b><span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Control type="text" placeholder="Authorized Mobile No 2" onChange={(e) => setMobile2(e.target.value)} value={mobile2} />
+                            <input  type="tel"  className="form-control"  pattern="[0-9]*" name="authorizedmobile" maxLength={10} placeholder="Authorized Mobile No 2" onChange={(e) => setMobile2(e.target.value)} value={mobile2} />
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
@@ -216,11 +311,10 @@ const ApllicantForm = (props) => {
                             <div>
                                 <Form.Label><b>Village/City </b><span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Select type="text"className="form-control" defaultValue="Select" placeholder="Village/City"  onChange={(e) => setvillage1(e.target.value)} value={village1}>
-                                <option value="1">Ballabgarh</option>
-                                <option value="2">Village</option>
-                                <option value="3">City</option>
-                            </Form.Select>
+                            <ReactMultiSelect 
+                        listOfData={optionsVillageList}
+                        labels="Village"
+                        getSelectedValue={setvillage1} />
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
@@ -237,34 +331,28 @@ const ApllicantForm = (props) => {
                             <div>
                                 <Form.Label><b>Tehshil </b><span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Select type="text" className="form-control" defaultValue="Select" placeholder="Tehshil" required onChange={(e) => setTehsil(e.target.value)} value={tehsil} >
-                                <option value="1">Tehshil 1</option>
-                                <option value="2">Tehshil 2</option>
-                                <option value="3">Tehshil 3</option>
-                                <option value="3">Tehshil 4</option>
-                            </Form.Select>
+                            <ReactMultiSelect 
+                        listOfData={optionsTehsilList}
+                        labels="Tehsil" 
+                        getSelectedValue={setTehsil}/>
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
                                 <Form.Label><b>District</b> <span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Select type="text" className="form-control" defaultValue="Select" placeholder="Tehshil" required onChange={(e) => setDistrict(e.target.value)} value={district} >
-                                <option value="1">District 1</option>
-                                <option value="2">District 2</option>
-                                <option value="3">District 3</option>
-                                <option value="3">District 4</option>
-                            </Form.Select>
+                            <ReactMultiSelect 
+                        listOfData={optionsDistrictList}
+                        labels="District"
+                        getSelectedValue={setDistrict} />
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
                                 <Form.Label><b>State</b> <span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Select type="text" className="form-control" defaultValue="Select" placeholder="Tehshil" required onChange={(e) => setState(e.target.value)} value={state}  >
-                                <option value="1">State 1</option>
-                                <option value="2">State 2</option>
-                                <option value="3">State 3</option>
-                                <option value="3">State 4</option>
-                            </Form.Select>
+                            <ReactMultiSelect 
+                        listOfData={optionsStateList}
+                        labels="State" 
+                        getSelectedValue={setState}/>
                         </Col>
                     </Row><br></br>
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -302,7 +390,7 @@ const ApllicantForm = (props) => {
                             </div>
                             <Form.Control type="text" disabled readOnly />
                         </Col>
-                        <Col md={4} xxl lg="4" style={{marginTop:45}}>
+                        <Col md={4} xxl lg="4" style={{marginTop:23}}>
                             <div>
                                 <Form.Label><b>Email ID for communication</b><span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
@@ -312,12 +400,12 @@ const ApllicantForm = (props) => {
 
                     </Row><br></br>
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                    <Col md={4} xxl lg="4">
+                  <div className="col col-4">
                             <div>
                                 <Form.Label><b>Name of the authorized person to sign the application</b><span style={{ color: "red" }}>*</span><i className="fa fa-info-circle-fill"/></Form.Label>
                             </div>
                             <Form.Control type="text" disabled readOnly />
-                        </Col>
+                        </div>
                         {/* <Col md={4} xxl lg="4">
                             <div>
                                 <Form.Label><b>Name of individual Land owner/ land-owning company/ firm/ LLP etc.</b> <span style={{ color: "red" }}>*</span></Form.Label>
@@ -331,16 +419,23 @@ const ApllicantForm = (props) => {
                     </Row>
 
                 </Form.Group>
-                <Button style={{ alignSelf: "center", marginTop: "25px",marginLeft:"-694px" }} variant="primary" type="submit">
-                Save as Draft
-            </Button>
-            <Button style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "715px" }} variant="primary" type="submit">
+                {/* <Button 
+                    style={{ alignSelf: "center", marginTop: "25px",marginLeft:"-1249px" }} 
+                    variant="primary" type="submit" 
+                    >
+              Back
+            </Button> */}
+            <Button 
+            style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "1163px" }} 
+            variant="primary"  
+            onClick={ApplicantFormSubmitHandlerForm}>
                 Continue
             </Button>
                
             </Card>
         </Form>
+       
     )
 }
 
-export default ApllicantForm;
+export default ApllicantFormStep1;

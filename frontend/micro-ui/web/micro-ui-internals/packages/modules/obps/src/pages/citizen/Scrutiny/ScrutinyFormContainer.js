@@ -1,9 +1,8 @@
-import { size } from "lodash";
 import React,{useState, useEffect} from "react";
 import { Container } from "react-bootstrap";
 import { Card, Row, Col} from "react-bootstrap";
 // import { commoncolor, primarycolor } from "../../constants";
-import ScrutitnyForms from "../ScrutinyBasic/ScutinyBasic";
+// import ScrutitnyForms from "../forms/scrutinyForms/scrutinyBasicForms";
 
 
 const ScrutinyFormcontainer=(props)=>{
@@ -42,19 +41,18 @@ const ScrutinyFormcontainer=(props)=>{
     
     
     return(
-        <Card >
-        
-           
-        <Row  style={{top:25,padding:5}}>
-                  <div className="ml-auto">
-                    <h2 className="fw-bold">This Screen is for read only (For Department use only)</h2>
+       
+        <Container className="justify-content-center" style={{display:props.isFormshow,minHeight:"100%",width:"100%",position:"relative", marginBottom:50,marginTop:50}}>
+            <Row >
+                <div className="ml-auto">
+                    <h2>This Screen is for read only (For Department use only)</h2>
                 </div>
-                </Row>
-            <Row  style={{top:30,padding:10}}>
+            </Row>
+            <Row className="ms-auto" style={{top:30,padding:10,borderWidth:10,borderStyle:"solid"}}>
                 <ScrutitnyForms></ScrutitnyForms>
             </Row>
-        
-        </Card>
+        </Container>
+       
     );
 }
 
