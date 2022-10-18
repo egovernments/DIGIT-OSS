@@ -6,9 +6,13 @@ import Modal from "react-bootstrap/Modal";
 // import TextField from '@mui/material/TextField';
 // import CalculateIcon from '@mui/icons-material/Calculate';
 // import InfoIcon from '@mui/icons-material/Info';
-import * as Icon from "react-bootstrap-icons";
-import { XCircleFill } from "react-bootstrap-icons";
-import { CheckCircleFill } from "react-bootstrap-icons";
+// import * as Icon from "react-bootstrap-icons";
+// import { XCircleFill } from "react-bootstrap-icons";
+// import { CheckCircleFill } from "react-bootstrap-icons";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
+// import Collapse from "react-bootstrap/Collapse";
 
 const Genarelinfo = (props) => {
   const [showhide1, setShowhide1] = useState("No");
@@ -20,7 +24,20 @@ const Genarelinfo = (props) => {
     this.setState({ isRadioSelected: true });
   };
 
+  const [showhide2, setShowhide2] = useState("No");
+
+  const handleshow2 = (e) => {
+    const getshow = e.target.value;
+    setShowhide2(getshow);
+  };
+  const [purpose, setPurpose] = useState("");
+  const handleChangesetPurpose = (e) => {
+    setPurpose(e.target.value);
+    localStorage.setItem("Purpose", e.target.value);
+  };
+
   const [form, setForm] = useState([]);
+  const [open, setOpen] = useState(false);
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -33,7 +50,27 @@ const Genarelinfo = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   console.log(uncheckedValue);
   return (
-    <Form ref={props.generalInfoRef}>
+    <Form
+      ref={props.generalInfoRef}
+      style={{
+        width: "100%",
+        height: props.heightGen,
+        overflow: "hidden",
+        marginBottom: 20,
+        borderColor: "#C3C3C3",
+        borderStyle: "solid",
+        borderWidth: 2,
+        padding: 2,
+      }}
+    >
+      {/* <Button
+    onClick={() => setOpen(!open)}
+    aria-controls="example-collapse-text"
+    aria-expanded={open}
+  >
+  Step-2
+      </Button> */}
+
       <Form.Group className="justify-content-center" controlId="formBasicEmail">
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col md={4} xxl lg="3">
@@ -46,7 +83,7 @@ const Genarelinfo = (props) => {
                 value="Puropse Of License"
                 type="radio"
                 id="default-radio"
-                label={<CheckCircleFill class="text-success" />}
+                label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                 // onChange={(e) => {setPurpose(e.target.value),localStorage.setItem("Purpose",e.target.value)}}
                 onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
                 name="group19"
@@ -57,14 +94,14 @@ const Genarelinfo = (props) => {
                 value="Puropse Of License"
                 type="radio"
                 id="default-radio"
-                label={<XCircleFill class="text-danger" />}
+                label={<CancelIcon color="error" />}
                 name="group19"
                 inline
               ></Form.Check>
             </div>
             {/* <Form.Select type="text" placeholder="Puropse"  readOnly> */}
-            <select className="form-control" id="Puropse" name="potential" readOnly>
-            <option value="">--Puropse--</option>
+            <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} readOnly>
+              <option value="">--Puropse--</option>
               <option value="01">Plotted Commercial</option>
               <option value="02">Group Housing Commercial</option>
               <option value="03">AGH </option>
@@ -74,7 +111,7 @@ const Genarelinfo = (props) => {
               <option value="07">IT Colony Commercial</option>
               <option value="08">DDJAY</option>
               <option value="12">TOD Group housing</option>
-              </select>
+            </select>
             {/* </Form.Select> */}
           </Col>
           <div className="col col-3">
@@ -88,7 +125,7 @@ const Genarelinfo = (props) => {
               value="Potential Zone"
               type="radio"
               id="default-radio"
-              label={<CheckCircleFill class="text-success" />}
+              label={<CheckCircleIcon color="success"></CheckCircleIcon>}
               name="group20"
               inline
             ></Form.Check>
@@ -97,7 +134,7 @@ const Genarelinfo = (props) => {
               value="Potential Zone"
               type="radio"
               id="default-radio"
-              label={<XCircleFill class="text-danger" />}
+              label={<CancelIcon color="error" />}
               name="group20"
               inline
             ></Form.Check>
@@ -121,7 +158,7 @@ const Genarelinfo = (props) => {
                 value="District"
                 type="radio"
                 id="default-radio"
-                label={<CheckCircleFill class="text-success" />}
+                label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                 name="group21"
                 inline
               ></Form.Check>
@@ -130,14 +167,15 @@ const Genarelinfo = (props) => {
                 value="District"
                 type="radio"
                 id="default-radio"
-                label={<XCircleFill class="text-danger" />}
+                label={<CancelIcon color="error" />}
                 name="group21"
                 inline
               ></Form.Check>
             </div>
-            <Form.Select type="text" defaultValue="Select" placeholder="District" readOnly>
+
+            <select className="form-control" id="District" placeholder="District" readOnly>
               <option value="1">no district</option>
-            </Form.Select>
+            </select>
           </Col>
           <Col md={4} xxl lg="3">
             <div>
@@ -150,7 +188,7 @@ const Genarelinfo = (props) => {
                 value="State"
                 type="radio"
                 id="default-radio"
-                label={<CheckCircleFill class="text-success" />}
+                label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                 name="group22"
                 inline
               ></Form.Check>
@@ -159,7 +197,7 @@ const Genarelinfo = (props) => {
                 value="State"
                 type="radio"
                 id="default-radio"
-                label={<XCircleFill class="text-danger" />}
+                label={<CancelIcon color="error" />}
                 name="group22"
                 inline
               ></Form.Check>
@@ -167,7 +205,8 @@ const Genarelinfo = (props) => {
             <Form.Control type="text" defaultValue="Haryana" disabled></Form.Control>
           </Col>
         </Row>
-
+        {/* <Collapse in={open}>
+        <div id="example-collapse-text"> */}
         <div className="ml-auto" style={{ marginTop: 20 }}>
           <h2 style={{ fontSize: 24 }}>2. Details of applied land:</h2>
           <p>
@@ -180,7 +219,7 @@ const Genarelinfo = (props) => {
               value="Name of the authorized person to sign the application"
               type="radio"
               id="default-radio"
-              label={<CheckCircleFill class="text-success" />}
+              label={  <CheckCircleIcon color="success"></CheckCircleIcon>}
               name="group23"
               inline
             ></Form.Check>
@@ -189,7 +228,7 @@ const Genarelinfo = (props) => {
               value="Name of the authorized person to sign the application"
               type="radio"
               id="default-radio"
-              label={<XCircleFill class="text-danger" />}
+               label={  <CancelIcon color="error" />}
               name="group23"
               inline
             ></Form.Check> */}
@@ -200,7 +239,7 @@ const Genarelinfo = (props) => {
             Enter Details
           </Button>
           <div>
-            <Modal {...props} size="xl" show={show}  onHide={handleClose} backdrop="static" keyboard={false}>
+            <Modal {...props} size="xl" show={show} onHide={handleClose} backdrop="static" keyboard={false}>
               <Modal.Header closeButton></Modal.Header>
 
               <Modal.Body>
@@ -217,7 +256,7 @@ const Genarelinfo = (props) => {
                         value="Tehsil"
                         type="radio"
                         id="default-radio"
-                        label={<CheckCircleFill class="text-success" />}
+                        label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                         name="group24"
                         inline
                       ></Form.Check>
@@ -226,7 +265,7 @@ const Genarelinfo = (props) => {
                         value="Tehsil"
                         type="radio"
                         id="default-radio"
-                        label={<XCircleFill class="text-danger" />}
+                        label={<CancelIcon color="error" />}
                         name="group24"
                         inline
                       ></Form.Check>
@@ -247,7 +286,7 @@ const Genarelinfo = (props) => {
                         value="Name of Revenue estate"
                         type="radio"
                         id="default-radio"
-                        label={<CheckCircleFill class="text-success" />}
+                        label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                         name="group25"
                         inline
                       ></Form.Check>
@@ -256,7 +295,7 @@ const Genarelinfo = (props) => {
                         value="Name of Revenue estate"
                         type="radio"
                         id="default-radio"
-                        label={<XCircleFill class="text-danger" />}
+                        label={<CancelIcon color="error" />}
                         name="group25"
                         inline
                       ></Form.Check>
@@ -278,7 +317,7 @@ const Genarelinfo = (props) => {
                         value="Rectangle No./Mustil"
                         type="radio"
                         id="default-radio"
-                        label={<CheckCircleFill class="text-success" />}
+                        label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                         name="group26"
                         inline
                       ></Form.Check>
@@ -287,7 +326,7 @@ const Genarelinfo = (props) => {
                         value="Rectangle No./Mustil"
                         type="radio"
                         id="default-radio"
-                        label={<XCircleFill class="text-danger" />}
+                        label={<CancelIcon color="error" />}
                         name="group26"
                         inline
                       ></Form.Check>
@@ -299,7 +338,7 @@ const Genarelinfo = (props) => {
                 </Row>
                 <br></br>
                 <Row className="ml-auto mb-3">
-                  <Col md={4} xxl lg="4">
+                  {/* <Col md={4} xxl lg="4">
                     <div>
                       <label>
                         <h6>
@@ -311,7 +350,7 @@ const Genarelinfo = (props) => {
                         value="Sector"
                         type="radio"
                         id="default-radio"
-                        label={<CheckCircleFill class="text-success" />}
+                        label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                         name="group27"
                         inline
                       ></Form.Check>
@@ -320,50 +359,224 @@ const Genarelinfo = (props) => {
                         value="Sector"
                         type="radio"
                         id="default-radio"
-                        label={<XCircleFill class="text-danger" />}
+                        label={<CancelIcon color="error" />}
                         name="group27"
                         inline
                       ></Form.Check>
                       <input type="number" className="form-control" />
                     </div>
-                  </Col>
+                  </Col> */}
 
-                  <Col md={4} xxl lg="4">
+                  <Col md={4} xxl lg="12">
                     <div>
                       <label>
                         <h6>
                           <b>Consolidation Type</b>
                         </h6>{" "}
-                      </label>
+                      </label>{" "}
                       &nbsp;&nbsp;
-                      <Form.Check
-                        value="Consolidation Type"
-                        type="radio"
-                        id="default-radio"
-                        label={<CheckCircleFill class="text-success" />}
-                        name="group28"
-                        inline
-                      ></Form.Check>
-                      <Form.Check
-                        onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                        value="Consolidation Type"
-                        type="radio"
-                        id="default-radio"
-                        label={<XCircleFill class="text-danger" />}
-                        name="group28"
-                        inline
-                      ></Form.Check>
-                      <Form.Select type="select" defaultValue="Select">
-                        <option>Consolidated</option>
-                        <option>Non Consolidated</option>
-                      </Form.Select>
-                    </div>
+                      {/* <Form.Select type="select" defaultValue="Select" placeholder="" className="form-control"
+                                    onChange={(e)=>setModalConsolidation(e.target.value)} >
+                                        */}
+                      <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow2} />
+                      &nbsp;&nbsp;
+                      <label for="Yes"></label>
+                      <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
+                      <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow2} />
+                      &nbsp;&nbsp;
+                      <label for="Yes"></label>
+                      <label htmlFor="npnl">Non-Consolidated</label>
+                      {/* </Form.Select> */}
+                    </div>{" "}
+                    {showhide2 === "1" && (
+                      <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                        <thead>
+                          <tr>
+                            {/* {(khasraData !== undefined && khasraData.length > 0)?(khasraData.)} */}
+                            <th>
+                              <b>
+                                Kanal&nbsp;&nbsp;
+                                <Form.Check
+                                  value="Kanal"
+                                  type="radio"
+                                  id="default-radio"
+                                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
+                                  name="group29"
+                                  inline
+                                ></Form.Check>
+                                <Form.Check
+                                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
+                                  value="Kanal"
+                                  type="radio"
+                                  id="default-radio"
+                                  label={<CancelIcon color="error" />}
+                                  name="group29"
+                                  inline
+                                ></Form.Check>
+                              </b>
+                            </th>
+                            <th>
+                              <b>
+                                Marla&nbsp;&nbsp;
+                                <Form.Check
+                                  value="Marla"
+                                  type="radio"
+                                  id="default-radio"
+                                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
+                                  name="group29"
+                                  inline
+                                ></Form.Check>
+                                <Form.Check
+                                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
+                                  value="Marla"
+                                  type="radio"
+                                  id="default-radio"
+                                  label={<CancelIcon color="error" />}
+                                  name="group29"
+                                  inline
+                                ></Form.Check>
+                              </b>
+                            </th>
+                            <th>
+                              <b>
+                                Sarsai&nbsp;&nbsp;
+                                <Form.Check
+                                  value="Sarsai"
+                                  type="radio"
+                                  id="default-radio"
+                                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
+                                  name="group29"
+                                  inline
+                                ></Form.Check>
+                                <Form.Check
+                                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
+                                  value="Sarsai"
+                                  type="radio"
+                                  id="default-radio"
+                                  label={<CancelIcon color="error" />}
+                                  name="group29"
+                                  inline
+                                ></Form.Check>
+                              </b>
+                              &nbsp;&nbsp;
+                            </th>
+                            {/* <th><b>Area in Marla</b>&nbsp;&nbsp;</th> */}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <input type="text" className="form-control" placeholder=""></input>
+                            </td>
+                            <td>
+                              <input type="text" className="form-control" placeholder=""></input>{" "}
+                            </td>
+                            <td>
+                              {" "}
+                              <input type="text" className="form-control" placeholder=""></input>
+                            </td>
+                            {/* <td > <input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalMarla(e.target.value)}></input></td> */}
+                          </tr>
+                        </tbody>
+                      </table>
+                    )}
+                    {showhide2 === "2" && (
+                      <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                        <thead>
+                          <tr>
+                            {/* {(khasraData !== undefined && khasraData.length > 0)?(khasraData.)} */}
+                            <th>
+                              <b>
+                                Bigha&nbsp;&nbsp;
+                                <Form.Check
+                                  value="Bigha"
+                                  type="radio"
+                                  id="default-radio"
+                                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
+                                  name="group29"
+                                  inline
+                                ></Form.Check>
+                                <Form.Check
+                                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
+                                  value="Bigha"
+                                  type="radio"
+                                  id="default-radio"
+                                  label={<CancelIcon color="error" />}
+                                  name="group29"
+                                  inline
+                                ></Form.Check>
+                              </b>
+                            </th>
+                            <th>
+                              <b>
+                                Biswa&nbsp;&nbsp;
+                                <Form.Check
+                                  value="Biswa"
+                                  type="radio"
+                                  id="default-radio"
+                                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
+                                  name="group29"
+                                  inline
+                                ></Form.Check>
+                                <Form.Check
+                                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
+                                  value="Biswa"
+                                  type="radio"
+                                  id="default-radio"
+                                  label={<CancelIcon color="error" />}
+                                  name="group29"
+                                  inline
+                                ></Form.Check>
+                              </b>
+                            </th>
+                            <th>
+                              <b>
+                                Biswansi&nbsp;&nbsp;
+                                <Form.Check
+                                  value="Biswansi"
+                                  type="radio"
+                                  id="default-radio"
+                                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
+                                  name="group29"
+                                  inline
+                                ></Form.Check>
+                                <Form.Check
+                                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
+                                  value="Biswansi"
+                                  type="radio"
+                                  id="default-radio"
+                                  label={<CancelIcon color="error" />}
+                                  name="group29"
+                                  inline
+                                ></Form.Check>
+                              </b>
+                              &nbsp;&nbsp;
+                            </th>
+                            {/* <th><b>Area in Marla</b>&nbsp;&nbsp;</th> */}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <input type="text" className="form-control" placeholder=""></input>
+                            </td>
+                            <td>
+                              <input type="text" className="form-control" placeholder=""></input>{" "}
+                            </td>
+                            <td>
+                              {" "}
+                              <input type="text" className="form-control" placeholder=""></input>
+                            </td>
+                            {/* <td > <input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalMarla(e.target.value)}></input></td> */}
+                          </tr>
+                        </tbody>
+                      </table>
+                    )}
                   </Col>
                 </Row>
-                <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                {/* <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                   <thead>
                     <tr>
-                      
                       <th>
                         <b>
                           Killa&nbsp;&nbsp;
@@ -371,7 +584,7 @@ const Genarelinfo = (props) => {
                             value="Killa"
                             type="radio"
                             id="default-radio"
-                            label={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                             name="group29"
                             inline
                           ></Form.Check>
@@ -380,7 +593,7 @@ const Genarelinfo = (props) => {
                             value="Killa"
                             type="radio"
                             id="default-radio"
-                            label={<XCircleFill class="text-danger" />}
+                            label={<CancelIcon color="error" />}
                             name="group29"
                             inline
                           ></Form.Check>
@@ -393,7 +606,7 @@ const Genarelinfo = (props) => {
                             value="Khewat"
                             type="radio"
                             id="default-radio"
-                            label={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                             name="group30"
                             inline
                           ></Form.Check>
@@ -402,7 +615,7 @@ const Genarelinfo = (props) => {
                             value="Khewat"
                             type="radio"
                             id="default-radio"
-                            label={<XCircleFill class="text-danger" />}
+                            label={<CancelIcon color="error" />}
                             name="group30"
                             inline
                           ></Form.Check>
@@ -415,7 +628,7 @@ const Genarelinfo = (props) => {
                             value=" Area in Kanal "
                             type="radio"
                             id="default-radio"
-                            label={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                             name="group31"
                             inline
                           ></Form.Check>
@@ -424,7 +637,7 @@ const Genarelinfo = (props) => {
                             value=" Area in Kanal "
                             type="radio"
                             id="default-radio"
-                            label={<XCircleFill class="text-danger" />}
+                            label={<CancelIcon color="error" />}
                             name="group31"
                             inline
                           ></Form.Check>
@@ -438,7 +651,7 @@ const Genarelinfo = (props) => {
                             value="Area in Marla"
                             type="radio"
                             id="default-radio"
-                            label={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                             name="group32"
                             inline
                           ></Form.Check>
@@ -447,7 +660,7 @@ const Genarelinfo = (props) => {
                             value="Area in Marla"
                             type="radio"
                             id="default-radio"
-                            label={<XCircleFill class="text-danger" />}
+                            label={<CancelIcon color="error" />}
                             name="group32"
                             inline
                           ></Form.Check>
@@ -472,7 +685,7 @@ const Genarelinfo = (props) => {
                       </td>
                     </tr>
                   </tbody>
-                </table>
+                </table> */}
 
                 <Row className="ml-auto mb-3">
                   <Col md={4} xxl lg="6">
@@ -487,7 +700,7 @@ const Genarelinfo = (props) => {
                         value="Name of Land Owner"
                         type="radio"
                         id="default-radio"
-                        label={<CheckCircleFill class="text-success" />}
+                        label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                         name="group33"
                         inline
                       ></Form.Check>
@@ -496,7 +709,7 @@ const Genarelinfo = (props) => {
                         value="Name of Land Owner"
                         type="radio"
                         id="default-radio"
-                        label={<XCircleFill class="text-danger" />}
+                        label={<CancelIcon color="error" />}
                         name="group33"
                         inline
                       ></Form.Check>
@@ -509,7 +722,7 @@ const Genarelinfo = (props) => {
                 <Row className="ml-auto mb-3">
                   <div className="col col-12">
                     <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
-                      <b>(h)&nbsp;Collaboration agreement&nbsp; </b>&nbsp;&nbsp;
+                      <b>(h) Collaboration agreement </b>&nbsp;&nbsp;
                       <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow1} />
                       &nbsp;&nbsp;
                       <label for="Yes">
@@ -531,7 +744,7 @@ const Genarelinfo = (props) => {
                       value="Collaboration agreement"
                       type="radio"
                       id="default-radio"
-                      label={<CheckCircleFill class="text-success" />}
+                      label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                       name="group34"
                       inline
                     ></Form.Check>
@@ -540,7 +753,7 @@ const Genarelinfo = (props) => {
                       value="Collaboration agreement"
                       type="radio"
                       id="default-radio"
-                      label={<XCircleFill class="text-danger" />}
+                      label={<CancelIcon color="error" />}
                       name="group34"
                       inline
                     ></Form.Check>
@@ -557,7 +770,7 @@ const Genarelinfo = (props) => {
                             value="Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered"
                             type="radio"
                             id="default-radio"
-                            label={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                             name="group35"
                             inline
                           ></Form.Check>
@@ -566,7 +779,7 @@ const Genarelinfo = (props) => {
                             value="Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered"
                             type="radio"
                             id="default-radio"
-                            label={<XCircleFill class="text-danger" />}
+                            label={<CancelIcon color="error" />}
                             name="group35"
                             inline
                           ></Form.Check>
@@ -583,7 +796,7 @@ const Genarelinfo = (props) => {
                             value="Date of registering collaboration agreement"
                             type="radio"
                             id="default-radio"
-                            label={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                             name="group36"
                             inline
                           ></Form.Check>
@@ -592,7 +805,7 @@ const Genarelinfo = (props) => {
                             value="Date of registering collaboration agreement"
                             type="radio"
                             id="default-radio"
-                            label={<XCircleFill class="text-danger" />}
+                            label={<CancelIcon color="error" />}
                             name="group36"
                             inline
                           ></Form.Check>
@@ -609,7 +822,7 @@ const Genarelinfo = (props) => {
                             value="Date of validity of collaboration agreement"
                             type="radio"
                             id="default-radio"
-                            label={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                             name="group37"
                             inline
                           ></Form.Check>
@@ -618,7 +831,7 @@ const Genarelinfo = (props) => {
                             value="Date of validity of collaboration agreement"
                             type="radio"
                             id="default-radio"
-                            label={<XCircleFill class="text-danger" />}
+                            label={<CancelIcon color="error" />}
                             name="group37"
                             inline
                           ></Form.Check>
@@ -647,7 +860,7 @@ const Genarelinfo = (props) => {
                             value="Whether collaboration agreement irrevocable"
                             type="radio"
                             id="default-radio"
-                            label={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                             name="group38"
                             inline
                           ></Form.Check>
@@ -656,7 +869,7 @@ const Genarelinfo = (props) => {
                             value="Whether collaboration agreement irrevocable"
                             type="radio"
                             id="default-radio"
-                            label={<XCircleFill class="text-danger" />}
+                            label={<CancelIcon color="error" />}
                             name="group38"
                             inline
                           ></Form.Check>
@@ -673,7 +886,7 @@ const Genarelinfo = (props) => {
                             value="Name of authorized signatory on behalf of land owner(s)"
                             type="radio"
                             id="default-radio"
-                            label={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                             name="group39"
                             inline
                           ></Form.Check>
@@ -682,7 +895,7 @@ const Genarelinfo = (props) => {
                             value="Name of authorized signatory on behalf of land owner(s)"
                             type="radio"
                             id="default-radio"
-                            label={<XCircleFill class="text-danger" />}
+                            label={<CancelIcon color="error" />}
                             name="group39"
                             inline
                           ></Form.Check>
@@ -699,7 +912,7 @@ const Genarelinfo = (props) => {
                             value="Name of authorized signatory on behalf of developer to sign Collaboration agreement"
                             type="radio"
                             id="default-radio"
-                            label={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                             name="group40"
                             inline
                           ></Form.Check>
@@ -708,7 +921,7 @@ const Genarelinfo = (props) => {
                             value="Name of authorized signatory on behalf of developer to sign Collaboration agreement"
                             type="radio"
                             id="default-radio"
-                            label={<XCircleFill class="text-danger" />}
+                            label={<CancelIcon color="error" />}
                             name="group40"
                             inline
                           ></Form.Check>
@@ -725,7 +938,7 @@ const Genarelinfo = (props) => {
                             value="Registring Authority"
                             type="radio"
                             id="default-radio"
-                            label={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                             name="group41"
                             inline
                           ></Form.Check>
@@ -734,7 +947,7 @@ const Genarelinfo = (props) => {
                             value="Registring Authority"
                             type="radio"
                             id="default-radio"
-                            label={<XCircleFill class="text-danger" />}
+                            label={<CancelIcon color="error" />}
                             name="group41"
                             inline
                           ></Form.Check>
@@ -751,7 +964,7 @@ const Genarelinfo = (props) => {
                             value="Registring Authority document"
                             type="radio"
                             id="default-radio"
-                            label={<CheckCircleFill class="text-success" />}
+                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
                             name="group42"
                             inline
                           ></Form.Check>
@@ -760,7 +973,7 @@ const Genarelinfo = (props) => {
                             value="Registring Authority document"
                             type="radio"
                             id="default-radio"
-                            label={<XCircleFill class="text-danger" />}
+                            label={<CancelIcon color="error" />}
                             name="group42"
                             inline
                           ></Form.Check>
@@ -776,8 +989,8 @@ const Genarelinfo = (props) => {
               </Modal.Footer>
             </Modal>
           </div>
-          
-{/* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+
+          {/* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
   Launch demo modal
 </button>
 
@@ -798,7 +1011,6 @@ const Genarelinfo = (props) => {
     </div>
   </div>
 </div> */}
-
         </div>
         <br></br>
 
@@ -812,18 +1024,18 @@ const Genarelinfo = (props) => {
                 <th>Killa</th>
                 <th>Land owner</th>
                 <th>Consolidation Type</th>
-                <th>Kanal</th>
-                <th>Marla</th>
-                <th>Sarsai</th>
+                <th>Kanal/Bigha</th>
+                <th>Marla/Biswa</th>
+                {/* <th>Sarsai</th>
                 <th>Bigha</th>
                 <th>Biswa</th>
                 <th>Biswansi</th>
-                <th>Area &nbsp;&nbsp;</th>
+                <th>Area &nbsp;&nbsp;</th> */}
                 <th>
                   {" "}
                   <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
                     <b>
-                      Collaboration agreement&nbsp;&nbsp;
+                      Khewat&nbsp;&nbsp;
                       {/* <InfoIcon style={{color:"blue"}}/>  */}
                     </b>
                     &nbsp;&nbsp;
@@ -858,7 +1070,7 @@ const Genarelinfo = (props) => {
                 <td class="text-center">
                   <input type="text" className="form-control" disabled />
                 </td>
-                <td class="text-center">
+                {/* <td class="text-center">
                   <input type="text" className="form-control" disabled />
                 </td>
                 <td class="text-center">
@@ -872,7 +1084,7 @@ const Genarelinfo = (props) => {
                 </td>
                 <td class="text-center">
                   <input type="text" className="form-control" disabled />
-                </td>
+                </td> */}
                 <td class="text-center">
                   {" "}
                   <input type="text" className="form-control" disabled />
@@ -881,10 +1093,12 @@ const Genarelinfo = (props) => {
             </tbody>
           </table>
         </div>
+        {/* </div>
+      </Collapse> */}
       </Form.Group>
       <br></br>
       <div style={{ position: "relative", marginBottom: 40 }}>
-        <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
+        <Button onClick={() => props.passUncheckedList({ data: uncheckedValue, purpose: purpose })}>Submit</Button>
       </div>
       <hr></hr>
     </Form>
