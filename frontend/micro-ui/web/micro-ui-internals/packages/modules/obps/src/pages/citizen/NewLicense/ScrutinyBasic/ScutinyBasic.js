@@ -7,8 +7,9 @@ import Feeandcharges from "./Feeandcharges";
 // import JeLandinfo from "./Scrutiny LOI/JE/JE";
 import DisApprovalList from "./DisApprovalList";
 import HistoryList from "./History";
+// import ScrutinyDevelopment from "./ScrutinyDevelopment/ScrutinyDevelopment";
 import { Button } from "react-bootstrap";
-import { padding } from "@mui/system";
+// import { padding } from "@mui/system";
 
 const ScrutitnyForms = () => {
   const personalInfoRef = useRef();
@@ -16,6 +17,7 @@ const ScrutitnyForms = () => {
   const developerInfoRef = useRef();
   const appliedInfoRef = useRef();
   const feeandchargesInfoRef = useRef();
+  const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
   const [displayPersonal, setDisplayPersonalInfo] = useState([]);
@@ -30,7 +32,6 @@ const ScrutitnyForms = () => {
   const [defaultheightDevelper, setDefaultheightDevelper] = useState(160);
   const [defaultheightApplied, setDefaultheightApplied] = useState(140);
   const [defaultheightFee, setDefaultheightFee] = useState(120);
-  const [purpose, setPurpose] = useState("");
 
   const [uncheckedValue, setUncheckedVlue] = useState([]);
 
@@ -44,10 +45,10 @@ const ScrutitnyForms = () => {
     console.log(data);
   };
   const getUncheckedGeneralinfos = (data) => {
-    console.log("abc", data);
     setPurpose(data.purpose);
     setDisplayGeneralInfo(data.data);
-    // console.log(data);
+    // console.log("abc", data);
+    console.log(data);
   };
   const getUncheckedAppliedLandInfo = (data) => {
     setDisplayAppliedLandInfo(data.data);
@@ -57,12 +58,13 @@ const ScrutitnyForms = () => {
     setDisplayFeeandChargesInfo(data.data);
     console.log(data);
   };
-  const getUncheckedJeLandInfo = (data) => {
-    setDisplayJeLand(data.data);
-    console.log(data);
-  };
+  // const getUncheckedJeLandInfo = (data) => {
+  //   setDisplayJeLand(data.data);
+  //   console.log(data);
+  // };
 
   console.log(uncheckedValue);
+  console.log("React", purpose);
 
   const ApllicantFormHandler = (data) => {
     setActiveKey(2);
@@ -124,7 +126,7 @@ const ScrutitnyForms = () => {
   //   };
 
   console.log(displayPersonal);
-  console.log("Adit", purpose);
+
   return (
     <div>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
@@ -170,7 +172,7 @@ const ScrutitnyForms = () => {
         // }}
         >
           <div>
-            <Button onClick={handleScrolltoPersonal} style={{ height: 50, marginBottom: 10 }}>
+            <Button onClick={handleScrolltoPersonal} style={{ height: 35, marginBottom: 10 }}>
               Step 1
             </Button>
             <Personalinfo
@@ -180,13 +182,13 @@ const ScrutitnyForms = () => {
             ></Personalinfo>
           </div>
           <div>
-            <Button onClick={handleScrolltOGeneral} style={{ height: 50, marginBottom: 10 }}>
+            <Button onClick={handleScrolltOGeneral} style={{ height: 35, marginBottom: 10 }}>
               Step 2
             </Button>
             <Genarelinfo generalInfoRef={generalInfoRef} passUncheckedList={getUncheckedGeneralinfos} heightGen={defaultHeightGen}></Genarelinfo>
           </div>
           <div>
-            <Button onClick={handleScrolltoDeveloper} style={{ height: 50, marginBottom: 10 }}>
+            <Button onClick={handleScrolltoDeveloper} style={{ height: 35, marginBottom: 10 }}>
               Step 3
             </Button>
             <Developerinfo
@@ -196,7 +198,7 @@ const ScrutitnyForms = () => {
             ></Developerinfo>
           </div>
           <div>
-            <Button onClick={handleScrolltoAppliedLandInfo} style={{ height: 50, marginBottom: 10 }}>
+            <Button onClick={handleScrolltoAppliedLandInfo} style={{ height: 35, marginBottom: 10 }}>
               Step 4
             </Button>
             <AppliedLandinfo
@@ -207,7 +209,7 @@ const ScrutitnyForms = () => {
             ></AppliedLandinfo>
           </div>
           <div>
-            <Button onClick={handleScrolltoFeeandChargesInfo} style={{ height: 50, marginBottom: 10 }}>
+            <Button onClick={handleScrolltoFeeandChargesInfo} style={{ height: 35, marginBottom: 10 }}>
               Step 5
             </Button>
             <Feeandcharges
@@ -220,7 +222,7 @@ const ScrutitnyForms = () => {
           {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}
         </div>
       </div>
-      <div style={{ position: "relative", width: "100%", height: "30%", display: "flex" }}>
+      <div style={{ position: "relative", width: "100%", height: "30%", display: "flex", marginBottom: 2 }}>
         <DisApprovalList
           disapprovallistDeveloper={displayPurpose}
           disapprovallistGeneral={displayGeneral}
@@ -230,6 +232,9 @@ const ScrutitnyForms = () => {
         ></DisApprovalList>
         <HistoryList></HistoryList>
       </div>
+      {/* <div style={{ position: "relative", width: "100%", height: "20%", display: "flex" }}>
+        <ScrutinyDevelopment></ScrutinyDevelopment>
+      </div> */}
     </div>
   );
 };
