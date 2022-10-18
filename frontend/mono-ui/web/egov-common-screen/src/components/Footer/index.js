@@ -245,7 +245,7 @@ export default function CenteredGrid() {
 
       </Grid><br />
       <center style={{color:"#ffffff"}}>Information provided online is update and no physical visit is required</center> <br />    
-      <center style={{color:"#ffffff"}}>Last Updated July 2021</center> <br />    
+      {/* <center style={{color:"#ffffff"}}>Last Updated July 2021</center> <br />     */}
       <center style={{color:"#ffffff"}}><span style={{color:"red"}}>*</span>Supported browser versions</center> <br />    
       <center ><table >
       <tr >
