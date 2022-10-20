@@ -35,7 +35,7 @@ const EmployeePayment = ({ stateCode, cityCode, moduleCode }) => {
           <SuccessfulPayment {...commonProps} />
         </Route>
           <Route path={`${currentPath}/integration/:moduleName/:pageName`}>
-          <IFrameInterface {...commonProps} />
+          {/* <IFrameInterface {...commonProps} /> */}
         </Route>
         <Route path={`${currentPath}/failure`}>
           <FailedPayment {...commonProps} />

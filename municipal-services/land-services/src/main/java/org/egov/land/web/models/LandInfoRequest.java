@@ -25,6 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LandInfoRequest   {
+	
   @JsonProperty("RequestInfo")
   private RequestInfo requestInfo = null;
 

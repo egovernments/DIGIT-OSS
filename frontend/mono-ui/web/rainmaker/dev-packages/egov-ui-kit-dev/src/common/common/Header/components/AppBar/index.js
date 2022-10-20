@@ -105,9 +105,9 @@ const EgovAppBar = ({
           </div>
         )}
 
-        <div className="appbar-right-logo">
+        {/* <div className="appbar-right-logo">
           <img src={digitLogo} />
-        </div>
+        </div> */}
         <div className="icon-button">
           {refreshButton && (
             <IconButton style={iconButtonStyle} onClick={(e) => location.reload()}>

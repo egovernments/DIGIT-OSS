@@ -84,6 +84,7 @@ public class User {
     private boolean otpValidationMandatory;
     private boolean mobileValidationMandatory = true;
     private String alternateMobileNumber;
+    private Long parentid;
 
     public User addAddressItem(Address addressItem) {
         if (this.addresses == null) {
@@ -131,61 +132,73 @@ public class User {
 
     @JsonIgnore
     public boolean isCorrespondenceAddressInvalid() {
+    	System.out.println("==correspondance address : " + correspondenceAddress);
         return correspondenceAddress != null && correspondenceAddress.isInvalid();
     }
 
     @JsonIgnore
     public boolean isPermanentAddressInvalid() {
+    	System.out.println("===permanent address  : " + permanentAddress);
         return permanentAddress != null && permanentAddress.isInvalid();
     }
 
     @JsonIgnore
     public boolean isOtpReferenceAbsent() {
+    	System.out.println("==tp is  + " + otpReference);
         return otpValidationMandatory && isEmpty(otpReference);
     }
 
     @JsonIgnore
     public boolean isTypeAbsent() {
+    	System.out.println("===Type is : " + type);
         return isEmpty(type);
     }
 
     @JsonIgnore
     public boolean isActiveIndicatorAbsent() {
+    	System.out.println("===is Active Indicator : " + active);
         return isEmpty(active);
     }
 
     @JsonIgnore
     public boolean isMobileNumberAbsent() {
+    	System.out.println("===mobile number : " + mobileNumber);
         return mobileValidationMandatory && isEmpty(mobileNumber);
     }
 
     @JsonIgnore
     public boolean isNameAbsent() {
+    	System.out.println("===name is :" +name);
         return isEmpty(name);
     }
 
     @JsonIgnore
     public boolean isUsernameAbsent() {
+    	System.out.println("====user is : " + username);
         return isEmpty(username);
     }
 
     @JsonIgnore
     public boolean isTenantIdAbsent() {
+    	System.out.println("====tenant is : " + tenantId);
         return isEmpty(tenantId);
     }
 
     @JsonIgnore
     public boolean isPasswordAbsent() {
+    	System.out.println("=====password is : " + password);
         return isEmpty(password);
     }
 
     @JsonIgnore
     public boolean isRolesAbsent() {
+    	System.out.println("====role is : " + roles);
         return CollectionUtils.isEmpty(roles) || roles.stream().anyMatch(r -> isEmpty(r.getCode()));
     }
 
     @JsonIgnore
     public boolean isIdAbsent() {
+    	System.out.println("===id is : " + id);
         return id == null;
     }
 
@@ -244,6 +257,13 @@ public class User {
     public void setActive(boolean isActive) {
         active = isActive;
     }
+
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
+
+
+
 }
 
 

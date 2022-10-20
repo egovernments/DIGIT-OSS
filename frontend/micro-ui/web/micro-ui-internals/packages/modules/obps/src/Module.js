@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useRouteMatch } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.css';
 import { Loader, CitizenHomeCard, OBPSIcon, CitizenInfoLabel } from "@egovernments/digit-ui-react-components";
 import CitizenApp from "./pages/citizen";
 import Inbox from "./pages/employee/Inbox";
@@ -26,6 +27,7 @@ import CreateEDCR from "./pages/citizen/EDCR";
 import CreateOCEDCR from "./pages/citizen/OCEDCR";
 import NewBuildingPermit from "./pages/citizen/NewBuildingPermit";
 import OCBuildingPermit from "./pages/citizen/OCBuildingPermit";
+import AddInfoForm from "./pages/citizen/DeveloperRegistration/AddInfoForm/addInfo";
 import StakeholderRegistration from "./pages/citizen/StakeholderRegistration";
 import CitizenBpaApplicationDetail from "./pages/citizen/BpaApplicationDetail";
 import BPASendToArchitect from "./pages/citizen/BPASendToArchitect";
@@ -36,6 +38,9 @@ import EdcrInbox from "./pages/citizen/EdcrInbox";
 
 import LicenseType from "./pageComponents/LicenseType";
 import LicenseDetails from "./pageComponents/LicenseDetails";
+import LicenseAddInfo from "./pageComponents/LicenseAddInfo";
+import AddAuthorizedUser from "./pageComponents/AddAuthorizedUser";
+import DeveloperCapacity from "./pageComponents/DeveloperCapacity";
 import CorrospondenceAddress from "./pageComponents/CorrospondenceAddress";
 import PermanentAddress from "./pageComponents/PermanentAddress";
 import StakeholderDocuments from "./pageComponents/StakeholderDocuments";
@@ -92,7 +97,15 @@ const OBPSLinks = ({ matchPath, userType }) => {
     {
       link: `${matchPath}/home`,
       i18nKey: t("BPA_CITIZEN_HOME_ARCHITECT_LOGIN_LABEL"),
-    },
+    }
+    // {
+    //   link: `${matchPath}/step-two`,
+    //   i18nKey: "Developer Registration",
+    // },
+    // {
+    //   link: `${matchPath}/step-two`,
+    //   i18nKey: "Developer Registration",
+    // },
   ];
 
   return (
@@ -122,7 +135,11 @@ const componentsToRegister = {
   OCUploadPlanDiagram,
   StakeholderDocsRequired,
   LicenseType,
+  AddInfoForm,
   LicenseDetails,
+  LicenseAddInfo,
+  AddAuthorizedUser,
+  DeveloperCapacity,
   CorrospondenceAddress,
   PermanentAddress,
   StakeholderDocuments,

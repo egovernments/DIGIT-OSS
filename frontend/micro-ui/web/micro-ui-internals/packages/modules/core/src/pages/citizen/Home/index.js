@@ -51,11 +51,11 @@ const Home = () => {
         Icon: <CaseIcon className="fill-path-primary-main" />,
         onClick: () => history.push("/digit-ui/citizen/tl-home"),
       },
-      // {
-      //     name: t("ACTION_TEST_WATER_AND_SEWERAGE"),
-      //     Icon: <DropIcon/>,
-      //     onClick: () => history.push("/digit-ui/citizen")
-      // },
+      {
+          name: "New License Services",
+          Icon: <CaseIcon className="fill-path-primary-main" />,
+          onClick: () => history.push("/digit-ui/citizen/obps/tab")
+      },
       {
         name: t("CS_COMMON_INBOX_BPA"),
         Icon: <OBPSIcon />,

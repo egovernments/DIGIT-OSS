@@ -1,27 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import Hamburger from "./Hamburger";
 import { NotificationBell } from "./svgindex";
 
 const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDetails, notificationCount, notificationCountLoaded, cityOfCitizenShownBesideLogo, onNotificationIconClick, hideNotificationIconOnSomeUrlsWhenNotLoggedIn }) => {
+  const [profileName,setProfileName]=useState("Noname")
+  const userData = JSON.parse(localStorage.getItem('user-info'));
+  console.log(userData);
+  useEffect(()=>{
+    if (userData!==null && userData!==undefined && userData.name!==undefined) {
+      setProfileName(userData.name)
+    }
+  }, [userData])
+
   return (
     <div className="navbar">
       <div className="center-container">
-      <h3>{cityOfCitizenShownBesideLogo}</h3>
-        <h2>TEST API</h2>
-        
+     
+      {isMobile && <Hamburger handleClick={toggleSidebar} />}
         <img
           className="city"
           id="topbar-logo" 
-          // src={img || "https://cdn.jsdelivr.net/npm/@egovernments/digit-ui-css@1.0.7/img/m_seva_white_logo.png"}
-          alt="mSeva"
+          src={"http://10.1.1.10:7001/tcp/assets/img/logo-white.png"}
+          height="100px"
+          alt="TCP"
         />
-        {isMobile && <Hamburger handleClick={toggleSidebar} />}
         <div className="RightMostTopBarOptions">
-          {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? <div className="EventNotificationWrapper" onClick={onNotificationIconClick}>
+        <h3 className="mx-2 fw-bold">{profileName}</h3>
+          {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? <span className="EventNotificationWrapper" onClick={onNotificationIconClick}>
             { notificationCountLoaded && notificationCount ? <span><p>{notificationCount}</p></span> : null }
-            <NotificationBell />
-          </div> : null}
+            <NotificationBell style={{display:"inline-block"}} />
+            
+          </span> : null}
         </div>
       </div>
     </div>

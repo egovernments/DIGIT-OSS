@@ -69,10 +69,13 @@ public class UserRepository {
         final List<Object> preparedStatementValues = new ArrayList<>();
         boolean RoleSearchHappend = false;
         List<Long> userIds = new ArrayList<>();
+        
         if (!isEmpty(userSearch.getRoleCodes()) && userSearch.getTenantId() != null) {
+        	System.out.println("! is not Empty UserSearch.getRoleCodes()");
             userIds = findUsersWithRole(userSearch);
             RoleSearchHappend = true;
         }
+        
         List<User> users = new ArrayList<>();
         if (RoleSearchHappend) {
             if (!CollectionUtils.isEmpty(userIds)) {
@@ -90,7 +93,7 @@ public class UserRepository {
             }
         }
         String queryStr = userTypeQueryBuilder.getQuery(userSearch, preparedStatementValues);
-        log.debug(queryStr);
+        log.debug("UserRrepository : find All : Query " + queryStr);
 
         users = jdbcTemplate.query(queryStr, preparedStatementValues.toArray(), userResultSetExtractor);
         enrichRoles(users);
@@ -109,6 +112,7 @@ public class UserRepository {
         final List<Object> preparedStatementValues = new ArrayList<>();
         List<Long> usersIds = new ArrayList<>();
         String queryStr = userTypeQueryBuilder.getQueryUserRoleSearch(userSearch, preparedStatementValues);
+        System.out.println("User Repository : findUsersWithRole " + queryStr);
         log.debug(queryStr);
 
         usersIds = jdbcTemplate.queryForList(queryStr, preparedStatementValues.toArray(), Long.class);
@@ -147,20 +151,27 @@ public class UserRepository {
     public User create(User user) {
         validateAndEnrichRoles(Collections.singletonList(user));
         final Long newId = getNextSequence();
+    	//user.setParentid(newId);
         user.setId(newId);
+        System.out.println("New Id =========>" + newId);
+       
+   
         user.setUuid(UUID.randomUUID().toString());
         user.setCreatedDate(new Date());
         user.setLastModifiedDate(new Date());
         user.setCreatedBy(user.getLoggedInUserId());
         user.setLastModifiedBy(user.getLoggedInUserId());
+        System.out.println("Parent id : " + user.getParentid());
         final User savedUser = save(user);
         if (user.getRoles().size() > 0) {
             saveUserRoles(user);
         }
         final Address savedCorrespondenceAddress = saveAddress(user.getCorrespondenceAddress(), savedUser.getId(),
                 savedUser.getTenantId());
+        
         final Address savedPermanentAddress = saveAddress(user.getPermanentAddress(), savedUser.getId(),
                 savedUser.getTenantId());
+        
         savedUser.setPermanentAddress(savedPermanentAddress);
         savedUser.setCorrespondenceAddress(savedCorrespondenceAddress);
         return savedUser;
@@ -475,6 +486,8 @@ public class UserRepository {
         userInputs.put("emailid", entityUser.getEmailId());
         userInputs.put("active", entityUser.getActive());
         userInputs.put("name", entityUser.getName());
+        System.out.println("Parent id : " + entityUser.getParentid());
+        userInputs.put("parentid", entityUser.getParentid());
 
         if (Gender.FEMALE.equals(entityUser.getGender())) {
             userInputs.put("gender", 1);
@@ -590,6 +603,16 @@ public class UserRepository {
 	private void updateAuditDetails(User oldUser, long userId, String uuid) {
 		auditRepository.auditUser(oldUser,userId,uuid);
 		
+	}
+	
+	public User getAuthorizedUser(String mobileNumber) {
+	
+		String mobilNumber = "0000000000";
+		
+		User user = jdbcTemplate.queryForObject("SELECT * FROM eg_user WHERE mobileNumber=?",
+		          BeanPropertyRowMapper.newInstance(User.class), mobilNumber);
+		
+		return user;
 	}
 
 }

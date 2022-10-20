@@ -2,6 +2,7 @@ import { CardLabel, FormStep, RadioOrSelect, TextInput, OpenLinkContainer, BackB
 import React, { useEffect, useState } from "react";
 import { stringReplaceAll } from "../utils";
 import Timeline from "../components/Timeline";
+import { Form, Row } from "react-bootstrap";
 
 const LicenseType = ({ t, config, onSelect, userType, formData }) => {
   if (JSON.parse(sessionStorage.getItem("BPAREGintermediateValue")) !== null) {
@@ -60,6 +61,11 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
       onSelect("", formData)
     }
   }
+
+  
+
+  
+
   return (
     <div>
       <div className={isopenlink ? "OpenlinkContainer" : ""}>
@@ -67,30 +73,50 @@ const LicenseType = ({ t, config, onSelect, userType, formData }) => {
         {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Timeline currentStep={1} flow="STAKEHOLDER" />
         <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") ? !LicenseType || !ArchitectNo : !LicenseType}>
-          <CardLabel>{t("BPA_LICENSE_TYPE")}*</CardLabel>
-          <div className={"form-pt-dropdown-only"}>
-            {data && (
-              <RadioOrSelect
-                t={t}
-                optionKey="i18nKey"
-                isMandatory={config.isMandatory}
-                options={getLicenseType() || {}}
-                selectedOption={LicenseType}
-                onSelect={selectLicenseType}
-              />
-            )}
-          </div>
-          {LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") && <div><CardLabel>{`${t("BPA_COUNCIL_NUMBER")}*`}</CardLabel>
-            <TextInput
-              t={t}
-              type={"text"}
-              isMandatory={false}
-              optionKey="i18nKey"
-              name="ArchitectNo"
-              value={ArchitectNo}
-              onChange={selectArchitectNo}
-            />
-          </div>}
+          <Row className="justify-content-between">
+            <Form.Group className="col-md-5">
+              <CardLabel>{t("BPA_LICENSE_TYPE")}*</CardLabel>
+              <div className={"form-pt-dropdown-only"}>
+                {data && (
+                  <RadioOrSelect
+                    t={t}
+                    optionKey="i18nKey"
+                    isMandatory={config.isMandatory}
+                    options={getLicenseType() || {}}
+                    selectedOption={LicenseType}
+                    onSelect={selectLicenseType}
+                  />
+                  // <RadioOrSelect
+                  //   t={t}
+                  //   optionKey="i18nKey"
+                  //   isMandatory={config.isMandatory}
+                  //   options={getLicenseType() || {}}
+                  //   selectedOption={LicenseType}
+                  //   onSelect={selectLicenseType}
+                  // />
+                )}
+              </div>
+            </Form.Group>
+
+            <Form.Group className="col-md-5">
+              {LicenseType && LicenseType?.i18nKey.includes("ARCHITECT") && <div><CardLabel>{`${t("BPA_COUNCIL_NUMBER")}*`}</CardLabel>
+                <TextInput
+                  t={t}
+                  type={"text"}
+                  isMandatory={false}
+                  optionKey="i18nKey"
+                  name="ArchitectNo"
+                  value={ArchitectNo}
+                  onChange={selectArchitectNo}
+                />
+              </div>}
+            </Form.Group>
+
+            <Form.Group>
+            
+             
+            </Form.Group>
+          </Row>
         </FormStep>
       </div>
     </div>

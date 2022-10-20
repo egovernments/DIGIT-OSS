@@ -1,0 +1,148 @@
+/* .AddInfo {
+    text-align: center;
+  } */
+/* .Card_AddInfo{
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding: auto;
+    width: 100%;
+    height: 100%;
+} */
+.card-h {
+
+    text-decoration: none;
+    color: #0572bb;
+    font-size: 1.25rem;
+}
+
+.card-hd {
+    margin-left: 2%;
+
+}
+
+.card {
+    padding: 5px;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+    /* border: #0572bb 1px solid;
+    box-shadow: 1px 1px 1px 1px #95b8cf; */
+}
+
+/* .card shadow{
+    margin-top: 5px;
+    margin-bottom: 5px;
+     
+} */
+/* .table-bd{
+    
+    border-color: black;
+} */
+.radio {
+    margin-right: 5px;
+}
+
+.btn-2 {
+
+
+    color: #0572bb;
+    font-size: 1.25rem;
+}
+
+/* .happy{
+  
+        background-color: #e1f4f7;
+    } */
+    .selectpower{
+        width: 40px !important ;
+
+    }
+    .card2{
+        padding: 2%;
+        margin-top: 0px;
+        margin-bottom: 2%;
+        margin-left: -1%;
+        margin-right: 2%;
+        /* box-shadow: 3px 1px 3px 1px #117ec7; */
+        width: 100%;
+        height: 100%;
+       
+
+      }
+
+      
+      .modal {
+        font-size: 12px;
+      }
+      .ModalHeader {
+        width: 100%;
+        border-bottom: 1px solid gray;
+        font-size: 18px;
+        text-align: center;
+        padding: 5px;
+      }
+      .content {
+        width: 100%;
+        padding: 10px 5px;
+      }
+      .actions {
+        width: 100%;
+        padding: 10px 5px;
+        margin: auto;
+        text-align: center;
+      }
+      .close {
+        cursor: pointer;
+        position: absolute;
+        display: block;
+        padding: 2px 5px;
+        line-height: 20px;
+        right: -10px;
+        top: -10px;
+        font-size: 24px;
+        background: #ffffff;
+        border-radius: 18px;
+        border: 1px solid #cfcece;
+      }
+      .popupcard{
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 2px 5px;
+        margin: auto;
+        text-align: center;
+
+      }
+      .submit-btn{
+        padding: 5px;
+      }
+      .text{
+        
+        padding: 5px;
+      }
+      .form-control{
+        padding: 5px;
+        margin: 2px;
+      }
+      .text1{
+        text-align: left;
+      }
+      .bigCard{
+        border: #0572bb 10px solid;
+      }
+      
+      .nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link{
+        background-color: #0572bb;
+        color: #fff;
+        border: #0572bb;
+        margin-bottom: 0;
+      }
+
+      .form-group label{
+        font-weight: bold;
+      }
+
+      .form-group{
+        margin-bottom: 0.5rem;
+      }

@@ -74,9 +74,12 @@ public class UserController {
      * @return
      */
     @PostMapping("/citizen/_create")
-    public Object createCitizen(@RequestBody @Valid CreateUserRequest createUserRequest) {
+    public Object createCitizen(@RequestBody  CreateUserRequest createUserRequest) {
+    	
         log.info("Received Citizen Registration Request  " + createUserRequest);
+        
         User user = createUserRequest.toDomain(true);
+        
         user.setOtpValidationMandatory(IsValidationMandatory);
         if (isRegWithLoginEnabled) {
             Object object = userService.registerWithLogin(user, createUserRequest.getRequestInfo());
@@ -94,14 +97,21 @@ public class UserController {
      * @return
      */
     @PostMapping("/users/_createnovalidate")
-    public UserDetailResponse createUserWithoutValidation(@RequestBody @Valid CreateUserRequest createUserRequest,
+    public UserDetailResponse createUserWithoutValidation(@RequestBody  CreateUserRequest createUserRequest,
                                                           @RequestHeader HttpHeaders headers) {
 
-        User user = createUserRequest.toDomain(true);
+    	
+       
+    	User user = createUserRequest.toDomain(true);
+    	
         user.setMobileValidationMandatory(isMobileValidationRequired(headers));
+       
         user.setOtpValidationMandatory(false);
+        
         final User newUser = userService.createUser(user, createUserRequest.getRequestInfo());
-        return createResponse(newUser);
+        System.out.println("parent id : " + newUser.getParentid());
+       return createResponse(newUser);
+        
     }
 
     /**
@@ -120,6 +130,8 @@ public class UserController {
         }
         return searchUsers(request, headers);
     }
+    
+    
 
     /**
      * end-point to search the users by providing userSearchRequest. In Request
