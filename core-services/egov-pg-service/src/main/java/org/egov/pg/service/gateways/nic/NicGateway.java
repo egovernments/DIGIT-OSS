@@ -155,7 +155,7 @@ public class NicGateway implements Gateway {
 	@Override
 	public String gatewayName() {
 		// TODO Auto-generated method stub
-		return null;
+		return GATEWAY_NAME;
 	}
 
 	@Override

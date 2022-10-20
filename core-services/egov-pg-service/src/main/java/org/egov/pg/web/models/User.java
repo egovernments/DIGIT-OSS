@@ -22,6 +22,9 @@ public class User {
     private String mobileNumber;
 
     private String emailId;
+    private String cityName;
+    private String address;
+    private String pinCode;
 
     @NotNull
     private String tenantId;
@@ -33,6 +36,9 @@ public class User {
         this.mobileNumber = user.getMobileNumber();
         this.emailId = user.getEmailId();
         this.tenantId = user.getTenantId();
+        this.cityName = user.getCityName();
+        this.address = user.getAddress();
+        this.pinCode=user.getPinCode();
     }
 
 }

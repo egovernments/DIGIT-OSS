@@ -170,6 +170,24 @@ public class Transaction {
 
     @JsonProperty("additionalDetails")
     private Object additionalDetails;
+    
+    //--------------------nic detail----------------//
+    @JsonProperty("officeName")
+    private String officeName;
+    
+    private String challanYear;
+    
+    private String remarks;
+    private String ApplicationNumber;
+    private String securityEmail;
+    
+    private String securityPhone;
+    private String validUpto;
+    private String schemeCount;
+    private Map<String,String> schemeName;
+    private Map<String,String> feeamount;
+    
+    //----------------nic detail end-------------------//
 
     /**
      * Entire RAW payment gateway response
@@ -179,7 +197,6 @@ public class Transaction {
 
     @JsonIgnore
     private Map<TransactionAdditionalFields, Object> additionalFields;
-
 
     /**
      * Current status of the transaction
