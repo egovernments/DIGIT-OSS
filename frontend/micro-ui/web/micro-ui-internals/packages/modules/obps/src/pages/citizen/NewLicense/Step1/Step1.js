@@ -119,8 +119,14 @@ const ApllicantFormStep1 = (props) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [formErrors, setFormErrors] = useState({});
     const [isSubmit, setIsSubmit] = useState(false);
+    const [developerData, setDeveloperData] = useState([]);
     const aurthorizedUserData = JSON.parse(localStorage.getItem("data_user"));
     // const dispatch = useDispatch();
+
+    const handleDeveloperChange = event => {
+        setDeveloper(event.target.value);
+
+    };
 
     const handleNameChange = event => {
         setName(event.target.value);
@@ -193,12 +199,45 @@ const ApllicantFormStep1 = (props) => {
        
 
     }, [FormSubmitted])
-   
-    useEffect(()=>{
-        if (aurthorizedUserData!==undefined && aurthorizedUserData !== null) {
-            console.log("authorized user data",aurthorizedUserData.aurthorizedUserInfoArray[0].name)
+
+    
+    const getDeveloperData = async () => {
+
+        // const datatopost = {
+        //     "RequestInfo": {
+        //         "apiId": "Rainmaker",
+        //         "ver": "v1",
+        //         "ts": 0,
+        //         "action": "_search",
+        //         "did": "",
+        //         "key": "",
+        //         "msgId": "090909",
+        //         "requesterId": "",
+        //         "authToken": ""
+        //     }
+
+        // }
+
+        try {
+            const Resp = await axios.get("http://10.1.1.18:8086/user/developer/_getAuthorizedUser?mobileNumber=1111111111").then((response) => {
+                return response
+            });
+            setDeveloperData(Resp.data)
+            
+        } catch (error) {
+            console.log(error.message);
         }
-    },[aurthorizedUserData]);
+
+    }
+    useEffect(() => {
+        getDeveloperData();
+    }, []);
+    useEffect(()=>{
+        if (developerData!==undefined && developerData !== null) {
+            console.log("authorized user data",developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName)
+        }
+    },[developerData]);
+    console.log("data",developerData)
 
     return (
       
@@ -211,11 +250,17 @@ const ApllicantFormStep1 = (props) => {
                             <div>
                                 <Form.Label><b>Developer</b> <span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <ReactMultiSelect 
-                        listOfData={optionsArrList}
-                        labels="Developer"
-                        getSelectedValue={setDeveloper} />
-                       
+                           
+                            <input   type="text" className="form-control"  pattern="[A-Za-z]*" name="authorizedPerson" minLength={10} maxLength={99}
+
+                                onChange={(e) => setDeveloper(e.target.value)} 
+                              
+                                placeholder={(developerData!==null && developerData!==undefined)?
+                                    developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName:"N/A"}
+                                    onChange1={handleDeveloperChange} value=
+                                    {(developerData!==null && developerData!==undefined)?
+                                    developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName:"N/A"}
+                                         disabled/>
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
@@ -226,11 +271,13 @@ const ApllicantFormStep1 = (props) => {
                             <input   type="text" className="form-control"  pattern="[A-Za-z]*" name="authorizedPerson" minLength={10} maxLength={99}
 
                                 onChange={(e) => setName(e.target.value)} 
-                                placeholder={(aurthorizedUserData!==null && aurthorizedUserData!==undefined)?
-                                    aurthorizedUserData.aurthorizedUserInfoArray[0].name:"N/A"}
+                              
+                                placeholder={(developerData!==null && developerData!==undefined)?
+                                    developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName:"N/A"}
                                     onChange1={handleNameChange} value=
-                                    {(aurthorizedUserData!==null && aurthorizedUserData!==undefined)?
-                                        aurthorizedUserData.aurthorizedUserInfoArray[0].name:"N/A"} disabled/>
+                                    {(developerData!==null && developerData!==undefined)?
+                                    developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName:"N/A"}
+                                         disabled/>
                             {errors.name && <p>Please check the First Name</p>}
                         </Col>
                         <Col md={4} xxl lg="4">
@@ -240,10 +287,13 @@ const ApllicantFormStep1 = (props) => {
                             <Form.Control type="text" className="form-control"  pattern="[0-9]*" name="authorizedmobile" maxLength={10}
 
                                 onChange={(e) => setMobile(e.target.value)} 
-                                placeholder={(aurthorizedUserData!==null && aurthorizedUserData!==undefined)?
-                                    aurthorizedUserData.aurthorizedUserInfoArray[0].mobile:"N/A"}
-                                onChange1={handleMobileChange} value={(aurthorizedUserData!==null && aurthorizedUserData!==undefined)?
-                                    aurthorizedUserData.aurthorizedUserInfoArray[0].mobile:"N/A"}disabled />
+                                placeholder={(developerData!==null && developerData!==undefined)?
+                                    developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber:"N/A"}
+                                    onChange1={handleMobileChange} value=
+                                    {(developerData!==null && developerData!==undefined)?
+                                    developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber:"N/A"}
+                                         disabled/>
+                              
                             {errors.mobile && <p>Please check the First Name</p>}
 
 
@@ -255,7 +305,7 @@ const ApllicantFormStep1 = (props) => {
                             <div>
                                 <Form.Label><b>Authorized Mobile No 2 </b><span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <input  type="tel"  className="form-control"  pattern="[0-9]*" name="authorizedmobile" maxLength={10} placeholder="Authorized Mobile No 2" onChange={(e) => setMobile2(e.target.value)} value={mobile2} />
+                            <input  type="tel"  className="form-control" required pattern="[0-9]*" name="authorizedmobile" maxLength={10} placeholder="Authorized Mobile No 2" onChange={(e) => setMobile2(e.target.value)} value={mobile2} />
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
@@ -263,11 +313,13 @@ const ApllicantFormStep1 = (props) => {
                             </div>
                             <Form.Control type="text" name="authorizedEmail" maxLength={25} pattern="[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]*"
                                 onChange={(e) => setEmail(e.target.value)}
-                                placeholder={(aurthorizedUserData!==null && aurthorizedUserData!==undefined)?
-                                    aurthorizedUserData.aurthorizedUserInfoArray[0].email:"N/A"}
-                                onChange1={handleEmailChange} 
-                                value={(aurthorizedUserData!==null && aurthorizedUserData!==undefined)?
-                                    aurthorizedUserData.aurthorizedUserInfoArray[0].email:"N/A"} disabled/>
+                                placeholder={(developerData!==null && developerData!==undefined)?
+                                    developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId:"N/A"}
+                                    onChange1={handleEmailChange} value=
+                                    {(developerData!==null && developerData!==undefined)?
+                                    developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId:"N/A"}
+                                         disabled/>
+                               
                             {errors.email && <p>Please check the First Name</p>}
                         </Col>
                         <Col md={4} xxl lg="4">
@@ -276,11 +328,13 @@ const ApllicantFormStep1 = (props) => {
                             </div>
                             <Form.Control type="text"  name="authorizedPan" maxLength={10} pattern="[a-z]+[0-9]+[0-9]*"
                                 onChange={(e) => setPan(e.target.value)} 
-                                placeholder={(aurthorizedUserData!==null && aurthorizedUserData!==undefined)?
-                                    aurthorizedUserData.aurthorizedUserInfoArray[0].pan:"N/A"}
-                                onChange1={handlePanChange}
-                                value={(aurthorizedUserData!==null && aurthorizedUserData!==undefined)?
-                                    aurthorizedUserData.aurthorizedUserInfoArray[0].pan:"N/A"} disabled/> 
+                                placeholder={(developerData!==null && developerData!==undefined)?
+                                    developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan:"N/A"}
+                                    onChange1={handlePanChange} value=
+                                    {(developerData!==null && developerData!==undefined)?
+                                    developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan:"N/A"}
+                                         disabled/>
+                             
                             {errors.pan && <p>Please check the First Name</p>}
                         </Col>
 
@@ -419,19 +473,14 @@ const ApllicantFormStep1 = (props) => {
                     </Row>
 
                 </Form.Group>
-                {/* <Button 
-                    style={{ alignSelf: "center", marginTop: "25px",marginLeft:"-1249px" }} 
-                    variant="primary" type="submit" 
-                    >
-              Back
-            </Button> */}
-            <Button 
-            style={{ alignSelf: "center", marginTop: "-35px", marginLeft: "1163px" }} 
-            variant="primary"  
-            onClick={ApplicantFormSubmitHandlerForm}>
-                Continue
-            </Button>
-               
+                <div class="row">
+    <div class="col-sm-12 text-right">
+        <button id="btnSearch" class="btn btn-primary btn-md center-block"   onClick={ApplicantFormSubmitHandlerForm} >Continue</button>
+        </div>
+        {/* <div class="col-sm-12 text-left"> 
+         <button id="btnClear" class="btn btn-danger btn-md center-block"  >button</button>
+     </div> */}
+</div>
             </Card>
         </Form>
        
