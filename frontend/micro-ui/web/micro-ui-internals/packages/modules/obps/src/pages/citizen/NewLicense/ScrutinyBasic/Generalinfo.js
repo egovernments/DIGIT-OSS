@@ -8,6 +8,7 @@ import Modal from "react-bootstrap/Modal";
 // import InfoIcon from '@mui/icons-material/Info';
 import * as Icon from "react-bootstrap-icons";
 import { XCircleFill } from "react-bootstrap-icons";
+
 import { CheckCircleFill } from "react-bootstrap-icons";
 
 const Genarelinfo = (props) => {
@@ -24,8 +25,14 @@ const Genarelinfo = (props) => {
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
-  // cons[(purpose, setPurpose)] = useState("");
   const [showhide, setShowhide] = useState("No");
+
+  const [purpose, setPurpose] = useState("");
+  const handleChangesetPurpose = (e) => {
+    setPurpose(e.target.value);
+    localStorage.setItem("Purpose", e.target.value);
+  };
+
   const handleshow = (e) => {
     const getshow = e.target.value;
     setShowhide(getshow);
@@ -63,8 +70,8 @@ const Genarelinfo = (props) => {
               ></Form.Check>
             </div>
             {/* <Form.Select type="text" placeholder="Puropse"  readOnly> */}
-            <select className="form-control" id="Puropse" name="potential" readOnly>
-            <option value="">--Puropse--</option>
+            <select className="form-control" id="Puropse" name="potential" readOnly onChange={(e) => handleChangesetPurpose(e)}>
+              <option value="">--Puropse--</option>
               <option value="01">Plotted Commercial</option>
               <option value="02">Group Housing Commercial</option>
               <option value="03">AGH </option>
@@ -74,7 +81,7 @@ const Genarelinfo = (props) => {
               <option value="07">IT Colony Commercial</option>
               <option value="08">DDJAY</option>
               <option value="12">TOD Group housing</option>
-              </select>
+            </select>
             {/* </Form.Select> */}
           </Col>
           <div className="col col-3">
@@ -200,7 +207,7 @@ const Genarelinfo = (props) => {
             Enter Details
           </Button>
           <div>
-            <Modal {...props} size="xl" show={show}  onHide={handleClose} backdrop="static" keyboard={false}>
+            <Modal {...props} size="xl" show={show} onHide={handleClose} backdrop="static" keyboard={false}>
               <Modal.Header closeButton></Modal.Header>
 
               <Modal.Body>
@@ -363,7 +370,6 @@ const Genarelinfo = (props) => {
                 <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                   <thead>
                     <tr>
-                      
                       <th>
                         <b>
                           Killa&nbsp;&nbsp;
@@ -776,8 +782,8 @@ const Genarelinfo = (props) => {
               </Modal.Footer>
             </Modal>
           </div>
-          
-{/* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+
+          {/* <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
   Launch demo modal
 </button>
 
@@ -798,7 +804,6 @@ const Genarelinfo = (props) => {
     </div>
   </div>
 </div> */}
-
         </div>
         <br></br>
 
@@ -884,7 +889,13 @@ const Genarelinfo = (props) => {
       </Form.Group>
       <br></br>
       <div style={{ position: "relative", marginBottom: 40 }}>
-        <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
+        <Button
+          onClick={() => {
+            props.passUncheckedList({ data: uncheckedValue, purpose: purpose });
+          }}
+        >
+          Submit
+        </Button>
       </div>
       <hr></hr>
     </Form>

@@ -10,6 +10,8 @@ import LanguageSelection from "./Home/LanguageSelection";
 import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
 import UserProfile from "./Home/UserProfile";
+import ServicePlan from "./ServicePlan";
+import ElectricalPlan from "./ElecticalPlan";
 
 const getTenants = (codes, tenants) => {
   return tenants.filter((tenant) => codes.map((item) => item.code).includes(tenant.code));
@@ -97,6 +99,14 @@ const Home = ({
 
           <Route path={`${path}/register`}>
             <Login stateCode={stateCode} isUserRegistered={false} />
+          </Route>
+
+          <Route path={`${path}/service-plan`}>
+            <ServicePlan />
+          </Route>
+
+          <Route path={`${path}/electrical-plan`}>
+            <ElectricalPlan />
           </Route>
 
           <Route path={`${path}/user/profile`}>

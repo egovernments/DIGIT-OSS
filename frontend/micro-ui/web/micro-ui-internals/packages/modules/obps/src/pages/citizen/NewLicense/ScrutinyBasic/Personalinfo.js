@@ -5,6 +5,7 @@ import * as Icon from "react-bootstrap-icons";
 import { XCircleFill } from "react-bootstrap-icons";
 import { CheckCircleFill } from "react-bootstrap-icons";
 // import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
+import Toggle from "react-toggle";
 
 const Personalinfo = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
@@ -33,14 +34,19 @@ const Personalinfo = (props) => {
                 <b>Developer</b>
               </Form.Label>
               <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              
             </div>
+
+            <Toggle
+              // defaultChecked={this.state.baconIsReady}
+              onChange={(e) => console.log("e", e.target.checked)}
+            />
+
             <Form.Check
               value="Developer"
               type="radio"
               id="default-radio"
               //  label={<AiFillCheckCircle  class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group0"
               inline
             ></Form.Check>
@@ -50,7 +56,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               //  label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group0"
               inline
             ></Form.Check>
@@ -62,13 +68,12 @@ const Personalinfo = (props) => {
               <b>Authorized Person Name</b>
             </Form.Label>
             <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-            
             <Form.Check
               value="Authorized Person Name"
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group1"
               inline
             ></Form.Check>
@@ -78,7 +83,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group1"
               inline
             ></Form.Check>
@@ -90,14 +95,13 @@ const Personalinfo = (props) => {
                 <b>Authorized Mobile No</b>
               </Form.Label>
               <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              
             </div>
             <Form.Check
               value="Authorized Mobile No"
               type="radio"
               id="default-radio"
               //  label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group2"
               inline
             ></Form.Check>
@@ -107,7 +111,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               //  label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group2"
               inline
             ></Form.Check>
@@ -121,14 +125,13 @@ const Personalinfo = (props) => {
                 <b>Authorized Mobile No. 2</b>
               </Form.Label>
               <span style={{ color: "red" }}>*</span>
-             
             </div>
             <Form.Check
               value="Authorized Mobile No. 2"
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle  class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group3"
               inline
             ></Form.Check>
@@ -138,7 +141,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group3"
               inline
             ></Form.Check>
@@ -158,7 +161,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle  class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group4"
               inline
             ></Form.Check>
@@ -168,7 +171,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group4"
               inline
             ></Form.Check>
@@ -186,7 +189,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group5"
               inline
             ></Form.Check>
@@ -196,7 +199,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group5"
               inline
             ></Form.Check>
@@ -214,7 +217,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle  class="fa fa-check text-success"size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group6"
               inline
             ></Form.Check>
@@ -224,7 +227,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCloseCircle class="fa fa-times text-danger"size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group6"
               inline
             ></Form.Check>
@@ -242,7 +245,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group7"
               inline
             ></Form.Check>
@@ -252,7 +255,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               //  label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group7"
               inline
             ></Form.Check>
@@ -272,7 +275,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group8"
               inline
             ></Form.Check>
@@ -282,7 +285,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group8"
               inline
             ></Form.Check>
@@ -300,7 +303,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               //  label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group9"
               inline
             ></Form.Check>
@@ -310,7 +313,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group9"
               inline
             ></Form.Check>
@@ -328,7 +331,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group10"
               inline
             ></Form.Check>
@@ -338,7 +341,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group10"
               inline
             ></Form.Check>
@@ -356,7 +359,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group11"
               inline
             ></Form.Check>
@@ -366,7 +369,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group11"
               inline
             ></Form.Check>
@@ -385,7 +388,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group12"
               inline
             ></Form.Check>
@@ -395,7 +398,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group12"
               inline
             ></Form.Check>
@@ -412,7 +415,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group13"
               inline
             ></Form.Check>
@@ -422,8 +425,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               //  label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
-
+              label={<XCircleFill class="text-danger" />}
               name="group13"
               inline
             ></Form.Check>
@@ -440,7 +442,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group14"
               inline
             ></Form.Check>
@@ -450,7 +452,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               //  label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group14"
               inline
             ></Form.Check>
@@ -467,7 +469,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               //  label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group15"
               inline
             ></Form.Check>
@@ -477,7 +479,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group15"
               inline
             ></Form.Check>
@@ -496,7 +498,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               //  label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group16"
               inline
             ></Form.Check>
@@ -506,7 +508,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group16"
               inline
             ></Form.Check>
@@ -523,7 +525,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               // label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group17"
               inline
             ></Form.Check>
@@ -533,7 +535,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               //  label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group17"
               inline
             ></Form.Check>
@@ -550,7 +552,7 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               //  label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-              label={  <CheckCircleFill class="text-success" />}
+              label={<CheckCircleFill class="text-success" />}
               name="group18"
               inline
             ></Form.Check>
@@ -560,26 +562,48 @@ const Personalinfo = (props) => {
               type="radio"
               id="default-radio"
               //  label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-              label={  <XCircleFill class="text-danger" />}
+              label={<XCircleFill class="text-danger" />}
               name="group18"
               inline
             ></Form.Check>
             <Form.Control style={{ maxWidth: 200, marginTop: 10 }} readOnly></Form.Control>
           </Col>
           <Col md={4} xxl lg="3">
-                        <div>
-                            <Form.Label><b>Name of individual Land owner/ land-owning company/ firm/ LLP etc.</b></Form.Label>
-                        </div>
-                        <Form.Check value="Name of individual Land owner/ land-owning company/ firm/ LLP etc." type="radio" id = "default-radio" label={  <CheckCircleFill class="text-success" />} name="group19" inline></Form.Check>
-                        <Form.Check onChange={(e)=>setUncheckedVlue((prev)=>[...prev,e.target.value])} value="Name of individual Land owner/ land-owning company/ firm/ LLP etc." type="radio" id = "default-radio"  label={  <XCircleFill class="text-danger" />}name="group19" inline></Form.Check>
-                        <Form.Control style={{maxWidth:200, marginTop:10}} readOnly></Form.Control>
-                    </Col>
+            <div>
+              <Form.Label>
+                <b>Name of individual Land owner/ land-owning company/ firm/ LLP etc.</b>
+              </Form.Label>
+            </div>
+            <Form.Check
+              value="Name of individual Land owner/ land-owning company/ firm/ LLP etc."
+              type="radio"
+              id="default-radio"
+              label={<CheckCircleFill class="text-success" />}
+              name="group19"
+              inline
+            ></Form.Check>
+            <Form.Check
+              onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
+              value="Name of individual Land owner/ land-owning company/ firm/ LLP etc."
+              type="radio"
+              id="default-radio"
+              label={<XCircleFill class="text-danger" />}
+              name="group19"
+              inline
+            ></Form.Check>
+            <Form.Control style={{ maxWidth: 200, marginTop: 10 }} readOnly></Form.Control>
+          </Col>
         </Row>
       </Form.Group>
       <div style={{ position: "relative", marginBottom: 40 }}>
-        <Button onClick={() => { 
-            console.log('here')
-            props.passUncheckedList({ 'data': uncheckedValue })}}>Submit</Button>
+        <Button
+          onClick={() => {
+            console.log("here");
+            props.passUncheckedList({ data: uncheckedValue });
+          }}
+        >
+          Submit
+        </Button>
       </div>
       <hr></hr>
     </Form>
