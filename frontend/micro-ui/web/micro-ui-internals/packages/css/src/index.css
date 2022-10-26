@@ -334,7 +334,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
     display: block;
     font-size: 14px;
     line-height: 16px;
-    color: #d4351c;
+    color: #1266af;
     color: rgba(212, 53, 28, var(--text-opacity)); }
   .card .card-label-desc, .card-emp .card-label-desc {
     font-weight: 700;
@@ -358,7 +358,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   font-size: 14px;
   line-height: 16px;
   --text-opacity:1;
-  color: #d4351c;
+  color: #1266af;
   color: rgba(212, 53, 28, var(--text-opacity)); }
 
 .field-container {
@@ -442,7 +442,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
     display: block;
     font-size: 14px;
     line-height: 16px;
-    color: #d4351c;
+    color: #1266af;
     color: rgba(212, 53, 28, var(--text-opacity)); }
   .employeeCard .card-label-desc {
     font-weight: 700;
@@ -626,7 +626,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   font-size: 14px;
   line-height: 16px;
   --text-opacity:1;
-  color: #d4351c;
+  color: #1266af;
   color: rgba(212, 53, 28, var(--text-opacity));
   margin-bottom: 16px; }
 
@@ -1039,7 +1039,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
 
 .card-input-error {
   --border-opacity:1;
-  border: 1px solid #d4351c;
+  border: 1px solid #1266af;
   border-color: rgba(212, 53, 28, var(--border-opacity)); }
 
 .employee-card-input {
@@ -1067,8 +1067,8 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
 
 .employee-card-input-error {
   --border-opacity:1;
-  border: 1px solid #d4351c;
-  border-color: rgba(212, 53, 28, var(--border-opacity)); }
+  border-bottom: 1px solid #1266af!important;
+}
 
 .card-textarea, .employee-card-textarea {
   display: block;
@@ -1195,7 +1195,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   margin-bottom: 16px; }
 
 .emp-error-wrap, .error-wrap {
-  background-color: #d4351c;
+  background-color: #1266af;
   background-color: rgba(212, 53, 28, var(--bg-opacity)); }
   .emp-error-wrap header, .error-wrap header {
     margin-bottom: 8px;
@@ -1542,7 +1542,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   margin-bottom: 8px;
   padding: 16px;
   --border-opacity:1;
-  border: 4px solid #d4351c;
+  border: 4px solid #1266af;
   border-color: rgba(212, 53, 28, var(--border-opacity)); }
   .error-message-wrap h2 {
     margin-bottom: 8px; }
@@ -1553,7 +1553,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
     display: block; }
   .error-message-wrap p {
     --text-opacity:1;
-    color: #d4351c;
+    color: #1266af;
     color: rgba(212, 53, 28, var(--text-opacity)); }
 
 .rating-star-wrap {
@@ -1617,7 +1617,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   height: 2rem;
   width: 5rem;
   --bg-opacity:1;
-  background-color: #d4351c;
+  background-color: #1266af;
   background-color: rgba(212, 53, 28, var(--bg-opacity));
   margin-bottom: 8px; }
   .status-highlight p {
@@ -1627,7 +1627,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
     font-size: 16px;
     line-height: 19px;
     --text-opacity:1;
-    color: #d4351c;
+    color: #1266af;
     color: rgba(212, 53, 28, var(--text-opacity)); }
   .status-highlight.success {
     --bg-opacity:1;
@@ -2417,7 +2417,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
 .roundedLabel {
   margin-left: 8px;
   --bg-opacity:1;
-  background-color: #d4351c;
+  background-color: #1266af;
   background-color: rgba(212, 53, 28, var(--bg-opacity));
   text-align: center;
   --text-opacity:1;
@@ -3824,7 +3824,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
       right: -10px;
       position: absolute;
       --bg-opacity:1;
-      background-color: #d4351c;
+      background-color: #1266af;
       background-color: rgba(212, 53, 28, var(--bg-opacity));
       height: 1.25rem;
       width: 1.25rem;
@@ -5113,7 +5113,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
 
 .surveyLisNotResponded {
   --text-opacity:1;
-  color: #d4351c;
+  color: #1266af;
   color: rgba(212, 53, 28, var(--text-opacity)); }
 
 .surveyLisResponded {
@@ -5535,7 +5535,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
   display: block;
   font-size: 14px;
   line-height: 16px;
-  color: #d4351c;
+  color: #1266af;
   color: rgba(212, 53, 28, var(--text-opacity)); }
 
 .card-emp .card-label-desc, .card .card-label-desc, .card-emp .card-label-desc {
@@ -5558,7 +5558,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
   cursor: pointer; }
 
 .validation-error {
-  color: #d4351c; }
+  color: #1266af; }
 
 .employeeCard .card-text-primary, .employeeCard .card-text span, .employeeCard span {
   color: #0b0c0c;
@@ -5569,7 +5569,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
   color: rgba(244, 119, 56, var(--text-opacity)); }
 
 .employeeCard .card-label-error {
-  color: #d4351c; }
+  color: #1266af; }
 
 .submit-bar, .submit-bar-disabled {
   background-color: #f47738;
@@ -5670,7 +5670,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
     margin-left: auto; } }
 
 .card-label-error {
-  color: #d4351c; }
+  color: #1266af; }
 
 .selector-button-primary {
   background-color: #f47738;
@@ -5802,7 +5802,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
   line-height: 20px; }
 
 .card-input-error {
-  border: 1px solid #d4351c; }
+  border: 1px solid #1266af; }
 
 .employee-card-input, .employee-card-input-error {
   margin-bottom: 24px;
@@ -5811,11 +5811,11 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
   outline-offset: 2px;
   display: block;
   width: 100%;
-  height: 2.5rem;
+  height: 2rem;
   --bg-opacity:1;
   background-color: #fff;
   background-color: rgba(255, 255, 255, var(--bg-opacity));
-  line-height: 2.5rem;
+  line-height: 2rem;
   font-size: 16px;
   line-height: 20px;
   --text-opacity:1;
@@ -5823,7 +5823,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
   color: rgba(11, 12, 12, var(--text-opacity)); }
 
 .employee-card-input-error {
-  border: 1px solid #d4351c; }
+  border-bottom: 1px solid #1266af!important; }
 
 .card-textarea, .employee-card-textarea {
   display: block;
@@ -5869,7 +5869,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
   margin-bottom: 16px; }
 
 .emp-error-wrap, .error-wrap {
-  background-color: #d4351c; }
+  background-color: #1266af; }
 
 @media (min-width: 780px) {
   .success-wrap {
@@ -5957,16 +5957,16 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
   -moz-appearance: textfield; }
 
 .error-message-wrap {
-  border: 4px solid #d4351c; }
+  border: 4px solid #1266af; }
 
 .error-message-wrap p {
-  color: #d4351c; }
+  color: #1266af; }
 
 .status-highlight {
-  background-color: #d4351c; }
+  background-color: #1266af; }
 
 .status-highlight p {
-  color: #d4351c; }
+  color: #1266af; }
 
 .table-fixed-first-column tbody td:first-child {
   color: #f47738; }
@@ -6054,7 +6054,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
   background-color: rgba(244, 119, 56, var(--bg-opacity)); }
 
 .roundedLabel {
-  background-color: #d4351c; }
+  background-color: #1266af; }
 
 .filters-wrapper .switch-wrapper .radio-switch:checked ~ label {
   border-color: #f47738;
@@ -6298,7 +6298,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
   color: rgba(200, 96, 43, var(--text-opacity)); }
 
 .RightMostTopBarOptions .EventNotificationWrapper span {
-  background-color: #d4351c; }
+  background-color: #1266af; }
 
 @media (min-width: 640px) {
   .employee .ground-container {
@@ -6613,10 +6613,10 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
     max-width: 300px !important; } }
 
 .sla-cell-error {
-  color: #d4351c; }
+  color: #1266af; }
 
 .search-error-label {
-  color: #d4351c !important; }
+  color: #1266af !important; }
 
 .table-switch-card-active {
   border: 1px solid #f47738; }
@@ -6706,7 +6706,7 @@ input::-ms-input-placeholder, .checkbox-wrap .input-emp::-ms-input-placeholder, 
     gap: 1rem; } }
 
 .surveyLisNotResponded {
-  color: #d4351c; }
+  color: #1266af; }
 
 .date-container, .date-response, .responses-container, .responses-container-date {
   display: -webkit-box;
@@ -8990,11 +8990,10 @@ img, video {
 
 .employee-card-input-error {
   padding-left: 8px;
-  height: 2.5rem;
+  height: 2rem;
   --border-opacity:1;
-  border: 1px solid #1266af;
-  border-color: rgba(212, 53, 28, var(--border-opacity));
-  line-height: 2.5rem; }
+  border-bottom: 1px solid #1266af!important;
+  line-height: 2rem; }
 
 .card-textarea, .employee-card-input-error, .employee-card-textarea {
   margin-bottom: 24px;

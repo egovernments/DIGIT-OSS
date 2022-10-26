@@ -1,4 +1,4 @@
-import { BackButton, Card, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, RadioOrSelect, TextInput, TextArea, CheckBox, DatePicker } from "@egovernments/digit-ui-react-components";
+import { BackButton, Card, CardLabel, CardLabelError, FormStep, Loader, Dropdown, MobileNumber, RadioButtons, RadioOrSelect, TextInput, TextArea, CheckBox, DatePicker } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { Form, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
@@ -54,6 +54,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       isMandatory: false,
     },
   ];
+
+  const [panValidation,setPanValidation] = useState("");
   function setValue(value, input) {
     // onSelect(config.key, { ...formData[config.key], [input]: value });
     setDOB(config.key, { ...formData[config.key], [input]: value });
@@ -72,7 +74,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
       menu.push({ i18nKey: `COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
     });
-
+    const editScreen = false;
   // if (isLoading) return <Loader />;
   const panVerification = async () => {
     try {
@@ -102,8 +104,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             "user": {
               "idType": "string",
               "idNumber": "string",
-              "mobile": "8126287097",
-              "email": "sudeeptamta3@gmail.com"
+              "mobile": mobileNumber,
+              "email": email
             },
             "data": {
               "id": "string"
@@ -133,11 +135,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         'Access-Control-Allow-Origin':"*",
       }}) 
       console.log("PANDET",panResp.data);
-    } catch (error) {
-      console.log(error.message)
+    } catch(errdata){
+      console.error("PANERROR",errdata);
     }
   }
-
+console.log(panValidation);
   useEffect(() => {
     if(PanNumber.length === 10){
       panVerification();
@@ -160,7 +162,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setDOB(e.target.value);
   }
   function selectPanNumber(e) {
-    setPanNumber(e.target.value);
+    setPanNumber(e.target.value.toUpperCase());
   }
   function selectPermanentAddress(e) {
     setPermanentAddress(e.target.value);
@@ -332,8 +334,19 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               <Form.Group className="col-md-5">
                 <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")}*`}</CardLabel>
                 <div className="row">
-                  
-                  <RadioButtons
+                <Dropdown
+                  style={{ width: "100%" }}
+                  className="form-field"
+                  selected={gender?.length === 1 ? gender[0] : gender}
+                  disable={gender?.length === 1 || editScreen}
+                  option={menu}
+                  select={setGenderName}
+                  value={gender}
+                  optionKey="code"
+                  t={t}
+                  name="gender"
+                />
+                  {/* <RadioButtons
                   t={t}
                   options={menu}
                   optionsKey="code"
@@ -343,8 +356,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   onSelect={setGenderName}
                   isDependent={true}
                   labelKey="COMMON_GENDER"
-                  //disabled={isUpdateProperty || isEditProperty}
-                  />
+                  /> */}
                 </div>
               </Form.Group>
               <Form.Group className="col-md-5">
@@ -360,7 +372,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               {inputs?.map((input, index) => (
               <Form.Group className="col-md-5">
               <CardLabel>{`${"Enter Date of Birth"}*`}</CardLabel>
-                <DatePicker 
+                {/* <DatePicker 
                   t={t}
                   type="date"
                   isMandatory={false}
@@ -368,16 +380,17 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   value={dob}
                   name="dob"
                   onChange={setDateofBirth}
-                />
-                {/* <DatePicker
-                key={input.name}
-                date={formData && formData[config.key] ? formData[config.key][input.name] : undefined}
-                onChange={(e) => setValue(e, input.name)}
+                /> */}
+                <DatePicker
+                isMandatory={true}
+                key={input.dob}
+                date={formData && formData[config.key] ? formData[config.key][input.dob] : undefined}
+                onChange={(e) => setValue(e, input.dob)}
                 disable={false}
                 max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
                 defaultValue={undefined}
                 {...input.validation}
-              /> */}
+              />
               </Form.Group>
               )
               )}
@@ -401,7 +414,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 <TextInput
                   t={t}
                   type={"text"}
-                  isMandatory={false}
+                  isMandatory={true}
                   optionKey="i18nKey"
                   name="PanNumber"
                   value={PanNumber}
@@ -409,6 +422,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   onChange={selectPanNumber}
                   {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
                   />
+                  {PanNumber&&PanNumber.length>0&&!PanNumber.match(Digit.Utils.getPattern('PAN'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px'}}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
               </Form.Group>
             </Row>
           </Card>
