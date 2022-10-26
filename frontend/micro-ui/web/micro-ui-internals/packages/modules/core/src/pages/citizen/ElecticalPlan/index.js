@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import { TextInput } from "@egovernments/digit-ui-react-components";
+import { Upload } from "react-bootstrap-icons";
 
 const ElectricalPlan = () => {
   const [LOCNumber, setLOCNumber] = useState("");
+  const [getData, setData] = useState([
+    { name: "Self-certified drawings from empanelled/certified architects that conform to the standard approved template", image: null },
+    { name: "Environmental Clearance", image: null },
+    { name: "PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website)", image: null },
+    { name: "AutoCAD (DXF) file", image: null },
+    { name: "Environmental Clearance", image: null },
+    { name: "Certified copy of the plan verified by a third party", image: null },
+  ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -146,6 +155,42 @@ const ElectricalPlan = () => {
               name="LoadSanctionApproval"
               inline
             ></Form.Check>
+          </div>
+          <div>
+            <table>
+              <tr>
+                <th>Sr. No.</th>
+                <th>Type Of Map/Plan</th>
+                <th>Annexure</th>
+              </tr>
+              {getData?.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{item?.name}</td>
+                    <td>
+                      <div class="mainWrapper">
+                        <div class="btnimg">
+                          <Upload class="text-success" />
+                        </div>
+                        <input
+                          type="file"
+                          name="file"
+                          onChange={(e) => {
+                            setData(
+                              getData?.map((tag, indi) => {
+                                if (indi === index) return { ...tag, image: e.target.files[0] };
+                              })
+                            );
+                          }}
+                        />
+                        {item?.image?.name}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </table>
           </div>
           <input type="submit" />
         </form>

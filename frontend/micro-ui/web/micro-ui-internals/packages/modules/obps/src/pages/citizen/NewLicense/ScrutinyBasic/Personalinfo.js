@@ -5,7 +5,6 @@ import * as Icon from "react-bootstrap-icons";
 import { XCircleFill } from "react-bootstrap-icons";
 import { CheckCircleFill } from "react-bootstrap-icons";
 // import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
-import Toggle from "react-toggle";
 
 const Personalinfo = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
@@ -35,11 +34,6 @@ const Personalinfo = (props) => {
               </Form.Label>
               <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
             </div>
-
-            <Toggle
-              // defaultChecked={this.state.baconIsReady}
-              onChange={(e) => console.log("e", e.target.checked)}
-            />
 
             <Form.Check
               value="Developer"

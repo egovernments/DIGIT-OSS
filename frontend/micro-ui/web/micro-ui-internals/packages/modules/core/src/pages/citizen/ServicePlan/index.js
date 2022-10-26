@@ -24,61 +24,63 @@ const ServicePlan = () => {
     <div style={{ marginTop: 50 }}>
       <div>
         <form onSubmit={handleSubmit}>
-          <span className="surveyformfield">
-            <label>LOC Number</label>
-            <TextInput name="LOINumber" onChange={(e) => setLOCNumber(e.target.value)} type="text" value={LOCNumber} />
-          </span>
           <div>
+            <span className="surveyformfield">
+              <label>LOC Number</label>
+              <TextInput name="LOINumber" onChange={(e) => setLOCNumber(e.target.value)} type="text" value={LOCNumber} />
+            </span>
             <div>
-              <Form.Label>
-                <b>Is the uploaded Service Plan in accordance to the Standard designs?</b>
-              </Form.Label>
-              <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+              <div>
+                <Form.Label>
+                  <b>Is the uploaded Service Plan in accordance to the Standard designs?</b>
+                </Form.Label>
+                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+              </div>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="standarDesigns"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="standarDesigns"
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="standarDesigns"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="standarDesigns"
+                inline
+              ></Form.Check>
             </div>
-            <Form.Check
-              onChange={(e) => console.log(e)}
-              value="standarDesigns"
-              type="radio"
-              id="default-radio"
-              label="Yes"
-              name="standarDesigns"
-              inline
-            ></Form.Check>
-            <Form.Check
-              onChange={(e) => console.log(e)}
-              value="standarDesigns"
-              type="radio"
-              id="default-radio"
-              label="No"
-              name="standarDesigns"
-              inline
-            ></Form.Check>
-          </div>
-          <div>
             <div>
-              <Form.Label>
-                <b>Undertaking</b>
-              </Form.Label>
-              <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+              <div>
+                <Form.Label>
+                  <b>Undertaking</b>
+                </Form.Label>
+                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+              </div>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="undertaking"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="undertaking"
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="undertaking"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="undertaking"
+                inline
+              ></Form.Check>
             </div>
-            <Form.Check
-              onChange={(e) => console.log(e)}
-              value="undertaking"
-              type="radio"
-              id="default-radio"
-              label="Yes"
-              name="undertaking"
-              inline
-            ></Form.Check>
-            <Form.Check
-              onChange={(e) => console.log(e)}
-              value="undertaking"
-              type="radio"
-              id="default-radio"
-              label="No"
-              name="undertaking"
-              inline
-            ></Form.Check>
           </div>
           <div>
             <table>
