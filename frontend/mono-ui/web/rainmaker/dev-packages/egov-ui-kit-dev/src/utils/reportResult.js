@@ -910,10 +910,25 @@ class ShowField extends Component {
     sumColumn = [];
     let { reportResult, metaData } = this.props;
     let { drillDown, checkIfDate } = this;
+    let reportResultArray = [];
+    if(reportResult && reportResult.reportData && reportResult.reportData.length) {
+      reportResult.reportData.forEach(data => {
+        let reportDataArray = [];
+        data.forEach(details => {
+          if(details == null || details == undefined || details == "") {
+            reportDataArray.push("NA")
+          } else {
+            reportDataArray.push(details)
+          }
+        })
+        reportResultArray.push(reportDataArray);
+      })
+    }
+
     return (
       <tbody>
         {reportResult.hasOwnProperty("reportData") &&
-          reportResult.reportData.map((dataItem, dataIndex) => {
+          reportResultArray.map((dataItem, dataIndex) => {
             //array of array
             let reportHeaderObj = reportResult.reportHeader;
             return (
