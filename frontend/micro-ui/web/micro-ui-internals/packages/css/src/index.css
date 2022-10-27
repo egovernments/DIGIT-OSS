@@ -194,7 +194,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
   --bg-opacity:1;
   background-color: #22394d;
   background-color: rgba(34, 57, 77, var(--bg-opacity));
-  padding: 16px;
+  padding: 5px;
   width: 100%; }
   .navbar img {
     min-width: 78px;
@@ -7903,7 +7903,7 @@ img, video {
   color: rgba(255, 255, 255, var(--text-opacity));
   --bg-opacity:1;
   background-color: #1266af;
-  padding: 16px;
+  padding: 5px;
   width: 100%;
   position: fixed;
   z-index: 99; }

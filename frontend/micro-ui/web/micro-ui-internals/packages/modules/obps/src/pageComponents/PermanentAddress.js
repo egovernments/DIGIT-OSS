@@ -1,4 +1,4 @@
-import { FormStep,TextInput, MobileNumber } from "@egovernments/digit-ui-react-components";
+import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
@@ -17,6 +17,7 @@ import {
   ModalFooter,
 } from "reactstrap";
 
+import { convertEpochToDate } from "../utils/index";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import axios from "axios";
@@ -38,6 +39,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
   const [aurthorizedDob, setAurthorizedDob] = useState(formData?.AddAuthorizeduser?.aurthorizedDob || formData?.AddAuthorizeduser?.aurthorizedDob || "");
   const [aurthorizedPan, setAurthorizedPan] = useState(formData?.AddAuthorizeduser?.aurthorizedPan || formData?.AddAuthorizeduser?.aurthorizedPan || "");
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
+  const [docUpload,setDocuploadData]=useState([])
+  const [file,setFile]=useState(null);
   //   const dispatch=useDispatch();
   // const Modal = () => (
   //   <Popup trigger={<button className="button"> Open Modal </button>} modal>
@@ -84,6 +87,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     const getshow = e.target.value;
     setShowhide(getshow);
   };
+  function selectPanNumber(e) {
+    setAurthorizedPan(e.target.value.toUpperCase());
+  }
   const panVerification = async () => {
     try {
       const panVal =  {
@@ -154,19 +160,68 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
       panVerification();
     }
   }, [aurthorizedPan])
+
+  const getDocumentData = async () => {
+    if(file===null){
+       return
+    }
+       const formData = new FormData();
+       formData.append(
+           "file",file.file      );
+       formData.append(
+           "tenantId","hr"      );  
+       formData.append(
+           "module","property-upload"      );
+        formData.append(
+            "tag","tag-property"      );
+   
+        console.log("File",formData)
+
+       try {
+           const Resp = await axios.post("http://10.1.1.18:8083/filestore/v1/files",formData,
+           {headers:{
+               "content-type":"multipart/form-data"
+           }}).then((response) => {
+               return response
+           });
+           setDocuploadData(Resp.data)
+           
+       } catch (error) {
+           console.log(error.message);
+       }
+
+      
+
+  }
+  useEffect(() => {
+    getDocumentData();
+  }, [file]);
   const [noofRows, setNoOfRows] = useState(1);
   const handleSubmitFormdata = () => {
     setmodal(false);
     console.log("submitted");
-    const aurthorizedUserData = {
+    const user = {
+      userName: aurthorizedUserName,
       name: aurthorizedUserName,
-      mobile: aurthorizedMobileNumber,
-      email: aurthorizedEmail,
+      gender: "male",
+      mobileNumber: aurthorizedMobileNumber,
+      emailId: aurthorizedEmail,
       dob: aurthorizedDob,
       pan: aurthorizedPan,
+      "active": true,
+      "type": "EMPLOYEE",
+      "password": "Password@123",
+      "tenantId": "hr",
+      "roles": [
+          {
+              "code": "EMPLOYEE",
+              "name": "Employee",
+              "tenantId": "default"
+          }
+      ]
     }
 
-    setAurthorizedUserInfoArray((prev) => [...prev, aurthorizedUserData]);
+    setAurthorizedUserInfoArray((prev) => [...prev, user]);
   };
 
   const handleAurthorizedUserFormSubmit = async (e) => {
@@ -178,7 +233,36 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     onSelect(config.key, formData);
     console.log(formData);
     localStorage.setItem("data_user", JSON.stringify(formData))
-    console.log("form submitted")
+    
+    
+      try {
+        const requestResp = {
+          
+            "RequestInfo": {
+                "api_id": "1",
+                "ver": "1",
+                "ts": null,
+                "action": "create",
+                "did": "",
+                "key": "",
+                "msg_id": "",
+                "requester_id": "",
+                "auth_token": null
+            },
+        }
+        const postDataAuthUser = await axios.post(`localhost:8086/user/users/_createnovalidate`,requestResp,formData,{headers:{
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin':"*",
+        }})
+        console.log(postDataAuthUser);
+      }
+      
+      catch(error){
+        console.log(error.message);
+      }
+    
+
+   
   }
   const onSkip = () => onSelect();
   return (
@@ -238,8 +322,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                             <input
                               type="text"
                               name="mobile[]"
-                              placeholder={elementInArray.mobile}
-                              value={elementInArray.mobile}
+                              placeholder={elementInArray.mobileNumber}
+                              value={elementInArray.mobileNumber}
                               class="employee-card-input"
                             />
                           </td>
@@ -247,8 +331,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                             <input
                               type="email"
                               name="email[]"
-                              placeholder={elementInArray.email}
-                              value={elementInArray.email}
+                              placeholder={elementInArray.emailId}
+                              value={elementInArray.emailId}
                               class="employee-card-input"
                             />
                           </td>
@@ -331,7 +415,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                       <div className="popupcard">
                         <form className="text1">
                           <Row>
-                            <Col md={4} xxl lg="4">
+                            <Col md={3} xxl lg="3">
                               <label htmlFor="name" className="text">Name</label>
                               {/* <input
                                 type="text"
@@ -356,18 +440,21 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                                 })}
                               />
                             </Col>
-                            <Col md={4} xxl lg="4">
+                            <Col md={3} xxl lg="3">
                               <label htmlFor="name" className="text">Mobile Number</label>
                               <input
-                                type="number"
+                                type="tel"
                                 name="name[]"
                                 placeholder=""
                                 class="employee-card-input"
                                 onChange={(e) => setAurthorizedMobileNumber(e.target.value)}
+                                maxlength={"10"}
+                                pattern={"[6-9]{1}[0-9]{9}"}
+                                required={true}
                               />
-                              
+                             
                             </Col>
-                            <Col md={4} xxl lg="4">
+                            <Col md={3} xxl lg="3">
                               <label htmlFor="name" className="text">Email</label>
                               <input
                                 type="email"
@@ -377,7 +464,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                                 onChange={(e) => setAurthorizedEmail(e.target.value)}
                               />
                             </Col>
-                            <Col md={4} xxl lg="4">
+                            <Col md={3} xxl lg="3">
                               <label htmlFor="name" className="text">Date of Birth</label>
                               <input
                                 type="date"
@@ -385,11 +472,10 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                                 placeholder=""
                                 class="employee-card-input"
                                 onChange={(e) => setAurthorizedDob(e.target.value)}
+                                max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
                               />
                             </Col>
-                          </Row>
-                          <Row>
-                            <Col md={4} xxl lg="4">
+                            <Col md={3} xxl lg="3">
                               <label htmlFor="name" className="text">PAN No.</label>
                               {/* <input
                                 type="text"
@@ -406,27 +492,30 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                                 name="aurthorizedPan"
                                 value={aurthorizedPan}
                                 placeholder={aurthorizedPan}
-                                onChange={(e) => setAurthorizedPan(e.target.value)}
-                                // onChange={selectPanNumber}
+                                // onChange={(e) => setAurthorizedPan(e.target.value)}
+                                onChange={selectPanNumber}
                                 {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
                                 />
+                                {aurthorizedPan&&aurthorizedPan.length>0&&!aurthorizedPan.match(Digit.Utils.getPattern('PAN'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px'}}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
                             </Col>
-                            <Col md={4} xxl lg="4">
+                            <Col md={3} xxl lg="3">
                               <label htmlFor="name" className="text">Upload Aadhar PDF</label>
                               <input
                                 type="file"
                                 name="name[]"
                                 placeholder=""
                                 class="employee-card-input"
+                                onChange={(e)=>setFile({file:e.target.files[0]})}
                               />
                             </Col>
-                            <Col md={4} xxl lg="4">
+                            <Col md={3} xxl lg="3">
                               <label htmlFor="name" className="text">Upload Digital Signature PDF</label>
                               <input
                                 type="file"
                                 name="name[]"
                                 placeholder=""
                                 class="employee-card-input"
+                                onChange={(e)=>setFile({file:e.target.files[0]})}
                               />
                             </Col>
                           </Row>

@@ -53,6 +53,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     const [modal, setmodal] = useState(false);
     const [data, setData] = useState([])
     const [devDetail, setdevDetail] = useState([])
+    
     // useEffect(() => {
     //   fetch("https://apisetu.gov.in/mca/v1/companies/U72200CH1998PTC022006").then((result) => {
     //     result.json().then((resp) => {
@@ -120,6 +121,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     
     const [modalValuesArray,setModalValuesArray]= useState([]);
     const [financialCapacity,setFinancialCapacity]= useState([]);
+    const [docUpload,setDocuploadData]=useState([])
+    const [file,setFile]=useState(null);
     const handleshow = (e) => {
       const getshow = e.target.value;
       setShowhide(getshow);
@@ -146,7 +149,42 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
       setShowDevTypeFields(getDevTypeValue);
       localStorage.setItem('devTypeValueFlag',getDevTypeValue)
     }
+    const getDocumentData = async () => {
+      if(file===null){
+         return
+      }
+         const formData = new FormData();
+         formData.append(
+             "file",file.file      );
+         formData.append(
+             "tenantId","hr"      );  
+         formData.append(
+             "module","property-upload"      );
+          formData.append(
+              "tag","tag-property"      );
+     
+          console.log("File",formData)
   
+         try {
+             const Resp = await axios.post("http://10.1.1.18:8083/filestore/v1/files",formData,
+             {headers:{
+                 "content-type":"multipart/form-data"
+             }}).then((response) => {
+                 return response
+             });
+             setDocuploadData(Resp.data)
+             
+         } catch (error) {
+             console.log(error.message);
+         }
+  
+        
+  
+    }
+    useEffect(() => {
+      getDocumentData();
+    }, [file]);
+    
     const HandleGetMCNdata=async()=>{
       try{
         if (cin_Number.length===21) {
@@ -387,13 +425,13 @@ const onSkip = () => onSelect();
                       // name="email"
                       // className={`employee-card-input`}
                       // placeholder=""
-                      // {...register("email", {
-                      //   required: "Email is required",
-                      //   pattern: {
-                      //     value: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/,
-                      //     message: "Email must be a valid email address",
-                      //   },
-                      // })}
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/,
+                          message: "Email must be a valid email address",
+                        },
+                      })}
                       />
                       {/* <div className="invalid-feedback">
                         {errors?.email?.message}
@@ -413,23 +451,23 @@ const onSkip = () => onSelect();
                       // name="name"
                       // className={`employee-card-input`}
                       // placeholder=""
-                      // {...register("name", {
-                      //   required: "Name is required",
-                      //   pattern: {
-                      //     value: /^[a-zA-Z]+$/,
-                      //     message: "Name must be a valid string",
-                      //   },
-                      //   minLength: {
-                      //     value: 3,
-                      //     message:
-                      //       "Name should be greater than 3 characters",
-                      //   },
-                      //   maxLength: {
-                      //     value: 20,
-                      //     message:
-                      //       "Name shouldn't be greater than 20 characters",
-                      //   },
-                      // })}
+                      {...register("name", {
+                        required: "Name is required",
+                        pattern: {
+                          value: /^[a-zA-Z]+$/,
+                          message: "Name must be a valid string",
+                        },
+                        minLength: {
+                          value: 3,
+                          message:
+                            "Name should be greater than 3 characters",
+                        },
+                        maxLength: {
+                          value: 20,
+                          message:
+                            "Name shouldn't be greater than 20 characters",
+                        },
+                      })}
                       />
                       {/* <div className="invalid-feedback">
                         {errors?.name?.message}
@@ -824,6 +862,7 @@ const onSkip = () => onSelect();
                                     value={uploadPdf}
                                     placeholder=""
                                     class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
                                   />
                                 </Col>
 

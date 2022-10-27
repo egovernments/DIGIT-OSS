@@ -56,10 +56,9 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   ];
 
   const [panValidation,setPanValidation] = useState("");
-  function setValue(value, input) {
-    // onSelect(config.key, { ...formData[config.key], [input]: value });
-    setDOB(config.key, { ...formData[config.key], [input]: value });
-  }
+  // function setValue(value, input) {
+  //   setDOB(config.key, { ...formData[config.key], [input]: value });
+  // }
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
   if(isOpenLinkFlow)  
@@ -383,13 +382,10 @@ console.log(panValidation);
                 /> */}
                 <DatePicker
                 isMandatory={true}
-                key={input.dob}
-                date={formData && formData[config.key] ? formData[config.key][input.dob] : undefined}
-                onChange={(e) => setValue(e, input.dob)}
+                date={dob}
+                onChange={(e) => setDOB(e)}
                 disable={false}
                 max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
-                defaultValue={undefined}
-                {...input.validation}
               />
               </Form.Group>
               )
