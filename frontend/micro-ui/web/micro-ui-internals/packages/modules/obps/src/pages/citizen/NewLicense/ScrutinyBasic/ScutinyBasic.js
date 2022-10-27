@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Personalinfo from "./Personalinfo";
 import Genarelinfo from "./Generalinfo";
 import Developerinfo from "./Developerinfo";
@@ -6,10 +6,10 @@ import AppliedLandinfo from "./AppliedLand";
 import Feeandcharges from "./Feeandcharges";
 // import JeLandinfo from "./Scrutiny LOI/JE/JE";
 import DisApprovalList from "./DisApprovalList";
-import HistoryList from "./History";
-// import ScrutinyDevelopment from "./ScrutinyDevelopment/ScrutinyDevelopment";
-import { Button } from "react-bootstrap";
-// import { padding } from "@mui/system";
+// import HistoryList from "./History";
+import ScrutinyDevelopment from "./ScrutinyDevelopment/ScrutinyDevelopment";
+import { Button, Row, Col } from "react-bootstrap";
+// import AddIcon from "@mui/icons-material/Add";
 
 const ScrutitnyForms = () => {
   const personalInfoRef = useRef();
@@ -21,23 +21,30 @@ const ScrutitnyForms = () => {
   const jeLandInfoRef = useRef();
 
   const [displayPersonal, setDisplayPersonalInfo] = useState([]);
+  const [displayPersonalCHeckedList, setDisplayCheckedPersonalList] = useState([]);
+  const [displayGeneralCHeckedList, setDisplayCheckedGeneralList] = useState([]);
   const [displayPurpose, setDisplayPurposeInfo] = useState([]);
   const [displayGeneral, setDisplayGeneralInfo] = useState([]);
   const [displayAppliedLand, setDisplayAppliedLandInfo] = useState([]);
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
-  const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(120);
+  const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(0);
   const [defaultHeightGen, setDefaultHeightGen] = useState(120);
-  const [defaultheightDevelper, setDefaultheightDevelper] = useState(160);
-  const [defaultheightApplied, setDefaultheightApplied] = useState(140);
-  const [defaultheightFee, setDefaultheightFee] = useState(120);
+  const [defaultheightDevelper, setDefaultheightDevelper] = useState(0);
+  const [defaultheightApplied, setDefaultheightApplied] = useState(0);
+  const [defaultheightFee, setDefaultheightFee] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const [uncheckedValue, setUncheckedVlue] = useState([]);
 
   const getUncheckedPersonalinfos = (data) => {
     setDisplayPersonalInfo(data.data);
-    console.log(data);
+    console.log("data parent label", data);
+  };
+  const getCheckedPersonalInfoValue = (data) => {
+    setDisplayCheckedPersonalList(data.data);
+    console.log("checked parent personal info data", data);
   };
 
   const getUncheckedPurposeinfos = (data) => {
@@ -49,6 +56,10 @@ const ScrutitnyForms = () => {
     setDisplayGeneralInfo(data.data);
     // console.log("abc", data);
     console.log(data);
+  };
+  const getCheckedGeneralInfoValue = (data) => {
+    setDisplayCheckedGeneralList(data.data);
+    console.log("checked parent General info data", data);
   };
   const getUncheckedAppliedLandInfo = (data) => {
     setDisplayAppliedLandInfo(data.data);
@@ -81,51 +92,57 @@ const ScrutitnyForms = () => {
 
   const handleScrolltoPersonal = () => {
     // personalInfoRef.current.scrollIntoView({ behavior: "smooth" });
-    if (defaultHeightPersonal === 120) {
+    if (defaultHeightPersonal === 0) {
       setDefaultHeightPersonal("auto");
     } else {
-      setDefaultHeightPersonal(120);
+      setDefaultHeightPersonal(0);
     }
   };
 
   const handleScrolltOGeneral = () => {
     // generalInfoRef.current.scrollIntoView({ behavior: "smooth" });
-    if (defaultHeightGen === 120) {
+    if (defaultHeightGen === 0) {
       setDefaultHeightGen("auto");
     } else {
-      setDefaultHeightGen(120);
+      setDefaultHeightGen(0);
     }
   };
   const handleScrolltoDeveloper = () => {
     // developerInfoRef.current.scrollIntoView({ behavior: "smooth" });
-    if (defaultheightDevelper === 160) {
+    if (defaultheightDevelper === 0) {
       setDefaultheightDevelper("auto");
     } else {
-      setDefaultheightDevelper(160);
+      setDefaultheightDevelper(0);
     }
   };
 
   const handleScrolltoAppliedLandInfo = () => {
     // appliedInfoRef.current.scrollIntoView({ behavior: "smooth" });
-    if (defaultheightApplied === 140) {
+    if (defaultheightApplied === 0) {
       setDefaultheightApplied("auto");
     } else {
-      setDefaultheightApplied(140);
+      setDefaultheightApplied(0);
     }
   };
   const handleScrolltoFeeandChargesInfo = () => {
     // feeandchargesInfoRef.current.scrollIntoView({ behavior: "smooth" });
-    if (defaultheightFee === 120) {
+    if (defaultheightFee === 0) {
       setDefaultheightFee("auto");
     } else {
-      setDefaultheightFee(120);
+      setDefaultheightFee(0);
     }
   };
   //   const handleScrolltoJeLandInfo = () => {
   //     jeLandInfoRef.current.scrollIntoView({ behavior: "smooth" });
   //   };
 
-  console.log(displayPersonal);
+  // const disapprovalilIst = (
+
+  // );
+  // useEffect(() => {
+  //   return disapprovalilIst;
+  // }, [displayPurpose, displayAppliedLand, displayFeeandCharges, displayPersonal, displayGeneral]);
+  // console.log("asddg", displayPersonal);
 
   return (
     <div>
@@ -172,69 +189,147 @@ const ScrutitnyForms = () => {
         // }}
         >
           <div>
-            <Button onClick={handleScrolltoPersonal} style={{ height: 35, marginBottom: 10 }}>
-              Step 1
-            </Button>
+            {/* <Col class="col-12">
+              <Button
+                className="d-block"
+                onClick={handleScrolltoPersonal}
+                style={{
+                  background: "#007bff",
+                  width: "100%",
+                  textAlign: "left",
+                  padding: "0.35rem 0.5rem",
+                  borderRadius: "0.2rem",
+                  color: "#fff",
+                }}
+              >
+                Applicant info
+                <AddIcon style={{ textAlign: "rightend", width: "70em" }}></AddIcon>
+              </Button>
+            </Col> */}
+
             <Personalinfo
               personalInfoRef={personalInfoRef}
               passUncheckedList={getUncheckedPersonalinfos}
-              heightPersonal={defaultHeightPersonal}
+              passCheckedList={getCheckedPersonalInfoValue}
+              // heightPersonal={defaultHeightPersonal}
+              onClick={() => setOpen(!open)}
             ></Personalinfo>
           </div>
           <div>
-            <Button onClick={handleScrolltOGeneral} style={{ height: 35, marginBottom: 10 }}>
-              Step 2
-            </Button>
-            <Genarelinfo generalInfoRef={generalInfoRef} passUncheckedList={getUncheckedGeneralinfos} heightGen={defaultHeightGen}></Genarelinfo>
+            {/* <Col class="col-12">
+              <Button
+                onClick={handleScrolltOGeneral}
+                style={{
+                  background: "#007bff",
+                  width: "100%",
+                  textAlign: "left",
+                  padding: "0.35rem 0.5rem",
+                  borderRadius: "0.2rem",
+                  color: "#fff",
+                }}
+              >
+                Applicant Puropse
+                <AddIcon style={{ textAlign: "rightend", width: "68em" }}></AddIcon>
+              </Button> */}
+            <Genarelinfo
+              generalInfoRef={generalInfoRef}
+              passUncheckedList={getUncheckedGeneralinfos}
+              passCheckedList={getCheckedGeneralInfoValue}
+              // heightGen={defaultHeightGen}
+              onClick={() => setOpen(!open)}
+            ></Genarelinfo>
+            {/* </Col> */}
           </div>
+
           <div>
-            <Button onClick={handleScrolltoDeveloper} style={{ height: 35, marginBottom: 10 }}>
-              Step 3
-            </Button>
+            {/* <Col class="col-12">
+              <Button
+                onClick={handleScrolltoDeveloper}
+                style={{
+                  background: "#007bff",
+                  width: "100%",
+                  textAlign: "left",
+                  padding: "0.35rem 0.5rem",
+                  borderRadius: "0.2rem",
+                  color: "#fff",
+                }}
+              >
+                Details of Applied Land
+                <AddIcon style={{ textAlign: "rightend", width: "66em" }}></AddIcon>
+              </Button> */}
             <Developerinfo
               developerInfoRef={developerInfoRef}
               passUncheckedList={getUncheckedPurposeinfos}
               heightDevelper={defaultheightDevelper}
             ></Developerinfo>
+            {/* </Col> */}
           </div>
           <div>
-            <Button onClick={handleScrolltoAppliedLandInfo} style={{ height: 35, marginBottom: 10 }}>
-              Step 4
-            </Button>
+            {/* <Col class="col-12">
+              <Button
+                onClick={handleScrolltoAppliedLandInfo}
+                style={{
+                  background: "#007bff",
+                  width: "100%",
+                  textAlign: "left",
+                  padding: "0.35rem 0.5rem",
+                  borderRadius: "0.2rem",
+                  color: "#fff",
+                }}
+              >
+                Geographical Specifications
+                <AddIcon style={{ textAlign: "rightend", width: "64em" }}></AddIcon>
+              </Button> */}
             <AppliedLandinfo
               appliedInfoRef={appliedInfoRef}
               purpose={purpose}
               passUncheckedList={getUncheckedAppliedLandInfo}
               heightApplied={defaultheightApplied}
             ></AppliedLandinfo>
+            {/* </Col> */}
           </div>
           <div>
-            <Button onClick={handleScrolltoFeeandChargesInfo} style={{ height: 35, marginBottom: 10 }}>
-              Step 5
-            </Button>
+            {/* <Col class="col-12">
+              <Button
+                onClick={handleScrolltoFeeandChargesInfo}
+                style={{
+                  background: "#007bff",
+                  width: "100%",
+                  textAlign: "left",
+                  padding: "0.35rem 0.5rem",
+                  borderRadius: "0.2rem",
+                  color: "#fff",
+                }}
+              >
+                Fee and charges
+                <AddIcon style={{ textAlign: "rightend", width: "70em" }}></AddIcon>
+              </Button> */}
             <Feeandcharges
               feeandchargesInfoRef={feeandchargesInfoRef}
               passUncheckedList={getUncheckedFeeandChargesInfo}
               heightFee={defaultheightFee}
             ></Feeandcharges>
+            {/* </Col> */}
           </div>
 
           {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}
         </div>
       </div>
-      <div style={{ position: "relative", width: "100%", height: "30%", display: "flex", marginBottom: 2 }}>
+      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
         <DisApprovalList
           disapprovallistDeveloper={displayPurpose}
           disapprovallistGeneral={displayGeneral}
           disapprovallistAppliedLand={displayAppliedLand}
           disapprovallistPersonal={displayPersonal}
+          disapprovalCheckedPersonal={displayPersonalCHeckedList}
+          disapprovalCheckedGeneral={displayGeneralCHeckedList}
           DisApprovalListFeeandCharges={displayFeeandCharges}
         ></DisApprovalList>
-        <HistoryList></HistoryList>
+        {/* <HistoryList></HistoryList> */}
       </div>
-      {/* <div style={{ position: "relative", width: "100%", height: "20%", display: "flex" }}>
+      <div style={{ position: "relative", width: "100%", height: "50%", display: "flex" }}>
         <ScrutinyDevelopment></ScrutinyDevelopment>
-      </div> */}
+      </div>
     </div>
   );
 };
