@@ -4,10 +4,16 @@ import { useForm } from "react-hook-form";
 // import Box from '@material-ui/core//Box';
 import { Button, Form } from "react-bootstrap";
 // import Typography from '@material-ui/core/Typography'
-import Modal from 'react-bootstrap/Modal';
+import {
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+} from "reactstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import axios from 'axios';
+
 // import InfoIcon from '@mui/icons-material/Info';
 // import TextField from '@mui/material/TextField';
 const style = {
@@ -28,10 +34,11 @@ const FeesChargesForm = (props) => {
     // const [show, setShow] = useState(false);
 
     const [show, setShow] = useState(false);
-
+    const [show1, setShow1] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const handleShow1 = () => setShow(true);
+    const setPayShow = () => setShow(true);
+   
 
     const [form, setForm] = useState([]);
     const [feeDetail, setFeeDetail] = useState('');
@@ -44,7 +51,8 @@ const FeesChargesForm = (props) => {
     const [amount, setAmount] = useState('');
     const[calculateData,setCalculateData]=useState({});
     const[finalSubmitData,setFinalSubmitData]=useState([])
-
+    const [modal, setmodal] = useState(false);
+    const [modal1, setmodal1] = useState(false);
     let frmData = JSON.parse(localStorage.getItem('key') || "[]")
     console.log("data1",frmData)
     let step2 = JSON.parse(localStorage.getItem('step2') || "[]")
@@ -140,7 +148,7 @@ const FeesChargesForm = (props) => {
     const [noOfRows, setNoOfRows] = useState(1);
     const [noOfRow, setNoOfRow] = useState(1);
     const [noOfRow1, setNoOfRow1] = useState(1); 
-    const [payShow, setPayShow] = useState(false);
+   
     const Purpose = JSON.parse(localStorage.getItem('purpose'))
     console.log("adf", Purpose)
     const potential = JSON.parse(localStorage.getItem('potential'))
@@ -436,7 +444,7 @@ const FeesChargesForm = (props) => {
                 <Form.Group className="justify-content-center" controlId="formBasicEmail">
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
                         <Col col-12>
-                            <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                            <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))",width:"875px",marginLeft:"339px" }}>
                                 <thead>
                                     <tr>
                                         <th><b>Total Area</b></th>
@@ -494,30 +502,6 @@ const FeesChargesForm = (props) => {
                                 </tbody>
                             </table>
 
-                            {/* <div className="row">
-                            <div className="col col-4">
-                              
-                                        <h6><b>(i)Fees/Charges details Total area</b></h6>
-                                        <input type="text" className="form-control"  minLength={1} maxLength={20} pattern="[0-9]*"
-                                         onChange={(e)=>setFeeDetail(e.target.value)} value={feeDetail} onChange1={handleFeesChange} />
-                                         {errors.feeDetail && <p>Please check the First Name</p>}
-                             </div>
-                             <div className="col col-4">
-                              
-                                        <h6><b>(ii)Licence Fees (25%)</b></h6>
-                                        <input type="text" className="form-control"   minLength={1} maxLength={20} pattern="[0-9]*"
-                                         onChange={(e)=>setLicenseFee(e.target.value)} value={licenseFee} onChange1={handleLicFeesChange} />
-                                         {errors.licenseFee && <p>Please check the First Name</p>}
-                             </div>
-                             <div className="col col-4">
-                              
-                              <h6><b>(iii)Scrutiny Fees</b></h6>
-                              <input type="text" className="form-control"   minLength={1} maxLength={20} pattern="[0-9]*"
-                               onChange={(e)=>setScrutinyFee(e.target.value)} value={ScrutinyFee} onChange1={handleScrutinyFeesChange} />
-                               {errors.ScrutinyFee && <p></p>}
-                   </div>
-                   </div><br></br> */}
-
                             <div className="row">
                                 <div className="col col-4">
                                     <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)"><b>(i)&nbsp;Payable Till Now&nbsp; </b>&nbsp;&nbsp;</h6>
@@ -570,30 +554,30 @@ const FeesChargesForm = (props) => {
                                 <p className="text-black">The following is undertaken: </p>
                                 <ul className="Undertakings">
                                     <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge</li>
-                                    .<button className="btn btn-primary" onClick={handleShow}>Read More</button>
+                                    .<button className="btn btn-primary" onClick={() => setmodal1(true)}>Read More</button>
 
                                 </ul>
                             </div>
-
-
                             <Modal
-                                show={show}
-                                onHide={() => setShow(false)}
-                                dialogClassName="modal-90w"
-                                aria-labelledby="example-custom-modal-styling-title"
-
+                                size="xl"
+                                isOpen={modal1}
+                                toggle={() => setmodal(!modal1)}
+                                style={{width:"500px", height:"200px"}}
                             >
-                                <Modal.Header closeButton>
-
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <p>
-                                        I hereby declare that the details furnished above are true and correct to the best of my
+                                <ModalHeader
+                                    toggle={() => setmodal1(!modal1)}
+                                ></ModalHeader>
+                                <ModalBody>
+                                    <p><b> I hereby declare that the details furnished above are true and correct to the best of my
                                         knowledge and belief and I undertake to inform you of any changes therein, immediately.
                                         In case any of the above information is found to be false or untrue or misleading or misrepresenting,
-                                        I am aware that I may be held liable for it.
+                                        I am aware that I may be held liable for it.</b>
+                                       
                                     </p>
-                                </Modal.Body>
+                                </ModalBody>
+                                <ModalFooter
+                                    toggle={() => setmodal(!modal1)}
+                                ></ModalFooter>
                             </Modal>
                             <div className="">
 
@@ -608,37 +592,39 @@ const FeesChargesForm = (props) => {
                                         </label>
                                     </div>
                                     <div class="my-2">
-                                        .<button className="btn btn-primary" onClick={setPayShow}>Pay Now</button>
+                                        .<button className="btn btn-primary" onClick={() => setmodal(true)} >Pay Now</button>
                                         {/* <button className="btn btn-success" onClick={()=>setPayShow(true)}
                                                         data-toggle="modal" data-target="#payemtModal">Pay Now</button> */}
-                                    </div>
+                                    </div>  
+                                    <div >
 
-
-                                    <Modal
-                                        show={show}
-                                        onHide={() => setShow(false)}
-                                        dialogClassName="modal-90w"
-                                        aria-labelledby="example-custom-modal-styling-title"
-                                        size="lg"
-
-                                    >
-                                        <Modal.Header closeButton>
-
-                                        </Modal.Header>
-                                        <Modal.Body>
-                                            <p>
-                                                I hereby declare that the details furnished above are true and correct to the best of my
-                                                knowledge and belief and I undertake to inform you of any changes therein, immediately.
-                                                In case any of the above information is found to be false or untrue or misleading or misrepresenting,
-                                                I am aware that I may be held liable for it.
-                                            </p>
-                                        </Modal.Body>
-                                    </Modal>
-
+                                        <Modal
+                                           size="xl"
+                                           isOpen={modal}
+                                           toggle={() => setmodal(!modal)}
+                                           style={{width:"500px", height:"200px"}}
+                                        >
+                                            <ModalHeader
+                                                toggle={() => setmodal(!modal)}
+                                            ></ModalHeader>
+                                            <ModalBody>
+                                            <p class="text-success font-weight-bold"
+                                                           >Congratulations, Payment
+                                                            Successful!!</p>
+                                                        <p class="font-weight-bold" >Your
+                                                            Application No. : <strong>2547893</strong></p>
+                                                        <p class="font-weight-bold">Your Diary
+                                                            No. : <strong>5984785</strong></p>
+                                                        <p class="font-weight-bold" >The same
+                                                            has been sent to your mobile and email as well.</p>
+                                            </ModalBody>
+                                            <ModalFooter
+                                                toggle={() => setmodal(!modal)}
+                                            ></ModalFooter>
+                                        </Modal>
+                                    
                                 </div>
-
-
-
+                                </div>
 
                                 {/* <div class="modal" tabindex="-1" id="payemtModal" role="modal">
                                             <div class="modal-dialog">

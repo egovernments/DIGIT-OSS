@@ -118,7 +118,7 @@ const optionsPotentialList = [
 ]
 
 const ApllicantPuropseForm = (props) => {
-    
+
     const [form, setForm] = useState([]);
     const [purposeDd, setSelectPurpose] = useState("");
     const [potentialDev, setPotentialDev] = useState("");
@@ -126,7 +126,7 @@ const ApllicantPuropseForm = (props) => {
     const [potential, setPotential] = useState("")
     const [PurposeformSubmitted, SetPurposeformSubmitted] = useState(false);
     const [tehsil, setTehsil] = useState({});
-    const[owmerName,setOwmerName]=useState({});
+    const [owmerName, setOwmerName] = useState({});
     const [revenueName, setRevenueName] = useState({});
     const [mustil, setMustil] = useState({});
     const [khewat, setKhewat] = useState('');
@@ -135,20 +135,20 @@ const ApllicantPuropseForm = (props) => {
     const [village2, setVillage2] = useState('');
     const [khasra, setKhasra] = useState('');
     const [khatoni, setKhatoni] = useState('');
-    const[killa,setKilla]=useState('');
+    const [killa, setKilla] = useState('');
     const [sector, setSector] = useState('');
-    const[Rectangle,setRectangle]=useState('');
-    const[sarsai,setSarsai]=useState('');
-    const[developerLlp,setDeveloperLlp]=useState('');
-    const[colKhasra,setColKhasra]=useState('');
-    const[kanalBigha,setkanalBigha]=useState('');
-    const[registeringdate,setRegisteingDate]=useState('');
-    const[validitydate,setValiditydate]=useState('');
-    const[colirrevocialble,setColirrevocialble]=useState('');
-    const[authSignature,setAuthSignature]=useState('');
-    const[nameAuthSign,setNameAuthSign]=useState('');
-    const[registeringAuthority,setRegisteringAuthority]=useState('');
-    const[marlaBiswa,setMarlaBiswa]=useState('');
+    const [Rectangle, setRectangle] = useState('');
+    const [sarsai, setSarsai] = useState('');
+    const [developerLlp, setDeveloperLlp] = useState('');
+    const [colKhasra, setColKhasra] = useState('');
+    const [kanalBigha, setkanalBigha] = useState('');
+    const [registeringdate, setRegisteingDate] = useState('');
+    const [validitydate, setValiditydate] = useState('');
+    const [colirrevocialble, setColirrevocialble] = useState('');
+    const [authSignature, setAuthSignature] = useState('');
+    const [nameAuthSign, setNameAuthSign] = useState('');
+    const [registeringAuthority, setRegisteringAuthority] = useState('');
+    const [marlaBiswa, setMarlaBiswa] = useState('');
     const handleShow = () => setShow(true);
     const [district2, setDistrict2] = useState('');
     const [modalValuesArray, setModalValuesArray] = useState([]);
@@ -174,13 +174,13 @@ const ApllicantPuropseForm = (props) => {
     const [revenueDataLabels, setRevenueDataLabels] = useState([]);
     const [mustilDataLabels, setMustilDataLabels] = useState([]);
     const [khewatDataLabels, setKhewatDataLabels] = useState([]);
-    const[editValues,setEditValues]=useState({});
-    const[docUpload,setDocuploadData]=useState([])
-    const [file,setFile]=useState(null);
+    const [editValues, setEditValues] = useState({});
+    const [docUpload, setDocuploadData] = useState([])
+    const [file, setFile] = useState(null);
     const [modal, setmodal] = useState(false);
     const [showhide1, setShowhide1] = useState("No");
     const [showhide2, setShowhide2] = useState("No");
-    const[displayEditModal,setDisplayEditModal]=useState("none");
+    const [displayEditModal, setDisplayEditModal] = useState("none");
     const handleshow1 = e => {
         const getshow = e.target.value;
         setShowhide1(getshow);
@@ -192,7 +192,7 @@ const ApllicantPuropseForm = (props) => {
 
     const handleArrayValues = () => {
 
-        if (tehsil.name !== "" && revenueName!=="" && mustil!=""
+        if (tehsil.name !== "" && revenueName !== "" && mustil != ""
         ) {
 
             const values = {
@@ -278,7 +278,7 @@ const ApllicantPuropseForm = (props) => {
                 if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
                     Resp.data.map((el, i) => {
                         setTehsilDataLabels((prev) => [...prev, { "label": el.name, "id": el.code, "value": el.code }])
-                        
+
                     })
                 }
             } catch (error) {
@@ -313,7 +313,7 @@ const ApllicantPuropseForm = (props) => {
 
                 if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
                     Resp.data.map((el, i) => {
-                        setRevenueDataLabels((prev) => [...prev, { "label": el.name, "id": el.khewats, "value": el.code, "khewats":el.khewats }])
+                        setRevenueDataLabels((prev) => [...prev, { "label": el.name, "id": el.khewats, "value": el.code, "khewats": el.khewats }])
 
 
                     })
@@ -380,24 +380,25 @@ const ApllicantPuropseForm = (props) => {
         }
 
         try {
-            if(revenueName.khewat!==undefined){
-           
-            
-            const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_owner?" + "dCode=" + district2 + "&" + "tCode=" + tehsil.data + "&NVCode=" + revenueName.data + "&khewat=" + revenueName.khewat, datatopost, {
+            if (revenueName.khewat !== undefined) {
 
-            }).then((response) => {                                   
 
-                return response
-            });
-            setKhewatData(Resp.data)
-        
-            if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-                Resp.data.map((el, i) => {
-                    setKhewatDataLabels((prev) => [...prev, { "label": el.name, "id": el.code, "value": el.khewats }])
-                })
+                const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_owner?" + "dCode=" + district2 + "&" + "tCode=" + tehsil.data + "&NVCode=" + revenueName.data + "&khewat=" + revenueName.khewat, datatopost, {
 
+                }).then((response) => {
+
+                    return response
+                });
+                setKhewatData(Resp.data)
+
+                if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
+                    Resp.data.map((el, i) => {
+                        setKhewatDataLabels((prev) => [...prev, { "label": el.name, "id": el.code, "value": el.khewats }])
+                    })
+
+                }
             }
-        } } catch (error) {
+        } catch (error) {
             console.log(error.message);
         }
 
@@ -420,7 +421,7 @@ const ApllicantPuropseForm = (props) => {
     useEffect(() => {
         getLandOwnerStateData();
     }, [district2, tehsil, revenueName.khewat])
-  
+
 
 
     const handleChange = (e) => {
@@ -456,34 +457,34 @@ const ApllicantPuropseForm = (props) => {
         props.Step2Continue({ "data": true })
     }
     let forms = {
-         purposeDd:purposeDd,
-         potentialDev:potentialDev,
-          district2:district2,
-          revenueName:revenueName,
-          khewat:khewat,
-          mustil:mustil,
-          killa:killa,
-          sector:sector,
-          kanal:kanal,
-          marla:marla,
-          village2:village2,
-          khasra:khasra,
-          khatoni:khatoni,
-          "step2Data1":
-          {
-            Rectangle:Rectangle,
-            kanalBigha:kanalBigha,
-            marlaBiswa:marlaBiswa,
-            sarsai:sarsai,
-            colkhasra:colKhasra,
-            developerLlp:developerLlp,
-            registeringdate:registeringdate,
-            validitydate:validitydate,
-            colirrevocialble:colirrevocialble,
-            authSignature:authSignature,
-            nameAuthSign:nameAuthSign,
-            registeringAuthority:registeringAuthority
-          }
+        purposeDd: purposeDd,
+        potentialDev: potentialDev,
+        district2: district2,
+        revenueName: revenueName,
+        khewat: khewat,
+        mustil: mustil,
+        killa: killa,
+        sector: sector,
+        kanal: kanal,
+        marla: marla,
+        village2: village2,
+        khasra: khasra,
+        khatoni: khatoni,
+        "step2Data1":
+        {
+            Rectangle: Rectangle,
+            kanalBigha: kanalBigha,
+            marlaBiswa: marlaBiswa,
+            sarsai: sarsai,
+            colkhasra: colKhasra,
+            developerLlp: developerLlp,
+            registeringdate: registeringdate,
+            validitydate: validitydate,
+            colirrevocialble: colirrevocialble,
+            authSignature: authSignature,
+            nameAuthSign: nameAuthSign,
+            registeringAuthority: registeringAuthority
+        }
 
 
 
@@ -506,49 +507,51 @@ const ApllicantPuropseForm = (props) => {
 
     }
     console.log("data", tehsil)
-    console.log("Khewat",revenueName)
+    console.log("Khewat", revenueName)
 
     const getDocumentData = async () => {
-        if(file===null){
-           return
+        if (file === null) {
+            return
         }
-           const formData = new FormData();
-           formData.append(
-               "file",file.file      );
-           formData.append(
-               "tenantId","hr"      );  
-           formData.append(
-               "module","property-upload"      );
-            formData.append(
-                "tag","tag-property"      );
-       
-            console.log("File",formData)
-   
-           try {
-               const Resp = await axios.post("http://10.1.1.18:8083/filestore/v1/files",formData,
-               {headers:{
-                   "content-type":"multipart/form-data"
-               }}).then((response) => {
-                   return response
-               });
-               setDocuploadData(Resp.data)
-               
-           } catch (error) {
-               console.log(error.message);
-           }
-   
-       }
-       useEffect(() => {
+        const formData = new FormData();
+        formData.append(
+            "file", file.file);
+        formData.append(
+            "tenantId", "hr");
+        formData.append(
+            "module", "property-upload");
+        formData.append(
+            "tag", "tag-property");
+
+        console.log("File", formData)
+
+        try {
+            const Resp = await axios.post("http://10.1.1.18:8083/filestore/v1/files", formData,
+                {
+                    headers: {
+                        "content-type": "multipart/form-data"
+                    }
+                }).then((response) => {
+                    return response
+                });
+            setDocuploadData(Resp.data)
+
+        } catch (error) {
+            console.log(error.message);
+        }
+
+    }
+    useEffect(() => {
         getDocumentData();
     }, [file]);
 
-    const handleEdit=(index)=>{
-        console.log("edit",index)
+    const handleEdit = (index) => {
+        console.log("edit", index)
         setEditValues(modalValuesArray[index])
         if (displayEditModal === "block") {
             setDisplayEditModal("none")
         }
-        else{
+        else {
             setDisplayEditModal("block")
         }
     }
@@ -557,7 +560,7 @@ const ApllicantPuropseForm = (props) => {
         <Form >
             <Card style={{ width: "126%", marginLeft: "20px", paddingRight: "10px" }}>
                 <Form.Group  >
-                <ModalForm displayEditModal = {displayEditModal} editDataIndex={editValues}/>
+                    <ModalForm displayEditModal={displayEditModal} editDataIndex={editValues} />
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
                         <Col md={4} xxl lg="3">
                             <div>
@@ -633,7 +636,7 @@ const ApllicantPuropseForm = (props) => {
                                                 listOfData={tehsilDataLabels}
                                                 labels="Tehsil"
                                                 getSelectedValue={(data) => setTehsil(data)}
-                                                
+
                                             ></ReactMultiSelect>
                                         </Col>
                                         <Col md={4} xxl lg="4">
@@ -821,7 +824,7 @@ const ApllicantPuropseForm = (props) => {
                                                         </div>
                                                         <div className="col col-4" style={{ marginTop: 15 }}>
                                                             <label for="parentLicense" className="font-weight-bold"><h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Registring Authority document&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6></label><br></br>
-                                                            <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}/>
+                                                            <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                                                         </div>
                                                     </div>
 
@@ -846,7 +849,7 @@ const ApllicantPuropseForm = (props) => {
                         </div>
                     </div>
                     <br></br>
-                  
+
                     <div className="applt" style={{ overflow: "auto" }}>
                         <table className="table table-bordered" style={{ overflow: "auto" }}>
                             <thead>
@@ -865,7 +868,7 @@ const ApllicantPuropseForm = (props) => {
 
                                 </tr>
                             </thead>
-                           
+
                             <tbody>
                                 {
                                     (modalValuesArray.length > 0) ?
@@ -890,7 +893,7 @@ const ApllicantPuropseForm = (props) => {
                                                         placeholder={elementInArray.marla} className="form-control" disabled /></td>
                                                     <td class="text-center"><input type="text" value={elementInArray.khewat}
                                                         placeholder={elementInArray.khewat} className="form-control" disabled /></td>
-                                                        <td >< EditIcon style={{ color: "blue" }} onClick={()=>handleEdit(input)}/><DeleteIcon style={{ color: "blue" }} onClick={()=>handleDelete(i)}/></td>
+                                                    <td >< EditIcon style={{ color: "blue" }} onClick={() => handleEdit(input)} /><DeleteIcon style={{ color: "blue" }} onClick={() => handleDelete(i)} /></td>
                                                     {/* <td class="text-center"><input type="text" value={elementInArray.bigha}
                             placeholder={elementInArray.bigha} className="form-control" disabled/></td> */}
                                                     {/* <td class="text-center"><input type="text" value={elementInArray.biswa}
@@ -912,17 +915,17 @@ const ApllicantPuropseForm = (props) => {
                         </table>
                     </div>
 
-                   
+
 
                 </Form.Group>
                 <div class="row">
                     <div class="col-sm-12 text-left">
-                        <button id="btnClear" class="btn btn-primary btn-md center-block" style={{marginBottom:"-44px"}} >Back</button>
+                        <button id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }} >Back</button>
                     </div>
                     <div class="row">
-                    <div class="col-sm-12 text-right">
-                        <button id="btnSearch" class="btn btn-primary btn-md center-block" onClick={PurposeFormSubmitHandler} >Continue</button>
-                    </div></div>
+                        <div class="col-sm-12 text-right">
+                            <button id="btnSearch" class="btn btn-primary btn-md center-block" onClick={PurposeFormSubmitHandler} >Continue</button>
+                        </div></div>
                 </div>
 
             </Card>

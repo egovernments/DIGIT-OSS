@@ -10,27 +10,12 @@ const getAction = (flow) => {
    case "NEWLICENSE": actions = [
    
     // 'BPA_NEW_ADDRESS_HEADER_DETAILS',
-    'Step1',
-    'Step2',
-    'Step3',
-    'Step4',
-    'Step5',
+    'Applicant Info',
+    'Application Purpose',
+    'Land Schedule',
+    'Details of Applied Land',
+    'Fees and Charges',
     ]
-    //   break;
-    // case "OCBPA": actions = [
-    //   'BPA_BASIC_AND_PLOT_DETAILS_LABEL',
-    //   'BPA_SCRUTINY_DETAILS',
-    //   'BPA_DOCUMENT_AND_NOC_DETAILS_LABEL',
-    //   'BPA_STEPPER_SUMMARY_HEADER',
-    // ];
-    //   break;
-    // default: actions = [
-    //   'Step1',
-    //   'Step2',
-    //   'Step3',
-    //   'Step4',
-    //   'Step5',
-    // ]
  }
 }
 const Timeline = ({ currentStep = 1, flow="" }) => {

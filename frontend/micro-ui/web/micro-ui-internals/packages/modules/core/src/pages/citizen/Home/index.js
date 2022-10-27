@@ -47,9 +47,9 @@ const Home = () => {
         onClick: () => history.push("/digit-ui/citizen/pt-home"),
       },
       {
-        name: t("MODULE_TL"),
+        name: "Bank Guarantee",
         Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/tl-home"),
+        onClick: () => history.push("/digit-ui/citizen/obps/bank"),
       },
       {
           name: "New License Services",

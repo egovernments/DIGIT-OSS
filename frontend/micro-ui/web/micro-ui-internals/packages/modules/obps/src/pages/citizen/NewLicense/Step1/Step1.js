@@ -8,7 +8,7 @@ import axios from 'axios';
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import TextField from '@mui/material/TextField';
-
+import { useFormInputValidation } from "react-form-input-validation";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect"
 
 const optionsArrList = [
@@ -121,7 +121,7 @@ const ApllicantFormStep1 = (props) => {
     const [isSubmit, setIsSubmit] = useState(false);
     const [developerData, setDeveloperData] = useState([]);
     const aurthorizedUserData = JSON.parse(localStorage.getItem("data_user"));
-    // const dispatch = useDispatch();
+  
 
     const handleDeveloperChange = event => {
         setDeveloper(event.target.value);
@@ -165,6 +165,10 @@ const ApllicantFormStep1 = (props) => {
     const[employeeName,employeedata]=useState([]);
 
     const ApplicantFormSubmitHandlerForm = async(e) => {
+        
+   const formData =(data)=>{
+    console.log(formData)
+   }
         e.preventDefault();
         SetFormSubmitted(true);
         props.Step1Continue({"data":true})
@@ -185,12 +189,6 @@ const ApllicantFormStep1 = (props) => {
 
         };
         localStorage.setItem("key",JSON.stringify(forms))
-       
-        
-        // console.log("FRMDATA",forms);
-        // localStorage.setItem('step1', JSON.stringify(forms))
-        // form.push(forms)
-        // let frmData = JSON.parse(localStorage.getItem('step1') || "[]")
     };
     useEffect(() => {
         if (FormSubmitted) {
@@ -202,21 +200,6 @@ const ApllicantFormStep1 = (props) => {
 
     
     const getDeveloperData = async () => {
-
-        // const datatopost = {
-        //     "RequestInfo": {
-        //         "apiId": "Rainmaker",
-        //         "ver": "v1",
-        //         "ts": 0,
-        //         "action": "_search",
-        //         "did": "",
-        //         "key": "",
-        //         "msgId": "090909",
-        //         "requesterId": "",
-        //         "authToken": ""
-        //     }
-
-        // }
 
         try {
             const Resp = await axios.get("http://10.1.1.18:8086/user/developer/_getAuthorizedUser?mobileNumber=1111111111").then((response) => {
@@ -239,9 +222,10 @@ const ApllicantFormStep1 = (props) => {
     },[developerData]);
     console.log("data",developerData)
 
+
     return (
       
-        <Form  autoComplete="off">
+        <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)} autoComplete="off">
             <Card style={{width:"126%",marginLeft:"19px",paddingRight:"10px"}}>
                 <Form.Group className="justify-content-center" controlId="formBasicEmail">
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -251,7 +235,7 @@ const ApllicantFormStep1 = (props) => {
                                 <Form.Label><b>Developer</b> <span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
                            
-                            <input   type="text" className="form-control"  pattern="[A-Za-z]*" name="authorizedPerson" minLength={10} maxLength={99}
+                            <input  type="text" className="form-control"  pattern="[A-Za-z]*" name="authorizedPerson" minLength={10} maxLength={99}
 
                                 onChange={(e) => setDeveloper(e.target.value)} 
                               
@@ -263,12 +247,13 @@ const ApllicantFormStep1 = (props) => {
                                          disabled/>
                         </Col>
                         <Col md={4} xxl lg="4">
+                        
                             <div>
                                 <Form.Label><b>Authorized Person Name </b><span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
                           
                
-                            <input   type="text" className="form-control"  pattern="[A-Za-z]*" name="authorizedPerson" minLength={10} maxLength={99}
+                            <input type="text" className="form-control"  pattern="[A-Za-z]*" name="authorizedPerson" minLength={10} maxLength={99}
 
                                 onChange={(e) => setName(e.target.value)} 
                               
@@ -305,13 +290,14 @@ const ApllicantFormStep1 = (props) => {
                             <div>
                                 <Form.Label><b>Authorized Mobile No 2 </b><span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <input  type="tel"  className="form-control" required pattern="[0-9]*" name="authorizedmobile" maxLength={10} placeholder="Authorized Mobile No 2" onChange={(e) => setMobile2(e.target.value)} value={mobile2} />
+                            <input  type="tel"  className="form-control"  name="authorizedmobile" 
+                             onChange={(e) => setMobile2(e.target.value)} value={mobile2} />
                         </Col>
                         <Col md={4} xxl lg="4">
                             <div>
                                 <Form.Label><b>Email ID</b> <span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Control type="text" name="authorizedEmail" maxLength={25} pattern="[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]*"
+                            <Form.Control type="text" name="authorizedEmail" maxLength={25}  pattern="[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]*"
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder={(developerData!==null && developerData!==undefined)?
                                     developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId:"N/A"}
@@ -326,7 +312,7 @@ const ApllicantFormStep1 = (props) => {
                             <div>
                                 <Form.Label><b>PAN No </b><span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Control type="text"  name="authorizedPan" maxLength={10} pattern="[a-z]+[0-9]+[0-9]*"
+                            <Form.Control type="text"  name="authorizedPan"  maxLength={10} pattern="[a-z]+[0-9]+[0-9]*"
                                 onChange={(e) => setPan(e.target.value)} 
                                 placeholder={(developerData!==null && developerData!==undefined)?
                                     developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan:"N/A"}
@@ -350,18 +336,6 @@ const ApllicantFormStep1 = (props) => {
                             {errors.address && <p>Please check the First Name</p>}
                         </Col>
                         <Col md={4} xxl lg="4">
-                    
-                                {/* <Form.Label><b>Village/City </b><span style={{ color: "red" }}>*</span></Form.Label>
-                            </div>
-                            <input type="text" className="form-control"list="data1"/>
-                            <datalist id="data1">
-                                {
-                                    employeeName.map(result=>
-                                        {
-                                            <option>{result.employee_name}</option>
-                                        })
-                                }
-                            </datalist> */}
                             <div>
                                 <Form.Label><b>Village/City </b><span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
@@ -374,7 +348,7 @@ const ApllicantFormStep1 = (props) => {
                             <div>
                                 <Form.Label><b>Pincode</b> <span style={{ color: "red" }}>*</span></Form.Label>
                             </div>
-                            <Form.Control type="text" placeholder="Pincode"pattern="[0-9]*" name="authorizedPinCode" maxLength={6}
+                            <Form.Control type="text" placeholder="Pincode"  pattern="[0-9]*" name="authorizedPinCode" maxLength={6}
                                 onChange={(e) => setPincode(e.target.value)} value={pincode} onChange1={handlePinChange} />
                             {errors.pincode && <p>Please check the First Name</p>}
                         </Col>
@@ -475,14 +449,14 @@ const ApllicantFormStep1 = (props) => {
                 </Form.Group>
                 <div class="row">
     <div class="col-sm-12 text-right">
-        <button id="btnSearch" class="btn btn-primary btn-md center-block"   onClick={ApplicantFormSubmitHandlerForm} >Continue</button>
+        <button id="btnSearch" class="btn btn-primary btn-md center-block"  >Continue</button>
         </div>
         {/* <div class="col-sm-12 text-left"> 
          <button id="btnClear" class="btn btn-danger btn-md center-block"  >button</button>
      </div> */}
 </div>
             </Card>
-        </Form>
+        </form>
        
     )
 }
