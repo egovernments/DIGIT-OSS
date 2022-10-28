@@ -6,118 +6,109 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import Popup from "reactjs-popup";
-import CalculateIcon from '@mui/icons-material/Calculate';
-import InfoIcon from '@mui/icons-material/Info';
-import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import {
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-} from "reactstrap";
-import axios from 'axios';
+import CalculateIcon from "@mui/icons-material/Calculate";
+import InfoIcon from "@mui/icons-material/Info";
+import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import axios from "axios";
 
-import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect"
+import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 const optionsPurposeList = [
-    {
-        label: "plotted Commercial",
-        value: "P",
-        id: "1"
-
-    },
-    {
-        label: "Group Housing Commercial",
-        value: "G",
-        id: "2"
-    },
-    {
-        label: "AGH",
-        value: "03",
-        id: "3"
-    },
-    {
-        label: "Commercial Integrated",
-        value: "04",
-        id: "3"
-    },
-    {
-        label: "Commercial Plotted",
-        value: "C",
-        id: "3"
-    },
-    {
-        label: "Industrial Colony Commercial",
-        value: "06",
-        id: "3"
-    },
-    {
-        label: "IT Colony Commercial",
-        value: "I",
-        id: "3"
-    },
-    {
-        label: "DDJAY",
-        value: "D",
-        id: "3"
-    },
-    {
-        label: "NILP",
-        value: "N",
-        id: "3"
-    },
-    {
-        label: "Low Density Ecofriendly",
-        value: "10",
-        id: "3"
-    },
-    {
-        label: "TOD Commercial",
-        value: "TC",
-        id: "3"
-    },
-    {
-        label: "TOD Group housing",
-        value: "TG",
-        id: "3"
-    },
-
-]
+  {
+    label: "plotted Commercial",
+    value: "P",
+    id: "1",
+  },
+  {
+    label: "Group Housing Commercial",
+    value: "G",
+    id: "2",
+  },
+  {
+    label: "AGH",
+    value: "03",
+    id: "3",
+  },
+  {
+    label: "Commercial Integrated",
+    value: "04",
+    id: "3",
+  },
+  {
+    label: "Commercial Plotted",
+    value: "C",
+    id: "3",
+  },
+  {
+    label: "Industrial Colony Commercial",
+    value: "06",
+    id: "3",
+  },
+  {
+    label: "IT Colony Commercial",
+    value: "I",
+    id: "3",
+  },
+  {
+    label: "DDJAY",
+    value: "D",
+    id: "3",
+  },
+  {
+    label: "NILP",
+    value: "N",
+    id: "3",
+  },
+  {
+    label: "Low Density Ecofriendly",
+    value: "10",
+    id: "3",
+  },
+  {
+    label: "TOD Commercial",
+    value: "TC",
+    id: "3",
+  },
+  {
+    label: "TOD Group housing",
+    value: "TG",
+    id: "3",
+  },
+];
 const optionsPotentialList = [
-    {
-        label: "Hyper",
-        value: "Hyper",
-        id: "1"
-
-    },
-    {
-        label: "High I",
-        value: "High I",
-        id: "2"
-    },
-    {
-        label: "High II",
-        value: "High II",
-        id: "3"
-    },
-    {
-        label: "Medium",
-        value: "Medium",
-        id: "3"
-    },
-    {
-        label: "Low I",
-        value: "Low I",
-        id: "3"
-    },
-    {
-        label: "Low II",
-        value: "Low II",
-        id: "3"
-    }
-
-]
+  {
+    label: "Hyper",
+    value: "Hyper",
+    id: "1",
+  },
+  {
+    label: "High I",
+    value: "High I",
+    id: "2",
+  },
+  {
+    label: "High II",
+    value: "High II",
+    id: "3",
+  },
+  {
+    label: "Medium",
+    value: "Medium",
+    id: "3",
+  },
+  {
+    label: "Low I",
+    value: "Low I",
+    id: "3",
+  },
+  {
+    label: "Low II",
+    value: "Low II",
+    id: "3",
+  },
+];
 
 const ApllicantPuropseForm = (props) => {
 
@@ -257,311 +248,323 @@ const ApllicantPuropseForm = (props) => {
             console.log(error.message);
         }
     }
+  };
 
-    console.log("state data", districtData)
-    const getTehslidata = async () => {
-        if (district2 !== "") {
-            const datatopost = {
-                "RequestInfo": {
-                    "apiId": "Rainmaker",
-                    "ver": "v1",
-                    "ts": 0,
-                    "action": "_search",
-                    "did": "",
-                    "key": "",
-                    "msgId": "090909",
-                    "requesterId": "",
-                    "authToken": ""
-                }
+  const DistrictApiCall = async () => {
+    try {
+      const postDistrict = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: "",
+        },
+      };
+      // const Resp = await axios.post(URL_MDMS+"/egov-mdms-service/v1/_search",
+      console.log("SS", process.env.REACT_APP_PROXY_MDMS);
+      const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_district", postDistrict).then((Resp) => {
+        console.log("DISTRICTLIST", Resp);
+        return Resp;
+      });
+      setDistrictData(Resp.data);
+      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
+        Resp.data.map((el, i) => {
+          setDistrictDataLabels((prev) => [...prev, { label: el.districtName, id: el.districtCode, value: el.districtCode }]);
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
-            }
+  console.log("state data", districtData);
+  const getTehslidata = async () => {
+    if (district2 !== "") {
+      const datatopost = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: "",
+        },
+      };
 
-            try {
-                const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_tehsil?dCode=" + district2, datatopost, {
-
-                }).then((response) => {
-                    return response
-                });
-                setTehsilData(Resp.data)
-                if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-                    Resp.data.map((el, i) => {
-                        setTehsilDataLabels((prev) => [...prev, { "label": el.name, "id": el.code, "value": el.code }])
-
-                    })
-                }
-            } catch (error) {
-                console.log(error.message);
-            }
+      try {
+        const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_tehsil?dCode=" + district2, datatopost, {}).then((response) => {
+          return response;
+        });
+        setTehsilData(Resp.data);
+        if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
+          Resp.data.map((el, i) => {
+            setTehsilDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.code }]);
+          });
         }
+      } catch (error) {
+        console.log(error.message);
+      }
     }
-    const getRevenuStateData = async () => {
-        if (tehsil !== "") {
-            const datatopost = {
-                "RequestInfo": {
-                    "apiId": "Rainmaker",
-                    "ver": "v1",
-                    "ts": 0,
-                    "action": "_search",
-                    "did": "",
-                    "key": "",
-                    "msgId": "090909",
-                    "requesterId": "",
-                    "authToken": ""
-                }
+  };
+  const getRevenuStateData = async () => {
+    if (tehsil !== "") {
+      const datatopost = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: "",
+        },
+      };
 
-            }
+      try {
+        const Resp = await axios
+          .post("http://10.1.1.18:8094/egov-mdms-service/v1/_village?" + "dCode=" + district2 + "&" + "tCode=" + tehsil.data, datatopost, {})
+          .then((response) => {
+            return response;
+          });
+        setRevenuStateData(Resp.data);
 
-            try {
-                const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_village?" + "dCode=" + district2 + "&" + "tCode=" + tehsil.data, datatopost, {
-
-                }).then((response) => {
-                    return response
-                });
-                setRevenuStateData(Resp.data)
-
-                if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-                    Resp.data.map((el, i) => {
-                        setRevenueDataLabels((prev) => [...prev, { "label": el.name, "id": el.khewats, "value": el.code, "khewats": el.khewats }])
-
-
-                    })
-
-                }
-            } catch (error) {
-                console.log(error.message);
-            }
+        if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
+          Resp.data.map((el, i) => {
+            setRevenueDataLabels((prev) => [...prev, { label: el.name, id: el.khewats, value: el.code, khewats: el.khewats }]);
+          });
         }
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    const getMustilData = async () => {
-        if (revenueName !== "") {
-            const datatopost = {
-                "RequestInfo": {
-                    "apiId": "Rainmaker",
-                    "ver": "v1",
-                    "ts": 0,
-                    "action": "_search",
-                    "did": "",
-                    "key": "",
-                    "msgId": "090909",
-                    "requesterId": "",
-                    "authToken": ""
-                }
+  const getMustilData = async () => {
+    if (revenueName !== "") {
+      const datatopost = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: "",
+        },
+      };
 
-            }
-
-            try {
-                const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_must?" + "dCode=" + district2 + "&" + "tCode=" + tehsil.data + "&NVCode=" + revenueName.data, datatopost, {
-
-                }).then((response) => {
-                    console.log("DD", response.data.must)
-                    return response
-                });
-                setMustilData(Resp.data.must);
-                if (Resp.data.must.length > 0 && Resp.data.must !== undefined && Resp.data.must !== null) {
-                    Resp.data.must.map((el, i) => {
-                        setMustilDataLabels((prev) => [...prev, { "label": el, "id": i, "value": el }])
-                    })
-
-                }
-            } catch (error) {
-                console.log(error.message);
-            }
+      try {
+        const Resp = await axios
+          .post(
+            "http://10.1.1.18:8094/egov-mdms-service/v1/_must?" + "dCode=" + district2 + "&" + "tCode=" + tehsil.data + "&NVCode=" + revenueName.data,
+            datatopost,
+            {}
+          )
+          .then((response) => {
+            console.log("DD", response.data.must);
+            return response;
+          });
+        setMustilData(Resp.data.must);
+        if (Resp.data.must.length > 0 && Resp.data.must !== undefined && Resp.data.must !== null) {
+          Resp.data.must.map((el, i) => {
+            setMustilDataLabels((prev) => [...prev, { label: el, id: i, value: el }]);
+          });
         }
+      } catch (error) {
+        console.log(error.message);
+      }
     }
+  };
 
-    const getLandOwnerStateData = async () => {
+  const getLandOwnerStateData = async () => {
+    const datatopost = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: "",
+      },
+    };
 
-        const datatopost = {
-            "RequestInfo": {
-                "apiId": "Rainmaker",
-                "ver": "v1",
-                "ts": 0,
-                "action": "_search",
-                "did": "",
-                "key": "",
-                "msgId": "090909",
-                "requesterId": "",
-                "authToken": ""
-            }
+    try {
+      if (revenueName.khewat !== undefined) {
+        const Resp = await axios
+          .post(
+            "http://10.1.1.18:8094/egov-mdms-service/v1/_owner?" +
+              "dCode=" +
+              district2 +
+              "&" +
+              "tCode=" +
+              tehsil.data +
+              "&NVCode=" +
+              revenueName.data +
+              "&khewat=" +
+              revenueName.khewat,
+            datatopost,
+            {}
+          )
+          .then((response) => {
+            return response;
+          });
+        setKhewatData(Resp.data);
 
+        if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
+          Resp.data.map((el, i) => {
+            setKhewatDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.khewats }]);
+          });
         }
-
-        try {
-            if (revenueName.khewat !== undefined) {
-
-
-                const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_owner?" + "dCode=" + district2 + "&" + "tCode=" + tehsil.data + "&NVCode=" + revenueName.data + "&khewat=" + revenueName.khewat, datatopost, {
-
-                }).then((response) => {
-
-                    return response
-                });
-                setKhewatData(Resp.data)
-
-                if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-                    Resp.data.map((el, i) => {
-                        setKhewatDataLabels((prev) => [...prev, { "label": el.name, "id": el.code, "value": el.khewats }])
-                    })
-
-                }
-            }
-        } catch (error) {
-            console.log(error.message);
-        }
-
+      }
+    } catch (error) {
+      console.log(error.message);
     }
-    useEffect(() => {
-        DistrictApiCall();
-    }, []);
-    useEffect(() => {
-        getTehslidata();
-    }, [district2])
+  };
+  useEffect(() => {
+    DistrictApiCall();
+  }, []);
+  useEffect(() => {
+    getTehslidata();
+  }, [district2]);
 
-    useEffect(() => {
-        getRevenuStateData();
-    }, [district2, tehsil])
+  useEffect(() => {
+    getRevenuStateData();
+  }, [district2, tehsil]);
 
-    useEffect(() => {
-        getMustilData();
-    }, [district2, tehsil, revenueName, khewat])
+  useEffect(() => {
+    getMustilData();
+  }, [district2, tehsil, revenueName, khewat]);
 
-    useEffect(() => {
-        getLandOwnerStateData();
-    }, [district2, tehsil, revenueName.khewat])
+  useEffect(() => {
+    getLandOwnerStateData();
+  }, [district2, tehsil, revenueName.khewat]);
 
+  const handleChange = (e) => {
+    this.setState({ isRadioSelected: true });
+  };
+  const [displayDdjayForm, setDisplayDdjayForm] = useState({ display: "none" });
+  const [displayResidential, setDisplayResidential] = useState({ display: "none" });
 
+  const setSelectPurposeDd = (e) => {
+    const purposeSelected = e.target.value;
+    console.log("purpose", purposeSelected);
+    localStorage.setItem("purpose", purposeSelected);
+  };
+  const setSelectDevPlan = (e) => {
+    const potentialSelected = e.target.value;
+    console.log("potential", potentialSelected);
+    localStorage.setItem("potential", potentialSelected);
+  };
 
-    const handleChange = (e) => {
-        this.setState({ isRadioSelected: true });
+  const setSelect = (e) => {
+    const purposeSelected = e.target.value;
+    console.log("purpose", purposeSelected);
+    localStorage.setItem("purpose", purposeSelected);
+  };
+  const PurposeFormSubmitHandler = (e) => {
+    e.preventDefault();
+    SetPurposeformSubmitted(true);
+    props.Step2Continue({ data: true });
+  };
+  let forms = {
+    purposeDd: purposeDd,
+    potentialDev: potentialDev,
+    district2: district2,
+    revenueName: revenueName,
+    khewat: khewat,
+    mustil: mustil,
+    killa: killa,
+    sector: sector,
+    kanal: kanal,
+    marla: marla,
+    village2: village2,
+    khasra: khasra,
+    khatoni: khatoni,
+    step2Data1: {
+      Rectangle: Rectangle,
+      kanalBigha: kanalBigha,
+      marlaBiswa: marlaBiswa,
+      sarsai: sarsai,
+      colkhasra: colKhasra,
+      developerLlp: developerLlp,
+      registeringdate: registeringdate,
+      validitydate: validitydate,
+      colirrevocialble: colirrevocialble,
+      authSignature: authSignature,
+      nameAuthSign: nameAuthSign,
+      registeringAuthority: registeringAuthority,
+    },
+  };
+  localStorage.setItem("step2", JSON.stringify(forms));
 
+  const handleChangePurpose = (data) => {
+    const purposeSelected = data.data;
+    setSelectPurpose(purposeSelected);
+    console.log("purpose", purposeSelected);
+    localStorage.setItem("purpose", JSON.stringify(purposeSelected));
+  };
+  const handleChangePotential = (data) => {
+    const potentialSelected = data.data;
+    setPotentialDev(potentialSelected);
+    console.log("potential", potentialSelected);
+    localStorage.setItem("potential", JSON.stringify(potentialSelected));
+  };
+  console.log("data", tehsil);
+  console.log("Khewat", revenueName);
+
+  const getDocumentData = async () => {
+    if (file === null) {
+      return;
     }
-    const [displayDdjayForm, setDisplayDdjayForm] = useState(
-        { display: "none" }
-    )
-    const [displayResidential, setDisplayResidential] = useState(
-        { display: "none" }
-    )
+    const formData = new FormData();
+    formData.append("file", file.file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
 
-    const setSelectPurposeDd = (e) => {
-        const purposeSelected = e.target.value;
-        console.log("purpose", purposeSelected)
-        localStorage.setItem("purpose", purposeSelected)
+    console.log("File", formData);
+
+    try {
+      const Resp = await axios
+        .post("http://10.1.1.18:8083/filestore/v1/files", formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          return response;
+        });
+      setDocuploadData(Resp.data);
+    } catch (error) {
+      console.log(error.message);
     }
-    const setSelectDevPlan = (e) => {
-        const potentialSelected = e.target.value;
-        console.log("potential", potentialSelected)
-        localStorage.setItem("potential", potentialSelected)
-    }
+  };
+  useEffect(() => {
+    getDocumentData();
+  }, [file]);
 
-    const setSelect = (e) => {
-        const purposeSelected = e.target.value;
-        console.log("purpose", purposeSelected)
-        localStorage.setItem("purpose", purposeSelected)
-    }
-    const PurposeFormSubmitHandler = (e) => {
-        e.preventDefault();
-        SetPurposeformSubmitted(true);
-        props.Step2Continue({ "data": true })
-    }
-    let forms = {
-        purposeDd: purposeDd,
-        potentialDev: potentialDev,
-        district2: district2,
-        revenueName: revenueName,
-        khewat: khewat,
-        mustil: mustil,
-        killa: killa,
-        sector: sector,
-        kanal: kanal,
-        marla: marla,
-        village2: village2,
-        khasra: khasra,
-        khatoni: khatoni,
-        "step2Data1":
-        {
-            Rectangle: Rectangle,
-            kanalBigha: kanalBigha,
-            marlaBiswa: marlaBiswa,
-            sarsai: sarsai,
-            colkhasra: colKhasra,
-            developerLlp: developerLlp,
-            registeringdate: registeringdate,
-            validitydate: validitydate,
-            colirrevocialble: colirrevocialble,
-            authSignature: authSignature,
-            nameAuthSign: nameAuthSign,
-            registeringAuthority: registeringAuthority
-        }
-
-
-
-    }
-    localStorage.setItem('step2', JSON.stringify(forms))
-
-
-    const handleChangePurpose = (data) => {
-        const purposeSelected = data.data;
-        setSelectPurpose(purposeSelected)
-        console.log("purpose", purposeSelected)
-        localStorage.setItem("purpose", JSON.stringify(purposeSelected))
-
-    }
-    const handleChangePotential = (data) => {
-        const potentialSelected = data.data;
-        setPotentialDev(potentialSelected)
-        console.log("potential", potentialSelected)
-        localStorage.setItem("potential", JSON.stringify(potentialSelected))
-
-    }
-    console.log("data", tehsil)
-    console.log("Khewat", revenueName)
-
-    const getDocumentData = async () => {
-        if (file === null) {
-            return
-        }
-        const formData = new FormData();
-        formData.append(
-            "file", file.file);
-        formData.append(
-            "tenantId", "hr");
-        formData.append(
-            "module", "property-upload");
-        formData.append(
-            "tag", "tag-property");
-
-        console.log("File", formData)
-
-        try {
-            const Resp = await axios.post("http://10.1.1.18:8083/filestore/v1/files", formData,
-                {
-                    headers: {
-                        "content-type": "multipart/form-data"
-                    }
-                }).then((response) => {
-                    return response
-                });
-            setDocuploadData(Resp.data)
-
-        } catch (error) {
-            console.log(error.message);
-        }
-
-    }
-    useEffect(() => {
-        getDocumentData();
-    }, [file]);
-
-    const handleEdit = (index) => {
-        console.log("edit", index)
-        setEditValues(modalValuesArray[index])
-        if (displayEditModal === "block") {
-            setDisplayEditModal("none")
-        }
-        else {
-            setDisplayEditModal("block")
-        }
+  const handleEdit = (index) => {
+    console.log("edit", index);
+    setEditValues(modalValuesArray[index]);
+    if (displayEditModal === "block") {
+      setDisplayEditModal("none");
+    } else {
+      setDisplayEditModal("block");
     }
 
     return (

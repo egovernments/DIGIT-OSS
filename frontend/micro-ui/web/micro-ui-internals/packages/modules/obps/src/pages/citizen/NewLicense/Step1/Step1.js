@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
-import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
-
 
 const ApllicantFormStep1 = (props) => {
   const {
@@ -18,17 +16,13 @@ const ApllicantFormStep1 = (props) => {
   } = useForm({
     mode: "onSubmit",
     reValidateMode: "onBlur",
-    resolver: yupResolver(VALIDATION_SCHEMA),
+    // resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
-  const [formErrors, setFormErrors] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
   const [developerData, setDeveloperData] = useState([]);
-  const aurthorizedUserData = JSON.parse(localStorage.getItem("data_user"));
-
-  const ApplicantFormSubmitHandlerForm = async (e) => {
-    props.Step1Continue({"data": true});
-    
+  const ApplicantFormSubmitHandlerForm = async (data) => {
+    console.log("data===", data);
+    props.Step1Continue(data);
   };
 
   const getDeveloperData = async () => {
@@ -75,10 +69,11 @@ const ApllicantFormStep1 = (props) => {
   }, [getDeveloperData()]);
 
   useEffect(() => {
-    if (aurthorizedUserData !== undefined && aurthorizedUserData !== null) {
-      console.log("authorized user data", aurthorizedUserData.aurthorizedUserInfoArray[0].name);
+    if (developerData !== undefined && developerData !== null) {
+      console.log("authorized user data", developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName);
     }
-  }, [aurthorizedUserData]);
+  }, [developerData]);
+  console.log("data", developerData);
 
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
@@ -91,10 +86,10 @@ const ApllicantFormStep1 = (props) => {
                   <b>Developer</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control"  placeholder="N/A"
-              disabled
-                   {...register("authorizedDeveloper")}/>
-                      <h3 className="error-message"style={{color:"red"}}>{errors?.authorizedDeveloper && errors?.authorizedDeveloper?.message}</h3>
+              <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedDeveloper")} />
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.authorizedDeveloper && errors?.authorizedDeveloper?.message}
+              </h3>
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -105,7 +100,9 @@ const ApllicantFormStep1 = (props) => {
               </div>
 
               <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedPerson")} />
-              <h3 className="error-message">{errors?.authorizedPerson && errors?.authorizedPerson?.message}</h3>
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.authorizedPerson && errors?.authorizedPerson?.message}
+              </h3>
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -114,7 +111,9 @@ const ApllicantFormStep1 = (props) => {
                 </Form.Label>
               </div>
               <Form.Control type="text" className="form-control" placeholder="N/A" {...register("authorizedmobile")} disabled />
-              {errors.mobile && <p>Please check the First Name</p>}
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.authorizedmobile && errors?.authorizedmobile?.message}
+              </h3>
             </Col>
           </Row>
           <br></br>
@@ -122,11 +121,14 @@ const ApllicantFormStep1 = (props) => {
             <Col md={4} xxl lg="4">
               <div>
                 <Form.Label>
-                  <b>Alternate Mobile No  </b>
+                  <b>Alternate Mobile No </b>
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <input type="tel" className="form-control" placeholder="Authorized Mobile No 2" {...register("authorizedmobile")} />
+              <Form.Control type="text" className="form-control" placeholder="N/A" {...register("alternatemobile")} disabled />
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.alternatemobile && errors?.alternatemobile?.message}
+              </h3>
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -135,7 +137,9 @@ const ApllicantFormStep1 = (props) => {
                 </Form.Label>
               </div>
               <Form.Control type="text" placeholder="N/A" {...register("authorizedEmail")} disabled />
-              {errors.email && <p>Please check the First Name</p>}
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.authorizedEmail && errors?.authorizedEmail?.message}
+              </h3>
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -145,7 +149,9 @@ const ApllicantFormStep1 = (props) => {
                 </Form.Label>
               </div>
               <Form.Control type="text" placeholder="N/A" {...register("authorizedPan")} disabled />
-              {errors.pan && <p>Please check the First Name</p>}
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.authorizedPan && errors?.authorizedPan?.message}
+              </h3>
             </Col>
           </Row>
           <br></br>
@@ -156,8 +162,10 @@ const ApllicantFormStep1 = (props) => {
                   <b>Address 1</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" placeholder="Address 1" {...register("authorizedAddress")} />
-              {errors.address && <p>Please check the First Name</p>}
+              <Form.Control type="text" placeholder="N/A" {...register("authorizedAddress")} />
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.authorizedAddress && errors?.authorizedAddress?.message}
+              </h3>
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -166,13 +174,10 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-               <Form.Control
-                type="text"
-                placeholder="N/A"
-                {...register("village")}
-                disabled
-              />
-              <h3 className="error-message" style={{color:"red"}}>{errors?.village && errors?.village?.message}</h3>
+              <Form.Control type="text" placeholder="N/A" {...register("village")} disabled />
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.village && errors?.village?.message}
+              </h3>
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -180,8 +185,10 @@ const ApllicantFormStep1 = (props) => {
                   <b>Pincode</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" placeholder="Pincode" {...register("authorizedPinCode")} />
-              {errors.pincode && <p>Please check the First Name</p>}
+              <Form.Control type="text" placeholder="N/A" {...register("authorizedPinCode")} disabled />
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.authorizedPinCode && errors?.authorizedPinCode?.message}
+              </h3>
             </Col>
           </Row>
           <br></br>
@@ -193,13 +200,10 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                placeholder="N/A"
-                {...register("tehsil")}
-                disabled
-              />
-              <h3 className="error-message" style={{color:"red"}}>{errors?.tehsil && errors?.tehsil?.message}</h3>
+              <Form.Control type="text" placeholder="N/A" {...register("tehsil")} disabled />
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.tehsil && errors?.tehsil?.message}
+              </h3>
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -207,13 +211,10 @@ const ApllicantFormStep1 = (props) => {
                   <b>District</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                placeholder="N/A"
-                {...register("district")}
-                disabled
-              />
-              <h3 className="error-message" style={{color:"red"}}>{errors?.district && errors?.district?.message}</h3>
+              <Form.Control type="text" placeholder="N/A" {...register("district")} disabled />
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.district && errors?.district?.message}
+              </h3>
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -221,13 +222,10 @@ const ApllicantFormStep1 = (props) => {
                   <b>State</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                placeholder="N/A"
-                {...register("state")}
-                disabled
-              />
-              <h3 className="error-message" style={{color:"red"}}>{errors?.state && errors?.state?.message}</h3>
+              <Form.Control type="text" placeholder="N/A" {...register("state")} disabled />
+              <h3 className="error-message" style={{ color: "red" }}>
+                {errors?.state && errors?.state?.message}
+              </h3>
             </Col>
           </Row>
           <br></br>
@@ -239,10 +237,7 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" 
-              placeholder="N/A"
-              {...register("status")}
-              disabled readOnly />
+              <Form.Control type="text" placeholder="N/A" {...register("status")} disabled readOnly />
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -251,10 +246,7 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text"
-              placeholder="N/A"
-              {...register("LC-1")}
-              />
+              <Form.Control type="text" placeholder="N/A" {...register("LC-1")} />
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -262,7 +254,7 @@ const ApllicantFormStep1 = (props) => {
                   <b>Address for communication</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" disabled readOnly />
+              <Form.Control type="text" placeholder="N/A" {...register("address")} />
             </Col>
           </Row>
           <br></br>
@@ -274,11 +266,7 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" 
-              placeholder="N/A"
-              {...register("permanentAddress")}
-              disabled readOnly
-              />
+              <Form.Control type="text" placeholder="N/A" {...register("permanentAddress")} disabled readOnly />
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -287,10 +275,7 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text"
-              placeholder="N/A"
-              {...register("notSigned")}
-              />
+              <Form.Control type="text" placeholder="N/A" {...register("notSigned")} />
             </Col>
             <Col md={4} xxl lg="4" style={{ marginTop: 23 }}>
               <div>
@@ -299,10 +284,7 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" 
-               placeholder="N/A"
-               {...register("email")}
-              disabled readOnly />
+              <Form.Control type="text" placeholder="N/A" {...register("email")} disabled readOnly />
             </Col>
           </Row>
           <br></br>
@@ -315,17 +297,16 @@ const ApllicantFormStep1 = (props) => {
                   <i className="fa fa-info-circle-fill" />
                 </Form.Label>
               </div>
-              <Form.Control type="text"
-               placeholder="N/A"
-               {...register("authorized")}
-              disabled readOnly />
+              <Form.Control type="text" placeholder="N/A" {...register("authorized")} disabled readOnly />
             </div>
           </Row>
         </Form.Group>
         <div class="row">
-    <div class="col-sm-12 text-right">
-        <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block"  >Continue</button>
-        </div>
+          <div class="col-sm-12 text-right">
+            <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+              Continue
+            </button>
+          </div>
         </div>
       </Card>
     </form>
