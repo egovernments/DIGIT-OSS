@@ -16,7 +16,7 @@ const ApllicantFormStep1 = (props) => {
   } = useForm({
     mode: "onSubmit",
     reValidateMode: "onBlur",
-    // resolver: yupResolver(VALIDATION_SCHEMA),
+    resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
   const [developerData, setDeveloperData] = useState([]);
@@ -246,7 +246,8 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" placeholder="N/A" {...register("LC-1")} />
+              <Form.Control type="text" placeholder="N/A" {...register("LC1")} />
+              <h3 className="error-message"style={{color:"red"}}>{errors?.LC1 && errors?.LC1?.message}</h3>
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -276,6 +277,7 @@ const ApllicantFormStep1 = (props) => {
                 </Form.Label>
               </div>
               <Form.Control type="text" placeholder="N/A" {...register("notSigned")} />
+              <h3 className="error-message"style={{color:"red"}}>{errors?.notSigned && errors?.notSigned?.message}</h3>
             </Col>
             <Col md={4} xxl lg="4" style={{ marginTop: 23 }}>
               <div>

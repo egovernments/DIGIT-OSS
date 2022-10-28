@@ -248,41 +248,6 @@ const ApllicantPuropseForm = (props) => {
             console.log(error.message);
         }
     }
-  };
-
-  const DistrictApiCall = async () => {
-    try {
-      const postDistrict = {
-        RequestInfo: {
-          apiId: "Rainmaker",
-          ver: "v1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key: "",
-          msgId: "090909",
-          requesterId: "",
-          authToken: "",
-        },
-      };
-      // const Resp = await axios.post(URL_MDMS+"/egov-mdms-service/v1/_search",
-      console.log("SS", process.env.REACT_APP_PROXY_MDMS);
-      const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_district", postDistrict).then((Resp) => {
-        console.log("DISTRICTLIST", Resp);
-        return Resp;
-      });
-      setDistrictData(Resp.data);
-      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-        Resp.data.map((el, i) => {
-          setDistrictDataLabels((prev) => [...prev, { label: el.districtName, id: el.districtCode, value: el.districtCode }]);
-        });
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  console.log("state data", districtData);
   const getTehslidata = async () => {
     if (district2 !== "") {
       const datatopost = {
@@ -481,36 +446,36 @@ const ApllicantPuropseForm = (props) => {
     SetPurposeformSubmitted(true);
     props.Step2Continue({ data: true });
   };
-  let forms = {
-    purposeDd: purposeDd,
-    potentialDev: potentialDev,
-    district2: district2,
-    revenueName: revenueName,
-    khewat: khewat,
-    mustil: mustil,
-    killa: killa,
-    sector: sector,
-    kanal: kanal,
-    marla: marla,
-    village2: village2,
-    khasra: khasra,
-    khatoni: khatoni,
-    step2Data1: {
-      Rectangle: Rectangle,
-      kanalBigha: kanalBigha,
-      marlaBiswa: marlaBiswa,
-      sarsai: sarsai,
-      colkhasra: colKhasra,
-      developerLlp: developerLlp,
-      registeringdate: registeringdate,
-      validitydate: validitydate,
-      colirrevocialble: colirrevocialble,
-      authSignature: authSignature,
-      nameAuthSign: nameAuthSign,
-      registeringAuthority: registeringAuthority,
-    },
-  };
-  localStorage.setItem("step2", JSON.stringify(forms));
+//   let forms = {
+//     purposeDd: purposeDd,
+//     potentialDev: potentialDev,
+//     district2: district2,
+//     revenueName: revenueName,
+//     khewat: khewat,
+//     mustil: mustil,
+//     killa: killa,
+//     sector: sector,
+//     kanal: kanal,
+//     marla: marla,
+//     village2: village2,
+//     khasra: khasra,
+//     khatoni: khatoni,
+//     step2Data1: {
+//       Rectangle: Rectangle,
+//       kanalBigha: kanalBigha,
+//       marlaBiswa: marlaBiswa,
+//       sarsai: sarsai,
+//       colkhasra: colKhasra,
+//       developerLlp: developerLlp,
+//       registeringdate: registeringdate,
+//       validitydate: validitydate,
+//       colirrevocialble: colirrevocialble,
+//       authSignature: authSignature,
+//       nameAuthSign: nameAuthSign,
+//       registeringAuthority: registeringAuthority,
+//     },
+//   };
+//   localStorage.setItem("step2", JSON.stringify(forms));
 
   const handleChangePurpose = (data) => {
     const purposeSelected = data.data;
@@ -558,14 +523,14 @@ const ApllicantPuropseForm = (props) => {
     getDocumentData();
   }, [file]);
 
-  const handleEdit = (index) => {
-    console.log("edit", index);
-    setEditValues(modalValuesArray[index]);
-    if (displayEditModal === "block") {
-      setDisplayEditModal("none");
-    } else {
-      setDisplayEditModal("block");
-    }
+//   const handleEdit = (index) => {
+//     console.log("edit", index);
+//     setEditValues(modalValuesArray[index]);
+//     if (displayEditModal === "block") {
+//       setDisplayEditModal("none");
+//     } else {
+//       setDisplayEditModal("block");
+//     }
 
     return (
         <form >
@@ -577,8 +542,7 @@ const ApllicantPuropseForm = (props) => {
                         <div>
                             <Form.Label><b>Puropse Of License</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
-                        <input type="text" className="form-control"  placeholder="N/A"
-                         {...register("purposeDd")}/>
+                        <ReactMultiSelect control={control} name="purposeDd" value={purposeDd}  placeholder="N/A" data={optionsPurposeList} labels="Purpose" getSelectedValue={handleChangePurpose}  />
                       <h3 className="error-message"style={{color:"red"}}>{errors?.purposeDd && errors?.purposeDd?.message}</h3>
                        </Col>
                         {/* <Form.Select type="text" defaultValue={purposeDd} placeholder="Puropse"  onChange={handleChangePurpose} value={purposeDd}  ></Form.Select> */}
@@ -592,34 +556,23 @@ const ApllicantPuropseForm = (props) => {
                         <div>
                             <Form.Label><b>Potential Zone:</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
-                        <input type="text" className="form-control"  placeholder="N/A"
-                         {...register("potentialZone")}/>
+                        <ReactMultiSelect control={control} name="potential"  placeholder="N/A" data={optionsPotentialList} labels="Potential" getSelectedValue={handleChangePotential}  />
                       <h3 className="error-message"style={{color:"red"}}>{errors?.potentialZone && errors?.potentialZone?.message}</h3>
                        </Col>
-                        {/* <ReactMultiSelect
-                            listOfData={optionsPotentialList}
-                            labels="Potential"
-                            getSelectedValue={handleChangePotential}
-                        /> */}
+                       
                     <Col md={4} xxl lg="3">
                         <div>
                             <Form.Label><b>District</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
-                        {/* <ReactMultiSelect
-
-                            listOfData={districtDataLbels}
-                            labels="District"
-                            getSelectedValue={(data) => setDistrict2(data.data)}
-
-                        ></ReactMultiSelect> */}
-                     <input type="text" className="form-control"  placeholder="N/A"
-                         {...register("district")} label="districtName" value="censusCode"/>
+                        <ReactMultiSelect control={control} name="district"  placeholder="N/A" data={districtDataLbels} labels="District"  getSelectedValue={(data) => setDistrict2(data.data)}  />
+                        
                       <h3 className="error-message"style={{color:"red"}}>{errors?.district && errors?.district?.message}</h3>
                        </Col>
                     <Col md={4} xxl lg="3">
                         <div>
                             <Form.Label><b>State </b><span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
+                        
                         <input type="text" className="form-control"  placeholder="N/A"
                          {...register("state")} disabled defaultValue="Haryana"/>
                       <h3 className="error-message"style={{color:"red"}}>{errors?.state && errors?.state?.message}</h3>
@@ -652,62 +605,30 @@ const ApllicantPuropseForm = (props) => {
                                         <div>
                                             <Form.Label><h6><b>Tehsil</b></h6></Form.Label>
                                         </div>
-
-{/* 
-                                        <ReactMultiSelect
-
-                                            listOfData={tehsilDataLabels}
-                                            labels="Tehsil"
-                                            getSelectedValue={(data) => setTehsil(data)}
-
-                                        ></ReactMultiSelect> */}
-                                            <input type="text" className="form-control" placeholder="N/A"
-                                                {...register("tehsil")} />
+                                        <ReactMultiSelect control={control} name="tehsil"  placeholder="N/A"
+                                        data={tehsilDataLabels} labels="Tehsil"   getSelectedValue={(data) => setTehsil(data)}  />
                                             <h3 className="error-message" style={{ color: "red" }}>{errors?.tehsil && errors?.tehsil?.message}</h3>
                                         </Col>
                                         <Col md={4} xxl lg="4">
                                             <div>
                                                 <Form.Label><h6><b>Name of Revenue estate</b></h6></Form.Label>
                                             </div>
-                                            {/* <ReactMultiSelect
-
-                                            listOfData={revenueDataLabels}
-                                            labels="Revenue Estate"
-                                            getSelectedValue={(data) => setRevenueName(data)}
-
-                                        ></ReactMultiSelect> */}
-
-                                            <input type="text" className="form-control" placeholder="N/A"
-                                                {...register("RevenueName")} />
+                                            <ReactMultiSelect control={control} name="revenue Estate"  placeholder="N/A"
+                                        data={revenueDataLabels} labels="Revenue Estate"   getSelectedValue={(data) => setRevenueName(data)} />
+                                            
                                             <h3 className="error-message" style={{ color: "red" }}>{errors?.RevenueName && errors?.RevenueName?.message}</h3>
                                         </Col>
                                     <Col md={4} xxl lg="4">
                                         <div>
                                             <Form.Label><h6><b>Rectangle No./Mustil</b></h6></Form.Label>
                                         </div>
-                                        {/* <ReactMultiSelect
-
-                                            listOfData={mustilDataLabels}
-                                            labels="Rectangle No."
-                                            getSelectedValue={(data) => setMustil(data.data)}
-
-                                        ></ReactMultiSelect> */}
-                                    
-                                    <input type="text" className="form-control" placeholder="N/A"
-                                                {...register("mustil")} />
+                                        <ReactMultiSelect control={control} name="mustil"  placeholder="N/A"
+                                        data={mustilDataLabels} labels="Rectangle No."  getSelectedValue={(data) => setMustil(data.data)} />
                                             <h3 className="error-message" style={{ color: "red" }}>{errors?.mustil && errors?.mustil?.message}</h3>
                                         </Col>
 
                                 </Row><br></br>
                                 <Row className="ml-auto mb-3" >
-                                    {/* <Col md={4} xxl lg="4">
-                            <div>
-                                <label ><h6><b>Sector</b></h6> </label>
-                                <input type="text"  placeholder="" className="form-control"
-                                onChange={(e)=>setModalSector(e.target.value)}/>
-                            </div>
-                        </Col> */}
-
                                     <Col md={4} xxl lg="12">
                                         <div>
                                             <label ><h6><b>Consolidation Type</b></h6> </label> &nbsp;&nbsp;
@@ -975,5 +896,6 @@ const ApllicantPuropseForm = (props) => {
     </form>
     )
 }
+    
 
 export default ApllicantPuropseForm;
