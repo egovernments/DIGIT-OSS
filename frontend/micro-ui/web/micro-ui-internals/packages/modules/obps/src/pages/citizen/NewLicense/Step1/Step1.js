@@ -114,6 +114,7 @@ const ApllicantFormStep1 = (props) => {
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
   } = useForm({
     mode: "onSubmit",
     reValidateMode: "onBlur",
@@ -189,6 +190,10 @@ const ApllicantFormStep1 = (props) => {
   }, [FormSubmitted]);
 
   useEffect(() => {
+    setValue("authorizedPerson", "testing");
+  }, []);
+
+  useEffect(() => {
     if (aurthorizedUserData !== undefined && aurthorizedUserData !== null) {
       console.log("authorized user data", aurthorizedUserData.aurthorizedUserInfoArray[0].name);
     }
@@ -215,26 +220,8 @@ const ApllicantFormStep1 = (props) => {
                 </Form.Label>
               </div>
 
-              <input
-                type="text"
-                className="form-control"
-                // pattern="[A-Za-z]*"
-                name="authorizedPerson"
-                // minLength={10}
-                // maxLength={99}
-                // onChange={(e) => setName(e.target.value)}
-                placeholder={
-                  aurthorizedUserData !== null && aurthorizedUserData !== undefined ? aurthorizedUserData.aurthorizedUserInfoArray[0].name : "N/A"
-                }
-                // onChange1={handleNameChange}
-                // value={
-                //   aurthorizedUserData !== null && aurthorizedUserData !== undefined ? aurthorizedUserData.aurthorizedUserInfoArray[0].name : "N/A"
-                // }
-                disabled
-                {...register("authorizedPerson")}
-              />
+              <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedPerson")} />
               <h3 className="error-message">{errors?.authorizedPerson && errors?.authorizedPerson?.message}</h3>
-              {/* {errors.name && <p>Please check the First Name</p>} */}
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -242,23 +229,7 @@ const ApllicantFormStep1 = (props) => {
                   <b>Authorized Mobile No1</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                className="form-control"
-                // pattern="[0-9]*"
-                name="authorizedmobile"
-                // maxLength={10}
-                // onChange={(e) => setMobile(e.target.value)}
-                placeholder={
-                  aurthorizedUserData !== null && aurthorizedUserData !== undefined ? aurthorizedUserData.aurthorizedUserInfoArray[0].mobile : "N/A"
-                }
-                // onChange1={handleMobileChange}
-                // value={
-                //   aurthorizedUserData !== null && aurthorizedUserData !== undefined ? aurthorizedUserData.aurthorizedUserInfoArray[0].mobile : "N/A"
-                // }
-                {...register("authorizedmobile")}
-                disabled
-              />
+              <Form.Control type="text" className="form-control" placeholder="N/A" {...register("authorizedmobile")} disabled />
               {errors.mobile && <p>Please check the First Name</p>}
             </Col>
           </Row>
@@ -271,17 +242,7 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <input
-                type="tel"
-                className="form-control"
-                // pattern="[0-9]*"
-                name="authorizedmobile"
-                // maxLength={10}
-                placeholder="Authorized Mobile No 2"
-                // onChange={(e) => setMobile2(e.target.value)}
-                // value={mobile2}
-                {...register("authorizedmobile")}
-              />
+              <input type="tel" className="form-control" placeholder="Authorized Mobile No 2" {...register("authorizedmobile")} />
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -289,22 +250,7 @@ const ApllicantFormStep1 = (props) => {
                   <b>Email ID</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                name="authorizedEmail"
-                // maxLength={25}
-                // pattern="[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]*"
-                // onChange={(e) => setEmail(e.target.value)}
-                placeholder={
-                  aurthorizedUserData !== null && aurthorizedUserData !== undefined ? aurthorizedUserData.aurthorizedUserInfoArray[0].email : "N/A"
-                }
-                // onChange1={handleEmailChange}
-                // value={
-                //   aurthorizedUserData !== null && aurthorizedUserData !== undefined ? aurthorizedUserData.aurthorizedUserInfoArray[0].email : "N/A"
-                // }
-                {...register("authorizedEmail")}
-                disabled
-              />
+              <Form.Control type="text" placeholder="N/A" {...register("authorizedEmail")} disabled />
               {errors.email && <p>Please check the First Name</p>}
             </Col>
             <Col md={4} xxl lg="4">
@@ -314,22 +260,7 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                name="authorizedPan"
-                // maxLength={10}
-                // pattern="[a-z]+[0-9]+[0-9]*"
-                // onChange={(e) => setPan(e.target.value)}
-                // onChange1={handlePanChange}
-                // value={
-                //   aurthorizedUserData !== null && aurthorizedUserData !== undefined ? aurthorizedUserData.aurthorizedUserInfoArray[0].pan : "N/A"
-                // }
-                placeholder={
-                  aurthorizedUserData !== null && aurthorizedUserData !== undefined ? aurthorizedUserData.aurthorizedUserInfoArray[0].pan : "N/A"
-                }
-                {...register("authorizedPan")}
-                disabled
-              />
+              <Form.Control type="text" placeholder="N/A" {...register("authorizedPan")} disabled />
               {errors.pan && <p>Please check the First Name</p>}
             </Col>
           </Row>
@@ -341,32 +272,10 @@ const ApllicantFormStep1 = (props) => {
                   <b>Address 1</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                placeholder="Address 1"
-                name="authorizedAddress"
-                {...register("authorizedAddress")}
-                // minLength={4}
-                // maxLength={30}
-                // pattern="[A-Za-z]+[0-9]*"
-                // onChange={(e) => setAddress(e.target.value)}
-                // value={address}
-                // onChange1={handleAddressChange}
-              />
+              <Form.Control type="text" placeholder="Address 1" {...register("authorizedAddress")} />
               {errors.address && <p>Please check the First Name</p>}
             </Col>
             <Col md={4} xxl lg="4">
-              {/* <Form.Label><b>Village/City </b><span style={{ color: "red" }}>*</span></Form.Label>
-                            </div>
-                            <input type="text" className="form-control"list="data1"/>
-                            <datalist id="data1">
-                                {
-                                    employeeName.map(result=>
-                                        {
-                                            <option>{result.employee_name}</option>
-                                        })
-                                }
-                            </datalist> */}
               <div>
                 <Form.Label>
                   <b>Village/City </b>
@@ -381,17 +290,7 @@ const ApllicantFormStep1 = (props) => {
                   <b>Pincode</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                placeholder="Pincode"
-                // pattern="[0-9]*"
-                name="authorizedPinCode"
-                {...register("authorizedPinCode")}
-                // maxLength={6}
-                // onChange={(e) => setPincode(e.target.value)}
-                // value={pincode}
-                // onChange1={handlePinChange}
-              />
+              <Form.Control type="text" placeholder="Pincode" {...register("authorizedPinCode")} />
               {errors.pincode && <p>Please check the First Name</p>}
             </Col>
           </Row>
