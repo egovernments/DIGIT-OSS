@@ -11,6 +11,7 @@ import LocationSelection from "./Home/LocationSelection";
 import Login from "./Login";
 import UserProfile from "./Home/UserProfile";
 import ServicePlan from "./ServicePlan";
+import ScrutinyServicePlan from "./ScrutinyServicePlan";
 import ElectricalPlan from "./ElecticalPlan";
 
 const getTenants = (codes, tenants) => {
@@ -103,6 +104,10 @@ const Home = ({
 
           <Route path={`${path}/service-plan`}>
             <ServicePlan />
+          </Route>
+
+          <Route path={`${path}/scrutiny-service-plan`}>
+            <ScrutinyServicePlan />
           </Route>
 
           <Route path={`${path}/electrical-plan`}>

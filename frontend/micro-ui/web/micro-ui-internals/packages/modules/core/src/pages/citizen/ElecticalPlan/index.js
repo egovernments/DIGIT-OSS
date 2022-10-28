@@ -23,7 +23,7 @@ const ElectricalPlan = () => {
       <div>
         <form onSubmit={handleSubmit}>
           <span className="surveyformfield">
-            <label>LOC Number</label>
+            <label>LOI Number</label>
             <TextInput name="LOINumber" onChange={(e) => setLOCNumber(e.target.value)} type="text" value={LOCNumber} />
           </span>
           <div>
@@ -179,7 +179,7 @@ const ElectricalPlan = () => {
                           onChange={(e) => {
                             setData(
                               getData?.map((tag, indi) => {
-                                if (indi === index) return { ...tag, image: e.target.files[0] };
+                                return indi === index ? { ...tag, image: e.target.files[0] } : { ...tag };
                               })
                             );
                           }}

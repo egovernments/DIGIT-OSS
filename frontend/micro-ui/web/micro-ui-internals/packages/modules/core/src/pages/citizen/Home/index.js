@@ -66,6 +66,13 @@ const Home = () => {
         // onClick: () => history.push("/digit-ui/citizen/tl-home"),
       },
       {
+        // name: t("MODULE_TL"),
+        name: "Application for the scrutiny  Service Plan",
+        Icon: <CaseIcon className="fill-path-primary-main" />,
+        onClick: () => history.push("/digit-ui/citizen/scrutiny-service-plan"),
+        // onClick: () => history.push("/digit-ui/citizen/tl-home"),
+      },
+      {
         name: "New License Services",
         Icon: <CaseIcon className="fill-path-primary-main" />,
         onClick: () => history.push("/digit-ui/citizen/obps/tab"),
