@@ -107,7 +107,7 @@ const ApllicantFormStep1 = (props) => {
     handleSubmit,
     formState: { errors },
     control,
-    setValue
+    setValue,
   } = useForm({
     mode: "onSubmit",
     reValidateMode: "onBlur",
@@ -182,56 +182,15 @@ const ApllicantFormStep1 = (props) => {
     }
   }, [FormSubmitted]);
 
-    const getDeveloperData = async () => {
+  useEffect(() => {
+    setValue("authorizedPerson", "testing");
+  }, []);
 
-        try {
-            const Resp = await axios.get("http://10.1.1.18:8086/user/developer/_getAuthorizedUser?mobileNumber=1111111111").then((response) => {
-                return response
-            });
-            setDeveloperData(Resp.data)
-
-        } catch (error) {
-            console.log(error.message);
-        }
-
+  useEffect(() => {
+    if (aurthorizedUserData !== undefined && aurthorizedUserData !== null) {
+      console.log("authorized user data", aurthorizedUserData.aurthorizedUserInfoArray[0].name);
     }
-    useEffect(() => {
-        setValue("authorizedDeveloper",(developerData!==null && developerData!==undefined)?
-        developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName:"N/A"),
-        setValue("authorizedPerson", (developerData!==null && developerData!==undefined)?
-        developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName:"N/A"),
-        setValue("authorizedmobile",(developerData!==null && developerData!==undefined)?
-        developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber:"N/A"),
-        setValue("authorizedEmail",(developerData!==null && developerData!==undefined)?
-        developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId:"N/A"),
-        setValue("authorizedPan",(developerData!==null && developerData!==undefined)?
-        developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan:"N/A")
-    }, [getDeveloperData()]);
-
-
-    // const getUserDevData = async () => {
-
-    //     try {
-    //         const Resp = await axios.post("http://10.1.1.18:8086/user/developer/_getAuthorizedUser?mobileNumber=1111111111").then((response) => {
-    //             return response
-    //         });
-    //         setDeveloperData(Resp.data)
-
-    //     } catch (error) {
-    //         console.log(error.message);
-    //     }
-
-    // }
-    // useEffect(() => {
-    //     getUserDevData();
-    // }, []);
-
-    useEffect(() => {
-        if (developerData !== undefined && developerData !== null) {
-            console.log("authorized user data", developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName)
-        }
-    }, [developerData]);
-    console.log("data", developerData)
+  }, [aurthorizedUserData]);
 
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
@@ -256,13 +215,8 @@ const ApllicantFormStep1 = (props) => {
                 </Form.Label>
               </div>
 
-              <input
-                type="text"
-                className="form-control"
-                name="authorizedPerson"
-                placeholder="N/A" disabled {...register("authorizedPerson")} 
-              />
-              <h3 className="error-message"style={{color:"red"}}>{errors?.authorizedPerson && errors?.authorizedPerson?.message}</h3>
+              <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedPerson")} />
+              <h3 className="error-message">{errors?.authorizedPerson && errors?.authorizedPerson?.message}</h3>
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -270,15 +224,8 @@ const ApllicantFormStep1 = (props) => {
                   <b>Authorized Mobile No</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                className="form-control"
-                name="authorizedmobile"
-                placeholder="N/A"
-                {...register("authorizedmobile")}
-                disabled
-              />
-               <h3 className="error-message"style={{color:"red"}}>{errors?.authorizedmobile && errors?.authorizedmobile?.message}</h3>
+              <Form.Control type="text" className="form-control" placeholder="N/A" {...register("authorizedmobile")} disabled />
+              {errors.mobile && <p>Please check the First Name</p>}
             </Col>
           </Row>
           <br></br>
@@ -290,15 +237,7 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                className="form-control"
-                name="alternatemobile"
-                placeholder="N/A"
-                {...register("alternatemobile")}
-                disabled
-              />
-               <h3 className="error-message"style={{color:"red"}}>{errors?.alternatemobile && errors?.alternatemobile?.message}</h3>
+              <input type="tel" className="form-control" placeholder="Authorized Mobile No 2" {...register("authorizedmobile")} />
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -306,14 +245,8 @@ const ApllicantFormStep1 = (props) => {
                   <b>Email ID</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                name="authorizedEmail"
-                placeholder="N/A"
-                {...register("authorizedEmail")}
-                disabled 
-              />
-               <h3 className="error-message" style={{color:"red"}}>{errors?.authorizedEmail && errors?.authorizedEmail?.message}</h3>
+              <Form.Control type="text" placeholder="N/A" {...register("authorizedEmail")} disabled />
+              {errors.email && <p>Please check the First Name</p>}
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -322,14 +255,8 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                name="authorizedPan"
-                placeholder="N/A"
-                {...register("authorizedPan")}
-                disabled
-              />
-              <h3 className="error-message" style={{color:"red"}}>{errors?.authorizedPan && errors?.authorizedPan?.message}</h3>
+              <Form.Control type="text" placeholder="N/A" {...register("authorizedPan")} disabled />
+              {errors.pan && <p>Please check the First Name</p>}
             </Col>
           </Row>
           <br></br>
@@ -340,13 +267,8 @@ const ApllicantFormStep1 = (props) => {
                   <b>Address 1</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                placeholder="N/A"
-                name="authorizedAddress"
-                {...register("authorizedAddress")}
-              />
-              <h3 className="error-message" style={{color:"red"}}>{errors?.authorizedAddress && errors?.authorizedAddress?.message}</h3>
+              <Form.Control type="text" placeholder="Address 1" {...register("authorizedAddress")} />
+              {errors.address && <p>Please check the First Name</p>}
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -370,15 +292,8 @@ const ApllicantFormStep1 = (props) => {
                   <b>Pincode</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control
-                type="text"
-                name="authorizedPinCode"
-                placeholder="N/A"
-                {...register("authorizedPinCode")}
-                disabled
-               
-              />
-              <h3 className="error-message" style={{color:"red"}}>{errors?.authorizedPinCode && errors?.authorizedPinCode?.message}</h3>
+              <Form.Control type="text" placeholder="Pincode" {...register("authorizedPinCode")} />
+              {errors.pincode && <p>Please check the First Name</p>}
             </Col>
           </Row>
           <br></br>
