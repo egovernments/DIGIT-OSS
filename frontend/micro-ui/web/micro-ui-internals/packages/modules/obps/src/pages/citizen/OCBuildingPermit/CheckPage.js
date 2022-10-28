@@ -174,7 +174,7 @@ const CheckPage = ({ onSubmit, value }) => {
   return (
     <React.Fragment>
       <Timeline currentStep={4} flow= {uiFlow?.flow === "OCBPA" ? "OCBPA" : ""}/>
-      <Header>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
+      <Header styles={{marginLeft: "10px"}}>{t("BPA_STEPPER_SUMMARY_HEADER")}</Header>
       <Card style={{paddingRight:"16px"}}>
         <StatusTable>
           <Row className="border-none" label={t(`BPA_APPLICATION_NUMBER_LABEL`)} text={applicationNo?applicationNo:""} />

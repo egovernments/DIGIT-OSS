@@ -243,7 +243,7 @@ const PropertyInformation = () => {
                     <Row 
                       className="border-none" 
                       label={t("PT_COMMON_APPLICANT_NAME_LABEL")}
-                      textStyle={isMobile?{marginLeft:"29%",marginRight:"5%",wordBreak:"break-word"}:{marginLeft:"21%"}}
+                      textStyle={isMobile?{marginLeft:"27%",marginRight:"5%",wordBreak:"break-word"}:{marginLeft:"18%"}}
                       text={`${owner?.name || t("CS_NA")}`}
                       actionButtonStyle={{marginRight:"-10px"}}
                       actionButton={
@@ -256,7 +256,7 @@ const PropertyInformation = () => {
                     className="border-none" 
                     label={t("PT_FORM3_MOBILE_NUMBER")}
                     text={`${t(owner?.mobileNumber)}` || t("CS_NA")}
-                    textStyle={isMobile?{marginLeft:"16%"}:{marginLeft:"13%"}}
+                    // textStyle={isMobile?{marginLeft:"16%"}:{marginLeft:"13%"}}
                     actionButton={
                     property?.status === "ACTIVE"&&owner?.mobileNumber&&Digit.UserService.getUser()?.info?.mobileNumber&&owner.mobileNumber===Digit.UserService.getUser()?.info?.mobileNumber&&<div onClick={() => showPopup({ name: owner?.name, mobileNumber: owner?.mobileNumber, ownerIndex: index })}>
                     <EditIcon />

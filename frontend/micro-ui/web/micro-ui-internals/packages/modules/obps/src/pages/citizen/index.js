@@ -43,6 +43,7 @@ const App = ({ path }) => {
 
   return (
     <React.Fragment>
+      <div className="ws-citizen-wrapper">
        {!location.pathname.includes("response") && !location.pathname.includes("openlink/stakeholder") && !location.pathname.includes("/acknowledgement") && !isDocScreenAfterEdcr && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
       <Switch>
         <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
@@ -50,7 +51,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/edcrscrutiny/apply`} component={CreateEDCR} />
         <PrivateRoute path={`${path}/edcrscrutiny/oc-apply`} component={CreateOCEDCR} />
         <PrivateRoute path={`${path}/bpa/:applicationType/:serviceType`} component={NewBuildingPermit} />
-          <PrivateRoute path={`${path}/ocbpa/:applicationType/:serviceType`} component={OCBuildingPermit}/>
+        <PrivateRoute path={`${path}/ocbpa/:applicationType/:serviceType`} component={OCBuildingPermit}/>
         <PrivateRoute path={`${path}/stakeholder/apply`} component={StakeholderRegistration} />
         <Route path={`${path}/openlink/stakeholder/apply`} component={StakeholderRegistration} />
         <PrivateRoute path={`${path}/my-applications`} component={MyApplication} />
@@ -64,6 +65,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/sendbacktocitizen/ocbpa/:tenantId/:applicationNo`} component={OCSendBackToCitizen} />
         <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
       </Switch>
+      </div>
     </React.Fragment>
   );
 };

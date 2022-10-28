@@ -395,7 +395,7 @@ const BpaApplicationDetail = () => {
   return (
     <Fragment>
       <div className="cardHeaderWithOptions" style={{ marginRight: "auto", maxWidth: "960px" }}>
-        <Header styles={{fontSize: "32px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
+        <Header styles={{fontSize: "32px", marginLeft: "10px"}}>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         {dowloadOptions && dowloadOptions.length > 0 && <MultiLink
           className="multilinkWrapper"
           onHeadClick={() => setShowOptions(!showOptions)}

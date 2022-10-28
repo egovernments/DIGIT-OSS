@@ -114,7 +114,7 @@ const MyApplication = () => {
 
   return (
     <Fragment>
-      <Header>{`${t("BPA_MY_APPLICATIONS")} (${data?.Licenses?.length + bpaData?.length})`}</Header>
+      <Header styles={{marginLeft: "10px"}}>{`${t("BPA_MY_APPLICATIONS")} (${data?.Licenses?.length + bpaData?.length})`}</Header>
       {finalData?.map((application, index) => {
         if (application.type === "BPAREG") {
           return (
