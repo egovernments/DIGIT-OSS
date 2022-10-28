@@ -81,6 +81,21 @@ const Genarelinfo = (props) => {
     const filteredObj = uncheckedValue.filter((obj) => {
       return obj.label == modaldData.label;
     });
+    const filteredObjCheked = checkValue.filter((obj) => {
+      return obj.label == modaldData.label;
+    });
+    if (filteredObj.length !== 0) {
+      const removedList = uncheckedValue.filter((obj) => {
+        return obj.label !== modaldData.label;
+      });
+      setUncheckedVlue(removedList);
+    }
+    if (filteredObjCheked.length !== 0) {
+      const removedList = checkValue.filter((obj) => {
+        return obj.label !== modaldData.label;
+      });
+      setCheckedVAlue(removedList);
+    }
 
     if (isyesOrNochecked === false) {
       if (modaldData.label !== "" || modaldData.Remarks !== "") {
@@ -90,7 +105,7 @@ const Genarelinfo = (props) => {
       }
     } else {
       if (modaldData.label !== "" || modaldData.Remarks !== "") {
-        if (filteredObj.length === 0) {
+        if (filteredObjCheked.length === 0) {
           setCheckedVAlue((prev) => [...prev, modaldData]);
         }
       }
@@ -111,21 +126,108 @@ const Genarelinfo = (props) => {
 
   console.log(uncheckedValue.indexOf("developer"));
 
-  const developerInputFiledColor = modaldData.label === "Puropse" ? modaldData.color : { data: "#FFB602" };
+  const developerInputFiledColor = uncheckedValue.filter((obj) => {
+    return obj.label === "Purpose Of License";
+  });
+  const developerInputCheckedFiledColor = checkValue.filter((obj) => {
+    return obj.label === "Purpose Of License";
+  });
+  console.log("color from array", developerInputFiledColor);
+
+  const developerInputFiledColor1 = uncheckedValue.filter((obj) => {
+    return obj.label === "Potential Zone";
+  });
+  const developerInputCheckedFiledColor1 = checkValue.filter((obj) => {
+    return obj.label === "Potential Zone";
+  });
+  const developerInputFiledColor2 = uncheckedValue.filter((obj) => {
+    return obj.label === "district";
+  });
+  const developerInputCheckedFiledColor2 = checkValue.filter((obj) => {
+    return obj.label === "district";
+  });
+  const developerInputFiledColor3 = uncheckedValue.filter((obj) => {
+    return obj.label === "State";
+  });
+  const developerInputCheckedFiledColor3 = checkValue.filter((obj) => {
+    return obj.label === "State";
+  });
+  const developerInputFiledColor4 = uncheckedValue.filter((obj) => {
+    return obj.label === "Tehsil";
+  });
+  const developerInputCheckedFiledColor4 = checkValue.filter((obj) => {
+    return obj.label === "Tehsil";
+  });
+  const developerInputFiledColor5 = uncheckedValue.filter((obj) => {
+    return obj.label === "Revenue estate";
+  });
+  const developerInputCheckedFiledColor5 = checkValue.filter((obj) => {
+    return obj.label === "Revenue estate";
+  });
+  const developerInputFiledColor6 = uncheckedValue.filter((obj) => {
+    return obj.label === "Rectangle No.";
+  });
+  const developerInputCheckedFiledColor6 = checkValue.filter((obj) => {
+    return obj.label === "Rectangle No.";
+  });
+  const developerInputFiledColor7 = uncheckedValue.filter((obj) => {
+    return obj.label === "Killa";
+  });
+  const developerInputCheckedFiledColor7 = checkValue.filter((obj) => {
+    return obj.label === "Killa";
+  });
+  const developerInputFiledColor8 = uncheckedValue.filter((obj) => {
+    return obj.label === "Land owner";
+  });
+  const developerInputCheckedFiledColor8 = checkValue.filter((obj) => {
+    return obj.label === "Land owner";
+  });
+  // const developerInputFiledColor9 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Tehsil";
+  // });
+  // const developerInputCheckedFiledColor9 = checkValue.filter((obj) => {
+  //   return obj.label === "Tehsil";
+  // });
+  const developerInputFiledColor10 = uncheckedValue.filter((obj) => {
+    return obj.label === "Consolidation Type";
+  });
+  const developerInputCheckedFiledColor10 = checkValue.filter((obj) => {
+    return obj.label === "Consolidation Type";
+  });
+  const developerInputFiledColor11 = uncheckedValue.filter((obj) => {
+    return obj.label === "Kanal/Bigha";
+  });
+  const developerInputCheckedFiledColor11 = checkValue.filter((obj) => {
+    return obj.label === "Kanal/Bigha";
+  });
+  const developerInputFiledColor12 = uncheckedValue.filter((obj) => {
+    return obj.label === "Marla/Biswa";
+  });
+  const developerInputCheckedFiledColor12 = checkValue.filter((obj) => {
+    return obj.label === "Marla/Biswa";
+  });
+  const developerInputFiledColor13 = uncheckedValue.filter((obj) => {
+    return obj.label === "Khewat";
+  });
+  const developerInputCheckedFiledColor13 = checkValue.filter((obj) => {
+    return obj.label === "Khewat";
+  });
+
+  // const developerInputFiledColor = modaldData.label === "Puropse" ? modaldData.color : { data: "#FFB602" };
   // const developerInputFiledColor1 = modaldData.label === "Authorized Person Name" ? modaldData.color : { data: "#FFB602" };
   //change the white color to default color
-  const developerInputFiledColor2 = modaldData.label === "Potential Zone" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor3 = modaldData.label === "district" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor4 = modaldData.label === "State" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor5 = modaldData.label === "Tehsil" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor6 = modaldData.label === "Revenue estate" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor7 = modaldData.label === "Rectangle No." ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor8 = modaldData.label === "Killa" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor9 = modaldData.label === "Land owner" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor10 = modaldData.label === "Consolidation Type" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor11 = modaldData.label === "Kanal/Bigha" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor12 = modaldData.label === "Marla/Biswa" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor13 = modaldData.label === "Marla/Biswa" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor2 = modaldData.label === "Potential Zone" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor3 = modaldData.label === "district" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor4 = modaldData.label === "State" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor5 = modaldData.label === "Tehsil" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor6 = modaldData.label === "Revenue estate" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor7 = modaldData.label === "Rectangle No." ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor8 = modaldData.label === "Killa" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor9 = modaldData.label === "Land owner" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor10 = modaldData.label === "Consolidation Type" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor11 = modaldData.label === "Kanal/Bigha" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor12 = modaldData.label === "Marla/Biswa" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor13 = modaldData.label === "Marla/Biswa" ? modaldData.color : { data: "#FFB602" };
   // const developerInputFiledColor14 = modaldData.label === "Village/City" ? modaldData.color : { data: "#FFB602" };
 
   console.log("color for the deeloper", developerInputFiledColor);
@@ -187,7 +289,7 @@ const Genarelinfo = (props) => {
                 </div>
 
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control> */}
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
 
                   {/* <Form.Check
                     value="Puropse Of License"
@@ -213,7 +315,7 @@ const Genarelinfo = (props) => {
                     placeholder="Puropse"
                     onChange={handleChangesetPurpose}
                     height={30}
-                    style={{ maxWidth: 120, marginRight: 5 }}
+                    style={{ maxWidth: 200, marginRight: 5 }}
                     disabled
                   >
                     {/* <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} readOnly> */}
@@ -231,10 +333,15 @@ const Genarelinfo = (props) => {
                   </Form.Select>
                   <ReportProblemIcon
                     style={{
-                      color: developerInputFiledColor.data,
+                      color:
+                        developerInputFiledColor.length > 0
+                          ? developerInputFiledColor[0].color.data
+                          : developerInputCheckedFiledColor.length > 0
+                          ? developerInputCheckedFiledColor[0].color.data
+                          : "#FFB602",
                     }}
                     onClick={() => {
-                      setLabelValue("Puropse"), setSmShow(true), console.log("modal open");
+                      setLabelValue("Purpose Of License"), setSmShow(true), console.log("modal open");
                     }}
                   ></ReportProblemIcon>
                   <ModalChild
@@ -272,7 +379,7 @@ const Genarelinfo = (props) => {
                 <div style={{ display: "flex" }}>
                   <Form.Select
                     height={30}
-                    style={{ maxWidth: 120, marginRight: 5 }}
+                    style={{ maxWidth: 200, marginRight: 5 }}
                     className="form-control"
                     id="potential"
                     name="potential"
@@ -286,10 +393,15 @@ const Genarelinfo = (props) => {
                     <option value="potential 2">Low I</option>
                     <option value="potential 2">Low II</option>
                   </Form.Select>
-                  {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control> */}
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
                   <ReportProblemIcon
                     style={{
-                      color: developerInputFiledColor2.data,
+                      color:
+                        developerInputFiledColor1.length > 0
+                          ? developerInputFiledColor1[0].color.data
+                          : developerInputCheckedFiledColor1.length > 0
+                          ? developerInputCheckedFiledColor1[0].color.data
+                          : "#FFB602",
                     }}
                     onClick={() => {
                       setLabelValue("Potential Zone"), setSmShow(true), console.log("modal open");
@@ -323,12 +435,17 @@ const Genarelinfo = (props) => {
                     inline
                   ></Form.Check> */}
                   <div style={{ display: "flex" }}>
-                    <Form.Select height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled>
+                    <Form.Select height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled>
                       <option value="1">no district</option>
                     </Form.Select>
                     <ReportProblemIcon
                       style={{
-                        color: developerInputFiledColor3.data,
+                        color:
+                          developerInputFiledColor2.length > 0
+                            ? developerInputFiledColor2[0].color.data
+                            : developerInputCheckedFiledColor2.length > 0
+                            ? developerInputCheckedFiledColor2[0].color.data
+                            : "#FFB602",
                       }}
                       onClick={() => {
                         setLabelValue("district"), setSmShow(true), console.log("modal open");
@@ -364,10 +481,15 @@ const Genarelinfo = (props) => {
                     inline
                   ></Form.Check> */}
                   <div style={{ display: "flex" }}>
-                    <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control>
+                    <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     <ReportProblemIcon
                       style={{
-                        color: developerInputFiledColor4.data,
+                        color:
+                          developerInputFiledColor3.length > 0
+                            ? developerInputFiledColor3[0].color.data
+                            : developerInputCheckedFiledColor3.length > 0
+                            ? developerInputCheckedFiledColor3[0].color.data
+                            : "#FFB602",
                       }}
                       onClick={() => {
                         setLabelValue("State"), setSmShow(true), console.log("modal open");
@@ -1197,7 +1319,12 @@ const Genarelinfo = (props) => {
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
-                            color: developerInputFiledColor5.data,
+                            color:
+                              developerInputFiledColor4.length > 0
+                                ? developerInputFiledColor4[0].color.data
+                                : developerInputCheckedFiledColor4.length > 0
+                                ? developerInputCheckedFiledColor4[0].color.data
+                                : "#FFB602",
                           }}
                           onClick={() => {
                             setLabelValue("Tehsil"), setSmShow(true), console.log("modal open");
@@ -1211,7 +1338,12 @@ const Genarelinfo = (props) => {
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
-                            color: developerInputFiledColor6.data,
+                            color:
+                              developerInputFiledColor5.length > 0
+                                ? developerInputFiledColor5[0].color.data
+                                : developerInputCheckedFiledColor5.length > 0
+                                ? developerInputCheckedFiledColor5[0].color.data
+                                : "#FFB602",
                           }}
                           onClick={() => {
                             setLabelValue("Revenue estate"), setSmShow(true), console.log("modal open");
@@ -1225,7 +1357,12 @@ const Genarelinfo = (props) => {
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
-                            color: developerInputFiledColor7.data,
+                            color:
+                              developerInputFiledColor6.length > 0
+                                ? developerInputFiledColor6[0].color.data
+                                : developerInputCheckedFiledColor6.length > 0
+                                ? developerInputCheckedFiledColor6[0].color.data
+                                : "#FFB602",
                           }}
                           onClick={() => {
                             setLabelValue("Rectangle No."), setSmShow(true), console.log("modal open");
@@ -1239,7 +1376,12 @@ const Genarelinfo = (props) => {
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
-                            color: developerInputFiledColor8.data,
+                            color:
+                              developerInputFiledColor7.length > 0
+                                ? developerInputFiledColor7[0].color.data
+                                : developerInputCheckedFiledColor7.length > 0
+                                ? developerInputCheckedFiledColor7[0].color.data
+                                : "#FFB602",
                           }}
                           onClick={() => {
                             setLabelValue("Killa"), setSmShow(true), console.log("modal open");
@@ -1253,7 +1395,12 @@ const Genarelinfo = (props) => {
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
-                            color: developerInputFiledColor9.data,
+                            color:
+                              developerInputFiledColor8.length > 0
+                                ? developerInputFiledColor8[0].color.data
+                                : developerInputCheckedFiledColor8.length > 0
+                                ? developerInputCheckedFiledColor8[0].color.data
+                                : "#FFB602",
                           }}
                           onClick={() => {
                             setLabelValue("Land owner"), setSmShow(true), console.log("modal open");
@@ -1267,7 +1414,12 @@ const Genarelinfo = (props) => {
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
-                            color: developerInputFiledColor10.data,
+                            color:
+                              developerInputFiledColor10.length > 0
+                                ? developerInputFiledColor10[0].color.data
+                                : developerInputCheckedFiledColor10.length > 0
+                                ? developerInputCheckedFiledColor10[0].color.data
+                                : "#FFB602",
                           }}
                           onClick={() => {
                             setLabelValue("Consolidation Type"), setSmShow(true), console.log("modal open");
@@ -1281,7 +1433,12 @@ const Genarelinfo = (props) => {
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
-                            color: developerInputFiledColor11.data,
+                            color:
+                              developerInputFiledColor11.length > 0
+                                ? developerInputFiledColor11[0].color.data
+                                : developerInputCheckedFiledColor11.length > 0
+                                ? developerInputCheckedFiledColor11[0].color.data
+                                : "#FFB602",
                           }}
                           onClick={() => {
                             setLabelValue("Kanal/Bigha"), setSmShow(true), console.log("modal open");
@@ -1295,7 +1452,12 @@ const Genarelinfo = (props) => {
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
-                            color: developerInputFiledColor12.data,
+                            color:
+                              developerInputFiledColor12.length > 0
+                                ? developerInputFiledColor12[0].color.data
+                                : developerInputCheckedFiledColor12.length > 0
+                                ? developerInputCheckedFiledColor12[0].color.data
+                                : "#FFB602",
                           }}
                           onClick={() => {
                             setLabelValue("Marla/Biswa"), setSmShow(true), console.log("modal open");
@@ -1312,21 +1474,24 @@ const Genarelinfo = (props) => {
                     <th>
                       {" "}
                       {/* <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)"> */}
-                      <b>
-                        Khewat
-                        <div style={{ display: "flex" }}>
-                          {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                          <ReportProblemIcon
-                            style={{
-                              color: developerInputFiledColor13.data,
-                            }}
-                            onClick={() => {
-                              setLabelValue("Marla/Biswa"), setSmShow(true), console.log("modal open");
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
-                        {/* <InfoIcon style={{color:"blue"}}/>  */}
-                      </b>
+                      Khewat
+                      <div style={{ display: "flex" }}>
+                        {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
+                        <ReportProblemIcon
+                          style={{
+                            color:
+                              developerInputFiledColor13.length > 0
+                                ? developerInputFiledColor13[0].color.data
+                                : developerInputCheckedFiledColor13.length > 0
+                                ? developerInputCheckedFiledColor13[0].color.data
+                                : "#FFB602",
+                          }}
+                          onClick={() => {
+                            setLabelValue("Khewat"), setSmShow(true), console.log("modal open");
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
+                      {/* <InfoIcon style={{color:"blue"}}/>  */}
                       &nbsp;&nbsp;
                       {/* </h6> */}
                     </th>

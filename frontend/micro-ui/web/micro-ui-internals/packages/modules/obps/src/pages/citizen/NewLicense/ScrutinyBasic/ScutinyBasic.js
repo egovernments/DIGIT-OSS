@@ -23,6 +23,7 @@ const ScrutitnyForms = () => {
   const [displayPersonal, setDisplayPersonalInfo] = useState([]);
   const [displayPersonalCHeckedList, setDisplayCheckedPersonalList] = useState([]);
   const [displayGeneralCHeckedList, setDisplayCheckedGeneralList] = useState([]);
+  const [displayPurposeCHeckedList, setDisplayCheckedPurposeList] = useState([]);
   const [displayPurpose, setDisplayPurposeInfo] = useState([]);
   const [displayGeneral, setDisplayGeneralInfo] = useState([]);
   const [displayAppliedLand, setDisplayAppliedLandInfo] = useState([]);
@@ -47,10 +48,6 @@ const ScrutitnyForms = () => {
     console.log("checked parent personal info data", data);
   };
 
-  const getUncheckedPurposeinfos = (data) => {
-    setDisplayPurposeInfo(data.data);
-    console.log(data);
-  };
   const getUncheckedGeneralinfos = (data) => {
     setPurpose(data.purpose);
     setDisplayGeneralInfo(data.data);
@@ -61,6 +58,16 @@ const ScrutitnyForms = () => {
     setDisplayCheckedGeneralList(data.data);
     console.log("checked parent General info data", data);
   };
+
+  const getUncheckedPurposeinfos = (data) => {
+    setDisplayPurposeInfo(data.data);
+    console.log(data);
+  };
+  const getCheckedPurposeInfoValue = (data) => {
+    setDisplayCheckedPurposeList(data.data);
+    console.log("checked parent personal info data", data);
+  };
+
   const getUncheckedAppliedLandInfo = (data) => {
     setDisplayAppliedLandInfo(data.data);
     console.log(data);
@@ -260,7 +267,9 @@ const ScrutitnyForms = () => {
             <Developerinfo
               developerInfoRef={developerInfoRef}
               passUncheckedList={getUncheckedPurposeinfos}
-              heightDevelper={defaultheightDevelper}
+              // heightDevelper={defaultheightDevelper}
+              passCheckedList={getCheckedPurposeInfoValue}
+              onClick={() => setOpen(!open)}
             ></Developerinfo>
             {/* </Col> */}
           </div>
@@ -323,6 +332,7 @@ const ScrutitnyForms = () => {
           disapprovallistPersonal={displayPersonal}
           disapprovalCheckedPersonal={displayPersonalCHeckedList}
           disapprovalCheckedGeneral={displayGeneralCHeckedList}
+          disapprovalCheckedPurpose={displayPurposeCHeckedList}
           DisApprovalListFeeandCharges={displayFeeandCharges}
         ></DisApprovalList>
         {/* <HistoryList></HistoryList> */}

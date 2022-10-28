@@ -4,11 +4,11 @@ import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 const windowHeight = window !== undefined ? window.innerHeight : null;
 const DisApprovalList = (props) => {
   const [personalInfoList, setperonaldisapprovallist] = useState([]);
-  const [peronsalCheckedLIst, setperonaldisapprovalCheckedlist] = useState([]);
+  const [personalCheckedLIst, setperonaldisapprovalCheckedlist] = useState([]);
   const [generalInfoList, setgeneraldisapprovallist] = useState([]);
   const [generalCheckedLIst, setgeneraldisapprovalCheckedlist] = useState([]);
-
-  const developerInfoList = props.disapprovallistDeveloper;
+  const [developerInfoList, setdeveloperdisapprovallist] = useState([]);
+  const [developerCheckedLIst, setdeveloperdisapprovalCheckedlist] = useState([]);
 
   const appliedLandInfoList = props.disapprovallistAppliedLand;
 
@@ -16,6 +16,8 @@ const DisApprovalList = (props) => {
   const personalCheckedlist = props.disapprovalCheckedPersonal;
   const general = props.disapprovallistGeneral;
   const generalCheckedlist = props.disapprovalCheckedGeneral;
+  const developer = props.disapprovallistDeveloper;
+  const developerCheckedlist = props.disapprovaCheckedDeveloper;
 
   useEffect(() => {
     setperonaldisapprovallist(props.disapprovallistPersonal);
@@ -37,6 +39,16 @@ const DisApprovalList = (props) => {
   }, [generalCheckedlist]);
   console.log("disaaproval side data Checkedlist=", generalCheckedlist);
 
+  useEffect(() => {
+    setdeveloperdisapprovallist(props.disapprovallistDeveloper);
+  }, [developer]);
+  console.log("disaaproval side data =", developer);
+
+  useEffect(() => {
+    setdeveloperdisapprovalCheckedlist(props.disapprovaCheckedDeveloper);
+  }, [developerCheckedlist]);
+  console.log("disaaproval side data Checkedlist=", developerCheckedlist);
+  console.log("general data", generalCheckedlist);
   return (
     // <Container>
     //   <Row>
@@ -109,14 +121,14 @@ const DisApprovalList = (props) => {
             </div>
           )}
           <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginTop: 10, marginBottom: 10 }}>General Information Aaproval</h2>
-          {generalCheckedLIst !== undefined && generalCheckedLIst !== null && generalCheckedLIst.length > 0 ? (
-            generalCheckedLIst.map((el, i) => (
+          {generalCheckedlist !== undefined && generalCheckedlist !== null && generalCheckedlist.length > 0 ? (
+            generalCheckedlist.map((el, i) => (
               <Row key={i} style={{ marginBottom: 10 }}>
                 <Col xxl lg="1">
                   <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{i + 1}</h4>
                 </Col>
                 <Col xxl lg="5">
-                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.label.data}</h4>
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.label}</h4>
                 </Col>
                 <Col xxl lg="6">
                   <Form.Control type="text" placeholder={el.Remarks.data}></Form.Control>
@@ -137,10 +149,30 @@ const DisApprovalList = (props) => {
                   <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{i + 1}</h4>
                 </Col>
                 <Col xxl lg="5">
-                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el}</h4>
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.label}</h4>
                 </Col>
                 <Col xxl lg="6">
-                  <Form.Control type="text" placeholder="Reason for Disapprove"></Form.Control>
+                  <Form.Control type="text" placeholder={el.Remarks.data}></Form.Control>
+                </Col>
+              </Row>
+            ))
+          ) : (
+            <div>
+              <h2 style={{ fontSize: 12, fontFamily: "Roboto", fontWeight: "lighter" }}>No Purpose Information Disapproval list to show right now</h2>
+            </div>
+          )}
+          <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginTop: 10, marginBottom: 10 }}>Purpose Information Aaproval</h2>
+          {developerCheckedlist !== undefined && developerCheckedlist !== null && developerCheckedlist.length > 0 ? (
+            developerCheckedlist.map((el, i) => (
+              <Row key={i} style={{ marginBottom: 10 }}>
+                <Col xxl lg="1">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{i + 1}</h4>
+                </Col>
+                <Col xxl lg="5">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.label}</h4>
+                </Col>
+                <Col xxl lg="6">
+                  <Form.Control type="text" placeholder={el.Remarks.data}></Form.Control>
                 </Col>
               </Row>
             ))

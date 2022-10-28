@@ -57,18 +57,33 @@ const Personalinfo = (props) => {
     const filteredObj = uncheckedValue.filter((obj) => {
       return obj.label == modaldData.label;
     });
+    const filteredObjCheked = checkValue.filter((obj) => {
+      return obj.label == modaldData.label;
+    });
+    if (filteredObj.length !== 0) {
+      const removedList = uncheckedValue.filter((obj) => {
+        return obj.label !== modaldData.label;
+      });
+      setUncheckedVlue(removedList);
+    }
+    if (filteredObjCheked.length !== 0) {
+      const removedList = checkValue.filter((obj) => {
+        return obj.label !== modaldData.label;
+      });
+      setCheckedVAlue(removedList);
+    }
 
     if (isyesOrNochecked === false) {
       if (modaldData.label !== "" || modaldData.Remarks !== "") {
-        // if (filteredObj.length === 0) {
-        setUncheckedVlue((prev) => [...prev, modaldData]);
-        // }
+        if (filteredObj.length === 0) {
+          setUncheckedVlue((prev) => [...prev, modaldData]);
+        }
       }
     } else {
       if (modaldData.label !== "" || modaldData.Remarks !== "") {
-        // if (filteredObj.length === 0) {
-        setCheckedVAlue((prev) => [...prev, modaldData]);
-        // }
+        if (filteredObjCheked.length === 0) {
+          setCheckedVAlue((prev) => [...prev, modaldData]);
+        }
       }
     }
   };
@@ -87,35 +102,157 @@ const Personalinfo = (props) => {
 
   console.log(uncheckedValue.indexOf("developer"));
 
-  const developerInputFiledColor = modaldData.label === "developer" ? modaldData.color : { data: "#FFB602" };
+  const developerInputFiledColor = uncheckedValue.filter((obj) => {
+    return obj.label === "developer";
+  });
+  const developerInputCheckedFiledColor = checkValue.filter((obj) => {
+    return obj.label === "developer";
+  });
+  console.log("color from array", developerInputFiledColor);
 
-  const developerInputFiledColor1 = modaldData.label === "Authorized Person Name" ? modaldData.color : { data: "#FFB602" }; //change the white color to default color
-  const developerInputFiledColor3 = modaldData.label === "Authorized MobileNo. 2" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor4 = modaldData.label === "Email ID" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor5 = modaldData.label === "PAN No." ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor6 = modaldData.label === "Address 1" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor7 = modaldData.label === "Village/City" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor2 = modaldData.label === "Authorized Mobile No" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor8 = modaldData.label === "Pincode" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor9 = modaldData.label === "Tehsil" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor10 = modaldData.label === "District" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor11 = modaldData.label === "State" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor12 = modaldData.label === "Status (Individual/ Company/ Firm/ LLP etc.)" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor13 = modaldData.label === "LC-I signed by" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor14 =
-    modaldData.label === "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
-      ? modaldData.color
-      : { data: "#FFB602" };
-  const developerInputFiledColor15 =
-    modaldData.label === "Permanent address in case of individual/ registered office address in case other than individual"
-      ? modaldData.color
-      : { data: "#FFB602" };
-  const developerInputFiledColor16 = modaldData.label === "Address for communication" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor17 =
-    modaldData.label === "Name of the authorized person to sign the application" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor18 = modaldData.label === "Email ID for communication" ? modaldData.color : { data: "#FFB602" };
-  const developerInputFiledColor19 =
-    modaldData.label === "Name of individual Land owner/ land-owning company/ firm/ LLP etc." ? modaldData.color : { data: "#FFB602" };
+  const developerInputFiledColor1 = uncheckedValue.filter((obj) => {
+    return obj.label === "Authorized Person Name";
+  });
+  const developerInputCheckedFiledColor1 = checkValue.filter((obj) => {
+    return obj.label === "Authorized Person Name";
+  });
+  const developerInputFiledColor2 = uncheckedValue.filter((obj) => {
+    return obj.label === "Authorized Mobile No";
+  });
+  const developerInputCheckedFiledColor2 = checkValue.filter((obj) => {
+    return obj.label === "Authorized Mobile No";
+  });
+  const developerInputFiledColor3 = uncheckedValue.filter((obj) => {
+    return obj.label === "Authorized MobileNo. 2";
+  });
+  const developerInputCheckedFiledColor3 = checkValue.filter((obj) => {
+    return obj.label === "Authorized MobileNo. 2";
+  });
+  const developerInputFiledColor4 = uncheckedValue.filter((obj) => {
+    return obj.label === "Email ID";
+  });
+  const developerInputCheckedFiledColor4 = checkValue.filter((obj) => {
+    return obj.label === "Email ID";
+  });
+  const developerInputFiledColor5 = uncheckedValue.filter((obj) => {
+    return obj.label === "PAN No.";
+  });
+  const developerInputCheckedFiledColor5 = checkValue.filter((obj) => {
+    return obj.label === "PAN No.";
+  });
+  const developerInputFiledColor6 = uncheckedValue.filter((obj) => {
+    return obj.label === "Address  1";
+  });
+  const developerInputCheckedFiledColor6 = checkValue.filter((obj) => {
+    return obj.label === "Address  1";
+  });
+  const developerInputFiledColor7 = uncheckedValue.filter((obj) => {
+    return obj.label === "Village/City";
+  });
+  const developerInputCheckedFiledColor7 = checkValue.filter((obj) => {
+    return obj.label === "Village/City";
+  });
+  const developerInputFiledColor8 = uncheckedValue.filter((obj) => {
+    return obj.label === "Pincode";
+  });
+  const developerInputCheckedFiledColor8 = checkValue.filter((obj) => {
+    return obj.label === "Pincode";
+  });
+  const developerInputFiledColor9 = uncheckedValue.filter((obj) => {
+    return obj.label === "Tehsil";
+  });
+  const developerInputCheckedFiledColor9 = checkValue.filter((obj) => {
+    return obj.label === "Tehsil";
+  });
+  const developerInputFiledColor10 = uncheckedValue.filter((obj) => {
+    return obj.label === "District";
+  });
+  const developerInputCheckedFiledColor10 = checkValue.filter((obj) => {
+    return obj.label === "District";
+  });
+  const developerInputFiledColor11 = uncheckedValue.filter((obj) => {
+    return obj.label === "State";
+  });
+  const developerInputCheckedFiledColor11 = checkValue.filter((obj) => {
+    return obj.label === "State";
+  });
+  const developerInputFiledColor12 = uncheckedValue.filter((obj) => {
+    return obj.label === "Status (Individual/ Company/ Firm/ LLP etc.)";
+  });
+  const developerInputCheckedFiledColor12 = checkValue.filter((obj) => {
+    return obj.label === "Status (Individual/ Company/ Firm/ LLP etc.)";
+  });
+  const developerInputFiledColor13 = uncheckedValue.filter((obj) => {
+    return obj.label === "LC-I signed by";
+  });
+  const developerInputCheckedFiledColor13 = checkValue.filter((obj) => {
+    return obj.label === "LC-I signed by";
+  });
+  const developerInputFiledColor14 = uncheckedValue.filter((obj) => {
+    return obj.label === "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)";
+  });
+  const developerInputCheckedFiledColor14 = checkValue.filter((obj) => {
+    return obj.label === "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)";
+  });
+  const developerInputFiledColor15 = uncheckedValue.filter((obj) => {
+    return obj.label === "Permanent address in case of individual/ registered office address in case other than individual";
+  });
+  const developerInputCheckedFiledColor15 = checkValue.filter((obj) => {
+    return obj.label === "Permanent address in case of individual/ registered office address in case other than individual";
+  });
+  const developerInputFiledColor16 = uncheckedValue.filter((obj) => {
+    return obj.label === "Address for communication";
+  });
+  const developerInputCheckedFiledColor16 = checkValue.filter((obj) => {
+    return obj.label === "Address for communication";
+  });
+  const developerInputFiledColor17 = uncheckedValue.filter((obj) => {
+    return obj.label === "Name of the authorized person to sign the application";
+  });
+  const developerInputCheckedFiledColor17 = checkValue.filter((obj) => {
+    return obj.label === "Name of the authorized person to sign the application";
+  });
+  const developerInputFiledColor18 = uncheckedValue.filter((obj) => {
+    return obj.label === "Email ID for communication";
+  });
+  const developerInputCheckedFiledColor18 = checkValue.filter((obj) => {
+    return obj.label === "Email ID for communication";
+  });
+  const developerInputFiledColor19 = uncheckedValue.filter((obj) => {
+    return obj.label === "Name of individual Land owner/ land-owning company/ firm/ LLP etc.";
+  });
+  const developerInputCheckedFiledColor19 = checkValue.filter((obj) => {
+    return obj.label === "Name of individual Land owner/ land-owning company/ firm/ LLP etc.";
+  });
+
+  // const developerInputFiledColor1 = modaldData.label === "Authorized Person Name" ? modaldData.color : { data: "#FFB602" }; //change the white color to default color
+  // const developerInputFiledColor3 = modaldData.label === "Authorized MobileNo. 2" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor2 = modaldData.label === "Authorized Mobile No" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor4 = modaldData.label === "Email ID" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor5 = modaldData.label === "PAN No." ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor6 = modaldData.label === "Address 1" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor7 = modaldData.label === "Village/City" ? modaldData.color : { data: "#FFB602" };
+
+  // const developerInputFiledColor8 = modaldData.label === "Pincode" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor9 = modaldData.label === "Tehsil" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor10 = modaldData.label === "District" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor11 = modaldData.label === "State" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor12 = modaldData.label === "Status (Individual/ Company/ Firm/ LLP etc.)" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor13 = modaldData.label === "LC-I signed by" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor14 =
+  //   modaldData.label === "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
+  //     ? modaldData.color
+  //     : { data: "#FFB602" };
+  // const developerInputFiledColor15 =
+  //   modaldData.label === "Permanent address in case of individual/ registered office address in case other than individual"
+  //     ? modaldData.color
+  //     : { data: "#FFB602" };
+  // const developerInputFiledColor16 = modaldData.label === "Address for communication" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor17 =
+  //   modaldData.label === "Name of the authorized person to sign the application" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor18 = modaldData.label === "Email ID for communication" ? modaldData.color : { data: "#FFB602" };
+  // const developerInputFiledColor19 =
+  //   modaldData.label === "Name of individual Land owner/ land-owning company/ firm/ LLP etc." ? modaldData.color : { data: "#FFB602" };
 
   console.log("color for the deeloper", developerInputFiledColor);
 
@@ -210,10 +347,15 @@ const Personalinfo = (props) => {
                       <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                     </div>
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor.data,
+                          color:
+                            developerInputFiledColor.length > 0
+                              ? developerInputFiledColor[0].color.data
+                              : developerInputCheckedFiledColor.length > 0
+                              ? developerInputCheckedFiledColor[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("developer"), setSmShow(true), console.log("modal open");
@@ -344,10 +486,15 @@ const Personalinfo = (props) => {
                     </Form.Label>
                     <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor1.data,
+                          color:
+                            developerInputFiledColor1.length > 0
+                              ? developerInputFiledColor1[0].color.data
+                              : developerInputCheckedFiledColor1.length > 0
+                              ? developerInputCheckedFiledColor1[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Authorized Person Name"), setSmShow(true), console.log("modal open");
@@ -404,7 +551,7 @@ const Personalinfo = (props) => {
                     ></Form.Check> */}
 
                     {/*  <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
                           color: "black",
@@ -415,13 +562,18 @@ const Personalinfo = (props) => {
                       ></ReportProblemIcon></div> */}
 
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor2.data,
+                          color:
+                            developerInputFiledColor2.length > 0
+                              ? developerInputFiledColor2[0].color.data
+                              : developerInputCheckedFiledColor2.length > 0
+                              ? developerInputCheckedFiledColor2[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
-                          setLabelValue("Authorized Person Name"), setSmShow(true), console.log("modal open");
+                          setLabelValue("Authorized Mobile No"), setSmShow(true), console.log("modal open");
                         }}
                       ></ReportProblemIcon>
                     </div>
@@ -503,10 +655,15 @@ const Personalinfo = (props) => {
                     ></Form.Check> */}
 
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor3.data,
+                          color:
+                            developerInputFiledColor3.length > 0
+                              ? developerInputFiledColor3[0].color.data
+                              : developerInputCheckedFiledColor3.length > 0
+                              ? developerInputCheckedFiledColor3[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Authorized MobileNo. 2 "), setSmShow(true), console.log("modal open");
@@ -542,10 +699,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor4.data,
+                          color:
+                            developerInputFiledColor4.length > 0
+                              ? developerInputFiledColor4[0].color.data
+                              : developerInputCheckedFiledColor4.length > 0
+                              ? developerInputCheckedFiledColor4[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Email ID"), setSmShow(true), console.log("modal open");
@@ -580,10 +742,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor5.data,
+                          color:
+                            developerInputFiledColor5.length > 0
+                              ? developerInputFiledColor5[0].color.data
+                              : developerInputCheckedFiledColor5.length > 0
+                              ? developerInputCheckedFiledColor5[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("PAN No."), setSmShow(true), console.log("modal open");
@@ -596,7 +763,7 @@ const Personalinfo = (props) => {
                   <Col md={4} xxl lg="4">
                     <div>
                       <Form.Label>
-                        <b>Address 1 </b>
+                        <b>Address 1</b>
                       </Form.Label>
                       <span style={{ color: "red" }}>*</span>
                     </div>
@@ -620,10 +787,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor6.data,
+                          color:
+                            developerInputFiledColor6.length > 0
+                              ? developerInputFiledColor6[0].color.data
+                              : developerInputCheckedFiledColor6.length > 0
+                              ? developerInputCheckedFiledColor6[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Address  1"), setSmShow(true), console.log("modal open");
@@ -658,10 +830,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor7.data,
+                          color:
+                            developerInputFiledColor7.length > 0
+                              ? developerInputFiledColor7[0].color.data
+                              : developerInputCheckedFiledColor7.length > 0
+                              ? developerInputCheckedFiledColor7[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Village/City"), setSmShow(true), console.log("modal open");
@@ -696,10 +873,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor8.data,
+                          color:
+                            developerInputFiledColor8.length > 0
+                              ? developerInputFiledColor8[0].color.data
+                              : developerInputCheckedFiledColor8.length > 0
+                              ? developerInputCheckedFiledColor8[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Pincode"), setSmShow(true), console.log("modal open");
@@ -736,10 +918,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor9.data,
+                          color:
+                            developerInputFiledColor9.length > 0
+                              ? developerInputFiledColor9[0].color.data
+                              : developerInputCheckedFiledColor9.length > 0
+                              ? developerInputCheckedFiledColor9[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Tehsil"), setSmShow(true), console.log("modal open");
@@ -774,10 +961,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor10.data,
+                          color:
+                            developerInputFiledColor10.length > 0
+                              ? developerInputFiledColor10[0].color.data
+                              : developerInputCheckedFiledColor10.length > 0
+                              ? developerInputCheckedFiledColor10[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("District"), setSmShow(true), console.log("modal open");
@@ -812,10 +1004,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor11.data,
+                          color:
+                            developerInputFiledColor11.length > 0
+                              ? developerInputFiledColor11[0].color.data
+                              : developerInputCheckedFiledColor11.length > 0
+                              ? developerInputCheckedFiledColor11[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("State"), setSmShow(true), console.log("modal open");
@@ -827,8 +1024,9 @@ const Personalinfo = (props) => {
                 <Row className="ms-auto" style={{ marginBottom: 20 }}>
                   <Col md={4} xxl lg="4">
                     <div>
-                      <Form.Label>
-                        <b>Status (Individual/ Company/ Firm/ LLP etc.)</b>
+                      <Form.Label data-toggle="tooltip" data-placement="top" title="Status (Individual/ Company/ Firm/ LLP etc.)">
+                        <b>Individual/ Company/ LLP</b>
+                        <InfoIcon />
                       </Form.Label>
                     </div>
                     {/* <Form.Check
@@ -851,10 +1049,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor12.data,
+                          color:
+                            developerInputFiledColor12.length > 0
+                              ? developerInputFiledColor12[0].color.data
+                              : developerInputCheckedFiledColor12.length > 0
+                              ? developerInputCheckedFiledColor12[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Status (Individual/ Company/ Firm/ LLP etc.)"), setSmShow(true), console.log("modal open");
@@ -888,10 +1091,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor13.data,
+                          color:
+                            developerInputFiledColor13.length > 0
+                              ? developerInputFiledColor13[0].color.data
+                              : developerInputCheckedFiledColor13.length > 0
+                              ? developerInputCheckedFiledColor13[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("LC-I signed by"), setSmShow(true), console.log("modal open");
@@ -901,8 +1109,13 @@ const Personalinfo = (props) => {
                   </Col>
                   <Col md={4} xxl lg="4">
                     <div>
-                      <Form.Label>
-                        <b>If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)</b>
+                      <Form.Label
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
+                      >
+                        <b> LC-I is not signed</b>
+                        <InfoIcon />
                       </Form.Label>
                     </div>
                     {/* <Form.Check
@@ -925,10 +1138,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor14.data,
+                          color:
+                            developerInputFiledColor14.length > 0
+                              ? developerInputFiledColor14[0].color.data
+                              : developerInputCheckedFiledColor14.length > 0
+                              ? developerInputCheckedFiledColor14[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"),
@@ -971,10 +1189,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor15.data,
+                          color:
+                            developerInputFiledColor15.length > 0
+                              ? developerInputFiledColor15[0].color.data
+                              : developerInputCheckedFiledColor15.length > 0
+                              ? developerInputCheckedFiledColor15[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Permanent address in case of individual/ registered office address in case other than individual"),
@@ -991,10 +1214,15 @@ const Personalinfo = (props) => {
                       </Form.Label>
                     </div>
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor16.data,
+                          color:
+                            developerInputFiledColor16.length > 0
+                              ? developerInputFiledColor16[0].color.data
+                              : developerInputCheckedFiledColor16.length > 0
+                              ? developerInputCheckedFiledColor16[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Address for communication"), setSmShow(true), console.log("modal open");
@@ -1004,8 +1232,9 @@ const Personalinfo = (props) => {
                   </Col>
                   <Col md={4} xxl lg="4">
                     <div>
-                      <Form.Label>
-                        <b>Name of the authorized person to sign the application</b>{" "}
+                      <Form.Label data-toggle="tooltip" data-placement="top" title="Name of the authorized person to sign the application">
+                        <b>authorized person </b>
+                        <InfoIcon />
                       </Form.Label>
                     </div>
                     {/* <Form.Check
@@ -1028,10 +1257,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor17.data,
+                          color:
+                            developerInputFiledColor17.length > 0
+                              ? developerInputFiledColor17[0].color.data
+                              : developerInputCheckedFiledColor17.length > 0
+                              ? developerInputCheckedFiledColor17[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Name of the authorized person to sign the application"), setSmShow(true), console.log("modal open");
@@ -1067,10 +1301,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor18.data,
+                          color:
+                            developerInputFiledColor18.length > 0
+                              ? developerInputFiledColor18[0].color.data
+                              : developerInputCheckedFiledColor18.length > 0
+                              ? developerInputCheckedFiledColor18[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Email ID for communication"), setSmShow(true), console.log("modal open");
@@ -1080,8 +1319,13 @@ const Personalinfo = (props) => {
                   </Col>
                   <Col md={4} xxl lg="4">
                     <div>
-                      <Form.Label>
-                        <b>Name of individual Land owner/ land-owning company/ firm/ LLP etc.</b>
+                      <Form.Label
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Name of individual Land owner/ land-owning company/ firm/ LLP etc."
+                      >
+                        <b>individual Land owner</b>
+                        <InfoIcon />
                       </Form.Label>
                     </div>
                     {/* <Form.Check
@@ -1102,10 +1346,15 @@ const Personalinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
                       <ReportProblemIcon
                         style={{
-                          color: developerInputFiledColor1.data,
+                          color:
+                            developerInputFiledColor19.length > 0
+                              ? developerInputFiledColor19[0].color.data
+                              : developerInputCheckedFiledColor19.length > 0
+                              ? developerInputCheckedFiledColor19[0].color.data
+                              : "#FFB602",
                         }}
                         onClick={() => {
                           setLabelValue("Name of individual Land owner/ land-owning company/ firm/ LLP etc."),
