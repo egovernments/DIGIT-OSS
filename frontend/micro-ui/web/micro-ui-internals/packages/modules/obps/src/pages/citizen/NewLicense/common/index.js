@@ -17,7 +17,7 @@ const CommonForm = () => {
     const [isStep4,setIsStep4]= useState(false);
     const [isStep5,setIsStep5]= useState(false);
     const [step,setStep]=useState(1);
-    const handleStep1=()=>{
+    const handleStep1=(data)=>{
         setIsStep1(true);
         setIsStep2(false);
         setIsStep3(false);
