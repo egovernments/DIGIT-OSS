@@ -8,7 +8,7 @@ const getAction = (flow) => {
    
  switch(flow){
    case "NEWLICENSE": actions = [
-   
+
     // 'BPA_NEW_ADDRESS_HEADER_DETAILS',
     'Applicant Info',
     'Application Purpose',

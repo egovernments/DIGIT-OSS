@@ -23,6 +23,15 @@ const ReleaseNew = (props) => {
                         </div>
                         <input type="text" className="form-control"  />
                     </Col>
+                    <Col md={4} xxl lg="3">
+                        <div>
+                            <Form.Label><b>Type of B.G. </b><span style={{ color: "red" }}>*</span></Form.Label>
+                        </div>
+                        <select className="form-control">
+                        <option> IDW</option>
+                        <option>EDC</option>
+                        </select>
+                    </Col>
                     </Row>
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
                     <Col md={4} xxl lg="3">

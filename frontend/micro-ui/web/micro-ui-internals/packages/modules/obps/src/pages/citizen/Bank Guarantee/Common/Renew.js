@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
-const Replace = (props) => {
+const RenewNew = (props) => {
 
     return(
         <form  autoComplete="off">
@@ -16,44 +16,18 @@ const Replace = (props) => {
                     </Col>
                     <Col md={4} xxl lg="3">
                         <div>
-                            <Form.Label><b>Enter Memo No. </b><span style={{ color: "red" }}>*</span></Form.Label>
+                            <Form.Label><b>Date Extended From </b><span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
-                        <input type="text" className="form-control"  />
+                        <input type="date" className="form-control"  />
                     </Col>
                     <Col md={4} xxl lg="3">
                         <div>
-                            <Form.Label><b>Bank Name</b><span style={{ color: "red" }}>*</span></Form.Label>
+                            <Form.Label><b>Date Extended To</b><span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
-                        <input type="text" className="form-control"  />
+                        <input type="date" className="form-control"  />
                     </Col>
-                    <Col md={4} xxl lg="3">
-                        <div>
-                            <Form.Label><b>Type of B.G</b><span style={{ color: "red" }}>*</span></Form.Label>
-                        </div>
-                        <select className="form-control">
-                        <option> IDW</option>
-                        <option>EDC</option>
-                        </select>
-                    </Col>
-
+                   
                 </Row>
-
-                <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                    <Col md={4} xxl lg="3">
-                        <div>
-                            <Form.Label><b>Validity</b><span style={{ color: "red" }}>*</span></Form.Label>
-                        </div>
-                        <input type="text" className="form-control"  />
-                    </Col>
-                    <Col md={4} xxl lg="3">
-                        <div>
-                            <Form.Label><b>Amount </b><span style={{ color: "red" }}>*</span></Form.Label>
-                        </div>
-                        <input type="text" className="form-control"  />
-                    </Col>
-                  
-                </Row>
-
             </Form.Group>
             <div class="row">
                     <div class="col-sm-12 text-right">
@@ -70,4 +44,4 @@ const Replace = (props) => {
     )
 }
 
-export default Replace;
+export default RenewNew;

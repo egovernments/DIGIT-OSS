@@ -21,10 +21,10 @@ import AddInfoForm from "../citizen/DeveloperRegistration/AddInfoForm/addInfo";
 import MyApplication from "./MyApplication";
 import ApplicationDetails from "./ApplicationDetail";
 import CommonBank from "./Bank Guarantee/Common/Common";
-import SubmitNew from "./Bank Guarantee/Submit New/SubmitNew";
-import RenewNew from "./Bank Guarantee/Renew/Renew";
-import Replace from "./Bank Guarantee/Replace/Replace";
-import ReleaseNew from "./Bank Guarantee/Release/Release";
+import SubmitNew from "./Bank Guarantee/Common/SubmitNew";
+import RenewNew from "./Bank Guarantee/Common/Renew";
+import Replace from "./Bank Guarantee/Common/Replace";
+import ReleaseNew from "./Bank Guarantee/Common/Release";
 // import LicenseAddInfo from "../../pageComponents/LicenseAddInfo";
 // import OCBuildingPermit from "./OCBuildingPermit";
 // import BpaApplicationDetail from "./BpaApplicationDetail";
@@ -72,6 +72,7 @@ const App = ({ path }) => {
         {/* <PrivateRoute path={`${path}/common`} component={Common} /> */}
         <PrivateRoute path={`${path}/tab`} component={CommonForm} />
         <PrivateRoute path={`${path}/bank`} component={CommonBank} />
+      
         <PrivateRoute path={`${path}/submitNew`} component={SubmitNew} />
         <PrivateRoute path={`${path}/renew`} component={RenewNew} />
         <PrivateRoute path={`${path}/replace`} component={Replace} />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Row, Col } from "react-bootstrap";
 import { Button, Form } from "react-bootstrap";
-const SubmitNew = (props) => {
+const SubmitNew = () => {
 
     return(
         <form  autoComplete="off">
