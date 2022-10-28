@@ -137,7 +137,14 @@ const GroupBills = ({ tenantId, onSubmit, data, count, isLoading, resultOk,servi
         //call the cancel bill api from response page and show appropriate response
     }
 
-    const [currentBill, setCurrentBill] = useState("")
+    const [currentBill, setCurrentBill] = useState("");
+
+    const downloadAll = (data) => {
+        data.map((fs) => {
+          window.open(fs.url);
+        });
+    };
+
     const handleCancelActionClick = (row) => {
         setShowModal(true)
         setCurrentBill(row)
@@ -159,10 +166,12 @@ const GroupBills = ({ tenantId, onSubmit, data, count, isLoading, resultOk,servi
         const keyv1 = keys.filter((key) => key.code === serviceType);
         const bills = await Digit.PaymentService.generatePdf(tenantId, { Bill: data }, keyv1[0].billKey);
         const res = await Digit.UploadServices.Filefetch(bills?.filestoreIds, tenantId);
-        window.open(res.data[bills.filestoreIds[0]]);
+        // removed for UM-5036
+        // window.open(res.data[bills.filestoreIds[0]]);
+        
         //logic for downloading all bills anyway(if api is giving multiple filestoreids)
         const fsObj = res.data.fileStoreIds;
-        // downloadAll(fsObj)
+        downloadAll(fsObj)
     };
     const handleMergeAndDownload = (e) => {
         downloadBills();
