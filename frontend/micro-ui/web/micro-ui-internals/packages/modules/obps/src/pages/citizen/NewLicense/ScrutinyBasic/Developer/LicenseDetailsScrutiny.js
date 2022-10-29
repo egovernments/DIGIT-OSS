@@ -86,7 +86,7 @@ const AddInfoScrutiny = (props) => {
                 // style={{ display: "flex" }}
                 >
                   <Form.Control height={25} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control>
-                  <BootstrapSwitchButton
+                  {/* <BootstrapSwitchButton
                     checked={true}
                     onlabel="Yes"
                     offlabel="No"
@@ -101,7 +101,7 @@ const AddInfoScrutiny = (props) => {
                         ? setUncheckedVlue((prev) => [...prev, "Developer"])
                         : setUncheckedVlue((prev) => prev.filter((elm) => elm !== "Developer"));
                     }}
-                  />
+                  /> */}
                   {/* <ToggleButton type="radio"></ToggleButton> */}
                 </div>
 
