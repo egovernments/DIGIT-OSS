@@ -4,9 +4,16 @@ import { useForm } from "react-hook-form";
 // import Box from '@material-ui/core//Box';
 import { Button, Form } from "react-bootstrap";
 // import Typography from '@material-ui/core/Typography'
-import Modal from 'react-bootstrap/Modal';
+import {
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+} from "reactstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import axios from 'axios';
+
 // import InfoIcon from '@mui/icons-material/Info';
 // import TextField from '@mui/material/TextField';
 const style = {
@@ -27,10 +34,11 @@ const FeesChargesForm = (props) => {
     // const [show, setShow] = useState(false);
 
     const [show, setShow] = useState(false);
-
+    const [show1, setShow1] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const handleShow1 = () => setShow(true);
+    const setPayShow = () => setShow(true);
+   
 
     const [form, setForm] = useState([]);
     const [feeDetail, setFeeDetail] = useState('');
@@ -41,7 +49,12 @@ const FeesChargesForm = (props) => {
     const [aggregator, setAggregator] = useState('');
     const [previousLic, setPreviousLic] = useState('');
     const [amount, setAmount] = useState('');
+    const[calculateData,setCalculateData]=useState({});
+    const[finalSubmitData,setFinalSubmitData]=useState([])
+    const [modal, setmodal] = useState(false);
+    const [modal1, setmodal1] = useState(false);
     let frmData = JSON.parse(localStorage.getItem('key') || "[]")
+    console.log("data1",frmData)
     let step2 = JSON.parse(localStorage.getItem('step2') || "[]")
     let step3 = JSON.parse(localStorage.getItem('step3') || "[]")
     let step4 = JSON.parse(localStorage.getItem('step4') || "[]")
@@ -134,11 +147,296 @@ const FeesChargesForm = (props) => {
     }
     const [noOfRows, setNoOfRows] = useState(1);
     const [noOfRow, setNoOfRow] = useState(1);
-    const [noOfRow1, setNoOfRow1] = useState(1);
+    const [noOfRow1, setNoOfRow1] = useState(1); 
+   
+    const Purpose = JSON.parse(localStorage.getItem('purpose'))
+    console.log("adf", Purpose)
+    const potential = JSON.parse(localStorage.getItem('potential'))
+    console.log("potential", potential)
+    const CalculateApiCall = async () => {
+        try {
+           
+        const Resp = await axios.get("http://10.1.1.18:8191/land-services/_calculate?feeType=scrutinyFeeCharges&purposename=residentialPlottedColony&arce=1" + "&potenialZone="+ potential +"&colonyType="+ Purpose,{
+             
+        })
+                .then((Resp) => {
+                    console.log("calculate", Resp)
+                    return Resp;
+                })
+            setCalculateData(Resp.data);
+            
+           
+        } catch (error) {
+            console.log(error.message);
+        }
+       
+    }
+     useEffect(()=>{
+        CalculateApiCall();
+    },[])
 
-    const [payShow, setPayShow] = useState(false);
+    useEffect(()=>{
+        if (calculateData!==undefined && calculateData !== null) {
+            console.log("Fee",calculateData?.feeTypeCalculationDto?.scrutinyFeeChargesCal)
+        }
+    },[calculateData]);
 
 
+    const FinalSubmitApiCall = async () => {
+        try {
+            const postDistrict = {
+                "NewServiceInfo":{
+     
+                    "newServiceInfoData":{
+                       "step1":{
+                          "developer":"akash",
+                          "name":"akash",
+                          "mobile":12345678,
+                          "mobile2":null,
+                          "email":null,
+                          "pan":null,
+                          "address":null,
+                          "village1":null,
+                          "pincode":null,
+                          "tehsil":null,
+                          "district1":null,
+                          "state":null,
+                          "nameOwner":null
+                       },
+                       "step2":{
+                          "purpose":null,
+                          "district2":null,
+                          "revenueName":null,
+                          "khewat":null,
+                          "mustil":null,
+                          "killa":null,
+                          "sector":null,
+                          "kanal":null,
+                          "marla":null,
+                          "village2":null,
+                          "khatoni":null,
+                          "step2Data1":null,
+                          "khasra":"khasra"
+                       },
+                       "step3":{
+                          "licenseApplied":"licensed Applied",
+                          "migrationLic":null,
+                          "step3Data1":{
+                             "potential":null,
+                             "siteLoc":null,
+                             "approach":"Approach",
+                             "specify":null,
+                             "existingCase":null,
+                             "typeLand":null,
+                             "thirdParty":null
+                          },
+                          "step3Data2":{
+                             "rehan":null,
+                             "patta":null,
+                             "gair":null,
+                             "any":null,
+                             "litigation":null,
+                             "court":null,
+                             "appliedLand":null,
+                             "revenuerasta":null,
+                             "widthrevenuerasta":null,
+                             "watercourse":null,
+                             "widthRev":null,
+                             "compactBlock":null,
+                             "sandwiched":null,
+                             "acquistion":"Acquisition",
+                             "compensation":null,
+                             "section4":null,
+                             "section6":null,
+                             "statusRelease":null,
+                             "award":null,
+                             "dateRelease":null,
+                             "site":null,
+                             "approachable":null,
+                             "vacant":null,
+                             "construction":null,
+                             "typeCons":null,
+                             "ht":null,
+                             "htRemark":null,
+                             "gas":null,
+                             "gasRemark":null,
+                             "nallah":null,
+                             "nallahRemark":null,
+                             "road":null,
+                             "roadWidth":null,
+                             "land":null,
+                             "landRemark":null,
+                             "layoutPlan":null
+                          }
+                       },
+                       "step4":{
+                          "dgps":"dgps",
+                          "step4Data1": {
+                              "resplotno": "lotnumber",
+                              "reslengthmtr": null,
+                              "reswidthmtr": null,
+                              "resareasq": null,
+                              "complotno": null,
+                              "comlengthmtr": null,
+                              "comwidthmtr": null,
+                              "comareasq": null,
+                              "siteplotno": null,
+                              "sitelengthmtr": null,
+                              "sitewidthmtr": null,
+                              "siteareasq": null,
+                              "parkplotno": null,
+                              "parklengthmtr": null,
+                              "parkwidthmtr": null,
+                              "parkareasq": null,
+                              "publicplotno": null,
+                              "publiclengthmtr": null,
+                              "publicwidthmtr": null,
+                              "publicareasq": null
+                          },
+                          "step4Data2": {
+                              "irPlotDimen": null,
+                              "irPlotArea": null,
+                              "irSizeDimen": null,
+                              "irSizeArea": null,
+                              "pocketDimen": null,
+                              "pocketArea": null,
+                              "surrenderDimen": null,
+                              "surrenderArea": null
+                          },
+                          "step4Data3": {
+                              "npnlNo": null,
+                              "npnlArea": null,
+                              "ewsNo": null,
+                              "ewsArea": null
+                          },
+                          "step4Data4": {
+                              "frozenNo": null,
+                              "frozenArea": null,
+                              "organizeNo": null,
+                              "organizeArea": null
+                          },
+                          "step4Data5": {
+                              "colonyNo": null,
+                              "colonyArea": null,
+                              "fiftyNo": null,
+                              "fiftyArea": null,
+                              "twoNo": null,
+                              "twoArea": null,
+                              "resiNo": null,
+                              "resiArea": null,
+                              "commerNo": null,
+                              "commerArea": null,
+                              "labourNo": null,
+                              "labourArea": null
+                          },
+                          "step4Data6": {
+                              "permissible": null,
+                              "far": null
+                          },
+                          "step4Data7": {
+                              "perPlot": null,
+                              "perLength": null,
+                              "perWidth": null,
+                              "perArea": null,
+                              "commPlotted": null,
+                              "scono": null,
+                              "scolengthmtr": null,
+                              "scowidthmtr": null,
+                              "scoareasq": null,
+                              "boothplotno": null,
+                              "boothlengthmtr": null,
+                              "boothwidthmtr": null,
+                              "boothareasq": null
+                          },
+                          "step4Data8": {
+                              "ewsnpnlPlot": null,
+                              "areaewsnpnlPlot": null,
+                              "collectorRate": null,
+                              "areaCollectorRate": null,
+                              "anyotherroad": null,
+                              "widthanyotherroad": null,
+                              "licValid": null,
+                              "licvalidity": null,
+                              "appliedrenewal": null,
+                              "scrutinyFee": null,
+                              "transactionScrutiny": null,
+                              "reasonRevision": null,
+                              "uploadapprovedLayout": null,
+                              "proposedLayout": null,
+                              "undertakingChang": null,
+                              "phasingSite": null,
+                              "reraUpload": null,
+                              "newspaperpublic": null,
+                              "dateNews": null,
+                              "namenewspaper": null,
+                              "intimatedAllotes": null,
+                              "attachintimate": null,
+                              "hostedapprovedWebsite": null,
+                              "objectionUpload": null,
+                              "replySubmittedUpload": null,
+                              "bookingPlotUpload": null,
+                              "anyFeature": null,
+                              "sitenczdevelop": null,
+                              "sitenczregional": null,
+                              "nczTruthingReport": null,
+                              "dlscRecommend": null,
+                              "exemption": null
+                          }
+                      },
+                      "step5": {
+                          "feeDetail": "100000",
+                          "licenseFee": null,
+                          "totalFee": null,
+                          "remark": null,
+                          "aggregator": null,
+                          "previousLic": null,
+                          "amount": null,
+                          "scrutinyFee": null
+                      }
+                  }
+                    }
+                 }
+           
+            const Resp = await axios.post("http://10.1.1.18:8199/land-services/new/_create",
+                postDistrict,
+            )
+                .then((Resp) => {
+                    console.log("Submit", Resp)
+                    return Resp;
+                })
+                setFinalSubmitData(Resp.data);
+           
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    useEffect(()=>{
+        FinalSubmitApiCall();
+    },[])
+
+    const handleChangePurpose = (data) => {
+        const purposeSelected = data.data;
+        setSelectPurpose(purposeSelected)
+        // console.log("purpose", purposeSelected)
+        // localStorage.setItem("purpose", JSON.stringify(purposeSelected))
+
+    }
+    const handleChangePotential = (data) => {
+        const purposeSelected = data.data;
+        setSelectPurpose(purposeSelected)
+    }
+    const handleScrutiny = event => {
+         setCalculateData(event.target.value);
+
+    };
+    const handleLicense= event => {
+        setCalculateData(event.target.value);
+
+   };
+   const handleConversion= event => {
+    setCalculateData(event.target.value);
+
+};
 
     return (
         <Form onSubmit={FeesChrgesFormSubmitHandler}>
@@ -146,7 +444,7 @@ const FeesChargesForm = (props) => {
                 <Form.Group className="justify-content-center" controlId="formBasicEmail">
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
                         <Col col-12>
-                            <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                            <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))",width:"875px",marginLeft:"339px" }}>
                                 <thead>
                                     <tr>
                                         <th><b>Total Area</b></th>
@@ -157,59 +455,56 @@ const FeesChargesForm = (props) => {
                                 <tbody>
                                     <tr>
                                         <th ><b>Purpose</b></th>
-                                        <td><input type="text" className="form-control" /></td>
+                                        <td><input type="text" className="form-control" placeholder={Purpose} 
+                                         onChange={handleChangePurpose} value={Purpose} disabled></input></td>
+                                       
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                     <tr>
                                         <th><b>Dev Plan</b></th>
-                                        <td><input type="text" className="form-control" /></td>
+                                        <td><input type="text" className="form-control" placeholder={potential} 
+                                         onChange={handleChangePotential} value={potential} disabled/></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                     <tr>
                                         <th><b>Scrutiny Fee</b></th>
-                                        <td><input type="text" className="form-control" /></td>
+                                        <td><input type="text" className="form-control"
+                                         placeholder={(calculateData!==null && calculateData!==undefined)?
+                                            calculateData?.feeTypeCalculationDto?.scrutinyFeeChargesCal :"N/A"}
+                                            onChange1={handleScrutiny} value=
+                                            {(calculateData!==null && calculateData!==undefined)?
+                                                calculateData?.feeTypeCalculationDto?.scrutinyFeeChargesCal :"N/A"}
+                                                 disabled /></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                     <tr>
                                         <th><b>License Fee</b></th>
-                                        <td><input type="text" className="form-control" /></td>
+                                        <td><input type="text" className="form-control"
+                                         placeholder={(calculateData!==null && calculateData!==undefined)?
+                                            calculateData?.feeTypeCalculationDto?.licenseFeeChargesCal :"N/A"}
+                                            onChange1={handleLicense} value=
+                                            {(calculateData!==null && calculateData!==undefined)?
+                                                calculateData?.feeTypeCalculationDto?.licenseFeeChargesCal :"N/A"}
+                                                 disabled  /></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                     <tr>
                                         <th><b>Conversion Chrges</b></th>
-                                        <td><input type="text" className="form-control" /></td>
+                                        <td><input type="text" className="form-control" 
+                                         placeholder={(calculateData!==null && calculateData!==undefined)?
+                                            calculateData?.feeTypeCalculationDto?.conversionChargesCal :"N/A"}
+                                            onChange1={handleConversion} value=
+                                            {(calculateData!==null && calculateData!==undefined)?
+                                                calculateData?.feeTypeCalculationDto?.conversionChargesCal :"N/A"}
+                                                 disabled /></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                 </tbody>
                             </table>
 
-                            {/* <div className="row">
-                            <div className="col col-4">
-                              
-                                        <h6><b>(i)Fees/Charges details Total area</b></h6>
-                                        <input type="text" className="form-control"  minLength={1} maxLength={20} pattern="[0-9]*"
-                                         onChange={(e)=>setFeeDetail(e.target.value)} value={feeDetail} onChange1={handleFeesChange} />
-                                         {errors.feeDetail && <p>Please check the First Name</p>}
-                             </div>
-                             <div className="col col-4">
-                              
-                                        <h6><b>(ii)Licence Fees (25%)</b></h6>
-                                        <input type="text" className="form-control"   minLength={1} maxLength={20} pattern="[0-9]*"
-                                         onChange={(e)=>setLicenseFee(e.target.value)} value={licenseFee} onChange1={handleLicFeesChange} />
-                                         {errors.licenseFee && <p>Please check the First Name</p>}
-                             </div>
-                             <div className="col col-4">
-                              
-                              <h6><b>(iii)Scrutiny Fees</b></h6>
-                              <input type="text" className="form-control"   minLength={1} maxLength={20} pattern="[0-9]*"
-                               onChange={(e)=>setScrutinyFee(e.target.value)} value={ScrutinyFee} onChange1={handleScrutinyFeesChange} />
-                               {errors.ScrutinyFee && <p></p>}
-                   </div>
-                   </div><br></br> */}
-
                             <div className="row">
                                 <div className="col col-4">
-                                    <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)"><b>(i)&nbsp;Total Fees&nbsp; </b>&nbsp;&nbsp;</h6>
+                                    <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)"><b>(i)&nbsp;Payable Till Now&nbsp; </b>&nbsp;&nbsp;</h6>
 
                                     <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*"
                                         onChange={(e) => setTotalFee(e.target.value)} value={totalFee} onChange1={handleTotalFeesChange} />
@@ -259,30 +554,30 @@ const FeesChargesForm = (props) => {
                                 <p className="text-black">The following is undertaken: </p>
                                 <ul className="Undertakings">
                                     <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge</li>
-                                    .<button className="btn btn-primary" onClick={handleShow}>Read More</button>
+                                    .<button className="btn btn-primary" onClick={() => setmodal1(true)}>Read More</button>
 
                                 </ul>
                             </div>
-
-
                             <Modal
-                                show={show}
-                                onHide={() => setShow(false)}
-                                dialogClassName="modal-90w"
-                                aria-labelledby="example-custom-modal-styling-title"
-
+                                size="lg"
+                                isOpen={modal1}
+                                toggle={() => setmodal(!modal1)}
+                                style={{width:"500px", height:"200px"}}
+                                aria-labelledby="contained-modal-title-vcenter"
+                                centered
                             >
-                                <Modal.Header closeButton>
-
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <p>
-                                        I hereby declare that the details furnished above are true and correct to the best of my
+                                <ModalHeader
+                                    toggle={() => setmodal1(!modal1)}
+                                ></ModalHeader>
+                                <ModalBody style={{fontSize:20}}>
+                                    <h2 > I hereby declare that the details furnished above are true and correct to the best of my
                                         knowledge and belief and I undertake to inform you of any changes therein, immediately.
                                         In case any of the above information is found to be false or untrue or misleading or misrepresenting,
-                                        I am aware that I may be held liable for it.
-                                    </p>
-                                </Modal.Body>
+                                        I am aware that I may be held liable for it.</h2>
+                                </ModalBody>
+                                <ModalFooter
+                                    toggle={() => setmodal(!modal1)}
+                                ></ModalFooter>
                             </Modal>
                             <div className="">
 
@@ -297,36 +592,41 @@ const FeesChargesForm = (props) => {
                                         </label>
                                     </div>
                                     <div class="my-2">
-                                        .<button className="btn btn-primary" onClick={setPayShow}>Pay Now</button>
+                                        .<button className="btn btn-primary" onClick={() => setmodal(true)} >Pay Now</button>
                                         {/* <button className="btn btn-success" onClick={()=>setPayShow(true)}
                                                         data-toggle="modal" data-target="#payemtModal">Pay Now</button> */}
-                                    </div>
+                                    </div>  
+                                    <div >
 
-
-                                    <Modal
-                                        show={show}
-                                        onHide={() => setShow(false)}
-                                        dialogClassName="modal-90w"
-                                        aria-labelledby="example-custom-modal-styling-title"
-
-                                    >
-                                        <Modal.Header closeButton>
-
-                                        </Modal.Header>
-                                        <Modal.Body>
-                                            <p>
-                                                I hereby declare that the details furnished above are true and correct to the best of my
-                                                knowledge and belief and I undertake to inform you of any changes therein, immediately.
-                                                In case any of the above information is found to be false or untrue or misleading or misrepresenting,
-                                                I am aware that I may be held liable for it.
-                                            </p>
-                                        </Modal.Body>
-                                    </Modal>
-
+                                        <Modal
+                                           size="lg"
+                                           isOpen={modal}
+                                           toggle={() => setmodal(!modal)}
+                                           style={{width:"500px", height:"200px"}}
+                                           aria-labelledby="contained-modal-title-vcenter"
+                                             centered
+                                        >
+                                            <ModalHeader
+                                                toggle={() => setmodal(!modal)}
+                                            ></ModalHeader>
+                                            <ModalBody style={{fontWeight:"bold",fontSize:20}}>
+                                            <p class="text-success font-weight-bold"
+                                                           >Congratulations, Payment
+                                                            Successful!!</p>
+                                                        <p class="font-weight-bold" >Your
+                                                            Application No. : <strong>2547893</strong></p>
+                                                        <p class="font-weight-bold">Your Diary
+                                                            No. : <strong>5984785</strong></p>
+                                                        <p class="font-weight-bold" >The same
+                                                            has been sent to your mobile and email as well.</p>
+                                            </ModalBody>
+                                            <ModalFooter
+                                                toggle={() => setmodal(!modal)}
+                                            ></ModalFooter>
+                                        </Modal>
+                                    
                                 </div>
-
-
-
+                                </div>
 
                                 {/* <div class="modal" tabindex="-1" id="payemtModal" role="modal">
                                             <div class="modal-dialog">
@@ -358,15 +658,13 @@ const FeesChargesForm = (props) => {
                                   
                                    </div>  */}
                             </div>
-                            <Button style={{ alignSelf: "center", marginTop: "-32px", marginLeft: "1061px" }}
-                                variant="primary" type="submit" onClick={() => props.Step5Continue({ "data": true })}>
-                                View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" />
-                            </Button> &nbsp;&nbsp;&nbsp;
-                            <Button style={{ alignSelf: "center", marginTop: "-32px" }}
-                                variant="primary" type="submit" onClick={FeesChrgesFormSubmitHandler} >
-                                Submit
-                            </Button>
-
+                            <div class="row">
+    <div class="col-sm-12 text-right">
+        <button id="btnSearch" class="btn btn-primary btn-md " onClick={() => props.Step5Continue({ "data": true })}  > View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" /></button> &nbsp;&nbsp;
+         <button id="btnClear" class="btn btn-primary btn-md " onClick={FeesChrgesFormSubmitHandler}>Submit</button>
+     </div>
+</div>
+          
                         </Col>
                     </Row>
                 </Form.Group>
