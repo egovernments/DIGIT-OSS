@@ -146,6 +146,10 @@ const AppliedDetailForm = (props) => {
   const [reslengthmtr, setResLengthmtr] = useState('');
   const [reswidthmtr, setResWidthmtr] = useState('');
   const [resareasq, setResAreasq] = useState('');
+  const [genplotno, setGenPlotno] = useState('');
+  const [genlengthmtr, setGenLengthmtr] = useState('');
+  const [genwidthmtr, setGenWidthmtr] = useState('');
+  const [genareasq, setGenAreasq] = useState('');
   const [complotno, setComPlotno] = useState('');
   const [comlengthmtr, setComLengthmtr] = useState('');
   const [comwidthmtr, setComWidthmtr] = useState('');
@@ -163,83 +167,91 @@ const AppliedDetailForm = (props) => {
   const [publicwidthmtr, setPublicWidthmtr] = useState('');
   const [publicareasq, setPublicAreasq] = useState('');
   const [irPlotDimen, setIrPlotDimen] = useState('');
-  const [irPlotArea, setIrPlotArea] = useState('');
+  const [npnlplotno, setNpnlPlotNo] = useState('');
   const [irSizeDimen, setIrSizeDimen] = useState('');
-  const [irSizeArea, setIrSizeArea] = useState('');
-  const [pocketDimen, setPocketDimen] = useState('');
-  const [pocketArea, setPocketArea] = useState('');
-  const [surrenderDimen, setSurrenderDimen] = useState('');
-  const [surrenderArea, setSurrenderArea] = useState('');
+  const [npnllengthmtr, setNpnlLengthMtr] = useState('');
+  const [npnlwidthmtr, setNpnlWidthMtr] = useState('');
+  const [npnlareasq, setNpnlareasq] = useState('');
+  const [ewsplotno, setEwsplotno] = useState('');
+  const [ewslengthmtr, setEwslengthmtr] = useState('');
   const [npnlNo, setNpnlNo] = useState('');
   const [npnlArea, setNpnlArea] = useState('');
   const [ewsNo, setEwsNo] = useState('');
   const [ewsArea, setEwsArea] = useState('');
   const [frozenNo, setFrozenNo] = useState('');
   const [frozenArea, setFrozenArea] = useState('');
-  const [organizeNo, setorganizeNo] = useState('');
-  const [organizeArea, setorganizeArea] = useState('');
-  const [colonyNo, setColonyNo] = useState('');
-  const [colonyArea, setColonyArea] = useState('');
-  const [fiftyNo, setFiftyNo] = useState('');
-  const [fiftyArea, setFiftyArea] = useState('');
-  const [twoNo, setTwoNo] = useState('');
-  const [twoArea, setTwoArea] = useState('');
+  const [ewswidthmtr, setEwswidthmtr] = useState('');
+  const [ewsareasq, setEwsareasq] = useState('');
+  const [stpplotno, setStpplotno] = useState('');
+  const [stplengthmtr, setStplengthmtr] = useState('');
+  const [stpwidthmtr, setStpwidthmtr] = useState('');
+  const [stpareasq, setStpareasq] = useState('');
+  const [etpplotno, setEtpplotno] = useState('');
+  const [etplengthmtr, setEtplengthmtr] = useState('');
   const [resiNo, setResiNo] = useState('');
   const [resiArea, setResiArea] = useState('');
   const [commerNo, setCommerNo] = useState('');
   const [commerArea, setCommerArea] = useState('');
   const [labourNo, setLabourNo] = useState('');
   const [labourArea, setLabourArea] = useState('');
-  const [permissible, setPermissible] = useState('');
-  const [perPlot, setPerPlot] = useState('');
-  const [perLength, setPerLength] = useState('');
-  const [perWidth, setPerWidth] = useState('');
-  const [perArea, setPerArea] = useState('');
-  const [commPlotted, setCommPlotted] = useState('');
-  const [far, setFar] = useState('');
-  const [scono, setScono] = useState('');
-  const [scolengthmtr, setScoLengthmtr] = useState('');
-  const [scowidthmtr, setScoWidthmtr] = useState('');
-  const [scoareasq, setScoAreasq] = useState('');
-  const [boothplotno, setBoothPlotno] = useState('');
-  const [boothlengthmtr, setBoothLengthmtr] = useState('');
-  const [boothwidthmtr, setBoothWidthmtr] = useState('');
-  const [boothareasq, setBoothAreasq] = useState('');
-  const [ewsnpnlPlot, setEwsNpnlPlot] = useState('');
-  const [areaewsnpnlPlot, setAreaEwsNpnlPlot] = useState('');
-  const [collectorRate, setCollectorRate] = useState('');
-  const [areaCollectorRate, setAreaCollectorRate] = useState('');
-  const [anyotherroad, setAnyOtherRoad] = useState('');
-  const [widthanyotherroad, setWidthAnyOtherRoad] = useState('');
-  const [licValid, setLicValid] = useState('');
-  const [licvalidity, setLicvalidity] = useState('');
-  const [appliedrenewal, setAplliedRenewal] = useState('');
-  const [scrutinyFee, setscrutinyFee] = useState('');
-  const [transactionScrutiny, setTransactionscrutiny] = useState('');
-  const [reasonRevision, setReasonRevision] = useState('');
-  const [uploadapprovedLayout, setUploadApprovedLayout] = useState('');
-  const [proposedLayout, setProposedLayout] = useState('');
-  const [undertakingChange, setUndertakingChange] = useState('');
-  const [phasingSite, setPhasingsite] = useState('');
-  const [reraUpload, setReraUpload] = useState('');
-  const [newspaperpublic, setNewspaperPublic] = useState('');
-  const [dateNews, setDateNews] = useState('');
-  const [namenewspaper, setNameNewspaper] = useState('');
-  const [intimatedAllotes, setIntimatedAllotes] = useState('');
-  const [attachintimate, setAttachIntimate] = useState('');
-  const [hostedapprovedWebsite, setHostedApprovedwebsite] = useState('');
-  const [objectionUpload, setObjectionUpload] = useState('');
-  const [replySubmittedUpload, setReplySubmittedUpload] = useState('');
-  const [bookingPlotUpload, setBookingPlotUpload] = useState('');
-  const [anyFeature, setAnyFeature] = useState('');
-  const [sitenczdevelop, setSiteNczDevelop] = useState('');
-  const [sitenczregional, setSiteNczRegional] = useState('');
-  const [nczTruthingReport, setNczTruthingReport] = useState('');
-  const [dlscRecommend, setDlscRecommend] = useState('');
-  const [exemption, setExemption] = useState('');
-  const [DdjayFormDisplay, setDdjayFormDisplay] = useState("")
-  const [ResidentialFormDisplay, setResidentialFormDisplay] = useState("")
-  const [IndustrialPlottedFormDisplay, setIndustrialPlottedFormDisplay] = useState("")
+  const [etpwidthmtr, setEtpwidthmtr] = useState('');
+  const [etpareasq, setEtpareasq] = useState('');
+  const [wtpplotno, setWtpplotno] = useState('');
+  const [wtplengthmtr, setWtplengthmtr] = useState('');
+  const [wtpwidthmtr, setWtpwidthmtr]= useState('');
+  const [wtpareasq, setWtpareasq] = useState('');
+  const [ugtplotno, setUgtplotno] = useState('');
+  const [ugtlengthmtr, setUgtlengthmtr] = useState('');
+  const [ugtwidthmtr, setUgtwidthmtr] = useState('');
+  const [ugtareasq, setUgtareasq] = useState('');
+  const [milkboothplotno, setMilkboothplotno] = useState('');
+  const [milkboothlengthmtr, setMilkboothlengthmtr] = useState('');
+  const [milkboothwidthmtr, setMilkboothwidthmtr] = useState('');
+  const [milkboothareasq, setMilkboothareasq] = useState('');
+  const [gssplotno, setGssplotno] = useState('');
+  const [gsslengthmtr, setGsslengthmtr] = useState('');
+  const [gsswidthmtr, setGsswidthmtr] = useState('');
+  const [gssareasq, setGssareasq] = useState('');
+  const [resDimension, setResDimension] = useState('');
+  const [resEnteredArea, setResEnteredArea] = useState('');
+  const [comDimension, setComDimension] = useState('');
+  const [comEnteredArea, setComEnteredArea] = useState('');
+  const [secPlanPlot, setSecPlanPlot] = useState('');
+  const [secPlanDim, setSecPlanDim] = useState('');
+  const [secPlanLength, setSecPlanLength] = useState('');
+  const [secPlanEntered, setSecPlanEntered] = useState('');
+  const [greenBeltPlot, setGreenBeltPlot] = useState('');
+  const [greenBeltLength, setGreenBeltLength] = useState('');
+  const [greenBeltDim, setgGreenBeltDim] = useState('');
+  const [greenBeltEntered, setGreenBeltEntered] = useState('');
+  const [internalPlot, setInternalPlot] = useState('');
+  const [internalLength, setInternalLength] = useState('');
+  const [internalDim, setInternalDim] = useState('');
+  const [internalEntered, setInternalEntered] = useState('');
+  const [otherPlot, setOtherPlot] = useState('');
+  const [otherDim, setOtherDim] = useState('');
+  const [otherLength, setOtherLength] = useState('');
+  const [otherEntered, setOtherEntered] = useState('');
+  const [undeterminedPlot, setUndeterminedPlot] = useState('');
+  const [undeterminedLength, setUndeterminedLength] = useState('');
+  const [undeterminedDim, setUndeterminedDim] = useState('');
+  const [undeterminedEntered, setUndeterminedEntered] = useState('');
+  const [organize, setOrganize] = useState('');
+  const [colonyfiftyNo, setColonyfiftyNo] = useState('');
+  const [colonyfiftyArea, setColonyfiftyArea] = useState('');
+  const [fiftyToTwoNo, setFiftyToTwoNo] = useState('');
+  const [fiftyToTwoArea, setFiftyToTwoArea] = useState('');
+  const [twoHundredNo, setTwoHundredNo] = useState("");
+  const [twoHundredArea, setTwoHundredArea] = useState("");
+  const [surrender, setSurrender] = useState("");
+  const [pocketProposed, setPocketProposed] = useState("");
+   const [surrendered, setSurrendered] = useState("");
+   const [deposit, setDeposit] = useState("");
+   const [sitePlan, setSitePlan] = useState("");
+   const [democraticPlan, setDemocraticPlan] = useState("");
+   const [developmentPlan, setDevelopmentPlan] = useState("");
+   const [sectoralPlan, setSectoralPlan] = useState("");
+   const [uploadLayoutPlan, setUploadLayoutPlan] = useState("");
   // const DdjayFormDisplay=useSelector(selectDdjayFormShowDisplay);
   //   const ResidentialFormDisplay=useSelector(selectResidentialFormShowDisplay);
   //   const IndustrialPlottedFormDisplay=useSelector(selectIndustrialFormDisplay);
@@ -284,12 +296,24 @@ const AppliedDetailForm = (props) => {
     props.Step4Continue({ "data": true })
     let forms = {
       dgps: dgps,
-      "step4Data1":
+      "DetailsAppliedLandData1":
       {
         resplotno: resplotno,
         reslengthmtr: reslengthmtr,
         reswidthmtr: reswidthmtr,
         resareasq: resareasq,
+        genplotno:  genplotno,
+        genlengthmtr:   genlengthmtr,
+        genwidthmtr:   genwidthmtr,
+        genareasq:   genareasq,
+        npnlplotno: npnlplotno,
+        npnllengthmtr:  npnllengthmtr,
+        npnlwidthmtr:  npnlwidthmtr,
+        npnlareasq:  npnlareasq,
+        ewsplotno: ewsplotno,
+        ewslengthmtr: ewslengthmtr,
+        ewswidthmtr: ewswidthmtr,
+        ewsareasq: ewsareasq,
         complotno: complotno,
         comlengthmtr: comlengthmtr,
         comwidthmtr: comwidthmtr,
@@ -306,40 +330,71 @@ const AppliedDetailForm = (props) => {
         publiclengthmtr: publiclengthmtr,
         publicwidthmtr: publicwidthmtr,
         publicareasq: publicareasq,
+        stpplotno:  stpplotno,
+        stplengthmtr:  stplengthmtr,
+        stpwidthmtr:  stpwidthmtr,
+        stpareasq:  stpareasq,
+        etpplotno: etpplotno,
+        etplengthmtr: etplengthmtr,
+        etpwidthmtr: etpwidthmtr,
+        etpareasq: etpareasq,
+        wtpplotno: wtpplotno,
+        wtplengthmtr:  wtplengthmtr,
+        wtpwidthmtr:  wtpwidthmtr,
+        wtpareasq:  wtpareasq,
+        ugtplotno:  ugtplotno,
+        ugtlengthmtr:  ugtlengthmtr,
+        ugtwidthmtr:  ugtwidthmtr,
+        ugtareasq:  ugtareasq,
+        milkboothplotno:  milkboothplotno,
+        milkboothlengthmtr:  milkboothlengthmtr,
+        milkboothwidthmtr:  milkboothwidthmtr,
+        milkboothareasq:  milkboothareasq,
+        gssplotno:    gssplotno,
+        gsslengthmtr:    gsslengthmtr,
+        gsswidthmtr:   gsswidthmtr,
+        gssareasq:    gssareasq,
+        resDimension:resDimension,
+        resEnteredArea:resEnteredArea,
+        comDimension:comDimension,
+        comEnteredArea:comEnteredArea,
+        secPlanPlot:secPlanPlot,
+        secPlanLength:secPlanLength,
+        secPlanDim:secPlanDim,
+        secPlanEntered:secPlanEntered,
+       greenBeltPlot:greenBeltPlot,
+       greenBeltLength:greenBeltLength,
+       greenBeltDim:greenBeltDim,
+       greenBeltEntered:greenBeltEntered,
+       internalPlot:internalPlot,
+       internalLength:internalLength,
+       internalDim:internalDim,
+       internalEntered:internalEntered,
+       otherPlot: otherPlot,
+       otherLength: otherLength,
+       otherDim: otherDim,
+       otherEntered: otherEntered,
+       undeterminedPlot: undeterminedPlot,
+       undeterminedLength:undeterminedLength,
+       undeterminedDim: undeterminedDim,
+       undeterminedEntered: undeterminedEntered,
+
+
       },
-      "step4Data2":
-      {
-        irPlotDimen: irPlotDimen,
-        irPlotArea: irPlotArea,
-        irSizeDimen: irSizeDimen,
-        irSizeArea: irSizeArea,
-        pocketDimen: pocketDimen,
-        pocketArea: pocketArea,
-        surrenderDimen: surrenderDimen,
-        surrenderArea: surrenderArea,
-      },
-      "step4Data3":
-      {
-        npnlNo: npnlNo,
-        npnlArea: npnlArea,
-        ewsNo: ewsNo,
-        ewsArea: ewsArea,
-      },
-      "step4Data4":
+      "DetailsAppliedLandDdjay2":
       {
         frozenNo: frozenNo,
         frozenArea: frozenArea,
-        organizeNo: organizeNo,
-        organizeArea: organizeArea,
+        organize: organize
       },
-      "step4Data5":
+      "DetailsAppliedLandIndustrial3":
       {
-        colonyNo: colonyNo,
-        colonyArea: colonyArea,
-        fiftyNo: fiftyNo,
-        fiftyArea: fiftyArea,
-        twoNo: twoNo,
-        twoArea: twoArea,
+        colonyfiftyNo: colonyfiftyNo,
+        colonyfiftyArea: colonyfiftyArea,
+        fiftyToTwoNo: fiftyToTwoNo,
+        fiftyToTwoArea: fiftyToTwoArea,
+        twoHundredNo: twoHundredNo,
+        twoHundredArea: twoHundredArea,
         resiNo: resiNo,
         resiArea: resiArea,
         commerNo: commerNo,
@@ -347,65 +402,31 @@ const AppliedDetailForm = (props) => {
         labourNo: labourNo,
         labourArea: labourArea,
       },
-      "step4Data6":
+      "DetailsAppliedLandResidential4":
       {
-        permissible: permissible,
-        perPlot: perPlot,
-        perLength: perLength,
-        perWidth: perWidth,
-        perArea: perArea,
-        commPlotted: commPlotted,
-        far: far,
+        npnlNo: npnlNo,
+        npnlArea: npnlArea,
+        ewsNo: ewsNo,
+        ewsArea: ewsArea,
       },
-      "step4Data7":
+      "DetailsAppliedLandNpnl5":
       {
-        scono: scono,
-        scolengthmtr: scolengthmtr,
-        scowidthmtr: scowidthmtr,
-        scoareasq: scoareasq,
-        boothplotno: boothplotno,
-        boothlengthmtr: boothlengthmtr,
-        boothwidthmtr: boothwidthmtr,
-        boothareasq: boothareasq,
+        surrender : surrender ,
+        pocketProposed: pocketProposed,
+        deposit : deposit ,
+        surrendered : surrendered ,
       },
-      "step4Data8":
+      "DetailsAppliedLand6":
       {
-        ewsnpnlPlot: ewsnpnlPlot,
-        areaewsnpnlPlot: areaewsnpnlPlot,
-        collectorRate: collectorRate,
-        areaCollectorRate: areaCollectorRate,
-        anyotherroad: anyotherroad,
-        widthanyotherroad: widthanyotherroad,
-        licValid: licValid,
-        licvalidity: licvalidity,
-        appliedrenewal: appliedrenewal,
-        scrutinyFee: scrutinyFee,
-        transactionScrutiny: transactionScrutiny,
-        reasonRevision: reasonRevision,
-        uploadapprovedLayout: uploadapprovedLayout,
-        proposedLayout: proposedLayout,
-        undertakingChange: undertakingChange,
-        phasingSite: phasingSite,
-        reraUpload: reraUpload,
-        newspaperpublic: newspaperpublic,
-        dateNews: dateNews,
-        namenewspaper: namenewspaper,
-        intimatedAllotes: intimatedAllotes,
-        attachintimate: attachintimate,
-        hostedapprovedWebsite: hostedapprovedWebsite,
-        objectionUpload: objectionUpload,
-        replySubmittedUpload: replySubmittedUpload,
-        bookingPlotUpload: bookingPlotUpload,
-        anyFeature: anyFeature,
-        sitenczdevelop: sitenczdevelop,
-        sitenczregional: sitenczregional,
-        nczTruthingReport: nczTruthingReport,
-        dlscRecommend: dlscRecommend,
-        exemption: exemption
+        sitePlan : sitePlan ,
+        democraticPlan: democraticPlan,
+        sectoralPlan : sectoralPlan ,
+        developmentPlan : developmentPlan ,
+        uploadLayoutPlan:uploadLayoutPlan
       },
 
     }
-    localStorage.setItem('step4', JSON.stringify(forms))
+    localStorage.setItem('Details of Applied Land', JSON.stringify(forms))
 
   };
   // useEffect(()=>{
@@ -725,38 +746,17 @@ const AppliedDetailForm = (props) => {
                       <tr>
                         <td >
                           <div className="px-2">
-                            <p className="mb-2" onChange={(e) => setResPlotno(e.target.value)} value={resplotno}><b>Residential
+                            <p className="mb-2" ><b>Residential
                             </b></p>
-                            {/* <div className="row">
-                                                                <div className="col col-3">
-                                                                <input type="radio" value="Yes" id="Yes"
-                                                                    onChange={handleChange} name="Yes" />
-                                                                <label for="Yes"></label>
-                                                                <label htmlFor="gen">Gen</label>
-                                                            </div>
-                                                            <div className="col col-3">
-                                                                <input type="radio" value="Yes" id="Yes"
-                                                                    onChange={handleChange} name="Yes" />
-                                                                <label for="Yes"></label>
-                                                                <label htmlFor="npnl">NPNL</label>
-                                                            </div>
-                                                            
-                                                            <div className="col col-3">
-                                                                <input type="radio" value="Yes" id="Yes"
-                                                                    onChange={handleChange} name="Yes" />
-                                                                <label for="Yes"></label>
-                                                                <label htmlFor="gen">EWS</label>
-                                                            </div>
-                                                            </div> */}
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setResPlotno(e.target.value)} value={resplotno} />
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setResLengthmtr(e.target.value)} value={reslengthmtr} /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setResWidthmtr(e.target.value)} value={reswidthmtr} /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setResAreasq(e.target.value)} value={resareasq} /></td>
 
                       </tr>
                       <tr>
@@ -768,12 +768,12 @@ const AppliedDetailForm = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setGenPlotno(e.target.value)} value={genplotno}/>
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setGenLengthmtr(e.target.value)} value={genlengthmtr} /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setGenWidthmtr(e.target.value)} value={genwidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setGenAreasq(e.target.value)} value={genareasq}/></td>
 
                       </tr>
                       <tr>
@@ -784,12 +784,12 @@ const AppliedDetailForm = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setNpnlPlotNo(e.target.value)} value={npnlplotno}/>
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setNpnlLengthMtr(e.target.value)} value={npnllengthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setNpnlWidthMtr(e.target.value)} value={npnlwidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setNpnlareasq(e.target.value)} value={npnlareasq}/></td>
 
                       </tr>
                       <tr>
@@ -800,80 +800,80 @@ const AppliedDetailForm = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setEwsplotno(e.target.value)} value={ewsplotno}/>
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setEwslengthmtr(e.target.value)} value={ewslengthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setEwswidthmtr(e.target.value)} value={ewswidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setEwsareasq(e.target.value)} value={ewsareasq}/></td>
 
                       </tr>
                       <tr>
                         <td >
                           <div className="px-2">
-                            <p className="mb-2" onChange={(e) => setComPlotno(e.target.value)} value={complotno}><b>Commercial
+                            <p className="mb-2"><b>Commercial
                             </b></p>
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control"  onChange={(e) => setComPlotno(e.target.value)} value={complotno}/>
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control"  onChange={(e) => setComLengthmtr(e.target.value)} value={comlengthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control"  onChange={(e) => setComWidthmtr(e.target.value)} value={comwidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control"  onChange={(e) => setComAreasq(e.target.value)} value={comareasq}/></td>
 
                       </tr>
                       <tr>
                         <td >
                           <div className="px-2">
-                            <p className="mb-2" onChange={(e) => setSitePlotno(e.target.value)} value={siteplotno}><b>Community Sites
+                            <p className="mb-2" ><b>Community Sites
 
                             </b></p>
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setSitePlotno(e.target.value)} value={siteplotno}/>
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setSiteLengthmtr(e.target.value)} value={sitelengthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setSiteWidthmtr(e.target.value)} value={sitewidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setSiteAreasq(e.target.value)} value={siteareasq}/></td>
 
                       </tr>
                       <tr>
                         <td >
                           <div className="px-2">
-                            <p className="mb-2" onChange={(e) => setParkPlotno(e.target.value)} value={parkplotno}><b>Parks
+                            <p className="mb-2" ><b>Parks
 
                             </b></p>
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setParkPlotno(e.target.value)} value={parkplotno}/>
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setParkLengthmtr(e.target.value)} value={parklengthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setParkWidthmtr(e.target.value)} value={parkwidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setParkAreasq(e.target.value)} value={parkareasq}/></td>
 
                       </tr>
                       <tr>
                         <td >
                           <div className="px-2">
-                            <p className="mb-2" onChange={(e) => setPublicPlotno(e.target.value)} value={publicplotno}><b>Public Utilities
+                            <p className="mb-2" x><b>Public Utilities
                             </b></p>
 
 
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setPublicPlotno(e.target.value)} value={publicplotno} />
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setPublicLengthmtr(e.target.value)} value={publiclengthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setPublicWidthmtr(e.target.value)} value={publicwidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setPublicAreasq(e.target.value)} value={publicareasq}/></td>
 
                       </tr>
                       <tr>
@@ -884,12 +884,12 @@ const AppliedDetailForm = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setStpplotno(e.target.value)} value={stpplotno}/>
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setStplengthmtr(e.target.value)} value={stplengthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setStpwidthmtr(e.target.value)} value={stpwidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setStpareasq(e.target.value)} value={stpareasq}/></td>
 
                       </tr>
                       <tr>
@@ -900,12 +900,12 @@ const AppliedDetailForm = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setEtpplotno(e.target.value)} value={etpplotno}/>
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setEtplengthmtr(e.target.value)} value={etplengthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setEtpwidthmtr(e.target.value)} value={etpwidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setEtpareasq(e.target.value)} value={etpareasq}/></td>
 
                       </tr>
                       <tr>
@@ -916,12 +916,12 @@ const AppliedDetailForm = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setWtpplotno(e.target.value)} value={wtpplotno}/>
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setWtplengthmtr(e.target.value)} value={wtplengthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setWtpwidthmtr(e.target.value)} value={wtpwidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setWtpareasq(e.target.value)} value={wtpareasq}/></td>
 
                       </tr>
                       <tr>
@@ -932,12 +932,12 @@ const AppliedDetailForm = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setUgtplotno(e.target.value)} value={ugtplotno}/>
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setUgtlengthmtr(e.target.value)} value={ugtlengthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setUgtwidthmtr(e.target.value)} value={ugtwidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setUgtareasq(e.target.value)} value={ugtareasq}/></td>
 
                       </tr>
                       <tr>
@@ -948,12 +948,12 @@ const AppliedDetailForm = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setMilkboothplotno(e.target.value)} value={milkboothplotno}/>
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setMilkboothlengthmtr(e.target.value)} value={milkboothlengthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setMilkboothwidthmtr(e.target.value)} value={milkboothwidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setMilkboothareasq(e.target.value)} value={milkboothareasq}/></td>
 
                       </tr>
                       <tr>
@@ -964,12 +964,12 @@ const AppliedDetailForm = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" onChange={(e) => setGssplotno(e.target.value)} value={gssplotno}/>
                         </td>
 
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
-                        <td align="right">  <input type="number" className="form-control" /></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setGsslengthmtr(e.target.value)} value={gsslengthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setGsswidthmtr(e.target.value)} value={gsswidthmtr}/></td>
+                        <td align="right">  <input type="number" className="form-control" onChange={(e) => setGssareasq(e.target.value)} value={gssareasq}/></td>
 
                       </tr>
                     </tbody>
@@ -992,22 +992,22 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td >
                             <div className="px-2">
-                              <p className="mb-2" onChange={(e) => setIrPlotDimen(e.target.value)} value={irPlotDimen}><b>Residential
+                              <p className="mb-2"><b>Residential
                               </b></p>
                             </div>
                           </td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setResDimension(e.target.value)} value={resDimension}/></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setResEnteredArea(e.target.value)} value={resEnteredArea} /></td>
                         </tr>
                         <tr>
                           <td >
                             <div className="px-2">
-                              <p className="mb-2" onChange={(e) => setIrSizeDimen(e.target.value)} value={irSizeDimen}><b>Commercial
+                              <p className="mb-2" ><b>Commercial
                               </b></p>
                             </div>
                           </td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setComDimension(e.target.value)} value={comDimension}/></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setComEnteredArea(e.target.value)} value={comEnteredArea}/></td>
                         </tr>
 
                       </tbody>
@@ -1027,76 +1027,76 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td >
                             <div className="px-2">
-                              <p className="mb-2" onChange={(e) => setNpnlNo(e.target.value)} value={npnlNo}><b>Sectoral Plan Road
+                              <p className="mb-2" ><b>Sectoral Plan Road
                               </b></p>
                             </div>
                           </td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setSecPlanPlot(e.target.value)} value={secPlanPlot}/></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setSecPlanLength(e.target.value)} value={secPlanLength}/></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setSecPlanDim(e.target.value)} value={secPlanDim}/></td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" onChange={(e) => setSecPlanEntered(e.target.value)} value={secPlanEntered}/>
                           </td>
                         </tr>
                         <tr>
                           <td >
                             <div className="px-2">
-                              <p className="mb-2" onChange={(e) => setEwsNo(e.target.value)} value={ewsNo}><b>Green Belt
+                              <p className="mb-2" ><b>Green Belt
 
                               </b></p>
                             </div>
                           </td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
+                          <td align="right">  <input type="number" className="form-control"onChange={(e) => setGreenBeltPlot(e.target.value)} value={greenBeltPlot} /></td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" onChange={(e) => setGreenBeltLength(e.target.value)} value={greenBeltLength}/>
                           </td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setgGreenBeltDim(e.target.value)} value={greenBeltDim}/></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setGreenBeltEntered(e.target.value)} value={greenBeltEntered}/></td>
                         </tr>
                         <tr>
                           <td >
                             <div className="px-2">
-                              <p className="mb-2" onChange={(e) => setEwsNo(e.target.value)} value={ewsNo}><b>24/18 mtr wide internal circulation Plan road
+                              <p className="mb-2" ><b>24/18 mtr wide internal circulation Plan road
 
                               </b></p>
                             </div>
                           </td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setInternalPlot(e.target.value)} value={internalPlot}/></td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" onChange={(e) => setInternalLength(e.target.value)} value={internalLength}/>
                           </td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setInternalDim(e.target.value)} value={internalDim}/></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setInternalEntered(e.target.value)} value={internalEntered}/></td>
                         </tr>
                         <tr>
                           <td >
                             <div className="px-2">
-                              <p className="mb-2" onChange={(e) => setEwsNo(e.target.value)} value={ewsNo}><b>Other Roads
+                              <p className="mb-2" ><b>Other Roads
 
                               </b></p>
                             </div>
                           </td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setOtherPlot(e.target.value)} value={otherPlot}/></td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" onChange={(e) => setOtherLength(e.target.value)} value={otherLength}/>
                           </td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setOtherDim(e.target.value)} value={otherDim}/></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setOtherEntered(e.target.value)} value={otherEntered}/></td>
                         </tr>
                         <tr>
                           <td >
                             <div className="px-2">
-                              <p className="mb-2" onChange={(e) => setEwsNo(e.target.value)} value={ewsNo}><b>Undetermined use(UD)
+                              <p className="mb-2" ><b>Undetermined use(UD)
 
                               </b></p>
                             </div>
                           </td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setUndeterminedPlot(e.target.value)} value={undeterminedPlot}/></td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" onChange={(e) => setUndeterminedLength(e.target.value)} value={undeterminedLength}/>
                           </td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
-                          <td align="right">  <input type="number" className="form-control" /></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setUndeterminedDim(e.target.value)} value={undeterminedDim}/></td>
+                          <td align="right">  <input type="number" className="form-control" onChange={(e) => setUndeterminedEntered(e.target.value)} value={undeterminedEntered}/></td>
                         </tr>
                       </tbody>
                     </div>
@@ -1150,7 +1150,7 @@ const AppliedDetailForm = (props) => {
                             <div className="col col-12">
                               <label for="areaAcre" className="font-weight-bold">Area in Acres </label>
 
-                              <input type="text" className="form-control" />
+                              <input type="text" className="form-control" onChange={(e) => setSurrender(e.target.value)} value={surrender}/>
                             </div>
                           </div>
                         )
@@ -1175,7 +1175,7 @@ const AppliedDetailForm = (props) => {
                             <div className="col col-6">
                               <label for="areaAcre" className="font-weight-bold"> Dimension (in mtr)&nbsp;&nbsp;<CalculateIcon color="primary" /></label>
 
-                              <input type="text" className="form-control" />
+                              <input type="text" className="form-control" onChange={(e) => setPocketProposed(e.target.value)} value={pocketProposed}/>
                             </div>
                             <div className="col col-6">
                               <label for="areaAcre" className="font-weight-bold"> Entered Area </label>
@@ -1205,7 +1205,7 @@ const AppliedDetailForm = (props) => {
                             <div className="col col-12">
                               <label for="areaAcre" className="font-weight-bold">Area in Acres &nbsp;&nbsp;<CalculateIcon color="primary" /></label>
 
-                              <input type="text" className="form-control" />
+                              <input type="text" className="form-control" onChange={(e) => setDeposit(e.target.value)} value={deposit}/>
                             </div>
                           </div>
                         )
@@ -1230,7 +1230,7 @@ const AppliedDetailForm = (props) => {
                             <div className="col col-12">
                               <label for="areaAcre" className="font-weight-bold">Dimension(in mtr) &nbsp;&nbsp;<CalculateIcon color="primary" /></label>
 
-                              <input type="text" className="form-control" />
+                              <input type="text" className="form-control" onChange={(e) => setSurrendered(e.target.value)} value={surrendered}/>
                             </div>
                             <div className="col col-12">
                               <label for="areaAcre" className="font-weight-bold">Entered Area</label>
@@ -1253,23 +1253,23 @@ const AppliedDetailForm = (props) => {
                 <div className="col col-3">
                   <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Site plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
 
-                  <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}>
+                  <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setSitePlan(e.target.value)} value={sitePlan}>
                   </input>
                 </div>
                 <div className="col col-3">
                   <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Democratic Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
 
-                  <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}></input>
+                  <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setDemocraticPlan(e.target.value)} value={democraticPlan}></input>
                 </div>
                 <div className="col col-3">
                   <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Sectoral Plan/Layout Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
 
-                  <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}></input>
+                  <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setSectoralPlan(e.target.value)} value={sectoralPlan}></input>
                 </div>
                 <div className="col col-3">
                   <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Development Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
 
-                  <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}></input>
+                  <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setDevelopmentPlan(e.target.value)} value={developmentPlan}></input>
                 </div>
 
               </div><br></br>
@@ -1277,7 +1277,7 @@ const AppliedDetailForm = (props) => {
                 <div className="col col-4">
                   <div className="form-group" >
                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document" ><b>Upload Layout Plan  &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon> <span className="text-primary"> (Click here for instructions to capture DGPS points)</span></b>&nbsp;&nbsp;
-                      <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}/><b /></h6>
+                      <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setUploadLayoutPlan(e.target.value)} value={uploadLayoutPlan}/><b /></h6>
                   </div>
                 </div>
               </div>

@@ -114,25 +114,28 @@ const ApllicantPuropseForm = (props) => {
 
     const [form, setForm] = useState([]);
     const [purposeDd, setSelectPurpose] = useState("");
-    const [potentialDev, setPotentialDev] = useState("");
+    const [potential, setPotentialDev] = useState("");
+    const [district, setDistrict] = useState("");
+    const [state, setState] = useState("");
+    const [revenueEstate, setRevenueEstate] = useState("");
+    const [consolidation, setConsolidation] = useState("");
     const [show, setShow] = useState(false);
-    const [potential, setPotential] = useState("")
     const [PurposeformSubmitted, SetPurposeformSubmitted] = useState(false);
     const [tehsil, setTehsil] = useState({});
-    const [owmerName, setOwmerName] = useState({});
+    const [landOwner, setLandOwner] = useState({});
     const [revenueName, setRevenueName] = useState({});
     const [mustil, setMustil] = useState({});
     const [khewat, setKhewat] = useState('');
     const [kanal, setKanal] = useState('');
     const [marla, setMarla] = useState('');
-    const [village2, setVillage2] = useState('');
-    const [khasra, setKhasra] = useState('');
-    const [khatoni, setKhatoni] = useState('');
-    const [killa, setKilla] = useState('');
+    const [bigha, setBigha] = useState('');
+    const [biswa, setBiswa] = useState('');
+    const [biswansi, setBiswansi] = useState('');
+    const [developerCompany, setDeveloperCompany] = useState('');
     const [sector, setSector] = useState('');
     const [Rectangle, setRectangle] = useState('');
     const [sarsai, setSarsai] = useState('');
-    const [developerLlp, setDeveloperLlp] = useState('');
+    const [registeringAuthorityDoc, setRegisteringAuthorityDoc] = useState('');
     const [colKhasra, setColKhasra] = useState('');
     const [kanalBigha, setkanalBigha] = useState('');
     const [registeringdate, setRegisteingDate] = useState('');
@@ -445,36 +448,34 @@ const ApllicantPuropseForm = (props) => {
     console.log("data===", data);
     props.Step2Continue({ data });
   };
-//   let forms = {
-//     purposeDd: purposeDd,
-//     potentialDev: potentialDev,
-//     district2: district2,
-//     revenueName: revenueName,
-//     khewat: khewat,
-//     mustil: mustil,
-//     killa: killa,
-//     sector: sector,
-//     kanal: kanal,
-//     marla: marla,
-//     village2: village2,
-//     khasra: khasra,
-//     khatoni: khatoni,
-//     step2Data1: {
-//       Rectangle: Rectangle,
-//       kanalBigha: kanalBigha,
-//       marlaBiswa: marlaBiswa,
-//       sarsai: sarsai,
-//       colkhasra: colKhasra,
-//       developerLlp: developerLlp,
-//       registeringdate: registeringdate,
-//       validitydate: validitydate,
-//       colirrevocialble: colirrevocialble,
-//       authSignature: authSignature,
-//       nameAuthSign: nameAuthSign,
-//       registeringAuthority: registeringAuthority,
-//     },
-//   };
-//   localStorage.setItem("step2", JSON.stringify(forms));
+  let forms = {
+    purposeDd: purposeDd,
+    potential: potential,
+    district: district,
+    state:state,
+    ApplicationPurposeData1: {
+        tehsil:tehsil,
+        revenueEstate: revenueEstate,
+        mustil:mustil,
+        consolidation:consolidation,
+        sarsai:sarsai,
+        kanal: kanal,
+        marla: marla,
+        bigha:bigha,
+        biswansi:biswansi,
+        biswa:biswa,
+        landOwner: landOwner,
+        developerCompany: developerCompany,
+        registeringdate: registeringdate,
+        validitydate: validitydate,
+        colirrevocialble: colirrevocialble,
+        authSignature: authSignature,
+        nameAuthSign: nameAuthSign,
+        registeringAuthority: registeringAuthority,
+        registeringAuthorityDoc: registeringAuthorityDoc,
+    },
+  };
+  localStorage.setItem("Application Purpose", JSON.stringify(forms));
 
   const handleChangePurpose = (data) => {
     const purposeSelected = data.data;
@@ -541,7 +542,8 @@ const ApllicantPuropseForm = (props) => {
                         <div>
                             <Form.Label><b>Puropse Of License</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
-                        <ReactMultiSelect control={control} name="purposeDd"  placeholder="N/A" data={optionsPurposeList} labels="Purpose" getSelectedValue={handleChangePurpose}  />
+                        <ReactMultiSelect control={control} name="purposeDd"  placeholder="N/A" data={optionsPurposeList} labels="Purpose" getSelectedValue={handleChangePurpose} 
+                        onChange={(e) => setSelectPurpose(e.target.value)} value={purposeDd}  />
                       <h3 className="error-message"style={{color:"red"}}>{errors?.purposeDd && errors?.purposeDd?.message}</h3>
                        </Col>
                         {/* <Form.Select type="text" defaultValue={purposeDd} placeholder="Puropse"  onChange={handleChangePurpose} value={purposeDd}  ></Form.Select> */}
@@ -555,7 +557,8 @@ const ApllicantPuropseForm = (props) => {
                         <div>
                             <Form.Label><b>Potential Zone:</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
-                        <ReactMultiSelect control={control} name="potential"  placeholder="N/A" data={optionsPotentialList} labels="Potential" getSelectedValue={handleChangePotential}  />
+                        <ReactMultiSelect control={control} name="potential"  placeholder="N/A" data={optionsPotentialList} labels="Potential"
+                         getSelectedValue={handleChangePotential}    onChange={(e) => setPotentialDev(e.target.value)} value={potential}  />
                       <h3 className="error-message"style={{color:"red"}}>{errors?.potential && errors?.potential?.message}</h3>
                        </Col>
                        
@@ -661,9 +664,9 @@ const ApllicantPuropseForm = (props) => {
                                                     <tbody>
                                                         <tr>
                                                             <td >
-                                                                <input type="text" className="form-control" placeholder="" onChange={(e) => setModalKilla(e.target.value)}></input></td>
-                                                            <td ><input type="text" className="form-control" placeholder="" onChange={(e) => setModalKhewat(e.target.value)}></input> </td>
-                                                            <td > <input type="text" className="form-control" placeholder="" onChange={(e) => setModalKanal(e.target.value)}></input></td>
+                                                                <input type="text" className="form-control" placeholder="" onChange={(e) => setKanal(e.target.value)} value={kanal} onChange1={(e) => setModalKilla(e.target.value)}></input></td>
+                                                            <td ><input type="text" className="form-control" placeholder="" onChange={(e) => setMarla(e.target.value)} value={marla} onChange1={(e) => setModalKhewat(e.target.value)}></input> </td>
+                                                            <td > <input type="text" className="form-control" placeholder="" onChange={(e) => setSarsai(e.target.value)} value={sarsai} onChange1={(e) => setModalKanal(e.target.value)}></input></td>
                                                             {/* <td > <input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalMarla(e.target.value)}></input></td> */}
                                                         </tr>
                                                     </tbody>
@@ -686,9 +689,9 @@ const ApllicantPuropseForm = (props) => {
                                                     </thead>
                                                     <tbody>
                                                         <tr>
-                                                            <td ><input type="text" className="form-control" placeholder="" onChange={(e) => setModalKilla(e.target.value)}></input></td>
-                                                            <td ><input type="text" className="form-control" placeholder="" onChange={(e) => setModalKhewat(e.target.value)}></input> </td>
-                                                            <td > <input type="text" className="form-control" placeholder="" onChange={(e) => setModalKanal(e.target.value)}></input></td>
+                                                            <td ><input type="text" className="form-control" placeholder="" onChange={(e) => setBigha(e.target.value)} value={bigha} onChange1={(e) => setModalKilla(e.target.value)}></input></td>
+                                                            <td ><input type="text" className="form-control" placeholder="" onChange={(e) => setBiswa(e.target.value)} value={biswa} onChange1={(e) => setModalKhewat(e.target.value)}></input> </td>
+                                                            <td > <input type="text" className="form-control" placeholder="" onChange={(e) => setBiswansi(e.target.value)} value={biswansi} onChange1={(e) => setModalKanal(e.target.value)}></input></td>
                                                             {/* <td > <input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalMarla(e.target.value)}></input></td> */}
                                                         </tr>
                                                     </tbody>
@@ -744,18 +747,18 @@ const ApllicantPuropseForm = (props) => {
                                                     <div className="col col-4">
                                                         <label for="parentLicense" className="font-weight-bold"><h6><b>Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered</b></h6></label>
                                                         <input type="text" className="form-control" placeholder="N/A"
-                                                           {...register("devCompany")}  />
+                                                           {...register("devCompany")}  onChange={(e) => setDeveloperCompany(e.target.value)} value={developerCompany}/>
                                                     </div>
                                                     <div className="col col-4" style={{ marginTop: 15 }}>
                                                         <label for="parentLicense" className="font-weight-bold"><h6><b>Date of registering collaboration agreement</b></h6></label>
                                                         <input type="date" className="form-control" placeholder="N/A"
-                                                           {...register("registering")}/>
+                                                           {...register("registering")} onChange={(e) => setRegisteingDate(e.target.value)} value={registeringdate}/>
 
                                                     </div>
                                                     <div className="col col-4" style={{ marginTop: 15 }}>
                                                         <label for="parentLicense" className="font-weight-bold"><h6><b>Date of validity of collaboration agreement</b></h6></label>
                                                         <input type="date" className="form-control" placeholder="N/A"
-                                                           {...register("dateValidity")} />
+                                                           {...register("dateValidity")} onChange={(e) => setValiditydate(e.target.value)} value={validitydate}/>
 
                                                     </div>
                                                     <div className="col col-4" style={{ marginTop: 35 }}>
@@ -772,22 +775,22 @@ const ApllicantPuropseForm = (props) => {
                                                     <div className="col col-4" style={{ marginTop: 35 }}>
                                                         <label for="parentLicense" className="font-weight-bold"><h6><b>Name of authorized signatory on behalf of land owner(s)</b></h6></label>
                                                         <input type="text" className="form-control" placeholder="N/A"
-                                                           {...register("authorizedSign")}/>
+                                                           {...register("authorizedSign")} onChange={(e) => setAuthSignature(e.target.value)} value={authSignature}/>
                                                     </div>
                                                     <div className="col col-4" style={{ marginTop: 15 }}>
                                                         <label for="parentLicense" className="font-weight-bold"><h6><b>Name of authorized signatory on behalf of developer to sign Collaboration agreement</b></h6></label>
                                                         <input type="date" className="form-control" placeholder="N/A"
-                                                           {...register("authorizedDev")}/>
+                                                           {...register("authorizedDev")} onChange={(e) => setNameAuthSign(e.target.value)} value={nameAuthSign}/>
 
                                                     </div>
                                                     <div className="col col-4" style={{ marginTop: 20 }}>
                                                         <label for="parentLicense" className="font-weight-bold"><h6><b>Registring Authority</b></h6></label><br></br>
                                                         <input type="text" className="form-control" placeholder="N/A"
-                                                           {...register("registeringAuth")}/>
+                                                           {...register("registeringAuth")} onChange={(e) => setRegisteringAuthority(e.target.value)} value={registeringAuthority}/>
                                                     </div>
                                                     <div className="col col-4" style={{ marginTop: 15 }}>
                                                         <label for="parentLicense" className="font-weight-bold"><h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Registring Authority document&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6></label><br></br>
-                                                        <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
+                                                        <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setRegisteringAuthorityDoc(e.target.value)} value={registeringAuthorityDoc} />
                                                     </div>
                                                 </div>
 
