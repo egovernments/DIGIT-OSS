@@ -41,14 +41,18 @@ const FeesChargesForm = (props) => {
    
 
     const [form, setForm] = useState([]);
-    const [feeDetail, setFeeDetail] = useState('');
+    const [totalArea, setTotalArea] = useState('');
+    const [potential, setPotential] = useState('');
+    const[purpose,setPurpose]=useState("");
+    const[devPlan,setDevPlan]=useState("");
+    const[scrutinyFee,setScrutinyFee]=useState("");
     const [licenseFee, setLicenseFee] = useState('');
-    const [ScrutinyFee, setScrutinyFee] = useState('');
     const [totalFee, setTotalFee] = useState('');
     const [remark, setRemark] = useState('');
-    const [aggregator, setAggregator] = useState('');
+    const [conversionCharges, setConversionCharges] = useState('');
+    const [payableNow, setPayableNow] = useState('');
     const [previousLic, setPreviousLic] = useState('');
-    const [amount, setAmount] = useState('');
+    const [licenseNo, setLicenseNo] = useState('');
     const[calculateData,setCalculateData]=useState({});
     const[finalSubmitData,setFinalSubmitData]=useState([])
     const [modal, setmodal] = useState(false);
@@ -62,22 +66,19 @@ const FeesChargesForm = (props) => {
     const FeesChrgesFormSubmitHandler = (e) => {
         e.preventDefault();
         SetFeesChargesFormSubmitted(true);
-
-
-
-
         let forms = {
-            feeDetail: feeDetail,
-            licenseFee: licenseFee,
-            ScrutinyFee: ScrutinyFee,
-            totalFee: totalFee,
+            totalArea:totalArea,
+            purpose:purpose,
+            devPlan:devPlan,
+            scrutinyFee:scrutinyFee,
+            licenseFee:licenseFee,
+            conversionCharges:conversionCharges,
+            payableNow:payableNow,
             remark: remark,
-            aggregator: aggregator,
-            previousLic: previousLic,
-            amount: amount
+            licenseNo:licenseNo
         }
         console.log("FRMDATA", forms);
-        localStorage.setItem('step5', JSON.stringify(forms))
+        localStorage.setItem('Fees and Charges', JSON.stringify(forms))
 
 
     };
@@ -151,8 +152,8 @@ const FeesChargesForm = (props) => {
    
     const Purpose = JSON.parse(localStorage.getItem('purpose'))
     console.log("adf", Purpose)
-    const potential = JSON.parse(localStorage.getItem('potential'))
-    console.log("potential", potential)
+    const potential1 = JSON.parse(localStorage.getItem('potential'))
+    console.log("potential", potential1)
     const CalculateApiCall = async () => {
         try {
            
@@ -448,7 +449,7 @@ const FeesChargesForm = (props) => {
                                 <thead>
                                     <tr>
                                         <th><b>Total Area</b></th>
-                                        <td><input type="text" className="form-control" /></td>
+                                        <td><input type="text" className="form-control" onChange={(e) => setTotalArea(e.target.value)} value={totalArea}/></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                 </thead>
@@ -456,14 +457,15 @@ const FeesChargesForm = (props) => {
                                     <tr>
                                         <th ><b>Purpose</b></th>
                                         <td><input type="text" className="form-control" placeholder={Purpose} 
-                                         onChange={handleChangePurpose} value={Purpose} disabled></input></td>
+                                         onChange1={handleChangePurpose} value={purpose} disabled onChange={(e) => setPurpose(e.target.value)} />
+                                         </td>
                                        
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                     <tr>
                                         <th><b>Dev Plan</b></th>
                                         <td><input type="text" className="form-control" placeholder={potential} 
-                                         onChange={handleChangePotential} value={potential} disabled/></td>
+                                         onChange1={handleChangePotential} value={potential} disabled onChange={(e) => setDevPlan(e.target.value)} /></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                     <tr>
@@ -474,7 +476,7 @@ const FeesChargesForm = (props) => {
                                             onChange1={handleScrutiny} value=
                                             {(calculateData!==null && calculateData!==undefined)?
                                                 calculateData?.feeTypeCalculationDto?.scrutinyFeeChargesCal :"N/A"}
-                                                 disabled /></td>
+                                                 disabled   onChange={(e) => setScrutinyFee(e.target.value)} /></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                     <tr>
@@ -485,7 +487,7 @@ const FeesChargesForm = (props) => {
                                             onChange1={handleLicense} value=
                                             {(calculateData!==null && calculateData!==undefined)?
                                                 calculateData?.feeTypeCalculationDto?.licenseFeeChargesCal :"N/A"}
-                                                 disabled  /></td>
+                                                 disabled   onChange={(e) => setLicenseFee(e.target.value)}/></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                     <tr>
@@ -496,7 +498,7 @@ const FeesChargesForm = (props) => {
                                             onChange1={handleConversion} value=
                                             {(calculateData!==null && calculateData!==undefined)?
                                                 calculateData?.feeTypeCalculationDto?.conversionChargesCal :"N/A"}
-                                                 disabled /></td>
+                                                 disabled  onChange={(e) => setConversionCharges(e.target.value)} /></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                 </tbody>
@@ -507,7 +509,7 @@ const FeesChargesForm = (props) => {
                                     <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)"><b>(i)&nbsp;Payable Till Now&nbsp; </b>&nbsp;&nbsp;</h6>
 
                                     <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*"
-                                        onChange={(e) => setTotalFee(e.target.value)} value={totalFee} onChange1={handleTotalFeesChange} />
+                                       onChange1={handleTotalFeesChange} onChange={(e) => setPayableNow(e.target.value)} value={payableNow}/>
                                     {errors.totalFee && <p></p>}
                                 </div>
 
@@ -515,15 +517,15 @@ const FeesChargesForm = (props) => {
 
                                     <h6><b>(ii)Remark (If any)</b></h6>
                                     <input type="text" className="form-control" minLength={2} maxLength={100}
-                                        onChange={(e) => setRemark(e.target.value)} value={remark} onChange1={handleRemarkChange} />
+                                        onChange={(e) => setRemark(e.target.value)} value={remark} onChange1={handleRemarkChange}  />
                                     {errors.remark && <p></p>}
                                 </div>
 
                                 <div className="col col-4">
-                                    <h6 onChange={(e) => setPreviousLic(e.target.value)} value={previousLic} data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)"><b>(iii)&nbsp;Adjust Fees&nbsp;</b>&nbsp;&nbsp;</h6>
+                                    <h6  data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)"><b>(iii)&nbsp;Adjust Fees&nbsp;</b>&nbsp;&nbsp;</h6>
 
                                     <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow0}
+                                        onChange1={handleChange} name="Yes" onClick={handleshow0} 
                                     />
                                     <label for="Yes">Yes</label>&nbsp;&nbsp;
 
@@ -535,7 +537,7 @@ const FeesChargesForm = (props) => {
                                             <div className="row "  >
                                                 <div className="col col-12">
                                                     <label for="parentLicense" className="font-weight-bold">Enter License Number/LOI number</label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control" onChange={(e) => setLicenseNo(e.target.value)}  value={licenseNo} />
                                                     <label for="parentLicense" className="font-weight-bold">Amount (previous)</label>
                                                     <input type="text" className="form-control" disabled />
 

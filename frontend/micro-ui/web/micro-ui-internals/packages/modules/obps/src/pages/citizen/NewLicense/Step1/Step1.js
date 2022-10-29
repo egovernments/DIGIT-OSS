@@ -32,7 +32,7 @@ const ApllicantFormStep1 = (props) => {
   const [district, setDistrict] = useState("");
   const [state, setState] = useState("");
   const [status, setStatus] = useState("");
-  const [LC1, setLC1] = useState("");
+  const [LC, setLC] = useState("");
   const [address, setAddress] = useState("");
   const [permanentAddress, setPermanentAddress] = useState("");
   const [notSigned, setNotSigned] = useState("");
@@ -60,7 +60,7 @@ const ApllicantFormStep1 = (props) => {
     district: district,
     state: state,
     status: status,
-    LC1:LC1,
+    LC:LC,
     address :address ,
     permanentAddress :permanentAddress ,
     notSigned :notSigned ,
@@ -68,7 +68,7 @@ const ApllicantFormStep1 = (props) => {
     authorized:authorized
 
 };
-localStorage.setItem("key",JSON.stringify(forms))
+localStorage.setItem("Applicant Info",JSON.stringify(forms))
 
   const getDeveloperData = async () => {
     try {
@@ -164,7 +164,10 @@ localStorage.setItem("key",JSON.stringify(forms))
                   <b>Developer</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedDeveloper")} />
+              <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedDeveloper")} 
+                onChange={(e) => setAuthorizedDeveloper(e.target.value)} value={ developerData !== null && developerData !== undefined
+                  ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
+                  : "N/A"} />
               <h3 className="error-message" style={{ color: "red" }}>
                 {errors?.authorizedDeveloper && errors?.authorizedDeveloper?.message}
               </h3>
@@ -324,8 +327,8 @@ localStorage.setItem("key",JSON.stringify(forms))
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" placeholder="N/A" {...register("LC1")} />
-              <h3 className="error-message"style={{color:"red"}}>{errors?.LC1 && errors?.LC1?.message}</h3>
+              <Form.Control type="text" placeholder="N/A" {...register("LC")}   onChange={(e) => setLC(e.target.value)} value={LC}/>
+              <h3 className="error-message"style={{color:"red"}}>{errors?.LC && errors?.LC?.message}</h3>
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -354,7 +357,7 @@ localStorage.setItem("key",JSON.stringify(forms))
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" placeholder="N/A" {...register("notSigned")} />
+              <Form.Control type="text" placeholder="N/A" {...register("notSigned")} onChange={(e) => setNotSigned(e.target.value)} value={notSigned}/>
               <h3 className="error-message"style={{color:"red"}}>{errors?.notSigned && errors?.notSigned?.message}</h3>
             </Col>
             <Col md={4} xxl lg="4" style={{ marginTop: 23 }}>

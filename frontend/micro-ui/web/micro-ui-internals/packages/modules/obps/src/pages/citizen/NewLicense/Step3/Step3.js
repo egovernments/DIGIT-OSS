@@ -123,19 +123,19 @@ const LandScheduleForm = (props) => {
 
     const [form, setForm] = useState([]);
     const [licenseApplied1, setLicenseApplied1] = useState('');
-    const [licenseApplied, setLicenseApplied] = useState('');
+    const [licNo, setLicNo] = useState('');
     const [migrationLic, setMigrationLic] = useState('');
     const [potential, setPotential] = useState('');
     const [siteLoc, setSiteLoc] = useState('');
     const [approach, setapproach] = useState('');
     const [specify, setSpecify] = useState('');
-    const [existingCase, setExistingCase] = useState('');
+    const [approachRoadWidth, setApproachRoadWidth] = useState('');
     const [typeLand, setTypeLand] = useState('');
     const [thirdParty, setThirdParty] = useState('');
-    const [rehan, setRehan] = useState('');
-    const [patta, setPatta] = useState('');
-    const [gair, setGair] = useState('');
-    const [any, setAny] = useState('');
+    const [encumbrance, setEncumbrance] = useState('');
+    const [insolvency, setInsolvency] = useState('');
+    const [orderUpload, setOrderUpload] = useState('');
+    const [approachable, setApproachable] = useState('');
     const [litigation, setLitigation] = useState('');
     const [court, setCourt] = useState('');
     const [appliedLand, setAppliedLand] = useState('');
@@ -157,9 +157,9 @@ const LandScheduleForm = (props) => {
     const [approachabl1, setApproachable11] = useState('');
     const [vacant, setVacant] = useState('');
     const [construction, setConstruction] = useState('');
-    const [typeCons, setTypeCons] = useState('');
+    const [mutation, setMutation] = useState('');
     const [ht, setHt] = useState('');
-    const [htRemark, setHtRemark] = useState('');
+    const [utilityLine, setUtilityLine] = useState('');
     const [gas, setGas] = useState('');
     const [gasRemark, setGasRemark] = useState('');
     const [nallah, setNallah] = useState('');
@@ -167,11 +167,14 @@ const LandScheduleForm = (props) => {
     const [road, setRoad] = useState('');
     const [roadWidth, setRoadwidth] = useState('');
     const [land, setLand] = useState('');
-    const [landRemark, setLandRemark] = useState('');
+    const [landSchedule, setLandSchedule] = useState('');
     const [layoutPlan, setLayoutPlan] = useState('');
-    const[docUpload,setDocuploadData]=useState([])
+    const [proposedLayoutPlan, setProposedLayoutPlan] = useState('');
+    const [revisedLansSchedule, setRevisedLandSchedule] = useState('');
+    const[jambandhi,setJambandhi]=useState([])
     // const dispatch = useDispatch();
     const [file,setFile]=useState(null);
+    const [docUpload, setDocuploadData] = useState([])
     const [LandFormSubmitted, SetLandFormSubmitted] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const formSubmit = (data) => {
@@ -187,54 +190,47 @@ const LandScheduleForm = (props) => {
         SetLandFormSubmitted(true);
         props.Step3Continue({ "data": true })
         let Landforms = {
-            licenseApplied: licenseApplied,
-            migrationLic: migrationLic,
-            "step3Data1":
-            {
-                "potential": "",
-                "siteLoc": "",
-                "approach": "",
-                "specify": "",
-                "existingCase": "",
-                "typeLand": "",
-                "thirdParty": ""
-            },
-            "step3Data2": {
-                "rehan": "",
-                "patta": "",
-                "gair": "",
-                "any": "",
-                "litigation": "",
-                "court": "",
-                "appliedLand": "",
-                "revenuerasta": "",
-
-                "watercourse": "",
-
-                "compactBlock": "",
-                "sandwiched": "",
-                "acquistion": "",
-                "exclusion": "",
-                "compensation": "",
-                "section4": "",
-                "section6": "",
-                "statusRelease": "",
-                "award": "",
-                "dateRelease": "",
-                "site": "",
-                "approachable": "",
-                "vacant": "",
-                "construction": "",
-                "ht": "",
-                "gas": "",
-                "nallah": "",
-                "road": "",
-                "land": "",
-
-                "layoutPlan": "",
-            }
+            "licenseApplied": "",
+            "LicNo":"",
+            "potential": "",
+            "siteLoc": "",
+            "approach": "",
+            "approachRoadWidth":"",
+            "specify": "",
+            "typeLand": "",
+            "thirdParty": "",
+            "migrationLic": "",
+            "encumburance":"",
+            "litigation": "",
+            "court": "",
+            "insolvency":"",
+            "appliedLand": "",
+            "revenuerasta": "",
+            "watercourse": "",
+            "compactBlock": "",
+            "sandwiched": "",
+            "acquistion": "",
+            "section4": "",
+            "section6": "",
+            "orderUpload":"",
+            "approachable": "",
+            "vacant": "",
+            "construction": "",
+            "ht": "",
+            "gas": "",
+            "nallah": "",
+            "road": "",
+            "land": "",
+            "utilityLine": "",
+            "landSchedule":"",
+            "mutation":"",
+            "jambandhi":"",
+            "LayoutPlan":"",
+            "proposedLayoutPlan":"",
+            "revisedLansSchedule":""
+            
         }
-        localStorage.setItem('step3', JSON.stringify(Landforms))
+        localStorage.setItem('Land Schedule', JSON.stringify(Landforms))
 
     };
     useEffect(() => {
@@ -441,7 +437,7 @@ const LandScheduleForm = (props) => {
                             <div className="row">
                                 <div className="col col-12 ">
 
-                                    <h6 onChange={(e) => setLicenseApplied1(e.target.value)} value={licenseApplied1} ><b>(i)Whether licence applied for additional area ?</b>&nbsp;&nbsp;
+                                    <h6  ><b>(i)Whether licence applied for additional area ?</b>&nbsp;&nbsp;
                                         <input type="radio" value="Yes" id="Yes"
                                             onChange1={handleChange} name="Yes" onClick={handleshow} />&nbsp;&nbsp;
                                         <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
@@ -454,12 +450,12 @@ const LandScheduleForm = (props) => {
                                             <div className="row" >
                                                 <div className="col col-3">
                                                     <label for="parentLicense" className="font-weight-bold"><h6><b>License No. of Parent License</b></h6> </label>
-                                                    <input type="number" className="form-control" />
+                                                    <input type="number" className="form-control" onChange={(e) => setLicNo(e.target.value)} value={licNo}/>
                                                 </div>
                                                 <div className="col col-3">
                                                     <label htmlFor="potential1"><h6><b>Potential Zone:</b></h6></label>
                                                     <select className="form-control" id="potential"
-                                                        name="potential" onChange={(e) => setPotential1(e.target.value)} value={potential}
+                                                        name="potential" onChange={(e) => setPotential(e.target.value)} value={potential}
                                                     >
                                                         <option value="" >--Potential Zone--
                                                         </option>
@@ -474,13 +470,13 @@ const LandScheduleForm = (props) => {
                                                 </div>
                                                 <div className="col col-3">
                                                     <label for="parentLicense" className="font-weight-bold"><h6><b>Site Location Purpose</b></h6> </label>
-                                                    <input type="text" className="form-control" disabled />
+                                                    <input type="text" className="form-control" disabled onChange={(e) => setSiteLoc(e.target.value)} value={siteLoc}/>
                                                 </div>
                                                 <div className="col col-3">
                                                     <div className="form-group">
                                                         <label htmlFor="approach"><h6><b>Approach Type (Type of Policy)</b></h6></label>
                                                         <select className="form-control" id="approach"
-                                                            name="approach" onChange={(e) => setapproach1(e.target.value)} value={approach}
+                                                         onChange={(e) => setapproach(e.target.value)} value={approach}
                                                         >
                                                             <option value="" >
                                                             </option>
@@ -497,7 +493,7 @@ const LandScheduleForm = (props) => {
                                                         <input
                                                             type="number"
                                                             name="roadwidth"
-                                                            className="form-control"></input>
+                                                            className="form-control"onChange={(e) => setApproachRoadWidth(e.target.value)} value={approachRoadWidth}></input>
                                                     </div>
                                                 </div>
                                                 <div className="col col-3">
@@ -513,7 +509,7 @@ const LandScheduleForm = (props) => {
                                                     <div className="form-group ">
                                                         <label htmlFor="typeland"><h6><b>Type of land</b></h6> </label>
                                                         <select className="form-control" id="typeland"
-                                                            name="typeland" onChange={(e) => setTypeLand1(e.target.value)} value={typeLand}>
+                                                            name="typeland" onChange={(e) => setTypeLand(e.target.value)} value={typeLand}>
                                                             <option value="" >--Type of Land--
                                                             </option>
                                                             <option value="" >chahi/nehri
@@ -528,7 +524,7 @@ const LandScheduleForm = (props) => {
                                                 <div className="col col-3 ">
 
 
-                                                    <label htmlFor="typeland" onChange={(e) => setThirdParty1(e.target.value)} value={thirdParty}><h6><b>Third-party right created</b> </h6></label><br></br>
+                                                    <label htmlFor="typeland"><h6><b>Third-party right created</b> </h6></label><br></br>
 
                                                     <input type="radio" value="Yes" id="Yes"
                                                         onChange1={handleChange} name="Yes" onClick={handleshow13} />&nbsp;&nbsp;
@@ -542,7 +538,7 @@ const LandScheduleForm = (props) => {
                                                             <div className="row " >
                                                                 <div className="col col-12">
                                                                     <label for="parentLicense" className="font-weight-bold"> Remark </label>
-                                                                    <input type="text" className="form-control" />
+                                                                    <input type="text" className="form-control" onChange={(e) => setThirdParty(e.target.value)} value={thirdParty} />
                                                                 </div>
                                                                 <div className="col col-12">
                                                                     <label for="parentLicense" className="font-weight-bold"> Document Upload </label>
@@ -573,7 +569,7 @@ const LandScheduleForm = (props) => {
 
                                             <div className="col col-6 ">
 
-                                                <h6 onChange={(e) => setMigrationLic(e.target.value)} value={setMigrationLic}><b>(ii)Whether licence applied under Migration policy?</b>&nbsp;&nbsp;
+                                                <h6 onChange={(e) => setMigrationLic(e.target.value)} value={migrationLic}><b>(ii)Whether licence applied under Migration policy?</b>&nbsp;&nbsp;
                                                     <input type="radio" value="Yes" id="Yes" 
                                                         onChange1={handleChange} name="Yes" onClick={handleshow23} />&nbsp;&nbsp;
                                                     <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
@@ -592,7 +588,7 @@ const LandScheduleForm = (props) => {
                                         </div>)}
                             </div><br></br>
                             <hr></hr><br></br>
-                            <h5 className="text-black"><b>2. Any encumbrance with respect to following :</b><br></br><br></br>
+                            <h5 className="text-black"  onChange={(e) => setEncumbrance(e.target.value)} value={encumbrance}><b>2. Any encumbrance with respect to following :</b><br></br><br></br>
                                 <label htmlFor="gen">Rehan / Mortgage</label>&nbsp;&nbsp;
                                 <input type="radio" id="Yes" value="1"
                                     onChange={handleChange} name="Yes" onClick={handleshow18} />&nbsp;&nbsp;
@@ -629,7 +625,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col-6">
                                                     <label for="parentLicense" className="font-weight-bold"> Remark </label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control"  onChange={(e) => setLitigation(e.target.value)} value={litigation}/>
                                                 </div>
                                                 <div className="col col-6">
                                                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
@@ -657,7 +653,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col-6">
                                                     <label for="parentLicense" className="font-weight-bold"> Remark/Case No. </label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control"  onChange={(e) => setCourt(e.target.value)} value={court}/>
                                                 </div>
                                                 <div className="col col-6">
                                                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
@@ -686,7 +682,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col-6">
                                                     <label for="parentLicense" className="font-weight-bold"> Remark </label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control"  onChange={(e) => setInsolvency(e.target.value)} value={insolvency}/>
                                                 </div>
                                                 <div className="col col-6">
                                                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
@@ -742,7 +738,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col">
                                                     <label for="parentLicense" className="font-weight-bold"> Width of revenue rasta &nbsp;<CalculateIcon color="primary" /></label>
-                                                    <input type="number" className="form-control" />
+                                                    <input type="number" className="form-control"  onChange={(e) => setRevenuerasta(e.target.value)} value={revenuerasta}/>
                                                 </div>
                                             </div>
                                         )
@@ -763,7 +759,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col">
                                                     <label for="parentLicense" className="font-weight-bold"> Remark </label>
-                                                    <input type="number" className="form-control" />
+                                                    <input type="number" className="form-control"  onChange={(e) => setWatercourse(e.target.value)} value={watercourse}/>
                                                 </div>
                                             </div>
                                         )
@@ -787,7 +783,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col">
                                                     <label for="parentLicense" className="font-weight-bold"> Remark </label>
-                                                    <input type="number" className="form-control" />
+                                                    <input type="number" className="form-control"  onChange={(e) => setCompactBlock(e.target.value)} value={compactBlock}/>
                                                 </div>
 
                                             </div>
@@ -811,7 +807,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col-12">
                                                     <label for="parentLicense" className="font-weight-bold">Remark</label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control"  onChange={(e) => setsandwiched(e.target.value)} value={sandwiched}/>
                                                 </div>
 
                                             </div>
@@ -836,7 +832,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col-12">
                                                     <label for="parentLicense" className="font-weight-bold">Remark</label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control"  onChange={(e) => setAcquistion(e.target.value)} value={acquistion}/>
                                                 </div>
 
                                             </div>
@@ -849,7 +845,7 @@ const LandScheduleForm = (props) => {
                                         <label htmlFor="sectionfour"><h6><b>Date of section 4 notification</b></h6> </label>
                                         <input
                                             type="date"
-                                            name="sectionfour" onChange={(e) => setSection41(e.target.value)} value={section4}
+                                            name="sectionfour" onChange={(e) => setSection4(e.target.value)} value={section4}
                                             className={`form-control ${errors.sectionfour ? "is-invalid" : ""
                                                 } `}
 
@@ -869,7 +865,7 @@ const LandScheduleForm = (props) => {
                                         <label htmlFor="sectionsix"><h6><b>Date of section 6 notification</b></h6></label>
                                         <input
                                             type="date"
-                                            name="sectionsix" onChange={(e) => setSection61(e.target.value)} value={section6}
+                                            name="sectionsix" onChange={(e) => setSection6(e.target.value)} value={section6}
                                             className={`form-control ${errors.sectionsix ? "is-invalid" : ""
                                                 } `}
 
@@ -996,7 +992,7 @@ const LandScheduleForm = (props) => {
                             </div><br></br>
                             <div className="row">
                                 <div className="col col-3">
-                                    <h6
+                                    <h6  onChange={(e) => setApproachable(e.target.value)} value={approachable}
                                         data-toggle="tooltip" data-placement="top" title="whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)
 "><b>(h)&nbsp;Site Approachable Road &nbsp;&nbsp; <InfoIcon color="primary" />
                                         </b></h6>
@@ -1013,7 +1009,7 @@ const LandScheduleForm = (props) => {
                             <div className="row">
                                 <div className="col col-3">
 
-                                    <h6 onChange={(e) => setVacant1(e.target.value)} value={vacant}><b>(a)vacant: (Yes/No)</b> </h6>
+                                    <h6 ><b>(a)vacant: (Yes/No)</b> </h6>
                                     <input type="radio" value="Yes" id="Yes"
                                         onChange1={handleChange} name="Yes" onClick={handleshow17} />&nbsp;&nbsp;
                                     <label for="Yes">Yes</label>&nbsp;&nbsp;
@@ -1026,7 +1022,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col">
                                                     <label for="parentLicense" className="font-weight-bold">Vacant Remark</label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control" onChange={(e) => setVacant(e.target.value)} value={vacant}/>
                                                 </div>
 
                                             </div>
@@ -1036,7 +1032,7 @@ const LandScheduleForm = (props) => {
                                 </div>
                                 <div className="col col-3">
 
-                                    <h6 onChange={(e) => setConstruction1(e.target.value)} value={construction}><b>(b)Construction: (Yes/No)</b>
+                                    <h6 ><b>(b)Construction: (Yes/No)</b>
                                     </h6>
                                     <input type="radio" value="Yes" id="Yes"
                                         onChange1={handleChange} name="Yes" onClick={handleshow4} />
@@ -1050,7 +1046,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col">
                                                     <label for="parentLicense" className="font-weight-bold">Type of Construction</label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control" onChange={(e) => setConstruction(e.target.value)} value={construction}/>
                                                 </div>
 
                                             </div>
@@ -1060,7 +1056,7 @@ const LandScheduleForm = (props) => {
                                 </div>
                                 <div className="col col-3">
 
-                                    <h6 onChange={(e) => setHt1(e.target.value)} value={ht}><b>(c)HT line:(Yes/No)</b>
+                                    <h6 ><b>(c)HT line:(Yes/No)</b>
                                     </h6>
                                     <input type="radio" value="Yes" id="Yes"
                                         onChange1={handleChange} name="Yes" onClick={handleshow5} />
@@ -1074,7 +1070,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col">
                                                     <label for="parentLicense" className="font-weight-bold">HT Remark</label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control" onChange={(e) => setHt(e.target.value)} value={ht} />
                                                 </div>
 
                                             </div>
@@ -1084,7 +1080,7 @@ const LandScheduleForm = (props) => {
                                 </div>
                                 <div className="col col-3">
 
-                                    <h6 onChange={(e) => setGas1(e.target.value)} value={gas}><b>(d) IOC Gas Pipeline:(Yes/No)</b>
+                                    <h6 ><b>(d) IOC Gas Pipeline:(Yes/No)</b>
                                     </h6>
                                     <input type="radio" value="Yes" id="Yes"
                                         onChange1={handleChange} name="Yes" onClick={handleshow6} />
@@ -1098,7 +1094,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col">
                                                     <label for="parentLicense" className="font-weight-bold">IOC Remark</label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control" onChange={(e) => setGas(e.target.value)} value={gas}/>
                                                 </div>
 
                                             </div>
@@ -1110,7 +1106,7 @@ const LandScheduleForm = (props) => {
                             <div className="row ">
                                 <div className="col col-3">
 
-                                    <h6 onChange={(e) => setNallah1(e.target.value)} value={nallah}><b>(e)Nallah:(Yes/No)</b> </h6>
+                                    <h6 ><b>(e)Nallah:(Yes/No)</b> </h6>
                                     <input type="radio" value="Yes" id="Yes"
                                         onChange1={handleChange} name="Yes" onClick={handleshow7} />
                                     <label for="Yes">Yes</label>&nbsp;&nbsp;
@@ -1123,7 +1119,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col">
                                                     <label for="parentLicense" className="font-weight-bold">Nallah Remark</label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control"onChange={(e) => setNallah(e.target.value)} value={nallah} />
                                                 </div>
 
                                             </div>
@@ -1133,7 +1129,7 @@ const LandScheduleForm = (props) => {
                                 </div>
                                 <div className="col col-3">
 
-                                    <h6 onChange={(e) => setRoad1(e.target.value)} value={road}><b>(f)Any revenue rasta/road:(Yes/No)</b>
+                                    <h6 ><b>(f)Any revenue rasta/road:(Yes/No)</b>
                                     </h6>
                                     <input type="radio" value="Yes" id="Yes"
                                         onChange1={handleChange} name="Yes" onClick={handleshow8} />
@@ -1147,7 +1143,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col">
                                                     <label for="parentLicense" className="font-weight-bold">Width of Revenue rasta/road &nbsp;&nbsp;<CalculateIcon color="primary" /></label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control" onChange={(e) => setRoad(e.target.value)} value={road}/>
                                                 </div>
 
                                             </div>
@@ -1157,7 +1153,7 @@ const LandScheduleForm = (props) => {
                                 </div>
                                 <div className="col col-3">
 
-                                    <h6 onChange={(e) => setLand1(e.target.value)} value={land}><b>(g)Any marginal land:(Yes/No)</b>
+                                    <h6 ><b>(g)Any marginal land:(Yes/No)</b>
                                     </h6>
                                     <input type="radio" value="Yes" id="Yes"
                                         onChange1={handleChange} name="Yes" onClick={handleshow9} />
@@ -1171,7 +1167,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col">
                                                     <label for="parentLicense" className="font-weight-bold">Remark of Marginal Land</label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control" onChange={(e) => setLand(e.target.value)} value={land}/>
                                                 </div>
 
                                             </div>
@@ -1180,7 +1176,7 @@ const LandScheduleForm = (props) => {
                                     }
                                 </div>
                                 <div className="col col-3">
-                                    <h6 onChange={(e) => setLayoutPlan1(e.target.value)} value={layoutPlan} data-toggle="tooltip" data-placement="top" title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)
+                                    <h6  data-toggle="tooltip" data-placement="top" title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)
 "><b>(h)&nbsp;Utility Line &nbsp; &nbsp;<InfoIcon color="primary" />
                                         </b></h6>
 
@@ -1196,7 +1192,7 @@ const LandScheduleForm = (props) => {
                                             <div className="row " >
                                                 <div className="col col">
                                                     <label for="parentLicense" className="font-weight-bold">Width of row &nbsp;&nbsp;<CalculateIcon color="primary" /></label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control" onChange={(e) => setUtilityLine(e.target.value)} value={utilityLine}/>
                                                 </div>
 
                                             </div>
@@ -1211,24 +1207,24 @@ const LandScheduleForm = (props) => {
                                 <div className="col col-3">
                                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Land schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
 
-                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}>
+                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setLandSchedule(e.target.value)} value={landSchedule}>
 
                                     </input>
                                 </div>
                                 <div className="col col-3">
                                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Copy of Mutation &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
 
-                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}></input>
+                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setMutation(e.target.value)} value={mutation}></input>
                                 </div>
                                 <div className="col col-3">
                                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Copy of Jamabandi &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
 
-                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}></input>
+                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setJambandhi(e.target.value)} value={jambandhi}></input>
                                 </div>
                                 <div className="col col-3">
                                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Details of lease / patta, if any &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
 
-                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}></input>
+                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} ></input>
                                 </div>
 
                             </div><br></br>
@@ -1236,18 +1232,18 @@ const LandScheduleForm = (props) => {
                                 <div className="col col-3">
                                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration  &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
 
-                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}>
+                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setLayoutPlan1(e.target.value)} value={layoutPlan}>
                                     </input>
                                 </div>
                                 <div className="col col-3">
                                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Proposed Layout of Plan /site plan for area applied for migration. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
 
-                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}></input>
+                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setProposedLayoutPlan(e.target.value)} value={proposedLayoutPlan}></input>
                                 </div>
                                 <div className="col col-3">
                                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Revised Land Schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
 
-                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}></input>
+                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setRevisedLandSchedule(e.target.value)} value={revisedLansSchedule}></input>
                                 </div>
                             </div>
                             <div class="row">
