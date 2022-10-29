@@ -11,8 +11,8 @@ import InfoIcon from "@mui/icons-material/Info";
 // import BootstrapSwitchButton from "bootstrap-switch-button-react";
 // import Alert from "react-bootstrap/Alert";
 // import ToggleButton from "react-toggle-button";
-import Toggle from "react-toggle";
-import "react-toggle/style.css";
+// import Toggle from "react-toggle";
+// import "react-toggle/style.css";
 // import WarningIcon from "@material-ui/icons/Warning";
 
 import LicenseDetailsScrutiny from "../ScrutinyBasic/Developer/LicenseDetailsScrutiny";
