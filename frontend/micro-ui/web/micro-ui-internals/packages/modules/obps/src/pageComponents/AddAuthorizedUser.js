@@ -1,4 +1,4 @@
-import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
@@ -21,6 +21,7 @@ import { convertEpochToDate } from "../utils/index";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import axios from "axios";
+// const tenantId = Digit.ULBService.getCurrentTenantId();
 
 //for Redux use only
 // import { setAurthorizedUserData } from "../Redux/Slicer/Slicer";
@@ -37,10 +38,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
   const [aurthorizedMobileNumber, setAurthorizedMobileNumber] = useState(formData?.AddAuthorizeduser?.aurthorizedMobileNumber || formData?.AddAuthorizeduser?.aurthorizedMobileNumber || "");
   const [aurthorizedEmail, setAurthorizedEmail] = useState(formData?.AddAuthorizeduser?.aurthorizedEmail || formData?.AddAuthorizeduser?.aurthorizedEmail || "");
   const [aurthorizedDob, setAurthorizedDob] = useState(formData?.AddAuthorizeduser?.aurthorizedDob || formData?.AddAuthorizeduser?.aurthorizedDob || "");
+  const [gender, setGender] = useState(formData?.AddAuthorizeduser?.gender || formData?.formData?.AddAuthorizeduser?.gender);
   const [aurthorizedPan, setAurthorizedPan] = useState(formData?.AddAuthorizeduser?.aurthorizedPan || formData?.AddAuthorizeduser?.aurthorizedPan || "");
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
   const [docUpload,setDocuploadData]=useState([])
   const [file,setFile]=useState(null);
+  const stateId = Digit.ULBService.getStateId();
   //   const dispatch=useDispatch();
   // const Modal = () => (
   //   <Popup trigger={<button className="button"> Open Modal </button>} modal>
@@ -87,9 +90,22 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     const getshow = e.target.value;
     setShowhide(getshow);
   };
+  function setGenderName(value) {
+    setGender(value);
+  }
   function selectPanNumber(e) {
     setAurthorizedPan(e.target.value.toUpperCase());
   }
+
+  const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
+
+  let menu = [];
+  genderTypeData &&
+    genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
+      menu.push({ i18nKey: `COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
+    });
+    const editScreen = false;
+
   const panVerification = async () => {
     try {
       const panVal =  {
@@ -100,7 +116,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
           "PANFullName": aurthorizedUserName,
           "FullName": aurthorizedUserName,
           "DOB": aurthorizedDob,
-          "GENDER": "MALE"
+          "GENDER": gender.value
           // "GENDER": gender.value
         },
         "consentArtifact": {
@@ -178,7 +194,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
         console.log("File",formData)
 
        try {
-           const Resp = await axios.post("http://10.1.1.18:8083/filestore/v1/files",formData,
+           const Resp = await axios.post("/filestore/v1/files",formData,
            {headers:{
                "content-type":"multipart/form-data"
            }}).then((response) => {
@@ -203,25 +219,50 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     const user = {
       userName: aurthorizedUserName,
       name: aurthorizedUserName,
-      gender: "male",
+      gender: gender.value,
       mobileNumber: aurthorizedMobileNumber,
       emailId: aurthorizedEmail,
       dob: aurthorizedDob,
       pan: aurthorizedPan,
       "active": true,
-      "type": "EMPLOYEE",
+      "type": "CITIZEN",
       "password": "Password@123",
       "tenantId": "hr",
       "roles": [
           {
-              "code": "EMPLOYEE",
-              "name": "Employee",
+              "code": "CITIZEN",
+              "name": "Citizen",
               "tenantId": "default"
           }
       ]
     }
 
     setAurthorizedUserInfoArray((prev) => [...prev, user]);
+    try {
+      const requestResp = {
+        
+          "RequestInfo": {
+              "api_id": "1",
+              "ver": "1",
+              "ts": null,
+              "action": "create",
+              "did": "",
+              "key": "",
+              "msg_id": "",
+              "requester_id": "",
+              "auth_token": null
+          },
+      }
+      const postDataAuthUser = axios.post(`/user/users/_createnovalidate`,requestResp,user,{headers:{
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin':"*",
+      }})
+      console.log(postDataAuthUser);
+    }
+    
+    catch(error){
+      console.log(error.message);
+    }
   };
 
   const handleAurthorizedUserFormSubmit = async (e) => {
@@ -235,31 +276,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     localStorage.setItem("data_user", JSON.stringify(formData))
     
     
-      try {
-        const requestResp = {
-          
-            "RequestInfo": {
-                "api_id": "1",
-                "ver": "1",
-                "ts": null,
-                "action": "create",
-                "did": "",
-                "key": "",
-                "msg_id": "",
-                "requester_id": "",
-                "auth_token": null
-            },
-        }
-        const postDataAuthUser = await axios.post(`localhost:8086/user/users/_createnovalidate`,requestResp,formData,{headers:{
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin':"*",
-        }})
-        console.log(postDataAuthUser);
-      }
       
-      catch(error){
-        console.log(error.message);
-      }
     
 
    
@@ -282,20 +299,21 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
             </div> */}
         {/* <div className="card shadow"> */}
 
-        <div className="card-body">
+        <div className="card-body px-0">
           {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
           <div className="table-bd">
             {/* { inputFields.map((data, index)=>{
                     const {}
                     })
                     } */}
-            <Table className="table table-bordered">
+            <Table className="table table-bordered table-responsive">
               <thead>
                 <tr>
                   <th>Sr. No</th>
                   <th>Name</th>
                   <th>Mobile Number</th>
                   <th>Email</th>
+                  <th>Gender</th>
                   <th>Date of Birth</th>
                   <th>PAN No.</th>
                   <th>Upload Aadhar PDF</th>
@@ -316,6 +334,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                               placeholder={elementInArray.name}
                               value={elementInArray.name}
                               class="employee-card-input"
+                             
                             />
                           </td>
                           <td>
@@ -334,6 +353,16 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                               placeholder={elementInArray.emailId}
                               value={elementInArray.emailId}
                               class="employee-card-input"
+                              disabled={"disabled"}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              name="gender[]"
+                              placeholder={elementInArray.gender}
+                              value={elementInArray.gender}
+                              class="employee-card-input"
                             />
                           </td>
                           <td>
@@ -341,7 +370,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                               type="text"
                               name="dob[]"
                               placeholder={elementInArray.dob}
-                              value={elementInArray.dob}
+                              value={elementInArray.dob || dd-mm-yyyy}
                               class="employee-card-input"
                             />
                           </td>
@@ -427,7 +456,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                               <TextInput
                                 t={t}
                                 type={"text"}
-                                isMandatory={true}
+                                isMandatory={false}
                                 optionKey="i18nKey"
                                 name="aurthorizedUserName"
                                 value={aurthorizedUserName}
@@ -436,7 +465,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                                   isRequired: true,
                                   pattern: "^[a-zA-Z-.`' ]*$",
                                   type: "text",
-                                  title: t("PT_NAME_ERROR_MESSAGE"),
+                                  title: "Please enter Name",
                                 })}
                               />
                             </Col>
@@ -451,6 +480,11 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                                 maxlength={"10"}
                                 pattern={"[6-9]{1}[0-9]{9}"}
                                 required={true}
+                                {...(validation = {
+                                  isRequired: true,
+                                  pattern: "^[a-zA-Z-.`' ]*$",
+                                  title: t("PT_NAME_ERROR_MESSAGE"),
+                                })}
                               />
                              
                             </Col>
@@ -463,6 +497,21 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                                 class="employee-card-input"
                                 onChange={(e) => setAurthorizedEmail(e.target.value)}
                               />
+                            </Col>
+                            <Col md={3} xxl lg="3">
+                                <label htmlFor="name" className="text">Gender</label>
+                                <Dropdown
+                                    style={{ width: "100%" }}
+                                    className="form-field"
+                                    selected={gender?.length === 1 ? gender[0] : gender}
+                                    disable={gender?.length === 1 || editScreen}
+                                    option={menu}
+                                    select={setGenderName}
+                                    value={gender}
+                                    optionKey="code"
+                                    t={t}
+                                    name="gender"
+                                />
                             </Col>
                             <Col md={3} xxl lg="3">
                               <label htmlFor="name" className="text">Date of Birth</label>

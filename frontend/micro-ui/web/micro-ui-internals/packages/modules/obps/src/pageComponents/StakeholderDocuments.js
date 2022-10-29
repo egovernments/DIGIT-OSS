@@ -30,15 +30,17 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
     const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
     
-
+    
     useEffect(() => {
         let filtredBpaDocs = [];
         if (data?.StakeholderRegistraition?.TradeTypetoRoleMapping) {
             filtredBpaDocs = data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.filter(ob => (ob.tradeType === formData?.formData?.LicneseType?.LicenseType?.tradeType))
+            console.log("STKH",data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.filter(ob => (ob.tradeType === formData?.formData?.LicneseType?.LicenseType?.tradeType)))
         }
-
         let documentsList = [];
         filtredBpaDocs?.[0]?.docTypes?.forEach(doc => {
+        
+
             documentsList.push(doc);
         });
         setBpaTaxDocuments(documentsList);
@@ -80,7 +82,6 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
     return (
         <div>
-            
             <div className={isopenlink? "OpenlinkContainer":""}>
             {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
             <Timeline currentStep={5} flow="STAKEHOLDER" />
@@ -112,8 +113,8 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                     {error && <Toast label={error} isDleteBtn={true} onClose={() => setError(null)} error  />}
                 </FormStep> : <Loader />}
                 {!(formData?.initiationFlow) && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={`${t("BPA_APPLICATION_NUMBER_LABEL")} ${formData?.result?.Licenses?.[0]?.applicationNumber} ${t("BPA_DOCS_INFORMATION")}`} className={"info-banner-wrap-citizen-override"}/>}
+                </div>
             </div>
-        </div>
         // </div>
     );
 }

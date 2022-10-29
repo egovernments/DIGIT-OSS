@@ -4,7 +4,7 @@ import {
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-
+import bannerImg from "../../../Images/bg-login.jpg"
 const Home = () => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -103,7 +103,8 @@ const Home = () => {
   ) : (
     <div className="HomePageWrapper">
       <div className="BannerWithSearch">
-        <img src={stateInfo?.bannerUrl} />
+        {/* <img src={stateInfo?.bannerUrl} /> */}
+        <img src={bannerImg} />
         <div className="Search">
           <StandaloneSearchBar placeholder={t("CS_COMMON_SEARCH_PLACEHOLDER")} />
         </div>

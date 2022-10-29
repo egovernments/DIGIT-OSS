@@ -918,7 +918,7 @@ button, input, .checkbox-wrap .input-emp, optgroup, select, textarea {
     position: relative;
     display: block;
     width: 100%;
-    height: 2.5rem;
+    height: 2rem;
     --border-opacity:1;
     border: 1px solid #464646;
     border-color: rgba(70, 70, 70, var(--border-opacity)); }
@@ -8810,7 +8810,7 @@ img, video {
   position: relative;
   display: block;
   width: 100%;
-  height: 2.5rem;
+  height: 2rem;
   --border-opacity:1;
   border: none;
   border-bottom: 1px solid #464646;

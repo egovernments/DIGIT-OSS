@@ -29,7 +29,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [locality, setLocality] = useState(formData?.LicneseDetails?.locality || formData?.formData?.LicneseDetails?.locality || "");
   const [city, setCity] = useState(formData?.LicneseDetails?.city || formData?.formData?.LicneseDetails?.city || "");
   const [pincode, setPincode] = useState(formData?.LicneseDetails?.pincode || formData?.formData?.LicneseDetails?.pincode || "");
-
+  const [addressSameAsPermanent,setSelectedChecked] = useState(formData?.LicenseDetails?.addressSameAsPermanent || formData?.LicenseDetails?.addressSameAsPermanent || "")
   const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.Correspondenceaddress || formData?.formData?.Correspondenceaddress || "");
   const [houseNumberCorrespondesnce, sethouseNumberCorrespondesnce] = useState(formData?.houseNumberCorrespondesnce || formData?.formData?.houseNumberCorrespondesnce || "");
   const [colonyNameCorrespondesnce, setColonyNameCorrespondesnce] = useState(formData?.colonyNameCorrespondesnce || formData?.formData?.colonyNameCorrespondesnce || "");
@@ -48,7 +48,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       type: "date",
       name: "dob",
       validation: {
-        isRequired: false,
+        isRequired: true,
         title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
       },
       isMandatory: false,
@@ -134,8 +134,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         'Access-Control-Allow-Origin':"*",
       }}) 
       console.log("PANDET",panResp.data);
-    } catch(errdata){
-      console.error("PANERROR",errdata);
+    } catch(error){
+      if (error.panResp && error.panResp.data) {
+        console.log(e.panResp.data.message) // some reason error message
+      }
+      // console.error("PANERROR",errdata);
     }
   }
 console.log(panValidation);
@@ -185,6 +188,7 @@ console.log(panValidation);
     setPincode(e.target.value);
   }
   function selectChecked(e) {
+    setSelectedChecked(e.target.value);
     if (isAddressSame == false) {
       setisAddressSame(true);
       setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress);
@@ -245,6 +249,7 @@ console.log(panValidation);
         locality: locality,
         city:city,
         pincode: pincode,
+        addressSameAsPermanent:addressSameAsPermanent,
         houseNumberCorrespondesnce: houseNumberCorrespondesnce,
         colonyNameCorrespondesnce: colonyNameCorrespondesnce,
         streetNameCorrespondesnce: streetNameCorrespondesnce,
@@ -285,6 +290,7 @@ console.log(panValidation);
       data.LicneseDetails.PanNumber = PanNumber;
       formData.Correspondenceaddress = Correspondenceaddress;
       formData.houseNumberCorrespondesnce = houseNumberCorrespondesnce;
+      formData.addressSameAsPermanent = addressSameAsPermanent;
       formData.isAddressSame = isAddressSame;
       onSelect("", formData, "", true);
       // onSelect("", formData)
@@ -306,7 +312,7 @@ console.log(panValidation);
           onSelect={goNext}
           onSkip={onSkip}
           t={t}
-          isDisabled={!name || !mobileNumber || !gender}
+          isDisabled={!name || !mobileNumber || !gender || !dob || !email || !PanNumber}
         >
           <Card className="mb-3">
             {/* <h4></h4> */}
@@ -391,34 +397,36 @@ console.log(panValidation);
               )
               )}
               <Form.Group className="col-md-5">
-                <CardLabel>{t("BPA_APPLICANT_EMAIL_LABEL")}</CardLabel>
+                <CardLabel>{`${t("BPA_APPLICANT_EMAIL_LABEL")}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"email"}
-                  isMandatory={false}
+                  isMandatory={true}
                   optionKey="i18nKey"
                   name="email"
                   value={email}
                   placeholder={email}
                   onChange={selectEmail}
                   //disable={editScreen}
-                  {...{ required: true, pattern: "[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$", type: "email", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+                  
                 />
+                {email&&email.length>0&&!email.match(Digit.Utils.getPattern('Email'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{("Invalid Email Address")}</CardLabelError>}
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${t("BPA_APPLICANT_PAN_NO")}`}</CardLabel>
+                <CardLabel>{`${t("BPA_APPLICANT_PAN_NO")}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
                   isMandatory={true}
                   optionKey="i18nKey"
                   name="PanNumber"
+                  required={true}
                   value={PanNumber}
                   placeholder={PanNumber}
                   onChange={selectPanNumber}
                   {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
                   />
-                  {PanNumber&&PanNumber.length>0&&!PanNumber.match(Digit.Utils.getPattern('PAN'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px'}}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
+                  {PanNumber&&PanNumber.length>0&&!PanNumber.match(Digit.Utils.getPattern('PAN'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
               </Form.Group>
             </Row>
           </Card>
@@ -438,7 +446,7 @@ console.log(panValidation);
                   />
               </Form.Group> */}
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Door/House No."}`}</CardLabel>
+                <CardLabel>{`${"Address Line 1"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -448,10 +456,15 @@ console.log(panValidation);
                   value={houseNumber}
                   placeholder={houseNumber}
                   onChange={selectHouseNumber}
+                  {...(validation = {
+                    isRequired: true,
+                    type: "text",
+                    title: ("Please Enter Address line 1"),
+                  })}
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Building/Colony Name"}`}</CardLabel>
+                <CardLabel>{`${"Address Line 2"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -464,7 +477,7 @@ console.log(panValidation);
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Street Name"}`}</CardLabel>
+                <CardLabel>{`${"Address Line 3"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -477,7 +490,7 @@ console.log(panValidation);
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Locality"}`}</CardLabel>
+                <CardLabel>{`${"Address Line 4"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -490,7 +503,7 @@ console.log(panValidation);
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"City"}`}</CardLabel>
+                <CardLabel>{`${"City"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -500,10 +513,15 @@ console.log(panValidation);
                   value={city}
                   placeholder={city}
                   onChange={selectCity}
+                  {...(validation = {
+                    isRequired: true,
+                    type: "text",
+                    title: ("Please Enter City"),
+                  })}
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Pincode"}`}</CardLabel>
+                <CardLabel>{`${"Pincode"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -513,7 +531,14 @@ console.log(panValidation);
                   value={pincode}
                   placeholder={pincode}
                   onChange={selectPincode}
+                  maxlength={"6"}
+                  {...(validation = {
+                    isRequired: true,
+                    type: "text",
+                    title: ("Please Enter Pincode"),
+                  })}
                   />
+                  {pincode&&pincode.length>0&&!pincode.match(Digit.Utils.getPattern('Pincode'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{t("Please enter valid Pincode")}</CardLabelError>}
               </Form.Group>
             </Row>
           </Card>
@@ -543,11 +568,11 @@ console.log(panValidation);
                   />
               </Form.Group> */}
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Door/House No."}`}</CardLabel>
+                <CardLabel>{`${"Address Line 1"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
-                  isMandatory={false}
+                  isMandatory={true}
                   optionKey="i18nKey"
                   name="houseNumberCorrespondesnce"
                   value={houseNumberCorrespondesnce}
@@ -557,7 +582,7 @@ console.log(panValidation);
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Building/Colony Name"}`}</CardLabel>
+                <CardLabel>{`${"Address Line 2"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -571,7 +596,7 @@ console.log(panValidation);
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Street Name"}`}</CardLabel>
+                <CardLabel>{`${"Address Line 3"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -585,7 +610,7 @@ console.log(panValidation);
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Locality"}`}</CardLabel>
+                <CardLabel>{`${"Address Line 4"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -599,11 +624,11 @@ console.log(panValidation);
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"City"}`}</CardLabel>
+                <CardLabel>{`${"City"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
-                  isMandatory={false}
+                  isMandatory={true}
                   optionKey="i18nKey"
                   name="cityCorrespondence"
                   value={cityCorrespondence}
@@ -613,11 +638,11 @@ console.log(panValidation);
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Pincode"}`}</CardLabel>
+                <CardLabel>{`${"Pincode"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
-                  isMandatory={false}
+                  isMandatory={true}
                   optionKey="i18nKey"
                   name="pincodeCorrespondence"
                   value={pincodeCorrespondence}
