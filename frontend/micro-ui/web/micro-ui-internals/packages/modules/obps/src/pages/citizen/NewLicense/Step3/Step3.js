@@ -574,7 +574,7 @@ const LandScheduleForm = (props) => {
                                             <div className="col col-6 ">
 
                                                 <h6 onChange={(e) => setMigrationLic(e.target.value)} value={setMigrationLic}><b>(ii)Whether licence applied under Migration policy?</b>&nbsp;&nbsp;
-                                                    <input type="radio" value="Yes" id="Yes"
+                                                    <input type="radio" value="Yes" id="Yes" 
                                                         onChange1={handleChange} name="Yes" onClick={handleshow23} />&nbsp;&nbsp;
                                                     <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
 

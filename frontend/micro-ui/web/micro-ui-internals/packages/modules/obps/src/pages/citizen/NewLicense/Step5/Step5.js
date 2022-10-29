@@ -397,7 +397,7 @@ const FeesChargesForm = (props) => {
                     }
                  }
            
-            const Resp = await axios.post("http://10.1.1.18:7171/land-services/new/_create",
+            const Resp = await axios.post("http://10.1.1.18:8199/land-services/new/_create",
                 postDistrict,
             )
                 .then((Resp) => {
@@ -559,21 +559,21 @@ const FeesChargesForm = (props) => {
                                 </ul>
                             </div>
                             <Modal
-                                size="xl"
+                                size="lg"
                                 isOpen={modal1}
                                 toggle={() => setmodal(!modal1)}
                                 style={{width:"500px", height:"200px"}}
+                                aria-labelledby="contained-modal-title-vcenter"
+                                centered
                             >
                                 <ModalHeader
                                     toggle={() => setmodal1(!modal1)}
                                 ></ModalHeader>
-                                <ModalBody>
-                                    <p><b> I hereby declare that the details furnished above are true and correct to the best of my
+                                <ModalBody style={{fontSize:20}}>
+                                    <h2 > I hereby declare that the details furnished above are true and correct to the best of my
                                         knowledge and belief and I undertake to inform you of any changes therein, immediately.
                                         In case any of the above information is found to be false or untrue or misleading or misrepresenting,
-                                        I am aware that I may be held liable for it.</b>
-                                       
-                                    </p>
+                                        I am aware that I may be held liable for it.</h2>
                                 </ModalBody>
                                 <ModalFooter
                                     toggle={() => setmodal(!modal1)}
@@ -599,15 +599,17 @@ const FeesChargesForm = (props) => {
                                     <div >
 
                                         <Modal
-                                           size="xl"
+                                           size="lg"
                                            isOpen={modal}
                                            toggle={() => setmodal(!modal)}
                                            style={{width:"500px", height:"200px"}}
+                                           aria-labelledby="contained-modal-title-vcenter"
+                                             centered
                                         >
                                             <ModalHeader
                                                 toggle={() => setmodal(!modal)}
                                             ></ModalHeader>
-                                            <ModalBody>
+                                            <ModalBody style={{fontWeight:"bold",fontSize:20}}>
                                             <p class="text-success font-weight-bold"
                                                            >Congratulations, Payment
                                                             Successful!!</p>

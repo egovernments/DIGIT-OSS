@@ -441,10 +441,9 @@ const ApllicantPuropseForm = (props) => {
     console.log("purpose", purposeSelected);
     localStorage.setItem("purpose", purposeSelected);
   };
-  const PurposeFormSubmitHandler = (e) => {
-    e.preventDefault();
-    SetPurposeformSubmitted(true);
-    props.Step2Continue({ data: true });
+  const PurposeFormSubmitHandler = async(data) => {
+    console.log("data===", data);
+    props.Step2Continue({ data });
   };
 //   let forms = {
 //     purposeDd: purposeDd,
@@ -533,7 +532,7 @@ const ApllicantPuropseForm = (props) => {
 //     }
 
     return (
-        <form >
+        <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
         <Card style={{ width: "126%", marginLeft: "20px", paddingRight: "10px" }}>
             <Form.Group  >
                 {/* <ModalForm displayEditModal={displayEditModal} editDataIndex={editValues} /> */}
@@ -542,7 +541,7 @@ const ApllicantPuropseForm = (props) => {
                         <div>
                             <Form.Label><b>Puropse Of License</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
-                        <ReactMultiSelect control={control} name="purposeDd" value={purposeDd}  placeholder="N/A" data={optionsPurposeList} labels="Purpose" getSelectedValue={handleChangePurpose}  />
+                        <ReactMultiSelect control={control} name="purposeDd"  placeholder="N/A" data={optionsPurposeList} labels="Purpose" getSelectedValue={handleChangePurpose}  />
                       <h3 className="error-message"style={{color:"red"}}>{errors?.purposeDd && errors?.purposeDd?.message}</h3>
                        </Col>
                         {/* <Form.Select type="text" defaultValue={purposeDd} placeholder="Puropse"  onChange={handleChangePurpose} value={purposeDd}  ></Form.Select> */}
@@ -557,7 +556,7 @@ const ApllicantPuropseForm = (props) => {
                             <Form.Label><b>Potential Zone:</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
                         <ReactMultiSelect control={control} name="potential"  placeholder="N/A" data={optionsPotentialList} labels="Potential" getSelectedValue={handleChangePotential}  />
-                      <h3 className="error-message"style={{color:"red"}}>{errors?.potentialZone && errors?.potentialZone?.message}</h3>
+                      <h3 className="error-message"style={{color:"red"}}>{errors?.potential && errors?.potential?.message}</h3>
                        </Col>
                        
                     <Col md={4} xxl lg="3">
@@ -613,10 +612,10 @@ const ApllicantPuropseForm = (props) => {
                                             <div>
                                                 <Form.Label><h6><b>Name of Revenue estate</b></h6></Form.Label>
                                             </div>
-                                            <ReactMultiSelect control={control} name="revenue Estate"  placeholder="N/A"
+                                            <ReactMultiSelect control={control} name="revenueEstate"  placeholder="N/A"
                                         data={revenueDataLabels} labels="Revenue Estate"   getSelectedValue={(data) => setRevenueName(data)} />
                                             
-                                            <h3 className="error-message" style={{ color: "red" }}>{errors?.RevenueName && errors?.RevenueName?.message}</h3>
+                                            <h3 className="error-message" style={{ color: "red" }}>{errors?.revenueEstate && errors?.revenueEstate?.message}</h3>
                                         </Col>
                                     <Col md={4} xxl lg="4">
                                         <div>
@@ -888,7 +887,7 @@ const ApllicantPuropseForm = (props) => {
                 </div>
                 <div class="row">
                     <div class="col-sm-12 text-right">
-                        <button id="btnSearch" class="btn btn-primary btn-md center-block" onClick={PurposeFormSubmitHandler} >Continue</button>
+                        <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block"  >Continue</button>
                     </div></div>
             </div>
 

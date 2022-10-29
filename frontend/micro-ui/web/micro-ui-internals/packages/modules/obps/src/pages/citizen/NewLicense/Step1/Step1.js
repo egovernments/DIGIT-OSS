@@ -19,11 +19,56 @@ const ApllicantFormStep1 = (props) => {
     resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
+  const [authorizedDeveloper, setAuthorizedDeveloper] = useState("");
+  const [authorizedPerson, setAuthorizedPerson] = useState("");
+  const [authorizedmobile, setAuthorizedmobile] = useState("");
+  const [alternatemobile, setAlternatemobile] = useState("");
+  const [authorizedEmail, setAuthorizedEmail] = useState("");
+  const [authorizedPan, setAuthorizedPan] = useState("");
+  const [authorizedAddress, setAuthorizedAddress] = useState("");
+  const [village, setVillage] = useState("");
+  const [authorizedPinCode, setAuthorizedPinCode] = useState("");
+  const [tehsil, setTehsil] = useState("");
+  const [district, setDistrict] = useState("");
+  const [state, setState] = useState("");
+  const [status, setStatus] = useState("");
+  const [LC1, setLC1] = useState("");
+  const [address, setAddress] = useState("");
+  const [permanentAddress, setPermanentAddress] = useState("");
+  const [notSigned, setNotSigned] = useState("");
+  const [email, setEmail] = useState("");
+  const [authorized, setAuthorized] = useState("");
+
   const [developerData, setDeveloperData] = useState([]);
+  const [developerDataLabel, setDeveloperDataLabel] = useState([]);
   const ApplicantFormSubmitHandlerForm = async (data) => {
     console.log("data===", data);
     props.Step1Continue(data);
   };
+
+  const forms = {
+    authorizedDeveloper: authorizedDeveloper,
+    authorizedPerson: authorizedPerson,
+    authorizedmobile: authorizedmobile,
+    alternatemobile: alternatemobile,
+    authorizedEmail: authorizedEmail,
+    authorizedPan: authorizedPan,
+    authorizedAddress: authorizedAddress,
+    village: village,
+    authorizedPinCode: authorizedPinCode,
+    tehsil: tehsil,
+    district: district,
+    state: state,
+    status: status,
+    LC1:LC1,
+    address :address ,
+    permanentAddress :permanentAddress ,
+    notSigned :notSigned ,
+    email :email ,
+    authorized:authorized
+
+};
+localStorage.setItem("key",JSON.stringify(forms))
 
   const getDeveloperData = async () => {
     try {
@@ -36,38 +81,71 @@ const ApllicantFormStep1 = (props) => {
     }
   };
   useEffect(() => {
+    getDeveloperData()
+    
+  }, [ setValue(
+    "authorizedDeveloper",
+    developerData !== null && developerData !== undefined
+      ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
+      : "N/A"
+  ),
     setValue(
-      "authorizedDeveloper",
+      "authorizedPerson",
       developerData !== null && developerData !== undefined
-        ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
+        ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName
         : "N/A"
     ),
-      setValue(
-        "authorizedPerson",
-        developerData !== null && developerData !== undefined
-          ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName
-          : "N/A"
-      ),
-      setValue(
-        "authorizedmobile",
-        developerData !== null && developerData !== undefined
-          ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber
-          : "N/A"
-      ),
-      setValue(
-        "authorizedEmail",
-        developerData !== null && developerData !== undefined
-          ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId
-          : "N/A"
-      ),
-      setValue(
-        "authorizedPan",
-        developerData !== null && developerData !== undefined
-          ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan
-          : "N/A"
-      );
-  }, [getDeveloperData()]);
+    setValue(
+      "authorizedmobile",
+      developerData !== null && developerData !== undefined
+        ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber
+        : "N/A"
+    ),
+    setValue(
+      "authorizedEmail",
+      developerData !== null && developerData !== undefined
+        ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId
+        : "N/A"
+    ),
+    setValue(
+      "authorizedPan",
+      developerData !== null && developerData !== undefined
+        ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan
+        : "N/A"
+    ),]);
 
+  const getDeveloperDataLabel = async () => {
+    try { 
+       const postDistrict = {
+        tenantId: "pb",
+        uuid: [
+            "b49784fb-59d9-4d37-b837-abc9919a26fe"
+        ],
+        "RequestInfo": {
+            apiId: "Rainmaker",
+            authToken: "cf3e6e7a-0fdf-4862-a55d-3ed07bbeb143",
+           
+            msgId: "1666945960102|en_IN"
+        }
+  }
+      const Resp = await axios.post("http://localhost:3000/user/_search?_=1666935568224",postDistrict).then((response) => {
+        return response;
+      });
+      setDeveloperDataLabel(Resp.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  useEffect(() => {
+    getDeveloperDataLabel()
+  }, []);
+
+  useEffect(() => {
+    if (developerDataLabel !== undefined && developerDataLabel !== null) {
+      console.log("authorized user data Label", developerDataLabel?.user?.altContactNumber);
+    }
+  }, [developerDataLabel]);
+  console.log("data", developerDataLabel);
   useEffect(() => {
     if (developerData !== undefined && developerData !== null) {
       console.log("authorized user data", developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName);

@@ -24,7 +24,8 @@ const CommonForm = () => {
     setIsStep5(false);
     setStep(2);
   };
-  const handlestep2 = () => {
+  const handlestep2 = (data) => {
+    console.log("true", data);
     setIsStep2(true);
     setIsStep1(false);
     setIsStep3(false);
