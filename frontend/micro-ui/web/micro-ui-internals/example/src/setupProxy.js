@@ -18,6 +18,10 @@ const LicProxy = createProxyMiddleware({
   target: process.env.REACT_APP_PROXY_MDMS || "https://qa.digit.org",
   changeOrigin: true,
 });
+const docUploadProxy = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_UPLOAD_DOC || "https://qa.digit.org",
+  changeOrigin: true,
+});
 module.exports = function (app) {
   [
     "/egov-mdms-service",
@@ -68,4 +72,5 @@ module.exports = function (app) {
     "/certificate/v3/pan/pancr"
   ].forEach((location) => app.use(location, apiSetuProxy));
   ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
+  ["/filestore/v1"].forEach((location) => app.use(location, docUploadProxy));
 };

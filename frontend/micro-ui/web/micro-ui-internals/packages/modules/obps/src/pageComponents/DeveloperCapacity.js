@@ -11,6 +11,7 @@ import Timeline from "../components/Timeline";
 import { FormStep } from "@egovernments/digit-ui-react-components";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import UploadDrawer from "../../../core/src/pages/citizen/Home/ImageUpload/UploadDrawer";
 const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) => {
     const { pathname: url } = useLocation();
     const userInfo = Digit.UserService.getUser();
@@ -79,10 +80,11 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
     const [boardDocN,setBoardDocN] = useState(formDataValue?.DeveloperCapacity?.boardDocN || "")
     const [earlierDocN,setEarlierDocN] = useState(formDataValue?.DeveloperCapacity?.earlierDocN || "")
     const [technicalAssistanceAgreementDoc,setTechnicalAssistanceAgreementDoc] = useState(formDataValue?.DeveloperCapacity?.technicalAssistanceAgreementDoc || "")
-  
-    
+    const [docUpload,setDocuploadData]=useState([])
+    const [file,setFile]=useState(null);
+
     // console.log("AUTHNAME", authUserName);
-  
+   
     // const dispatch = useDispatch();
     const {
       register,
@@ -157,7 +159,41 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
     // if(devTypeFlagVal == "0"){
     //     setIsDevTypeComp(true);
     // }
-
+    const getDocumentData = async () => {
+        if(file===null){
+           return
+        }
+           const formData = new FormData();
+           formData.append(
+               "file",file.file      );
+           formData.append(
+               "tenantId","hr"      );  
+           formData.append(
+               "module","property-upload"      );
+            formData.append(
+                "tag","tag-property"      );
+       
+            console.log("File",formData)
+    
+           try {
+               const Resp = await axios.post("/filestore/v1/files",formData,
+               {headers:{
+                   "content-type":"multipart/form-data"
+               }}).then((response) => {
+                   return response
+               });
+               setDocuploadData(Resp.data)
+               
+           } catch (error) {
+               console.log(error.message);
+           }
+    
+          
+    
+      }
+      useEffect(() => {
+        getDocumentData();
+      }, [file]);
 
 
     const handleArrayValues = () => {
@@ -379,6 +415,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     name="upload"
                                     placeholder=""
                                     class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
                                 />
                                 </td>
                                 <td align="center" size="large">
@@ -415,7 +452,9 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     name="upload"
                                     placeholder=""
                                     class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
                                 />
+                               
                                 </td>
                                 <td align="center" size="large">
                                 {/* <FileUploadIcon /> */}
@@ -430,6 +469,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     name="upload"
                                     placeholder=""
                                     class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
                                 />
                                 </td>
                                 <td align="center" size="large">
@@ -466,6 +506,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     name="upload"
                                     placeholder=""
                                     class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
                                 />
                                 </td>
                                 <td align="center" size="large">
@@ -481,6 +522,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     name="upload"
                                     placeholder=""
                                     class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
                                 />
                                 </td>
                                 <td align="center" size="large">
@@ -581,7 +623,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                         <td>
                                             <div className="row">
                                             <button className="btn btn-sm col-md-6">
-                                                <VisibilityIcon color="info" className="icon" />
+                                                <VisibilityIcon color="info" className="icon"/>
                                             </button>
                                             <button className="btn btn-sm col-md-6">
                                                 <FileDownloadIcon color="primary"  />
@@ -671,7 +713,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                             <label htmlFor="name" className="text">Sector and development plan</label>
                                             <input
                                                 type="file"
-                                                onChange={(e) => setModalDevPlan(e.target.value)}
+                                                // onChange={(e) => setModalDevPlan(e.target.value)}
+                                                onChange={(e)=>setFile({file:e.target.files[0]})}
                                                 placeholder=""
                                                 class="employee-card-input"
                                             />
@@ -680,7 +723,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                             <label htmlFor="name" className="text">Validity of licence </label>
                                             <input
                                                 type="file"
-                                                onChange={(e) => setModalDevValidity(e.target.value)}
+                                                // onChange={(e) => setModalDevValidity(e.target.value)}
+                                                onChange={(e)=>setFile({file:e.target.files[0]})}
                                                 placeholder=""
                                                 class="employee-card-input"
                                             />
@@ -864,7 +908,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                             <label htmlFor="name" className="text">Status of development</label>
                                             <input
                                             type="file"
-                                            onChange={(e) => setColonyStatusDev(e.target.value)}
+                                            // onChange={(e) => setColonyStatusDev(e.target.value)}
+                                            onChange={(e)=>setFile({file:e.target.files[0]})}
                                             placeholder=""
                                             class="employee-card-input"
                                             />
@@ -873,7 +918,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                             <label htmlFor="name" className="text">Outstanding Dues</label>
                                             <input
                                             type="file"
-                                            onChange={(e) => setColonyoutstandingDue(e.target.value)}
+                                            // onChange={(e) => setColonyoutstandingDue(e.target.value)}
+                                            onChange={(e)=>setFile({file:e.target.files[0]})}
                                             placeholder=""
                                             class="employee-card-input"
                                             />
@@ -974,7 +1020,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td>
                                         <input
                                         type="file"
-                                        onChange={(e) => setEngineerSign(e.target.value)}
+                                        // onChange={(e) => setEngineerSign(e.target.value)}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -982,7 +1029,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                     <input
                                         type="file"
-                                        onChange={(e) => setEngineerDegree(e.target.value)}
+                                        // onChange={(e) => setEngineerDegree(e.target.value)}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1011,7 +1059,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td>
                                         <input
                                         type="file"
-                                        onChange={((e) => setArchitectSign(e.target.value))}
+                                        // onChange={((e) => setArchitectSign(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1019,7 +1068,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                         <input
                                         type="file"
-                                        onChange={((e) => setArchitectDegree(e.target.value))}
+                                        // onChange={((e) => setArchitectDegree(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         class="employee-card-input"
                                         />
                                     </td>
@@ -1047,7 +1097,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td>
                                         <input
                                         type="file"
-                                        onChange={((e) => setTownPlannerSign(e.target.value))}
+                                        // onChange={((e) => setTownPlannerSign(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1055,7 +1106,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                     <input
                                         type="file"
-                                        onChange={((e) => setTownPlannerDegree(e.target.value))}
+                                        // onChange={((e) => setTownPlannerDegree(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1138,7 +1190,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                     <input
                                         type="file"
-                                        onChange={((e) => setEngineerDocN(e.target.value))}
+                                        // onChange={((e) => setEngineerDocN(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1157,7 +1210,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                     <input
                                         type="file"
-                                        onChange={((e) => setArchitectDocN(e.target.value))}
+                                        // onChange={((e) => setArchitectDocN(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1180,7 +1234,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                         <input 
                                         type="file"
                                         class="employee-card-input"
-                                        onChange={((e)=> setUplaodSpaBoardDoc(e.target.value))}
+                                        // onChange={((e)=> setUplaodSpaBoardDoc(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         />
                                     </td>
                                     </tr>
@@ -1249,7 +1304,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                         <input
                                         type="file"
-                                        onChange={((e) => setAgreementDoc(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         class="employee-card-input"
                                         />
                                     </td>
@@ -1263,7 +1318,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                     <input
                                         type="file"
-                                        onChange={((e) => setBoardDoc(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         class="employee-card-input"
                                         />
                                     </td>
@@ -1326,7 +1381,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                         <td align="center" size="large">
                                         <input 
                                             type="file"
-                                            onChange={((e)=> setRegisteredDoc(e.target.value))}
+                                            // onChange={((e)=> setRegisteredDoc(e.target.value))}
+                                            onChange={(e)=>setFile({file:e.target.files[0]})}
                                             class="employee-card-input"
                                         />
                                         </td>
@@ -1341,7 +1397,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                         <td align="center" size="large">
                                         <input 
                                             type="file"
-                                            onChange={((e)=> setBoardDocY(e.target.value))}
+                                            // onChange={((e)=> setBoardDocY(e.target.value))}
+                                            onChange={(e)=>setFile({file:e.target.files[0]})}
                                             class="employee-card-input"
                                         />
                                         </td>
@@ -1357,7 +1414,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                         <td align="center" size="large">
                                         <input 
                                             type="file"
-                                            onChange={((e)=> setEarlierDocY(e.target.value))}
+                                            // onChange={((e)=> setEarlierDocY(e.target.value))}
+                                            onChange={(e)=>setFile({file:e.target.files[0]})}
                                             class="employee-card-input"
                                         />
                                         </td>
@@ -1393,7 +1451,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                         <input 
                                         type="file"
-                                        onChange={((e)=> setTechnicalAssistanceAgreementDoc(e.target.value))}
+                                        // onChange={((e)=> setTechnicalAssistanceAgreementDoc(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         class="employee-card-input"
                                         />
                                     </td>
@@ -1407,9 +1466,10 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     </td>
                                     <td align="center" size="large">
                                     <input 
-                                            type="file"
-                                            onChange={((e)=> setBoardDocN(e.target.value))}
-                                            class="employee-card-input"
+                                        type="file"
+                                        // onChange={((e)=> setBoardDocN(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
+                                        class="employee-card-input"
                                         />
                                     </td>
                                     </tr>
@@ -1424,7 +1484,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                     <input 
                                             type="file"
-                                            onChange={((e)=> setEarlierDocN(e.target.value))}
+                                            // onChange={((e)=> setEarlierDocN(e.target.value))}
+                                            onChange={(e)=>setFile({file:e.target.files[0]})}
                                             class="employee-card-input"
                                         />
                                     </td>

@@ -29,32 +29,22 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
     }
 
     const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
-    const addInfo = localStorage.getItem("addInfo")
-    const addAuthUser = localStorage.getItem("data_user")
-    const developerCapacity = localStorage.getItem("capacity")
+    
     
     useEffect(() => {
         let filtredBpaDocs = [];
         if (data?.StakeholderRegistraition?.TradeTypetoRoleMapping) {
-            //filtredBpaDocs = bpaDocs?.BPA?.DocTypeMapping?.filter(data => (data.WFState == "INITIATED" && data.RiskType == "LOW" && data.ServiceType == "NEW_CONSTRUCTION" && data.applicationType == "BUILDING_PLAN_SCRUTINY"))
-        //    let  formData = {formdata:{LicenseType:{LicenseType:{tradeType : "ENGINEER.CLASSA",}}}}
             filtredBpaDocs = data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.filter(ob => (ob.tradeType === formData?.formData?.LicneseType?.LicenseType?.tradeType))
+            console.log("STKH",data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.filter(ob => (ob.tradeType === formData?.formData?.LicneseType?.LicenseType?.tradeType)))
         }
-        console.log("BPADOClist",filtredBpaDocs);
         let documentsList = [];
         filtredBpaDocs?.[0]?.docTypes?.forEach(doc => {
-            let code = doc.code; doc.dropdownData = [];
-            // commonDocs?.["common-masters"]?.DocumentType?.forEach(value => {
-            //     let values = value.code.slice(0, code.length);
-            //     if (code === values) {
-            //         doc.hasDropdown = true;
-            //         value.i18nKey = value.code;
-            //         doc.dropdownData.push(value);
-            //     }
-            // });
+        
+
             documentsList.push(doc);
         });
         setBpaTaxDocuments(documentsList);
+
     }, [!isLoading]);
 
     const handleSubmit = () => {
@@ -85,60 +75,14 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                 count = count + 1;
             }
         });
-        //if(bpaTaxDocuments.length == documents.length+1 && bpaTaxDocuments.length!==0) setEnableSubmit(false);
         if ((count == "0" || count == 0) && documents.length > 0) setEnableSubmit(false);
         else setEnableSubmit(true);
     }, [documents, checkRequiredFields])
 
-    // if (bpaDocsLoading) {
-    //     return <Loader />;
-    // }
-
-    const submitTechdevData = async (e) => {
-        //   e.preventDefault();
-          const formDataValues = {
-            "developerDetail" :[
-              {
-                "devDetail":{
-                  addInfo:addInfo,
-                  addRemoveAuthoizedUsers:addAuthUser,
-                  capacityDevelopAColony:developerCapacity,
-                    
-                }
-              }
-            ]
-            
-          }
-          onSelect(config.key, formDataValues);
-          try {
-            let res = await axios.post("http://localhost:8081/user/developer/_registration",formDataValues,{
-              headers:{
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-origin':"*",
-            }
-            }).then((response)=>{
-              return response
-            });
-            
-            
-          } catch (err) {
-            console.log(err);
-          }
-          
-          console.log("FINAL SUBMIT",formDataValues)
-          localStorage.setItem("developerRegistration",JSON.stringify(formDataValues));
-          
-          // dispatch(setTechnicalData(
-          //   formDataValues
-          // ))
-          
-        }
 
     return (
         <div>
             <div className={isopenlink? "OpenlinkContainer":""}>
-            {/* {isopenlink &&<OpenLinkContainer />} */}
-            {/* <div style={isopenlink?{marginTop:"60px", width:isCitizenUrl?"100%":"70%", marginLeft:"auto",marginRight:"auto"}:{}}> */}
             {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
             <Timeline currentStep={5} flow="STAKEHOLDER" />
             {!isLoading ?
@@ -151,7 +95,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                     onAdd={onAdd}
                     cardStyle={{paddingRight:"16px"}}
                 >
-                    {/* {bpaTaxDocuments?.map((document, index) => {
+                    {bpaTaxDocuments?.map((document, index) => {
                         return (
                             <SelectDocument
                                 key={index}
@@ -165,73 +109,7 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                                 isCitizenUrl={isCitizenUrl}
                             />
                         );
-                    })} */}
-                    <div className="table-bd">
-                        <table className="table table-bordered" size="sm">
-                            <tbody>
-                                <tr>
-                                    <td> 1 &nbsp;&nbsp;</td>
-                                    <td>Copy of SPA/GPA/Board Resolution</td>
-                                    <td>
-                                    <input
-                                        type="file"
-                                        name="upload"
-                                        placeholder=""
-                                        class="form-control"
-                                    />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> 2&nbsp;&nbsp; </td>
-                                    <td>
-                                    Copy of memorandum/Articles of Association/ any other
-                                    document of developer (if other than individual)*
-                                    </td>
-                                    <td>
-                                    <input
-                                        type="file"
-                                        name="upload"
-                                        placeholder=""
-                                        class="form-control"
-                                    />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> 3 &nbsp;&nbsp;</td>
-                                
-                                    <td>
-                                    In case of firm/LLP, copy of registered irrevocable
-                                    partnership deed
-                                    </td>
-                                    <td>
-                                    <input
-                                        type="file"
-                                        name="upload"
-                                        placeholder=""
-                                        class="form-control"
-                                    />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td> 4&nbsp;&nbsp; </td>
-                                    <td>
-                                    In case of HUF, copy of affidavit and copy of PAN card
-                                    </td>
-                                    <td>
-                                    <input
-                                        type="file"
-                                        name="upload"
-                                        placeholder=""
-                                        class="form-control"
-                                    />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        {/* <div className="col-md-4">
-                            <button onClick={submitTechdevData} className="btn btn-success">Submit</button>
-                        </div> */}
-                    </div>
+                    })}
                     {error && <Toast label={error} isDleteBtn={true} onClose={() => setError(null)} error  />}
                 </FormStep> : <Loader />}
                 {!(formData?.initiationFlow) && <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={`${t("BPA_APPLICATION_NUMBER_LABEL")} ${formData?.result?.Licenses?.[0]?.applicationNumber} ${t("BPA_DOCS_INFORMATION")}`} className={"info-banner-wrap-citizen-override"}/>}
@@ -298,8 +176,11 @@ function SelectDocument({
         (async () => {
             setError(null);
             if (file) {
+                const allowedFileTypesRegex = /(.*?)(jpg|jpeg|png|image|pdf)$/i
                 if (file.size >= 5242880) {
                     setError(t("CS_MAXIMUM_UPLOAD_SIZE_EXCEEDED"));
+                } else if (file?.type && !allowedFileTypesRegex.test(file?.type)) {
+                    setError(t(`NOT_SUPPORTED_FILE_TYPE`))
                 } else {
                     try {
                         setUploadedFile(null);
@@ -323,16 +204,14 @@ function SelectDocument({
             {doc?.info ? <div style={{fontSize: "12px", color: "#505A5F", fontWeight: 400, lineHeight: "15px", marginBottom: "10px"}}>{`${t(doc?.info)}`}</div> : null}
             <UploadFile
                 extraStyleName={"OBPS"}
-                accept=".jpg,.png,.pdf"
+                accept="image/*, .pdf, .png, .jpeg, .jpg"
                 onUpload={selectfile}
                 onDelete={() => {
                     setUploadedFile(null);
                     setCheckRequiredFields(true);
                 }}
                 message={uploadedFile ? `1 ${t(`CS_ACTION_FILEUPLOADED`)}` : t(`CS_ACTION_NO_FILEUPLOADED`)}
-                error={error}
-                // inputStyles={{top:"0%",maxHeight:""}}
-                // Multistyle={isCitizenUrl?{marginTop:"-15px",position:"absolute"}:{marginTop:"-11px",position:"absolute"}}
+                iserror={error}
             />
         </div>
     );

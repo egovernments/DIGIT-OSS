@@ -1,4 +1,4 @@
-import { BackButton, Card, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, RadioOrSelect, TextInput, TextArea, CheckBox, DatePicker } from "@egovernments/digit-ui-react-components";
+import { BackButton, Card, CardLabel, CardLabelError, FormStep, Loader, Dropdown, MobileNumber, RadioButtons, RadioOrSelect, TextInput, TextArea, CheckBox, DatePicker } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { Form, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
@@ -29,7 +29,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [locality, setLocality] = useState(formData?.LicneseDetails?.locality || formData?.formData?.LicneseDetails?.locality || "");
   const [city, setCity] = useState(formData?.LicneseDetails?.city || formData?.formData?.LicneseDetails?.city || "");
   const [pincode, setPincode] = useState(formData?.LicneseDetails?.pincode || formData?.formData?.LicneseDetails?.pincode || "");
-
+  const [addressSameAsPermanent,setSelectedChecked] = useState(formData?.LicenseDetails?.addressSameAsPermanent || formData?.LicenseDetails?.addressSameAsPermanent || "")
   const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.Correspondenceaddress || formData?.formData?.Correspondenceaddress || "");
   const [houseNumberCorrespondesnce, sethouseNumberCorrespondesnce] = useState(formData?.houseNumberCorrespondesnce || formData?.formData?.houseNumberCorrespondesnce || "");
   const [colonyNameCorrespondesnce, setColonyNameCorrespondesnce] = useState(formData?.colonyNameCorrespondesnce || formData?.formData?.colonyNameCorrespondesnce || "");
@@ -48,16 +48,17 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       type: "date",
       name: "dob",
       validation: {
-        isRequired: false,
+        isRequired: true,
         title: t("CORE_COMMON_APPLICANT_NAME_INVALID"),
       },
       isMandatory: false,
     },
   ];
-  function setValue(value, input) {
-    // onSelect(config.key, { ...formData[config.key], [input]: value });
-    setDOB(config.key, { ...formData[config.key], [input]: value });
-  }
+
+  const [panValidation,setPanValidation] = useState("");
+  // function setValue(value, input) {
+  //   setDOB(config.key, { ...formData[config.key], [input]: value });
+  // }
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
   if(isOpenLinkFlow)  
@@ -72,7 +73,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
       menu.push({ i18nKey: `COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
     });
-
+    const editScreen = false;
   // if (isLoading) return <Loader />;
   const panVerification = async () => {
     try {
@@ -102,8 +103,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             "user": {
               "idType": "string",
               "idNumber": "string",
-              "mobile": "8126287097",
-              "email": "sudeeptamta3@gmail.com"
+              "mobile": mobileNumber,
+              "email": email
             },
             "data": {
               "id": "string"
@@ -133,11 +134,14 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         'Access-Control-Allow-Origin':"*",
       }}) 
       console.log("PANDET",panResp.data);
-    } catch (error) {
-      console.log(error.message)
+    } catch(error){
+      if (error.panResp && error.panResp.data) {
+        console.log(e.panResp.data.message) // some reason error message
+      }
+      // console.error("PANERROR",errdata);
     }
   }
-
+console.log(panValidation);
   useEffect(() => {
     if(PanNumber.length === 10){
       panVerification();
@@ -160,7 +164,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setDOB(e.target.value);
   }
   function selectPanNumber(e) {
-    setPanNumber(e.target.value);
+    setPanNumber(e.target.value.toUpperCase());
   }
   function selectPermanentAddress(e) {
     setPermanentAddress(e.target.value);
@@ -184,6 +188,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setPincode(e.target.value);
   }
   function selectChecked(e) {
+    setSelectedChecked(e.target.value);
     if (isAddressSame == false) {
       setisAddressSame(true);
       setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress);
@@ -244,6 +249,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         locality: locality,
         city:city,
         pincode: pincode,
+        addressSameAsPermanent:addressSameAsPermanent,
         houseNumberCorrespondesnce: houseNumberCorrespondesnce,
         colonyNameCorrespondesnce: colonyNameCorrespondesnce,
         streetNameCorrespondesnce: streetNameCorrespondesnce,
@@ -284,6 +290,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       data.LicneseDetails.PanNumber = PanNumber;
       formData.Correspondenceaddress = Correspondenceaddress;
       formData.houseNumberCorrespondesnce = houseNumberCorrespondesnce;
+      formData.addressSameAsPermanent = addressSameAsPermanent;
       formData.isAddressSame = isAddressSame;
       onSelect("", formData, "", true);
       // onSelect("", formData)
@@ -305,7 +312,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           onSelect={goNext}
           onSkip={onSkip}
           t={t}
-          isDisabled={!name || !mobileNumber || !gender}
+          isDisabled={!name || !mobileNumber || !gender || !dob || !email || !PanNumber}
         >
           <Card className="mb-3">
             {/* <h4></h4> */}
@@ -332,8 +339,19 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               <Form.Group className="col-md-5">
                 <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")}*`}</CardLabel>
                 <div className="row">
-                  
-                  <RadioButtons
+                <Dropdown
+                  style={{ width: "100%" }}
+                  className="form-field"
+                  selected={gender?.length === 1 ? gender[0] : gender}
+                  disable={gender?.length === 1 || editScreen}
+                  option={menu}
+                  select={setGenderName}
+                  value={gender}
+                  optionKey="code"
+                  t={t}
+                  name="gender"
+                />
+                  {/* <RadioButtons
                   t={t}
                   options={menu}
                   optionsKey="code"
@@ -343,8 +361,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   onSelect={setGenderName}
                   isDependent={true}
                   labelKey="COMMON_GENDER"
-                  //disabled={isUpdateProperty || isEditProperty}
-                  />
+                  /> */}
                 </div>
               </Form.Group>
               <Form.Group className="col-md-5">
@@ -360,7 +377,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               {inputs?.map((input, index) => (
               <Form.Group className="col-md-5">
               <CardLabel>{`${"Enter Date of Birth"}*`}</CardLabel>
-                <DatePicker 
+                {/* <DatePicker 
                   t={t}
                   type="date"
                   isMandatory={false}
@@ -368,47 +385,48 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   value={dob}
                   name="dob"
                   onChange={setDateofBirth}
-                />
-                {/* <DatePicker
-                key={input.name}
-                date={formData && formData[config.key] ? formData[config.key][input.name] : undefined}
-                onChange={(e) => setValue(e, input.name)}
+                /> */}
+                <DatePicker
+                isMandatory={true}
+                date={dob}
+                onChange={(e) => setDOB(e)}
                 disable={false}
                 max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
-                defaultValue={undefined}
-                {...input.validation}
-              /> */}
+              />
               </Form.Group>
               )
               )}
               <Form.Group className="col-md-5">
-                <CardLabel>{t("BPA_APPLICANT_EMAIL_LABEL")}</CardLabel>
+                <CardLabel>{`${t("BPA_APPLICANT_EMAIL_LABEL")}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"email"}
-                  isMandatory={false}
+                  isMandatory={true}
                   optionKey="i18nKey"
                   name="email"
                   value={email}
                   placeholder={email}
                   onChange={selectEmail}
                   //disable={editScreen}
-                  {...{ required: true, pattern: "[A-Za-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$", type: "email", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+                  
                 />
+                {email&&email.length>0&&!email.match(Digit.Utils.getPattern('Email'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{("Invalid Email Address")}</CardLabelError>}
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${t("BPA_APPLICANT_PAN_NO")}`}</CardLabel>
+                <CardLabel>{`${t("BPA_APPLICANT_PAN_NO")}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
-                  isMandatory={false}
+                  isMandatory={true}
                   optionKey="i18nKey"
                   name="PanNumber"
+                  required={true}
                   value={PanNumber}
                   placeholder={PanNumber}
                   onChange={selectPanNumber}
                   {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
                   />
+                  {PanNumber&&PanNumber.length>0&&!PanNumber.match(Digit.Utils.getPattern('PAN'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
               </Form.Group>
             </Row>
           </Card>
@@ -428,7 +446,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group> */}
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Door/House No."}`}</CardLabel>
+                <CardLabel>{`${"Address Line 1"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -438,10 +456,15 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   value={houseNumber}
                   placeholder={houseNumber}
                   onChange={selectHouseNumber}
+                  {...(validation = {
+                    isRequired: true,
+                    type: "text",
+                    title: ("Please Enter Address line 1"),
+                  })}
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Building/Colony Name"}`}</CardLabel>
+                <CardLabel>{`${"Address Line 2"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -454,7 +477,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Street Name"}`}</CardLabel>
+                <CardLabel>{`${"Address Line 3"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -467,7 +490,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Locality"}`}</CardLabel>
+                <CardLabel>{`${"Address Line 4"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -480,7 +503,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"City"}`}</CardLabel>
+                <CardLabel>{`${"City"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -490,10 +513,15 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   value={city}
                   placeholder={city}
                   onChange={selectCity}
+                  {...(validation = {
+                    isRequired: true,
+                    type: "text",
+                    title: ("Please Enter City"),
+                  })}
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Pincode"}`}</CardLabel>
+                <CardLabel>{`${"Pincode"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -503,7 +531,14 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   value={pincode}
                   placeholder={pincode}
                   onChange={selectPincode}
+                  maxlength={"6"}
+                  {...(validation = {
+                    isRequired: true,
+                    type: "text",
+                    title: ("Please Enter Pincode"),
+                  })}
                   />
+                  {pincode&&pincode.length>0&&!pincode.match(Digit.Utils.getPattern('Pincode'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{t("Please enter valid Pincode")}</CardLabelError>}
               </Form.Group>
             </Row>
           </Card>
@@ -533,11 +568,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group> */}
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Door/House No."}`}</CardLabel>
+                <CardLabel>{`${"Address Line 1"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
-                  isMandatory={false}
+                  isMandatory={true}
                   optionKey="i18nKey"
                   name="houseNumberCorrespondesnce"
                   value={houseNumberCorrespondesnce}
@@ -547,7 +582,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Building/Colony Name"}`}</CardLabel>
+                <CardLabel>{`${"Address Line 2"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -561,7 +596,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Street Name"}`}</CardLabel>
+                <CardLabel>{`${"Address Line 3"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -575,7 +610,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Locality"}`}</CardLabel>
+                <CardLabel>{`${"Address Line 4"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
@@ -589,11 +624,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"City"}`}</CardLabel>
+                <CardLabel>{`${"City"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
-                  isMandatory={false}
+                  isMandatory={true}
                   optionKey="i18nKey"
                   name="cityCorrespondence"
                   value={cityCorrespondence}
@@ -603,11 +638,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group>
               <Form.Group className="col-md-5">
-                <CardLabel>{`${"Pincode"}`}</CardLabel>
+                <CardLabel>{`${"Pincode"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
-                  isMandatory={false}
+                  isMandatory={true}
                   optionKey="i18nKey"
                   name="pincodeCorrespondence"
                   value={pincodeCorrespondence}

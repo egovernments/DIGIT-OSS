@@ -1,5 +1,5 @@
-import { FormStep } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown } from "@egovernments/digit-ui-react-components";
+import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
 import { useLocation } from "react-router-dom";
@@ -17,414 +17,582 @@ import {
   ModalFooter,
 } from "reactstrap";
 
+import { convertEpochToDate } from "../utils/index";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-
+import axios from "axios";
+// const tenantId = Digit.ULBService.getCurrentTenantId();
 
 //for Redux use only
 // import { setAurthorizedUserData } from "../Redux/Slicer/Slicer";
 // import { useDispatch } from "react-redux";
 
-const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
+const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
 
-    const { pathname: url } = useLocation();
-    const userInfo = Digit.UserService.getUser();
-    let validation = {};
-    let isOpenLinkFlow = window.location.href.includes("openlink");
-    const [modal, setmodal] = useState(false);
-    const [aurthorizedUserName,setAurtorizedUserName] = useState(formData?.AddAuthorizeduser?.aurthorizedUserName || formData?.AddAuthorizeduser?.aurthorizedUserName || "");
-    const [aurthorizedMobileNumber,setAurthorizedMobileNumber] = useState(formData?.AddAuthorizeduser?.aurthorizedMobileNumber || formData?.AddAuthorizeduser?.aurthorizedMobileNumber || "");
-    const [aurthorizedEmail,setAurthorizedEmail] = useState(formData?.AddAuthorizeduser?.aurthorizedEmail || formData?.AddAuthorizeduser?.aurthorizedEmail || "");
-    const [aurthorizedPan,setAurthorizedPan] = useState(formData?.AddAuthorizeduser?.aurthorizedPan || formData?.AddAuthorizeduser?.aurthorizedPan || "");
-    const [aurthorizedUserInfoArray,setAurthorizedUserInfoArray]=useState([]);
+  const { pathname: url } = useLocation();
+  const userInfo = Digit.UserService.getUser();
+  let validation = {};
+  let isOpenLinkFlow = window.location.href.includes("openlink");
+  const [modal, setmodal] = useState(false);
+  const [aurthorizedUserName, setAurtorizedUserName] = useState(formData?.AddAuthorizeduser?.aurthorizedUserName || formData?.AddAuthorizeduser?.aurthorizedUserName || "");
+  const [aurthorizedMobileNumber, setAurthorizedMobileNumber] = useState(formData?.AddAuthorizeduser?.aurthorizedMobileNumber || formData?.AddAuthorizeduser?.aurthorizedMobileNumber || "");
+  const [aurthorizedEmail, setAurthorizedEmail] = useState(formData?.AddAuthorizeduser?.aurthorizedEmail || formData?.AddAuthorizeduser?.aurthorizedEmail || "");
+  const [aurthorizedDob, setAurthorizedDob] = useState(formData?.AddAuthorizeduser?.aurthorizedDob || formData?.AddAuthorizeduser?.aurthorizedDob || "");
+  const [gender, setGender] = useState(formData?.AddAuthorizeduser?.gender || formData?.formData?.AddAuthorizeduser?.gender);
+  const [aurthorizedPan, setAurthorizedPan] = useState(formData?.AddAuthorizeduser?.aurthorizedPan || formData?.AddAuthorizeduser?.aurthorizedPan || "");
+  const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
+  const [docUpload,setDocuploadData]=useState([])
+  const [file,setFile]=useState(null);
+  const stateId = Digit.ULBService.getStateId();
   //   const dispatch=useDispatch();
-    // const Modal = () => (
-    //   <Popup trigger={<button className="button"> Open Modal </button>} modal>
-    //     <span> Modal content </span>
-    //   </Popup>
-    // );
-  
-    // function UploadDocuments() {
-    //   const [inputFields, setInputFields] = useState([{
-    //     fullName:'',
-  
-    // } ]);
-  
-    // const addInputField = ()=>{
-  
-    //     setInputFields([...inputFields, {
-    //         fullName:'',
-    //     } ])
-  
-    // }
-    // const removeInputFields = (index)=>{
-    //     const rows = [...inputFields];
-    //     rows.splice(index, 1);
-    //     setInputFields(rows);
-    // }
-    // const handleChange = (index, evnt)=>{
-  
-    // const { name, value } = evnt.target;
-    // const list = [...inputFields];
-    // list[index][name] = value;
-    // setInputFields(list);
-    const {
-      register,
-      handleSumit,
-      formState: { error },
-    } = useForm([
-      { Sr: "", Name: "", Mobile: "", Email: "", PAN: "", Aadhar: "" },
-    ]);
-    const formSubmit = (data) => {
-      console.log("data", data);
-    };
-    const [showhide, setShowhide] = useState("No");
-    const handleshow = (e) => {
-      const getshow = e.target.value;
-      setShowhide(getshow);
-    };
-  
-    const [noofRows, setNoOfRows] = useState(1);
-    const handleSubmitFormdata=()=>{
-      setmodal(false);
-      console.log("submitted");
-      const aurthorizedUserData={
-        name:aurthorizedUserName,
-        mobile:aurthorizedMobileNumber,
-        email:aurthorizedEmail,
-        pan:aurthorizedPan,
+  // const Modal = () => (
+  //   <Popup trigger={<button className="button"> Open Modal </button>} modal>
+  //     <span> Modal content </span>
+  //   </Popup>
+  // );
+
+  // function UploadDocuments() {
+  //   const [inputFields, setInputFields] = useState([{
+  //     fullName:'',
+
+  // } ]);
+
+  // const addInputField = ()=>{
+
+  //     setInputFields([...inputFields, {
+  //         fullName:'',
+  //     } ])
+
+  // }
+  // const removeInputFields = (index)=>{
+  //     const rows = [...inputFields];
+  //     rows.splice(index, 1);
+  //     setInputFields(rows);
+  // }
+  // const handleChange = (index, evnt)=>{
+
+  // const { name, value } = evnt.target;
+  // const list = [...inputFields];
+  // list[index][name] = value;
+  // setInputFields(list);
+  const {
+    register,
+    handleSumit,
+    formState: { error },
+  } = useForm([
+    { Sr: "", Name: "", Mobile: "", Email: "", PAN: "", Aadhar: "" },
+  ]);
+  const formSubmit = (data) => {
+    console.log("data", data);
+  };
+  const [showhide, setShowhide] = useState("No");
+  const handleshow = (e) => {
+    const getshow = e.target.value;
+    setShowhide(getshow);
+  };
+  function setGenderName(value) {
+    setGender(value);
+  }
+  function selectPanNumber(e) {
+    setAurthorizedPan(e.target.value.toUpperCase());
+  }
+
+  const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
+
+  let menu = [];
+  genderTypeData &&
+    genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
+      menu.push({ i18nKey: `COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
+    });
+    const editScreen = false;
+
+  const panVerification = async () => {
+    try {
+      const panVal =  {
+        "txnId": "f7f1469c-29b0-4325-9dfc-c567200a70f7",
+        "format": "xml",
+        "certificateParameters": {
+          "panno": aurthorizedPan,
+          "PANFullName": aurthorizedUserName,
+          "FullName": aurthorizedUserName,
+          "DOB": aurthorizedDob,
+          "GENDER": gender.value
+          // "GENDER": gender.value
+        },
+        "consentArtifact": {
+          "consent": {
+            "consentId": "ea9c43aa-7f5a-4bf3-a0be-e1caa24737ba",
+            "timestamp": "2022-10-08T06:21:51.321Z",
+            "dataConsumer": {
+              "id": "string"
+            },
+            "dataProvider": {
+              "id": "string"
+            },
+            "purpose": {
+              "description": "string"
+            },
+            "user": {
+              "idType": "string",
+              "idNumber": "string",
+              "mobile": aurthorizedMobileNumber,
+              "email": aurthorizedEmail
+            },
+            "data": {
+              "id": "string"
+            },
+            "permission": {
+              "access": "string",
+              "dateRange": {
+                "from": "2022-10-08T06:21:51.321Z",
+                "to": "2022-10-08T06:21:51.321Z"
+              },
+              "frequency": {
+                "unit": "string",
+                "value": 0,
+                "repeats": 0
+              }
+            }
+          },
+          "signature": {
+            "signature": "string"
+          }
+        }
       }
-  
-      setAurthorizedUserInfoArray((prev)=>[...prev,aurthorizedUserData]);
-    };
-  
-    const handleAurthorizedUserFormSubmit=async(e)=>{
-    //   e.preventDefault();
-      
-      const formData ={
-        aurthorizedUserInfoArray
-      }
-      onSelect(config.key, formData);
-      console.log(formData);
-      localStorage.setItem("data_user",JSON.stringify(formData))
-      console.log("form submitted")
+      const panResp = await axios.post(`/certificate/v3/pan/pancr`,panVal, {headers:{
+        'Content-Type': 'application/json',
+        'X-APISETU-APIKEY':'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
+        'X-APISETU-CLIENTID':'in.gov.tcpharyana',
+        'Access-Control-Allow-Origin':"*",
+      }}) 
+      console.log("",panResp.data);
+    } catch(errdata){
+      console.error("PANERROR",errdata);
     }
-    const onSkip = () => onSelect();
+  }
+  
+  useEffect(() => {
+    if(aurthorizedPan.length === 10){
+      panVerification();
+    }
+  }, [aurthorizedPan])
+
+  const getDocumentData = async () => {
+    if(file===null){
+       return
+    }
+       const formData = new FormData();
+       formData.append(
+           "file",file.file      );
+       formData.append(
+           "tenantId","hr"      );  
+       formData.append(
+           "module","property-upload"      );
+        formData.append(
+            "tag","tag-property"      );
+   
+        console.log("File",formData)
+
+       try {
+           const Resp = await axios.post("/filestore/v1/files",formData,
+           {headers:{
+               "content-type":"multipart/form-data"
+           }}).then((response) => {
+               return response
+           });
+           setDocuploadData(Resp.data)
+           
+       } catch (error) {
+           console.log(error.message);
+       }
+
+      
+
+  }
+  useEffect(() => {
+    getDocumentData();
+  }, [file]);
+  const [noofRows, setNoOfRows] = useState(1);
+  const handleSubmitFormdata = () => {
+    setmodal(false);
+    console.log("submitted");
+    const user = {
+      userName: aurthorizedUserName,
+      name: aurthorizedUserName,
+      gender: gender.value,
+      mobileNumber: aurthorizedMobileNumber,
+      emailId: aurthorizedEmail,
+      dob: aurthorizedDob,
+      pan: aurthorizedPan,
+      "active": true,
+      "type": "CITIZEN",
+      "password": "Password@123",
+      "tenantId": "hr",
+      "roles": [
+          {
+              "code": "CITIZEN",
+              "name": "Citizen",
+              "tenantId": "default"
+          }
+      ]
+    }
+
+    setAurthorizedUserInfoArray((prev) => [...prev, user]);
+    try {
+      const requestResp = {
+        
+          "RequestInfo": {
+              "api_id": "1",
+              "ver": "1",
+              "ts": null,
+              "action": "create",
+              "did": "",
+              "key": "",
+              "msg_id": "",
+              "requester_id": "",
+              "auth_token": null
+          },
+      }
+      const postDataAuthUser = axios.post(`/user/users/_createnovalidate`,requestResp,user,{headers:{
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin':"*",
+      }})
+      console.log(postDataAuthUser);
+    }
+    
+    catch(error){
+      console.log(error.message);
+    }
+  };
+
+  const handleAurthorizedUserFormSubmit = async (e) => {
+    //   e.preventDefault();
+
+    const formData = {
+      aurthorizedUserInfoArray
+    }
+    onSelect(config.key, formData);
+    console.log(formData);
+    localStorage.setItem("data_user", JSON.stringify(formData))
+    
+    
+      
+    
+
+   
+  }
+  const onSkip = () => onSelect();
   return (
-     
+
     <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
-        <Timeline currentStep={3} flow="STAKEHOLDER" />
-        <FormStep 
-            className="card" 
-            // onSubmit={handleAurthorizedUserFormSubmit}
-            config={config}
-            onSelect={handleAurthorizedUserFormSubmit}
-            onSkip={onSkip}
-            t={t}
-        >
-            {/* <div>
+      <Timeline currentStep={3} flow="STAKEHOLDER" />
+      <FormStep
+        className="card"
+        // onSubmit={handleAurthorizedUserFormSubmit}
+        config={config}
+        onSelect={handleAurthorizedUserFormSubmit}
+        onSkip={onSkip}
+        t={t}
+      >
+        {/* <div>
                 <h5 className="card-h"> Developer</h5>
             </div> */}
-            {/* <div className="card shadow"> */}
+        {/* <div className="card shadow"> */}
 
-            <div className="card-body">
-                {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
-                <div className="table-bd">
-                {/* { inputFields.map((data, index)=>{
+        <div className="card-body px-0">
+          {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
+          <div className="table-bd">
+            {/* { inputFields.map((data, index)=>{
                     const {}
                     })
                     } */}
-                <Table className="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th>Sr. No</th>
-                        <th>Name</th>
-                        <th>Mobile Number</th>
-                        <th>Email</th>
-                        <th>PAN No.</th>
-                        <th>Upload Aadhar PDF</th>
-                        <th>Upload Digital Signature PDF</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        (aurthorizedUserInfoArray.length>0)?
-                        aurthorizedUserInfoArray.map((elementInArray, input) => {
-                        return (
-                            <tr>
-                                <td>{input+1}</td>
-                                <td>
-                                    <input
-                                    type="text"
-                                    name="name[]"
-                                    placeholder={elementInArray.name}
-                                    value={elementInArray.name}
-                                    class="employee-card-input"
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                    type="text"
-                                    name="mobile[]"
-                                    placeholder={elementInArray.mobile}
-                                    value={elementInArray.mobile}
-                                    class="employee-card-input"
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                    type="email"
-                                    name="email[]"
-                                    placeholder={elementInArray.email}
-                                    value={elementInArray.email}
-                                    class="employee-card-input"
-                                    />
-                                </td>
-                                <td>
-                                    <input
-                                    type="text"
-                                    name="pan[]"
-                                    placeholder="{elementInArray.pan}"
-                                    value={elementInArray.pan}
-                                    class="employee-card-input"
-                                    />
-                                </td>
-                                <td>
-                                    <div className="row">
-                                    <button className="btn btn-sm col-md-6">
-                                        <VisibilityIcon color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6">
-                                        <FileDownloadIcon color="primary"  />
-                                    </button>
-                                    
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="row">
-                                    <button className="btn btn-sm col-md-6">
-                                        <VisibilityIcon color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6">
-                                        <FileDownloadIcon color="primary"  />
-                                    </button>
-                                    
-                                    </div>
-                                </td>
-                            </tr>
-                        );
-                        })
-                        :<div className="justify-content-center">
-                        Click on Add to add a aurthorized user
-                        </div>
-                    }
-                    </tbody>
-                </Table>
-                <div>
-                    <button
-                    type="button"
-                    style={{
-                        float: "left",
-                        backgroundColor: "#0b3629",
-                        color: "white",
-                    }}
-                    className="btn mt-3"
-                    // onClick={() => setNoOfRows(noofRows + 1)}
-                    onClick={() => setmodal(true)}
-                    >
-                    Add More
-                    </button>
-
-                    <div>
-                    <Modal
-                        size="lg"
-                        isOpen={modal}
-                        toggle={() => setmodal(!modal)}
-                    >
-                        <ModalHeader
-                        toggle={() => setmodal(!modal)}
-                        ></ModalHeader>
-
-                        <ModalBody>
-                        <div className="card2">
-                            <div className="popupcard">
-                            {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
-                            {/* <div className="table-bd">
-            <Table className="table table-bordered">
-            <thead>
+            <Table className="table table-bordered table-responsive">
+              <thead>
                 <tr>
-                <th>Add More</th>
-                
-                
-                <th> Licence No / year and date of grant of licence </th>
-                <th>Name of developer *</th>
-                <th>Purpose of colony </th>
-                <th>Sector and development plan </th>
-                <th>Validity of licence including renewals if any</th>
-                <th>Remove</th>
+                  <th>Sr. No</th>
+                  <th>Name</th>
+                  <th>Mobile Number</th>
+                  <th>Email</th>
+                  <th>Gender</th>
+                  <th>Date of Birth</th>
+                  <th>PAN No.</th>
+                  <th>Upload Aadhar PDF</th>
+                  <th>Upload Digital Signature PDF</th>
                 </tr>
-            </thead>
-            <tbody>
-                {[...Array(noofRows)].map((elementInArray, input) => {
-                return (
-                    <tr>
-                    <td>
-                        <button
-                        type="button"
-                        style={{ float: "left" }}
-                        className="btn btn-primary"
-                        onClick={() => setNoOfRows(noofRows + 1)}
-                        >
-                        <AddIcon />
-                        </button>
-                    </td>
-                    
-                    <td>
-                        <input
-                        type="text"
-                        name="name[]"
-                        placeholder=""
-                        class="employee-card-input"
-                        />
-                    </td>
-                    <td>
-                        <input
-                        type="text"
-                        name="mobile[]"
-                        placeholder=""
-                        class="employee-card-input"
-                        />
-                    </td>
-                    <td>
-                        <input
-                        type="email"
-                        name="email[]"
-                        placeholder=""
-                        class="employee-card-input"
-                        />
-                    </td>
-                    <td>
-                        <input
-                        type="file"
-                        name="upload"
-                        placeholder=""
-                        class="employee-card-input"
-                        />
-                    </td>
-                    <td>
-                        <input
-                        type="file"
-                        name="upload"
-                        placeholder=""
-                        class="employee-card-input"
-                        />
-                    </td>
+              </thead>
+              <tbody>
+                {
+                  (aurthorizedUserInfoArray.length > 0) ?
+                    aurthorizedUserInfoArray.map((elementInArray, input) => {
+                      return (
+                        <tr>
+                          <td>{input + 1}</td>
+                          <td>
+                            <input
+                              type="text"
+                              name="name[]"
+                              placeholder={elementInArray.name}
+                              value={elementInArray.name}
+                              class="employee-card-input"
+                             
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              name="mobile[]"
+                              placeholder={elementInArray.mobileNumber}
+                              value={elementInArray.mobileNumber}
+                              class="employee-card-input"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="email"
+                              name="email[]"
+                              placeholder={elementInArray.emailId}
+                              value={elementInArray.emailId}
+                              class="employee-card-input"
+                              disabled={"disabled"}
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              name="gender[]"
+                              placeholder={elementInArray.gender}
+                              value={elementInArray.gender}
+                              class="employee-card-input"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              name="dob[]"
+                              placeholder={elementInArray.dob}
+                              value={elementInArray.dob || dd-mm-yyyy}
+                              class="employee-card-input"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              name="pan[]"
+                              placeholder="{elementInArray.pan}"
+                              value={elementInArray.pan}
+                              class="employee-card-input"
+                            />
+                          </td>
+                          <td>
+                            <div className="row">
+                              <button className="btn btn-sm col-md-6">
+                                <VisibilityIcon color="info" className="icon" />
+                              </button>
+                              <button className="btn btn-sm col-md-6">
+                                <FileDownloadIcon color="primary" />
+                              </button>
 
-                    <td>
-                        <button
-                        type="button"
-                        style={{ float: "right" }}
-                        className="btn btn-danger"
-                        onClick={() => setNoOfRows(noofRows - 1)}
-                        >
-                        <DeleteIcon />
-                        </button>
-                    </td>
-                    </tr>
-                );
-                })}
-            </tbody>
-            </Table>
-        </div> */}
-
-                            <form className="text1">
-                                <Row>
-                                    <Col md={4} xxl lg="4">
-                                    <label htmlFor="name" className="text">Name</label>
-                                    <input
-                                        type="text"
-                                        name="name[]"
-                                        placeholder=""
-                                        class="employee-card-input"
-                                        onChange={(e)=>setAurtorizedUserName(e.target.value)}
-                                    />
-                                    </Col>
-                                    <Col md={4} xxl lg="4">
-                                    <label htmlFor="name" className="text">Mobile Number</label>
-                                    <input
-                                        type="number"
-                                        name="name[]"
-                                        placeholder=""
-                                        class="employee-card-input"
-                                        onChange={(e)=>setAurthorizedMobileNumber(e.target.value)}
-                                    />
-                                    </Col>
-                                    <Col md={4} xxl lg="4">
-                                    <label htmlFor="name" className="text">Email</label>
-                                    <input
-                                        type="email"
-                                        name="name[]"
-                                        placeholder=""
-                                        class="employee-card-input"
-                                        onChange={(e)=>setAurthorizedEmail(e.target.value)}
-                                    />
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col md={4} xxl lg="4">
-                                    <label htmlFor="name" className="text">PAN No.</label>
-                                    <input
-                                        type="text"
-                                        name="name[]"
-                                        placeholder=""
-                                        class="employee-card-input"
-                                        onChange={(e)=>setAurthorizedPan(e.target.value)}
-                                    />
-                                    </Col>
-                                    <Col md={4} xxl lg="4">
-                                    <label htmlFor="name" className="text">Upload Aadhar PDF</label>
-                                    <input
-                                        type="file"
-                                        name="name[]"
-                                        placeholder=""
-                                        class="employee-card-input"
-                                    />
-                                    </Col>
-                                    <Col md={4} xxl lg="4">
-                                    <label htmlFor="name" className="text">Upload Digital Signature PDF</label>
-                                    <input
-                                        type="file"
-                                        name="name[]"
-                                        placeholder=""
-                                        class="employee-card-input"
-                                    />
-                                    </Col>
-                                </Row>
-                            </form>
-                            
                             </div>
-                            <div className="submit-btn">
-                            <div className="form-group col-md6 mt-6">
-                <button
-                type="button"
-                style={{ float: "right" }}
-                className="btn btn-success" 
-                onClick={handleSubmitFormdata}
-                >
-                Submit
-                </button>
-            </div>
-            </div>
-                        </div>
-                        </ModalBody>
-                        <ModalFooter
-                        toggle={() => setmodal(!modal)}
-                        ></ModalFooter>
-                    </Modal>
+                          </td>
+                          <td>
+                            <div className="row">
+                              <button className="btn btn-sm col-md-6">
+                                <VisibilityIcon color="info" className="icon" />
+                              </button>
+                              <button className="btn btn-sm col-md-6">
+                                <FileDownloadIcon color="primary" />
+                              </button>
+
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                    : <div className="justify-content-center">
+                      Click on Add to add a aurthorized user
                     </div>
-                </div>
-                </div>
-                {/* <button
+                }
+              </tbody>
+            </Table>
+            <div>
+              <button
+                type="button"
+                style={{
+                  float: "left",
+                  backgroundColor: "#0b3629",
+                  color: "white",
+                }}
+                className="btn mt-3"
+                // onClick={() => setNoOfRows(noofRows + 1)}
+                onClick={() => setmodal(true)}
+              >
+                Add More
+              </button>
+
+              <div>
+                <Modal
+                  size="lg"
+                  isOpen={modal}
+                  toggle={() => setmodal(!modal)}
+                >
+                  <ModalHeader
+                    toggle={() => setmodal(!modal)}
+                  ></ModalHeader>
+
+                  <ModalBody>
+                    <div className="card2">
+                      <div className="popupcard">
+                        <form className="text1">
+                          <Row>
+                            <Col md={3} xxl lg="3">
+                              <label htmlFor="name" className="text">Name</label>
+                              {/* <input
+                                type="text"
+                                name="name[]"
+                                placeholder=""
+                                class="employee-card-input"
+                                onChange={(e) => setAurtorizedUserName(e.target.value)}
+                              /> */}
+                              <TextInput
+                                t={t}
+                                type={"text"}
+                                isMandatory={false}
+                                optionKey="i18nKey"
+                                name="aurthorizedUserName"
+                                value={aurthorizedUserName}
+                                onChange={(e) => setAurtorizedUserName(e.target.value)}
+                                {...(validation = {
+                                  isRequired: true,
+                                  pattern: "^[a-zA-Z-.`' ]*$",
+                                  type: "text",
+                                  title: "Please enter Name",
+                                })}
+                              />
+                            </Col>
+                            <Col md={3} xxl lg="3">
+                              <label htmlFor="name" className="text">Mobile Number</label>
+                              <input
+                                type="tel"
+                                name="name[]"
+                                placeholder=""
+                                class="employee-card-input"
+                                onChange={(e) => setAurthorizedMobileNumber(e.target.value)}
+                                maxlength={"10"}
+                                pattern={"[6-9]{1}[0-9]{9}"}
+                                required={true}
+                                {...(validation = {
+                                  isRequired: true,
+                                  pattern: "^[a-zA-Z-.`' ]*$",
+                                  title: t("PT_NAME_ERROR_MESSAGE"),
+                                })}
+                              />
+                             
+                            </Col>
+                            <Col md={3} xxl lg="3">
+                              <label htmlFor="name" className="text">Email</label>
+                              <input
+                                type="email"
+                                name="name[]"
+                                placeholder=""
+                                class="employee-card-input"
+                                onChange={(e) => setAurthorizedEmail(e.target.value)}
+                              />
+                            </Col>
+                            <Col md={3} xxl lg="3">
+                                <label htmlFor="name" className="text">Gender</label>
+                                <Dropdown
+                                    style={{ width: "100%" }}
+                                    className="form-field"
+                                    selected={gender?.length === 1 ? gender[0] : gender}
+                                    disable={gender?.length === 1 || editScreen}
+                                    option={menu}
+                                    select={setGenderName}
+                                    value={gender}
+                                    optionKey="code"
+                                    t={t}
+                                    name="gender"
+                                />
+                            </Col>
+                            <Col md={3} xxl lg="3">
+                              <label htmlFor="name" className="text">Date of Birth</label>
+                              <input
+                                type="date"
+                                name="dob[]"
+                                placeholder=""
+                                class="employee-card-input"
+                                onChange={(e) => setAurthorizedDob(e.target.value)}
+                                max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
+                              />
+                            </Col>
+                            <Col md={3} xxl lg="3">
+                              <label htmlFor="name" className="text">PAN No.</label>
+                              {/* <input
+                                type="text"
+                                name="name[]"
+                                placeholder=""
+                                class="employee-card-input"
+                                onChange={(e) => setAurthorizedPan(e.target.value)}
+                              /> */}
+                              <TextInput
+                                t={t}
+                                type={"text"}
+                                isMandatory={true}
+                                optionKey="i18nKey"
+                                name="aurthorizedPan"
+                                value={aurthorizedPan}
+                                placeholder={aurthorizedPan}
+                                // onChange={(e) => setAurthorizedPan(e.target.value)}
+                                onChange={selectPanNumber}
+                                {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
+                                />
+                                {aurthorizedPan&&aurthorizedPan.length>0&&!aurthorizedPan.match(Digit.Utils.getPattern('PAN'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px'}}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
+                            </Col>
+                            <Col md={3} xxl lg="3">
+                              <label htmlFor="name" className="text">Upload Aadhar PDF</label>
+                              <input
+                                type="file"
+                                name="name[]"
+                                placeholder=""
+                                class="employee-card-input"
+                                onChange={(e)=>setFile({file:e.target.files[0]})}
+                              />
+                            </Col>
+                            <Col md={3} xxl lg="3">
+                              <label htmlFor="name" className="text">Upload Digital Signature PDF</label>
+                              <input
+                                type="file"
+                                name="name[]"
+                                placeholder=""
+                                class="employee-card-input"
+                                onChange={(e)=>setFile({file:e.target.files[0]})}
+                              />
+                            </Col>
+                          </Row>
+                        </form>
+
+                      </div>
+                      <div className="submit-btn">
+                        <div className="form-group col-md6 mt-6">
+                          <button
+                            type="button"
+                            style={{ float: "right" }}
+                            className="btn btn-success"
+                            onClick={handleSubmitFormdata}
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </ModalBody>
+                  <ModalFooter
+                    toggle={() => setmodal(!modal)}
+                  ></ModalFooter>
+                </Modal>
+              </div>
+            </div>
+          </div>
+          {/* <button
                 type="button"
                 style={{ float: "left" }}
                 className="btn btn-primary"
@@ -432,7 +600,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                 >
                 Add More
                 </button> */}
-                {/* <button
+          {/* <button
                 type="button"
                 style={{ float: "right" }}
                 className="btn btn-danger"
@@ -440,8 +608,8 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                 >
                 Remove
                 </button> */}
-            </div>
-            {/* <div className="form-group col-md6 mt-6">
+        </div>
+        {/* <div className="form-group col-md6 mt-6">
                 <button
                 type="submit"
                 style={{ float: "right" }}
@@ -452,7 +620,7 @@ const  AddAuthorizeduser = ({t, config, onSelect,formData, data}) => {
                 Submit
                 </button>
             </div> */}
-        </FormStep>
+      </FormStep>
     </div>
   );
 }

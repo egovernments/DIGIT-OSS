@@ -22,9 +22,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, ownerIndex }) => {
+  let validation = {};
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
-  let validation = {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
   
   const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name: "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
@@ -53,6 +53,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     const [modal, setmodal] = useState(false);
     const [data, setData] = useState([])
     const [devDetail, setdevDetail] = useState([])
+    
     // useEffect(() => {
     //   fetch("https://apisetu.gov.in/mca/v1/companies/U72200CH1998PTC022006").then((result) => {
     //     result.json().then((resp) => {
@@ -63,8 +64,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     // console.warn(data)
     
     const {
-      control
-    } = useForm();
+      register,
+      handleSumit,
+      formState: { error },
+    } = useForm([
+      { Sr: "", name: "", mobileNumber: "", email: "", PAN: "", Aadhar: "" },
+    ]);
 
     
     const optionsArrList = [
@@ -120,6 +125,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     
     const [modalValuesArray,setModalValuesArray]= useState([]);
     const [financialCapacity,setFinancialCapacity]= useState([]);
+    
+    const [docUpload,setDocuploadData]=useState([])
+    const [file,setFile]=useState(null);
     const handleshow = (e) => {
       const getshow = e.target.value;
       setShowhide(getshow);
@@ -146,7 +154,42 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
       setShowDevTypeFields(getDevTypeValue);
       localStorage.setItem('devTypeValueFlag',getDevTypeValue)
     }
+    const getDocumentData = async () => {
+      if(file===null){
+         return
+      }
+         const formData = new FormData();
+         formData.append(
+             "file",file.file      );
+         formData.append(
+             "tenantId","hr"      );  
+         formData.append(
+             "module","property-upload"      );
+          formData.append(
+              "tag","tag-property"      );
+     
+          console.log("File",formData)
   
+         try {
+             const Resp = await axios.post("/filestore/v1/files",formData,
+             {headers:{
+                 "content-type":"multipart/form-data"
+             }}).then((response) => {
+                 return response
+             });
+             setDocuploadData(Resp.data)
+             
+         } catch (error) {
+             console.log(error.message);
+         }
+  
+        
+  
+    }
+    useEffect(() => {
+      getDocumentData();
+    }, [file]);
+    
     const HandleGetMCNdata=async()=>{
       try{
         if (cin_Number.length===21) {
@@ -223,7 +266,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     const [noofRows, setNoOfRows] = useState(1);
     const [aoofRows, setAoOfRows] = useState(1);
  
-
+    
     
     
   // if (isLoading) return <Loader />;
@@ -273,6 +316,7 @@ const onSkip = () => onSelect();
           config={config}
           onSelect={AddInfoForm}
           onSkip={onSkip}
+          isDisabled={showDevTypeFields === "00" || showDevTypeFields==undefined}
           t={t}
         >
           <div className="happy">
@@ -289,7 +333,13 @@ const onSkip = () => onSelect();
                           labels="Selct Type"
                           getSelectedValue={devType}
                           placeholder={showDevTypeFields}
-                        />
+                          isMendatory={false}
+                          {...(validation = {
+                            isRequired: true,
+                            title: t("Please Select Developer type")
+                          })}
+                          />
+                          
                         {/* <MuiDropdown 
                           listOfData={optionsArrList}
                           labels="text"
@@ -452,13 +502,21 @@ const onSkip = () => onSelect();
                 <div className="row">
                   <div className="col col-4">
                     <div className="form-group">
-                      <label htmlFor="name">CIN Number</label>
-                      <input
+                      <label htmlFor="name">CIN Number *</label>
+                      <TextInput
                         type="text"
-                        onChange={(e) => setCinNo(e.target.value)}
+                        onChange={(e) => setCinNo(e.target.value.toUpperCase())}
                         value={cin_Number}
+                        isMendatory={false}
                         placeholder={cin_Number}
                         className="employee-card-input"
+                        max={"21"}
+                        {...(validation = {
+                          isRequired: true,
+                          pattern: "^[a-zA-Z0-9]*$",
+                          type: "text",
+                          title: "Please Enter CIN Number"
+                        })}
                       // placeholder=""
                       // {...register("name", {
                       //   required: "Name is required",
@@ -478,6 +536,7 @@ const onSkip = () => onSelect();
                       //   },
                       // })}
                       />
+                      
                     </div>
                   </div>
                   <div className="col col-4">
@@ -784,37 +843,55 @@ const onSkip = () => onSelect();
                         <div className="card2">
                           <div className="popupcard">
                             
-                            <form className="text1">
+                          <form className="text1">
                               <Row>
                                 <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Name</label>
+                                  <label htmlFor="name" className="text">Name *</label>
                                   <input
                                     type="text"
                                     
                                     onChange={(e)=>setModalNAme(e.target.value)}
                                     placeholder=""
                                     class="employee-card-input"
+                                    {...(validation = {
+                                      isRequired: true,
+                                      pattern: "^[a-zA-Z]*$",
+                                      type: "text",
+                                      title: "Please Enter Name"
+                                    })}
                                   />
                                 </Col>
                                 <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">	Designition</label>
+                                  <label htmlFor="name" className="text">	Designition *</label>
                                   <input
                                     type="text"
                                     
                                     onChange={(e)=>setModaldesignition(e.target.value)}
                                     placeholder=""
                                     class="employee-card-input"
+                                    {...(validation = {
+                                      isRequired: true,
+                                      pattern: "^[a-zA-Z]*$",
+                                      type: "text",
+                                      title: "Please Enter Designition"
+                                    })}
                                   />
                                 </Col>
 
                                 <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Percentage</label>
+                                  <label htmlFor="name" className="text">Percentage *</label>
                                   <input
                                     type="flot"
                                     
                                     onChange={(e)=>setModalPercentage(e.target.value)}
                                     placeholder=""
                                     class="employee-card-input"
+                                    {...(validation = {
+                                      isRequired: true,
+                                      pattern: "^[a-zA-Z]*$",
+                                      type: "text",
+                                      title: "Please Enter Percentage"
+                                    })}
                                   />
                                 </Col>
                                 <Col md={3} xxl lg="4">
@@ -824,6 +901,11 @@ const onSkip = () => onSelect();
                                     value={uploadPdf}
                                     placeholder=""
                                     class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
+                                    {...(validation = {
+                                      isRequired: true,
+                                      title: "Please upload document"
+                                    })}
                                   />
                                 </Col>
 
@@ -945,12 +1027,20 @@ const onSkip = () => onSelect();
                 <div className="row">
                   <div className="col col-4">
                     <div className="form-group">
-                      <label htmlFor="name">LLP Pin</label>
+                      <label htmlFor="name">LLP Pin *</label>
                       <input
                         type="text"
                         onChange={(e) => setCinNo(e.target.value)}
                         value={cin_Number}
                         className="employee-card-input"
+                        {...(validation = {
+                          isRequired: true,
+                          required: "Name is required",
+                          pattern: "^[a-zA-Z0-9]*$",
+                          type: "text",
+                          
+                          title: "Please Enter LLP Pin"
+                        })}
                       // placeholder=""
                       // {...register("name", {
                       //   required: "Name is required",
@@ -1273,34 +1363,52 @@ const onSkip = () => onSelect();
                             <form className="text1">
                               <Row>
                                 <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Name</label>
+                                  <label htmlFor="name" className="text">Name *</label>
                                   <input
                                     type="text"
                                     
                                     onChange={(e)=>setModalNAme(e.target.value)}
                                     placeholder=""
                                     class="employee-card-input"
+                                    {...(validation = {
+                                      isRequired: true,
+                                      pattern: "^[a-zA-Z]*$",
+                                      type: "text",
+                                      title: "Please Enter Name"
+                                    })}
                                   />
                                 </Col>
                                 <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">	Designition</label>
+                                  <label htmlFor="name" className="text">	Designition *</label>
                                   <input
                                     type="text"
                                     
                                     onChange={(e)=>setModaldesignition(e.target.value)}
                                     placeholder=""
                                     class="employee-card-input"
+                                    {...(validation = {
+                                      isRequired: true,
+                                      pattern: "^[a-zA-Z]*$",
+                                      type: "text",
+                                      title: "Please Enter Designition"
+                                    })}
                                   />
                                 </Col>
 
                                 <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Percentage</label>
+                                  <label htmlFor="name" className="text">Percentage *</label>
                                   <input
                                     type="flot"
                                     
                                     onChange={(e)=>setModalPercentage(e.target.value)}
                                     placeholder=""
                                     class="employee-card-input"
+                                    {...(validation = {
+                                      isRequired: true,
+                                      pattern: "^[a-zA-Z]*$",
+                                      type: "text",
+                                      title: "Please Enter Percentage"
+                                    })}
                                   />
                                 </Col>
                                 <Col md={3} xxl lg="4">
@@ -1310,6 +1418,12 @@ const onSkip = () => onSelect();
                                     value={uploadPdf}
                                     placeholder=""
                                     class="employee-card-input"
+                                    {...(validation = {
+                                      isRequired: true,
+                                      pattern: "^[a-zA-Z]*$",
+                                      type: "text",
+                                      title: "Please upload document"
+                                    })}
                                   />
                                 </Col>
 
