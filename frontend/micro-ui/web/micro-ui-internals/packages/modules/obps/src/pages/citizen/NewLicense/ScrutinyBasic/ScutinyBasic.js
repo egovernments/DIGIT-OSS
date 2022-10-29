@@ -24,6 +24,7 @@ const ScrutitnyForms = () => {
   const [displayPersonalCHeckedList, setDisplayCheckedPersonalList] = useState([]);
   const [displayGeneralCHeckedList, setDisplayCheckedGeneralList] = useState([]);
   const [displayPurposeCHeckedList, setDisplayCheckedPurposeList] = useState([]);
+  const [displayAppliedLandCheckedList, setDisplayCheckedAppliedLandList] = useState([]);
   const [displayPurpose, setDisplayPurposeInfo] = useState([]);
   const [displayGeneral, setDisplayGeneralInfo] = useState([]);
   const [displayAppliedLand, setDisplayAppliedLandInfo] = useState([]);
@@ -71,6 +72,10 @@ const ScrutitnyForms = () => {
   const getUncheckedAppliedLandInfo = (data) => {
     setDisplayAppliedLandInfo(data.data);
     console.log(data);
+  };
+  const getCheckedAppliedInfoValue = (data) => {
+    setDisplayCheckedAppliedLandList(data.data);
+    console.log("checked parent personal info data", data);
   };
   const getUncheckedFeeandChargesInfo = (data) => {
     setDisplayFeeandChargesInfo(data.data);
@@ -293,6 +298,7 @@ const ScrutitnyForms = () => {
               appliedInfoRef={appliedInfoRef}
               purpose={purpose}
               passUncheckedList={getUncheckedAppliedLandInfo}
+              passCheckedList={getCheckedAppliedInfoValue}
               heightApplied={defaultheightApplied}
             ></AppliedLandinfo>
             {/* </Col> */}
@@ -329,6 +335,7 @@ const ScrutitnyForms = () => {
           disapprovallistDeveloper={displayPurpose}
           disapprovallistGeneral={displayGeneral}
           disapprovallistAppliedLand={displayAppliedLand}
+          disapprovalCheckedAppliedLand={displayAppliedLandCheckedList}
           disapprovallistPersonal={displayPersonal}
           disapprovalCheckedPersonal={displayPersonalCHeckedList}
           disapprovalCheckedGeneral={displayGeneralCHeckedList}

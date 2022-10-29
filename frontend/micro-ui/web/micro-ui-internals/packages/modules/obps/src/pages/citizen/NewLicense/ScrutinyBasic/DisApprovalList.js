@@ -9,8 +9,8 @@ const DisApprovalList = (props) => {
   const [generalCheckedLIst, setgeneraldisapprovalCheckedlist] = useState([]);
   const [developerInfoList, setdeveloperdisapprovallist] = useState([]);
   const [developerCheckedLIst, setdeveloperdisapprovalCheckedlist] = useState([]);
-
-  const appliedLandInfoList = props.disapprovallistAppliedLand;
+  const [appliedLandInfoList, setappliedisapprovallist] = useState([]);
+  const [appliedCheckedLIst, setappliedisapprovalCheckedlist] = useState([]);
 
   const persona = props.disapprovallistPersonal;
   const personalCheckedlist = props.disapprovalCheckedPersonal;
@@ -18,6 +18,8 @@ const DisApprovalList = (props) => {
   const generalCheckedlist = props.disapprovalCheckedGeneral;
   const developer = props.disapprovallistDeveloper;
   const developerCheckedlist = props.disapprovaCheckedDeveloper;
+  const appliedLand = props.disapprovallistAppliedLand;
+  const appliedLandCheckedList = props.disapprovalCheckedAppliedLand;
 
   useEffect(() => {
     setperonaldisapprovallist(props.disapprovallistPersonal);
@@ -48,6 +50,16 @@ const DisApprovalList = (props) => {
     setdeveloperdisapprovalCheckedlist(props.disapprovaCheckedDeveloper);
   }, [developerCheckedlist]);
   console.log("disaaproval side data Checkedlist=", developerCheckedlist);
+
+  useEffect(() => {
+    setappliedisapprovallist(props.disapprovallistAppliedLand);
+  }, [appliedLand]);
+  console.log("disaaproval side data =", appliedLand);
+
+  useEffect(() => {
+    setappliedisapprovalCheckedlist(props.disapprovalCheckedAppliedLand);
+  }, [appliedLandCheckedList]);
+  console.log("disaaproval side data Checkedlist=", appliedLandCheckedList);
   console.log("general data", generalCheckedlist);
   return (
     // <Container>
@@ -191,10 +203,10 @@ const DisApprovalList = (props) => {
                   <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{i + 1}</h4>
                 </Col>
                 <Col xxl lg="5">
-                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el}</h4>
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.label}</h4>
                 </Col>
                 <Col xxl lg="6">
-                  <Form.Control type="text" placeholder="Reason for Disapprove"></Form.Control>
+                  <Form.Control type="text" placeholder={el.Remarks.data}></Form.Control>
                 </Col>
               </Row>
             ))

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 // import {AiFillCheckCircle, AiFillCloseCircle} from "react-icons/ai";
@@ -22,6 +22,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
+import ModalChild from "./Remarks/ModalChild";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
 const AppliedLandinfo = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
@@ -29,7 +31,8 @@ const AppliedLandinfo = (props) => {
   const [migrationApllied, setMigrationApplied] = useState(true);
   // const DdjayFormDisplay = useSelector(selectDdjayFormShowDisplay);
   const [resplotno, setResPlotno] = useState("");
-
+  // const [uncheckedValue, setUncheckedVlue] = useState([]);
+  const [checkValue, setCheckedVAlue] = useState([]);
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
@@ -38,12 +41,200 @@ const AppliedLandinfo = (props) => {
     const getshow = e.target.value;
     setShowhide18(getshow);
   };
+  const [noChecked, setNochecked] = useState(true);
+  const [warningOrred, setwarningOrred] = useState("#ffcf33");
+  const [color, setColor] = useState({ yes: false, no: false });
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
+  const [smShow, setSmShow] = useState(false);
   const [noOfRows, setNoOfRows] = useState(1);
   const [noOfRow, setNoOfRow] = useState(1);
   const [noOfRow1, setNoOfRow1] = useState(1);
   const Purpose = props.purpose;
+  const [labelValue, setLabelValue] = useState("");
+  const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
+  const [isyesOrNochecked, setYesorNochecked] = useState(true);
+
+  const handlemodaldData = (data) => {
+    setmodaldData(data.data);
+    setSmShow(false);
+  };
+
+  const handleYesOrNochecked = (data) => {
+    setYesorNochecked(data.data);
+  };
+  const handlemodalsubmit = () => {
+    console.log("here");
+    const filteredObj = uncheckedValue.filter((obj) => {
+      return obj.label == modaldData.label;
+    });
+    const filteredObjCheked = checkValue.filter((obj) => {
+      return obj.label == modaldData.label;
+    });
+    if (filteredObj.length !== 0) {
+      const removedList = uncheckedValue.filter((obj) => {
+        return obj.label !== modaldData.label;
+      });
+      setUncheckedVlue(removedList);
+    }
+    if (filteredObjCheked.length !== 0) {
+      const removedList = checkValue.filter((obj) => {
+        return obj.label !== modaldData.label;
+      });
+      setCheckedVAlue(removedList);
+    }
+
+    if (isyesOrNochecked === false) {
+      if (modaldData.label !== "" || modaldData.Remarks !== "") {
+        if (filteredObj.length === 0) {
+          setUncheckedVlue((prev) => [...prev, modaldData]);
+        }
+      }
+    } else {
+      if (modaldData.label !== "" || modaldData.Remarks !== "") {
+        if (filteredObjCheked.length === 0) {
+          setCheckedVAlue((prev) => [...prev, modaldData]);
+        }
+      }
+    }
+  };
+  useEffect(() => {
+    console.log("called");
+    handlemodalsubmit();
+  }, [modaldData.Remarks]);
+  useEffect(() => {
+    props.passUncheckedList({ data: uncheckedValue });
+  }, [uncheckedValue]);
+
+  useEffect(() => {
+    props.passCheckedList({ data: checkValue });
+  }, [checkValue]);
+  console.log("unchecked values", uncheckedValue);
+
+  console.log(uncheckedValue.indexOf("developer"));
+
+  const developerInputFiledColor = uncheckedValue.filter((obj) => {
+    return obj.label === "developer";
+  });
+  const developerInputCheckedFiledColor = checkValue.filter((obj) => {
+    return obj.label === "developer";
+  });
+  // console.log("color from array", developerInputFiledColor);
+
+  // const developerInputFiledColor1 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Authorized Person Name";
+  // });
+  // const developerInputCheckedFiledColor1 = checkValue.filter((obj) => {
+  //   return obj.label === "Authorized Person Name";
+  // });
+  // const developerInputFiledColor2 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Authorized Mobile No";
+  // });
+  // const developerInputCheckedFiledColor2 = checkValue.filter((obj) => {
+  //   return obj.label === "Authorized Mobile No";
+  // });
+  // const developerInputFiledColor3 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Authorized MobileNo. 2";
+  // });
+  // const developerInputCheckedFiledColor3 = checkValue.filter((obj) => {
+  //   return obj.label === "Authorized MobileNo. 2";
+  // });
+  // const developerInputFiledColor4 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Email ID";
+  // });
+  // const developerInputCheckedFiledColor4 = checkValue.filter((obj) => {
+  //   return obj.label === "Email ID";
+  // });
+  // const developerInputFiledColor5 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "PAN No.";
+  // });
+  // const developerInputCheckedFiledColor5 = checkValue.filter((obj) => {
+  //   return obj.label === "PAN No.";
+  // });
+  // const developerInputFiledColor6 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Address  1";
+  // });
+  // const developerInputCheckedFiledColor6 = checkValue.filter((obj) => {
+  //   return obj.label === "Address  1";
+  // });
+  // const developerInputFiledColor7 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Village/City";
+  // });
+  // const developerInputCheckedFiledColor7 = checkValue.filter((obj) => {
+  //   return obj.label === "Village/City";
+  // });
+  // const developerInputFiledColor8 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Pincode";
+  // });
+  // const developerInputCheckedFiledColor8 = checkValue.filter((obj) => {
+  //   return obj.label === "Pincode";
+  // });
+  // const developerInputFiledColor9 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Tehsil";
+  // });
+  // const developerInputCheckedFiledColor9 = checkValue.filter((obj) => {
+  //   return obj.label === "Tehsil";
+  // });
+  // const developerInputFiledColor10 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "District";
+  // });
+  // const developerInputCheckedFiledColor10 = checkValue.filter((obj) => {
+  //   return obj.label === "District";
+  // });
+  // const developerInputFiledColor11 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "State";
+  // });
+  // const developerInputCheckedFiledColor11 = checkValue.filter((obj) => {
+  //   return obj.label === "State";
+  // });
+  // const developerInputFiledColor12 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Status (Individual/ Company/ Firm/ LLP etc.)";
+  // });
+  // const developerInputCheckedFiledColor12 = checkValue.filter((obj) => {
+  //   return obj.label === "Status (Individual/ Company/ Firm/ LLP etc.)";
+  // });
+  // const developerInputFiledColor13 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "LC-I signed by";
+  // });
+  // const developerInputCheckedFiledColor13 = checkValue.filter((obj) => {
+  //   return obj.label === "LC-I signed by";
+  // });
+  // const developerInputFiledColor14 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)";
+  // });
+  // const developerInputCheckedFiledColor14 = checkValue.filter((obj) => {
+  //   return obj.label === "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)";
+  // });
+  // const developerInputFiledColor15 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Permanent address in case of individual/ registered office address in case other than individual";
+  // });
+  // const developerInputCheckedFiledColor15 = checkValue.filter((obj) => {
+  //   return obj.label === "Permanent address in case of individual/ registered office address in case other than individual";
+  // });
+  // const developerInputFiledColor16 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Address for communication";
+  // });
+  // const developerInputCheckedFiledColor16 = checkValue.filter((obj) => {
+  //   return obj.label === "Address for communication";
+  // });
+  // const developerInputFiledColor17 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Name of the authorized person to sign the application";
+  // });
+  // const developerInputCheckedFiledColor17 = checkValue.filter((obj) => {
+  //   return obj.label === "Name of the authorized person to sign the application";
+  // });
+  // const developerInputFiledColor18 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Email ID for communication";
+  // });
+  // const developerInputCheckedFiledColor18 = checkValue.filter((obj) => {
+  //   return obj.label === "Email ID for communication";
+  // });
+  // const developerInputFiledColor19 = uncheckedValue.filter((obj) => {
+  //   return obj.label === "Name of individual Land owner/ land-owning company/ firm/ LLP etc.";
+  // });
+  // const developerInputCheckedFiledColor19 = checkValue.filter((obj) => {
+  //   return obj.label === "Name of individual Land owner/ land-owning company/ firm/ LLP etc.";
+  // });
   console.log("Akash", Purpose);
   return (
     <Form
@@ -108,7 +299,7 @@ const AppliedLandinfo = (props) => {
                 <h5 className="text-black">
                   1. DGPS points <span className="text-primary"> (Click here for instructions to capture DGPS points)</span>
                   &nbsp;&nbsp;
-                  <Form.Check
+                  {/* <Form.Check
                     value="Name of the authorized person to sign the application"
                     type="radio"
                     id="default-radio"
@@ -124,7 +315,30 @@ const AppliedLandinfo = (props) => {
                     label={<CancelIcon color="error" />}
                     name="group39"
                     inline
-                  ></Form.Check>
+                  ></Form.Check> */}
+                  <div style={{ display: "flex" }}>
+                    <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color:
+                          developerInputFiledColor.length > 0
+                            ? developerInputFiledColor[0].color.data
+                            : developerInputCheckedFiledColor.length > 0
+                            ? developerInputCheckedFiledColor[0].color.data
+                            : "#FFB602",
+                      }}
+                      onClick={() => {
+                        setLabelValue("developer"), setSmShow(true), console.log("modal open");
+                      }}
+                    ></ReportProblemIcon>
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      isYesorNoChecked={handleYesOrNochecked}
+                      displaymodal={smShow}
+                      setColor={setColor}
+                    ></ModalChild>
+                  </div>
                 </h5>
 
                 <div className="px-2">
