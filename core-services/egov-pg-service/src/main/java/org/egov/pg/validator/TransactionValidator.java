@@ -164,7 +164,9 @@ public class TransactionValidator {
         BigDecimal totalPaid = BigDecimal.ZERO;
 
         for(TaxAndPayment taxAndPayment : txn.getTaxAndPayments()){
+        	System.out.println("_____________");
             totalPaid = totalPaid.add(taxAndPayment.getAmountPaid());
+            System.out.println("_____$$$$$$$$$$________");
         }
         if(totalPaid.compareTo(new BigDecimal(txn.getTxnAmount())) != 0)
             errorMap.put("TXN_CREATE_INVALID_TXN_AMT", "Transaction amount should be equal to sum of all " +
