@@ -9,6 +9,8 @@ import DisApprovalList from "./DisApprovalList";
 // import HistoryList from "./History";
 import ScrutinyDevelopment from "./ScrutinyDevelopment/ScrutinyDevelopment";
 import { Button, Row, Col } from "react-bootstrap";
+import LicenseDetailsScrutiny from "../ScrutinyBasic/Developer/LicenseDetailsScrutiny";
+import { useForkRef } from "@mui/material";
 // import AddIcon from "@mui/icons-material/Add";
 
 const ScrutitnyForms = () => {
@@ -17,6 +19,7 @@ const ScrutitnyForms = () => {
   const developerInfoRef = useRef();
   const appliedInfoRef = useRef();
   const feeandchargesInfoRef = useRef();
+  const licenseDetailsInfoRef = useRef();
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -29,6 +32,8 @@ const ScrutitnyForms = () => {
   const [displayGeneral, setDisplayGeneralInfo] = useState([]);
   const [displayAppliedLand, setDisplayAppliedLandInfo] = useState([]);
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
+  const [displayLicenseDetails, setDisplayLicenseDetailsInfo] = useState([]);
+  const [displayLicenseDetailsCheckedlist, setDisplayCheckedLicenseDetailsList] = useState([]);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
   const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(0);
@@ -46,6 +51,15 @@ const ScrutitnyForms = () => {
   };
   const getCheckedPersonalInfoValue = (data) => {
     setDisplayCheckedPersonalList(data.data);
+    console.log("checked parent personal info data", data);
+  };
+
+  const getUncheckedLicenseDetailsInfo = (data) => {
+    setDisplayLicenseDetailsInfo(data.data);
+    console.log("data parent label", data);
+  };
+  const getCheckedLicenseDetailsInfoValue = (data) => {
+    setDisplayCheckedLicenseDetailsList(data.data);
     console.log("checked parent personal info data", data);
   };
 
@@ -325,6 +339,16 @@ const ScrutitnyForms = () => {
               heightFee={defaultheightFee}
             ></Feeandcharges>
             {/* </Col> */}
+          </div>
+          <div>
+            <LicenseDetailsScrutiny
+              licenseDetailsInfoRef={licenseDetailsInfoRef}
+              purpose={purpose}
+              passUncheckedList={getUncheckedLicenseDetailsInfo}
+              passCheckedList={getCheckedLicenseDetailsInfoValue}
+              // heightApplied={defaultheightApplied}
+              onClick={() => setOpen(!open)}
+            ></LicenseDetailsScrutiny>
           </div>
 
           {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}
