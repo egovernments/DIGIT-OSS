@@ -17,7 +17,8 @@ import {
   ModalFooter,
 } from "reactstrap";
 import axios from "axios";
-import ReactMultiSelct from "../../../../react-components/src/atoms/ReactMultiSelect";
+// import ReactMultiSelct from "../../../../react-components/src/atoms/ReactMultiSelect";
+import SearchDropDown from "../../../../react-components/src/atoms/searchDropDown";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
@@ -273,7 +274,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
   const AddInfoForm = async (e) => {
 
     if (!(formTab?.result && formTab?.result?.Licenses[0]?.id)) {
-      let licenseDet = { 
+      let licenseDet = {
+        showDevTypeFields:showDevTypeFields,
         cin_Number: cin_Number,
         companyName: companyName,
         incorporationDate: incorporationDate,
@@ -282,8 +284,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
         registeredContactNo: registeredContactNo,
         gst_Number: gst_Number,
         directorsInformation: DirectorData,
-        shareHoldingPatterens:modalValuesArray,
-        financialCapacity:financialCapacity
+        shareHoldingPatterens:modalValuesArray
       }
       onSelect(config.key, licenseDet);
       console.log("DATALICDET",licenseDet);
@@ -328,7 +329,7 @@ const onSkip = () => onSelect();
                     <div className="form-group row">
                       <div className="col-sm-3">
 
-                        <ReactMultiSelct
+                        <SearchDropDown
                           listOfData={optionsArrList}
                           labels="Selct Type"
                           getSelectedValue={devType}
