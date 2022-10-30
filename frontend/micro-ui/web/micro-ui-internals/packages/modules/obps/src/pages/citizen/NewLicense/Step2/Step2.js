@@ -176,6 +176,7 @@ const ApllicantPuropseForm = (props) => {
     const [modal, setmodal] = useState(false);
     const [showhide1, setShowhide1] = useState("No");
     const [showhide2, setShowhide2] = useState("No");
+    const[tehsilCode,setTehsilCode]=useState(null)
     const [displayEditModal, setDisplayEditModal] = useState("none");
     const {
         register,
@@ -214,7 +215,7 @@ const ApllicantPuropseForm = (props) => {
             setmodal(!modal)
         }
     }
-
+ 
 
     const DistrictApiCall = async () => {
         try {
@@ -251,168 +252,172 @@ const ApllicantPuropseForm = (props) => {
             console.log(error.message);
         }
     }
-  const getTehslidata = async () => {
-    if (district2 !== "") {
-      const datatopost = {
-        RequestInfo: {
-          apiId: "Rainmaker",
-          ver: "v1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key: "",
-          msgId: "090909",
-          requesterId: "",
-          authToken: "",
-        },
-      };
+    const getTehslidata = async (data) => {
+      
+          const datapost = {
+              "RequestInfo": {
+                  "apiId": "Rainmaker",
+                  "ver": "v1",
+                  "ts": 0,
+                  "action": "_search",
+                  "did": "",
+                  "key": "",
+                  "msgId": "090909",
+                  "requesterId": "",
+                  "authToken": ""
+              },
 
-      try {
-        const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_tehsil?dCode=" + district2, datatopost, {}).then((response) => {
-          return response;
-        });
-        setTehsilData(Resp.data);
-        if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-          Resp.data.map((el, i) => {
-            setTehsilDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.code }]);
-          });
-        }
-      } catch (error) {
-        console.log(error.message);
-      }
+          };
+
+          try {
+              const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {
+
+              }).then((response) => {
+                  return response
+              });
+              setTehsilData(Resp.data)
+              if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
+                  Resp.data.map((el, i) => {
+                      setTehsilDataLabels((prev) => [...prev, { "label": el.name, "id": el.code, "value": el.code }])
+                      
+                  })
+              }
+          } catch (error) {
+              console.log(error.message);
+          }
+      
     }
-  };
-  const getRevenuStateData = async () => {
-    if (tehsil !== "") {
-      const datatopost = {
-        RequestInfo: {
-          apiId: "Rainmaker",
-          ver: "v1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key: "",
-          msgId: "090909",
-          requesterId: "",
-          authToken: "",
-        },
-      };
+    const getRevenuStateData = async (code) => {
+     
+        const datatopost = {
+          RequestInfo: {
+            apiId: "Rainmaker",
+            ver: "v1",
+            ts: 0,
+            action: "_search",
+            did: "",
+            key: "",
+            msgId: "090909",
+            requesterId: "",
+            authToken: "",
+          },
+        };
 
-      try {
-        const Resp = await axios
-          .post("http://10.1.1.18:8094/egov-mdms-service/v1/_village?" + "dCode=" + district2 + "&" + "tCode=" + tehsil.data, datatopost, {})
-          .then((response) => {
-            return response;
-          });
-        setRevenuStateData(Resp.data);
+        try {
+          const Resp = await axios
+            .post("http://10.1.1.18:8094/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datatopost, {})
+            .then((response) => {
+              return response;
+            });
+          setRevenuStateData(Resp.data);
 
-        if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-          Resp.data.map((el, i) => {
-            setRevenueDataLabels((prev) => [...prev, { label: el.name, id: el.khewats, value: el.code, khewats: el.khewats }]);
-          });
+          if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
+            Resp.data.map((el, i) => {
+              setRevenueDataLabels((prev) => [...prev, { label: el.name, id: el.khewats, value: el.code, khewats: el.khewats, code:el.code }]);
+            });
+          }
+        } catch (error) {
+          console.log(error.message);
         }
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
-  };
-
-  const getMustilData = async () => {
-    if (revenueName !== "") {
-      const datatopost = {
-        RequestInfo: {
-          apiId: "Rainmaker",
-          ver: "v1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key: "",
-          msgId: "090909",
-          requesterId: "",
-          authToken: "",
-        },
-      };
-
-      try {
-        const Resp = await axios
-          .post(
-            "http://10.1.1.18:8094/egov-mdms-service/v1/_must?" + "dCode=" + district2 + "&" + "tCode=" + tehsil.data + "&NVCode=" + revenueName.data,
-            datatopost,
-            {}
-          )
-          .then((response) => {
-            console.log("DD", response.data.must);
-            return response;
-          });
-        setMustilData(Resp.data.must);
-        if (Resp.data.must.length > 0 && Resp.data.must !== undefined && Resp.data.must !== null) {
-          Resp.data.must.map((el, i) => {
-            setMustilDataLabels((prev) => [...prev, { label: el, id: i, value: el }]);
-          });
-        }
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
-  };
-
-  const getLandOwnerStateData = async () => {
-    const datatopost = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: "",
-      },
+      
     };
 
-    try {
-      if (revenueName.khewat !== undefined) {
-        const Resp = await axios
-          .post(
-            "http://10.1.1.18:8094/egov-mdms-service/v1/_owner?" +
-              "dCode=" +
-              district2 +
-              "&" +
-              "tCode=" +
-              tehsil.data +
-              "&NVCode=" +
-              revenueName.data +
-              "&khewat=" +
-              revenueName.khewat,
-            datatopost,
-            {}
-          )
-          .then((response) => {
-            return response;
-          });
-        setKhewatData(Resp.data);
+    const getMustilData = async (code) => {
+     
+        const datpost = {
+          RequestInfo: {
+            apiId: "Rainmaker",
+            ver: "v1",
+            ts: 0,
+            action: "_search",
+            did: "",
+            key: "",
+            msgId: "090909",
+            requesterId: "",
+            authToken: "",
+          },
+        };
 
-        if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-          Resp.data.map((el, i) => {
-            setKhewatDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.khewats }]);
-          });
+        try {
+          const Resp = await axios
+            .post(
+              "http://10.1.1.18:8094/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code,
+              datpost,
+              {}
+            )
+            .then((response) => {
+              console.log("DD", response.data.must);
+              return response;
+            });
+          setMustilData(Resp.data.must);
+          if (Resp.data.must.length > 0 && Resp.data.must !== undefined && Resp.data.must !== null) {
+            Resp.data.must.map((el, i) => {
+              setMustilDataLabels((prev) => [...prev, { label: el, id: i, value: el }]);
+            });
+          }
+        } catch (error) {
+          console.log(error.message);
         }
+      
+    };
+
+    const getLandOwnerStateData = async () => {
+      const datatopos = {
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: "",
+        },
+      };
+
+      try {
+        if (revenueName.khewat !== undefined) {
+          const Resp = await axios
+            .post(
+              "http://10.1.1.18:8094/egov-mdms-service/v1/_owner?" +
+                "dCode=" +
+                district2 +
+                "&" +
+                "tCode=" +
+                tehsil.data +
+                "&NVCode=" +
+                revenueName.data +
+                "&khewat=" +
+                revenueName.khewat,
+              datatopos,
+              {}
+            )
+            .then((response) => {
+              return response;
+            });
+          setKhewatData(Resp.data);
+
+          if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
+            Resp.data.map((el, i) => {
+              setKhewatDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.khewats }]);
+            });
+          }
+        }
+      } catch (error) {
+        console.log(error.message);
       }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+    };
   useEffect(() => {
     DistrictApiCall();
   }, []);
-  useEffect(() => {
-    getTehslidata();
-  }, [district2]);
+  // useEffect(() => {
+  //   getTehslidata();
+  // }, [district2]);
 
-  useEffect(() => {
-    getRevenuStateData();
-  }, [district2, tehsil]);
+  // useEffect(() => {
+  //   getRevenuStateData();
+  // }, [district2, tehsil]);
 
   useEffect(() => {
     getMustilData();
@@ -421,6 +426,10 @@ const ApllicantPuropseForm = (props) => {
   useEffect(() => {
     getLandOwnerStateData();
   }, [district2, tehsil, revenueName.khewat]);
+
+  useEffect(()=>{
+    console.log("district2",district2)
+  },[district2])
 
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
@@ -533,8 +542,10 @@ const ApllicantPuropseForm = (props) => {
 //     }
 
     return (
-        <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
-        <Card style={{ width: "126%", marginLeft: "20px", paddingRight: "10px" }}>
+        <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}> 
+        <Card style={{ width: "126%"}}>
+        <h2>New License</h2>
+       <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
             <Form.Group  >
                 {/* <ModalForm displayEditModal={displayEditModal} editDataIndex={editValues} /> */}
                 <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -542,8 +553,8 @@ const ApllicantPuropseForm = (props) => {
                         <div>
                             <Form.Label><b>Puropse Of License</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
-                        <ReactMultiSelect control={control} name="purposeDd"  placeholder="N/A" data={optionsPurposeList} labels="Purpose" getSelectedValue={handleChangePurpose} 
-                        onChange={(e) => setSelectPurpose(e.target.value)} value={purposeDd}  />
+                        <ReactMultiSelect control={control} name="purposeDd"  placeholder="Purpose" data={optionsPurposeList} labels="Purpose" getSelectedValue={handleChangePurpose} 
+                         />
                       <h3 className="error-message"style={{color:"red"}}>{errors?.purposeDd && errors?.purposeDd?.message}</h3>
                        </Col>
                         {/* <Form.Select type="text" defaultValue={purposeDd} placeholder="Puropse"  onChange={handleChangePurpose} value={purposeDd}  ></Form.Select> */}
@@ -557,8 +568,8 @@ const ApllicantPuropseForm = (props) => {
                         <div>
                             <Form.Label><b>Potential Zone:</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
-                        <ReactMultiSelect control={control} name="potential"  placeholder="N/A" data={optionsPotentialList} labels="Potential"
-                         getSelectedValue={handleChangePotential}    onChange={(e) => setPotentialDev(e.target.value)} value={potential}  />
+                        <ReactMultiSelect control={control} name="potential"  placeholder="Potential" data={optionsPotentialList} labels="Potential"
+                         getSelectedValue={handleChangePotential}   />
                       <h3 className="error-message"style={{color:"red"}}>{errors?.potential && errors?.potential?.message}</h3>
                        </Col>
                        
@@ -566,8 +577,11 @@ const ApllicantPuropseForm = (props) => {
                         <div>
                             <Form.Label><b>District</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
-                        <ReactMultiSelect control={control} name="district"  placeholder="N/A" data={districtDataLbels} labels="District"  getSelectedValue={(data) => setDistrict2(data.data)}  />
-                        
+                        <ReactMultiSelect control={control} name="district"  placeholder="District" data={districtDataLbels} labels="District" 
+                        onChange={(e)=>{getTehslidata(e.value)
+                          setDistrict(e.value)
+                        }}  />
+                    
                       <h3 className="error-message"style={{color:"red"}}>{errors?.district && errors?.district?.message}</h3>
                        </Col>
                     <Col md={4} xxl lg="3">
@@ -606,9 +620,13 @@ const ApllicantPuropseForm = (props) => {
                                     <Col md={4} xxl lg="4">
                                         <div>
                                             <Form.Label><h6><b>Tehsil</b></h6></Form.Label>
-                                        </div>
-                                        <ReactMultiSelect control={control} name="tehsil"  placeholder="N/A"
-                                        data={tehsilDataLabels} labels="Tehsil"   getSelectedValue={(data) => setTehsil(data)}  />
+                                        </div> 
+                                        <ReactMultiSelect control={control} name="tehsil"  placeholder="Tehsil"
+                                        data={tehsilDataLabels} labels="Tehsil"    onChange={(e)=>{getRevenuStateData(e.value)
+                                          setTehsilCode(e.value)
+                                        }
+                                        
+                                        }  />
                                             <h3 className="error-message" style={{ color: "red" }}>{errors?.tehsil && errors?.tehsil?.message}</h3>
                                         </Col>
                                         <Col md={4} xxl lg="4">
@@ -616,7 +634,7 @@ const ApllicantPuropseForm = (props) => {
                                                 <Form.Label><h6><b>Name of Revenue estate</b></h6></Form.Label>
                                             </div>
                                             <ReactMultiSelect control={control} name="revenueEstate"  placeholder="N/A"
-                                        data={revenueDataLabels} labels="Revenue Estate"   getSelectedValue={(data) => setRevenueName(data)} />
+                                        data={revenueDataLabels} labels="Revenue Estate"   onChange={(e)=>getMustilData(e.code)} />
                                             
                                             <h3 className="error-message" style={{ color: "red" }}>{errors?.revenueEstate && errors?.revenueEstate?.message}</h3>
                                         </Col>
@@ -894,6 +912,7 @@ const ApllicantPuropseForm = (props) => {
                     </div></div>
             </div>
 
+        </Card>
         </Card>
     </form>
     )

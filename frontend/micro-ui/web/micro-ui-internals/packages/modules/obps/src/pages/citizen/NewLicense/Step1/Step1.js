@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import { useForm } from "react-hook-form";
+import { useForm,Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
 
@@ -19,6 +19,10 @@ const ApllicantFormStep1 = (props) => {
     resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
+  const [userDetails, setUserDetails] = useState(null);
+  const userInfo = Digit.UserService.getUser()?.info || {};
+ const stateId = Digit.ULBService.getStateId();
+  const tenant = Digit.ULBService.getCurrentTenantId();
   const [authorizedDeveloper, setAuthorizedDeveloper] = useState("");
   const [authorizedPerson, setAuthorizedPerson] = useState("");
   const [authorizedmobile, setAuthorizedmobile] = useState("");
@@ -44,6 +48,242 @@ const ApllicantFormStep1 = (props) => {
   const ApplicantFormSubmitHandlerForm = async (data) => {
     console.log("data===", data);
     props.Step1Continue(data);
+
+    try {
+      const postDistrict = {
+        NewServiceInfo: {
+          newServiceInfoData: [
+            {
+              ApplicantInfo: {
+                authorizedDeveloper: authorizedDeveloper,
+                authorizedPerson: "sd",
+                authorizedmobile: "sds",
+                alternatemobile: "1e",
+                authorizedEmail: "eeds",
+                authorizedPan: "fsd",
+                authorizedAddress: "",
+                village: "village",
+                authorizedPinCode: "",
+                tehsil: "dsf",
+                district: "sdf",
+                state: "dsf",
+                status: "fgr",
+                LC: LC,
+                address: address,
+                permanentAddress: "fgd",
+                notSigned: "fgver",
+                email: "gfg",
+                authorized: "rgsf",
+              },
+              ApplicantPurpose: {
+                purposeDd: "",
+                potential: "",
+                district: "",
+                state: "",
+                ApplicationPurposeData1: {
+                  tehsil: "tahsil",
+                  revenueEstate: "",
+                  mustil: "",
+                  consolidation: "",
+                  sarsai: "",
+                  kanal: "",
+                  marla: "",
+                  bigha: "",
+                  biswansi: "",
+                  biswa: "",
+                  landOwner: "",
+                  developerCompany: "",
+                  registeringdate: "",
+                  validitydate: "",
+                  colirrevocialble: "",
+                  authSignature: "",
+                  nameAuthSign: "",
+                  registeringAuthority: "",
+                  registeringAuthorityDoc: "",
+                },
+              },
+              LandSchedule: {
+                licenseApplied: "lic",
+                LicNo: "",
+                potential: "",
+                siteLoc: "",
+                approach: "",
+                approachRoadWidth: "",
+                specify: "",
+                typeLand: "",
+                thirdParty: "",
+                migrationLic: "",
+                encumburance: "",
+                litigation: "",
+                court: "",
+                insolvency: "",
+                appliedLand: "",
+                revenuerasta: "",
+                watercourse: "",
+                compactBlock: "",
+                sandwiched: "",
+                acquistion: "",
+                section4: "",
+                section6: "",
+                orderUpload: "",
+                approachable: "",
+                vacant: "",
+                construction: "",
+                ht: "",
+                gas: "",
+                nallah: "",
+                road: "",
+                land: "",
+                utilityLine: "",
+                landSchedule: "",
+                mutation: "",
+                jambandhi: "",
+                LayoutPlan: "",
+                proposedLayoutPlan: "",
+                revisedLansSchedule: "",
+              },
+              DetailsofAppliedLand: {
+                dgps: "dsg",
+                DetailsAppliedLandData1: {
+                  resplotno: "asa",
+                  reslengthmtr: "",
+                  reswidthmtr: "",
+                  resareasq: "",
+                  npnlplotno: "",
+                  npnllengthmtr: "",
+                  npnlwidthmtr: "",
+                  npnlareasq: "",
+                  ewsplotno: "",
+                  ewslengthmtr: "",
+                  ewswidthmtr: "",
+                  ewsareasq: "",
+                  complotno: "",
+                  comlengthmtr: "",
+                  comwidthmtr: "",
+                  comareasq: "",
+                  siteplotno: "",
+                  sitelengthmtr: "",
+                  sitewidthmtr: "",
+                  siteareasq: "",
+                  parkplotno: "",
+                  parklengthmtr: "",
+                  parkwidthmtr: "",
+                  parkareasq: "",
+                  publicplotno: "",
+                  publiclengthmtr: "",
+                  publicwidthmtr: "",
+                  publicareasq: "",
+                  stpplotno: "",
+                  stplengthmtr: "",
+                  stpwidthmtr: "",
+                  stpareasq: "",
+                  etpplotno: "",
+                  etplengthmtr: "",
+                  etpwidthmtr: "",
+                  etpareasq: "",
+                  wtpplotno: "",
+                  wtplengthmtr: "",
+                  wtpwidthmtr: "",
+                  wtpareasq: "",
+                  ugtplotno: "",
+                  ugtlengthmtr: "",
+                  ugtwidthmtr: "",
+                  ugtareasq: "",
+                  milkboothplotno: "",
+                  milkboothlengthmtr: "",
+                  milkboothwidthmtr: "",
+                  milkboothareasq: "",
+                  gssplotno: "",
+                  gsslengthmtr: "",
+                  gssareasq: "",
+                  resDimension: "",
+                  resEnteredArea: "",
+                  comDimension: "",
+                  comEnteredArea: "",
+                  secPlanPlot: "",
+                  secPlanLength: "",
+                  secPlanDim: "",
+                  secPlanEntered: "",
+                  greenBeltPlot: "",
+                  greenBeltLength: "",
+                  greenBeltDim: "",
+                  greenBeltEntered: "",
+                  internalPlot: "",
+                  internalLength: "",
+                  internalDim: "",
+                  internalEntered: "",
+                  otherPlot: "",
+                  otherLength: "",
+                  otherDim: "",
+                  otherEntered: "",
+                  undeterminedPlot: "",
+                  undeterminedLength: "",
+                  undeterminedDim: "",
+                  undeterminedEntered: "",
+                },
+                DetailsAppliedLandDdjay2: {
+                  frozenNo: "qw",
+                  frozenArea: "",
+                  organize: "",
+                },
+                DetailsAppliedLandIndustrial3: {
+                  colonyfiftyNo: "qwq",
+                  colonyfiftyArea: "",
+                  fiftyToTwoNo: "",
+                  fiftyToTwoArea: "",
+                  twoHundredNo: "",
+                  twoHundredArea: "",
+                  resiNo: "",
+                  resiArea: "",
+                  commerNo: "",
+                  commerArea: "",
+                  labourNo: "",
+                  labourArea: "",
+                },
+                DetailsAppliedLandResidential4: {
+                  npnlNo: "wew",
+                  npnlArea: "",
+                  ewsNo: "",
+                  ewsArea: "",
+                },
+                DetailsAppliedLandNpnl5: {
+                  surrender: "sds",
+                  pocketProposed: "",
+                  deposit: "",
+                  surrendered: "",
+                },
+                DetailsAppliedLand6: {
+                  sitePlan: "sdsd",
+                  democraticPlan: "",
+                  sectoralPlan: "",
+                  developmentPlan: "",
+                  uploadLayoutPlan: "",
+                },
+              },
+              FeesAndCharges: {
+                totalArea: "sdsd",
+                purpose: "",
+                devPlan: "",
+                scrutinyFee: "",
+                licenseFee: "",
+                conversionCharges: "",
+                payableNow: "",
+                remark: "",
+                adjustFee: "",
+              },
+            },
+          ],
+        },
+      };
+
+      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
+        console.log("Submit", Resp);
+        return Resp;
+      });
+      setFinalSubmitData(Resp.data);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const forms = {
@@ -60,15 +300,14 @@ const ApllicantFormStep1 = (props) => {
     district: district,
     state: state,
     status: status,
-    LC:LC,
-    address :address ,
-    permanentAddress :permanentAddress ,
-    notSigned :notSigned ,
-    email :email ,
-    authorized:authorized
-
-};
-localStorage.setItem("Applicant Info",JSON.stringify(forms))
+    LC: LC,
+    address: address,
+    permanentAddress: permanentAddress,
+    notSigned: notSigned,
+    email: email,
+    authorized: authorized,
+  };
+  localStorage.setItem("Applicant Info", JSON.stringify(forms));
 
   const getDeveloperData = async () => {
     try {
@@ -81,81 +320,68 @@ localStorage.setItem("Applicant Info",JSON.stringify(forms))
     }
   };
   useEffect(() => {
-    getDeveloperData()
-    
-  }, [ setValue(
-    "authorizedDeveloper",
-    developerData !== null && developerData !== undefined
-      ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
-      : "N/A"
-  ),
-    setValue(
-      "authorizedPerson",
-      developerData !== null && developerData !== undefined
-        ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName
-        : "N/A"
-    ),
-    setValue(
-      "authorizedmobile",
-      developerData !== null && developerData !== undefined
-        ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber
-        : "N/A"
-    ),
-    setValue(
-      "authorizedEmail",
-      developerData !== null && developerData !== undefined
-        ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId
-        : "N/A"
-    ),
-    setValue(
-      "authorizedPan",
-      developerData !== null && developerData !== undefined
-        ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan
-        : "N/A"
-    ),]);
-
-  const getDeveloperDataLabel = async () => {
-    try { 
-       const postDistrict = {
-        tenantId: "pb",
-        uuid: [
-            "b49784fb-59d9-4d37-b837-abc9919a26fe"
-        ],
-        "RequestInfo": {
-            apiId: "Rainmaker",
-            authToken: "cf3e6e7a-0fdf-4862-a55d-3ed07bbeb143",
-           
-            msgId: "1666945960102|en_IN"
-        }
-  }
-      const Resp = await axios.post("http://localhost:3000/user/_search?_=1666935568224",postDistrict).then((response) => {
-        return response;
-      });
-      setDeveloperDataLabel(Resp.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  useEffect(() => {
-    getDeveloperDataLabel()
+    getDeveloperData();
   }, []);
 
-  useEffect(() => {
-    if (developerDataLabel !== undefined && developerDataLabel !== null) {
-      console.log("authorized user data Label", developerDataLabel?.user?.altContactNumber);
-    }
-  }, [developerDataLabel]);
-  console.log("data", developerDataLabel);
+    const getUserInfo = async () => {
+      const uuid = userInfo?.uuid;
+      if (uuid) {
+        const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
+        usersResponse && usersResponse.user && usersResponse.user.length && setUserDetails(usersResponse.user[0]);
+        console.log("USERRESP",usersResponse);
+      }
+    };
+    useEffect(() => {
+      getUserInfo()
+    },[]);
+
   useEffect(() => {
     if (developerData !== undefined && developerData !== null) {
-      console.log("authorized user data", developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName);
+      setValue(
+        "authorizedDeveloper",
+        developerData !== null && developerData !== undefined
+          ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
+          : "N/A"
+      ),
+        setValue(
+          "authorizedPerson",
+          developerData !== null && developerData !== undefined
+            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName
+            : "N/A"
+        ),
+        setValue(
+          "authorizedmobile",
+          developerData !== null && developerData !== undefined
+            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber
+            : "N/A"
+        ),
+        setValue(
+          "authorizedEmail",
+          developerData !== null && developerData !== undefined
+            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId
+            : "N/A"
+        ),
+        setValue(
+          "authorizedPan",
+          developerData !== null && developerData !== undefined
+            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan
+            : "N/A"
+        );
     }
   }, [developerData]);
   console.log("data", developerData);
+  useEffect(() => {
+    if (userDetails !== null && userDetails !== undefined){
+    console.log("Auth",userDetails?.user?.[0]?.accountLocked);
+    
+  }}, [userDetails]);
+  console.log("data", userDetails);
 
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
-      <Card style={{ width: "126%", marginLeft: "19px", paddingRight: "10px" }}>
+       <Card style={{ width: "126%"}}>
+       <h2>New License</h2>
+      <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
         <Form.Group className="justify-content-center" controlId="formBasicEmail">
           <Row className="ml-auto" style={{ marginBottom: 5 }}>
             <Col md={4} xxl lg="4">
@@ -179,8 +405,16 @@ localStorage.setItem("Applicant Info",JSON.stringify(forms))
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
+               <Controller
+                  control={control}
+                  name="authorizedPerson"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPerson" />
+                  )}
+                />
 
-              <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedPerson")} />
+
+              {/* <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedPerson")} /> */}
               <h3 className="error-message" style={{ color: "red" }}>
                 {errors?.authorizedPerson && errors?.authorizedPerson?.message}
               </h3>
@@ -206,7 +440,11 @@ localStorage.setItem("Applicant Info",JSON.stringify(forms))
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" className="form-control" placeholder="N/A" {...register("alternatemobile")} disabled />
+              <Form.Control type="text" className="form-control" placeholder={developerDataLabel !== null && developerDataLabel !== undefined
+        ? developerDataLabel?.user?.[0]?.accountLocked
+        : "N/A"} {...register("alternatemobile")} disabled value={developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.user?.[0]?.accountLocked
+          : "N/A"}/>
               <h3 className="error-message" style={{ color: "red" }}>
                 {errors?.alternatemobile && errors?.alternatemobile?.message}
               </h3>
@@ -383,14 +621,8 @@ localStorage.setItem("Applicant Info",JSON.stringify(forms))
               <Form.Control type="text" placeholder="N/A" {...register("authorized")} disabled readOnly />
             </div>
           </Row>
-        </Form.Group>
-        <div class="row">
-          <div class="col-sm-12 text-right">
-            <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-              Continue
-            </button>
-          </div>
-        </div>
+          </Form.Group>
+        </Card>
       </Card>
     </form>
   );
