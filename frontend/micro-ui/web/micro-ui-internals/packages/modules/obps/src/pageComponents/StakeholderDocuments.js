@@ -30,17 +30,15 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
 
     const { data, isLoading } = Digit.Hooks.obps.useMDMS(stateId, "StakeholderRegistraition", "TradeTypetoRoleMapping");
     
-    
+
     useEffect(() => {
         let filtredBpaDocs = [];
         if (data?.StakeholderRegistraition?.TradeTypetoRoleMapping) {
             filtredBpaDocs = data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.filter(ob => (ob.tradeType === formData?.formData?.LicneseType?.LicenseType?.tradeType))
-            console.log("STKH",data?.StakeholderRegistraition?.TradeTypetoRoleMapping?.filter(ob => (ob.tradeType === formData?.formData?.LicneseType?.LicenseType?.tradeType)))
         }
+
         let documentsList = [];
         filtredBpaDocs?.[0]?.docTypes?.forEach(doc => {
-        
-
             documentsList.push(doc);
         });
         setBpaTaxDocuments(documentsList);

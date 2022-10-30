@@ -7,7 +7,22 @@ import Timeline from "../components/Timeline";
 // import TextField from '@material-ui/core/TextField';
 import { convertEpochToDate } from "../utils/index";
 import axios from "axios";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers";
+import { VALIDATION_SCHEMA } from "../utils/developerRegisterSchema";
 const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  //   control,
+  //   setValue,
+  // } = useForm({
+  //   mode: "onSubmit",
+  //   reValidateMode: "onBlur",
+  //   resolver: yupResolver(VALIDATION_SCHEMA),
+  //   shouldFocusError: true,
+  // });
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
@@ -23,18 +38,18 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || ""
   );
   const [PermanentAddress, setPermanentAddress] = useState(formData?.LicneseDetails?.PermanentAddress || formData?.formData?.LicneseDetails?.PermanentAddress);
-  const [houseNumber, setHouseNumber] = useState(formData?.LicneseDetails?.houseNumber || formData?.formData?.LicneseDetails?.houseNumber || "");
-  const [colonyName, setColonyName] = useState(formData?.LicneseDetails?.colonyName || formData?.formData?.LicneseDetails?.colonyName || "");
-  const [streetName, setStreetName] = useState(formData?.LicneseDetails?.streetName || formData?.formData?.LicneseDetails?.streetName || "");
-  const [locality, setLocality] = useState(formData?.LicneseDetails?.locality || formData?.formData?.LicneseDetails?.locality || "");
+  const [addressLineOne, setAddressLineOne] = useState(formData?.LicneseDetails?.addressLineOne || formData?.formData?.LicneseDetails?.addressLineOne || "");
+  const [addressLineTwo, setAddressLineTwo] = useState(formData?.LicneseDetails?.addressLineTwo || formData?.formData?.LicneseDetails?.addressLineTwo || "");
+  const [addressLineThree, setAddressLineThree] = useState(formData?.LicneseDetails?.addressLineThree || formData?.formData?.LicneseDetails?.addressLineThree || "");
+  const [addressLineFour, setAddressLineFour] = useState(formData?.LicneseDetails?.addressLineFour || formData?.formData?.LicneseDetails?.addressLineFour || "");
   const [city, setCity] = useState(formData?.LicneseDetails?.city || formData?.formData?.LicneseDetails?.city || "");
   const [pincode, setPincode] = useState(formData?.LicneseDetails?.pincode || formData?.formData?.LicneseDetails?.pincode || "");
   const [addressSameAsPermanent,setSelectedChecked] = useState(formData?.LicenseDetails?.addressSameAsPermanent || formData?.LicenseDetails?.addressSameAsPermanent || "")
   const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.Correspondenceaddress || formData?.formData?.Correspondenceaddress || "");
-  const [houseNumberCorrespondesnce, sethouseNumberCorrespondesnce] = useState(formData?.houseNumberCorrespondesnce || formData?.formData?.houseNumberCorrespondesnce || "");
-  const [colonyNameCorrespondesnce, setColonyNameCorrespondesnce] = useState(formData?.colonyNameCorrespondesnce || formData?.formData?.colonyNameCorrespondesnce || "");
-  const [streetNameCorrespondesnce, setStreetNameCorrespondesnce] = useState(formData?.streetNameCorrespondesnce || formData?.formData?.streetNameCorrespondesnce || "");
-  const [localityCorrespondence, setLocalityCorrespondence] = useState(formData?.localityCorrespondence || formData?.formData?.localityCorrespondence || "");
+  const [addressLineOneCorrespondence, setAddressLineOneCorrespondence] = useState(formData?.addressLineOneCorrespondence || formData?.formData?.addressLineOneCorrespondence || "");
+  const [addressLineTwoCorrespondence, setAddressLineTwoCorrespondence] = useState(formData?.addressLineTwoCorrespondence || formData?.formData?.addressLineTwoCorrespondence || "");
+  const [addressLineThreeCorrespondence, setAddressLineThreeCorrespondence] = useState(formData?.addressLineThreeCorrespondence || formData?.formData?.addressLineThreeCorrespondence || "");
+  const [addressLineFourCorrespondence, setAddressLineFourCorrespondence] = useState(formData?.addressLineFourCorrespondence || formData?.formData?.addressLineFourCorrespondence || "");
   const [cityCorrespondence, setCityCorrespondence] = useState(formData?.cityCorrespondence || formData?.formData?.cityCorrespondence || "");
   const [pincodeCorrespondence, setPincodeCorrespondence] = useState(formData?.pincodeCorrespondence || formData?.formData?.pincodeCorrespondence || "");
   const [isAddressSame, setisAddressSame] = useState(formData?.isAddressSame || formData?.formData?.isAddressSame || false);
@@ -133,12 +148,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         'X-APISETU-CLIENTID':'in.gov.tcpharyana',
         'Access-Control-Allow-Origin':"*",
       }}) 
-      console.log("PANDET",panResp.data);
+      console.log("PANDET",panResp?.data);
     } catch(error){
-      if (error.panResp && error.panResp.data) {
-        console.log(e.panResp.data.message) // some reason error message
-      }
-      // console.error("PANERROR",errdata);
+        console.log(error?.response?.data?.errorDescription);
+        const errorPanVal = error?.response?.data?.errorDescription
     }
   }
 console.log(panValidation);
@@ -170,16 +183,16 @@ console.log(panValidation);
     setPermanentAddress(e.target.value);
   }
   function selectHouseNumber(e) {
-    setHouseNumber(e.target.value);
+    setAddressLineOne(e.target.value);
   }
   function selectColonyName(e) {
-    setColonyName(e.target.value);
+    setAddressLineTwo(e.target.value);
   }
   function selectStreetName(e) {
-    setStreetName(e.target.value);
+    setAddressLineThree(e.target.value);
   }
   function selectLocality(e) {
-    setLocality(e.target.value);
+    setAddressLineFour(e.target.value);
   }
   function selectCity(e) {
     setCity(e.target.value);
@@ -192,10 +205,10 @@ console.log(panValidation);
     if (isAddressSame == false) {
       setisAddressSame(true);
       setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress);
-      sethouseNumberCorrespondesnce(formData?.LicneseDetails?.houseNumber || formData?.formData?.LicneseDetails?.houseNumber);
-      setColonyNameCorrespondesnce(formData?.LicneseDetails?.colonyName ? formData?.LicneseDetails?.colonyName : formData?.formData?.LicneseDetails?.colonyName);
-      setStreetNameCorrespondesnce(formData?.LicneseDetails?.streetName ? formData?.LicneseDetails?.streetName : formData?.formData?.LicneseDetails?.streetName);
-      setLocalityCorrespondence(formData?.LicneseDetails?.locality ? formData?.LicneseDetails?.locality : formData?.formData?.LicneseDetails?.locality);
+      setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOne ? formData?.LicneseDetails?.addressLineOne : formData?.LicneseDetails?.addressLineOne);
+      setAddressLineTwoCorrespondence(formData?.LicneseDetails?.addressLineTwo ? formData?.LicneseDetails?.addressLineTwo : formData?.formData?.LicneseDetails?.addressLineTwo);
+      setAddressLineThreeCorrespondence(formData?.LicneseDetails?.addressLineThree ? formData?.LicneseDetails?.addressLineThree : formData?.formData?.LicneseDetails?.addressLineThree);
+      setAddressLineFourCorrespondence(formData?.LicneseDetails?.addressLineFour ? formData?.LicneseDetails?.addressLineFour : formData?.formData?.LicneseDetails?.addressLineFour);
       setCityCorrespondence(formData?.LicneseDetails?.city ? formData?.LicneseDetails?.city : formData?.formData?.LicneseDetails?.city);
       setPincodeCorrespondence(formData?.LicneseDetails?.pincode ? formData?.LicneseDetails?.pincode : formData?.formData?.LicneseDetails?.pincode);
     }
@@ -203,10 +216,10 @@ console.log(panValidation);
       Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
       setisAddressSame(false);
       setCorrespondenceaddress("");
-      sethouseNumberCorrespondesnce("");
-      setColonyNameCorrespondesnce("");
-      setStreetNameCorrespondesnce("");
-      setLocalityCorrespondence("");
+      setAddressLineOneCorrespondence("");
+      setAddressLineTwoCorrespondence("");
+      setAddressLineThreeCorrespondence("");
+      setAddressLineFourCorrespondence("");
       setCityCorrespondence("");
       setPincodeCorrespondence("");
     }
@@ -215,16 +228,16 @@ console.log(panValidation);
     setCorrespondenceaddress(e.target.value);
   }
   function selecthouseNumberCorrespondenceaddress(e) {
-    sethouseNumberCorrespondesnce(e.target.value);
+    setAddressLineOneCorrespondence(e.target.value);
   }
-  function selectColonyNameCorrespondesnce(e) {
-    setColonyNameCorrespondesnce(e.target.value);
+  function selectColonyNameCorrespondence(e) {
+    setAddressLineTwoCorrespondence(e.target.value);
   }
-  function selectStreetNameCorrespondesnce(e) {
-    setStreetNameCorrespondesnce(e.target.value);
+  function selectStreetNameCorrespondence(e) {
+    setAddressLineThreeCorrespondence(e.target.value);
   }
   function selectLocalityCorrespondence(e) {
-    setLocalityCorrespondence(e.target.value);
+    setAddressLineFourCorrespondence(e.target.value);
   }
   function selectCityCorrespondence(e) {
     setCityCorrespondence(e.target.value);
@@ -233,7 +246,7 @@ console.log(panValidation);
     setPincodeCorrespondence(e.target.value);
   }
   
-  const goNext = () => {
+  const goNext = async () => {
 
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
       let licenseDet = {
@@ -243,20 +256,21 @@ console.log(panValidation);
         email: email, 
         dob:dob,
         PanNumber: PanNumber,
-        houseNumber: houseNumber,
-        colonyName: colonyName,
-        streetName: streetName,
-        locality: locality,
+        addressLineOne: addressLineOne,
+        addressLineTwo: addressLineTwo,
+        addressLineThree: addressLineThree,
+        addressLineFour: addressLineFour,
         city:city,
         pincode: pincode,
         addressSameAsPermanent:addressSameAsPermanent,
-        houseNumberCorrespondesnce: houseNumberCorrespondesnce,
-        colonyNameCorrespondesnce: colonyNameCorrespondesnce,
-        streetNameCorrespondesnce: streetNameCorrespondesnce,
-        localityCorrespondence: localityCorrespondence,
+        addressLineOneCorrespondence: addressLineOneCorrespondence,
+        addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+        addressLineThreeCorrespondence: addressLineThreeCorrespondence,
+        addressLineFourCorrespondence: addressLineFourCorrespondence,
         cityCorrespondence: cityCorrespondence,
         pincodeCorrespondence: pincodeCorrespondence
-        }
+      }
+
       onSelect(config.key, licenseDet);
       console.log("DATALICDET",licenseDet);
       localStorage.setItem("licenceDetails",JSON.stringify(licenseDet));
@@ -267,8 +281,8 @@ console.log(panValidation);
             result: result, 
             formData: formData, 
             Correspondenceaddress: Correspondenceaddress,
-            houseNumberCorrespondesnce: houseNumberCorrespondesnce,
-            colonyNameCorrespondesnce: colonyNameCorrespondesnce,
+            addressLineOneCorrespondence: addressLineOneCorrespondence,
+            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
 
             isAddressSame: isAddressSame }
           //1, units
@@ -280,6 +294,146 @@ console.log(panValidation);
           setShowToast({ key: "error" });
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
+      
+    // DEVELOPER API CALL
+    try{
+      const developerRegisterData = {
+        "devDetail": {
+            "licenceDetails": {
+              licenseDet:licenseDet
+            },
+            "addInfo": {
+                "showDevTypeFields": "02",
+                "cin_Number": "U72200CH1998PTC022006",
+                "companyName": "MAPDATA SCIENCES INDIA PRIVATE LIMITED",
+                "incorporationDate": "03/12/1998",
+                "registeredAddress": "PLOT NO.10, 2ND FLOOR RGTP, KISHANGARH CHANDIGARH Chandigarh CH 160101 IN",
+                "email": "charan.singh@mapds.com.au",
+                "registeredContactNo": "",
+                "gst_Number": "",
+                "directorsInformation": [
+                    {
+                        "contactNumber": "",
+                        "din": "0002260042",
+                        "name": "CHARAN SINGH"
+                    },
+                    {
+                        "contactNumber": "",
+                        "din": "0003529888",
+                        "name": "BRETT JOHN BUNDOCK"
+                    }
+                ],
+                "shareHoldingPatterens": [
+                    {
+                        "name": "DLF",
+                        "designition": "developer",
+                        "percentage": "45",
+                        "uploadPdf": null,
+                        "serialNumber": null
+                    }
+                ]
+            },
+            "aurthorizedUserInfoArray": [
+                {
+                    "userName": "Deep",
+                    "name": "Deep",
+                    "gender": "MALE",
+                    "mobileNumber": "8126287097",
+                    "emailId": "sudeep@gmail.com",
+                    "dob": "1997-01-08",
+                    "pan": "BRTPO8978U",
+                    "active": true,
+                    "type": "CITIZEN",
+                    "password": "Password@123",
+                    "tenantId": "hr",
+                    "roles": [
+                        {
+                            "code": "CITIZEN",
+                            "name": "Citizen",
+                            "tenantId": "default"
+                        }
+                    ]
+                }
+            ],
+            "capacityDevelopAColony": {
+                "individualCertificateCA": "",
+                "companyBalanceSheet": "",
+                "paidUpCapital": "",
+                "networthPartners": "",
+                "networthFirm": "",
+                "capacityDevelopColonyHdruAct": [
+                    {
+                        "licenceNumber": "1112",
+                        "nameOfDeveloper": "abc",
+                        "purposeOfColony": "hyper",
+                        "sectorAndDevelopmentPlan": "abghed",
+                        "validatingLicence": "yes"
+                    }
+                ],
+                "capacityDevelopColonyLawAct": [
+                    {
+                        "serialNumber": "23",
+                        "coloniesDeveloped": "yes",
+                        "area": "12345",
+                        "purpose": "for building",
+                        "statusOfDevelopment": "good",
+                        "outstandingDues": ""
+                    }
+                ],
+                "technicalExpertEngaged": [
+                    {
+                        "engineerName": "",
+                        "engineerQualification": "",
+                        "engineerSign": "",
+                        "engineerDegree": "",
+                        "architectName": "",
+                        "architectQualification": "",
+                        "architectSign": "",
+                        "architectDegree": "",
+                        "townPlannerName": "",
+                        "townPlannerQualification": "",
+                        "townPlannerSign": "",
+                        "townPlannerDegree": "",
+                        "existingDeveloperAgreement": "",
+                        "existingDeveloperAgreementDoc": "",
+                        "technicalCapacity": "",
+                        "technicalCapacityDoc": "",
+                        "engineerNameN": "",
+                        "engineerDocN": "",
+                        "architectNameN": "",
+                        "architectDocN": "",
+                        "uplaodSpaBoard": "",
+                        "uplaodSpaBoardDoc": ""
+                    }
+                ],
+                "designationDirector": [
+                    {
+                        "agreementDoc": "",
+                        "boardDoc": ""
+                    }
+                ],
+                "obtainedLicense": [
+                    {
+                        "registeredDoc": "",
+                        "boardDocY": "",
+                        "earlierDocY": "",
+                        "boardDocN": "",
+                        "earlierDocN": "",
+                        "technicalAssistanceAgreementDoc": ""
+                    }
+                ]
+            }
+        }
+      }
+      const devDetailsDataCall = await axios.post(`/user/developer/registration`,developerRegisterData,{
+        
+      });
+      console.log(devDetailsDataCall);
+    }
+    catch(error){
+      console.log(error.message);
+    }
+    
     }
     else {
       let data = formData?.formData;
@@ -289,7 +443,7 @@ console.log(panValidation);
       data.LicneseDetails.email = email;
       data.LicneseDetails.PanNumber = PanNumber;
       formData.Correspondenceaddress = Correspondenceaddress;
-      formData.houseNumberCorrespondesnce = houseNumberCorrespondesnce;
+      formData.addressLineOneCorrespondence = addressLineOneCorrespondence;
       formData.addressSameAsPermanent = addressSameAsPermanent;
       formData.isAddressSame = isAddressSame;
       onSelect("", formData, "", true);
@@ -317,7 +471,7 @@ console.log(panValidation);
           <Card className="mb-3">
             {/* <h4></h4> */}
             <Row className="justify-content-between">
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${t("BPA_APPLICANT_NAME_LABEL")}*`}</CardLabel>
                 <TextInput
                   t={t}
@@ -336,7 +490,7 @@ console.log(panValidation);
                   })}
                 />
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")}*`}</CardLabel>
                 <div className="row">
                 <Dropdown
@@ -364,7 +518,7 @@ console.log(panValidation);
                   /> */}
                 </div>
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${t("BPA_OWNER_MOBILE_NO_LABEL")}*`}</CardLabel>
                 <MobileNumber
                   value={mobileNumber}
@@ -375,7 +529,7 @@ console.log(panValidation);
                 />
               </Form.Group>
               {inputs?.map((input, index) => (
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
               <CardLabel>{`${"Enter Date of Birth"}*`}</CardLabel>
                 {/* <DatePicker 
                   t={t}
@@ -396,7 +550,7 @@ console.log(panValidation);
               </Form.Group>
               )
               )}
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${t("BPA_APPLICANT_EMAIL_LABEL")}*`}</CardLabel>
                 <TextInput
                   t={t}
@@ -412,7 +566,7 @@ console.log(panValidation);
                 />
                 {email&&email.length>0&&!email.match(Digit.Utils.getPattern('Email'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{("Invalid Email Address")}</CardLabelError>}
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${t("BPA_APPLICANT_PAN_NO")}*`}</CardLabel>
                 <TextInput
                   t={t}
@@ -427,13 +581,14 @@ console.log(panValidation);
                   {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
                   />
                   {PanNumber&&PanNumber.length>0&&!PanNumber.match(Digit.Utils.getPattern('PAN'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
+                  <h3 className="error-message" style={{color:"red"}}>{error?.response?.data?.errorDescription}</h3>
               </Form.Group>
             </Row>
           </Card>
           <Card className="mb-3">
             <h4 className="mb-2 fw-bold">Permanent Address</h4>
             <Row className="justify-content-between">
-              {/* <Form.Group className="col-md-5">
+              {/* <Form.Group className="col-md-4">
                 <CardLabel>{`${t("BPA_PERMANANT_ADDRESS_LABEL")}*`}</CardLabel>
                 <TextArea
                   t={t}
@@ -445,16 +600,16 @@ console.log(panValidation);
                   value={PermanentAddress}
                   />
               </Form.Group> */}
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${"Address Line 1"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
                   isMandatory={false}
                   optionKey="i18nKey"
-                  name="houseNumber"
-                  value={houseNumber}
-                  placeholder={houseNumber}
+                  name="addressLineOne"
+                  value={addressLineOne}
+                  placeholder={addressLineOne}
                   onChange={selectHouseNumber}
                   {...(validation = {
                     isRequired: true,
@@ -462,47 +617,49 @@ console.log(panValidation);
                     title: ("Please Enter Address line 1"),
                   })}
                   />
+                  {/* <Form.Control type="text" placeholder="N/A" {...register("addressLineOne")}   onChange={(e) => setAddressLineOne(e.target.value)} value={addressLineOne}/>
+              <h3 className="error-message"style={{color:"red"}}>{errors?.addressLineOne && errors?.addressLineOne?.message}</h3> */}
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${"Address Line 2"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
                   isMandatory={false}
                   optionKey="i18nKey"
-                  name="colonyName"
-                  value={colonyName}
-                  placeholder={colonyName}
+                  name="addressLineTwo"
+                  value={addressLineTwo}
+                  placeholder={addressLineTwo}
                   onChange={selectColonyName}
                   />
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${"Address Line 3"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
                   isMandatory={false}
                   optionKey="i18nKey"
-                  name="streetName"
-                  value={streetName}
-                  placeholder={streetName}
+                  name="addressLineThree"
+                  value={addressLineThree}
+                  placeholder={addressLineThree}
                   onChange={selectStreetName}
                   />
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${"Address Line 4"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
                   isMandatory={false}
                   optionKey="i18nKey"
-                  name="locality"
-                  value={locality}
-                  placeholder={locality}
+                  name="addressLineFour"
+                  value={addressLineFour}
+                  placeholder={addressLineFour}
                   onChange={selectLocality}
                   />
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${"City"}*`}</CardLabel>
                 <TextInput
                   t={t}
@@ -520,7 +677,7 @@ console.log(panValidation);
                   })}
                   />
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${"Pincode"}*`}</CardLabel>
                 <TextInput
                   t={t}
@@ -554,7 +711,7 @@ console.log(panValidation);
                   style={{ paddingBottom: "10px", paddingTop: "10px" }}
                   />
               </Form.Group> 
-              {/* <Form.Group className="col-md-5">
+              {/* <Form.Group className="col-md-4">
                 <CardLabel>{`${t("BPA_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL")}`}</CardLabel>
                 <TextArea
                   t={t}
@@ -567,63 +724,63 @@ console.log(panValidation);
                   disable={isAddressSame}
                   />
               </Form.Group> */}
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${"Address Line 1"}*`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
                   isMandatory={true}
                   optionKey="i18nKey"
-                  name="houseNumberCorrespondesnce"
-                  value={houseNumberCorrespondesnce}
-                  placeholder={houseNumberCorrespondesnce}
+                  name="addressLineOneCorrespondence"
+                  value={addressLineOneCorrespondence}
+                  placeholder={addressLineOneCorrespondence}
                   onChange={selecthouseNumberCorrespondenceaddress}
                   disable={isAddressSame}
                   />
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${"Address Line 2"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
                   isMandatory={false}
                   optionKey="i18nKey"
-                  name="colonyNameCorrespondesnce"
-                  value={colonyNameCorrespondesnce}
-                  placeholder={colonyNameCorrespondesnce}
-                  onChange={selectColonyNameCorrespondesnce}
+                  name="addressLineTwoCorrespondence"
+                  value={addressLineTwoCorrespondence}
+                  placeholder={addressLineTwoCorrespondence}
+                  onChange={selectColonyNameCorrespondence}
                   disable={isAddressSame}
                   />
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${"Address Line 3"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
                   isMandatory={false}
                   optionKey="i18nKey"
-                  name="streetNameCorrespondesnce"
-                  value={streetNameCorrespondesnce}
-                  placeholder={streetNameCorrespondesnce}
-                  onChange={selectStreetNameCorrespondesnce}
+                  name="addressLineThreeCorrespondence"
+                  value={addressLineThreeCorrespondence}
+                  placeholder={addressLineThreeCorrespondence}
+                  onChange={selectStreetNameCorrespondence}
                   disable={isAddressSame}
                   />
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${"Address Line 4"}`}</CardLabel>
                 <TextInput
                   t={t}
                   type={"text"}
                   isMandatory={false}
                   optionKey="i18nKey"
-                  name="localityCorrespondence"
-                  value={localityCorrespondence}
-                  placeholder={localityCorrespondence}
+                  name="addressLineFourCorrespondence"
+                  value={addressLineFourCorrespondence}
+                  placeholder={addressLineFourCorrespondence}
                   onChange={selectLocalityCorrespondence}
                   disable={isAddressSame}
                   />
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${"City"}*`}</CardLabel>
                 <TextInput
                   t={t}
@@ -637,7 +794,7 @@ console.log(panValidation);
                   disable={isAddressSame}
                   />
               </Form.Group>
-              <Form.Group className="col-md-5">
+              <Form.Group className="col-md-4">
                 <CardLabel>{`${"Pincode"}*`}</CardLabel>
                 <TextInput
                   t={t}
