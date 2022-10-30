@@ -251,8 +251,8 @@ const ApllicantPuropseForm = (props) => {
             console.log(error.message);
         }
     }
-    const getTehslidata = async () => {
-      if (district2 !== "") {
+    const getTehslidata = async (data) => {
+      
           const datapost = {
               "RequestInfo": {
                   "apiId": "Rainmaker",
@@ -269,7 +269,7 @@ const ApllicantPuropseForm = (props) => {
           };
 
           try {
-              const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_tehsil?dCode=" + district2, datapost, {
+              const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {
 
               }).then((response) => {
                   return response
@@ -284,10 +284,10 @@ const ApllicantPuropseForm = (props) => {
           } catch (error) {
               console.log(error.message);
           }
-      }
+      
     }
-    const getRevenuStateData = async () => {
-      if (tehsil !== "") {
+    const getRevenuStateData = async (data1) => {
+     
         const datatopost = {
           RequestInfo: {
             apiId: "Rainmaker",
@@ -304,7 +304,7 @@ const ApllicantPuropseForm = (props) => {
 
         try {
           const Resp = await axios
-            .post("http://10.1.1.18:8094/egov-mdms-service/v1/_village?" + "dCode=" + district2 + "&" + "tCode=" + tehsil.data, datatopost, {})
+            .post("http://10.1.1.18:8094/egov-mdms-service/v1/_village?" + "dCode=" + data + "&" + "tCode=" + data1, datatopost, {})
             .then((response) => {
               return response;
             });
@@ -318,7 +318,7 @@ const ApllicantPuropseForm = (props) => {
         } catch (error) {
           console.log(error.message);
         }
-      }
+      
     };
 
     const getMustilData = async () => {
@@ -410,13 +410,13 @@ const ApllicantPuropseForm = (props) => {
   useEffect(() => {
     DistrictApiCall();
   }, []);
-  useEffect(() => {
-    getTehslidata();
-  }, [district2]);
+  // useEffect(() => {
+  //   getTehslidata();
+  // }, [district2]);
 
-  useEffect(() => {
-    getRevenuStateData();
-  }, [district2, tehsil]);
+  // useEffect(() => {
+  //   getRevenuStateData();
+  // }, [district2, tehsil]);
 
   useEffect(() => {
     getMustilData();
@@ -577,9 +577,8 @@ const ApllicantPuropseForm = (props) => {
                             <Form.Label><b>District</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
                         <ReactMultiSelect control={control} name="district"  placeholder="District" data={districtDataLbels} labels="District" 
-                         getSelectedValue={(data) => setDistrict2(data.data)}  />
-                        {/* //  onChange={(e)=>console.log(e)}/> */}
-                        
+                        onChange={(e)=>getTehslidata(e.value)}  />
+                    
                       <h3 className="error-message"style={{color:"red"}}>{errors?.district && errors?.district?.message}</h3>
                        </Col>
                     <Col md={4} xxl lg="3">
@@ -620,7 +619,7 @@ const ApllicantPuropseForm = (props) => {
                                             <Form.Label><h6><b>Tehsil</b></h6></Form.Label>
                                         </div> 
                                         <ReactMultiSelect control={control} name="tehsil"  placeholder="Tehsil"
-                                        data={tehsilDataLabels} labels="Tehsil"   getSelectedValue={(data) => setTehsil(data)}  />
+                                        data={tehsilDataLabels} labels="Tehsil"    onChange={(e)=>getRevenuStateData(e.code)}  />
                                             <h3 className="error-message" style={{ color: "red" }}>{errors?.tehsil && errors?.tehsil?.message}</h3>
                                         </Col>
                                         <Col md={4} xxl lg="4">

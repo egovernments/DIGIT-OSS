@@ -18,6 +18,7 @@ const MultiSelectField = (props) => {
             options={props?.data}
             isDisabled={props?.isDisabled}
             value={props?.value}
+            onChange={props?.onChange}
           />
         )}
       />
