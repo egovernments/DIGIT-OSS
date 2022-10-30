@@ -44,6 +44,248 @@ const ApllicantFormStep1 = (props) => {
   const ApplicantFormSubmitHandlerForm = async (data) => {
     console.log("data===", data);
     props.Step1Continue(data);
+
+    try {
+      const postDistrict = {
+          
+              "NewServiceInfo": {
+                  "newServiceInfoData": [
+                      {
+                          "ApplicantInfo": {
+                              "authorizedDeveloper": authorizedDeveloper,
+                              "authorizedPerson": "sd",
+                              "authorizedmobile": "sds",
+                              "alternatemobile": "1e",
+                              "authorizedEmail": "eeds",
+                              "authorizedPan": "fsd",
+                              "authorizedAddress": "",
+                              "village": "village",
+                              "authorizedPinCode": "",
+                              "tehsil": "dsf",
+                              "district": "sdf",
+                              "state": "dsf",
+                              "status": "fgr",
+                              LC: LC,
+                              address: address,
+                              "permanentAddress": "fgd",
+                              "notSigned": "fgver",
+                              "email": "gfg",
+                              "authorized": "rgsf"
+                          },
+                          "ApplicantPurpose": {
+                              "purposeDd": "",
+                              "potential": "",
+                              "district": "",
+                              "state": "",
+                              "ApplicationPurposeData1": {
+                                  "tehsil": "tahsil",
+                                  "revenueEstate": "",
+                                  "mustil": "",
+                                  "consolidation": "",
+                                  "sarsai": "",
+                                  "kanal": "",
+                                  "marla": "",
+                                  "bigha": "",
+                                  "biswansi": "",
+                                  "biswa": "",
+                                  "landOwner": "",
+                                  "developerCompany": "",
+                                  "registeringdate": "",
+                                  "validitydate": "",
+                                  "colirrevocialble": "",
+                                  "authSignature": "",
+                                  "nameAuthSign": "",
+                                  "registeringAuthority": "",
+                                  "registeringAuthorityDoc": ""
+                              }
+                          },
+                          "LandSchedule": {
+                              "licenseApplied": "lic",
+                              "LicNo": "",
+                              "potential": "",
+                              "siteLoc": "",
+                              "approach": "",
+                              "approachRoadWidth": "",
+                              "specify": "",
+                              "typeLand": "",
+                              "thirdParty": "",
+                              "migrationLic": "",
+                              "encumburance": "",
+                              "litigation": "",
+                              "court": "",
+                              "insolvency": "",
+                              "appliedLand": "",
+                              "revenuerasta": "",
+                              "watercourse": "",
+                              "compactBlock": "",
+                              "sandwiched": "",
+                              "acquistion": "",
+                              "section4": "",
+                              "section6": "",
+                              "orderUpload": "",
+                              "approachable": "",
+                              "vacant": "",
+                              "construction": "",
+                              "ht": "",
+                              "gas": "",
+                              "nallah": "",
+                              "road": "",
+                              "land": "",
+                              "utilityLine": "",
+                              "landSchedule": "",
+                              "mutation": "",
+                              "jambandhi": "",
+                              "LayoutPlan": "",
+                              "proposedLayoutPlan": "",
+                              "revisedLansSchedule": ""
+                          },
+                          "DetailsofAppliedLand": {
+                              "dgps": "dsg",
+                              "DetailsAppliedLandData1": {
+                                  "resplotno": "asa",
+                                  "reslengthmtr": "",
+                                  "reswidthmtr": "",
+                                  "resareasq": "",
+                                  "npnlplotno": "",
+                                  "npnllengthmtr": "",
+                                  "npnlwidthmtr": "",
+                                  "npnlareasq": "",
+                                  "ewsplotno": "",
+                                  "ewslengthmtr": "",
+                                  "ewswidthmtr": "",
+                                  "ewsareasq": "",
+                                  "complotno": "",
+                                  "comlengthmtr": "",
+                                  "comwidthmtr": "",
+                                  "comareasq": "",
+                                  "siteplotno": "",
+                                  "sitelengthmtr": "",
+                                  "sitewidthmtr": "",
+                                  "siteareasq": "",
+                                  "parkplotno": "",
+                                  "parklengthmtr": "",
+                                  "parkwidthmtr": "",
+                                  "parkareasq": "",
+                                  "publicplotno": "",
+                                  "publiclengthmtr": "",
+                                  "publicwidthmtr": "",
+                                  "publicareasq": "",
+                                  "stpplotno": "",
+                                  "stplengthmtr": "",
+                                  "stpwidthmtr": "",
+                                  "stpareasq": "",
+                                  "etpplotno": "",
+                                  "etplengthmtr": "",
+                                  "etpwidthmtr": "",
+                                  "etpareasq": "",
+                                  "wtpplotno": "",
+                                  "wtplengthmtr": "",
+                                  "wtpwidthmtr": "",
+                                  "wtpareasq": "",
+                                  "ugtplotno": "",
+                                  "ugtlengthmtr": "",
+                                  "ugtwidthmtr": "",
+                                  "ugtareasq": "",
+                                  "milkboothplotno": "",
+                                  "milkboothlengthmtr": "",
+                                  "milkboothwidthmtr": "",
+                                  "milkboothareasq": "",
+                                  "gssplotno": "",
+                                  "gsslengthmtr": "",
+                                  "gssareasq": "",
+                                  "resDimension": "",
+                                  "resEnteredArea": "",
+                                  "comDimension": "",
+                                  "comEnteredArea": "",
+                                  "secPlanPlot": "",
+                                  "secPlanLength": "",
+                                  "secPlanDim": "",
+                                  "secPlanEntered": "",
+                                  "greenBeltPlot": "",
+                                  "greenBeltLength": "",
+                                  "greenBeltDim": "",
+                                  "greenBeltEntered": "",
+                                  "internalPlot": "",
+                                  "internalLength": "",
+                                  "internalDim": "",
+                                  "internalEntered": "",
+                                  "otherPlot": "",
+                                  "otherLength": "",
+                                  "otherDim": "",
+                                  "otherEntered": "",
+                                  "undeterminedPlot": "",
+                                  "undeterminedLength": "",
+                                  "undeterminedDim": "",
+                                  "undeterminedEntered": ""
+                              },
+                              "DetailsAppliedLandDdjay2": {
+                                  "frozenNo": "qw",
+                                  "frozenArea": "",
+                                  "organize": ""
+                              },
+                              "DetailsAppliedLandIndustrial3": {
+                                  "colonyfiftyNo": "qwq",
+                                  "colonyfiftyArea": "",
+                                  "fiftyToTwoNo": "",
+                                  "fiftyToTwoArea": "",
+                                  "twoHundredNo": "",
+                                  "twoHundredArea": "",
+                                  "resiNo": "",
+                                  "resiArea": "",
+                                  "commerNo": "",
+                                  "commerArea": "",
+                                  "labourNo": "",
+                                  "labourArea": ""
+                              },
+                              "DetailsAppliedLandResidential4": {
+                                  "npnlNo": "wew",
+                                  "npnlArea": "",
+                                  "ewsNo": "",
+                                  "ewsArea": ""
+                              },
+                              "DetailsAppliedLandNpnl5": {
+                                  "surrender": "sds",
+                                  "pocketProposed": "",
+                                  "deposit": "",
+                                  "surrendered": ""
+                              },
+                              "DetailsAppliedLand6": {
+                                  "sitePlan": "sdsd",
+                                  "democraticPlan": "",
+                                  "sectoralPlan": "",
+                                  "developmentPlan": "",
+                                  "uploadLayoutPlan": ""
+                              }
+                          },
+                          "FeesAndCharges": {
+                              "totalArea": "sdsd",
+                              "purpose": "",
+                              "devPlan": "",
+                              "scrutinyFee": "",
+                              "licenseFee": "",
+                              "conversionCharges": "",
+                              "payableNow": "",
+                              "remark": "",
+                              "adjustFee": ""
+                          }
+                      }
+                  ]
+              }
+          
+           }
+     
+      const Resp = await axios.post("/land-services/new/_create",
+          postDistrict,
+      )
+          .then((Resp) => {
+              console.log("Submit", Resp)
+              return Resp;
+          })
+          setFinalSubmitData(Resp.data);
+     
+  } catch (error) {
+      console.log(error.message);
+  }
   };
 
   const forms = {
@@ -152,10 +394,18 @@ localStorage.setItem("Applicant Info",JSON.stringify(forms))
     }
   }, [developerData]);
   console.log("data", developerData);
+  const FinalSubmitApiCall = async () => {
+    
+}
+useEffect(()=>{
+    FinalSubmitApiCall();
+},[])
 
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
-      <Card style={{ width: "126%", marginLeft: "19px", paddingRight: "10px" }}>
+       <Card style={{ width: "126%"}}>
+       <h2>New License</h2>
+      <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
         <Form.Group className="justify-content-center" controlId="formBasicEmail">
           <Row className="ml-auto" style={{ marginBottom: 5 }}>
             <Col md={4} xxl lg="4">
@@ -386,11 +636,12 @@ localStorage.setItem("Applicant Info",JSON.stringify(forms))
         </Form.Group>
         <div class="row">
           <div class="col-sm-12 text-right">
-            <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+            <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block"  onClick={ApplicantFormSubmitHandlerForm}>
               Continue
             </button>
           </div>
         </div>
+      </Card>
       </Card>
     </form>
   );

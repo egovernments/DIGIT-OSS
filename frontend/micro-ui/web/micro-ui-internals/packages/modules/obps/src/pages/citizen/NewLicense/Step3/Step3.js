@@ -426,9 +426,10 @@ const LandScheduleForm = (props) => {
 
       
     return (
-        <Form >
-
-            <Card style={{ width: "126%", marginLeft: "11px", paddingRight: "10px" }}>
+        <Form > 
+            <Card style={{ width: "126%"}}>
+        <h2>New License</h2>
+       <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
 
                 <Form.Group className="justify-content-center" controlId="formBasicEmail">
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -1261,6 +1262,7 @@ const LandScheduleForm = (props) => {
                     </Row>
 
                 </Form.Group>
+            </Card>
             </Card>
         </Form>
     )
