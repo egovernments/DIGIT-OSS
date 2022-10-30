@@ -176,6 +176,7 @@ const ApllicantPuropseForm = (props) => {
     const [modal, setmodal] = useState(false);
     const [showhide1, setShowhide1] = useState("No");
     const [showhide2, setShowhide2] = useState("No");
+    const[tehsilCode,setTehsilCode]=useState(null)
     const [displayEditModal, setDisplayEditModal] = useState("none");
     const {
         register,
@@ -286,7 +287,7 @@ const ApllicantPuropseForm = (props) => {
           }
       
     }
-    const getRevenuStateData = async (data1) => {
+    const getRevenuStateData = async (code) => {
      
         const datatopost = {
           RequestInfo: {
@@ -304,7 +305,7 @@ const ApllicantPuropseForm = (props) => {
 
         try {
           const Resp = await axios
-            .post("http://10.1.1.18:8094/egov-mdms-service/v1/_village?" + "dCode=" + data + "&" + "tCode=" + data1, datatopost, {})
+            .post("http://10.1.1.18:8094/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datatopost, {})
             .then((response) => {
               return response;
             });
@@ -312,7 +313,7 @@ const ApllicantPuropseForm = (props) => {
 
           if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
             Resp.data.map((el, i) => {
-              setRevenueDataLabels((prev) => [...prev, { label: el.name, id: el.khewats, value: el.code, khewats: el.khewats }]);
+              setRevenueDataLabels((prev) => [...prev, { label: el.name, id: el.khewats, value: el.code, khewats: el.khewats, code:el.code }]);
             });
           }
         } catch (error) {
@@ -321,8 +322,8 @@ const ApllicantPuropseForm = (props) => {
       
     };
 
-    const getMustilData = async () => {
-      if (revenueName !== "") {
+    const getMustilData = async (code) => {
+     
         const datpost = {
           RequestInfo: {
             apiId: "Rainmaker",
@@ -340,7 +341,7 @@ const ApllicantPuropseForm = (props) => {
         try {
           const Resp = await axios
             .post(
-              "http://10.1.1.18:8094/egov-mdms-service/v1/_must?" + "dCode=" + district2 + "&" + "tCode=" + tehsil.data + "&NVCode=" + revenueName.data,
+              "http://10.1.1.18:8094/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code,
               datpost,
               {}
             )
@@ -357,7 +358,7 @@ const ApllicantPuropseForm = (props) => {
         } catch (error) {
           console.log(error.message);
         }
-      }
+      
     };
 
     const getLandOwnerStateData = async () => {
@@ -577,7 +578,9 @@ const ApllicantPuropseForm = (props) => {
                             <Form.Label><b>District</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
                         <ReactMultiSelect control={control} name="district"  placeholder="District" data={districtDataLbels} labels="District" 
-                        onChange={(e)=>getTehslidata(e.value)}  />
+                        onChange={(e)=>{getTehslidata(e.value)
+                          setDistrict(e.value)
+                        }}  />
                     
                       <h3 className="error-message"style={{color:"red"}}>{errors?.district && errors?.district?.message}</h3>
                        </Col>
@@ -619,7 +622,11 @@ const ApllicantPuropseForm = (props) => {
                                             <Form.Label><h6><b>Tehsil</b></h6></Form.Label>
                                         </div> 
                                         <ReactMultiSelect control={control} name="tehsil"  placeholder="Tehsil"
-                                        data={tehsilDataLabels} labels="Tehsil"    onChange={(e)=>getRevenuStateData(e.code)}  />
+                                        data={tehsilDataLabels} labels="Tehsil"    onChange={(e)=>{getRevenuStateData(e.value)
+                                          setTehsilCode(e.value)
+                                        }
+                                        
+                                        }  />
                                             <h3 className="error-message" style={{ color: "red" }}>{errors?.tehsil && errors?.tehsil?.message}</h3>
                                         </Col>
                                         <Col md={4} xxl lg="4">
@@ -627,7 +634,7 @@ const ApllicantPuropseForm = (props) => {
                                                 <Form.Label><h6><b>Name of Revenue estate</b></h6></Form.Label>
                                             </div>
                                             <ReactMultiSelect control={control} name="revenueEstate"  placeholder="N/A"
-                                        data={revenueDataLabels} labels="Revenue Estate"   getSelectedValue={(data) => setRevenueName(data)} />
+                                        data={revenueDataLabels} labels="Revenue Estate"   onChange={(e)=>getMustilData(e.code)} />
                                             
                                             <h3 className="error-message" style={{ color: "red" }}>{errors?.revenueEstate && errors?.revenueEstate?.message}</h3>
                                         </Col>

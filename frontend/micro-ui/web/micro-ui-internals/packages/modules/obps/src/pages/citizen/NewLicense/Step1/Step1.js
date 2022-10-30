@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import { useForm } from "react-hook-form";
+import { useForm,Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
 
@@ -19,6 +19,10 @@ const ApllicantFormStep1 = (props) => {
     resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
+  const [userDetails, setUserDetails] = useState(null);
+  const userInfo = Digit.UserService.getUser()?.info || {};
+ const stateId = Digit.ULBService.getStateId();
+  const tenant = Digit.ULBService.getCurrentTenantId();
   const [authorizedDeveloper, setAuthorizedDeveloper] = useState("");
   const [authorizedPerson, setAuthorizedPerson] = useState("");
   const [authorizedmobile, setAuthorizedmobile] = useState("");
@@ -356,50 +360,30 @@ localStorage.setItem("Applicant Info",JSON.stringify(forms))
         : "N/A"
     ),]);
 
-  const getDeveloperDataLabel = async () => {
-    try { 
-       const postDistrict = {
-        tenantId: "pb",
-        uuid: [
-            "b49784fb-59d9-4d37-b837-abc9919a26fe"
-        ],
-        "RequestInfo": {
-            apiId: "Rainmaker",
-            authToken: "cf3e6e7a-0fdf-4862-a55d-3ed07bbeb143",
-           
-            msgId: "1666945960102|en_IN"
-        }
-  }
-      const Resp = await axios.post("http://localhost:3000/user/_search?_=1666935568224",postDistrict).then((response) => {
-        return response;
-      });
-      setDeveloperDataLabel(Resp.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  useEffect(() => {
-    getDeveloperDataLabel()
-  }, []);
+    const getUserInfo = async () => {
+      const uuid = userInfo?.uuid;
+      if (uuid) {
+        const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
+        usersResponse && usersResponse.user && usersResponse.user.length && setUserDetails(usersResponse.user[0]);
+        console.log("USERRESP",usersResponse);
+      }
+    };
+    useEffect(() => {
+      getUserInfo()
+    },[]);
 
-  useEffect(() => {
-    if (developerDataLabel !== undefined && developerDataLabel !== null) {
-      console.log("authorized user data Label", developerDataLabel?.user?.altContactNumber);
-    }
-  }, [developerDataLabel]);
-  console.log("data", developerDataLabel);
   useEffect(() => {
     if (developerData !== undefined && developerData !== null) {
       console.log("authorized user data", developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName);
     }
   }, [developerData]);
   console.log("data", developerData);
-  const FinalSubmitApiCall = async () => {
+  useEffect(() => {
+    if (userDetails !== null && userDetails !== undefined){
+    console.log("Auth",userDetails?.user?.[0]?.accountLocked);
     
-}
-useEffect(()=>{
-    FinalSubmitApiCall();
-},[])
+  }}, [userDetails]);
+  console.log("data", userDetails);
 
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
@@ -429,8 +413,16 @@ useEffect(()=>{
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
+               <Controller
+                  control={control}
+                  name="authorizedPerson"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPerson" />
+                  )}
+                />
 
-              <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedPerson")} />
+
+              {/* <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedPerson")} /> */}
               <h3 className="error-message" style={{ color: "red" }}>
                 {errors?.authorizedPerson && errors?.authorizedPerson?.message}
               </h3>
@@ -456,7 +448,11 @@ useEffect(()=>{
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" className="form-control" placeholder="N/A" {...register("alternatemobile")} disabled />
+              <Form.Control type="text" className="form-control" placeholder={developerDataLabel !== null && developerDataLabel !== undefined
+        ? developerDataLabel?.user?.[0]?.accountLocked
+        : "N/A"} {...register("alternatemobile")} disabled value={developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.user?.[0]?.accountLocked
+          : "N/A"}/>
               <h3 className="error-message" style={{ color: "red" }}>
                 {errors?.alternatemobile && errors?.alternatemobile?.message}
               </h3>
