@@ -245,7 +245,7 @@ const ApllicantPuropseForm = (props) => {
   } = useForm({
     mode: "onSubmit",
     reValidateMode: "onBlur",
-    resolver: yupResolver(VALIDATION_SCHEMA),
+    // resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
   const handleshow1 = (e) => {
@@ -498,7 +498,7 @@ const ApllicantPuropseForm = (props) => {
       "kanal":modalKanal,
       
     }
-    console.log("data++++++", values);
+    console.log("data++++++", data);
     // setModalValuesArray((prev)=>[...prev,values]);
    
   };
