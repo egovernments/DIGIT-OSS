@@ -19,29 +19,27 @@ const ApllicantFormStep1 = (props) => {
     resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
-  const [userDetails, setUserDetails] = useState(null);
   const userInfo = Digit.UserService.getUser()?.info || {};
-  const stateId = Digit.ULBService.getStateId();
   const tenant = Digit.ULBService.getCurrentTenantId();
-  const [authorizedDeveloper, setAuthorizedDeveloper] = useState("");
-  const [authorizedPerson, setAuthorizedPerson] = useState("");
-  const [authorizedmobile, setAuthorizedmobile] = useState("");
-  const [alternatemobile, setAlternatemobile] = useState("");
-  const [authorizedEmail, setAuthorizedEmail] = useState("");
-  const [authorizedPan, setAuthorizedPan] = useState("");
-  const [authorizedAddress, setAuthorizedAddress] = useState("");
-  const [village, setVillage] = useState("");
-  const [authorizedPinCode, setAuthorizedPinCode] = useState("");
-  const [tehsil, setTehsil] = useState("");
-  const [district, setDistrict] = useState("");
-  const [state, setState] = useState("");
-  const [status, setStatus] = useState("");
-  const [LC, setLC] = useState("");
-  const [address, setAddress] = useState("");
-  const [permanentAddress, setPermanentAddress] = useState("");
-  const [notSigned, setNotSigned] = useState("");
-  const [email, setEmail] = useState("");
-  const [authorized, setAuthorized] = useState("");
+  // const [authorizedDeveloper, setAuthorizedDeveloper] = useState("");
+  // const [authorizedPerson, setAuthorizedPerson] = useState("");
+  // const [authorizedmobile, setAuthorizedmobile] = useState("");
+  // const [alternatemobile, setAlternatemobile] = useState("");
+  // const [authorizedEmail, setAuthorizedEmail] = useState("");
+  // const [authorizedPan, setAuthorizedPan] = useState("");
+  // const [authorizedAddress, setAuthorizedAddress] = useState("");
+  // const [village, setVillage] = useState("");
+  // const [authorizedPinCode, setAuthorizedPinCode] = useState("");
+  // const [tehsil, setTehsil] = useState("");
+  // const [district, setDistrict] = useState("");
+  // const [state, setState] = useState("");
+  // const [status, setStatus] = useState("");
+  // const [LC, setLC] = useState("");
+  // const [address, setAddress] = useState("");
+  // const [permanentAddress, setPermanentAddress] = useState("");
+  // const [notSigned, setNotSigned] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [authorized, setAuthorized] = useState("");
 
   const [developerData, setDeveloperData] = useState([]);
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
@@ -55,7 +53,7 @@ const ApllicantFormStep1 = (props) => {
           newServiceInfoData: [
             {
               ApplicantInfo: {
-                authorizedDeveloper: authorizedDeveloper,
+                // authorizedDeveloper: authorizedDeveloper,
                 authorizedPerson: "sd",
                 authorizedmobile: "sds",
                 alternatemobile: "1e",
@@ -68,8 +66,8 @@ const ApllicantFormStep1 = (props) => {
                 district: "sdf",
                 state: "dsf",
                 status: "fgr",
-                LC: LC,
-                address: address,
+                // LC: LC,
+                // address: address,
                 permanentAddress: "fgd",
                 notSigned: "fgver",
                 email: "gfg",
@@ -286,28 +284,28 @@ const ApllicantFormStep1 = (props) => {
     }
   };
 
-  const forms = {
-    authorizedDeveloper: authorizedDeveloper,
-    authorizedPerson: authorizedPerson,
-    authorizedmobile: authorizedmobile,
-    alternatemobile: alternatemobile,
-    authorizedEmail: authorizedEmail,
-    authorizedPan: authorizedPan,
-    authorizedAddress: authorizedAddress,
-    village: village,
-    authorizedPinCode: authorizedPinCode,
-    tehsil: tehsil,
-    district: district,
-    state: state,
-    status: status,
-    LC: LC,
-    address: address,
-    permanentAddress: permanentAddress,
-    notSigned: notSigned,
-    email: email,
-    authorized: authorized,
-  };
-  localStorage.setItem("Applicant Info", JSON.stringify(forms));
+  // const forms = {
+  //   // authorizedDeveloper: authorizedDeveloper,
+  //   authorizedPerson: authorizedPerson,
+  //   authorizedmobile: authorizedmobile,
+  //   alternatemobile: alternatemobile,
+  //   authorizedEmail: authorizedEmail,
+  //   authorizedPan: authorizedPan,
+  //   authorizedAddress: authorizedAddress,
+  //   village: village,
+  //   authorizedPinCode: authorizedPinCode,
+  //   tehsil: tehsil,
+  //   district: district,
+  //   state: state,
+  //   status: status,
+  //   LC: LC,
+  //   address: address,
+  //   permanentAddress: permanentAddress,
+  //   notSigned: notSigned,
+  //   email: email,
+  //   authorized: authorized,
+  // };
+  // localStorage.setItem("Applicant Info", JSON.stringify(forms));
 
   const getDeveloperData = async () => {
     try {
@@ -327,8 +325,6 @@ const ApllicantFormStep1 = (props) => {
     const uuid = userInfo?.uuid;
     if (uuid) {
       const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
-      usersResponse && usersResponse.user && usersResponse.user.length && setUserDetails(usersResponse.user[0]);
-      console.log("USERRESP===", usersResponse.user);
       setValue("alternatemobile", usersResponse?.user?.[0]?.altContactNumber);
       setValue("authorizedAddress", usersResponse?.user?.[0]?.permanentAddress);
     }
@@ -371,7 +367,6 @@ const ApllicantFormStep1 = (props) => {
         );
     }
   }, [developerData]);
-  console.log("data", developerData);
 
   const getDeveloperDataLabel = async () => {
     try {
@@ -386,6 +381,7 @@ const ApllicantFormStep1 = (props) => {
   useEffect(() => {
     getDeveloperDataLabel();
   }, []);
+
   useEffect(() => {
     if (developerDataLabel !== undefined && developerDataLabel !== null) {
       setValue(
@@ -445,7 +441,6 @@ const ApllicantFormStep1 = (props) => {
       );
     }
   }, [developerDataLabel]);
-  console.log("data++", developerDataLabel?.devDetail?.[0]?.devDetail);
 
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>

@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from "react";
-import ModalForm from "../modal/modal";
-import { Button, Form, Collapse } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
-import Popup from "reactjs-popup";
-import CalculateIcon from "@mui/icons-material/Calculate";
 import InfoIcon from "@mui/icons-material/Info";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
-import { Table } from "antd";
 import WorkingTable from "../../../../components/Table";
 
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
