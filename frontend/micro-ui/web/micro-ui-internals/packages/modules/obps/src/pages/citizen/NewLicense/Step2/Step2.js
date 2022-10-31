@@ -165,9 +165,10 @@ const columns = [
     dataIndex: "marla",
   },
   {
-    key: "action",
+    // key: "action",
     title: "Action",
-    dataIndex: "action",
+    dataIndex: "",
+    render: () => <h6>Delete</h6>,
   },
 ];
 
