@@ -40,7 +40,7 @@ const ApllicantFormStep1 = (props) => {
   // const [notSigned, setNotSigned] = useState("");
   // const [email, setEmail] = useState("");
   // const [authorized, setAuthorized] = useState("");
-
+  
   const [developerData, setDeveloperData] = useState([]);
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
   const ApplicantFormSubmitHandlerForm = async (data) => {
@@ -275,7 +275,6 @@ const ApllicantFormStep1 = (props) => {
       };
 
       const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        console.log("Submit", Resp);
         return Resp;
       });
       setFinalSubmitData(Resp.data);

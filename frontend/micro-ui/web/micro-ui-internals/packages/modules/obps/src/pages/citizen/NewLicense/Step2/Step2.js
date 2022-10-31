@@ -176,21 +176,18 @@ const ApllicantPuropseForm = (props) => {
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
   const [district, setDistrict] = useState("");
-  const [state, setState] = useState("");
+ 
   const [revenueEstate, setRevenueEstate] = useState("");
   const [consolidation, setConsolidation] = useState("");
   const [show, setShow] = useState(false);
   const [PurposeformSubmitted, SetPurposeformSubmitted] = useState(false);
   const [tehsil, setTehsil] = useState({});
   const [landOwner, setLandOwner] = useState({});
+  
   const [revenueName, setRevenueName] = useState({});
   const [mustil, setMustil] = useState({});
   const [khewat, setKhewat] = useState("");
-  const [kanal, setKanal] = useState("");
-  const [marla, setMarla] = useState("");
-  const [bigha, setBigha] = useState("");
-  const [biswa, setBiswa] = useState("");
-  const [biswansi, setBiswansi] = useState("");
+ 
   const [developerCompany, setDeveloperCompany] = useState("");
   const [sector, setSector] = useState("");
   const [Rectangle, setRectangle] = useState("");
@@ -237,6 +234,7 @@ const ApllicantPuropseForm = (props) => {
   const [showhide1, setShowhide1] = useState("No");
   const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
+  
   const [displayEditModal, setDisplayEditModal] = useState("none");
   const {
     register,
@@ -259,18 +257,18 @@ const ApllicantPuropseForm = (props) => {
     setShowhide2(getshow);
   };
 
-  const handleArrayValues = () => {
-    if (tehsil.name !== "" && revenueName !== "" && mustil != "") {
-      const values = {
-        tehsil: tehsil.name,
-        revenueEstate: revenueName.name,
-        rectangleNo: mustil,
-        land: owmerName,
-      };
-      setModalValuesArray((prev) => [...prev, values]);
-      setmodal(!modal);
-    }
-  };
+  // const handleArrayValues = () => {
+  //   if (tehsil.name !== "" && revenueName !== "" && mustil != "") {
+  //     const values = {
+  //       tehsil: tehsil.name,
+  //       revenueEstate: revenueName.name,
+  //       rectangleNo: mustil,
+  //       land: owmerName,
+  //     };
+  //     setModalValuesArray((prev) => [...prev, values]);
+  //     setmodal(!modal);
+  //   }
+  // };
 
   const DistrictApiCall = async () => {
     try {
@@ -492,6 +490,21 @@ const ApllicantPuropseForm = (props) => {
     console.log("purpose", purposeSelected);
     localStorage.setItem("purpose", purposeSelected);
   };
+
+  const ApplicantPurposeModalData =(data)=>{
+    
+    const values ={
+      "tehsil":tehsilCode,
+      "kanal":modalKanal,
+      
+    }
+    console.log("data++++++", values);
+    // setModalValuesArray((prev)=>[...prev,values]);
+   
+  };
+  
+  
+
   const PurposeFormSubmitHandler = async (data) => {
     console.log("data===", data);
     props.Step2Continue({ data });
@@ -731,34 +744,30 @@ const ApllicantPuropseForm = (props) => {
       console.log(error.message);
     }
   };
-  let forms = {
-    purposeDd: purposeDd,
-    potential: potential,
-    district: district,
-    state: state,
-    ApplicationPurposeData1: {
-      tehsil: tehsil,
-      revenueEstate: revenueEstate,
-      mustil: mustil,
-      consolidation: consolidation,
-      sarsai: sarsai,
-      kanal: kanal,
-      marla: marla,
-      bigha: bigha,
-      biswansi: biswansi,
-      biswa: biswa,
-      landOwner: landOwner,
-      developerCompany: developerCompany,
-      registeringdate: registeringdate,
-      validitydate: validitydate,
-      colirrevocialble: colirrevocialble,
-      authSignature: authSignature,
-      nameAuthSign: nameAuthSign,
-      registeringAuthority: registeringAuthority,
-      registeringAuthorityDoc: registeringAuthorityDoc,
-    },
-  };
-  localStorage.setItem("Application Purpose", JSON.stringify(forms));
+  // let forms = {
+  //   purposeDd: purposeDd,
+  //   potential: potential,
+  //   district: district,
+    
+  //   ApplicationPurposeData1: {
+  //     tehsil: tehsil,
+  //     revenueEstate: revenueEstate,
+  //     mustil: mustil,
+  //     consolidation: consolidation,
+  //     sarsai: sarsai,
+   
+  //     landOwner: landOwner,
+  //     developerCompany: developerCompany,
+  //     registeringdate: registeringdate,
+  //     validitydate: validitydate,
+  //     colirrevocialble: colirrevocialble,
+  //     authSignature: authSignature,
+  //     nameAuthSign: nameAuthSign,
+  //     registeringAuthority: registeringAuthority,
+  //     registeringAuthorityDoc: registeringAuthorityDoc,
+  //   },
+  // };
+  // localStorage.setItem("Application Purpose", JSON.stringify(forms));
 
   const handleChangePurpose = (data) => {
     console.log("purpose", data?.label);
@@ -773,8 +782,7 @@ const ApllicantPuropseForm = (props) => {
     console.log("potential", potentialSelected);
     localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
-  console.log("data", tehsil);
-  console.log("Khewat", revenueName);
+ 
 
   const getDocumentData = async () => {
     if (file === null) {
@@ -808,6 +816,7 @@ const ApllicantPuropseForm = (props) => {
   }, [file]);
 
   return (
+    <div>
     <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
       <Card style={{ width: "126%" }}>
         <h2>New License</h2>
@@ -915,399 +924,7 @@ const ApllicantPuropseForm = (props) => {
               <Button type="button" variant="primary" onClick={() => setmodal(true)}>
                 Enter Details
               </Button>
-              <div>
-                <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
-                  <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
-                  <ModalBody>
-                    <Row className="ml-auto mb-3">
-                      <Col md={4} xxl lg="4">
-                        <div>
-                          <Form.Label>
-                            <h6>
-                              <b>Tehsil</b>
-                            </h6>
-                          </Form.Label>
-                        </div>
-                        <ReactMultiSelect
-                          control={control}
-                          name="tehsil"
-                          placeholder="Tehsil"
-                          data={tehsilDataLabels}
-                          labels="Tehsil"
-                          onChange={(e) => {
-                            getRevenuStateData(e.value);
-                            setTehsilCode(e.value);
-                          }}
-                        />
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.tehsil && errors?.tehsil?.message}
-                        </h3>
-                      </Col>
-                      <Col md={4} xxl lg="4">
-                        <div>
-                          <Form.Label>
-                            <h6>
-                              <b>Name of Revenue estate</b>
-                            </h6>
-                          </Form.Label>
-                        </div>
-                        <ReactMultiSelect
-                          control={control}
-                          name="revenueEstate"
-                          placeholder="N/A"
-                          data={revenueDataLabels}
-                          labels="Revenue Estate"
-                          onChange={(e) => getMustilData(e.code)}
-                        />
-
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.revenueEstate && errors?.revenueEstate?.message}
-                        </h3>
-                      </Col>
-                      <Col md={4} xxl lg="4">
-                        <div>
-                          <Form.Label>
-                            <h6>
-                              <b>Rectangle No./Mustil</b>
-                            </h6>
-                          </Form.Label>
-                        </div>
-                        <ReactMultiSelect control={control} name="mustil" placeholder="N/A" data={mustilDataLabels} labels="Rectangle No." />
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.mustil && errors?.mustil?.message}
-                        </h3>
-                      </Col>
-                    </Row>
-                    <br></br>
-                    <Row className="ml-auto mb-3">
-                      <Col md={4} xxl lg="12">
-                        <div>
-                          <label>
-                            <h6>
-                              <b>Consolidation Type</b>
-                            </h6>{" "}
-                          </label>{" "}
-                          &nbsp;&nbsp;
-                          {/* <Form.Select type="select" defaultValue="Select" placeholder="" className="form-control"
-                                onChange={(e)=>setModalConsolidation(e.target.value)} >
-                                    */}
-                          <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow2} />
-                          &nbsp;&nbsp;
-                          <label for="Yes"></label>
-                          <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
-                          <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow2} />
-                          &nbsp;&nbsp;
-                          <label for="Yes"></label>
-                          <label htmlFor="npnl">Non-Consolidated</label>
-                          {/* </Form.Select> */}
-                        </div>{" "}
-                        {showhide2 === "1" && (
-                          <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
-                            <thead>
-                              <tr>
-                                {/* {(khasraData !== undefined && khasraData.length > 0)?(khasraData.)} */}
-                                <th>
-                                  <b>Kanal</b>
-                                </th>
-                                <th>
-                                  <b>Marla</b>
-                                </th>
-                                <th>
-                                  <b>Sarsai</b>&nbsp;&nbsp;
-                                </th>
-                                {/* <th><b>Area in Marla</b>&nbsp;&nbsp;</th> */}
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder=""
-                                    onChange={(e) => setKanal(e.target.value)}
-                                    value={kanal}
-                                    onChange1={(e) => setModalKilla(e.target.value)}
-                                  ></input>
-                                </td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder=""
-                                    onChange={(e) => setMarla(e.target.value)}
-                                    value={marla}
-                                    onChange1={(e) => setModalKhewat(e.target.value)}
-                                  ></input>{" "}
-                                </td>
-                                <td>
-                                  {" "}
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder=""
-                                    onChange={(e) => setSarsai(e.target.value)}
-                                    value={sarsai}
-                                    onChange1={(e) => setModalKanal(e.target.value)}
-                                  ></input>
-                                </td>
-                                {/* <td > <input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalMarla(e.target.value)}></input></td> */}
-                              </tr>
-                            </tbody>
-                          </table>
-                        )}
-                        {showhide2 === "2" && (
-                          <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
-                            <thead>
-                              <tr>
-                                {/* {(khasraData !== undefined && khasraData.length > 0)?(khasraData.)} */}
-                                <th>
-                                  <b>Bigha</b>
-                                </th>
-                                <th>
-                                  <b>Biswa</b>
-                                </th>
-                                <th>
-                                  <b>Biswansi</b>&nbsp;&nbsp;
-                                </th>
-                                {/* <th><b>Area in Marla</b>&nbsp;&nbsp;</th> */}
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder=""
-                                    onChange={(e) => setBigha(e.target.value)}
-                                    value={bigha}
-                                    onChange1={(e) => setModalKilla(e.target.value)}
-                                  ></input>
-                                </td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder=""
-                                    onChange={(e) => setBiswa(e.target.value)}
-                                    value={biswa}
-                                    onChange1={(e) => setModalKhewat(e.target.value)}
-                                  ></input>{" "}
-                                </td>
-                                <td>
-                                  {" "}
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder=""
-                                    onChange={(e) => setBiswansi(e.target.value)}
-                                    value={biswansi}
-                                    onChange1={(e) => setModalKanal(e.target.value)}
-                                  ></input>
-                                </td>
-                                {/* <td > <input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalMarla(e.target.value)}></input></td> */}
-                              </tr>
-                            </tbody>
-                          </table>
-                        )}
-                      </Col>
-                    </Row>
-
-                    <Row className="ml-auto mb-3">
-                      <Col md={4} xxl lg="6">
-                        <div>
-                          <label>
-                            <h6>
-                              <b>Name of Land Owner</b>
-                            </h6>{" "}
-                          </label>
-                        </div>
-                        <input type="text" className="form-control" placeholder="N/A" {...register("landOwner")} onChange={(e) => console.log(e)} />
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.landOwner && errors?.landOwner?.message}
-                        </h3>
-                      </Col>
-
-                      <Col md={4} xxl lg="6">
-                        {/* <ReactMultiSelect
-
-                                            listOfData={khewatDataLabels}
-                                            labels="Owner Name"
-                                            getSelectedValue={(data) => setModalLand(data.data)}
-
-                                        ></ReactMultiSelect> */}
-                        {/* <input type="text"  placeholder="Owner Name" className="form-control" 
-                                onChange={(e)=>setModalLand(e.target.value)}
-                            /> */}
-                      </Col>
-                    </Row>
-                    <Row className="ml-auto mb-3">
-                      <div className="col col-12">
-                        <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
-                          <b>
-                            Collaboration agreement&nbsp;
-                            <InfoIcon style={{ color: "blue" }} />
-                            &nbsp;{" "}
-                          </b>
-                          &nbsp;&nbsp;
-                          <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow1} />
-                          &nbsp;&nbsp;
-                          <label for="Yes">
-                            <h6>
-                              <b>Yes</b>
-                            </h6>
-                          </label>
-                          &nbsp;&nbsp;
-                          <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow1} />
-                          &nbsp;&nbsp;
-                          <label for="No">
-                            <h6>
-                              <b>No</b>
-                            </h6>
-                          </label>
-                        </h6>
-                        {showhide1 === "Yes" && (
-                          <div className="row ">
-                            <div className="col col-4">
-                              <label for="parentLicense" className="font-weight-bold">
-                                <h6>
-                                  <b>Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered</b>
-                                </h6>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="N/A"
-                                {...register("devCompany")}
-                                onChange={(e) => setDeveloperCompany(e.target.value)}
-                                value={developerCompany}
-                              />
-                            </div>
-                            <div className="col col-4" style={{ marginTop: 15 }}>
-                              <label for="parentLicense" className="font-weight-bold">
-                                <h6>
-                                  <b>Date of registering collaboration agreement</b>
-                                </h6>
-                              </label>
-                              <input
-                                type="date"
-                                className="form-control"
-                                placeholder="N/A"
-                                {...register("registering")}
-                                onChange={(e) => setRegisteingDate(e.target.value)}
-                                value={registeringdate}
-                              />
-                            </div>
-                            <div className="col col-4" style={{ marginTop: 15 }}>
-                              <label for="parentLicense" className="font-weight-bold">
-                                <h6>
-                                  <b>Date of validity of collaboration agreement</b>
-                                </h6>
-                              </label>
-                              <input
-                                type="date"
-                                className="form-control"
-                                placeholder="N/A"
-                                {...register("dateValidity")}
-                                onChange={(e) => setValiditydate(e.target.value)}
-                                value={validitydate}
-                              />
-                            </div>
-                            <div className="col col-4" style={{ marginTop: 35 }}>
-                              <label for="parentLicense" className="font-weight-bold">
-                                <h6>
-                                  <b>Whether collaboration agreement irrevocable (Yes/No)</b>
-                                </h6>
-                              </label>
-                              <br></br>
-                              <input type="radio" value="Yes" id="Yes1" onChange={handleChange} name="Yes" />
-                              &nbsp;&nbsp;
-                              <label for="Yes">
-                                <h6>Yes</h6>
-                              </label>
-                              &nbsp;&nbsp;
-                              <input type="radio" value="No" id="No1" onChange={handleChange} name="Yes" />
-                              &nbsp;&nbsp;
-                              <label for="No">
-                                <h6>No</h6>
-                              </label>
-                            </div>
-
-                            <div className="col col-4" style={{ marginTop: 35 }}>
-                              <label for="parentLicense" className="font-weight-bold">
-                                <h6>
-                                  <b>Name of authorized signatory on behalf of land owner(s)</b>
-                                </h6>
-                              </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="N/A"
-                                {...register("authorizedSign")}
-                                onChange={(e) => setAuthSignature(e.target.value)}
-                                value={authSignature}
-                              />
-                            </div>
-                            <div className="col col-4" style={{ marginTop: 15 }}>
-                              <label for="parentLicense" className="font-weight-bold">
-                                <h6>
-                                  <b>Name of authorized signatory on behalf of developer to sign Collaboration agreement</b>
-                                </h6>
-                              </label>
-                              <input
-                                type="date"
-                                className="form-control"
-                                placeholder="N/A"
-                                {...register("authorizedDev")}
-                                onChange={(e) => setNameAuthSign(e.target.value)}
-                                value={nameAuthSign}
-                              />
-                            </div>
-                            <div className="col col-4" style={{ marginTop: 20 }}>
-                              <label for="parentLicense" className="font-weight-bold">
-                                <h6>
-                                  <b>Registring Authority</b>
-                                </h6>
-                              </label>
-                              <br></br>
-                              <input
-                                type="text"
-                                className="form-control"
-                                placeholder="N/A"
-                                {...register("registeringAuth")}
-                                onChange={(e) => setRegisteringAuthority(e.target.value)}
-                                value={registeringAuthority}
-                              />
-                            </div>
-                            <div className="col col-4" style={{ marginTop: 15 }}>
-                              <label for="parentLicense" className="font-weight-bold">
-                                <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                                  <b>
-                                    Registring Authority document&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                                  </b>
-                                </h6>
-                              </label>
-                              <br></br>
-                              <input
-                                type="file"
-                                className="form-control"
-                                onChange1={(e) => setFile({ file: e.target.files[0] })}
-                                onChange={(e) => setRegisteringAuthorityDoc(e.target.value)}
-                                value={registeringAuthorityDoc}
-                              />
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </Row>
-                    <button type="submit" style={{ float: "right" }} className="btn btn-primary" onSubmit={handleSubmit}>
-                      Submit
-                    </button>
-                  </ModalBody>
-                  <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
-                </Modal>
-              </div>
+           
             </div>
             <br></br>
 
@@ -1333,6 +950,389 @@ const ApllicantPuropseForm = (props) => {
         </Card>
       </Card>
     </form>
+    <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
+    <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
+    <ModalBody>
+      <form onSubmit={handleSubmit(ApplicantPurposeModalData)}>
+      <Row className="ml-auto mb-3">
+        <Col md={4} xxl lg="4">
+          <div>
+            <Form.Label>
+              <h6>
+                <b>Tehsil</b>
+              </h6>
+            </Form.Label>
+          </div>
+          {/* <Controller
+                  control={control}
+                  name="authorizedPerson"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPerson" />
+                  )}
+                /> */}
+          <ReactMultiSelect
+            control={control}
+            name="tehsil"
+            data={tehsilDataLabels}
+            labels="Tehsil" 
+            
+            onChange={(e) => {
+              getRevenuStateData(e.value);
+              setTehsilCode(e.value);
+            }}
+          />
+          <h3 className="error-message" style={{ color: "red" }}>
+            {errors?.tehsil && errors?.tehsil?.message}
+          </h3>
+        </Col>
+        <Col md={4} xxl lg="4">
+          <div>
+            <Form.Label>
+              <h6>
+                <b>Name of Revenue estate</b>
+              </h6>
+            </Form.Label>
+          </div>
+          <ReactMultiSelect
+            control={control}
+            name="revenueEstate"
+            placeholder="N/A"
+            data={revenueDataLabels}
+            labels="Revenue Estate"
+            onChange={(e) => getMustilData(e.code)}
+          />
+
+          <h3 className="error-message" style={{ color: "red" }}>
+            {errors?.revenueEstate && errors?.revenueEstate?.message}
+          </h3>
+        </Col>
+        <Col md={4} xxl lg="4">
+          <div>
+            <Form.Label>
+              <h6>
+                <b>Rectangle No./Mustil</b>
+              </h6>
+            </Form.Label>
+          </div>
+          <ReactMultiSelect control={control} name="mustil" placeholder="N/A" data={mustilDataLabels} labels="Rectangle No." />
+          <h3 className="error-message" style={{ color: "red" }}>
+            {errors?.mustil && errors?.mustil?.message}
+          </h3>
+        </Col>
+      </Row>
+      <br></br>
+      <Row className="ml-auto mb-3">
+        <Col md={4} xxl lg="12">
+          <div>
+            <label>
+              <h6>
+                <b>Consolidation Type</b>
+              </h6>{" "}
+            </label>{" "}
+            &nbsp;&nbsp;
+            {/* <Form.Select type="select" defaultValue="Select" placeholder="" className="form-control"
+                  onChange={(e)=>setModalConsolidation(e.target.value)} >
+                      */}
+            <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow2} />
+            &nbsp;&nbsp;
+            <label for="Yes"></label>
+            <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
+            <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow2} />
+            &nbsp;&nbsp;
+            <label for="Yes"></label>
+            <label htmlFor="npnl">Non-Consolidated</label>
+            {/* </Form.Select> */}
+          </div>{" "}
+          {showhide2 === "1" && (
+            <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+              <thead>
+                <tr>
+                  {/* {(khasraData !== undefined && khasraData.length > 0)?(khasraData.)} */}
+                  <th>
+                    <b>Kanal</b>
+                  </th>
+                  <th>
+                    <b>Marla</b>
+                  </th>
+                  <th>
+                    <b>Sarsai</b>&nbsp;&nbsp;
+                  </th>
+                  {/* <th><b>Area in Marla</b>&nbsp;&nbsp;</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                  <Form.Control type="text" className="form-control" placeholder="N/A" {...register("kanal")} disabled />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder=""
+                      onChange={(e) => setMarla(e.target.value)}
+                     
+                    ></input>{" "}
+                  </td>
+                  <td>
+                    {" "}
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder=""
+                      onChange={(e) => setSarsai(e.target.value)}
+                    
+                    ></input>
+                  </td>
+                  {/* <td > <input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalMarla(e.target.value)}></input></td> */}
+                </tr>
+              </tbody>
+            </table>
+          )}
+          {showhide2 === "2" && (
+            <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+              <thead>
+                <tr>
+                  {/* {(khasraData !== undefined && khasraData.length > 0)?(khasraData.)} */}
+                  <th>
+                    <b>Bigha</b>
+                  </th>
+                  <th>
+                    <b>Biswa</b>
+                  </th>
+                  <th>
+                    <b>Biswansi</b>&nbsp;&nbsp;
+                  </th>
+                  {/* <th><b>Area in Marla</b>&nbsp;&nbsp;</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder=""
+                      onChange={(e) => setBigha(e.target.value)}
+                     
+                    ></input>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder=""
+                      onChange={(e) => setBiswa(e.target.value)}
+                     
+                    ></input>{" "}
+                  </td>
+                  <td>
+                    {" "}
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder=""
+                      onChange={(e) => setBiswansi(e.target.value)}
+                     
+                    ></input>
+                  </td>
+                  {/* <td > <input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalMarla(e.target.value)}></input></td> */}
+                </tr>
+              </tbody>
+            </table>
+          )}
+        </Col>
+      </Row>
+
+      <Row className="ml-auto mb-3">
+        <Col md={4} xxl lg="6">
+          <div>
+            <label>
+              <h6>
+                <b>Name of Land Owner</b>
+              </h6>{" "}
+            </label>
+          </div>
+          <input type="text" className="form-control" placeholder="N/A" {...register("landOwner")} onChange={(e) => console.log(e)} />
+          <h3 className="error-message" style={{ color: "red" }}>
+            {errors?.landOwner && errors?.landOwner?.message}
+          </h3>
+        </Col>
+
+        <Col md={4} xxl lg="6">
+          {/* <ReactMultiSelect
+
+                              listOfData={khewatDataLabels}
+                              labels="Owner Name"
+                              getSelectedValue={(data) => setModalLand(data.data)}
+
+                          ></ReactMultiSelect> */}
+          {/* <input type="text"  placeholder="Owner Name" className="form-control" 
+                  onChange={(e)=>setModalLand(e.target.value)}
+              /> */}
+        </Col>
+      </Row>
+      <Row className="ml-auto mb-3">
+        <div className="col col-12">
+          <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
+            <b>
+              Collaboration agreement&nbsp;
+              <InfoIcon style={{ color: "blue" }} />
+              &nbsp;{" "}
+            </b>
+            &nbsp;&nbsp;
+            <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow1} />
+            &nbsp;&nbsp;
+            <label for="Yes">
+              <h6>
+                <b>Yes</b>
+              </h6>
+            </label>
+            &nbsp;&nbsp;
+            <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow1} />
+            &nbsp;&nbsp;
+            <label for="No">
+              <h6>
+                <b>No</b>
+              </h6>
+            </label>
+          </h6>
+          {showhide1 === "Yes" && (
+            <div className="row ">
+              <div className="col col-4">
+                <label for="parentLicense" className="font-weight-bold">
+                  <h6>
+                    <b>Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered</b>
+                  </h6>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="N/A"
+                  {...register("devCompany")}
+                
+                />
+              </div>
+              <div className="col col-4" style={{ marginTop: 15 }}>
+                <label for="parentLicense" className="font-weight-bold">
+                  <h6>
+                    <b>Date of registering collaboration agreement</b>
+                  </h6>
+                </label>
+                <input
+                  type="date"
+                  className="form-control"
+                  placeholder="N/A"
+                  {...register("registering")}
+                />
+              </div>
+              <div className="col col-4" style={{ marginTop: 15 }}>
+                <label for="parentLicense" className="font-weight-bold">
+                  <h6>
+                    <b>Date of validity of collaboration agreement</b>
+                  </h6>
+                </label>
+                <input
+                  type="date"
+                  className="form-control"
+                  placeholder="N/A"
+                  {...register("dateValidity")}
+                
+                />
+              </div>
+              <div className="col col-4" style={{ marginTop: 35 }}>
+                <label for="parentLicense" className="font-weight-bold">
+                  <h6>
+                    <b>Whether collaboration agreement irrevocable (Yes/No)</b>
+                  </h6>
+                </label>
+                <br></br>
+                <input type="radio" value="Yes" id="Yes1" onChange={handleChange} name="Yes" />
+                &nbsp;&nbsp;
+                <label for="Yes">
+                  <h6>Yes</h6>
+                </label>
+                &nbsp;&nbsp;
+                <input type="radio" value="No" id="No1" onChange={handleChange} name="Yes" />
+                &nbsp;&nbsp;
+                <label for="No">
+                  <h6>No</h6>
+                </label>
+              </div>
+
+              <div className="col col-4" style={{ marginTop: 35 }}>
+                <label for="parentLicense" className="font-weight-bold">
+                  <h6>
+                    <b>Name of authorized signatory on behalf of land owner(s)</b>
+                  </h6>
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="N/A"
+                  {...register("authorizedSign")}
+                
+                />
+              </div>
+              <div className="col col-4" style={{ marginTop: 15 }}>
+                <label for="parentLicense" className="font-weight-bold">
+                  <h6>
+                    <b>Name of authorized signatory on behalf of developer to sign Collaboration agreement</b>
+                  </h6>
+                </label>
+                <input
+                  type="date"
+                  className="form-control"
+                  placeholder="N/A"
+                  {...register("authorizedDev")}
+                  onChange={(e) => setNameAuthSign(e.target.value)}
+                  value={nameAuthSign}
+                />
+              </div>
+              <div className="col col-4" style={{ marginTop: 20 }}>
+                <label for="parentLicense" className="font-weight-bold">
+                  <h6>
+                    <b>Registring Authority</b>
+                  </h6>
+                </label>
+                <br></br>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="N/A"
+                  {...register("registeringAuth")}
+                 
+                />
+              </div>
+              <div className="col col-4" style={{ marginTop: 15 }}>
+                <label for="parentLicense" className="font-weight-bold">
+                  <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <b>
+                      Registring Authority document&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                    </b>
+                  </h6>
+                </label>
+                <br></br>
+                <input
+                  type="file"
+                  className="form-control"
+                  onChange1={(e) => setFile({ file: e.target.files[0] })}
+                 
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      </Row>
+   
+      <button type="submit" style={{ float: "right" }} className="btn btn-priary" >
+        Submit
+      </button>
+      </form>
+    </ModalBody>
+    <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
+  </Modal>
+  </div>
   );
 };
 
