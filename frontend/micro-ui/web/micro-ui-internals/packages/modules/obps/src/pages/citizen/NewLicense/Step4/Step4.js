@@ -1104,7 +1104,7 @@ const AppliedDetailForm = (props) => {
                     </div>
                   </div>)}
               <div>
-                {Purpose === "D" && (
+                {Purpose === "DDJAY" && (
 
                   <DDJAYForm ></DDJAYForm>
                 )}

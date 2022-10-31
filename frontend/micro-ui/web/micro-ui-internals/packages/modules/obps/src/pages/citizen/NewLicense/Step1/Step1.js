@@ -42,7 +42,7 @@ const ApllicantFormStep1 = (props) => {
   const [notSigned, setNotSigned] = useState("");
   const [email, setEmail] = useState("");
   const [authorized, setAuthorized] = useState("");
-
+ 
   const [developerData, setDeveloperData] = useState([]);
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
   const ApplicantFormSubmitHandlerForm = async (data) => {
@@ -309,6 +309,9 @@ const ApllicantFormStep1 = (props) => {
   };
   localStorage.setItem("Applicant Info", JSON.stringify(forms));
 
+  
+
+
   const getDeveloperData = async () => {
     try {
       const Resp = await axios.get("http://10.1.1.18:8086/user/developer/_getAuthorizedUser?mobileNumber=1111111111").then((response) => {
@@ -328,54 +331,134 @@ const ApllicantFormStep1 = (props) => {
       if (uuid) {
         const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
         usersResponse && usersResponse.user && usersResponse.user.length && setUserDetails(usersResponse.user[0]);
-        console.log("USERRESP",usersResponse);
+        console.log("USERRESP===",usersResponse.user);
+        setValue("alternatemobile",usersResponse?.user?.[0]?.altContactNumber)
+        setValue("authorizedAddress",usersResponse?.user?.[0]?.permanentAddress)
       }
     };
     useEffect(() => {
       getUserInfo()
     },[]);
 
-  useEffect(() => {
-    if (developerData !== undefined && developerData !== null) {
-      setValue(
-        "authorizedDeveloper",
-        developerData !== null && developerData !== undefined
-          ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
-          : "N/A"
-      ),
+    useEffect(() => {
+      if (developerData !== undefined && developerData !== null) {
         setValue(
-          "authorizedPerson",
+          "authorizedDeveloper",
           developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName
+            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
             : "N/A"
         ),
-        setValue(
-          "authorizedmobile",
-          developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber
-            : "N/A"
-        ),
-        setValue(
-          "authorizedEmail",
-          developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId
-            : "N/A"
-        ),
-        setValue(
-          "authorizedPan",
-          developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan
-            : "N/A"
-        );
+          setValue(
+            "authorizedPerson",
+            developerData !== null && developerData !== undefined
+              ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName
+              : "N/A"
+          ),
+          setValue(
+            "authorizedmobile",
+            developerData !== null && developerData !== undefined
+              ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber
+              : "N/A"
+          ),
+          setValue(
+            "authorizedEmail",
+            developerData !== null && developerData !== undefined
+              ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId
+              : "N/A"
+          ),
+          setValue(
+            "authorizedPan",
+            developerData !== null && developerData !== undefined
+              ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan
+              : "N/A"
+          );
+      }
+    }, [developerData]);
+    console.log("data", developerData);
+
+
+
+  const getDeveloperDataLabel = async () => {
+    try {
+      const Resp = await axios.get("http://10.1.1.18:8081/user/developer/_getDeveloperById?id=36&isAllData=true"
+
+      ).then((response) => {
+        return response;
+      });
+      setDeveloperDataLabel(Resp.data);
+    } catch (error) {
+      console.log(error.message);
     }
-  }, [developerData]);
-  console.log("data", developerData);
+  };
   useEffect(() => {
-    if (userDetails !== null && userDetails !== undefined){
-    console.log("Auth",userDetails?.user?.[0]?.accountLocked);
-    
-  }}, [userDetails]);
-  console.log("data", userDetails);
+    getDeveloperDataLabel();
+  }, []);
+  useEffect(() => {
+    if (developerDataLabel !== undefined && developerDataLabel !== null) {
+      setValue(
+        "village",
+        developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.city
+          : "N/A"
+      );
+      setValue(
+        "tehsil",
+        developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.tehsil
+          : "N/A"
+      );
+      setValue(
+        "district",
+        developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.district
+          : "N/A"
+      );
+      setValue(
+        "state",
+        developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.state
+          : "N/A"
+      );
+      setValue(
+        "status",
+        developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.showDevTypeFields
+          : "N/A"
+      );
+      setValue(
+        "address",
+        developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.registeredAddress
+          : "N/A"
+      );
+      setValue(
+        "authorizedAddress",
+        developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.addressLineOne
+          : "N/A"
+      );
+      setValue(
+        "authorizedPinCode",
+        developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.pincode
+          : "N/A"
+      );
+      
+      setValue(
+        "email",
+        developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.email
+          : "N/A"
+      );
+      setValue(
+        "permanentAddress",
+        developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.registeredAddress
+          : "N/A"
+      );
+    }
+  }, [developerDataLabel]);
+  console.log("data++", developerDataLabel?.devDetail?.[0]?.devDetail);
 
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
@@ -440,11 +523,7 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" className="form-control" placeholder={developerDataLabel !== null && developerDataLabel !== undefined
-        ? developerDataLabel?.user?.[0]?.accountLocked
-        : "N/A"} {...register("alternatemobile")} disabled value={developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.user?.[0]?.accountLocked
-          : "N/A"}/>
+              <Form.Control type="text" className="form-control"  {...register("alternatemobile")} disabled />
               <h3 className="error-message" style={{ color: "red" }}>
                 {errors?.alternatemobile && errors?.alternatemobile?.message}
               </h3>
@@ -481,7 +560,7 @@ const ApllicantFormStep1 = (props) => {
                   <b>Address 1</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" placeholder="N/A" {...register("authorizedAddress")} />
+              <Form.Control type="text" placeholder="N/A" {...register("authorizedAddress")} disabled/>
               <h3 className="error-message" style={{ color: "red" }}>
                 {errors?.authorizedAddress && errors?.authorizedAddress?.message}
               </h3>
@@ -574,7 +653,7 @@ const ApllicantFormStep1 = (props) => {
                   <b>Address for communication</b> <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" placeholder="N/A" {...register("address")} />
+              <Form.Control type="text" placeholder="N/A" {...register("address")} disabled/>
             </Col>
           </Row>
           <br></br>
@@ -586,7 +665,7 @@ const ApllicantFormStep1 = (props) => {
                   <span style={{ color: "red" }}>*</span>
                 </Form.Label>
               </div>
-              <Form.Control type="text" placeholder="N/A" {...register("permanentAddress")} disabled readOnly />
+              <Form.Control type="text" placeholder="N/A" {...register("permanentAddress")} disabled  />
             </Col>
             <Col md={4} xxl lg="4">
               <div>
@@ -626,7 +705,7 @@ const ApllicantFormStep1 = (props) => {
                     <div class="col-sm-12 text-right">
                         <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block"  >Continue</button>
                     </div></div>
-           
+           ``
         </Card>
       </Card>
     </form>

@@ -42,7 +42,7 @@ const FeesChargesForm = (props) => {
 
     const [form, setForm] = useState([]);
     const [totalArea, setTotalArea] = useState('');
-    const [potential, setPotential] = useState('');
+  
     const[purpose,setPurpose]=useState("");
     const[devPlan,setDevPlan]=useState("");
     const[scrutinyFee,setScrutinyFee]=useState("");
@@ -152,8 +152,8 @@ const FeesChargesForm = (props) => {
    
     const Purpose = JSON.parse(localStorage.getItem('purpose'))
     console.log("adf", Purpose)
-    const potential1 = JSON.parse(localStorage.getItem('potential'))
-    console.log("potential", potential1)
+    const potential = JSON.parse(localStorage.getItem('potential'))
+    console.log("potential", potential)
     const CalculateApiCall = async () => {
         try {
            

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ModalForm from "../modal/modal";
 import { Button, Form, Collapse } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { useForm ,Controller} from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import Popup from "reactjs-popup";
@@ -13,6 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
+import { Table } from 'antd';
 
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 const optionsPurposeList = [
@@ -110,8 +111,56 @@ const optionsPotentialList = [
   },
 ];
 
-const ApllicantPuropseForm = (props) => {
+const columns = [ 
+  { 
+  key: "name", 
+  title: "Tehsil", 
+  dataIndex: "name", 
+  }, 
+  { 
+  key: "email", 
+  title: "Revenue Estate", 
+  dataIndex: "email", 
+  }, 
+  { 
+  key: "address", 
+  title: "Rectangle No.", 
+  dataIndex: "address", 
+  }, 
+  { 
+  key: "phone", 
+  title: "Killa", 
+  dataIndex: "phone", 
+  }, 
+  { 
+  key: "website", 
+  title: "Land Owner", 
+  dataIndex: "website", 
+  }, 
+  {
+    key: "website",
+    title: "Consolidation Type",
+    dataIndex: "website",
+  },
+  {
+    key: "website",
+    title: "Kanal/Bigha",
+    dataIndex: "website",
+  },
+  {
+    key: "website",
+    title: "Marla/Biswa",
+    dataIndex: "website",
+  },
+  {
+    key: "website",
+    title: "Action",
+    dataIndex: "website",
+  },
+] 
 
+const ApllicantPuropseForm = (props) => {
+   
     const [form, setForm] = useState([]);
     const [purposeDd, setSelectPurpose] = useState("");
     const [potential, setPotentialDev] = useState("");
@@ -361,7 +410,7 @@ const ApllicantPuropseForm = (props) => {
       
     };
 
-    const getLandOwnerStateData = async () => {
+    const getLandOwnerStateData = async (code) => {
       const datatopos = {
         RequestInfo: {
           apiId: "Rainmaker",
@@ -377,19 +426,19 @@ const ApllicantPuropseForm = (props) => {
       };
 
       try {
-        if (revenueName.khewat !== undefined) {
+       
           const Resp = await axios
             .post(
               "http://10.1.1.18:8094/egov-mdms-service/v1/_owner?" +
                 "dCode=" +
-                district2 +
+                district +
                 "&" +
                 "tCode=" +
-                tehsil.data +
+                tehsilCode +
                 "&NVCode=" +
-                revenueName.data +
+                code +
                 "&khewat=" +
-                revenueName.khewat,
+                code.khewat,
               datatopos,
               {}
             )
@@ -402,7 +451,7 @@ const ApllicantPuropseForm = (props) => {
             Resp.data.map((el, i) => {
               setKhewatDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.khewats }]);
             });
-          }
+          
         }
       } catch (error) {
         console.log(error.message);
@@ -419,13 +468,13 @@ const ApllicantPuropseForm = (props) => {
   //   getRevenuStateData();
   // }, [district2, tehsil]);
 
-  useEffect(() => {
-    getMustilData();
-  }, [district2, tehsil, revenueName, khewat]);
+  // useEffect(() => {
+  //   getMustilData();
+  // }, [district2, tehsil, revenueName, khewat]);
 
-  useEffect(() => {
-    getLandOwnerStateData();
-  }, [district2, tehsil, revenueName.khewat]);
+  // useEffect(() => {
+  //   getLandOwnerStateData();
+  // }, [district2, tehsil, revenueName.khewat]);
 
   useEffect(()=>{
     console.log("district2",district2)
@@ -456,6 +505,242 @@ const ApllicantPuropseForm = (props) => {
   const PurposeFormSubmitHandler = async(data) => {
     console.log("data===", data);
     props.Step2Continue({ data });
+    try {
+      const postDistrict = {
+        NewServiceInfo: {
+          newServiceInfoData: [
+            {
+              ApplicantInfo: {
+                authorizedDeveloper: "",
+                authorizedPerson: "sd",
+                authorizedmobile: "sds",
+                alternatemobile: "1e",
+                authorizedEmail: "eeds",
+                authorizedPan: "fsd",
+                authorizedAddress: "",
+                village: "village",
+                authorizedPinCode: "",
+                tehsil: "dsf",
+                district: "sdf",
+                state: "dsf",
+                status: "fgr",
+                LC: LC,
+                address: address,
+                permanentAddress: "fgd",
+                notSigned: "fgver",
+                email: "gfg",
+                authorized: "rgsf",
+              },
+              ApplicantPurpose: {
+                purposeDd: "",
+                potential: "",
+                district: "",
+                state: "",
+                ApplicationPurposeData1: {
+                  tehsil: "tahsil",
+                  revenueEstate: "",
+                  mustil: "",
+                  consolidation: "",
+                  sarsai: "",
+                  kanal: "",
+                  marla: "",
+                  bigha: "",
+                  biswansi: "",
+                  biswa: "",
+                  landOwner: "",
+                  developerCompany: "",
+                  registeringdate: "",
+                  validitydate: "",
+                  colirrevocialble: "",
+                  authSignature: "",
+                  nameAuthSign: "",
+                  registeringAuthority: "",
+                  registeringAuthorityDoc: "",
+                },
+              },
+              LandSchedule: {
+                licenseApplied: "lic",
+                LicNo: "",
+                potential: "",
+                siteLoc: "",
+                approach: "",
+                approachRoadWidth: "",
+                specify: "",
+                typeLand: "",
+                thirdParty: "",
+                migrationLic: "",
+                encumburance: "",
+                litigation: "",
+                court: "",
+                insolvency: "",
+                appliedLand: "",
+                revenuerasta: "",
+                watercourse: "",
+                compactBlock: "",
+                sandwiched: "",
+                acquistion: "",
+                section4: "",
+                section6: "",
+                orderUpload: "",
+                approachable: "",
+                vacant: "",
+                construction: "",
+                ht: "",
+                gas: "",
+                nallah: "",
+                road: "",
+                land: "",
+                utilityLine: "",
+                landSchedule: "",
+                mutation: "",
+                jambandhi: "",
+                LayoutPlan: "",
+                proposedLayoutPlan: "",
+                revisedLansSchedule: "",
+              },
+              DetailsofAppliedLand: {
+                dgps: "dsg",
+                DetailsAppliedLandData1: {
+                  resplotno: "asa",
+                  reslengthmtr: "",
+                  reswidthmtr: "",
+                  resareasq: "",
+                  npnlplotno: "",
+                  npnllengthmtr: "",
+                  npnlwidthmtr: "",
+                  npnlareasq: "",
+                  ewsplotno: "",
+                  ewslengthmtr: "",
+                  ewswidthmtr: "",
+                  ewsareasq: "",
+                  complotno: "",
+                  comlengthmtr: "",
+                  comwidthmtr: "",
+                  comareasq: "",
+                  siteplotno: "",
+                  sitelengthmtr: "",
+                  sitewidthmtr: "",
+                  siteareasq: "",
+                  parkplotno: "",
+                  parklengthmtr: "",
+                  parkwidthmtr: "",
+                  parkareasq: "",
+                  publicplotno: "",
+                  publiclengthmtr: "",
+                  publicwidthmtr: "",
+                  publicareasq: "",
+                  stpplotno: "",
+                  stplengthmtr: "",
+                  stpwidthmtr: "",
+                  stpareasq: "",
+                  etpplotno: "",
+                  etplengthmtr: "",
+                  etpwidthmtr: "",
+                  etpareasq: "",
+                  wtpplotno: "",
+                  wtplengthmtr: "",
+                  wtpwidthmtr: "",
+                  wtpareasq: "",
+                  ugtplotno: "",
+                  ugtlengthmtr: "",
+                  ugtwidthmtr: "",
+                  ugtareasq: "",
+                  milkboothplotno: "",
+                  milkboothlengthmtr: "",
+                  milkboothwidthmtr: "",
+                  milkboothareasq: "",
+                  gssplotno: "",
+                  gsslengthmtr: "",
+                  gssareasq: "",
+                  resDimension: "",
+                  resEnteredArea: "",
+                  comDimension: "",
+                  comEnteredArea: "",
+                  secPlanPlot: "",
+                  secPlanLength: "",
+                  secPlanDim: "",
+                  secPlanEntered: "",
+                  greenBeltPlot: "",
+                  greenBeltLength: "",
+                  greenBeltDim: "",
+                  greenBeltEntered: "",
+                  internalPlot: "",
+                  internalLength: "",
+                  internalDim: "",
+                  internalEntered: "",
+                  otherPlot: "",
+                  otherLength: "",
+                  otherDim: "",
+                  otherEntered: "",
+                  undeterminedPlot: "",
+                  undeterminedLength: "",
+                  undeterminedDim: "",
+                  undeterminedEntered: "",
+                },
+                DetailsAppliedLandDdjay2: {
+                  frozenNo: "qw",
+                  frozenArea: "",
+                  organize: "",
+                },
+                DetailsAppliedLandIndustrial3: {
+                  colonyfiftyNo: "qwq",
+                  colonyfiftyArea: "",
+                  fiftyToTwoNo: "",
+                  fiftyToTwoArea: "",
+                  twoHundredNo: "",
+                  twoHundredArea: "",
+                  resiNo: "",
+                  resiArea: "",
+                  commerNo: "",
+                  commerArea: "",
+                  labourNo: "",
+                  labourArea: "",
+                },
+                DetailsAppliedLandResidential4: {
+                  npnlNo: "wew",
+                  npnlArea: "",
+                  ewsNo: "",
+                  ewsArea: "",
+                },
+                DetailsAppliedLandNpnl5: {
+                  surrender: "sds",
+                  pocketProposed: "",
+                  deposit: "",
+                  surrendered: "",
+                },
+                DetailsAppliedLand6: {
+                  sitePlan: "sdsd",
+                  democraticPlan: "",
+                  sectoralPlan: "",
+                  developmentPlan: "",
+                  uploadLayoutPlan: "",
+                },
+              },
+              FeesAndCharges: {
+                totalArea: "sdsd",
+                purpose: "",
+                devPlan: "",
+                scrutinyFee: "",
+                licenseFee: "",
+                conversionCharges: "",
+                payableNow: "",
+                remark: "",
+                adjustFee: "",
+              },
+            },
+          ],
+        },
+      };
+
+      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
+        console.log("Submit", Resp);
+        return Resp;
+      });
+      setFinalSubmitData(Resp.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  
   };
   let forms = {
     purposeDd: purposeDd,
@@ -487,13 +772,14 @@ const ApllicantPuropseForm = (props) => {
   localStorage.setItem("Application Purpose", JSON.stringify(forms));
 
   const handleChangePurpose = (data) => {
-    const purposeSelected = data.data;
+    console.log("purpose", data?.label);
+    const purposeSelected = data?.label;
     setSelectPurpose(purposeSelected);
-    console.log("purpose", purposeSelected);
     localStorage.setItem("purpose", JSON.stringify(purposeSelected));
   };
   const handleChangePotential = (data) => {
-    const potentialSelected = data.data;
+    console.log("potential", data);
+    const potentialSelected = data?.label;
     setPotentialDev(potentialSelected);
     console.log("potential", potentialSelected);
     localStorage.setItem("potential", JSON.stringify(potentialSelected));
@@ -532,14 +818,6 @@ const ApllicantPuropseForm = (props) => {
     getDocumentData();
   }, [file]);
 
-//   const handleEdit = (index) => {
-//     console.log("edit", index);
-//     setEditValues(modalValuesArray[index]);
-//     if (displayEditModal === "block") {
-//       setDisplayEditModal("none");
-//     } else {
-//       setDisplayEditModal("block");
-//     }
 
     return (
         <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}> 
@@ -547,13 +825,16 @@ const ApllicantPuropseForm = (props) => {
         <h2>New License</h2>
        <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
             <Form.Group  >
-                {/* <ModalForm displayEditModal={displayEditModal} editDataIndex={editValues} /> */}
+               
                 <Row className="ml-auto" style={{ marginBottom: 5 }}>
                     <Col md={4} xxl lg="3">
                         <div>
                             <Form.Label><b>Puropse Of License</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
-                        <ReactMultiSelect control={control} name="purposeDd"  placeholder="Purpose" data={optionsPurposeList} labels="Purpose" getSelectedValue={handleChangePurpose} 
+                  
+                        <ReactMultiSelect control={control} name="purposeDd"  onChange={handleChangePurpose}
+                         placeholder="Purpose" data={optionsPurposeList} 
+                        labels="Purpose" 
                          />
                       <h3 className="error-message"style={{color:"red"}}>{errors?.purposeDd && errors?.purposeDd?.message}</h3>
                        </Col>
@@ -569,7 +850,7 @@ const ApllicantPuropseForm = (props) => {
                             <Form.Label><b>Potential Zone:</b> <span style={{ color: "red" }}>*</span></Form.Label>
                         </div>
                         <ReactMultiSelect control={control} name="potential"  placeholder="Potential" data={optionsPotentialList} labels="Potential"
-                         getSelectedValue={handleChangePotential}   />
+                         onChange={handleChangePotential}   />
                       <h3 className="error-message"style={{color:"red"}}>{errors?.potential && errors?.potential?.message}</h3>
                        </Col>
                        
@@ -622,7 +903,7 @@ const ApllicantPuropseForm = (props) => {
                                             <Form.Label><h6><b>Tehsil</b></h6></Form.Label>
                                         </div> 
                                         <ReactMultiSelect control={control} name="tehsil"  placeholder="Tehsil"
-                                        data={tehsilDataLabels} labels="Tehsil"    onChange={(e)=>{getRevenuStateData(e.value)
+                                        data={tehsilDataLabels} labels="Tehsil"  onChange={(e)=>{getRevenuStateData(e.value)
                                           setTehsilCode(e.value)
                                         }
                                         
@@ -643,7 +924,7 @@ const ApllicantPuropseForm = (props) => {
                                             <Form.Label><h6><b>Rectangle No./Mustil</b></h6></Form.Label>
                                         </div>
                                         <ReactMultiSelect control={control} name="mustil"  placeholder="N/A"
-                                        data={mustilDataLabels} labels="Rectangle No."  getSelectedValue={(data) => setMustil(data.data)} />
+                                        data={mustilDataLabels} labels="Rectangle No."  />
                                             <h3 className="error-message" style={{ color: "red" }}>{errors?.mustil && errors?.mustil?.message}</h3>
                                         </Col>
 
@@ -729,7 +1010,9 @@ const ApllicantPuropseForm = (props) => {
 
                                         </div>
                                         <input type="text" className="form-control" placeholder="N/A"
-                                                {...register("landOwner")} />
+                                                {...register("landOwner")}  
+                                                onChange={(e)=> console.log(e)}  
+                                                />
                                             <h3 className="error-message" style={{ color: "red" }}>{errors?.landOwner && errors?.landOwner?.message}</h3>
                                         </Col>
 
@@ -818,10 +1101,10 @@ const ApllicantPuropseForm = (props) => {
 
                                 </Row>
                                 <button
-                                    type="button"
+                                    type="submit"
                                     style={{ float: "right" }}
                                     className="btn btn-primary"
-                                    onClick={handleArrayValues}
+                                    onSubmit={handleSubmit}
                                 >
                                     Submit
                                 </button>
@@ -835,72 +1118,9 @@ const ApllicantPuropseForm = (props) => {
                 <br></br>
 
                 <div className="applt" style={{ overflow: "auto" }}>
-                    <table className="table table-bordered" style={{ overflow: "auto" }}>
-                        <thead>
-                            <tr>
-                                <th>Tehsil</th>
-                                <th>Revenue estate</th>
-                                <th>Rectangle No.</th>
-                                <th>Killa</th>
-                                <th>Land owner</th>
-                                <th>Consolidation Type</th>
-                                <th>Kanal/Bigha</th>
-                                <th>Marla/Biswa</th>
-                                <th>Khewat</th>
-                                <th>Action</th>
-
-
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {
-                                (modalValuesArray.length > 0) ?
-                                    modalValuesArray.map((elementInArray, input) => {
-                                        return (
-                                            <tr >
-                                                <td ><input type="text" value={elementInArray.tehsil}
-                                                    placeholder={elementInArray.tehsil} className="form-control" disabled /></td>
-                                                <td ><input type="text" value={elementInArray.revenueEstate}
-                                                    placeholder={elementInArray.revenueEstate} className="form-control" disabled /></td>
-                                                <td ><input type="text" value={elementInArray.rectangleNo}
-                                                    placeholder={elementInArray.rectangleNo} className="form-control" disabled /></td>
-                                                <td class="text-center"><input type="text" value={elementInArray.killa}
-                                                    placeholder={elementInArray.killa} className="form-control" disabled /></td>
-                                                <td class="text-center"><input type="text" value={elementInArray.land}
-                                                    placeholder={elementInArray.land} className="form-control" disabled /></td>
-                                                <td class="text-center"> <input type="text" value={elementInArray.consolidation}
-                                                    placeholder={elementInArray.consolidation} className="form-control" disabled /> </td>
-                                                <td class="text-center"><input type="text" value={elementInArray.kanal}
-                                                    placeholder={elementInArray.kanal} className="form-control" disabled /></td>
-                                                <td class="text-center"><input type="text" value={elementInArray.marla}
-                                                    placeholder={elementInArray.marla} className="form-control" disabled /></td>
-                                                <td class="text-center"><input type="text" value={elementInArray.khewat}
-                                                    placeholder={elementInArray.khewat} className="form-control" disabled /></td>
-                                                <td >< EditIcon style={{ color: "blue" }} onClick={() => handleEdit(input)} /><DeleteIcon style={{ color: "blue" }} onClick={() => handleDelete(i)} /></td>
-                                                {/* <td class="text-center"><input type="text" value={elementInArray.bigha}
-                        placeholder={elementInArray.bigha} className="form-control" disabled/></td> */}
-                                                {/* <td class="text-center"><input type="text" value={elementInArray.biswa}
-                        placeholder={elementInArray.biswa} className="form-control" disabled/></td>
-                    <td class="text-center"><input type="text"value={elementInArray.biswansi}
-                        placeholder={elementInArray.biswansi} className="form-control" disabled/></td> */}
-                                                {/* <td class="text-center"><input type="text" value={elementInArray.area}
-                        placeholder={elementInArray.area}className="form-control"disabled /></td>
-                    <td class="text-center"> <input type="text"value={elementInArray.collaboration}
-                        placeholder={elementInArray.collaboration} className="form-control"disabled /></td> */}
-
-                                            </tr>
-                                        );
-                                    })
-                                    :
-                                    <p>Click on Enter Details to Add More </p>
-                            }
-                        </tbody>
-                    </table>
+                <Table className="table table-bordered" columns={columns} pagination={false} /> 
+                    
                 </div>
-
-
-
             </Form.Group>
             <div class="row">
                 <div class="col-sm-12 text-left">
