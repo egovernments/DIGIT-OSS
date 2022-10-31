@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import { useForm,Controller } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
 
@@ -21,7 +21,7 @@ const ApllicantFormStep1 = (props) => {
   });
   const [userDetails, setUserDetails] = useState(null);
   const userInfo = Digit.UserService.getUser()?.info || {};
- const stateId = Digit.ULBService.getStateId();
+  const stateId = Digit.ULBService.getStateId();
   const tenant = Digit.ULBService.getCurrentTenantId();
   const [authorizedDeveloper, setAuthorizedDeveloper] = useState("");
   const [authorizedPerson, setAuthorizedPerson] = useState("");
@@ -42,7 +42,7 @@ const ApllicantFormStep1 = (props) => {
   const [notSigned, setNotSigned] = useState("");
   const [email, setEmail] = useState("");
   const [authorized, setAuthorized] = useState("");
- 
+
   const [developerData, setDeveloperData] = useState([]);
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
   const ApplicantFormSubmitHandlerForm = async (data) => {
@@ -309,9 +309,6 @@ const ApllicantFormStep1 = (props) => {
   };
   localStorage.setItem("Applicant Info", JSON.stringify(forms));
 
-  
-
-
   const getDeveloperData = async () => {
     try {
       const Resp = await axios.get("http://10.1.1.18:8086/user/developer/_getAuthorizedUser?mobileNumber=1111111111").then((response) => {
@@ -326,63 +323,59 @@ const ApllicantFormStep1 = (props) => {
     getDeveloperData();
   }, []);
 
-    const getUserInfo = async () => {
-      const uuid = userInfo?.uuid;
-      if (uuid) {
-        const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
-        usersResponse && usersResponse.user && usersResponse.user.length && setUserDetails(usersResponse.user[0]);
-        console.log("USERRESP===",usersResponse.user);
-        setValue("alternatemobile",usersResponse?.user?.[0]?.altContactNumber)
-        setValue("authorizedAddress",usersResponse?.user?.[0]?.permanentAddress)
-      }
-    };
-    useEffect(() => {
-      getUserInfo()
-    },[]);
+  const getUserInfo = async () => {
+    const uuid = userInfo?.uuid;
+    if (uuid) {
+      const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
+      usersResponse && usersResponse.user && usersResponse.user.length && setUserDetails(usersResponse.user[0]);
+      console.log("USERRESP===", usersResponse.user);
+      setValue("alternatemobile", usersResponse?.user?.[0]?.altContactNumber);
+      setValue("authorizedAddress", usersResponse?.user?.[0]?.permanentAddress);
+    }
+  };
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
-    useEffect(() => {
-      if (developerData !== undefined && developerData !== null) {
+  useEffect(() => {
+    if (developerData !== undefined && developerData !== null) {
+      setValue(
+        "authorizedDeveloper",
+        developerData !== null && developerData !== undefined
+          ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
+          : "N/A"
+      ),
         setValue(
-          "authorizedDeveloper",
+          "authorizedPerson",
           developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
+            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName
             : "N/A"
         ),
-          setValue(
-            "authorizedPerson",
-            developerData !== null && developerData !== undefined
-              ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName
-              : "N/A"
-          ),
-          setValue(
-            "authorizedmobile",
-            developerData !== null && developerData !== undefined
-              ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber
-              : "N/A"
-          ),
-          setValue(
-            "authorizedEmail",
-            developerData !== null && developerData !== undefined
-              ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId
-              : "N/A"
-          ),
-          setValue(
-            "authorizedPan",
-            developerData !== null && developerData !== undefined
-              ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan
-              : "N/A"
-          );
-      }
-    }, [developerData]);
-    console.log("data", developerData);
-
-
+        setValue(
+          "authorizedmobile",
+          developerData !== null && developerData !== undefined
+            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber
+            : "N/A"
+        ),
+        setValue(
+          "authorizedEmail",
+          developerData !== null && developerData !== undefined
+            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId
+            : "N/A"
+        ),
+        setValue(
+          "authorizedPan",
+          developerData !== null && developerData !== undefined
+            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan
+            : "N/A"
+        );
+    }
+  }, [developerData]);
+  console.log("data", developerData);
 
   const getDeveloperDataLabel = async () => {
     try {
-      const Resp = await axios.get("http://10.1.1.18:8081/user/developer/_getDeveloperById?id=36&isAllData=true"
-
-      ).then((response) => {
+      const Resp = await axios.get("http://10.1.1.18:8081/user/developer/_getDeveloperById?id=36&isAllData=true").then((response) => {
         return response;
       });
       setDeveloperDataLabel(Resp.data);
@@ -397,9 +390,7 @@ const ApllicantFormStep1 = (props) => {
     if (developerDataLabel !== undefined && developerDataLabel !== null) {
       setValue(
         "village",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.city
-          : "N/A"
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.city : "N/A"
       );
       setValue(
         "tehsil",
@@ -415,9 +406,7 @@ const ApllicantFormStep1 = (props) => {
       );
       setValue(
         "state",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.state
-          : "N/A"
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.state : "N/A"
       );
       setValue(
         "status",
@@ -443,12 +432,10 @@ const ApllicantFormStep1 = (props) => {
           ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.pincode
           : "N/A"
       );
-      
+
       setValue(
         "email",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.email
-          : "N/A"
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.email : "N/A"
       );
       setValue(
         "permanentAddress",
@@ -462,33 +449,42 @@ const ApllicantFormStep1 = (props) => {
 
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
-       <Card style={{ width: "126%"}}>
-       <h2>New License</h2>
-      <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
-        <Form.Group className="justify-content-center" controlId="formBasicEmail">
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>Developer</b> <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedDeveloper")} 
-                onChange={(e) => setAuthorizedDeveloper(e.target.value)} value={ developerData !== null && developerData !== undefined
-                  ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
-                  : "N/A"} />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.authorizedDeveloper && errors?.authorizedDeveloper?.message}
-              </h3>
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>Authorized Person Name </b>
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-               <Controller
+      <Card style={{ width: "126%" }}>
+        <h2>New License</h2>
+        <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
+          <Form.Group className="justify-content-center" controlId="formBasicEmail">
+            <Row className="ml-auto" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>Developer</b> <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="N/A"
+                  disabled
+                  {...register("authorizedDeveloper")}
+                  // onChange={(e) => setAuthorizedDeveloper(e.target.value)}
+                  // value={
+                  //   developerData !== null && developerData !== undefined
+                  //     ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
+                  //     : "N/A"
+                  // }
+                />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.authorizedDeveloper && errors?.authorizedDeveloper?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>Authorized Person Name </b>
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Controller
                   control={control}
                   name="authorizedPerson"
                   render={({ field: { onChange, value } }) => (
@@ -496,216 +492,222 @@ const ApllicantFormStep1 = (props) => {
                   )}
                 />
 
-
-              {/* <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedPerson")} /> */}
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.authorizedPerson && errors?.authorizedPerson?.message}
-              </h3>
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>Authorized Mobile No</b> <span style={{ color: "red" }}>*</span>
-                </Form.Label>
+                {/* <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedPerson")} /> */}
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.authorizedPerson && errors?.authorizedPerson?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>Authorized Mobile No</b> <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" className="form-control" placeholder="N/A" {...register("authorizedmobile")} disabled />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.authorizedmobile && errors?.authorizedmobile?.message}
+                </h3>
+              </Col>
+            </Row>
+            <br></br>
+            <Row className="ml-auto" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>Alternate Mobile No </b>
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" className="form-control" {...register("alternatemobile")} disabled />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.alternatemobile && errors?.alternatemobile?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>Email ID</b> <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("authorizedEmail")} disabled />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.authorizedEmail && errors?.authorizedEmail?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>PAN No </b>
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("authorizedPan")} disabled />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.authorizedPan && errors?.authorizedPan?.message}
+                </h3>
+              </Col>
+            </Row>
+            <br></br>
+            <Row className="ml-auto" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>Address 1</b> <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("authorizedAddress")} disabled />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.authorizedAddress && errors?.authorizedAddress?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>Village/City </b>
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("village")} disabled />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.village && errors?.village?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>Pincode</b> <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("authorizedPinCode")} disabled />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.authorizedPinCode && errors?.authorizedPinCode?.message}
+                </h3>
+              </Col>
+            </Row>
+            <br></br>
+            <Row className="ml-auto" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>Tehshil </b>
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("tehsil")} disabled />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.tehsil && errors?.tehsil?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>District</b> <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("district")} disabled />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.district && errors?.district?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>State</b> <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("state")} disabled />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.state && errors?.state?.message}
+                </h3>
+              </Col>
+            </Row>
+            <br></br>
+            <Row className="ml-auto" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>Status (Individual/ Company/ Firm/ LLP etc.)</b>
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("status")} disabled readOnly />
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label style={{ marginTop: "15" }}>
+                    <b>LC-I signed by </b>
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("LC")} />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.LC && errors?.LC?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>Address for communication</b> <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("address")} disabled />
+              </Col>
+            </Row>
+            <br></br>
+            <Row className="ml-auto" style={{ marginBottom: 5 }}>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>Permanent address in case of individual/ registered office address in case other than individual</b>
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("permanentAddress")} disabled />
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <b>If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)</b>
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("notSigned")} />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.notSigned && errors?.notSigned?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4" style={{ marginTop: 23 }}>
+                <div>
+                  <Form.Label>
+                    <b>Email ID for communication</b>
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("email")} disabled readOnly />
+              </Col>
+            </Row>
+            <br></br>
+            <Row className="ml-auto" style={{ marginBottom: 5 }}>
+              <div className="col col-4">
+                <div>
+                  <Form.Label>
+                    <b>Name of the authorized person to sign the application</b>
+                    <span style={{ color: "red" }}>*</span>
+                    <i className="fa fa-info-circle-fill" />
+                  </Form.Label>
+                </div>
+                <Form.Control type="text" placeholder="N/A" {...register("authorized")} disabled readOnly />
               </div>
-              <Form.Control type="text" className="form-control" placeholder="N/A" {...register("authorizedmobile")} disabled />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.authorizedmobile && errors?.authorizedmobile?.message}
-              </h3>
-            </Col>
-          </Row>
-          <br></br>
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>Alternate Mobile No </b>
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" className="form-control"  {...register("alternatemobile")} disabled />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.alternatemobile && errors?.alternatemobile?.message}
-              </h3>
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>Email ID</b> <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("authorizedEmail")} disabled />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.authorizedEmail && errors?.authorizedEmail?.message}
-              </h3>
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>PAN No </b>
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("authorizedPan")} disabled />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.authorizedPan && errors?.authorizedPan?.message}
-              </h3>
-            </Col>
-          </Row>
-          <br></br>
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>Address 1</b> <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("authorizedAddress")} disabled/>
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.authorizedAddress && errors?.authorizedAddress?.message}
-              </h3>
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>Village/City </b>
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("village")} disabled />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.village && errors?.village?.message}
-              </h3>
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>Pincode</b> <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("authorizedPinCode")} disabled />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.authorizedPinCode && errors?.authorizedPinCode?.message}
-              </h3>
-            </Col>
-          </Row>
-          <br></br>
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>Tehshil </b>
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("tehsil")} disabled />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.tehsil && errors?.tehsil?.message}
-              </h3>
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>District</b> <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("district")} disabled />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.district && errors?.district?.message}
-              </h3>
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>State</b> <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("state")} disabled />
-              <h3 className="error-message" style={{ color: "red" }}>
-                {errors?.state && errors?.state?.message}
-              </h3>
-            </Col>
-          </Row>
-          <br></br>
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>Status (Individual/ Company/ Firm/ LLP etc.)</b>
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("status")} disabled readOnly />
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label style={{ marginTop: "15" }}>
-                  <b>LC-I signed by </b>
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("LC")}   onChange={(e) => setLC(e.target.value)} value={LC}/>
-              <h3 className="error-message"style={{color:"red"}}>{errors?.LC && errors?.LC?.message}</h3>
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>Address for communication</b> <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("address")} disabled/>
-            </Col>
-          </Row>
-          <br></br>
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>Permanent address in case of individual/ registered office address in case other than individual</b>
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("permanentAddress")} disabled  />
-            </Col>
-            <Col md={4} xxl lg="4">
-              <div>
-                <Form.Label>
-                  <b>If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)</b>
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("notSigned")} onChange={(e) => setNotSigned(e.target.value)} value={notSigned}/>
-              <h3 className="error-message"style={{color:"red"}}>{errors?.notSigned && errors?.notSigned?.message}</h3>
-            </Col>
-            <Col md={4} xxl lg="4" style={{ marginTop: 23 }}>
-              <div>
-                <Form.Label>
-                  <b>Email ID for communication</b>
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("email")} disabled readOnly />
-            </Col>
-          </Row>
-          <br></br>
-          <Row className="ml-auto" style={{ marginBottom: 5 }}>
-            <div className="col col-4">
-              <div>
-                <Form.Label>
-                  <b>Name of the authorized person to sign the application</b>
-                  <span style={{ color: "red" }}>*</span>
-                  <i className="fa fa-info-circle-fill" />
-                </Form.Label>
-              </div>
-              <Form.Control type="text" placeholder="N/A" {...register("authorized")} disabled readOnly />
-            </div>
-          </Row>
+            </Row>
           </Form.Group>
-                <div class="row">
-                    <div class="col-sm-12 text-right">
-                        <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block"  >Continue</button>
-                    </div></div>
-           ``
+          <div class="row">
+            <div class="col-sm-12 text-right">
+              <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+                Continue
+              </button>
+            </div>
+          </div>
+          ``
         </Card>
       </Card>
     </form>
