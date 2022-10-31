@@ -8992,7 +8992,7 @@ img, video {
   padding-left: 8px;
   height: 2rem;
   --border-opacity:1;
-  border-bottom: 1px solid #1266af!important;
+  border-bottom: 1px solid #464646!important;
   line-height: 2rem; }
 
 .card-textarea, .employee-card-input-error, .employee-card-textarea {
@@ -13614,7 +13614,12 @@ body {
   .HomePageWrapper .BannerWithSearch {
     margin-bottom: 56px;
     min-width: 100vw;
-    margin-left: calc(-15vw - 16px); }
+    margin-left: calc(-10vw - 16px); 
+    background-image: url(http://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/bg-login.jpg);
+    height: 24vw;
+    background-position: top;
+    background-size: cover;
+  }
   .HomePageWrapper .BannerWithSearch .Search {
     width: calc(70% - 32px);
     left: calc(15% + 25px);

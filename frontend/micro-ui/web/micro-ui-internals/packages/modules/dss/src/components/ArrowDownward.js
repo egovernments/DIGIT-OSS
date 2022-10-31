@@ -1,5 +1,5 @@
 import React from "react";
-import {ReactComponent as Arrow_Downward} from "../images/Arrow_Downward.svg"
+import Arrow_Downward from "../images/Arrow_Downward.svg"
 
 export function ArrowDownwardElement(marginRight, marginLeft)
 {
