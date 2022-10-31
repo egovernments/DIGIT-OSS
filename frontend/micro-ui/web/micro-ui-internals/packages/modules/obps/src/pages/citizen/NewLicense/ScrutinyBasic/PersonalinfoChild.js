@@ -43,6 +43,9 @@ const PersonalinfoChild = (props) => {
   const [labelValue, setLabelValue] = useState("");
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
+  const [fieldValue, setFieldValue] = useState("");
+
+  const personalinfo = props.personalinfo;
 
   const handlemodaldData = (data) => {
     setmodaldData(data.data);
@@ -267,7 +270,11 @@ const PersonalinfoChild = (props) => {
             <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
           </div>
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
+              readOnly
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -279,7 +286,11 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("developer"), setSmShow(true), console.log("modal open");
+                setLabelValue("developer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  // ,
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
               }}
             ></ReportProblemIcon>
             <ModalChild
@@ -288,6 +299,7 @@ const PersonalinfoChild = (props) => {
               isYesorNoChecked={handleYesOrNochecked}
               displaymodal={smShow}
               setColor={setColor}
+              fieldValue={fieldValue}
             ></ModalChild>
             {/* <BootstrapSwitchButton
             checked={true}
@@ -406,7 +418,11 @@ const PersonalinfoChild = (props) => {
           </Form.Label>
           <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              // placeholder={personalinfo.authorizedPerson}
+              readOnly
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -419,6 +435,8 @@ const PersonalinfoChild = (props) => {
               }}
               onClick={() => {
                 setLabelValue("Authorized Person Name"), setSmShow(true), console.log("modal open");
+                // ,
+                // setFieldValue(personalinfo.authorizedPerson);
               }}
             ></ReportProblemIcon>
           </div>
@@ -593,6 +611,8 @@ const PersonalinfoChild = (props) => {
               }}
               onClick={() => {
                 setLabelValue("Authorized MobileNo. 2 "), setSmShow(true), console.log("modal open");
+                // ,
+                // setFieldValue(personalinfo.authorizedPerson);
               }}
             ></ReportProblemIcon>
           </div>

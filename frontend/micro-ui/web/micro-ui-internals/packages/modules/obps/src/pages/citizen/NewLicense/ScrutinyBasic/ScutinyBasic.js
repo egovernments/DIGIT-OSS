@@ -11,6 +11,7 @@ import ScrutinyDevelopment from "./ScrutinyDevelopment/ScrutinyDevelopment";
 import { Button, Row, Col } from "react-bootstrap";
 import LicenseDetailsScrutiny from "../ScrutinyBasic/Developer/LicenseDetailsScrutiny";
 import { useForkRef } from "@mui/material";
+import axios from "axios";
 // import AddIcon from "@mui/icons-material/Add";
 
 const ScrutitnyForms = () => {
@@ -42,7 +43,8 @@ const ScrutitnyForms = () => {
   const [defaultheightApplied, setDefaultheightApplied] = useState(0);
   const [defaultheightFee, setDefaultheightFee] = useState(0);
   const [open, setOpen] = useState(false);
-
+  const [apiResppnse, setApiResponse] = useState({});
+  const [remarksResponse, setRemarksResponse] = useState({});
   const [uncheckedValue, setUncheckedVlue] = useState([]);
 
   const getUncheckedPersonalinfos = (data) => {
@@ -95,10 +97,57 @@ const ScrutitnyForms = () => {
     setDisplayFeeandChargesInfo(data.data);
     console.log(data);
   };
-  // const getUncheckedJeLandInfo = (data) => {
-  //   setDisplayJeLand(data.data);
-  //   console.log(data);
-  // };
+  const handleGetInputFieldsValues = async () => {
+    try {
+      const Resp = await axios.get("/land-services/new/licenses/_get?id=1099696").then((response) => {
+        return response.data;
+      });
+
+      console.log("Response From API", Resp);
+      setApiResponse(Resp);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleGetRemarkssValues = async () => {
+    const dataToSend = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        action: "_create",
+        did: 1,
+        key: "",
+        msgId: "20170310130900|en_IN",
+        ts: 0,
+        ver: ".01",
+        authToken: "80458c19-3b48-4aa8-b86e-e2e195e6753a",
+        userInfo: {
+          uuid: "5fe074f2-c12d-4a27-bd7b-92d15f9ab19c",
+          name: "rahul7",
+          userName: "rahul7",
+          tenantId: "hr",
+          id: 97,
+          mobileNumber: "7895877833",
+        },
+      },
+    };
+    try {
+      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=123", dataToSend).then((response) => {
+        return response.data;
+      });
+
+      console.log("Response From API", Resp);
+      setRemarksResponse(Resp);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetInputFieldsValues();
+  }, []);
+  useEffect(() => {
+    handleGetRemarkssValues();
+  }, []);
 
   console.log(uncheckedValue);
   console.log("React", purpose);
@@ -158,18 +207,8 @@ const ScrutitnyForms = () => {
       setDefaultheightFee(0);
     }
   };
-  //   const handleScrolltoJeLandInfo = () => {
-  //     jeLandInfoRef.current.scrollIntoView({ behavior: "smooth" });
-  //   };
-
-  // const disapprovalilIst = (
-
-  // );
-  // useEffect(() => {
-  //   return disapprovalilIst;
-  // }, [displayPurpose, displayAppliedLand, displayFeeandCharges, displayPersonal, displayGeneral]);
-  // console.log("asddg", displayPersonal);
-
+  console.log("scrutiny form api get", apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantInfo : apiResppnse);
+  console.log("remarks api", remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null);
   return (
     <div>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
@@ -239,6 +278,7 @@ const ScrutitnyForms = () => {
               passCheckedList={getCheckedPersonalInfoValue}
               // heightPersonal={defaultHeightPersonal}
               onClick={() => setOpen(!open)}
+              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantInfo : null}
             ></Personalinfo>
           </div>
           <div>
@@ -369,7 +409,7 @@ const ScrutitnyForms = () => {
         {/* <HistoryList></HistoryList> */}
       </div>
       <div style={{ position: "relative", width: "100%", height: "50%", display: "flex" }}>
-        <ScrutinyDevelopment></ScrutinyDevelopment>
+        <ScrutinyDevelopment remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}></ScrutinyDevelopment>
       </div>
     </div>
   );

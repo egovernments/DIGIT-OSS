@@ -44,6 +44,9 @@ const Personalinfo = (props) => {
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
 
+  const applicantInfoPersonal = props.ApiResponseData;
+  console.log("personal info applicant data", applicantInfoPersonal);
+
   const handlemodaldData = (data) => {
     setmodaldData(data.data);
     setSmShow(false);
@@ -340,7 +343,10 @@ const Personalinfo = (props) => {
       </Collapse> */}
           <Collapse in={open2}>
             <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}>
-              <PersonalinfoChild displayPersonal={open2 ? "block" : "none"} />
+              <PersonalinfoChild
+                personalinfo={applicantInfoPersonal !== null ? applicantInfoPersonal : null}
+                displayPersonal={open2 ? "block" : "none"}
+              />
 
               {/* <hr></hr> */}
               {/* </Card> */}
