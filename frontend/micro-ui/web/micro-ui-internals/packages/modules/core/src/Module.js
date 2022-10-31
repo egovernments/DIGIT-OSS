@@ -44,6 +44,7 @@ export const DigitUI = ({ stateCode, registry, enabledModules, moduleReducers })
         staleTime: 15 * 60 * 1000,
         cacheTime: 50 * 60 * 1000,
         retryDelay: (attemptIndex) => Infinity,
+        retry:false
         /*
           enable this to have auto retry incase of failure
           retryDelay: attemptIndex => Math.min(1000 * 3 ** attemptIndex, 60000)
