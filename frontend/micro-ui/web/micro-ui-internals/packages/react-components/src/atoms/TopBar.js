@@ -6,7 +6,7 @@ import { NotificationBell } from "./svgindex";
 const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDetails, notificationCount, notificationCountLoaded, cityOfCitizenShownBesideLogo, onNotificationIconClick, hideNotificationIconOnSomeUrlsWhenNotLoggedIn }) => {
   const [profileName,setProfileName]=useState("Noname")
   const userData = JSON.parse(localStorage.getItem('user-info'));
-  console.log(userData);
+  // console.log(userData);
   useEffect(()=>{
     if (userData!==null && userData!==undefined && userData.name!==undefined) {
       setProfileName(userData.name)

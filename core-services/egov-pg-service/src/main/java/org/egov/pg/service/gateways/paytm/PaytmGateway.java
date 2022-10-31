@@ -27,7 +27,7 @@ import java.util.TreeMap;
 
 @Service
 @Slf4j
-public class PaytmGateway implements Gateway {
+public abstract class PaytmGateway implements Gateway {
 
     private static final String GATEWAY_NAME = "PAYTM";
     private final String MID;

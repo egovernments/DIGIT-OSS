@@ -57,17 +57,6 @@ const CheckPage = ({ onSubmit, value }) => {
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
-          <LinkButton
-              label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
-              style={{ width: "100px", display: "inline" }}
-              onClick={() => routeTo(`${routeLink}/add-info`)}
-            />
-            <StatusTable>
-              <Row className="border-none" label={t(`BPA_LICENSE_TYPE`)} textStyle={{ paddingLeft: "12px" }} text={t(formData?.LicneseType?.LicenseType?.i18nKey)} />
-              {formData?.LicneseType?.LicenseType?.i18nKey.includes("ARCHITECT") && <Row className="border-none" label={t(`BPA_COUNCIL_NUMBER`)} text={formData?.LicneseType?.ArchitectNo} />}
-            </StatusTable>
-          </Card>
-          <Card style={{ paddingRight: "16px" }}>
             <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_LICENSE_DETAILS_LABEL`)}</CardHeader>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -116,7 +105,7 @@ const CheckPage = ({ onSubmit, value }) => {
             />
             <Row className="border-none" text={t(value?.Correspondenceaddress)} />
           </Card>
-          {/* <Card style={{ paddingRight: "16px" }}>
+          <Card style={{ paddingRight: "16px" }}>
             <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -148,7 +137,7 @@ const CheckPage = ({ onSubmit, value }) => {
             <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_COMMON_TOTAL_AMT")}</CardHeader>
             <CardHeader>₹ {paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount}</CardHeader>
             <SubmitBar label={t("CS_COMMON_SUBMIT")} onSubmit={onSubmit} disabled={paymentDetails?.billResponse?.Bill?.[0]?.billDetails[0]?.amount ? false : true} />
-          </Card> */}
+          </Card>
         </div>
       </div>
     </React.Fragment>

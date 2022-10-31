@@ -50,8 +50,7 @@ const StakeholderRegistration = () => {
 
   // const state = tenantId.split(".")[0];
   let config = [];
-  newConfig =  newConfigBPAREG;
-  console.log("MDMS SAKEHOLDER",newConfig);
+  newConfig = newConfigBPAREG;
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
@@ -72,7 +71,6 @@ const StakeholderRegistration = () => {
       {config.map((routeObj, index) => {
         const { component, texts, inputs, key } = routeObj;
         const Component = typeof component === "string" ? Digit.ComponentRegistryService.getComponent(component) : component;
-        // console.log("FOR COMPONENT",Component);
         return (
           <Route path={`${path}/${routeObj.route}`} key={index}>
             <Component config={{ texts, inputs, key }} onSelect={handleSelect} onSkip={handleSkip} t={t} formData={params} />

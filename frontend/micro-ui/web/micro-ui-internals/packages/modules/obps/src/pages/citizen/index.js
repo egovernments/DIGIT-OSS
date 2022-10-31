@@ -36,7 +36,7 @@ import Inbox from "./ArchitectInbox";
 //import EdcrInbox from "./EdcrInbox";
 import OBPSResponse from "../employee/OBPSResponse";
 import CommonForm from "../citizen/NewLicense/common/index";
-import ScrutinyFormcontainer from "./NewLicense/ScrutinyContainer/scrutinyformcontainer";
+import ScrutinyFormcontainer from "../citizen/NewLicense/ScrutinyContainer/ScrutinyFormContainer";
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();

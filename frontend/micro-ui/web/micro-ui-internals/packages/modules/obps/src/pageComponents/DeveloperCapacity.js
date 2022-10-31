@@ -1,5 +1,6 @@
+import { BackButton, CardLabel, CheckBox, FormStep, TextArea, Toast } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.css";
+import Timeline from "../components/Timeline";
 import { useForm } from "react-hook-form";
 import { Button, Form, FormLabel } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
@@ -7,351 +8,327 @@ import Table from "react-bootstrap/Table";
 import { Modal,ModalHeader,ModalBody,ModalFooter} from "reactstrap";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import Timeline from "../components/Timeline";
-import { FormStep } from "@egovernments/digit-ui-react-components";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) => {
+const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData }) => {
     const { pathname: url } = useLocation();
-    const userInfo = Digit.UserService.getUser();
     let validation = {};
-    let isOpenLinkFlow = window.location.href.includes("openlink");
-    // const financialCapacity = useSelector(selectFinancialCapacity)
-    // const cin_Number = useSelector(selectCinNumber)
-    // const companyName = useSelector(selectCompanayNAme)
-    // const dateOfCorporation = useSelector(selectDateOfCorporation)
-    // const registeredAddress = useSelector(selectRegisteredAddress)
-    // const email = useSelector(selectEmail)
-    // const mobileNumber = useSelector(selectMobileNumber)
-    // const gst_Number = useSelector(selectGst_Number)
-    // const shareHoldingPatterens = useSelector(selectShareHoldingPatterens)
-    // const directorsData = useSelector(selectDirectorsInformation);
-    // const authUserName = useSelector(selectmodalAuthUserValuesArray);
+    const onSkip = () => onSelect();
+    const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.Correspondenceaddress || formData?.formData?.Correspondenceaddress || "");
+    const [isAddressSame, setisAddressSame] = useState(formData?.isAddressSame || formData?.formData?.isAddressSame || false);
+    const [error, setError] = useState(null);
+    const [showToast, setShowToast] = useState(null);
+    const [isDisableForNext, setIsDisableForNext] = useState(false);
     const [isDevType, setIsDevType] = useState(false)
     const [isDevTypeComp, setIsDevTypeComp] = useState(false)
     const [modal, setmodal] = useState(false);
     const [modalColony, setmodalColony] = useState(false);
-    const [capacityDevelopColonyHdruAct, setModalCapacityDevelopColonyHdruAct] = useState(formDataValue?.DeveloperCapacity?.capacityDevelopColonyHdruAct || []);
+    const [capacityDevelopColonyHdruAct, setModalCapacityDevelopColonyHdruAct] = useState(formData?.DeveloperCapacity?.capacityDevelopColonyHdruAct || []);
     // const [modalColonyDevGrpValuesArray, setModalColonyDevGrpValuesArray] = useState([]);
-    const [capacityDevelopColonyLawAct, setCapacityDevelopColonyLawAct] = useState(formDataValue?.DeveloperCapacity?.capacityDevelopColonyLawAct || []);
+    const [capacityDevelopColonyLawAct, setCapacityDevelopColonyLawAct] = useState(formData?.DeveloperCapacity?.capacityDevelopColonyLawAct || []);
     const [capacityDevelopAColony, setcapacityDevelopAColony] = useState([]);
   
-    const [licenceNumber, setModalLcNo] = useState(formDataValue?.DeveloperCapacity?.licenceNumber || "");
-    const [nameOfDeveloper, setModalDevName] = useState(formDataValue?.DeveloperCapacity?.nameOfDeveloper || "");
-    const [purposeOfColony, setModalPurposeCol] = useState(formDataValue?.DeveloperCapacity?.purposeOfColony || "");
-    const [sectorAndDevelopmentPlan, setModalDevPlan] = useState(formDataValue?.DeveloperCapacity?.sectorAndDevelopmentPlan || "");
-    const [validatingLicence, setModalDevValidity] = useState(formDataValue?.DeveloperCapacity?.validatingLicence || "");
+    const [licenceNumber, setModalLcNo] = useState(formData?.DeveloperCapacity?.licenceNumber || "");
+    const [nameOfDeveloper, setModalDevName] = useState(formData?.DeveloperCapacity?.nameOfDeveloper || "");
+    const [purposeOfColony, setModalPurposeCol] = useState(formData?.DeveloperCapacity?.purposeOfColony || "");
+    const [sectorAndDevelopmentPlan, setModalDevPlan] = useState(formData?.DeveloperCapacity?.sectorAndDevelopmentPlan || "");
+    const [validatingLicence, setModalDevValidity] = useState(formData?.DeveloperCapacity?.validatingLicence || "");
   
     
-    const [coloniesDeveloped,setColonyDev] = useState(formDataValue?.DeveloperCapacity?.coloniesDeveloped || "");
-    const [area,setColonyArea] = useState(formDataValue?.DeveloperCapacity?.area || "");
-    const [purpose,setColonyPurpose] = useState(formDataValue?.DeveloperCapacity?.purpose || "");
-    const [statusOfDevelopment,setColonyStatusDev] = useState(formDataValue?.DeveloperCapacity?.statusOfDevelopment || "");
-    const [outstandingDues,setColonyoutstandingDue] = useState(formDataValue?.DeveloperCapacity?.outstandingDues || "");
+    const [coloniesDeveloped,setColonyDev] = useState(formData?.DeveloperCapacity?.coloniesDeveloped || "");
+    const [area,setColonyArea] = useState(formData?.DeveloperCapacity?.area || "");
+    const [purpose,setColonyPurpose] = useState(formData?.DeveloperCapacity?.purpose || "");
+    const [statusOfDevelopment,setColonyStatusDev] = useState(formData?.DeveloperCapacity?.statusOfDevelopment || "");
+    const [outstandingDues,setColonyoutstandingDue] = useState(formData?.DeveloperCapacity?.outstandingDues || "");
   
-    const [engineerName,setEngineerName] = useState(formDataValue?.DeveloperCapacity?.engineerName || "")
-    const [engineerQualification,setEngineerQualification] = useState(formDataValue?.DeveloperCapacity?.engineerQualification || "")
-    const [engineerSign,setEngineerSign] = useState(formDataValue?.DeveloperCapacity?.engineerSign || "")
-    const [engineerDegree,setEngineerDegree] = useState(formDataValue?.DeveloperCapacity?.engineerDegree || "")
-    const [architectName,setArchitectName] = useState(formDataValue?.DeveloperCapacity?.architectName || "")
-    const [architectQualification,setArchitectQualification] = useState(formDataValue?.DeveloperCapacity?.architectQualification || "")
-    const [architectSign,setArchitectSign] = useState(formDataValue?.DeveloperCapacity?.architectSign || "")
-    const [architectDegree,setArchitectDegree] = useState(formDataValue?.DeveloperCapacity?.architectDegree || "")
-    const [townPlannerName,setTownPlannerName] = useState(formDataValue?.DeveloperCapacity?.townPlannerName || "")
-    const [townPlannerQualification,setTownPlannerQualification] = useState(formDataValue?.DeveloperCapacity?.townPlannerQualification || "")
-    const [townPlannerSign,setTownPlannerSign] = useState(formDataValue?.DeveloperCapacity?.townPlannerSign || "")
-    const [townPlannerDegree,setTownPlannerDegree] = useState(formDataValue?.DeveloperCapacity?.townPlannerDegree || "")
-    const [existingDeveloperAgreement,setExistingDev] = useState(formDataValue?.DeveloperCapacity?.existingDeveloperAgreement || "")
-    const [existingDeveloperAgreementDoc,setExistingDevDoc] = useState(formDataValue?.DeveloperCapacity?.existingDeveloperAgreementDoc || "")
-    const [technicalCapacity,setTechnicalCapacity] = useState(formDataValue?.DeveloperCapacity?.technicalCapacity || "")
-    const [technicalCapacityDoc,setTechnicalCapacityDoc] = useState(formDataValue?.DeveloperCapacity?.technicalCapacityDoc || "")
-    const [engineerNameN,setengineerNameN] = useState(formDataValue?.DeveloperCapacity?.engineerNameN || "")
-    const [engineerDocN,setEngineerDocN] = useState(formDataValue?.DeveloperCapacity?.engineerDocN || "")
-    const [architectNameN,setArchitectNameN] = useState(formDataValue?.DeveloperCapacity?.architectNameN || "")
-    const [architectDocN,setArchitectDocN] = useState(formDataValue?.DeveloperCapacity?.architectDocN || "")
-    const [uplaodSpaBoard,setUplaodSpaBoard] = useState(formDataValue?.DeveloperCapacity?.uplaodSpaBoard || "")
-    const [uplaodSpaBoardDoc,setUplaodSpaBoardDoc] = useState(formDataValue?.DeveloperCapacity?.uplaodSpaBoardDoc || "")
-    const [agreementDoc,setAgreementDoc] = useState(formDataValue?.DeveloperCapacity?.agreementDoc || "")
-    const [boardDoc,setBoardDoc] = useState(formDataValue?.DeveloperCapacity?.boardDoc || "")
-    const [registeredDoc,setRegisteredDoc] = useState(formDataValue?.DeveloperCapacity?.registeredDoc || "")
-    const [boardDocY,setBoardDocY] = useState(formDataValue?.DeveloperCapacity?.boardDocY || "")
-    const [earlierDocY,setEarlierDocY] = useState(formDataValue?.DeveloperCapacity?.earlierDocY || "")
-    const [boardDocN,setBoardDocN] = useState(formDataValue?.DeveloperCapacity?.boardDocN || "")
-    const [earlierDocN,setEarlierDocN] = useState(formDataValue?.DeveloperCapacity?.earlierDocN || "")
-    const [technicalAssistanceAgreementDoc,setTechnicalAssistanceAgreementDoc] = useState(formDataValue?.DeveloperCapacity?.technicalAssistanceAgreementDoc || "")
+    const [engineerName,setEngineerName] = useState(formData?.DeveloperCapacity?.engineerName || "")
+    const [engineerQualification,setEngineerQualification] = useState(formData?.DeveloperCapacity?.engineerQualification || "")
+    const [engineerSign,setEngineerSign] = useState(formData?.DeveloperCapacity?.engineerSign || "")
+    const [engineerDegree,setEngineerDegree] = useState(formData?.DeveloperCapacity?.engineerDegree || "")
+    const [architectName,setArchitectName] = useState(formData?.DeveloperCapacity?.architectName || "")
+    const [architectQualification,setArchitectQualification] = useState(formData?.DeveloperCapacity?.architectQualification || "")
+    const [architectSign,setArchitectSign] = useState(formData?.DeveloperCapacity?.architectSign || "")
+    const [architectDegree,setArchitectDegree] = useState(formData?.DeveloperCapacity?.architectDegree || "")
+    const [townPlannerName,setTownPlannerName] = useState(formData?.DeveloperCapacity?.townPlannerName || "")
+    const [townPlannerQualification,setTownPlannerQualification] = useState(formData?.DeveloperCapacity?.townPlannerQualification || "")
+    const [townPlannerSign,setTownPlannerSign] = useState(formData?.DeveloperCapacity?.townPlannerSign || "")
+    const [townPlannerDegree,setTownPlannerDegree] = useState(formData?.DeveloperCapacity?.townPlannerDegree || "")
+    const [existingDeveloperAgreement,setExistingDev] = useState(formData?.DeveloperCapacity?.existingDeveloperAgreement || "")
+    const [existingDeveloperAgreementDoc,setExistingDevDoc] = useState(formData?.DeveloperCapacity?.existingDeveloperAgreementDoc || "")
+    const [technicalCapacity,setTechnicalCapacity] = useState(formData?.DeveloperCapacity?.technicalCapacity || "")
+    const [technicalCapacityDoc,setTechnicalCapacityDoc] = useState(formData?.DeveloperCapacity?.technicalCapacityDoc || "")
+    const [engineerNameN,setengineerNameN] = useState(formData?.DeveloperCapacity?.engineerNameN || "")
+    const [engineerDocN,setEngineerDocN] = useState(formData?.DeveloperCapacity?.engineerDocN || "")
+    const [architectNameN,setArchitectNameN] = useState(formData?.DeveloperCapacity?.architectNameN || "")
+    const [architectDocN,setArchitectDocN] = useState(formData?.DeveloperCapacity?.architectDocN || "")
+    const [uplaodSpaBoard,setUplaodSpaBoard] = useState(formData?.DeveloperCapacity?.uplaodSpaBoard || "")
+    const [uplaodSpaBoardDoc,setUplaodSpaBoardDoc] = useState(formData?.DeveloperCapacity?.uplaodSpaBoardDoc || "")
+    const [agreementDoc,setAgreementDoc] = useState(formData?.DeveloperCapacity?.agreementDoc || "")
+    const [boardDoc,setBoardDoc] = useState(formData?.DeveloperCapacity?.boardDoc || "")
+    const [registeredDoc,setRegisteredDoc] = useState(formData?.DeveloperCapacity?.registeredDoc || "")
+    const [boardDocY,setBoardDocY] = useState(formData?.DeveloperCapacity?.boardDocY || "")
+    const [earlierDocY,setEarlierDocY] = useState(formData?.DeveloperCapacity?.earlierDocY || "")
+    const [boardDocN,setBoardDocN] = useState(formData?.DeveloperCapacity?.boardDocN || "")
+    const [earlierDocN,setEarlierDocN] = useState(formData?.DeveloperCapacity?.earlierDocN || "")
+    const [technicalAssistanceAgreementDoc,setTechnicalAssistanceAgreementDoc] = useState(formData?.DeveloperCapacity?.technicalAssistanceAgreementDoc || "")
+    const [docUpload,setDocuploadData]=useState([])
+    const [file,setFile]=useState(null);
+    const [individualCertificateCA,setIndividualCertificateCA] = useState("");
+    const [companyBalanceSheet,setCompanyBalanceSheet] = useState("");
+    const [paidUpCapital,setPaidUpCapital] = useState("");
+    const [networthPartners,setNetworthPartners] = useState("");
+    const [networthFirm,setNetworthFirm] = useState("");
+  const [showhide, setShowhide] = useState("No");
+  const [showhide1, setShowhide1] = useState("no");
+  const [showhide0, setShowhide0] = useState("No");
+  // const [showhide2, setShowhide2] = useState("No");
+  // const [showhide3, setShowhide3] = useState("No");
+  // const [showhide4, setShowhide4] = useState("No");
+  // const [showhide5, setShowhide5] = useState("No");
+  const [showhide6, setShowhide6] = useState("no");
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = Digit.ULBService.getStateId();
+  let isopenlink = window.location.href.includes("/openlink/");
+  const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
+
+  if(isopenlink)  
+  window.onunload = function () {
+    sessionStorage.removeItem("Digit.BUILDING_PERMIT");
+  }
+
+  function selectChecked(e) {
+    if (isAddressSame == false) {
+      setisAddressSame(true);
+      setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress);
+    }
+    else {
+      Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
+      setisAddressSame(false);
+      setCorrespondenceaddress("");
+    }
+  }
+  function selectCorrespondenceaddress(e) {
+    setCorrespondenceaddress(e.target.value);
+  }
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm([{ XLongitude: "", YLatitude: "" }]);
+  const formSubmit = (data) => {
+    console.log("data", data);
+  };
+  const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] =
+    useState(false);
+  // const AppliedDetailFormSubmitHandler = (e) => {
+  //   e.preventDefault();
+  //   SetAppliedDetailFormSubmitted(true);
+  // };
+  // useEffect(() => {
+  //   if (AppliedDetailFormSubmitted) {
+  //     props.AppliedDetailsFormSubmit(true);
+  //   }
+  // }, [AppliedDetailFormSubmitted]);
   
-    
-    // console.log("AUTHNAME", authUserName);
+
+  const handleshow = (e) => {
+    const getshow = e.target.value;
+    setShowhide(getshow);
+  };
+  const handleshow0 = (e) => {
+    const getshow = e.target.value;
+    setShowhide0(getshow);
+  };
+  const handleshow1 = (e) => {
+    const getshow = e.target.value;
+    setShowhide1(getshow);
+  };
+  const handleshow6 = (e) => {
+    const getshow = e.target.value;
+    setShowhide6(getshow);
+  };
+
+  const handleChange = (e) => {
+    this.setState({ isRadioSelected: true });
+  };
   
-    // const dispatch = useDispatch();
-    const {
-      register,
-      handleSubmit,
-      formState: { errors },
-    } = useForm([{ XLongitude: "", YLatitude: "" }]);
-    const formSubmit = (data) => {
-      console.log("data", data);
-    };
-    const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] =
-      useState(false);
-    // const AppliedDetailFormSubmitHandler = (e) => {
-    //   e.preventDefault();
-    //   SetAppliedDetailFormSubmitted(true);
-    // };
-    // useEffect(() => {
-    //   if (AppliedDetailFormSubmitted) {
-    //     props.AppliedDetailsFormSubmit(true);
-    //   }
-    // }, [AppliedDetailFormSubmitted]);
-    const [showhide, setShowhide] = useState("No");
-    const [showhide1, setShowhide1] = useState("no");
-    const [showhide0, setShowhide0] = useState("No");
-    // const [showhide2, setShowhide2] = useState("No");
-    // const [showhide3, setShowhide3] = useState("No");
-    // const [showhide4, setShowhide4] = useState("No");
-    // const [showhide5, setShowhide5] = useState("No");
-    const [showhide6, setShowhide6] = useState("no");
-  
-    const handleshow = (e) => {
-      const getshow = e.target.value;
-      setShowhide(getshow);
-    };
-    const handleshow0 = (e) => {
-      const getshow = e.target.value;
-      setShowhide0(getshow);
-    };
-    const handleshow1 = (e) => {
-      const getshow = e.target.value;
-      setShowhide1(getshow);
-    };
-    // const handleshow2 = (e) => {
-    //   const getshow = e.target.value;
-    //   setShowhide2(getshow);
-    // };
-    // const handleshow3 = (e) => {
-    //   const getshow = e.target.value;
-    //   setShowhide3(getshow);
-    // };
-    // const handleshow4 = (e) => {
-    //   const getshow = e.target.value;
-    //   setShowhide4(getshow);
-    // };
-    // const handleshow5 = (e) => {
-    //   const getshow = e.target.value;
-    //   setShowhide5(getshow);
-    // };
-    const handleshow6 = (e) => {
-      const getshow = e.target.value;
-      setShowhide6(getshow);
-    };
-  
-    const handleChange = (e) => {
-      this.setState({ isRadioSelected: true });
-    };
-    
-    const devTypeFlagVal = localStorage.getItem('devTypeValueFlag');
-    
-    // if(devTypeFlagVal == "1"){
-    //     setIsDevType(true);
-    // }
-    // if(devTypeFlagVal == "0"){
-    //     setIsDevTypeComp(true);
-    // }
+  const devTypeFlagVal = localStorage.getItem('devTypeValueFlag');
+  const getDocumentData = async () => {
+    if(file===null){
+       return
+    }
+       const formData = new FormData();
+       formData.append(
+           "file",file.file      );
+       formData.append(
+           "tenantId","hr"      );  
+       formData.append(
+           "module","property-upload"      );
+        formData.append(
+            "tag","tag-property"      );
+   
+        console.log("File",formData)
+
+       try {
+           const Resp = await axios.post("/filestore/v1/files",formData,
+           {headers:{
+               "content-type":"multipart/form-data"
+           }}).then((response) => {
+               return response
+           });
+           setDocuploadData(Resp.data)
+           
+       } catch (error) {
+           console.log(error.message);
+       }
+
+      
+
+  }
+  useEffect(() => {
+    getDocumentData();
+  }, [file]);
+
+
+const handleArrayValues = () => {
+
+  if (licenceNumber !== "" && nameOfDeveloper !== "" && purposeOfColony !== "") {
+
+    const values = {
+      
+        licenceNumber: licenceNumber,
+        nameOfDeveloper: nameOfDeveloper,
+        purposeOfColony: purposeOfColony,
+        sectorAndDevelopmentPlan: sectorAndDevelopmentPlan,
+        validatingLicence: validatingLicence
+      
+    }
+    setModalCapacityDevelopColonyHdruAct((prev) => [...prev, values]);
+    setmodal(!modal)
+  }
+  console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
+  localStorage.setItem("DevCapacityDetails", JSON.stringify(capacityDevelopColonyHdruAct))
+}
 
 
 
-    const handleArrayValues = () => {
-  
-      if (licenceNumber !== "" && nameOfDeveloper !== "" && purposeOfColony !== "") {
-  
-        const values = {
-          
-            licenceNumber: licenceNumber,
-            nameOfDeveloper: nameOfDeveloper,
-            purposeOfColony: purposeOfColony,
-            sectorAndDevelopmentPlan: sectorAndDevelopmentPlan,
-            validatingLicence: validatingLicence
-          
-        }
-        setModalCapacityDevelopColonyHdruAct((prev) => [...prev, values]);
-        setmodal(!modal)
-      }
-      console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
-      localStorage.setItem("DevCapacityDetails", JSON.stringify(capacityDevelopColonyHdruAct))
-    }
-  
-  
-    const handleColonyDevGrp=()=>{
-      const colonyDevValues = {
-        
-          coloniesDeveloped:coloniesDeveloped,
-          area:area,
-          purpose:purpose,
-          statusOfDevelopment:statusOfDevelopment,
-          outstandingDues:outstandingDues
-        
-        
-      }
-      setCapacityDevelopColonyLawAct((prev) => [...prev, colonyDevValues]);
-      setmodalColony(!modalColony)
-      console.log("DevCapacityColony", capacityDevelopColonyLawAct);
-    }
-  
-    const submitTechdevData = async (e) => {
-    //   e.preventDefault();
-      const formDataValues = {
-        // "developerDetail" :[
-        //   {
-        //     "devDetail":{
-        //       addInfo:{
-        //         financialCapacity:financialCapacity,
-        //         cin_Number:cin_Number,
-        //         companyName:companyName,
-        //         dateOfCorporation:dateOfCorporation,
-        //         registeredAddress:registeredAddress,
-        //         email:email,
-        //         mobileNumber:mobileNumber,
-        //         gst_Number:gst_Number,
-        //         shareHoldingPatterens:shareHoldingPatterens,
-        //         directorsData:directorsData,
-        //       },
-        //       addRemoveAuthoizedUsers:{
-        //         authUserName:authUserName
-        //       },
-        //       capacityDevelopAColony: {
-        //         capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
-        //         capacityDevelopColonyLawAct:capacityDevelopColonyLawAct,
-        //         technicalExpertEngaged:{
-        //           engineerName:engineerName,
-        //           engineerQualification:engineerQualification,
-        //           engineerSign:engineerSign,
-        //           engineerDegree:engineerDegree,
-        //           architectName:architectName,
-        //           architectQualification:architectQualification,
-        //           architectSign:architectSign,
-        //           architectDegree:architectDegree,
-        //           townPlannerName:townPlannerName,
-        //           townPlannerQualification:townPlannerQualification,
-        //           townPlannerSign:townPlannerSign,
-        //           townPlannerDegree:townPlannerDegree,
-        //           existingDeveloperAgreement:existingDeveloperAgreement,
-        //           existingDeveloperAgreementDoc:existingDeveloperAgreementDoc,
-        //           technicalCapacity:technicalCapacity,
-        //           technicalCapacityDoc:technicalCapacityDoc,
-        //           engineerNameN:engineerNameN,
-        //           engineerDocN:engineerDocN,
-        //           architectNameN:architectNameN,
-        //           architectDocN:architectDocN,
-        //           uplaodSpaBoard:uplaodSpaBoard,
-        //           uplaodSpaBoardDoc:uplaodSpaBoardDoc
-        //         },
-        //         designationDirector:{
-        //           agreementDoc:agreementDoc,
-        //           boardDoc:boardDoc
-        //         },
-        //         obtainedLicense:{
-        //           registeredDoc:registeredDoc,
-        //           boardDocY:boardDocY,
-        //           earlierDocY:earlierDocY,
-        //           boardDocN:boardDocN,
-        //           earlierDocN:earlierDocN,
-        //           technicalAssistanceAgreementDoc:technicalAssistanceAgreementDoc
-        //         }
-                
-                
-        //       },
-  
-        //     }
-        //   }
-        // ]
-        capacityDevelopAColony: {
-        capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
-        capacityDevelopColonyLawAct:capacityDevelopColonyLawAct,
-        technicalExpertEngaged:{
-            engineerName:engineerName,
-            engineerQualification:engineerQualification,
-            engineerSign:engineerSign,
-            engineerDegree:engineerDegree,
-            architectName:architectName,
-            architectQualification:architectQualification,
-            architectSign:architectSign,
-            architectDegree:architectDegree,
-            townPlannerName:townPlannerName,
-            townPlannerQualification:townPlannerQualification,
-            townPlannerSign:townPlannerSign,
-            townPlannerDegree:townPlannerDegree,
-            existingDeveloperAgreement:existingDeveloperAgreement,
-            existingDeveloperAgreementDoc:existingDeveloperAgreementDoc,
-            technicalCapacity:technicalCapacity,
-            technicalCapacityDoc:technicalCapacityDoc,
-            engineerNameN:engineerNameN,
-            engineerDocN:engineerDocN,
-            architectNameN:architectNameN,
-            architectDocN:architectDocN,
-            uplaodSpaBoard:uplaodSpaBoard,
-            uplaodSpaBoardDoc:uplaodSpaBoardDoc
-        },
-        designationDirector:{
-            agreementDoc:agreementDoc,
-            boardDoc:boardDoc
-        },
-        obtainedLicense:{
-            registeredDoc:registeredDoc,
-            boardDocY:boardDocY,
-            earlierDocY:earlierDocY,
-            boardDocN:boardDocN,
-            earlierDocN:earlierDocN,
-            technicalAssistanceAgreementDoc:technicalAssistanceAgreementDoc
-        }
-        
-        
-        },
-        
-      }
-      onSelect(config.key, formDataValues);
-    //   try {
-    //     let res = await axios.post("http://localhost:8081/user/developer/_registration",formDataValues,{
-    //       headers:{
-    //         'Content-Type': 'application/json',
-    //         'Access-Control-Allow-origin':"*",
-    //     }
-    //     }).then((response)=>{
-    //       return response
-    //     });
-        
-        
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-      
-      console.log("FINAL SUBMIT",formDataValues)
-      localStorage.setItem("capacity",JSON.stringify(formDataValues));
-      setcapacityDevelopAColony((prev) => [...prev, formDataValues]);
-      
-      // dispatch(setTechnicalData(
-      //   formDataValues
-      // ))
-      
-    }
-    const jsonobj=localStorage.getItem("capacity") ;
-    console.log(JSON.parse(jsonobj));
+
+const handleColonyDevGrp=()=>{
+  const colonyDevValues = {
     
-  
-    const [noofRows, setNoOfRows] = useState(1);
-    const [noofRow, setNoOfRow] = useState(1);
-    const [noofRow1, setNoOfRow1] = useState(1);
-    const onSkip = () => onSelect();
-    return (
-        <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
-            <Timeline currentStep={4} flow="STAKEHOLDER" />
-            <FormStep 
-                config={config}
-                onSelect={submitTechdevData}
-                onSkip={onSkip}
-                // onClick={submitTechdevData} 
-                t={t}
-            >
-                {devTypeFlagVal === "01" &&(
+      coloniesDeveloped:coloniesDeveloped,
+      area:area,
+      purpose:purpose,
+      statusOfDevelopment:statusOfDevelopment,
+      outstandingDues:outstandingDues
+    
+    
+  }
+  setCapacityDevelopColonyLawAct((prev) => [...prev, colonyDevValues]);
+  setmodalColony(!modalColony)
+  console.log("DevCapacityColony", capacityDevelopColonyLawAct);
+}
+  const goNext = () => {
+
+    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+      setIsDisableForNext(true);
+      let payload = {
+        "Licenses": [
+          {
+            "tradeLicenseDetail": {
+              "owners": [
+                {
+                  "gender": formData?.LicneseDetails?.gender?.code,
+                  "mobileNumber": formData?.LicneseDetails?.mobileNumber,
+                  "name": formData?.LicneseDetails?.name,
+                  "dob": null,
+                  "emailId": formData?.LicneseDetails?.email,
+                  "permanentAddress": "dfdjsfdsf",
+                  "correspondenceAddress": Correspondenceaddress,
+                  "pan":formData?.LicneseDetails?.PanNumber,
+                  // "permanentPinCode": "143001"
+                }
+              ],
+              "subOwnerShipCategory": "INDIVIDUAL",
+              "tradeUnits": [
+                {
+                  "tradeType": formData?.LicneseType?.LicenseType?.tradeType,
+                }
+              ],
+              "additionalDetail": {
+                "counsilForArchNo": formData?.LicneseType?.ArchitectNo,
+              },
+              "address": {
+                "city": "",
+                "landmark": "",
+                "pincode": ""
+              },
+              "institution": null,
+              "applicationDocuments": null
+            },
+            "licenseType": "PERMANENT",
+            "businessService": "BPAREG",
+            "tenantId": stateId,
+            "action": "NOWORKFLOW"
+          }
+        ]
+      }
+
+      Digit.OBPSService.BPAREGCreate(payload, tenantId)
+        .then((result, err) => {
+          setIsDisableForNext(false);
+          let data = { result: result, formData: formData, Correspondenceaddress: Correspondenceaddress, isAddressSame: isAddressSame }
+          //1, units
+          onSelect("", data, "", true);
+
+        })
+        .catch((e) => {
+          setIsDisableForNext(false);
+          setShowToast({ key: "error" });
+          setError(e?.response?.data?.Errors[0]?.message || null);
+        });
+    }
+    else {
+      formData.Correspondenceaddress = Correspondenceaddress;
+      formData.isAddressSame = isAddressSame;
+      onSelect("", formData, "", true);
+    }
+    // sessionStorage.setItem("CurrentFinancialYear", FY);
+    // onSelect(config.key, { TradeName });
+  };
+
+  return (
+    <React.Fragment>
+      <div className={isopenlink ? "OpenlinkContainer" : ""}>
+
+        {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
+        <Timeline currentStep={2} flow="STAKEHOLDER" />
+        <FormStep
+          config={config}
+          onSelect={goNext}
+          onSkip={onSkip}
+          t={t}
+          isDisabled={isDisableForNext}
+        >
+          {/* <CheckBox
+            label={t("BPA_SAME_AS_PERMANENT_ADDRESS")}
+            onChange={(e) => selectChecked(e)}
+            //value={field.isPrimaryOwner}
+            checked={isAddressSame}
+            style={{ paddingBottom: "10px", paddingTop: "10px" }}
+          />
+          <CardLabel>{`${t("BPA_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL")}`}</CardLabel>
+          <TextArea
+            t={t}
+            isMandatory={false}
+            type={"text"}
+            optionKey="i18nKey"
+            name="Correspondenceaddress"
+            onChange={selectCorrespondenceaddress}
+            value={Correspondenceaddress}
+            disable={isAddressSame}
+          /> */}
+          {devTypeFlagVal === "01" &&(
                 <div className="card-body">
                     <div className="form-group row mb-12">
                         {/* <label className="col-sm-3 col-form-label">Individual</label> */}
@@ -379,6 +356,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     name="upload"
                                     placeholder=""
                                     class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
                                 />
                                 </td>
                                 <td align="center" size="large">
@@ -415,7 +393,9 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     name="upload"
                                     placeholder=""
                                     class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
                                 />
+                               
                                 </td>
                                 <td align="center" size="large">
                                 {/* <FileUploadIcon /> */}
@@ -430,6 +410,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     name="upload"
                                     placeholder=""
                                     class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
                                 />
                                 </td>
                                 <td align="center" size="large">
@@ -466,6 +447,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     name="upload"
                                     placeholder=""
                                     class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
                                 />
                                 </td>
                                 <td align="center" size="large">
@@ -481,6 +463,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     name="upload"
                                     placeholder=""
                                     class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
                                 />
                                 </td>
                                 <td align="center" size="large">
@@ -581,7 +564,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                         <td>
                                             <div className="row">
                                             <button className="btn btn-sm col-md-6">
-                                                <VisibilityIcon color="info" className="icon" />
+                                                <VisibilityIcon color="info" className="icon"/>
                                             </button>
                                             <button className="btn btn-sm col-md-6">
                                                 <FileDownloadIcon color="primary"  />
@@ -671,7 +654,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                             <label htmlFor="name" className="text">Sector and development plan</label>
                                             <input
                                                 type="file"
-                                                onChange={(e) => setModalDevPlan(e.target.value)}
+                                                // onChange={(e) => setModalDevPlan(e.target.value)}
+                                                onChange={(e)=>setFile({file:e.target.files[0]})}
                                                 placeholder=""
                                                 class="employee-card-input"
                                             />
@@ -680,7 +664,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                             <label htmlFor="name" className="text">Validity of licence </label>
                                             <input
                                                 type="file"
-                                                onChange={(e) => setModalDevValidity(e.target.value)}
+                                                // onChange={(e) => setModalDevValidity(e.target.value)}
+                                                onChange={(e)=>setFile({file:e.target.files[0]})}
                                                 placeholder=""
                                                 class="employee-card-input"
                                             />
@@ -864,7 +849,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                             <label htmlFor="name" className="text">Status of development</label>
                                             <input
                                             type="file"
-                                            onChange={(e) => setColonyStatusDev(e.target.value)}
+                                            // onChange={(e) => setColonyStatusDev(e.target.value)}
+                                            onChange={(e)=>setFile({file:e.target.files[0]})}
                                             placeholder=""
                                             class="employee-card-input"
                                             />
@@ -873,7 +859,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                             <label htmlFor="name" className="text">Outstanding Dues</label>
                                             <input
                                             type="file"
-                                            onChange={(e) => setColonyoutstandingDue(e.target.value)}
+                                            // onChange={(e) => setColonyoutstandingDue(e.target.value)}
+                                            onChange={(e)=>setFile({file:e.target.files[0]})}
                                             placeholder=""
                                             class="employee-card-input"
                                             />
@@ -974,7 +961,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td>
                                         <input
                                         type="file"
-                                        onChange={(e) => setEngineerSign(e.target.value)}
+                                        // onChange={(e) => setEngineerSign(e.target.value)}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -982,7 +970,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                     <input
                                         type="file"
-                                        onChange={(e) => setEngineerDegree(e.target.value)}
+                                        // onChange={(e) => setEngineerDegree(e.target.value)}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1011,7 +1000,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td>
                                         <input
                                         type="file"
-                                        onChange={((e) => setArchitectSign(e.target.value))}
+                                        // onChange={((e) => setArchitectSign(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1019,7 +1009,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                         <input
                                         type="file"
-                                        onChange={((e) => setArchitectDegree(e.target.value))}
+                                        // onChange={((e) => setArchitectDegree(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         class="employee-card-input"
                                         />
                                     </td>
@@ -1047,7 +1038,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td>
                                         <input
                                         type="file"
-                                        onChange={((e) => setTownPlannerSign(e.target.value))}
+                                        // onChange={((e) => setTownPlannerSign(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1055,7 +1047,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                     <input
                                         type="file"
-                                        onChange={((e) => setTownPlannerDegree(e.target.value))}
+                                        // onChange={((e) => setTownPlannerDegree(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1138,7 +1131,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                     <input
                                         type="file"
-                                        onChange={((e) => setEngineerDocN(e.target.value))}
+                                        // onChange={((e) => setEngineerDocN(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1157,7 +1151,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                     <input
                                         type="file"
-                                        onChange={((e) => setArchitectDocN(e.target.value))}
+                                        // onChange={((e) => setArchitectDocN(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1180,7 +1175,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                         <input 
                                         type="file"
                                         class="employee-card-input"
-                                        onChange={((e)=> setUplaodSpaBoardDoc(e.target.value))}
+                                        // onChange={((e)=> setUplaodSpaBoardDoc(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         />
                                     </td>
                                     </tr>
@@ -1249,7 +1245,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                         <input
                                         type="file"
-                                        onChange={((e) => setAgreementDoc(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         class="employee-card-input"
                                         />
                                     </td>
@@ -1263,7 +1259,7 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                     <input
                                         type="file"
-                                        onChange={((e) => setBoardDoc(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         class="employee-card-input"
                                         />
                                     </td>
@@ -1326,7 +1322,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                         <td align="center" size="large">
                                         <input 
                                             type="file"
-                                            onChange={((e)=> setRegisteredDoc(e.target.value))}
+                                            // onChange={((e)=> setRegisteredDoc(e.target.value))}
+                                            onChange={(e)=>setFile({file:e.target.files[0]})}
                                             class="employee-card-input"
                                         />
                                         </td>
@@ -1341,7 +1338,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                         <td align="center" size="large">
                                         <input 
                                             type="file"
-                                            onChange={((e)=> setBoardDocY(e.target.value))}
+                                            // onChange={((e)=> setBoardDocY(e.target.value))}
+                                            onChange={(e)=>setFile({file:e.target.files[0]})}
                                             class="employee-card-input"
                                         />
                                         </td>
@@ -1357,7 +1355,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                         <td align="center" size="large">
                                         <input 
                                             type="file"
-                                            onChange={((e)=> setEarlierDocY(e.target.value))}
+                                            // onChange={((e)=> setEarlierDocY(e.target.value))}
+                                            onChange={(e)=>setFile({file:e.target.files[0]})}
                                             class="employee-card-input"
                                         />
                                         </td>
@@ -1393,7 +1392,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                         <input 
                                         type="file"
-                                        onChange={((e)=> setTechnicalAssistanceAgreementDoc(e.target.value))}
+                                        // onChange={((e)=> setTechnicalAssistanceAgreementDoc(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
                                         class="employee-card-input"
                                         />
                                     </td>
@@ -1407,9 +1407,10 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     </td>
                                     <td align="center" size="large">
                                     <input 
-                                            type="file"
-                                            onChange={((e)=> setBoardDocN(e.target.value))}
-                                            class="employee-card-input"
+                                        type="file"
+                                        // onChange={((e)=> setBoardDocN(e.target.value))}
+                                        onChange={(e)=>setFile({file:e.target.files[0]})}
+                                        class="employee-card-input"
                                         />
                                     </td>
                                     </tr>
@@ -1424,7 +1425,8 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                                     <td align="center" size="large">
                                     <input 
                                             type="file"
-                                            onChange={((e)=> setEarlierDocN(e.target.value))}
+                                            // onChange={((e)=> setEarlierDocN(e.target.value))}
+                                            onChange={(e)=>setFile({file:e.target.files[0]})}
                                             class="employee-card-input"
                                         />
                                     </td>
@@ -1449,8 +1451,12 @@ const DeveloperCapacity = ({t, config, onSelect,formData, formDataValue, data}) 
                     </button>
                 </div> */}
                
-            </FormStep>
-        </div>
-    );
+        </FormStep>
+      </div>
+      <div style={{ disabled: "true", height: "30px", width: "100%", fontSize: "14px" }}></div>
+      {showToast && <Toast error={showToast?.key === "error" ? true : false} label={error} isDleteBtn={true} onClose={() => { setShowToast(null); setError(null); }} />}
+    </React.Fragment>
+  );
 };
-export default DeveloperCapacity;
+
+export default CorrospondenceAddress;
