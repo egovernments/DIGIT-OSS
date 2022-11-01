@@ -16,39 +16,36 @@ function ModalChild(props) {
   const handlemodalsubmit = async () => {
     props.passmodalData({ data: { label: iscrosschecked, Remarks: RemarksDeveloper, color: warningorred } });
     const postData = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        action: "_create",
-        did: 1,
+      requestInfo: {
+        api_id: "1",
+        ver: "1",
+        ts: null,
+        action: "create",
+        did: "",
         key: "",
-        msgId: "20170310130900|en_IN",
-        ts: 0,
-        ver: ".01",
-        authToken: "80458c19-3b48-4aa8-b86e-e2e195e6753a",
-        userInfo: {
-          uuid: "5fe074f2-c12d-4a27-bd7b-92d15f9ab19c",
-          name: "rahul7",
-          userName: "rahul7",
-          tenantId: "hr",
-          id: 97,
-          mobileNumber: "7895877833",
-        },
+        msg_id: "",
+        requester_id: "",
+        auth_token: null,
       },
-      EgScrutiny: {
-        id: 97,
-        applicationId: 123,
-        comment: RemarksDeveloper.data,
-        createdOn: 10,
-        fieldValue: "avc",
-        field_d: 12,
-        isApproved: yesOrNoClicked,
-        userid: 12,
+      egScrutiny: {
+        applicationId: "123",
+        comment: RemarksDeveloper,
+        fieldValue: "update",
+        fieldIdL: "name",
+        isApproved: true,
+        userid: "123",
+        serviceId: "123",
       },
     };
 
-    const Resp = await axios.post("/land-services/egscrutiny/_create", postData, {}).then((response) => {
-      return response.data;
-    });
+    try {
+      const Resp = await axios.post("/land-services/egscrutiny/_create", postData, {}).then((response) => {
+        return response.data;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    props.remarksUpdate({ data: RemarksDeveloper.data });
     console.log("response from API", Resp);
   };
   console.log("smshow", smShow);
@@ -65,8 +62,15 @@ function ModalChild(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-sm">
-          {props.labelmodal}
-          <h2 style={{ fontSize: "30" }}>{inputFieldValue}</h2>
+          <Row>
+            <Col xs={12} md={6}>
+              {" "}
+              {props.labelmodal}
+            </Col>
+            <Col xs={12} md={6}>
+              <h2 style={{ fontSize: "30" }}>{inputFieldValue}</h2>
+            </Col>
+          </Row>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -99,17 +103,25 @@ function ModalChild(props) {
           name="group0"
           inline
         ></Form.Check>
-        <Col xs={12} md={4}>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Col xs={12} md={12}>
             <Form.Label>Remarks</Form.Label>
-            <Form.Control type="text" placeholder="Enter your Remarks" autoFocus onChange={(e) => setDeveloperRemarks({ data: e.target.value })} />
-          </Form.Group>
-          <div class="col-md-4 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-            <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
-              Submit
-            </Button>
-          </div>
-        </Col>
+            <textarea
+              class="form-control"
+              id="exampleFormControlTextarea1"
+              placeholder="Enter your Remarks"
+              autoFocus
+              onChange={(e) => setDeveloperRemarks({ data: e.target.value })}
+              rows="3"
+            />
+            {/* <Form.Control type="text" /> */}
+          </Col>
+        </Form.Group>
+        <div class="col-md-4 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+          <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
+            Submit
+          </Button>
+        </div>
         {/* <div class="col-md-4 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
           <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
             Submit

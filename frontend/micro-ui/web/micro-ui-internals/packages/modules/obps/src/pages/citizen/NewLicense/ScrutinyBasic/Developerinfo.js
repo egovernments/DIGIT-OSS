@@ -36,6 +36,8 @@ const Developerinfo = (props) => {
     this.setState({ isRadioSelected: true });
   };
 
+  // const [fieldValue, setFieldValue] = useState("");
+
   const [showhide1, setShowhide1] = useState("No");
   const [showhide2, setShowhide2] = useState("No");
   const [showhide3, setShowhide3] = useState("No");
@@ -50,6 +52,7 @@ const Developerinfo = (props) => {
   const [showhide18, setShowhide18] = useState("No");
   const [showhide16, setShowhide16] = useState("No");
   const [showhide17, setShowhide17] = useState("No");
+
   const [open2, setOpen2] = useState(false);
   const handleshow = (e) => {
     const getshow = e.target.value;
@@ -537,7 +540,10 @@ const Developerinfo = (props) => {
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-          <Form.Group style={{ display: props.displayGeneral }} className="justify-content-center">
+          <Form.Group
+            style={{ display: props.displayGeneral, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
+            className="justify-content-center"
+          >
             <Row className="ms-auto" style={{ marginBottom: 20 }}>
               <Col className="ms-auto" md={4} xxl lg="12">
                 <Form.Label>
@@ -548,11 +554,11 @@ const Developerinfo = (props) => {
                 <br></br> */}
 
                 <div style={{ display: "flex" }}>
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow} readOnly />
+                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow} disabled />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow} readOnly />
+                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow} disabled />
                   <label for="No">No</label>
-                  {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control> */}
+                  {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                   <ReportProblemIcon
                     style={{
                       color:
@@ -572,6 +578,7 @@ const Developerinfo = (props) => {
                     isYesorNoChecked={handleYesOrNochecked}
                     displaymodal={smShow}
                     setColor={setColor}
+                    fieldValue={labelValue}
                   ></ModalChild>
                 </div>
               </Col>
@@ -609,7 +616,12 @@ const Developerinfo = (props) => {
                         inline
                       ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control
+                        height={30}
+                        style={{ maxWidth: 200, marginRight: 5 }}
+                        // placeholder={personalinfo !== null ? personalinfo.licenseApplied : null}
+                        disabled
+                      ></Form.Control>
                       <ReportProblemIcon
                         style={{
                           color:
@@ -621,6 +633,7 @@ const Developerinfo = (props) => {
                         }}
                         onClick={() => {
                           setLabelValue("License No. of Parent License"), setSmShow(true), console.log("modal open");
+                          // setFieldValue(personalinfo !== null ? personalinfo.licenseApplied : null);
                         }}
                       ></ReportProblemIcon>
                     </div>
@@ -651,8 +664,8 @@ const Developerinfo = (props) => {
                         inline
                       ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                      {/* <Form.Select height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly>
+                      {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                      {/* <Form.Select height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled>
                           
                         </Form.Select> */}
                       <Form.Select
@@ -663,7 +676,7 @@ const Developerinfo = (props) => {
                         style={{ maxWidth: 200, marginRight: 5 }}
                         disabled
                       >
-                        {/* <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} readOnly> */}
+                        {/* <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} disabled> */}
                         <option value="">--Potential Zone--</option>
                         <option value="K.Mishra">Hyper</option>
                         <option value="potential 1">High I</option>
@@ -695,7 +708,7 @@ const Developerinfo = (props) => {
                       </h6>{" "}
                     </label>
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                       <ReportProblemIcon
                         style={{
                           color:
@@ -756,7 +769,7 @@ const Developerinfo = (props) => {
                             inline
                           ></Form.Check> */}
                       <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
                             color:
@@ -788,7 +801,7 @@ const Developerinfo = (props) => {
                         </h6>{" "}
                       </label>
                       <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
                             color:
@@ -820,7 +833,7 @@ const Developerinfo = (props) => {
                             name="group46"
                             inline
                           ></Form.Check> */}
-                      {/* <input type="number" name="roadwidth" className="form-control" readOnly></input> */}
+                      {/* <input type="number" name="roadwidth" className="form-control" disabled></input> */}
                     </div>
                   </Col>
                   <Col className="ms-auto" md={4} xxl lg="4">
@@ -831,7 +844,7 @@ const Developerinfo = (props) => {
                         </h6>
                       </label>
                       <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
                             color:
@@ -894,7 +907,7 @@ const Developerinfo = (props) => {
                             inline
                           ></Form.Check> */}
                       <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
                             color:
@@ -955,7 +968,7 @@ const Developerinfo = (props) => {
                           inline
                         ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                       <ReportProblemIcon
                         style={{
                           color:
@@ -1027,10 +1040,10 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow17} readOnly />
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow17} disabled />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow17} readOnly />
+                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow17} disabled />
                   <label for="No">No</label>
                   <ReportProblemIcon
                     style={{
@@ -1047,9 +1060,9 @@ const Developerinfo = (props) => {
                   ></ReportProblemIcon>
                 </div>
                 <br></br>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow17} readOnly />
+                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow17} disabled />
                 <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow17} readOnly />
+                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow17} disabled />
                 <label for="No">No</label> */}
                 {showhide17 === "Yes" && (
                   <div className="col col-6 ">
@@ -1085,7 +1098,7 @@ const Developerinfo = (props) => {
                 inline
               ></Form.Check> */}
               <div style={{ display: "flex" }}>
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                 <label htmlFor="gen">Rehan / Mortgage</label>&nbsp;&nbsp;
                 <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} />
                 &nbsp;&nbsp;
@@ -1132,7 +1145,7 @@ const Developerinfo = (props) => {
                     <b>Any other, please specify</b>
                   </h6>
                 </label>
-                <input type="text" className="form-control" readOnly />
+                <input type="text" className="form-control" disabled />
               </div>
             </div>
             <hr />
@@ -1156,7 +1169,7 @@ const Developerinfo = (props) => {
                 inline
               ></Form.Check> */}
               <div style={{ display: "flex" }}>
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                 <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
                 <label for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
@@ -1203,7 +1216,7 @@ const Developerinfo = (props) => {
                 inline
               ></Form.Check> */}
               <div style={{ display: "flex" }}>
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                 <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
                 <label for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
@@ -1248,7 +1261,7 @@ const Developerinfo = (props) => {
                 inline
               ></Form.Check> */}
               <div style={{ display: "flex" }}>
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                 <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
                 <label for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
@@ -1300,7 +1313,7 @@ const Developerinfo = (props) => {
                     inline
                   ></Form.Check> */}
                   <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
                     <label for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
@@ -1351,7 +1364,7 @@ const Developerinfo = (props) => {
                     inline
                   ></Form.Check> */}
                   <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow1} />
                     <label for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow1} />
@@ -1382,7 +1395,7 @@ const Developerinfo = (props) => {
                         {" "}
                         Width of revenue rasta{" "}
                       </label>
-                      <input type="number" className="form-control" readOnly />
+                      <input type="number" className="form-control" disabled />
                     </div>
                   </div>
                 )}
@@ -1417,7 +1430,7 @@ const Developerinfo = (props) => {
                     inline
                   ></Form.Check> */}
                   <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow2} />
                     <label for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow2} />
@@ -1478,7 +1491,7 @@ const Developerinfo = (props) => {
                     inline
                   ></Form.Check> */}
                   <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
                     <label for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
@@ -1534,7 +1547,7 @@ const Developerinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                      {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                       <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
                       <label for="Yes">Yes</label>&nbsp;&nbsp;
                       <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
@@ -1584,7 +1597,7 @@ const Developerinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                      {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                       <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow3} />
                       <label for="Yes">Yes</label>&nbsp;&nbsp;
                       <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow3} />
@@ -1643,7 +1656,7 @@ const Developerinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                       <ReportProblemIcon
                         style={{
                           color:
@@ -1658,7 +1671,7 @@ const Developerinfo = (props) => {
                         }}
                       ></ReportProblemIcon>
                     </div>
-                    {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} readOnly></Form.Control> */}
+                    {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
                   </div>
                 </div>
                 <div className="col col-3">
@@ -1685,7 +1698,7 @@ const Developerinfo = (props) => {
                       inline
                     ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                       <ReportProblemIcon
                         style={{
                           color:
@@ -1700,7 +1713,7 @@ const Developerinfo = (props) => {
                         }}
                       ></ReportProblemIcon>
                     </div>
-                    {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} readOnly></Form.Control> */}
+                    {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
                   </div>
                 </div>
               </div>
@@ -1731,7 +1744,7 @@ const Developerinfo = (props) => {
                     inline
                   ></Form.Check> */}
                   <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow16} />
                     <label for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow16} />
@@ -1785,7 +1798,7 @@ const Developerinfo = (props) => {
                         inline
                       ></Form.Check> */}
                       <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
                             color:
@@ -1826,7 +1839,7 @@ const Developerinfo = (props) => {
                           inline
                         ></Form.Check> */}
                         <div style={{ display: "flex" }}>
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
                               color:
@@ -1874,7 +1887,7 @@ const Developerinfo = (props) => {
                           inline
                         ></Form.Check> */}
                         <div style={{ display: "flex" }}>
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
                               color:
@@ -1917,7 +1930,7 @@ const Developerinfo = (props) => {
                           inline
                         ></Form.Check> */}
                         <div style={{ display: "flex" }}>
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
                               color:
@@ -1960,7 +1973,7 @@ const Developerinfo = (props) => {
                           inline
                         ></Form.Check> */}
                         <div style={{ display: "flex" }}>
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
                               color:
@@ -2006,7 +2019,7 @@ const Developerinfo = (props) => {
                     inline
                   ></Form.Check> */}
                   <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
                     <label for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
@@ -2062,7 +2075,7 @@ const Developerinfo = (props) => {
                     inline
                   ></Form.Check> */}
                   <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
                     <label for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
@@ -2109,7 +2122,7 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow4} />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow4} />
@@ -2165,7 +2178,7 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow5} />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow5} />
@@ -2221,7 +2234,7 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow6} />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow6} />
@@ -2280,7 +2293,7 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow7} />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow7} />
@@ -2336,7 +2349,7 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow8} />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow8} />
@@ -2392,7 +2405,7 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow9} />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow9} />
@@ -2456,7 +2469,7 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow0} />
@@ -2512,7 +2525,7 @@ const Developerinfo = (props) => {
                 inline
               ></Form.Check> */}
               <div style={{ display: "flex" }}>
-                <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                 <ReportProblemIcon
                   style={{
                     color:
@@ -2552,8 +2565,8 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="file" className="form-control" readOnly />
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2569,7 +2582,7 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
+                {/* <input type="file" className="form-control" disabled />
                 {<DownloadForOfflineIcon color="primary" />} */}
               </div>
               <div className="col col-3">
@@ -2595,8 +2608,8 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="file" className="form-control" readOnly />
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2612,7 +2625,7 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
+                {/* <input type="file" className="form-control" disabled />
                 {<DownloadForOfflineIcon color="primary" />} */}
               </div>
               <div className="col col-3">
@@ -2638,8 +2651,8 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="file" className="form-control" readOnly />
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2655,7 +2668,7 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
+                {/* <input type="file" className="form-control" disabled />
                 {<DownloadForOfflineIcon color="primary" />} */}
               </div>
               <div className="col col-3">
@@ -2681,8 +2694,8 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="file" className="form-control" readOnly />
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2698,7 +2711,7 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
+                {/* <input type="file" className="form-control" disabled />
                 {<DownloadForOfflineIcon color="primary" />} */}
               </div>
             </div>
@@ -2728,9 +2741,9 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  <input type="file" className="form-control" readOnly />
+                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <ReportProblemIcon
                     style={{
                       color:
@@ -2747,7 +2760,7 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
+                {/* <input type="file" className="form-control" disabled />
                 {<DownloadForOfflineIcon color="primary" />} */}
               </div>
               <div className="col col-3">
@@ -2773,8 +2786,8 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="file" className="form-control" readOnly />
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2790,7 +2803,7 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
+                {/* <input type="file" className="form-control" disabled />
                 {<DownloadForOfflineIcon color="primary" />} */}
               </div>
               <div className="col col-3">
@@ -2816,8 +2829,8 @@ const Developerinfo = (props) => {
                   inline
                 ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="file" className="form-control" readOnly />
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2833,16 +2846,17 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
+                {/* <input type="file" className="form-control" disabled />
                 {<DownloadForOfflineIcon color="primary" />} */}
               </div>
             </div>
             <br></br>
+            <div style={{ position: "relative", marginBottom: 40 }}>
+              <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
+            </div>
           </Form.Group>
-          <div style={{ position: "relative", marginBottom: 40 }}>
-            <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
-          </div>
-          <hr></hr>
+
+          {/* <hr></hr> */}
           {/* </Card> */}
         </div>
       </Collapse>

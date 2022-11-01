@@ -139,7 +139,10 @@ const Feeandcharges = (props) => {
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-          <Form.Group style={{ display: props.displayFeeandCharges }} className="justify-content-center">
+          <Form.Group
+            style={{ display: props.displayFeeandCharges, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
+            className="justify-content-center"
+          >
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               <Col col-12>
                 <div className="row">
@@ -540,11 +543,12 @@ const Feeandcharges = (props) => {
                 </div>
               </Col>
             </Row>
+            <div style={{ position: "relative", marginBottom: 40 }}>
+              <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
+            </div>
           </Form.Group>
-          <div style={{ position: "relative", marginBottom: 40 }}>
-            <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
-          </div>
-          <hr></hr>
+
+          {/* <hr></hr> */}
           {/* </Card> */}
         </div>
       </Collapse>

@@ -293,7 +293,10 @@ const AppliedLandinfo = (props) => {
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-          <Form.Group style={{ display: props.displayPurpose }} className="justify-content-center">
+          <Form.Group
+            style={{ display: props.displayPurpose, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
+            className="justify-content-center"
+          >
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               <Col col-12>
                 {/* <h5 className="text-black">
@@ -317,7 +320,7 @@ const AppliedLandinfo = (props) => {
                     inline
                   ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   1. DGPS points <span className="text-primary"> (Click here for instructions to capture DGPS points)</span>
                   <ReportProblemIcon
                     style={{
@@ -350,13 +353,13 @@ const AppliedLandinfo = (props) => {
                         <label htmlFor="pitentialZone" className="font-weight-bold">
                           X:Longitude
                         </label>
-                        <input type="number" name="XLongitude" className="form-control" readOnly />
+                        <input type="number" name="XLongitude" className="form-control" disabled />
                       </div>
                       <div className="col col-4">
                         <label htmlFor="pitentialZone" className="font-weight-bold">
                           Y:Latitude
                         </label>
-                        <input type="number" name="YLatitude" className="form-control" readOnly />
+                        <input type="number" name="YLatitude" className="form-control" disabled />
                       </div>
                     </div>
                   </div>
@@ -369,13 +372,13 @@ const AppliedLandinfo = (props) => {
                         <label htmlFor="pitentialZone" className="font-weight-bold">
                           X:Longitude
                         </label>
-                        <input type="number" name="XLongitude" className="form-control" readOnly />
+                        <input type="number" name="XLongitude" className="form-control" disabled />
                       </div>
                       <div className="col col-4">
                         <label htmlFor="pitentialZone" className="font-weight-bold">
                           Y:Latitude
                         </label>
-                        <input type="number" name="YLatitude" className="form-control" readOnly />
+                        <input type="number" name="YLatitude" className="form-control" disabled />
                       </div>
                     </div>
                   </div>
@@ -389,13 +392,13 @@ const AppliedLandinfo = (props) => {
                         <label htmlFor="pitentialZone" className="font-weight-bold">
                           X:Longitude
                         </label>
-                        <input type="number" name="XLongitude" className="form-control" readOnly />
+                        <input type="number" name="XLongitude" className="form-control" disabled />
                       </div>
                       <div className="col col-4">
                         <label htmlFor="pitentialZone" className="font-weight-bold">
                           Y:Latitude
                         </label>
-                        <input type="number" name="YLatitude" className="form-control" readOnly />
+                        <input type="number" name="YLatitude" className="form-control" disabled />
                       </div>
                     </div>
                   </div>
@@ -408,13 +411,13 @@ const AppliedLandinfo = (props) => {
                         <label htmlFor="pitentialZone" className="font-weight-bold">
                           X:Longitude
                         </label>
-                        <input type="number" name="XLongitude" className="form-control" readOnly />
+                        <input type="number" name="XLongitude" className="form-control" disabled />
                       </div>
                       <div className="col col-4">
                         <label htmlFor="pitentialZone" className="font-weight-bold">
                           Y:Latitude
                         </label>
-                        <input type="number" name="YLatitude" className="form-control" readOnly />
+                        <input type="number" name="YLatitude" className="form-control" disabled />
                       </div>
                     </div>
                     {/* <DashSquareFill style={{ float: "right" }} class="text-primary" onClick={() => setNoOfRows(noOfRows - 1)} /> */}
@@ -429,13 +432,13 @@ const AppliedLandinfo = (props) => {
                           <label htmlFor="pitentialZone" className="font-weight-bold">
                             X:Longiude
                           </label>
-                          <input type="number" name="XLongitude" className="form-control" readOnly />
+                          <input type="number" name="XLongitude" className="form-control" disabled />
                         </div>
                         <div className="col col-4">
                           <label htmlFor="pitentialZone" className="font-weight-bold">
                             Y:Latitude
                           </label>
-                          <input type="number" name="YLatitude" className="form-control" readOnly />
+                          <input type="number" name="YLatitude" className="form-control" disabled />
                         </div>
                       </div>
                     );
@@ -448,11 +451,11 @@ const AppliedLandinfo = (props) => {
                 <h5 className="text-black" style={{ marginTop: "3%" }}>
                   <b>2.Details of Plots</b>&nbsp;&nbsp;
                   <div style={{ display: "flex" }}>
-                    <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} readOnly />
+                    <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} disabled />
                     &nbsp;&nbsp;
                     <label for="Yes"></label>
                     <label htmlFor="gen">Regular</label>&nbsp;&nbsp;
-                    <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} readOnly />
+                    <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} disabled />
                     &nbsp;&nbsp;
                     <label for="Yes"></label>
                     <label htmlFor="npnl">Irregular</label>
@@ -502,20 +505,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" readOnly />
+                          <input type="text" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -527,20 +530,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" readOnly />
+                          <input type="text" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -552,20 +555,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" readOnly />
+                          <input type="text" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -577,20 +580,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" readOnly />
+                          <input type="text" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -605,20 +608,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" readOnly />
+                          <input type="text" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -633,20 +636,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" readOnly />
+                          <input type="text" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -661,20 +664,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" readOnly />
+                          <input type="text" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -689,20 +692,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" readOnly />
+                          <input type="text" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -714,20 +717,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -739,20 +742,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -764,20 +767,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -789,20 +792,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -814,20 +817,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                       <tr>
@@ -839,20 +842,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" readOnly />
+                          <input type="number" className="form-control" disabled />
                         </td>
                       </tr>
                     </tbody>
@@ -888,11 +891,11 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                         </tr>
                         <tr>
@@ -908,18 +911,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                         </tr>
                       </tbody>
                     </div>
                     <h5 className="text-black">
                       <div style={{ display: "flex" }}>
-                        {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                        {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                         <b>Area Under</b>
                         <ReportProblemIcon
                           style={{
@@ -970,18 +973,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                         </tr>
                         <tr>
@@ -997,18 +1000,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                         </tr>
                         <tr>
@@ -1024,18 +1027,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                         </tr>
                         <tr>
@@ -1051,18 +1054,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                         </tr>
                         <tr>
@@ -1078,18 +1081,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" readOnly />
+                            <input type="number" className="form-control" disabled />
                           </td>
                         </tr>
                       </tbody>
@@ -1110,7 +1113,7 @@ const AppliedLandinfo = (props) => {
                 <h5 className="text-black">
                   <div style={{ display: "flex" }}>
                     <b>NILP :-</b>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <ReportProblemIcon
                       style={{
                         color:
@@ -1153,6 +1156,7 @@ const AppliedLandinfo = (props) => {
                           type="radio"
                           value="Yes"
                           id="Yes"
+                          disabled
                           // onChange={handleChange} name="Yes" onClick={handleshow0}
                         />
                         <label for="Yes">Yes</label>
@@ -1161,6 +1165,7 @@ const AppliedLandinfo = (props) => {
                           type="radio"
                           value="No"
                           id="No"
+                          disabled
                           // onChange={handleChange} name="Yes" onClick={handleshow0}
                         />
                         <label for="No">No</label>
@@ -1170,7 +1175,7 @@ const AppliedLandinfo = (props) => {
                                                         <div className="col col-12">
                                                             <label for="areaAcre" className="font-weight-bold">Area in Acres </label>
                                                             
-                                                            <input type="number" className="form-control"  readOnly  />
+                                                            <input type="number" className="form-control"  disabled  />
                                                         </div>
                                                     </div> 
                                             )
@@ -1185,6 +1190,7 @@ const AppliedLandinfo = (props) => {
                           type="radio"
                           value="Yes"
                           id="Yes"
+                          disabled
                           // onChange={handleChange} name="Yes" onClick={handleshow13}
                         />
                         <label for="Yes">Yes</label>
@@ -1193,6 +1199,7 @@ const AppliedLandinfo = (props) => {
                           type="radio"
                           value="No"
                           id="No"
+                          disabled
                           // onChange={handleChange} name="Yes" onClick={handleshow13}
                         />
                         <label for="No">No</label>
@@ -1202,12 +1209,12 @@ const AppliedLandinfo = (props) => {
                                                         <div className="col col-6">
                                                             <label for="areaAcre" className="font-weight-bold"> Dimension (in mtr) </label>
                                                             
-                                                            <input type="number" className="form-control"  readOnly  />
+                                                            <input type="number" className="form-control"  disabled  />
                                                         </div>
                                                         <div className="col col-6">
                                                             <label for="areaAcre" className="font-weight-bold"> Entered Area </label>
                                                             
-                                                            <input type="number" className="form-control"  readOnly  />
+                                                            <input type="number" className="form-control"  disabled  />
                                                         </div>
                                                     </div> 
                                             )
@@ -1222,6 +1229,7 @@ const AppliedLandinfo = (props) => {
                           type="radio"
                           value="Yes"
                           id="Yes"
+                          disabled
                           // onChange={handleChange} name="Yes" onClick={handleshow1}
                         />
                         <label for="Yes">Yes</label>
@@ -1230,6 +1238,7 @@ const AppliedLandinfo = (props) => {
                           type="radio"
                           value="No"
                           id="No"
+                          disabled
                           // onChange={handleChange} name="Yes"onClick={handleshow1}
                         />
                         <label for="No">No</label>
@@ -1239,7 +1248,7 @@ const AppliedLandinfo = (props) => {
                                                         <div className="col col-12">
                                                             <label for="areaAcre" className="font-weight-bold">Area in Acres </label>
                                                             
-                                                            <input type="number" className="form-control"  readOnly  />
+                                                            <input type="number" className="form-control"  disabled  />
                                                         </div>
                                                     </div> 
                                             )
@@ -1254,6 +1263,7 @@ const AppliedLandinfo = (props) => {
                           type="radio"
                           value="Yes"
                           id="Yes"
+                          disabled
                           // onChange={handleChange} name="Yes" onClick={handleshow14}
                         />
                         <label for="Yes">Yes</label>
@@ -1262,6 +1272,7 @@ const AppliedLandinfo = (props) => {
                           type="radio"
                           value="No"
                           id="No"
+                          disabled
                           // onChange={handleChange} name="Yes"onClick={handleshow14}
                         />
                         <label for="No">No</label>
@@ -1271,12 +1282,12 @@ const AppliedLandinfo = (props) => {
                                                         <div className="col col-12">
                                                             <label for="areaAcre" className="font-weight-bold">Dimension(in mtr)</label>
                                                             
-                                                            <input type="number" className="form-control"  readOnly  />
+                                                            <input type="number" className="form-control"  disabled  />
                                                         </div>
                                                         <div className="col col-12">
                                                             <label for="areaAcre" className="font-weight-bold">Entered Area</label>
                                                             
-                                                            <input type="number" className="form-control"  readOnly  />
+                                                            <input type="number" className="form-control"  disabled  />
                                                         </div>
                                                     </div> 
                                             )
@@ -1286,16 +1297,16 @@ const AppliedLandinfo = (props) => {
                   </tbody>
                 </div>
 
-                <hr />
+                <hr style={{ margin: 3 }} />
                 <h5 className="text-black" style={{ marginBottom: "2%" }}>
                   <b>Mandatory Documents</b>
                 </h5>
                 <div className="row">
                   <div className="col col-3">
                     <h6>
+                      Site plan.
                       <div style={{ display: "flex" }}>
-                        <b>Site plan.</b>
-                        <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" readOnly />
+                        {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
                         {<DownloadForOfflineIcon color="primary" />}
                         <ReportProblemIcon
                           style={{
@@ -1312,14 +1323,15 @@ const AppliedLandinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </h6>
-                    {/* <input type="file" className="form-control" readOnly /> */}
+                    {/* <input type="file" className="form-control" disabled /> */}
                   </div>
                   <div className="col col-3">
                     <h6>
+                      Democratic Plan.
                       <div style={{ display: "flex" }}>
                         {/* <b>Site plan.</b> */}
-                        <b>Democratic Plan.</b>
-                        <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" readOnly />
+
+                        {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
                         {<DownloadForOfflineIcon color="primary" />}
                         <ReportProblemIcon
                           style={{
@@ -1336,16 +1348,13 @@ const AppliedLandinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </h6>
-                    {/* <input type="file" className="form-control" readOnly />
+                    {/* <input type="file" className="form-control" disabled />
                     {<DownloadForOfflineIcon color="primary" />} */}
                   </div>
                   <div className="col col-3">
-                    {/* <h6>
-                      <b>Sectoral Plan/Layout Plan.</b>
-                    </h6> */}
+                    <h5>Sectoral Plan/Layout Plan.</h5>
                     <div style={{ display: "flex" }}>
-                      <b>Sectoral Plan/Layout Plan.</b>
-                      <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" readOnly />
+                      {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
                       {<DownloadForOfflineIcon color="primary" />}
                       <ReportProblemIcon
                         style={{
@@ -1361,18 +1370,15 @@ const AppliedLandinfo = (props) => {
                         }}
                       ></ReportProblemIcon>
                     </div>
-                    {/* <input type="file" className="form-control" readOnly />
+                    {/* <input type="file" className="form-control" disabled />
                     {<DownloadForOfflineIcon color="primary" />} */}
                   </div>
                   <div className="col col-3">
-                    {/* <h6>
-                      
-                    </h6>
-                    <input type="file" className="form-control" readOnly />
-                    {<DownloadForOfflineIcon color="primary" />} */}
+                    <h5>Development Plan.</h5>
+                    {/* <input type="file" className="form-control" disabled /> */}
+                    {/* {<DownloadForOfflineIcon color="primary" />} */}
                     <div style={{ display: "flex" }}>
-                      <b>Development Plan. </b>
-                      <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" readOnly />
+                      {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
                       {<DownloadForOfflineIcon color="primary" />}
                       <ReportProblemIcon
                         style={{
@@ -1392,16 +1398,12 @@ const AppliedLandinfo = (props) => {
                   <div className="row">
                     <div className="col col-3">
                       <div className="form-group">
-                        {/* <h6>
-                          <b>
-                            
-                          </b>
-                          
-                        </h6> */}
-                        <div style={{ display: "flex" }}>
+                        <h5>
                           Upload Layout Plan <span className="text-primary"> (Click here for instructions to capture DGPS points)</span>
-                          <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" readOnly />
-                          {/* <Form.Control  readOnly></Form.Control> */}
+                        </h5>
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {/* <Form.Control  disabled></Form.Control> */}
                           {<DownloadForOfflineIcon color="primary" />}
                           <ReportProblemIcon
                             style={{
@@ -1432,10 +1434,11 @@ const AppliedLandinfo = (props) => {
       </Collapse> */}
               </Col>
             </Row>
+            <div style={{ position: "relative", marginBottom: 40 }}>
+              <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
+            </div>
           </Form.Group>
-          <div style={{ position: "relative", marginBottom: 40 }}>
-            <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
-          </div>
+
           {/* <hr></hr> */}
         </div>
       </Collapse>

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
 
 const windowHeight = window !== undefined ? window.innerHeight : null;
 const ScrutinyDevelopment = (props) => {
+  const [approval, setDisapproval] = useState(false);
   const remarkDataResp = props.remarkData;
   return (
     <Container
@@ -16,7 +17,7 @@ const ScrutinyDevelopment = (props) => {
       }}
     >
       <Row>
-        <Card>
+        {/* <Card>
           <Card.Header>
             <Card.Title>
               <div style={{ display: "flex" }}>
@@ -33,9 +34,9 @@ const ScrutinyDevelopment = (props) => {
                 </div>
                 <div style={{ position: "relative", float: "right", margin: 5 }}>
                   <Button>Noting Reference </Button>
-                </div>
+                </div> */}
 
-                {/* <Card style={{ marginTop: 5 }}>
+        {/* <Card style={{ marginTop: 5 }}>
                   <Row className="ml-auto" style={{ marginBottom: 5 }}>
                     <Col md={4} xxl lg="3">
                       <Form.Label>
@@ -93,7 +94,7 @@ const ScrutinyDevelopment = (props) => {
                     </Col>
                   </Row>
                 </Card> */}
-                {/* <Card style={{ marginTop: 5 }}>
+        {/* <Card style={{ marginTop: 5 }}>
                   <Card.Header>
                     <Card.Title style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", textAlign: "center" }}>
                       Previw Current Noting
@@ -106,7 +107,7 @@ const ScrutinyDevelopment = (props) => {
                     </div>
                   </Form>
                 </Card> */}
-                <table class="table table-bordered">
+        {/* <table class="table table-bordered">
                   <thead>
                     <tr>
                       <th scope="col">S.No</th>
@@ -141,8 +142,8 @@ const ScrutinyDevelopment = (props) => {
               </div>
             </Form>
           </Card.Body>
-          <Card.Footer>
-            {/* <div style={{ position: "relative", float: "right", margin: 5, height: 35 }}>
+          <Card.Footer> */}
+        {/* <div style={{ position: "relative", float: "right", margin: 5, height: 35 }}>
               <Button>Lett: Created/Approve/Send</Button>
             </div>
             <div style={{ position: "relative", float: "right", margin: 5, height: 35 }}>
@@ -166,14 +167,14 @@ const ScrutinyDevelopment = (props) => {
             <div style={{ position: "relative", float: "right" }}>
               <Button>Submit</Button>
             </div> */}
-            <Row className="ms-auto" style={{ marginBottom: 20 }}>
+        {/* <Row className="ms-auto" style={{ marginBottom: 20 }}>
               <Col md={4} xxl lg="4">
                 <div style={{ display: "flex" }}>
                   <h5 style={{ margin: 5 }}>User Name</h5>
                   <input class="form-control" id="exampleFormControlT"></input>
                 </div>
 
-                {/* <input type="text" id="appt" name="appt"></input> */}
+                <input type="text" id="appt" name="appt"></input>
               </Col>
               <Col md={4} xxl lg="4">
                 <div style={{ display: "flex" }}>
@@ -189,7 +190,56 @@ const ScrutinyDevelopment = (props) => {
               </Col>
             </Row>
           </Card.Footer>
-        </Card>
+        </Card> */}
+        <Row>
+          <Col className="ms-auto" md={4} xxl lg="12">
+            <b>Application NO: </b>
+          </Col>
+        </Row>
+        {remarkDataResp !== null ? (
+          remarkDataResp.map((el, i) => {
+            return (
+              <div class="WhatsNewCard" style={{ backgroundColor: "#d0f0c0" }}>
+                <Row>
+                  {/* <Col className="ms-auto" md={4} xxl lg="4">
+                    <b> S.No</b>
+                  </Col> */}
+                  {/* <Col className="ms-auto" md={4} xxl lg="4">
+                    <b>Use Name</b>
+                  </Col>
+                  <Col className="ms-auto" md={4} xxl lg="4">
+                    <b>Remarks</b>
+                  </Col> */}
+                </Row>
+                {/* <h2> &amp; Redressal</h2> */}
+                <Row>
+                  {/* <Col className="ms-auto" md={4} xxl lg="12"></Col>
+
+                  <Col className="ms-auto" md={4} xxl lg="12"></Col>
+
+                  <Col className="ms-auto" md={4} xxl lg="12"></Col> */}
+                  <Row>
+                    <b>{el.userid}</b>
+                  </Row>
+                  <Row>{/* <b>{el.isApproved == true}</b> */}</Row>
+                  <Row>
+                    <b>Remarks</b>
+                  </Row>
+
+                  <p>
+                    {el.comment}
+                    {/* <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Null"></textarea> */}
+                  </p>
+                </Row>
+
+                <b style={{ textAlign: "left" }}>User ID :</b>
+                <b style={{ align: "right" }}>Date : 01-11-2022 </b>
+              </div>
+            );
+          })
+        ) : (
+          <p></p>
+        )}
       </Row>
     </Container>
   );
