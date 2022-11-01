@@ -11,6 +11,7 @@ function ModalChild(props) {
   const [iscrosschecked, setCrosschecked] = useState("");
   const [warningorred, setwarningOrred] = useState("#DAA520");
   const [yesOrNoClicked, setIsYesorNoClicked] = useState(true);
+  const inputFieldValue = props.fieldValue;
 
   const handlemodalsubmit = async () => {
     props.passmodalData({ data: { label: iscrosschecked, Remarks: RemarksDeveloper, color: warningorred } });
@@ -45,7 +46,7 @@ function ModalChild(props) {
       },
     };
 
-    const Resp = await axios.post("", postData, {}).then((response) => {
+    const Resp = await axios.post("/land-services/egscrutiny/_create", postData, {}).then((response) => {
       return response.data;
     });
     console.log("response from API", Resp);
@@ -63,7 +64,10 @@ function ModalChild(props) {
       onHide={() => setSmShow(false)}
     >
       <Modal.Header closeButton>
-        <Modal.Title id="example-modal-sizes-title-sm">{props.labelmodal}</Modal.Title>
+        <Modal.Title id="example-modal-sizes-title-sm">
+          {props.labelmodal}
+          <h2 style={{ fontSize: "30" }}>{inputFieldValue}</h2>
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {" "}
@@ -98,7 +102,7 @@ function ModalChild(props) {
         <Col xs={12} md={4}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>Remarks</Form.Label>
-            <Form.Control type="text" placeholder="" autoFocus onChange={(e) => setDeveloperRemarks({ data: e.target.value })} />
+            <Form.Control type="text" placeholder="Enter your Remarks" autoFocus onChange={(e) => setDeveloperRemarks({ data: e.target.value })} />
           </Form.Group>
           <div class="col-md-4 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
             <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>

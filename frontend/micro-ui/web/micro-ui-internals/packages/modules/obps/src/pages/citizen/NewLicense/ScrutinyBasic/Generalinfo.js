@@ -284,7 +284,9 @@ const Genarelinfo = (props) => {
               <Col md={4} xxl lg="3">
                 <div>
                   <Form.Label>
-                    <b>Purpose Of License</b> <span style={{ color: "red" }}>*</span>
+                    {/* <b></b>  */}
+                    <h5>Purpose Of License &nbsp;</h5>
+                    <span style={{ color: "red" }}>*</span>
                   </Form.Label>
                 </div>
 

@@ -94,14 +94,13 @@ const TopBar = ({
       />
     );
   }
-  console.log("ABC");
   const loggedin = userDetails?.access_token ? true : false;
   return (
     <div className="topbar">
       {mobileView ? <Hamburger handleClick={toggleSidebar} color="#9E9E9E" /> : null}
       
-      {/* <img className="city" src={loggedin ? cityDetails?.logoId : stateInfo?.statelogo} /> */}
-      <img className="city" src={""} />
+      <img className="city" src={loggedin ? cityDetails?.logoId : stateInfo?.statelogo} />
+     
       <span style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
         {loggedin &&
           (cityDetails?.city?.ulbGrade ? (

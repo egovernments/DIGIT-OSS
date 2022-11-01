@@ -76,23 +76,23 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     const optionsArrList = [
       {
         label: "Individual",
-        value: "01",
-        id: "0",
-      },
-      {
-        label: "Company",
-        value: "02",
+        value: "Individual",
         id: "1",
       },
       {
-        label: "LLP",
-        value: "03",
+        label: "Company",
+        value: "Company",
         id: "2",
       },
       {
-        label: "Society",
-        value: "04",
+        label: "LLP",
+        value: "LLP",
         id: "3",
+      },
+      {
+        label: "Society",
+        value: "Society",
+        id: "4",
       },
     ]
     // onchange = (e) => {
@@ -268,13 +268,39 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     const [aoofRows, setAoOfRows] = useState(1);
  
     
-    
+    const getDeveloperData = async ()=>{
+      try {
+        const requestResp = {
+          
+          "RequestInfo": {
+              "api_id": "1",
+              "ver": "1",
+              "ts": "",
+              "action": "_getDeveloperById",
+              "did": "",
+              "key": "",
+              "msg_id": "",
+              "requester_id": "",
+              "auth_token": ""
+          },
+      }
+        const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=36&isAllData=true`,requestResp,{
+  
+        });
+        console.log(getDevDetails?.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    useEffect(() => {
+      getDeveloperData()
+    }, []);
     
   // if (isLoading) return <Loader />;
   const AddInfoForm = async (e) => {
 
     if (!(formTab?.result && formTab?.result?.Licenses[0]?.id)) {
-      let licenseDet = {
+      let addInfoDev = {
         showDevTypeFields:showDevTypeFields,
         cin_Number: cin_Number,
         companyName: companyName,
@@ -286,9 +312,130 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
         directorsInformation: DirectorData,
         shareHoldingPatterens:modalValuesArray
       }
-      onSelect(config.key, licenseDet);
-      console.log("DATALICDET",licenseDet);
-      localStorage.setItem("addInfo",JSON.stringify(licenseDet));
+      onSelect(config.key, addInfoDev);
+      console.log("DATALICDET",addInfoDev);
+      localStorage.setItem("addInfo",JSON.stringify(addInfoDev));
+
+      const developerRegisterData = {
+        "devDetail": {
+            "licenceDetails": {
+              // licenseDet:licenseDet
+            },
+            "addInfo": {
+              addInfoDev:addInfoDev
+            },
+            "aurthorizedUserInfoArray": [
+                {
+                    "userName": "",
+                    "name": "",
+                    "gender": "",
+                    "mobileNumber": "",
+                    "emailId": "",
+                    "dob": "",
+                    "pan": "",
+                    "active": "",
+                    "type": "",
+                    "password": "",
+                    "tenantId": tenantId,
+                    "roles": [
+                        {
+                            "code": "CITIZEN",
+                            "name": "Citizen",
+                            "tenantId": "default"
+                        }
+                    ]
+                }
+            ],
+            "capacityDevelopAColony": {
+                "individualCertificateCA": "",
+                "companyBalanceSheet": "",
+                "paidUpCapital": "",
+                "networthPartners": "",
+                "networthFirm": "",
+                "capacityDevelopColonyHdruAct": [
+                    {
+                        "licenceNumber": "",
+                        "nameOfDeveloper": "",
+                        "purposeOfColony": "",
+                        "sectorAndDevelopmentPlan": "",
+                        "validatingLicence": ""
+                    }
+                ],
+                "capacityDevelopColonyLawAct": [
+                    {
+                        "serialNumber": "",
+                        "coloniesDeveloped": "",
+                        "area": "",
+                        "purpose": "",
+                        "statusOfDevelopment": "",
+                        "outstandingDues": ""
+                    }
+                ],
+                "technicalExpertEngaged": [
+                    {
+                        "engineerName": "",
+                        "engineerQualification": "",
+                        "engineerSign": "",
+                        "engineerDegree": "",
+                        "architectName": "",
+                        "architectQualification": "",
+                        "architectSign": "",
+                        "architectDegree": "",
+                        "townPlannerName": "",
+                        "townPlannerQualification": "",
+                        "townPlannerSign": "",
+                        "townPlannerDegree": "",
+                        "existingDeveloperAgreement": "",
+                        "existingDeveloperAgreementDoc": "",
+                        "technicalCapacity": "",
+                        "technicalCapacityDoc": "",
+                        "engineerNameN": "",
+                        "engineerDocN": "",
+                        "architectNameN": "",
+                        "architectDocN": "",
+                        "uplaodSpaBoard": "",
+                        "uplaodSpaBoardDoc": ""
+                    }
+                ],
+                "designationDirector": [
+                    {
+                        "agreementDoc": "",
+                        "boardDoc": ""
+                    }
+                ],
+                "obtainedLicense": [
+                    {
+                        "registeredDoc": "",
+                        "boardDocY": "",
+                        "earlierDocY": "",
+                        "boardDocN": "",
+                        "earlierDocN": "",
+                        "technicalAssistanceAgreementDoc": ""
+                    }
+                ]
+            }
+        }
+      }
+      Digit.OBPSService.createDeveloper(developerRegisterData, tenantId)
+        .then((result, err) => {
+          setIsDisableForNext(false);
+          let data = { 
+            result: result, 
+            formData: formData, 
+            Correspondenceaddress: Correspondenceaddress,
+            addressLineOneCorrespondence: addressLineOneCorrespondence,
+            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+  
+            isAddressSame: isAddressSame }
+          //1, units
+          onSelect("", data, "", true);
+  
+        })
+        .catch((e) => {
+          setIsDisableForNext(false);
+          setShowToast({ key: "error" });
+          setError(e?.response?.data?.Errors[0]?.message || null);
+        });
     }
     else {
       let data = formTab?.formTab;
@@ -299,6 +446,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
       data.LicneseAddInfo.registeredContactNo = registeredContactNo;
       onSelect("", formTab)
     }
+
+    
 
   };
 
@@ -353,7 +502,7 @@ const onSkip = () => onSelect();
             </div>
 
             {/* FOR INDIVIDUAL */}
-            {showDevTypeFields === "01" && (
+            {showDevTypeFields === "Individual" && (
             <div className="card mb-3">
               {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -493,7 +642,7 @@ const onSkip = () => onSelect();
             )}
           
             {/* FOR COMPANY */}
-            {showDevTypeFields === "02" && (
+            {showDevTypeFields === "Company" && (
             <div className="card mb-3">
               {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -731,7 +880,7 @@ const onSkip = () => onSelect();
               </div>
             </div>
             )}
-            {showDevTypeFields === "02" && (
+            {showDevTypeFields === "Company" && (
             <div className="card mb-3">
             <h5 className="card-title fw-bold">Shareholding Patterns</h5>
               <div className="card-body">
@@ -952,7 +1101,7 @@ const onSkip = () => onSelect();
               </div>
             </div>
              )}
-            {showDevTypeFields === "02" && (
+            {showDevTypeFields === "Company" && (
             <div className="card mb-3">
             <h5 className="card-title fw-bold">Directors Information</h5>
               <div className="card-body">
@@ -963,7 +1112,7 @@ const onSkip = () => onSelect();
                         <th>Sr. No</th>
                         <th>DIN Number</th>
                         <th>Name</th>
-                        <th>PAN Number</th>
+                        <th>Contact Number</th>
                         <th>Upload PDF</th>
                       </tr>
                     </thead>
@@ -1018,7 +1167,7 @@ const onSkip = () => onSelect();
             )}
 
             {/* FOR COMPANY */}
-            {showDevTypeFields === "03" && (
+            {showDevTypeFields === "LLP" && (
             <div className="card mb-3">
               {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -1254,7 +1403,7 @@ const onSkip = () => onSelect();
               </div>
             </div>
             )}
-            {showDevTypeFields === "03" && (
+            {showDevTypeFields === "LLP" && (
             <div className="card mb-3">
             <h5 className="card-title fw-bold">Shareholding Patterns</h5>
               <div className="card-body">
@@ -1470,7 +1619,7 @@ const onSkip = () => onSelect();
               </div>
             </div>
              )}
-            {showDevTypeFields === "03" && (
+            {showDevTypeFields === "LLP" && (
             <div className="card mb-3">
             <h5 className="card-title fw-bold">Directors Information</h5>
               <div className="card-body">
@@ -1481,7 +1630,7 @@ const onSkip = () => onSelect();
                         <th>Sr. No</th>
                         <th>DIN Number</th>
                         <th>Name</th>
-                        <th>PAN Number</th>
+                        <th>Contact Number</th>
                         <th>Upload PDF</th>
                       </tr>
                     </thead>
