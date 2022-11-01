@@ -165,9 +165,10 @@ const columns = [
     dataIndex: "marla",
   },
   {
-    key: "action",
+    // key: "action",
     title: "Action",
-    dataIndex: "action",
+    dataIndex: "",
+    render: () => <h6>Delete</h6>,
   },
 ];
 
@@ -176,18 +177,18 @@ const ApllicantPuropseForm = (props) => {
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
   const [district, setDistrict] = useState("");
- 
+
   const [revenueEstate, setRevenueEstate] = useState("");
   const [consolidation, setConsolidation] = useState("");
   const [show, setShow] = useState(false);
   const [PurposeformSubmitted, SetPurposeformSubmitted] = useState(false);
   const [tehsil, setTehsil] = useState({});
   const [landOwner, setLandOwner] = useState({});
-  
+
   const [revenueName, setRevenueName] = useState({});
   const [mustil, setMustil] = useState({});
   const [khewat, setKhewat] = useState("");
- 
+
   const [developerCompany, setDeveloperCompany] = useState("");
   const [sector, setSector] = useState("");
   const [Rectangle, setRectangle] = useState("");
@@ -234,7 +235,7 @@ const ApllicantPuropseForm = (props) => {
   const [showhide1, setShowhide1] = useState("No");
   const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
-  
+
   const [displayEditModal, setDisplayEditModal] = useState("none");
   const {
     register,
@@ -286,9 +287,7 @@ const ApllicantPuropseForm = (props) => {
         },
       };
 
-      console.log("SS", process.env.REACT_APP_PROXY_MDMS);
       const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_district", postDistrict).then((Resp) => {
-        console.log("DISTRICTLIST", Resp);
         return Resp;
       });
       setDistrictData(Resp.data);
@@ -386,7 +385,6 @@ const ApllicantPuropseForm = (props) => {
           {}
         )
         .then((response) => {
-          console.log("DD", response.data.must);
           return response;
         });
       setMustilData(Resp.data.must);
@@ -464,10 +462,6 @@ const ApllicantPuropseForm = (props) => {
   //   getLandOwnerStateData();
   // }, [district2, tehsil, revenueName.khewat]);
 
-  useEffect(() => {
-    console.log("district2", district2);
-  }, [district2]);
-
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
@@ -476,34 +470,26 @@ const ApllicantPuropseForm = (props) => {
 
   const setSelectPurposeDd = (e) => {
     const purposeSelected = e.target.value;
-    console.log("purpose", purposeSelected);
     localStorage.setItem("purpose", purposeSelected);
   };
   const setSelectDevPlan = (e) => {
     const potentialSelected = e.target.value;
-    console.log("potential", potentialSelected);
     localStorage.setItem("potential", potentialSelected);
   };
 
   const setSelect = (e) => {
     const purposeSelected = e.target.value;
-    console.log("purpose", purposeSelected);
     localStorage.setItem("purpose", purposeSelected);
   };
 
-  const ApplicantPurposeModalData =(data)=>{
-    
-    const values ={
-      "tehsil":tehsilCode,
-      "kanal":modalKanal,
-      
-    }
+  const ApplicantPurposeModalData = (data) => {
+    const values = {
+      tehsil: tehsilCode,
+      kanal: modalKanal,
+    };
     console.log("data++++++", data);
     // setModalValuesArray((prev)=>[...prev,values]);
-   
   };
-  
-  
 
   const PurposeFormSubmitHandler = async (data) => {
     console.log("data===", data);
@@ -736,7 +722,6 @@ const ApllicantPuropseForm = (props) => {
       };
 
       const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        console.log("Submit", Resp);
         return Resp;
       });
       setFinalSubmitData(Resp.data);
@@ -748,14 +733,14 @@ const ApllicantPuropseForm = (props) => {
   //   purposeDd: purposeDd,
   //   potential: potential,
   //   district: district,
-    
+
   //   ApplicationPurposeData1: {
   //     tehsil: tehsil,
   //     revenueEstate: revenueEstate,
   //     mustil: mustil,
   //     consolidation: consolidation,
   //     sarsai: sarsai,
-   
+
   //     landOwner: landOwner,
   //     developerCompany: developerCompany,
   //     registeringdate: registeringdate,
@@ -770,19 +755,15 @@ const ApllicantPuropseForm = (props) => {
   // localStorage.setItem("Application Purpose", JSON.stringify(forms));
 
   const handleChangePurpose = (data) => {
-    console.log("purpose", data?.label);
     const purposeSelected = data?.label;
     setSelectPurpose(purposeSelected);
     localStorage.setItem("purpose", JSON.stringify(purposeSelected));
   };
   const handleChangePotential = (data) => {
-    console.log("potential", data);
     const potentialSelected = data?.label;
     setPotentialDev(potentialSelected);
-    console.log("potential", potentialSelected);
     localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
- 
 
   const getDocumentData = async () => {
     if (file === null) {
@@ -793,8 +774,6 @@ const ApllicantPuropseForm = (props) => {
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-
-    console.log("File", formData);
 
     try {
       const Resp = await axios
@@ -817,139 +796,139 @@ const ApllicantPuropseForm = (props) => {
 
   return (
     <div>
-    <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
-      <Card style={{ width: "126%" }}>
-        <h2>New License</h2>
-        <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
-          <Form.Group>
-            <Row className="ml-auto" style={{ marginBottom: 5 }}>
-              <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <b>Puropse Of License</b> <span style={{ color: "red" }}>*</span>
-                  </Form.Label>
-                </div>
+      <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
+        <Card style={{ width: "126%" }}>
+          <h2>New License</h2>
+          <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
+            <Form.Group>
+              <Row className="ml-auto" style={{ marginBottom: 5 }}>
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <b>Puropse Of License</b> <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
+                  </div>
 
-                <ReactMultiSelect
-                  control={control}
-                  name="purposeDd"
-                  onChange={handleChangePurpose}
-                  placeholder="Purpose"
-                  data={optionsPurposeList}
-                  labels="Purpose"
-                />
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.purposeDd && errors?.purposeDd?.message}
-                </h3>
-              </Col>
-              {/* <Form.Select type="text" defaultValue={purposeDd} placeholder="Puropse"  onChange={handleChangePurpose} value={purposeDd}  ></Form.Select> */}
-              {/* <ReactMultiSelect
+                  <ReactMultiSelect
+                    control={control}
+                    name="purposeDd"
+                    onChange={handleChangePurpose}
+                    placeholder="Purpose"
+                    data={optionsPurposeList}
+                    labels="Purpose"
+                  />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.purposeDd && errors?.purposeDd?.message}
+                  </h3>
+                </Col>
+                {/* <Form.Select type="text" defaultValue={purposeDd} placeholder="Puropse"  onChange={handleChangePurpose} value={purposeDd}  ></Form.Select> */}
+                {/* <ReactMultiSelect
                             listOfData={optionsPurposeList}
                             labels="Purpose"
                             getSelectedValue={handleChangePurpose}
                         /> */}
 
-              <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <b>Potential Zone:</b> <span style={{ color: "red" }}>*</span>
-                  </Form.Label>
-                </div>
-                <ReactMultiSelect
-                  control={control}
-                  name="potential"
-                  placeholder="Potential"
-                  data={optionsPotentialList}
-                  labels="Potential"
-                  onChange={handleChangePotential}
-                />
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.potential && errors?.potential?.message}
-                </h3>
-              </Col>
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <b>Potential Zone:</b> <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
+                  </div>
+                  <ReactMultiSelect
+                    control={control}
+                    name="potential"
+                    placeholder="Potential"
+                    data={optionsPotentialList}
+                    labels="Potential"
+                    onChange={handleChangePotential}
+                  />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.potential && errors?.potential?.message}
+                  </h3>
+                </Col>
 
-              <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <b>District</b> <span style={{ color: "red" }}>*</span>
-                  </Form.Label>
-                </div>
-                <ReactMultiSelect
-                  control={control}
-                  name="district"
-                  placeholder="District"
-                  data={districtDataLbels}
-                  labels="District"
-                  onChange={(e) => {
-                    getTehslidata(e.value);
-                    setDistrict(e.value);
-                  }}
-                />
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <b>District</b> <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
+                  </div>
+                  <ReactMultiSelect
+                    control={control}
+                    name="district"
+                    placeholder="District"
+                    data={districtDataLbels}
+                    labels="District"
+                    onChange={(e) => {
+                      getTehslidata(e.value);
+                      setDistrict(e.value);
+                    }}
+                  />
 
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.district && errors?.district?.message}
-                </h3>
-              </Col>
-              <Col md={4} xxl lg="3">
-                <div>
-                  <Form.Label>
-                    <b>State </b>
-                    <span style={{ color: "red" }}>*</span>
-                  </Form.Label>
-                </div>
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.district && errors?.district?.message}
+                  </h3>
+                </Col>
+                <Col md={4} xxl lg="3">
+                  <div>
+                    <Form.Label>
+                      <b>State </b>
+                      <span style={{ color: "red" }}>*</span>
+                    </Form.Label>
+                  </div>
 
-                <input type="text" className="form-control" placeholder="N/A" {...register("state")} disabled defaultValue="Haryana" />
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.state && errors?.state?.message}
-                </h3>
-              </Col>
-            </Row>
+                  <input type="text" className="form-control" placeholder="N/A" {...register("state")} disabled defaultValue="Haryana" />
+                  <h3 className="error-message" style={{ color: "red" }}>
+                    {errors?.state && errors?.state?.message}
+                  </h3>
+                </Col>
+              </Row>
 
-            <div className="ml-auto" style={{ marginTop: 20 }}>
-              <h2 style={{ fontSize: 24 }}>
-                <b>2. Details of applied land:</b>
-              </h2>
+              <div className="ml-auto" style={{ marginTop: 20 }}>
+                <h2 style={{ fontSize: 24 }}>
+                  <b>2. Details of applied land:</b>
+                </h2>
+                <br></br>
+                <p>
+                  Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development
+                  agreements/ Memorandum of Understanding etc. and similar agreements registered with competent authority.
+                </p>
+                <br></br>
+                <p>
+                  <b>(i) Khasra-wise information to be provided in the following format:</b>
+                </p>
+                <br></br>
+              </div>
+              <div className="ml-auto">
+                <Button type="button" variant="primary" onClick={() => setmodal(true)}>
+                  Enter Details
+                </Button>
+              </div>
               <br></br>
-              <p>
-                Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development
-                agreements/ Memorandum of Understanding etc. and similar agreements registered with competent authority.
-              </p>
-              <br></br>
-              <p>
-                <b>(i) Khasra-wise information to be provided in the following format:</b>
-              </p>
-              <br></br>
-            </div>
-            <div className="ml-auto">
-              <Button type="button" variant="primary" onClick={() => setmodal(true)}>
-                Enter Details
-              </Button>
-           
-            </div>
-            <br></br>
 
-            <div className="applt" style={{ overflow: "auto" }}>
-              <WorkingTable columns={columns} data={tableData} />
-              {/* <Table className="table table-bordered" columns={columns} pagination={false} /> */}
-            </div>
-          </Form.Group>
-          <div class="row">
-            <div class="col-sm-12 text-left">
-              <button id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
-                Back
-              </button>
-            </div>
+              <div className="applt" style={{ overflow: "auto" }}>
+                <WorkingTable columns={columns} data={tableData} />
+                {/* <Table className="table table-bordered" columns={columns} pagination={false} /> */}
+              </div>
+            </Form.Group>
             <div class="row">
-              <div class="col-sm-12 text-right">
-                <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-                  Continue
+              <div class="col-sm-12 text-left">
+                <button id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
+                  Back
                 </button>
               </div>
+              <div class="row">
+                <div class="col-sm-12 text-right">
+                  <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+                    Continue
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
+          </Card>
         </Card>
-      </Card>
-    </form>
+      </form>
+     
     <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
     <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
     <ModalBody>
@@ -1117,7 +1096,7 @@ const ApllicantPuropseForm = (props) => {
                               getSelectedValue={(data) => setModalLand(data.data)}
 
                           ></ReactMultiSelect> */}
-          {/* <input type="text"  placeholder="Owner Name" className="form-control" 
+                {/* <input type="text"  placeholder="Owner Name" className="form-control" 
                   onChange={(e)=>setModalLand(e.target.value)}
               /> */}
         </Col>
