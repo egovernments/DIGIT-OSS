@@ -20,6 +20,11 @@ import Step5 from "../citizen/NewLicense/Step5/Step5";
 import AddInfoForm from "../citizen/DeveloperRegistration/AddInfoForm/addInfo";
 import MyApplication from "./MyApplication";
 import ApplicationDetails from "./ApplicationDetail";
+import CommonBank from "./Bank Guarantee/Common/Common";
+import SubmitNew from "./Bank Guarantee/Common/SubmitNew";
+import RenewNew from "./Bank Guarantee/Common/Renew";
+import Replace from "./Bank Guarantee/Common/Replace";
+import ReleaseNew from "./Bank Guarantee/Common/Release";
 // import LicenseAddInfo from "../../pageComponents/LicenseAddInfo";
 // import OCBuildingPermit from "./OCBuildingPermit";
 // import BpaApplicationDetail from "./BpaApplicationDetail";
@@ -31,7 +36,7 @@ import Inbox from "./ArchitectInbox";
 //import EdcrInbox from "./EdcrInbox";
 import OBPSResponse from "../employee/OBPSResponse";
 import CommonForm from "../citizen/NewLicense/common/index";
-import ScrutinyFormcontainer from "./NewLicense/ScrutinyContainer/scrutinyformcontainer";
+import ScrutinyFormcontainer from "../citizen/NewLicense/ScrutinyContainer/ScrutinyFormContainer";
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
@@ -66,6 +71,12 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/add-info`} component={AddInfoForm} />
         {/* <PrivateRoute path={`${path}/common`} component={Common} /> */}
         <PrivateRoute path={`${path}/tab`} component={CommonForm} />
+        <PrivateRoute path={`${path}/bank`} component={CommonBank} />
+      
+        <PrivateRoute path={`${path}/submitNew`} component={SubmitNew} />
+        <PrivateRoute path={`${path}/renew`} component={RenewNew} />
+        <PrivateRoute path={`${path}/replace`} component={Replace} />
+        <PrivateRoute path={`${path}/release`} component={ReleaseNew} />
         <PrivateRoute path={`${path}/step-one`} component={Step1} />
         <PrivateRoute path={`${path}/step-two`} component={Step2} />
         <PrivateRoute path={`${path}/step-three`} component={Step3} />

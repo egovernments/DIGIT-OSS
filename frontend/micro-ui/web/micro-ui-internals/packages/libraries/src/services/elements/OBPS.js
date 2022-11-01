@@ -33,6 +33,23 @@ export const OBPSService = {
       params: {},
       auth: true,
     }),
+  createDeveloper: (details, tenantId) =>
+    Request({
+      url: Urls.obps.createDeveloper,
+      data: details,
+      setTimeParam: false,
+      userService: true,
+      method: "POST",
+      auth: true,
+    }),
+  getDeveloperData: (tenantId, sourceRefId) =>
+    Request({
+      url: Urls.obps.getDeveloperData,
+      params: { tenantId, ...sourceRefId },
+      auth: true,
+      userService: true,
+      method: "GET"
+    }),
   NOCSearch: (tenantId, sourceRefId) =>
     Request({
       url: Urls.obps.nocSearch,

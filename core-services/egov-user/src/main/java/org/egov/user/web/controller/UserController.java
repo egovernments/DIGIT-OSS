@@ -76,12 +76,10 @@ public class UserController {
     @PostMapping("/citizen/_create")
     public Object createCitizen(@RequestBody  CreateUserRequest createUserRequest) {
     	
-    	 System.out.println("Received Citizen Registration Request  " + createUserRequest);
         log.info("Received Citizen Registration Request  " + createUserRequest);
         
         User user = createUserRequest.toDomain(true);
         
-        System.out.println("1");
         user.setOtpValidationMandatory(IsValidationMandatory);
         if (isRegWithLoginEnabled) {
             Object object = userService.registerWithLogin(user, createUserRequest.getRequestInfo());

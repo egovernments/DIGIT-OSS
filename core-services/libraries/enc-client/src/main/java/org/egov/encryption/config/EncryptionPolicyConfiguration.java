@@ -2,6 +2,8 @@ package org.egov.encryption.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
 import net.minidev.json.JSONArray;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.encryption.models.Attribute;
@@ -43,6 +45,10 @@ public class EncryptionPolicyConfiguration {
             MdmsCriteriaReq mdmsCriteriaReq = MdmsCriteriaReq.builder().requestInfo(RequestInfo.builder().build())
                     .mdmsCriteria(mdmsCriteria).build();
 
+            System.out.println("====encProperties.getEgovMdmsHost() : ===" +encProperties.getEgovMdmsHost() + "===encProperties.getEgovMdmsSearchEndpoint() ===" + 
+            encProperties.getEgovMdmsSearchEndpoint() +"=== mdmsCriteriaReq : ===" + mdmsCriteriaReq.getMdmsCriteria().getTenantId() + "==========mdmsCriteriaReq : " + mdmsCriteriaReq.getRequestInfo().getApiId());
+            
+            
             ResponseEntity<MdmsResponse> response =
                     restTemplate.postForEntity(encProperties.getEgovMdmsHost() + encProperties.getEgovMdmsSearchEndpoint(),
                             mdmsCriteriaReq, MdmsResponse.class);

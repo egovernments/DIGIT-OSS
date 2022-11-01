@@ -7,7 +7,7 @@ import NoData from "./NoData";
 import { ArrowDownwardElement } from "./ArrowDownward";
 import { ArrowUpwardElement } from "./ArrowUpward";
 
-const rowNamesToBeLocalised = ["Department","", "Usage Type","Ward","Wards"]
+const rowNamesToBeLocalised = ["Department", "", "Usage Type", "Ward", "Wards"];
 
 const InsightView = ({ rowValue, insight }) => {
   return (
@@ -16,7 +16,7 @@ const InsightView = ({ rowValue, insight }) => {
       {` `}
       {insight >= 0 ? ArrowUpwardElement() : ArrowDownwardElement()}
       {` `}
-      { isNaN(insight) ? `0%` : `${Math.abs(insight)}%`}
+      {isNaN(insight) ? `0%` : `${Math.abs(insight)}%`}
     </span>
   );
 };
@@ -26,7 +26,7 @@ const calculateFSTPCapacityUtilization = (value, totalCapacity, numberOfDays = 1
   return Math.round((value / (totalCapacity * numberOfDays)) * 100);
 };
 
-const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) => {
+const CustomTable = ({ data = {}, onSearch, setChartData, setChartDenomination }) => {
   const { id } = data;
   const [chartKey, setChartKey] = useState(id);
   const [filterStack, setFilterStack] = useState([{ id: chartKey }]);
@@ -46,7 +46,9 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
     tenantId,
     requestDate: { ...lastYearDate },
     filters:
-      id === chartKey ? value?.filters : {...value?.filters, [filterStack[filterStack.length - 1]?.filterKey]: filterStack[filterStack.length - 1]?.filterValue },
+      id === chartKey
+        ? value?.filters
+        : { ...value?.filters, [filterStack[filterStack.length - 1]?.filterKey]: filterStack[filterStack.length - 1]?.filterValue },
   });
   const { isLoading, data: response } = Digit.Hooks.dss.useGetChart({
     key: chartKey,
@@ -54,13 +56,15 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
     tenantId,
     requestDate: { ...value?.requestDate, startDate: value?.range?.startDate?.getTime(), endDate: value?.range?.endDate?.getTime() },
     filters:
-      id === chartKey ? value?.filters : {...value?.filters, [filterStack[filterStack.length - 1]?.filterKey]: filterStack[filterStack.length - 1]?.filterValue },
+      id === chartKey
+        ? value?.filters
+        : { ...value?.filters, [filterStack[filterStack.length - 1]?.filterKey]: filterStack[filterStack.length - 1]?.filterValue },
   });
   useEffect(() => {
     const { id } = data;
     setChartKey(id);
     setFilterStack([{ id: id }]);
-  }, [data,value]);
+  }, [data, value]);
   const tableData = useMemo(() => {
     if (!response || !lastYearResponse) return;
     setChartDenomination(response?.responseData?.data?.[0]?.headerSymbol);
@@ -100,8 +104,8 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
         if (typeof cellValue === "number" && !Number.isInteger(cellValue)) {
           cellValue = Math.round((cellValue + Number.EPSILON) * 100) / 100;
         }
-        if(typeof cellValue === "string" &&rowNamesToBeLocalised?.includes(row.name)){
-          cellValue=t(`DSS_TB_`+Digit.Utils.locale.getTransformedLocale(cellValue));
+        if (typeof cellValue === "string" && rowNamesToBeLocalised?.includes(row.name)) {
+          cellValue = t(`DSS_TB_` + Digit.Utils.locale.getTransformedLocale(cellValue));
         }
         acc[t(`DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(row?.name)}`)] =
           insight !== null ? { value: cellValue, insight } : row?.name === "S.N." ? id + 1 : cellValue;
@@ -121,8 +125,7 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
         }, {});
       });
       setChartData(result);
-    }
-    else{
+    } else {
       const result = [];
       setChartData(result);
     }
@@ -142,10 +145,8 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
           });
         }
         return (
-          String(row?.values?.[key])
-          .toLowerCase()?.includes(filterValue?.toLowerCase()) ||
-        String(t(row?.values?.[key]))
-          .toLowerCase()?.includes(filterValue?.toLowerCase())
+          String(row?.values?.[key]).toLowerCase()?.includes(filterValue?.toLowerCase()) ||
+          String(t(row?.values?.[key])).toLowerCase()?.includes(filterValue?.toLowerCase())
           /* search in the table to get filter along with space is currently enabled
           Also replace startsWith with includes
           String(row?.values?.[key])
@@ -166,11 +167,11 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
   const renderUnits = (denomination) => {
     switch (denomination) {
       case "Unit":
-        return `(${t('DSS_'+Digit.Utils.locale.getTransformedLocale(denomination))})`;
+        return `(${t("DSS_" + Digit.Utils.locale.getTransformedLocale(denomination))})`;
       case "Lac":
-        return `(${t('DSS_'+Digit.Utils.locale.getTransformedLocale(denomination))})`;
+        return `(${t("DSS_" + Digit.Utils.locale.getTransformedLocale(denomination))})`;
       case "Cr":
-        return `(${t('DSS_'+Digit.Utils.locale.getTransformedLocale(denomination))})`;
+        return `(${t("DSS_" + Digit.Utils.locale.getTransformedLocale(denomination))})`;
       default:
         return "";
     }
@@ -188,9 +189,11 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
     if (response?.responseData?.drillDownChartId && response?.responseData?.drillDownChartId !== "none") {
       let currentValue = value;
       if (filterKey === "tenantId") {
-        currentValue = dssTenants?.filter((tenant) => tenant?.city?.ddrName === value || tenant?.code === value || tenant?.description=== value).map((tenant) => tenant?.code);
-        if(currentValue?.length==0&&value){
-          currentValue=[value]
+        currentValue = dssTenants
+          ?.filter((tenant) => tenant?.city?.ddrName === value || tenant?.code === value || tenant?.description === value)
+          .map((tenant) => tenant?.code);
+        if (currentValue?.length == 0 && value) {
+          currentValue = [value];
         }
         /*  Removed this mdms active tenants filter logic as per RAIN-5454
         currentValue = dssTenants.filter((tenant) => tenant?.city?.ddrName === value || tenant?.code === value).map((tenant) => tenant?.code);
@@ -226,21 +229,56 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
   const isMobile = window.Digit.Utils.browser.isMobile();
 
   const getTooltipStyles = (name) => {
-    if (isMobile) return {height: "fit-content", background: "#555", padding: "5px", wordBreak: name?.length > 100 ? "break-all" : "break-word", overflowWrap: "break-word", borderRadius: "6px", maxWidth: "205px" };
-    else return {height: "fit-content", background: "#555", width: "fit-content", padding: "5px", wordBreak: name?.length > 100 ? "break-all" : "break-word", overflowWrap: "break-word", borderRadius: "6px"}
-  } 
+    if (isMobile)
+      return {
+        height: "fit-content",
+        background: "#555",
+        padding: "5px",
+        wordBreak: name?.length > 100 ? "break-all" : "break-word",
+        overflowWrap: "break-word",
+        borderRadius: "6px",
+        maxWidth: "205px",
+      };
+    else
+      return {
+        height: "fit-content",
+        background: "#555",
+        width: "fit-content",
+        padding: "5px",
+        wordBreak: name?.length > 100 ? "break-all" : "break-word",
+        overflowWrap: "break-word",
+        borderRadius: "6px",
+      };
+  };
 
   const tableColumns = useMemo(() => {
     const columns = response?.responseData?.data?.find((row) => !!row);
     return columns?.plots
       ?.filter((plot) => plot?.name !== "TankCapacity")
       .map((plot) => ({
-        Header:<span className="tooltip">
-             {renderHeader(plot)}
-              <span className="tooltiptext" style={{fontSize:"14px" , marginLeft: ((t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)).length < 10) ? -40 : (tableData?.length > 2) ? -100 : -160, height:"35px" ,bottom:'0%', top: '100%', background: "none", width: (tableData?.length > 2 || (t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)).length < 42) ?  "150px" : "250px"}} >
-                <div style={getTooltipStyles(t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`))}>{t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)}</div>
-              </span>
-            </span>,
+        Header: (
+          <span className="tooltip">
+            {renderHeader(plot)}
+            <span
+              className="tooltiptext"
+              style={{
+                fontSize: "14px",
+                marginLeft:
+                  t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`).length < 10 ? -40 : tableData?.length > 2 ? -100 : -160,
+                height: "35px",
+                bottom: "0%",
+                top: "100%",
+                background: "none",
+                width:
+                  tableData?.length > 2 || t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`).length < 42 ? "150px" : "250px",
+              }}
+            >
+              <div style={getTooltipStyles(t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`))}>
+                {t(`TIP_DSS_HEADER_${Digit.Utils.locale.getTransformedLocale(plot?.name)}`)}
+              </div>
+            </span>
+          </span>
+        ),
         accessor: accessData(plot),
         id: plot?.name?.replaceAll(".", " "),
         symbol: plot?.symbol,
@@ -300,15 +338,21 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
     return <Loader />;
   }
   return (
-    <div style={{ width: "100%"}}>
-      <span className={"dss-table-subheader" } style={{position:"sticky" ,left:0}}>
-        {t('DSS_CMN_TABLE_INFO')}
-        </span>
+    <div style={{ width: "100%" }}>
+      <span className={"dss-table-subheader"} style={{ position: "sticky", left: 0 }}>
+        {t("DSS_CMN_TABLE_INFO")}
+      </span>
       {filterStack?.length > 1 && (
         <div className="tag-container">
           <span style={{ marginTop: "20px" }}>{t("DSS_FILTERS_APPLIED")}: </span>
           {filterStack.map((filter, id) =>
-            id > 0 ? <RemoveableTag key={id} text={`${filter?.label}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter?.name)}`)}`} onClick={() => removeULB(id)} /> : null
+            id > 0 ? (
+              <RemoveableTag
+                key={id}
+                text={`${filter?.label}: ${t(`DSS_TB_${Digit.Utils.locale.getTransformedLocale(filter?.name)}`)}`}
+                onClick={() => removeULB(id)}
+              />
+            ) : null
           )}
         </div>
       )}
@@ -326,11 +370,11 @@ const CustomTable = ({ data={}, onSearch, setChartData,setChartDenomination }) =
           globalSearch={filterValue}
           initSortId="S N "
           onSearch={onSearch}
-          data={tableData?.filter(tRow=>tRow)||[]}
+          data={tableData?.filter((tRow) => tRow) || []}
           totalRecords={tableData?.length}
-          columns={tableColumns?.filter(row=>row)?.slice(1)}
+          columns={tableColumns?.filter((row) => row)?.slice(1)}
           showAutoSerialNo={"DSS_HEADER_S_N_"}
-          styles={{overflow: "hidden"}}
+          styles={{ overflow: "hidden" }}
           getCellProps={(cellInfo) => {
             return {
               style: {},

@@ -106,6 +106,16 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     });
     const editScreen = false;
 
+    const getDeveloperData = async (tenantId, params) => {
+      const response = await OBPSService.getDeveloperData(tenantId, params);
+      return response;
+    }
+
+    useEffect(() => {
+      getDeveloperData()
+    }, []);
+
+  
   const panVerification = async () => {
     try {
       const panVal =  {
@@ -263,6 +273,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     catch(error){
       console.log(error.message);
     }
+
+    
+
   };
 
   const handleAurthorizedUserFormSubmit = async (e) => {
@@ -275,7 +288,109 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     console.log(formData);
     localStorage.setItem("data_user", JSON.stringify(formData))
     
-    
+    const developerRegisterData = {
+      "devDetail": {
+          "licenceDetails": {
+            // licenseDet:licenseDet
+          },
+          "addInfo": {
+            // addInfoDev:addInfoDev
+          },
+          "aurthorizedUserInfoArray": [
+              {
+                formData:formData
+              }
+          ],
+          "capacityDevelopAColony": {
+              "individualCertificateCA": "",
+              "companyBalanceSheet": "",
+              "paidUpCapital": "",
+              "networthPartners": "",
+              "networthFirm": "",
+              "capacityDevelopColonyHdruAct": [
+                  {
+                      "licenceNumber": "",
+                      "nameOfDeveloper": "",
+                      "purposeOfColony": "",
+                      "sectorAndDevelopmentPlan": "",
+                      "validatingLicence": ""
+                  }
+              ],
+              "capacityDevelopColonyLawAct": [
+                  {
+                      "serialNumber": "",
+                      "coloniesDeveloped": "",
+                      "area": "",
+                      "purpose": "",
+                      "statusOfDevelopment": "",
+                      "outstandingDues": ""
+                  }
+              ],
+              "technicalExpertEngaged": [
+                  {
+                      "engineerName": "",
+                      "engineerQualification": "",
+                      "engineerSign": "",
+                      "engineerDegree": "",
+                      "architectName": "",
+                      "architectQualification": "",
+                      "architectSign": "",
+                      "architectDegree": "",
+                      "townPlannerName": "",
+                      "townPlannerQualification": "",
+                      "townPlannerSign": "",
+                      "townPlannerDegree": "",
+                      "existingDeveloperAgreement": "",
+                      "existingDeveloperAgreementDoc": "",
+                      "technicalCapacity": "",
+                      "technicalCapacityDoc": "",
+                      "engineerNameN": "",
+                      "engineerDocN": "",
+                      "architectNameN": "",
+                      "architectDocN": "",
+                      "uplaodSpaBoard": "",
+                      "uplaodSpaBoardDoc": ""
+                  }
+              ],
+              "designationDirector": [
+                  {
+                      "agreementDoc": "",
+                      "boardDoc": ""
+                  }
+              ],
+              "obtainedLicense": [
+                  {
+                      "registeredDoc": "",
+                      "boardDocY": "",
+                      "earlierDocY": "",
+                      "boardDocN": "",
+                      "earlierDocN": "",
+                      "technicalAssistanceAgreementDoc": ""
+                  }
+              ]
+          }
+      }
+    }
+    Digit.OBPSService.createDeveloper(developerRegisterData, tenantId)
+      .then((result, err) => {
+        setIsDisableForNext(false);
+        let data = { 
+          result: result, 
+          formData: formData, 
+          Correspondenceaddress: Correspondenceaddress,
+          addressLineOneCorrespondence: addressLineOneCorrespondence,
+          addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+
+          isAddressSame: isAddressSame }
+        //1, units
+        onSelect("", data, "", true);
+
+      })
+      .catch((e) => {
+        setIsDisableForNext(false);
+        setShowToast({ key: "error" });
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
       
     
 

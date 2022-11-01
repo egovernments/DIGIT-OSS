@@ -1,35 +1,27 @@
 import React from "react";
 import Select from "react-select";
-import {Autocomplete,TextField} from '@mui/material';
-
-
+import { Controller } from "react-hook-form";
 
 const MultiSelectField = (props) => {
- const ApiList=props.listOfData
   return (
     <div className="app-input-text">
-        {/* <Select
-          className="basic-single"
-          classNamePrefix="select"
-          // defaultValue={dealAnalysisArr[0]}
-          isClearable={true}
-          isSearchable={true}
-          name={props?.name}
-          options={props?.data}
-          value={props?.value}
-          
-         
-        /> */}
-
-        <Autocomplete
-          id="combo-box-demo"
-          options={(ApiList.length>0)?ApiList:[{"label":"none","id":null}]}
-          sx={{ width: 250 }}
-          onChange={(e,v)=>props.getSelectedValue({"data":v.value})}
-          renderInput={(params) => <TextField {...params} label={props.labels} variant="standard" />}>
-
-      </Autocomplete>
-        
+      <Controller
+        name={props?.name}
+        control={props?.control}
+        render={({ field: { onChange, value } }) => (
+          <Select
+            isMulti={props.multiSelect}
+            placeholder={props?.placeholder}
+            options={props?.data}
+            isDisabled={props?.isDisabled}
+            value={props?.value ? props?.data?.filter((option) => option?.value === props?.value) : value}
+            onChange={(e) => {
+              onChange(e);
+              if (props?.onChange) props?.onChange(e);
+            }}
+          />
+        )}
+      />
     </div>
   );
 };
