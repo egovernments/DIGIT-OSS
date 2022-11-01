@@ -3,7 +3,6 @@ import { Table } from "antd";
 
 // rowSelection object indicates the need for row selection
 const rowSelection = {
-  // onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {},
   getCheckboxProps: (record) => ({
     disabled: record.name === "Disabled User", // Column configuration not to be checked
     name: record.name,
