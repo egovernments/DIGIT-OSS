@@ -16,7 +16,6 @@ const MultiSelectField = (props) => {
             isDisabled={props?.isDisabled}
             value={props?.value ? props?.data?.filter((option) => option?.value === props?.value) : value}
             onChange={(e) => {
-              console.log("eee", e);
               onChange(e);
               if (props?.onChange) props?.onChange(e);
             }}

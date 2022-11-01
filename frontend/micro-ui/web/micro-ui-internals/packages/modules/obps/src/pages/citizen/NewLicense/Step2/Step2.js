@@ -497,7 +497,7 @@ const ApllicantPuropseForm = (props) => {
       tehsil: tehsilCode,
       kanal: modalKanal,
     };
-    console.log("data++++++", data);
+    console.log("data++++++", values);
     // setModalValuesArray((prev)=>[...prev,values]);
   };
 

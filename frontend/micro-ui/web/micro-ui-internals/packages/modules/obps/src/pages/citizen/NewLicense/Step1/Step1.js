@@ -407,19 +407,7 @@ const ApllicantFormStep1 = (props) => {
                     <b>Developer</b> <span style={{ color: "red" }}>*</span>
                   </Form.Label>
                 </div>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="N/A"
-                  disabled
-                  {...register("authorizedDeveloper")}
-                  // onChange={(e) => setAuthorizedDeveloper(e.target.value)}
-                  // value={
-                  //   developerData !== null && developerData !== undefined
-                  //     ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
-                  //     : "N/A"
-                  // }
-                />
+                <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedDeveloper")} />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.authorizedDeveloper && errors?.authorizedDeveloper?.message}
                 </h3>
@@ -438,8 +426,6 @@ const ApllicantFormStep1 = (props) => {
                     <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPerson" />
                   )}
                 />
-
-                {/* <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedPerson")} /> */}
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.authorizedPerson && errors?.authorizedPerson?.message}
                 </h3>
