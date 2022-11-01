@@ -168,9 +168,9 @@ const columns = [
     // key: "action",
     title: "Action",
     dataIndex: "",
-    render: () => (
+    render: (data) => (
       <div>
-        <h6>Edit</h6>
+        <h6 onClick={() => console.log("data", data)}>Edit</h6>
         <h6>Delete</h6>
       </div>
     ),
@@ -196,6 +196,7 @@ const ApllicantPuropseForm = (props) => {
   const [showhide1, setShowhide1] = useState("No");
   const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
+  const [consolidateValue, setConsolidateValue] = useState(null);
 
   const {
     register,
@@ -216,6 +217,11 @@ const ApllicantPuropseForm = (props) => {
   };
   const handleshow2 = (e) => {
     const getshow = e.target.value;
+    if (getshow === "1") {
+      setConsolidateValue("consolidated");
+    } else {
+      setConsolidateValue("non-consolidated");
+    }
     setShowhide2(getshow);
   };
 
@@ -350,16 +356,22 @@ const ApllicantPuropseForm = (props) => {
     DistrictApiCall();
   }, []);
 
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
-
   const ApplicantPurposeModalData = (data) => {
     console.log("data++++++", data);
-    setModalData((prev) => [...prev, data]);
-    setmodal(false);
-    reset();
-    // setModalValuesArray((prev)=>[...prev,values]);
+    data["consolidationType"] = consolidateValue;
+    if (showhide2 === "1") {
+      delete data?.bigha;
+      delete data?.biswa;
+      delete data?.biswansi;
+    }
+    if (showhide2 === "2") {
+      delete data?.marla;
+      delete data?.kanal;
+      delete data?.sarsai;
+    }
+    // setModalData((prev) => [...prev, data]);
+    // setmodal(false);
+    // reset();
   };
 
   const PurposeFormSubmitHandler = async (data) => {
@@ -841,11 +853,11 @@ const ApllicantPuropseForm = (props) => {
                     </h6>{" "}
                   </label>{" "}
                   &nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow2} />
+                  <input type="radio" id="Yes" value="1" name="Yes" onClick={handleshow2} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
                   <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow2} />
+                  <input type="radio" id="Yes" value="2" name="Yes" onClick={handleshow2} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
                   <label htmlFor="npnl">Non-Consolidated</label>
@@ -939,7 +951,7 @@ const ApllicantPuropseForm = (props) => {
                     &nbsp;{" "}
                   </b>
                   &nbsp;&nbsp;
-                  <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow1} />
+                  <input type="radio" value="Yes" id="Yes" name="Yes" onClick={handleshow1} />
                   &nbsp;&nbsp;
                   <label for="Yes">
                     <h6>
@@ -947,7 +959,7 @@ const ApllicantPuropseForm = (props) => {
                     </h6>
                   </label>
                   &nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow1} />
+                  <input type="radio" value="No" id="No" name="Yes" onClick={handleshow1} />
                   &nbsp;&nbsp;
                   <label for="No">
                     <h6>
@@ -988,13 +1000,13 @@ const ApllicantPuropseForm = (props) => {
                         </h6>
                       </label>
                       <br></br>
-                      <input type="radio" value="Yes" id="Yes1" onChange={handleChange} name="Yes" />
+                      <input type="radio" value="Yes" id="Yes1" name="Yes" />
                       &nbsp;&nbsp;
                       <label for="Yes">
                         <h6>Yes</h6>
                       </label>
                       &nbsp;&nbsp;
-                      <input type="radio" value="No" id="No1" onChange={handleChange} name="Yes" />
+                      <input type="radio" value="No" id="No1" name="Yes" />
                       &nbsp;&nbsp;
                       <label for="No">
                         <h6>No</h6>
