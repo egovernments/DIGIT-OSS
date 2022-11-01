@@ -21,7 +21,7 @@ const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDeta
         <img
           className="city"
           id="topbar-logo" 
-          src={"http://10.1.1.10:7001/tcp/assets/img/logo-white.png"}
+          src={"https://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/tcp-logo-hr2.png"}
           height="100px"
           alt="TCP"
         />

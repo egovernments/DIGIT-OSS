@@ -302,7 +302,7 @@ const handleColonyDevGrp=()=>{
       <div className={isopenlink ? "OpenlinkContainer" : ""}>
 
         {isopenlink && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
-        <Timeline currentStep={2} flow="STAKEHOLDER" />
+        <Timeline currentStep={4} flow="STAKEHOLDER" />
         <FormStep
           config={config}
           onSelect={goNext}
@@ -328,7 +328,7 @@ const handleColonyDevGrp=()=>{
             value={Correspondenceaddress}
             disable={isAddressSame}
           /> */}
-          {devTypeFlagVal === "01" &&(
+          {devTypeFlagVal === "Individual" &&(
                 <div className="card-body">
                     <div className="form-group row mb-12">
                         {/* <label className="col-sm-3 col-form-label">Individual</label> */}
@@ -368,7 +368,7 @@ const handleColonyDevGrp=()=>{
                         </div>
                     </div>
                 </div>)}
-                {devTypeFlagVal === "02" &&(
+                {devTypeFlagVal === "Company" &&(
                 <div className="card-body">
                     <div className="form-group row">
                         {/* <label className="col-sm-3 col-form-label">Company</label> */}
@@ -422,7 +422,7 @@ const handleColonyDevGrp=()=>{
                         </div>
                     </div>
                 </div>)}
-                {devTypeFlagVal === "03" &&(
+                {devTypeFlagVal === "LLP" &&(
                 <div className="card-body">
                     <div className="form-group row">
                         {/* <label className="col-sm-3 col-form-label">LLP</label> */}

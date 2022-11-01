@@ -8,8 +8,8 @@ import Timeline from "../components/Timeline";
 import { convertEpochToDate } from "../utils/index";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers";
-import { VALIDATION_SCHEMA } from "../utils/developerRegisterSchema";
+// import { yupResolver } from "@hookform/resolvers";
+// import { VALIDATION_SCHEMA } from "../utils/developerRegisterSchema";
 const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   // const {
   //   register,
@@ -159,7 +159,35 @@ console.log(panValidation);
     if(PanNumber.length === 10){
       panVerification();
     }
-  }, [PanNumber])
+  }, [PanNumber]);
+
+  const getDeveloperData = async ()=>{
+    try {
+      const requestResp = {
+        
+        "RequestInfo": {
+            "api_id": "1",
+            "ver": "1",
+            "ts": "",
+            "action": "_getDeveloperById",
+            "did": "",
+            "key": "",
+            "msg_id": "",
+            "requester_id": "",
+            "auth_token": ""
+        },
+    }
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=36&isAllData=true`,requestResp,{
+
+      });
+      console.log(getDevDetails?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    getDeveloperData()
+  }, []);
   function SelectName(e) {
     setName(e.target.value);
   }
@@ -201,11 +229,13 @@ console.log(panValidation);
     setPincode(e.target.value);
   }
   function selectChecked(e) {
+    console.log(e.target.value);
     setSelectedChecked(e.target.value);
     if (isAddressSame == false) {
       setisAddressSame(true);
+      setSelectedChecked(formData?.LicenseDetails?.addressSameAsPermanent ? formData?.LicenseDetails?.addressSameAsPermanent: formData?.LicenseDetails?.addressSameAsPermanent)
       setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress);
-      setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOne ? formData?.LicneseDetails?.addressLineOne : formData?.LicneseDetails?.addressLineOne);
+      setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOneCorrespondence ? formData?.LicneseDetails?.addressLineOneCorrespondence : formData?.LicneseDetails?.addressLineOne);
       setAddressLineTwoCorrespondence(formData?.LicneseDetails?.addressLineTwo ? formData?.LicneseDetails?.addressLineTwo : formData?.formData?.LicneseDetails?.addressLineTwo);
       setAddressLineThreeCorrespondence(formData?.LicneseDetails?.addressLineThree ? formData?.LicneseDetails?.addressLineThree : formData?.formData?.LicneseDetails?.addressLineThree);
       setAddressLineFourCorrespondence(formData?.LicneseDetails?.addressLineFour ? formData?.LicneseDetails?.addressLineFour : formData?.formData?.LicneseDetails?.addressLineFour);
@@ -294,58 +324,56 @@ console.log(panValidation);
           setShowToast({ key: "error" });
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
-      
-    // DEVELOPER API CALL
-    try{
-      const developerRegisterData = {
+
+        const developerRegisterData = {
         "devDetail": {
             "licenceDetails": {
               licenseDet:licenseDet
             },
             "addInfo": {
-                "showDevTypeFields": "02",
-                "cin_Number": "U72200CH1998PTC022006",
-                "companyName": "MAPDATA SCIENCES INDIA PRIVATE LIMITED",
-                "incorporationDate": "03/12/1998",
-                "registeredAddress": "PLOT NO.10, 2ND FLOOR RGTP, KISHANGARH CHANDIGARH Chandigarh CH 160101 IN",
-                "email": "charan.singh@mapds.com.au",
+                "showDevTypeFields": "",
+                "cin_Number": "",
+                "companyName": "",
+                "incorporationDate": "",
+                "registeredAddress": "",
+                "email": "",
                 "registeredContactNo": "",
                 "gst_Number": "",
                 "directorsInformation": [
                     {
                         "contactNumber": "",
-                        "din": "0002260042",
-                        "name": "CHARAN SINGH"
+                        "din": "",
+                        "name": ""
                     },
                     {
                         "contactNumber": "",
-                        "din": "0003529888",
-                        "name": "BRETT JOHN BUNDOCK"
+                        "din": "",
+                        "name": ""
                     }
                 ],
                 "shareHoldingPatterens": [
                     {
-                        "name": "DLF",
-                        "designition": "developer",
-                        "percentage": "45",
-                        "uploadPdf": null,
-                        "serialNumber": null
+                        "name": "",
+                        "designition": "",
+                        "percentage": "",
+                        "uploadPdf": "",
+                        "serialNumber": ""
                     }
                 ]
             },
             "aurthorizedUserInfoArray": [
                 {
-                    "userName": "Deep",
-                    "name": "Deep",
-                    "gender": "MALE",
-                    "mobileNumber": "8126287097",
-                    "emailId": "sudeep@gmail.com",
-                    "dob": "1997-01-08",
-                    "pan": "BRTPO8978U",
-                    "active": true,
-                    "type": "CITIZEN",
-                    "password": "Password@123",
-                    "tenantId": "hr",
+                    "userName": "",
+                    "name": "",
+                    "gender": "",
+                    "mobileNumber": "",
+                    "emailId": "",
+                    "dob": "",
+                    "pan": "",
+                    "active": "",
+                    "type": "",
+                    "password": "",
+                    "tenantId": tenantId,
                     "roles": [
                         {
                             "code": "CITIZEN",
@@ -363,20 +391,20 @@ console.log(panValidation);
                 "networthFirm": "",
                 "capacityDevelopColonyHdruAct": [
                     {
-                        "licenceNumber": "1112",
-                        "nameOfDeveloper": "abc",
-                        "purposeOfColony": "hyper",
-                        "sectorAndDevelopmentPlan": "abghed",
-                        "validatingLicence": "yes"
+                        "licenceNumber": "",
+                        "nameOfDeveloper": "",
+                        "purposeOfColony": "",
+                        "sectorAndDevelopmentPlan": "",
+                        "validatingLicence": ""
                     }
                 ],
                 "capacityDevelopColonyLawAct": [
                     {
-                        "serialNumber": "23",
-                        "coloniesDeveloped": "yes",
-                        "area": "12345",
-                        "purpose": "for building",
-                        "statusOfDevelopment": "good",
+                        "serialNumber": "",
+                        "coloniesDeveloped": "",
+                        "area": "",
+                        "purpose": "",
+                        "statusOfDevelopment": "",
                         "outstandingDues": ""
                     }
                 ],
@@ -425,14 +453,165 @@ console.log(panValidation);
             }
         }
       }
-      const devDetailsDataCall = await axios.post(`/user/developer/registration`,developerRegisterData,{
+      Digit.OBPSService.createDeveloper(developerRegisterData, tenantId)
+        .then((result, err) => {
+          setIsDisableForNext(false);
+          let data = { 
+            result: result, 
+            formData: formData, 
+            Correspondenceaddress: Correspondenceaddress,
+            addressLineOneCorrespondence: addressLineOneCorrespondence,
+            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+
+            isAddressSame: isAddressSame }
+          //1, units
+          onSelect("", data, "", true);
+
+        })
+        .catch((e) => {
+          setIsDisableForNext(false);
+          setShowToast({ key: "error" });
+          setError(e?.response?.data?.Errors[0]?.message || null);
+        });
+      
+    // DEVELOPER API CALL
+    // try{
+    //   const developerRegisterData = {
+    //     "devDetail": {
+    //         "licenceDetails": {
+    //           licenseDet:licenseDet
+    //         },
+    //         "addInfo": {
+    //             "showDevTypeFields": "02",
+    //             "cin_Number": "U72200CH1998PTC022006",
+    //             "companyName": "MAPDATA SCIENCES INDIA PRIVATE LIMITED",
+    //             "incorporationDate": "03/12/1998",
+    //             "registeredAddress": "PLOT NO.10, 2ND FLOOR RGTP, KISHANGARH CHANDIGARH Chandigarh CH 160101 IN",
+    //             "email": "charan.singh@mapds.com.au",
+    //             "registeredContactNo": "",
+    //             "gst_Number": "",
+    //             "directorsInformation": [
+    //                 {
+    //                     "contactNumber": "",
+    //                     "din": "0002260042",
+    //                     "name": "CHARAN SINGH"
+    //                 },
+    //                 {
+    //                     "contactNumber": "",
+    //                     "din": "0003529888",
+    //                     "name": "BRETT JOHN BUNDOCK"
+    //                 }
+    //             ],
+    //             "shareHoldingPatterens": [
+    //                 {
+    //                     "name": "DLF",
+    //                     "designition": "developer",
+    //                     "percentage": "45",
+    //                     "uploadPdf": null,
+    //                     "serialNumber": null
+    //                 }
+    //             ]
+    //         },
+    //         "aurthorizedUserInfoArray": [
+    //             {
+    //                 "userName": "Deep",
+    //                 "name": "Deep",
+    //                 "gender": "MALE",
+    //                 "mobileNumber": "8126287097",
+    //                 "emailId": "sudeep@gmail.com",
+    //                 "dob": "1997-01-08",
+    //                 "pan": "BRTPO8978U",
+    //                 "active": true,
+    //                 "type": "CITIZEN",
+    //                 "password": "Password@123",
+    //                 "tenantId": "hr",
+    //                 "roles": [
+    //                     {
+    //                         "code": "CITIZEN",
+    //                         "name": "Citizen",
+    //                         "tenantId": "default"
+    //                     }
+    //                 ]
+    //             }
+    //         ],
+    //         "capacityDevelopAColony": {
+    //             "individualCertificateCA": "",
+    //             "companyBalanceSheet": "",
+    //             "paidUpCapital": "",
+    //             "networthPartners": "",
+    //             "networthFirm": "",
+    //             "capacityDevelopColonyHdruAct": [
+    //                 {
+    //                     "licenceNumber": "1112",
+    //                     "nameOfDeveloper": "abc",
+    //                     "purposeOfColony": "hyper",
+    //                     "sectorAndDevelopmentPlan": "abghed",
+    //                     "validatingLicence": "yes"
+    //                 }
+    //             ],
+    //             "capacityDevelopColonyLawAct": [
+    //                 {
+    //                     "serialNumber": "23",
+    //                     "coloniesDeveloped": "yes",
+    //                     "area": "12345",
+    //                     "purpose": "for building",
+    //                     "statusOfDevelopment": "good",
+    //                     "outstandingDues": ""
+    //                 }
+    //             ],
+    //             "technicalExpertEngaged": [
+    //                 {
+    //                     "engineerName": "",
+    //                     "engineerQualification": "",
+    //                     "engineerSign": "",
+    //                     "engineerDegree": "",
+    //                     "architectName": "",
+    //                     "architectQualification": "",
+    //                     "architectSign": "",
+    //                     "architectDegree": "",
+    //                     "townPlannerName": "",
+    //                     "townPlannerQualification": "",
+    //                     "townPlannerSign": "",
+    //                     "townPlannerDegree": "",
+    //                     "existingDeveloperAgreement": "",
+    //                     "existingDeveloperAgreementDoc": "",
+    //                     "technicalCapacity": "",
+    //                     "technicalCapacityDoc": "",
+    //                     "engineerNameN": "",
+    //                     "engineerDocN": "",
+    //                     "architectNameN": "",
+    //                     "architectDocN": "",
+    //                     "uplaodSpaBoard": "",
+    //                     "uplaodSpaBoardDoc": ""
+    //                 }
+    //             ],
+    //             "designationDirector": [
+    //                 {
+    //                     "agreementDoc": "",
+    //                     "boardDoc": ""
+    //                 }
+    //             ],
+    //             "obtainedLicense": [
+    //                 {
+    //                     "registeredDoc": "",
+    //                     "boardDocY": "",
+    //                     "earlierDocY": "",
+    //                     "boardDocN": "",
+    //                     "earlierDocN": "",
+    //                     "technicalAssistanceAgreementDoc": ""
+    //                 }
+    //             ]
+    //         }
+    //     }
+    //   }
+    //   const devDetailsDataCall = await axios.post(`/user/developer/registration`,developerRegisterData,{
         
-      });
-      console.log(devDetailsDataCall);
-    }
-    catch(error){
-      console.log(error.message);
-    }
+    //   });
+    //   console.log(devDetailsDataCall);
+    // }
+    // catch(error){
+    //   console.log(error.message);
+    // }
     
     }
     else {
@@ -581,7 +760,7 @@ console.log(panValidation);
                   {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
                   />
                   {PanNumber&&PanNumber.length>0&&!PanNumber.match(Digit.Utils.getPattern('PAN'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
-                  <h3 className="error-message" style={{color:"red"}}>{error?.response?.data?.errorDescription}</h3>
+                  {/* <h3 className="error-message" style={{color:"red"}}>{errorPanVal}</h3> */}
               </Form.Group>
             </Row>
           </Card>
@@ -706,7 +885,7 @@ console.log(panValidation);
                 <CheckBox
                   label={t("BPA_SAME_AS_PERMANENT_ADDRESS")}
                   onChange={(e) => selectChecked(e)}
-                  //value={field.isPrimaryOwner}
+                  value={isAddressSame}
                   checked={isAddressSame}
                   style={{ paddingBottom: "10px", paddingTop: "10px" }}
                   />
