@@ -9,8 +9,10 @@ const DisApprovalList = (props) => {
   const [generalCheckedLIst, setgeneraldisapprovalCheckedlist] = useState([]);
   const [developerInfoList, setdeveloperdisapprovallist] = useState([]);
   const [developerCheckedLIst, setdeveloperdisapprovalCheckedlist] = useState([]);
-
-  const appliedLandInfoList = props.disapprovallistAppliedLand;
+  const [appliedLandInfoList, setappliedisapprovallist] = useState([]);
+  const [appliedCheckedLIst, setappliedisapprovalCheckedlist] = useState([]);
+  const [licenseDetailsInfoList, setlicenseDetailsdisapprovallist] = useState([]);
+  const [licenseDetailsCheckedLIst, setlicenseDetailsdisapprovalCheckedlist] = useState([]);
 
   const persona = props.disapprovallistPersonal;
   const personalCheckedlist = props.disapprovalCheckedPersonal;
@@ -18,6 +20,10 @@ const DisApprovalList = (props) => {
   const generalCheckedlist = props.disapprovalCheckedGeneral;
   const developer = props.disapprovallistDeveloper;
   const developerCheckedlist = props.disapprovaCheckedDeveloper;
+  const appliedLand = props.disapprovallistAppliedLand;
+  const appliedLandCheckedList = props.disapprovalCheckedAppliedLand;
+  const licenseDetails = props.disapprovallistlicenseDetails;
+  const licenseDetailsCheckedlist = props.disapprovalCheckedlicenseDetails;
 
   useEffect(() => {
     setperonaldisapprovallist(props.disapprovallistPersonal);
@@ -28,6 +34,16 @@ const DisApprovalList = (props) => {
     setperonaldisapprovalCheckedlist(props.disapprovalCheckedPersonal);
   }, [personalCheckedlist]);
   console.log("disaaproval side data Checkedlist=", personalCheckedlist);
+
+  useEffect(() => {
+    setlicenseDetailsdisapprovallist(props.disapprovallistlicenseDetails);
+  }, [licenseDetails]);
+  console.log("disaaproval side data =", licenseDetails);
+
+  useEffect(() => {
+    setlicenseDetailsdisapprovalCheckedlist(props.disapprovalCheckedlicenseDetails);
+  }, [licenseDetailsCheckedlist]);
+  console.log("disaaproval side data Checkedlist=", licenseDetailsCheckedlist);
 
   useEffect(() => {
     setgeneraldisapprovallist(props.disapprovallistGeneral);
@@ -48,6 +64,16 @@ const DisApprovalList = (props) => {
     setdeveloperdisapprovalCheckedlist(props.disapprovaCheckedDeveloper);
   }, [developerCheckedlist]);
   console.log("disaaproval side data Checkedlist=", developerCheckedlist);
+
+  useEffect(() => {
+    setappliedisapprovallist(props.disapprovallistAppliedLand);
+  }, [appliedLand]);
+  console.log("disaaproval side data =", appliedLand);
+
+  useEffect(() => {
+    setappliedisapprovalCheckedlist(props.disapprovalCheckedAppliedLand);
+  }, [appliedLandCheckedList]);
+  console.log("disaaproval side data Checkedlist=", appliedLandCheckedList);
   console.log("general data", generalCheckedlist);
   return (
     // <Container>
@@ -191,10 +217,10 @@ const DisApprovalList = (props) => {
                   <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{i + 1}</h4>
                 </Col>
                 <Col xxl lg="5">
-                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el}</h4>
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.label}</h4>
                 </Col>
                 <Col xxl lg="6">
-                  <Form.Control type="text" placeholder="Reason for Disapprove"></Form.Control>
+                  <Form.Control type="text" placeholder={el.Remarks.data}></Form.Control>
                 </Col>
               </Row>
             ))
@@ -203,6 +229,73 @@ const DisApprovalList = (props) => {
               <h2 style={{ fontSize: 12, fontFamily: "Roboto", fontWeight: "lighter" }}>
                 No Applied Land Information Disapproval list to show right now
               </h2>
+            </div>
+          )}
+          <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginTop: 10, marginBottom: 10 }}>
+            Applied Land Information Aaproval
+          </h2>
+          {appliedCheckedLIst !== undefined && appliedCheckedLIst !== null && appliedCheckedLIst.length > 0 ? (
+            appliedCheckedLIst.map((el, i) => (
+              <Row key={i} style={{ marginBottom: 10 }}>
+                <Col xxl lg="1">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{i + 1}</h4>
+                </Col>
+                <Col xxl lg="5">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.label}</h4>
+                </Col>
+                <Col xxl lg="6">
+                  <Form.Control type="text" placeholder={el.Remarks.data}></Form.Control>
+                </Col>
+              </Row>
+            ))
+          ) : (
+            <div>
+              <h2 style={{ fontSize: 12, fontFamily: "Roboto", fontWeight: "lighter" }}>
+                No Applied Land Information Disapproval list to show right now
+              </h2>
+            </div>
+          )}
+
+          <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Personal Information Disaaproval</h2>
+          {licenseDetailsInfoList !== undefined && licenseDetailsInfoList !== null && licenseDetailsInfoList.length > 0 ? (
+            licenseDetailsInfoList.map((el, i) => (
+              <Row key={i} style={{ marginBottom: 10 }}>
+                <Col xxl lg="1">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{i + 1}</h4>
+                </Col>
+                <Col xxl lg="5">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.label}</h4>
+                </Col>
+                <Col xxl lg="6">
+                  <Form.Control type="text" placeholder={el.Remarks.data}></Form.Control>
+                </Col>
+              </Row>
+            ))
+          ) : (
+            <div>
+              <h2 style={{ fontSize: 12, fontFamily: "Roboto", fontWeight: "lighter" }}>
+                No Personal Information Disapproval list to show right now
+              </h2>
+            </div>
+          )}
+          <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Personal Information approval</h2>
+          {licenseDetailsCheckedlist !== undefined && licenseDetailsCheckedlist !== null && licenseDetailsCheckedlist.length > 0 ? (
+            licenseDetailsCheckedlist.map((el, i) => (
+              <Row key={i} style={{ marginBottom: 10 }}>
+                <Col xxl lg="1">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{i + 1}</h4>
+                </Col>
+                <Col xxl lg="5">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.label}</h4>
+                </Col>
+                <Col xxl lg="6">
+                  <Form.Control type="text" placeholder={el.Remarks.data}></Form.Control>
+                </Col>
+              </Row>
+            ))
+          ) : (
+            <div>
+              <h2 style={{ fontSize: 12, fontFamily: "Roboto", fontWeight: "lighter" }}>No Personal Information Approval list to show right now</h2>
             </div>
           )}
         </Form>
