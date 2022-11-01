@@ -176,10 +176,69 @@ const columns = [
     ),
   },
 ];
+const consolidatedColumns = [
+  {
+    key: "tehsil",
+    title: "Tehsil",
+    dataIndex: "tehsil",
+  },
+  {
+    key: "revenueEstate",
+    title: "Revenue Estate",
+    dataIndex: "revenueEstate",
+  },
+  {
+    key: "rectangleNo",
+    title: "Rectangle No.",
+    dataIndex: "rectangleNo",
+  },
+  {
+    key: "killa",
+    title: "Killa",
+    dataIndex: "killa",
+  },
+  {
+    key: "landOwner",
+    title: "Land Owner",
+    dataIndex: "landOwner",
+  },
+  {
+    key: "consolidationType",
+    title: "Consolidation Type",
+    dataIndex: "consolidationType",
+  },
+  {
+    key: "bigha",
+    title: "Bigha",
+    dataIndex: "bigha",
+  },
+  {
+    key: "biswa",
+    title: "Biswa",
+    dataIndex: "biswa",
+  },
+  {
+    key: "biswansi",
+    title: "Biswansi",
+    dataIndex: "biswansi",
+  },
+  {
+    // key: "action",
+    title: "Action",
+    dataIndex: "",
+    render: (data) => (
+      <div>
+        <h6 onClick={() => console.log("data", data)}>Edit</h6>
+        <h6>Delete</h6>
+      </div>
+    ),
+  },
+];
 
 const ApllicantPuropseForm = (props) => {
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
+  const [getColumns, setColumns] = useState(columns);
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [districtData, setDistrictData] = useState([]);
@@ -368,6 +427,11 @@ const ApllicantPuropseForm = (props) => {
       delete data?.marla;
       delete data?.kanal;
       delete data?.sarsai;
+    }
+    if (data.consolidationType === "consolidated") {
+      setColumns(columns);
+    } else {
+      setColumns(consolidatedColumns);
     }
     // setModalData((prev) => [...prev, data]);
     // setmodal(false);
@@ -760,7 +824,7 @@ const ApllicantPuropseForm = (props) => {
               <br></br>
 
               <div className="applt" style={{ overflow: "auto" }}>
-                <WorkingTable columns={columns} data={modalData} />
+                <WorkingTable columns={getColumns} data={modalData} />
                 {/* <Table className="table table-bordered" columns={columns} pagination={false} /> */}
               </div>
             </Form.Group>
