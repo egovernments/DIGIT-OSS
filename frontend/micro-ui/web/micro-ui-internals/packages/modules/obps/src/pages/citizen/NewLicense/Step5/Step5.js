@@ -552,6 +552,7 @@ const FeesChargesForm = (props) => {
                                     {
                                         showhide0 === "Yes" && (
                                             <div className="row "  >
+                        
                                                 <div className="col col-12">
                                                     <label for="parentLicense" className="font-weight-bold">Enter License Number/LOI number</label>
                                                     <input type="text" className="form-control" onChange={(e) => setLicenseNo(e.target.value)}  value={licenseNo} />

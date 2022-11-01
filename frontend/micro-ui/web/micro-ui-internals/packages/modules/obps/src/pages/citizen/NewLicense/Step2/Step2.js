@@ -138,6 +138,12 @@ const columns = [
     title: "Rectangle No.",
     dataIndex: "rectangleNo",
   },
+  
+  {
+    key: "killa",
+    title: "Killa",
+    dataIndex: "killa",
+  },
   {
     key: "landOwner",
     title: "Land Owner",
@@ -149,26 +155,86 @@ const columns = [
     dataIndex: "consolidationType",
   },
   {
-    key: "kanal",
-    title: "Kanal/Bigha",
-    dataIndex: "kanal",
+    key: "bigha",
+    title: "Bigha",
+    dataIndex: "bigha",
   },
   {
-    key: "marla",
-    title: "Marla/Biswa",
-    dataIndex: "marla",
+    key: "biswa",
+    title: "Biswa",
+    dataIndex: "biswa",
+  },
+  {
+    key: "biswansi",
+    title: "Biswansi",
+    dataIndex: "biswansi",
   },
   {
     // key: "action",
     title: "Action",
     dataIndex: "",
-    render: () => (
+    render: (data) => (
       <div>
-       <div className="flex"   style={{ color: "black" }} 
-      onClick={() => Edit(record)} > Edit</div>
-       <div className="flex"   style={{ color: "black" }} 
-      onClick={() => Delete(record)} > Delete</div>
-      <div/>
+        <h6 onClick={() => console.log("data", data)}>Edit</h6>
+        <h6>Delete</h6>
+      </div>
+    ),
+  },
+];
+const consolidatedColumns = [
+  {
+    key: "tehsil",
+    title: "Tehsil",
+    dataIndex: "tehsil",
+  },
+  {
+    key: "revenueEstate",
+    title: "Revenue Estate",
+    dataIndex: "revenueEstate",
+  },
+  {
+    key: "rectangleNo",
+    title: "Rectangle No.",
+    dataIndex: "rectangleNo",
+  },
+  {
+    key: "killa",
+    title: "Killa",
+    dataIndex: "killa",
+  },
+  {
+    key: "landOwner",
+    title: "Land Owner",
+    dataIndex: "landOwner",
+  },
+  {
+    key: "consolidationType",
+    title: "Consolidation Type",
+    dataIndex: "consolidationType",
+  },
+  {
+    key: "bigha",
+    title: "Bigha",
+    dataIndex: "bigha",
+  },
+  {
+    key: "biswa",
+    title: "Biswa",
+    dataIndex: "biswa",
+  },
+  {
+    key: "biswansi",
+    title: "Biswansi",
+    dataIndex: "biswansi",
+  },
+  {
+    // key: "action",
+    title: "Action",
+    dataIndex: "",
+    render: (data) => (
+      <div>
+        <h6 onClick={() => console.log("data", data)}>Edit</h6>
+        <h6>Delete</h6>
       </div>
     ),
   },
@@ -177,6 +243,7 @@ const columns = [
 const ApllicantPuropseForm = (props) => {
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
+  const [getColumns, setColumns] = useState(columns);
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [districtData, setDistrictData] = useState([]);
@@ -193,6 +260,7 @@ const ApllicantPuropseForm = (props) => {
   const [showhide1, setShowhide1] = useState("No");
   const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
+  const [consolidateValue, setConsolidateValue] = useState(null);
 
   const {
     register,
@@ -213,6 +281,11 @@ const ApllicantPuropseForm = (props) => {
   };
   const handleshow2 = (e) => {
     const getshow = e.target.value;
+    if (getshow === "1") {
+      setConsolidateValue("consolidated");
+    } else {
+      setConsolidateValue("non-consolidated");
+    }
     setShowhide2(getshow);
   };
 
@@ -347,16 +420,27 @@ const ApllicantPuropseForm = (props) => {
     DistrictApiCall();
   }, []);
 
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
-
   const ApplicantPurposeModalData = (data) => {
     console.log("data++++++", data);
-    setModalData((prev) => [...prev, data]);
-    setmodal(false);
-    reset();
-    // setModalValuesArray((prev)=>[...prev,values]);
+    data["consolidationType"] = consolidateValue;
+    if (showhide2 === "1") {
+      delete data?.bigha;
+      delete data?.biswa;
+      delete data?.biswansi;
+    }
+    if (showhide2 === "2") {
+      delete data?.marla;
+      delete data?.kanal;
+      delete data?.sarsai;
+    }
+    if (data.consolidationType === "consolidated") {
+      setColumns(columns);
+    } else {
+      setColumns(consolidatedColumns);
+    }
+    // setModalData((prev) => [...prev, data]);
+    // setmodal(false);
+    // reset();
   };
   const [visible, setVisible] = useState(false); 
 
@@ -599,7 +683,9 @@ const ApllicantPuropseForm = (props) => {
       console.log(error.message);
     }
   };
-
+  const handleChange = (e) => {
+    this.setState({ isRadioSelected: true });
+  };
   const handleChangePurpose = (data) => {
     const purposeSelected = data?.label;
     setSelectPurpose(purposeSelected);
@@ -747,7 +833,7 @@ const ApllicantPuropseForm = (props) => {
               <br></br>
 
               <div className="applt" style={{ overflow: "auto" }}>
-                <WorkingTable columns={columns} data={modalData} />
+                <WorkingTable columns={getColumns} data={modalData} />
                 {/* <Table className="table table-bordered" columns={columns} pagination={false} /> */}
               </div>
             </Form.Group>
@@ -840,11 +926,11 @@ const ApllicantPuropseForm = (props) => {
                     </h6>{" "}
                   </label>{" "}
                   &nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="Consolidated" onChange={handleChange} name="Yes"{...register("consolidationType")} onClick={handleshow2} />
+                  <input type="radio" id="Yes" value="1" name="Yes" onClick={handleshow2} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
                   <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="Non-Consolidated" onChange={handleChange} name="Yes" {...register("consolidationType")} onClick={handleshow2} />
+                  <input type="radio" id="Yes" value="2" name="Yes" onClick={handleshow2} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
                   <label htmlFor="npnl">Non-Consolidated</label>
@@ -933,12 +1019,11 @@ const ApllicantPuropseForm = (props) => {
               <div className="col col-12">
                 <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
                   <b>
-                    Collaboration agreement&nbsp;
-                    <InfoIcon style={{ color: "blue" }} />
+                    Collaboration agreement
                     &nbsp;{" "}
                   </b>
                   &nbsp;&nbsp;
-                  <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow1} />
+                  <input type="radio" value="Yes" id="Yes" name="Yes" onClick={handleshow1} />
                   &nbsp;&nbsp;
                   <label for="Yes">
                     <h6>
@@ -946,7 +1031,7 @@ const ApllicantPuropseForm = (props) => {
                     </h6>
                   </label>
                   &nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow1} />
+                  <input type="radio" value="No" id="No" name="Yes" onClick={handleshow1} />
                   &nbsp;&nbsp;
                   <label for="No">
                     <h6>
@@ -987,7 +1072,7 @@ const ApllicantPuropseForm = (props) => {
                         </h6>
                       </label>
                       <br></br>
-                      <input type="radio" value="Yes" id="Yes1" onChange={handleChange} name="Yes" />
+                      <input type="radio" value="Yes" id="Yes1" name="Yes" />
                       &nbsp;&nbsp;
                       <label for="Yes">
                         <h6>Yes</h6>

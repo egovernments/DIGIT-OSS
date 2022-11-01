@@ -727,7 +727,8 @@ const LandScheduleForm = (props) => {
                                 </div>
 
                                 <div className="col col-3 ">
-                                    <h6 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?"><b>(b)&nbsp;Revenue rasta&nbsp;&nbsp;<InfoIcon color="primary" /> </b>&nbsp;&nbsp;</h6>
+                                    <h6 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?"><b>(b)&nbsp;Revenue rasta&nbsp;&nbsp;
+                                         </b>&nbsp;&nbsp;</h6>
                                     <input type="radio" value="Yes" id="Yes"
                                         onChange1={handleChange} name="Yes" onClick={handleshow1} />&nbsp;&nbsp;
                                     <label for="Yes">Yes</label>&nbsp;&nbsp;
@@ -747,7 +748,7 @@ const LandScheduleForm = (props) => {
                                 </div>
                                 <div className="col col-3 ">
                                     <h6
-                                        data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?"><b>(c)&nbsp;Watercourse running&nbsp;&nbsp;<InfoIcon color="primary" />
+                                        data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?"><b>(c)&nbsp;Watercourse running&nbsp;&nbsp;
                                         </b></h6>
                                     <input type="radio" value="Yes" id="Yes"
                                         onChange1={handleChange} name="Yes" onClick={handleshow2} />&nbsp;&nbsp;
@@ -795,7 +796,7 @@ const LandScheduleForm = (props) => {
                             </div>  <br></br>
                             <div className="row">
                                 <div className="col col-3 ">
-                                    <h6 onChange={(e) => setsandwiched1(e.target.value)} value={sandwiched} data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land."><b>(e)&nbsp;Land Sandwiched&nbsp;&nbsp;<InfoIcon color="primary" />
+                                    <h6 onChange={(e) => setsandwiched1(e.target.value)} value={sandwiched} data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land."><b>(e)&nbsp;Land Sandwiched&nbsp;&nbsp;
                                     </b>  </h6>
                                     <input type="radio" value="Yes" id="Yes"
                                         onChange1={handleChange} name="Yes" onClick={handleshow20} />&nbsp;&nbsp;
@@ -884,7 +885,7 @@ const LandScheduleForm = (props) => {
                             </div> <br></br>
                             <div className="row">
                                 <div className="col col-12">
-                                    <h6 onChange={(e) => setExclusion1(e.target.value)} value={exclusion} data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded."><b>(g)&nbsp;Orders Upload &nbsp;&nbsp;<InfoIcon color="primary" />
+                                    <h6 onChange={(e) => setExclusion1(e.target.value)} value={exclusion} data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded."><b>(g)&nbsp;Orders Upload &nbsp;&nbsp;
                                     </b>  </h6>
                                     <input type="radio" value="Yes" id="Yes"
                                         onChange1={handleChange} name="Yes" onClick={handleshow16} />&nbsp;&nbsp;
@@ -995,7 +996,7 @@ const LandScheduleForm = (props) => {
                                 <div className="col col-3">
                                     <h6  onChange={(e) => setApproachable(e.target.value)} value={approachable}
                                         data-toggle="tooltip" data-placement="top" title="whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)
-"><b>(h)&nbsp;Site Approachable Road &nbsp;&nbsp; <InfoIcon color="primary" />
+"><b>(h)&nbsp;Site Approachable Road &nbsp;&nbsp; 
                                         </b></h6>
                                     <input type="radio" value="Yes" id="Yes"
                                         onChange1={handleChange} name="Yes" />
@@ -1178,7 +1179,7 @@ const LandScheduleForm = (props) => {
                                 </div>
                                 <div className="col col-3">
                                     <h6  data-toggle="tooltip" data-placement="top" title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)
-"><b>(h)&nbsp;Utility Line &nbsp; &nbsp;<InfoIcon color="primary" />
+"><b>(h)&nbsp;Utility Line &nbsp; &nbsp;
                                         </b></h6>
 
                                     <input type="radio" value="Yes" id="Yes"
