@@ -122,130 +122,213 @@ const optionsPotentialList = [
   },
 ];
 
-const columns = [
-  {
-    key: "tehsil",
-    title: "Tehsil",
-    dataIndex: "tehsil",
-  },
-  {
-    key: "revenueEstate",
-    title: "Revenue Estate",
-    dataIndex: "revenueEstate",
-  },
-  {
-    key: "rectangleNo",
-    title: "Rectangle No.",
-    dataIndex: "rectangleNo",
-  },
-  
-  {
-    key: "killa",
-    title: "Killa",
-    dataIndex: "killa",
-  },
-  {
-    key: "landOwner",
-    title: "Land Owner",
-    dataIndex: "landOwner",
-  },
-  {
-    key: "consolidationType",
-    title: "Consolidation Type",
-    dataIndex: "consolidationType",
-  },
-  {
-    key: "bigha",
-    title: "Bigha",
-    dataIndex: "bigha",
-  },
-  {
-    key: "biswa",
-    title: "Biswa",
-    dataIndex: "biswa",
-  },
-  {
-    key: "biswansi",
-    title: "Biswansi",
-    dataIndex: "biswansi",
-  },
-  {
-    // key: "action",
-    title: "Action",
-    dataIndex: "",
-    render: (data) => (
-      <div>
-        <h6 onClick={() => console.log("data", data)}>Edit</h6>
-        <h6>Delete</h6>
-      </div>
-    ),
-  },
-];
-const consolidatedColumns = [
-  {
-    key: "tehsil",
-    title: "Tehsil",
-    dataIndex: "tehsil",
-  },
-  {
-    key: "revenueEstate",
-    title: "Revenue Estate",
-    dataIndex: "revenueEstate",
-  },
-  {
-    key: "rectangleNo",
-    title: "Rectangle No.",
-    dataIndex: "rectangleNo",
-  },
-  {
-    key: "killa",
-    title: "Killa",
-    dataIndex: "killa",
-  },
-  {
-    key: "landOwner",
-    title: "Land Owner",
-    dataIndex: "landOwner",
-  },
-  {
-    key: "consolidationType",
-    title: "Consolidation Type",
-    dataIndex: "consolidationType",
-  },
-  {
-    key: "bigha",
-    title: "Bigha",
-    dataIndex: "bigha",
-  },
-  {
-    key: "biswa",
-    title: "Biswa",
-    dataIndex: "biswa",
-  },
-  {
-    key: "biswansi",
-    title: "Biswansi",
-    dataIndex: "biswansi",
-  },
-  {
-    // key: "action",
-    title: "Action",
-    dataIndex: "",
-    render: (data) => (
-      <div>
-        <h6 onClick={() => console.log("data", data)}>Edit</h6>
-        <h6>Delete</h6>
-      </div>
-    ),
-  },
-];
+// const columns = [
+//   {
+//     key: "tehsil",
+//     title: "Tehsil",
+//     dataIndex: "tehsil",
+//   },
+//   {
+//     key: "revenueEstate",
+//     title: "Revenue Estate",
+//     dataIndex: "revenueEstate",
+//   },
+//   {
+//     key: "rectangleNo",
+//     title: "Rectangle No.",
+//     dataIndex: "rectangleNo",
+//   },
+
+//   {
+//     key: "killa",
+//     title: "Killa",
+//     dataIndex: "killa",
+//   },
+//   {
+//     key: "landOwner",
+//     title: "Land Owner",
+//     dataIndex: "landOwner",
+//   },
+//   {
+//     key: "consolidationType",
+//     title: "Consolidation Type",
+//     dataIndex: "consolidationType",
+//   },
+//   {
+//     key: "bigha",
+//     title: "Bigha",
+//     dataIndex: "bigha",
+//   },
+//   {
+//     key: "biswa",
+//     title: "Biswa",
+//     dataIndex: "biswa",
+//   },
+//   {
+//     key: "biswansi",
+//     title: "Biswansi",
+//     dataIndex: "biswansi",
+//   },
+//   {
+//     // key: "action",
+//     title: "Action",
+//     dataIndex: "",
+//     render: (data) => (
+//       <div>
+//         <h6
+//           onClick={() => {
+//             setmodal(true);
+//             console.log("data", data);
+//           }}
+//         >
+//           Edit
+//         </h6>
+//         <h6>Delete</h6>
+//       </div>
+//     ),
+//   },
+// ];
+// const consolidatedColumns = [
+//   {
+//     key: "tehsil",
+//     title: "Tehsil",
+//     dataIndex: "tehsil",
+//   },
+//   {
+//     key: "revenueEstate",
+//     title: "Revenue Estate",
+//     dataIndex: "revenueEstate",
+//   },
+//   {
+//     key: "rectangleNo",
+//     title: "Rectangle No.",
+//     dataIndex: "rectangleNo",
+//   },
+//   {
+//     key: "killa",
+//     title: "Killa",
+//     dataIndex: "killa",
+//   },
+//   {
+//     key: "landOwner",
+//     title: "Land Owner",
+//     dataIndex: "landOwner",
+//   },
+//   {
+//     key: "consolidationType",
+//     title: "Consolidation Type",
+//     dataIndex: "consolidationType",
+//   },
+//   {
+//     key: "bigha",
+//     title: "Bigha",
+//     dataIndex: "bigha",
+//   },
+//   {
+//     key: "biswa",
+//     title: "Biswa",
+//     dataIndex: "biswa",
+//   },
+//   {
+//     key: "biswansi",
+//     title: "Biswansi",
+//     dataIndex: "biswansi",
+//   },
+//   {
+//     // key: "action",
+//     title: "Action",
+//     dataIndex: "",
+//     render: (data) => (
+//       <div>
+//         <h6
+//           onClick={() => {
+//             setmodal(true);
+//             // console.log("data", data)
+//           }}
+//         >
+//           Edit
+//         </h6>
+//         <h6>Delete</h6>
+//       </div>
+//     ),
+//   },
+// ];
 
 const ApllicantPuropseForm = (props) => {
+  const columns = [
+    {
+      key: "tehsil",
+      title: "Tehsil",
+      dataIndex: "tehsil",
+    },
+    {
+      key: "revenueEstate",
+      title: "Revenue Estate",
+      dataIndex: "revenueEstate",
+    },
+    {
+      key: "rectangleNo",
+      title: "Rectangle No.",
+      dataIndex: "rectangleNo",
+    },
+
+    {
+      key: "killa",
+      title: "Killa",
+      dataIndex: "killa",
+    },
+    {
+      key: "landOwner",
+      title: "Land Owner",
+      dataIndex: "landOwner",
+    },
+    {
+      key: "consolidationType",
+      title: "Consolidation Type",
+      dataIndex: "consolidationType",
+    },
+    {
+      key: "bigha",
+      title: "Bigha",
+      dataIndex: "bigha",
+    },
+    {
+      key: "biswa",
+      title: "Biswa",
+      dataIndex: "biswa",
+    },
+    {
+      key: "biswansi",
+      title: "Biswansi",
+      dataIndex: "biswansi",
+    },
+    {
+      // key: "action",
+      title: "Action",
+      dataIndex: "",
+      render: (data) => (
+        <div>
+          <h6
+            onClick={() => {
+              setmodal(true);
+              setSpecificTableData(data);
+              console.log("data", data);
+            }}
+          >
+            Edit
+          </h6>
+          <h6>Delete</h6>
+        </div>
+      ),
+    },
+  ];
+
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
-  const [getColumns, setColumns] = useState(columns);
+  // const [getColumns, setColumns] = useState(columns);
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
+  const [specificTableData, setSpecificTableData] = useState(null);
   const [districtData, setDistrictData] = useState([]);
   const [tehsilData, setTehsilData] = useState([]);
   const [revenueStateData, setRevenuStateData] = useState([]);
@@ -261,6 +344,13 @@ const ApllicantPuropseForm = (props) => {
   const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
   const [consolidateValue, setConsolidateValue] = useState(null);
+
+  useEffect(() => {
+    if (specificTableData) {
+      setValue("kanal", specificTableData?.kanal);
+    }
+    console.log("specificTableData", specificTableData);
+  }, [specificTableData]);
 
   const {
     register,
@@ -423,6 +513,7 @@ const ApllicantPuropseForm = (props) => {
   const ApplicantPurposeModalData = (data) => {
     console.log("data++++++", data);
     data["consolidationType"] = consolidateValue;
+    data["tehsil"] = data?.tehsil?.value;
     if (showhide2 === "1") {
       delete data?.bigha;
       delete data?.biswa;
@@ -433,17 +524,19 @@ const ApllicantPuropseForm = (props) => {
       delete data?.kanal;
       delete data?.sarsai;
     }
-    if (data.consolidationType === "consolidated") {
-      setColumns(columns);
-    } else {
-      setColumns(consolidatedColumns);
-    }
-    // setModalData((prev) => [...prev, data]);
-    // setmodal(false);
-    // reset();
+    // if (data.consolidationType === "consolidated") {
+    //   setColumns(columns);
+    // } else {
+    //   setColumns(consolidatedColumns);
+    // }
+    setModalData((prev) => [...prev, data]);
+    setmodal(false);
+    reset({
+      kanal: "",
+      marla: "",
+      sarsai: "",
+    });
   };
-  const [visible, setVisible] = useState(false); 
-
 
   const PurposeFormSubmitHandler = async (data) => {
     console.log("data===", data);
@@ -833,8 +926,7 @@ const ApllicantPuropseForm = (props) => {
               <br></br>
 
               <div className="applt" style={{ overflow: "auto" }}>
-                <WorkingTable columns={getColumns} data={modalData} />
-                {/* <Table className="table table-bordered" columns={columns} pagination={false} /> */}
+                <WorkingTable columns={columns} data={modalData} />
               </div>
             </Form.Group>
             <div class="row">
@@ -855,8 +947,28 @@ const ApllicantPuropseForm = (props) => {
         </Card>
       </form>
 
-      <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
-        <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
+      <Modal
+        size="xl"
+        isOpen={modal}
+        toggle={() => {
+          reset({
+            kanal: "",
+            marla: "",
+            sarsai: "",
+          });
+          setmodal(!modal);
+        }}
+      >
+        <ModalHeader
+          toggle={() => {
+            setmodal(!modal);
+            reset({
+              kanal: "",
+              marla: "",
+              sarsai: "",
+            });
+          }}
+        ></ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(ApplicantPurposeModalData)}>
             <Row className="ml-auto mb-3">
@@ -870,7 +982,7 @@ const ApllicantPuropseForm = (props) => {
                 </div>
                 <ReactMultiSelect
                   control={control}
-                 {...register("tehsil")}
+                  {...register("tehsil")}
                   data={tehsilDataLabels}
                   labels="Tehsil"
                   onChange={(e) => {
@@ -936,7 +1048,7 @@ const ApllicantPuropseForm = (props) => {
                   <label htmlFor="npnl">Non-Consolidated</label>
                   {/* </Form.Select> */}
                 </div>{" "}
-                {showhide2 === "Consolidated" && (
+                {showhide2 === "1" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
@@ -966,7 +1078,7 @@ const ApllicantPuropseForm = (props) => {
                     </tbody>
                   </table>
                 )}
-                {showhide2 === "Non-Consolidated" && (
+                {showhide2 === "2" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
@@ -1018,10 +1130,7 @@ const ApllicantPuropseForm = (props) => {
             <Row className="ml-auto mb-3">
               <div className="col col-12">
                 <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
-                  <b>
-                    Collaboration agreement
-                    &nbsp;{" "}
-                  </b>
+                  <b>Collaboration agreement &nbsp; </b>
                   &nbsp;&nbsp;
                   <input type="radio" value="Yes" id="Yes" name="Yes" onClick={handleshow1} />
                   &nbsp;&nbsp;
