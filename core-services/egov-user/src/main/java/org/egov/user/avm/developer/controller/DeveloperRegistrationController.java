@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.user.avm.developer.dto.UserDeveloperDto;
 import org.egov.user.avm.developer.entity.AddRemoveAuthoizedUsers;
 import org.egov.user.avm.developer.entity.DeveloperInfo;
 import org.egov.user.avm.developer.entity.DeveloperRegistration;
@@ -39,19 +40,11 @@ public class DeveloperRegistrationController {
 	public DeveloperRegistration createDeveloperRegistraion(@RequestBody DeveloperRegistration developerRegistration) throws JsonProcessingException {
 
 		System.out.println("Registration Api..");
-		System.out.println("developer detail size ==== : " + developerRegistration.getDeveloperDetail().size());
-		//DeveloperRegistration insertedDeveloper = this.developerRegistrationService.addDeveloperRegistraion(developerRegistration);
-		//List<User> userList = this.developerRegistrationService.setUserInfo(developerRegistration);
 		
-		//User createdUser = userService.createCitizen(user, createUserRequest.getRequestInfo());
 		DeveloperRegistration developerRegistration1 = developerRegistrationService.addDeveloperRegistraion(developerRegistration); 
-	
 		
 		System.out.println("developer1 detail size ==== : " + developerRegistration1.getDeveloperDetail().size());
-		
-		
-		
-		
+			
 		User newUser = null;
 		Long devId=developerRegistration1.getId();
 		UserRequest userRequest ;
@@ -79,17 +72,28 @@ public class DeveloperRegistrationController {
 				User user = createUserRequest.toDomain(true);
 				System.out.println("dev Id ======> " + devId);
 				
-				//user.setParentid(devId);
-				//user.setMobileValidationMandatory(isMobileValidationRequired(headers));
 				newUser = userService.createUser(user, requestInfo);
 				 
 			}
 		}
-		
-
-		//return developerRegistrationService.addDeveloperRegistraion(developerRegistration);
 		return developerRegistration1;
 		
+	}
+	
+	@GetMapping("/_getAuthorizedUser")
+	public UserDeveloperDto viewAuthorizedUserDetail() {
+		
+		String mobileNumber = "";
+		UserDeveloperDto userDeveloperDto = new UserDeveloperDto();
+		
+		User user = userService.getAuthorizedUser(mobileNumber);
+		if(!user.equals(null) && user.getParentid()!=null) {
+			Long parentId = user.getParentid();
+			DeveloperRegistration developerRegistration = developerRegistrationRepo.findById(parentId);
+			userDeveloperDto.setUser(user);
+			userDeveloperDto.setDeveloperRegistration(developerRegistration);
+		}
+		return userDeveloperDto;
 	}
 	
 	
@@ -145,7 +149,7 @@ public class DeveloperRegistrationController {
 	
 
 	
-	@GetMapping("/_getAuthorizedUser")
+	//@GetMapping("/_getAuthorizedUser")
 	public UserRequest getAuthorize() {
 		
 		String mobileNumber = "12312312";

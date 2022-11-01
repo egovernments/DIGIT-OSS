@@ -55,7 +55,7 @@
 					"enabled": true
 				}
 			],
-			"url": "http://egov-micro-dev.egovernments.org/user/users/1/_updatenovalidate",
+			"url": "http://localhost:8081/user/users/1/_updatenovalidate",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -67,7 +67,7 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1502702576332,
-			"name": "http://egov-micro-dev.egovernments.org/user/users/1/_updatenovalidate",
+			"name": "http://localhost:8081/user/users/1/_updatenovalidate",
 			"description": "",
 			"collectionId": "60f1f16b-7d22-9ca8-4ab6-071ae89340b2",
 			"responses": [],
@@ -84,7 +84,7 @@
 					"enabled": true
 				}
 			],
-			"url": "http://egov-micro-dev.egovernments.org/user/users/_createnovalidate",
+			"url": "http://localhost:8081/user/users/_createnovalidate",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -96,7 +96,7 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1502702579643,
-			"name": "http://egov-micro-dev.egovernments.org/user/users/_createnovalidate",
+			"name": "http://localhost:8081/user/users/_createnovalidate",
 			"description": "Create user with no validation",
 			"collectionId": "60f1f16b-7d22-9ca8-4ab6-071ae89340b2",
 			"responses": [],
@@ -142,7 +142,7 @@
 					"enabled": true
 				}
 			],
-			"url": "http://egov-micro-dev.egovernments.org/user/v1/_search",
+			"url": "http://localhost:8081/user/v1/_search",
 			"queryParams": [],
 			"preRequestScript": null,
 			"pathVariables": {},
@@ -154,7 +154,7 @@
 			"currentHelper": "normal",
 			"helperAttributes": {},
 			"time": 1502702569418,
-			"name": "http://egov-micro-dev.egovernments.org/user/v1/_search",
+			"name": "http://localhost:8081/user/v1/_search",
 			"description": "",
 			"collectionId": "60f1f16b-7d22-9ca8-4ab6-071ae89340b2",
 			"responses": [
@@ -260,7 +260,7 @@
 					"name": "userSearchResponse",
 					"id": "c27fa8c2-c0b8-9403-f89b-98c82946e108",
 					"request": {
-						"url": "http://egov-micro-dev.egovernments.org/user/v1/_search",
+						"url": "http://localhost:8081/user/v1/_search",
 						"pathVariables": {},
 						"pathVariableData": [],
 						"queryParams": [],

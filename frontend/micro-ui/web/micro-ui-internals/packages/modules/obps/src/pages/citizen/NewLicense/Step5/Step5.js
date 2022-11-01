@@ -4,9 +4,16 @@ import { useForm } from "react-hook-form";
 // import Box from '@material-ui/core//Box';
 import { Button, Form } from "react-bootstrap";
 // import Typography from '@material-ui/core/Typography'
-import Modal from 'react-bootstrap/Modal';
+import {
+    Modal,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+} from "reactstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import axios from 'axios';
+
 // import InfoIcon from '@mui/icons-material/Info';
 // import TextField from '@mui/material/TextField';
 const style = {
@@ -27,21 +34,31 @@ const FeesChargesForm = (props) => {
     // const [show, setShow] = useState(false);
 
     const [show, setShow] = useState(false);
-
+    const [show1, setShow1] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const handleShow1 = () => setShow(true);
+    const setPayShow = () => setShow(true);
+   
 
     const [form, setForm] = useState([]);
-    const [feeDetail, setFeeDetail] = useState('');
+    const [totalArea, setTotalArea] = useState('');
+  
+    const[purpose,setPurpose]=useState("");
+    const[devPlan,setDevPlan]=useState("");
+    const[scrutinyFee,setScrutinyFee]=useState("");
     const [licenseFee, setLicenseFee] = useState('');
-    const [ScrutinyFee, setScrutinyFee] = useState('');
     const [totalFee, setTotalFee] = useState('');
     const [remark, setRemark] = useState('');
-    const [aggregator, setAggregator] = useState('');
+    const [conversionCharges, setConversionCharges] = useState('');
+    const [payableNow, setPayableNow] = useState('');
     const [previousLic, setPreviousLic] = useState('');
-    const [amount, setAmount] = useState('');
+    const [licenseNo, setLicenseNo] = useState('');
+    const[calculateData,setCalculateData]=useState({});
+    const[finalSubmitData,setFinalSubmitData]=useState([])
+    const [modal, setmodal] = useState(false);
+    const [modal1, setmodal1] = useState(false);
     let frmData = JSON.parse(localStorage.getItem('key') || "[]")
+    console.log("data1",frmData)
     let step2 = JSON.parse(localStorage.getItem('step2') || "[]")
     let step3 = JSON.parse(localStorage.getItem('step3') || "[]")
     let step4 = JSON.parse(localStorage.getItem('step4') || "[]")
@@ -49,22 +66,19 @@ const FeesChargesForm = (props) => {
     const FeesChrgesFormSubmitHandler = (e) => {
         e.preventDefault();
         SetFeesChargesFormSubmitted(true);
-
-
-
-
         let forms = {
-            feeDetail: feeDetail,
-            licenseFee: licenseFee,
-            ScrutinyFee: ScrutinyFee,
-            totalFee: totalFee,
+            totalArea:totalArea,
+            purpose:purpose,
+            devPlan:devPlan,
+            scrutinyFee:scrutinyFee,
+            licenseFee:licenseFee,
+            conversionCharges:conversionCharges,
+            payableNow:payableNow,
             remark: remark,
-            aggregator: aggregator,
-            previousLic: previousLic,
-            amount: amount
+            licenseNo:licenseNo
         }
         console.log("FRMDATA", forms);
-        localStorage.setItem('step5', JSON.stringify(forms))
+        localStorage.setItem('Fees and Charges', JSON.stringify(forms))
 
 
     };
@@ -134,85 +148,385 @@ const FeesChargesForm = (props) => {
     }
     const [noOfRows, setNoOfRows] = useState(1);
     const [noOfRow, setNoOfRow] = useState(1);
-    const [noOfRow1, setNoOfRow1] = useState(1);
+    const [noOfRow1, setNoOfRow1] = useState(1); 
+   
+    const Purpose = JSON.parse(localStorage.getItem('purpose'))
+    console.log("adf", Purpose)
+    const potential = JSON.parse(localStorage.getItem('potential'))
+    console.log("potential", potential)
+    const CalculateApiCall = async () => {
+        try {
+           
+        const Resp = await axios.get("http://10.1.1.18:8191/land-services/_calculate?feeType=scrutinyFeeCharges&purposename=residentialPlottedColony&arce=1" + "&potenialZone="+ potential +"&colonyType="+ Purpose,{
+             
+        })
+                .then((Resp) => {
+                    console.log("calculate", Resp)
+                    return Resp;
+                })
+            setCalculateData(Resp.data);
+            
+           
+        } catch (error) {
+            console.log(error.message);
+        }
+       
+    }
+     useEffect(()=>{
+        CalculateApiCall();
+    },[])
 
-    const [payShow, setPayShow] = useState(false);
+    useEffect(()=>{
+        if (calculateData!==undefined && calculateData !== null) {
+            console.log("Fee",calculateData?.feeTypeCalculationDto?.scrutinyFeeChargesCal)
+        }
+    },[calculateData]);
 
 
+    const FinalSubmitApiCall = async () => {
+        try {
+            const postDistrict = {
+                
+                    "NewServiceInfo": {
+                        "newServiceInfoData": [
+                            {
+                                "ApplicantInfo": {
+                                    "authorizedDeveloper": "sdsd",
+                                    "authorizedPerson": "sd",
+                                    "authorizedmobile": "sds",
+                                    "alternatemobile": "1e",
+                                    "authorizedEmail": "eeds",
+                                    "authorizedPan": "fsd",
+                                    "authorizedAddress": "",
+                                    "village": "village",
+                                    "authorizedPinCode": "",
+                                    "tehsil": "dsf",
+                                    "district": "sdf",
+                                    "state": "dsf",
+                                    "status": "fgr",
+                                    "LC": "ertfger",
+                                    "address": "ertf",
+                                    "permanentAddress": "fgd",
+                                    "notSigned": "fgver",
+                                    "email": "gfg",
+                                    "authorized": "rgsf"
+                                },
+                                "ApplicantPurpose": {
+                                    "purposeDd": "",
+                                    "potential": "",
+                                    "district": "",
+                                    "state": "",
+                                    "ApplicationPurposeData1": {
+                                        "tehsil": "tahsil",
+                                        "revenueEstate": "",
+                                        "mustil": "",
+                                        "consolidation": "",
+                                        "sarsai": "",
+                                        "kanal": "",
+                                        "marla": "",
+                                        "bigha": "",
+                                        "biswansi": "",
+                                        "biswa": "",
+                                        "landOwner": "",
+                                        "developerCompany": "",
+                                        "registeringdate": "",
+                                        "validitydate": "",
+                                        "colirrevocialble": "",
+                                        "authSignature": "",
+                                        "nameAuthSign": "",
+                                        "registeringAuthority": "",
+                                        "registeringAuthorityDoc": ""
+                                    }
+                                },
+                                "LandSchedule": {
+                                    "licenseApplied": "lic",
+                                    "LicNo": "",
+                                    "potential": "",
+                                    "siteLoc": "",
+                                    "approach": "",
+                                    "approachRoadWidth": "",
+                                    "specify": "",
+                                    "typeLand": "",
+                                    "thirdParty": "",
+                                    "migrationLic": "",
+                                    "encumburance": "",
+                                    "litigation": "",
+                                    "court": "",
+                                    "insolvency": "",
+                                    "appliedLand": "",
+                                    "revenuerasta": "",
+                                    "watercourse": "",
+                                    "compactBlock": "",
+                                    "sandwiched": "",
+                                    "acquistion": "",
+                                    "section4": "",
+                                    "section6": "",
+                                    "orderUpload": "",
+                                    "approachable": "",
+                                    "vacant": "",
+                                    "construction": "",
+                                    "ht": "",
+                                    "gas": "",
+                                    "nallah": "",
+                                    "road": "",
+                                    "land": "",
+                                    "utilityLine": "",
+                                    "landSchedule": "",
+                                    "mutation": "",
+                                    "jambandhi": "",
+                                    "LayoutPlan": "",
+                                    "proposedLayoutPlan": "",
+                                    "revisedLansSchedule": ""
+                                },
+                                "DetailsofAppliedLand": {
+                                    "dgps": "dsg",
+                                    "DetailsAppliedLandData1": {
+                                        "resplotno": "asa",
+                                        "reslengthmtr": "",
+                                        "reswidthmtr": "",
+                                        "resareasq": "",
+                                        "npnlplotno": "",
+                                        "npnllengthmtr": "",
+                                        "npnlwidthmtr": "",
+                                        "npnlareasq": "",
+                                        "ewsplotno": "",
+                                        "ewslengthmtr": "",
+                                        "ewswidthmtr": "",
+                                        "ewsareasq": "",
+                                        "complotno": "",
+                                        "comlengthmtr": "",
+                                        "comwidthmtr": "",
+                                        "comareasq": "",
+                                        "siteplotno": "",
+                                        "sitelengthmtr": "",
+                                        "sitewidthmtr": "",
+                                        "siteareasq": "",
+                                        "parkplotno": "",
+                                        "parklengthmtr": "",
+                                        "parkwidthmtr": "",
+                                        "parkareasq": "",
+                                        "publicplotno": "",
+                                        "publiclengthmtr": "",
+                                        "publicwidthmtr": "",
+                                        "publicareasq": "",
+                                        "stpplotno": "",
+                                        "stplengthmtr": "",
+                                        "stpwidthmtr": "",
+                                        "stpareasq": "",
+                                        "etpplotno": "",
+                                        "etplengthmtr": "",
+                                        "etpwidthmtr": "",
+                                        "etpareasq": "",
+                                        "wtpplotno": "",
+                                        "wtplengthmtr": "",
+                                        "wtpwidthmtr": "",
+                                        "wtpareasq": "",
+                                        "ugtplotno": "",
+                                        "ugtlengthmtr": "",
+                                        "ugtwidthmtr": "",
+                                        "ugtareasq": "",
+                                        "milkboothplotno": "",
+                                        "milkboothlengthmtr": "",
+                                        "milkboothwidthmtr": "",
+                                        "milkboothareasq": "",
+                                        "gssplotno": "",
+                                        "gsslengthmtr": "",
+                                        "gssareasq": "",
+                                        "resDimension": "",
+                                        "resEnteredArea": "",
+                                        "comDimension": "",
+                                        "comEnteredArea": "",
+                                        "secPlanPlot": "",
+                                        "secPlanLength": "",
+                                        "secPlanDim": "",
+                                        "secPlanEntered": "",
+                                        "greenBeltPlot": "",
+                                        "greenBeltLength": "",
+                                        "greenBeltDim": "",
+                                        "greenBeltEntered": "",
+                                        "internalPlot": "",
+                                        "internalLength": "",
+                                        "internalDim": "",
+                                        "internalEntered": "",
+                                        "otherPlot": "",
+                                        "otherLength": "",
+                                        "otherDim": "",
+                                        "otherEntered": "",
+                                        "undeterminedPlot": "",
+                                        "undeterminedLength": "",
+                                        "undeterminedDim": "",
+                                        "undeterminedEntered": ""
+                                    },
+                                    "DetailsAppliedLandDdjay2": {
+                                        "frozenNo": "qw",
+                                        "frozenArea": "",
+                                        "organize": ""
+                                    },
+                                    "DetailsAppliedLandIndustrial3": {
+                                        "colonyfiftyNo": "qwq",
+                                        "colonyfiftyArea": "",
+                                        "fiftyToTwoNo": "",
+                                        "fiftyToTwoArea": "",
+                                        "twoHundredNo": "",
+                                        "twoHundredArea": "",
+                                        "resiNo": "",
+                                        "resiArea": "",
+                                        "commerNo": "",
+                                        "commerArea": "",
+                                        "labourNo": "",
+                                        "labourArea": ""
+                                    },
+                                    "DetailsAppliedLandResidential4": {
+                                        "npnlNo": "wew",
+                                        "npnlArea": "",
+                                        "ewsNo": "",
+                                        "ewsArea": ""
+                                    },
+                                    "DetailsAppliedLandNpnl5": {
+                                        "surrender": "sds",
+                                        "pocketProposed": "",
+                                        "deposit": "",
+                                        "surrendered": ""
+                                    },
+                                    "DetailsAppliedLand6": {
+                                        "sitePlan": "sdsd",
+                                        "democraticPlan": "",
+                                        "sectoralPlan": "",
+                                        "developmentPlan": "",
+                                        "uploadLayoutPlan": ""
+                                    }
+                                },
+                                "FeesAndCharges": {
+                                    "totalArea": "sdsd",
+                                    "purpose": "",
+                                    "devPlan": "",
+                                    "scrutinyFee": "",
+                                    "licenseFee": "",
+                                    "conversionCharges": "",
+                                    "payableNow": "",
+                                    "remark": "",
+                                    "adjustFee": ""
+                                }
+                            }
+                        ]
+                    }
+                
+                 }
+           
+            const Resp = await axios.post("/land-services/new/_create",
+                postDistrict,
+            )
+                .then((Resp) => {
+                    console.log("Submit", Resp)
+                    return Resp;
+                })
+                setFinalSubmitData(Resp.data);
+           
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    useEffect(()=>{
+        FinalSubmitApiCall();
+    },[])
+
+    const handleChangePurpose = (data) => {
+        const purposeSelected = data.data;
+        setSelectPurpose(purposeSelected)
+        // console.log("purpose", purposeSelected)
+        // localStorage.setItem("purpose", JSON.stringify(purposeSelected))
+
+    }
+    const handleChangePotential = (data) => {
+        const purposeSelected = data.data;
+        setSelectPurpose(purposeSelected)
+    }
+    const handleScrutiny = event => {
+         setCalculateData(event.target.value);
+
+    };
+    const handleLicense= event => {
+        setCalculateData(event.target.value);
+
+   };
+   const handleConversion= event => {
+    setCalculateData(event.target.value);
+
+};
 
     return (
         <Form onSubmit={FeesChrgesFormSubmitHandler}>
-            <Card style={{ width: "126%", marginLeft: "12px", paddingRight: "10px" }}>
+           <Card style={{ width: "126%"}}>
+       <h2>New License</h2>
+      <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
                 <Form.Group className="justify-content-center" controlId="formBasicEmail">
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
                         <Col col-12>
-                            <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
+                            <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))",width:"629px",marginLeft:"273px" }}>
                                 <thead>
                                     <tr>
                                         <th><b>Total Area</b></th>
-                                        <td><input type="text" className="form-control" /></td>
+                                        <td><input type="text" className="form-control" onChange={(e) => setTotalArea(e.target.value)} value={totalArea}/></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <th ><b>Purpose</b></th>
-                                        <td><input type="text" className="form-control" /></td>
+                                        <td><input type="text" className="form-control" placeholder={Purpose} 
+                                         onChange1={handleChangePurpose} value={purpose} disabled onChange={(e) => setPurpose(e.target.value)} />
+                                         </td>
+                                       
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                     <tr>
                                         <th><b>Dev Plan</b></th>
-                                        <td><input type="text" className="form-control" /></td>
+                                        <td><input type="text" className="form-control" placeholder={potential} 
+                                         onChange1={handleChangePotential} value={potential} disabled onChange={(e) => setDevPlan(e.target.value)} /></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                     <tr>
                                         <th><b>Scrutiny Fee</b></th>
-                                        <td><input type="text" className="form-control" /></td>
+                                        <td><input type="text" className="form-control"
+                                         placeholder={(calculateData!==null && calculateData!==undefined)?
+                                            calculateData?.feeTypeCalculationDto?.scrutinyFeeChargesCal :"N/A"}
+                                            onChange1={handleScrutiny} value=
+                                            {(calculateData!==null && calculateData!==undefined)?
+                                                calculateData?.feeTypeCalculationDto?.scrutinyFeeChargesCal :"N/A"}
+                                                 disabled   onChange={(e) => setScrutinyFee(e.target.value)} /></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                     <tr>
                                         <th><b>License Fee</b></th>
-                                        <td><input type="text" className="form-control" /></td>
+                                        <td><input type="text" className="form-control"
+                                         placeholder={(calculateData!==null && calculateData!==undefined)?
+                                            calculateData?.feeTypeCalculationDto?.licenseFeeChargesCal :"N/A"}
+                                            onChange1={handleLicense} value=
+                                            {(calculateData!==null && calculateData!==undefined)?
+                                                calculateData?.feeTypeCalculationDto?.licenseFeeChargesCal :"N/A"}
+                                                 disabled   onChange={(e) => setLicenseFee(e.target.value)}/></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                     <tr>
                                         <th><b>Conversion Chrges</b></th>
-                                        <td><input type="text" className="form-control" /></td>
+                                        <td><input type="text" className="form-control" 
+                                         placeholder={(calculateData!==null && calculateData!==undefined)?
+                                            calculateData?.feeTypeCalculationDto?.conversionChargesCal :"N/A"}
+                                            onChange1={handleConversion} value=
+                                            {(calculateData!==null && calculateData!==undefined)?
+                                                calculateData?.feeTypeCalculationDto?.conversionChargesCal :"N/A"}
+                                                 disabled  onChange={(e) => setConversionCharges(e.target.value)} /></td>
                                         {/* <td > <TextField id="standard-basic" variant="standard" /></td> */}
                                     </tr>
                                 </tbody>
                             </table>
 
-                            {/* <div className="row">
-                            <div className="col col-4">
-                              
-                                        <h6><b>(i)Fees/Charges details Total area</b></h6>
-                                        <input type="text" className="form-control"  minLength={1} maxLength={20} pattern="[0-9]*"
-                                         onChange={(e)=>setFeeDetail(e.target.value)} value={feeDetail} onChange1={handleFeesChange} />
-                                         {errors.feeDetail && <p>Please check the First Name</p>}
-                             </div>
-                             <div className="col col-4">
-                              
-                                        <h6><b>(ii)Licence Fees (25%)</b></h6>
-                                        <input type="text" className="form-control"   minLength={1} maxLength={20} pattern="[0-9]*"
-                                         onChange={(e)=>setLicenseFee(e.target.value)} value={licenseFee} onChange1={handleLicFeesChange} />
-                                         {errors.licenseFee && <p>Please check the First Name</p>}
-                             </div>
-                             <div className="col col-4">
-                              
-                              <h6><b>(iii)Scrutiny Fees</b></h6>
-                              <input type="text" className="form-control"   minLength={1} maxLength={20} pattern="[0-9]*"
-                               onChange={(e)=>setScrutinyFee(e.target.value)} value={ScrutinyFee} onChange1={handleScrutinyFeesChange} />
-                               {errors.ScrutinyFee && <p></p>}
-                   </div>
-                   </div><br></br> */}
-
                             <div className="row">
                                 <div className="col col-4">
-                                    <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)"><b>(i)&nbsp;Total Fees&nbsp; </b>&nbsp;&nbsp;</h6>
+                                    <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)"><b>(i)&nbsp;Payable Till Now&nbsp; </b>&nbsp;&nbsp;</h6>
 
                                     <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*"
-                                        onChange={(e) => setTotalFee(e.target.value)} value={totalFee} onChange1={handleTotalFeesChange} />
+                                       onChange1={handleTotalFeesChange} onChange={(e) => setPayableNow(e.target.value)} value={payableNow}/>
                                     {errors.totalFee && <p></p>}
                                 </div>
 
@@ -220,15 +534,15 @@ const FeesChargesForm = (props) => {
 
                                     <h6><b>(ii)Remark (If any)</b></h6>
                                     <input type="text" className="form-control" minLength={2} maxLength={100}
-                                        onChange={(e) => setRemark(e.target.value)} value={remark} onChange1={handleRemarkChange} />
+                                        onChange={(e) => setRemark(e.target.value)} value={remark} onChange1={handleRemarkChange}  />
                                     {errors.remark && <p></p>}
                                 </div>
 
                                 <div className="col col-4">
-                                    <h6 onChange={(e) => setPreviousLic(e.target.value)} value={previousLic} data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)"><b>(iii)&nbsp;Adjust Fees&nbsp;</b>&nbsp;&nbsp;</h6>
+                                    <h6  data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)"><b>(iii)&nbsp;Adjust Fees&nbsp;</b>&nbsp;&nbsp;</h6>
 
                                     <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow0}
+                                        onChange1={handleChange} name="Yes" onClick={handleshow0} 
                                     />
                                     <label for="Yes">Yes</label>&nbsp;&nbsp;
 
@@ -240,7 +554,7 @@ const FeesChargesForm = (props) => {
                                             <div className="row "  >
                                                 <div className="col col-12">
                                                     <label for="parentLicense" className="font-weight-bold">Enter License Number/LOI number</label>
-                                                    <input type="text" className="form-control" />
+                                                    <input type="text" className="form-control" onChange={(e) => setLicenseNo(e.target.value)}  value={licenseNo} />
                                                     <label for="parentLicense" className="font-weight-bold">Amount (previous)</label>
                                                     <input type="text" className="form-control" disabled />
 
@@ -259,30 +573,30 @@ const FeesChargesForm = (props) => {
                                 <p className="text-black">The following is undertaken: </p>
                                 <ul className="Undertakings">
                                     <li>I hereby declare that the details furnished above are true and correct to the best of my knowledge</li>
-                                    .<button className="btn btn-primary" onClick={handleShow}>Read More</button>
+                                    .<button className="btn btn-primary" onClick={() => setmodal1(true)}>Read More</button>
 
                                 </ul>
                             </div>
-
-
                             <Modal
-                                show={show}
-                                onHide={() => setShow(false)}
-                                dialogClassName="modal-90w"
-                                aria-labelledby="example-custom-modal-styling-title"
-
+                                size="lg"
+                                isOpen={modal1}
+                                toggle={() => setmodal(!modal1)}
+                                style={{width:"500px", height:"200px"}}
+                                aria-labelledby="contained-modal-title-vcenter"
+                                centered
                             >
-                                <Modal.Header closeButton>
-
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <p>
-                                        I hereby declare that the details furnished above are true and correct to the best of my
+                                <ModalHeader
+                                    toggle={() => setmodal1(!modal1)}
+                                ></ModalHeader>
+                                <ModalBody style={{fontSize:20}}>
+                                    <h2 > I hereby declare that the details furnished above are true and correct to the best of my
                                         knowledge and belief and I undertake to inform you of any changes therein, immediately.
                                         In case any of the above information is found to be false or untrue or misleading or misrepresenting,
-                                        I am aware that I may be held liable for it.
-                                    </p>
-                                </Modal.Body>
+                                        I am aware that I may be held liable for it.</h2>
+                                </ModalBody>
+                                <ModalFooter
+                                    toggle={() => setmodal(!modal1)}
+                                ></ModalFooter>
                             </Modal>
                             <div className="">
 
@@ -297,36 +611,41 @@ const FeesChargesForm = (props) => {
                                         </label>
                                     </div>
                                     <div class="my-2">
-                                        .<button className="btn btn-primary" onClick={setPayShow}>Pay Now</button>
+                                        .<button className="btn btn-primary" onClick={() => setmodal(true)} >Pay Now</button>
                                         {/* <button className="btn btn-success" onClick={()=>setPayShow(true)}
                                                         data-toggle="modal" data-target="#payemtModal">Pay Now</button> */}
-                                    </div>
+                                    </div>  
+                                    <div >
 
-
-                                    <Modal
-                                        show={show}
-                                        onHide={() => setShow(false)}
-                                        dialogClassName="modal-90w"
-                                        aria-labelledby="example-custom-modal-styling-title"
-
-                                    >
-                                        <Modal.Header closeButton>
-
-                                        </Modal.Header>
-                                        <Modal.Body>
-                                            <p>
-                                                I hereby declare that the details furnished above are true and correct to the best of my
-                                                knowledge and belief and I undertake to inform you of any changes therein, immediately.
-                                                In case any of the above information is found to be false or untrue or misleading or misrepresenting,
-                                                I am aware that I may be held liable for it.
-                                            </p>
-                                        </Modal.Body>
-                                    </Modal>
-
+                                        <Modal
+                                           size="lg"
+                                           isOpen={modal}
+                                           toggle={() => setmodal(!modal)}
+                                           style={{width:"500px", height:"200px"}}
+                                           aria-labelledby="contained-modal-title-vcenter"
+                                             centered
+                                        >
+                                            <ModalHeader
+                                                toggle={() => setmodal(!modal)}
+                                            ></ModalHeader>
+                                            <ModalBody style={{fontWeight:"bold",fontSize:20}}>
+                                            <p class="text-success font-weight-bold"
+                                                           >Congratulations, Payment
+                                                            Successful!!</p>
+                                                        <p class="font-weight-bold" >Your
+                                                            Application No. : <strong>2547893</strong></p>
+                                                        <p class="font-weight-bold">Your Diary
+                                                            No. : <strong>5984785</strong></p>
+                                                        <p class="font-weight-bold" >The same
+                                                            has been sent to your mobile and email as well.</p>
+                                            </ModalBody>
+                                            <ModalFooter
+                                                toggle={() => setmodal(!modal)}
+                                            ></ModalFooter>
+                                        </Modal>
+                                    
                                 </div>
-
-
-
+                                </div>
 
                                 {/* <div class="modal" tabindex="-1" id="payemtModal" role="modal">
                                             <div class="modal-dialog">
@@ -358,18 +677,17 @@ const FeesChargesForm = (props) => {
                                   
                                    </div>  */}
                             </div>
-                            <Button style={{ alignSelf: "center", marginTop: "-32px", marginLeft: "1061px" }}
-                                variant="primary" type="submit" onClick={() => props.Step5Continue({ "data": true })}>
-                                View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" />
-                            </Button> &nbsp;&nbsp;&nbsp;
-                            <Button style={{ alignSelf: "center", marginTop: "-32px" }}
-                                variant="primary" type="submit" onClick={FeesChrgesFormSubmitHandler} >
-                                Submit
-                            </Button>
-
+                            <div class="row">
+    <div class="col-sm-12 text-right">
+        <button id="btnSearch" class="btn btn-primary btn-md " onClick={() => props.Step5Continue({ "data": true })}  > View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" /></button> &nbsp;&nbsp;
+         <button id="btnClear" class="btn btn-primary btn-md " onClick={FeesChrgesFormSubmitHandler}>Submit</button>
+     </div>
+</div>
+          
                         </Col>
                     </Row>
                 </Form.Group>
+            </Card>
             </Card>
         </Form>)
 };
