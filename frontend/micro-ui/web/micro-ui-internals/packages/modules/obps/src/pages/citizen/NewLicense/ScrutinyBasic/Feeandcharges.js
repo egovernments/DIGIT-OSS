@@ -146,7 +146,7 @@ const Feeandcharges = (props) => {
                   <div className="col col-3">
                     <h6>
                       <b>(i)Fees/Charges details Total area</b>&nbsp;&nbsp;
-                      <Form.Check
+                      {/* <Form.Check
                         value="Fees/Charges"
                         type="radio"
                         onChange1={handleChange}
@@ -166,7 +166,7 @@ const Feeandcharges = (props) => {
                         label={<CancelIcon color="error" />}
                         name="group110"
                         inline
-                      ></Form.Check>
+                      ></Form.Check> */}
                     </h6>
                     <input
                       type="text"
@@ -185,7 +185,7 @@ const Feeandcharges = (props) => {
                   <div className="col col-3">
                     <h6>
                       <b>(ii)Licence Fees (25%)</b>&nbsp;&nbsp;
-                      <Form.Check
+                      {/* <Form.Check
                         value="Licence Fees"
                         type="radio"
                         onChange1={handleChange}
@@ -205,7 +205,7 @@ const Feeandcharges = (props) => {
                         label={<CancelIcon color="error" />}
                         name="group111"
                         inline
-                      ></Form.Check>
+                      ></Form.Check> */}
                     </h6>
                     <input
                       type="text"
@@ -229,7 +229,7 @@ const Feeandcharges = (props) => {
                       &nbsp;&nbsp;
                     </div>
                     <div>
-                      <Form.Check
+                      {/* <Form.Check
                         value="Scrutiny Fees"
                         type="radio"
                         onChange1={handleChange}
@@ -249,7 +249,7 @@ const Feeandcharges = (props) => {
                         label={<CancelIcon color="error" />}
                         name="group112"
                         inline
-                      ></Form.Check>
+                      ></Form.Check> */}
                     </div>
                     <input
                       type="text"
@@ -276,7 +276,7 @@ const Feeandcharges = (props) => {
                     </div>
                     <div>
                       &nbsp;&nbsp; &nbsp;&nbsp;
-                      <Form.Check
+                      {/* <Form.Check
                         value="Total Fees"
                         type="radio"
                         onChange1={handleChange}
@@ -296,7 +296,7 @@ const Feeandcharges = (props) => {
                         label={<CancelIcon color="error" />}
                         name="group113"
                         inline
-                      ></Form.Check>
+                      ></Form.Check> */}
                     </div>
                     <input
                       type="text"
@@ -318,7 +318,7 @@ const Feeandcharges = (props) => {
                   <div className="col col-3">
                     <h6>
                       <b>(v)Remark (If any)</b>&nbsp;&nbsp;
-                      <Form.Check
+                      {/* <Form.Check
                         value="Remark"
                         type="radio"
                         onChange1={handleChange}
@@ -338,7 +338,7 @@ const Feeandcharges = (props) => {
                         label={<CancelIcon color="error" />}
                         name="group114"
                         inline
-                      ></Form.Check>
+                      ></Form.Check> */}
                     </h6>
                     <input
                       type="number"
@@ -360,7 +360,7 @@ const Feeandcharges = (props) => {
                         {/* <InfoIcon style={{color:"blue"}}/> */}
                       </b>
                       &nbsp;&nbsp; &nbsp;&nbsp;
-                      <Form.Check
+                      {/* <Form.Check
                         value="adjust"
                         type="radio"
                         onChange1={handleChange}
@@ -380,7 +380,7 @@ const Feeandcharges = (props) => {
                         label={<CancelIcon color="error" />}
                         name="group116"
                         inline
-                      ></Form.Check>
+                      ></Form.Check> */}
                     </h6>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
                     <label for="Yes">Yes</label>&nbsp;&nbsp;
@@ -426,7 +426,7 @@ const Feeandcharges = (props) => {
                 <h5 className="text-black">
                   <b>1.Undertakings:-</b>
                   &nbsp;&nbsp;
-                  <Form.Check
+                  {/* <Form.Check
                     value="Undertakings"
                     type="radio"
                     onChange1={handleChange}
@@ -446,7 +446,7 @@ const Feeandcharges = (props) => {
                     label={<CancelIcon color="error" />}
                     name="group118"
                     inline
-                  ></Form.Check>
+                  ></Form.Check> */}
                 </h5>
                 <div className="px-2">
                   <p className="text-black">The following is undertaken: </p>
