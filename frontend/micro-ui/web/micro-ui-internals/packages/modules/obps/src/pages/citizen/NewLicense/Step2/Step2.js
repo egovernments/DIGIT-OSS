@@ -287,9 +287,7 @@ const ApllicantPuropseForm = (props) => {
         },
       };
 
-      console.log("SS", process.env.REACT_APP_PROXY_MDMS);
       const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_district", postDistrict).then((Resp) => {
-        console.log("DISTRICTLIST", Resp);
         return Resp;
       });
       setDistrictData(Resp.data);
@@ -387,7 +385,6 @@ const ApllicantPuropseForm = (props) => {
           {}
         )
         .then((response) => {
-          console.log("DD", response.data.must);
           return response;
         });
       setMustilData(Resp.data.must);
@@ -465,10 +462,6 @@ const ApllicantPuropseForm = (props) => {
   //   getLandOwnerStateData();
   // }, [district2, tehsil, revenueName.khewat]);
 
-  useEffect(() => {
-    console.log("district2", district2);
-  }, [district2]);
-
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
@@ -477,18 +470,15 @@ const ApllicantPuropseForm = (props) => {
 
   const setSelectPurposeDd = (e) => {
     const purposeSelected = e.target.value;
-    console.log("purpose", purposeSelected);
     localStorage.setItem("purpose", purposeSelected);
   };
   const setSelectDevPlan = (e) => {
     const potentialSelected = e.target.value;
-    console.log("potential", potentialSelected);
     localStorage.setItem("potential", potentialSelected);
   };
 
   const setSelect = (e) => {
     const purposeSelected = e.target.value;
-    console.log("purpose", purposeSelected);
     localStorage.setItem("purpose", purposeSelected);
   };
 
@@ -497,7 +487,7 @@ const ApllicantPuropseForm = (props) => {
       tehsil: tehsilCode,
       kanal: modalKanal,
     };
-    console.log("data++++++", values);
+    console.log("data++++++", data);
     // setModalValuesArray((prev)=>[...prev,values]);
   };
 
@@ -732,7 +722,6 @@ const ApllicantPuropseForm = (props) => {
       };
 
       const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        console.log("Submit", Resp);
         return Resp;
       });
       setFinalSubmitData(Resp.data);
@@ -766,16 +755,13 @@ const ApllicantPuropseForm = (props) => {
   // localStorage.setItem("Application Purpose", JSON.stringify(forms));
 
   const handleChangePurpose = (data) => {
-    console.log("purpose", data?.label);
     const purposeSelected = data?.label;
     setSelectPurpose(purposeSelected);
     localStorage.setItem("purpose", JSON.stringify(purposeSelected));
   };
   const handleChangePotential = (data) => {
-    console.log("potential", data);
     const potentialSelected = data?.label;
     setPotentialDev(potentialSelected);
-    console.log("potential", potentialSelected);
     localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
 
@@ -788,8 +774,6 @@ const ApllicantPuropseForm = (props) => {
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-
-    console.log("File", formData);
 
     try {
       const Resp = await axios
@@ -1116,7 +1100,7 @@ const ApllicantPuropseForm = (props) => {
                     </h6>{" "}
                   </label>
                 </div>
-                <input type="text" className="form-control" placeholder="N/A" {...register("landOwner")} onChange={(e) => console.log(e)} />
+                <input type="text" className="form-control" placeholder="N/A" {...register("landOwner")} />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
