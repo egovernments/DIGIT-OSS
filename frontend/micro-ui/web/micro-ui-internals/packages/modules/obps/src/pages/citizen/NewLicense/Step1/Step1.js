@@ -21,39 +21,17 @@ const ApllicantFormStep1 = (props) => {
   });
   const userInfo = Digit.UserService.getUser()?.info || {};
   const tenant = Digit.ULBService.getCurrentTenantId();
-  // const [authorizedDeveloper, setAuthorizedDeveloper] = useState("");
-  // const [authorizedPerson, setAuthorizedPerson] = useState("");
-  // const [authorizedmobile, setAuthorizedmobile] = useState("");
-  // const [alternatemobile, setAlternatemobile] = useState("");
-  // const [authorizedEmail, setAuthorizedEmail] = useState("");
-  // const [authorizedPan, setAuthorizedPan] = useState("");
-  // const [authorizedAddress, setAuthorizedAddress] = useState("");
-  // const [village, setVillage] = useState("");
-  // const [authorizedPinCode, setAuthorizedPinCode] = useState("");
-  // const [tehsil, setTehsil] = useState("");
-  // const [district, setDistrict] = useState("");
-  // const [state, setState] = useState("");
-  // const [status, setStatus] = useState("");
-  // const [LC, setLC] = useState("");
-  // const [address, setAddress] = useState("");
-  // const [permanentAddress, setPermanentAddress] = useState("");
-  // const [notSigned, setNotSigned] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [authorized, setAuthorized] = useState("");
-  
   const [developerData, setDeveloperData] = useState([]);
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
   const ApplicantFormSubmitHandlerForm = async (data) => {
     console.log("data===", data);
     props.Step1Continue(data);
-
     try {
       const postDistrict = {
         NewServiceInfo: {
           newServiceInfoData: [
             {
               ApplicantInfo: {
-                // authorizedDeveloper: authorizedDeveloper,
                 authorizedPerson: "sd",
                 authorizedmobile: "sds",
                 alternatemobile: "1e",
@@ -66,8 +44,6 @@ const ApllicantFormStep1 = (props) => {
                 district: "sdf",
                 state: "dsf",
                 status: "fgr",
-                // LC: LC,
-                // address: address,
                 permanentAddress: "fgd",
                 notSigned: "fgver",
                 email: "gfg",
@@ -282,29 +258,6 @@ const ApllicantFormStep1 = (props) => {
       console.log(error.message);
     }
   };
-
-  // const forms = {
-  //   // authorizedDeveloper: authorizedDeveloper,
-  //   authorizedPerson: authorizedPerson,
-  //   authorizedmobile: authorizedmobile,
-  //   alternatemobile: alternatemobile,
-  //   authorizedEmail: authorizedEmail,
-  //   authorizedPan: authorizedPan,
-  //   authorizedAddress: authorizedAddress,
-  //   village: village,
-  //   authorizedPinCode: authorizedPinCode,
-  //   tehsil: tehsil,
-  //   district: district,
-  //   state: state,
-  //   status: status,
-  //   LC: LC,
-  //   address: address,
-  //   permanentAddress: permanentAddress,
-  //   notSigned: notSigned,
-  //   email: email,
-  //   authorized: authorized,
-  // };
-  // localStorage.setItem("Applicant Info", JSON.stringify(forms));
 
   const getDeveloperData = async () => {
     try {
