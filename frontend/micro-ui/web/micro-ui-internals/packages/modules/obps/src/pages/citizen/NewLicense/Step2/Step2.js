@@ -20,7 +20,6 @@ const tableData = [
     tehsil: "Mike",
     revenueEstate: 32,
     rectangleNo: "10 Downing Street",
-    killa: "10 Downing Street",
     landOwner: "10 Downing Street",
     consolidationType: "10 Downing Street",
     kanal: "10 Downing Street",
@@ -140,11 +139,6 @@ const columns = [
     dataIndex: "rectangleNo",
   },
   {
-    key: "killa",
-    title: "Killa",
-    dataIndex: "killa",
-  },
-  {
     key: "landOwner",
     title: "Land Owner",
     dataIndex: "landOwner",
@@ -170,8 +164,11 @@ const columns = [
     dataIndex: "",
     render: () => (
       <div>
-        <h6>Edit</h6>
-        <h6>Delete</h6>
+       <div className="flex"   style={{ color: "black" }} 
+      onClick={() => Edit(record)} > Edit</div>
+       <div className="flex"   style={{ color: "black" }} 
+      onClick={() => Delete(record)} > Delete</div>
+      <div/>
       </div>
     ),
   },
@@ -361,6 +358,8 @@ const ApllicantPuropseForm = (props) => {
     reset();
     // setModalValuesArray((prev)=>[...prev,values]);
   };
+  const [visible, setVisible] = useState(false); 
+
 
   const PurposeFormSubmitHandler = async (data) => {
     console.log("data===", data);
@@ -785,7 +784,7 @@ const ApllicantPuropseForm = (props) => {
                 </div>
                 <ReactMultiSelect
                   control={control}
-                  name="tehsil"
+                 {...register("tehsil")}
                   data={tehsilDataLabels}
                   labels="Tehsil"
                   onChange={(e) => {
@@ -841,17 +840,17 @@ const ApllicantPuropseForm = (props) => {
                     </h6>{" "}
                   </label>{" "}
                   &nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow2} />
+                  <input type="radio" id="Yes" value="Consolidated" onChange={handleChange} name="Yes"{...register("consolidationType")} onClick={handleshow2} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
                   <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow2} />
+                  <input type="radio" id="Yes" value="Non-Consolidated" onChange={handleChange} name="Yes" {...register("consolidationType")} onClick={handleshow2} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
                   <label htmlFor="npnl">Non-Consolidated</label>
                   {/* </Form.Select> */}
                 </div>{" "}
-                {showhide2 === "1" && (
+                {showhide2 === "Consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
@@ -881,7 +880,7 @@ const ApllicantPuropseForm = (props) => {
                     </tbody>
                   </table>
                 )}
-                {showhide2 === "2" && (
+                {showhide2 === "Non-Consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
