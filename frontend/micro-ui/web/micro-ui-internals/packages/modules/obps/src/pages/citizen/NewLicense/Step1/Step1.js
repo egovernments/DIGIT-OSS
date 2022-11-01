@@ -459,7 +459,7 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>Email ID</b> <span style={{ color: "red" }}>*</span>
+                    <b>EmailId</b> <span style={{ color: "red" }}>*</span>
                   </Form.Label>
                 </div>
                 <Form.Control type="text" placeholder="N/A" {...register("authorizedEmail")} disabled />
@@ -591,7 +591,13 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>Permanent address in case of individual/ registered office address in case other than individual</b>
+                  <h6 data-toggle="tooltip" data-placement="top" title="Permanent address in case of individual/ registered office address in case other than individual">
+                  <b>
+                    Permanent address/ registered office address
+                    &nbsp;{" "}
+                  </b>
+                  </h6>
+                    
                     <span style={{ color: "red" }}>*</span>
                   </Form.Label>
                 </div>
@@ -612,7 +618,7 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4" style={{ marginTop: 23 }}>
                 <div>
                   <Form.Label>
-                    <b>Email ID for communication</b>
+                    <b>EmailId for communication</b>
                     <span style={{ color: "red" }}>*</span>
                   </Form.Label>
                 </div>

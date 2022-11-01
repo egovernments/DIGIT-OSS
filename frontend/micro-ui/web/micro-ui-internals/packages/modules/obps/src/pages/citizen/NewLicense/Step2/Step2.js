@@ -139,11 +139,7 @@ const columns = [
     dataIndex: "rectangleNo",
   },
   
-  {
-    key: "killa",
-    title: "Killa",
-    dataIndex: "killa",
-  },
+  
   {
     key: "landOwner",
     title: "Land Owner",
@@ -155,19 +151,19 @@ const columns = [
     dataIndex: "consolidationType",
   },
   {
-    key: "bigha",
-    title: "Bigha",
-    dataIndex: "bigha",
+    key: "kanal",
+    title: "Kanal",
+    dataIndex: "kanal",
   },
   {
-    key: "biswa",
-    title: "Biswa",
-    dataIndex: "biswa",
+    key: "marla",
+    title: "Marla",
+    dataIndex: "marla",
   },
   {
-    key: "biswansi",
-    title: "Biswansi",
-    dataIndex: "biswansi",
+    key: "sarsai",
+    title: "Sarsai",
+    dataIndex: "sarsai",
   },
   {
     // key: "action",
@@ -422,13 +418,16 @@ const ApllicantPuropseForm = (props) => {
 
   const ApplicantPurposeModalData = (data) => {
     console.log("data++++++", data);
+    setModalData((prev) => [...prev, data]);
+    setmodal(false);
+    reset();
     data["consolidationType"] = consolidateValue;
-    if (showhide2 === "1") {
+    if (showhide2 === "Consolidated") {
       delete data?.bigha;
       delete data?.biswa;
       delete data?.biswansi;
     }
-    if (showhide2 === "2") {
+    if (showhide2 === "Non-Consolidated") {
       delete data?.marla;
       delete data?.kanal;
       delete data?.sarsai;
@@ -438,13 +437,7 @@ const ApllicantPuropseForm = (props) => {
     } else {
       setColumns(consolidatedColumns);
     }
-    // setModalData((prev) => [...prev, data]);
-    // setmodal(false);
-    // reset();
   };
-  const [visible, setVisible] = useState(false); 
-
-
   const PurposeFormSubmitHandler = async (data) => {
     console.log("data===", data);
     props.Step2Continue({ data });
@@ -892,7 +885,8 @@ const ApllicantPuropseForm = (props) => {
                 </div>
                 <ReactMultiSelect
                   control={control}
-                  name="revenueEstate"
+                  {...register("revenueEstate")}
+                 
                   data={revenueDataLabels}
                   labels="Revenue Estate"
                   onChange={(e) => getMustilData(e.code)}
@@ -910,7 +904,7 @@ const ApllicantPuropseForm = (props) => {
                     </h6>
                   </Form.Label>
                 </div>
-                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No." />
+                <ReactMultiSelect control={control} name="mustil"  data={mustilDataLabels} labels="Rectangle No." />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.mustil && errors?.mustil?.message}
                 </h3>
@@ -926,11 +920,11 @@ const ApllicantPuropseForm = (props) => {
                     </h6>{" "}
                   </label>{" "}
                   &nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="1" name="Yes" onClick={handleshow2} />
+                  <input type="radio" id="Yes" value="Consolidated" name="Yes" onClick={handleshow2} {...register("consolidationType")}/>
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
                   <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="2" name="Yes" onClick={handleshow2} />
+                  <input type="radio" id="No" value="Non-Consolidated" name="Yes" onClick={handleshow2} {...register("consolidationType")}/>
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
                   <label htmlFor="npnl">Non-Consolidated</label>
