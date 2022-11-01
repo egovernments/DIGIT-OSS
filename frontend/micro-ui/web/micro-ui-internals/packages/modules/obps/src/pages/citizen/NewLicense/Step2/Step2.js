@@ -963,19 +963,11 @@ const ApllicantPuropseForm = (props) => {
               </h6>
             </Form.Label>
           </div>
-          {/* <Controller
-                  control={control}
-                  name="authorizedPerson"
-                  render={({ field: { onChange, value } }) => (
-                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPerson" />
-                  )}
-                /> */}
           <ReactMultiSelect
             control={control}
             name="tehsil"
             data={tehsilDataLabels}
             labels="Tehsil" 
-            
             onChange={(e) => {
               getRevenuStateData(e.value);
               setTehsilCode(e.value);
@@ -996,7 +988,6 @@ const ApllicantPuropseForm = (props) => {
           <ReactMultiSelect
             control={control}
             name="revenueEstate"
-            placeholder="N/A"
             data={revenueDataLabels}
             labels="Revenue Estate"
             onChange={(e) => getMustilData(e.code)}
@@ -1014,7 +1005,7 @@ const ApllicantPuropseForm = (props) => {
               </h6>
             </Form.Label>
           </div>
-          <ReactMultiSelect control={control} name="mustil" placeholder="N/A" data={mustilDataLabels} labels="Rectangle No." />
+          <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No." />
           <h3 className="error-message" style={{ color: "red" }}>
             {errors?.mustil && errors?.mustil?.message}
           </h3>
@@ -1030,14 +1021,13 @@ const ApllicantPuropseForm = (props) => {
               </h6>{" "}
             </label>{" "}
             &nbsp;&nbsp;
-            {/* <Form.Select type="select" defaultValue="Select" placeholder="" className="form-control"
-                  onChange={(e)=>setModalConsolidation(e.target.value)} >
-                      */}
-            <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow2} />
+            <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" 
+           onClick={handleshow2} />
             &nbsp;&nbsp;
             <label for="Yes"></label>
             <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
-            <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow2} />
+            <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes"
+             onClick={handleshow2} />
             &nbsp;&nbsp;
             <label for="Yes"></label>
             <label htmlFor="npnl">Non-Consolidated</label>
@@ -1047,7 +1037,6 @@ const ApllicantPuropseForm = (props) => {
             <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
               <thead>
                 <tr>
-                  {/* {(khasraData !== undefined && khasraData.length > 0)?(khasraData.)} */}
                   <th>
                     <b>Kanal</b>
                   </th>
@@ -1057,34 +1046,19 @@ const ApllicantPuropseForm = (props) => {
                   <th>
                     <b>Sarsai</b>&nbsp;&nbsp;
                   </th>
-                  {/* <th><b>Area in Marla</b>&nbsp;&nbsp;</th> */}
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>
-                  <Form.Control type="text" className="form-control" placeholder="N/A" {...register("kanal")} disabled />
+                  <Form.Control type="text" className="form-control"  {...register("kanal")}  />
                   </td>
                   <td>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder=""
-                      onChange={(e) => setMarla(e.target.value)}
-                     
-                    ></input>{" "}
+                  <Form.Control type="text" className="form-control" {...register("marla")}  />
                   </td>
                   <td>
-                    {" "}
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder=""
-                      onChange={(e) => setSarsai(e.target.value)}
-                    
-                    ></input>
+                  <Form.Control type="text" className="form-control"  {...register("sarsai")}  />
                   </td>
-                  {/* <td > <input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalMarla(e.target.value)}></input></td> */}
                 </tr>
               </tbody>
             </table>
@@ -1093,7 +1067,6 @@ const ApllicantPuropseForm = (props) => {
             <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
               <thead>
                 <tr>
-                  {/* {(khasraData !== undefined && khasraData.length > 0)?(khasraData.)} */}
                   <th>
                     <b>Bigha</b>
                   </th>
@@ -1103,41 +1076,19 @@ const ApllicantPuropseForm = (props) => {
                   <th>
                     <b>Biswansi</b>&nbsp;&nbsp;
                   </th>
-                  {/* <th><b>Area in Marla</b>&nbsp;&nbsp;</th> */}
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder=""
-                      onChange={(e) => setBigha(e.target.value)}
-                     
-                    ></input>
+                  <Form.Control type="text" className="form-control"  {...register("bigha")}  />
                   </td>
                   <td>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder=""
-                      onChange={(e) => setBiswa(e.target.value)}
-                     
-                    ></input>{" "}
+                  <Form.Control type="text" className="form-control"  {...register("biswa")}  />
                   </td>
                   <td>
-                    {" "}
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder=""
-                      onChange={(e) => setBiswansi(e.target.value)}
-                     
-                    ></input>
-                  </td>
-                  {/* <td > <input type="text" className="form-control" placeholder=""  onChange={(e)=>setModalMarla(e.target.value)}></input></td> */}
-                </tr>
+                  <Form.Control type="text" className="form-control" {...register("biswansi")}  />
+                  </td></tr>
               </tbody>
             </table>
           )}
@@ -1150,15 +1101,14 @@ const ApllicantPuropseForm = (props) => {
             <label>
               <h6>
                 <b>Name of Land Owner</b>
-              </h6>{" "}
+              </h6>
             </label>
           </div>
-          <input type="text" className="form-control" placeholder="N/A" {...register("landOwner")} onChange={(e) => console.log(e)} />
+          <Form.Control type="text" className="form-control" placeholder="N/A" {...register("landOwner")} onChange={(e) => console.log(e)} />
           <h3 className="error-message" style={{ color: "red" }}>
             {errors?.landOwner && errors?.landOwner?.message}
           </h3>
         </Col>
-
         <Col md={4} xxl lg="6">
           {/* <ReactMultiSelect
 
@@ -1205,8 +1155,7 @@ const ApllicantPuropseForm = (props) => {
                     <b>Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered</b>
                   </h6>
                 </label>
-                <input
-                  type="text"
+                <Form.Control type="text"
                   className="form-control"
                   placeholder="N/A"
                   {...register("devCompany")}
@@ -1219,8 +1168,7 @@ const ApllicantPuropseForm = (props) => {
                     <b>Date of registering collaboration agreement</b>
                   </h6>
                 </label>
-                <input
-                  type="date"
+                <Form.Control type="date"
                   className="form-control"
                   placeholder="N/A"
                   {...register("registering")}
@@ -1232,8 +1180,7 @@ const ApllicantPuropseForm = (props) => {
                     <b>Date of validity of collaboration agreement</b>
                   </h6>
                 </label>
-                <input
-                  type="date"
+                <Form.Control type="date"
                   className="form-control"
                   placeholder="N/A"
                   {...register("dateValidity")}
@@ -1266,8 +1213,7 @@ const ApllicantPuropseForm = (props) => {
                     <b>Name of authorized signatory on behalf of land owner(s)</b>
                   </h6>
                 </label>
-                <input
-                  type="text"
+                <Form.Control type="text"
                   className="form-control"
                   placeholder="N/A"
                   {...register("authorizedSign")}
@@ -1280,13 +1226,10 @@ const ApllicantPuropseForm = (props) => {
                     <b>Name of authorized signatory on behalf of developer to sign Collaboration agreement</b>
                   </h6>
                 </label>
-                <input
-                  type="date"
+                <Form.Control type="date"
                   className="form-control"
                   placeholder="N/A"
                   {...register("authorizedDev")}
-                  onChange={(e) => setNameAuthSign(e.target.value)}
-                  value={nameAuthSign}
                 />
               </div>
               <div className="col col-4" style={{ marginTop: 20 }}>
@@ -1296,8 +1239,7 @@ const ApllicantPuropseForm = (props) => {
                   </h6>
                 </label>
                 <br></br>
-                <input
-                  type="text"
+                <Form.Control type="text"
                   className="form-control"
                   placeholder="N/A"
                   {...register("registeringAuth")}
@@ -1313,8 +1255,7 @@ const ApllicantPuropseForm = (props) => {
                   </h6>
                 </label>
                 <br></br>
-                <input
-                  type="file"
+                <Form.Control type="file"
                   className="form-control"
                   onChange1={(e) => setFile({ file: e.target.files[0] })}
                  
