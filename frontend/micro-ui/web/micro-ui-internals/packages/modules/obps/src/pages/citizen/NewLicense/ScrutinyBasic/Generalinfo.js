@@ -221,27 +221,9 @@ const Genarelinfo = (props) => {
 
   return (
     <Form ref={props.generalInfoRef}>
-      <div>
-        <Col class="col-12">
-          <Button
-            style={{
-              // margin: 2,
-              width: "inherit",
-              textAlign: "inherit",
-              padding: "0.25rem 1rem",
-              fontWeight: "Bold",
-              backgroundColor: "#c2c4c7",
-              border: "none",
-              color: "unset",
-            }}
-            onClick={() => setOpen2(!open2)}
-            aria-controls="example-collapse-text"
-            aria-expanded={open2}
-          >
-            Application Purpose
-            <AddIcon style={{ width: "63.2em" }}></AddIcon>
-          </Button>
-        </Col>
+      <div className="collapse-header" onClick={() => setOpen2(!open2)} aria-controls="example-collapse-text" aria-expanded={open2}>
+        <span className="">Application Purpose</span>
+        {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
@@ -445,15 +427,15 @@ const Genarelinfo = (props) => {
                 <b>(i) Khasra-wise information to be provided in the following format:</b>&nbsp;&nbsp;
               </p>
             </div>
-            <div className="ml-auto"></div>
+            {/* <div className="ml-auto"></div> */}
             <br></br>
 
-            <div className="applt" style={{ overflow: "auto" }}>
-              <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", overflow: "auto" }}>
+            <div>
+              <table className="table table-bordered">
                 <thead>
                   <tr>
                     <th>
-                      Tehsil{" "}
+                      Tehsil
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
@@ -472,7 +454,7 @@ const Genarelinfo = (props) => {
                       </div>
                     </th>
                     <th>
-                      Revenue estate{" "}
+                      Revenue estate
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
@@ -491,7 +473,7 @@ const Genarelinfo = (props) => {
                       </div>
                     </th>
                     <th>
-                      Rectangle No.{" "}
+                      Rectangle No.
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
@@ -510,7 +492,7 @@ const Genarelinfo = (props) => {
                       </div>
                     </th>
                     <th>
-                      Killa{" "}
+                      Killa
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
@@ -529,7 +511,7 @@ const Genarelinfo = (props) => {
                       </div>
                     </th>
                     <th>
-                      Land owner{" "}
+                      Land owner
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon

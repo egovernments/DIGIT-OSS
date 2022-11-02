@@ -115,27 +115,10 @@ const Feeandcharges = (props) => {
           padding: 2,
         }}
       > */}
-      <div>
-        <Col class="col-12">
-          <Button
-            style={{
-              margin: 2,
-              width: "inherit",
-              textAlign: "inherit",
-              padding: "0.25rem 1rem",
-              fontWeight: "Bold",
-              backgroundColor: "#c2c4c7",
-              border: "none",
-              color: "unset",
-            }}
-            onClick={() => setOpen2(!open2)}
-            aria-controls="example-collapse-text"
-            aria-expanded={open2}
-          >
-            Fee and charges
-            <AddIcon style={{ width: "66em" }}></AddIcon>
-          </Button>
-        </Col>
+
+      <div className="collapse-header" onClick={() => setOpen(!open2)} aria-controls="example-collapse-text" aria-expanded={open2}>
+        <span className="">Application Purpose</span>
+        {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">

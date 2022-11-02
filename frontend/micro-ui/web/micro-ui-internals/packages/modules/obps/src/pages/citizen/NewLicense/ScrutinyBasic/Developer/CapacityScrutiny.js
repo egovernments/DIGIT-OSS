@@ -421,28 +421,12 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
     <div>
       {/* // <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
         //     <Timeline currentStep={4} flow="STAKEHOLDER" /> */}
-      <div>
-        <Col class="col-12">
-          <Button
-            style={{
-              marginBottom: 3,
-              width: "100%",
-              textAlign: "inherit",
-              padding: "0.25rem 1rem",
-              fontWeight: "Bold",
-              backgroundColor: "#c2c4c7",
-              border: "none",
-              color: "unset",
-            }}
-            onClick={() => setOpen(!open)}
-            aria-controls="example-collapse-text"
-            aria-expanded={open}
-          >
-            DeveloperCapacity
-            <AddIcon style={{ width: "64em" }}></AddIcon>
-          </Button>
-        </Col>
+
+      <div className="collapse-header" onClick={() => setOpen(!open)} aria-controls="example-collapse-text" aria-expanded={open}>
+        <span className="">DeveloperCapacity</span>
+        {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
+
       <Collapse in={open}>
         <div id="example-collapse-text">
           <FormStep
@@ -474,9 +458,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                           <td>
                             <input type="file" name="upload" placeholder="" class="employee-card-input" />
                           </td>
-                          <td align="center" size="large">
-                            {/* <FileUploadIcon /> */}
-                          </td>
+                          <td align="center" size="large"></td>
                         </tr>
                       </tbody>
                     </table>

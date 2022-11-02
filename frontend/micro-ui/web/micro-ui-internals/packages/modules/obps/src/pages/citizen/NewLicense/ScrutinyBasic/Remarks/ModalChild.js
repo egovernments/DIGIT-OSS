@@ -73,7 +73,9 @@ function ModalChild(props) {
               {props.labelmodal}
             </Col>
             <Col xs={4} md={4}>
-              <h5 style={{ fontSize: "15", borderColor: "#C3C3C3", borderStyle: "none" }}>{inputFieldValue}</h5>
+              <h5 style={{ fontSize: "15", borderColor: "#C3C3C3", fontStyle: "none" }}>
+                <i>{inputFieldValue}</i>
+              </h5>
             </Col>
           </Row>
         </Modal.Title>
@@ -90,7 +92,7 @@ function ModalChild(props) {
           type="radio"
           id="default-radio"
           // label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          label="Aaproval"
+          label="Approved"
           name="group0"
           inline
         ></Form.Check>
@@ -104,13 +106,13 @@ function ModalChild(props) {
           type="radio"
           id="default-radio"
           // label={<CancelIcon color="error" />}
-          label="Disaaproval"
+          label="Disapproved"
           name="group0"
           inline
         ></Form.Check>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
           <Col xs={12} md={12}>
-            <Form.Label>Remarks</Form.Label>
+            <Form.Label style={{ margin: 5 }}>Remarks</Form.Label>
             <textarea
               class="form-control"
               id="exampleFormControlTextarea1"

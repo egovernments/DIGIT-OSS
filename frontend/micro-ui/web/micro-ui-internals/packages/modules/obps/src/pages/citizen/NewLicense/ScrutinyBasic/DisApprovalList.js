@@ -84,21 +84,29 @@ const DisApprovalList = (props) => {
       <Card.Header>
         <Card.Title style={{ fontFamily: "Roboto", fontSize: 30, fontWeight: "bold" }}>{/* Disapproval List */}</Card.Title>
       </Card.Header>
-      <Card.Body style={{ overflowY: "auto", height: 350, maxWidth: "100%", backgroundColor: "#C6C6C6" }}>
+      <Card.Body style={{ overflowY: "auto", height: 350, maxWidth: "100%", border: "soild" }}>
         <Form>
-          <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginBottom: 10 }}></h2>
+          <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginBottom: 2 }}></h2>
           <Row>
             <Col xxl lg="1">
-              <h5>Sr. No</h5>
+              <h5 style={{ textAlign: "center" }} className="fw-bold">
+                Sr. No.
+              </h5>
             </Col>
             <Col xxl lg="3">
-              <h5>field Name</h5>
+              <h5 style={{ textAlign: "center" }} className="fw-bold">
+                Field Name
+              </h5>
             </Col>
             <Col xxl lg="3">
-              <h5 style={{ textAlign: "center" }}>Status</h5>
+              <h5 style={{ textAlign: "center" }} className="fw-bold">
+                Status
+              </h5>
             </Col>
             <Col xxl lg="5">
-              <h5 style={{ textAlign: "center" }}>Remark</h5>
+              <h5 style={{ textAlign: "center" }} className="fw-bold">
+                Remark
+              </h5>
             </Col>
           </Row>
           {dataStor.egScrutiny !== undefined && dataStor.egScrutiny !== null && dataStor.egScrutiny.length > 0 ? (

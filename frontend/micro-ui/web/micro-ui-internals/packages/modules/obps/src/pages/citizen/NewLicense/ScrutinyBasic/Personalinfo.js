@@ -7,6 +7,7 @@ import { Card, Row, Col } from "react-bootstrap";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import InfoIcon from "@mui/icons-material/Info";
 // import BootstrapSwitchButton from "bootstrap-switch-button-react";
 // import Alert from "react-bootstrap/Alert";
@@ -120,53 +121,15 @@ const Personalinfo = (props) => {
       // }}
     >
       {/* <Alert variant="warning">{messege}</Alert> */}
-      <div>
-        <Col class="col-12">
-          <Button
-            style={{
-              marginBottom: 3,
-              width: "inherit",
-              textAlign: "inherit",
-              padding: "0.25rem 1rem",
-              fontWeight: "Bold",
-              backgroundColor: "#c2c4c7",
-              border: "none",
-              color: "unset",
-              // borderColor: "#C3C3C3",
-              // borderStyle: "solid",
-              // borderWidth: 2,
-            }}
-            onClick={() => setOpen(!open)}
-            aria-controls="example-collapse-text"
-            aria-expanded={open}
-          >
-            Applicant info
-            <AddIcon style={{ width: "67em" }}></AddIcon>
-          </Button>
-        </Col>
+      <div className="collapse-header" onClick={() => setOpen(!open)} aria-controls="example-collapse-text" aria-expanded={open}>
+        <span className="">Applicant info</span>
+        {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
 
-      {/* <div style={{ width: "100%", height: 40, padding: 2 }}>
-        <Button onClick={() => props.Personalinfo({ data: true })} style={{ width: "100%", height: "100%" }}>
-          Step-1
-        </Button>
-      </div> */}
-      {/* <Card
-        style={{
-          width: "100%",
-          height: props.heightPersonal,
-          overflow: "hidden",
-          marginBottom: 20,
-          borderColor: "#C3C3C3",
-          borderStyle: "solid",
-          borderWidth: 2,
-          padding: 2,
-        }}
-      > */}
       <Collapse in={open}>
         <div id="example-collapse-text">
           <div>
-            <Col class="col-12">
+            {/* <Col class="col-12">
               <Button
                 style={{
                   marginBottom: 3,
@@ -174,7 +137,8 @@ const Personalinfo = (props) => {
                   textAlign: "inherit",
                   padding: "0.25rem 1rem",
                   fontWeight: "Bold",
-                  backgroundColor: "#c2c4c7",
+                  backgroundColor: "#e9ecef",
+
                   border: "none",
                   color: "unset",
                 }}
@@ -185,10 +149,12 @@ const Personalinfo = (props) => {
                 Personal info
                 <AddIcon style={{ width: "67.6em" }}></AddIcon>
               </Button>
-            </Col>
+            </Col> */}
           </div>
-          {/* </div>
-      </Collapse> */}
+          <div className="collapse-header" onClick={() => setOpen2(!open2)} aria-controls="example-collapse-text" aria-expanded={open2}>
+            <span className="">Applicant info</span>
+            {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+          </div>
           <Collapse in={open2}>
             <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}>
               <PersonalinfoChild
@@ -196,9 +162,6 @@ const Personalinfo = (props) => {
                 personalinfo={applicantInfoPersonal !== null ? applicantInfoPersonal : null}
                 displayPersonal={open2 ? "block" : "none"}
               />
-
-              {/* <hr></hr> */}
-              {/* </Card> */}
             </div>
           </Collapse>
           <LicenseDetailsScrutiny />

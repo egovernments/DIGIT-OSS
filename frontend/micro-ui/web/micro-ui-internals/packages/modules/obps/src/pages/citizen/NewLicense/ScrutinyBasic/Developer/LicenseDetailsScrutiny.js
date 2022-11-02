@@ -300,108 +300,15 @@ const LicenseDetailsScrutiny = (props) => {
       // }}
     >
       {/* <Alert variant="warning">{messege}</Alert> */}
-      <div>
-        <Col class="col-12">
-          <Button
-            style={{
-              marginBottom: 5,
-              width: "inherit",
-              textAlign: "inherit",
-              padding: "0.25rem 1rem",
-              fontWeight: "Bold",
-              backgroundColor: "#c2c4c7",
-              border: "none",
-              color: "unset",
-            }}
-            onClick={() => setOpen(!open)}
-            // aria-controls="example-collapse-text"
-            aria-controls="example-fade-text"
-            aria-expanded={open}
-          >
-            AddIfo
-            <AddIcon style={{ width: "71.4em" }}></AddIcon>
-          </Button>
-        </Col>
+
+      <div className="collapse-header" onClick={() => setOpen(!open)} aria-controls="example-collapse-text" aria-expanded={open2}>
+        <span className="">Add Info</span>
+        {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
 
-      {/* <div style={{ width:"100%" , height:40, padding:2,}}>
-  <Button onClick={() =>props.Personalinfo({data:true})} style={{ width:"100%" , height:"100%"}}>Step-1</Button>
-  </div> */}
-      {/* <Card
-      style={{
-        width: "100%",
-        height: props.heightPersonal,
-        overflow: "hidden",
-        marginBottom: 20,
-        borderColor: "#C3C3C3",
-        borderStyle: "solid",
-        borderWidth: 2,
-        padding: 2,
-      }}
-    > */}
       <Collapse in={open}>
-        {/* <div id="example-collapse-text"> */}
-        {/* <div>
-            <Col class="col-12">
-              <Button
-                style={{
-                  marginBottom: 3,
-                  width: "inherit",
-                  textAlign: "inherit",
-                  padding: "0.25rem 1rem",
-                  fontWeight: "Bold",
-                  backgroundColor: "#c2c4c7",
-                  border: "none",
-                  color: "unset",
-                }}
-                onClick={() => setOpen2(!open2)}
-                aria-controls="example-collapse-text"
-                aria-expanded={open2}
-              >
-                Personal info
-                <AddIcon style={{ width: "67.6em" }}></AddIcon>
-              </Button>
-            </Col>
-          </div> */}
-
-        {/* </div>
-    </Collapse> */}
-        {/* <Collapse in={open2}> */}
         <div id="example-collapse-text" style={{ marginTop: 5, paddingLeft: 5, paddingRight: 5 }}>
           <Form.Group style={{ display: props.displayLicenseDetails, margin: 5 }}>
-            {/* <Row className="ms-auto" style={{ marginTop: 20, marginBottom: 20 }}> */}
-            {/* <Col className="ms-auto" md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h5>Developer &nbsp;</h5>
-                  </Form.Label>
-                  <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                </div>
-                <div style={{ display: "flex" }}>
-                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
-                  &nbsp;&nbsp;
-                  <ReportProblemIcon
-                    style={{
-                      color:
-                        developerInputFiledColor.length > 0
-                          ? developerInputFiledColor[0].color.data
-                          : developerInputCheckedFiledColor.length > 0
-                          ? developerInputCheckedFiledColor[0].color.data
-                          : "#FFB602",
-                    }}
-                    onClick={() => {
-                      setLabelValue("developer"), setSmShow(true), console.log("modal open");
-                    }}
-                  ></ReportProblemIcon>
-                  <ModalChild
-                    labelmodal={labelValue}
-                    passmodalData={handlemodaldData}
-                    isYesorNoChecked={handleYesOrNochecked}
-                    displaymodal={smShow}
-                    setColor={setColor}
-                  ></ModalChild>
-                </div>
-              </Col> */}
             <div>
               <Card style={{ margin: 2 }}>
                 <h5>Developer's type</h5>
