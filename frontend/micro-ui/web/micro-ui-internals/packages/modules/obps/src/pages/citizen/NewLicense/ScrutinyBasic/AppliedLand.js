@@ -270,26 +270,10 @@ const AppliedLandinfo = (props) => {
         }}
       > */}
       <div>
-        <Col class="col-12">
-          <Button
-            style={{
-              margin: 2,
-              width: "inherit",
-              textAlign: "inherit",
-              padding: "0.25rem 1rem",
-              fontWeight: "Bold",
-              backgroundColor: "#c2c4c7",
-              border: "none",
-              color: "unset",
-            }}
-            onClick={() => setOpen2(!open2)}
-            aria-controls="example-collapse-text"
-            aria-expanded={open2}
-          >
-            Geographical Specifications
-            <AddIcon style={{ width: "58.3em" }}></AddIcon>
-          </Button>
-        </Col>
+        <div className="collapse-header" onClick={() => setOpen(!open)} aria-controls="example-collapse-text" aria-expanded={open}>
+          <span className="">Details of Applied Land</span>
+          {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+        </div>
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
@@ -299,26 +283,6 @@ const AppliedLandinfo = (props) => {
           >
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               <Col col-12>
-                {/* <h5 className="text-black">
-                 
-                  &nbsp;&nbsp; */}
-                {/* <Form.Check
-                    value="Name of the authorized person to sign the application"
-                    type="radio"
-                    id="default-radio"
-                    label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                    name="group39"
-                    inline
-                  ></Form.Check>
-                  <Form.Check
-                    onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                    value="Name of the authorized person to sign the application"
-                    type="radio"
-                    id="default-radio"
-                    label={<CancelIcon color="error" />}
-                    name="group39"
-                    inline
-                  ></Form.Check> */}
                 <div style={{ display: "flex" }}>
                   {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   1. DGPS points <span className="text-primary"> (Click here for instructions to capture DGPS points)</span>
@@ -346,40 +310,30 @@ const AppliedLandinfo = (props) => {
                 {/* </h5> */}
 
                 <div className="px-2">
-                  <div className="text-black">
-                    (i)Add point 1 &nbsp;
-                    <div className="row ">
-                      <div className="col col-4">
-                        <label htmlFor="pitentialZone" className="font-weight-bold">
-                          X:Longitude
-                        </label>
-                        <input type="number" name="XLongitude" className="form-control" disabled />
-                      </div>
-                      <div className="col col-4">
-                        <label htmlFor="pitentialZone" className="font-weight-bold">
-                          Y:Latitude
-                        </label>
-                        <input type="number" name="YLatitude" className="form-control" disabled />
-                      </div>
+                  (i)Add point 1 &nbsp;
+                  <div className="row ">
+                    <br></br>
+                    <div className="col col-4">
+                      <label htmlFor="pitentialZone">X:Longitude</label>
+                      <input type="number" name="XLongitude" className="form-control" disabled />
+                    </div>
+                    <div className="col col-4">
+                      <label htmlFor="pitentialZone">Y:Latitude</label>
+                      <input type="number" name="YLatitude" className="form-control" disabled />
                     </div>
                   </div>
                 </div>
                 <div className="px-2">
-                  <div className="text-black">
-                    (ii)Add point 2 &nbsp;
-                    <div className="row ">
-                      <div className="col col-4">
-                        <label htmlFor="pitentialZone" className="font-weight-bold">
-                          X:Longitude
-                        </label>
-                        <input type="number" name="XLongitude" className="form-control" disabled />
-                      </div>
-                      <div className="col col-4">
-                        <label htmlFor="pitentialZone" className="font-weight-bold">
-                          Y:Latitude
-                        </label>
-                        <input type="number" name="YLatitude" className="form-control" disabled />
-                      </div>
+                  (ii)Add point 2 &nbsp;
+                  <div className="row ">
+                    <br></br>
+                    <div className="col col-4">
+                      <label htmlFor="pitentialZone">X:Longitude</label>
+                      <input type="number" name="XLongitude" className="form-control" disabled />
+                    </div>
+                    <div className="col col-4">
+                      <label htmlFor="pitentialZone">Y:Latitude</label>
+                      <input type="number" name="YLatitude" className="form-control" disabled />
                     </div>
                   </div>
                 </div>
@@ -387,6 +341,7 @@ const AppliedLandinfo = (props) => {
                 <div className="px-2">
                   <div className="text-black">
                     (iii)Add point 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <br></br>
                     <div className="row ">
                       <div className="col col-4">
                         <label htmlFor="pitentialZone" className="font-weight-bold">
@@ -407,6 +362,7 @@ const AppliedLandinfo = (props) => {
                   <div className="text-black">
                     (iv)Add point 4 &nbsp;
                     <div className="row ">
+                      <br></br>
                       <div className="col col-4">
                         <label htmlFor="pitentialZone" className="font-weight-bold">
                           X:Longitude
@@ -420,24 +376,18 @@ const AppliedLandinfo = (props) => {
                         <input type="number" name="YLatitude" className="form-control" disabled />
                       </div>
                     </div>
-                    {/* <DashSquareFill style={{ float: "right" }} class="text-primary" onClick={() => setNoOfRows(noOfRows - 1)} /> */}
                     &nbsp;&nbsp;&nbsp;
-                    {/* <PlusSquareFill style={{ float: "right", marginRight: 15 }} class="text-primary" onClick={() => setNoOfRows(noOfRows + 1)} /> */}
                   </div>
 
                   {[...Array(noOfRows)].map((elementInArray, index) => {
                     return (
                       <div className="row ">
                         <div className="col col-4">
-                          <label htmlFor="pitentialZone" className="font-weight-bold">
-                            X:Longiude
-                          </label>
+                          <label htmlFor="pitentialZone">X:Longiude</label>
                           <input type="number" name="XLongitude" className="form-control" disabled />
                         </div>
                         <div className="col col-4">
-                          <label htmlFor="pitentialZone" className="font-weight-bold">
-                            Y:Latitude
-                          </label>
+                          <label htmlFor="pitentialZone">Y:Latitude</label>
                           <input type="number" name="YLatitude" className="form-control" disabled />
                         </div>
                       </div>
@@ -450,6 +400,7 @@ const AppliedLandinfo = (props) => {
         <div id="example-collapse-text"> */}
                 <h5 className="text-black" style={{ marginTop: "3%" }}>
                   <b>2.Details of Plots</b>&nbsp;&nbsp;
+                  <br></br>
                   <div style={{ display: "flex" }}>
                     <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} disabled />
                     &nbsp;&nbsp;
@@ -459,21 +410,25 @@ const AppliedLandinfo = (props) => {
                     &nbsp;&nbsp;
                     <label for="Yes"></label>
                     <label htmlFor="npnl">Irregular</label>
-                    <ReportProblemIcon
-                      style={{
-                        color:
-                          developerInputFiledColor1.length > 0
-                            ? developerInputFiledColor1[0].color.data
-                            : developerInputCheckedFiledColor1.length > 0
-                            ? developerInputCheckedFiledColor1[0].color.data
-                            : "#FFB602",
-                      }}
-                      onClick={() => {
-                        setLabelValue("2.Details of Plots"), setSmShow(true), console.log("modal open");
-                      }}
-                    ></ReportProblemIcon>
+                    <div style={{ margin: 5 }}>
+                      {" "}
+                      <ReportProblemIcon
+                        style={{
+                          color:
+                            developerInputFiledColor1.length > 0
+                              ? developerInputFiledColor1[0].color.data
+                              : developerInputCheckedFiledColor1.length > 0
+                              ? developerInputCheckedFiledColor1[0].color.data
+                              : "#FFB602",
+                        }}
+                        onClick={() => {
+                          setLabelValue("2.Details of Plots"), setSmShow(true), console.log("modal open");
+                        }}
+                      ></ReportProblemIcon>
+                    </div>
                   </div>
                 </h5>
+                <br></br>
                 {showhide18 === "1" && (
                   <div className="table table-bordered table-responsive">
                     <thead>
