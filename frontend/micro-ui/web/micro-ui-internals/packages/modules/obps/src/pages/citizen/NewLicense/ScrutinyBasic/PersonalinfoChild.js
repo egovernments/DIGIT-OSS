@@ -41,11 +41,17 @@ const PersonalinfoChild = (props) => {
   const [smShow2, setSmShow2] = useState(false);
   const [smShow3, setSmShow3] = useState(false);
   const [labelValue, setLabelValue] = useState("");
+
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
   const [fieldValue, setFieldValue] = useState("");
+  // const [fieldValue1, setFieldValue1] = useState("");
 
   const personalinfo = props.personalinfo;
+
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
 
   const handlemodaldData = (data) => {
     setmodaldData(data.data);
@@ -106,10 +112,10 @@ const PersonalinfoChild = (props) => {
   console.log(uncheckedValue.indexOf("developer"));
 
   const developerInputFiledColor = uncheckedValue.filter((obj) => {
-    return obj.label === "developer";
+    return obj.label === "Developer";
   });
   const developerInputCheckedFiledColor = checkValue.filter((obj) => {
-    return obj.label === "developer";
+    return obj.label === "Developer";
   });
   console.log("color from array", developerInputFiledColor);
 
@@ -228,35 +234,6 @@ const PersonalinfoChild = (props) => {
     return obj.label === "Name of individual Land owner/ land-owning company/ firm/ LLP etc.";
   });
 
-  // const developerInputFiledColor1 = modaldData.label === "Authorized Person Name" ? modaldData.color : { data: "#FFB602" }; //change the white color to default color
-  // const developerInputFiledColor3 = modaldData.label === "Authorized MobileNo. 2" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor2 = modaldData.label === "Authorized Mobile No" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor4 = modaldData.label === "Email ID" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor5 = modaldData.label === "PAN No." ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor6 = modaldData.label === "Address 1" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor7 = modaldData.label === "Village/City" ? modaldData.color : { data: "#FFB602" };
-
-  // const developerInputFiledColor8 = modaldData.label === "Pincode" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor9 = modaldData.label === "Tehsil" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor10 = modaldData.label === "District" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor11 = modaldData.label === "State" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor12 = modaldData.label === "Status (Individual/ Company/ Firm/ LLP etc.)" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor13 = modaldData.label === "LC-I signed by" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor14 =
-  //   modaldData.label === "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
-  //     ? modaldData.color
-  //     : { data: "#FFB602" };
-  // const developerInputFiledColor15 =
-  //   modaldData.label === "Permanent address in case of individual/ registered office address in case other than individual"
-  //     ? modaldData.color
-  //     : { data: "#FFB602" };
-  // const developerInputFiledColor16 = modaldData.label === "Address for communication" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor17 =
-  //   modaldData.label === "Name of the authorized person to sign the application" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor18 = modaldData.label === "Email ID for communication" ? modaldData.color : { data: "#FFB602" };
-  // const developerInputFiledColor19 =
-  //   modaldData.label === "Name of individual Land owner/ land-owning company/ firm/ LLP etc." ? modaldData.color : { data: "#FFB602" };
-
   console.log("color for the deeloper", developerInputFiledColor);
 
   return (
@@ -273,7 +250,7 @@ const PersonalinfoChild = (props) => {
             <Form.Control
               style={{ maxWidth: 200, marginRight: 5, height: 30 }}
               placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
-              readOnly
+              disabled
             ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
@@ -286,10 +263,9 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("developer"),
+                setLabelValue("Developer"),
                   setSmShow(true),
                   console.log("modal open"),
-                  // ,
                   setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
               }}
             ></ReportProblemIcon>
@@ -299,117 +275,11 @@ const PersonalinfoChild = (props) => {
               isYesorNoChecked={handleYesOrNochecked}
               displaymodal={smShow}
               setColor={setColor}
+              // fieldValue={labelValue}
               fieldValue={fieldValue}
+              remarksUpdate={currentRemarks}
             ></ModalChild>
-            {/* <BootstrapSwitchButton
-            checked={true}
-            onlabel="Yes"
-            offlabel="No"
-            onstyle="success"
-            offstyle="danger"
-            width={30}
-            padding={5}
-            height={10}
-            onChange={(e) => {
-              console.log(e);
-              !e && uncheckedValue.indexOf("Developer") === -1
-                ? setUncheckedVlue((prev) => [...prev, "Developer"])
-                : setUncheckedVlue((prev) => prev.filter((elm) => elm !== "Developer"));
-            }}
-          /> */}
-            {/* <Toggle className="react-toggle" onChange={(e) => console.log(e)} /> */}
-            {/* <Toggle
-            defaultChecked={this.state.baconIsReady}
-            defaultChecked={true}
-            icons={false}
-            onChange={
-              (e) => {
-                console.log(e.target.checked);
-              }
-              console.log(e);
-            }
-          /> */}
-            {/* onstyle="success" offstyle="danger" onClick={() => setShow(!show)} */}
-            {/* <ToggleButton type="radio"></ToggleButton> */}
           </div>
-
-          {/* <Modal size="sm" show={smShow} onHide={() => setSmShow(false)} aria-labelledby="example-modal-sizes-title-sm">
-          <Modal.Header closeButton>
-            <Modal.Title id="example-modal-sizes-title-sm">Developer</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {" "}
-            <Form.Check
-              value="Developer"
-              onChange={(e) => {
-                setCrosschecked(""), setNochecked(false), setwarningOrred("#09cb3d");
-              }}
-              type="radio"
-              id="default-radio"
-              // label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-              label="Yes"
-              name="group0"
-              inline
-            ></Form.Check>
-            <Form.Check
-              onChange={(e) => {
-                setCrosschecked(e.target.value), setNochecked(true), setwarningOrred("#ff0000");
-              }}
-              value="Developer"
-              type="radio"
-              id="default-radio"
-              // label={<CancelIcon color="error" />}
-              label="No"
-              name="group0"
-              inline
-            ></Form.Check>
-            <Col xs={8} md={4}>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label>Remarks</Form.Label>
-                <Form.Control type="text" placeholder="" autoFocus onChange={(e) => setDeveloperRemarks(e.target.value)} />
-              </Form.Group>
-            </Col>
-            <div class="col-md-4 bg-light text-right" style={{ position: "relative", marginBottom: 40 }}>
-              <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
-                Submit
-              </Button>
-            </div>
-          </Modal.Body>
-        </Modal> */}
-          {/* <Form.Check
-      value="Developer"
-      type="radio"
-      id="default-radio"
-      
-      label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-      name="group0"
-      inline
-    ></Form.Check>
-    <Form.Check
-      onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-      value="Developer"
-      type="radio"
-      id="default-radio"
-     
-      label={<CancelIcon color="error" />}
-      name="group0"
-      inline
-    ></Form.Check> */}
-
-          {/* <div class="custom-control custom-switch">
-      <input type="checkbox" class="custom-control-input" id="customSwitches" />
-      <label class="custom-control-label" for="customSwitches"></label>
-    </div>
-    <label class="switch">
-      <input type="checkbox" />
-      <span class="slider"></span>
-    </label>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" data-toggle="toggle" />
-        Option one is enabled
-      </label>
-    </div> */}
         </Col>
         <Col className="ms-auto" md={4} xxl lg="4">
           <Form.Label>
@@ -421,7 +291,8 @@ const PersonalinfoChild = (props) => {
             <Form.Control
               style={{ maxWidth: 200, marginRight: 5, height: 30 }}
               // placeholder={personalinfo.authorizedPerson}
-              readOnly
+              placeholder={personalinfo !== null ? personalinfo.authorizedPerson : null}
+              disabled
             ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
@@ -434,9 +305,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Authorized Person Name"), setSmShow(true), console.log("modal open");
-                // ,
-                // setFieldValue(personalinfo.authorizedPerson);
+                setLabelValue("Authorized Person Name"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedPerson : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -491,7 +363,7 @@ const PersonalinfoChild = (props) => {
         ></Form.Check> */}
 
           {/*  <div style={{ display: "flex" }}>
-          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
           &nbsp;&nbsp;
           <ReportProblemIcon
             style={{
@@ -503,7 +375,11 @@ const PersonalinfoChild = (props) => {
           ></ReportProblemIcon></div> */}
 
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.authorizedmobile : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -515,7 +391,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Authorized Mobile No"), setSmShow(true), console.log("modal open");
+                setLabelValue("Authorized Mobile No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedmobile : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -598,7 +477,11 @@ const PersonalinfoChild = (props) => {
         ></Form.Check> */}
 
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.alternatemobile : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -610,9 +493,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Authorized MobileNo. 2 "), setSmShow(true), console.log("modal open");
-                // ,
-                // setFieldValue(personalinfo.authorizedPerson);
+                setLabelValue("Authorized MobileNo. 2 "),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.alternatemobile : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -646,7 +530,11 @@ const PersonalinfoChild = (props) => {
           inline
         ></Form.Check> */}
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.authorizedEmail : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -658,7 +546,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Email ID"), setSmShow(true), console.log("modal open");
+                setLabelValue("Email ID"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedEmail : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -691,7 +582,11 @@ const PersonalinfoChild = (props) => {
           inline
         ></Form.Check> */}
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.authorizedPan : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -703,7 +598,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("PAN No."), setSmShow(true), console.log("modal open");
+                setLabelValue("PAN No."),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedPan : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -738,7 +636,11 @@ const PersonalinfoChild = (props) => {
           inline
         ></Form.Check> */}
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.authorizedAddress : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -750,7 +652,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Address  1"), setSmShow(true), console.log("modal open");
+                setLabelValue("Address  1"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedAddress : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -783,7 +688,11 @@ const PersonalinfoChild = (props) => {
           inline
         ></Form.Check> */}
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.village : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -795,7 +704,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Village/City"), setSmShow(true), console.log("modal open");
+                setLabelValue("Village/City"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.village : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -828,7 +740,11 @@ const PersonalinfoChild = (props) => {
           inline
         ></Form.Check> */}
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.authorizedPinCode : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -840,7 +756,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Pincode"), setSmShow(true), console.log("modal open");
+                setLabelValue("Pincode"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedPinCode : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -875,7 +794,11 @@ const PersonalinfoChild = (props) => {
           inline
         ></Form.Check> */}
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.tehsil : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -887,7 +810,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Tehsil"), setSmShow(true), console.log("modal open");
+                setLabelValue("Tehsil"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.tehsil : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -920,7 +846,11 @@ const PersonalinfoChild = (props) => {
           inline
         ></Form.Check> */}
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.district : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -932,7 +862,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("District"), setSmShow(true), console.log("modal open");
+                setLabelValue("District"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.district : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -965,7 +898,11 @@ const PersonalinfoChild = (props) => {
           inline
         ></Form.Check> */}
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.state : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -977,7 +914,7 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("State"), setSmShow(true), console.log("modal open");
+                setLabelValue("State"), setSmShow(true), console.log("modal open"), setFieldValue(personalinfo !== null ? personalinfo.state : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -1012,7 +949,11 @@ const PersonalinfoChild = (props) => {
           inline
         ></Form.Check> */}
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.status : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -1024,7 +965,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Status (Individual/ Company/ Firm/ LLP etc.)"), setSmShow(true), console.log("modal open");
+                setLabelValue("Status (Individual/ Company/ Firm/ LLP etc.)"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.status : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -1056,7 +1000,11 @@ const PersonalinfoChild = (props) => {
           inline
         ></Form.Check> */}
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              // placeholder={personalinfo !== null ? personalinfo.status : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -1069,6 +1017,7 @@ const PersonalinfoChild = (props) => {
               }}
               onClick={() => {
                 setLabelValue("LC-I signed by"), setSmShow(true), console.log("modal open");
+                // setFieldValue(personalinfo !== null ? personalinfo.status : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -1105,7 +1054,11 @@ const PersonalinfoChild = (props) => {
           inline
         ></Form.Check> */}
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.LC : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -1119,7 +1072,8 @@ const PersonalinfoChild = (props) => {
               onClick={() => {
                 setLabelValue("If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"),
                   setSmShow(true),
-                  console.log("modal open");
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.LC : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -1158,7 +1112,11 @@ const PersonalinfoChild = (props) => {
           inline
         ></Form.Check> */}
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.address : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -1172,7 +1130,8 @@ const PersonalinfoChild = (props) => {
               onClick={() => {
                 setLabelValue("Permanent address in case of individual/ registered office address in case other than individual"),
                   setSmShow(true),
-                  console.log("modal open");
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.address : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -1185,7 +1144,11 @@ const PersonalinfoChild = (props) => {
             </Form.Label>
           </div>
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.permanentAddress : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -1197,7 +1160,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Address for communication"), setSmShow(true), console.log("modal open");
+                setLabelValue("Address for communication"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.permanentAddress : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -1205,32 +1171,16 @@ const PersonalinfoChild = (props) => {
         <Col md={4} xxl lg="4">
           <div>
             <Form.Label data-toggle="tooltip" data-placement="top" title="Name of the authorized person to sign the application">
-              {/* <b>authorized person </b> */}
               <h5>Authorized person &nbsp;</h5>
-              {/* <InfoIcon /> */}
             </Form.Label>
           </div>
-          {/* <Form.Check
-          value="Name of the authorized person to sign the application"
-          type="radio"
-          id="default-radio"
-          label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          name="group17"
-          inline
-        ></Form.Check>
-        <Form.Check
-          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-          value="Name of the authorized person to sign the application"
-          type="radio"
-          id="default-radio"
-           label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-          label={<CancelIcon color="error" />}
-          name="group17"
-          inline
-        ></Form.Check> */}
+
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.notSigned : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -1242,7 +1192,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Name of the authorized person to sign the application"), setSmShow(true), console.log("modal open");
+                setLabelValue("Name of the authorized person to sign the application"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.notSigned : null);
               }}
             ></ReportProblemIcon>
           </div>
@@ -1256,27 +1209,13 @@ const PersonalinfoChild = (props) => {
               <h5>Email ID for communication &nbsp;</h5>
             </Form.Label>
           </div>
-          {/* <Form.Check
-          value="Email ID for communication"
-          type="radio"
-          id="default-radio"
-           label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          name="group18"
-          inline
-        ></Form.Check>
-        <Form.Check
-          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-          value="Email ID for communication"
-          type="radio"
-          id="default-radio"
-           label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-          label={<CancelIcon color="error" />}
-          name="group18"
-          inline
-        ></Form.Check> */}
+
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.email : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -1288,38 +1227,29 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Email ID for communication"), setSmShow(true), console.log("modal open");
+                setLabelValue("Email ID for communication"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.email : null);
               }}
             ></ReportProblemIcon>
           </div>
         </Col>
-        <Col md={4} xxl lg="4">
+        {/* <Col md={4} xxl lg="4">
           <div>
             <Form.Label data-toggle="tooltip" data-placement="top" title="Name of individual Land owner/ land-owning company/ firm/ LLP etc.">
-              {/* <b>individual Land owner</b> */}
+              
               <h5>individual Land owner &nbsp;</h5>
-              {/* <InfoIcon /> */}
+              
             </Form.Label>
           </div>
-          {/* <Form.Check
-          value="Name of individual Land owner/ land-owning company/ firm/ LLP etc."
-          type="radio"
-          id="default-radio"
-          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          name="group19"
-          inline
-        ></Form.Check>
-        <Form.Check
-          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-          value="Name of individual Land owner/ land-owning company/ firm/ LLP etc."
-          type="radio"
-          id="default-radio"
-          label={<CancelIcon color="error" />}
-          name="group19"
-          inline
-        ></Form.Check> */}
+         
           <div style={{ display: "flex" }}>
-            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
+            <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.authorized : null}
+              disabled
+            ></Form.Control>
             &nbsp;&nbsp;
             <ReportProblemIcon
               style={{
@@ -1331,25 +1261,15 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Name of individual Land owner/ land-owning company/ firm/ LLP etc."), setSmShow(true), console.log("modal open");
+                setLabelValue("Name of individual Land owner/ land-owning company/ firm/ LLP etc."),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorized : null);
               }}
             ></ReportProblemIcon>
           </div>
-        </Col>
+        </Col> */}
       </Row>
-      {/* </div>
-</Collapse> */}
-      {/* <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 40 }}>
-        <Button
-          style={{ textAlign: "right" }}
-          onClick={() => {
-            console.log("here");
-            props.passUncheckedList({ data: uncheckedValue });
-          }}
-        >
-          Submit
-        </Button>
-      </div> */}
     </Form.Group>
   );
 };

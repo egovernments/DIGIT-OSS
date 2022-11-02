@@ -76,20 +76,20 @@ const LicenseDetailsScrutiny = (props) => {
       }
     }
   };
-  useEffect(() => {
-    console.log("called");
-    handlemodalsubmit();
-  }, [modaldData.Remarks]);
-  useEffect(() => {
-    props.passUncheckedList({ data: uncheckedValue });
-  }, [uncheckedValue]);
+  // useEffect(() => {
+  //   console.log("called");
+  //   handlemodalsubmit();
+  // }, [modaldData.Remarks]);
+  // useEffect(() => {
+  //   props.passUncheckedList({ data: uncheckedValue });
+  // }, [uncheckedValue]);
 
-  useEffect(() => {
-    props.passCheckedList({ data: checkValue });
-  }, [checkValue]);
-  console.log("unchecked values", uncheckedValue);
+  // useEffect(() => {
+  //   props.passCheckedList({ data: checkValue });
+  // }, [checkValue]);
+  // console.log("unchecked values", uncheckedValue);
 
-  console.log(uncheckedValue.indexOf("developer"));
+  // console.log(uncheckedValue.indexOf("developer"));
 
   const developerInputFiledColor = uncheckedValue.filter((obj) => {
     return obj.label === "developer";
@@ -300,480 +300,392 @@ const LicenseDetailsScrutiny = (props) => {
       // }}
     >
       {/* <Alert variant="warning">{messege}</Alert> */}
-      <div>
-        <Col class="col-12">
-          <Button
-            style={{
-              marginBottom: 3,
-              width: "inherit",
-              textAlign: "inherit",
-              padding: "0.25rem 1rem",
-              fontWeight: "Bold",
-              backgroundColor: "#c2c4c7",
-              border: "none",
-              color: "unset",
-            }}
-            onClick={() => setOpen(!open)}
-            aria-controls="example-collapse-text"
-            aria-expanded={open}
-          >
-            AddIfo
-            <AddIcon style={{ width: "67em" }}></AddIcon>
-          </Button>
-        </Col>
+
+      <div className="collapse-header" onClick={() => setOpen(!open)} aria-controls="example-collapse-text" aria-expanded={open2}>
+        <span className="">Add Info</span>
+        {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
 
-      {/* <div style={{ width:"100%" , height:40, padding:2,}}>
-  <Button onClick={() =>props.Personalinfo({data:true})} style={{ width:"100%" , height:"100%"}}>Step-1</Button>
-  </div> */}
-      {/* <Card
-      style={{
-        width: "100%",
-        height: props.heightPersonal,
-        overflow: "hidden",
-        marginBottom: 20,
-        borderColor: "#C3C3C3",
-        borderStyle: "solid",
-        borderWidth: 2,
-        padding: 2,
-      }}
-    > */}
       <Collapse in={open}>
-        {/* <div id="example-collapse-text"> */}
-        {/* <div>
-            <Col class="col-12">
-              <Button
-                style={{
-                  marginBottom: 3,
-                  width: "inherit",
-                  textAlign: "inherit",
-                  padding: "0.25rem 1rem",
-                  fontWeight: "Bold",
-                  backgroundColor: "#c2c4c7",
-                  border: "none",
-                  color: "unset",
-                }}
-                onClick={() => setOpen2(!open2)}
-                aria-controls="example-collapse-text"
-                aria-expanded={open2}
-              >
-                Personal info
-                <AddIcon style={{ width: "67.6em" }}></AddIcon>
-              </Button>
-            </Col>
-          </div> */}
-
-        {/* </div>
-    </Collapse> */}
-        {/* <Collapse in={open2}> */}
-        <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}>
-          <Form.Group
-            style={{ display: props.displayLicenseDetails, border: "2px solid #e9ecef", margin: 5 }}
-            // className="justify-content-center"
-          >
-            <Row className="ms-auto" style={{ marginTop: 20, marginBottom: 20 }}>
-              <Col className="ms-auto" md={4} xxl lg="4">
-                <div>
-                  <Form.Label>
-                    <h5>Developer &nbsp;</h5>
-                  </Form.Label>
-                  <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-                </div>
-                <div style={{ display: "flex" }}>
-                  <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                  &nbsp;&nbsp;
-                  <ReportProblemIcon
-                    style={{
-                      color:
-                        developerInputFiledColor.length > 0
-                          ? developerInputFiledColor[0].color.data
-                          : developerInputCheckedFiledColor.length > 0
-                          ? developerInputCheckedFiledColor[0].color.data
-                          : "#FFB602",
-                    }}
-                    onClick={() => {
-                      setLabelValue("developer"), setSmShow(true), console.log("modal open");
-                    }}
-                  ></ReportProblemIcon>
-                  <ModalChild
-                    labelmodal={labelValue}
-                    passmodalData={handlemodaldData}
-                    isYesorNoChecked={handleYesOrNochecked}
-                    displaymodal={smShow}
-                    setColor={setColor}
-                  ></ModalChild>
-                </div>
-              </Col>
-              <div>
-                <Card style={{ margin: 5 }}>
-                  <h5>Developer's type</h5>
-                  <div className="card-body">
-                    <div className="row">
-                      <div className="col-sm-12">
-                        {/* <div className="form-group row"> */}
-                        <div className="col-sm-4">
-                          <Form.Select
-                            type="text"
-                            placeholder=""
-                            // onChange={handleChangesetPurpose}
-                            // onChange1={handleChange}
-                            onClick={handleshow9}
-                            style={{ maxWidth: 200, marginRight: 5, height: 40 }}
-                            // disabled
-                          >
-                            <option value="">--Purpose--</option>
-                            <option value="01">Individual</option>
-                            <option value="02">Company</option>
-                            <option value="03">LLP</option>
-                            <option value="04">Society</option>
-                          </Form.Select>
-                        </div>
+        <div id="example-collapse-text" style={{ marginTop: 5, paddingLeft: 5, paddingRight: 5 }}>
+          <Form.Group style={{ display: props.displayLicenseDetails, margin: 5 }}>
+            <div>
+              <Card style={{ margin: 2 }}>
+                <h5>Developer's type</h5>
+                <div className="card-body">
+                  <div className="row">
+                    <div className="col-sm-12">
+                      {/* <div className="form-group row"> */}
+                      <div className="col-sm-4">
+                        <Form.Select
+                          type="text"
+                          placeholder=""
+                          // onChange={handleChangesetPurpose}
+                          // onChange1={handleChange}
+                          onClick={handleshow9}
+                          style={{ maxWidth: 200, marginRight: 5, height: 40 }}
+                          // disabled
+                        >
+                          <option value="">--Purpose--</option>
+                          <option value="01">Individual</option>
+                          <option value="02">Company</option>
+                          <option value="03">LLP</option>
+                          <option value="04">Society</option>
+                        </Form.Select>
                       </div>
                     </div>
                   </div>
-                  {/* </div> */}
-                </Card>
+                </div>
+                {/* </div> */}
+              </Card>
 
-                {showhide9 === "01" && (
-                  <div>
-                    <Card style={{ margin: 5 }}>
-                      <h5>Developer Details</h5>
-                      <Row>
-                        <Col md={4} xxl lg="4">
-                          <div>
-                            <Form.Label>
-                              {/* <b>individual Land owner</b> */}
-                              <h5>Name &nbsp;</h5>
-                            </Form.Label>
-                            <span style={{ color: "red" }}>*</span>
-                          </div>
+              {showhide9 === "01" && (
+                <div>
+                  <Card style={{ margin: 5 }}>
+                    <h5>Developer Details</h5>
+                    <Row>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5>Name &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
 
-                          <div style={{ display: "flex" }}>
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            &nbsp;&nbsp;
-                            <ReportProblemIcon
-                              style={{
-                                color:
-                                  developerInputFiledColor20.length > 0
-                                    ? developerInputFiledColor20[0].color.data
-                                    : developerInputCheckedFiledColor20.length > 0
-                                    ? developerInputCheckedFiledColor20[0].color.data
-                                    : "#FFB602",
-                              }}
-                              onClick={() => {
-                                setLabelValue("Name"), setSmShow(true), console.log("modal open");
-                              }}
-                            ></ReportProblemIcon>
-                          </div>
-                        </Col>
-                        <Col md={4} xxl lg="4">
-                          <div>
-                            <Form.Label>
-                              {/* <b>individual Land owner</b> */}
-                              <h5>Email &nbsp;</h5>
-                            </Form.Label>
-                            <span style={{ color: "red" }}>*</span>
-                          </div>
+                        <div style={{ display: "flex" }}>
+                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              color:
+                                developerInputFiledColor20.length > 0
+                                  ? developerInputFiledColor20[0].color.data
+                                  : developerInputCheckedFiledColor20.length > 0
+                                  ? developerInputCheckedFiledColor20[0].color.data
+                                  : "#FFB602",
+                            }}
+                            onClick={() => {
+                              setLabelValue("Name"), setSmShow(true), console.log("modal open");
+                            }}
+                          ></ReportProblemIcon>
+                          <ModalChild
+                            labelmodal={labelValue}
+                            passmodalData={handlemodaldData}
+                            isYesorNoChecked={handleYesOrNochecked}
+                            displaymodal={smShow}
+                            setColor={setColor}
+                          ></ModalChild>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5>Email &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
 
-                          <div style={{ display: "flex" }}>
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            &nbsp;&nbsp;
-                            <ReportProblemIcon
-                              style={{
-                                color:
-                                  developerInputFiledColor21.length > 0
-                                    ? developerInputFiledColor21[0].color.data
-                                    : developerInputCheckedFiledColor21.length > 0
-                                    ? developerInputCheckedFiledColor21[0].color.data
-                                    : "#FFB602",
-                              }}
-                              onClick={() => {
-                                setLabelValue("Email"), setSmShow(true), console.log("modal open");
-                              }}
-                            ></ReportProblemIcon>
-                          </div>
-                        </Col>
-                        <Col md={4} xxl lg="4">
-                          <div>
-                            <Form.Label>
-                              {/* <b>individual Land owner</b> */}
-                              <h5>Mobile No. &nbsp;</h5>
-                            </Form.Label>
-                            <span style={{ color: "red" }}>*</span>
-                          </div>
+                        <div style={{ display: "flex" }}>
+                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              color:
+                                developerInputFiledColor21.length > 0
+                                  ? developerInputFiledColor21[0].color.data
+                                  : developerInputCheckedFiledColor21.length > 0
+                                  ? developerInputCheckedFiledColor21[0].color.data
+                                  : "#FFB602",
+                            }}
+                            onClick={() => {
+                              setLabelValue("Email"), setSmShow(true), console.log("modal open");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5>Mobile No. &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
 
-                          <div style={{ display: "flex" }}>
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            &nbsp;&nbsp;
-                            <ReportProblemIcon
-                              style={{
-                                color:
-                                  developerInputFiledColor22.length > 0
-                                    ? developerInputFiledColor22[0].color.data
-                                    : developerInputCheckedFiledColor22.length > 0
-                                    ? developerInputCheckedFiledColor22[0].color.data
-                                    : "#FFB602",
-                              }}
-                              onClick={() => {
-                                setLabelValue("Mobile No."), setSmShow(true), console.log("modal open");
-                              }}
-                            ></ReportProblemIcon>
-                          </div>
-                        </Col>
-                      </Row>
-                    </Card>
-                  </div>
-                )}
+                        <div style={{ display: "flex" }}>
+                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              color:
+                                developerInputFiledColor22.length > 0
+                                  ? developerInputFiledColor22[0].color.data
+                                  : developerInputCheckedFiledColor22.length > 0
+                                  ? developerInputCheckedFiledColor22[0].color.data
+                                  : "#FFB602",
+                            }}
+                            onClick={() => {
+                              setLabelValue("Mobile No."), setSmShow(true), console.log("modal open");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Card>
+                </div>
+              )}
 
-                {showhide9 === "02" && (
-                  <div>
-                    <Card style={{ margin: 5 }}>
-                      <h5>Developer Details</h5>
-                      <Row>
-                        <Col md={4} xxl lg="4">
-                          <div>
-                            <Form.Label>
-                              {/* <b>individual Land owner</b> */}
-                              <h5>CIN Number &nbsp;</h5>
-                            </Form.Label>
-                            <span style={{ color: "red" }}>*</span>
-                          </div>
+              {showhide9 === "02" && (
+                <div>
+                  <Card style={{ margin: 5 }}>
+                    <h5>Developer Details</h5>
+                    <Row>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5>CIN Number &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
 
-                          <div style={{ display: "flex" }}>
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            &nbsp;&nbsp;
-                            <ReportProblemIcon
-                              style={{
-                                color:
-                                  developerInputFiledColor23.length > 0
-                                    ? developerInputFiledColor23[0].color.data
-                                    : developerInputCheckedFiledColor23.length > 0
-                                    ? developerInputCheckedFiledColor23[0].color.data
-                                    : "#FFB602",
-                              }}
-                              onClick={() => {
-                                setLabelValue("CIN Number"), setSmShow(true), console.log("modal open");
-                              }}
-                            ></ReportProblemIcon>
-                          </div>
-                        </Col>
-                        <Col md={4} xxl lg="4">
-                          <div>
-                            <Form.Label>
-                              {/* <b>individual Land owner</b> */}
-                              <h5>Company Name &nbsp;</h5>
-                            </Form.Label>
-                            <span style={{ color: "red" }}>*</span>
-                          </div>
+                        <div style={{ display: "flex" }}>
+                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              color:
+                                developerInputFiledColor23.length > 0
+                                  ? developerInputFiledColor23[0].color.data
+                                  : developerInputCheckedFiledColor23.length > 0
+                                  ? developerInputCheckedFiledColor23[0].color.data
+                                  : "#FFB602",
+                            }}
+                            onClick={() => {
+                              setLabelValue("CIN Number"), setSmShow(true), console.log("modal open");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5>Company Name &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
 
-                          <div style={{ display: "flex" }}>
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            &nbsp;&nbsp;
-                            <ReportProblemIcon
-                              style={{
-                                color:
-                                  developerInputFiledColor24.length > 0
-                                    ? developerInputFiledColor24[0].color.data
-                                    : developerInputCheckedFiledColor24.length > 0
-                                    ? developerInputCheckedFiledColor24[0].color.data
-                                    : "#FFB602",
-                              }}
-                              onClick={() => {
-                                setLabelValue("Company Name"), setSmShow(true), console.log("modal open");
-                              }}
-                            ></ReportProblemIcon>
-                          </div>
-                        </Col>
-                        <Col md={4} xxl lg="4">
-                          <div>
-                            <Form.Label>
-                              {/* <b>individual Land owner</b> */}
-                              <h5>Date of Incorporation &nbsp;</h5>
-                            </Form.Label>
-                            <span style={{ color: "red" }}>*</span>
-                          </div>
+                        <div style={{ display: "flex" }}>
+                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              color:
+                                developerInputFiledColor24.length > 0
+                                  ? developerInputFiledColor24[0].color.data
+                                  : developerInputCheckedFiledColor24.length > 0
+                                  ? developerInputCheckedFiledColor24[0].color.data
+                                  : "#FFB602",
+                            }}
+                            onClick={() => {
+                              setLabelValue("Company Name"), setSmShow(true), console.log("modal open");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5>Date of Incorporation &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
 
-                          <div style={{ display: "flex" }}>
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            &nbsp;&nbsp;
-                            <ReportProblemIcon
-                              style={{
-                                color:
-                                  developerInputFiledColor25.length > 0
-                                    ? developerInputFiledColor25[0].color.data
-                                    : developerInputCheckedFiledColor25.length > 0
-                                    ? developerInputCheckedFiledColor25[0].color.data
-                                    : "#FFB602",
-                              }}
-                              onClick={() => {
-                                setLabelValue("Date of Incorporation"), setSmShow(true), console.log("modal open");
-                              }}
-                            ></ReportProblemIcon>
-                          </div>
-                        </Col>
-                        <Col md={4} xxl lg="4">
-                          <div>
-                            <Form.Label>
-                              {/* <b>individual Land owner</b> */}
-                              <h5>Registered Address &nbsp;</h5>
-                            </Form.Label>
-                            <span style={{ color: "red" }}>*</span>
-                          </div>
+                        <div style={{ display: "flex" }}>
+                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              color:
+                                developerInputFiledColor25.length > 0
+                                  ? developerInputFiledColor25[0].color.data
+                                  : developerInputCheckedFiledColor25.length > 0
+                                  ? developerInputCheckedFiledColor25[0].color.data
+                                  : "#FFB602",
+                            }}
+                            onClick={() => {
+                              setLabelValue("Date of Incorporation"), setSmShow(true), console.log("modal open");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5>Registered Address &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
 
-                          <div style={{ display: "flex" }}>
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            &nbsp;&nbsp;
-                            <ReportProblemIcon
-                              style={{
-                                color:
-                                  developerInputFiledColor26.length > 0
-                                    ? developerInputFiledColor26[0].color.data
-                                    : developerInputCheckedFiledColor26.length > 0
-                                    ? developerInputCheckedFiledColor26[0].color.data
-                                    : "#FFB602",
-                              }}
-                              onClick={() => {
-                                setLabelValue("Registered Address"), setSmShow(true), console.log("modal open");
-                              }}
-                            ></ReportProblemIcon>
-                          </div>
-                        </Col>
-                        <Col md={4} xxl lg="4">
-                          <div>
-                            <Form.Label>
-                              {/* <b>individual Land owner</b> */}
-                              <h5>Email &nbsp;</h5>
-                            </Form.Label>
-                            <span style={{ color: "red" }}>*</span>
-                          </div>
+                        <div style={{ display: "flex" }}>
+                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              color:
+                                developerInputFiledColor26.length > 0
+                                  ? developerInputFiledColor26[0].color.data
+                                  : developerInputCheckedFiledColor26.length > 0
+                                  ? developerInputCheckedFiledColor26[0].color.data
+                                  : "#FFB602",
+                            }}
+                            onClick={() => {
+                              setLabelValue("Registered Address"), setSmShow(true), console.log("modal open");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5>Email &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
 
-                          <div style={{ display: "flex" }}>
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            &nbsp;&nbsp;
-                            <ReportProblemIcon
-                              style={{
-                                color:
-                                  developerInputFiledColor27.length > 0
-                                    ? developerInputFiledColor27[0].color.data
-                                    : developerInputCheckedFiledColor27.length > 0
-                                    ? developerInputCheckedFiledColor27[0].color.data
-                                    : "#FFB602",
-                              }}
-                              onClick={() => {
-                                setLabelValue("Email"), setSmShow(true), console.log("modal open");
-                              }}
-                            ></ReportProblemIcon>
-                          </div>
-                        </Col>
-                        <Col md={4} xxl lg="4">
-                          <div>
-                            <Form.Label>
-                              {/* <b>individual Land owner</b> */}
-                              <h5>Mobile No. &nbsp;</h5>
-                            </Form.Label>
-                            <span style={{ color: "red" }}>*</span>
-                          </div>
+                        <div style={{ display: "flex" }}>
+                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              color:
+                                developerInputFiledColor27.length > 0
+                                  ? developerInputFiledColor27[0].color.data
+                                  : developerInputCheckedFiledColor27.length > 0
+                                  ? developerInputCheckedFiledColor27[0].color.data
+                                  : "#FFB602",
+                            }}
+                            onClick={() => {
+                              setLabelValue("Email"), setSmShow(true), console.log("modal open");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5>Mobile No. &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
 
-                          <div style={{ display: "flex" }}>
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            &nbsp;&nbsp;
-                            <ReportProblemIcon
-                              style={{
-                                color:
-                                  developerInputFiledColor28.length > 0
-                                    ? developerInputFiledColor28[0].color.data
-                                    : developerInputCheckedFiledColor28.length > 0
-                                    ? developerInputCheckedFiledColor28[0].color.data
-                                    : "#FFB602",
-                              }}
-                              onClick={() => {
-                                setLabelValue("Mobile No."), setSmShow(true), console.log("modal open");
-                              }}
-                            ></ReportProblemIcon>
-                          </div>
-                        </Col>
-                        <Col md={4} xxl lg="4">
-                          <div>
-                            <Form.Label>
-                              {/* <b>individual Land owner</b> */}
-                              <h5>GST No. &nbsp;</h5>
-                            </Form.Label>
-                            <span style={{ color: "red" }}>*</span>
-                          </div>
+                        <div style={{ display: "flex" }}>
+                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              color:
+                                developerInputFiledColor28.length > 0
+                                  ? developerInputFiledColor28[0].color.data
+                                  : developerInputCheckedFiledColor28.length > 0
+                                  ? developerInputCheckedFiledColor28[0].color.data
+                                  : "#FFB602",
+                            }}
+                            onClick={() => {
+                              setLabelValue("Mobile No."), setSmShow(true), console.log("modal open");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col md={4} xxl lg="4">
+                        <div>
+                          <Form.Label>
+                            {/* <b>individual Land owner</b> */}
+                            <h5>GST No. &nbsp;</h5>
+                          </Form.Label>
+                          <span style={{ color: "red" }}>*</span>
+                        </div>
 
-                          <div style={{ display: "flex" }}>
-                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            &nbsp;&nbsp;
-                            <ReportProblemIcon
-                              style={{
-                                color:
-                                  developerInputFiledColor29.length > 0
-                                    ? developerInputFiledColor29[0].color.data
-                                    : developerInputCheckedFiledColor29.length > 0
-                                    ? developerInputCheckedFiledColor29[0].color.data
-                                    : "#FFB602",
-                              }}
-                              onClick={() => {
-                                setLabelValue("GST No."), setSmShow(true), console.log("modal open");
-                              }}
-                            ></ReportProblemIcon>
-                          </div>
-                        </Col>
-                      </Row>
-                    </Card>
-                    <Card style={{ margin: 5 }}>
-                      <div className="table-bd">
-                        <table className="table table-bordered">
-                          <thead>
-                            <tr>
-                              <th>Sr. No</th>
-                              <th>Name</th>
-                              <th>Designition</th>
-                              <th>Percentage</th>
-                              <th>View PDF</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {/* {modalValuesArray.length > 0 ? (
+                        <div style={{ display: "flex" }}>
+                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              color:
+                                developerInputFiledColor29.length > 0
+                                  ? developerInputFiledColor29[0].color.data
+                                  : developerInputCheckedFiledColor29.length > 0
+                                  ? developerInputCheckedFiledColor29[0].color.data
+                                  : "#FFB602",
+                            }}
+                            onClick={() => {
+                              setLabelValue("GST No."), setSmShow(true), console.log("modal open");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Card>
+                  <Card style={{ margin: 5 }}>
+                    <div className="table-bd">
+                      <table className="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>Sr. No</th>
+                            <th>Name</th>
+                            <th>Designition</th>
+                            <th>Percentage</th>
+                            <th>View PDF</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {/* {modalValuesArray.length > 0 ? (
                               modalValuesArray.map((elementInArray, input) => {
                                 return ( */}
-                            <tr>
-                              <td>{/* {input + 1} */}</td>
-                              <td>
-                                {/* <input
+                          <tr>
+                            <td>{/* {input + 1} */}</td>
+                            <td>
+                              {/* <input
                                       type="text"
                                       value={elementInArray.name}
                                       placeholder={elementInArray.name}
-                                      readOnly
+                                      disabled
                                       disabled="disabled"
                                       class="employee-card-input"
                                     /> */}
-                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                              </td>
-                              <td>
-                                {/* <input
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                            </td>
+                            <td>
+                              {/* <input
                                       type="text"
                                       value={elementInArray.designition}
                                       placeholder={elementInArray.designition}
-                                      readOnly
+                                      disabled
                                       disabled="disabled"
                                       class="employee-card-input"
                                     /> */}
-                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                              </td>
-                              <td>
-                                {/* <input
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                            </td>
+                            <td>
+                              {/* <input
                                       type="text"
                                       value={elementInArray.percentage}
                                       placeholder={elementInArray.percentage}
-                                      readOnly
+                                      disabled
                                       disabled="disabled"
                                       class="employee-card-input"
                                    /> */}
-                                <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                              </td>
-                              <td>
-                                {/* <div className="row">
+                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                            </td>
+                            <td>
+                              {/* <div className="row">
                                         <button className="btn btn-sm col-md-6">
                                           <VisibilityIcon color="info" className="icon" />
                                         </button>
@@ -781,83 +693,83 @@ const LicenseDetailsScrutiny = (props) => {
                                           <FileDownloadIcon color="primary" />
                                         </button>
                                       </div> */}
-                              </td>
-                            </tr>
-                            {/* );
+                            </td>
+                          </tr>
+                          {/* );
                               })
                             ) : (
                               <p className="text-danger text-center">Click on the Add More Button</p>
                             )} */}
-                          </tbody>
-                        </table>
-                      </div>
-                    </Card>
-                    {/* {showDevTypeFields === "02" && (
+                        </tbody>
+                      </table>
+                    </div>
+                  </Card>
+                  {/* {showDevTypeFields === "02" && (
                   <div className="card mb-3">
                     <h5 className="card-title fw-bold">Directors Information</h5>
                     <div className="card-body"> */}
-                    <div className="table-bd">
-                      <table className="table table-bordered">
-                        <thead>
-                          <tr>
-                            <th>Sr. No</th>
-                            <th>DIN Number</th>
-                            <th>Name</th>
-                            <th>PAN Number</th>
-                            <th>Upload PDF</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {/* {DirectorData.map((elementInArray, input) => {
+                  <div className="table-bd">
+                    <table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Sr. No</th>
+                          <th>DIN Number</th>
+                          <th>Name</th>
+                          <th>PAN Number</th>
+                          <th>Upload PDF</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* {DirectorData.map((elementInArray, input) => {
                               return ( */}
-                          <tr
-                          // key={input}
-                          >
-                            <td>{/* {input + 1} */}</td>
-                            <td>
-                              {/* <input
+                        <tr
+                        // key={input}
+                        >
+                          <td>{/* {input + 1} */}</td>
+                          <td>
+                            {/* <input
                                       type="text"
                                       disabled="disabled"
                                       value={elementInArray.din}
                                       placeholder={elementInArray.din}
                                       class="employee-card-input"
                                     /> */}
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            </td>
-                            <td>
-                              {/* <input
+                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          </td>
+                          <td>
+                            {/* <input
                                       type="text"
                                       disabled="disabled"
                                       value={elementInArray.name}
                                       placeholder={elementInArray.name}
                                       class="employee-card-input"
                                     /> */}
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            </td>
-                            <td>
-                              {/* <input
+                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          </td>
+                          <td>
+                            {/* <input
                                       type="text"
                                       value={elementInArray.contactNumber}
                                       placeholder={elementInArray.contactNumber}
                                       class="employee-card-input"
                                     /> */}
-                              <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} readOnly></Form.Control>
-                            </td>
-                            <td>{/* <input type="file" value={uploadPdf} placeholder="" class="employee-card-input" /> */}</td>
-                          </tr>
-                          {/* );
+                            <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          </td>
+                          <td>{/* <input type="file" value={uploadPdf} placeholder="" class="employee-card-input" /> */}</td>
+                        </tr>
+                        {/* );
                             })} */}
-                        </tbody>
-                      </table>
-                    </div>
-                    {/* </div>
+                      </tbody>
+                    </table>
+                  </div>
+                  {/* </div>
                   </div>
                 )} */}
-                    {/* <Card style={{ margin: 5 }}></Card> */}
-                  </div>
-                )}
-              </div>
-            </Row>
+                  {/* <Card style={{ margin: 5 }}></Card> */}
+                </div>
+              )}
+            </div>
+            {/* </Row> */}
 
             <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 40 }}>
               <Button

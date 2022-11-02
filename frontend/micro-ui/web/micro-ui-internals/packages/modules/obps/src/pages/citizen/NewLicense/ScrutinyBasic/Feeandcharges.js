@@ -115,31 +115,17 @@ const Feeandcharges = (props) => {
           padding: 2,
         }}
       > */}
-      <div>
-        <Col class="col-12">
-          <Button
-            style={{
-              margin: 2,
-              width: "inherit",
-              textAlign: "inherit",
-              padding: "0.25rem 1rem",
-              fontWeight: "Bold",
-              backgroundColor: "#c2c4c7",
-              border: "none",
-              color: "unset",
-            }}
-            onClick={() => setOpen2(!open2)}
-            aria-controls="example-collapse-text"
-            aria-expanded={open2}
-          >
-            Fee and charges
-            <AddIcon style={{ width: "66em" }}></AddIcon>
-          </Button>
-        </Col>
+
+      <div className="collapse-header" onClick={() => setOpen(!open2)} aria-controls="example-collapse-text" aria-expanded={open2}>
+        <span className="">Application Purpose</span>
+        {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-          <Form.Group style={{ display: props.displayFeeandCharges }} className="justify-content-center">
+          <Form.Group
+            style={{ display: props.displayFeeandCharges, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
+            className="justify-content-center"
+          >
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               <Col col-12>
                 <div className="row">
@@ -540,11 +526,12 @@ const Feeandcharges = (props) => {
                 </div>
               </Col>
             </Row>
+            <div style={{ position: "relative", marginBottom: 40 }}>
+              <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
+            </div>
           </Form.Group>
-          <div style={{ position: "relative", marginBottom: 40 }}>
-            <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
-          </div>
-          <hr></hr>
+
+          {/* <hr></hr> */}
           {/* </Card> */}
         </div>
       </Collapse>

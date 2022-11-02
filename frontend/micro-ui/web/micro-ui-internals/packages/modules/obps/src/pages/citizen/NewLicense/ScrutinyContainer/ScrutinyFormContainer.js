@@ -37,7 +37,7 @@ const ScrutinyFormcontainer = (props) => {
     <Card>
       <Row style={{ top: 25, padding: 5 }}>
         <div className="ml-auto">
-          <h2 className="fw-bold">This Screen is for read only (For Department use only)</h2>
+          <h2 className="fw-bold">Application : 123</h2>
         </div>
       </Row>
       <Row style={{ top: 30, padding: 10 }}>

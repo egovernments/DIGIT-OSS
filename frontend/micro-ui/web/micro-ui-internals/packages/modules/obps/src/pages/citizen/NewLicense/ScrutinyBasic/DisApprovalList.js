@@ -11,8 +11,8 @@ const DisApprovalList = (props) => {
   const [developerCheckedLIst, setdeveloperdisapprovalCheckedlist] = useState([]);
   const [appliedLandInfoList, setappliedisapprovallist] = useState([]);
   const [appliedCheckedLIst, setappliedisapprovalCheckedlist] = useState([]);
-  const [licenseDetailsInfoList, setlicenseDetailsdisapprovallist] = useState([]);
-  const [licenseDetailsCheckedLIst, setlicenseDetailsdisapprovalCheckedlist] = useState([]);
+  // const [licenseDetailsInfoList, setlicenseDetailsdisapprovallist] = useState([]);
+  // const [licenseDetailsCheckedLIst, setlicenseDetailsdisapprovalCheckedlist] = useState([]);
 
   const persona = props.disapprovallistPersonal;
   const personalCheckedlist = props.disapprovalCheckedPersonal;
@@ -22,8 +22,10 @@ const DisApprovalList = (props) => {
   const developerCheckedlist = props.disapprovaCheckedDeveloper;
   const appliedLand = props.disapprovallistAppliedLand;
   const appliedLandCheckedList = props.disapprovalCheckedAppliedLand;
-  const licenseDetails = props.disapprovallistlicenseDetails;
-  const licenseDetailsCheckedlist = props.disapprovalCheckedlicenseDetails;
+  // const licenseDetails = props.disapprovallistlicenseDetails;
+  // const licenseDetailsCheckedlist = props.disapprovalCheckedlicenseDetails;
+
+  const dataStor = props.dataList;
 
   useEffect(() => {
     setperonaldisapprovallist(props.disapprovallistPersonal);
@@ -35,15 +37,15 @@ const DisApprovalList = (props) => {
   }, [personalCheckedlist]);
   console.log("disaaproval side data Checkedlist=", personalCheckedlist);
 
-  useEffect(() => {
-    setlicenseDetailsdisapprovallist(props.disapprovallistlicenseDetails);
-  }, [licenseDetails]);
-  console.log("disaaproval side data =", licenseDetails);
+  // useEffect(() => {
+  //   setlicenseDetailsdisapprovallist(props.disapprovallistlicenseDetails);
+  // }, [licenseDetails]);
+  // console.log("disaaproval side data =", licenseDetails);
 
-  useEffect(() => {
-    setlicenseDetailsdisapprovalCheckedlist(props.disapprovalCheckedlicenseDetails);
-  }, [licenseDetailsCheckedlist]);
-  console.log("disaaproval side data Checkedlist=", licenseDetailsCheckedlist);
+  // useEffect(() => {
+  //   setlicenseDetailsdisapprovalCheckedlist(props.disapprovalCheckedlicenseDetails);
+  // }, [licenseDetailsCheckedlist]);
+  // console.log("disaaproval side data Checkedlist=", licenseDetailsCheckedlist);
 
   useEffect(() => {
     setgeneraldisapprovallist(props.disapprovallistGeneral);
@@ -82,20 +84,48 @@ const DisApprovalList = (props) => {
       <Card.Header>
         <Card.Title style={{ fontFamily: "Roboto", fontSize: 30, fontWeight: "bold" }}>{/* Disapproval List */}</Card.Title>
       </Card.Header>
-      <Card.Body style={{ overflowY: "auto", height: 350, maxWidth: "100%", backgroundColor: "#C6C6C6" }}>
+      <Card.Body style={{ overflowY: "auto", height: 350, maxWidth: "100%", border: "soild" }}>
         <Form>
-          <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Personal Information Disaaproval</h2>
-          {personalInfoList !== undefined && personalInfoList !== null && personalInfoList.length > 0 ? (
-            personalInfoList.map((el, i) => (
+          <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginBottom: 2 }}></h2>
+          <Row>
+            <Col xxl lg="1">
+              <h5 style={{ textAlign: "center" }} className="fw-bold">
+                Sr. No.
+              </h5>
+            </Col>
+            <Col xxl lg="3">
+              <h5 style={{ textAlign: "center" }} className="fw-bold">
+                Field Name
+              </h5>
+            </Col>
+            <Col xxl lg="3">
+              <h5 style={{ textAlign: "center" }} className="fw-bold">
+                Status
+              </h5>
+            </Col>
+            <Col xxl lg="5">
+              <h5 style={{ textAlign: "center" }} className="fw-bold">
+                Remark
+              </h5>
+            </Col>
+          </Row>
+          {dataStor.egScrutiny !== undefined && dataStor.egScrutiny !== null && dataStor.egScrutiny.length > 0 ? (
+            dataStor.egScrutiny.map((el, i) => (
               <Row key={i} style={{ marginBottom: 10 }}>
                 <Col xxl lg="1">
                   <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{i + 1}</h4>
                 </Col>
-                <Col xxl lg="5">
-                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.label}</h4>
+
+                <Col xxl lg="3">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.fieldIdL}</h4>
                 </Col>
-                <Col xxl lg="6">
-                  <Form.Control type="text" placeholder={el.Remarks.data}></Form.Control>
+
+                <Col xxl lg="3">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.isApproved ? "Approved" : "Disapproved"} </h4>
+                </Col>
+
+                <Col xxl lg="5">
+                  <Form.Control type="text" placeholder={el.comment}></Form.Control>
                 </Col>
               </Row>
             ))
@@ -106,18 +136,21 @@ const DisApprovalList = (props) => {
               </h2>
             </div>
           )}
-          <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Personal Information approval</h2>
+          {/* <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Personal Information approval</h2>
           {personalCheckedlist !== undefined && personalCheckedlist !== null && personalCheckedlist.length > 0 ? (
             personalCheckedlist.map((el, i) => (
               <Row key={i} style={{ marginBottom: 10 }}>
                 <Col xxl lg="1">
                   <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{i + 1}</h4>
                 </Col>
-                <Col xxl lg="5">
-                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.label}</h4>
+                <Col xxl lg="3">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.fieldIdL}</h4>
                 </Col>
-                <Col xxl lg="6">
-                  <Form.Control type="text" placeholder={el.Remarks.data}></Form.Control>
+                <Col xxl lg="3">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.isApproved} </h4>
+                </Col>
+                <Col xxl lg="5">
+                  <Form.Control type="text" placeholder={el.comment}></Form.Control>
                 </Col>
               </Row>
             ))
@@ -131,13 +164,21 @@ const DisApprovalList = (props) => {
             generalInfoList.map((el, i) => (
               <Row key={i} style={{ marginBottom: 10 }}>
                 <Col xxl lg="1">
+                  <h5>Sr. No</h5>
                   <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{i + 1}</h4>
                 </Col>
-                <Col xxl lg="5">
-                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.label}</h4>
+
+                <Col xxl lg="3">
+                  <h5>field Name</h5>
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.fieldIdL}</h4>
                 </Col>
-                <Col xxl lg="6">
-                  <Form.Control type="text" placeholder={el.Remarks.data}></Form.Control>
+                <h5>Status</h5>
+                <Col xxl lg="3">
+                  <h4 style={{ fontSize: 14, fontFamily: "Roboto", fontWeight: "lighter" }}>{el.isApproved} </h4>
+                </Col>
+                <h5 style={{ textAlign: "center" }}>Remark</h5>
+                <Col xxl lg="5">
+                  <Form.Control type="text" placeholder={el.comment}></Form.Control>
                 </Col>
               </Row>
             ))
@@ -254,9 +295,9 @@ const DisApprovalList = (props) => {
                 No Applied Land Information Disapproval list to show right now
               </h2>
             </div>
-          )}
+          )} */}
 
-          <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Personal Information Disaaproval</h2>
+          {/* <h2 style={{ fontFamily: "Roboto", fontSize: 18, fontWeight: "bold", marginBottom: 10 }}>Personal Information Disaaproval</h2>
           {licenseDetailsInfoList !== undefined && licenseDetailsInfoList !== null && licenseDetailsInfoList.length > 0 ? (
             licenseDetailsInfoList.map((el, i) => (
               <Row key={i} style={{ marginBottom: 10 }}>
@@ -297,7 +338,7 @@ const DisApprovalList = (props) => {
             <div>
               <h2 style={{ fontSize: 12, fontFamily: "Roboto", fontWeight: "lighter" }}>No Personal Information Approval list to show right now</h2>
             </div>
-          )}
+          )} */}
         </Form>
       </Card.Body>
       <Card.Footer>{/* <div style={{ position: "relative", float: "right" }}>
