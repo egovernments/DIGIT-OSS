@@ -219,9 +219,13 @@ const ScrutinyDevelopment = (props) => {
 
                   <Col className="ms-auto" md={4} xxl lg="12"></Col> */}
                   <Row>
-                    <b>{el.userid}</b>
+                    <div className="col-md-6">
+                      <b>{el.fieldIdL}</b> <b>{el.fieldValue}</b>
+                    </div>
+                    <div className="col-md-6">
+                      <b>{el.isApproved ? "Approved" : "Disapproved"}</b>
+                    </div>
                   </Row>
-                  <Row>{/* <b>{el.isApproved == true}</b> */}</Row>
                   <Row>
                     <b>Remarks</b>
                   </Row>

@@ -48,6 +48,7 @@ const ScrutitnyForms = () => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [remarksChanges, setRemarksChanges] = useState("");
   const [disapprovalData, setDisapprovalData] = useState({});
+  const [applictaionNo, setApplicationNO] = useState(null);
 
   const getUncheckedPersonalinfos = (data) => {
     setDisplayPersonalInfo(data.data);

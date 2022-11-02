@@ -583,18 +583,17 @@ const Developerinfo = (props) => {
                 </div>
               </Col>
             </Row>
-            {showhide1 === "Yes" && (
-              <div>
-                {/* <div className="col col-4"> */}
+            {/* {showhide1 === "Yes" && ( */}
+            <div>
+              {/* <div className="col col-4"> */}
 
-                <Row className="ms-auto" style={{ marginBottom: 20 }}>
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <label for="parentLicense" className="font-weight-bold">
-                      <h6>
-                        <b>License No. of Parent License</b>
-                      </h6>{" "}
-                    </label>
-                    {/* <Form.Check
+              <Row className="ms-auto" style={{ marginBottom: 20 }}>
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label>
+                    {/* <b>License No. of Parent License</b> */}
+                    <h5>License No. of Parent License &nbsp;</h5>
+                  </label>
+                  {/* <Form.Check
                         value="Yes"
                         type="radio"
                         onChange1={handleChange}
@@ -615,38 +614,39 @@ const Developerinfo = (props) => {
                         name="group41"
                         inline
                       ></Form.Check> */}
-                    <div style={{ display: "flex" }}>
-                      <Form.Control
-                        height={30}
-                        style={{ maxWidth: 200, marginRight: 5 }}
-                        // placeholder={personalinfo !== null ? personalinfo.licenseApplied : null}
-                        disabled
-                      ></Form.Control>
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor1.length > 0
-                              ? developerInputFiledColor1[0].color.data
-                              : developerInputCheckedFiledColor1.length > 0
-                              ? developerInputCheckedFiledColor1[0].color.data
-                              : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("License No. of Parent License"), setSmShow(true), console.log("modal open");
-                          // setFieldValue(personalinfo !== null ? personalinfo.licenseApplied : null);
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-                    {/* <input type="number" className="form-control" /> */}
-                  </Col>
+                  <div style={{ display: "flex" }}>
+                    <Form.Control
+                      height={30}
+                      style={{ maxWidth: 200, marginRight: 5 }}
+                      // placeholder={personalinfo !== null ? personalinfo.licenseApplied : null}
+                      disabled
+                    ></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color:
+                          developerInputFiledColor1.length > 0
+                            ? developerInputFiledColor1[0].color.data
+                            : developerInputCheckedFiledColor1.length > 0
+                            ? developerInputCheckedFiledColor1[0].color.data
+                            : "#FFB602",
+                      }}
+                      onClick={() => {
+                        setLabelValue("License No. of Parent License"), setSmShow(true), console.log("modal open");
+                        // setFieldValue(personalinfo !== null ? personalinfo.licenseApplied : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <input type="number" className="form-control" /> */}
+                </Col>
 
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <label htmlFor="potential">
-                      <h6>
-                        <b>Potential Zone:</b>
-                      </h6>
-                    </label>
-                    {/* <Form.Check
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label htmlFor="potential">
+                    <h6>
+                      {/* <b>Potential Zone:</b> */}
+                      <h5>Potential Zone: &nbsp;</h5>
+                    </h6>
+                  </label>
+                  {/* <Form.Check
                         value="Potential Zone"
                         type="radio"
                         id="default-radio"
@@ -663,67 +663,66 @@ const Developerinfo = (props) => {
                         name="group43"
                         inline
                       ></Form.Check> */}
-                    <div style={{ display: "flex" }}>
-                      {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                      {/* <Form.Select height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled>
+                  <div style={{ display: "flex" }}>
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    {/* <Form.Select height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled>
                           
                         </Form.Select> */}
-                      <Form.Select
-                        type="text"
-                        placeholder="Puropse"
-                        // onChange={handleChangesetPurpose}
-                        height={30}
-                        style={{ maxWidth: 200, marginRight: 5 }}
-                        disabled
-                      >
-                        {/* <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} disabled> */}
-                        <option value="">--Potential Zone--</option>
-                        <option value="K.Mishra">Hyper</option>
-                        <option value="potential 1">High I</option>
-                        <option value="potential 2">High II</option>
-                        <option value="potential 2">Medium</option>
-                        <option value="potential 2">Low I</option>
-                        <option value="potential 2">Low II</option>
-                        {/* </select> */}
-                      </Form.Select>
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor2.length > 0
-                              ? developerInputFiledColor2[0].color.data
-                              : developerInputCheckedFiledColor2.length > 0
-                              ? developerInputCheckedFiledColor2[0].color.data
-                              : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("Potential Zone:"), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-                  </Col>
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <label for="parentLicense" className="font-weight-bold">
-                      <h6>
-                        <b>Site Location Purpose</b>
-                      </h6>{" "}
-                    </label>
-                    <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor3.length > 0
-                              ? developerInputFiledColor3[0].color.data
-                              : developerInputCheckedFiledColor3.length > 0
-                              ? developerInputCheckedFiledColor3[0].color.data
-                              : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("Site Location Purpose"), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-                    {/* <Form.Check
+                    <Form.Select
+                      type="text"
+                      placeholder="Puropse"
+                      // onChange={handleChangesetPurpose}
+                      height={30}
+                      style={{ maxWidth: 200, marginRight: 5 }}
+                      disabled
+                    >
+                      {/* <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} disabled> */}
+                      <option value="">--Potential Zone--</option>
+                      <option value="K.Mishra">Hyper</option>
+                      <option value="potential 1">High I</option>
+                      <option value="potential 2">High II</option>
+                      <option value="potential 2">Medium</option>
+                      <option value="potential 2">Low I</option>
+                      <option value="potential 2">Low II</option>
+                      {/* </select> */}
+                    </Form.Select>
+                    <ReportProblemIcon
+                      style={{
+                        color:
+                          developerInputFiledColor2.length > 0
+                            ? developerInputFiledColor2[0].color.data
+                            : developerInputCheckedFiledColor2.length > 0
+                            ? developerInputCheckedFiledColor2[0].color.data
+                            : "#FFB602",
+                      }}
+                      onClick={() => {
+                        setLabelValue("Potential Zone:"), setSmShow(true), console.log("modal open");
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                </Col>
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label>
+                    {/* <b>Site Location Purpose</b> */}
+                    <h5>Site Location Purpose: &nbsp;</h5>
+                  </label>
+                  <div style={{ display: "flex" }}>
+                    <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color:
+                          developerInputFiledColor3.length > 0
+                            ? developerInputFiledColor3[0].color.data
+                            : developerInputCheckedFiledColor3.length > 0
+                            ? developerInputCheckedFiledColor3[0].color.data
+                            : "#FFB602",
+                      }}
+                      onClick={() => {
+                        setLabelValue("Site Location Purpose"), setSmShow(true), console.log("modal open");
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <Form.Check
                           value="Site Location Purpose"
                           type="radio"
                           id="default-radio"
@@ -740,18 +739,16 @@ const Developerinfo = (props) => {
                           name="group44"
                           inline
                         ></Form.Check> */}
-                    {/* <input type="text" className="form-control" disabled="disabled" /> */}
-                  </Col>
-                </Row>
-                <Row className="ms-auto" style={{ marginBottom: 20 }}>
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <div className="form-group">
-                      <label htmlFor="approach">
-                        <h6>
-                          <b>Approach Type (Type of Policy)</b>
-                        </h6>
-                      </label>
-                      {/* <Form.Check
+                  {/* <input type="text" className="form-control" disabled="disabled" /> */}
+                </Col>
+                {/* </Row>
+                <Row className="ms-auto" style={{ marginBottom: 20 }}> */}
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label>
+                    {/* <b>Approach Type (Type of Policy)</b> */}
+                    <h5>Approach Type (Type of Policy) &nbsp;</h5>
+                  </label>
+                  {/* <Form.Check
                             value="Approach Type "
                             type="radio"
                             id="default-radio"
@@ -768,55 +765,51 @@ const Developerinfo = (props) => {
                             name="group45"
                             inline
                           ></Form.Check> */}
-                      <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            color:
-                              developerInputFiledColor4.length > 0
-                                ? developerInputFiledColor4[0].color.data
-                                : developerInputCheckedFiledColor4.length > 0
-                                ? developerInputCheckedFiledColor4[0].color.data
-                                : "#FFB602",
-                          }}
-                          onClick={() => {
-                            setLabelValue("Approach Type (Type of Policy)"), setSmShow(true), console.log("modal open");
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                      <select className="form-control" id="approach" name="approach">
-                        <option value=""></option>
-                        <option value="K.Mishra"></option>
-                        <option value="potential 1"></option>
-                        <option value="potential 2"></option>
-                      </select>
-                    </div>
-                  </Col>
+                  <div style={{ display: "flex" }}>
+                    <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color:
+                          developerInputFiledColor4.length > 0
+                            ? developerInputFiledColor4[0].color.data
+                            : developerInputCheckedFiledColor4.length > 0
+                            ? developerInputCheckedFiledColor4[0].color.data
+                            : "#FFB602",
+                      }}
+                      onClick={() => {
+                        setLabelValue("Approach Type (Type of Policy)"), setSmShow(true), console.log("modal open");
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <select className="form-control" id="approach" name="approach">
+                      <option value=""></option>
+                      <option value="K.Mishra"></option>
+                      <option value="potential 1"></option>
+                      <option value="potential 2"></option>
+                    </select> */}
+                </Col>
 
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <div className="form-group ">
-                      <label htmlFor="roadwidth">
-                        <h6>
-                          <b>Approach Road Width</b>&nbsp;&nbsp;
-                        </h6>{" "}
-                      </label>
-                      <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            color:
-                              developerInputFiledColor5.length > 0
-                                ? developerInputFiledColor5[0].color.data
-                                : developerInputCheckedFiledColor5.length > 0
-                                ? developerInputCheckedFiledColor5[0].color.data
-                                : "#FFB602",
-                          }}
-                          onClick={() => {
-                            setLabelValue("Approach Road Width"), setSmShow(true), console.log("modal open");
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                      {/* <Form.Check
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label>
+                    <h6>Approach Road Width&nbsp;&nbsp;</h6>{" "}
+                  </label>
+                  <div style={{ display: "flex" }}>
+                    <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color:
+                          developerInputFiledColor5.length > 0
+                            ? developerInputFiledColor5[0].color.data
+                            : developerInputCheckedFiledColor5.length > 0
+                            ? developerInputCheckedFiledColor5[0].color.data
+                            : "#FFB602",
+                      }}
+                      onClick={() => {
+                        setLabelValue("Approach Road Width"), setSmShow(true), console.log("modal open");
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <Form.Check
                             value="Approach Road Width "
                             type="radio"
                             id="default-radio"
@@ -833,33 +826,29 @@ const Developerinfo = (props) => {
                             name="group46"
                             inline
                           ></Form.Check> */}
-                      {/* <input type="number" name="roadwidth" className="form-control" disabled></input> */}
-                    </div>
-                  </Col>
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <div className="form-group ">
-                      <label htmlFor="specify">
-                        <h6>
-                          <b>Specify Others</b>
-                        </h6>
-                      </label>
-                      <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            color:
-                              developerInputFiledColor6.length > 0
-                                ? developerInputFiledColor6[0].color.data
-                                : developerInputCheckedFiledColor6.length > 0
-                                ? developerInputCheckedFiledColor6[0].color.data
-                                : "#FFB602",
-                          }}
-                          onClick={() => {
-                            setLabelValue("Specify Other"), setSmShow(true), console.log("modal open");
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                      {/* <Form.Check
+                  {/* <input type="number" name="roadwidth" className="form-control" disabled></input> */}
+                </Col>
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label>
+                    <h6>Specify Others</h6>
+                  </label>
+                  <div style={{ display: "flex" }}>
+                    <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color:
+                          developerInputFiledColor6.length > 0
+                            ? developerInputFiledColor6[0].color.data
+                            : developerInputCheckedFiledColor6.length > 0
+                            ? developerInputCheckedFiledColor6[0].color.data
+                            : "#FFB602",
+                      }}
+                      onClick={() => {
+                        setLabelValue("Specify Other"), setSmShow(true), console.log("modal open");
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <Form.Check
                             value="Specify Others"
                             type="radio"
                             id="default-radio"
@@ -876,20 +865,16 @@ const Developerinfo = (props) => {
                             name="group47"
                             inline
                           ></Form.Check> */}
-                      {/* <input type="number" name="specify" className="form-control " /> */}
-                    </div>
-                  </Col>
-                </Row>
+                  {/* <input type="number" name="specify" className="form-control " /> */}
+                </Col>
+              </Row>
 
-                <Row className="ms-auto" style={{ marginBottom: 20 }}>
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <div className="form-group ">
-                      <label htmlFor="typeland">
-                        <h6>
-                          <b>Type of land</b>
-                        </h6>{" "}
-                      </label>
-                      {/* <Form.Check
+              <Row className="ms-auto" style={{ marginBottom: 20 }}>
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label>
+                    <h6>Type of land</h6>{" "}
+                  </label>
+                  {/* <Form.Check
                             value="Type of land"
                             type="radio"
                             id="default-radio"
@@ -906,51 +891,48 @@ const Developerinfo = (props) => {
                             name="group49"
                             inline
                           ></Form.Check> */}
-                      <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            color:
-                              developerInputFiledColor7.length > 0
-                                ? developerInputFiledColor7[0].color.data
-                                : developerInputCheckedFiledColor7.length > 0
-                                ? developerInputCheckedFiledColor7[0].color.data
-                                : "#FFB602",
-                          }}
-                          onClick={() => {
-                            setLabelValue("Type of land"), setSmShow(true), console.log("modal open");
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                      <select className="form-control" id="typeland" name="typeland">
-                        <option value="">--Type of Land--</option>
-                        <option value="">chahi/nehri</option>
-                        <option>Gair Mumkins</option>
-                        <option>others</option>
-                        <option></option>
-                      </select>
-                    </div>
-                  </Col>
+                  <div style={{ display: "flex" }}>
+                    <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color:
+                          developerInputFiledColor7.length > 0
+                            ? developerInputFiledColor7[0].color.data
+                            : developerInputCheckedFiledColor7.length > 0
+                            ? developerInputCheckedFiledColor7[0].color.data
+                            : "#FFB602",
+                      }}
+                      onClick={() => {
+                        setLabelValue("Type of land"), setSmShow(true), console.log("modal open");
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <select className="form-control" id="typeland" name="typeland">
+                      <option value="">--Type of Land--</option>
+                      <option value="">chahi/nehri</option>
+                      <option>Gair Mumkins</option>
+                      <option>others</option>
+                      <option></option>
+                    </select> */}
+                </Col>
 
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <label htmlFor="typeland">
-                      <h6>
-                        <b>Third-party right created</b>{" "}
-                      </h6>
-                    </label>
-                    <br></br>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow13} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">
-                      <h6>Yes</h6>
-                    </label>
-                    &nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow13} />
-                    &nbsp;&nbsp;
-                    <label for="No">
-                      <h6>No</h6>
-                    </label>
-                    {/* <Form.Check
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label>
+                    <h6>Third-party right created</h6>
+                  </label>
+                  <br></br>
+                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow13} />
+                  &nbsp;&nbsp;
+                  <label for="Yes">
+                    <h6>Yes</h6>
+                  </label>
+                  &nbsp;&nbsp;
+                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow13} />
+                  &nbsp;&nbsp;
+                  <label for="No">
+                    <h6>No</h6>
+                  </label>
+                  {/* <Form.Check
                           value="Third-party right created"
                           type="radio"
                           id="default-radio"
@@ -967,55 +949,46 @@ const Developerinfo = (props) => {
                           name="group50"
                           inline
                         ></Form.Check> */}
-                    <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor8.length > 0
-                              ? developerInputFiledColor8[0].color.data
-                              : developerInputCheckedFiledColor8.length > 0
-                              ? developerInputCheckedFiledColor8[0].color.data
-                              : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("Third-party right created"), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
+                  <div style={{ display: "flex" }}>
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    <ReportProblemIcon
+                      style={{
+                        color:
+                          developerInputFiledColor8.length > 0
+                            ? developerInputFiledColor8[0].color.data
+                            : developerInputCheckedFiledColor8.length > 0
+                            ? developerInputCheckedFiledColor8[0].color.data
+                            : "#FFB602",
+                      }}
+                      onClick={() => {
+                        setLabelValue("Third-party right created"), setSmShow(true), console.log("modal open");
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {showhide13 === "Yes" && (
+                    <div className="row ">
+                      <div className="col col-4">
+                        <label> Remark </label>
+                        <input type="text" className="form-control" />
+                      </div>
+                      <div className="col col-4">
+                        <label> Document Upload </label>
+                        <input type="file" className="form-control" />
+                      </div>
                     </div>
-                    {showhide13 === "Yes" && (
-                      <div className="row ">
-                        <div className="col col-12">
-                          <label for="parentLicense" className="font-weight-bold">
-                            {" "}
-                            Remark{" "}
-                          </label>
-                          <input type="text" className="form-control" />
-                        </div>
-                        <div className="col col-12">
-                          <label for="parentLicense" className="font-weight-bold">
-                            {" "}
-                            Document Upload{" "}
-                          </label>
-                          <input type="file" className="form-control" />
-                        </div>
+                  )}
+                  {showhide13 === "No" && (
+                    <div className="row ">
+                      <div className="col col-4">
+                        <label> Document Upload </label>
+                        <input type="file" className="form-control" />
                       </div>
-                    )}
-                    {showhide13 === "No" && (
-                      <div className="row ">
-                        <div className="col col">
-                          <label for="parentLicense" className="font-weight-bold">
-                            {" "}
-                            Document Upload{" "}
-                          </label>
-                          <input type="file" className="form-control" />
-                        </div>
-                      </div>
-                    )}
-                  </Col>
-                </Row>
-              </div>
-            )}
+                    </div>
+                  )}
+                </Col>
+              </Row>
+            </div>
+            {/* )} */}
             <Row className="ms-auto">
               <Col md={4} xxl lg="12">
                 <Form.Label>
@@ -1391,10 +1364,7 @@ const Developerinfo = (props) => {
                 {showhide2 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        {" "}
-                        Width of revenue rasta{" "}
-                      </label>
+                      <label> Width of revenue rasta </label>
                       <input type="number" className="form-control" disabled />
                     </div>
                   </div>
@@ -1457,10 +1427,7 @@ const Developerinfo = (props) => {
                 {showhide3 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        {" "}
-                        Rev. rasta width{" "}
-                      </label>
+                      <label> Rev. rasta width </label>
                       <input type="number" className="form-control" />
                     </div>
                   </div>
@@ -1624,9 +1591,7 @@ const Developerinfo = (props) => {
                   {showhide4 === "Yes" && (
                     <div className="row ">
                       <div className="col col">
-                        <label for="parentLicense" className="font-weight-bold">
-                          Remark
-                        </label>
+                        <label>Remark</label>
                         <input type="text" className="form-control" />
                       </div>
                     </div>
@@ -2148,9 +2113,7 @@ const Developerinfo = (props) => {
                 {showhide4 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        Type of Construction
-                      </label>
+                      <label>Type of Construction</label>
                       <input type="text" className="form-control" />
                     </div>
                   </div>
@@ -2204,9 +2167,7 @@ const Developerinfo = (props) => {
                 {showhide5 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        HT Remarks
-                      </label>
+                      <label>HT Remarks</label>
                       <input type="text" className="form-control" />
                     </div>
                   </div>
@@ -2260,9 +2221,7 @@ const Developerinfo = (props) => {
                 {showhide6 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        IOC Remarks
-                      </label>
+                      <label>IOC Remarks</label>
                       <input type="text" className="form-control" />
                     </div>
                   </div>
@@ -2319,9 +2278,7 @@ const Developerinfo = (props) => {
                 {showhide7 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        Nallah Remarks
-                      </label>
+                      <label>Nallah Remarks</label>
                       <input type="text" className="form-control" />
                     </div>
                   </div>
@@ -2375,9 +2332,7 @@ const Developerinfo = (props) => {
                 {showhide8 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        Width
-                      </label>
+                      <label>Width</label>
                       <input type="text" className="form-control" />
                     </div>
                   </div>
@@ -2431,9 +2386,7 @@ const Developerinfo = (props) => {
                 {showhide9 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        Remark
-                      </label>
+                      <label>Remark</label>
                       <input type="text" className="form-control" />
                     </div>
                   </div>
@@ -2495,9 +2448,7 @@ const Developerinfo = (props) => {
                 {showhide0 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        Width of row
-                      </label>
+                      <label>Width of row</label>
                       <input type="text" className="form-control" />
                     </div>
                   </div>

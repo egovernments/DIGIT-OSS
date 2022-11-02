@@ -263,7 +263,10 @@ const PersonalinfoChild = (props) => {
                     : "#FFB602",
               }}
               onClick={() => {
-                setLabelValue("Developer"), setSmShow(true), console.log("modal open");
+                setLabelValue("Developer"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
               }}
             ></ReportProblemIcon>
             <ModalChild
@@ -272,7 +275,8 @@ const PersonalinfoChild = (props) => {
               isYesorNoChecked={handleYesOrNochecked}
               displaymodal={smShow}
               setColor={setColor}
-              fieldValue={labelValue}
+              // fieldValue={labelValue}
+              fieldValue={fieldValue}
               remarksUpdate={currentRemarks}
             ></ModalChild>
           </div>

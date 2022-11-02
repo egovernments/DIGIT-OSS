@@ -22,6 +22,7 @@ const Genarelinfo = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [checkValue, setCheckedVAlue] = useState([]);
   const [smShow, setSmShow] = useState(false);
+  // const [fieldValue, setFieldValue] = useState("");
 
   const genarelinfo = props.genarelinfo;
 
@@ -292,11 +293,21 @@ const Genarelinfo = (props) => {
                         setFieldValue(Genarelinfo !== null ? Genarelinfo.purposeDd : null);
                     }}
                   ></ReportProblemIcon>
+                  {/* <ModalChild
+                    labelmodal={labelValue}
+                    passmodalData={handlemodaldData}
+                    isYesorNoChecked={handleYesOrNochecked}
+                    displaymodal={smShow}
+                  ></ModalChild> */}
                   <ModalChild
                     labelmodal={labelValue}
                     passmodalData={handlemodaldData}
                     isYesorNoChecked={handleYesOrNochecked}
                     displaymodal={smShow}
+                    setColor={setColor}
+                    // fieldValue={labelValue}
+                    fieldValue={fieldValue}
+                    // remarksUpdate={currentRemarks}
                   ></ModalChild>
                 </div>
               </Col>

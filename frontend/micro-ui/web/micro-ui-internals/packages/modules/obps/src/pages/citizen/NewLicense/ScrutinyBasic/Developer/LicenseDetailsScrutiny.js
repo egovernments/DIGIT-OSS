@@ -304,7 +304,7 @@ const LicenseDetailsScrutiny = (props) => {
         <Col class="col-12">
           <Button
             style={{
-              marginBottom: 3,
+              marginBottom: 5,
               width: "inherit",
               textAlign: "inherit",
               padding: "0.25rem 1rem",
@@ -314,11 +314,12 @@ const LicenseDetailsScrutiny = (props) => {
               color: "unset",
             }}
             onClick={() => setOpen(!open)}
-            aria-controls="example-collapse-text"
+            // aria-controls="example-collapse-text"
+            aria-controls="example-fade-text"
             aria-expanded={open}
           >
             AddIfo
-            <AddIcon style={{ width: "61.4em" }}></AddIcon>
+            <AddIcon style={{ width: "71.4em" }}></AddIcon>
           </Button>
         </Col>
       </div>

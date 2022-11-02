@@ -8,13 +8,16 @@ function ModalChild(props) {
   const smShow = props.displaymodal;
   const setSmShow = useState(false);
   const [RemarksDeveloper, setDeveloperRemarks] = useState("");
+  const [RemarksEntered, setRemarksEntered] = useState("");
   const [iscrosschecked, setCrosschecked] = useState("");
   const [warningorred, setwarningOrred] = useState("#DAA520");
   const [yesOrNoClicked, setIsYesorNoClicked] = useState(true);
   const inputFieldValue = props.fieldValue;
+  const inputFieldLabel = props.labelValue;
+  const dateTime = new Date();
 
   const handlemodalsubmit = async () => {
-    props.passmodalData({ data: { label: iscrosschecked, Remarks: RemarksDeveloper, color: warningorred } });
+    props.passmodalData({ data: { label: iscrosschecked, Remarks: RemarksDeveloper.data, color: warningorred } });
     const postData = {
       requestInfo: {
         api_id: "1",
@@ -29,12 +32,14 @@ function ModalChild(props) {
       },
       egScrutiny: {
         applicationId: "123",
-        comment: RemarksDeveloper,
+        comment: RemarksDeveloper.data,
         fieldValue: "update",
-        fieldIdL: "name",
-        isApproved: true,
+        fieldIdL: iscrosschecked,
+        isApproved: yesOrNoClicked,
         userid: "123",
         serviceId: "123",
+        documentId: null,
+        ts: dateTime.toUTCString(),
       },
     };
 
@@ -62,13 +67,13 @@ function ModalChild(props) {
     >
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-sm">
-          <Row>
-            <Col xs={12} md={6}>
+          <Row style={{ display: "flex" }}>
+            <Col xs={4} md={4} style={{ marginRight: "100px" }}>
               {" "}
               {props.labelmodal}
             </Col>
-            <Col xs={12} md={6}>
-              <h2 style={{ fontSize: "30" }}>{inputFieldValue}</h2>
+            <Col xs={4} md={4}>
+              <h5 style={{ fontSize: "15", borderColor: "#C3C3C3", borderStyle: "none" }}>{inputFieldValue}</h5>
             </Col>
           </Row>
         </Modal.Title>
@@ -85,7 +90,7 @@ function ModalChild(props) {
           type="radio"
           id="default-radio"
           // label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          label="Yes"
+          label="Aaproval"
           name="group0"
           inline
         ></Form.Check>
@@ -99,7 +104,7 @@ function ModalChild(props) {
           type="radio"
           id="default-radio"
           // label={<CancelIcon color="error" />}
-          label="No"
+          label="Disaaproval"
           name="group0"
           inline
         ></Form.Check>
@@ -111,13 +116,16 @@ function ModalChild(props) {
               id="exampleFormControlTextarea1"
               placeholder="Enter your Remarks"
               autoFocus
-              onChange={(e) => setDeveloperRemarks({ data: e.target.value })}
+              onChange={(e) => {
+                setDeveloperRemarks({ data: e.target.value });
+                // setRemarksEntered(e.target.value);
+              }}
               rows="3"
             />
             {/* <Form.Control type="text" /> */}
           </Col>
         </Form.Group>
-        <div class="col-md-4 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+        <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
           <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
             Submit
           </Button>
