@@ -17,11 +17,11 @@ const ScrutinyDevelopment = (props) => {
       }}
     >
       <Row>
-        <Row>
+        {/* <Row>
           <Col className="ms-auto" md={4} xxl lg="12">
             <b>Application NO: </b>
           </Col>
-        </Row>
+        </Row> */}
         {remarkDataResp !== null ? (
           remarkDataResp.map((el, i) => {
             return (
