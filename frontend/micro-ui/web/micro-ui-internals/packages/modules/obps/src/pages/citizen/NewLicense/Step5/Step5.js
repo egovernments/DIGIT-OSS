@@ -77,14 +77,12 @@ const FeesChargesForm = (props) => {
             remark: remark,
             licenseNo: licenseNo
         }
-        console.log("FRMDATA", forms);
         localStorage.setItem('Fees and Charges', JSON.stringify(forms))
 
 
     };
     useEffect(() => {
         if (FeesChargesFormSubmitted) {
-            // props.FeesChrgesFormSubmit(true);
         }
     }, [FeesChargesFormSubmitted]);
     const { register, handleSubmit, formState: { errors } } = useForm([{ XLongitude: '', YLatitude: '' }]);
@@ -96,18 +94,13 @@ const FeesChargesForm = (props) => {
         const getshow = e.target.value;
         setShowhide0(getshow);
     }
-    //     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
-    //   const handleClose = () => setOpen(false);
 
     const [showhide, setShowhide] = useState("No");
     const handleshow = e => {
         const getshow = e.target.value;
         setShowhide(getshow);
     }
-
-
-
     const handleFeesChange = event => {
 
         setFeeDetail(event.target.value);
@@ -157,7 +150,7 @@ const FeesChargesForm = (props) => {
     const CalculateApiCall = async () => {
         try {
 
-            const Resp = await axios.get("http://10.1.1.18:8062/land-services/_calculate?feeType=scrutinyFeeCharges&purposename=residentialPlottedColony&arce=1" + "&potenialZone=" + potential + "&colonyType=" + Purpose, {
+            const Resp = await axios.get("http://10.1.1.18:8443/land-services/_calculate?feeType=scrutinyFeeCharges&purposename=residentialPlottedColony&arce=1" + "&potenialZone=" + potential + "&colonyType=" + Purpose, {
 
             })
                 .then((Resp) => {
@@ -461,7 +454,7 @@ const FeesChargesForm = (props) => {
                                     <thead>
                                         <tr>
                                             <th>Total Area</th>
-                                            <td><input type="text" className="form-control" onChange={(e) => setTotalArea(e.target.value)} value={totalArea} /></td>
+                                            <td><input type="text" className="form-control" onChange={(e) => setTotalArea(e.target.value)} value={totalArea} disabled/></td>
                                         </tr>
                                     </thead>
                                     <tbody>

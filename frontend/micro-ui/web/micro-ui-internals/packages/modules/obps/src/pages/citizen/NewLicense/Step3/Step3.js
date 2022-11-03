@@ -7,120 +7,8 @@ import CalculateIcon from '@mui/icons-material/Calculate';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios';
-
-// import CalculateIcon from '@mui/icons-material/Calculate';
-// import InfoIcon from '@mui/icons-material/Info';
-// import { selectDeveloper } from "../../Redux/Slicer/Slicer";
-// import { selectName } from "../../Redux/Slicer/Slicer";
-// import { selectMobile } from "../../Redux/Slicer/Slicer";
-// import { selectMobile2 } from "../../Redux/Slicer/Slicer";
-// import { selectEmail1 } from "../../Redux/Slicer/Slicer";
-// import { selectPan } from "../../Redux/Slicer/Slicer";
-// import { selectAddress } from "../../Redux/Slicer/Slicer";
-// import { selectVillage1 } from "../../Redux/Slicer/Slicer";
-// import { selectPincode } from "../../Redux/Slicer/Slicer";
-// import { selectTehsil } from "../../Redux/Slicer/Slicer";
-// import { selectDistrict } from "../../Redux/Slicer/Slicer";
-// import { selectState } from "../../Redux/Slicer/Slicer";
-// import { selectNameOwner } from "../../Redux/Slicer/Slicer";
-// import AttachFileIcon from '@mui/icons-material/AttachFile';
-// import { useSelector } from "react-redux";
-// import { useDispatch } from "react-redux";
-// import { setLandScheduleFormData } from "../../Redux/Slicer/Slicer";
-// import { selectLicenseApplied } from "../../Redux/Slicer/Slicer";
-// import { selectMigrationLic } from "../../Redux/Slicer/Slicer";
-// import { selectPotential } from "../../Redux/Slicer/Slicer";
-// import { selectSiteLoc } from "../../Redux/Slicer/Slicer";
-// import { selectApproach } from "../../Redux/Slicer/Slicer";
-// import { selectSpecify } from "../../Redux/Slicer/Slicer";
-// import { selectexistingCase } from "../../Redux/Slicer/Slicer";
-// import { selectTypeLand } from "../../Redux/Slicer/Slicer";
-// import { selectThirdParty } from "../../Redux/Slicer/Slicer";
-// import { selectRehan } from "../../Redux/Slicer/Slicer";
-// import { selectPatta } from "../../Redux/Slicer/Slicer";
-// import { selectGair } from "../../Redux/Slicer/Slicer";
-// import { selectAny } from "../../Redux/Slicer/Slicer";
-// import { selectLitigation } from "../../Redux/Slicer/Slicer";
-// import { selectCourt } from "../../Redux/Slicer/Slicer";
-// import { selectAppliedLand } from "../../Redux/Slicer/Slicer";
-// import { selectRevenuerasta } from "../../Redux/Slicer/Slicer";
-// import { selectWatercourse } from "../../Redux/Slicer/Slicer";
-// import { selectCompactBlock } from "../../Redux/Slicer/Slicer";
-// import { selectSandwiched } from "../../Redux/Slicer/Slicer";
-// import { selectAcquistion } from "../../Redux/Slicer/Slicer";
-// import { selectExclusion } from "../../Redux/Slicer/Slicer";
-// import { selectCompensation } from "../../Redux/Slicer/Slicer";
-// import { selectSection4 } from "../../Redux/Slicer/Slicer";
-// import { selectSection6 } from "../../Redux/Slicer/Slicer";
-// import { selectStatusRelease } from "../../Redux/Slicer/Slicer";
-// import { selectaward } from "../../Redux/Slicer/Slicer";
-// import { selectDateRelease } from "../../Redux/Slicer/Slicer";
-// import { selectSite } from "../../Redux/Slicer/Slicer";
-// import { selectApproachable } from "../../Redux/Slicer/Slicer";
-// import { selectVacant } from "../../Redux/Slicer/Slicer";
-// import { selectConstruction } from "../../Redux/Slicer/Slicer";
-// import { selectHt } from "../../Redux/Slicer/Slicer";
-// import { selectGas } from "../../Redux/Slicer/Slicer";
-// import { selectNallah } from "../../Redux/Slicer/Slicer";
-// import { selectRoad } from "../../Redux/Slicer/Slicer";
-// import { selectLand } from "../../Redux/Slicer/Slicer";
-// import { selectLayoutPlan } from "../../Redux/Slicer/Slicer";
-
-
 const LandScheduleForm = (props) => {
-    // const developer = useSelector(selectDeveloper)
-    // const name = useSelector(selectName)
-    // const mobile = useSelector(selectMobile)
-    // const mobile2 = useSelector(selectMobile2)
-    // const email = useSelector(selectEmail1)
-    // const pan = useSelector(selectPan)
-    // const address = useSelector(selectAddress)
-    // const village1 = useSelector(selectVillage1)
-    // const pincode = useSelector(selectPincode)
-    // const tehsil = useSelector(selectTehsil)
-    // const district = useSelector(selectDistrict)
-    // const state = useSelector(selectState)
-    // const nameOwner = useSelector(selectNameOwner)
-
-    // const licenseApplied=useSelector(selectLicenseApplied)
-    // const migrationLic=useSelector(selectMigrationLic)
-    // const potential=useSelector(selectPotential)
-    // const siteLoc=useSelector(selectSiteLoc)
-    // const approach=useSelector(selectApproach)
-    // const specify=useSelector(selectSpecify)
-    // const existingCase=useSelector(selectexistingCase)
-    // const typeLand=useSelector(selectTypeLand)
-    // const thirdParty=useSelector(selectThirdParty)
-    // const rehan=useSelector(selectRehan)
-    // const patta=useSelector(selectPatta)
-    // const gair=useSelector(selectGair)
-    // const any=useSelector(selectAny)
-    // const litigation=useSelector(selectLitigation)
-    // const court=useSelector(selectCourt)
-    // const appliedLand=useSelector(selectAppliedLand)
-    // const  revenuerasta=useSelector(selectRevenuerasta)
-    // const watercourse=useSelector(selectWatercourse)
-    // const compactBlock=useSelector(selectCompactBlock)
-    // const sandwiched=useSelector(selectSandwiched)
-    // const acquistion=useSelector(selectAcquistion)
-    // const exclusion=useSelector(selectExclusion)
-    // const compensation=useSelector(selectCompensation)
-    // const section4=useSelector(selectSection4)
-    // const section6=useSelector(selectSection6)
-    // const statusRelease=useSelector(selectStatusRelease)
-    // const  award=useSelector(selectaward)
-    // const dateRelease=useSelector(selectDateRelease)
-    // const site=useSelector(selectSite)
-    // const  approachable=useSelector(selectApproachable)
-    // const vacant=useSelector(selectVacant)
-    // const construction=useSelector(selectConstruction)
-    // const ht=useSelector(selectHt)
-    // const  gas=useSelector(selectGas)
-    // const nallah=useSelector(selectNallah)
-    // const road=useSelector(selectRoad)
-    // const land=useSelector(selectLand)
-    // const  layoutPlan =useSelector(selectLayoutPlan)
-
+    const [finalSubmitData, setFinalSubmitData] = useState([])
     const [form, setForm] = useState([]);
     const [licenseApplied1, setLicenseApplied1] = useState('');
     const [licNo, setLicNo] = useState('');
@@ -390,6 +278,253 @@ const LandScheduleForm = (props) => {
     useEffect(() => {
         getDocumentData();
     }, [file]);
+
+    const FinalSubmitApiCall = async () => {
+        try {
+            const postDistrict = {
+
+                "NewServiceInfo": {
+                    "newServiceInfoData": [
+                        {
+                            "ApplicantInfo": {
+                                "authorizedDeveloper": "sdsd",
+                                "authorizedPerson": "sd",
+                                "authorizedmobile": "sds",
+                                "alternatemobile": "1e",
+                                "authorizedEmail": "eeds",
+                                "authorizedPan": "fsd",
+                                "authorizedAddress": "",
+                                "village": "village",
+                                "authorizedPinCode": "",
+                                "tehsil": "dsf",
+                                "district": "sdf",
+                                "state": "dsf",
+                                "status": "fgr",
+                                "LC": "ertfger",
+                                "address": "ertf",
+                                "permanentAddress": "fgd",
+                                "notSigned": "fgver",
+                                "email": "gfg",
+                                "authorized": "rgsf"
+                            },
+                            "ApplicantPurpose": {
+                                "purposeDd": "",
+                                "potential": "",
+                                "district": "",
+                                "state": "",
+                                "ApplicationPurposeData1": {
+                                    "tehsil": "tahsil",
+                                    "revenueEstate": "",
+                                    "mustil": "",
+                                    "consolidation": "",
+                                    "sarsai": "",
+                                    "kanal": "",
+                                    "marla": "",
+                                    "bigha": "",
+                                    "biswansi": "",
+                                    "biswa": "",
+                                    "landOwner": "",
+                                    "developerCompany": "",
+                                    "registeringdate": "",
+                                    "validitydate": "",
+                                    "colirrevocialble": "",
+                                    "authSignature": "",
+                                    "nameAuthSign": "",
+                                    "registeringAuthority": "",
+                                    "registeringAuthorityDoc": ""
+                                }
+                            },
+                            "LandSchedule": {
+                                "licenseApplied": "lic",
+                                "LicNo": "",
+                                "potential": "",
+                                "siteLoc": "",
+                                "approach": "",
+                                "approachRoadWidth": "",
+                                "specify": "",
+                                "typeLand": "",
+                                "thirdParty": "",
+                                "migrationLic": "",
+                                "encumburance": "",
+                                "litigation": "",
+                                "court": "",
+                                "insolvency": "",
+                                "appliedLand": "",
+                                "revenuerasta": "",
+                                "watercourse": "",
+                                "compactBlock": "",
+                                "sandwiched": "",
+                                "acquistion": "",
+                                "section4": "",
+                                "section6": "",
+                                "orderUpload": "",
+                                "approachable": "",
+                                "vacant": "",
+                                "construction": "",
+                                "ht": "",
+                                "gas": "",
+                                "nallah": "",
+                                "road": "",
+                                "land": "",
+                                "utilityLine": "",
+                                "landSchedule": "",
+                                "mutation": "",
+                                "jambandhi": "",
+                                "LayoutPlan": "",
+                                "proposedLayoutPlan": "",
+                                "revisedLansSchedule": ""
+                            },
+                            "DetailsofAppliedLand": {
+                                "dgps": "dsg",
+                                "DetailsAppliedLandData1": {
+                                    "resplotno": "asa",
+                                    "reslengthmtr": "",
+                                    "reswidthmtr": "",
+                                    "resareasq": "",
+                                    "npnlplotno": "",
+                                    "npnllengthmtr": "",
+                                    "npnlwidthmtr": "",
+                                    "npnlareasq": "",
+                                    "ewsplotno": "",
+                                    "ewslengthmtr": "",
+                                    "ewswidthmtr": "",
+                                    "ewsareasq": "",
+                                    "complotno": "",
+                                    "comlengthmtr": "",
+                                    "comwidthmtr": "",
+                                    "comareasq": "",
+                                    "siteplotno": "",
+                                    "sitelengthmtr": "",
+                                    "sitewidthmtr": "",
+                                    "siteareasq": "",
+                                    "parkplotno": "",
+                                    "parklengthmtr": "",
+                                    "parkwidthmtr": "",
+                                    "parkareasq": "",
+                                    "publicplotno": "",
+                                    "publiclengthmtr": "",
+                                    "publicwidthmtr": "",
+                                    "publicareasq": "",
+                                    "stpplotno": "",
+                                    "stplengthmtr": "",
+                                    "stpwidthmtr": "",
+                                    "stpareasq": "",
+                                    "etpplotno": "",
+                                    "etplengthmtr": "",
+                                    "etpwidthmtr": "",
+                                    "etpareasq": "",
+                                    "wtpplotno": "",
+                                    "wtplengthmtr": "",
+                                    "wtpwidthmtr": "",
+                                    "wtpareasq": "",
+                                    "ugtplotno": "",
+                                    "ugtlengthmtr": "",
+                                    "ugtwidthmtr": "",
+                                    "ugtareasq": "",
+                                    "milkboothplotno": "",
+                                    "milkboothlengthmtr": "",
+                                    "milkboothwidthmtr": "",
+                                    "milkboothareasq": "",
+                                    "gssplotno": "",
+                                    "gsslengthmtr": "",
+                                    "gssareasq": "",
+                                    "resDimension": "",
+                                    "resEnteredArea": "",
+                                    "comDimension": "",
+                                    "comEnteredArea": "",
+                                    "secPlanPlot": "",
+                                    "secPlanLength": "",
+                                    "secPlanDim": "",
+                                    "secPlanEntered": "",
+                                    "greenBeltPlot": "",
+                                    "greenBeltLength": "",
+                                    "greenBeltDim": "",
+                                    "greenBeltEntered": "",
+                                    "internalPlot": "",
+                                    "internalLength": "",
+                                    "internalDim": "",
+                                    "internalEntered": "",
+                                    "otherPlot": "",
+                                    "otherLength": "",
+                                    "otherDim": "",
+                                    "otherEntered": "",
+                                    "undeterminedPlot": "",
+                                    "undeterminedLength": "",
+                                    "undeterminedDim": "",
+                                    "undeterminedEntered": ""
+                                },
+                                "DetailsAppliedLandDdjay2": {
+                                    "frozenNo": "qw",
+                                    "frozenArea": "",
+                                    "organize": ""
+                                },
+                                "DetailsAppliedLandIndustrial3": {
+                                    "colonyfiftyNo": "qwq",
+                                    "colonyfiftyArea": "",
+                                    "fiftyToTwoNo": "",
+                                    "fiftyToTwoArea": "",
+                                    "twoHundredNo": "",
+                                    "twoHundredArea": "",
+                                    "resiNo": "",
+                                    "resiArea": "",
+                                    "commerNo": "",
+                                    "commerArea": "",
+                                    "labourNo": "",
+                                    "labourArea": ""
+                                },
+                                "DetailsAppliedLandResidential4": {
+                                    "npnlNo": "wew",
+                                    "npnlArea": "",
+                                    "ewsNo": "",
+                                    "ewsArea": ""
+                                },
+                                "DetailsAppliedLandNpnl5": {
+                                    "surrender": "sds",
+                                    "pocketProposed": "",
+                                    "deposit": "",
+                                    "surrendered": ""
+                                },
+                                "DetailsAppliedLand6": {
+                                    "sitePlan": "sdsd",
+                                    "democraticPlan": "",
+                                    "sectoralPlan": "",
+                                    "developmentPlan": "",
+                                    "uploadLayoutPlan": ""
+                                }
+                            },
+                            "FeesAndCharges": {
+                                "totalArea": "sdsd",
+                                "purpose": "",
+                                "devPlan": "",
+                                "scrutinyFee": "",
+                                "licenseFee": "",
+                                "conversionCharges": "",
+                                "payableNow": "",
+                                "remark": "",
+                                "adjustFee": ""
+                            }
+                        }
+                    ]
+                }
+
+            }
+
+            const Resp = await axios.post("/land-services/new/_create",
+                postDistrict,
+            )
+                .then((Resp) => {
+                    console.log("Submit", Resp)
+                    return Resp;
+                })
+            setFinalSubmitData(Resp.data);
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    useEffect(() => {
+        FinalSubmitApiCall();
+    }, [])
 
     return (
         <Form >

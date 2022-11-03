@@ -11,6 +11,7 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios';
 const AppliedDetailForm = (props) => {
+  const [finalSubmitData, setFinalSubmitData] = useState([])
   const [form, setForm] = useState([]);
   const [dgps, setDgps] = useState('');
   const [resplotno, setResPlotno] = useState('');
@@ -403,6 +404,253 @@ const AppliedDetailForm = (props) => {
     getDocumentData();
   }, [file]);
 
+  const FinalSubmitApiCall = async () => {
+    try {
+        const postDistrict = {
+
+            "NewServiceInfo": {
+                "newServiceInfoData": [
+                    {
+                        "ApplicantInfo": {
+                            "authorizedDeveloper": "sdsd",
+                            "authorizedPerson": "sd",
+                            "authorizedmobile": "sds",
+                            "alternatemobile": "1e",
+                            "authorizedEmail": "eeds",
+                            "authorizedPan": "fsd",
+                            "authorizedAddress": "",
+                            "village": "village",
+                            "authorizedPinCode": "",
+                            "tehsil": "dsf",
+                            "district": "sdf",
+                            "state": "dsf",
+                            "status": "fgr",
+                            "LC": "ertfger",
+                            "address": "ertf",
+                            "permanentAddress": "fgd",
+                            "notSigned": "fgver",
+                            "email": "gfg",
+                            "authorized": "rgsf"
+                        },
+                        "ApplicantPurpose": {
+                            "purposeDd": "",
+                            "potential": "",
+                            "district": "",
+                            "state": "",
+                            "ApplicationPurposeData1": {
+                                "tehsil": "tahsil",
+                                "revenueEstate": "",
+                                "mustil": "",
+                                "consolidation": "",
+                                "sarsai": "",
+                                "kanal": "",
+                                "marla": "",
+                                "bigha": "",
+                                "biswansi": "",
+                                "biswa": "",
+                                "landOwner": "",
+                                "developerCompany": "",
+                                "registeringdate": "",
+                                "validitydate": "",
+                                "colirrevocialble": "",
+                                "authSignature": "",
+                                "nameAuthSign": "",
+                                "registeringAuthority": "",
+                                "registeringAuthorityDoc": ""
+                            }
+                        },
+                        "LandSchedule": {
+                            "licenseApplied": "lic",
+                            "LicNo": "",
+                            "potential": "",
+                            "siteLoc": "",
+                            "approach": "",
+                            "approachRoadWidth": "",
+                            "specify": "",
+                            "typeLand": "",
+                            "thirdParty": "",
+                            "migrationLic": "",
+                            "encumburance": "",
+                            "litigation": "",
+                            "court": "",
+                            "insolvency": "",
+                            "appliedLand": "",
+                            "revenuerasta": "",
+                            "watercourse": "",
+                            "compactBlock": "",
+                            "sandwiched": "",
+                            "acquistion": "",
+                            "section4": "",
+                            "section6": "",
+                            "orderUpload": "",
+                            "approachable": "",
+                            "vacant": "",
+                            "construction": "",
+                            "ht": "",
+                            "gas": "",
+                            "nallah": "",
+                            "road": "",
+                            "land": "",
+                            "utilityLine": "",
+                            "landSchedule": "",
+                            "mutation": "",
+                            "jambandhi": "",
+                            "LayoutPlan": "",
+                            "proposedLayoutPlan": "",
+                            "revisedLansSchedule": ""
+                        },
+                        "DetailsofAppliedLand": {
+                            "dgps": "dsg",
+                            "DetailsAppliedLandData1": {
+                                "resplotno": "asa",
+                                "reslengthmtr": "",
+                                "reswidthmtr": "",
+                                "resareasq": "",
+                                "npnlplotno": "",
+                                "npnllengthmtr": "",
+                                "npnlwidthmtr": "",
+                                "npnlareasq": "",
+                                "ewsplotno": "",
+                                "ewslengthmtr": "",
+                                "ewswidthmtr": "",
+                                "ewsareasq": "",
+                                "complotno": "",
+                                "comlengthmtr": "",
+                                "comwidthmtr": "",
+                                "comareasq": "",
+                                "siteplotno": "",
+                                "sitelengthmtr": "",
+                                "sitewidthmtr": "",
+                                "siteareasq": "",
+                                "parkplotno": "",
+                                "parklengthmtr": "",
+                                "parkwidthmtr": "",
+                                "parkareasq": "",
+                                "publicplotno": "",
+                                "publiclengthmtr": "",
+                                "publicwidthmtr": "",
+                                "publicareasq": "",
+                                "stpplotno": "",
+                                "stplengthmtr": "",
+                                "stpwidthmtr": "",
+                                "stpareasq": "",
+                                "etpplotno": "",
+                                "etplengthmtr": "",
+                                "etpwidthmtr": "",
+                                "etpareasq": "",
+                                "wtpplotno": "",
+                                "wtplengthmtr": "",
+                                "wtpwidthmtr": "",
+                                "wtpareasq": "",
+                                "ugtplotno": "",
+                                "ugtlengthmtr": "",
+                                "ugtwidthmtr": "",
+                                "ugtareasq": "",
+                                "milkboothplotno": "",
+                                "milkboothlengthmtr": "",
+                                "milkboothwidthmtr": "",
+                                "milkboothareasq": "",
+                                "gssplotno": "",
+                                "gsslengthmtr": "",
+                                "gssareasq": "",
+                                "resDimension": "",
+                                "resEnteredArea": "",
+                                "comDimension": "",
+                                "comEnteredArea": "",
+                                "secPlanPlot": "",
+                                "secPlanLength": "",
+                                "secPlanDim": "",
+                                "secPlanEntered": "",
+                                "greenBeltPlot": "",
+                                "greenBeltLength": "",
+                                "greenBeltDim": "",
+                                "greenBeltEntered": "",
+                                "internalPlot": "",
+                                "internalLength": "",
+                                "internalDim": "",
+                                "internalEntered": "",
+                                "otherPlot": "",
+                                "otherLength": "",
+                                "otherDim": "",
+                                "otherEntered": "",
+                                "undeterminedPlot": "",
+                                "undeterminedLength": "",
+                                "undeterminedDim": "",
+                                "undeterminedEntered": ""
+                            },
+                            "DetailsAppliedLandDdjay2": {
+                                "frozenNo": "qw",
+                                "frozenArea": "",
+                                "organize": ""
+                            },
+                            "DetailsAppliedLandIndustrial3": {
+                                "colonyfiftyNo": "qwq",
+                                "colonyfiftyArea": "",
+                                "fiftyToTwoNo": "",
+                                "fiftyToTwoArea": "",
+                                "twoHundredNo": "",
+                                "twoHundredArea": "",
+                                "resiNo": "",
+                                "resiArea": "",
+                                "commerNo": "",
+                                "commerArea": "",
+                                "labourNo": "",
+                                "labourArea": ""
+                            },
+                            "DetailsAppliedLandResidential4": {
+                                "npnlNo": "wew",
+                                "npnlArea": "",
+                                "ewsNo": "",
+                                "ewsArea": ""
+                            },
+                            "DetailsAppliedLandNpnl5": {
+                                "surrender": "sds",
+                                "pocketProposed": "",
+                                "deposit": "",
+                                "surrendered": ""
+                            },
+                            "DetailsAppliedLand6": {
+                                "sitePlan": "sdsd",
+                                "democraticPlan": "",
+                                "sectoralPlan": "",
+                                "developmentPlan": "",
+                                "uploadLayoutPlan": ""
+                            }
+                        },
+                        "FeesAndCharges": {
+                            "totalArea": "sdsd",
+                            "purpose": "",
+                            "devPlan": "",
+                            "scrutinyFee": "",
+                            "licenseFee": "",
+                            "conversionCharges": "",
+                            "payableNow": "",
+                            "remark": "",
+                            "adjustFee": ""
+                        }
+                    }
+                ]
+            }
+
+        }
+
+        const Resp = await axios.post("/land-services/new/_create",
+            postDistrict,
+        )
+            .then((Resp) => {
+                console.log("Submit", Resp)
+                return Resp;
+            })
+        setFinalSubmitData(Resp.data);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+useEffect(() => {
+    FinalSubmitApiCall();
+}, [])
+
   return (
     <Form >
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
@@ -489,7 +737,6 @@ const AppliedDetailForm = (props) => {
                       <div className="row ">
                          <div className="col col-4">
                           <label >{index+1}</label>
-                          <input type="number" name="XLongitude" className="form-control" />
 
                         </div>
                         <div className="col col-4">

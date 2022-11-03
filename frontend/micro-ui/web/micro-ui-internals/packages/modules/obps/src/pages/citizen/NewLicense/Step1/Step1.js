@@ -23,32 +23,36 @@ const ApllicantFormStep1 = (props) => {
   const tenant = Digit.ULBService.getCurrentTenantId();
   const [developerData, setDeveloperData] = useState([]);
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
-  const [submitDataLabel, setSubmitDataLabel] = useState([])
+  const [submitDataLabel, setSubmitDataLabel] = useState([]);
+  const [finalSubmitData, setFinalSubmitData] = useState([]);
+  const[applicationId,setApplicationId]=useState("")
   const ApplicantFormSubmitHandlerForm = async (data) => {
-    console.log("data===", data);
-    props.Step1Continue(data);
+    console.log("data===+++++", data);
+  
     try {
       const postDistrict = {
         NewServiceInfo: {
           newServiceInfoData: [
             {
               ApplicantInfo: {
-                authorizedPerson: "sd",
-                authorizedmobile: "sds",
-                alternatemobile: "1e",
-                authorizedEmail: "eeds",
-                authorizedPan: "fsd",
-                authorizedAddress: "",
-                village: "village",
-                authorizedPinCode: "",
-                tehsil: "dsf",
-                district: "sdf",
-                state: "dsf",
-                status: "fgr",
-                permanentAddress: "fgd",
-                notSigned: "fgver",
-                email: "gfg",
-                authorized: "rgsf",
+                 authorizedPerson: data.authorizedPerson,
+                authorizedmobile: data.authorizedmobile,
+                // alternatemobile:usersResponse?.user?.[0]?.altContactNumber,
+                authorizedEmail: data.authorizedEmail,
+                authorizedPan: data.authorizedPan,
+                // authorizedAddress: usersResponse?.user?.[0]?.permanentAddress,
+                village:data.village ,
+                authorizedPinCode:data.authorizedPinCode,
+                tehsil:data.tehsil,
+                district:data.district,
+                state:data.state,
+                status: data.status,
+                permanentAddress: data.permanentAddress,
+                LC: data.LC,
+                notSigned: data.notSigned,
+                email: data.email,
+                authorized: data.authorized
+                
               },
               ApplicantPurpose: {
                 purposeDd: "",
@@ -56,7 +60,7 @@ const ApllicantFormStep1 = (props) => {
                 district: "",
                 state: "",
                 ApplicationPurposeData1: {
-                  tehsil: "tahsil",
+                  tehsil: "",
                   revenueEstate: "",
                   mustil: "",
                   consolidation: "",
@@ -78,7 +82,7 @@ const ApllicantFormStep1 = (props) => {
                 },
               },
               LandSchedule: {
-                licenseApplied: "lic",
+                licenseApplied: "",
                 LicNo: "",
                 potential: "",
                 siteLoc: "",
@@ -118,7 +122,7 @@ const ApllicantFormStep1 = (props) => {
                 revisedLansSchedule: "",
               },
               DetailsofAppliedLand: {
-                dgps: "dsg",
+                dgps: "",
                 DetailsAppliedLandData1: {
                   resplotno: "asa",
                   reslengthmtr: "",
@@ -197,12 +201,12 @@ const ApllicantFormStep1 = (props) => {
                   undeterminedEntered: "",
                 },
                 DetailsAppliedLandDdjay2: {
-                  frozenNo: "qw",
+                  frozenNo: "",
                   frozenArea: "",
                   organize: "",
                 },
                 DetailsAppliedLandIndustrial3: {
-                  colonyfiftyNo: "qwq",
+                  colonyfiftyNo: "",
                   colonyfiftyArea: "",
                   fiftyToTwoNo: "",
                   fiftyToTwoArea: "",
@@ -216,19 +220,19 @@ const ApllicantFormStep1 = (props) => {
                   labourArea: "",
                 },
                 DetailsAppliedLandResidential4: {
-                  npnlNo: "wew",
+                  npnlNo: "",
                   npnlArea: "",
                   ewsNo: "",
                   ewsArea: "",
                 },
                 DetailsAppliedLandNpnl5: {
-                  surrender: "sds",
+                  surrender: "",
                   pocketProposed: "",
                   deposit: "",
                   surrendered: "",
                 },
                 DetailsAppliedLand6: {
-                  sitePlan: "sdsd",
+                  sitePlan: "",
                   democraticPlan: "",
                   sectoralPlan: "",
                   developmentPlan: "",
@@ -236,7 +240,7 @@ const ApllicantFormStep1 = (props) => {
                 },
               },
               FeesAndCharges: {
-                totalArea: "sdsd",
+                totalArea: "",
                 purpose: "",
                 devPlan: "",
                 scrutinyFee: "",
@@ -253,8 +257,11 @@ const ApllicantFormStep1 = (props) => {
 
       const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
         return Resp;
+        
       });
-      setFinalSubmitData(Resp.data);
+      console.log("Resp",Resp.data)
+      // props.Step1Continue(data);
+   setFinalSubmitData(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -262,7 +269,7 @@ const ApllicantFormStep1 = (props) => {
 
   const getDeveloperData = async () => {
     try {
-      const Resp = await axios.get("http://10.1.1.18:8086/user/developer/_getAuthorizedUser?mobileNumber=1111111111").then((response) => {
+      const Resp = await axios.get("http://10.1.1.18:8443/user/developer/_getAuthorizedUser?mobileNumber=1111111111").then((response) => {
         return response;
       });
       setDeveloperData(Resp.data);
@@ -397,7 +404,7 @@ const ApllicantFormStep1 = (props) => {
 
   const getSubmitDataLabel = async () => {
     try {
-      const Resp = await axios.get("http://10.1.1.18:8199/land-services/new/licenses/_get?id=1099696").then((response) => {
+      const Resp = await axios.get("http://10.1.1.18:8443/land-services/new/licenses/_get?id=1099696").then((response) => {
         return response;
       });
       console.log("RESP+++", Resp)
@@ -413,7 +420,7 @@ const ApllicantFormStep1 = (props) => {
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4>New License</h4>
+        <h4>New License TESTING </h4>
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
           <Form.Group className="justify-content-center" controlId="formBasicEmail">
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -648,7 +655,7 @@ const ApllicantFormStep1 = (props) => {
                     <h2>LC-I signed by <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("LC")} />
+                <Form.Control type="text" placeholder="" {...register("LC")} />
 
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.LC && errors?.LC?.message}
@@ -701,7 +708,7 @@ const ApllicantFormStep1 = (props) => {
                     </h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("notSigned")} />
+                <Form.Control type="text" placeholder= {...register("notSigned")} />
 
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.notSigned && errors?.notSigned?.message}

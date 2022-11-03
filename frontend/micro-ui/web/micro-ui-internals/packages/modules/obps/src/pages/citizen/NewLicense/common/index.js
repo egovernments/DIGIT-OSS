@@ -55,7 +55,6 @@ const CommonForm = () => {
     setIsStep3(false);
     setIsStep4(false);
   };
-  console.log("TAB", step);
   return (
     <div>
       <TimelineNewLic currentStep={step} flow="NEWLICENSE" />

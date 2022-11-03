@@ -149,24 +149,25 @@ const ApllicantPuropseForm = (props) => {
       title: "Kanal/Bigha",
       dataIndex: "",
       render: (text) => (
-        text?.kanal ? text?.kanal : text?.bigha
-      ),
+        text?.kanal? text?.kanal : text?.bigha
+         ),
     },
     {
       title: "Marla/Biswa",
       dataIndex: "",
       render: (text) => (
-        text?.marla ? text?.marla : text?.biswa
-      ),
+       text?.marla? text?.marla : text?.biswa
+        ),
     },
     {
       title: "Sarsai/Biswansi",
       dataIndex: "",
       render: (text) => (
-        text?.sarsai ? text?.sarsai : text?.biswansi
-      ),
+        text?.sarsai? text?.sarsai : text?.biswansi
+         ),
     },
     {
+      // key: "action",
       title: "Action",
       dataIndex: "",
       render: (data) => (
@@ -175,6 +176,7 @@ const ApllicantPuropseForm = (props) => {
             onClick={() => {
               setmodal(true);
               setSpecificTableData(data);
+              console.log("data", data);
             }}
           >
             Edit
@@ -184,6 +186,76 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
   ];
+  const consolidatedColumns = [
+      {
+        key: "tehsil",
+        title: "Tehsil",
+        dataIndex: "tehsil",
+      },
+      {
+        key: "revenueEstate",
+        title: "Revenue Estate",
+        dataIndex: "revenueEstate",
+      },
+      {
+        key: "rectangleNo",
+        title: "Rectangle No.",
+        dataIndex: "rectangleNo",
+      },
+      {
+        key: "killa",
+        title: "Killa",
+        dataIndex: "killa",
+      },
+      {
+        key: "landOwner",
+        title: "Land Owner",
+        dataIndex: "landOwner",
+      },
+      {
+        key: "consolidationType",
+        title: "Consolidation Type",
+        dataIndex: "consolidationType",
+      },
+      {
+        key: "bigha",
+        title: "Kanal/Bigha",
+        dataIndex: "bigha",
+      },
+      {
+        // key: "biswa",
+        title: "Marla/Biswa",
+        dataIndex: "",
+        render: (text) => (
+          <div onClick={()=>console.log("text",text)}>text</div>
+          ),
+      },
+      {
+        key: "biswansi",
+        title: "Sarsai/Biswansi",
+        dataIndex: "biswansi",
+      },
+      {
+        // key: "action",
+        title: "Action",
+        dataIndex: "",
+        render: (data) => (
+          <div>
+            <h6
+              onClick={() => {
+                setmodal(true);
+                setSpecificTableData(data);
+                // console.log("data", data)
+              }}
+            >
+              Edit
+            </h6>
+            <h6>Delete</h6>
+          </div>
+        ),
+      },
+    ];
+ 
 
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
@@ -224,6 +296,7 @@ const ApllicantPuropseForm = (props) => {
       setValue("landOwner", specificTableData?.landOwner);
 
     }
+    console.log("specificTableData", specificTableData);
   }, [specificTableData]);
 
   const {
@@ -269,7 +342,7 @@ const ApllicantPuropseForm = (props) => {
         },
       };
 
-      const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_district", postDistrict).then((Resp) => {
+      const Resp = await axios.post("/egov-mdms-service/v1/_district", postDistrict).then((Resp) => {
         return Resp;
       });
       setDistrictData(Resp.data);
@@ -298,7 +371,7 @@ const ApllicantPuropseForm = (props) => {
     };
 
     try {
-      const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {}).then((response) => {
+      const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {}).then((response) => {
         return response;
       });
       setTehsilData(Resp.data);
@@ -328,7 +401,7 @@ const ApllicantPuropseForm = (props) => {
 
     try {
       const Resp = await axios
-        .post("http://10.1.1.18:8094/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datatopost, {})
+        .post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datatopost, {})
         .then((response) => {
           return response;
         });
@@ -362,7 +435,7 @@ const ApllicantPuropseForm = (props) => {
     try {
       const Resp = await axios
         .post(
-          "http://10.1.1.18:8094/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code,
+          "/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code,
           datpost,
           {}
         )
@@ -380,7 +453,7 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
-  const getLandOwnerStateData = async ({ code, khewats }) => {
+  const getLandOwnerStateData = async (khewats ) => {
     const datatopos = {
       RequestInfo: {
         apiId: "Rainmaker",
@@ -394,24 +467,25 @@ const ApllicantPuropseForm = (props) => {
         authToken: "",
       },
     };
-
+ console.log("khewat",khewats)
     try {
       const Resp = await axios
         .post(
-          "http://10.1.1.18:8094/egov-mdms-service/v1/_owner?" +
+          "/egov-mdms-service/v1/_owner?" +
           "dCode=" +
           district +
           "&" +
           "tCode=" +
           tehsilCode +
           "&NVCode=" +
-          code +
+          tehsilCode +
           "&khewat=" +
           khewats,
           datatopos,
           {}
         )
         .then((response) => {
+          console.log("Resp",response)
           return response;
         });
       setKhewatData(Resp.data);
@@ -429,6 +503,10 @@ const ApllicantPuropseForm = (props) => {
   useEffect(() => {
     DistrictApiCall();
   }, []);
+
+  useEffect(()=>{
+    console.log("Revenue",revenueDataLabels)
+  },[revenueDataLabels])
 
   const ApplicantPurposeModalData = (data) => {
     console.log("data++++++", data);
@@ -464,6 +542,10 @@ const ApllicantPuropseForm = (props) => {
       biswansi: "",
     });
   };
+
+  const applicantPurposeBack=async(data)=>{
+    console.log("data==============", data);
+  }
 
   const PurposeFormSubmitHandler = async (data) => {
     console.log("data===", data);
@@ -746,6 +828,10 @@ const ApllicantPuropseForm = (props) => {
     getDocumentData();
   }, [file]);
 
+  let kanal=0;
+  let marla=98;
+
+
   return (
     <div>
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
@@ -859,7 +945,7 @@ const ApllicantPuropseForm = (props) => {
             </Form.Group>
             <div class="row">
               <div class="col-sm-12 text-left">
-                <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
+                <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }} onClick={applicantPurposeBack}>
                   Back
                 </button>
               </div>
@@ -947,8 +1033,10 @@ const ApllicantPuropseForm = (props) => {
                   onChange={(e) => {
                     getMustilData(e.code);
                     getLandOwnerStateData(e.khewats);
+                   
                   }}
                 />
+              
 
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.revenueEstate && errors?.revenueEstate?.message}
