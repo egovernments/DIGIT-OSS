@@ -15,6 +15,7 @@ import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
 import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const Developerinfo = (props) => {
   const [vacant, setVacant] = useState("");

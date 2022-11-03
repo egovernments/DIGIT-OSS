@@ -10,6 +10,7 @@ import Collapse from "react-bootstrap/Collapse";
 import Modal from "react-bootstrap/Modal";
 import ModalChild from "../Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const LicenseDetailsScrutiny = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);

@@ -14,7 +14,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
-
+import RemoveIcon from "@mui/icons-material/Remove";
 const style = {
   position: "absolute",
   top: "50%",
