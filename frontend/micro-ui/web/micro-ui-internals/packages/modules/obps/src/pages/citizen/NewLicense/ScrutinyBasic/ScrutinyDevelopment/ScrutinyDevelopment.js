@@ -16,42 +16,47 @@ const ScrutinyDevelopment = (props) => {
         minHeight: "40%",
       }}
     >
-      <Row>
-        {/* <Row>
-          <Col className="ms-auto" md={4} xxl lg="12">
-            <b>Application NO: </b>
-          </Col>
+      {/* <Row>
+      <Col>
+        {el.applicationId}
+      </Col>
+      <Col>
+        {el.serviceId}
+      </Col>
+      <Col>
+        {el.documentId}
+      </Col>
         </Row> */}
-        {remarkDataResp !== null ? (
-          remarkDataResp.map((el, i) => {
-            return (
-              <div class="WhatsNewCard" style={{ backgroundColor: "#D9FECF" }}>
-                {/* <h2> &amp; Redressal</h2> */}
-                <Row>
-                  <Row>
-                    <div className="col-md-6">
-                      <b>{el.fieldIdL}</b> <b>{el.fieldValue}</b>
-                    </div>
-                    <div className="col-md-6">
-                      <b>{el.isApproved ? "Approved" : "Disapproved"}</b>
-                    </div>
-                  </Row>
-                  <Row>
-                    <b>Remarks</b>
-                  </Row>
+      {remarkDataResp !== null ? (
+        remarkDataResp.map((el, i) => {
+          return (
+            <div class="WhatsNewCard" style={{ backgroundColor: "#D9FECF" }}>
+              {/* <h2> &amp; Redressal</h2> */}
+              <Row>
+                <Col>
+                  <b>{el.fieldIdL}</b>
+                </Col>
+                <Col>{el.fieldValue}</Col>
+                <Col>{el.isApproved ? "Approved" : "Disapproved"}</Col>
+              </Row>
 
-                  <p>{el.comment}</p>
-                </Row>
+              <Row>
+                <p>{el.comment}</p>
+              </Row>
 
-                <b style={{ textAlign: "left" }}>User ID :{el.userid}</b>
-                <b style={{ textAlign: "right" }}>Date : 01-11-2022 </b>
-              </div>
-            );
-          })
-        ) : (
-          <p></p>
-        )}
-      </Row>
+              <Row>
+                <h6 style={{ textAlign: "right" }}>{el.userid}</h6>
+              </Row>
+
+              <Row>
+                <p style={{ textAlign: "right" }}>{new Date(el.ts).toLocaleDateString()}</p>
+              </Row>
+            </div>
+          );
+        })
+      ) : (
+        <p></p>
+      )}
     </Container>
   );
 };
