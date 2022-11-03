@@ -11,6 +11,7 @@
   <artifactId>egov-enc-service</artifactId>
   <version>1.1.2</version>
   <name>egov-enc-service</name>
+  <packaging>jar</packaging>
   <properties>
     <log4j2.version>2.17.1</log4j2.version>
     <java.version>1.8</java.version>

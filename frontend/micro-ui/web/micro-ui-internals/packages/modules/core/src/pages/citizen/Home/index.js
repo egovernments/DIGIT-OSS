@@ -1,5 +1,15 @@
 import {
-    Calender, CardBasedOptions, CaseIcon, ComplaintIcon, DocumentIcon, HomeIcon, Loader, OBPSIcon, PTIcon, StandaloneSearchBar, WhatsNewCard
+  Calender,
+  CardBasedOptions,
+  CaseIcon,
+  ComplaintIcon,
+  DocumentIcon,
+  HomeIcon,
+  Loader,
+  OBPSIcon,
+  PTIcon,
+  StandaloneSearchBar,
+  WhatsNewCard,
 } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -42,19 +52,23 @@ const Home = () => {
         onClick: () => history.push("/digit-ui/citizen/pgr-home"),
       },
       {
-        name: t("MODULE_PT"),
+        // name: t("MODULE_PT"),
+        name: "Application for  Electrical Plan",
         Icon: <PTIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/pt-home"),
+        onClick: () => history.push("/digit-ui/citizen/electrical-plan"),
+        // onClick: () => history.push("/digit-ui/citizen/pt-home"),
       },
       {
-        name: t("MODULE_TL"),
+        // name: t("MODULE_TL"),
+        name: "Application for  Service Plan",
         Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/tl-home"),
+        onClick: () => history.push("/digit-ui/citizen/service-plan"),
+        // onClick: () => history.push("/digit-ui/citizen/tl-home"),
       },
       {
-          name: "New License Services",
-          Icon: <CaseIcon className="fill-path-primary-main" />,
-          onClick: () => history.push("/digit-ui/citizen/obps/tab")
+        name: "New License Services",
+        Icon: <CaseIcon className="fill-path-primary-main" />,
+        onClick: () => history.push("/digit-ui/citizen/obps/tab"),
       },
       {
         name: t("CS_COMMON_INBOX_BPA"),
