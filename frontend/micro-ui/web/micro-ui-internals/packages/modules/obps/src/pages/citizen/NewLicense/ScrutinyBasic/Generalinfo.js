@@ -12,6 +12,7 @@ import Modal from "react-bootstrap/Modal";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 import Collapse from "react-bootstrap/Collapse";
 import ModalChild from "./Remarks/ModalChild";
@@ -221,9 +222,27 @@ const Genarelinfo = (props) => {
 
   return (
     <Form ref={props.generalInfoRef}>
-      <div className="collapse-header" onClick={() => setOpen2(!open2)} aria-controls="example-collapse-text" aria-expanded={open2}>
-        <span className="">Application Purpose</span>
-        {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+      <div
+        className="collapse-header"
+        onClick={() => setOpen2(!open2)}
+        aria-controls="example-collapse-text"
+        aria-expanded={open2}
+        style={{
+          background: "#f1f1f1",
+          padding: "0.25rem 1.25rem",
+          borderRadius: "0.25rem",
+          fontWeight: "600",
+          display: "flex",
+          cursor: "pointer",
+          color: "#817f7f",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <span style={{ color: "#817f7f" }} className="">
+          Application Purpose
+        </span>
+        {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">

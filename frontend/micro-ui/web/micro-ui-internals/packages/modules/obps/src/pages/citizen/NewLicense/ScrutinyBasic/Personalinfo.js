@@ -121,38 +121,52 @@ const Personalinfo = (props) => {
       // }}
     >
       {/* <Alert variant="warning">{messege}</Alert> */}
-      <div className="collapse-header" onClick={() => setOpen(!open)} aria-controls="example-collapse-text" aria-expanded={open}>
-        <span className="">Applicant info</span>
+      <div
+        className="collapse-header"
+        onClick={() => setOpen(!open)}
+        aria-controls="example-collapse-text"
+        aria-expanded={open}
+        style={{
+          background: "#f1f1f1",
+          padding: "0.25rem 1.25rem",
+          borderRadius: "0.25rem",
+          fontWeight: "600",
+          display: "flex",
+          cursor: "pointer",
+          color: "#817f7f",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <span style={{ color: "#817f7f" }} className="">
+          Applicant info
+        </span>
         {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
 
       <Collapse in={open}>
         <div id="example-collapse-text">
-          <div>
-            {/* <Col class="col-12">
-              <Button
-                style={{
-                  marginBottom: 3,
-                  width: "inherit",
-                  textAlign: "inherit",
-                  padding: "0.25rem 1rem",
-                  fontWeight: "Bold",
-                  backgroundColor: "#e9ecef",
-
-                  border: "none",
-                  color: "unset",
-                }}
-                onClick={() => setOpen2(!open2)}
-                aria-controls="example-collapse-text"
-                aria-expanded={open2}
-              >
-                Personal info
-                <AddIcon style={{ width: "67.6em" }}></AddIcon>
-              </Button>
-            </Col> */}
-          </div>
-          <div className="collapse-header" onClick={() => setOpen2(!open2)} aria-controls="example-collapse-text" aria-expanded={open2}>
-            <span className="">Applicant info</span>
+          <div></div>
+          <div
+            className="collapse-header"
+            onClick={() => setOpen2(!open2)}
+            aria-controls="example-collapse-text"
+            aria-expanded={open2}
+            style={{
+              background: "#f1f1f1",
+              padding: "0.25rem 1.25rem",
+              borderRadius: "0.25rem",
+              fontWeight: "600",
+              display: "flex",
+              cursor: "pointer",
+              color: "#817f7f",
+              justifyContent: "space-between",
+              alignContent: "center",
+            }}
+          >
+            <span style={{ color: "#817f7f" }} className="">
+              Personalinfo
+            </span>
             {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>
           <Collapse in={open2}>

@@ -15,6 +15,7 @@ import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
 import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const Developerinfo = (props) => {
   const [vacant, setVacant] = useState("");
@@ -119,42 +120,7 @@ const Developerinfo = (props) => {
   // const [labelValue, setLabelValue] = useState("");
   const [smShow, setSmShow] = useState(false);
   const [color, setColor] = useState({ yes: false, no: false });
-  // const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
-  // const [isyesOrNochecked, setYesorNochecked] = useState(true);
 
-  // const handlemodaldData = (data) => {
-  //   setmodaldData(data.data);
-  //   setSmShow(false);
-  // };
-
-  // const handleYesOrNochecked = (data) => {
-  //   setYesorNochecked(data.data);
-  // };
-  // const handlemodalsubmit = () => {
-  //   console.log("here");
-  //   const filteredObj = uncheckedValue.filter((obj) => {
-  //     return obj.label == modaldData.label;
-  //   });
-
-  //   if (isyesOrNochecked === false) {
-  //     if (modaldData.label !== "" || modaldData.Remarks !== "") {
-  //       if (filteredObj.length === 0) {
-  //         setUncheckedVlue((prev) => [...prev, modaldData]);
-  //       }
-  //     }
-  //   }
-  // };
-  // useEffect(() => {
-  //   console.log("called");
-  //   handlemodalsubmit();
-  // }, [modaldData.Remarks]);
-  // useEffect(() => {
-  //   props.passUncheckedList({ data: uncheckedValue });
-  // }, [uncheckedValue]);
-  // console.log("unchecked values", uncheckedValue);
-
-  // console.log(uncheckedValue.indexOf("developer"));
-  //////////////////////////////////////////////////////////////
   const [smShow2, setSmShow2] = useState(false);
   const [smShow3, setSmShow3] = useState(false);
   const [labelValue, setLabelValue] = useState("");
@@ -517,11 +483,29 @@ const Developerinfo = (props) => {
         }}
       > */}
 
-      <div className="collapse-header" onClick={() => setOpen(!open)} aria-controls="example-collapse-text" aria-expanded={open}>
-        <span className="">Land Schedule</span>
+      <div
+        className="collapse-header"
+        onClick={() => setOpen(!open)}
+        aria-controls="example-collapse-text"
+        aria-expanded={open}
+        style={{
+          background: "#f1f1f1",
+          padding: "0.25rem 1.25rem",
+          borderRadius: "0.25rem",
+          fontWeight: "600",
+          display: "flex",
+          cursor: "pointer",
+          color: "#817f7f",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <span style={{ color: "#817f7f" }} className="">
+          Land Schedule
+        </span>
         {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
-      <Collapse in={open2}>
+      <Collapse in={open}>
         <div id="example-collapse-text">
           <Form.Group
             style={{ display: props.displayGeneral, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
@@ -529,9 +513,7 @@ const Developerinfo = (props) => {
           >
             <Row className="ms-auto" style={{ marginBottom: 20 }}>
               <Col className="ms-auto" md={4} xxl lg="12">
-                <Form.Label>
-                  <b>(i)Whether licence applied for additional area ?</b>
-                </Form.Label>
+                <Form.Label>(i)Whether licence applied for additional area ?</Form.Label>
                 {/* &nbsp;&nbsp;
                 
                 <br></br> */}
@@ -566,37 +548,15 @@ const Developerinfo = (props) => {
                 </div>
               </Col>
             </Row>
-            {/* {showhide1 === "Yes" && ( */}
-            <div>
-              {/* <div className="col col-4"> */}
 
+            <div>
               <Row className="ms-auto" style={{ marginBottom: 20 }}>
                 <Col className="ms-auto" md={4} xxl lg="4">
                   <label>
-                    {/* <b>License No. of Parent License</b> */}
+                    {/* License No. of Parent License */}
                     <h5>License No. of Parent License &nbsp;</h5>
                   </label>
-                  {/* <Form.Check
-                        value="Yes"
-                        type="radio"
-                        onChange1={handleChange}
-                        onClick={handleshow}
-                        id="default-radio"
-                        label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                        name="group41"
-                        inline
-                      ></Form.Check>
-                      <Form.Check
-                        onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                        value="No"
-                        type="radio"
-                        id="default-radio"
-                        onChange1={handleChange}
-                        onClick={handleshow}
-                        label={<CancelIcon color="error" />}
-                        name="group41"
-                        inline
-                      ></Form.Check> */}
+
                   <div style={{ display: "flex" }}>
                     <Form.Control
                       height={30}
@@ -621,36 +581,15 @@ const Developerinfo = (props) => {
                   </div>
                   {/* <input type="number" className="form-control" /> */}
                 </Col>
-
                 <Col className="ms-auto" md={4} xxl lg="4">
                   <label htmlFor="potential">
                     <h6>
-                      {/* <b>Potential Zone:</b> */}
+                      {/* Potential Zone: */}
                       <h5>Potential Zone: &nbsp;</h5>
                     </h6>
                   </label>
-                  {/* <Form.Check
-                        value="Potential Zone"
-                        type="radio"
-                        id="default-radio"
-                        label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                        name="group43"
-                        inline
-                      ></Form.Check>
-                      <Form.Check
-                        onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                        value="Potential Zone"
-                        type="radio"
-                        id="default-radio"
-                        label={<CancelIcon color="error" />}
-                        name="group43"
-                        inline
-                      ></Form.Check> */}
+
                   <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                    {/* <Form.Select height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled>
-                          
-                        </Form.Select> */}
                     <Form.Select
                       type="text"
                       placeholder="Puropse"
@@ -660,13 +599,13 @@ const Developerinfo = (props) => {
                       disabled
                     >
                       {/* <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} disabled> */}
-                      <option value="">--Potential Zone--</option>
+                      {/* <option value="">--Potential Zone--</option>
                       <option value="K.Mishra">Hyper</option>
                       <option value="potential 1">High I</option>
                       <option value="potential 2">High II</option>
                       <option value="potential 2">Medium</option>
                       <option value="potential 2">Low I</option>
-                      <option value="potential 2">Low II</option>
+                      <option value="potential 2">Low II</option> */}
                       {/* </select> */}
                     </Form.Select>
                     <ReportProblemIcon
@@ -686,7 +625,7 @@ const Developerinfo = (props) => {
                 </Col>
                 <Col className="ms-auto" md={4} xxl lg="4">
                   <label>
-                    {/* <b>Site Location Purpose</b> */}
+                    {/* Site Location Purpose */}
                     <h5>Site Location Purpose: &nbsp;</h5>
                   </label>
                   <div style={{ display: "flex" }}>
@@ -705,49 +644,15 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                  {/* <Form.Check
-                          value="Site Location Purpose"
-                          type="radio"
-                          id="default-radio"
-                          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                          name="group44"
-                          inline
-                        ></Form.Check>
-                        <Form.Check
-                          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                          value="Site Location Purpose"
-                          type="radio"
-                          id="default-radio"
-                          label={<CancelIcon color="error" />}
-                          name="group44"
-                          inline
-                        ></Form.Check> */}
-                  {/* <input type="text" className="form-control" disabled="disabled" /> */}
                 </Col>
                 {/* </Row>
-                <Row className="ms-auto" style={{ marginBottom: 20 }}> */}
+              <Row className="ms-auto" style={{ marginBottom: 20 }}> */}
                 <Col className="ms-auto" md={4} xxl lg="4">
                   <label>
-                    {/* <b>Approach Type (Type of Policy)</b> */}
+                    {/* Approach Type (Type of Policy) */}
                     <h5>Approach Type (Type of Policy) &nbsp;</h5>
                   </label>
-                  {/* <Form.Check
-                            value="Approach Type "
-                            type="radio"
-                            id="default-radio"
-                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                            name="group45"
-                            inline
-                          ></Form.Check>
-                          <Form.Check
-                            onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                            value="Approach Type "
-                            type="radio"
-                            id="default-radio"
-                            label={<CancelIcon color="error" />}
-                            name="group45"
-                            inline
-                          ></Form.Check> */}
+
                   <div style={{ display: "flex" }}>
                     <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     <ReportProblemIcon
@@ -764,14 +669,7 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                  {/* <select className="form-control" id="approach" name="approach">
-                      <option value=""></option>
-                      <option value="K.Mishra"></option>
-                      <option value="potential 1"></option>
-                      <option value="potential 2"></option>
-                    </select> */}
                 </Col>
-
                 <Col className="ms-auto" md={4} xxl lg="4">
                   <label>
                     <h6>Approach Road Width&nbsp;&nbsp;</h6>{" "}
@@ -792,24 +690,6 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                  {/* <Form.Check
-                            value="Approach Road Width "
-                            type="radio"
-                            id="default-radio"
-                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                            name="group46"
-                            inline
-                          ></Form.Check>
-                          <Form.Check
-                            onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                            value="Approach Road Width"
-                            type="radio"
-                            id="default-radio"
-                            label={<CancelIcon color="error" />}
-                            name="group46"
-                            inline
-                          ></Form.Check> */}
-                  {/* <input type="number" name="roadwidth" className="form-control" disabled></input> */}
                 </Col>
                 <Col className="ms-auto" md={4} xxl lg="4">
                   <label>
@@ -831,49 +711,11 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                  {/* <Form.Check
-                            value="Specify Others"
-                            type="radio"
-                            id="default-radio"
-                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                            name="group47"
-                            inline
-                          ></Form.Check>
-                          <Form.Check
-                            onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                            value="Specify Others"
-                            type="radio"
-                            id="default-radio"
-                            label={<CancelIcon color="error" />}
-                            name="group47"
-                            inline
-                          ></Form.Check> */}
-                  {/* <input type="number" name="specify" className="form-control " /> */}
                 </Col>
               </Row>
-
               <Row className="ms-auto" style={{ marginBottom: 20 }}>
-                <Col className="ms-auto" md={4} xxl lg="4">
-                  <label>
-                    <h6>Type of land</h6>{" "}
-                  </label>
-                  {/* <Form.Check
-                            value="Type of land"
-                            type="radio"
-                            id="default-radio"
-                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                            name="group49"
-                            inline
-                          ></Form.Check>
-                          <Form.Check
-                            onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                            value="Type of land"
-                            type="radio"
-                            id="default-radio"
-                            label={<CancelIcon color="error" />}
-                            name="group49"
-                            inline
-                          ></Form.Check> */}
+                <div className="col col-4">
+                  <h6>Type of land</h6>{" "}
                   <div style={{ display: "flex" }}>
                     <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     <ReportProblemIcon
@@ -890,50 +732,24 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                  {/* <select className="form-control" id="typeland" name="typeland">
-                      <option value="">--Type of Land--</option>
-                      <option value="">chahi/nehri</option>
-                      <option>Gair Mumkins</option>
-                      <option>others</option>
-                      <option></option>
-                    </select> */}
-                </Col>
+                </div>
 
-                <Col className="ms-auto" md={4} xxl lg="4">
-                  <label>
-                    <h6>Third-party right created</h6>
-                  </label>
-                  <br></br>
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow13} />
-                  &nbsp;&nbsp;
-                  <label for="Yes">
-                    <h6>Yes</h6>
-                  </label>
-                  &nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow13} />
-                  &nbsp;&nbsp;
-                  <label for="No">
-                    <h6>No</h6>
-                  </label>
-                  {/* <Form.Check
-                          value="Third-party right created"
-                          type="radio"
-                          id="default-radio"
-                          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                          name="group50"
-                          inline
-                        ></Form.Check>
-                        <Form.Check
-                          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                          value="Third-party right created"
-                          type="radio"
-                          id="default-radio"
-                          label={<CancelIcon color="error" />}
-                          name="group50"
-                          inline
-                        ></Form.Check> */}
+                <div className="col col-4">
+                  <h6>Third-party right created</h6>
+
                   <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow13} disabled />
+                    &nbsp;&nbsp;
+                    <label for="Yes">
+                      <h6>Yes</h6>
+                    </label>
+                    &nbsp;&nbsp;
+                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow13} disabled />
+                    &nbsp;&nbsp;
+                    <label for="No">
+                      <h6>No</h6>
+                    </label>
+                    <DownloadForOfflineIcon color="primary" />
                     <ReportProblemIcon
                       style={{
                         color:
@@ -948,53 +764,35 @@ const Developerinfo = (props) => {
                       }}
                     ></ReportProblemIcon>
                   </div>
-                  {showhide13 === "Yes" && (
+                </div>
+
+                {/* {showhide13 === "Yes" && (
                     <div className="row ">
                       <div className="col col-4">
-                        <label> Remark </label>
-                        <input type="text" className="form-control" />
+                      <label> Remark </label>
+                      <input type="text" className="form-control" disabled />
                       </div>
                       <div className="col col-4">
-                        <label> Document Upload </label>
-                        <input type="file" className="form-control" />
+                      <label> Document Download </label>
+                      <DownloadForOfflineIcon color="primary" />
                       </div>
                     </div>
                   )}
                   {showhide13 === "No" && (
                     <div className="row ">
                       <div className="col col-4">
-                        <label> Document Upload </label>
-                        <input type="file" className="form-control" />
+                      <label> Document Download </label>
+                      <DownloadForOfflineIcon color="primary" />
                       </div>
                     </div>
-                  )}
-                </Col>
+                  )} */}
               </Row>
             </div>
             {/* )} */}
             <Row className="ms-auto">
               <Col md={4} xxl lg="12">
-                <Form.Label>
-                  <b>(ii)Whether licence applied under Migration policy?</b>
-                </Form.Label>
+                <Form.Label>(ii)Whether licence applied under Migration policy?</Form.Label>
                 &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="Whether licence applied under Migration policy"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group42"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="Whether licence applied under Migration policy"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group42"
-                  inline
-                ></Form.Check> */}
                 <div style={{ display: "flex" }}>
                   {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow17} disabled />
@@ -1016,17 +814,11 @@ const Developerinfo = (props) => {
                   ></ReportProblemIcon>
                 </div>
                 <br></br>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow17} disabled />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow17} disabled />
-                <label for="No">No</label> */}
                 {showhide17 === "Yes" && (
                   <div className="col col-6 ">
                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                      <b>
-                        Another Copy of Shahjra Plan&nbsp;&nbsp;
-                        <DownloadForOfflineIcon color="primary" />
-                      </b>{" "}
+                      Another Copy of Shahjra Plan&nbsp;&nbsp;
+                      <DownloadForOfflineIcon color="primary" />{" "}
                     </h6>
                     <input type="file" className="form-control" />
                   </div>
@@ -1035,24 +827,7 @@ const Developerinfo = (props) => {
             </Row>
             <hr></hr>
             <h5 className="text-black">
-              <b>2. Any encumbrance with respect to following :</b>&nbsp;&nbsp;
-              {/* <Form.Check
-                value="Rehan"
-                type="radio"
-                id="default-radio"
-                label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                name="group43"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                value="Rehan"
-                type="radio"
-                id="default-radio"
-                label={<CancelIcon color="error" />}
-                name="group43"
-                inline
-              ></Form.Check> */}
+              2. Any encumbrance with respect to following :&nbsp;&nbsp;
               <div style={{ display: "flex" }}>
                 {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                 <label htmlFor="gen">Rehan / Mortgage</label>&nbsp;&nbsp;
@@ -1097,16 +872,14 @@ const Developerinfo = (props) => {
             <div className="row">
               <div className="col col-4">
                 <label htmlFor="npnl">
-                  <h6>
-                    <b>Any other, please specify</b>
-                  </h6>
+                  <h6>Any other, please specify</h6>
                 </label>
                 <input type="text" className="form-control" disabled />
               </div>
             </div>
             <hr />
             <h6>
-              <b>(ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator</b>&nbsp;&nbsp;
+              (ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator&nbsp;&nbsp;
               {/* <Form.Check
                 value=" Existing litigation"
                 type="radio"
@@ -1153,7 +926,7 @@ const Developerinfo = (props) => {
             <label for="No">No</label> */}
             <hr />
             <h6>
-              <b>(iii) Court orders, if any, affecting applied land</b>&nbsp;&nbsp;
+              (iii) Court orders, if any, affecting applied land&nbsp;&nbsp;
               {/* <Form.Check
                 value=" Court orders"
                 type="radio"
@@ -1198,7 +971,7 @@ const Developerinfo = (props) => {
             <label for="No">No</label> */}
             <hr />
             <h6>
-              <b>(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed :</b>&nbsp;&nbsp;
+              (iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed :&nbsp;&nbsp;
               {/* <Form.Check
                 value=" Any insolvency"
                 type="radio"
@@ -1244,13 +1017,11 @@ const Developerinfo = (props) => {
             <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
             <label for="No">No</label> */}
             <hr />
-            <h5 className="text-black">
-              <b>3.Shajra Plan</b>
-            </h5>
+            <h5 className="text-black">3.Shajra Plan</h5>
             <div className="row">
               <div className="col col-3 ">
                 <h6>
-                  <b>(a)As per applied land (Yes/No)</b> &nbsp;&nbsp;
+                  (a)As per applied land (Yes/No) &nbsp;&nbsp;
                   {/* <Form.Check
                     value=" As per applied land "
                     type="radio"
@@ -1297,10 +1068,8 @@ const Developerinfo = (props) => {
 
               <div className="col col-3 ">
                 <h6 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?">
-                  <b>
-                    (b)&nbsp;Revenue rasta&nbsp;
-                    {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  </b>
+                  (b)&nbsp;Revenue rasta&nbsp;
+                  {/* <InfoIcon style={{color:"blue"}}/>  */}
                   &nbsp;&nbsp;
                   {/* <Form.Check
                     value=" revenue rasta "
@@ -1356,10 +1125,8 @@ const Developerinfo = (props) => {
 
               <div className="col col-3 ">
                 <h6 data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?">
-                  <b>
-                    (c)&nbsp;Watercourse running&nbsp;
-                    {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  </b>
+                  (c)&nbsp;Watercourse running&nbsp;
+                  {/* <InfoIcon style={{color:"blue"}}/>  */}
                   &nbsp;&nbsp;
                   {/* <Form.Check
                     value=" Yes"
@@ -1418,7 +1185,7 @@ const Developerinfo = (props) => {
               </div>
               <div className="col col-3 ">
                 <h6>
-                  <b>(d)Whether in Compact Block (Yes/No)</b> &nbsp;&nbsp;
+                  (d)Whether in Compact Block (Yes/No) &nbsp;&nbsp;
                   {/* <Form.Check
                     value=" Compact Block"
                     type="radio"
@@ -1470,34 +1237,10 @@ const Developerinfo = (props) => {
               <div className="row">
                 <div className="col col-3 ">
                   <h6 data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land.">
-                    <b>
-                      (e)&nbsp;Land Sandwiched&nbsp;
-                      {/* <InfoIcon style={{color:"blue"}}/>  */}
-                    </b>
+                    (e)&nbsp;Land Sandwiched&nbsp;
+                    {/* <InfoIcon style={{color:"blue"}}/>  */}
                     &nbsp;&nbsp;
-                    {/* <Form.Check
-                      value=" sandwiched"
-                      type="radio"
-                      id="default-radio"
-                      onChange1={handleChange}
-                      onClick={handleshow2}
-                      label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                      name="group56"
-                      inline
-                    ></Form.Check>
-                    <Form.Check
-                      onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                      value="sandwiched "
-                      type="radio"
-                      id="default-radio"
-                      onChange1={handleChange}
-                      onClick={handleshow2}
-                      label={<CancelIcon color="error" />}
-                      name="group56"
-                      inline
-                    ></Form.Check> */}
                     <div style={{ display: "flex" }}>
-                      {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                       <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
                       <label for="Yes">Yes</label>&nbsp;&nbsp;
                       <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
@@ -1517,35 +1260,10 @@ const Developerinfo = (props) => {
                       ></ReportProblemIcon>
                     </div>
                   </h6>
-                  {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                  <label for="No">No</label> */}
                 </div>
                 <div className="col col-3 ">
                   <h6>
-                    <b>(f)Acquisition status (Yes/No)</b> &nbsp;&nbsp;
-                    {/* <Form.Check
-                      value=" Yes"
-                      type="radio"
-                      id="default-radio"
-                      onChange1={handleChange}
-                      onClick={handleshow2}
-                      label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                      name="group57"
-                      inline
-                    ></Form.Check>
-                    <Form.Check
-                      onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                      value="No"
-                      type="radio"
-                      id="default-radio"
-                      onChange1={handleChange}
-                      onClick={handleshow2}
-                      label={<CancelIcon color="error" />}
-                      name="group57"
-                      inline
-                    ></Form.Check> */}
+                    (f)Acquisition status (Yes/No) &nbsp;&nbsp;
                     <div style={{ display: "flex" }}>
                       {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                       <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow3} />
@@ -1567,10 +1285,7 @@ const Developerinfo = (props) => {
                       ></ReportProblemIcon>
                     </div>
                   </h6>
-                  {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow3} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow3} />
-                  <label for="No">No</label> */}
+
                   {showhide4 === "Yes" && (
                     <div className="row ">
                       <div className="col col">
@@ -1581,28 +1296,9 @@ const Developerinfo = (props) => {
                   )}
                 </div>
                 <div className="col col-3">
-                  <div className="form-group ">
-                    <label>
-                      <b>Date of section 4 notification</b>{" "}
-                    </label>
+                  <div>
+                    <label>Date of section 4 notification </label>
                     &nbsp;&nbsp;
-                    {/* <Form.Check
-                      value=" Date of section 4 notification"
-                      type="radio"
-                      id="default-radio"
-                      label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                      name="group61"
-                      inline
-                    ></Form.Check>
-                    <Form.Check
-                      onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                      value="Date of section 4 notification"
-                      type="radio"
-                      id="default-radio"
-                      label={<CancelIcon color="error" />}
-                      name="group61"
-                      inline
-                    ></Form.Check> */}
                     <div style={{ display: "flex" }}>
                       <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                       <ReportProblemIcon
@@ -1623,28 +1319,9 @@ const Developerinfo = (props) => {
                   </div>
                 </div>
                 <div className="col col-3">
-                  <div className="form-group ">
-                    <label>
-                      <b>Date of section 6 notification</b>
-                    </label>
+                  <div>
+                    <label>Date of section 6 notification</label>
                     &nbsp;&nbsp;
-                    {/* <Form.Check
-                      value=" Date of section 6 notification"
-                      type="radio"
-                      id="default-radio"
-                      label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                      name="group62"
-                      inline
-                    ></Form.Check>
-                    <Form.Check
-                      onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                      value="Date of section 6 notification"
-                      type="radio"
-                      id="default-radio"
-                      label={<CancelIcon color="error" />}
-                      name="group62"
-                      inline
-                    ></Form.Check> */}
                     <div style={{ display: "flex" }}>
                       <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                       <ReportProblemIcon
@@ -1669,28 +1346,9 @@ const Developerinfo = (props) => {
             <div className="row">
               <div className="col col-12 ">
                 <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
-                  <b>
-                    (g)&nbsp;Orders Upload &nbsp;
-                    {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  </b>
+                  (g)&nbsp;Orders Upload &nbsp;
+                  {/* <InfoIcon style={{color:"blue"}}/>  */}
                   &nbsp;&nbsp;
-                  {/* <Form.Check
-                    value=" release/exclusion"
-                    type="radio"
-                    id="default-radio"
-                    label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                    name="group59"
-                    inline
-                  ></Form.Check>
-                  <Form.Check
-                    onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                    value="release/exclusion"
-                    type="radio"
-                    id="default-radio"
-                    label={<CancelIcon color="error" />}
-                    name="group59"
-                    inline
-                  ></Form.Check> */}
                   <div style={{ display: "flex" }}>
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow16} />
@@ -1712,15 +1370,12 @@ const Developerinfo = (props) => {
                     ></ReportProblemIcon>
                   </div>
                 </h6>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow16} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow16} />
-                <label for="No">No</label> */}
+
                 {showhide16 === "Yes" && (
                   <div className="row ">
                     <div className="col col-3 ">
                       <h6>
-                        <b>(h) Whether land compensation received</b>&nbsp;&nbsp;
+                        (h) Whether land compensation received&nbsp;&nbsp;
                         <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
                         &nbsp;&nbsp;
                         <label for="Yes">Yes</label>&nbsp;&nbsp;
@@ -1728,23 +1383,7 @@ const Developerinfo = (props) => {
                         &nbsp;&nbsp;
                         <label for="No">No</label>
                       </h6>
-                      {/* <Form.Check
-                        value=" land compensation"
-                        type="radio"
-                        id="default-radio"
-                        label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                        name="group60"
-                        inline
-                      ></Form.Check>
-                      <Form.Check
-                        onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                        value="land compensation"
-                        type="radio"
-                        id="default-radio"
-                        label={<CancelIcon color="error" />}
-                        name="group60"
-                        inline
-                      ></Form.Check> */}
+
                       <div style={{ display: "flex" }}>
                         <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
@@ -1765,27 +1404,9 @@ const Developerinfo = (props) => {
                     <div className="col col-3">
                       <div className="form-group">
                         <label htmlFor="releasestatus">
-                          <h6>
-                            <b>Status of release</b>
-                          </h6>
+                          <h6>Status of release</h6>
                         </label>
-                        {/* <Form.Check
-                          value="Status of release"
-                          type="radio"
-                          id="default-radio"
-                          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                          name="group63"
-                          inline
-                        ></Form.Check>
-                        <Form.Check
-                          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                          value="Status of release"
-                          type="radio"
-                          id="default-radio"
-                          label={<CancelIcon color="error" />}
-                          name="group63"
-                          inline
-                        ></Form.Check> */}
+
                         <div style={{ display: "flex" }}>
                           <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
@@ -1813,9 +1434,7 @@ const Developerinfo = (props) => {
                     <div className="col col-3">
                       <div className="form-group ">
                         <label htmlFor="awarddate">
-                          <h6>
-                            <b>Date of Award</b>
-                          </h6>
+                          <h6>Date of Award</h6>
                         </label>
                         {/* <Form.Check
                           value="Date of Award"
@@ -1856,27 +1475,9 @@ const Developerinfo = (props) => {
                     <div className="col col-3">
                       <div className="form-group ">
                         <label htmlFor="releasedate">
-                          <h6>
-                            <b>Date of Release</b>
-                          </h6>{" "}
+                          <h6>Date of Release</h6>{" "}
                         </label>
-                        {/* <Form.Check
-                          value="Date of Release"
-                          type="radio"
-                          id="default-radio"
-                          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                          name="group65"
-                          inline
-                        ></Form.Check>
-                        <Form.Check
-                          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                          value="Date of Release"
-                          type="radio"
-                          id="default-radio"
-                          label={<CancelIcon color="error" />}
-                          name="group65"
-                          inline
-                        ></Form.Check> */}
+
                         <div style={{ display: "flex" }}>
                           <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
@@ -1899,9 +1500,7 @@ const Developerinfo = (props) => {
                     <div className="col col-3">
                       <div className="form-group ">
                         <label htmlFor="sitedetails">
-                          <h6>
-                            <b>Site Details</b>
-                          </h6>
+                          <h6>Site Details</h6>
                         </label>
                         {/* <Form.Check
                           value="Site Details"
@@ -1947,25 +1546,8 @@ const Developerinfo = (props) => {
             <div className="row">
               <div className="col col-12 ">
                 <h6>
-                  <b>whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)</b>
+                  whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)
                   &nbsp;&nbsp;
-                  {/* <Form.Check
-                    value="approachable"
-                    type="radio"
-                    id="default-radio"
-                    label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                    name="group67"
-                    inline
-                  ></Form.Check>
-                  <Form.Check
-                    onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                    value="approachable"
-                    type="radio"
-                    id="default-radio"
-                    label={<CancelIcon color="error" />}
-                    name="group67"
-                    inline
-                  ></Form.Check> */}
                   <div style={{ display: "flex" }}>
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
@@ -1998,30 +1580,11 @@ const Developerinfo = (props) => {
               </div>
             </div>
             <hr />
-            <h5 className="text-black">
-              <b>4.Site condition</b>
-            </h5>
+            <h5 className="text-black">4.Site condition</h5>
             <div className="row">
               <div className="col col-3">
                 <h6>
-                  <b>(a)vacant: (Yes/No)</b>{" "}
-                  {/* <Form.Check
-                    value="vacant"
-                    type="radio"
-                    id="default-radio"
-                    label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                    name="group68"
-                    inline
-                  ></Form.Check>
-                  <Form.Check
-                    onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                    value="vacant"
-                    type="radio"
-                    id="default-radio"
-                    label={<CancelIcon color="error" />}
-                    name="group68"
-                    inline
-                  ></Form.Check> */}
+                  (a)vacant: (Yes/No){" "}
                   <div style={{ display: "flex" }}>
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
@@ -2043,32 +1606,12 @@ const Developerinfo = (props) => {
                     ></ReportProblemIcon>
                   </div>
                 </h6>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label> */}
               </div>
               <div className="col col-3">
                 <h6 onChange={(e) => setConstruction(e.target.value)} value={construction}>
-                  <b>(b)Construction: (Yes/No)</b>
+                  (b)Construction: (Yes/No)
                 </h6>
-                {/* <Form.Check
-                  value="Construction"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group69"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="Construction"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group69"
-                  inline
-                ></Form.Check> */}
+
                 <div style={{ display: "flex" }}>
                   {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow4} />
@@ -2089,10 +1632,7 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                <label for="No">No</label> */}
+
                 {showhide4 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
@@ -2104,25 +1644,9 @@ const Developerinfo = (props) => {
               </div>
               <div className="col col-3">
                 <h6 onChange={(e) => setHt(e.target.value)} value={ht}>
-                  <b>(c)HT line:(Yes/No)</b>
+                  (c)HT line:(Yes/No)
                 </h6>
-                {/* <Form.Check
-                  value="HT"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group70"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="HT"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group70"
-                  inline
-                ></Form.Check> */}
+
                 <div style={{ display: "flex" }}>
                   {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow5} />
@@ -2143,10 +1667,7 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                <label for="No">No</label> */}
+
                 {showhide5 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
@@ -2158,27 +1679,10 @@ const Developerinfo = (props) => {
               </div>
               <div className="col col-3">
                 <h6 onChange={(e) => setGas(e.target.value)} value={gas}>
-                  <b>(d) IOC Gas Pipeline:(Yes/No)</b>
+                  (d) IOC Gas Pipeline:(Yes/No)
                 </h6>
-                {/* <Form.Check
-                  value=" IOC"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group71"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value=" IOC"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group71"
-                  inline
-                ></Form.Check> */}
+
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow6} />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow6} />
@@ -2215,27 +1719,10 @@ const Developerinfo = (props) => {
             <div className="row ">
               <div className="col col-3">
                 <h6 onChange={(e) => setNallah(e.target.value)} value={nallah}>
-                  <b>(e)Nallah:(Yes/No)</b>{" "}
+                  (e)Nallah:(Yes/No){" "}
                 </h6>
-                {/* <Form.Check
-                  value="Nallah"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group72"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="Nallah"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group72"
-                  inline
-                ></Form.Check> */}
+
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow7} />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow7} />
@@ -2254,10 +1741,7 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                <label for="No">No</label> */}
+
                 {showhide7 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
@@ -2269,27 +1753,9 @@ const Developerinfo = (props) => {
               </div>
               <div className="col col-3">
                 <h6 onChange={(e) => setRoad(e.target.value)} value={road}>
-                  <b>(f)Any revenue rasta/road:(Yes/No)</b>
+                  (f)Any revenue rasta/road:(Yes/No)
                 </h6>{" "}
-                {/* <Form.Check
-                  value="revenue"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group73"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="revenue"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group73"
-                  inline
-                ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow8} />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow8} />
@@ -2308,10 +1774,6 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                <label for="No">No</label> */}
                 {showhide8 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
@@ -2323,27 +1785,9 @@ const Developerinfo = (props) => {
               </div>
               <div className="col col-3">
                 <h6 onChange={(e) => setLand(e.target.value)} value={land}>
-                  <b>(g)Any marginal land:(Yes/No)</b>
+                  (g)Any marginal land:(Yes/No)
                 </h6>{" "}
-                {/* <Form.Check
-                  value="marginal"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group74"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="marginal"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group74"
-                  inline
-                ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow9} />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow9} />
@@ -2362,10 +1806,6 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                <label for="No">No</label> */}
                 {showhide9 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
@@ -2382,30 +1822,10 @@ const Developerinfo = (props) => {
                   title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)
 "
                 >
-                  <b>
-                    (h)&nbsp;Utility Line &nbsp;
-                    {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  </b>
+                  (h)&nbsp;Utility Line &nbsp;
                 </h6>
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
+
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow0} />
@@ -2424,10 +1844,7 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                <label for="No">No</label> */}
+
                 {showhide0 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
@@ -2440,24 +1857,7 @@ const Developerinfo = (props) => {
             </div>
             <hr />
             <h5 className="text-black">
-              <b>5. Enclose the following documents as Annexures</b>&nbsp;&nbsp;
-              {/* <Form.Check
-                value="utility"
-                type="radio"
-                id="default-radio"
-                label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                name="group76"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                value="utility"
-                type="radio"
-                id="default-radio"
-                label={<CancelIcon color="error" />}
-                name="group76"
-                inline
-              ></Form.Check> */}
+              5. Enclose the following documents as Annexures&nbsp;&nbsp;
               <div style={{ display: "flex" }}>
                 <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                 <ReportProblemIcon
@@ -2477,30 +1877,9 @@ const Developerinfo = (props) => {
             </h5>
             <div className="row">
               <div className="col col-3">
-                <h6>
-                  <b>Land schedule</b>
-                </h6>
+                <h6>Land schedule</h6>
                 &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2516,34 +1895,11 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" disabled />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
               <div className="col col-3">
-                <h6>
-                  <b>Copy of Mutation</b>
-                </h6>
+                <h6>Copy of Mutation</h6>
                 &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2559,34 +1915,11 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" disabled />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
               <div className="col col-3">
-                <h6>
-                  <b>Copy of Jamabandi</b>
-                </h6>
+                <h6>Copy of Jamabandi</h6>
                 &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2602,34 +1935,11 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" disabled />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
               <div className="col col-3">
-                <h6>
-                  <b>Details of lease / patta, if any</b>
-                </h6>
+                <h6>Details of lease / patta, if any</h6>
                 &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2645,39 +1955,17 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" disabled />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
             </div>
             <br></br>
             <div className="row">
               <div className="col col-3">
                 &nbsp;&nbsp;
-                <h6>
-                  <b>Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration </b>
-                </h6>
+                <h6>Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration</h6>
                 &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+
                   <ReportProblemIcon
                     style={{
                       color:
@@ -2694,34 +1982,11 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" disabled />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
               <div className="col col-3">
-                <h6>
-                  <b>Proposed Layout of Plan /site plan for area applied for migration.</b>
-                </h6>
+                <h6>Proposed Layout of Plan /site plan for area applied for migration.</h6>
                 &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2737,34 +2002,11 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" disabled />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
               <div className="col col-3">
-                <h6>
-                  <b>Revised Land Schedule</b>
-                </h6>
+                <h6>Revised Land Schedule</h6>
                 &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
                 <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                  <input type="file" className="form-control" disabled />
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2780,18 +2022,13 @@ const Developerinfo = (props) => {
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" disabled />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
             </div>
             <br></br>
-            <div style={{ position: "relative", marginBottom: 40 }}>
+            {/* <div style={{ position: "relative", marginBottom: 40 }}>
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
-            </div>
+            </div> */}
           </Form.Group>
-
-          {/* <hr></hr> */}
-          {/* </Card> */}
         </div>
       </Collapse>
     </Form>

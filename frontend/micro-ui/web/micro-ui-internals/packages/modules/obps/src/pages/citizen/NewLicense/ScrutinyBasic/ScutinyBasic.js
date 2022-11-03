@@ -5,7 +5,7 @@ import Developerinfo from "./Developerinfo";
 import AppliedLandinfo from "./AppliedLand";
 import Feeandcharges from "./Feeandcharges";
 // import JeLandinfo from "./Scrutiny LOI/JE/JE";
-import DisApprovalList from "./DisApprovalList";
+// import DisApprovalList from "./DisApprovalList";
 // import HistoryList from "./History";
 import ScrutinyDevelopment from "./ScrutinyDevelopment/ScrutinyDevelopment";
 import { Button, Row, Col } from "react-bootstrap";
@@ -263,7 +263,6 @@ const ScrutitnyForms = () => {
               personalInfoRef={personalInfoRef}
               passUncheckedList={getUncheckedPersonalinfos}
               passCheckedList={getCheckedPersonalInfoValue}
-              // heightPersonal={defaultHeightPersonal}
               onClick={() => setOpen(!open)}
               ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantInfo : null}
               showTable={curentDataPersonal}
@@ -274,7 +273,6 @@ const ScrutitnyForms = () => {
               generalInfoRef={generalInfoRef}
               passUncheckedList={getUncheckedGeneralinfos}
               passCheckedList={getCheckedGeneralInfoValue}
-              // heightGen={defaultHeightGen}
               onClick={() => setOpen(!open)}
               ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantPurpose : null}
             ></Genarelinfo>
@@ -285,10 +283,8 @@ const ScrutitnyForms = () => {
             <Developerinfo
               developerInfoRef={developerInfoRef}
               passUncheckedList={getUncheckedPurposeinfos}
-              // heightDevelper={defaultheightDevelper}
               passCheckedList={getCheckedPurposeInfoValue}
               onClick={() => setOpen(!open)}
-              // ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].LandSchedule : null}
             ></Developerinfo>
             {/* </Col> */}
           </div>
@@ -324,21 +320,21 @@ const ScrutitnyForms = () => {
           {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}
         </div>
       </div>
-      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+      {/* <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
         <DisApprovalList
-          // disapprovallistDeveloper={displayPurpose}
-          // disapprovallistGeneral={displayGeneral}
-          // disapprovallistAppliedLand={displayAppliedLand}
-          // disapprovalCheckedAppliedLand={displayAppliedLandCheckedList}
-          // disapprovallistPersonal={displayPersonal}
-          // disapprovalCheckedPersonal={displayPersonalCHeckedList}
-          // disapprovalCheckedGeneral={displayGeneralCHeckedList}
-          // disapprovalCheckedPurpose={displayPurposeCHeckedList}
-          // DisApprovalListFeeandCharges={displayFeeandCharges}
+          disapprovallistDeveloper={displayPurpose}
+          disapprovallistGeneral={displayGeneral}
+          disapprovallistAppliedLand={displayAppliedLand}
+          disapprovalCheckedAppliedLand={displayAppliedLandCheckedList}
+          disapprovallistPersonal={displayPersonal}
+          disapprovalCheckedPersonal={displayPersonalCHeckedList}
+          disapprovalCheckedGeneral={displayGeneralCHeckedList}
+          disapprovalCheckedPurpose={displayPurposeCHeckedList}
+          DisApprovalListFeeandCharges={displayFeeandCharges}
           dataList={disapprovalData}
         ></DisApprovalList>
-        {/* <HistoryList></HistoryList> */}
-      </div>
+        <HistoryList></HistoryList>
+      </div> */}
       <div style={{ position: "relative", width: "100%", height: "50%", display: "flex" }}>
         <ScrutinyDevelopment remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}></ScrutinyDevelopment>
       </div>

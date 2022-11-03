@@ -101,6 +101,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data }) => {
   const { pathname: url } = useLocation();
@@ -422,8 +423,26 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
       {/* // <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
         //     <Timeline currentStep={4} flow="STAKEHOLDER" /> */}
 
-      <div className="collapse-header" onClick={() => setOpen(!open)} aria-controls="example-collapse-text" aria-expanded={open}>
-        <span className="">DeveloperCapacity</span>
+      <div
+        className="collapse-header"
+        onClick={() => setOpen(!open)}
+        aria-controls="example-collapse-text"
+        aria-expanded={open}
+        style={{
+          background: "#f1f1f1",
+          padding: "0.25rem 1.25rem",
+          borderRadius: "0.25rem",
+          fontWeight: "600",
+          display: "flex",
+          cursor: "pointer",
+          color: "#817f7f",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <span style={{ color: "#817f7f" }} className="">
+          DeveloperCapacity
+        </span>
         {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
 
