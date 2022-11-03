@@ -13,6 +13,7 @@ import {
   HelpIcon,
   WhatsNewCard,
   OBPSIcon,
+  WSICon,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
@@ -87,7 +88,7 @@ const Home = () => {
       // },
       {
         name: t(citizenServicesObj?.props?.[3]?.label),
-        Icon: <OBPSIcon />,
+        Icon: <WSICon />,
         onClick: () => history.push(citizenServicesObj?.props?.[3]?.navigationUrl),
       },
     ],

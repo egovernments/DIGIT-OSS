@@ -25,7 +25,8 @@ import TLDocument from "./pageComponents/TLDocumets";
 import TLAcknowledgement from "./pages/citizen/Create/TLAcknowledgement";
 import MyApplications from "./pages/citizen/Applications/Application";
 import TradeLicenseList  from "./pages/citizen/Renewal/TradeLicenseList";
-import TLWFApplicationTimeline from "./pageComponents/TLWFApplicationTimeline";
+import TLWFApplicationTimeline from "./pageComponents/TLWFApplicationTimeline";  
+import SelectOtherTradeDetails from "./pageComponents/SelectOtherTradeDetails";
 
 import TLOwnerDetailsEmployee from "./pageComponents/TLOwnerDetailsEmployee";
 import TLTradeDetailsEmployee from "./pageComponents/TLTradeDetailsEmployee";
@@ -140,6 +141,7 @@ const componentsToRegister = {
   TLReNewApplication : ReNewApplication,
   TLSearch : Search,
   TLResponse : Response,
+  SelectOtherTradeDetails,
 };
 
 export const initTLComponents = () => {

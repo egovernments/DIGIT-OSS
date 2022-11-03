@@ -125,6 +125,9 @@ const getTradeEditDetails = (data,t) => {
       i18nKey: `${data.tradeLicenseDetail?.structureType.includes("IMMOVABLE") ? "TL_COMMON_YES" : "TL_COMMON_NO"}`,
     },
     TradeName: data?.tradeName,
+    TradeGSTNumber: data?.tradeLicenseDetail?.additionalDetail?.tradeGstNo || data?.tradeLicenseDetail?.additionalDetail?.gstNo || "",
+    OperationalSqFtArea : data?.tradeLicenseDetail?.operationalArea || "",
+    NumberOfEmployees : data?.tradeLicenseDetail?.noOfEmployees || "", 
     accessories: gettradeaccessories(data?.tradeLicenseDetail?.accessories,t),
     isAccessories:
       gettradeaccessories(data?.tradeLicenseDetail?.accessories,t).length > 0
@@ -158,9 +161,10 @@ const getTradeEditDetails = (data,t) => {
   };
   data.ownershipCategory = {
     code: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`,
-    i18nKey: `PT_OWNERSHIP_${data?.tradeLicenseDetail?.subOwnerShipCategory.split(".")[1]}`,
-    value: `${data?.tradeLicenseDetail?.subOwnerShipCategory}`,
-    isSameAsPropertyOwner: data?.tradeLicenseDetail?.additionalDetail?.isSameAsPropertyOwner
+    i18nKey: `PT_OWNERSHIP_${data?.tradeLicenseDetail?.subOwnerShipCategory?.includes("INSTITUTIONAL") ? (data?.tradeLicenseDetail?.subOwnerShipCategory?.includes("GOVERNMENT") ?"OTHERGOVERNMENTINSTITUITION":"OTHERSPRIVATEINSTITUITION"):data?.tradeLicenseDetail?.subOwnerShipCategory?.split(".")[1]}`,
+    value: `${data?.tradeLicenseDetail?.subOwnerShipCategory}${data?.tradeLicenseDetail?.subOwnerShipCategory?.includes("INSTITUTIONAL") ? (data?.tradeLicenseDetail?.subOwnerShipCategory?.includes("GOVERNMENT") ?".OTHERGOVERNMENTINSTITUITION":".OTHERSPRIVATEINSTITUITION"):""}`,
+    isSameAsPropertyOwner: data?.tradeLicenseDetail?.additionalDetail?.isSameAsPropertyOwner === "null" ? null : data?.tradeLicenseDetail?.additionalDetail?.isSameAsPropertyOwner,
+
   };
   return data;
 };
@@ -252,7 +256,7 @@ const EditTrade = ({ parentRoute }) => {
     {
       nextStep = "map";
     }
-    if(nextStep === "street" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
+    if(nextStep === "landmark" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
     {
       nextStep = "owner-ship-details";
     }

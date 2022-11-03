@@ -169,17 +169,18 @@ function SelectDocument({
         }
 
         const filteredDocumentsByFileStoreId = filteredDocumentsByDocumentType?.filter((item) => item?.fileStoreId !== uploadedFile);
-        return [
+        const data = [
           ...filteredDocumentsByFileStoreId,
           {
             documentType: selectedDocument?.code,
             fileStoreId: uploadedFile,
-            // documentUid: doc?.documentUid ? doc?.documentUid : uploadedFile,
             i18nKey: selectedDocument?.code,
-            id: doc?.id,
+            id: selectedDocument?.id,
             status: "ACTIVE"
           },
         ];
+        sessionStorage.setItem("DISCONNECTION_EDIT_DOCS", JSON.stringify(data));
+        return data;
       });
     }
     if (!isHidden) {

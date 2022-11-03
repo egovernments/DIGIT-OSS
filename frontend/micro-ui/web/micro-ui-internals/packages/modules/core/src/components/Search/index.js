@@ -5,13 +5,14 @@ import { Link } from "react-router-dom";
 import MobileSearchApplication from "./MobileSearchApplication";
 import SearchFields from "./SearchFields";
 
-const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
+const SearchApplication = ({showLoader,isLoading, tenantId, t, onSubmit, data, count }) => {
 
   const initialValues = Digit.SessionStorage.get("AUDIT_APPLICATION_DETAIL") || {
     offset: 0,
-    limit: 5,
-    sortOrder: "DESC",
+    limit:10,
+    sortOrder: "ASC"
   };
+
   const { register, control, handleSubmit, setValue, getValues, reset } = useForm({
     defaultValues: initialValues,
   });
@@ -55,8 +56,8 @@ const SearchApplication = ({ tenantId, t, onSubmit, data, count }) => {
   }; 
   useEffect(() => {
     register("offset", 0);
-    register("limit", 5);
-    register("sortOrder", "DESC");
+    register("limit", 10);
+    //register("sortOrder", "DESC");
 }, [register]);
 useEffect(() => {
   if ( data?.length >0){
@@ -64,11 +65,11 @@ useEffect(() => {
 
       data?.map((obj)=> {
         let returnObject={};
-        returnObject[ t("AUDIT_DATE_LABEL")]=convertEpochToDate(obj?.timestamp);
-        returnObject[t("AUDIT_TIME_LABEL")]=convertEpochToTimeInHours(obj?.timestamp);
-        returnObject[t("AUDIT_DATAVIEWED_LABEL")]=obj?.dataView[0]+','+obj?.dataView[1];
+        returnObject[ t("AUDIT_DATE_LABEL")]=convertEpochToDate(obj?.timestamp)|| "-";
+        returnObject[t("AUDIT_TIME_LABEL")]=convertEpochToTimeInHours(obj?.timestamp)|| "-";
+        returnObject[t("AUDIT_DATAVIEWED_LABEL")]=obj?.dataView?.join(", ")|| "-";
         returnObject[t("AUDIT_DATAVIEWED_BY_LABEL")]=obj?.dataViewedBy;
-        returnObject[t("AUDIT_ROLE_LABEL")]=obj?.roles.map(obj=>obj.name).join(",");
+        returnObject[t("AUDIT_ROLE_LABEL")]=obj?.roles?.map(obj=>obj.name).join(", ")|| "-";
         return {
           ...returnObject,
         }
@@ -98,7 +99,7 @@ function previousPage() {
 const isMobile = window.Digit.Utils.browser.isMobile();
 
 if (isMobile) {
-  return <MobileSearchApplication {...{ Controller, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit }} />;
+  return <MobileSearchApplication {...{ Controller,isLoading,showLoader, register, control, t, reset, previousPage, handleSubmit, tenantId, data, onSubmit }} />;
 }
 
 //need to get from workflow
@@ -110,7 +111,7 @@ const columns = useMemo(
         disableSortBy: true,
         accessor:( row ) => {
           const timestamp = row.timestamp === "NA" ? t("WS_NA") : convertEpochToDate(row.timestamp);
-          return GetCell(`${timestamp}`);
+          return GetCell(`${timestamp || "-"}`);
         },
       },
       {
@@ -118,28 +119,28 @@ const columns = useMemo(
         disableSortBy: true,
         accessor:(row) => {
           const timestamp = row.timestamp === "NA" ? t("WS_NA") : convertEpochToTimeInHours(row.timestamp);
-          return GetCell(`${timestamp}`);
+          return GetCell(`${timestamp || "-"}`);
         }, 
       },
       {
         Header:isMobile? t("AUDIT_DATAVIEWED_LABEL"):t("AUDIT_DATAVIEWED_PRIVACY"),
         disableSortBy: true,
         accessor: (row) => {
-          return GetCell(`${row?.dataView}`);
+          return GetCell(`${row?.dataView?.join(", ") || "-"}`);
         },   
       },
       {
         Header:isMobile? t("AUDIT_DATAVIEWED_BY_LABEL"):t("AUDIT_DATAVIEWED_BY_PRIVACY"),
         disableSortBy: true,
         accessor:(row) => {
-          return GetCell(`${row?.dataViewedBy}`);
+          return GetCell(`${row?.dataViewedBy || "-"}`);
         },   
       },
       {
         Header:t("AUDIT_ROLE_LABEL"),
         disableSortBy: true,
         accessor: ( row ) => {
-          return GetCell(`${row?.roles.slice(0,3)?.map((e)=>e.name)}`);
+          return GetCell(`${row?.roles?.slice(0,3)?.map((e)=>e.name)?.join(", ") || "-"}`);
         },   
       }
     ],
@@ -153,26 +154,26 @@ const columns = useMemo(
       <SearchForm className="audit-card" onSubmit={onSubmit} handleSubmit={handleSubmit}>
         <SearchFields {...{ register, control, reset, tenantId, t, previousPage }} />
       </SearchForm>
-      <div style={{marginTop:"240px",marginLeft:"-55%",maxWidth:"80%",marginRight:"52px"}} >
+      <div style={{marginTop:"240px",marginLeft:"-55%",width:"80%"}} >
       {data?.display ? (
-        <div style={{ marginTop: "20x",width:"1025px", marginLeft:"25px" ,backgroundColor: "white",height:"60px" }}>
+        <div style={{ marginTop: "20x",maxWidth:"680%", marginLeft:"60px" ,backgroundColor: "white",height:"60px" }}>
           {t(data.display)
             .split("\\n")
             .map((text, index) => (
-              <p key={index} style={{ textAlign: "center" }}>
+              <p key={index} style={{ textAlign: "center", paddingTop:"12px" }}>
                 {text}
               </p>
             ))}
         </div>
       ) : (
         data !== "" ? (
-        <div style={{ backgroundColor: "white", marginRight:"-30px", marginLeft:"30px" }}>  
+        <div style={{ backgroundColor: "white", marginRight:"200px", marginLeft:"2.5%", width:"100%" }}>  
         <div className="sideContent" style={{ float:"right", padding:"10px 30px"}}>
                   <DownloadBtn className="mrlg cursorPointer"  onClick={() => handleExcelDownload(tabledata)}/>
               </div>
         <Table
             t={t}
-            data={data}
+            data={data.sort((a,b) => a.timestamp - b.timestamp)}
             totalRecords={count}
             columns={columns}
             getCellProps={(cellInfo) => {
@@ -188,7 +189,6 @@ const columns = useMemo(
               currentPage={getValues("offset") / getValues("limit")}
               onNextPage={nextPage}
               onPrevPage={previousPage}
-              manualPagination={false}
               pageSizeLimit={getValues("limit")}
               onSort={onSort}
               disableSort={false}

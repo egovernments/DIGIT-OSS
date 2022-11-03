@@ -165,4 +165,13 @@ export const FSMService = {
       params: { tenantId },
       auth: true,
     }),
+  advanceBalanceCalculate: (tenantId, details) =>
+    Request({
+      url: Urls.fsm.advanceBalanceCalculate,
+      useCache: false,
+      userService: true,
+      method: "POST",
+      params: { tenantId, ...details },
+      auth: true,
+    }),
 };

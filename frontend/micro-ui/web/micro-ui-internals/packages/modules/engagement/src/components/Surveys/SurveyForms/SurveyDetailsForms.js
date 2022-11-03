@@ -32,7 +32,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
   return (
     <div className="surveydetailsform-wrapper">
       <span className="surveyformfield">
-        <label>{`${t("LABEL_FOR_ULB")} * :`}</label>
+        <label>{`${t("LABEL_FOR_ULB")} * `}</label>
         <Controller
           name="tenantIds"
           control={controlSurveyForm}
@@ -92,7 +92,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
       </span>
 
       <span className="surveyformfield">
-        <label>{`${t("CS_SURVEY_NAME")} * :`}</label>
+        <label>{`${t("CS_SURVEY_NAME")} * `}</label>
         <TextInput
           name="title"
           type="text"
@@ -112,7 +112,7 @@ const SurveyDetailsForms = ({ t, registerRef, controlSurveyForm, surveyFormState
         {surveyFormState?.errors?.title && <CardLabelError>{surveyFormState?.errors?.["title"]?.message}</CardLabelError>}
       </span>
       <span className="surveyformfield">
-        <label>{`${t("CS_SURVEY_DESCRIPTION")} :`}</label>
+        <label>{`${t("CS_SURVEY_DESCRIPTION")} `}</label>
         <TextInput
           name="description"
           type="text"

@@ -210,7 +210,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                   <TextInput
                     t={t}
                     type={"text"}
-                    isMandatory={true}
+                    isMandatory={false}
                     name="institutionName"
                     value={field.institutionName}
                     ValidationRequired={true}

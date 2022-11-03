@@ -208,7 +208,7 @@ const ConnectionDetails = (_props) => {
         <div >
             <div style={{ marginBottom: "16px" }}>
                 <div>
-                    { !window.location.href.includes("by-config") ?
+                    { !window.location.href.includes("by-config") && !window.location.href.includes("ws/modify-application") ?
                         <LabelFieldPair>
                             <CardLabel style={{ marginTop: "-5px", fontWeight: "700" }} className="card-label-smaller">{`${t("WS_ACK_COMMON_APP_NO_LABEL")}*`}</CardLabel>
                             <div className="field">

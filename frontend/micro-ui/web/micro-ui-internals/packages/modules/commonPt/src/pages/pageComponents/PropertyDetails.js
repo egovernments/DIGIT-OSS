@@ -80,9 +80,17 @@ const PropertyDetails = ({ t, config, onSelect, userType, formData }) => {
               <Row className="border-none" label={t(`OWNER_NAME`)} text={propertyDetails?.Properties[0]?.owners[0]?.name} />
               <Row className="border-none" textStyle={{ wordBreak: "break-word" }} label={t(`PROPERTY_ADDRESS`)} text={propAddArr.join(', ')} 
               privacy={ {
-                uuid: propertyDetails?.Properties[0]?.propertyId,
+                uuid: propertyDetails?.Properties?.[0]?.owners?.[0]?.uuid,
                 fieldName: ["doorNo" , "street" , "landmark"], 
-                model: "Property"
+                model: "Property",
+                showValue: true,
+                loadData: {
+                  serviceName: "/property-services/property/_search",
+                  requestBody: {},
+                  requestParam: { tenantId:propertyDetails?.Properties[0]?.tenantId, propertyIds:propertyDetails?.Properties[0]?.propertyId },
+                  jsonPath: "Properties[0].address.street",
+                  isArray: false,
+                },
               }}/>
               <Row className="border-none" label={t(`PT_MUTATION_STATUS`)} text={t(propertyDetails?.Properties[0]?.status)} />
               <div style={{ textAlign: "left" }}>

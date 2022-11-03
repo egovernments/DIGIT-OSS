@@ -18,6 +18,7 @@ import {
   BirthIcon,
   DeathIcon,
   FirenocIcon,
+  LoginIcon
 } from "@egovernments/digit-ui-react-components";
 import { Link, useLocation } from "react-router-dom";
 import SideBarMenu from "../../../config/sidebar-menu";
@@ -90,6 +91,7 @@ const IconsObject = {
   EditPencilIcon: <EditPencilIcon className="icon" />,
   LogoutIcon: <LogoutIcon className="icon" />,
   Phone: <Phone className="icon" />,
+  LoginIcon: <LoginIcon className="icon" />,
 };
 const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
   const { t } = useTranslation();
@@ -117,7 +119,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
     setShowDialog(false);
   };
 
-  if (islinkDataLoading) {
+  if (islinkDataLoading || !isFetched) {
     return <Loader />;
   }
 
@@ -129,12 +131,13 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
   const showProfilePage = () => {
     history.push("/digit-ui/citizen/user/profile");
   };
+  const tenantId = Digit.ULBService.getCitizenCurrentTenant();
+  const filteredTenantContact = storeData?.tenants.filter((e) => e.code === tenantId)[0]?.contactNumber || storeData?.tenants[0]?.contactNumber;
 
-  let menuItems = [...SideBarMenu(t, showProfilePage, redirectToLoginPage, isEmployee)];
+  let menuItems = [...SideBarMenu(t, showProfilePage, redirectToLoginPage, isEmployee, storeData, tenantId)];
 
   menuItems = menuItems.filter((item) => item.element !== "LANGUAGE");
 
-  const tenantId = Digit.ULBService.getCurrentTenantId();
   const MenuItem = ({ item }) => {
     const leftIconArray = item?.icon || item.icon?.type?.name;
     const leftIcon = leftIconArray ? IconsObject[leftIconArray] : IconsObject.BillsIcon;
@@ -171,7 +174,7 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
 
   if (isFetched && user && user.access_token) {
     profileItem = <Profile info={user?.info} stateName={stateInfo?.name} t={t} />;
-    menuItems = menuItems.filter((item) => item?.id !== "login-btn");
+    menuItems = menuItems.filter((item) => item?.id !== "login-btn" && item?.id !== "help-line");
     menuItems = [
       ...menuItems,
       {
@@ -193,19 +196,8 @@ const StaticCitizenSideBar = ({ linkData, islinkDataLoading }) => {
           <React.Fragment>
             {t("CS_COMMON_HELPLINE")}
             <div className="telephone" style={{ marginTop: "-10%" }}>
-              {storeData?.tenants.map((i) => {
-                i.code === tenantId ? (
-                  <div className="link">
-                    <a href={`tel:${storeData?.tenants[i].contactNumber}`}>{storeData?.tenants[i].contactNumber}</a>
-                  </div>
-                ) : (
-                  <div className="link">
-                    <a href={`tel:${storeData?.tenants[0].contactNumber}`}>{storeData?.tenants[0].contactNumber}</a>
-                  </div>
-                );
-              })}
               <div className="link">
-                <a href={`tel:${storeData?.tenants[0].contactNumber}`}>{storeData?.tenants[0].contactNumber}</a>
+                <a href={`tel:${filteredTenantContact}`}>{filteredTenantContact}</a>
               </div>
             </div>
           </React.Fragment>

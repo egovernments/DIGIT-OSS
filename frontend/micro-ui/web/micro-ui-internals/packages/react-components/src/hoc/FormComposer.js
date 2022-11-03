@@ -42,10 +42,11 @@ export const FormComposer = (props) => {
   const formData = watch();
 
   useEffect(() => {
-    if (props?.appData && Object.keys(props?.appData)?.length > 0 && !_.isEqual(props?.appData, formData)) {
+    const iseyeIconClicked = sessionStorage.getItem("eyeIconClicked");
+    if (props?.appData && !(props?.appData?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails) && iseyeIconClicked && Object.keys(props?.appData)?.length > 0 && (!(_.isEqual(props?.appData?.ConnectionHolderDetails?.[0],formData?.ConnectionHolderDetails?.[0] ))) ) {
       reset({ ...props?.appData });
     }
-  }, [props?.appData]);
+  }, [props?.appData, formData, props?.appData?.ConnectionHolderDetails]);
 
   useEffect(() => {
     props.getFormAccessors && props.getFormAccessors({ setValue, getValues });

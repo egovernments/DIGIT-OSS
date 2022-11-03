@@ -142,3 +142,8 @@
   @apply flex items-center justify-end;
   min-width: 85px;
 }
+video::-webkit-media-controls-panel {
+  top: 55%;
+  position: absolute;
+  width: 100%;
+}

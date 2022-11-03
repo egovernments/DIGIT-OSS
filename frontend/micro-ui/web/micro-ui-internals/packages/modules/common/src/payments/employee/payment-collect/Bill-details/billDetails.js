@@ -131,15 +131,35 @@ export const BillDetailsFormConfig = (props, t) => ({
       ],
     },
   ],
+  FSM: [
+    {
+      head: t("ES_TITLE_PAYMENT_DETAILS"),
+      body: [
+        {
+          withoutLabel: true,
+          type: "custom",
+          populators: {
+            name: "amount",
+            customProps: { businessService: props.businessService, consumerCode: props.consumerCode },
+            component: (props, customProps) => <BillDetails onChange={props.onChange} amount={props.value} {...customProps} />,
+          },
+        },
+      ],
+    },
+  ],
 });
 
 const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
   const { t } = useTranslation();
-  const { workflow: ModuleWorkflow } = Digit.Hooks.useQueryParams();
-
+  const { workflow: ModuleWorkflow, IsDisconnectionFlow } = Digit.Hooks.useQueryParams();
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const { data, isLoading } = Digit.Hooks.useFetchPayment({ tenantId, businessService, consumerCode });
 
+  const { isLoading: isDataLoading, data: applicationData } = Digit.Hooks.fsm.useSearch(
+    tenantId,
+    { applicationNos: consumerCode },
+    { staleTime: Infinity }
+  );
   const [bill, setBill] = useState();
   const [showDetails, setShowDetails] = useState(true);
 
@@ -147,6 +167,7 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
   const billDetails = yearWiseBills?.[0] || [];
   // const currentYear = new Date().getFullYear();
   const getTotal = () => (bill?.totalAmount ? bill?.totalAmount : 0);
+  const getAdvanceAmount = () => (applicationData?.advanceAmount ? applicationData?.advanceAmount : 0);
 
   const arrears =
     bill?.billDetails
@@ -158,8 +179,14 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
 
   useEffect(() => {
     const payRestrictiondetails = mdmsBillingData?.MdmsRes?.BillingService?.BusinessService;
-    if (payRestrictiondetails?.length) setPaymentRules(payRestrictiondetails.filter((e) => e.code == businessService)[0]);
-    else
+    if (payRestrictiondetails?.length) {
+      if (IsDisconnectionFlow) {
+        setPaymentRules({
+          ...payRestrictiondetails.filter((e) => e.code == businessService)[0],
+          partPaymentAllowed: false,
+        });
+      } else setPaymentRules(payRestrictiondetails.filter((e) => e.code == businessService)[0]);
+    } else
       setPaymentRules({
         // isAdvanceAllowed: false,
         // isVoucherCreationEnabled: true,
@@ -190,11 +217,11 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
 
   useEffect(() => {
     let allowPayment = minAmountPayable && amount >= minAmountPayable && amount <= getTotal() && !formError;
-    
-    if((businessService==="WS"|| businessService==="SW") && amount>getTotal() && isAdvanceAllowed){
+
+    if ((businessService === "WS" || businessService === "SW") && amount > getTotal() && isAdvanceAllowed) {
       allowPayment = minAmountPayable && amount >= minAmountPayable && !formError;
     }
-    
+
     if (paymentType != t("CS_PAYMENT_FULL_AMOUNT")) setPaymentAllowed(allowPayment);
     else setPaymentAllowed(true);
   }, [paymentType, amount]);
@@ -252,6 +279,8 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
   const tdStyle = { textAlign: "left", borderBottom: "#D6D5D4 1px solid", padding: "8px 10px", breakWord: "no-break" };
 
   const config = BillDetailsKeyNoteConfig()[ModuleWorkflow ? ModuleWorkflow : businessService];
+  const checkFSM = window.location.href.includes("FSM");
+  const getAdvanceAmountLabel = applicationData?.paymentPreference === "PRE_PAY" && applicationData?.applicationStatus !== "DSO_INPROGRESS";
 
   const renderArrearDetailsForWNS = () => {
     return (
@@ -295,10 +324,12 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
       </table>
     );
   };
+
   return (
     <React.Fragment>
       <StatusTable>
-        {bill &&
+        {!checkFSM &&
+          bill &&
           config.details.map((obj, index) => {
             const value = obj.keyPath.reduce((acc, key) => {
               if (typeof key === "function") acc = key(acc);
@@ -308,56 +339,69 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
             return <Row key={index + "bill"} label={t(obj.keyValue)} text={value} />;
           })}
       </StatusTable>
-      <StatusTable style={{ paddingTop: "46px" }}>
-        <Row label={t("ES_PAYMENT_TAXHEADS")} textStyle={{ fontWeight: "bold" }} text={t("ES_PAYMENT_AMOUNT")} />
-        <hr style={{ width: "40%" }} className="underline" />
-        {billDetails?.billAccountDetails
-          ?.sort((a, b) => a.order - b.order)
-          .map((amountDetails, index) => (
+      {checkFSM ? (
+        <StatusTable>
+          <Row label={t("ADV_TOTAL_AMOUNT")} textStyle={{ textAlign: "right", maxWidth: "100px" }} text={"₹ " + Number(getTotal()).toFixed(2)} />
+          {getAdvanceAmountLabel ? (
             <Row
-              key={index + "taxheads"}
+              label={t("ADV_COLLECTION")}
+              textStyle={{ fontWeight: "bold", textAlign: "right", maxWidth: "100px" }}
+              text={"₹ " + Number(getAdvanceAmount()).toFixed(2)}
+            />
+          ) : null}
+        </StatusTable>
+      ) : (
+        <StatusTable style={{ paddingTop: "46px" }}>
+          <Row label={t("ES_PAYMENT_TAXHEADS")} textStyle={{ fontWeight: "bold" }} text={t("ES_PAYMENT_AMOUNT")} />
+          <hr style={{ width: "40%" }} className="underline" />
+          {billDetails?.billAccountDetails
+            ?.sort((a, b) => a.order - b.order)
+            .map((amountDetails, index) => (
+              <Row
+                key={index + "taxheads"}
+                labelStyle={{ fontWeight: "normal" }}
+                textStyle={{ textAlign: "right", maxWidth: "100px" }}
+                label={t(amountDetails.taxHeadCode)}
+                text={"₹ " + amountDetails.amount?.toFixed(2)}
+              />
+            ))}
+
+          {arrears?.toFixed?.(2) ? (
+            <Row
               labelStyle={{ fontWeight: "normal" }}
               textStyle={{ textAlign: "right", maxWidth: "100px" }}
-              label={t(amountDetails.taxHeadCode)}
-              text={"₹ " + amountDetails.amount?.toFixed(2)}
+              label={t("COMMON_ARREARS")}
+              text={"₹ " + arrears?.toFixed?.(2) || Number(0).toFixed(2)}
             />
-          ))}
+          ) : null}
 
-        {arrears?.toFixed?.(2) ? (
+          <hr style={{ width: "40%" }} className="underline" />
           <Row
-            labelStyle={{ fontWeight: "normal" }}
-            textStyle={{ textAlign: "right", maxWidth: "100px" }}
-            label={t("COMMON_ARREARS")}
-            text={"₹ " + arrears?.toFixed?.(2) || Number(0).toFixed(2)}
+            label={t("CS_PAYMENT_TOTAL_AMOUNT")}
+            textStyle={{ fontWeight: "bold", textAlign: "right", maxWidth: "100px" }}
+            text={"₹ " + Number(getTotal()).toFixed(2)}
           />
-        ) : null}
 
-        <hr style={{ width: "40%" }} className="underline" />
-        <Row
-          label={t("CS_PAYMENT_TOTAL_AMOUNT")}
-          textStyle={{ fontWeight: "bold", textAlign: "right", maxWidth: "100px" }}
-          text={"₹ " + Number(getTotal()).toFixed(2)}
-        />
-
-        {!showDetails && !ModuleWorkflow && businessService !== "TL" && yearWiseBills?.length > 1 && (
-          <Fragment>
-            {businessService === "WS" || "SW" ? (
-              <div className="row last">
-                <div style={{ maxWidth: "100px" }} onClick={() => setShowDetails(true)} className="filter-button value">
-                  {t("ES_COMMON_VIEW_DETAILS")}
+          {!showDetails && !ModuleWorkflow && businessService !== "TL" && yearWiseBills?.length > 1 && (
+            <Fragment>
+              {businessService === "WS" || "SW" ? (
+                <div className="row last">
+                  <div style={{ maxWidth: "100px" }} onClick={() => setShowDetails(true)} className="filter-button value">
+                    {t("ES_COMMON_VIEW_DETAILS")}
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="row last">
-                <h2></h2>
-                <div style={{ textAlign: "right", maxWidth: "100px" }} onClick={() => setShowDetails(true)} className="filter-button value">
-                  {t("ES_COMMON_VIEW_DETAILS")}
+              ) : (
+                <div className="row last">
+                  <h2></h2>
+                  <div style={{ textAlign: "right", maxWidth: "100px" }} onClick={() => setShowDetails(true)} className="filter-button value">
+                    {t("ES_COMMON_VIEW_DETAILS")}
+                  </div>
                 </div>
-              </div>
-            )}
-          </Fragment>
-        )}
-      </StatusTable>
+              )}
+            </Fragment>
+          )}
+        </StatusTable>
+      )}
       {showDetails && yearWiseBills?.length > 1 && !ModuleWorkflow && businessService !== "TL" && (
         <React.Fragment>
           <div style={{ maxWidth: "95%", display: "inline-block", textAlign: "right" }}>
@@ -419,7 +463,7 @@ const BillDetails = ({ businessService, consumerCode, _amount, onChange }) => {
           </div>
         </React.Fragment>
       )}
-      {paymentRules?.partPaymentAllowed && (
+      {!checkFSM && paymentRules?.partPaymentAllowed && (
         <div style={{ marginTop: "50px" }} className="bill-payment-amount">
           <CardSectionHeader>{t("CS_COMMON_PAYMENT_AMOUNT")}</CardSectionHeader>
           <RadioButtons

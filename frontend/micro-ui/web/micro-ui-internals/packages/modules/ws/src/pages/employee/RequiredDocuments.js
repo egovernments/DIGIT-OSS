@@ -5,7 +5,9 @@ import { useHistory, useLocation, useParams } from "react-router-dom"
 
 const RequiredDocuments = ({path}) => {
 	//connectionNumber=WS/107/2021-22/227166&tenantId=pb.amritsar&service=WATER&connectionType=Metered
-	const {search,state} = useLocation()
+	const {search} = useLocation()
+	let { state } = useLocation();
+  	state = state  ? (typeof(state) === "string" ? JSON.parse(state) : state) : {};
 	const history = useHistory()
 	const { t } = useTranslation()
 	const stateId = Digit.ULBService.getStateId();
@@ -15,7 +17,7 @@ const RequiredDocuments = ({path}) => {
 		tenantId: stateId
 	});
 	const redirectToBillAmdmentPage = () => {
-		history.push(`${path}/bill-amendment${search}`, { data: state?.data });
+		history.push(`${path}/bill-amendment${search}`, JSON.stringify({ data: state?.data }));
 	}
 	const handlePrint = () => Digit.Download.PDF(fullPageRef, t("ES_COMMON_WS_DOCUMENTS_REQUIRED"));
 

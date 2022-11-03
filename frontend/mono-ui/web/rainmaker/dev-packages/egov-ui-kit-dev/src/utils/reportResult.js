@@ -886,7 +886,9 @@ class ShowField extends Component {
               setRoute("/print/report/" + response.viewPath);
             }
           },
-          function (err) {}
+          function (err) {
+            console.log(err,"error");
+          }
         );
     }
   }
@@ -918,7 +920,12 @@ class ShowField extends Component {
           if(details == null || details == undefined || details == "") {
             reportDataArray.push("NA")
           } else {
-            reportDataArray.push(details)
+            if (typeof details == "string" && details.includes("_")) {
+              let localisedData = getLocaleLabels(details, details);
+              reportDataArray.push(localisedData);
+            } else {
+              reportDataArray.push(details)
+            }
           }
         })
         reportResultArray.push(reportDataArray);

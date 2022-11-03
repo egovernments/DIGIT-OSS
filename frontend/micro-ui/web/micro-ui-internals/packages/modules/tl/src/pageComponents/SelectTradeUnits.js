@@ -11,6 +11,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   const [TradeSubType, setTradeSubType] = useState(formData?.TadeDetails?.Units?.TradeSubType || "");
   const [UnitOfMeasure, setUnitOfMeasure] = useState(formData?.TadeDetails?.Units?.UnitOfMeasure || "");
   const [UomValue, setUomValue] = useState(formData?.TadeDetails?.Units?.UomValue || "");
+  const [error, setError] = useState(null);
   const [fields, setFeilds] = useState(
     (formData?.TradeDetails && formData?.TradeDetails?.units) || [{ tradecategory: "", tradetype: "", tradesubtype: "", unit: null, uom: null }]
   );
@@ -174,16 +175,32 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
   function selectUomValue(i, e) {
     let units = [...fields];
     units[i].uom = e.target.value;
-    setUomValue(e.target.value);
-    setFeilds(units);
-  }
+    setError(null);
+    
+    let selectedtradesubType = billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === units[i]?.tradesubtype?.code && ob?.structureType === formData?.TradeDetails?.BuildingType?.code )
+    if(Number.isInteger(selectedtradesubType?.[0]?.fromUom)){
+     if(!(e.target.value && parseInt(e.target.value) >= selectedtradesubType?.[0]?.fromUom)){
+     setError("TL_FILL_CORRECT_UOM_VALUE");
+     }
+    }
+    if(Number.isInteger(selectedtradesubType?.[0]?.toUom)){
+    if(!(e.target.value && parseInt(e.target.value) <= selectedtradesubType?.[0]?.toUom)){
+      setError("TL_FILL_CORRECT_UOM_VALUE");
+      }
+    }
+      setUomValue(e.target.value);
+      setFeilds(units);
+}
 
   const goNext = () => {
     let units = formData.TradeDetails.Units;
     let unitsdata;
-
+    
+    if(!error){
+    setError(null);
     unitsdata = { ...units, units: fields };
     onSelect(config.key, unitsdata);
+    }
   };
 
   const onSkip = () => onSelect();
@@ -198,6 +215,7 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
           onSelect={goNext}
           onSkip={onSkip}
           t={t}
+          forcedError={t(error)}
           isDisabled={!fields[0].tradecategory || !fields[0].tradetype || !fields[0].tradesubtype}
         >
           {fields.map((field, index) => {

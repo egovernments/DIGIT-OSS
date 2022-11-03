@@ -213,4 +213,19 @@ export const BillDetailsKeyNoteConfig = () => ({
       },
     ],
   },
+  FSM: {
+    heading: "COMMON_PAY_SCREEN_HEADER",
+    details: [
+      {
+        keyValue: "ADV_TOTAL_AMOUNT",
+        keyPath: ["totalAmount"],
+        fallback: "",
+      },
+      {
+        keyValue: "ADV_COLLECTION",
+        keyPath: ["totalAmountPaid"],
+        fallback: "N/A",
+      },
+    ],
+  },
 });

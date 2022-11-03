@@ -11,6 +11,7 @@ import {
   ActionBar,
   SubmitBar,
   MultiLink,
+  Toast
 } from "@egovernments/digit-ui-react-components";
 import { useParams, useHistory } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -32,6 +33,7 @@ const ApplicationDetails = () => {
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateCode = Digit.ULBService.getStateId();
   const [showToast, setShowToast] = useState(null);
+  const [showWaringToast, setShowWaringToast] = useState(null);
   const [canSubmit, setSubmitValve] = useState(false);
   const defaultValues = {};
   const history = useHistory();
@@ -58,9 +60,26 @@ const ApplicationDetails = () => {
   if (index > -1) commonPayInfo = commonPayDetails[index];
   else commonPayInfo = commonPayDetails && commonPayDetails.filter(item => item.code === "DEFAULT");
   const receiptKey = commonPayInfo?.receiptKey || "consolidatedreceipt";
+
+  const { isLoading: isPrivacyLoading, data : privacyData } = Digit.Hooks.useCustomMDMS(
+    Digit.ULBService.getStateId(),
+    "DataSecurity",
+    [{ name: "SecurityPolicy" }],
+    {
+      select: (data) => data?.DataSecurity?.SecurityPolicy?.find((elem) => elem?.model == "User") || {},
+    }
+  );
+  
   
 
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, applicationNumber, serviceType, userInfo,{ privacy: Digit.Utils.getPrivacyObject() });
+
+  function checkforPrivacyenablement(){
+    if(!isLoading && Digit.Utils.checkPrivacy(privacyData, { uuid:applicationDetails?.applicationData?.connectionHolders?.uuid || applicationDetails?.propertyDetails?.owners?.[0]?.uuid, fieldName: "mobileNumber", model: "User" }))
+    return true
+    else
+    return false
+  }
 
   let workflowDetails = Digit.Hooks.useWorkflowDetails(
     {
@@ -95,7 +114,7 @@ const ApplicationDetails = () => {
     enabled: applicationDetails?.applicationData?.applicationType?.includes("MODIFY_") ? true : false,
     privacy: Digit.Utils.getPrivacyObject()
   });
-
+  sessionStorage.removeItem("eyeIconClicked");
   const oldValueWC = oldData?.WaterConnection;
   const oldValueSC = oldData?.SewerageConnections;
 
@@ -127,6 +146,10 @@ const ApplicationDetails = () => {
   const closeToast = () => {
     setShowToast(null);
   };
+
+  const closeWaringToast = () => {
+    setShowWaringToast(null);
+  }
 
   const checkWSAdditionalDetails = () => {
     const connectionType = applicationDetails?.applicationData?.connectionType;
@@ -289,10 +312,36 @@ const ApplicationDetails = () => {
     window.open(fileStore[response?.filestoreIds[0]], "_blank");
   }
 
+  const handleEstimateDownload = async () => {
+    if (applicationDetails?.applicationData?.additionalDetails?.estimationFileStoreId) {
+      getFiles([applicationDetails?.applicationData?.additionalDetails?.estimationFileStoreId], stateCode)
+    } else {
+      const warningCount = sessionStorage.getItem("WARINIG_COUNT") || "0";
+      const warningCountDetails = JSON.parse(warningCount);
+      if(warningCountDetails == 0) {
+        const filters = { applicationNumber };
+        const response = await Digit.WSService.search({tenantId : tenantId, filters: { ...filters }, businessService: serviceType == "WATER" ? "WS" : "SW"})
+        let details = serviceType == "WATER" ? response?.WaterConnection?.[0] : response?.SewerageConnections?.[0];
+        if (details?.additionalDetails?.estimationFileStoreId) {
+          getFiles([details?.additionalDetails?.estimationFileStoreId], stateCode)
+        } else {
+          sessionStorage.setItem("WARINIG_COUNT", warningCountDetails ? warningCountDetails + 1 : 1);
+          setTimeout(() => {
+            sessionStorage.setItem("WARINIG_COUNT", "0");
+          }, 60000);
+          setShowWaringToast({ isError: false, isWarning: true, key: "warning", message: t("WS_WARNING_FILESTOREID_PLEASE_TRY_AGAIN_SOMETIME_LABEL") });
+        }
+      } else if(!showWaringToast) {
+        setShowWaringToast({ isError: false, isWarning: true, key: "warning", message: t("WS_WARNING_FILESTOREID_PLEASE_TRY_AGAIN_SOMETIME_LABEL") });
+      }
+    }
+
+  }
+
   const wsEstimateDownloadObject = {
     order: 1,
     label: t("WS_ESTIMATION_NOTICE"),
-    onClick: () => getFiles([applicationDetails?.applicationData?.additionalDetails?.estimationFileStoreId], stateCode),
+    onClick: handleEstimateDownload,
   };
 
   const sanctionDownloadObject = {
@@ -389,9 +438,18 @@ const ApplicationDetails = () => {
           closeToast={closeToast}
           timelineStatusPrefix={`WF_${applicationDetails?.processInstancesDetails?.[0]?.businessService?.toUpperCase()}_`}
           oldValue={res}
-          isInfoLabel={true}
+          isInfoLabel={checkforPrivacyenablement()}
           clearDataDetails={clearDataDetails}
         />
+        {showWaringToast &&
+          <Toast
+            style={{ zIndex: "10000" }}
+            warning={showWaringToast?.isWarning}
+            error={showWaringToast?.isWarning ? false : true}
+            label={t(showWaringToast?.message)}
+            onClose={closeWaringToast}
+            isDleteBtn={true}
+          />}
       </div>
     </Fragment>
   );

@@ -20,6 +20,7 @@ const convertEditApplicationDetails1 = (data, appData, serviceType) => {
     proposedWaterClosets: data?.ConnectionDetails?.[0]?.proposedWaterClosets && Number(data?.ConnectionDetails?.[0]?.proposedWaterClosets),
     proposedToilets: data?.ConnectionDetails?.[0]?.proposedToilets && Number(data?.ConnectionDetails?.[0]?.proposedToilets),
     connectionHolders: !data?.ConnectionHolderDetails?.[0]?.sameAsOwnerDetails ? [{
+      ...appData?.applicationData?.connectionHolders?.[0],
       correspondenceAddress: data?.ConnectionHolderDetails?.[0]?.address || "",
       fatherOrHusbandName: data?.ConnectionHolderDetails?.[0]?.guardian || "",
       gender: data?.ConnectionHolderDetails?.[0]?.gender?.code || "",
@@ -37,13 +38,13 @@ const convertEditApplicationDetails1 = (data, appData, serviceType) => {
     },
     action: "VERIFY_AND_FORWARD",
     documents: data?.DocumentsRequired?.documents,
-    // plumberInfo: [
-    //   {
-    //     licenseNo: data?.plumberDetails?.[0]?.plumberLicenseNo || appData?.plumberLicenseNo,
-    //     name: data?.plumberDetails?.[0]?.plumberName || appData?.plumberName,
-    //     mobileNumber: data?.plumberDetails?.[0]?.plumberMobileNo || appData?.plumberMobileNo
-    //   }
-    // ],
+    plumberInfo: [
+      {
+        licenseNo: data?.plumberDetails?.[0]?.plumberLicenseNo || appData?.plumberLicenseNo,
+        name: data?.plumberDetails?.[0]?.plumberName || appData?.plumberName,
+        mobileNumber: data?.plumberDetails?.[0]?.plumberMobileNo || appData?.plumberMobileNo
+      }
+    ],
     roadCuttingInfo: data?.roadCuttingDetails?.filter((o) => o.roadType.code != "").map((details) => (
       details?.id && details?.id !== null
       ? 
@@ -70,12 +71,15 @@ const convertEditApplicationDetails1 = (data, appData, serviceType) => {
       noOfWaterClosets: data?.connectionDetails?.[0]?.noOfWaterClosets || appData?.noOfWaterClosets || "",
       noOfToilets: data?.connectionDetails?.[0]?.noOfToilets || appData?.noOfToilets || "",
     },
-    tenantId: data?.cpt?.details?.tenantId,
-    additionalDetails: {
-      detailsProvidedBy: data?.plumberDetails?.[0]?.detailsProvidedBy?.code || appData?.detailsProvidedBy,
-      initialMeterReading: null,
-      locality: data?.cpt?.details?.address?.locality?.code,
-    },
+    tenantId: data?.cpt?.details?.tenantId
+  }
+
+  if (data?.plumberDetails?.[0]?.detailsProvidedBy?.code || appData?.detailsProvidedBy) {
+    payload.additionalDetails.detailsProvidedBy = data?.plumberDetails?.[0]?.detailsProvidedBy?.code || appData?.detailsProvidedBy;
+    payload.additionalDetails.initialMeterReading = null;
+  }
+  if (data?.cpt?.details?.address?.locality?.code) {
+    payload.additionalDetails.locality = data?.cpt?.details?.address?.locality?.code;
   }
 
   if (data?.plumberDetails?.[0]?.detailsProvidedBy?.code == "ULB") {
@@ -90,6 +94,8 @@ const convertEditApplicationDetails1 = (data, appData, serviceType) => {
 
   return payload;
 }
+
+
 
 const WSEditApplicationByConfig = () => {
   const { t } = useTranslation();
@@ -111,28 +117,34 @@ const WSEditApplicationByConfig = () => {
   const editApplicationDetails = JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS"));
   const serviceType = filters?.service || editApplicationDetails?.applicationData?.serviceType;
 
-  const details = cloneDeep(state?.data?.applicationDetails);
-  const actionData = cloneDeep(state?.data?.action);
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig, isLoading: isConfigLoading } = Digit.Hooks.ws.useWSConfigMDMS.WSCreateConfig(stateId, {});
 
+  let details = cloneDeep(state?.data?.applicationDetails);
+  const actionData = cloneDeep(state?.data?.action);
+  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, details?.applicationNo, details?.applicationData?.serviceType,{privacy : Digit.Utils.getPrivacyObject() });
+  details = applicationDetails;
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
 
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_WS_NEW_FORM", {});
   const [sessionAhocFormData, setSessionAdhocFormData, clearSessionAdhocFormData] = Digit.Hooks.useSessionStorage("ADHOC_ADD_REBATE_DATA", {});
 
-
   const { data: propertyDetails } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: propertyId }, tenantId: tenantId },
-    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId && propertyId != "" ? true : false }
+    { filters: { propertyIds: propertyId }, tenantId: tenantId, enabled: propertyId && propertyId != "" ? true : false, privacy : Digit.Utils.getPrivacyObject() }
   );
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isEditByConfig);
-    config.head = "WS_APP_FOR_WATER_AND_SEWERAGE_EDIT_LABEL";
-    let bodyDetails = [];
-    config?.body?.forEach(data => { if (data?.isEditByConfigConnection) bodyDetails.push(data); })
-    config.body = bodyDetails;
-    setConfig(config);
-  });
+    if (!isConfigLoading) {
+      // const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isEditByConfig);
+      const config = newConfig.find((conf) => conf.hideInCitizen && conf.isEditByConfig);
+      config.head = "WS_APP_FOR_WATER_AND_SEWERAGE_EDIT_LABEL";
+      let bodyDetails = [];
+      config?.body?.forEach(data => { if (data?.isEditByConfigConnection) bodyDetails.push(data); })
+      config.body = bodyDetails;
+      setConfig(config);
+    }
+  },[newConfig]);
 
   useEffect(() => {
     !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
@@ -141,19 +153,20 @@ const WSEditApplicationByConfig = () => {
   useEffect(async () => {
     const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
     if (details?.applicationData?.id && !IsDetailsExists) {
-      const convertAppData = await convertApplicationData(details, serviceType, false, true, t);
+      sessionStorage.setItem("appData",JSON.stringify(appData));
+      const convertAppData = await convertApplicationData(details, serviceType, false, false, t);
       setSessionFormData({ ...sessionFormData, ...convertAppData });
       setAppData({ ...convertAppData })
       sessionStorage.setItem("IsDetailsExists", JSON.stringify(true));
     }
-  }, [sessionFormData?.cpt, sessionFormData, propertyDetails]);
+  }, [details,applicationDetails,sessionFormData?.cpt, sessionFormData, propertyDetails]);
 
   useEffect(() => {
     setSessionFormData({ ...sessionFormData, cpt: { details: propertyDetails?.Properties?.[0] } });
   }, [propertyDetails]);
 
   useEffect(() => {
-    if (sessionFormData?.DocumentsRequired?.documents?.length > 0 || sessionFormData?.ConnectionDetails?.[0]?.water || sessionFormData?.ConnectionDetails?.[0]?.sewerage) {
+    if (sessionFormData?.DocumentsRequired?.documents?.length > 0 || sessionFormData?.ConnectionDetails?.[0]?.water || sessionFormData?.ConnectionDetails?.[0]?.sewerage || sessionFormData?.cpt?.details && !isLoading) {
       setEnabledLoader(false);
     }
   }, [propertyDetails, sessionFormData, sessionFormData?.cpt]);
@@ -199,6 +212,13 @@ const WSEditApplicationByConfig = () => {
   };
 
   const onSubmit = async (data) => {
+    if(!canSubmit){
+      setShowToast({ warning: true, message: "PLEASE_FILL_MANDATORY_DETAILS" });
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    }
+    else{
     const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
     let convertAppData = await convertEditApplicationDetails1(data, details, serviceType);
     if (sessionAhocFormData?.adhocPenalty) convertAppData.additionalDetails.adhocPenalty = parseInt(sessionAhocFormData?.adhocPenalty);
@@ -209,6 +229,7 @@ const WSEditApplicationByConfig = () => {
     if (sessionAhocFormData?.adhocRebateReason) convertAppData.additionalDetails.adhocRebateReason = sessionAhocFormData?.adhocRebateReason || "";
     const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
     setSubmitValve(false);
+    sessionStorage.setItem("redirectedfromEDIT", true);
     sessionStorage.setItem("WS_SESSION_APPLICATION_DETAILS", JSON.stringify(convertAppData));
      window.location.assign(`${window.location.origin}${state?.url}`);
 
@@ -228,6 +249,7 @@ const WSEditApplicationByConfig = () => {
     //     },
     //   });
     // }
+    }
   };
 
 
@@ -235,7 +257,7 @@ const WSEditApplicationByConfig = () => {
     setShowToast(null);
   };
 
-  if (enabledLoader) {
+  if (enabledLoader || isConfigLoading) {
     return <Loader />;
   }
 
@@ -248,12 +270,13 @@ const WSEditApplicationByConfig = () => {
         config={config.body}
         userType={"employee"}
         onFormValueChange={onFormValueChange}
-        isDisabled={!canSubmit}
+        // isDisabled={!canSubmit}
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}
         defaultValues={sessionFormData}
+        appData={appData}
       ></FormComposer>
-      {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />}
+      {showToast && <Toast error={showToast.key} label={t(showToast?.message)} warning={showToast?.warning} onClose={closeToast} />}
     </React.Fragment>
   );
 };

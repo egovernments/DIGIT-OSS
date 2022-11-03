@@ -39,6 +39,7 @@ const GetConnectionDetails = () => {
   const [showModal, setshowModal] = useState(false);
   const [billData, setBilldata] = useState([]);
   const [showActionToast, setshowActionToast] = useState(null);
+  const checkifPrivacyenabled = Digit.Hooks.ws.useToCheckPrivacyEnablement({privacy : { uuid:(applicationDetails?.applicationData?.applicationNo?.includes("WS") ? applicationDetails?.applicationData?.WaterConnection?.[0]?.connectionHolders?.[0]?.uuid : applicationDetails?.applicationData?.SewerageConnections?.[0]?.connectionHolders?.[0]?.uuid), fieldName: ["connectionHoldersMobileNumber"], model: "WnSConnectionOwner" }}) || false;
 
   const {
     isLoading: updatingApplication,
@@ -115,7 +116,7 @@ const GetConnectionDetails = () => {
 
     let pathname = `/digit-ui/employee/ws/modify-application?applicationNumber=${applicationDetails?.applicationData?.connectionNo}&service=${serviceType}&propertyId=${applicationDetails?.propertyDetails?.propertyId}&from=WS_COMMON_CONNECTION_DETAIL`;
 
-    history.push(`${pathname}`, { data: applicationDetails });
+    history.push(`${pathname}`, JSON.stringify({ data: applicationDetails }));
   };
 
   const getBillAmendmentButton = () => {
@@ -145,7 +146,7 @@ const GetConnectionDetails = () => {
 
     history.push(
       `/digit-ui/employee/ws/required-documents?connectionNumber=${applicationDetails?.applicationData?.connectionNo}&tenantId=${getTenantId}&service=${serviceType}`,
-      { data: applicationDetails }
+      JSON.stringify({ data: applicationDetails })
     );
   };
 
@@ -280,9 +281,10 @@ const GetConnectionDetails = () => {
           showToast={showToast}
           setShowToast={setShowToast}
           closeToast={closeToast}
+          isInfoLabel={checkifPrivacyenabled}
           labelComponent={<WSInfoLabel t={t} />}
         />
-        {ifUserRoleExists("WS_CEMP") && checkApplicationStatus ? (
+        {ifUserRoleExists("WS_CEMP") && checkApplicationStatus && !applicationDetails?.isDisconnectionDone ? (
           <ActionBar>
             {displayMenu ? <Menu options={showAction} localeKeyPrefix={"WS"} t={t} onSelect={onActionSelect} /> : null}
 

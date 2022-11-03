@@ -47,7 +47,7 @@ const MyChallanResult = ({ template, header, actionButtonLabel }) => {
   const searchResults = result?.data?.Bills?.map((bill) => {
     return {
       businesService: bill.businessService,
-      total_due: bill.status === "PAID" ? 0 : bill.totalAmount,
+      total_due:bill.status === "ACTIVE" ? bill.totalAmount : 0 ,
       OwnerName: bill.payerName || t("CS_NA"),
       BillingPeriod: getBillingPeriod(bill.billDetails[0].fromPeriod, bill.billDetails[0].toPeriod),
       //bil_due__date: bill.billDetails[0].expiryDate || 0,

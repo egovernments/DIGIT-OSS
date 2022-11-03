@@ -53,7 +53,7 @@ const Response = (props) => {
           <ActionBar style={{ display: "flex", justifyContent: "flex-end", alignItems: "baseline" }}>
           {state?.data?.[0]?.status !== "PENDINGPAYMENT" ?
             <Link to={`/digit-ui/employee`} style={{ marginRight: "1rem" }}>
-              <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} />
+              <SubmitBar label={t("CORE_COMMON_GO_TO_HOME")} onClick={() => sessionStorage.removeItem("isCreateEnabled")} />
             </Link> :
             // <Link to={`digit-ui/employee/payment/collect/TL/${state?.data?.[0]?.applicationNumber}/${state?.data?.[0]?.tenantId}`} style={{ marginRight: "1rem" }}>
             <div onClick={routeToPaymentScreen}>

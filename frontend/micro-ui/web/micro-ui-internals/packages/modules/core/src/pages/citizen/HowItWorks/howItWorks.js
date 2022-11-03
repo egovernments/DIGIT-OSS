@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 
 const HowItWorks = ({module}) => {
+  const isMobile = window.Digit.Utils.browser.isMobile();
   const user = Digit.UserService.getUser();
   const tenantId = user?.info?.tenantId || Digit.ULBService.getCurrentTenantId();
   const { t } = useTranslation();
@@ -58,11 +59,11 @@ const HowItWorks = ({module}) => {
   return (
     <Fragment>
     <div className="how-it-works-page">
-      <BackButton></BackButton>
+      <div style={{marginLeft: "-10px"}}><BackButton /></div>
         <div className="how-it-works-page-header">
-          <Header>{t("HOW_IT_WORKS")}</Header>
+          <div style={{marginLeft:isMobile ? "-15px":""}}><Header>{t("HOW_IT_WORKS")}</Header></div>
         </div>
-        <div className="language-selector" style={{margin: "10px"}}>
+        <div className="language-selector" style={{marginBottom: "10px"}}>
           {languages.map((language, index) => (
             <div className="language-button-container" key={index}>
               <CustomButton
@@ -107,10 +108,10 @@ const HowItWorks = ({module}) => {
         </div>
         { videoPlay && (
                 <div className="how-it-works-video-play">
-                    <div className="close-button">
-                    <CloseSvg onClick={onClose}></CloseSvg>
-                    </div>
-                    <video width={500}  height={500} controls autoPlay>
+                  <div className="close-button" style={{position:"absolute", right:"0",top:"10%", zIndex:"1"}}>
+                        <CloseSvg onClick={onClose}></CloseSvg>
+                        </div>
+                    <video width={500}  height={500} controls autoPlay style={{position:"fixed", top:"0",left:"0",minWidth:"100%",minHeight:"100%", backgroundColor: "rgba(0,0,0,0.5)"}}>
                         <source src={vidSrc} type="video/mp4"></source>
                     </video>
                 </div>

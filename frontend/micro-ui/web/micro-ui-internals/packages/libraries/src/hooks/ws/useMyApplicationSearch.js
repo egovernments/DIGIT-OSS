@@ -7,7 +7,10 @@ const useMyApplicationSearch = ({tenantId, filters = {}, BusinessService="WS", t
   const client = useQueryClient();
 
   const { isLoading, error, data, isSuccess } =  useQuery(['WS_SEARCH', tenantId, filters, BusinessService, config], async () => await WSService.search({tenantId, filters: { ...filters }, businessService:BusinessService})
-  , config);
+  , {
+    ...config,
+    refetchOnMount: "always"
+  });
 
   const user = Digit.UserService.getUser();
   const tenant = Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code || user?.info?.permanentCity || Digit.ULBService.getCurrentTenantId();
@@ -24,6 +27,7 @@ const useMyApplicationSearch = ({tenantId, filters = {}, BusinessService="WS", t
     , businessService:BusinessService})
   , {
     enabled: isSuccess && getWorkflow,
+    refetchOnMount: "always"
   })
 
   let businessIds = [];
@@ -56,7 +60,7 @@ const useMyApplicationSearch = ({tenantId, filters = {}, BusinessService="WS", t
     error, 
     data : !getWorkflow ? data : {...data, ...workflowData}, 
     isSuccess,
-    revalidate: () => client.invalidateQueries(["WS_SEARCH", tenantId, filters, BusinessService]),
+    revalidate: () => client.invalidateQueries(["WS_SEARCH", tenantId, filters, BusinessService, config])
   };
     
 

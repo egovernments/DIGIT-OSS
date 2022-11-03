@@ -1,4 +1,4 @@
-import { CardLabel, Dropdown, LabelFieldPair, TextInput, CardLabelError } from "@egovernments/digit-ui-react-components";
+import { CardLabel, Dropdown, LabelFieldPair, TextInput, CardLabelError,WrapUnMaskComponent } from "@egovernments/digit-ui-react-components";
 import React, { useEffect, useState } from "react";
 import * as func from "../utils";
 import { useForm, Controller } from "react-hook-form";
@@ -241,7 +241,7 @@ const PlumberDetails = (_props) => {
                                         name="plumberMobileNo"
                                         defaultValue={plumberDetail?.plumberMobileNo}
                                         // rules={{ required: t("REQUIRED_FIELD") }}
-                                        rules={{ validate: (e) => ((e && getPattern("MobileNo").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
+                                        rules={{ validate: (e) => ((e && getPattern("MobileNoWithPrivacy").test(e)) || !e || e.includes("*") ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")), required: t("REQUIRED_FIELD") }}
                                         type="mobileNumber"
                                         isMandatory={true}
                                         render={(props) => (
@@ -260,7 +260,33 @@ const PlumberDetails = (_props) => {
                                                     labelStyle={{ marginTop: "unset" }}
                                                     onBlur={props.onBlur}
                                                 />
-                                            </div>
+                                                <div style={{marginRight:"-50px",marginLeft:"10px"}}>
+                                           <WrapUnMaskComponent
+                                            unmaskField={(e) => {
+                                                props.onChange(e);
+                                              }}
+                                              iseyevisible={props.value?.includes("*") ? true : false}
+                                              privacy={{
+                                                uuid: plumberDetail?.applicationNo,
+                                                fieldName: "plumberInfoMobileNumber",
+                                                model: "WnSConnectionPlumber",
+                                                loadData: {
+                                                  serviceName: formData?.connectionDetails?.[0]?.formDetails?.applicationData?.serviceType === "WATER" ? "/ws-services/wc/_search" : "/sw-services/swc/_search",
+                                                  requestBody: {},
+                                                  requestParam: {
+                                                    tenantId: formData?.connectionDetails?.[0]?.formDetails?.tenantId,
+                                                    applicationNumber: plumberDetail?.applicationNo,
+                                                  },
+                                                  jsonPath: formData?.connectionDetails?.[0]?.formDetails?.applicationData?.serviceType === "WATER"
+                                                    ? "WaterConnection[0].plumberInfo[0].mobileNumber"
+                                                    : "SewerageConnections[0].plumberInfo[0].mobileNumber",
+                                                  isArray: false,
+                                                },
+                                              }}>
+                                            { /*privacy={{ uuid:plumberDetail?.applicationNo, fieldName: ["plumberInfoMobileNumber"], model: "WnSConnectionPlumber" }}*/}
+                                            </WrapUnMaskComponent>
+                                           </div>
+                                           </div>
                                             
                                         )}
                                     />

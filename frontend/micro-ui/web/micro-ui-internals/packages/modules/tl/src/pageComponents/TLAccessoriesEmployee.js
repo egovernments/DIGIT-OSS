@@ -168,6 +168,8 @@ const AccessoriersForm = (_props) => {
                             accessory.code = item.accessoryCategory;
                             accessory.uom = item.uom;
                             accessory.rate = item.rate;
+                            accessory.fromUom = item.fromUom;
+                            accessory.toUom = item.toUom;
                             item.rate && item.rate > 0 && acc.accessories.push(accessory);
                         } else if (item.accessoryCategory === null && item.tradeType) {
                             tradeType.code = item.tradeType;
@@ -175,6 +177,8 @@ const AccessoriersForm = (_props) => {
                             tradeType.structureType = item.structureType;
                             tradeType.licenseType = item.licenseType;
                             tradeType.rate = item.rate;
+                            tradeType.fromUom = item.fromUom;
+                            tradeType.toUom = item.toUom;
                             !isUndefined(item.rate) &&
                                 item.rate !== null &&
                                 acc.tradeTypeData.push(tradeType);
@@ -253,6 +257,20 @@ const AccessoriersForm = (_props) => {
         }
     }, [errors]);
 
+    function checkRangeForUomValue(e, fromUom, toUom){
+        if(Number.isInteger(fromUom)){
+            if(!(e && parseInt(e) >= fromUom)){
+            return false;
+            }
+           }
+        if(Number.isInteger(toUom)){
+           if(!(e && parseInt(e) <= toUom)){
+             return false
+             }
+           }
+        return true
+    }
+
     const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
     return (
         <React.Fragment>
@@ -330,7 +348,7 @@ const AccessoriersForm = (_props) => {
                                 control={control}
                                 name={"uomValue"}
                                 defaultValue={accessor?.uomValue}
-                                rules={accessor?.accessoryCategory?.uom && { required: t("REQUIRED_FIELD"), validate: (e) => ((e && getPattern("UOMValue").test(e)) || !e ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
+                                rules={accessor?.accessoryCategory?.uom && { required: t("REQUIRED_FIELD"), validate: (e) => ((e && getPattern("UOMValue").test(e)) || !e ? (checkRangeForUomValue(e,accessor?.accessoryCategory?.fromUom,accessor?.accessoryCategory?.toUom) ? true :  t("ERR_WRONG_UOM_VALUE")) : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
                                 render={(props) => (
                                     <TextInput
                                         value={getValues("uomValue")}

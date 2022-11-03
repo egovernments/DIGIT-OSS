@@ -47,6 +47,8 @@ import { NOCService } from "./services/elements/NOC";
 import AccessControlService from "./services/elements/Access";
 import BillServices from "./services/elements/Bill";
 
+import {CustomService} from "./services/elements/CustomService";
+
 const setupLibraries = (Library, props) => {
   window.Digit = window.Digit || {};
   window.Digit[Library] = window.Digit[Library] || {};
@@ -69,6 +71,7 @@ const initLibraries = () => {
   setupLibraries("PGRService", PGRService);
   setupLibraries("FSMService", FSMService);
   setupLibraries("PTService", PTService);
+  setupLibraries("CustomService", CustomService);
   setupLibraries("TLService", TLService);
   setupLibraries("HRMSService", HrmsService);
   setupLibraries("ReceiptsService", ReceiptsService);

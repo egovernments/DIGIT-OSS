@@ -34,7 +34,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
         (nextStep[sessionStorage.getItem("isAccessories")] === "accessories-details" ||
           nextStep[sessionStorage.getItem("isAccessories")] === "map" ||
           nextStep[sessionStorage.getItem("isAccessories")] === "owner-ship-details" || 
-          nextStep[sessionStorage.getItem("isAccessories")] === "know-your-property")
+          nextStep[sessionStorage.getItem("isAccessories")] === "other-trade-details")
       ) {
         nextStep = `${nextStep[sessionStorage.getItem("isAccessories")]}`;
       } else if (
@@ -61,7 +61,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
     {
       nextStep = "map";
     }
-    if(nextStep === "street" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
+    if(nextStep === "landmark" && params?.TradeDetails?.StructureType?.code === "MOVABLE")
     {
       nextStep = "owner-ship-details";
     }
@@ -92,6 +92,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
   };
 
   const createProperty = async () => {
+    sessionStorage.setItem("isCreateEnabled","true");
     history.push(`${match.path}/acknowledgement`);
   };
 

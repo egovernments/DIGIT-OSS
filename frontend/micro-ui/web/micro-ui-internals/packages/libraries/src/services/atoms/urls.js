@@ -50,6 +50,7 @@ const Urls = {
     createDriver: "/vendor/driver/v1/_create",
     updateDriver: "/vendor/driver/v1/_update",
     vehicleTripCreate: "/vehicle/trip/v1/_create",
+    advanceBalanceCalculate: "/fsm-calculator/v1/_advanceBalanceCalculate",
   },
 
   payment: {
@@ -130,7 +131,7 @@ const Urls = {
     bpaRegUpdate: "/tl-services/v1/BPAREG/_update",
     receipt_download: "/egov-pdf/download/PAYMENT/consolidatedreceipt",
     edcrreportdownload: "/bpa-services/v1/bpa/_permitorderedcr",
-    getSearchDetails: "/inbox/v1/dss/_search"
+    getSearchDetails: "/inbox/v1/dss/_search",
   },
 
   edcr: {
@@ -165,10 +166,10 @@ const Urls = {
     wns_group_bill: "/egov-pdf/download/WNS/wnsgroupbill",
     cancel_group_bill: "/pdf-service/v1/_cancelProcess",
     wns_generate_pdf: "/egov-pdf/download/WNS/wnsbill",
-    water_applyAdhocTax : "/ws-calculator/waterCalculator/_applyAdhocTax",
+    water_applyAdhocTax: "/ws-calculator/waterCalculator/_applyAdhocTax",
     sewerage_applyAdhocTax: "/sw-calculator/sewerageCalculator/_applyAdhocTax",
     getSearchDetails: "/inbox/v1/dss/_search",
-    disconnection_notice: "/pdf-service/v1/_createnosave"
+    disconnection_notice: "/pdf-service/v1/_createnosave",
   },
 
   engagement: {
@@ -194,13 +195,12 @@ const Urls = {
   reports: {
     reportSearch: "/report/",
   },
-  bills:{
-    cancelBill:"/billing-service/bill/v2/_cancelbill"
+  bills: {
+    cancelBill: "/billing-service/bill/v2/_cancelbill",
   },
   access_control: "/access/v1/actions/mdms/_get",
   billgenie: "/egov-searcher",
-  audit:"/inbox/v1/elastic/_search"
+  audit: "/inbox/v1/elastic/_search",
 };
-
 
 export default Urls;

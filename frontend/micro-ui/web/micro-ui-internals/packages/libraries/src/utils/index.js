@@ -94,7 +94,7 @@ const getStaticMapUrl = (latitude, longitude) => {
 };
 
 const detectDsoRoute = (pathname) => {
-  const employeePages = ["search", "inbox", "dso-dashboard", "dso-application-details", "user"];
+  const employeePages = ["search", "inbox", "dso-dashboard", "dso-application-details", "user", "Audit"];
 
   return employeePages.some((url) => pathname.split("/").includes(url));
 };

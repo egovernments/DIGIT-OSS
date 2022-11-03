@@ -28,7 +28,7 @@ const WSCreate = () => {
   const Acknowledgement = Digit?.ComponentRegistryService?.getComponent('WSAcknowledgement') ;
 
   const stateId = Digit.ULBService.getStateId();
-  let { data: newConfig } = Digit.Hooks.obps.SearchMdmsTypes.getFormConfig(stateId, []);
+  let { data: newConfig } = Digit.Hooks.ws.useWSConfigMDMS.getFormConfig(stateId, []);
   let isModifyEdit = window.location.href.includes("/modify-connection/") || window.location.href.includes("/edit-application/")
 
   const goNext = (skipStep) => {
@@ -82,8 +82,8 @@ const WSCreate = () => {
   const handleSkip = () => { };
 
   let config = [];
-  // newConfig = newConfig?.BuildingPermitConfig ? newConfig?.BuildingPermitConfig : newConfigWS;
-  newConfig = newConfigWS;
+  newConfig = newConfig?.WSCreateConfig ? newConfig?.WSCreateConfig : newConfigWS;
+  //newConfig = newConfigWS;
   newConfig.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });

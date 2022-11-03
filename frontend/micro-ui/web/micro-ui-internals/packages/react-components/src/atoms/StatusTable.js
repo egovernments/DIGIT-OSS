@@ -1,5 +1,5 @@
 import React from "react";
-import { UnMaskComponent } from "..";
+import { UnMaskComponent ,WrapUnMaskComponent} from "..";
 
 export const LastRow = (props) => {
   return (
@@ -26,7 +26,9 @@ export const Row = (props) => {
              */}
             {props?.privacy && (
               <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
-                <UnMaskComponent privacy={props?.privacy}></UnMaskComponent>
+                {/* <UnMaskComponent iseyevisible={val?.value?.includes("*")?true:false}></UnMaskComponent> */}
+                <WrapUnMaskComponent   value={value} iseyevisible={val?.value?.includes("*")?true:false} privacy={props?.privacy?.[index]} />
+
               </span>
             )}
           </p>
@@ -41,7 +43,9 @@ export const Row = (props) => {
                 Feature :: Privacy
                 privacy object set to the Mask Component
               */}
-              <UnMaskComponent privacy={props?.privacy}></UnMaskComponent>
+              {/* <UnMaskComponent iseyevisible={val?.includes("*")?true:false} privacy={props?.privacy}></UnMaskComponent> */}
+              <WrapUnMaskComponent   value={value} iseyevisible={val?.includes("*")?true:false} privacy={Array.isArray(props?.privacy) ? props?.privacy?.[index] : props?.privacy} />
+
             </span>
           )}
         </p>
@@ -57,12 +61,13 @@ export const Row = (props) => {
     <div style={props.rowContainerStyle} className={`${props.last ? "row last" : "row"} ${props?.className || ""}`}>
       <h2 style={labelStyle}>{props.label}</h2>
       <div className="value" style={{...valueStyle, wordBreak: "break-word"}}>
-        {value}
+        {/* {value}////
         {props?.privacy && (
           <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
-            <UnMaskComponent privacy={props?.privacy}></UnMaskComponent>
+            <UnMaskComponent iseyevisible={value?.includes("*")?true:false} privacy={Array.isArray(props?.privacy) ? props?.privacy?.[0] : props?.privacy}></UnMaskComponent>
           </span>
-        )}
+        )} */}
+        <WrapUnMaskComponent   value={value} iseyevisible={value && value?.toString()?.includes("*")?true:false} privacy={Array.isArray(props?.privacy)?props?.privacy?.[0]:props?.privacy} />
         {props.caption && <div className="caption">{props.caption}</div>}
       </div>
       {props.actionButton ? (

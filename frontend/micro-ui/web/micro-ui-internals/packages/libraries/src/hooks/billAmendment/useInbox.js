@@ -41,7 +41,7 @@ const useBillAmendmentInbox = ({ tenantId, filters, config = {} }) => {
       ...(consumerNo ? { consumerNo } : {}),
       ...(sortOrder ? { sortOrder } : {}),
       sortBy: "createdTime",
-      ...(locality?.length > 0 ? { locality: locality.map((item) => item.code.split("_").pop()).join(",") } : {}),
+      ...(locality?.length > 0 ? { locality: locality.map((item) => item.code.split("_").pop()) } : {}),
     },
     limit,
     offset,

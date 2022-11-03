@@ -52,6 +52,18 @@ const WrapCheckPage = ({ onSubmit, value }) => {
       localStorage.setItem("TLAppSubmitEnabled", "false");
     };
   }, []);
+
+  useEffect(() => {
+    if(sessionStorage.getItem("isCreateEnabledEmployee") === "true")
+    { 
+      sessionStorage.removeItem("isCreateEnabledEmployee");
+      history.replace("/employee");
+    }
+    else
+    sessionStorage.removeItem("isCreateEnabledEmployee");
+
+  })
+
   const typeOfApplication = !isEditProperty ? `new-application` : `renew-trade`;
   let routeLink = `/digit-ui/citizen/tl/tradelicence/${typeOfApplication}`;
   if (window.location.href.includes("edit-application") || window.location.href.includes("renew-trade")) {
@@ -83,6 +95,9 @@ const WrapCheckPage = ({ onSubmit, value }) => {
             label={t("TL_STRUCTURE_SUB_TYPE")}
             text={t(TradeDetails?.StructureType.code !== "IMMOVABLE" ? TradeDetails?.VehicleType?.i18nKey : TradeDetails?.BuildingType?.i18nKey)}
           />
+          <Row className="border-none" label={t("TL_TRADE_GST_NO")} text={TradeDetails?.TradeGSTNumber || t("CS_NA")} />
+          <Row className="border-none" label={t("TL_OPERATIONAL_AREA")} text={TradeDetails?.OperationalSqFtArea || t("CS_NA")} />
+          <Row className="border-none" label={t("TL_NO_OF_EMPLOYEES")} text={TradeDetails?.NumberOfEmployees || t("CS_NA")} />
           <Row className="border-none" label={t("TL_NEW_TRADE_DETAILS_TRADE_COMM_DATE_LABEL")} text={t(getdate(TradeDetails?.CommencementDate))} />
           {TradeDetails?.units.map((unit, index) => (
             <div key={index}>

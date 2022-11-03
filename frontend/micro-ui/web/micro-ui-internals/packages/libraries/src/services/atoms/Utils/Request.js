@@ -67,6 +67,7 @@ export const Request = async ({
   multipartFormData = false,
   multipartData = {},
   reqTimestamp = false,
+  plainAccessRequest = null
 }) => {
   if (method.toUpperCase() === "POST") {
     const ts = new Date().getTime();
@@ -98,6 +99,11 @@ export const Request = async ({
     if (privacy && !url.includes("/edcr/rest/dcr/") && !noRequestInfo) {
       data.RequestInfo = { ...data.RequestInfo, plainAccessRequest: { ...privacy } };
     }
+
+    if(plainAccessRequest){
+      data.RequestInfo = { ...data.RequestInfo, plainAccessRequest };
+    }
+
   }
 
   const headers1 = {

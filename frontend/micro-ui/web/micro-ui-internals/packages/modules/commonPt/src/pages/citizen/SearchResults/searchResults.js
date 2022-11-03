@@ -3,6 +3,7 @@ import { Header, ResponseComposer, Loader, Modal, Card, KeyNote, SubmitBar, Citi
 import PropTypes from "prop-types";
 import { useHistory, Link, useLocation, useRouteMatch } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import _ from "lodash";
 const TYPE_REGISTER = { type: "register" };
 const TYPE_LOGIN = { type: "login" };
 const DEFAULT_USER = "digit-user";
@@ -134,9 +135,20 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
       owner_mobile: (property?.owners || [])[0]?.mobileNumber,
       privacy: {
         property_address : {
-          uuid: property?.propertyId, 
+          uuid: property?.owners?.[0]?.uuid, 
           fieldName: ["doorNo" , "street" , "landmark"], 
-          model: "Property"
+          model: "Property",showValue: true,
+          loadData: {
+            serviceName: "/property-services/property/_search",
+            requestBody: {},
+            requestParam: { tenantId : property?.tenantId, propertyIds : property?.propertyId },
+            jsonPath: "Properties[0].address.street",
+            isArray: false,
+            d: (res) => {
+              let resultString = (_.get(res,"Properties[0].address.doorNo") ?  `${_.get(res,"Properties[0].address.doorNo")}, ` : "") + (_.get(res,"Properties[0].address.street")? `${_.get(res,"Properties[0].address.street")}, ` : "") + (_.get(res,"Properties[0].address.landmark") ? `${_.get(res,"Properties[0].address.landmark")}`:"")
+              return resultString;
+            }
+          },
         }
       }  };
   });
@@ -189,8 +201,7 @@ const PropertySearchResults = ({ template, header, actionButtonLabel, isMutation
             {t(header)} ({searchResults?.length})
           </Header>
         )}
-        {/* For UM-4418 changes */}
-        {/* <PrivacyInfoLabel t={t} /> */}
+        { <PrivacyInfoLabel t={t} /> }
         <ResponseComposer data={searchResults} template={template} actionButtonLabel={actionButtonLabel}
         onSubmit={sendOtpToUser} />
       </div>

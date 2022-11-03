@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import AuditSearchApplication from "../../components/Search";
+import { Link } from "react-router-dom";
 const Search = ({ path }) => {
   const { t } = useTranslation();
   const tenantId = Digit.ULBService.getCitizenCurrentTenant()
   const [payload, setPayload] = useState({});
+  const isMobile = window.Digit.Utils.browser.isMobile();
   const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
     //example input format : "2018-10-02"
     try {
@@ -15,6 +17,10 @@ const Search = ({ path }) => {
         DateObj.setHours(DateObj.getHours() + 24);
         DateObj.setSeconds(DateObj.getSeconds() - 1);
       }
+      if (dayStartOrEnd === "daystart") {
+        DateObj.setHours(DateObj.getHours());
+        DateObj.setSeconds(DateObj.getSeconds() + 1);
+      }
       return DateObj.getTime();
     } catch (e) {
       return dateString;
@@ -22,15 +28,13 @@ const Search = ({ path }) => {
   };
   function onSubmit(_data) {
     Digit.SessionStorage.set("AUDIT_APPLICATION_DETAIL", {
-      offset: 0,
-      limit: 5,
-      sortBy: "commencementDate",
-      sortOrder: "DESC",
+      offset:0,
+      limit:10
     });
-    const data = {
+    let data = {
         ..._data,
-        fromDate: convertDateToEpoch(_data?.fromDate),
-        toDate: convertDateToEpoch(_data?.toDate),
+        fromDate: convertDateToEpoch(_data?.fromDate, _data?.fromDate == _data?.toDate ? "daystart":""),
+        toDate: convertDateToEpoch(_data?.toDate, _data?.fromDate == _data?.toDate ? "dayend":""),
       };
   
       setPayload(
@@ -56,7 +60,18 @@ const Search = ({ path }) => {
   const config = {
     enabled: !!(payload && Object.keys(payload).length > 0),
   };
-  const newObj = { ...payload };
+
+  let curoffset = window.location.href.split("/").pop();
+  let previousoffset;
+  let currentoffset;
+  if (!isNaN(parseInt(curoffset))) {
+    currentoffset = curoffset;
+    previousoffset = parseInt(curoffset) + 10;
+  } else {
+    previousoffset = 10;
+  } 
+
+  const newObj = isMobile ? { ...payload, offset:!isNaN(parseInt(curoffset))? parseInt(currentoffset) : 0 } : { ...payload };
  
   const {
     isLoading,
@@ -70,19 +85,29 @@ const Search = ({ path }) => {
     });
 
     return (
+      <React.Fragment>
         <AuditSearchApplication
           t={t}
           tenantId={tenantId}
           onSubmit={onSubmit}
           data={
             !isLoading
-              ? data?.ElasticSearchData?.length > 0
-                ? data?.ElasticSearchData
+              ? data?.ElasticSearchData?.filter((e)=> !e.total)?.length > 0
+                ? data?.ElasticSearchData?.filter((e)=> !e.total)
                 : { display: "ES_COMMON_NO_DATA" }
               : ""
           }
-          count={data?.ElasticSearchData?.length}
+          count={data?.ElasticSearchData?.filter((e)=> e.total)?.[0]?.total}
+          isLoading={isLoading}
         />
+        {isMobile && data?.ElasticSearchData?.filter((e)=> !e.total)?.length && data?.ElasticSearchData?.filter((e)=> !e.total)?.length !== 0 && (
+          <div>
+            <p style={{ marginLeft: "16px",marginBottom:"40px"}}>
+              <span className="link">{<Link to={`/digit-ui/citizen/Audit/${previousoffset}`}>{t("PT_LOAD_MORE_MSG")}</Link>}</span>
+            </p>
+          </div>
+        )}
+        </React.Fragment>
       );
     };
     export default Search;

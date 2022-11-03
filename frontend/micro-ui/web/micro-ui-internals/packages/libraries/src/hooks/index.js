@@ -21,6 +21,7 @@ import { useApplicationsForBusinessServiceSearch } from "./useApplicationForBill
 import useBoundaryLocalities from "./useLocalities";
 import useCommonMDMS from "./useMDMS";
 import useCustomMDMS from "./useCustomMDMS";
+import useCustomAPIHook from "./useCustomAPIHook";
 import useInboxGeneral from "./useInboxGeneral/useInboxGeneral";
 import useApplicationStatusGeneral from "./useStatusGeneral";
 import useModuleTenants from "./useModuleTenants";
@@ -84,6 +85,7 @@ import useDriverCreate from "./fsm/useDriverCreate";
 import useDriverUpdate from "./fsm/useDriverUpdate";
 import useDriverDetails from "./fsm/useDriverDetails";
 import useVendorSearch from "./fsm/useVendorSearch";
+import useAdvanceBalanceCalulation from "./fsm/useAdvanceBalanceCalculation";
 
 import useEmployeeSearch from "./useEmployeeSearch";
 
@@ -240,6 +242,8 @@ import useGetDSSAboutJSON from "./useGetDSSAboutJSON";
 import useStaticData from "./useStaticData";
 import useBillAmendmentInbox from "./billAmendment/useInbox";
 import { usePrivacyContext } from "./usePrivacyContext";
+import useToCheckPrivacyEnablement from "./ws/useToCheckPrivacyEnablement";
+import useWSConfigMDMS from "./ws/useWSConfigMDMS";
 
 const pgr = {
   useComplaintDetails,
@@ -257,7 +261,7 @@ const pgr = {
   usePropertyMDMS,
   useComplaintStatusCount,
   useTradeLicenseBillingslab,
-  useMDMS : usePGRMDMS,
+  useMDMS: usePGRMDMS,
 };
 
 const fsm = {
@@ -298,6 +302,7 @@ const fsm = {
   useDriverDetails,
   useVehicleTripCreate,
   useVendorSearch,
+  useAdvanceBalanceCalulation,
 };
 
 const pt = {
@@ -469,7 +474,9 @@ const ws = {
   useWaterPropertySearch,
   useDisconnectionWorkflow,
   useDisConnectionDetails,
-  useWSModifyDetailsPage
+  useWSModifyDetailsPage,
+  useToCheckPrivacyEnablement,
+  useWSConfigMDMS: useWSConfigMDMS,
 };
 
 const reports = {
@@ -526,6 +533,7 @@ const Hooks = {
   noc,
   ws,
   useCustomMDMS,
+  useCustomAPIHook,
   reports,
   useGetHowItWorksJSON,
   useGetFAQsJSON,

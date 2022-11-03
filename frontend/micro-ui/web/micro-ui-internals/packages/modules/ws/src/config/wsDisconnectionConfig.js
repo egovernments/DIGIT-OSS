@@ -1,6 +1,6 @@
 export const newConfig = [
   {
-    head: "",
+    head: "NEW_DISCONNECTION",
     body: [
       {
         route: "docsrequired",
@@ -92,5 +92,47 @@ export const newConfig = [
         }]
       }
     ]
-  }
+  },
+  {
+    head: "RE_SUBMIT_DISCONNECTION_APPLICATION",
+    body: [
+      {
+        route: "application-form",
+        component: "WSDisconnectionForm",
+        key: "WSDisconnectionForm",
+        type: "component",
+        withoutLabel: true,
+        nextStep: "documents-upload",
+      },
+      {
+        route: "documents-upload",
+        component: "WSDisconnectionDocumentsForm",
+        key: "WSDisconnectionDocumentsForm",
+        type: "component",
+        isMandatory: true,
+        withoutLabel: true,
+        nextStep: "resubmit-check",
+        hideInEmployee: true,
+      },
+      {
+        route: "check",
+        component: "WSReSubmitDisconnectionCheckPage",
+        key: "WSReSubmitDisconnectionCheckPage",
+        type: "component",
+        isMandatory: true,
+        withoutLabel: true,
+        nextStep: "disconnect-acknowledge",
+        hideInEmployee: true,
+      },
+      {
+        route: "disconnect-acknowledge",
+        component: "WSDisconnectAcknowledgement",
+        key: "WSDisconnectAcknowledgement",
+        type: "component",
+        isMandatory: true,
+        withoutLabel: true,
+        hideInEmployee: true,
+      }
+    ]
+  },
 ]

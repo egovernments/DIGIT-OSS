@@ -24,7 +24,7 @@ const MultiSelectDropdown = ({ options, optionsKey, selected = [], onSelect, def
 
   useEffect(() => {
     dispatch({type: "REPLACE_COMPLETE_STATE", payload: fnToSelectOptionThroughProvidedSelection(selected) })
-  },[selected?.length])
+  },[selected?.length, selected?.[0]?.code])
 
   function fnToSelectOptionThroughProvidedSelection(selected){
     return selected?.map( e => ({[optionsKey]: e?.[optionsKey], propsData: [null, e]}))

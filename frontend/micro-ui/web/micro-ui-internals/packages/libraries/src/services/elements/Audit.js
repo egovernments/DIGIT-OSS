@@ -11,6 +11,8 @@ const AuditService = {
         InboxElasticSearchCriteria: {
           tenantId: tenantId,
           "indexKey": "userLogin",
+          limit:10,
+          offset:0,
           ...filters,
         },
       },

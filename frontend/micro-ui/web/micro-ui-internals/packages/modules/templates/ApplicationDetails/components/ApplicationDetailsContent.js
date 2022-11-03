@@ -168,7 +168,7 @@ function ApplicationDetailsContent({
   return (
     <Card style={{ position: "relative" }} className={"employeeCard-override"}>
       {/* For UM-4418 changes */}
-      {/* {isInfoLabel ? <InfoDetails t={t} userType={false} infoBannerLabel={"CS_FILE_APPLICATION_INFO_LABEL"} infoClickLable={"WS_CLICK_ON_LABEL"} infoClickInfoLabel={getClickInfoDetails()} infoClickInfoLabel1={getClickInfoDetails1()}/> : null} */}
+      { isInfoLabel ? <InfoDetails t={t} userType={false} infoBannerLabel={"CS_FILE_APPLICATION_INFO_LABEL"} infoClickLable={"WS_CLICK_ON_LABEL"} infoClickInfoLabel={getClickInfoDetails()} infoClickInfoLabel1={getClickInfoDetails1()} /> : null }
       {applicationDetails?.applicationDetails?.map((detail, index) => (
         <React.Fragment key={index}>
           <div style={getMainDivStyles()}>
@@ -261,6 +261,7 @@ function ApplicationDetailsContent({
                         className="border-none"
                         key={`${value.title}`}
                         label={`${t(`${value.title}`)}`}
+                        privacy={value?.privacy}
                         text={value?.oldValue ? value?.oldValue : value?.value ? value?.value : ""}
                       /> ) : (<Row
                         key={t(value.title)}
@@ -369,6 +370,11 @@ function ApplicationDetailsContent({
                 <ConnectingCheckPoints>
                   {workflowDetails?.data?.timeline &&
                     workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
+                      let timelineStatusPostfix = "";
+                      if (window.location.href.includes("/obps/")) {
+                        timelineStatusPostfix = index == 0 ? "" : `_DONE`;
+                      }
+                      
                       return (
                         <React.Fragment key={index}>
                           <CheckPoint
@@ -378,7 +384,7 @@ function ApplicationDetailsContent({
                             label={t(
                               `${timelineStatusPrefix}${
                                 checkpoint?.performedAction === "REOPEN" ? checkpoint?.performedAction : checkpoint?.[statusAttribute]
-                              }`
+                              }${timelineStatusPostfix}`
                             )}
                             customChild={getTimelineCaptions(checkpoint)}
                           />

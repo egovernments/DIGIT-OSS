@@ -47,11 +47,11 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
   
         data?.map((obj)=> {
           let returnObject={};
-          returnObject[ t("AUDIT_DATE_LABEL")]=convertEpochToDate(obj?.timestamp);
-          returnObject[t("AUDIT_TIME_LABEL")]=convertEpochToTimeInHours(obj?.timestamp);
-          returnObject[t("AUDIT_DATAVIEWED_LABEL")]=obj?.dataView[0]+','+obj?.dataView[1];
-          returnObject[t("AUDIT_DATAVIEWED_BY_LABEL")]=obj?.dataViewedBy;
-          returnObject[t("AUDIT_ROLE_LABEL")]=obj?.roles.map(obj=>obj.name).join(",");
+          returnObject[ t("AUDIT_DATE_LABEL")]=convertEpochToDate(obj?.timestamp) || "-";
+          returnObject[t("AUDIT_TIME_LABEL")]=convertEpochToTimeInHours(obj?.timestamp)|| "-";
+          returnObject[t("AUDIT_DATAVIEWED_LABEL")]=obj?.dataView?.join(", ")|| "-";
+          returnObject[t("AUDIT_DATAVIEWED_BY_LABEL")]=obj?.dataViewedBy|| "-";
+          returnObject[t("AUDIT_ROLE_LABEL")]=obj?.roles?.map(obj=>obj.name).join(", ") || "-";
           return {
             ...returnObject,
           }
@@ -137,11 +137,11 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
           return [];
           }
           return data?.map((data) => ({
-            [t("AUDIT_DATE_LABEL")]: convertEpochToDate(data.timestamp),
-            [t("AUDIT_TIME_LABEL")]: convertEpochToTimeInHours(data.timestamp),
-            [t("AUDIT_DATAVIEWED_LABEL")]: data.dataView[0]+','+data.dataView[1],
-            [t("AUDIT_DATAVIEWED_BY_LABEL")]: data.dataViewedBy,
-            [t("AUDIT_ROLE_LABEL")]: data.roles.slice(0,3)?.map((e)=>e.name).join(","),
+            [t("AUDIT_DATE_LABEL")]: convertEpochToDate(data.timestamp)|| "-",
+            [t("AUDIT_TIME_LABEL")]: convertEpochToTimeInHours(data.timestamp)|| "-",
+            [t("AUDIT_DATAVIEWED_LABEL")]: data.dataView?.join(", ")|| "-",
+            [t("AUDIT_DATAVIEWED_BY_LABEL")]: data.dataViewedBy|| "-",
+            [t("AUDIT_ROLE_LABEL")]: data.roles?.slice(0,3)?.map((e)=>e.name).join(", ")|| "-",
       }))
     },
     [data]
@@ -150,7 +150,7 @@ const MobileSearchApplication = ({ Controller, register, control, t, reset, prev
   return (
     <React.Fragment>
       <BackButton />
-      <div className="sideContent" style={{ marginLeft:"70%", marginTop:"-12%"}}>
+      <div className="sideContent" style={{ marginLeft:"65%", marginTop:"-12%"}}>
                   <DownloadBtn className="mrlg cursorPointer"  onClick={() => handleExcelDownload(tabledata)}/>
       </div>
       <Header>{t("PRIVACY_AUDIT_REPORT")}:</Header>

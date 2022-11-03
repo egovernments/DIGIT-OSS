@@ -31,9 +31,10 @@ const ApplicationBillAmendment = () => {
   const [showToast, setShowToast] = useState(null)
   //connectionNumber=WS/107/2021-22/227166&tenantId=pb.amritsar&service=WATER&connectionType=Metered
   const { t } = useTranslation();
-  const { connectionNumber, tenantId, service, connectionType } = Digit.Hooks.useQueryParams();
+  const { connectionNumber, tenantId, service, connectionType, isEdit } = Digit.Hooks.useQueryParams();
   const stateId = Digit.ULBService.getStateId();
-  const { state } = useLocation();
+  let { state } = useLocation();
+  state = state  ? (typeof(state) === "string" ? JSON.parse(state) : state) : {};
   const [error, setUploadError] = useState("")
   const [ischeckedReduce, setischeckedReduce] = useState(false)
   const [ischeckedAddition, setischeckedAddition] = useState(false)
@@ -49,7 +50,7 @@ const ApplicationBillAmendment = () => {
   const { data, isFetched } = Digit.Hooks.fsm.useMDMS(stateId, "DIGIT-UI", "WSTaxHeadMaster");
   const availableBillAmendmentTaxHeads = data?.BillingService?.TaxHeadMaster?.filter((w) => w.IsBillamend);
 
-  const billSearchData = preBillSearchData?.filter((e) =>
+  let billSearchData = preBillSearchData?.filter((e) =>
     availableBillAmendmentTaxHeads?.find((taxHeadMaster) => taxHeadMaster.code === e.taxHeadCode)
   );
   const rebateAndPenaltyTaxHeads = data?.BillingService?.TaxHeadMaster?.filter(e => e.code.includes("ADHOC") && e.IsBillamend && e.service === servicev1)
@@ -211,7 +212,7 @@ const ApplicationBillAmendment = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (goToAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/application-details-bill-amendment?applicationNumber=${state?.data.applicationDetails.amendment.amendmentId}`
+      if (goToAppDetailsPage) window.location.href = `${window.location.origin}/digit-ui/employee/ws/generate-note-bill-amendment?applicationNumber=${state?.data.applicationDetails.amendment.amendmentId}`
     }, 5000);
     return () => clearTimeout(timer);
   }, [goToAppDetailsPage]);
@@ -309,6 +310,12 @@ const ApplicationBillAmendment = () => {
     return "WS_DOCUMENT_NO";
   }
 
+  let adhocAmount = 0;
+  billSearchData?.filter((ob) => ob?.taxHeadCode?.includes("ADHOC"))?.map((ob) => {
+    adhocAmount = adhocAmount + ob?.amount;
+  });
+  billSearchData = billSearchData?.filter((ob) => !(ob?.taxHeadCode?.includes("ADHOC")));
+
   return (
     <form onSubmit={handleSubmit(onFormSubmit)}>
       <div style={{marginLeft:"20px"}}><Header>{state?.data?.action ? t("WS_APP_FOR_WATER_AND_SEWERAGE_EDIT_LABEL") : t("WS_BILL_AMENDMENT_BUTTON")}</Header></div>
@@ -324,7 +331,7 @@ const ApplicationBillAmendment = () => {
           <table cellPadding={"8px"} cellSpacing={"10px"}>
             <tr style={{ textAlign: "left" }}>
               <th>{t("WS_TAX_HEADS")}</th>
-              <th>{t("WS_CURRENT_AMOUNT")}</th>
+              <th style={{textAlign : "right"}}>{t("WS_CURRENT_AMOUNT")}</th>
               <th style={{paddingLeft:"150px"}}>
                 <>
                   <Controller
@@ -353,6 +360,7 @@ const ApplicationBillAmendment = () => {
                               props.onChange(false);
                             }
                           }}
+                          disable={isEdit && (state?.data?.applicationDetails?.amendment?.additionalDetails?.editForm?.["WS_REDUCED_AMOUNT"]?.["VALUE"] == false || state?.data?.applicationDetails?.amendment?.additionalDetails?.editForm?.["SW_REDUCED_AMOUNT"]?.["VALUE"] == false) ? true : false}
                           checked={props?.value}
                         />
                         </div>
@@ -391,6 +399,7 @@ const ApplicationBillAmendment = () => {
                               props.onChange(false);
                             }
                           }}
+                          disable={isEdit && (state?.data?.applicationDetails?.amendment?.additionalDetails?.editForm?.["WS_ADDITIONAL_AMOUNT"]?.["VALUE"] == false || state?.data?.applicationDetails?.amendment?.additionalDetails?.editForm?.["WS_ADDITIONAL_AMOUNT"]?.["VALUE"] == false) ? true : false}
                           checked={props?.value}
                         />
                         </div>
@@ -454,7 +463,7 @@ const ApplicationBillAmendment = () => {
               </tr>
             ))}
             {<tr>
-              <td colSpan={2} style={{ paddingRight: "60px" }}>{t("WS_REBATE_PENALTY")}
+              <td style={{ paddingRight: "60px", fontWeight:"700" }}>{t("WS_REBATE_PENALTY")}
                 <div className="tooltip" style={{marginLeft:"10px",marginBottom:"-4px"}}>
                   <InfoBannerIcon fill="#0b0c0c" style />
                   <span className="tooltiptext" style={{
@@ -467,7 +476,8 @@ const ApplicationBillAmendment = () => {
                   </span>
                 </div>
               </td>
-
+              <td style={{  textAlign: "end" }}>₹ {adhocAmount || 0}</td>
+              
               <td style={{ paddingRight: "60px", paddingLeft:"150px" }}>
                 <>
                   <TextInput

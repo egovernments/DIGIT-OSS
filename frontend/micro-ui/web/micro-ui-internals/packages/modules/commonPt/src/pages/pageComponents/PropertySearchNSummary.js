@@ -13,7 +13,6 @@ import {
   Toast,
   StatusTable,
   Row,
-  UnMaskComponent,
 } from "@egovernments/digit-ui-react-components";
 import { useTranslation } from "react-i18next";
 import _ from "lodash";
@@ -104,7 +103,7 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
 
   return (
     <React.Fragment>
-     {(window.location.href.includes("/tl/") ? (!(formData?.tradedetils?.[0]?.structureType?.code === "MOVABLE") || isEmpNewApplication ) : true) && <div>
+     {(window.location.href.includes("/tl/") ? (!(formData?.tradedetils?.[0]?.structureType?.code === "MOVABLE") && (isEmpNewApplication || isEmpRenewLicense) ) : true) && <div>
       <LabelFieldPair>
         <CardLabel className="card-label-smaller" style={getInputStyles()}>{`${t(`PROPERTY_ID`)}`}</CardLabel>
         <div className="field" style={{ marginTop: "20px", display: "flex" }}>
@@ -157,9 +156,19 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
                 label={t(`PROPERTY_ADDRESS`)}
                 text={propertyAddress}
                 privacy={{ 
-                  uuid:propertyDetails?.Properties[0]?.propertyId, 
+                  uuid:propertyDetails?.Properties[0]?.owners?.[0]?.uuid, 
                   fieldName: ["doorNo","street","landmark"], 
-                  model: "Property" }}
+                  model: "Property",
+                  showValue: true,
+                  loadData: {
+                    serviceName: "/property-services/property/_search",
+                    requestBody: {},
+                    requestParam: { tenantId:propertyDetails?.Properties[0]?.tenantId, propertyIds:propertyDetails?.Properties[0]?.propertyId },
+                    jsonPath: "Properties[0].address.street",
+                    isArray: false,
+                  },
+          
+                 }}
               />
             </div>
           </StatusTable>

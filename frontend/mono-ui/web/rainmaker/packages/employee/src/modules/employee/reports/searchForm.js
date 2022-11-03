@@ -348,6 +348,16 @@ class ShowForm extends Component {
       metaData.reportDetails.searchParams.filter((field) => field.displayOnly).map((field) => field.name)
     );
   };
+  setError = (err) => {
+    err &&
+      err.message &&
+      this.props.toggleSnackbarAndSetText(
+        true,
+        { labelName: getTransformedLocale(err.message), labelKey: getTransformedLocale(err.message) },
+        "error"
+      );
+  };
+
   defautSearch = (e = null, isDrilldown = false, rptName, moduleName) => {
     if (e) {
       e.preventDefault();
@@ -358,6 +368,7 @@ class ShowForm extends Component {
     let date = today.getDate() + "/" + (today.getMonth() + 1) + "/" + today.getFullYear();
     let tabLabel = `Showing data upto : ${date}`;
     this.props.updateTabLabel(tabLabel);
+    const { setError } = this;
 
     var tenantId = getTenantId() ? getTenantId() : commonConfig.tenantId;
     let self = this;
@@ -387,7 +398,8 @@ class ShowForm extends Component {
           },
           function (err) {
             showTable(false);
-            alert("Something went wrong or try again later");
+            setError(err);
+            // alert(err);
           }
         );
     }
@@ -398,7 +410,7 @@ class ShowForm extends Component {
     if (e) {
       e.preventDefault();
     }
-
+    const { setError } = this;
     let {
       showTable,
       changeButtonText,
@@ -498,6 +510,14 @@ class ShowForm extends Component {
         commonApiPost(resulturl, {}, { tenantId: tenantId, reportName: this.state.reportName, searchParams }).then(
           function (response) {
             if (response && response.reportHeader && response.reportData) {
+              if (window.location.pathname.includes("TradeLicenseDailyCollectionReport")) {
+                const ind = response.reportHeader.findIndex((d) => d.name === "username");
+                response.reportHeader[ind].showColumn = false;
+                response.reportData = response.reportData.map((eachArr) => {
+                  eachArr[ind + 1] = `${eachArr[ind + 1]}/${eachArr[ind]}`;
+                  return eachArr;
+                });
+              }
               let hiddenRows = [];
 
               response.reportHeader.map((e, i) => {
@@ -517,7 +537,8 @@ class ShowForm extends Component {
           },
           function (err) {
             showTable(false);
-            alert("Something went wrong or try again later");
+            setError(err);
+            // alert(err);
           }
         );
     } else {
@@ -547,7 +568,8 @@ class ShowForm extends Component {
             },
             function (err) {
               showTable(false);
-              alert("Something went wrong or try again later");
+              setError(err);
+              // alert(err);
             }
           );
       } else {
@@ -582,7 +604,8 @@ class ShowForm extends Component {
             },
             function (err) {
               showTable(false);
-              alert("Something went wrong or try again later");
+              setError(err);
+              // alert(err);
             }
           );
       }

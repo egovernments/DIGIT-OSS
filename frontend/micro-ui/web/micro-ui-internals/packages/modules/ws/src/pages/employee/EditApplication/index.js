@@ -30,6 +30,10 @@ const EditApplication = () => {
 
   let details = cloneDeep(state?.data?.applicationDetails);
   const actionData = cloneDeep(state?.data?.action);
+
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig, isLoading: isConfigLoading } = Digit.Hooks.ws.useWSConfigMDMS.WSCreateConfig(stateId, {});
+
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, details?.applicationNo, details?.applicationData?.serviceType,{privacy : Digit.Utils.getPrivacyObject() });
   details = applicationDetails;
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
@@ -42,13 +46,16 @@ const EditApplication = () => {
   );
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isEdit);
-    config.head = "WS_APP_FOR_WATER_AND_SEWERAGE_EDIT_LABEL";
-    let bodyDetails = [];
-    config?.body?.forEach(data => { if (data?.isEditConnection) bodyDetails.push(data); })
-    config.body = bodyDetails;
-    setConfig(config);
-  }, []);
+    if (!isConfigLoading) {
+      // const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isEdit);
+      const config = newConfig.find((conf) => conf.hideInCitizen && conf.isEdit);
+      config.head = "WS_APP_FOR_WATER_AND_SEWERAGE_EDIT_LABEL";
+      let bodyDetails = [];
+      config?.body?.forEach(data => { if (data?.isEditConnection) bodyDetails.push(data); })
+      config.body = bodyDetails;
+      setConfig(config);
+    }
+  }, [newConfig]);
 
   useEffect(() => {
     !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
@@ -57,6 +64,7 @@ const EditApplication = () => {
   useEffect(async () => {
     const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
     if (details?.applicationData?.id && !IsDetailsExists) {
+      sessionStorage.setItem("appData",JSON.stringify(appData));
       const convertAppData = await convertApplicationData(details, serviceType, false, false, t);
       setSessionFormData({ ...sessionFormData, ...convertAppData });
       setAppData({ ...convertAppData })
@@ -98,7 +106,14 @@ const EditApplication = () => {
   };
 
   const onSubmit = async (data) => {
-    const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
+    if(!canSubmit){
+      setShowToast({ warning: true, message: "PLEASE_FILL_MANDATORY_DETAILS" });
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    }
+    else{ 
+    const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};    
     let convertAppData = await convertEditApplicationDetails(data, details, actionData);
     const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
     setSubmitValve(false);
@@ -119,6 +134,7 @@ const EditApplication = () => {
     //     },
     //   });
     // }
+    }
   };
 
 
@@ -126,7 +142,7 @@ const EditApplication = () => {
     setShowToast(null);
   };
 
-  if (enabledLoader) {
+  if (enabledLoader || isConfigLoading) {
     return <Loader />;
   }
 
@@ -139,13 +155,13 @@ const EditApplication = () => {
         config={config.body}
         userType={"employee"}
         onFormValueChange={onFormValueChange}
-        isDisabled={!canSubmit}
+        // isDisabled={!canSubmit}
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}
         defaultValues={sessionFormData}
         appData={appData}
       ></FormComposer>
-      {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />}
+      {showToast && <Toast error={showToast.key} label={t(showToast?.message)} warning={showToast?.warning} onClose={closeToast} />}
     </React.Fragment>
   );
 };

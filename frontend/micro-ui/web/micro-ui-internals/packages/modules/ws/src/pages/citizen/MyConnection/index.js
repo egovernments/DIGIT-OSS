@@ -3,6 +3,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import WSConnection from "./WSConnection";
+import WSInfoLabel from "../../../pageComponents/WSInfoLabel";
 
 const MyConnections = ({ view }) => {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ const MyConnections = ({ view }) => {
   let applicationNos = applicationNoWS.concat(applicaionNoSW);
   const { isLoading: PTisLoading, isError: PTisError, error: PTerror, data: PTdata } = Digit.Hooks.pt.usePropertySearch(
     { filters: { propertyIds: applicationNos } },
-    { filters: { propertyIds: applicationNos }, enabled: applicationNos ? true : false, privacy: Digit.Utils.getPrivacyObject()}
+    { filters: { propertyIds: applicationNos }, enabled: applicationNos ? true : false}
   );
   connectionList =
     connectionList &&
@@ -48,6 +49,7 @@ const MyConnections = ({ view }) => {
   return (
     <React.Fragment>
       <Header>{`${t("WS_MYCONNECTIONS_HEADER")} ${connectionList ? `(${connectionList.length})` : ""}`}</Header>
+      <WSInfoLabel t={t} /> 
       <div>
         {connectionList?.length > 0 &&
           connectionList.map((application, index) => (

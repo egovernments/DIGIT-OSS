@@ -7,11 +7,11 @@ import { PTService } from "../../services/elements/PT";
  * Task 6502 to show only locality info without door no and street names
  */
 const getAddress = (address, t, shortAddress) => {
-  if (shortAddress) return `${address?.locality?.code ? t(address?.locality?.code) + ", " : ""}${address?.city ? address?.city : ""}`;
-  return `${address?.doorNo ? address?.doorNo + ", " : ""}${address?.street ? address?.street + ", " : ""}${
-    address?.landMark ? address?.landMark + ", " : ""
-  }${address?.locality?.code ? t(address?.locality?.code) + ", " : ""}${address?.city ? address?.city : ""}${
-    address?.pinCode ? ", " + address?.pinCode : ""
+  if (shortAddress) return `${address?.locality?.code ? t(`TENANTS_MOHALLA_${address?.locality?.code}`) + ", " : ""}${address?.city ? address?.city : ""}`;
+  return `${address?.doorNo ? `${address?.doorNo}, ` : ""}${address?.street ? `${address?.street}, ` : ""}${
+    address?.landmark ? `${address?.landmark}, ` : ""
+  }${address?.locality?.code ? t(`TENANTS_MOHALLA_${address?.locality?.code}`) : ""}${address?.city?.code || address?.city  ? `, ${t(address?.city.code || address?.city)}` : ""}${
+    address?.pincode ? `, ${address.pincode}` : " "
   }`;
 };
 

@@ -58,6 +58,7 @@ import { PrivateRoute } from "./atoms/PrivateRoute";
 import RadioButtons from "./atoms/RadioButtons";
 import Rating from "./atoms/Rating";
 import UnMaskComponent from "./atoms/UnMaskComponent";
+import WrapUnMaskComponent from "./atoms/WrapUnMaskComponent";
 import RoundedLabel from "./atoms/RoundedLabel";
 import SectionalDropdown from "./atoms/SectionalDropdown";
 import { LastRow, MediaRow, Row, StatusTable } from "./atoms/StatusTable";
@@ -172,6 +173,7 @@ import {
   BirthIcon,
   FirenocIcon,
   InfoIcon,
+  LoginIcon,
 } from "./atoms/svgindex";
 import Table from "./atoms/Table";
 import TelePhone from "./atoms/TelePhone";
@@ -443,9 +445,11 @@ export {
   ViewReportIcon,
   InboxIcon,
   UnMaskComponent,
+  WrapUnMaskComponent,
   PrivacyMaskIcon,
   DeathIcon,
   BirthIcon,
   FirenocIcon,
   InfoIcon,
+  LoginIcon,
 };

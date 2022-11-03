@@ -194,6 +194,8 @@ const getHeaderDetails = async (application, t,tenantId) => {
 
   return {
     title: "",
+    email: "",
+    phoneNumber: "",
     isHeader: true,
     typeOfApplication: application?.applicationNo?.includes("SW") ? t("WS_NEW_SEWERAGE_CONNECTION"): t("WS_COMMON_INBOX_NEWWS1"),
     date: (application?.auditDetails?.createdTime ? Digit.DateUtils.ConvertEpochToDate(application?.auditDetails?.createdTime) : Digit.DateUtils.ConvertEpochToDate(application?.additionalDetails?.appCreatedDate)) || "NA",

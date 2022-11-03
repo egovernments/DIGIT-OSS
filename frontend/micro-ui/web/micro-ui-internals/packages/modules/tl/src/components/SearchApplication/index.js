@@ -107,7 +107,7 @@ const SearchApplication = ({tenantId, t, onSubmit, data, count }) => {
         },
         {
           Header: t("WF_INBOX_HEADER_CURRENT_OWNER"),
-          accessor: (row) => GetCell(row.CurrentOwners[0].currentOwner || ""),
+          accessor: (row) => GetCell(row.CurrentOwners[0]?.currentOwner || ""),
           disableSortBy: true,
         },
         {

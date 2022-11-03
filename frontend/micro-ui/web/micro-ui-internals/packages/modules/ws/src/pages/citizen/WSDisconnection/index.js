@@ -16,11 +16,13 @@ const WSDisconnection = () => {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const match = useRouteMatch();
-
+  const stateId = Digit.ULBService.getStateId();
 
   let config = [];
-  let newConfig = newConfigWS;
-  newConfig.forEach((obj) => {
+  let { data: newConfig, isLoading: configLoading } = Digit.Hooks.ws.useWSConfigMDMS.getFormConfig(stateId, {});
+  newConfig = newConfig?.WSDisconnectionConfig ? newConfig?.WSDisconnectionConfig : newConfigWS;
+  newConfig = newConfigWS;
+  newConfig.filter((e) => e.head === "NEW_DISCONNECTION")?.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = "docsrequired";

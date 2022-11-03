@@ -18,6 +18,7 @@ const getEditDetails = (waterResult,sewerageresult,t) => {
     if(waterResult)
     {
     waterResult["ConnectionHolderDetails"] = waterResult?.connectionHolders ? {
+      ...waterResult?.connectionHolders?.[0],
       address : waterResult?.connectionHolders?.[0]?.correspondenceAddress,
       documentId : "",
       documentType : "",
@@ -57,6 +58,7 @@ const getEditDetails = (waterResult,sewerageresult,t) => {
     else if(sewerageresult)
     {
       sewerageresult.ConnectionHolderDetails = sewerageresult?.connectionHolders ? {
+          ...sewerageresult?.connectionHolders?.[0],
           address : sewerageresult?.connectionHolders?.[0]?.correspondenceAddress,
           documentId : "",
           documentType : "",
@@ -115,7 +117,7 @@ const EditApplication = ({ parentRoute }) => {
   const [params, setParams, clearParams] = Digit.Hooks.useSessionStorage("WS_EDIT_APPLICATION", {});
 
   const stateId = Digit.ULBService.getStateId();
-  //let { data: newConfig, isLoading: configLoading } = Digit.Hooks.tl.useMDMS.getFormConfig(stateId, {});
+  let { data: newConfig, isLoading: configLoading } = Digit.Hooks.ws.useWSConfigMDMS.getFormConfig(stateId, {});
 
   let filter1 = {};
 
@@ -123,8 +125,8 @@ const EditApplication = ({ parentRoute }) => {
   if (tenantId) filter1.tenantId = tenantId;
 
   //filter1 = {tenantId: tenantId, applicationNumber: applicationNobyData }
-  const {data : Waterresult} =  Digit.Hooks.ws.useWaterSearch({ tenantId, filters:{...filter1},BusinessService:"WS", t },{enabled:applicationNumber && applicationNumber.includes("WS") ? true : false});
-  const {data : Sewarageresult} = Digit.Hooks.ws.useSewarageSearch({ tenantId, filters:{...filter1},BusinessService:"SW",t },{enabled:applicationNumber && applicationNumber.includes("SW") ? true : false});
+  const {data : Waterresult} =  Digit.Hooks.ws.useWaterSearch({ tenantId, filters:{...filter1,isInternalCall:true},BusinessService:"WS", t },{enabled:applicationNumber && applicationNumber.includes("WS") ? true : false});
+  const {data : Sewarageresult} = Digit.Hooks.ws.useSewarageSearch({ tenantId, filters:{...filter1,isInternalCall:true},BusinessService:"SW",t },{enabled:applicationNumber && applicationNumber.includes("SW") ? true : false});
   let isModifyEdit = window.location.href.includes("/modify-connection/") || window.location.href.includes("/edit-application/")
 
   useEffect(() => {
@@ -209,12 +211,12 @@ const EditApplication = ({ parentRoute }) => {
     goNext(skipStep);
   };
   const handleSkip = () => { };
-  let newConfig=newConfigWS;
+  newConfig = newConfig?.WSCreateConfig ? newConfig?.WSCreateConfig : newConfigWS;
   newConfig?.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
   });
   config.indexRoute = "property-details";
-  if ((Waterresult && Object.keys(Waterresult).length>0 || !Sewarageresult) && Waterresult?.isLoading || Sewarageresult?.isLoading) {
+  if ((Waterresult && Object.keys(Waterresult).length>0 || !Sewarageresult) && Waterresult?.isLoading || Sewarageresult?.isLoading || configLoading) {
     return <Loader />;
   }
   const CheckPage = Digit?.ComponentRegistryService?.getComponent('WSCheckPage') ;

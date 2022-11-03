@@ -38,6 +38,17 @@ const NewApplication = () => {
   };
 
   useEffect(() => {
+    if(sessionStorage.getItem("isCreateEnabledEmployee") === "true")
+    {
+      sessionStorage.removeItem("isCreateEnabledEmployee");
+      history.replace("/employee");
+    }
+    else
+    sessionStorage.removeItem("isCreateEnabledEmployee");
+
+  })
+
+  useEffect(() => {
     setMutationHappened(false);
     clearSuccessData();
   }, []);
@@ -212,6 +223,7 @@ const NewApplication = () => {
             .then((response) => {
               if (response?.Licenses?.length > 0) {
                 // setTimeout(() => window.location.reload());
+                sessionStorage.setItem("isCreateEnabledEmployee","true");
                 history.replace(`/digit-ui/employee/tl/response`, { data: response?.Licenses });
                 clearSessionFormData();
               }

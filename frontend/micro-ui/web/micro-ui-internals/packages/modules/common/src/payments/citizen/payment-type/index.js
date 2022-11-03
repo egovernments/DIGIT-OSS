@@ -28,7 +28,7 @@ export const SelectPaymentType = (props) => {
   const history = useHistory();
   const { pathname, search } = useLocation();
   // const menu = ["AXIS"];
-  const { consumerCode, businessService } = useParams();
+  let { consumerCode, businessService } = useParams();
   const tenantId = state?.tenantId || __tenantId || Digit.ULBService.getCurrentTenantId();
   const stateTenant = Digit.ULBService.getStateId();
   const { control, handleSubmit } = useForm();
@@ -37,6 +37,8 @@ export const SelectPaymentType = (props) => {
     { tenantId: tenantId, consumerCode: wrkflow === "WNS" ? connectionNo : consumerCode, businessService },
     {}
   );
+  if (window.location.href.includes("ISWSCON") || wrkflow === "WNS") consumerCode = decodeURIComponent(consumerCode);
+  if( wrkflow === "WNS") consumerCode = stringReplaceAll(consumerCode,"+","/")
   useEffect(() => {
     if (paymentdetails?.Bill && paymentdetails.Bill.length == 0) {
       setShowToast({ key: true, label: "CS_BILL_NOT_FOUND" });
@@ -56,7 +58,7 @@ export const SelectPaymentType = (props) => {
         txnAmount: paymentAmount || billDetails.totalAmount,
         module: businessService,
         billId: billDetails.id,
-        consumerCode: wrkflow === "WNS" ? stringReplaceAll(consumerCode, "+", "/") : consumerCode,
+        consumerCode: consumerCode,
         productInfo: "Common Payment",
         gateway: d.paymentType,
         taxAndPayments: [

@@ -113,8 +113,11 @@ function SelectDocument({
                   {
                       documentType: selectedDocument?.code,
                       fileStoreId: uploadedFile,
-                      documentUid: uploadedFile,
+                      id: selectedDocument?.id,
+                      i18nKey: selectedDocument?.code,
+                      documentUid: selectedDocument?.documentUid ? selectedDocument?.documentUid : uploadedFile,
                       fileName: file?.name || "",
+                      status: "ACTIVE"
                   },
               ];
           });

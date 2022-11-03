@@ -112,12 +112,12 @@ const MutationCitizen = (props) => {
           marketValue: Number(additionalDetails?.marketValue),
         },
         ownershipCategory: ownershipCategory.code,
-        documents: [
-          ...originalProperty.documents.map((oldDoc) => {
+        documents:  [
+           ...(originalProperty?.documents && originalProperty?.documents?.length > 0 ? originalProperty?.documents?.map((oldDoc) => {
             if (mutationDocs?.PropertyTax?.MutationDocuments.some((mut) => oldDoc.documentType.includes(mut.code))) {
               return { ...oldDoc, status: "INACTIVE" };
             } else return oldDoc;
-          }),
+          }):[]) ,
           ...newDocs,
         ],
         workflow: { action: "OPEN", businessService: "PT.MUTATION", moduleName: "PT", tenantId: originalProperty.tenantId },

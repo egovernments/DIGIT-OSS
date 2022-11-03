@@ -27,11 +27,7 @@ const useArchitectInbox = ({ tenantId, filters, withEDCRData = true, isTotalCoun
             ...(applicationNo ? {applicationNo} : {}),
             ...(sortOrder ? {sortOrder} : {}),
             ...(locality?.length > 0 ? {locality: locality.map((item) => item.code.split("_").pop()).join(",")} : {}),
-        },
-        sortBy,
-        limit,
-        offset,
-        sortOrder
+        }
     }
 
     return useQuery(

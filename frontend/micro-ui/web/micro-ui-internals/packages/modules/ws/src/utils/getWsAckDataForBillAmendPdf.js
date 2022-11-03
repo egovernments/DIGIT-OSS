@@ -5,6 +5,15 @@ import {
     mdmsData
 } from "./index";
 
+function getReasonDocNoHeader(amendmentReason){
+    if(amendmentReason === "COURT_CASE_SETTLEMENT")
+    return "WS_COURT_ORDER_NO";
+    else if(amendmentReason === "ARREAR_WRITE_OFF" || amendmentReason === "ONE_TIME_SETTLEMENT")
+    return "WS_GOVERNMENT_NOTIFICATION_NUMBER";
+    else
+    return "WS_DOCUMENT_NO";
+  }
+
 const getHeaderDetails = async (application, t,tenantId) => {
     const dynamicHeaderData = await mdmsData(tenantId, t)
     let values = [];
@@ -19,17 +28,17 @@ const getHeaderDetails = async (application, t,tenantId) => {
                 value: t(application?.amendmentReason) || t("CS_NA")
             },
             {
-                title: t("WS_DOCUMENT_NO"),
+                title: t(getReasonDocNoHeader(application?.amendmentReason)),
                 value: application?.reasonDocumentNumber || t("CS_NA")
             },
             {
                 title: t("WS_COMMON_FROM_DATE_LABEL"),
                 value: convertEpochToDateDMY(application?.effectiveFrom)
             },
-            {   
+            {...application?.amendmentReason !== "COURT_CASE_SETTLEMENT" && {   
                 title: t("WS_COMMON_TO_DATE_LABEL"),
                 value: convertEpochToDateDMY(application?.effectiveTill)
-            }
+            }}
             ]
     }
 

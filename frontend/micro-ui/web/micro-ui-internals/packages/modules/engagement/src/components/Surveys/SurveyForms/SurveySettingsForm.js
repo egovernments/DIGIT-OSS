@@ -44,7 +44,7 @@ const SurveySettingsForms = ({ t, controlSurveyForm, surveyFormState, disableInp
     <div className="surveydetailsform-wrapper">
       <div className="heading">{t("CS_COMMON_SETTINGS")}</div>
       <span className="surveyformfield">
-        <label>{`${t("LABEL_SURVEY_START_DATE")} * :`}</label>
+        <label>{`${t("LABEL_SURVEY_START_DATE")} * `}</label>
         <Controller
           control={controlSurveyForm}
           name="fromDate"
@@ -61,7 +61,7 @@ const SurveySettingsForms = ({ t, controlSurveyForm, surveyFormState, disableInp
       </span>
 
       <span className="surveyformfield">
-        <label>{`${t("LABEL_SURVEY_START_TIME")} * :`}</label>
+        <label>{`${t("LABEL_SURVEY_START_TIME")} * `}</label>
         <Controller
           control={controlSurveyForm}
           name="fromTime"
@@ -78,7 +78,7 @@ const SurveySettingsForms = ({ t, controlSurveyForm, surveyFormState, disableInp
       </span>
 
       <span className="surveyformfield">
-        <label>{`${t("LABEL_SURVEY_END_DATE")} * :`}</label>
+        <label>{`${t("LABEL_SURVEY_END_DATE")} * `}</label>
         <Controller
           control={controlSurveyForm}
           name="toDate"
@@ -95,7 +95,7 @@ const SurveySettingsForms = ({ t, controlSurveyForm, surveyFormState, disableInp
       </span>
 
       <span className="surveyformfield">
-        <label>{`${t("LABEL_SURVEY_END_TIME")} * :`}</label>
+        <label>{`${t("LABEL_SURVEY_END_TIME")} * `}</label>
 
         <Controller
           control={controlSurveyForm}

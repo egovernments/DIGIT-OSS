@@ -1,6 +1,6 @@
 {
   "name": "e-governance",
-  "version": "1.9.0",
+  "version": "1.9.0-beta",
   "private": true,
   "homepage": "/dashboard/",
   "proxy": "https://qa.digit.org",

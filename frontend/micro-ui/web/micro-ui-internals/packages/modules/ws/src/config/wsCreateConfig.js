@@ -112,7 +112,7 @@ export const newConfig = [
         component: "WSWaterConnectionDetails",
         key: "waterConectionDetails",
         nextStep: "sewerage-connection-details",
-        WATER: "plumber-preference",
+        WATER: "document-details",
         texts: {
           headerCaption: "WS_COMMON_CONNECTION_DETAIL",
           header: "WS_WATER_CONNECTION_DETAILS",
@@ -124,8 +124,8 @@ export const newConfig = [
         route: "sewerage-connection-details",
         component: "WSSewerageConnectionDetails",
         key: "sewerageConnectionDetails",
-        nextStep: "plumber-preference",
-        SEWERAGE: "plumber-preference",
+        nextStep: "document-details",
+        SEWERAGE: "document-details",
         texts: {
           headerCaption: "WS_COMMON_CONNECTION_DETAIL",
           header: "PDF_STATIC_LABEL_SW_CONSOLIDATED_ACKNOWELDGMENT_LOGO_SUB_HEADER",
@@ -133,18 +133,18 @@ export const newConfig = [
           submitBarLabel: "CS_COMMON_NEXT",
         }
       },
-      {
-        route: "plumber-preference",
-        component: "WSPlumberPreference",
-        key: "plumberPreference",
-        nextStep: "document-details",
-        texts: {
-          headerCaption: "WS_COMMON_CONNECTION_DETAIL",
-          header: "WS_PLUMBER_PREFERENCE",
-          cardText: "",
-          submitBarLabel: "CS_COMMON_NEXT",
-        }
-      },
+      // {
+      //   route: "plumber-preference",
+      //   component: "WSPlumberPreference",
+      //   key: "plumberPreference",
+      //   nextStep: "document-details",
+      //   texts: {
+      //     headerCaption: "WS_COMMON_CONNECTION_DETAIL",
+      //     header: "WS_PLUMBER_PREFERENCE",
+      //     cardText: "",
+      //     submitBarLabel: "CS_COMMON_NEXT",
+      //   }
+      // },
       {
         route: "document-details",
         component: "WSDocumentDetails",
@@ -165,10 +165,10 @@ export const newConfig = [
     body: [{
       // For UM-4418 changes
       head: "",
-      isEditConnection: false,
-      isCreateConnection: false,
-      isModifyConnection: false,
-      isEditByConfigConnection: false,
+      isEditConnection: true,
+      isCreateConnection: true,
+      isModifyConnection: true,
+      isEditByConfigConnection: true,
       body: [
         {
           type: "component",
@@ -311,10 +311,10 @@ export const newConfig = [
     body: [{
       // For UM-4418 changes
       head: "",
-      isEditConnection: false,
-      isCreateConnection: false,
-      isModifyConnection: false,
-      isEditByConfigConnection: false,
+      isEditConnection: true,
+      isCreateConnection: true,
+      isModifyConnection: true,
+      isEditByConfigConnection: true,
       body: [
         {
           type: "component",
@@ -456,10 +456,10 @@ export const newConfig = [
     body: [{
       // For UM-4418 changes
       head: "",
-      isEditConnection: false,
-      isCreateConnection: false,
-      isModifyConnection: false,
-      isEditByConfigConnection: false,
+      isEditConnection: true,
+      isCreateConnection: true,
+      isModifyConnection: true,
+      isEditByConfigConnection: true,
       body: [
         {
           type: "component",
@@ -601,10 +601,10 @@ export const newConfig = [
     body: [{
       // For UM-4418 changes
       head: "",
-      isEditConnection: false,
-      isCreateConnection: false,
-      isModifyConnection: false,
-      isEditByConfigConnection: false,
+      isEditConnection: true,
+      isCreateConnection: true,
+      isModifyConnection: true,
+      isEditByConfigConnection: true,
       body: [
         {
           type: "component",

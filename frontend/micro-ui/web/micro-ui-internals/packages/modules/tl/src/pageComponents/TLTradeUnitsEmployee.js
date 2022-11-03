@@ -231,6 +231,19 @@ const TradeUnitForm = (_props) => {
         }
     }, [tradeTypeMdmsData, !isLoading, billingSlabTradeTypeData]);
 
+function checkRangeForUomValue(e, fromUom, toUom){
+    if(Number.isInteger(fromUom)){
+        if(!(e && parseInt(e) >= fromUom)){
+        return false;
+        }
+       }
+    if(Number.isInteger(toUom)){
+       if(!(e && parseInt(e) <= toUom)){
+         return false
+         }
+       }
+    return true
+}
 
     const errorStyle = { width: "70%", marginLeft: "30%", fontSize: "12px", marginTop: "-21px" };
     return (
@@ -402,7 +415,7 @@ const TradeUnitForm = (_props) => {
                                 control={control}
                                 name={"uomValue"}
                                 defaultValue={unit?.uomValue}
-                                rules={unit?.tradeSubType?.uom && { required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^(0)*[1-9][0-9]{0,5}$/.test(val) ? true : t("ERR_DEFAULT_INPUT_FIELD_MSG")) } } }
+                                rules={unit?.tradeSubType?.uom && { required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^(0)*[1-9][0-9]{0,5}$/.test(val) ?(checkRangeForUomValue(val,unit?.tradeSubType?.fromUom,unit?.tradeSubType?.toUom) ? true :  t("ERR_WRONG_UOM_VALUE")) : t("ERR_DEFAULT_INPUT_FIELD_MSG")) } } }
                                 render={(props) => (
                                     <TextInput
                                         value={getValues("uomValue")}

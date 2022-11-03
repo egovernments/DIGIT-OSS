@@ -64,7 +64,7 @@ export const WSMyApplications = () => {
     <React.Fragment>
       <Header>{`${t("CS_HOME_MY_APPLICATIONS")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
       {/* For UM-4418 changes */}
-      {/* <WSInfoLabel t={t} /> */}
+       <WSInfoLabel t={t} /> 
       <div>
         {applicationsList?.length > 0 &&
           applicationsList.sort((a, b) => b.auditDetails?.lastModifiedTime - a.auditDetails?.lastModifiedTime ).map((application, index) => (

@@ -2,31 +2,12 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation } from "react-router-dom";
 import { PrivateRoute, BreadCrumb } from "@egovernments/digit-ui-react-components";
-import ApplicationBillAmendment from "./ApplicationBillAmendment";
-import RequiredDocuments from "./RequiredDocuments";
-import NewApplication from "./NewApplication";
-import ApplicationDetails from "./ApplicationDetails";
-import GetConnectionDetails from "./connectionDetails/connectionDetails";
-import ActivateConnection from "./ActivateConnection";
+
+
 import WSResponse from "./WSResponse";
 import Response from "./Response";
-import ApplicationDetailsBillAmendment from "./ApplicationDetailsBillAmendment";
-import Search from "./search";
-import SearchWater from "./SearchWater";
-import EditApplication from "./EditApplication";
-import ConsumptionDetails from "./connectionDetails/ConsumptionDetails";
-import ModifyApplication from "./ModifyApplication";
-import EditModifyApplication from "./EditModifyApplication";
-import DisconnectionApplication from './DisconnectionApplication/'
-import WSEditApplicationByConfig from "./EditApplication/WSEditApplicationByConfig";
 import ResponseBillAmend from "./ResponseBillAmend";
-import BillIAmendMentInbox from "../../components/BillIAmendMentInbox";
-import GetDisconnectionDetails from "./DisconnectionDetails";
 import WSDisconnectionResponse from "./DisconnectionApplication/WSDisconnectionResponse";
-import ModifyApplicationDetails from "./ModifyApplicationDetails";
-import EditDisconnectionApplication from "./EditDisconnectionApplication";
-import EditDisconnectionByConfig from "./EditDisconnectionApplication/EditDisconnectionByConfig"
-import ResubmitDisconnection from "./EditDisconnectionApplication/ResubmitDisconnection";
 
 const BILLSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
@@ -35,8 +16,16 @@ const BILLSBreadCrumbs = ({ location }) => {
   const fromScreen = new URLSearchParams(search).get("from") || null;
   const IsEdit = new URLSearchParams(search).get("isEdit") || null;
   const applicationNumbercheck = new URLSearchParams(search).get("applicationNumber") || null;
+  let requestParam = window.location.href.split("?")[1];
 
-  const crumbs = [
+  function findLastIndex(array, searchKey, searchValue) {
+    var index = array.slice().reverse().findIndex(x => x[searchKey] === searchValue);
+    var count = array.length - 1
+    var finalIndex = index >= 0 ? count - index : index;
+    return finalIndex;
+  }
+
+  let crumbs = [
     {
       path: "/digit-ui/employee",
       content: t("ES_COMMON_HOME"),
@@ -51,6 +40,16 @@ const BILLSBreadCrumbs = ({ location }) => {
       path: "/digit-ui/employee/water/inbox",
       content: t("ES_COMMON_BILLS_WATER_INBOX_LABEL"),
       show: location.pathname.includes("/water/inbox") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/ws/water/bill-amendment/inbox",
+      content: t("ES_COMMON_BILL_AMEND_WATER_INBOX_LABEL"),
+      show: location.pathname.includes("/water/bill-amendment/inbox") ? true : false,
+    },
+    {
+      path: "/digit-ui/employee/ws/sewerage/bill-amendment/inbox",
+      content: t("ES_COMMON_BILL_AMEND_SEWERAGE_INBOX_LABEL"),
+      show: location.pathname.includes("/sewerage/bill-amendment/inbox") ? true : false,
     },
     {
       path: "/digit-ui/employee/ws/water/search-application",
@@ -97,6 +96,12 @@ const BILLSBreadCrumbs = ({ location }) => {
       show: location.pathname.includes("/consumption-details") ? true : false,
       isBack: fromScreen && true,
     },
+    // {
+    //   path: sessionStorage.getItem("redirectedfromEDIT") === "true"? (applicationNumbercheck?.includes("SW_AP")?  "/digit-ui/employee/ws/sewerage/search-application" : "/digit-ui/employee/ws/water/search-application") : "/digit-ui/employee/ws/application-details",
+    //   content: fromScreen ? `${t(fromScreen)} / ${t("WS_APPLICATION_DETAILS_HEADER")}` : t("WS_APPLICATION_DETAILS_HEADER"),
+    //   show: location.pathname.includes("/generate-note") ? true : false,
+    //   isBack: sessionStorage.getItem("redirectedfromEDIT") !== "true" && fromScreen && true,
+    // },
     {
       path: sessionStorage.getItem("redirectedfromEDIT") === "true"? (applicationNumbercheck?.includes("SW_AP")?  "/digit-ui/employee/ws/sewerage/search-application" : "/digit-ui/employee/ws/water/search-application") : "/digit-ui/employee/ws/application-details",
       content: fromScreen ? `${t(fromScreen)} / ${t("WS_APPLICATION_DETAILS_HEADER")}` : t("WS_APPLICATION_DETAILS_HEADER"),
@@ -168,11 +173,11 @@ const BILLSBreadCrumbs = ({ location }) => {
       show: location.pathname.includes("/ws-disconnection-response") ? true : false,
       isBack: true
     },
-    {
-      path: "/digit-ui/employee/sewerage/bill-amendment/inbox",
-      content: t("ES_COMMON_BILLS_SEWERAGE_INBOX_LABEL"),
-      show: location.pathname.includes("/sewerage/bill-amendment/inbox") ? true : false,
-    },
+    // {
+    //   path: "/digit-ui/employee/sewerage/bill-amendment/inbox",
+    //   content: t("ES_COMMON_BILLS_SEWERAGE_INBOX_LABEL"),
+    //   show: location.pathname.includes("/sewerage/bill-amendment/inbox") ? true : false,
+    // },
     {
       path: `${location?.pathname}${location.search}`,
       content: fromScreen ? `${t(fromScreen)} / ${t("WS_MODIFY_CONNECTION_BUTTON")}`:t("WS_MODIFY_CONNECTION_BUTTON"),
@@ -185,7 +190,7 @@ const BILLSBreadCrumbs = ({ location }) => {
       show: location.pathname.includes("/required-documents") ? true : false,
     },
     {
-      path: "/digit-ui/employee/ws/bill-amendment",
+      path: requestParam ? `/digit-ui/employee/ws/bill-amendment?${requestParam}` : "/digit-ui/employee/ws/bill-amendment",
       content: t("WS_BILL_AMEND_APP"),
       show: location.pathname.includes("ws/bill-amendment") && !IsEdit ? true : false,
     },
@@ -198,8 +203,18 @@ const BILLSBreadCrumbs = ({ location }) => {
       path: "/digit-ui/employee/ws/response",
       content: t("WS_ACK_SCREEN"),
       show: location.pathname.includes("/employee/ws/response") ? true : false,
+      isclickable : false,
+    },
+    {
+      path: "/digit-ui/employee/ws/generate-note-bill-amendment",
+      content: t("CS_TITLE_GENERATE_NOTE"),
+      show: location.pathname.includes("/generate-note-bill-amendment") ? true : false,
+      //isclickable : false,
     }
   ];
+
+  let lastCrumbIndex = findLastIndex(crumbs,"show",true)
+  crumbs[lastCrumbIndex] = {...crumbs[lastCrumbIndex],isclickable: false}
 
   return <div style={window?.location.href.includes("/employee/ws/bill-amendment") || window?.location.href.includes("/employee/ws/response")? {marginLeft:"20px"} : {}}><BreadCrumb crumbs={crumbs}  spanStyle={{ maxWidth: "min-content"}} /></div>;
 };
@@ -209,8 +224,27 @@ const App = ({ path }) => {
   const WSDocsRequired = Digit?.ComponentRegistryService?.getComponent("WSDocsRequired");
   const WSInbox = Digit?.ComponentRegistryService?.getComponent("WSInbox");
   const WSDisconnectionDocsRequired = Digit?.ComponentRegistryService?.getComponent('WSDisconnectionDocsRequired');
-  
-  // const locationCheck = window.location.href.includes("/employee/ws/new-application") || window.location.href.includes("/employee/ws/create-application");
+  const WSApplicationBillAmendment = Digit?.ComponentRegistryService?.getComponent("WSApplicationBillAmendment");
+  const WSRequiredDocuments = Digit?.ComponentRegistryService?.getComponent("WSRequiredDocuments");
+  const WSNewApplication = Digit?.ComponentRegistryService?.getComponent("WSNewApplication");
+  const WSApplicationDetails = Digit?.ComponentRegistryService?.getComponent("WSApplicationDetails");
+  const WSGetConnectionDetails = Digit?.ComponentRegistryService?.getComponent("WSGetConnectionDetails");
+  const WSActivateConnection = Digit?.ComponentRegistryService?.getComponent("WSActivateConnection");
+  const WSApplicationDetailsBillAmendment = Digit?.ComponentRegistryService?.getComponent("WSApplicationDetailsBillAmendment");
+  const WSSearch = Digit?.ComponentRegistryService?.getComponent("WSSearch");
+  const WSSearchWater = Digit?.ComponentRegistryService?.getComponent("WSSearchWater");
+  const WSEditApplication = Digit?.ComponentRegistryService?.getComponent("WSEditApplication");
+  const WSConsumptionDetails = Digit?.ComponentRegistryService?.getComponent("WSConsumptionDetails");
+  const WSModifyApplication = Digit?.ComponentRegistryService?.getComponent("WSModifyApplication");
+  const WSEditModifyApplication = Digit?.ComponentRegistryService?.getComponent("WSEditModifyApplication");
+  const WSDisconnectionApplication = Digit?.ComponentRegistryService?.getComponent("WSDisconnectionApplication");
+  const WSEditApplicationByConfig = Digit?.ComponentRegistryService?.getComponent("WSEditApplicationByConfig");
+  const WSBillIAmendMentInbox = Digit?.ComponentRegistryService?.getComponent("WSBillIAmendMentInbox");
+  const WSGetDisconnectionDetails = Digit?.ComponentRegistryService?.getComponent("WSGetDisconnectionDetails");
+  const WSModifyApplicationDetails = Digit?.ComponentRegistryService?.getComponent("WSModifyApplicationDetails");
+  const WSEditDisconnectionApplication = Digit?.ComponentRegistryService?.getComponent("WSEditDisconnectionApplication");
+  const WSEditDisconnectionByConfig = Digit?.ComponentRegistryService?.getComponent("WSEditDisconnectionByConfig");
+  const WSResubmitDisconnection = Digit?.ComponentRegistryService?.getComponent("WSResubmitDisconnection");
 
   const locationCheck = 
   window.location.href.includes("/employee/ws/new-application") || 
@@ -241,39 +275,39 @@ const App = ({ path }) => {
           </div>
 
           <PrivateRoute path={`${path}/create-application`} component={WSDocsRequired} />
-          <PrivateRoute path={`${path}/new-application`} component={NewApplication} />
-          <PrivateRoute path={`${path}/edit-application`} component={EditApplication} />
-          <PrivateRoute path={`${path}/edit-disconnection-application`} component={EditDisconnectionApplication} />
-          <PrivateRoute path={`${path}/resubmit-disconnection-application`} component={ResubmitDisconnection} />
-          <PrivateRoute path={`${path}/config-by-disconnection-application`} component={EditDisconnectionByConfig} />
-          <PrivateRoute path={`${path}/application-details`} component={ApplicationDetails} />
-          <PrivateRoute path={`${path}/modify-details`} component={ModifyApplicationDetails} />
-          <PrivateRoute path={`${path}/connection-details`} component={GetConnectionDetails} />
-          <PrivateRoute path={`${path}/bill-amendment`} component={() => <ApplicationBillAmendment {...{ path }} />} />
-          <PrivateRoute path={`${path}/application-details-bill-amendment`} component={() => <ApplicationDetailsBillAmendment {...{ path }} />} />
+          <PrivateRoute path={`${path}/new-application`} component={WSNewApplication} />
+          <PrivateRoute path={`${path}/edit-application`} component={WSEditApplication} />
+          <PrivateRoute path={`${path}/edit-disconnection-application`} component={WSEditDisconnectionApplication} />
+          <PrivateRoute path={`${path}/resubmit-disconnection-application`} component={WSResubmitDisconnection} />
+          <PrivateRoute path={`${path}/config-by-disconnection-application`} component={WSEditDisconnectionByConfig} />
+          <PrivateRoute path={`${path}/application-details`} component={WSApplicationDetails} />
+          <PrivateRoute path={`${path}/modify-details`} component={WSModifyApplicationDetails} />
+          <PrivateRoute path={`${path}/connection-details`} component={WSGetConnectionDetails} />
+          <PrivateRoute path={`${path}/bill-amendment`} component={() => <WSApplicationBillAmendment {...{ path }} />} />
+          <PrivateRoute path={`${path}/generate-note-bill-amendment`} component={() => <WSApplicationDetailsBillAmendment {...{ path }} />} />
           <PrivateRoute path={`${path}/response`} component={() => <Response {...{ path }} />} />
           <PrivateRoute path={`${path}/response-bill-amend`} component={() => <ResponseBillAmend {...{ path }} />} />
-          <PrivateRoute path={`${path}/required-documents`} component={() => <RequiredDocuments {...{ path }} />} />
-          <PrivateRoute path={`${path}/activate-connection`} component={ActivateConnection} />
-          <PrivateRoute path={`${path}/water/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
-          <PrivateRoute path={`${path}/sewerage/search-application`} component={(props) => <Search {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/required-documents`} component={() => <WSRequiredDocuments {...{ path }} />} />
+          <PrivateRoute path={`${path}/activate-connection`} component={WSActivateConnection} />
+          <PrivateRoute path={`${path}/water/search-application`} component={(props) => <WSSearch {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/sewerage/search-application`} component={(props) => <WSSearch {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/ws-response`} component={WSResponse} />
           <PrivateRoute path={`${path}/ws-disconnection-response`} component={WSDisconnectionResponse} />
-          <PrivateRoute path={`${path}/water/search-connection`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
-          <PrivateRoute path={`${path}/sewerage/search-connection`} component={(props) => <SearchWater {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/water/search-connection`} component={(props) => <WSSearchWater {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/sewerage/search-connection`} component={(props) => <WSSearchWater {...props} parentRoute={path} />} />
 
-          <PrivateRoute path={`${path}/consumption-details`} component={ConsumptionDetails} />
-          <PrivateRoute path={`${path}/modify-application`} component={ModifyApplication} />
-          <PrivateRoute path={`${path}/modify-application-edit`} component={EditModifyApplication} />
+          <PrivateRoute path={`${path}/consumption-details`} component={WSConsumptionDetails} />
+          <PrivateRoute path={`${path}/modify-application`} component={WSModifyApplication} />
+          <PrivateRoute path={`${path}/modify-application-edit`} component={WSEditModifyApplication} />
           <PrivateRoute path={`${path}/disconnection-application`} component={WSDisconnectionDocsRequired} />
-          <PrivateRoute path={`${path}/new-disconnection`} component={DisconnectionApplication} />
-          <PrivateRoute path={`${path}/bill-amend/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/new-disconnection`} component={WSDisconnectionApplication} />
+          <PrivateRoute path={`${path}/bill-amend/inbox`} component={(props) => <WSBillIAmendMentInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/water/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/sewerage/inbox`} component={(props) => <WSInbox {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/edit-application-by-config`} component={WSEditApplicationByConfig} />
-          <PrivateRoute path={`${path}/disconnection-details`} component={GetDisconnectionDetails} />
-          <PrivateRoute path={`${path}/water/bill-amendment/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
-          <PrivateRoute path={`${path}/sewerage/bill-amendment/inbox`} component={(props) => <BillIAmendMentInbox {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/disconnection-details`} component={WSGetDisconnectionDetails} />
+          <PrivateRoute path={`${path}/water/bill-amendment/inbox`} component={(props) => <WSBillIAmendMentInbox {...props} parentRoute={path} />} />
+          <PrivateRoute path={`${path}/sewerage/bill-amendment/inbox`} component={(props) => <WSBillIAmendMentInbox {...props} parentRoute={path} />} />
 
           {/* <Route path={`${path}/search`} component={SearchConnectionComponent} />
           <Route path={`${path}/search-results`} component={SearchResultsComponent} /> */}

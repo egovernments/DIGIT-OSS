@@ -11,7 +11,7 @@ const useInboxMobileCardsData = ({ parentRoute, table }) => {
   const getApplicationNumberCell = (value, amendmentReason) => {
     return (
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <Link to={`/digit-ui/employee/ws/application-details-bill-amendment?applicationNumber=${value}`}>
+        <Link to={`/digit-ui/employee/ws/generate-note-bill-amendment?applicationNumber=${value}`}>
           <span className="link">{value}</span>
         </Link>
         {GetCell(t(`BILLAMENDMENT_${amendmentReason}_HEADING`))}

@@ -24,6 +24,10 @@ const NewApplication = () => {
   const [config, setConfig] = useState({ head: "", body: [] });
   let tenantId = Digit.ULBService.getCurrentTenantId();
   tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig, isLoading } = Digit.Hooks.ws.useWSConfigMDMS.WSCreateConfig(stateId, {});
+
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
 
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_WS_NEW_FORM", {});
@@ -34,13 +38,16 @@ const NewApplication = () => {
   );
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isCreate);
-    config.head = "WS_APP_FOR_WATER_AND_SEWERAGE_LABEL";
-    let bodyDetails = [];
-    config?.body?.forEach(data => { if(data?.isCreateConnection) bodyDetails.push(data); })
-    config.body = bodyDetails;
-    setConfig(config);
-  }, []);
+    if (!isLoading) {
+      // const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isCreate);
+      const config = newConfig.find((conf) => conf.hideInCitizen && conf.isCreate);
+      config.head = "WS_APP_FOR_WATER_AND_SEWERAGE_LABEL";
+      let bodyDetails = [];
+      config?.body?.forEach(data => { if (data?.isCreateConnection) bodyDetails.push(data); })
+      config.body = bodyDetails;
+      setConfig(config);
+    }
+  }, [newConfig]);
 
   useEffect(() => {
     !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
@@ -87,7 +94,7 @@ const NewApplication = () => {
       setSessionFormData({ ...sessionFormData, ...formData });
     }
 
-    if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState.errors["owners"] && Object.values(formState.errors["owners"].type).filter((ob) => ob.type === "required").length == 0 && !formData?.cpt?.details?.propertyId) setSubmitValve(true);
+    if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState?.errors?.["ConnectionHolderDetails"]?.type && Object.keys(formState?.errors?.["ConnectionHolderDetails"]?.type)?.length == 1 && formState.errors["ConnectionHolderDetails"] && Object.values(formState.errors["ConnectionHolderDetails"].type).filter((ob) => ob.type === "required" && (ob?.ref?.value !== "")).length > 0  /*&&  !formData?.cpt?.details?.propertyId*/) setSubmitValve(true);
     else setSubmitValve(!(Object.keys(formState.errors).length));
     // if(!formData?.cpt?.details?.propertyId) setSubmitValve(false);
   };
@@ -102,6 +109,14 @@ const NewApplication = () => {
           return;
         }
     }
+
+    if(!canSubmit){
+      setShowToast({ warning: true, message: "PLEASE_FILL_MANDATORY_DETAILS" });
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    }
+    else{
 
     if (!data?.cpt?.details) {
       data.cpt = {
@@ -231,13 +246,14 @@ const NewApplication = () => {
         });
       }
     }
+  }
   };
 
   const closeToast = () => {
     setShowToast(null);
   };
 
-  if (isEnableLoader) {
+  if (isEnableLoader || isLoading) {
     return <Loader />;
   }
 
@@ -250,12 +266,12 @@ const NewApplication = () => {
         config={config.body}
         userType={"employee"}
         onFormValueChange={onFormValueChange}
-        isDisabled={!canSubmit}
+        // isDisabled={!canSubmit}
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}
         defaultValues={sessionFormData}
       ></FormComposer>
-      {showToast && <Toast isDleteBtn={true} error={showToast?.key === "error" ? true : false} label={t(showToast?.message)} onClose={closeToast} />}
+      {showToast && <Toast isDleteBtn={true} error={showToast?.key === "error" ? true : false} warning={showToast?.warning} label={t(showToast?.message)} onClose={closeToast} />}
       {/* {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />} */}
     </React.Fragment>
   );

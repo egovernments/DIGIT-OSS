@@ -5,6 +5,7 @@ import Axios from "axios";
 import { useHistory, Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {stringReplaceAll} from "../../../utils/index";
+import WSInfoLabel from "../../../pageComponents/WSInfoLabel";
 
 const WNSMyBills = ({ template, header, actionButtonLabel }) => {
   const { t } = useTranslation();
@@ -52,6 +53,7 @@ const WNSMyBills = ({ template, header, actionButtonLabel }) => {
             {t(header)} ({searchResults?.length})
           </Header>
         )}
+         <WSInfoLabel t={t} /> 
         <ResponseComposer data={searchResults} template={template} actionButtonLabel={actionButtonLabel} onSubmit={onSubmit} />
       </div>
       {!searchResults?.length > 0 && <p style={{ paddingLeft: "16px" }}>{t("CS_BILLS_TEXT_NO_BILLS_FOUND")}</p>}

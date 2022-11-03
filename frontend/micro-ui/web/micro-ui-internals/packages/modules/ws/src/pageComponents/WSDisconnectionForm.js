@@ -52,6 +52,7 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
   const { isMdmsLoading, data: mdmsData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["disconnectionType"]);
   const { isLoading: wsDocsLoading, data: wsDocs } =  Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(stateCode, "DisconnectionDocuments");
   const {isLoading: slaLoading, data: slaData } = Digit.Hooks.ws.useDisconnectionWorkflow({tenantId});
+  const isReSubmit = window.location.href.includes("resubmit");
   const {
     isLoading: creatingWaterApplicationLoading,
     isError: createWaterApplicationError,
@@ -86,7 +87,7 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
   } = Digit.Hooks.ws.useWSApplicationActions("SEWERAGE");
 
 
-  const closeToastOfError = () => { setShowToast(null); };
+  const closeToastOfError = () => { setError(null); };
 
   useEffect(() => {
     const oldData = {...disconnectionData};
@@ -126,6 +127,16 @@ const WSDisconnectionForm = ({ t, config, onSelect, userType }) => {
 
     if( convertDateToEpoch(data?.date)  <= convertDateToEpoch(proposedDate)){
       setError({key: "error", message: "PROPOSED_DISCONNECTION_INVALID_DATE"});
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
+    }
+
+    else if(wsDocsLoading || documents.length < 2 || disconnectionData?.reason?.value === "" || disconnectionData?.reason === "" || disconnectionData?.date === "" || disconnectionData?.type === ""){
+      setError({ warning: true, message: "PLEASE_FILL_MANDATORY_DETAILS" });
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
     }
 
     else {
@@ -206,7 +217,7 @@ if(userType === 'citizen') {
         >
           
           <div style={{padding:"0px 10px 10px 10px"}}>
-          <CardHeader>{t("WS_APPLICATION_FORM")}</CardHeader>
+          <CardHeader>{ isReSubmit ? t("RESUBMIT_DISCONNECTION_FORM") : t("WS_APPLICATION_FORM")}</CardHeader>
           <StatusTable>
             <Row key={t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")} label={`${t("PDF_STATIC_LABEL_CONSUMER_NUMBER_LABEL")}`} text={applicationData?.connectionNo} className="border-none" />
           </StatusTable> 
@@ -263,6 +274,9 @@ if(userType === 'citizen') {
 
                 if( parseInt(convertDateToEpoch(disconnectionData?.date))  <= parseInt(convertDateToEpoch(proposedDate))){
                   setError({key: "error", message: "PROPOSED_DISCONNECTION_INVALID_DATE"});
+                  setTimeout(() => {
+                    setError(false);
+                  }, 3000);  
                 }
                 else{
                   history.push(match.path.replace("application-form", "documents-upload"));
@@ -373,7 +387,7 @@ if(userType === 'citizen') {
                     />
                   );
                   })}
-                  {error && <Toast error={error?.key === "error" ? true : false} label={t(error?.message)} onClose={() => setError(null)} />}
+                  {error && <Toast error={error?.key === "error" ? true : false} label={t(error?.message)} warning={error?.warning} onClose={() => setError(null)} />}
       </div>
 
 
@@ -384,10 +398,10 @@ if(userType === 'citizen') {
               label={t("ACTION_TEST_SUBMIT")}
               onSubmit={() => onSubmit(disconnectionData)}
               style={{ margin: "10px 10px 0px 0px" }}
-              disabled={
-                wsDocsLoading || documents.length < 2 || disconnectionData?.reason?.value === "" || disconnectionData?.reason === "" || disconnectionData?.date === "" || disconnectionData?.type === ""
-                ? true 
-                : false}
+              // disabled={
+              //   wsDocsLoading || documents.length < 2 || disconnectionData?.reason?.value === "" || disconnectionData?.reason === "" || disconnectionData?.date === "" || disconnectionData?.type === ""
+              //   ? true 
+              //   : false}
             />}
      </ActionBar>
     </div>

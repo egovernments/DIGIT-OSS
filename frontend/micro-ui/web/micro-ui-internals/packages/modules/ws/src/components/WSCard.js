@@ -76,7 +76,7 @@ const WSCard = () => {
     links: [
       {
         count: isWSInboxLoading ? "-" : wsData?.totalCount,
-        label: t("WS_WATER_INBOX"),
+        label: t("WS_INBOX_HEADER"),
         link: `/digit-ui/employee/ws/water/inbox`,
         roles: ["WS_CEMP", "WS_APPROVER", "WS_FIELD_INSPECTOR", "WS_DOC_VERIFIER", "WS_CLERK"],
       },

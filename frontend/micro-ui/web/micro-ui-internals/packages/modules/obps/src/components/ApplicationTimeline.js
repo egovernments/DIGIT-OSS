@@ -77,12 +77,16 @@ const ApplicationTimeline = ({ id, tenantId }) => {
             <ConnectingCheckPoints>
               {data?.timeline &&
                 data?.timeline.map((checkpoint, index, arr) => {
+                  let timelineStatusPostfix = "";
+                  if (window.location.href.includes("/obps")) {
+                    timelineStatusPostfix = index == 0 ? "" : `_DONE`;
+                  }
                   return (
                     <React.Fragment key={index}>
                       <CheckPoint
                         keyValue={index}
                         isCompleted={index === 0}
-                        label={checkpoint.state ? t(`WF_ARCHITECT_${checkpoint.state}`) : "NA"}
+                        label={checkpoint.state ? t(`WF_ARCHITECT_${checkpoint.state}${timelineStatusPostfix}`) : "NA"}
                         customChild={getTimelineCaptions(checkpoint)}
                       />
                     </React.Fragment>

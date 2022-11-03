@@ -246,7 +246,7 @@ export const Search = {
       .map((trip) => {
         if (vendorOwnerKey[trip.tripOwnerId]) {
           return { ...trip, dsoName: vendorOwnerKey[trip.tripOwnerId].name };
-        } else return {};
+        } else return { ...trip };
       })
       .filter((e) => e.tripOwnerId);
   },

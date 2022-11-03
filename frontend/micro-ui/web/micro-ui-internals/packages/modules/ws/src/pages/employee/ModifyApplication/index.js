@@ -26,6 +26,9 @@ const ModifyApplication = () => {
   const applicationNumber = filters?.applicationNumber;
   const serviceType = filters?.service;
 
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig, isLoading: isConfigLoading } = Digit.Hooks.ws.useWSConfigMDMS.WSCreateConfig(stateId, {});
+
   let details = cloneDeep(state?.data);
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, details?.applicationNo, details?.applicationData?.serviceType,{privacy : Digit.Utils.getPrivacyObject() });
   details = applicationDetails;
@@ -39,14 +42,17 @@ const ModifyApplication = () => {
   );
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isModify);
-    config.head = "WS_WATER_AND_SEWERAGE_MODIFY_CONNECTION_LABEL";
-    let bodyDetails = [];
-    config?.body?.forEach(data => { if (data?.isModifyConnection) bodyDetails.push(data); });
-    bodyDetails.forEach(bdyData => { if (bdyData?.head == "WS_COMMON_PROPERTY_DETAILS") bdyData.head = ""; })
-    config.body = bodyDetails;
-    setConfig(config);
-  }, []);
+   if (!isConfigLoading) {
+     // const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isModify);
+     const config = newConfig.find((conf) => conf.hideInCitizen && conf.isModify);
+     config.head = "WS_WATER_AND_SEWERAGE_MODIFY_CONNECTION_LABEL";
+     let bodyDetails = [];
+     config?.body?.forEach(data => { if (data?.isModifyConnection) bodyDetails.push(data); });
+     bodyDetails.forEach(bdyData => { if (bdyData?.head == "WS_COMMON_PROPERTY_DETAILS") bdyData.head = ""; })
+     config.body = bodyDetails;
+     setConfig(config);
+   }
+  }, [newConfig]);
 
   useEffect(() => {
     !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
@@ -126,6 +132,13 @@ const ModifyApplication = () => {
           return;
         }
     }
+    if(!canSubmit){
+      setShowToast({ warning: true, message: "PLEASE_FILL_MANDATORY_DETAILS" });
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    }
+    else{
 
     if (!data?.cpt?.details) {
       data.cpt = {
@@ -194,6 +207,7 @@ const ModifyApplication = () => {
         });
       }
     }
+  }
   };
 
 
@@ -201,7 +215,7 @@ const ModifyApplication = () => {
     setShowToast(null);
   };
 
-  if (enabledLoader || isEnableLoader) {
+  if (enabledLoader || isEnableLoader || isConfigLoading) {
     return <Loader />;
   }
 
@@ -214,7 +228,7 @@ const ModifyApplication = () => {
         config={config.body}
         userType={"employee"}
         onFormValueChange={onFormValueChange}
-        isDisabled={!canSubmit}
+        // isDisabled={!canSubmit}
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}
         defaultValues={sessionFormData}

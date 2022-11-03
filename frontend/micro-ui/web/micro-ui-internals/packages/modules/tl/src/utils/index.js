@@ -315,6 +315,8 @@ export const convertToTrade = (data = {}) => {
             street: !data?.cpt ? data?.address?.street : data?.cpt?.details?.address?.street,
             landmark: !data?.cpt ? data?.address?.landmark : data?.cpt?.details?.address?.landmark,
           },
+          noOfEmployees: data?.TradeDetails?.NumberOfEmployees || null,
+          operationalArea : data?.TradeDetails?.OperationalSqFtArea || null,
           applicationDocuments: null,
           accessories: data?.TradeDetails?.accessories ? getaccessories(data) : null,
           owners: getownerarray(data),
@@ -333,7 +335,8 @@ export const convertToTrade = (data = {}) => {
           tradeUnits: gettradeunits(data),
           additionalDetail: {
             propertyId: !data?.cpt ? "" :data?.cpt?.details?.propertyId,
-            isSameAsPropertyOwner: isSameAsPropertyOwner
+            isSameAsPropertyOwner: isSameAsPropertyOwner,
+            tradeGstNo: data?.TradeDetails?.TradeGSTNumber || null,
           }
         },
         tradeName: data?.TradeDetails?.TradeName,

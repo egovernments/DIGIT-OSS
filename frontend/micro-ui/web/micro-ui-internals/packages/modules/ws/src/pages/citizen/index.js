@@ -2,26 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation, Route } from "react-router-dom";
 import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-components";
-import WSCreate from "./WSCreate/index";
-import WSDisconnection from "./WSDisconnection/index";
-import SearchConnectionComponent from "./SearchConnection";
-import SearchResultsComponent from "./SearchResults";
 import TestAcknowledgment from "./TestAcknowledgment";
-import WNSMyBillsComponent from "./WnSMyBills";
 import { WSMyApplications } from "./WSMyApplications";
-import WSApplicationDetails from "./WSApplicationDetails";
-import WSAdditionalDetails from "./WSMyApplications/additionalDetails";
-import MyConnections from "./MyConnection";
-import ConnectionDetails from "./MyConnection/ConnectionDetails";
-import consumptionDetails from "./MyConnection/ConsumptionDetails";
-import WSMyPayments from "./MyPayment";
-import EditApplication from "./EditApplication";
 
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
   let isCommonPTPropertyScreen = window.location.href.includes("/ws/create-application/property-details");
-  let isAcknowledgement = window.location.href.includes("/acknowledgement");
+  let isAcknowledgement = window.location.href.includes("/acknowledgement") || window.location.href.includes("/disconnect-acknowledge");
   const WSDisconnectAcknowledgement = Digit?.ComponentRegistryService?.getComponent("WSDisconnectAcknowledgement");
 
   const getBackPageNumber = () => {
@@ -33,6 +21,19 @@ const App = ({ path }) => {
     return goBacktoFromProperty;
   };
 
+  const WSCreate = Digit?.ComponentRegistryService?.getComponent("WSCreate");
+  const WSDisconnection = Digit?.ComponentRegistryService?.getComponent("WSDisconnection");
+  const WSSearchConnectionComponent = Digit?.ComponentRegistryService?.getComponent("WSSearchConnectionComponent");
+  const WSSearchResultsComponent = Digit?.ComponentRegistryService?.getComponent("WSSearchResultsComponent");
+  const WSCitizenApplicationDetails = Digit?.ComponentRegistryService?.getComponent("WSCitizenApplicationDetails");
+  const WSAdditionalDetails = Digit?.ComponentRegistryService?.getComponent("WSAdditionalDetails");
+  const WSCitizenConnectionDetails = Digit?.ComponentRegistryService?.getComponent("WSCitizenConnectionDetails");
+  const WSCitizenConsumptionDetails = Digit?.ComponentRegistryService?.getComponent("WSCitizenConsumptionDetails");
+  const WSMyPayments = Digit?.ComponentRegistryService?.getComponent("WSMyPayments");
+  const WSCitizenEditApplication = Digit?.ComponentRegistryService?.getComponent("WSCitizenEditApplication");
+  const WSReSubmitDisconnectionApplication = Digit?.ComponentRegistryService?.getComponent("WSReSubmitDisconnectionApplication");
+  const WSMyConnections = Digit?.ComponentRegistryService?.getComponent("WSMyConnections");
+  const WNSMyBillsComponent = Digit?.ComponentRegistryService?.getComponent("WNSMyBillsComponent");
   return (
     <React.Fragment>
       <div className="ws-citizen-wrapper">
@@ -43,19 +44,20 @@ const App = ({ path }) => {
           <PrivateRoute path={`${path}/create-application`} component={WSCreate} />
           <PrivateRoute path={`${path}/disconnect-application`} component={WSDisconnection} />
           <PrivateRoute path={`${path}/disconnect-acknowledge`} component={WSDisconnectAcknowledgement} />
-          <Route path={`${path}/search`} component={SearchConnectionComponent} />
+          <PrivateRoute path={`${path}/resubmit-disconnect-application`} component={WSReSubmitDisconnectionApplication} />
+          <Route path={`${path}/search`} component={WSSearchConnectionComponent} />
           <PrivateRoute path={`${path}/my-bills`} component={WNSMyBillsComponent} />
-          <Route path={`${path}/search-results`} component={SearchResultsComponent} />
+          <Route path={`${path}/search-results`} component={WSSearchResultsComponent} />
           <Route path={`${path}/test-acknowledgment`} component={TestAcknowledgment} />
           <PrivateRoute path={`${path}/my-payments`} component={WSMyPayments} />
           <PrivateRoute path={`${path}/my-applications`} component={WSMyApplications} />
-          <PrivateRoute path={`${path}/my-connections`} component={MyConnections} />
-          <PrivateRoute path={`${path}/connection/application/:acknowledgementIds`} component={WSApplicationDetails} />
+          <PrivateRoute path={`${path}/my-connections`} component={WSMyConnections} />
+          <PrivateRoute path={`${path}/connection/application/:acknowledgementIds`} component={WSCitizenApplicationDetails} />
           <PrivateRoute path={`${path}/connection/additional/:acknowledgementIds`} component={WSAdditionalDetails} />
-          <PrivateRoute path={`${path}/connection/details/:acknowledgementIds`} component={ConnectionDetails} />
-          <PrivateRoute path={`${path}/consumption/details`} component={consumptionDetails} />
-          <PrivateRoute path={`${path}/edit-application/:tenantId`} component={EditApplication} />
-          <PrivateRoute path={`${path}/modify-connection/:tenantId`} component={EditApplication} />
+          <PrivateRoute path={`${path}/connection/details/:acknowledgementIds`} component={WSCitizenConnectionDetails} />
+          <PrivateRoute path={`${path}/consumption/details`} component={WSCitizenConsumptionDetails} />
+          <PrivateRoute path={`${path}/edit-application/:tenantId`} component={WSCitizenEditApplication} />
+          <PrivateRoute path={`${path}/modify-connection/:tenantId`} component={WSCitizenEditApplication} />
         </Switch>
       </div>
     </React.Fragment>

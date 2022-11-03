@@ -56,9 +56,12 @@ import {
     
     let values = [];
     if (application?.applicationNo) values.push({ title: `${t("PDF_STATIC_LABEL_APPLICATION_NUMBER_LABEL")}:`, value: application?.applicationNo });
+    if (application?.applicationType) values.push({ title: `${t("WS_SERVICE_NAME")}:`, value: t(`WS_APPLICATION_TYPE_${application?.applicationType}`) });
   
     return {
       title: "",
+      email: "",
+      phoneNumber: "",
       isHeader: true,
       header: t(`${application?.tenantId?.replace('.', '_')?.toUpperCase()}_HEADER_LABEL`),
       subHeader: t(`${application?.tenantId?.replace('.', '_')?.toUpperCase()}_SUB_HEADER_LABEL`),
@@ -101,6 +104,8 @@ import {
     return {
       t: t,
       tenantId: tenantInfo,
+      email: "",
+      phoneNumber: "",
       headerDetails: [
         header
       ],

@@ -34,6 +34,7 @@ const TLApplicationDetails = () => {
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("CITIZEN_TL_MUTATION_HAPPENED", false);
   const { tenants } = storeData || {};
+  const isMobile = window.Digit.Utils.browser.isMobile();
   let multiBoxStyle = {
     border: "groove",
     background: "#FAFAFA",
@@ -133,6 +134,7 @@ const TLApplicationDetails = () => {
 
   const dowloadOptions =
     paymentsHistory?.Payments?.length > 0 && application?.[0]?.status !== "EXPIRED" && application?.[0]?.status !== "CANCELLED" && application?.[0]?.status !== "PENDINGPAYMENT"
+    && application?.[0]?.status !=="MANUALEXPIRED"
       ? [
           {
             label: t("TL_CERTIFICATE"),
@@ -156,7 +158,7 @@ const TLApplicationDetails = () => {
 
   return (
     <React.Fragment>
-      <div className="cardHeaderWithOptions">
+      <div className="cardHeaderWithOptions" style={isMobile ? {} : {maxWidth:"960px"}}>
         <Header>{t("CS_TITLE_APPLICATION_DETAILS")}</Header>
         <MultiLink
           className="multilinkWrapper"
@@ -192,6 +194,24 @@ const TLApplicationDetails = () => {
                 style={{ border: "none" }}
                 label={t("TL_COMMON_TABLE_COL_TRD_NAME")}
                 text={application?.tradeName}
+                textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
+              />
+              <Row
+                style={{ border: "none" }}
+                label={t("TL_TRADE_GST_NO")}
+                text={application?.tradeLicenseDetail?.additionalDetail?.tradeGstNo || application?.tradeLicenseDetail?.additionalDetail?.gstNo || t("CS_NA")}
+                textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
+              />
+              <Row
+                style={{ border: "none" }}
+                label={t("TL_OPERATIONAL_AREA")}
+                text={application?.tradeLicenseDetail?.operationalArea || t("CS_NA")}
+                textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
+              />
+              <Row
+                style={{ border: "none" }}
+                label={t("TL_NO_OF_EMPLOYEES")}
+                text={application?.tradeLicenseDetail?.noOfEmployees || t("CS_NA")}
                 textStyle={{ whiteSpace: "pre-wrap", width: "70%" }}
               />
               <CardSectionHeader>{t("TL_OWNERSHIP_DETAILS_HEADER")}</CardSectionHeader>

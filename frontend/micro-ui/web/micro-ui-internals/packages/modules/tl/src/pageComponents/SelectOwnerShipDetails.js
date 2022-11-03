@@ -140,7 +140,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
     <React.Fragment>
     {window.location.href.includes("/citizen") ? <Timeline currentStep={2}/> : null}
     <FormStep t={t} config={config} onSelect={goNext} onSkip={onSkip} isDisabled={!ownershipCategory}>
-      { !(formData?.TradeDetails?.StructureType?.code === "MOVABLE") &&<CheckBox
+      { !(formData?.TradeDetails?.StructureType?.code === "MOVABLE") && formData?.cpt?.details &&<CheckBox
           label={t("TL_COMMON_SAME_AS_PROPERTY_OWNERS")}
           onChange={selectisSameAsPropertyOwner}
           value={isSameAsPropertyOwner}
@@ -158,6 +158,7 @@ const SelectOwnerShipDetails = ({ t, config, onSelect, userType, formData, onBlu
         labelKey="PT_OWNERSHIP"
         isDependent={true}
         disabled={isEdit}
+        isTLFlow={true}
       />
     </FormStep>
     </React.Fragment>

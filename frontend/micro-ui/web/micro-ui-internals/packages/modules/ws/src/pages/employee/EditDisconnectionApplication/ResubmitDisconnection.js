@@ -22,6 +22,9 @@ const ResubmitDisconnection = () => {
   let tenantId = Digit.ULBService.getCurrentTenantId();
   tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
 
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig, isLoading: isConfigLoading } = Digit.Hooks.ws.useWSConfigMDMS.WSDisconnectionConfig(stateId, {});
+
   const editApplicationDetails = JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS"));
   const serviceType = filters?.service || editApplicationDetails?.applicationData?.serviceType;
 
@@ -42,15 +45,16 @@ const ResubmitDisconnection = () => {
   } = Digit.Hooks.ws.useWSApplicationActions(serviceType);
 
   useEffect(() => {
-    if (!isLoading) {
-      const config = newConfigLocal.find((conf) => conf.isDisonnectionEdit);
+    if (!isLoading && !isConfigLoading) {
+      // const config = newConfigLocal.find((conf) => conf.isDisonnectionEdit);
+      const config = newConfig.find((conf) => conf.isDisonnectionEdit);
       config.head = "WS_WATER_SEWERAGE_DISCONNECTION_EDIT_LABEL";
       let bodyDetails = [];
       config?.body?.forEach(data => { if (data?.isDisonnectionEdit) bodyDetails.push(data); })
       config.body = bodyDetails;
       setConfig(config);
     }
-  }, [applicationDetails, isLoading]);
+  }, [applicationDetails, isLoading, newConfig]);
 
   useEffect(async () => {
     const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
@@ -80,6 +84,13 @@ const ResubmitDisconnection = () => {
   };
 
   const onSubmit = async (data) => {
+    if(!canSubmit){
+      setShowToast({ warning: true, message: "PLEASE_FILL_MANDATORY_DETAILS" });
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    }
+    else{
     const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
     let convertAppData = await convertDisonnectEditApplicationDetails(data, details, actionData);
     setSubmitValve(false);
@@ -101,6 +112,7 @@ const ResubmitDisconnection = () => {
         },
       });
     }
+  }
   };
 
 
@@ -109,7 +121,7 @@ const ResubmitDisconnection = () => {
   };
 
   const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
-  if (isLoading || !IsDetailsExists) {
+  if (isLoading || !IsDetailsExists || isConfigLoading) {
     return <Loader />;
   }
 
@@ -122,14 +134,14 @@ const ResubmitDisconnection = () => {
         config={config.body}
         userType={"employee"}
         onFormValueChange={onFormValueChange}
-        isDisabled={!canSubmit}
+        // isDisabled={!canSubmit}
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}
         defaultValues={sessionFormData}
         appData={appData}
         noBreakLine={true}
       ></FormComposer>
-      {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />}
+      {showToast && <Toast error={showToast.key} label={t(showToast?.message)} warning={showToast?.warning} onClose={closeToast} />}
     </React.Fragment>
   );
 };

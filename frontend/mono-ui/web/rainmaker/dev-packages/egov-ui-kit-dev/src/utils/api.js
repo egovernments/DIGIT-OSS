@@ -12,6 +12,7 @@ import {
 } from "egov-ui-kit/utils/localStorageUtils";
 import some from "lodash/some";
 import store from "ui-redux/store";
+import { getLocaleLabels } from "egov-ui-framework/ui-utils/commons";
 import { addQueryArg, hasTokenExpired, prepareForm } from "./commons";
 import { setUserObj } from "./localStorageUtils";
 
@@ -344,16 +345,19 @@ export const commonApiPost = (
           // _err=response.response.data.error.message?"a) "+extractErrorMsg(response.response.data.error, "message", "description")+" : ":"";
           // let fields=response.response.data.error.fields;
           if (response.response.data.Errors.length == 1) {
-            _err += common.translate(response.response.data.Errors[0].message) + ".";
+            if(response.response.data.Errors[0].message.includes("InvalidAccessTokenException")){
+              throw new Error(getLocaleLabels("InvalidAccessTokenException"));
+            }
+            _err += getLocaleLabels(response.response.data.Errors[0].message) + ".";
           } else {
             for (var i = 0; i < response.response.data.Errors.length; i++) {
-              _err += i + 1 + ") " + common.translate(response.response.data.Errors[i].message) + ".";
+              _err += i + 1 + ") " + getLocaleLabels(response.response.data.Errors[i].message) + ".";
             }
           }
 
           throw new Error(_err);
         } else if (response && response.response && response.response.data && response.response.data.hasOwnProperty("Data")) {
-          let _err = common.translate(response.response.data.Message) + ".";
+          let _err = getLocaleLabels(response.response.data.Message) + ".";
           throw new Error(_err);
         } else if (response && response.response && !response.response.data && response.response.status === 400) {
           if (counter == 0) {

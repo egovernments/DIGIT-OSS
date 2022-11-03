@@ -80,6 +80,7 @@
 @import "./components//howItWorks.scss";
 @import "./components/staticDynamicMessages.scss";
 @import "./components/toggleSwitch.scss";
+@import "./components/plusMinus.scss";
 
 @import "./pages/employee/index.scss";
 @import "./pages/employee/cardfix.scss";
@@ -709,9 +710,19 @@ input[type="number"] {
     fill: rgba(244, 119, 56, 1);
   }
 }
+
+.privacy-icon-2 {
+  cursor: pointer;
+}
+.privacy-icon-2:hover {
+  path {
+    fill: none;
+  }
+}
+
 .audit-card {
   width: 80%;
-  margin-left: -28%;
+  margin-left: -260px;
   margin-right: -27%;
   max-height: 120px;
   margin-top: 90px;

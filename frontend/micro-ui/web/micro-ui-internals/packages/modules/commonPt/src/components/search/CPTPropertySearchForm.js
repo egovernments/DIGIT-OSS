@@ -1,5 +1,5 @@
 import { CardLabelError, SearchField, SearchForm, SubmitBar, TextInput,Localities } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 
@@ -22,6 +22,18 @@ const SearchPTID = ({ tenantId, t, onSubmit, onReset, searchBy, PTSearchFields, 
   });
   const formValue = watch();
   const fields = PTSearchFields?.[searchBy] || {};
+
+  useEffect(() => {
+    if(sessionStorage.getItem("isCreateEnabledEmployee") === "true")
+    {
+      sessionStorage.removeItem("isCreateEnabledEmployee");
+      history.replace("/digit-ui/employee");
+    }
+    else
+    sessionStorage.removeItem("isCreateEnabledEmployee");
+
+  })
+
   return (
     <div className="PropertySearchForm">
       <SearchForm onSubmit={onSubmit} handleSubmit={handleSubmit}>

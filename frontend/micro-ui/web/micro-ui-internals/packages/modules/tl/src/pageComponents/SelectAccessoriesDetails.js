@@ -50,12 +50,16 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
               accessory.uom = item.uom;
               accessory.rate = item.rate;
               item.rate && item.rate > 0 && acc.accessories.push(accessory);
+              accessory.fromUom = item.fromUom;
+              accessory.toUom = item.toUom;
             } else if (item.accessoryCategory === null && item.tradeType) {
               tradeType.code = item.tradeType;
               tradeType.uom = item.uom;
               tradeType.structureType = item.structureType;
               tradeType.licenseType = item.licenseType;
               tradeType.rate = item.rate;
+              tradeType.fromUom = item.fromUom;
+              tradeType.toUom = item.toUom;
               !isUndefined(item.rate) && item.rate !== null && acc.tradeTypeData.push(tradeType);
             }
             return acc;
@@ -143,6 +147,16 @@ const SelectAccessoriesDetails = ({ t, config, onSelect, userType, formData }) =
   function selectUomValue(i, e) {
     setAccUOMError(null);
     if (isNaN(e.target.value)) setAccUOMError("TL_ONLY_NUM_ALLOWED");
+    if(fields?.[i]?.accessory && Number.isInteger(fields?.[i]?.accessory?.fromUom)){
+      if(!(e.target.value && parseInt(e.target.value) >= fields?.[i]?.accessory?.fromUom)){
+        setAccUOMError("TL_FILL_CORRECT_UOM_VALUE");
+      }
+     }
+     if(fields?.[i]?.accessory && Number.isInteger(fields?.[i]?.accessory?.toUom)){
+     if(!(e.target.value && parseInt(e.target.value) <= fields?.[i]?.accessory?.toUom)){
+        setAccUOMError("TL_FILL_CORRECT_UOM_VALUE");
+       }
+     }
     let acc = [...fields];
     acc[i].uom = e.target.value;
     setUomValue(e.target.value);

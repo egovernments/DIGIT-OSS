@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import { WSService } from "../../services/elements/WS";
 import { PTService } from "../../services/elements/PT";
+import _ from "lodash";
 
 const getDate = (epochdate) => {
 return ( epochdate ?
@@ -8,10 +9,12 @@ new Date(epochdate).getDate() + "/" + (new Date(epochdate).getMonth() + 1) + "/"
 }
 
 const getAddress = (address, t) => {
-  return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
+  return `${address?.doorNo ? `${address?.doorNo}, ` : ""}${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${t(address?.locality.code)}, ${t(address?.city.code || address?.city)}${t(address?.pincode) ? `, ${address.pincode}` : " "}`
-} 
+  }${address?.locality?.code ? t(`TENANTS_MOHALLA_${address?.locality?.code}`) : ""}${address?.city?.code || address?.city  ? `, ${t(address?.city.code || address?.city)}` : ""}${
+    address?.pincode ? `, ${address.pincode}` : " "
+  }`;
+};
 
 const combineResponse = (WaterConnections, properties, billData, t) => {
   if(WaterConnections && properties ){
@@ -30,9 +33,20 @@ const combineResponse = (WaterConnections, properties, billData, t) => {
     DueDate : billData ? getDate(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.expiryDate) : "NA",
     privacy: {
       Address: {
-        uuid: properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.propertyId,
+        uuid: properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.owners?.[0]?.uuid,
         fieldName: ["doorNo", "street", "landmark"],
-        model: "Property"
+        model: "Property",showValue: true,
+        loadData: {
+          serviceName: "/property-services/property/_search",
+          requestBody: {},
+          requestParam: { tenantId : app?.tenantId, propertyIds : app?.propertyId },
+          jsonPath: "Properties[0].address.street",
+          isArray: false,
+          d: (res) => {
+            let resultString = (_.get(res,"Properties[0].address.doorNo") ?  `${_.get(res,"Properties[0].address.doorNo")}, ` : "") + (_.get(res,"Properties[0].address.street")? `${_.get(res,"Properties[0].address.street")}, ` : "") + (_.get(res,"Properties[0].address.landmark") ? `${_.get(res,"Properties[0].address.landmark")}`:"")
+            return resultString;
+          }
+        },
       }
     }
     }))

@@ -256,7 +256,7 @@ const PropertyInformation = () => {
                     className="border-none" 
                     label={t("PT_FORM3_MOBILE_NUMBER")}
                     text={`${t(owner?.mobileNumber)}` || t("CS_NA")}
-                    // textStyle={isMobile?{marginLeft:"16%"}:{marginLeft:"13%"}}
+                    textStyle={isMobile?{marginLeft:"16%"}:{marginLeft:"12%"}}
                     actionButton={
                     property?.status === "ACTIVE"&&owner?.mobileNumber&&Digit.UserService.getUser()?.info?.mobileNumber&&owner.mobileNumber===Digit.UserService.getUser()?.info?.mobileNumber&&<div onClick={() => showPopup({ name: owner?.name, mobileNumber: owner?.mobileNumber, ownerIndex: index })}>
                     <EditIcon />

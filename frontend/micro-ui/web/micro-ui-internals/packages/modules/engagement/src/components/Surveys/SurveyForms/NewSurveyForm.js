@@ -166,7 +166,7 @@ const NewSurveyForm = ({ t, index, questionStatement, type, required, options, d
   
   return (
     <div className="newSurveyForm_wrapper">
-      <span className="newSurveyForm_quesno">{`${t("CS_COMMON_QUESTION")} ${index + 1} * :`}</span>
+      <span className="newSurveyForm_quesno">{`${t("CS_COMMON_QUESTION")} ${index + 1} * `}</span>
       <span className="newSurveyForm_mainsection">
         <div className="newSurveyForm_questions">
           <div style={{width: "80%"}}>

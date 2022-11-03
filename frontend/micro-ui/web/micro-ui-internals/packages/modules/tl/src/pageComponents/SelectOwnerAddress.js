@@ -114,14 +114,14 @@ const SelectOwnerAddress = ({ t, config, onSelect, userType, formData }) => {
           //disable={isUpdateProperty || isEditProperty}
         />
         {/* <CardLabel>{t("PT_OWNER_S_ADDRESS")}</CardLabel> */}
-        <CheckBox
+        {formData?.TradeDetails?.StructureType?.code !== "MOVABLE" && <CheckBox
           label={t("TL_COMMON_SAME_AS_TRADE_ADDRESS")}
           onChange={setCorrespondenceAddress}
           value={isCorrespondenceAddress}
           checked={isCorrespondenceAddress || false}
           style={{ paddingTop: "10px" }}
           //disable={isUpdateProperty || isEditProperty}
-        />
+        />}
       </FormStep>
       {ismultiple ? <CitizenInfoLabel info={t("CS_FILE_APPLICATION_INFO_LABEL")} text={t("TL_PRIMARY_ADDR_INFO_MSG")} /> : ""}
     </React.Fragment>

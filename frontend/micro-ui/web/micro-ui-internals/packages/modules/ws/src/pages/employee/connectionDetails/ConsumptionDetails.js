@@ -2,7 +2,7 @@ import {
   ActionBar, Card, DatePicker, Dropdown, FormComposer, Header, Loader, Modal, Row, StatusTable, SubmitBar,
   Toast
 } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import * as func from "../../../utils";
 
@@ -26,7 +26,7 @@ const ConsumptionDetails = ({ view }) => {
   const [currentMeterReading, setCurrentReading] = useState("");
   const [selectedConsumtion, setConsumption] = useState("");
   const [currentBillingPeriod, setBillingPeriod] = useState("");
-
+  const [isAddMeterReadingButtonEnable, setisAddMeterReadingButtonEnable] = useState(false);
   const userInfo = Digit.UserService.getUser();
   const userRoles = userInfo.info.roles.map((roleData) => roleData.code);
   const isUserAllowedToAddMeterReading = userRoles.filter((role) => role === "WS_CEMP" || role === "SW_CEMP").length > 0;
@@ -36,6 +36,12 @@ const ConsumptionDetails = ({ view }) => {
   const { isLoading: meterStatusLoading, data: mdmsMeterStatus } = Digit.Hooks.ws.useGetMeterStatusList(tenantId);
   const { isLoading: billingPeriodLoading, data: mdmsBillingPeriod } = Digit.Hooks.ws.useGetBillingPeriodValidation(tenantId);
 
+  let connectionFilters = {
+    connectionNumber: applicationNo
+  };
+
+  const { isLoading: isConnectionDetailsLoading, data: connectionDetailsData } = Digit.Hooks.ws.useOldValue({tenantId : tenantId, filters: { ...connectionFilters },businessService : businessService === "WS"? "WATER" : "SEWERAGE"})
+
   const {
     isLoading: updatingMeterConnectionLoading,
     isError: updateMeterConnectionError,
@@ -43,6 +49,18 @@ const ConsumptionDetails = ({ view }) => {
     error: updateMeterError,
     mutate: meterReadingMutation,
   } = Digit.Hooks.ws.useMeterReadingCreateAPI(businessService);
+
+  useEffect(() => {
+    if (!isConnectionDetailsLoading) {
+      let connectionDetails = businessService == "WS" ? connectionDetailsData?.WaterConnection : connectionDetailsData?.SewerageConnections;
+      let connectionData = connectionDetails?.filter((ob) => ob?.applicationType?.includes("DISCONNECT"));
+      if (connectionData?.length == 0) setisAddMeterReadingButtonEnable(true);
+      connectionData?.map((data) => {
+        if (data?.applicationStatus === "DISCONNECTION_EXECUTED" || data?.applicationStatus === "PENDING_FOR_DISCONNECTION_EXECUTION") setisAddMeterReadingButtonEnable(false);
+        else setisAddMeterReadingButtonEnable(true);
+      })
+    }
+  }, [connectionDetailsData])
 
   const convertDateToEpoch = (dateString, dayStartOrEnd = "dayend") => {
     //example input format : "2018-10-02"
@@ -311,7 +329,7 @@ const ConsumptionDetails = ({ view }) => {
     } else return t("NA");
   };
 
-  if (isLoading) {
+  if (isLoading || isConnectionDetailsLoading) {
     return <Loader />;
   }
   let { meterReadings } = response || {};
@@ -380,9 +398,11 @@ const ConsumptionDetails = ({ view }) => {
           {!meterReadings?.length > 0 && <p style={{ marginLeft: "16px", marginTop: "16px" }}>{t("WS_NO_CONSUMPTION_FOUND")}</p>}
         </div>
         {isLoading || meterStatusLoading || billingPeriodLoading || !isUserAllowedToAddMeterReading ? null : (
-          <ActionBar>
+          <div>
+            {isAddMeterReadingButtonEnable && <ActionBar>
             <SubmitBar label={t("WS_CONSUMPTION_BUTTON_METER_READING_LABEL")} onSubmit={popUp} />
-          </ActionBar>
+          </ActionBar>}
+          </div>
         )}
       </div>
       {openModal && (

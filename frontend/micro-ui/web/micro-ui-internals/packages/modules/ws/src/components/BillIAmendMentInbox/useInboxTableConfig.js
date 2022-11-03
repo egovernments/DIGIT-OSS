@@ -26,7 +26,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
         Header: t("WS_COMMON_TABLE_COL_SERVICE_LABEL"),
         disableSortBy: true,
         Cell: ({ row }) => {
-          return GetCell(t(`ACTION_TEST_${row?.original?.service}`));
+          return GetCell(t(`ACTION_TEST_${row?.original?.service?.includes("WS") ? "WATER" : "SEWERAGE"}`));
         },
       },
       {
@@ -35,7 +35,7 @@ const useInboxTableConfig = ({ parentRoute, onPageSizeChange, formState, totalCo
         Cell: ({ row }) => {
           return (
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <Link to={`/digit-ui/employee/ws/application-details-bill-amendment?applicationNumber=${row.original["applicationNo"]}`}>
+              <Link to={`/digit-ui/employee/ws/generate-note-bill-amendment?applicationNumber=${row.original["applicationNo"]}`}>
                 <span className="link">{row.original["applicationNo"]}</span>
               </Link>
               {GetCell(t(`BILLAMENDMENT_${row?.original?.amendmentReason}_HEADING`))}

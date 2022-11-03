@@ -58,8 +58,6 @@ const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
 
     useEffect(() => {
         const data = { ...wsAdditionalDetails?.additionalDetails?.appDetails?.additionalDetails };
-        setSessionFormData(data);
-        setFields(data);
         if (sessionFormData?.billDetails?.length > 0) {
             const values = [
                 { title: "WS_APPLICATION_FEE_HEADER", value: <span>&#8377;{sessionFormData?.billDetails?.[0]?.fee}</span>},
@@ -68,6 +66,11 @@ const WSFeeEstimation = ({ wsAdditionalDetails, workflowDetails }) => {
             ];
             setValues(values);
             setBillDetails(sessionFormData?.billDetails?.[0]);
+        }
+        else
+        {
+            setSessionFormData(data);
+            setFields(data);
         }
     }, []);
 

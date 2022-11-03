@@ -36,7 +36,7 @@ const StaticDynamicCard = ({moduleCode}) => {
         case 'MCOLLECT':
           return <MCollectIcon className="fill-path-primary-main" styles={styles}/>;
         case 'PGR':
-          return <ComplaintIcon className="fill-path-primary-main" styles={styles}/>
+          return <PTIcon className="fill-path-primary-main" styles={styles}/>
         case 'WS':
           return <WSICon className="fill-path-primary-main" styles={styles}/>
         case 'OBPS':
@@ -84,9 +84,9 @@ const StaticDynamicCard = ({moduleCode}) => {
           return {
             staticCommonContent: t("CHALLAN_VALIDITY"),
           }
-        case 'PGR':
-          return {
-            staticCommonContent: t("ACTION_TEST_COMPLAINT_TYPES"),
+         case 'PGR':
+           return {
+             staticCommonContent: t("CATEGORIES_OF_COMPLAINT_TYPES_CAN_BE_SUBMITTED_ON_GRIEVANCE_PORTAL"),
           }
         case 'OBPS':
           return {
@@ -176,7 +176,7 @@ const StaticDynamicCard = ({moduleCode}) => {
       ) : (
       <div className="dynamicDataCard">
         <div className="dynamicData">
-        <span style={{paddingTop: "8px"}}>
+        <span style={{paddingTop: "2px"}}>
         <IconComponent module={moduleCode} styles={{width: "18px", height: "24px"}}/></span>
           <span className="dynamicData-content">
             {dynamicData?.dynamicDataOne}
@@ -188,7 +188,7 @@ const StaticDynamicCard = ({moduleCode}) => {
       ) : (
       <div className="dynamicDataCard">
       <div className="dynamicData">
-      <span style={{paddingTop: "8px"}}>
+      <span style={{paddingTop: "2px"}}>
         <IconComponent module={moduleCode} styles={{width: "18px", height: "24px"}}/></span>
           <span className="dynamicData-content">
           {dynamicData?.dynamicDataTwo}
@@ -250,8 +250,8 @@ const StaticDynamicCard = ({moduleCode}) => {
          <div className="staticDataCard">
           <div className="staticData">
             { moduleCode === "PGR" 
-            ? <span style={{paddingTop: "8px"}}>
-            <IconComponent module={moduleCode} styles={{width: "18px", height: "24px", marginLeft: "13px"}}/></span>
+            ? <span style={{paddingTop: "15px"}}>
+            <TimerIcon module={moduleCode} styles={{width: "18px", height: "24px", marginLeft: "13px"}}/></span>
             : <span className="validityIcon">
                <ValidityTimeIcon/>
             </span>}

@@ -133,7 +133,7 @@ const SurveyDetails = ({ location, match }) => {
 
   const handleDelete = () => {
     const details = {
-      SurveyEntity: { ...surveyData },
+      SurveyEntity: { ...surveyData, tenantId: tenantId?.code ? tenantId?.code : tenantId },
     };
     history.push("/digit-ui/employee/engagement/surveys/delete-response", details);
   };

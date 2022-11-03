@@ -22,8 +22,14 @@ const ActivateConnection = () => {
 
     const [config, setConfig] = React.useState({ head: "", body: [] });
 
-    const details = cloneDeep(state?.data);
-
+    const stateId = Digit.ULBService.getStateId();
+    let tenantId = Digit.ULBService.getCurrentTenantId();
+    tenantId ? tenantId : Digit.SessionStorage.get("CITIZEN.COMMON.HOME.CITY")?.code;
+    let { data: newConfig, isLoading } = Digit.Hooks.ws.useWSConfigMDMS.WSActivationConfig(stateId, {});
+    let details = cloneDeep(state?.data); 
+    let { isLoading: isappdetailsLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useWSDetailsPage(t, tenantId, details?.applicationNo, details?.serviceType,{ privacy: Digit.Utils.getPrivacyObject() });
+    details = cloneDeep(applicationDetails);
+    state = {data : {...applicationDetails?.applicationData}}
     const {
         isLoading: updatingApplication,
         isError: updateApplicationError,
@@ -63,6 +69,7 @@ const ActivateConnection = () => {
         detailsProvidedBy: state?.data?.additionalDetails?.detailsProvidedBy ? {
             i18nKey: `WS_PLUMBER_${state?.data?.additionalDetails?.detailsProvidedBy?.toUpperCase()}`, code: state?.data?.additionalDetails?.detailsProvidedBy
         } : "",
+        applicationNo: state?.data?.applicationNo,
         key: Date.now(),
     }];
 
@@ -82,13 +89,18 @@ const ActivateConnection = () => {
         activationDetails: activationDetails
     };
     useEffect(() => {
+        if(!isappdetailsLoading){
         setAppDetails(details);
+        }
     }, []);
 
     useEffect(() => {
-        const config = newConfigLocal.find((conf) => conf.hideInCitizen);
-        setConfig(config);
-    });
+        if (!isLoading) {
+            // const config = newConfigLocal.find((conf) => conf.hideInCitizen);
+            const config = newConfig.find((conf) => conf.hideInCitizen);
+            setConfig(config);
+        }
+    }, [newConfig]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -122,8 +134,15 @@ const ActivateConnection = () => {
     const closeToastOfError = () => { setShowToast(null); };
 
     const onSubmit = async (data) => {
+        if(!canSubmit){
+            setShowToast({ warning: true, message: "PLEASE_FILL_MANDATORY_DETAILS" });
+            setTimeout(() => {
+              setShowToast(false);
+            }, 3000);
+          }
+          else{
         const formDetails = cloneDeep(data);
-        const formData = { ...appDetails };
+        const formData = Object.keys(appDetails)?.length > 0 ? { ...appDetails } : {...details?.applicationData};
 
         if (formDetails?.connectionDetails?.[0]?.connectionType?.code) formData.connectionType = formDetails?.connectionDetails?.[0]?.connectionType?.code;
         if (formDetails?.connectionDetails?.[0]?.waterSource?.code) formData.waterSource = formDetails?.connectionDetails?.[0]?.sourceSubData?.code;
@@ -186,10 +205,11 @@ const ActivateConnection = () => {
                 },
             });
         }
+    }
     };
 
 
-    if (isEnableLoader) { //updatingApplication || 
+    if (isEnableLoader || isLoading || isappdetailsLoading) { //updatingApplication || 
         return <Loader />;
     }
 
@@ -205,9 +225,9 @@ const ActivateConnection = () => {
                 onSubmit={onSubmit}
                 label={t("WF_EMPLOYEE_NEWSW1_ACTIVATE_CONNECTION")}
                 onFormValueChange={onFormValueChange}
-                isDisabled={!canSubmit}
+                // isDisabled={!canSubmit}
             ></FormComposer>
-            {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />}
+            {showToast && <Toast error={showToast.key} label={t(showToast?.message)} warning={showToast?.warning} onClose={closeToast} />}
         </React.Fragment>
     );
 };

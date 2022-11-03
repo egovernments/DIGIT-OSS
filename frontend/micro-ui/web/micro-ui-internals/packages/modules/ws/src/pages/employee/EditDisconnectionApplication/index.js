@@ -24,6 +24,9 @@ const EditDisconnectionByConfig = () => {
   const editApplicationDetails = JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS"));
   const serviceType = filters?.service || editApplicationDetails?.applicationData?.serviceType;
 
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig, isLoading: isConfigLoading } = Digit.Hooks.ws.useWSConfigMDMS.WSDisconnectionConfig(stateId, {});
+
   let details = cloneDeep(state?.data?.applicationDetails);
   const actionData = cloneDeep(state?.data?.action);
   let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useDisConnectionDetails(t, tenantId, details?.applicationNo, details?.applicationData?.serviceType, { privacy: Digit.Utils.getPrivacyObject() });
@@ -33,15 +36,16 @@ const EditDisconnectionByConfig = () => {
   const [sessionFormData, setSessionFormData, clearSessionFormData] = Digit.Hooks.useSessionStorage("PT_CREATE_EMP_WS_NEW_FORM", {});
 
   useEffect(() => {
-    if (!isLoading) {
-      const config = newConfigLocal.find((conf) => conf.isDisonnectionEdit);
+    if (!isLoading && !isConfigLoading) {
+      // const config = newConfigLocal.find((conf) => conf.isDisonnectionEdit);
+      const config = newConfig.find((conf) => conf.isDisonnectionEdit);
       config.head = "WS_WATER_SEWERAGE_DISCONNECTION_EDIT_LABEL";
       let bodyDetails = [];
       config?.body?.forEach(data => { if (data?.isDisonnectionEdit) bodyDetails.push(data); })
       config.body = bodyDetails;
       setConfig(config);
     }
-  }, [applicationDetails, isLoading]);
+  }, [applicationDetails, isLoading, newConfig]);
 
   useEffect(async () => {
     const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
@@ -62,12 +66,20 @@ const EditDisconnectionByConfig = () => {
   };
 
   const onSubmit = async (data) => {
+    if(!canSubmit){
+      setShowToast({ warning: true, message: "PLEASE_FILL_MANDATORY_DETAILS" });
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    }
+    else{
     const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
     let convertAppData = await convertDisonnectEditApplicationDetails(data, details, actionData);
     setSubmitValve(false);
     sessionStorage.setItem("redirectedfromEDIT", true);
     sessionStorage.setItem("WS_SESSION_APPLICATION_DETAILS", JSON.stringify(convertAppData));
     window.location.assign(`${window.location.origin}${state?.url}`);
+    }
   };
 
 
@@ -76,7 +88,7 @@ const EditDisconnectionByConfig = () => {
   };
 
   const IsDetailsExists = sessionStorage.getItem("IsDetailsExists") ? JSON.parse(sessionStorage.getItem("IsDetailsExists")) : false
-  if (isLoading || !IsDetailsExists) {
+  if (isLoading || !IsDetailsExists || isConfigLoading) {
     return <Loader />;
   }
 
@@ -89,14 +101,14 @@ const EditDisconnectionByConfig = () => {
         config={config.body}
         userType={"employee"}
         onFormValueChange={onFormValueChange}
-        isDisabled={!canSubmit}
+        // isDisabled={!canSubmit}
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}
         defaultValues={sessionFormData}
         appData={appData}
         noBreakLine={true}
       ></FormComposer>
-      {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />}
+      {showToast && <Toast error={showToast.key} label={t(showToast?.message)} warning={showToast?.warning} onClose={closeToast} />}
     </React.Fragment>
   );
 };

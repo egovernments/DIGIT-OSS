@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "react-query";
-
+import _ from "lodash";
 import { WSService } from "../../services/elements/WS";
 import { PTService } from "../../services/elements/PT";
 
@@ -32,9 +32,20 @@ const combineResponse = (SewerageConnections, properties, billData, t) => {
       ServiceName: billData ?  (billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.businessService) : "NA",
       privacy: {
         Address : {
-          uuid: properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.propertyId, 
+          uuid: properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.owners?.[0]?.uuid, 
           fieldName: ["doorNo" , "street" , "landmark"], 
-          model: "Property"
+          model: "Property",showValue: true,
+          loadData: {
+            serviceName: "/property-services/property/_search",
+            requestBody: {},
+            requestParam: { tenantId : app?.tenantId, propertyIds : app?.propertyId },
+            jsonPath: "Properties[0].address.street",
+            isArray: false,
+            d: (res) => {
+              let resultString = (_.get(res,"Properties[0].address.doorNo") ?  `${_.get(res,"Properties[0].address.doorNo")}, ` : "") + (_.get(res,"Properties[0].address.street")? `${_.get(res,"Properties[0].address.street")}, ` : "") + (_.get(res,"Properties[0].address.landmark") ? `${_.get(res,"Properties[0].address.landmark")}`:"")
+              return resultString;
+            }
+          },
         }
       }
       }))

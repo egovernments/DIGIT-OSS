@@ -41,7 +41,7 @@ const useDynamicData = ({moduleCode ,tenantId, filters, t }) => {
             const pgrData = {
                 dynamicDataOne : data?.complaintsResolved === 0 || data?.complaintsResolved === null ? null : data?.complaintsResolved + " " + t("COMPLAINTS_RESOLVED_IN_LAST_30_DAYS"),
                 dynamicDataTwo : data?.averageResolutionTime === 0 || data?.averageResolutionTime === null ? null : data?.averageResolutionTime + " " + (data?.averageResolutionTime === 1 ? t("COMMON_DAY") : t("COMMON_DAYS")) + " " + t("IS_AVG_COMPLAINT_RESOLUTION_TIME"),
-                staticData : data?.complaintTypes === 0 || data?.complaintTypes === null ? null : data?.complaintTypes + " " + t("CATEGORIES_OF_COMPLAINT_TYPES_CAN_BE_SUBMITTED_ON_GRIEVANCE_PORTAL")
+                staticData : data?.complaintTypes === 0 || data?.complaintTypes === null ? null : data?.complaintTypes
             }
             return pgrData;
         }});

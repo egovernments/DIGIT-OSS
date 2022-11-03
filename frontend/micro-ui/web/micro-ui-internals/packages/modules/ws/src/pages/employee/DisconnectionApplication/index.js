@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import { Loader } from "@egovernments/digit-ui-react-components";
+import React from "react";
 import { useTranslation } from "react-i18next";
-import { useQueryClient } from "react-query";
-import { useRouteMatch, useLocation, useHistory, Switch, Route, Redirect } from "react-router-dom";
+import { useRouteMatch, Switch, Route, Redirect } from "react-router-dom";
 import { newConfig as newConfigWS } from "../../../config/wsDisconnectionConfig";
 
 const getPath = (path, params) => {
@@ -15,14 +15,21 @@ const getPath = (path, params) => {
 const DisconnectionApplication = () => {
   const { t } = useTranslation();
   const match = useRouteMatch();
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig, isLoading } = Digit.Hooks.ws.useWSConfigMDMS.WSDisconnectionConfig(stateId, {});
 
   let config = [];
-  let newConfig = newConfigWS;
-  newConfig.forEach((obj) => {
-    config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
-  });
-  config.indexRoute = "docsrequired";
 
+  if (!isLoading && newConfig.length > 0) {
+    newConfig.forEach((obj) => {
+      config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
+    });
+    config.indexRoute = "docsrequired";
+  } else {
+    return <Loader />
+  }
+
+  
   return (
     <Switch>
       {config.map((routeObj, index) => {

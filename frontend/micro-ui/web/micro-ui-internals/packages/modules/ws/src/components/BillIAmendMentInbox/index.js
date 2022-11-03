@@ -112,6 +112,7 @@ const Inbox = ({ parentRoute }) => {
   const { isLoading: isInboxLoading, data: { table, statuses, totalCount } = {} } = Digit.Hooks.useBillAmendmentInbox({
     tenantId,
     filters: { ...formState },
+    config : { cacheTime : 0}
   });
 
   const { data: statusData, isLoading } = Digit.Hooks.useApplicationStatusGeneral({ businessServices: ["BS.AMENDMENT"], tenantId }, { enabled: statuses?.length>0});

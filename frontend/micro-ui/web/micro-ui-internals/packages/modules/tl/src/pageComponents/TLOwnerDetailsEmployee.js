@@ -174,7 +174,7 @@ const OwnerForm = (_props) => {
                         <TextInput
                           t={t}
                           type={"text"}
-                          isMandatory={true}
+                          isMandatory={false}
                           value={props.value}
                           disable={isSameAsPropertyOwner}
                           autoFocus={focusIndex.index === owner?.key && focusIndex.type === "instituionName"}

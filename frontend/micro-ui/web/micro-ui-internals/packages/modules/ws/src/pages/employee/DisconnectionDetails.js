@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Header, MultiLink } from "@egovernments/digit-ui-react-components";
 import ApplicationDetailsTemplate from "../../../../templates/ApplicationDetails";
@@ -9,6 +9,7 @@ import { ifUserRoleExists } from "../../utils";
 
 const GetDisconnectionDetails = () => {
   const { t } = useTranslation();
+  const menuRef = useRef();
   let filters = func.getQueryStringParams(location.search);
   const [showOptions, setShowOptions] = useState(false);
   const [showToast, setShowToast] = useState(null);
@@ -22,7 +23,7 @@ const GetDisconnectionDetails = () => {
   sessionStorage.removeItem("IsDetailsExists");
   sessionStorage.setItem("disconnectionURL", JSON.stringify({url : `${location?.pathname}${location.search}`}));
 
-  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useDisConnectionDetails(t, tenantId, applicationNumber, serviceType);
+  let { isLoading, isError, data: applicationDetails, error } = Digit.Hooks.ws.useDisConnectionDetails(t, tenantId, applicationNumber, serviceType,{ privacy: Digit.Utils.getPrivacyObject() } );
   const { isServicesMasterLoading, data: servicesMasterData } = Digit.Hooks.ws.useMDMS(stateCode, "ws-services-masters", ["WSEditApplicationByConfigUser"]);
   const appStatus = applicationDetails?.applicationData?.applicationStatus || "";
 
@@ -49,6 +50,10 @@ const GetDisconnectionDetails = () => {
     setShowToast(null);
     // setError(null);
   };
+  const closeMenu = () => {
+    setShowOptions(false);
+  };
+  Digit.Hooks.useClickOutside(menuRef, closeMenu, showOptions);
 
   const mobileView = Digit.Utils.browser.isMobile();
 
@@ -77,7 +82,7 @@ const GetDisconnectionDetails = () => {
       action.redirectionUrll = {
         pathname: `${serviceType == "WATER" ? "WS" : "SW"}/${applicationDetails?.applicationData?.connectionNo}/${applicationDetails?.tenantId}?tenantId=${
           applicationDetails?.tenantId
-        }&ISWSAPP&applicationNumber=${applicationDetails?.applicationData?.connectionNo}`,
+        }&ISWSAPP&applicationNumber=${applicationDetails?.applicationData?.connectionNo}&IsDisconnectionFlow=${true}`,
         state: applicationDetails?.tenantId,
       };
     }
@@ -88,7 +93,7 @@ const GetDisconnectionDetails = () => {
       action.redirectionUrll = {
         pathname: `${serviceType == "WATER" ? "WS" : "SW"}/${applicationDetails?.applicationData?.connectionNo}/${applicationDetails?.tenantId}?tenantId=${
           applicationDetails?.tenantId
-        }&ISWSAPP&applicationNumber=${applicationDetails?.applicationData?.connectionNo}`,
+        }&ISWSAPP&applicationNumber=${applicationDetails?.applicationData?.connectionNo}&IsDisconnectionFlow=${true}`,
         state: applicationDetails?.tenantId,
       };
     }
@@ -106,7 +111,7 @@ const GetDisconnectionDetails = () => {
         if (isFieldInspector) return false;
         else return true;
       })
-      if (isFieldInspector) { //&& appStatus === mdmsApplicationStatus
+      if (isFieldInspector && appStatus === mdmsApplicationStatus) {
         pathName = `/digit-ui/employee/ws/config-by-disconnection-application?applicationNumber=${applicationNumber}&service=${serviceType}`;
       }
       action.redirectionUrll = {
@@ -165,6 +170,8 @@ const GetDisconnectionDetails = () => {
   let dowloadOptions = [];
   switch (appStatus) {
     case "DISCONNECTION_EXECUTED":
+    case "PENDING_FOR_PAYMENT":
+    case "PENDING_FOR_DISCONNECTION_EXECUTION":
       dowloadOptions = [applicationDownloadObject, disconnectionNoticeObject];
       break;
     default:
@@ -188,6 +195,7 @@ const GetDisconnectionDetails = () => {
             options={dowloadOptions}
             downloadBtnClassName={"employee-download-btn-className"}
             optionsClassName={"employee-options-btn-className"}
+            ref={menuRef}
           />
         </div>
         <ApplicationDetailsTemplate

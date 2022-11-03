@@ -24,6 +24,8 @@ const EditModifyApplication = () => {
   const applicationNumber = filters?.applicationNumber;
   const serviceType = filters?.service;
   const details = cloneDeep(state?.data);
+  const stateId = Digit.ULBService.getStateId();
+  let { data: newConfig, isLoading: isConfigLoading } = Digit.Hooks.ws.useWSConfigMDMS.WSCreateConfig(stateId, {});
 
   const [propertyId, setPropertyId] = useState(new URLSearchParams(useLocation().search).get("propertyId"));
 
@@ -35,14 +37,17 @@ const EditModifyApplication = () => {
   );
 
   useEffect(() => {
-    const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isModify);
+    if (!isConfigLoading) {
+      // const config = newConfigLocal.find((conf) => conf.hideInCitizen && conf.isModify);
+    const config = newConfig.find((conf) => conf.hideInCitizen && conf.isModify);
     config.head = "WS_WATER_AND_SEWERAGE_MODIFY_CONNECTION_LABEL";
     let bodyDetails = [];
     config?.body?.forEach(data => { if (data?.isModifyConnection) bodyDetails.push(data); });
     bodyDetails.forEach(bdyData => { if (bdyData?.head == "WS_COMMON_PROPERTY_DETAILS") bdyData.head = ""; })
     config.body = bodyDetails;
     setConfig(config);
-  }, []);
+    }
+  }, [newConfig]);
 
   useEffect(() => {
     !propertyId && sessionFormData?.cpt?.details?.propertyId && setPropertyId(sessionFormData?.cpt?.details?.propertyId);
@@ -92,6 +97,13 @@ const EditModifyApplication = () => {
   };
 
   const onSubmit = async (data) => {
+    if(!canSubmit){
+      setShowToast({ warning: true, message: "PLEASE_FILL_MANDATORY_DETAILS" });
+      setTimeout(() => {
+        setShowToast(false);
+      }, 3000);
+    }
+    else{
     const details = sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS") ? JSON.parse(sessionStorage.getItem("WS_EDIT_APPLICATION_DETAILS")) : {};
     let convertAppData = await convertModifyApplicationDetails(data, details, "SUBMIT_APPLICATION");
     const reqDetails = data?.ConnectionDetails?.[0]?.serviceName == "WATER" ? { WaterConnection: convertAppData } : { SewerageConnection: convertAppData }
@@ -108,6 +120,7 @@ const EditModifyApplication = () => {
         },
       });
     }
+  }
   };
 
 
@@ -115,7 +128,7 @@ const EditModifyApplication = () => {
     setShowToast(null);
   };
 
-  if (enabledLoader) {
+  if (enabledLoader || isConfigLoading) {
     return <Loader />;
   }
 
@@ -128,7 +141,7 @@ const EditModifyApplication = () => {
         config={config.body}
         userType={"employee"}
         onFormValueChange={onFormValueChange}
-        isDisabled={!canSubmit}
+        // isDisabled={!canSubmit}
         label={t("CS_COMMON_SUBMIT")}
         onSubmit={onSubmit}
         defaultValues={sessionFormData}

@@ -2,7 +2,7 @@ import { Header, Loader } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import WSPayment from "./WSPayments";
-
+import WSInfoLabel from "../../../pageComponents/WSInfoLabel";
 
 const WSMyPayments = () => {
 
@@ -50,6 +50,7 @@ const WSMyPayments = () => {
   return (
     <React.Fragment>
       <Header>{`${t("WS_MY_PAYMENTS_HEADER")} ${applicationsList ? `(${applicationsList.length})` : ""}`}</Header>
+      <WSInfoLabel t={t} /> 
       <div>
       {applicationsList?.length > 0 &&
           applicationsList.map((application, index) => (

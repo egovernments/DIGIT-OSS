@@ -25,6 +25,7 @@ import {
   LogoutIcon,
   EditPencilIcon,
   LanguageIcon,
+  LoginIcon
 } from "./svgindex";
 import { BirthIcon, DeathIcon, FirenocIcon } from "..";
 
@@ -60,6 +61,7 @@ const IconsObject = {
   LogoutIcon: <LogoutIcon className="icon" />,
   Phone: <Phone className="icon" />,
   LanguageIcon: <LanguageIcon className="icon" />,
+  LoginIcon: <LoginIcon className="icon" />
 };
 const NavBar = ({ open, toggleSidebar, profileItem, menuItems, onClose, Footer, isEmployee, search, setSearch }) => {
   const node = useRef();
