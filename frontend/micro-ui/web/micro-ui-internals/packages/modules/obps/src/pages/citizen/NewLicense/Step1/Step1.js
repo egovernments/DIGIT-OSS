@@ -23,6 +23,7 @@ const ApllicantFormStep1 = (props) => {
   const tenant = Digit.ULBService.getCurrentTenantId();
   const [developerData, setDeveloperData] = useState([]);
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
+  const [submitDataLabel, setSubmitDataLabel] = useState([])
   const ApplicantFormSubmitHandlerForm = async (data) => {
     console.log("data===", data);
     props.Step1Continue(data);
@@ -322,7 +323,7 @@ const ApllicantFormStep1 = (props) => {
 
   const getDeveloperDataLabel = async () => {
     try {
-      const Resp = await axios.get("http://10.1.1.18:8081/user/developer/_getDeveloperById?id=36&isAllData=true").then((response) => {
+      const Resp = await axios.get("http://10.1.1.18:8038/user/developer/_getDeveloperById?id=36&isAllData=true").then((response) => {
         return response;
       });
       setDeveloperDataLabel(Resp.data);
@@ -394,17 +395,32 @@ const ApllicantFormStep1 = (props) => {
     }
   }, [developerDataLabel]);
 
+  const getSubmitDataLabel = async () => {
+    try {
+      const Resp = await axios.get("http://10.1.1.18:8199/land-services/new/licenses/_get?id=1099696").then((response) => {
+        return response;
+      });
+      console.log("RESP+++", Resp)
+      setSubmitDataLabel(Resp?.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  useEffect(() => {
+    getSubmitDataLabel();
+  }, []);
+
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
-      <Card style={{ width: "126%" }}>
-        <h2>New License</h2>
-        <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
+      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+        <h4>New License</h4>
+        <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
           <Form.Group className="justify-content-center" controlId="formBasicEmail">
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>Developer</b> <span style={{ color: "red" }}>*</span>
+                    <h2>Developer <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
                 <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedDeveloper")} />
@@ -415,8 +431,8 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>Authorized Person Name </b>
-                    <span style={{ color: "red" }}>*</span>
+                    <h2>Authorized Person Name <span style={{ color: "red" }}>*</span></h2>
+
                   </Form.Label>
                 </div>
                 <Controller
@@ -433,10 +449,16 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>Authorized Mobile No</b> <span style={{ color: "red" }}>*</span>
+                    <h2>Authorized Mobile No<span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" className="form-control" placeholder="N/A" {...register("authorizedmobile")} disabled />
+                <Controller
+                  control={control}
+                  name="authorizedmobile"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedmobile" />
+                  )}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.authorizedmobile && errors?.authorizedmobile?.message}
                 </h3>
@@ -447,11 +469,16 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>Alternate Mobile No </b>
-                    <span style={{ color: "red" }}>*</span>
+                    <h2>Alternate Mobile No<span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" className="form-control" {...register("alternatemobile")} disabled />
+                <Controller
+                  control={control}
+                  name="alternatemobile"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="alternatemobile" />
+                  )}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.alternatemobile && errors?.alternatemobile?.message}
                 </h3>
@@ -459,10 +486,16 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>EmailId</b> <span style={{ color: "red" }}>*</span>
+                    <h2>EmailId<span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("authorizedEmail")} disabled />
+                <Controller
+                  control={control}
+                  name="authorizedEmail"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedEmail" />
+                  )}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.authorizedEmail && errors?.authorizedEmail?.message}
                 </h3>
@@ -470,11 +503,16 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>PAN No </b>
-                    <span style={{ color: "red" }}>*</span>
+                    <h2>PAN No <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("authorizedPan")} disabled />
+                <Controller
+                  control={control}
+                  name="authorizedPan"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPan" />
+                  )}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.authorizedPan && errors?.authorizedPan?.message}
                 </h3>
@@ -485,10 +523,16 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>Address 1</b> <span style={{ color: "red" }}>*</span>
+                    <h2>Address 1<span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("authorizedAddress")} disabled />
+                <Controller
+                  control={control}
+                  name="authorizedAddress"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedAddress" />
+                  )}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.authorizedAddress && errors?.authorizedAddress?.message}
                 </h3>
@@ -496,11 +540,16 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>Village/City </b>
-                    <span style={{ color: "red" }}>*</span>
+                    <h2>Village/City <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("village")} disabled />
+                <Controller
+                  control={control}
+                  name="village"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="village" />
+                  )}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.village && errors?.village?.message}
                 </h3>
@@ -508,10 +557,16 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>Pincode</b> <span style={{ color: "red" }}>*</span>
+                    <h2>Pincode<span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("authorizedPinCode")} disabled />
+                <Controller
+                  control={control}
+                  name="authorizedPinCode"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorizedPinCode" />
+                  )}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.authorizedPinCode && errors?.authorizedPinCode?.message}
                 </h3>
@@ -522,11 +577,16 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>Tehshil </b>
-                    <span style={{ color: "red" }}>*</span>
+                    <h2>Tehshil<span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("tehsil")} disabled />
+                <Controller
+                  control={control}
+                  name="tehsil"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="tehsil" />
+                  )}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.tehsil && errors?.tehsil?.message}
                 </h3>
@@ -534,10 +594,16 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>District</b> <span style={{ color: "red" }}>*</span>
+                    <h2>District<span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("district")} disabled />
+                <Controller
+                  control={control}
+                  name="district"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="district" />
+                  )}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.district && errors?.district?.message}
                 </h3>
@@ -545,10 +611,16 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>State</b> <span style={{ color: "red" }}>*</span>
+                    <h2>State<span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("state")} disabled />
+                <Controller
+                  control={control}
+                  name="state"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="state" />
+                  )}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.state && errors?.state?.message}
                 </h3>
@@ -559,20 +631,25 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>Status (Individual/ Company/ Firm/ LLP etc.)</b>
-                    <span style={{ color: "red" }}>*</span>
+                    <h2>Status (Individual/ Company/ Firm/ LLP etc.)<span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("status")} disabled readOnly />
+                <Controller
+                  control={control}
+                  name="status"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="status" />
+                  )}
+                />
               </Col>
               <Col md={4} xxl lg="4">
                 <div>
-                  <Form.Label style={{ marginTop: "15" }}>
-                    <b>LC-I signed by </b>
-                    <span style={{ color: "red" }}>*</span>
+                  <Form.Label >
+                    <h2>LC-I signed by <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
                 <Form.Control type="text" placeholder="N/A" {...register("LC")} />
+
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.LC && errors?.LC?.message}
                 </h3>
@@ -580,10 +657,16 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>Address for communication</b> <span style={{ color: "red" }}>*</span>
+                    <h2>Address for communication <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("address")} disabled />
+                <Controller
+                  control={control}
+                  name="address"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="address" />
+                  )}
+                />
               </Col>
             </Row>
             <br></br>
@@ -591,38 +674,52 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                  <h6 data-toggle="tooltip" data-placement="top" title="Permanent address in case of individual/ registered office address in case other than individual">
-                  <b>
-                    Permanent address/ registered office address
-                    &nbsp;{" "}
-                  </b>
-                  </h6>
-                    
-                    <span style={{ color: "red" }}>*</span>
+                    <h2 data-toggle="tooltip" data-placement="top" title="Permanent address in case of individual/ registered office address in case other than individual">
+
+                      Permanent address/ registered office address<span style={{ color: "red" }}>*</span>
+                      &nbsp;{" "}
+
+                    </h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("permanentAddress")} disabled />
+                <Controller
+                  control={control}
+                  name="permanentAddress"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="permanentAddress" />
+                  )}
+                />
               </Col>
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <b>If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)</b>
-                    <span style={{ color: "red" }}>*</span>
+                    <h2 data-toggle="tooltip" data-placement="top" title="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)">
+
+                      If LC-I is not signed by self <span style={{ color: "red" }}>*</span>
+                      &nbsp;{" "}
+
+                    </h2>
                   </Form.Label>
                 </div>
                 <Form.Control type="text" placeholder="N/A" {...register("notSigned")} />
+
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.notSigned && errors?.notSigned?.message}
                 </h3>
               </Col>
-              <Col md={4} xxl lg="4" style={{ marginTop: 23 }}>
+              <Col md={4} xxl lg="4" >
                 <div>
                   <Form.Label>
-                    <b>EmailId for communication</b>
-                    <span style={{ color: "red" }}>*</span>
+                    <h2>EmailId for communication <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("email")} disabled readOnly />
+                <Controller
+                  control={control}
+                  name="email"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="email" />
+                  )}
+                />
               </Col>
             </Row>
             <br></br>
@@ -630,19 +727,24 @@ const ApllicantFormStep1 = (props) => {
               <div className="col col-4">
                 <div>
                   <Form.Label>
-                    <b>Name of the authorized person to sign the application</b>
-                    <span style={{ color: "red" }}>*</span>
+                    <h2>Name of the authorized person to sign the application <span style={{ color: "red" }}>*</span></h2>
                     <i className="fa fa-info-circle-fill" />
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder="N/A" {...register("authorized")} disabled readOnly />
+                <Controller
+                  control={control}
+                  name="authorized"
+                  render={({ field: { onChange, value } }) => (
+                    <input type="text" value={value} className="form-control" placeholder="N/A" disabled name="authorized" />
+                  )}
+                />
               </div>
             </Row>
           </Form.Group>
           <div class="row">
             <div class="col-sm-12 text-right">
               <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-                Continue
+                Save and Continue
               </button>
             </div>
           </div>

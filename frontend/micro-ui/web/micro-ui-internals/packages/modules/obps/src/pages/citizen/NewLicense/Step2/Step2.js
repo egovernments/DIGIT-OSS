@@ -29,8 +29,8 @@ const tableData = [
 
 const optionsPurposeList = [
   {
-    label: "plotted Commercial",
-    value: "P",
+    label: "Plotted Commercial",
+    value: "plotted",
     id: "1",
   },
   {
@@ -65,7 +65,7 @@ const optionsPurposeList = [
   },
   {
     label: "DDJAY",
-    value: "D",
+    value: "DDJAY",
     id: "3",
   },
   {
@@ -122,138 +122,6 @@ const optionsPotentialList = [
   },
 ];
 
-// const columns = [
-//   {
-//     key: "tehsil",
-//     title: "Tehsil",
-//     dataIndex: "tehsil",
-//   },
-//   {
-//     key: "revenueEstate",
-//     title: "Revenue Estate",
-//     dataIndex: "revenueEstate",
-//   },
-//   {
-//     key: "rectangleNo",
-//     title: "Rectangle No.",
-//     dataIndex: "rectangleNo",
-//   },
-
-//   {
-//     key: "killa",
-//     title: "Killa",
-//     dataIndex: "killa",
-//   },
-//   {
-//     key: "landOwner",
-//     title: "Land Owner",
-//     dataIndex: "landOwner",
-//   },
-//   {
-//     key: "consolidationType",
-//     title: "Consolidation Type",
-//     dataIndex: "consolidationType",
-//   },
-//   {
-//     key: "bigha",
-//     title: "Bigha",
-//     dataIndex: "bigha",
-//   },
-//   {
-//     key: "biswa",
-//     title: "Biswa",
-//     dataIndex: "biswa",
-//   },
-//   {
-//     key: "biswansi",
-//     title: "Biswansi",
-//     dataIndex: "biswansi",
-//   },
-//   {
-//     // key: "action",
-//     title: "Action",
-//     dataIndex: "",
-//     render: (data) => (
-//       <div>
-//         <h6
-//           onClick={() => {
-//             setmodal(true);
-//             console.log("data", data);
-//           }}
-//         >
-//           Edit
-//         </h6>
-//         <h6>Delete</h6>
-//       </div>
-//     ),
-//   },
-// ];
-// const consolidatedColumns = [
-//   {
-//     key: "tehsil",
-//     title: "Tehsil",
-//     dataIndex: "tehsil",
-//   },
-//   {
-//     key: "revenueEstate",
-//     title: "Revenue Estate",
-//     dataIndex: "revenueEstate",
-//   },
-//   {
-//     key: "rectangleNo",
-//     title: "Rectangle No.",
-//     dataIndex: "rectangleNo",
-//   },
-//   {
-//     key: "killa",
-//     title: "Killa",
-//     dataIndex: "killa",
-//   },
-//   {
-//     key: "landOwner",
-//     title: "Land Owner",
-//     dataIndex: "landOwner",
-//   },
-//   {
-//     key: "consolidationType",
-//     title: "Consolidation Type",
-//     dataIndex: "consolidationType",
-//   },
-//   {
-//     key: "bigha",
-//     title: "Bigha",
-//     dataIndex: "bigha",
-//   },
-//   {
-//     key: "biswa",
-//     title: "Biswa",
-//     dataIndex: "biswa",
-//   },
-//   {
-//     key: "biswansi",
-//     title: "Biswansi",
-//     dataIndex: "biswansi",
-//   },
-//   {
-//     // key: "action",
-//     title: "Action",
-//     dataIndex: "",
-//     render: (data) => (
-//       <div>
-//         <h6
-//           onClick={() => {
-//             setmodal(true);
-//             // console.log("data", data)
-//           }}
-//         >
-//           Edit
-//         </h6>
-//         <h6>Delete</h6>
-//       </div>
-//     ),
-//   },
-// ];
-
 const ApllicantPuropseForm = (props) => {
   const columns = [
     {
@@ -273,37 +141,32 @@ const ApllicantPuropseForm = (props) => {
     },
 
     {
-      key: "killa",
-      title: "Killa",
-      dataIndex: "killa",
-    },
-    {
-      key: "landOwner",
-      title: "Land Owner",
-      dataIndex: "landOwner",
-    },
-    {
       key: "consolidationType",
       title: "Consolidation Type",
       dataIndex: "consolidationType",
     },
     {
-      key: "bigha",
-      title: "Bigha",
-      dataIndex: "bigha",
+      title: "Kanal/Bigha",
+      dataIndex: "",
+      render: (text) => (
+        text?.kanal ? text?.kanal : text?.bigha
+      ),
     },
     {
-      key: "biswa",
-      title: "Biswa",
-      dataIndex: "biswa",
+      title: "Marla/Biswa",
+      dataIndex: "",
+      render: (text) => (
+        text?.marla ? text?.marla : text?.biswa
+      ),
     },
     {
-      key: "biswansi",
-      title: "Biswansi",
-      dataIndex: "biswansi",
+      title: "Sarsai/Biswansi",
+      dataIndex: "",
+      render: (text) => (
+        text?.sarsai ? text?.sarsai : text?.biswansi
+      ),
     },
     {
-      // key: "action",
       title: "Action",
       dataIndex: "",
       render: (data) => (
@@ -312,7 +175,6 @@ const ApllicantPuropseForm = (props) => {
             onClick={() => {
               setmodal(true);
               setSpecificTableData(data);
-              console.log("data", data);
             }}
           >
             Edit
@@ -325,7 +187,7 @@ const ApllicantPuropseForm = (props) => {
 
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
-  // const [getColumns, setColumns] = useState(columns);
+  const [getColumns, setColumns] = useState(columns);
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
@@ -344,12 +206,24 @@ const ApllicantPuropseForm = (props) => {
   const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
   const [consolidateValue, setConsolidateValue] = useState(null);
+  const nextFormStep = () => setFormStep((currentStep) => currentStep + 1);
+
+  const prevFormStep = () => setFormStep((currentStep) => currentStep - 1);
 
   useEffect(() => {
     if (specificTableData) {
+      setValue("tehsil", specificTableData?.tehsil);
+      setValue("revenueEstate", specificTableData?.revenueEstate);
+      setValue("rectangleNo", specificTableData?.rectangleNo);
       setValue("kanal", specificTableData?.kanal);
+      setValue("marla", specificTableData?.marla);
+      setValue("sarsai", specificTableData?.sarsai);
+      setValue("bigha", specificTableData?.bigha);
+      setValue("biswansi", specificTableData?.biswansi);
+      setValue("biswa", specificTableData?.biswa);
+      setValue("landOwner", specificTableData?.landOwner);
+
     }
-    console.log("specificTableData", specificTableData);
   }, [specificTableData]);
 
   const {
@@ -506,18 +380,62 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
+  const getLandOwnerStateData = async ({ code, khewats }) => {
+    const datatopos = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: "",
+      },
+    };
+
+    try {
+      const Resp = await axios
+        .post(
+          "http://10.1.1.18:8094/egov-mdms-service/v1/_owner?" +
+          "dCode=" +
+          district +
+          "&" +
+          "tCode=" +
+          tehsilCode +
+          "&NVCode=" +
+          code +
+          "&khewat=" +
+          khewats,
+          datatopos,
+          {}
+        )
+        .then((response) => {
+          return response;
+        });
+      setKhewatData(Resp.data);
+
+      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
+        Resp.data.map((el, i) => {
+          setKhewatDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.khewats }]);
+        });
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   useEffect(() => {
     DistrictApiCall();
   }, []);
 
   const ApplicantPurposeModalData = (data) => {
     console.log("data++++++", data);
-    setModalData((prev) => [...prev, data]);
-    setmodal(false);
-    reset();
-    data["consolidationType"] = consolidateValue;
-    data["tehsil"] = data?.tehsil?.value;
-    if (showhide2 === "1") {
+    data["tehsil"] = data?.tehsil?.label;
+    data["revenueEstate"] = data?.revenueEstate?.label;
+    data["rectangleNo"] = data?.rectangleNo;
+    if (showhide2 === "consolidated") {
       delete data?.bigha;
       delete data?.biswa;
       delete data?.biswansi;
@@ -527,17 +445,23 @@ const ApllicantPuropseForm = (props) => {
       delete data?.kanal;
       delete data?.sarsai;
     }
-    // if (data.consolidationType === "consolidated") {
-    //   setColumns(columns);
-    // } else {
-    //   setColumns(consolidatedColumns);
-    // }
+    if (data.consolidationType === "consolidated") {
+      setColumns(columns);
+    } else {
+      setColumns(consolidatedColumns);
+    }
     setModalData((prev) => [...prev, data]);
     setmodal(false);
     reset({
+      tehsil: "",
+      revenueEstate: "",
+      rectangleNo: "",
       kanal: "",
       marla: "",
       sarsai: "",
+      bigha: "",
+      biswa: "",
+      biswansi: "",
     });
   };
 
@@ -785,7 +709,7 @@ const ApllicantPuropseForm = (props) => {
   const handleChangePurpose = (data) => {
     const purposeSelected = data?.label;
     setSelectPurpose(purposeSelected);
-    localStorage.setItem("purpose", JSON.stringify(purposeSelected));
+    localStorage.setItem("purpose", (purposeSelected));
   };
   const handleChangePotential = (data) => {
     const potentialSelected = data?.label;
@@ -825,15 +749,15 @@ const ApllicantPuropseForm = (props) => {
   return (
     <div>
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
-        <Card style={{ width: "126%" }}>
-          <h2>New License</h2>
-          <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
+        <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+          <h1>New License</h1>
+          <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <b>Puropse Of License</b> <span style={{ color: "red" }}>*</span>
+                      <h2>Puropse Of License<span style={{ color: "red" }}>*</span></h2>
                     </Form.Label>
                   </div>
 
@@ -853,7 +777,7 @@ const ApllicantPuropseForm = (props) => {
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <b>Potential Zone:</b> <span style={{ color: "red" }}>*</span>
+                      <h2>Potential Zone<span style={{ color: "red" }}>*</span></h2>
                     </Form.Label>
                   </div>
                   <ReactMultiSelect
@@ -872,7 +796,7 @@ const ApllicantPuropseForm = (props) => {
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <b>District</b> <span style={{ color: "red" }}>*</span>
+                      <h2>District<span style={{ color: "red" }}>*</span></h2>
                     </Form.Label>
                   </div>
                   <ReactMultiSelect
@@ -894,8 +818,7 @@ const ApllicantPuropseForm = (props) => {
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <b>State </b>
-                      <span style={{ color: "red" }}>*</span>
+                      <h2>State<span style={{ color: "red" }}>*</span></h2>
                     </Form.Label>
                   </div>
 
@@ -907,9 +830,9 @@ const ApllicantPuropseForm = (props) => {
               </Row>
 
               <div className="ml-auto" style={{ marginTop: 20 }}>
-                <h2 style={{ fontSize: 24 }}>
-                  <b>2. Details of applied land:</b>
-                </h2>
+                <h5>
+                  <b>Details of applied land</b>
+                </h5>
                 <br></br>
                 <p>
                   Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development
@@ -917,7 +840,7 @@ const ApllicantPuropseForm = (props) => {
                 </p>
                 <br></br>
                 <p>
-                  <b>(i) Khasra-wise information to be provided in the following format:</b>
+                  <h3>(i) Khasra-wise information to be provided in the following format</h3>
                 </p>
                 <br></br>
               </div>
@@ -930,18 +853,20 @@ const ApllicantPuropseForm = (props) => {
 
               <div className="applt" style={{ overflow: "auto" }}>
                 <WorkingTable columns={columns} data={modalData} />
+
+
               </div>
             </Form.Group>
             <div class="row">
               <div class="col-sm-12 text-left">
-                <button id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
+                <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
                   Back
                 </button>
               </div>
               <div class="row">
                 <div class="col-sm-12 text-right">
                   <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-                    Continue
+                    Save and Continue
                   </button>
                 </div>
               </div>
@@ -955,9 +880,15 @@ const ApllicantPuropseForm = (props) => {
         isOpen={modal}
         toggle={() => {
           reset({
+            tehsil: "",
+            revenueEstate: "",
+            rectangleNo: "",
             kanal: "",
             marla: "",
             sarsai: "",
+            bigha: "",
+            biswa: "",
+            biswansi: "",
           });
           setmodal(!modal);
         }}
@@ -966,9 +897,15 @@ const ApllicantPuropseForm = (props) => {
           toggle={() => {
             setmodal(!modal);
             reset({
+              tehsil: "",
+              revenueEstate: "",
+              rectangleNo: "",
               kanal: "",
               marla: "",
               sarsai: "",
+              bigha: "",
+              biswa: "",
+              biswansi: "",
             });
           }}
         ></ModalHeader>
@@ -978,9 +915,7 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h6>
-                      <b>Tehsil</b>
-                    </h6>
+                    <h2>Tehsil <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
                 <ReactMultiSelect
@@ -1000,18 +935,19 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h6>
-                      <b>Name of Revenue estate</b>
-                    </h6>
+                    <h2>Name of Revenue Estate <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
                 <ReactMultiSelect
                   control={control}
                   {...register("revenueEstate")}
-                 
+
                   data={revenueDataLabels}
                   labels="Revenue Estate"
-                  onChange={(e) => getMustilData(e.code)}
+                  onChange={(e) => {
+                    getMustilData(e.code);
+                    getLandOwnerStateData(e.khewats);
+                  }}
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
@@ -1021,12 +957,10 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h6>
-                      <b>Rectangle No./Mustil</b>
-                    </h6>
+                    <h2>Rectangle No./Mustil <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <ReactMultiSelect control={control} name="mustil"  data={mustilDataLabels} labels="Rectangle No." />
+                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No." />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.mustil && errors?.mustil?.message}
                 </h3>
@@ -1037,19 +971,17 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="12">
                 <div>
                   <label>
-                    <h6>
-                      <b>Consolidation Type</b>
-                    </h6>{" "}
+                    <h2>Consolidation Type<span style={{ color: "red" }}>*</span></h2>
                   </label>{" "}
                   &nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="Consolidated" name="Yes" onClick={handleshow2} {...register("consolidationType")}/>
+                  <input type="radio" id="Yes" value="Consolidated" name="Yes" onClick={handleshow2} {...register("consolidationType")} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
-                  <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
-                  <input type="radio" id="No" value="Non-Consolidated" name="Yes" onClick={handleshow2} {...register("consolidationType")}/>
+                  <label htmlFor="gen" >Consolidated</label>&nbsp;&nbsp;
+                  <input type="radio" id="No" value="Non-Consolidated" name="Yes" onClick={handleshow2} {...register("consolidationType")} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
-                  <label htmlFor="npnl">Non-Consolidated</label>
+                  <label htmlFor="npnl" >Non-Consolidated</label>
                   {/* </Form.Select> */}
                 </div>{" "}
                 {showhide2 === "Consolidated" && (
@@ -1057,13 +989,13 @@ const ApllicantPuropseForm = (props) => {
                     <thead>
                       <tr>
                         <th>
-                          <b>Kanal</b>
+                          <h2>Kanal</h2>
                         </th>
                         <th>
-                          <b>Marla</b>
+                          <h2>Marla</h2>
                         </th>
                         <th>
-                          <b>Sarsai</b>&nbsp;&nbsp;
+                          <h2>Sarsai</h2>&nbsp;&nbsp;
                         </th>
                       </tr>
                     </thead>
@@ -1087,13 +1019,13 @@ const ApllicantPuropseForm = (props) => {
                     <thead>
                       <tr>
                         <th>
-                          <b>Bigha</b>
+                          <h2>Bigha</h2>
                         </th>
                         <th>
-                          <b>Biswa</b>
+                          <h2>Biswa</h2>
                         </th>
                         <th>
-                          <b>Biswansi</b>&nbsp;&nbsp;
+                          <h2>Biswansi</h2>&nbsp;&nbsp;
                         </th>
                       </tr>
                     </thead>
@@ -1119,9 +1051,7 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="6">
                 <div>
                   <label>
-                    <h6>
-                      <b>Name of Land Owner</b>
-                    </h6>
+                    <h2>Name of Land Owner<span style={{ color: "red" }}>*</span></h2>
                   </label>
                 </div>
                 <Form.Control type="text" className="form-control" placeholder="N/A" {...register("landOwner")} />
@@ -1133,14 +1063,14 @@ const ApllicantPuropseForm = (props) => {
             </Row>
             <Row className="ml-auto mb-3">
               <div className="col col-12">
-                <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
-                  <b>Collaboration agreement &nbsp; </b>
+                <h2 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
+                  Collaboration agreement Owner<span style={{ color: "red" }}>*</span>
                   &nbsp;&nbsp;
                   <input type="radio" value="Yes" id="Yes" name="Yes" onClick={handleshow1} />
                   &nbsp;&nbsp;
                   <label for="Yes">
                     <h6>
-                      <b>Yes</b>
+                      Yes
                     </h6>
                   </label>
                   &nbsp;&nbsp;
@@ -1148,41 +1078,33 @@ const ApllicantPuropseForm = (props) => {
                   &nbsp;&nbsp;
                   <label for="No">
                     <h6>
-                      <b>No</b>
+                      No
                     </h6>
                   </label>
-                </h6>
+                </h2>
                 {showhide1 === "Yes" && (
                   <div className="row ">
                     <div className="col col-4">
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered</b>
-                        </h6>
+                      <label >
+                        <h2>Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered<span style={{ color: "red" }}>*</span></h2>
                       </label>
                       <Form.Control type="text" className="form-control" placeholder="N/A" {...register("devCompany")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Date of registering collaboration agreement</b>
-                        </h6>
+                      <label >
+                        <h2>Date of registering collaboration agreement<span style={{ color: "red" }}>*</span></h2>
                       </label>
                       <Form.Control type="date" className="form-control" placeholder="N/A" {...register("registering")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Date of validity of collaboration agreement</b>
-                        </h6>
+                      <label >
+                        <h2>Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span></h2>
                       </label>
                       <Form.Control type="date" className="form-control" placeholder="N/A" {...register("dateValidity")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 35 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Whether collaboration agreement irrevocable (Yes/No)</b>
-                        </h6>
+                      <label >
+                        <h2>Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span></h2>
                       </label>
                       <br></br>
                       <input type="radio" value="Yes" id="Yes1" name="Yes" />
@@ -1199,37 +1121,30 @@ const ApllicantPuropseForm = (props) => {
                     </div>
 
                     <div className="col col-4" style={{ marginTop: 35 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Name of authorized signatory on behalf of land owner(s)</b>
-                        </h6>
+                      <label >
+                        <h2>Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span></h2>
                       </label>
                       <Form.Control type="text" className="form-control" placeholder="N/A" {...register("authorizedSign")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Name of authorized signatory on behalf of developer to sign Collaboration agreement</b>
-                        </h6>
+                      <label >
+                        <h2>Name of authorized signatory on behalf of developer to sign Collaboration agreement<span style={{ color: "red" }}>*</span></h2>
+
                       </label>
                       <Form.Control type="date" className="form-control" placeholder="N/A" {...register("authorizedDev")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 20 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Registring Authority</b>
-                        </h6>
+                      <label >
+                        <h2>Registring Authority<span style={{ color: "red" }}>*</span></h2>
                       </label>
                       <br></br>
                       <Form.Control type="text" className="form-control" placeholder="N/A" {...register("registeringAuth")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                          <b>
-                            Registring Authority document&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                          </b>
-                        </h6>
+                      <label >
+                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                          Registring Authority document <span style={{ color: "red" }}>*</span><ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        </h2>
                       </label>
                       <br></br>
                       <Form.Control type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} />
