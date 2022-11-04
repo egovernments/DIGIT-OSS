@@ -344,7 +344,7 @@ let serviceType = state?.applicationType?.includes("WATER") ? "WATER":"SEWERAGE"
             />
             <Row
               className="border-none"
-              label={t("WS_OWN_DETAIL_CROSADD")}
+              label={t("WS_OWN_DETAIL_PROPADD")}
               text={getAddress(PTData?.Properties?.[0]?.address) || t("CS_NA")}
               textStyle={{ wordBreak : "break-word" }}
               privacy={ {

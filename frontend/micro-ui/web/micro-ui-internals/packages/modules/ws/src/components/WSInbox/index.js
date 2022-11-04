@@ -147,7 +147,7 @@ const WSInbox = ({ parentRoute }) => {
   links = links.filter((link) => (link.roles ? checkForEmployee(link.roles) : true));
   const PropsForInboxLinks = {
     logoIcon: <DropIcon />,
-    headerText: checkPathName ? "MODULE_WS" : "MODULE_SW",
+    headerText: checkPathName ? "MODULE_WATER" : "MODULE_SW",
     links: [
       ...links,
       {
