@@ -10,6 +10,7 @@ import Collapse from "react-bootstrap/Collapse";
 import Modal from "react-bootstrap/Modal";
 import ModalChild from "../Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const LicenseDetailsScrutiny = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
@@ -301,9 +302,27 @@ const LicenseDetailsScrutiny = (props) => {
     >
       {/* <Alert variant="warning">{messege}</Alert> */}
 
-      <div className="collapse-header" onClick={() => setOpen(!open)} aria-controls="example-collapse-text" aria-expanded={open2}>
-        <span className="">Add Info</span>
-        {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+      <div
+        className="collapse-header"
+        onClick={() => setOpen(!open)}
+        aria-controls="example-collapse-text"
+        aria-expanded={open2}
+        style={{
+          background: "#f1f1f1",
+          padding: "0.25rem 1.25rem",
+          borderRadius: "0.25rem",
+          fontWeight: "600",
+          display: "flex",
+          cursor: "pointer",
+          color: "#817f7f",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <span style={{ color: "#817f7f" }} className="">
+          Add Info
+        </span>
+        {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
 
       <Collapse in={open}>
@@ -771,7 +790,7 @@ const LicenseDetailsScrutiny = (props) => {
             </div>
             {/* </Row> */}
 
-            <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 40 }}>
+            {/* <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 40 }}>
               <Button
                 style={{ textAlign: "right" }}
                 onClick={() => {
@@ -781,7 +800,7 @@ const LicenseDetailsScrutiny = (props) => {
               >
                 Submit
               </Button>
-            </div>
+            </div> */}
           </Form.Group>
 
           {/* <hr></hr> */}

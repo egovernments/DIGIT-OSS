@@ -1,0 +1,24 @@
+.mainWrapper {
+  display: inline-block;
+  position: relative;
+}
+
+.btnimg {
+  /* background: red; */
+  pointer-events: none;
+  /* width: 250px;
+  height: 90px; */
+  opacity: 1;
+  line-height: 90px;
+  text-align: center;
+  cursor: pointer;
+}
+
+input[type="file"] {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

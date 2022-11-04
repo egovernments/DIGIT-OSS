@@ -24,6 +24,7 @@ import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
 import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 const AppliedLandinfo = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
@@ -270,12 +271,30 @@ const AppliedLandinfo = (props) => {
         }}
       > */}
       <div>
-        <div className="collapse-header" onClick={() => setOpen(!open)} aria-controls="example-collapse-text" aria-expanded={open}>
-          <span className="">Details of Applied Land</span>
+        <div
+          className="collapse-header"
+          onClick={() => setOpen(!open)}
+          aria-controls="example-collapse-text"
+          aria-expanded={open}
+          style={{
+            background: "#f1f1f1",
+            padding: "0.25rem 1.25rem",
+            borderRadius: "0.25rem",
+            fontWeight: "600",
+            display: "flex",
+            cursor: "pointer",
+            color: "#817f7f",
+            justifyContent: "space-between",
+            alignContent: "center",
+          }}
+        >
+          <span style={{ color: "#817f7f" }} className="">
+            Details of Applied Land
+          </span>
           {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
         </div>
       </div>
-      <Collapse in={open2}>
+      <Collapse in={open}>
         <div id="example-collapse-text">
           <Form.Group
             style={{ display: props.displayPurpose, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
@@ -344,15 +363,11 @@ const AppliedLandinfo = (props) => {
                     <br></br>
                     <div className="row ">
                       <div className="col col-4">
-                        <label htmlFor="pitentialZone" className="font-weight-bold">
-                          X:Longitude
-                        </label>
+                        <label htmlFor="pitentialZone">X:Longitude</label>
                         <input type="number" name="XLongitude" className="form-control" disabled />
                       </div>
                       <div className="col col-4">
-                        <label htmlFor="pitentialZone" className="font-weight-bold">
-                          Y:Latitude
-                        </label>
+                        <label htmlFor="pitentialZone">Y:Latitude</label>
                         <input type="number" name="YLatitude" className="form-control" disabled />
                       </div>
                     </div>
@@ -364,15 +379,11 @@ const AppliedLandinfo = (props) => {
                     <div className="row ">
                       <br></br>
                       <div className="col col-4">
-                        <label htmlFor="pitentialZone" className="font-weight-bold">
-                          X:Longitude
-                        </label>
+                        <label htmlFor="pitentialZone">X:Longitude</label>
                         <input type="number" name="XLongitude" className="form-control" disabled />
                       </div>
                       <div className="col col-4">
-                        <label htmlFor="pitentialZone" className="font-weight-bold">
-                          Y:Latitude
-                        </label>
+                        <label htmlFor="pitentialZone">Y:Latitude</label>
                         <input type="number" name="YLatitude" className="form-control" disabled />
                       </div>
                     </div>
@@ -399,7 +410,7 @@ const AppliedLandinfo = (props) => {
                 {/* <Collapse in={open}>
         <div id="example-collapse-text"> */}
                 <h5 className="text-black" style={{ marginTop: "3%" }}>
-                  <b>2.Details of Plots</b>&nbsp;&nbsp;
+                  2.Details of Plots&nbsp;&nbsp;
                   <br></br>
                   <div style={{ display: "flex" }}>
                     <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} disabled />
@@ -433,21 +444,11 @@ const AppliedLandinfo = (props) => {
                   <div className="table table-bordered table-responsive">
                     <thead>
                       <tr>
-                        <td>
-                          <b>Type of plots</b>
-                        </td>
-                        <td>
-                          <b>Plot No.</b>
-                        </td>
-                        <td>
-                          <b>Length in mtr</b>
-                        </td>
-                        <td>
-                          <b>Width in mtr</b>
-                        </td>
-                        <td>
-                          <b>Area in sqmtr</b>
-                        </td>
+                        <td>Type of plots</td>
+                        <td>Plot No.</td>
+                        <td>Length in mtr</td>
+                        <td>Width in mtr</td>
+                        <td>Area in sqmtr</td>
                       </tr>
                     </thead>
                     <tbody>
@@ -455,7 +456,7 @@ const AppliedLandinfo = (props) => {
                         <td>
                           <div className="px-2">
                             <p className="mb-2" onChange={(e) => setResPlotno(e.target.value)} value={resplotno}>
-                              <b>Residential</b>
+                              Residential
                             </p>
                           </div>
                         </td>
@@ -479,9 +480,7 @@ const AppliedLandinfo = (props) => {
                       <tr>
                         <td>
                           <div className="px-2">
-                            <p className="mb-2">
-                              <b>Gen</b>
-                            </p>
+                            <p className="mb-2">Gen</p>
                           </div>
                         </td>
                         <td component="th" scope="row">
@@ -504,9 +503,7 @@ const AppliedLandinfo = (props) => {
                       <tr>
                         <td>
                           <div className="px-2">
-                            <p className="mb-2">
-                              <b>NPNL</b>
-                            </p>
+                            <p className="mb-2">NPNL</p>
                           </div>
                         </td>
                         <td component="th" scope="row">
@@ -529,9 +526,7 @@ const AppliedLandinfo = (props) => {
                       <tr>
                         <td>
                           <div className="px-2">
-                            <p className="mb-2">
-                              <b>EWS</b>
-                            </p>
+                            <p className="mb-2">EWS</p>
                           </div>
                         </td>
                         <td component="th" scope="row">
@@ -558,7 +553,7 @@ const AppliedLandinfo = (props) => {
                               className="mb-2"
                               // onChange={(e)=>setComPlotno(e.target.value)} value={complotno}
                             >
-                              <b>Commercial</b>
+                              Commercial
                             </p>
                           </div>
                         </td>
@@ -586,7 +581,7 @@ const AppliedLandinfo = (props) => {
                               className="mb-2"
                               // onChange={(e)=>setSitePlotno(e.target.value)} value={siteplotno}
                             >
-                              <b>Community Sites</b>
+                              Community Sites
                             </p>
                           </div>
                         </td>
@@ -614,7 +609,7 @@ const AppliedLandinfo = (props) => {
                               className="mb-2"
                               // onChange={(e)=>setParkPlotno(e.target.value)} value={parkplotno}
                             >
-                              <b>Parks</b>
+                              Parks
                             </p>
                           </div>
                         </td>
@@ -642,7 +637,7 @@ const AppliedLandinfo = (props) => {
                               className="mb-2"
                               // onChange={(e)=>setPublicPlotno(e.target.value)} value={publicplotno}
                             >
-                              <b>Public Utilities</b>
+                              Public Utilities
                             </p>
                           </div>
                         </td>
@@ -666,9 +661,7 @@ const AppliedLandinfo = (props) => {
                       <tr>
                         <td>
                           <div className="px-2">
-                            <p className="mb-2">
-                              <b>STP</b>
-                            </p>
+                            <p className="mb-2">STP</p>
                           </div>
                         </td>
                         <td component="th" scope="row">
@@ -691,9 +684,7 @@ const AppliedLandinfo = (props) => {
                       <tr>
                         <td>
                           <div className="px-2">
-                            <p className="mb-2">
-                              <b>ETP</b>
-                            </p>
+                            <p className="mb-2">ETP</p>
                           </div>
                         </td>
                         <td component="th" scope="row">
@@ -716,9 +707,7 @@ const AppliedLandinfo = (props) => {
                       <tr>
                         <td>
                           <div className="px-2">
-                            <p className="mb-2">
-                              <b>WTP</b>
-                            </p>
+                            <p className="mb-2">WTP</p>
                           </div>
                         </td>
                         <td component="th" scope="row">
@@ -741,9 +730,7 @@ const AppliedLandinfo = (props) => {
                       <tr>
                         <td>
                           <div className="px-2">
-                            <p className="mb-2">
-                              <b>UGT</b>
-                            </p>
+                            <p className="mb-2">UGT</p>
                           </div>
                         </td>
                         <td component="th" scope="row">
@@ -766,9 +753,7 @@ const AppliedLandinfo = (props) => {
                       <tr>
                         <td>
                           <div className="px-2">
-                            <p className="mb-2">
-                              <b>Milk Booth</b>
-                            </p>
+                            <p className="mb-2">Milk Booth</p>
                           </div>
                         </td>
                         <td component="th" scope="row">
@@ -791,9 +776,7 @@ const AppliedLandinfo = (props) => {
                       <tr>
                         <td>
                           <div className="px-2">
-                            <p className="mb-2">
-                              <b>GSS</b>
-                            </p>
+                            <p className="mb-2">GSS</p>
                           </div>
                         </td>
                         <td component="th" scope="row">
@@ -821,15 +804,9 @@ const AppliedLandinfo = (props) => {
                     <div className="table table-bordered table-responsive ">
                       <thead>
                         <tr>
-                          <td>
-                            <b>Details of Plot</b>
-                          </td>
-                          <td>
-                            <b>Dimensions (in mtr)</b>
-                          </td>
-                          <td>
-                            <b>Entered Area</b>
-                          </td>
+                          <td>Details of Plot</td>
+                          <td>Dimensions (in mtr)</td>
+                          <td>Entered Area</td>
                         </tr>
                       </thead>
                       <tbody>
@@ -840,7 +817,7 @@ const AppliedLandinfo = (props) => {
                                 className="mb-2"
                                 //  onChange={(e)=>setIrPlotDimen(e.target.value)} value={irPlotDimen}
                               >
-                                <b>Residential</b>
+                                Residential
                               </p>
                             </div>
                           </td>
@@ -860,7 +837,7 @@ const AppliedLandinfo = (props) => {
                                 className="mb-2"
                                 // onChange={(e)=>setIrSizeDimen(e.target.value)} value={irSizeDimen}
                               >
-                                <b>Commercial</b>
+                                Commercial
                               </p>
                             </div>
                           </td>
@@ -878,7 +855,7 @@ const AppliedLandinfo = (props) => {
                     <h5 className="text-black">
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                        <b>Area Under</b>
+                        Area Under
                         <ReportProblemIcon
                           style={{
                             color:
@@ -897,21 +874,11 @@ const AppliedLandinfo = (props) => {
                     <div className="table table-bordered table-responsive">
                       <thead>
                         <tr>
-                          <td>
-                            <b>Detail of plots</b>
-                          </td>
-                          <td>
-                            <b> Plot No.</b>
-                          </td>
-                          <td>
-                            <b>Length (in mtr)</b>
-                          </td>
-                          <td>
-                            <b>Dimension (in mtr)</b>
-                          </td>
-                          <td>
-                            <b>Entered Area</b>
-                          </td>
+                          <td>Detail of plots</td>
+                          <td>Plot No.</td>
+                          <td>Length (in mtr)</td>
+                          <td>Dimension (in mtr)</td>
+                          <td>Entered Area</td>
                         </tr>
                       </thead>
                       <tbody>
@@ -922,7 +889,7 @@ const AppliedLandinfo = (props) => {
                                 className="mb-2"
                                 // onChange={(e)=>setNpnlNo(e.target.value)} value={npnlNo}
                               >
-                                <b>Sectoral Plan Road</b>
+                                Sectoral Plan Road
                               </p>
                             </div>
                           </td>
@@ -949,7 +916,7 @@ const AppliedLandinfo = (props) => {
                                 className="mb-2"
                                 // onChange={(e)=>setEwsNo(e.target.value)} value={ewsNo}
                               >
-                                <b>Green Belt</b>
+                                Green Belt
                               </p>
                             </div>
                           </td>
@@ -976,7 +943,7 @@ const AppliedLandinfo = (props) => {
                                 className="mb-2"
                                 // onChange={(e)=>setEwsNo(e.target.value)} value={ewsNo}
                               >
-                                <b>24/18 mtr wide internal circulation Plan road</b>
+                                24/18 mtr wide internal circulation Plan road
                               </p>
                             </div>
                           </td>
@@ -1003,7 +970,7 @@ const AppliedLandinfo = (props) => {
                                 className="mb-2"
                                 //  onChange={(e)=>setEwsNo(e.target.value)} value={ewsNo}
                               >
-                                <b>Other Roads</b>
+                                Other Roads
                               </p>
                             </div>
                           </td>
@@ -1030,7 +997,7 @@ const AppliedLandinfo = (props) => {
                                 className="mb-2"
                                 // onChange={(e)=>setEwsNo(e.target.value)} value={ewsNo}
                               >
-                                <b>Undetermined use(UD)</b>
+                                Undetermined use(UD)
                               </p>
                             </div>
                           </td>
@@ -1067,7 +1034,7 @@ const AppliedLandinfo = (props) => {
 
                 <h5 className="text-black">
                   <div style={{ display: "flex" }}>
-                    <b>NILP :-</b>
+                    NILP :-
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <ReportProblemIcon
                       style={{
@@ -1088,15 +1055,9 @@ const AppliedLandinfo = (props) => {
                 <div className="table table-bordered table-responsive">
                   <thead>
                     <tr>
-                      <td>
-                        <b>S.No.</b>
-                      </td>
-                      <td>
-                        <b>NLP Details</b>
-                      </td>
-                      <td>
-                        <b>Yes/No</b>
-                      </td>
+                      <td>S.No.</td>
+                      <td>NLP Details</td>
+                      <td>Yes/No</td>
                     </tr>
                   </thead>
                   <tbody>
@@ -1254,7 +1215,7 @@ const AppliedLandinfo = (props) => {
 
                 <hr style={{ margin: 3 }} />
                 <h5 className="text-black" style={{ marginBottom: "2%" }}>
-                  <b>Mandatory Documents</b>
+                  Mandatory Documents
                 </h5>
                 <div className="row">
                   <div className="col col-3">
@@ -1284,7 +1245,7 @@ const AppliedLandinfo = (props) => {
                     <h6>
                       Democratic Plan.
                       <div style={{ display: "flex" }}>
-                        {/* <b>Site plan.</b> */}
+                        {/* Site plan. */}
 
                         {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
                         {<DownloadForOfflineIcon color="primary" />}
@@ -1389,9 +1350,9 @@ const AppliedLandinfo = (props) => {
       </Collapse> */}
               </Col>
             </Row>
-            <div style={{ position: "relative", marginBottom: 40 }}>
+            {/* <div style={{ position: "relative", marginBottom: 40 }}>
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
-            </div>
+            </div> */}
           </Form.Group>
 
           {/* <hr></hr> */}
