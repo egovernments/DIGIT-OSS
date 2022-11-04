@@ -1,15 +1,15 @@
 import * as Yup from "yup";
 
 const VALIDATION_SCHEMA = Yup.object().shape({
-  purposeDd: Yup.object({
-      value: Yup.string().required('This field is required'),
-    }),
-  potential: Yup.object({
-    value: Yup.string().required('This field is required'),
-  }),
-  district: Yup.object({
-    value: Yup.string().required('This field is required'),
-  }),
+  // purposeDd: Yup.object({
+  //     value: Yup.string().required('This field is required'),
+  //   }),
+  // potential: Yup.object({
+  //   value: Yup.string().required('This field is required'),
+  // }),
+  // district: Yup.object({
+  //   value: Yup.string().required('This field is required'),
+  // }),
 //   tehsil: Yup.object({
 //     value: Yup.string().required('This field is required'),
 //   }),

@@ -121,22 +121,22 @@ const handleChange=(e)=>{
          <Form.Group className="justify-content-center" controlId="formBasicEmail">
                 <Row className="ml-auto" style={{marginBottom:5}}>
                 <Col col-12>
-                <h5 className="text-black"><b>Industrial Plotted:-</b></h5>
+                <h5 className="text-black">Industrial Plotted:-</h5>
               
       <div className="table table-bordered table-responsive">
         <thead>
           <tr>
-            <td><b>Detail of plots</b></td>
-            <td ><b>No.</b></td>
-            <td ><b>Area in Acres</b></td>
+            <td>Detail of plots</td>
+            <td >No.</td>
+            <td >Area in Acres</td>
           </tr>
         </thead>
         <tbody>
             <tr>
                 <td >
                                                         <div className="px-2">
-                                                            <p className="mb-2"><b>Area of the colony, Up to 50 acres
-                                                            </b></p>
+                                                            <p className="mb-2">Area of the colony, Up to 50 acres
+                                                            </p>
                                                         </div>
                 </td>
                 <td align="right">  <input type="number" className="form-control"/></td>
@@ -147,7 +147,7 @@ const handleChange=(e)=>{
             <tr>
                 <td >
                                                         <div className="px-2">
-                                                            <p className="mb-2"><b>More than 50 to 200 acres </b></p>
+                                                            <p className="mb-2">More than 50 to 200 acres </p>
                                                            
                                                         </div>
                 </td>
@@ -159,7 +159,7 @@ const handleChange=(e)=>{
             <tr>
                 <td >
                                                         <div className="px-2">
-                                                            <p className="mb-2" ><b>More than 200 acres </b></p>
+                                                            <p className="mb-2" >More than 200 acres </p>
                                                            
                                                         </div>
                 </td>
@@ -171,7 +171,7 @@ const handleChange=(e)=>{
             <tr>
                 <td >
                                                         <div className="px-2">
-                                                            <p className="mb-2"><b>Proposed plots under residential component DDJAY  </b></p>
+                                                            <p className="mb-2">Proposed plots under residential component DDJAY  </p>
                                                            
                                                         </div>
                 </td>
@@ -183,7 +183,7 @@ const handleChange=(e)=>{
             <tr>
                 <td >
                                                         <div className="px-2">
-                                                            <p className="mb-2"><b>Proposed plots under community facilities in DDJAY Area  </b></p>
+                                                            <p className="mb-2">Proposed plots under community facilities in DDJAY Area  </p>
                                                            
                                                         </div>
                 </td>
@@ -195,7 +195,7 @@ const handleChange=(e)=>{
             <tr>
                 <td >
                                                         <div className="px-2">
-                                                            <p className="mb-2" ><b>Details of plots for Labour dormitories from affordable Industries Housing component  </b></p>
+                                                            <p className="mb-2" >Details of plots for Labour dormitories from affordable Industries Housing component  </p>
                                                            
                                                         </div>
                 </td>

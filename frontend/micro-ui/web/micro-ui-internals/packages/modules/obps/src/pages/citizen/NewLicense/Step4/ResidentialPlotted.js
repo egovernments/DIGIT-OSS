@@ -121,22 +121,22 @@ const handleChange=(e)=>{
          <Form.Group className="justify-content-center" controlId="formBasicEmail">
                 <Row className="ml-auto" style={{marginBottom:5}}>
                 <Col col-12>
-                <h6 className="text-black"><b>Residential Plotted</b></h6>
+                <h6 className="text-black">Residential Plotted</h6>
                
       <div className="table table-bordered table-responsive">
         <thead>
           <tr>
-            <td><b>Detail of plots</b></td>
-            <td ><b>No.</b></td>
-            <td ><b>Area</b></td>
+            <td>Detail of plots</td>
+            <td >No.</td>
+            <td >Area</td>
           </tr>
         </thead>
         <tbody>
             <tr>
                 <td >
                                                         <div className="px-2">
-                                                            <p className="mb-2"><b>NPNL
-                                                            </b></p>
+                                                            <p className="mb-2">NPNL
+                                                            </p>
                                                         </div>
                 </td>
                 <td align="right">  <input type="number" className="form-control"/></td>
@@ -147,9 +147,9 @@ const handleChange=(e)=>{
             <tr>
                 <td >
                                                         <div className="px-2">
-                                                            <p className="mb-2"><b>EWS
+                                                            <p className="mb-2">EWS
 
-                                                            </b></p>
+                                                            </p>
                                                         </div>
                 </td>
                 <td align="right">  <input type="number" className="form-control"/></td>

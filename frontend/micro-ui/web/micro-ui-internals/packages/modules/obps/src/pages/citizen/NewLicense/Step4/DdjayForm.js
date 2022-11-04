@@ -121,22 +121,22 @@ const DDJAYForm = (props) => {
       <Form.Group className="justify-content-center" controlId="formBasicEmail">
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col col-12>
-            <h5 className="text-black"><b>Deen Dayal Jan Awas Yojna (DDJAY):-</b></h5>
+            <h5 className="text-black">Deen Dayal Jan Awas Yojna (DDJAY):-</h5>
 
             <div className="table table-bordered table-responsive">
               <thead>
                 <tr>
-                  <td><b>Detail of plots</b></td>
-                  <td ><b>No.</b></td>
-                  <td ><b>Area</b></td>
+                  <td>Detail of plots</td>
+                  <td >No.</td>
+                  <td >Area</td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <td >
                     <div className="px-2">
-                      <p className="mb-2" ><b>Details of frozen plots (50%)
-                      </b></p>
+                      <p className="mb-2" >Details of frozen plots (50%)
+                      </p>
                     </div>
                   </td>
                   <td align="right">  <input type="number" className="form-control" /></td>
@@ -150,7 +150,7 @@ const DDJAYForm = (props) => {
             <br></br>
             <div className="row">
               <div className="col col-12">
-                <h6><b> Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan (Yes/No)</b>&nbsp;&nbsp;
+                <h6> Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan (Yes/No)&nbsp;&nbsp;
 
 
                   <input type="radio" value="Yes" id="Yes"
@@ -164,7 +164,7 @@ const DDJAYForm = (props) => {
                   showhide12 === "Yes" && (
                     <div className="row " >
                       <div className="col col-6">
-                        <label for="parentLicense" className="font-weight-bold">Area of such Pocket (in acres)</label>
+                        <label >Area of such Pocket (in acres)</label>
                         <input type="text" className="form-control" />
                       </div>
 

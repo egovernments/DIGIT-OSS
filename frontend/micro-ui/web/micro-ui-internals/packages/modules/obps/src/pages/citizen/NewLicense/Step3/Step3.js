@@ -7,176 +7,26 @@ import CalculateIcon from '@mui/icons-material/Calculate';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios';
-
-// import CalculateIcon from '@mui/icons-material/Calculate';
-// import InfoIcon from '@mui/icons-material/Info';
-// import { selectDeveloper } from "../../Redux/Slicer/Slicer";
-// import { selectName } from "../../Redux/Slicer/Slicer";
-// import { selectMobile } from "../../Redux/Slicer/Slicer";
-// import { selectMobile2 } from "../../Redux/Slicer/Slicer";
-// import { selectEmail1 } from "../../Redux/Slicer/Slicer";
-// import { selectPan } from "../../Redux/Slicer/Slicer";
-// import { selectAddress } from "../../Redux/Slicer/Slicer";
-// import { selectVillage1 } from "../../Redux/Slicer/Slicer";
-// import { selectPincode } from "../../Redux/Slicer/Slicer";
-// import { selectTehsil } from "../../Redux/Slicer/Slicer";
-// import { selectDistrict } from "../../Redux/Slicer/Slicer";
-// import { selectState } from "../../Redux/Slicer/Slicer";
-// import { selectNameOwner } from "../../Redux/Slicer/Slicer";
-// import AttachFileIcon from '@mui/icons-material/AttachFile';
-// import { useSelector } from "react-redux";
-// import { useDispatch } from "react-redux";
-// import { setLandScheduleFormData } from "../../Redux/Slicer/Slicer";
-// import { selectLicenseApplied } from "../../Redux/Slicer/Slicer";
-// import { selectMigrationLic } from "../../Redux/Slicer/Slicer";
-// import { selectPotential } from "../../Redux/Slicer/Slicer";
-// import { selectSiteLoc } from "../../Redux/Slicer/Slicer";
-// import { selectApproach } from "../../Redux/Slicer/Slicer";
-// import { selectSpecify } from "../../Redux/Slicer/Slicer";
-// import { selectexistingCase } from "../../Redux/Slicer/Slicer";
-// import { selectTypeLand } from "../../Redux/Slicer/Slicer";
-// import { selectThirdParty } from "../../Redux/Slicer/Slicer";
-// import { selectRehan } from "../../Redux/Slicer/Slicer";
-// import { selectPatta } from "../../Redux/Slicer/Slicer";
-// import { selectGair } from "../../Redux/Slicer/Slicer";
-// import { selectAny } from "../../Redux/Slicer/Slicer";
-// import { selectLitigation } from "../../Redux/Slicer/Slicer";
-// import { selectCourt } from "../../Redux/Slicer/Slicer";
-// import { selectAppliedLand } from "../../Redux/Slicer/Slicer";
-// import { selectRevenuerasta } from "../../Redux/Slicer/Slicer";
-// import { selectWatercourse } from "../../Redux/Slicer/Slicer";
-// import { selectCompactBlock } from "../../Redux/Slicer/Slicer";
-// import { selectSandwiched } from "../../Redux/Slicer/Slicer";
-// import { selectAcquistion } from "../../Redux/Slicer/Slicer";
-// import { selectExclusion } from "../../Redux/Slicer/Slicer";
-// import { selectCompensation } from "../../Redux/Slicer/Slicer";
-// import { selectSection4 } from "../../Redux/Slicer/Slicer";
-// import { selectSection6 } from "../../Redux/Slicer/Slicer";
-// import { selectStatusRelease } from "../../Redux/Slicer/Slicer";
-// import { selectaward } from "../../Redux/Slicer/Slicer";
-// import { selectDateRelease } from "../../Redux/Slicer/Slicer";
-// import { selectSite } from "../../Redux/Slicer/Slicer";
-// import { selectApproachable } from "../../Redux/Slicer/Slicer";
-// import { selectVacant } from "../../Redux/Slicer/Slicer";
-// import { selectConstruction } from "../../Redux/Slicer/Slicer";
-// import { selectHt } from "../../Redux/Slicer/Slicer";
-// import { selectGas } from "../../Redux/Slicer/Slicer";
-// import { selectNallah } from "../../Redux/Slicer/Slicer";
-// import { selectRoad } from "../../Redux/Slicer/Slicer";
-// import { selectLand } from "../../Redux/Slicer/Slicer";
-// import { selectLayoutPlan } from "../../Redux/Slicer/Slicer";
-
-
 const LandScheduleForm = (props) => {
-    // const developer = useSelector(selectDeveloper)
-    // const name = useSelector(selectName)
-    // const mobile = useSelector(selectMobile)
-    // const mobile2 = useSelector(selectMobile2)
-    // const email = useSelector(selectEmail1)
-    // const pan = useSelector(selectPan)
-    // const address = useSelector(selectAddress)
-    // const village1 = useSelector(selectVillage1)
-    // const pincode = useSelector(selectPincode)
-    // const tehsil = useSelector(selectTehsil)
-    // const district = useSelector(selectDistrict)
-    // const state = useSelector(selectState)
-    // const nameOwner = useSelector(selectNameOwner)
-
-    // const licenseApplied=useSelector(selectLicenseApplied)
-    // const migrationLic=useSelector(selectMigrationLic)
-    // const potential=useSelector(selectPotential)
-    // const siteLoc=useSelector(selectSiteLoc)
-    // const approach=useSelector(selectApproach)
-    // const specify=useSelector(selectSpecify)
-    // const existingCase=useSelector(selectexistingCase)
-    // const typeLand=useSelector(selectTypeLand)
-    // const thirdParty=useSelector(selectThirdParty)
-    // const rehan=useSelector(selectRehan)
-    // const patta=useSelector(selectPatta)
-    // const gair=useSelector(selectGair)
-    // const any=useSelector(selectAny)
-    // const litigation=useSelector(selectLitigation)
-    // const court=useSelector(selectCourt)
-    // const appliedLand=useSelector(selectAppliedLand)
-    // const  revenuerasta=useSelector(selectRevenuerasta)
-    // const watercourse=useSelector(selectWatercourse)
-    // const compactBlock=useSelector(selectCompactBlock)
-    // const sandwiched=useSelector(selectSandwiched)
-    // const acquistion=useSelector(selectAcquistion)
-    // const exclusion=useSelector(selectExclusion)
-    // const compensation=useSelector(selectCompensation)
-    // const section4=useSelector(selectSection4)
-    // const section6=useSelector(selectSection6)
-    // const statusRelease=useSelector(selectStatusRelease)
-    // const  award=useSelector(selectaward)
-    // const dateRelease=useSelector(selectDateRelease)
-    // const site=useSelector(selectSite)
-    // const  approachable=useSelector(selectApproachable)
-    // const vacant=useSelector(selectVacant)
-    // const construction=useSelector(selectConstruction)
-    // const ht=useSelector(selectHt)
-    // const  gas=useSelector(selectGas)
-    // const nallah=useSelector(selectNallah)
-    // const road=useSelector(selectRoad)
-    // const land=useSelector(selectLand)
-    // const  layoutPlan =useSelector(selectLayoutPlan)
-
+    const [finalSubmitData, setFinalSubmitData] = useState([])
     const [form, setForm] = useState([]);
-    const [licenseApplied1, setLicenseApplied1] = useState('');
-    const [licNo, setLicNo] = useState('');
-    const [migrationLic, setMigrationLic] = useState('');
-    const [potential, setPotential] = useState('');
-    const [siteLoc, setSiteLoc] = useState('');
-    const [approach, setapproach] = useState('');
-    const [specify, setSpecify] = useState('');
-    const [approachRoadWidth, setApproachRoadWidth] = useState('');
-    const [typeLand, setTypeLand] = useState('');
-    const [thirdParty, setThirdParty] = useState('');
-    const [encumbrance, setEncumbrance] = useState('');
-    const [insolvency, setInsolvency] = useState('');
-    const [orderUpload, setOrderUpload] = useState('');
-    const [approachable, setApproachable] = useState('');
-    const [litigation, setLitigation] = useState('');
-    const [court, setCourt] = useState('');
-    const [appliedLand, setAppliedLand] = useState('');
-    const [revenuerasta, setRevenuerasta] = useState('');
-    const [widthrevenuerasta, setWidthRevenuerasta] = useState('');
-    const [watercourse, setWatercourse] = useState('');
-    const [widthRev, setWidthRev] = useState('');
-    const [compactBlock, setCompactBlock] = useState('');
-    const [sandwiched, setsandwiched] = useState('');
-    const [acquistion, setAcquistion] = useState('');
-    const [exclusion, setExclusion] = useState('');
-    const [compensation, setCompensation] = useState('');
-    const [section4, setSection4] = useState('');
-    const [section6, setSection6] = useState('');
-    const [statusRelease, setStatusRelease] = useState('');
-    const [award, setAward] = useState('');
-    const [dateRelease, setDateRelease] = useState('');
-    const [site, setSite] = useState('');
-    const [approachabl1, setApproachable11] = useState('');
-    const [vacant, setVacant] = useState('');
-    const [construction, setConstruction] = useState('');
-    const [mutation, setMutation] = useState('');
-    const [ht, setHt] = useState('');
-    const [utilityLine, setUtilityLine] = useState('');
-    const [gas, setGas] = useState('');
-    const [gasRemark, setGasRemark] = useState('');
-    const [nallah, setNallah] = useState('');
-    const [nallahRemark, setNallahremark] = useState('');
-    const [road, setRoad] = useState('');
-    const [roadWidth, setRoadwidth] = useState('');
-    const [land, setLand] = useState('');
-    const [landSchedule, setLandSchedule] = useState('');
-    const [layoutPlan, setLayoutPlan] = useState('');
-    const [proposedLayoutPlan, setProposedLayoutPlan] = useState('');
-    const [revisedLansSchedule, setRevisedLandSchedule] = useState('');
-    const[jambandhi,setJambandhi]=useState([])
-    // const dispatch = useDispatch();
-    const [file,setFile]=useState(null);
+    const [file, setFile] = useState(null);
     const [docUpload, setDocuploadData] = useState([])
     const [LandFormSubmitted, SetLandFormSubmitted] = useState(false);
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [submitDataLabel, setSubmitDataLabel] = useState([]);
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        control,
+        setValue,
+        reset,
+      } = useForm({
+        mode: "onSubmit",
+        reValidateMode: "onBlur",
+        // resolver: yupResolver(VALIDATION_SCHEMA),
+        shouldFocusError: true,
+      });
     const formSubmit = (data) => {
         console.log("data", data);
     };
@@ -184,60 +34,100 @@ const LandScheduleForm = (props) => {
         this.setState({ isRadioSelected: true });
 
     }
-
-    const landScheduleFormSubmitHandler = (e) => {
-        e.preventDefault();
-        SetLandFormSubmitted(true);
-        props.Step3Continue({ "data": true })
-        let Landforms = {
-            "licenseApplied": "",
-            "LicNo":"",
-            "potential": "",
-            "siteLoc": "",
-            "approach": "",
-            "approachRoadWidth":"",
-            "specify": "",
-            "typeLand": "",
-            "thirdParty": "",
-            "migrationLic": "",
-            "encumburance":"",
-            "litigation": "",
-            "court": "",
-            "insolvency":"",
-            "appliedLand": "",
-            "revenuerasta": "",
-            "watercourse": "",
-            "compactBlock": "",
-            "sandwiched": "",
-            "acquistion": "",
-            "section4": "",
-            "section6": "",
-            "orderUpload":"",
-            "approachable": "",
-            "vacant": "",
-            "construction": "",
-            "ht": "",
-            "gas": "",
-            "nallah": "",
-            "road": "",
-            "land": "",
-            "utilityLine": "",
-            "landSchedule":"",
-            "mutation":"",
-            "jambandhi":"",
-            "LayoutPlan":"",
-            "proposedLayoutPlan":"",
-            "revisedLansSchedule":""
+    const landScheduleFormSubmitHandler = async(data) => {
+        console.log("data------", data);
+        try {
+            const postDistrict = 
+            {
+              
+                "NewServiceInfo": 
+                        {
+                        "pageName": "LandSchedule",
+                        "id": props.getId,
+                    "newServiceInfoData": 
+                        {
+                            "LandSchedule": {
+                                "licenseApplied": "",
+                                LicNo: data.licNo,
+                                potential: data.potential,
+                                siteLoc: data.siteLoc,
+                                approach: data.approach,
+                                approachRoadWidth: data.roadwidth,
+                                specify: data.specify,
+                                typeLand: data.typeland,
+                                thirdParty: data.thirdParty,
+                                migrationLic: data.areamigration,
+                                purpose:data.purpose,
+                                LicenseNo:data.licenseNo,
+                                AreaLic:data.araeLic,
+                                renewalFees:data.renewalFee,
+                                freshlyApplied:data.freshlyApplied,
+                                encumburance: data.pleaseSpecify,
+                                litigation: data.remark,
+                                court: data.caseNo,
+                                insolvency: data.insolvencyRemark,
+                                "appliedLand": "",
+                                revenuerasta: data.widthRevenue,
+                                watercourse: data.watercouseRemark,
+                                compactBlock: data.compactRemark,
+                                sandwiched: data.sandwichedRemark,
+                                acquistion: data.acquistionRemark,
+                                section4: data.sectionfour,
+                                section6: data.sectionsix,
+                                statusRelease:data.releasestatus,
+                                awardDate:data.awarddate,
+                                dateRelease:data.releasedate,
+                                siteDetails:data.sitedetails,
+                                "orderUpload": "",
+                                "approachable": "",
+                                vacant: data.vacantRemark,
+                                construction: data.ConstType,
+                                ht: data.htRemark,
+                                gas: data.iocRemark,
+                                nallah: data.nallahRemark,
+                                road: data.roadRemark,
+                                land: data.marginalRemark,
+                                utilityLine: data.utilityRemark
+                            },
+                        
+                        }
+                },
+                
             
-        }
-        localStorage.setItem('Land Schedule', JSON.stringify(Landforms))
-
-    };
+            };
+      
+            const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
+              return Resp;
+            });
+            
+            console.log("MMM",Resp?.data?.NewServiceInfo?.[0]?.id)
+            props.Step3Continue(data,Resp?.data?.NewServiceInfo?.[0]?.id);
+          SetLandFormSubmitted(Resp.data);
+          } catch (error) {
+            console.log(error.message);
+          }
+        };
+   
     useEffect(() => {
         if (LandFormSubmitted) {
             props.landFormSubmit(true);
         }
     }, [LandFormSubmitted]);
+
+    const getSubmitDataLabel = async () => {
+        try {
+          const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
+            return response;
+          });
+          console.log("RESP+++", Resp?.data)
+          setSubmitDataLabel(Resp?.data);
+        } catch (error) {
+          console.log(error.message);
+        }
+      };
+      useEffect(() => {
+        getSubmitDataLabel();
+      }, []);
     const [showhide, setShowhide] = useState("No");
     const [showhide1, setShowhide1] = useState("No");
     const [showhide2, setShowhide2] = useState("No");
@@ -360,911 +250,967 @@ const LandScheduleForm = (props) => {
     }
 
     const getDocumentData = async () => {
-     if(file===null){
-        return
-     }
+        if (file === null) {
+            return
+        }
         const formData = new FormData();
         formData.append(
-            "file",file.file      );
+            "file", file.file);
         formData.append(
-            "tenantId","hr"      );  
+            "tenantId", "hr");
         formData.append(
-            "module","property-upload"      );
-         formData.append(
-             "tag","tag-property"      );
-    
-         console.log("File",formData)
+            "module", "property-upload");
+        formData.append(
+            "tag", "tag-property");
 
         try {
-            const Resp = await axios.post("http://10.1.1.18:8083/filestore/v1/files",formData,
-            {headers:{
-                "content-type":"multipart/form-data"
-            }}).then((response) => {
-                return response
-            });
+            const Resp = await axios.post("http://10.1.1.18:8083/filestore/v1/files", formData,
+                {
+                    headers: {
+                        "content-type": "multipart/form-data"
+                    }
+                }).then((response) => {
+                    return response
+                });
             setDocuploadData(Resp.data)
-            
+
         } catch (error) {
             console.log(error.message);
         }
-
-       
-
     }
-
-    // const getImageurl = async () =>{
-     
-
-    //     try {
-    //         const Resp = await axios.get("http://10.1.1.18:8083/filestore/v1/files/url?"+ "tenantId=" + docUpload.hr + "&fileStoreIds=" + docUpload.fileStoreId,
-    //         {headers:{
-    //             "content-type":"multipart/form-data"
-    //         }}).then((response) => {
-    //             return response
-    //         });
-    //         setDocuploadData(Resp.data)
-    //         console.log("Url",docUpload.hr)
-    //         console.log("Id",docUpload.fileStoreId)
-
-            
-    //     } catch (error) {
-    //         console.log(error.message);
-    //     }
-    // }
-
-    
     useEffect(() => {
         getDocumentData();
     }, [file]);
 
-    // useEffect(()=>{
-    //     getImageurl();
-    // },[docUpload]);
 
-   console.log("FileUpload",file)
-   console.log("File",docUpload)
-
-      
     return (
-        <Form > 
-            <Card style={{ width: "126%"}}>
-        <h2>New License</h2>
-       <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
+        <form onSubmit={handleSubmit(landScheduleFormSubmitHandler)}>
+            <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+                <h1>New License</h1>
+                <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
 
-                <Form.Group className="justify-content-center" controlId="formBasicEmail">
-                    <Row className="ml-auto" style={{ marginBottom: 5 }}>
-                        <Col col-12>
-                            {/* <h5 className="text-black">1. Details of applied land:</h5> */}
-                            <div className="row">
-                                <div className="col col-12 ">
+                    <Form.Group className="justify-content-center" controlId="formBasicEmail">
+                        <Row className="ml-auto" style={{ marginBottom: 5 }}>
+                            <Col col-12>
+                                <div className="row">
+                                    <div className="col col-12 ">
+                                        <h2>1.&nbsp;(i)Whether licence applied for additional area ?<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                                            <input type="radio" value="Yes" id="Yes" 
+                                                onChange1={handleChange} name="Yes" onClick={handleshow} />&nbsp;&nbsp;
+                                            <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
 
-                                    <h6  ><b>(i)Whether licence applied for additional area ?</b>&nbsp;&nbsp;
-                                        <input type="radio" value="Yes" id="Yes"
-                                            onChange1={handleChange} name="Yes" onClick={handleshow} />&nbsp;&nbsp;
-                                        <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
-
-                                        <input type="radio" value="No" id="No"
-                                            onChange1={handleChange} name="Yes" onClick={handleshow} />&nbsp;&nbsp;
-                                        <label for="No"><h6>No</h6></label></h6>
-                                    {
-                                        showhide === "Yes" && (
-                                            <div className="row" >
-                                                <div className="col col-3">
-                                                    <label for="parentLicense" className="font-weight-bold"><h6><b>License No. of Parent License</b></h6> </label>
-                                                    <input type="number" className="form-control" onChange={(e) => setLicNo(e.target.value)} value={licNo}/>
-                                                </div>
-                                                <div className="col col-3">
-                                                    <label htmlFor="potential1"><h6><b>Potential Zone:</b></h6></label>
-                                                    <select className="form-control" id="potential"
-                                                        name="potential" onChange={(e) => setPotential(e.target.value)} value={potential}
-                                                    >
-                                                        <option value="" >--Potential Zone--
-                                                        </option>
-                                                        <option value="K.Mishra">Hyper</option>
-                                                        <option value="potential 1">High I</option>
-                                                        <option value="potential 2">High II</option>
-                                                        <option value="potential 2">Medium</option>
-                                                        <option value="potential 2">Low I</option>
-                                                        <option value="potential 2">Low II</option>
-                                                    </select>
-
-                                                </div>
-                                                <div className="col col-3">
-                                                    <label for="parentLicense" className="font-weight-bold"><h6><b>Site Location Purpose</b></h6> </label>
-                                                    <input type="text" className="form-control" disabled onChange={(e) => setSiteLoc(e.target.value)} value={siteLoc}/>
-                                                </div>
-                                                <div className="col col-3">
-                                                    <div className="form-group">
-                                                        <label htmlFor="approach"><h6><b>Approach Type (Type of Policy)</b></h6></label>
-                                                        <select className="form-control" id="approach"
-                                                         onChange={(e) => setapproach(e.target.value)} value={approach}
+                                            <input type="radio" value="No" id="No"  
+                                                onChange1={handleChange} name="Yes" onClick={handleshow} />&nbsp;&nbsp;
+                                            <label for="No"><h6>No</h6></label></h2>
+                                        {
+                                            showhide === "Yes" && (
+                                                <div className="row" >
+                                                    <div className="col col-3">
+                                                        <label >
+                                                            <h2>License No. of Parent License <span style={{ color: "red" }}>*</span></h2></label>
+                                                        <input type="number" className="form-control"{...register("licNo")} />
+                                                    </div>
+                                                    <div className="col col-3">
+                                                        <label>
+                                                            <h2>Potential Zone <span style={{ color: "red" }}>*</span></h2>
+                                                        </label>
+                                                        <select className="form-control" id="potential" {...register("potential")}
+                                                          
                                                         >
-                                                            <option value="" >
+                                                            <option value="" >--Potential Zone--
                                                             </option>
+                                                            <option value="K.Mishra">Hyper</option>
+                                                            <option value="potential 1">High I</option>
+                                                            <option value="potential 2">High II</option>
+                                                            <option value="potential 2">Medium</option>
+                                                            <option value="potential 2">Low I</option>
+                                                            <option value="potential 2">Low II</option>
+                                                        </select>
+
+                                                    </div>
+                                                    <div className="col col-3">
+                                                        <label >
+                                                            <h2>Site Location Purpose <span style={{ color: "red" }}>*</span></h2></label>
+                                                        <input type="text" className="form-control" {...register("siteLoc")}  />
+                                                    </div>
+                                                    <div className="col col-3">
+                                                        <label >
+                                                            <h2>Approach Type (Type of Policy) <span style={{ color: "red" }}>*</span></h2></label>
+                                                        <select className="form-control" id="approach" {...register("approach")}
+                                                        >
                                                             <option value="K.Mishra"></option>
                                                             <option value="potential 1"></option>
                                                             <option value="potential 2"></option>
                                                         </select>
+                                                    </div>
+                                                    <div className="col col-3">
+                                                        <label >
+                                                            <h2>Approach Road Width <span style={{ color: "red" }}>*</span><CalculateIcon color="primary" /></h2> </label>
+                                                        <input
+                                                            type="number"
+                                                            className="form-control" {...register("roadwidth")}></input>
 
                                                     </div>
-                                                </div>
-                                                <div className="col col-3">
-                                                    <div className="form-group ">
-                                                        <label htmlFor="roadwidth"><h6><b>Approach Road Width</b><CalculateIcon color="primary" />&nbsp;&nbsp;</h6> </label>
+                                                    <div className="col col-3">
+                                                        <label>
+                                                            <h2>Specify Others<span style={{ color: "red" }}>*</span></h2></label>
                                                         <input
-                                                            type="number"
-                                                            name="roadwidth"
-                                                            className="form-control"onChange={(e) => setApproachRoadWidth(e.target.value)} value={approachRoadWidth}></input>
-                                                    </div>
-                                                </div>
-                                                <div className="col col-3">
-                                                    <div className="form-group ">
-                                                        <label htmlFor="specify"><h6><b>Specify Others</b></h6></label>
-                                                        <input
-                                                            type="number"
-                                                            name="specify" onChange={(e) => setSpecify1(e.target.value)} value={specify}
+                                                            type="number" {...register("specify")}
                                                             className="form-control" />
                                                     </div>
-                                                </div>
-                                                <div className="col col-3">
-                                                    <div className="form-group ">
-                                                        <label htmlFor="typeland"><h6><b>Type of land</b></h6> </label>
-                                                        <select className="form-control" id="typeland"
-                                                            name="typeland" onChange={(e) => setTypeLand(e.target.value)} value={typeLand}>
-                                                            <option value="" >--Type of Land--
+                                                    <div className="col col-3">
+                                                        <label >
+                                                            <h2>Type of land<span style={{ color: "red" }}>*</span></h2></label>
+                                                        <select className="form-control" id="typeland" {...register("typeland")}>
+                                                            <option value="" >Type of Land
                                                             </option>
-                                                            <option value="" >chahi/nehri
+                                                            <option value="" >Chahi/nehri
                                                             </option>
                                                             <option >Gair Mumkins</option>
-                                                            <option >others</option>
-                                                            <option ></option>
+                                                            <option >Others</option>
                                                         </select>
-
                                                     </div>
-                                                </div>
-                                                <div className="col col-3 ">
-
-
-                                                    <label htmlFor="typeland"><h6><b>Third-party right created</b> </h6></label><br></br>
-
-                                                    <input type="radio" value="Yes" id="Yes"
-                                                        onChange1={handleChange} name="Yes" onClick={handleshow13} />&nbsp;&nbsp;
-                                                    <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
-
-                                                    <input type="radio" value="No" id="No"
-                                                        onChange1={handleChange} name="Yes" onClick={handleshow13} />&nbsp;&nbsp;
-                                                    <label for="No"><h6>No</h6></label>
-                                                    {
-                                                        showhide13 === "Yes" && (
-                                                            <div className="row " >
-                                                                <div className="col col-12">
-                                                                    <label for="parentLicense" className="font-weight-bold"> Remark </label>
-                                                                    <input type="text" className="form-control" onChange={(e) => setThirdParty(e.target.value)} value={thirdParty} />
-                                                                </div>
-                                                                <div className="col col-12">
-                                                                    <label for="parentLicense" className="font-weight-bold"> Document Upload </label>
-                                                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})} />
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    }
-                                                    {
-                                                        showhide13 === "No" && (
-                                                            <div className="row " >
-                                                                <div className="col col">
-                                                                    <label for="parentLicense" className="font-weight-bold"> Document Upload </label>
-                                                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}/>
-                                                                </div>
-                                                            </div>
-                                                        )
-                                                    }
-                                                </div>
-                                            </div>
-
-                                        )
-                                    }
-                                </div><br></br><br></br>
-                                {
-                                    showhide === "No" && (
-                                        <div className="row" >
-
-                                            <div className="col col-6 ">
-
-                                                <h6 onChange={(e) => setMigrationLic(e.target.value)} value={migrationLic}><b>(ii)Whether licence applied under Migration policy?</b>&nbsp;&nbsp;
-                                                    <input type="radio" value="Yes" id="Yes" 
-                                                        onChange1={handleChange} name="Yes" onClick={handleshow23} />&nbsp;&nbsp;
-                                                    <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
-
-                                                    <input type="radio" value="No" id="No"
-                                                        onChange1={handleChange} name="Yes" onClick={handleshow23} />&nbsp;&nbsp;
-                                                    <label for="No"><h6>No</h6></label></h6>
-                                                {
-                                                    showhide23 === "Yes" && (
-                                                        <div className="col col-6 ">
-
-                                                            <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Another Copy of Shahjra Plan&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b> </h6>
-                                                            <input type="file" className="form-control" />
-                                                        </div>)}
-                                            </div>
-                                        </div>)}
-                            </div><br></br>
-                            <hr></hr><br></br>
-                            <h5 className="text-black"  onChange={(e) => setEncumbrance(e.target.value)} value={encumbrance}><b>2. Any encumbrance with respect to following :</b><br></br><br></br>
-                                <label htmlFor="gen">Rehan / Mortgage</label>&nbsp;&nbsp;
-                                <input type="radio" id="Yes" value="1"
-                                    onChange={handleChange} name="Yes" onClick={handleshow18} />&nbsp;&nbsp;
-                                <label for="Yes"></label>&nbsp;&nbsp;&nbsp;&nbsp;
-
-                                <label htmlFor="npnl">Patta/Lease</label>&nbsp;&nbsp;
-                                <input type="radio" id="Yes" value="2"
-                                    onChange={handleChange} name="Yes" onClick={handleshow18} />&nbsp;&nbsp;
-                                <label for="Yes"></label>&nbsp;&nbsp;&nbsp;&nbsp;
-
-                                <label htmlFor="npnl">Gair/Marusi</label>&nbsp;&nbsp;
-                                <input type="radio" id="Yes" value="2"
-                                    onChange={handleChange} name="Yes" onClick={handleshow18} />&nbsp;&nbsp;
-                                <label for="Yes"></label></h5>
-
-                            <div className="row">
-                                <div className="col col-4">
-                                    <label htmlFor="npnl"><h6><b>Any other, please specify</b></h6></label>
-                                    <input type="text" className="form-control" /></div>
-                            </div><br></br>
-                            <hr /><br></br>
-                            <h6 ><b>(ii) Existing litigation, if any, concerning applied land including co-sharers  and collaborator :</b>&nbsp;&nbsp;
-                                <input type="radio" value="Yes" id="Yes"
-                                    onChange1={handleChange} name="Yes" onClick={handleshow10} />&nbsp;&nbsp;
-                                <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
-
-                                <input type="radio" value="No" id="No"
-                                    onChange1={handleChange} name="Yes" onClick={handleshow10} />&nbsp;&nbsp;
-                                <label for="No"><h6>No</h6></label></h6>
-                            <div className="row">
-                                <div className="col col-12 ">
-                                    {
-                                        showhide10 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col-6">
-                                                    <label for="parentLicense" className="font-weight-bold"> Remark </label>
-                                                    <input type="text" className="form-control"  onChange={(e) => setLitigation(e.target.value)} value={litigation}/>
-                                                </div>
-                                                <div className="col col-6">
-                                                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
-                                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}/>
-                                                </div>
-
-                                            </div>
-                                        )
-                                    }
-                                </div>
-                            </div><br></br>
-                            <hr /><br></br>
-                            <h6 ><b>(iii) Court orders, if any, affecting applied land :</b>&nbsp;&nbsp;
-                                <input type="radio" value="Yes" id="Yes"
-                                    onChange1={handleChange} name="Yes" onClick={handleshow11} />&nbsp;&nbsp;
-                                <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
-
-                                <input type="radio" value="No" id="No"
-                                    onChange1={handleChange} name="Yes" onClick={handleshow11} />&nbsp;&nbsp;
-                                <label for="No"><h6>No</h6></label></h6>
-                            <div className="row">
-                                <div className="col col-12 ">
-                                    {
-                                        showhide11 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col-6">
-                                                    <label for="parentLicense" className="font-weight-bold"> Remark/Case No. </label>
-                                                    <input type="text" className="form-control"  onChange={(e) => setCourt(e.target.value)} value={court}/>
-                                                </div>
-                                                <div className="col col-6">
-                                                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
-                                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}/>
-                                                </div>
-
-                                            </div>
-
-                                        )
-                                    }
-                                </div>
-                            </div><br></br>
-                            <hr /><br></br>
-                            <h6 ><b>(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed :</b>&nbsp;&nbsp;
-                                <input type="radio" value="Yes" id="Yes"
-                                    onChange1={handleChange} name="Yes" onClick={handleshow12} />&nbsp;&nbsp;
-                                <label for="Yes">Yes</label>&nbsp;&nbsp;
-
-                                <input type="radio" value="No" id="No"
-                                    onChange1={handleChange} name="Yes" onClick={handleshow12} />&nbsp;&nbsp;
-                                <label for="No">No</label></h6>
-                            <div className="row">
-                                <div className="col col-12 ">
-                                    {
-                                        showhide12 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col-6">
-                                                    <label for="parentLicense" className="font-weight-bold"> Remark </label>
-                                                    <input type="text" className="form-control"  onChange={(e) => setInsolvency(e.target.value)} value={insolvency}/>
-                                                </div>
-                                                <div className="col col-6">
-                                                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
-                                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}/>
-                                                </div>
-
-                                            </div>
-
-                                        )
-                                    }
-                                </div>
-                            </div>
-                            <hr /><br></br>
-                            <h5 className="text-black"><b>3.Shajra Plan</b></h5><br></br>
-                            <div className="row">
-                                <div className="col col-3 ">
-
-                                    <h6 ><b>(a)As per applied land (Yes/No)</b> </h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow14} />&nbsp;&nbsp;
-
-                                    <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
-
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow14} />&nbsp;&nbsp;
-
-                                    <label for="No"><h6>No</h6></label>
-                                    {
-                                        showhide14 === "Yes" && (
-                                            <div className="row " >
-
-                                                <div className="col col-12">
-                                                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
-                                                    <input type="file" className="form-control" onChange={(e)=>setFile({file:e.target.files[0]})}/>
-                                                </div>
-
-                                            </div>
-
-                                        )
-                                    }
-                                </div>
-
-                                <div className="col col-3 ">
-                                    <h6 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?"><b>(b)&nbsp;Revenue rasta&nbsp;&nbsp;<InfoIcon color="primary" /> </b>&nbsp;&nbsp;</h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow1} />&nbsp;&nbsp;
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow1} />&nbsp;&nbsp;
-                                    <label for="No">No</label>
-                                    {
-                                        showhide1 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col">
-                                                    <label for="parentLicense" className="font-weight-bold"> Width of revenue rasta &nbsp;<CalculateIcon color="primary" /></label>
-                                                    <input type="number" className="form-control"  onChange={(e) => setRevenuerasta(e.target.value)} value={revenuerasta}/>
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-                                </div>
-                                <div className="col col-3 ">
-                                    <h6
-                                        data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?"><b>(c)&nbsp;Watercourse running&nbsp;&nbsp;<InfoIcon color="primary" />
-                                        </b></h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow2} />&nbsp;&nbsp;
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow2} />&nbsp;&nbsp;
-                                    <label for="No">No</label>
-                                    {
-                                        showhide2 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col">
-                                                    <label for="parentLicense" className="font-weight-bold"> Remark </label>
-                                                    <input type="number" className="form-control"  onChange={(e) => setWatercourse(e.target.value)} value={watercourse}/>
-                                                </div>
-                                            </div>
-                                        )
-                                    }
-                                </div>
-
-                                <div className="col col-3 ">
-
-                                    <h6 onChange={(e) => setCompactBlock1(e.target.value)} value={compactBlock}><b>(d)Whether in Compact Block (Yes/No)</b>  </h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow15} />&nbsp;&nbsp;
-
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow15} />&nbsp;&nbsp;
-
-                                    <label for="No">No</label>
-                                    {
-                                        showhide15 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col">
-                                                    <label for="parentLicense" className="font-weight-bold"> Remark </label>
-                                                    <input type="number" className="form-control"  onChange={(e) => setCompactBlock(e.target.value)} value={compactBlock}/>
-                                                </div>
-
-                                            </div>
-
-                                        )
-                                    }
-                                </div>
-                            </div>  <br></br>
-                            <div className="row">
-                                <div className="col col-3 ">
-                                    <h6 onChange={(e) => setsandwiched1(e.target.value)} value={sandwiched} data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land."><b>(e)&nbsp;Land Sandwiched&nbsp;&nbsp;<InfoIcon color="primary" />
-                                    </b>  </h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow20} />&nbsp;&nbsp;
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow20} />&nbsp;&nbsp;
-                                    <label for="No">No</label>
-                                    {
-                                        showhide20 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col-12">
-                                                    <label for="parentLicense" className="font-weight-bold">Remark</label>
-                                                    <input type="text" className="form-control"  onChange={(e) => setsandwiched(e.target.value)} value={sandwiched}/>
-                                                </div>
-
-                                            </div>
-
-                                        )
-                                    }
-                                </div>
-                                <div className="col col-3 ">
-
-                                    <h6 onChange={(e) => setAcquistion1(e.target.value)} value={acquistion}><b>(f)Acquisition status (Yes/No)</b> </h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow3} />&nbsp;&nbsp;
-
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow3} />&nbsp;&nbsp;
-
-                                    <label for="No">No</label>
-                                    {
-                                        showhide3 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col-12">
-                                                    <label for="parentLicense" className="font-weight-bold">Remark</label>
-                                                    <input type="text" className="form-control"  onChange={(e) => setAcquistion(e.target.value)} value={acquistion}/>
-                                                </div>
-
-                                            </div>
-
-                                        )
-                                    }
-                                </div>
-                                <div className="col col-3">
-                                    <div className="form-group ">
-                                        <label htmlFor="sectionfour"><h6><b>Date of section 4 notification</b></h6> </label>
-                                        <input
-                                            type="date"
-                                            name="sectionfour" onChange={(e) => setSection4(e.target.value)} value={section4}
-                                            className={`form-control ${errors.sectionfour ? "is-invalid" : ""
-                                                } `}
-
-                                            {...register("sectionfour", {
-                                                required: "sectionfour is required",
-
-
-                                            })}
-                                        />
-                                        <div className="invalid-feedback">
-                                            {errors?.sectionfour?.message}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col col-3">
-                                    <div className="form-group ">
-                                        <label htmlFor="sectionsix"><h6><b>Date of section 6 notification</b></h6></label>
-                                        <input
-                                            type="date"
-                                            name="sectionsix" onChange={(e) => setSection6(e.target.value)} value={section6}
-                                            className={`form-control ${errors.sectionsix ? "is-invalid" : ""
-                                                } `}
-
-                                            {...register("sectionsix", {
-                                                required: "sectionsix is required",
-
-
-                                            })}
-                                        />
-                                        <div className="invalid-feedback">
-                                            {errors?.sectionsix?.message}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <br></br>
-                            <div className="row">
-                                <div className="col col-12">
-                                    <h6 onChange={(e) => setExclusion1(e.target.value)} value={exclusion} data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded."><b>(g)&nbsp;Orders Upload &nbsp;&nbsp;<InfoIcon color="primary" />
-                                    </b>  </h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow16} />&nbsp;&nbsp;
-                                    <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow16} />&nbsp;&nbsp;
-                                    <label for="No"><h6>No</h6></label>
-                                    {
-                                        showhide16 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col-3 ">
-
-                                                    <h6 onChange={(e) => setCompensation1(e.target.value)} value={compensation}><b>(h) Whether land compensation received</b>&nbsp;&nbsp;
-                                                        <input type="radio" value="Yes" id="Yes"
-                                                            onChange1={handleChange} name="Yes" />&nbsp;&nbsp;
-
-                                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+                                                    <div className="col col-3 ">
+                                                        <label >
+                                                            <h2>Third-party right created<span style={{ color: "red" }}>*</span></h2></label><br></br>
+                                                        <input type="radio" value="Yes" id="Yes" 
+                                                            onChange1={handleChange} name="Yes" onClick={handleshow13} />&nbsp;&nbsp;
+                                                        <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
 
                                                         <input type="radio" value="No" id="No"
-                                                            onChange1={handleChange} name="Yes" />&nbsp;&nbsp;
-
-                                                        <label for="No">No</label></h6>
+                                                            onChange1={handleChange} name="Yes" onClick={handleshow13} />&nbsp;&nbsp;
+                                                        <label for="No"><h6>No</h6></label>
+                                                        {
+                                                            showhide13 === "Yes" && (
+                                                                <div className="row " >
+                                                                    <div className="col col-12">
+                                                                        <label >  <h2>Remark<span style={{ color: "red" }}>*</span></h2> </label>
+                                                                        <input type="text" className="form-control" {...register("thirdParty")}/>
+                                                                    </div>
+                                                                    <div className="col col-12">
+                                                                        <label > <h2>Document Upload <span style={{ color: "red" }}>*</span></h2></label>
+                                                                        <input type="file" className="form-control"  onChange={(e) => setFile({ file: e.target.files[0] })} />
+                                                                    </div>
+                                                                </div>
+                                                            )
+                                                        }
+                                                        {
+                                                            showhide13 === "No" && (
+                                                                <div className="row " >
+                                                                    <div className="col col">
+                                                                        <label > <h2>Document Upload <span style={{ color: "red" }}>*</span></h2> </label>
+                                                                        <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
+                                                                    </div>
+                                                                </div>
+                                                            )
+                                                        }
+                                                    </div>
                                                 </div>
-                                                <div className="col col-3">
-                                                    <div className="form-group">
-                                                        <label htmlFor="releasestatus"><h6><b>Status of release</b></h6></label>
-                                                        <select className="form-control" id="releasestatus"
-                                                            name="releasestatus" onChange={(e) => setStatusRelease1(e.target.value)} value={statusRelease}
+
+                                            )
+                                        }
+                                    </div>
+                                </div>&nbsp;&nbsp;
+                                <div className="row">
+                                    <div className="col col-12 ">
+                                        <h2>&nbsp;&nbsp;(ii)Whether licence applied under Migration Policy ?&nbsp;&nbsp;
+                                            <input type="radio" value="Yes" id="Yes" 
+                                                onChange1={handleChange} name="Yes" onClick={handleshow19} />&nbsp;&nbsp;
+                                            <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
+                                            <input type="radio" value="No" id="No" 
+                                                onChange1={handleChange} name="Yes" onClick={handleshow19} />&nbsp;&nbsp;
+                                            <label for="No"><h6>No</h6></label></h2>
+                                        {
+                                            showhide19 === "Yes" && (
+                                                <div className="row" >
+                                                    <div className="col col-3">
+                                                        <label ><h2>Area Applied under Migration</h2> </label>
+                                                        <input type="text" className="form-control" {...register("areamigration")}  />
+                                                    </div>
+                                                    <div className="col col-3">
+                                                        <label ><h2>Purpose of Parent License</h2></label>
+                                                        <select className="form-control" id="potential" {...register("purpose")}
                                                         >
-                                                            <option value="" >
+                                                            <option value="">Purpose
                                                             </option>
-                                                            <option ></option>
-                                                            <option ></option>
-                                                            <option ></option>
+                                                            <option >AGH</option>
+                                                            <option > DDJAY</option>
+                                                            <option >Commercial Plotted</option>
+                                                            <option >Residential Plotted Colony</option>
+                                                            <option >TOD Commercial</option>
                                                         </select>
-                                                        <div className="invalid-feedback">
-                                                            {errors?.releasestatus?.message}
-                                                        </div>
                                                     </div>
-                                                </div>
+                                                    <div className="col col-3">
+                                                        <label ><h2>License No.</h2></label>
+                                                        <input type="text" className="form-control" {...register("licenseNo")} />
+                                                    </div>
+                                                    <div className="col col-3">
+                                                        <label >
+                                                            <h2>Area of Parent License</h2>
+                                                        </label>
+                                                        <input type="text" className="form-control" {...register("areaLic")}  />
+
+                                                    </div>
+                                                    <div className="col col-3">
+                                                        <label>
+                                                            <h2 >Validity of Parent License </h2> </label>
+                                                        <input type="radio" value="Yes" id="Yes" 
+                                                            onChange1={handleChange} name="Yes" onClick={handleshow21} />&nbsp;&nbsp;
+                                                        <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
+
+                                                        <input type="radio" value="No" id="No" 
+                                                            onChange1={handleChange} name="Yes" onClick={handleshow21} />&nbsp;&nbsp;
+                                                        <label for="No"><h6>No</h6></label>
+                                                    </div>
+                                                    {
+                                                        showhide21 === "Yes" && (
+                                                            <div className="row " >
+                                                                <div className="col col-6">
+                                                                    <label >
+                                                                        <h2>Number of Renewal Fees to be deposited </h2>
+                                                                    </label>
+                                                                    <input type="text" className="form-control" {...register("renewalFee")}  />
+                                                                </div>
+                                                                <div className="col col-6">
+                                                                    <label ><h2>Freshly applied area,other than migration</h2>  </label>
+                                                                    <input type="text" className="form-control" {...register("freshlyApplied")} onChange={(e) => setFile({ file: e.target.files[0] })} />
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    }
                                                 <div className="col col-3">
-                                                    <div className="form-group ">
-                                                        <label htmlFor="awarddate"><h6><b>Date of Award</b></h6></label>
-                                                        <input
-                                                            type="date"
-                                                            name="awarddate" onChange={(e) => setAward1(e.target.value)} value={award}
-                                                            className={`form-control ${errors.awarddate ? "is-invalid" : ""
-                                                                } `}
+                                                <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration  &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+        
+                                                <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} >
+                                                </input>
+                                            </div>
+                                            <div className="col col-3">
+                                                <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"> Proposed Layout of Plan /site plan for area applied for migration. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+        
+                                                <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} ></input>
+                                            </div>
+                                            <div className="col col-3">
+                                                <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">Upload Previously approved Layout Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+        
+                                                <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} ></input>
+                                            </div>
+                                            
+                                            </div>
+                                            )
+                                        }
+                                    </div>
+                                </div ><hr></hr><br></br>
+                                <h4 >2. Any encumbrance with respect to following <br></br><br></br>
+                                    <label ><h2>Rehan / Mortgage</h2></label>&nbsp;&nbsp;
+                                    <input type="radio" id="Yes" value="1"
+                                        onChange={handleChange} name="Yes" onClick={handleshow18} />&nbsp;&nbsp;
+                                    <label for="Yes"></label>&nbsp;&nbsp;&nbsp;&nbsp;
 
-                                                            {...register("awarddate", {
-                                                                required: "awarddate is required",
+                                    <label><h2>Patta/Lease</h2></label>&nbsp;&nbsp;
+                                    <input type="radio" id="Yes" value="2"
+                                        onChange={handleChange} name="Yes" onClick={handleshow18} />&nbsp;&nbsp;
+                                    <label for="Yes"></label>&nbsp;&nbsp;&nbsp;&nbsp;
 
+                                    <label ><h2>Gair/Marusi</h2></label>&nbsp;&nbsp;
+                                    <input type="radio" id="Yes" value="2"
+                                        onChange={handleChange} name="Yes" onClick={handleshow18} />&nbsp;&nbsp;
+                                    <label for="Yes"></label></h4>
 
-                                                            })}
-                                                        />
-                                                        <div className="invalid-feedback">
-                                                            {errors?.awarddate?.message}
-                                                        </div>
+                                <div className="row">
+                                    <div className="col col-4">
+                                        <label ><h2>Any other, please specify</h2></label>
+                                        <input type="text" className="form-control" {...register("pleaseSpecify")}/></div>
+                                </div><br></br>
+                                <hr /><br></br>
+                                <h6 >(ii) Existing litigation, if any, concerning applied land including co-sharers  and collaborator &nbsp;&nbsp;
+                                    <input type="radio" value="Yes" id="Yes"
+                                        onChange1={handleChange} name="Yes" onClick={handleshow10} />&nbsp;&nbsp;
+                                    <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
+
+                                    <input type="radio" value="No" id="No"
+                                        onChange1={handleChange} name="Yes" onClick={handleshow10} />&nbsp;&nbsp;
+                                    <label for="No"><h6>No</h6></label></h6>
+                                <div className="row">
+                                    <div className="col col-12 ">
+                                        {
+                                            showhide10 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col-6">
+                                                        <label >
+                                                            <h2>Remark</h2>
+                                                        </label>
+                                                        <input type="text" className="form-control"  {...register("remark")} />
+                                                    </div>
+                                                    <div className="col col-6">
+                                                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+                                                        <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
+                                                    </div>
+
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+                                </div><br></br>
+                                <hr /><br></br>
+                                <h6 >(iii) Court orders, if any, affecting applied land &nbsp;&nbsp;
+                                    <input type="radio" value="Yes" id="Yes"
+                                        onChange1={handleChange} name="Yes" onClick={handleshow11} />&nbsp;&nbsp;
+                                    <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
+
+                                    <input type="radio" value="No" id="No"
+                                        onChange1={handleChange} name="Yes" onClick={handleshow11} />&nbsp;&nbsp;
+                                    <label for="No"><h6>No</h6></label></h6>
+                                <div className="row">
+                                    <div className="col col-12 ">
+                                        {
+                                            showhide11 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col-6">
+                                                        <label > <h2>Remark/Case No.</h2> </label>
+                                                        <input type="text" className="form-control"  {...register("caseNo")}/>
+                                                    </div>
+                                                    <div className="col col-6">
+                                                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+                                                        <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                    </div>
+                                </div><br></br>
+                                <hr /><br></br>
+                                <h6 >(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed &nbsp;&nbsp;
+                                    <input type="radio" value="Yes" id="Yes"
+                                        onChange1={handleChange} name="Yes" onClick={handleshow12} />&nbsp;&nbsp;
+                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+
+                                    <input type="radio" value="No" id="No"
+                                        onChange1={handleChange} name="Yes" onClick={handleshow12} />&nbsp;&nbsp;
+                                    <label for="No">No</label></h6>
+                                <div className="row">
+                                    <div className="col col-12 ">
+                                        {
+                                            showhide12 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col-6">
+                                                        <label ><h2>Remark</h2>  </label>
+                                                        <input type="text" className="form-control"  {...register("insolvencyRemark")}  />
+                                                    </div>
+                                                    <div className="col col-6">
+                                                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"> Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+                                                        <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                    </div>
+                                </div>
+                                <hr /><br></br>
+                                <h5 >3.Shajra Plan</h5><br></br>
+                                <div className="row">
+                                    <div className="col col-3 ">
+                                        <h2>(a)As per applied land (Yes/No)</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow14} />&nbsp;&nbsp;
+
+                                        <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
+
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow14} />&nbsp;&nbsp;
+
+                                        <label for="No"><h6>No</h6></label>
+                                        {
+                                            showhide14 === "Yes" && (
+                                                <div className="row " >
+
+                                                    <div className="col col-12">
+                                                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+                                                        <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                    </div>
+
+                                    <div className="col col-3 ">
+                                        <h2 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?">(b)&nbsp;Revenue rasta&nbsp;&nbsp;
+                                        &nbsp;&nbsp;</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow1} />&nbsp;&nbsp;
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow1} />&nbsp;&nbsp;
+                                        <label for="No">No</label>
+                                        {
+                                            showhide1 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label ><h2> Width of revenue rasta &nbsp;<CalculateIcon color="primary" /></h2></label>
+                                                        <input type="number" className="form-control"  {...register("widthRevenue")}  />
                                                     </div>
                                                 </div>
-                                                <div className="col col-3">
-                                                    <div className="form-group ">
-                                                        <label htmlFor="releasedate"><h6><b>Date of Release</b></h6> </label>
-                                                        <input
-                                                            type="date"
-                                                            name="releasedate" onChange={(e) => setDateRelease1(e.target.value)} value={dateRelease}
-                                                            className={`form-control ${errors.releasedate ? "is-invalid" : ""
-                                                                } `}
-
-                                                            {...register("releasedate", {
-                                                                required: "releasedate is required",
-
-
-                                                            })}
-                                                        />
-                                                        <div className="invalid-feedback">
-                                                            {errors?.releasedate?.message}
-                                                        </div>
+                                            )
+                                        }
+                                    </div>
+                                    <div className="col col-3 ">
+                                        <h2
+                                            data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?">(c)&nbsp;Watercourse running&nbsp;&nbsp;
+                                            </h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow2} />&nbsp;&nbsp;
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow2} />&nbsp;&nbsp;
+                                        <label for="No">No</label>
+                                        {
+                                            showhide2 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label> <h2>Remark</h2> </label>
+                                                        <input type="text" className="form-control" {...register("watercouseRemark")} />
                                                     </div>
                                                 </div>
-                                                <div className="col col-3">
-                                                    <div className="form-group ">
-                                                        <label htmlFor="sitedetails"><h6><b>Site Details</b></h6></label>
-                                                        <input
-                                                            type="number"
-                                                            name="sitedetails" onChange={(e) => setSite1(e.target.value)} value={site}
-                                                            className={`form-control ${errors.sitedetails ? "is-invalid" : ""
-                                                                } `}
+                                            )
+                                        }
+                                    </div>
 
-                                                            {...register("sitedetails", {
-                                                                required: "sitedetails is required",
+                                    <div className="col col-3 ">
 
+                                        <h2 >(d)Whether in Compact Block (Yes/No)</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow15} />&nbsp;&nbsp;
 
-                                                            })}
-                                                        />
-                                                        <div className="invalid-feedback">
-                                                            {errors?.sitedetails?.message}
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow15} />&nbsp;&nbsp;
+
+                                        <label for="No">No</label>
+                                        {
+                                            showhide15 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label ><h2>Remark</h2>  </label>
+                                                        <input type="number" className="form-control" {...register("compactRemark")}  />
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                    </div>
+                                </div>  <br></br>
+                                <div className="row">
+                                    <div className="col col-3 ">
+                                        <h2 data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land.">(e)&nbsp;Land Sandwiched&nbsp;&nbsp;</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow20} />&nbsp;&nbsp;
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow20} />&nbsp;&nbsp;
+                                        <label for="No">No</label>
+                                        {
+                                            showhide20 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col-12">
+                                                        <label ><h2>Remark</h2></label>
+                                                        <input type="text" className="form-control" {...register("sandwichedRemark")}  />
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                    </div>
+                                    <div className="col col-3 ">
+
+                                        <h2 >(f)Acquisition status (Yes/No)</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow3} />&nbsp;&nbsp;
+
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow3} />&nbsp;&nbsp;
+
+                                        <label for="No">No</label>
+                                        {
+                                            showhide3 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col-12">
+                                                        <label >Remark</label>
+                                                        <input type="text" className="form-control"{...register("acquistionRemark")}  />
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                    </div>
+                                    <div className="col col-3">
+                                            <label><h2>Date of section 4 notification</h2> </label>
+                                            <input
+                                                type="date" {...register("sectionfour")} 
+                                                className="form-control" 
+                                            />
+                                            <div className="invalid-feedback">
+                                                {errors?.sectionfour?.message}
+                                            </div>
+                                        </div>
+                                    <div className="col col-3">
+                                            <label ><h2>Date of section 6 notification</h2></label>
+                                            <input
+                                                type="date"
+                                                className= "form-control" 
+                                                {...register("sectionsix" )}
+                                            />
+                                            <div className="invalid-feedback">
+                                                {errors?.sectionsix?.message}
+                                            </div>
+                                        </div>
+                                        
+                                    </div> <br></br>
+                                <div className="row">
+                                    <div className="col col-12">
+                                    <label ><h2>(g)&nbsp;&nbsp;Whether details/orders of release/exclusion of land uploaded.</h2></label>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow16} />&nbsp;&nbsp;
+                                        <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow16} />&nbsp;&nbsp;
+                                        <label for="No"><h6>No</h6></label>
+                                        {
+                                            showhide16 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col-3 ">
+
+                                                        <h2>(h) Whether land compensation received&nbsp;&nbsp;
+                                                            <input type="radio" value="Yes" id="Yes"
+                                                                onChange1={handleChange} name="Yes" />&nbsp;&nbsp;
+
+                                                            <label for="Yes">Yes</label>&nbsp;&nbsp;
+
+                                                            <input type="radio" value="No" id="No"
+                                                                onChange1={handleChange} name="Yes" />&nbsp;&nbsp;
+
+                                                            <label for="No">No</label></h2>
+                                                    </div>
+                                                    <div className="col col-3">
+                                                            <label ><h2>Status of release</h2></label>
+                                                            <select className="form-control" id="releasestatus" {...register("releasestatus")}
+                                                            >
+                                                                <option value="" >
+                                                                </option>
+                                                                <option ></option>
+                                                                <option ></option>
+                                                                <option ></option>
+                                                            </select>
+                                                            <div className="invalid-feedback">
+                                                                {errors?.releasestatus?.message}
+                                                            </div>
+                                                        </div>
+                                                    <div className="col col-3">
+                                                            <label ><h2>Date of Award</h2></label>
+                                                            <input
+                                                                type="date" {...register("awarddate")}
+                                                                className="form-control"
+                                                            />
+                                                            <div className="invalid-feedback">
+                                                                {errors?.awarddate?.message}
+                                                            </div>
+                                                        </div>
+                                                    <div className="col col-3">
+                                                            <label ><h2>Date of Release</h2> </label>
+                                                            <input
+                                                                type="date" {...register("releasedate")} className="form-control"
+                                                            />
+                                                            <div className="invalid-feedback">
+                                                                {errors?.releasedate?.message}
+                                                            </div>
+                                                        </div>
+                                                    <div className="col col-3">
+                                                            <label htmlFor="sitedetails"><h2>Site Details</h2></label>
+                                                            <input
+                                                                type="text" {...register("sitedetails")} className="form-control"
+                                                            />
+                                                            <div className="invalid-feedback">
+                                                                {errors?.sitedetails?.message}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
+                                            )
+                                        }
+                                    </div>
+                                </div><br></br>
+                                <div className="row">
+                                    <div className="col col-12">
+                                        <label><h2>(h)&nbsp;&nbsp;whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)</h2></label> &nbsp;&nbsp;
+                                             <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" />
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" />
+                                        <label for="No">No</label>
+                                    </div>
+                                </div><br></br>
+                                <hr /><br></br>
+                                <h4>4.Site condition</h4><br></br>
+                                <div className="row">
+                                    <div className="col col-3">
 
-                                        )
-                                    }
-                                </div>
-                            </div><br></br>
-                            <div className="row">
-                                <div className="col col-3">
-                                    <h6  onChange={(e) => setApproachable(e.target.value)} value={approachable}
-                                        data-toggle="tooltip" data-placement="top" title="whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)
-"><b>(h)&nbsp;Site Approachable Road &nbsp;&nbsp; <InfoIcon color="primary" />
-                                        </b></h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" />
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" />
-                                    <label for="No">No</label>
-                                </div>
-                            </div><br></br>
-                            <hr /><br></br>
-                            <h5 className="text-black"><b>4.Site condition</b></h5><br></br>
-                            <div className="row">
-                                <div className="col col-3">
+                                        <h2>(a)vacant(Yes/No)</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow17} />&nbsp;&nbsp;
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
 
-                                    <h6 ><b>(a)vacant: (Yes/No)</b> </h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow17} />&nbsp;&nbsp;
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow17} />&nbsp;&nbsp;
+                                        <label for="No">No</label>
+                                        {
+                                            showhide17 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label><h2>Vacant Remark</h2></label>
+                                                        <input type="text" className="form-control" {...register("vacantRemark")} />
+                                                    </div>
 
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow17} />&nbsp;&nbsp;
-                                    <label for="No">No</label>
-                                    {
-                                        showhide17 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col">
-                                                    <label for="parentLicense" className="font-weight-bold">Vacant Remark</label>
-                                                    <input type="text" className="form-control" onChange={(e) => setVacant(e.target.value)} value={vacant}/>
                                                 </div>
 
-                                            </div>
+                                            )
+                                        }
+                                         {
+                                            showhide17 === "No" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label><h2>Vacant Remark</h2></label>
+                                                        <input type="text" className="form-control"  />
+                                                    </div>
 
-                                        )
-                                    }
-                                </div>
-                                <div className="col col-3">
-
-                                    <h6 ><b>(b)Construction: (Yes/No)</b>
-                                    </h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                                    <label for="No">No</label>
-                                    {
-                                        showhide4 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col">
-                                                    <label for="parentLicense" className="font-weight-bold">Type of Construction</label>
-                                                    <input type="text" className="form-control" onChange={(e) => setConstruction(e.target.value)} value={construction}/>
                                                 </div>
 
-                                            </div>
+                                            )
+                                        }
+                                    </div>
+                                    <div className="col col-3">
 
-                                        )
-                                    }
-                                </div>
-                                <div className="col col-3">
+                                        <h2>(b)Construction: (Yes/No)</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow4} />
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
 
-                                    <h6 ><b>(c)HT line:(Yes/No)</b>
-                                    </h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow4} />
+                                        <label for="No">No</label>
+                                        {
+                                            showhide4 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label >Type of Construction</label>
+                                                        <input type="text" className="form-control" {...register("ConstType")} />
+                                                    </div>
 
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                                    <label for="No">No</label>
-                                    {
-                                        showhide5 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col">
-                                                    <label for="parentLicense" className="font-weight-bold">HT Remark</label>
-                                                    <input type="text" className="form-control" onChange={(e) => setHt(e.target.value)} value={ht} />
                                                 </div>
 
-                                            </div>
+                                            )
+                                        }
+                                         {
+                                            showhide4 === "No" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label><h2>Remark</h2></label>
+                                                        <input type="text" className="form-control" {...register("ConstRemark")} />
+                                                    </div>
 
-                                        )
-                                    }
-                                </div>
-                                <div className="col col-3">
-
-                                    <h6 ><b>(d) IOC Gas Pipeline:(Yes/No)</b>
-                                    </h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                                    <label for="No">No</label>
-                                    {
-                                        showhide6 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col">
-                                                    <label for="parentLicense" className="font-weight-bold">IOC Remark</label>
-                                                    <input type="text" className="form-control" onChange={(e) => setGas(e.target.value)} value={gas}/>
                                                 </div>
 
-                                            </div>
+                                            )
+                                        }
+                                    </div>
+                                    <div className="col col-3">
+                                        <h2>(c)HT line:(Yes/No)</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow5} />
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
 
-                                        )
-                                    }
-                                </div>
-                            </div><br></br>
-                            <div className="row ">
-                                <div className="col col-3">
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow5} />
+                                        <label for="No">No</label>
+                                        {
+                                            showhide5 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label ><h2>HT Remark</h2></label>
+                                                        <input type="text" className="form-control"  {...register("htRemark")} />
+                                                    </div>
 
-                                    <h6 ><b>(e)Nallah:(Yes/No)</b> </h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                                    <label for="No">No</label>
-                                    {
-                                        showhide7 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col">
-                                                    <label for="parentLicense" className="font-weight-bold">Nallah Remark</label>
-                                                    <input type="text" className="form-control"onChange={(e) => setNallah(e.target.value)} value={nallah} />
                                                 </div>
 
-                                            </div>
+                                            )
+                                        }
+                                        {
+                                            showhide5 === "No" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label ><h2>Remark</h2></label>
+                                                        <input type="text" className="form-control"  />
+                                                    </div>
 
-                                        )
-                                    }
-                                </div>
-                                <div className="col col-3">
-
-                                    <h6 ><b>(f)Any revenue rasta/road:(Yes/No)</b>
-                                    </h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                                    <label for="No">No</label>
-                                    {
-                                        showhide8 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col">
-                                                    <label for="parentLicense" className="font-weight-bold">Width of Revenue rasta/road &nbsp;&nbsp;<CalculateIcon color="primary" /></label>
-                                                    <input type="text" className="form-control" onChange={(e) => setRoad(e.target.value)} value={road}/>
                                                 </div>
 
-                                            </div>
+                                            )
+                                        }
+                                    </div>
+                                    <div className="col col-3">
+                                        <h2>(d) IOC Gas Pipeline:(Yes/No)</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow6} />
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
 
-                                        )
-                                    }
-                                </div>
-                                <div className="col col-3">
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow6} />
+                                        <label for="No">No</label>
+                                        {
+                                            showhide6 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label >IOC Remark</label>
+                                                        <input type="text" className="form-control"  {...register("iocRemark")}/>
+                                                    </div>
 
-                                    <h6 ><b>(g)Any marginal land:(Yes/No)</b>
-                                    </h6>
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                                    <label for="No">No</label>
-                                    {
-                                        showhide9 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col">
-                                                    <label for="parentLicense" className="font-weight-bold">Remark of Marginal Land</label>
-                                                    <input type="text" className="form-control" onChange={(e) => setLand(e.target.value)} value={land}/>
                                                 </div>
 
-                                            </div>
+                                            )
+                                        }
+                                        {
+                                            showhide6 === "No" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label >Remark</label>
+                                                        <input type="text" className="form-control" />
+                                                    </div>
 
-                                        )
-                                    }
-                                </div>
-                                <div className="col col-3">
-                                    <h6  data-toggle="tooltip" data-placement="top" title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)
-"><b>(h)&nbsp;Utility Line &nbsp; &nbsp;<InfoIcon color="primary" />
-                                        </b></h6>
-
-                                    <input type="radio" value="Yes" id="Yes"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-
-                                    <input type="radio" value="No" id="No"
-                                        onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                                    <label for="No">No</label>
-                                    {
-                                        showhide0 === "Yes" && (
-                                            <div className="row " >
-                                                <div className="col col">
-                                                    <label for="parentLicense" className="font-weight-bold">Width of row &nbsp;&nbsp;<CalculateIcon color="primary" /></label>
-                                                    <input type="text" className="form-control" onChange={(e) => setUtilityLine(e.target.value)} value={utilityLine}/>
                                                 </div>
 
-                                            </div>
+                                            )
+                                        }
+                                    </div>
+                                </div><br></br>
+                                <div className="row ">
+                                    <div className="col col-3">
 
-                                        )
-                                    }
+                                        <h2>(e)Nallah:(Yes/No)</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow7} />
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow7} />
+                                        <label for="No">No</label>
+                                        {
+                                            showhide7 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label >Nallah Remark</label>
+                                                        <input type="text" className="form-control"  {...register("nallahRemark")}/>
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                        {
+                                            showhide7 === "No" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label >Remark</label>
+                                                        <input type="text" className="form-control"  />
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                    </div>
+                                    <div className="col col-3">
+
+                                        <h2>(f)Any revenue rasta/road:(Yes/No)</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow8} />
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow8} />
+                                        <label for="No">No</label>
+                                        {
+                                            showhide8 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label ><h2>Width of Revenue rasta/road &nbsp;&nbsp;<CalculateIcon color="primary" /></h2></label>
+                                                        <input type="text" className="form-control"  {...register("roadRemark")}/>
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                        {
+                                            showhide8 === "No" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label ><h2>Remark</h2></label>
+                                                        <input type="text" className="form-control"  />
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                    </div>
+                                    <div className="col col-3">
+
+                                        <h2>(g)Any marginal land:(Yes/No)</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow9} />
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow9} />
+                                        <label for="No">No</label>
+                                        {
+                                            showhide9 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label ><h2>Remark of Marginal Land </h2></label>
+                                                        <input type="text" className="form-control" {...register("marginalRemark")} />
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                        {
+                                            showhide9 === "No" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label ><h2>Remark </h2></label>
+                                                        <input type="text" className="form-control"  />
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                    </div>
+                                    <div className="col col-3">
+                                        <h2 data-toggle="tooltip" data-placement="top" title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)
+">(h)&nbsp;Utility Line &nbsp; &nbsp;</h2>
+                                        <input type="radio" value="Yes" id="Yes"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow0} />
+                                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+
+                                        <input type="radio" value="No" id="No"
+                                            onChange1={handleChange} name="Yes" onClick={handleshow0} />
+                                        <label for="No">No</label>
+                                        {
+                                            showhide0 === "Yes" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label ><h2>Width of row &nbsp;&nbsp;<CalculateIcon color="primary" /></h2></label>
+                                                        <input type="text" className="form-control"  {...register("utilityRemark")}/>
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                         {
+                                            showhide0 === "No" && (
+                                                <div className="row " >
+                                                    <div className="col col">
+                                                        <label ><h2>Remark</h2></label>
+                                                        <input type="text" className="form-control"  />
+                                                    </div>
+
+                                                </div>
+
+                                            )
+                                        }
+                                    </div>
+                                </div><br></br>
+                                <hr></hr><br></br>
+                                <h5 >5. Enclose the following documents as Annexures</h5><br></br>
+                                <div className="row">
+                                    <div className="col col-3">
+                                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">Land schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+
+                                        <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} >
+
+                                        </input>
+                                    </div>
+                                    <div className="col col-3">
+                                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">Copy of Mutation &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+
+                                        <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} ></input>
+                                    </div>
+                                    <div className="col col-3">
+                                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">Copy of Jamabandi &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+
+                                        <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} ></input>
+                                    </div>
+                                    <div className="col col-3">
+                                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">Details of lease / patta, if any &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+
+                                        <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} ></input>
+                                    </div>
+
+                                </div><br></br>
+                                <div className="row">
+                                    <div className="col col-3">
+                                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">Add sales/Deed/exchange/gift deed, mutation, lease/Patta &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+
+                                        <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} >
+                                        </input>
+                                    </div>
+                                    <div className="col col-3">
+                                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document"> Copy of spa/GPA/board resolution to sign collaboration agrrement &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+
+                                        <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} ></input>
+                                    </div>
+                                    <div className="col col-3">
+                                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">Revised Land Schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+
+                                        <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} ></input>
+                                    </div>
+                                    <div className="col col-3">
+                                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">Copy of Shajra Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h2>
+
+                                        <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} ></input>
+                                    </div>
                                 </div>
-                            </div><br></br>
-                            <hr></hr><br></br>
-                            <h5 className="text-black"><b>5. Enclose the following documents as Annexures</b></h5><br></br>
-                            <div className="row">
-                                <div className="col col-3">
-                                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Land schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
-
-                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setLandSchedule(e.target.value)} value={landSchedule}>
-
-                                    </input>
-                                </div>
-                                <div className="col col-3">
-                                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Copy of Mutation &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
-
-                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setMutation(e.target.value)} value={mutation}></input>
-                                </div>
-                                <div className="col col-3">
-                                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Copy of Jamabandi &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
-
-                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setJambandhi(e.target.value)} value={jambandhi}></input>
-                                </div>
-                                <div className="col col-3">
-                                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Details of lease / patta, if any &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
-
-                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} ></input>
+                                <div class="row">
+                                    <div class="col-sm-12 text-left">
+                                        <button id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }} >Back</button>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12 text-right">
+                                            <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block"  > Save and Continue</button>
+                                        </div>
+                                    </div>
                                 </div>
 
-                            </div><br></br>
-                            <div className="row">
-                                <div className="col col-3">
-                                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration  &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
+                            </Col>
+                        </Row>
 
-                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setLayoutPlan1(e.target.value)} value={layoutPlan}>
-                                    </input>
-                                </div>
-                                <div className="col col-3">
-                                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b> Proposed Layout of Plan /site plan for area applied for migration. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
-
-                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setProposedLayoutPlan(e.target.value)} value={proposedLayoutPlan}></input>
-                                </div>
-                                <div className="col col-3">
-                                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document"><b>Revised Land Schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></b></h6>
-
-                                    <input type="file" className="form-control" onChange1={(e)=>setFile({file:e.target.files[0]})} onChange={(e) => setRevisedLandSchedule(e.target.value)} value={revisedLansSchedule}></input>
-                                </div>
-                            </div>
-                            <div class="row">
-                    <div class="col-sm-12 text-left">
-                        <button id="btnClear" class="btn btn-primary btn-md center-block" style={{marginBottom:"-44px"}} >Back</button>
-                    </div>
-                    <div class="row">
-                                <div class="col-sm-12 text-right">
-                                    <button id="btnSearch" class="btn btn-primary btn-md center-block" onClick={landScheduleFormSubmitHandler} >Continue</button>
-                                </div>
-                            </div>
-                            </div>
-
-                        </Col>
-                    </Row>
-
-                </Form.Group>
+                    </Form.Group>
+                </Card>
             </Card>
-            </Card>
-        </Form>
+        </form>
     )
 };
 export default LandScheduleForm;

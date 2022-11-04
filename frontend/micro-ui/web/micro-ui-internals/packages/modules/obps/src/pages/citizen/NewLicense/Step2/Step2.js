@@ -29,8 +29,8 @@ const tableData = [
 
 const optionsPurposeList = [
   {
-    label: "plotted Commercial",
-    value: "P",
+    label: "Plotted Commercial",
+    value: "plotted",
     id: "1",
   },
   {
@@ -65,7 +65,7 @@ const optionsPurposeList = [
   },
   {
     label: "DDJAY",
-    value: "D",
+    value: "DDJAY",
     id: "3",
   },
   {
@@ -122,63 +122,148 @@ const optionsPotentialList = [
   },
 ];
 
-const columns = [
-  {
-    key: "tehsil",
-    title: "Tehsil",
-    dataIndex: "tehsil",
-  },
-  {
-    key: "revenueEstate",
-    title: "Revenue Estate",
-    dataIndex: "revenueEstate",
-  },
-  {
-    key: "rectangleNo",
-    title: "Rectangle No.",
-    dataIndex: "rectangleNo",
-  },
-  {
-    key: "landOwner",
-    title: "Land Owner",
-    dataIndex: "landOwner",
-  },
-  {
-    key: "consolidationType",
-    title: "Consolidation Type",
-    dataIndex: "consolidationType",
-  },
-  {
-    key: "kanal",
-    title: "Kanal/Bigha",
-    dataIndex: "kanal",
-  },
-  {
-    key: "marla",
-    title: "Marla/Biswa",
-    dataIndex: "marla",
-  },
-  {
-    // key: "action",
-    title: "Action",
-    dataIndex: "",
-    render: () => (
-      <div>
-       <div className="flex"   style={{ color: "black" }} 
-      onClick={() => Edit(record)} > Edit</div>
-       <div className="flex"   style={{ color: "black" }} 
-      onClick={() => Delete(record)} > Delete</div>
-      <div/>
-      </div>
-    ),
-  },
-];
-
 const ApllicantPuropseForm = (props) => {
+  console.log("Props",props)
+  const columns = [
+    {
+      key: "tehsil",
+      title: "Tehsil",
+      dataIndex: "tehsil",
+    },
+    {
+      key: "revenueEstate",
+      title: "Revenue Estate",
+      dataIndex: "revenueEstate",
+    },
+    {
+      key: "rectangleNo",
+      title: "Rectangle No.",
+      dataIndex: "rectangleNo",
+    },
+
+    {
+      key: "consolidationType",
+      title: "Consolidation Type",
+      dataIndex: "consolidationType",
+    },
+    {
+      title: "Kanal/Bigha",
+      dataIndex: "",
+      render: (text) => (
+        text?.kanal? text?.kanal : text?.bigha
+         ),
+    },
+    {
+      title: "Marla/Biswa",
+      dataIndex: "",
+      render: (text) => (
+       text?.marla? text?.marla : text?.biswa
+        ),
+    },
+    {
+      title: "Sarsai/Biswansi",
+      dataIndex: "",
+      render: (text) => (
+        text?.sarsai? text?.sarsai : text?.biswansi
+         ),
+    },
+    {
+      // key: "action",
+      title: "Action",
+      dataIndex: "",
+      render: (data) => (
+        <div>
+          <h6
+            onClick={() => {
+              setmodal(true);
+              setSpecificTableData(data);
+              console.log("data", data);
+            }}
+          >
+            Edit
+          </h6>
+          <h6>Delete</h6>
+        </div>
+      ),
+    },
+  ];
+  const consolidatedColumns = [
+      {
+        key: "tehsil",
+        title: "Tehsil",
+        dataIndex: "tehsil",
+      },
+      {
+        key: "revenueEstate",
+        title: "Revenue Estate",
+        dataIndex: "revenueEstate",
+      },
+      {
+        key: "rectangleNo",
+        title: "Rectangle No.",
+        dataIndex: "rectangleNo",
+      },
+      {
+        key: "killa",
+        title: "Killa",
+        dataIndex: "killa",
+      },
+      {
+        key: "landOwner",
+        title: "Land Owner",
+        dataIndex: "landOwner",
+      },
+      {
+        key: "consolidationType",
+        title: "Consolidation Type",
+        dataIndex: "consolidationType",
+      },
+      {
+        key: "bigha",
+        title: "Kanal/Bigha",
+        dataIndex: "bigha",
+      },
+      {
+        // key: "biswa",
+        title: "Marla/Biswa",
+        dataIndex: "",
+        render: (text) => (
+          <div onClick={()=>console.log("text",text)}>text</div>
+          ),
+      },
+      {
+        key: "biswansi",
+        title: "Sarsai/Biswansi",
+        dataIndex: "biswansi",
+      },
+      {
+        // key: "action",
+        title: "Action",
+        dataIndex: "",
+        render: (data) => (
+          <div>
+            <h6
+              onClick={() => {
+                setmodal(true);
+                setSpecificTableData(data);
+                // console.log("data", data)
+              }}
+            >
+              Edit
+            </h6>
+            <h6>Delete</h6>
+          </div>
+        ),
+      },
+    ];
+ 
+
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
+  const [getColumns, setColumns] = useState(columns);
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
+  const [specificTableData, setSpecificTableData] = useState(null);
   const [districtData, setDistrictData] = useState([]);
   const [tehsilData, setTehsilData] = useState([]);
   const [revenueStateData, setRevenuStateData] = useState([]);
@@ -193,6 +278,27 @@ const ApllicantPuropseForm = (props) => {
   const [showhide1, setShowhide1] = useState("No");
   const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
+  const [consolidateValue, setConsolidateValue] = useState(null);  
+  const [submitDataLabel, setSubmitDataLabel] = useState([]);
+  const [finalSubmitData, setFinalSubmitData] = useState([]);
+const ID = props.getId;
+console.log("ID",ID);
+  useEffect(() => {
+    if (specificTableData) {
+      setValue("tehsil", specificTableData?.tehsil);
+      setValue("revenueEstate", specificTableData?.revenueEstate);
+      setValue("rectangleNo", specificTableData?.rectangleNo);
+      setValue("kanal", specificTableData?.kanal);
+      setValue("marla", specificTableData?.marla);
+      setValue("sarsai", specificTableData?.sarsai);
+      setValue("bigha", specificTableData?.bigha);
+      setValue("biswansi", specificTableData?.biswansi);
+      setValue("biswa", specificTableData?.biswa);
+      setValue("landOwner", specificTableData?.landOwner);
+
+    }
+    console.log("specificTableData", specificTableData);
+  }, [specificTableData]);
 
   const {
     register,
@@ -213,6 +319,11 @@ const ApllicantPuropseForm = (props) => {
   };
   const handleshow2 = (e) => {
     const getshow = e.target.value;
+    if (getshow === "1") {
+      setConsolidateValue("consolidated");
+    } else {
+      setConsolidateValue("non-consolidated");
+    }
     setShowhide2(getshow);
   };
 
@@ -232,7 +343,7 @@ const ApllicantPuropseForm = (props) => {
         },
       };
 
-      const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_district", postDistrict).then((Resp) => {
+      const Resp = await axios.post("/egov-mdms-service/v1/_district", postDistrict).then((Resp) => {
         return Resp;
       });
       setDistrictData(Resp.data);
@@ -261,7 +372,7 @@ const ApllicantPuropseForm = (props) => {
     };
 
     try {
-      const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {}).then((response) => {
+      const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {}).then((response) => {
         return response;
       });
       setTehsilData(Resp.data);
@@ -291,7 +402,7 @@ const ApllicantPuropseForm = (props) => {
 
     try {
       const Resp = await axios
-        .post("http://10.1.1.18:8094/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datatopost, {})
+        .post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datatopost, {})
         .then((response) => {
           return response;
         });
@@ -325,7 +436,7 @@ const ApllicantPuropseForm = (props) => {
     try {
       const Resp = await axios
         .post(
-          "http://10.1.1.18:8094/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code,
+          "/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code,
           datpost,
           {}
         )
@@ -343,267 +454,108 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
-  useEffect(() => {
-    DistrictApiCall();
-  }, []);
-
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
-
-  const ApplicantPurposeModalData = (data) => {
-    console.log("data++++++", data);
-    setModalData((prev) => [...prev, data]);
-    setmodal(false);
-    reset();
-    // setModalValuesArray((prev)=>[...prev,values]);
-  };
-  const [visible, setVisible] = useState(false); 
-
-
-  const PurposeFormSubmitHandler = async (data) => {
-    console.log("data===", data);
-    props.Step2Continue({ data });
+  const getLandOwnerStateData = async (khewats ) => {
+    const datatopos = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: "",
+      },
+    };
+ console.log("khewat",khewats)
     try {
-      const postDistrict = {
-        NewServiceInfo: {
-          newServiceInfoData: [
-            {
-              ApplicantInfo: {
-                authorizedDeveloper: "",
-                authorizedPerson: "sd",
-                authorizedmobile: "sds",
-                alternatemobile: "1e",
-                authorizedEmail: "eeds",
-                authorizedPan: "fsd",
-                authorizedAddress: "",
-                village: "village",
-                authorizedPinCode: "",
-                tehsil: "dsf",
-                district: "sdf",
-                state: "dsf",
-                status: "fgr",
-                LC: LC,
-                address: address,
-                permanentAddress: "fgd",
-                notSigned: "fgver",
-                email: "gfg",
-                authorized: "rgsf",
-              },
-              ApplicantPurpose: {
-                purposeDd: "",
-                potential: "",
-                district: "",
-                state: "",
-                ApplicationPurposeData1: {
-                  tehsil: "tahsil",
-                  revenueEstate: "",
-                  mustil: "",
-                  consolidation: "",
-                  sarsai: "",
-                  kanal: "",
-                  marla: "",
-                  bigha: "",
-                  biswansi: "",
-                  biswa: "",
-                  landOwner: "",
-                  developerCompany: "",
-                  registeringdate: "",
-                  validitydate: "",
-                  colirrevocialble: "",
-                  authSignature: "",
-                  nameAuthSign: "",
-                  registeringAuthority: "",
-                  registeringAuthorityDoc: "",
-                },
-              },
-              LandSchedule: {
-                licenseApplied: "lic",
-                LicNo: "",
-                potential: "",
-                siteLoc: "",
-                approach: "",
-                approachRoadWidth: "",
-                specify: "",
-                typeLand: "",
-                thirdParty: "",
-                migrationLic: "",
-                encumburance: "",
-                litigation: "",
-                court: "",
-                insolvency: "",
-                appliedLand: "",
-                revenuerasta: "",
-                watercourse: "",
-                compactBlock: "",
-                sandwiched: "",
-                acquistion: "",
-                section4: "",
-                section6: "",
-                orderUpload: "",
-                approachable: "",
-                vacant: "",
-                construction: "",
-                ht: "",
-                gas: "",
-                nallah: "",
-                road: "",
-                land: "",
-                utilityLine: "",
-                landSchedule: "",
-                mutation: "",
-                jambandhi: "",
-                LayoutPlan: "",
-                proposedLayoutPlan: "",
-                revisedLansSchedule: "",
-              },
-              DetailsofAppliedLand: {
-                dgps: "dsg",
-                DetailsAppliedLandData1: {
-                  resplotno: "asa",
-                  reslengthmtr: "",
-                  reswidthmtr: "",
-                  resareasq: "",
-                  npnlplotno: "",
-                  npnllengthmtr: "",
-                  npnlwidthmtr: "",
-                  npnlareasq: "",
-                  ewsplotno: "",
-                  ewslengthmtr: "",
-                  ewswidthmtr: "",
-                  ewsareasq: "",
-                  complotno: "",
-                  comlengthmtr: "",
-                  comwidthmtr: "",
-                  comareasq: "",
-                  siteplotno: "",
-                  sitelengthmtr: "",
-                  sitewidthmtr: "",
-                  siteareasq: "",
-                  parkplotno: "",
-                  parklengthmtr: "",
-                  parkwidthmtr: "",
-                  parkareasq: "",
-                  publicplotno: "",
-                  publiclengthmtr: "",
-                  publicwidthmtr: "",
-                  publicareasq: "",
-                  stpplotno: "",
-                  stplengthmtr: "",
-                  stpwidthmtr: "",
-                  stpareasq: "",
-                  etpplotno: "",
-                  etplengthmtr: "",
-                  etpwidthmtr: "",
-                  etpareasq: "",
-                  wtpplotno: "",
-                  wtplengthmtr: "",
-                  wtpwidthmtr: "",
-                  wtpareasq: "",
-                  ugtplotno: "",
-                  ugtlengthmtr: "",
-                  ugtwidthmtr: "",
-                  ugtareasq: "",
-                  milkboothplotno: "",
-                  milkboothlengthmtr: "",
-                  milkboothwidthmtr: "",
-                  milkboothareasq: "",
-                  gssplotno: "",
-                  gsslengthmtr: "",
-                  gssareasq: "",
-                  resDimension: "",
-                  resEnteredArea: "",
-                  comDimension: "",
-                  comEnteredArea: "",
-                  secPlanPlot: "",
-                  secPlanLength: "",
-                  secPlanDim: "",
-                  secPlanEntered: "",
-                  greenBeltPlot: "",
-                  greenBeltLength: "",
-                  greenBeltDim: "",
-                  greenBeltEntered: "",
-                  internalPlot: "",
-                  internalLength: "",
-                  internalDim: "",
-                  internalEntered: "",
-                  otherPlot: "",
-                  otherLength: "",
-                  otherDim: "",
-                  otherEntered: "",
-                  undeterminedPlot: "",
-                  undeterminedLength: "",
-                  undeterminedDim: "",
-                  undeterminedEntered: "",
-                },
-                DetailsAppliedLandDdjay2: {
-                  frozenNo: "qw",
-                  frozenArea: "",
-                  organize: "",
-                },
-                DetailsAppliedLandIndustrial3: {
-                  colonyfiftyNo: "qwq",
-                  colonyfiftyArea: "",
-                  fiftyToTwoNo: "",
-                  fiftyToTwoArea: "",
-                  twoHundredNo: "",
-                  twoHundredArea: "",
-                  resiNo: "",
-                  resiArea: "",
-                  commerNo: "",
-                  commerArea: "",
-                  labourNo: "",
-                  labourArea: "",
-                },
-                DetailsAppliedLandResidential4: {
-                  npnlNo: "wew",
-                  npnlArea: "",
-                  ewsNo: "",
-                  ewsArea: "",
-                },
-                DetailsAppliedLandNpnl5: {
-                  surrender: "sds",
-                  pocketProposed: "",
-                  deposit: "",
-                  surrendered: "",
-                },
-                DetailsAppliedLand6: {
-                  sitePlan: "sdsd",
-                  democraticPlan: "",
-                  sectoralPlan: "",
-                  developmentPlan: "",
-                  uploadLayoutPlan: "",
-                },
-              },
-              FeesAndCharges: {
-                totalArea: "sdsd",
-                purpose: "",
-                devPlan: "",
-                scrutinyFee: "",
-                licenseFee: "",
-                conversionCharges: "",
-                payableNow: "",
-                remark: "",
-                adjustFee: "",
-              },
-            },
-          ],
-        },
-      };
+      const Resp = await axios
+        .post(
+          "/egov-mdms-service/v1/_owner?" +
+          "dCode=" +
+          district +
+          "&" +
+          "tCode=" +
+          tehsilCode +
+          "&NVCode=" +
+          tehsilCode +
+          "&khewat=" +
+          khewats,
+          datatopos,
+          {}
+        )
+        .then((response) => {
+          console.log("Resp",response)
+          return response;
+        });
+      setKhewatData(Resp.data);
 
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-      });
-      setFinalSubmitData(Resp.data);
+      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
+        Resp.data.map((el, i) => {
+          setKhewatDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.khewats }]);
+        });
+      }
     } catch (error) {
       console.log(error.message);
     }
   };
 
+  useEffect(() => {
+    DistrictApiCall();
+  }, []);
+
+  useEffect(()=>{
+    console.log("Revenue",revenueDataLabels)
+  },[revenueDataLabels])
+
+  const ApplicantPurposeModalData = (data) => {
+    console.log("data++++++", data);
+    data["tehsil"] = data?.tehsil?.label;
+    data["revenueEstate"] = data?.revenueEstate?.label;
+    data["rectangleNo"] = data?.rectangleNo;
+    if (showhide2 === "consolidated") {
+      delete data?.bigha;
+      delete data?.biswa;
+      delete data?.biswansi;
+    }
+    if (showhide2 === "Non-Consolidated") {
+      delete data?.marla;
+      delete data?.kanal;
+      delete data?.sarsai;
+    }
+    if (data.consolidationType === "consolidated") {
+      setColumns(columns);
+    } else {
+      setColumns(consolidatedColumns);
+    }
+    setModalData((prev) => [...prev, data]);
+    setmodal(false);
+    reset({
+      tehsil: "",
+      revenueEstate: "",
+      rectangleNo: "",
+      kanal: "",
+      marla: "",
+      sarsai: "",
+      bigha: "",
+      biswa: "",
+      biswansi: "",
+    });
+  };
+
+  const applicantPurposeBack=async(data)=>{
+    console.log("data==============", data);
+  }
+
+  
+  const handleChange = (e) => {
+    this.setState({ isRadioSelected: true });
+  };
   const handleChangePurpose = (data) => {
     const purposeSelected = data?.label;
     setSelectPurpose(purposeSelected);
-    localStorage.setItem("purpose", JSON.stringify(purposeSelected));
+    localStorage.setItem("purpose", (purposeSelected));
   };
   const handleChangePotential = (data) => {
     const potentialSelected = data?.label;
@@ -638,20 +590,92 @@ const ApllicantPuropseForm = (props) => {
   };
   useEffect(() => {
     getDocumentData();
-  }, [file]);
+  }, [file]); 
+  
+  const getSubmitDataLabel = async () => {
+    try {
+      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
+        return response;
+      });
+      console.log("RESP+++", Resp?.data)
+      setSubmitDataLabel(Resp?.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  useEffect(() => {
+    getSubmitDataLabel();
+  }, []);
+
+  const PurposeFormSubmitHandler = async (data) => {
+    console.log("data===", data);
+    try {
+      const postDistrict = 
+      {
+        
+          "NewServiceInfo": 
+                  {
+                  "pageName": "ApplicantPurpose",
+                  "id": props.getId,
+              "newServiceInfoData": 
+                  {
+                      "ApplicantPurpose": {
+                          purposeDd: data?.purposeDd?.Label,
+                          potential: data?.potential?.label,
+                          district: data?.district?.label,
+                          state: data.state,
+                          "applicationPurposeData1": {
+                              tehsil: data?.tehsil?.label,
+                              revenueEstate: data?.revenueEstate?.label,
+                              mustil: data?.rectangleNo,
+                              consolidation: data?.consolidationType,
+                              sarsai: data?.sarsai,
+                              kanal: data?.kanal,
+                              marla: data?.marla,
+                              bigha: data?.bigha,
+                              biswansi: data?.biswansi,
+                              biswa: data?.biswa,
+                              landOwner:data?.landOwner,
+                              developerCompany: data?.devCompany,
+                              registeringdate: data?.registering,
+                              validitydate: data?.dateValidity,
+                              "colirrevocialble": "",
+                              authSignature: data?.authorizedSign,
+                              nameAuthSign: data?.authorizedDev,
+                              registeringAuthority: data?.registeringAuth
+                          }
+                      }
+                  
+                  }
+          },
+          
+      
+      };
+
+      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
+        return Resp;
+      });
+      
+      console.log("MMM",Resp?.data?.NewServiceInfo?.[0]?.id)
+    props.Step2Continue(data,Resp?.data?.NewServiceInfo?.[0]?.id);
+      setFinalSubmitData(Resp.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div>
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
-        <Card style={{ width: "126%" }}>
-          <h2>New License</h2>
-          <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
+        <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+          <h1>New License </h1>
+          <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <b>Puropse Of License</b> <span style={{ color: "red" }}>*</span>
+                      <h2>Puropse Of License<span style={{ color: "red" }}>*</span></h2>
                     </Form.Label>
                   </div>
 
@@ -671,7 +695,7 @@ const ApllicantPuropseForm = (props) => {
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <b>Potential Zone:</b> <span style={{ color: "red" }}>*</span>
+                      <h2>Potential Zone<span style={{ color: "red" }}>*</span></h2>
                     </Form.Label>
                   </div>
                   <ReactMultiSelect
@@ -690,7 +714,7 @@ const ApllicantPuropseForm = (props) => {
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <b>District</b> <span style={{ color: "red" }}>*</span>
+                      <h2>District<span style={{ color: "red" }}>*</span></h2>
                     </Form.Label>
                   </div>
                   <ReactMultiSelect
@@ -712,8 +736,7 @@ const ApllicantPuropseForm = (props) => {
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <b>State </b>
-                      <span style={{ color: "red" }}>*</span>
+                      <h2>State<span style={{ color: "red" }}>*</span></h2>
                     </Form.Label>
                   </div>
 
@@ -725,9 +748,9 @@ const ApllicantPuropseForm = (props) => {
               </Row>
 
               <div className="ml-auto" style={{ marginTop: 20 }}>
-                <h2 style={{ fontSize: 24 }}>
-                  <b>2. Details of applied land:</b>
-                </h2>
+                <h5>
+                  <b>Details of applied land</b>
+                </h5>
                 <br></br>
                 <p>
                   Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development
@@ -735,7 +758,7 @@ const ApllicantPuropseForm = (props) => {
                 </p>
                 <br></br>
                 <p>
-                  <b>(i) Khasra-wise information to be provided in the following format:</b>
+                  <h3>(i) Khasra-wise information to be provided in the following format</h3>
                 </p>
                 <br></br>
               </div>
@@ -748,19 +771,20 @@ const ApllicantPuropseForm = (props) => {
 
               <div className="applt" style={{ overflow: "auto" }}>
                 <WorkingTable columns={columns} data={modalData} />
-                {/* <Table className="table table-bordered" columns={columns} pagination={false} /> */}
+
+
               </div>
             </Form.Group>
             <div class="row">
               <div class="col-sm-12 text-left">
-                <button id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
+                <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }} onClick={applicantPurposeBack}>
                   Back
                 </button>
               </div>
               <div class="row">
                 <div class="col-sm-12 text-right">
                   <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-                    Continue
+                    Save and Continue
                   </button>
                 </div>
               </div>
@@ -769,22 +793,52 @@ const ApllicantPuropseForm = (props) => {
         </Card>
       </form>
 
-      <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
-        <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
+      <Modal
+        size="xl"
+        isOpen={modal}
+        toggle={() => {
+          reset({
+            tehsil: "",
+            revenueEstate: "",
+            rectangleNo: "",
+            kanal: "",
+            marla: "",
+            sarsai: "",
+            bigha: "",
+            biswa: "",
+            biswansi: "",
+          });
+          setmodal(!modal);
+        }}
+      >
+        <ModalHeader
+          toggle={() => {
+            setmodal(!modal);
+            reset({
+              tehsil: "",
+              revenueEstate: "",
+              rectangleNo: "",
+              kanal: "",
+              marla: "",
+              sarsai: "",
+              bigha: "",
+              biswa: "",
+              biswansi: "",
+            });
+          }}
+        ></ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(ApplicantPurposeModalData)}>
             <Row className="ml-auto mb-3">
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h6>
-                      <b>Tehsil</b>
-                    </h6>
+                    <h2>Tehsil <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
                 <ReactMultiSelect
                   control={control}
-                 {...register("tehsil")}
+                  {...register("tehsil")}
                   data={tehsilDataLabels}
                   labels="Tehsil"
                   onChange={(e) => {
@@ -799,18 +853,22 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h6>
-                      <b>Name of Revenue estate</b>
-                    </h6>
+                    <h2>Name of Revenue Estate <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
                 <ReactMultiSelect
                   control={control}
-                  name="revenueEstate"
+                  {...register("revenueEstate")}
+
                   data={revenueDataLabels}
                   labels="Revenue Estate"
-                  onChange={(e) => getMustilData(e.code)}
+                  onChange={(e) => {
+                    getMustilData(e.code);
+                    getLandOwnerStateData(e.khewats);
+                   
+                  }}
                 />
+              
 
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.revenueEstate && errors?.revenueEstate?.message}
@@ -819,12 +877,11 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h6>
-                      <b>Rectangle No./Mustil</b>
-                    </h6>
+                    <h2>Rectangle No./Mustil <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No." />
+                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No."  {...register("rectangleNo")}
+ />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.mustil && errors?.mustil?.message}
                 </h3>
@@ -835,19 +892,17 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="12">
                 <div>
                   <label>
-                    <h6>
-                      <b>Consolidation Type</b>
-                    </h6>{" "}
+                    <h2>Consolidation Type<span style={{ color: "red" }}>*</span></h2>
                   </label>{" "}
                   &nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="Consolidated" onChange={handleChange} name="Yes"{...register("consolidationType")} onClick={handleshow2} />
+                  <input type="radio" id="Yes" value="Consolidated" name="Yes" onClick={handleshow2} {...register("consolidationType")} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
-                  <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="Non-Consolidated" onChange={handleChange} name="Yes" {...register("consolidationType")} onClick={handleshow2} />
+                  <label htmlFor="gen" >Consolidated</label>&nbsp;&nbsp;
+                  <input type="radio" id="No" value="Non-Consolidated" name="Yes" onClick={handleshow2} {...register("consolidationType")} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
-                  <label htmlFor="npnl">Non-Consolidated</label>
+                  <label htmlFor="npnl" >Non-Consolidated</label>
                   {/* </Form.Select> */}
                 </div>{" "}
                 {showhide2 === "Consolidated" && (
@@ -855,13 +910,13 @@ const ApllicantPuropseForm = (props) => {
                     <thead>
                       <tr>
                         <th>
-                          <b>Kanal</b>
+                          <h2>Kanal</h2>
                         </th>
                         <th>
-                          <b>Marla</b>
+                          <h2>Marla</h2>
                         </th>
                         <th>
-                          <b>Sarsai</b>&nbsp;&nbsp;
+                          <h2>Sarsai</h2>&nbsp;&nbsp;
                         </th>
                       </tr>
                     </thead>
@@ -885,13 +940,13 @@ const ApllicantPuropseForm = (props) => {
                     <thead>
                       <tr>
                         <th>
-                          <b>Bigha</b>
+                          <h2>Bigha</h2>
                         </th>
                         <th>
-                          <b>Biswa</b>
+                          <h2>Biswa</h2>
                         </th>
                         <th>
-                          <b>Biswansi</b>&nbsp;&nbsp;
+                          <h2>Biswansi</h2>&nbsp;&nbsp;
                         </th>
                       </tr>
                     </thead>
@@ -917,12 +972,10 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="6">
                 <div>
                   <label>
-                    <h6>
-                      <b>Name of Land Owner</b>
-                    </h6>
+                    <h2>Name of Land Owner<span style={{ color: "red" }}>*</span></h2>
                   </label>
                 </div>
-                <Form.Control type="text" className="form-control" placeholder="N/A" {...register("landOwner")} />
+                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")}/>
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
@@ -931,63 +984,51 @@ const ApllicantPuropseForm = (props) => {
             </Row>
             <Row className="ml-auto mb-3">
               <div className="col col-12">
-                <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
-                  <b>
-                    Collaboration agreement&nbsp;
-                    <InfoIcon style={{ color: "blue" }} />
-                    &nbsp;{" "}
-                  </b>
+                <h2 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
+                  Collaboration agreement Owner<span style={{ color: "red" }}>*</span>
                   &nbsp;&nbsp;
-                  <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow1} />
+                  <input type="radio" value="Yes" id="Yes" name="Yes" onClick={handleshow1} />
                   &nbsp;&nbsp;
                   <label for="Yes">
                     <h6>
-                      <b>Yes</b>
+                      Yes
                     </h6>
                   </label>
                   &nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow1} />
+                  <input type="radio" value="No" id="No" name="Yes" onClick={handleshow1} />
                   &nbsp;&nbsp;
                   <label for="No">
                     <h6>
-                      <b>No</b>
+                      No
                     </h6>
                   </label>
-                </h6>
+                </h2>
                 {showhide1 === "Yes" && (
                   <div className="row ">
                     <div className="col col-4">
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered</b>
-                        </h6>
+                      <label >
+                        <h2>Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered<span style={{ color: "red" }}>*</span></h2>
                       </label>
                       <Form.Control type="text" className="form-control" placeholder="N/A" {...register("devCompany")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Date of registering collaboration agreement</b>
-                        </h6>
+                      <label >
+                        <h2>Date of registering collaboration agreement<span style={{ color: "red" }}>*</span></h2>
                       </label>
                       <Form.Control type="date" className="form-control" placeholder="N/A" {...register("registering")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Date of validity of collaboration agreement</b>
-                        </h6>
+                      <label >
+                        <h2>Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span></h2>
                       </label>
                       <Form.Control type="date" className="form-control" placeholder="N/A" {...register("dateValidity")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 35 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Whether collaboration agreement irrevocable (Yes/No)</b>
-                        </h6>
+                      <label >
+                        <h2>Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span></h2>
                       </label>
                       <br></br>
-                      <input type="radio" value="Yes" id="Yes1" onChange={handleChange} name="Yes" />
+                      <input type="radio" value="Yes" id="Yes1" name="Yes" />
                       &nbsp;&nbsp;
                       <label for="Yes">
                         <h6>Yes</h6>
@@ -1001,37 +1042,30 @@ const ApllicantPuropseForm = (props) => {
                     </div>
 
                     <div className="col col-4" style={{ marginTop: 35 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Name of authorized signatory on behalf of land owner(s)</b>
-                        </h6>
+                      <label >
+                        <h2>Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span></h2>
                       </label>
                       <Form.Control type="text" className="form-control" placeholder="N/A" {...register("authorizedSign")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Name of authorized signatory on behalf of developer to sign Collaboration agreement</b>
-                        </h6>
+                      <label >
+                        <h2>Name of authorized signatory on behalf of developer to sign Collaboration agreement<span style={{ color: "red" }}>*</span></h2>
+
                       </label>
                       <Form.Control type="date" className="form-control" placeholder="N/A" {...register("authorizedDev")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 20 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Registring Authority</b>
-                        </h6>
+                      <label >
+                        <h2>Registring Authority<span style={{ color: "red" }}>*</span></h2>
                       </label>
                       <br></br>
                       <Form.Control type="text" className="form-control" placeholder="N/A" {...register("registeringAuth")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                          <b>
-                            Registring Authority document&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                          </b>
-                        </h6>
+                      <label >
+                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                          Registring Authority document <span style={{ color: "red" }}>*</span><ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        </h2>
                       </label>
                       <br></br>
                       <Form.Control type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} />
