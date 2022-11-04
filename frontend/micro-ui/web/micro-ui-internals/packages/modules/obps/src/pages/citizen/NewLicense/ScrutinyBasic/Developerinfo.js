@@ -127,6 +127,7 @@ const Developerinfo = (props) => {
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
   const [checkValue, setCheckedVAlue] = useState([]);
+  const [fieldValue, setFieldValue] = useState("");
 
   const handlemodaldData = (data) => {
     setmodaldData(data.data);
@@ -513,7 +514,11 @@ const Developerinfo = (props) => {
           >
             <Row className="ms-auto" style={{ marginBottom: 20 }}>
               <Col className="ms-auto" md={4} xxl lg="12">
-                <Form.Label>(i)Whether licence applied for additional area ?</Form.Label>
+                <Form.Label
+                // placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
+                >
+                  (i)Whether licence applied for additional area ?
+                </Form.Label>
                 {/* &nbsp;&nbsp;
                 
                 <br></br> */}
@@ -535,6 +540,7 @@ const Developerinfo = (props) => {
                     }}
                     onClick={() => {
                       setLabelValue("Whether licence applied for additional area ?"), setSmShow(true), console.log("modal open");
+                      //  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
                     }}
                   ></ReportProblemIcon>
                   <ModalChild
@@ -543,7 +549,8 @@ const Developerinfo = (props) => {
                     isYesorNoChecked={handleYesOrNochecked}
                     displaymodal={smShow}
                     setColor={setColor}
-                    fieldValue={labelValue}
+                    fieldValue={fieldValue}
+                    // remarksUpdate={currentRemarks}
                   ></ModalChild>
                 </div>
               </Col>

@@ -459,7 +459,7 @@ const Genarelinfo = (props) => {
               <table className="table table-bordered">
                 <thead>
                   <tr>
-                    <th>
+                    <th class="fw-normal">
                       Tehsil
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
@@ -478,7 +478,7 @@ const Genarelinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </th>
-                    <th>
+                    <th class="fw-normal">
                       Revenue estate
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
@@ -497,7 +497,7 @@ const Genarelinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </th>
-                    <th>
+                    <th class="fw-normal">
                       Rectangle No.
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
@@ -516,7 +516,7 @@ const Genarelinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </th>
-                    <th>
+                    <th class="fw-normal">
                       Killa
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
@@ -535,7 +535,7 @@ const Genarelinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </th>
-                    <th>
+                    <th class="fw-normal">
                       Land owner
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
@@ -554,7 +554,7 @@ const Genarelinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </th>
-                    <th>
+                    <th class="fw-normal">
                       Consolidation Type{" "}
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
@@ -573,7 +573,7 @@ const Genarelinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </th>
-                    <th>
+                    <th class="fw-normal">
                       Kanal/Bigha{" "}
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
@@ -592,7 +592,7 @@ const Genarelinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </th>
-                    <th>
+                    <th class="fw-normal">
                       Marla/Biswa{" "}
                       <div style={{ display: "flex" }}>
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
@@ -617,7 +617,7 @@ const Genarelinfo = (props) => {
                 <th>Biswa</th>
                 <th>Biswansi</th>
                 <th>Area &nbsp;&nbsp;</th> */}
-                    <th>
+                    <th class="fw-normal">
                       {" "}
                       {/* <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)"> */}
                       Khewat
@@ -695,9 +695,9 @@ const Genarelinfo = (props) => {
             </div>
             {/* </div>
       </Collapse> */}
-            <div style={{ position: "relative", marginBottom: 40 }}>
+            {/* <div style={{ position: "relative", marginBottom: 40 }}>
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue, purpose: purpose })}>Submit</Button>
-            </div>
+            </div> */}
           </Form.Group>
           <br></br>
 

@@ -5,6 +5,8 @@ const windowHeight = window !== undefined ? window.innerHeight : null;
 const ScrutinyDevelopment = (props) => {
   const [approval, setDisapproval] = useState(false);
   const remarkDataResp = props.remarkData;
+  // const sumdataTime = props.remarksum;
+  // const [applicationId, setApplicationId] = useState("");
   return (
     <Container
       className="justify-content-center"
@@ -27,36 +29,73 @@ const ScrutinyDevelopment = (props) => {
         {el.documentId}
       </Col>
         </Row> */}
-      {remarkDataResp !== null ? (
-        remarkDataResp.map((el, i) => {
-          return (
-            <div class="WhatsNewCard" style={{ backgroundColor: "#D9FECF" }}>
-              {/* <h2> &amp; Redressal</h2> */}
-              <Row>
-                <Col>
-                  <b>{el.fieldIdL}</b>
-                </Col>
-                <Col>{el.fieldValue}</Col>
-                <Col>{el.isApproved ? "Approved" : "Disapproved"}</Col>
-              </Row>
+      <Row>
+        <div class="WhatsNewCard" style={{ backgroundColor: "#ddf2cf" }}>
+          <Row>
+            {/* {sumdataTime !== null ? (
+              sumdataTime.map((el) => {
+                return ( */}
 
-              <Row>
-                <p>{el.comment}</p>
-              </Row>
+            <Col>
+              <b>ApplicationId</b>
+              {/* {el.applicationId} */}
+            </Col>
+            <Col>
+              <b>Service Id</b>
 
-              <Row>
-                <h6 style={{ textAlign: "right" }}>{el.userid}</h6>
-              </Row>
+              {/* {el.serviceId} */}
+            </Col>
+            <Col>
+              <b> Diary No</b>
 
-              <Row>
-                <p style={{ textAlign: "right" }}>{new Date(el.ts).toLocaleDateString()}</p>
-              </Row>
-            </div>
-          );
-        })
-      ) : (
-        <p></p>
-      )}
+              {/* {el.documentId} */}
+            </Col>
+
+            {/* );
+              })
+            ) : (
+              <p></p>
+            )} */}
+          </Row>
+          <hr style={{ marginTop: 5, marginBottom: 5 }}></hr>
+          {remarkDataResp !== null ? (
+            remarkDataResp.map((el, i) => {
+              return (
+                <div>
+                  <Row style={{ marginBottom: 5 }}>
+                    <Col>
+                      <b>{el.fieldIdL}</b>
+                    </Col>
+                    <Col>
+                      {" "}
+                      <b>{el.fieldValue}</b>
+                    </Col>
+                    <Col>
+                      <b>{el.isApproved ? "Approved" : "Disapproved"}</b>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <p>
+                      <i>{el.comment}</i>
+                    </p>
+                  </Row>
+
+                  <Row style={{ margin: 4 }}>
+                    <b style={{ textAlign: "right" }}>{el.userid}</b>
+                  </Row>
+
+                  <Row style={{ margin: 4 }}>
+                    <b style={{ textAlign: "right" }}>{new Date(el.ts).toLocaleDateString()}</b>
+                  </Row>
+                </div>
+              );
+            })
+          ) : (
+            <p></p>
+          )}
+        </div>
+      </Row>
     </Container>
   );
 };

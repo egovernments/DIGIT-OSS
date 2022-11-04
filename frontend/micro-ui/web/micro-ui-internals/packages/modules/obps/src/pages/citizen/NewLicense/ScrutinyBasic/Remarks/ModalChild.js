@@ -33,7 +33,7 @@ function ModalChild(props) {
       egScrutiny: {
         applicationId: "123",
         comment: RemarksDeveloper.data,
-        fieldValue: "update",
+        fieldValue: inputFieldValue,
         fieldIdL: iscrosschecked,
         isApproved: yesOrNoClicked,
         userid: "123",
