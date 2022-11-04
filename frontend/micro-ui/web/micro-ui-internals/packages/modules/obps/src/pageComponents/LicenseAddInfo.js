@@ -163,7 +163,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
          formData.append(
              "file",file.file      );
          formData.append(
-             "tenantId","hr"      );  
+             "tenantId",tenantId      );  
          formData.append(
              "module","property-upload"      );
           formData.append(
@@ -317,102 +317,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
       localStorage.setItem("addInfo",JSON.stringify(addInfoDev));
 
       const developerRegisterData = {
+        // "id":,
+          "pageName":"addInfo",
         "devDetail": {
-            "licenceDetails": {
-              // licenseDet:licenseDet
-            },
+          
             "addInfo": {
               addInfoDev:addInfoDev
-            },
-            "aurthorizedUserInfoArray": [
-                {
-                    "userName": "",
-                    "name": "",
-                    "gender": "",
-                    "mobileNumber": "",
-                    "emailId": "",
-                    "dob": "",
-                    "pan": "",
-                    "active": "",
-                    "type": "",
-                    "password": "",
-                    "tenantId": tenantId,
-                    "roles": [
-                        {
-                            "code": "CITIZEN",
-                            "name": "Citizen",
-                            "tenantId": "default"
-                        }
-                    ]
-                }
-            ],
-            "capacityDevelopAColony": {
-                "individualCertificateCA": "",
-                "companyBalanceSheet": "",
-                "paidUpCapital": "",
-                "networthPartners": "",
-                "networthFirm": "",
-                "capacityDevelopColonyHdruAct": [
-                    {
-                        "licenceNumber": "",
-                        "nameOfDeveloper": "",
-                        "purposeOfColony": "",
-                        "sectorAndDevelopmentPlan": "",
-                        "validatingLicence": ""
-                    }
-                ],
-                "capacityDevelopColonyLawAct": [
-                    {
-                        "serialNumber": "",
-                        "coloniesDeveloped": "",
-                        "area": "",
-                        "purpose": "",
-                        "statusOfDevelopment": "",
-                        "outstandingDues": ""
-                    }
-                ],
-                "technicalExpertEngaged": [
-                    {
-                        "engineerName": "",
-                        "engineerQualification": "",
-                        "engineerSign": "",
-                        "engineerDegree": "",
-                        "architectName": "",
-                        "architectQualification": "",
-                        "architectSign": "",
-                        "architectDegree": "",
-                        "townPlannerName": "",
-                        "townPlannerQualification": "",
-                        "townPlannerSign": "",
-                        "townPlannerDegree": "",
-                        "existingDeveloperAgreement": "",
-                        "existingDeveloperAgreementDoc": "",
-                        "technicalCapacity": "",
-                        "technicalCapacityDoc": "",
-                        "engineerNameN": "",
-                        "engineerDocN": "",
-                        "architectNameN": "",
-                        "architectDocN": "",
-                        "uplaodSpaBoard": "",
-                        "uplaodSpaBoardDoc": ""
-                    }
-                ],
-                "designationDirector": [
-                    {
-                        "agreementDoc": "",
-                        "boardDoc": ""
-                    }
-                ],
-                "obtainedLicense": [
-                    {
-                        "registeredDoc": "",
-                        "boardDocY": "",
-                        "earlierDocY": "",
-                        "boardDocN": "",
-                        "earlierDocN": "",
-                        "technicalAssistanceAgreementDoc": ""
-                    }
-                ]
             }
         }
       }

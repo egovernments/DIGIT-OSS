@@ -58,6 +58,7 @@ module.exports = function (app) {
     "/egov-searcher/bill-genie/billswithaddranduser/_get",
     "/egov-pdf/download/UC/mcollect-challan",
     "/egov-hrms/employees/_count",
+    "/user/developer/registration",
     "/tl-services/v1/_create",
     "/tl-services/v1/_search",
     "/egov-url-shortening/shortener",

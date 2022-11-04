@@ -33,9 +33,9 @@ export const OBPSService = {
       params: {},
       auth: true,
     }),
-  createDeveloper: (details, tenantId) =>
+    CREATEDeveloper: (details, tenantId) =>
     Request({
-      url: Urls.obps.createDeveloper,
+      url: Urls.obps.createDev,
       data: details,
       setTimeParam: false,
       userService: true,

@@ -21,18 +21,23 @@ import { convertEpochToDate } from "../utils/index";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import axios from "axios";
+const TYPE_REGISTER = { type: "register" };
+const TYPE_LOGIN = { type: "login" };
 // const tenantId = Digit.ULBService.getCurrentTenantId();
 
 //for Redux use only
 // import { setAurthorizedUserData } from "../Redux/Slicer/Slicer";
 // import { useDispatch } from "react-redux";
 
-const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
+const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegistered = true }) => {
 
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
+  
+  const getUserType = () => Digit.UserService.getType();
+  const [params, setParmas] = useState(isUserRegistered?{}:location?.state?.data);
   const [modal, setmodal] = useState(false);
   const [aurthorizedUserName, setAurtorizedUserName] = useState(formData?.AddAuthorizeduser?.aurthorizedUserName || formData?.AddAuthorizeduser?.aurthorizedUserName || "");
   const [aurthorizedMobileNumber, setAurthorizedMobileNumber] = useState(formData?.AddAuthorizeduser?.aurthorizedMobileNumber || formData?.AddAuthorizeduser?.aurthorizedMobileNumber || "");
@@ -96,6 +101,28 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
   function selectPanNumber(e) {
     setAurthorizedPan(e.target.value.toUpperCase());
   }
+
+  const handleMobileChange = async (event) => {
+    const { value } = event.target;
+    setParmas({ ...params, aurthorizedMobileNumber: value });
+    const data = {
+      ...aurthorizedMobileNumber,
+      tenantId: "hr",
+      userType: getUserType(),
+    };
+    if (isUserRegistered) {
+      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
+      if (!err) {
+        alert("please Enter Login",res)
+        return;
+      } 
+    } else {
+      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
+      alert("Please register yourself",res)
+    }
+  };
+  
+  
 
   const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
 
@@ -187,6 +214,15 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     }
   }, [aurthorizedPan])
 
+  const sendOtp = async (data) => {
+    try {
+      const res = await Digit.UserService.sendOtp(data, stateCode);
+      return [res, null];
+    } catch (err) {
+      return [null, err];
+    }
+  };
+
   const getDocumentData = async () => {
     if(file===null){
        return
@@ -227,43 +263,63 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     setmodal(false);
     console.log("submitted");
     const user = {
-      userName: aurthorizedUserName,
-      name: aurthorizedUserName,
-      gender: gender.value,
-      mobileNumber: aurthorizedMobileNumber,
-      emailId: aurthorizedEmail,
-      dob: aurthorizedDob,
-      pan: aurthorizedPan,
-      "active": true,
-      "type": "CITIZEN",
-      "password": "Password@123",
-      "tenantId": "hr",
-      "roles": [
-          {
-              "code": "CITIZEN",
-              "name": "Citizen",
-              "tenantId": "default"
-          }
-      ]
+        userName: aurthorizedUserName,
+        name: aurthorizedUserName,
+        gender: gender.value,
+        mobileNumber: aurthorizedMobileNumber,
+        // emailId: aurthorizedEmail,
+        // dob: aurthorizedDob,
+        // pan: aurthorizedPan,
+        "type": "CITIZEN",
+        "password": "Password@123",
+        
+        "roles": [
+            {
+                "code": "CITIZEN",
+                "name": "Citizen",
+                "tenantId": "default"
+            }
+        ],
+        "tenantId": "hr",
     }
 
     setAurthorizedUserInfoArray((prev) => [...prev, user]);
     try {
       const requestResp = {
         
-          "RequestInfo": {
-              "api_id": "1",
-              "ver": "1",
+          // "RequestInfo": {
+          //     "api_id": "1",
+          //     "ver": "1",
+          //     "ts": null,
+          //     "action": "create",
+          //     "did": "",
+          //     "key": "",
+          //     "msg_id": "",
+          //     "requester_id": "",
+          //     "auth_token": null,
+          //     "userInfo":{
+          //        userInfo:userInfo,
+          //     }
+          // },
+          // user:user,
+          
+
+          
+            "requestInfo": {
+              "apiId": "Rainmaker",
+              "ver": ".01",
               "ts": null,
-              "action": "create",
-              "did": "",
+              "action": "_update",
+              "did": "1",
               "key": "",
-              "msg_id": "",
-              "requester_id": "",
-              "auth_token": null
-          },
+              "msgId": "20170310130900|en_IN",
+              "authToken": "dce88a06-7e09-4923-97f9-f15af2deea66",
+              userInfo:userInfo
+            },
+            user:user
+          
       }
-      const postDataAuthUser = axios.post(`/user/users/_createnovalidate`,requestResp,user,{headers:{
+      const postDataAuthUser = axios.post(`/user/users/_createnovalidate`,requestResp,{headers:{
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin':"*",
       }})
@@ -374,6 +430,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     Digit.OBPSService.createDeveloper(developerRegisterData, tenantId)
       .then((result, err) => {
         setIsDisableForNext(false);
+        
         let data = { 
           result: result, 
           formData: formData, 
@@ -591,7 +648,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                                 name="name[]"
                                 placeholder=""
                                 class="employee-card-input"
-                                onChange={(e) => setAurthorizedMobileNumber(e.target.value)}
+                                // onChange={(e) => setAurthorizedMobileNumber(e.target.value)}
+                                onChange={handleMobileChange}
                                 maxlength={"10"}
                                 pattern={"[6-9]{1}[0-9]{9}"}
                                 required={true}

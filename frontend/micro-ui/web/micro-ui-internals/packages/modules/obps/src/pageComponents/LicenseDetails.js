@@ -3,30 +3,16 @@ import React, { useState, useEffect } from "react";
 import { Form, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
-// import Button from '@material-ui/core/Button';
-// import TextField from '@material-ui/core/TextField';
 import { convertEpochToDate } from "../utils/index";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers";
-// import { VALIDATION_SCHEMA } from "../utils/developerRegisterSchema";
 const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  //   control,
-  //   setValue,
-  // } = useForm({
-  //   mode: "onSubmit",
-  //   reValidateMode: "onBlur",
-  //   resolver: yupResolver(VALIDATION_SCHEMA),
-  //   shouldFocusError: true,
-  // });
+  
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
+  // const [id,setId] = useState("")
   const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name: "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
   const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.formData?.LicneseDetails?.gender);
@@ -71,6 +57,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   ];
 
   const [panValidation,setPanValidation] = useState("");
+  const [PanValError,setPanValError] = useState("");
   // function setValue(value, input) {
   //   setDOB(config.key, { ...formData[config.key], [input]: value });
   // }
@@ -151,7 +138,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       console.log("PANDET",panResp?.data);
     } catch(error){
         console.log(error?.response?.data?.errorDescription);
-        const errorPanVal = error?.response?.data?.errorDescription
+        setPanValError(error?.response?.data?.errorDescription) 
     }
   }
 console.log(panValidation);
@@ -276,7 +263,7 @@ console.log(panValidation);
     setPincodeCorrespondence(e.target.value);
   }
   
-  const goNext = async () => {
+  const goNext = async (props) => {
 
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
       let licenseDet = {
@@ -326,135 +313,137 @@ console.log(panValidation);
         });
 
         const developerRegisterData = {
-        "devDetail": {
-            "licenceDetails": {
-              licenseDet:licenseDet
-            },
-            "addInfo": {
-                "showDevTypeFields": "",
-                "cin_Number": "",
-                "companyName": "",
-                "incorporationDate": "",
-                "registeredAddress": "",
-                "email": "",
-                "registeredContactNo": "",
-                "gst_Number": "",
-                "directorsInformation": [
-                    {
-                        "contactNumber": "",
-                        "din": "",
-                        "name": ""
-                    },
-                    {
-                        "contactNumber": "",
-                        "din": "",
-                        "name": ""
-                    }
-                ],
-                "shareHoldingPatterens": [
-                    {
-                        "name": "",
-                        "designition": "",
-                        "percentage": "",
-                        "uploadPdf": "",
-                        "serialNumber": ""
-                    }
-                ]
-            },
-            "aurthorizedUserInfoArray": [
-                {
-                    "userName": "",
-                    "name": "",
-                    "gender": "",
-                    "mobileNumber": "",
-                    "emailId": "",
-                    "dob": "",
-                    "pan": "",
-                    "active": "",
-                    "type": "",
-                    "password": "",
-                    "tenantId": tenantId,
-                    "roles": [
-                        {
-                            "code": "CITIZEN",
-                            "name": "Citizen",
-                            "tenantId": "default"
-                        }
-                    ]
-                }
-            ],
-            "capacityDevelopAColony": {
-                "individualCertificateCA": "",
-                "companyBalanceSheet": "",
-                "paidUpCapital": "",
-                "networthPartners": "",
-                "networthFirm": "",
-                "capacityDevelopColonyHdruAct": [
-                    {
-                        "licenceNumber": "",
-                        "nameOfDeveloper": "",
-                        "purposeOfColony": "",
-                        "sectorAndDevelopmentPlan": "",
-                        "validatingLicence": ""
-                    }
-                ],
-                "capacityDevelopColonyLawAct": [
-                    {
-                        "serialNumber": "",
-                        "coloniesDeveloped": "",
-                        "area": "",
-                        "purpose": "",
-                        "statusOfDevelopment": "",
-                        "outstandingDues": ""
-                    }
-                ],
-                "technicalExpertEngaged": [
-                    {
-                        "engineerName": "",
-                        "engineerQualification": "",
-                        "engineerSign": "",
-                        "engineerDegree": "",
-                        "architectName": "",
-                        "architectQualification": "",
-                        "architectSign": "",
-                        "architectDegree": "",
-                        "townPlannerName": "",
-                        "townPlannerQualification": "",
-                        "townPlannerSign": "",
-                        "townPlannerDegree": "",
-                        "existingDeveloperAgreement": "",
-                        "existingDeveloperAgreementDoc": "",
-                        "technicalCapacity": "",
-                        "technicalCapacityDoc": "",
-                        "engineerNameN": "",
-                        "engineerDocN": "",
-                        "architectNameN": "",
-                        "architectDocN": "",
-                        "uplaodSpaBoard": "",
-                        "uplaodSpaBoardDoc": ""
-                    }
-                ],
-                "designationDirector": [
-                    {
-                        "agreementDoc": "",
-                        "boardDoc": ""
-                    }
-                ],
-                "obtainedLicense": [
-                    {
-                        "registeredDoc": "",
-                        "boardDocY": "",
-                        "earlierDocY": "",
-                        "boardDocN": "",
-                        "earlierDocN": "",
-                        "technicalAssistanceAgreementDoc": ""
-                    }
-                ]
-            }
+          "pageName":"addInfo",
+          "devDetail": {
+              "licenceDetails": {
+                licenseDet:licenseDet
+              },
+              // "addInfo": {
+              //     "showDevTypeFields": "",
+              //     "cin_Number": "",
+              //     "companyName": "",
+              //     "incorporationDate": "",
+              //     "registeredAddress": "",
+              //     "email": "",
+              //     "registeredContactNo": "",
+              //     "gst_Number": "",
+              //     "directorsInformation": [
+              //         {
+              //             "contactNumber": "",
+              //             "din": "",
+              //             "name": ""
+              //         },
+              //         {
+              //             "contactNumber": "",
+              //             "din": "",
+              //             "name": ""
+              //         }
+              //     ],
+              //     "shareHoldingPatterens": [
+              //         {
+              //             "name": "",
+              //             "designition": "",
+              //             "percentage": "",
+              //             "uploadPdf": "",
+              //             "serialNumber": ""
+              //         }
+              //     ]
+              // },
+              // "aurthorizedUserInfoArray": [
+              //     {
+              //         "userName": "",
+              //         "name": "",
+              //         "gender": "",
+              //         "mobileNumber": "",
+              //         "emailId": "",
+              //         "dob": "",
+              //         "pan": "",
+              //         "active": "",
+              //         "type": "",
+              //         "password": "",
+              //         "tenantId": tenantId,
+              //         "roles": [
+              //             {
+              //                 "code": "CITIZEN",
+              //                 "name": "Citizen",
+              //                 "tenantId": "default"
+              //             }
+              //         ]
+              //     }
+              // ],
+              // "capacityDevelopAColony": {
+              //     "individualCertificateCA": "",
+              //     "companyBalanceSheet": "",
+              //     "paidUpCapital": "",
+              //     "networthPartners": "",
+              //     "networthFirm": "",
+              //     "capacityDevelopColonyHdruAct": [
+              //         {
+              //             "licenceNumber": "",
+              //             "nameOfDeveloper": "",
+              //             "purposeOfColony": "",
+              //             "sectorAndDevelopmentPlan": "",
+              //             "validatingLicence": ""
+              //         }
+              //     ],
+              //     "capacityDevelopColonyLawAct": [
+              //         {
+              //             "serialNumber": "",
+              //             "coloniesDeveloped": "",
+              //             "area": "",
+              //             "purpose": "",
+              //             "statusOfDevelopment": "",
+              //             "outstandingDues": ""
+              //         }
+              //     ],
+              //     "technicalExpertEngaged": [
+              //         {
+              //             "engineerName": "",
+              //             "engineerQualification": "",
+              //             "engineerSign": "",
+              //             "engineerDegree": "",
+              //             "architectName": "",
+              //             "architectQualification": "",
+              //             "architectSign": "",
+              //             "architectDegree": "",
+              //             "townPlannerName": "",
+              //             "townPlannerQualification": "",
+              //             "townPlannerSign": "",
+              //             "townPlannerDegree": "",
+              //             "existingDeveloperAgreement": "",
+              //             "existingDeveloperAgreementDoc": "",
+              //             "technicalCapacity": "",
+              //             "technicalCapacityDoc": "",
+              //             "engineerNameN": "",
+              //             "engineerDocN": "",
+              //             "architectNameN": "",
+              //             "architectDocN": "",
+              //             "uplaodSpaBoard": "",
+              //             "uplaodSpaBoardDoc": ""
+              //         }
+              //     ],
+              //     "designationDirector": [
+              //         {
+              //             "agreementDoc": "",
+              //             "boardDoc": ""
+              //         }
+              //     ],
+              //     "obtainedLicense": [
+              //         {
+              //             "registeredDoc": "",
+              //             "boardDocY": "",
+              //             "earlierDocY": "",
+              //             "boardDocN": "",
+              //             "earlierDocN": "",
+              //             "technicalAssistanceAgreementDoc": ""
+              //         }
+              //     ]
+              // }
+          }
         }
-      }
-      Digit.OBPSService.createDeveloper(developerRegisterData, tenantId)
+      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
+          console.log("DATA",result?.data?.id);
           setIsDisableForNext(false);
           let data = { 
             result: result, 
@@ -760,7 +749,7 @@ console.log(panValidation);
                   {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
                   />
                   {PanNumber&&PanNumber.length>0&&!PanNumber.match(Digit.Utils.getPattern('PAN'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
-                  {/* <h3 className="error-message" style={{color:"red"}}>{errorPanVal}</h3> */}
+                  <h3 className="error-message" style={{color:"red"}}>{PanValError}</h3>
               </Form.Group>
             </Row>
           </Card>
