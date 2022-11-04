@@ -201,10 +201,13 @@ public class DemandService {
 					: ONE_TIME_FEE_SERVICE_FIELD;
 
 			addRoundOffTaxHead(calculation.getTenantId(), demandDetails);
+
+			Map<String, String> additionalDetailsMap = new HashMap<>();
+			additionalDetailsMap.put("propertyId", property.getPropertyId());
 			demands.add(Demand.builder().consumerCode(consumerCode).demandDetails(demandDetails).payer(owner)
 					.minimumAmountPayable(minimumPayableAmount).tenantId(tenantId).taxPeriodFrom(fromDate)
 					.taxPeriodTo(toDate).consumerType("waterConnection").businessService(businessService)
-					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).build());
+					.status(StatusEnum.valueOf("ACTIVE")).billExpiryTime(expiryDate).additionalDetails(additionalDetailsMap).build());
 		}
 
 		String billingcycle = calculatorUtils.getBillingCycle(masterMap);

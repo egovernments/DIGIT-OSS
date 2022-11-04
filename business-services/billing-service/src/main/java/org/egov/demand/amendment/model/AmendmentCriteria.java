@@ -42,9 +42,8 @@ package org.egov.demand.amendment.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
-import org.egov.demand.amendment.model.enums.AmendmentStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -64,6 +63,12 @@ public class AmendmentCriteria {
 	private String tenantId;
 	
 	private String amendmentId;
+	
+	@Min(0)
+	private Integer offset;
+	
+	@Min(1)
+	private Integer limit;
 
 	@Default
 	private Set<String> consumerCode = new HashSet<>();
@@ -71,5 +76,6 @@ public class AmendmentCriteria {
 	@NotNull
 	private String businessService;
 
+	@Default
 	private Set<String> status = new HashSet<>();
 }

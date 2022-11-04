@@ -98,7 +98,11 @@ public class SewerageDaoImpl implements SewerageDao {
 
 	public void updateSewerageConnection(SewerageConnectionRequest sewerageConnectionRequest,
 			boolean isStateUpdatable) {
+		String reqAction = sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction();
 		if (isStateUpdatable) {
+			if (SWConstants.EXECUTE_DISCONNECTION.equalsIgnoreCase(reqAction)) {
+				sewerageConnectionRequest.getSewerageConnection().setStatus(Connection.StatusEnum.INACTIVE);
+			}
 			sewarageConnectionProducer.push(updateSewarageConnection, sewerageConnectionRequest);
 		} else if (SWConstants.EXECUTE_DISCONNECTION.equalsIgnoreCase(sewerageConnectionRequest.getSewerageConnection().getProcessInstance().getAction())) {
 			sewerageConnectionRequest.getSewerageConnection().setStatus(Connection.StatusEnum.INACTIVE);
@@ -144,6 +148,8 @@ public class SewerageDaoImpl implements SewerageDao {
 		String query = swQueryBuilder.getSearchQueryStringForPlainSearch(criteria, preparedStatement, requestInfo);
 		if (query == null)
 			return Collections.emptyList();
+		System.out.println("\nFinal Query ::" + query);
+
 		Boolean isOpenSearch = isSearchOpen(requestInfo.getUserInfo());
 		List<SewerageConnection> sewerageConnectionList = new ArrayList<>();
 		if(isOpenSearch)

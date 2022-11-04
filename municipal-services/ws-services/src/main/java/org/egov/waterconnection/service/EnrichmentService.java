@@ -16,6 +16,7 @@ import org.egov.waterconnection.repository.IdGenRepository;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
 import org.egov.waterconnection.repository.WaterDaoImpl;
 import org.egov.waterconnection.util.EncryptionDecryptionUtil;
+import org.egov.waterconnection.util.UnmaskingUtil;
 import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.web.models.*;
 import org.egov.waterconnection.web.models.Connection.StatusEnum;
@@ -77,6 +78,10 @@ public class EnrichmentService {
 
 	@Autowired
 	EncryptionDecryptionUtil encryptionDecryptionUtil;
+
+	@Autowired
+	private UnmaskingUtil unmaskingUtil;
+
 
 	/**
 	 * Enrich water connection
@@ -382,18 +387,24 @@ public class EnrichmentService {
 		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(connectionHolderIds.iterator().next())
 				.plainRequestFields(plainRequestFieldsList).build();
 
-		requestInfo.setPlainAccessRequest(plainAccessRequest);
+		userSearchRequest.getRequestInfo().setPlainAccessRequest(plainAccessRequest);
 
 		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+
 		//Re-setting the original PlainAccessRequest object that came from api request
 		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
+
 		// Encrypting and decrypting the data as per ws-service requirement
 		/* encrypt here */
-		/*userDetailResponse.setUser((List<OwnerInfo>) encryptionDecryptionUtil.encryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class));
+		userDetailResponse.setUser((List<OwnerInfo>) encryptionDecryptionUtil.encryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class));
 
-		*//* decrypt here *//*
-		userDetailResponse.setUser(encryptionDecryptionUtil.decryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, requestInfo));
-*/
+		/* decrypt here */
+		if (!criteria.getIsSkipLevelSearch()) {
+			if (criteria.getIsInternalCall())
+				userDetailResponse.setUser(encryptionDecryptionUtil.decryptObject(userDetailResponse.getUser(), "WnSConnectionOwnerDecrypDisabled", OwnerInfo.class, requestInfo));
+			else
+				userDetailResponse.setUser(encryptionDecryptionUtil.decryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, requestInfo));
+		}
 		enrichConnectionHolderInfo(userDetailResponse, waterConnectionList, requestInfo);
 	}
 
@@ -473,8 +484,11 @@ public class EnrichmentService {
 						if (creationDate1.compareTo(creationDate2) == -1) {
 							connectionHashMap.put(connection.getConnectionNo(), connection);
 						}
+					} else if (connection.getApplicationStatus().equals(WCConstants.MODIFIED_FINAL_STATE)) {
+							connectionHashMap.put(connection.getConnectionNo(), connection);
 					} else {
-						if (connection.getApplicationStatus().equals(WCConstants.MODIFIED_FINAL_STATE)) {
+						if (connection.getApplicationStatus().equals(WCConstants
+								.DISCONNECTION_FINAL_STATE)) {
 							connectionHashMap.put(connection.getConnectionNo(), connection);
 						}
 					}
@@ -523,7 +537,6 @@ public class EnrichmentService {
 				List<OwnerInfo> ownerInfoList = propertyToOwner.get(waterConnection.getPropertyId());
 				if (!CollectionUtils.isEmpty(ownerInfoList)) {
 					additionalDetail.put("ownerName", ownerInfoList.get(0).getName());
-					additionalDetail.put("ownerMobileNumber", ownerInfoList.get(0).getMobileNumber());
 				}
 				waterConnection.setAdditionalDetails(additionalDetail);
 				finalConnectionList.add(waterConnection);
@@ -541,22 +554,26 @@ public class EnrichmentService {
 
 		PlainAccessRequest apiPlainAccessRequest = requestInfo.getPlainAccessRequest();
 
-		ProcessInstance processInstance = null;
+		Map<String, ProcessInstance> processInstances = null;
+		Set<String> applicationNumbers = waterConnectionList.stream().map(WaterConnection::getApplicationNo).collect(Collectors.toSet());
+
+		if (criteria.getTenantId() != null)
+			processInstances = wfService.getProcessInstances(requestInfo, applicationNumbers,
+					criteria.getTenantId(), null);
+		else
+			processInstances = wfService.getProcessInstances(requestInfo, applicationNumbers,
+					requestInfo.getUserInfo().getTenantId(), null);
+
 		for (WaterConnection waterConnection : waterConnectionList) {
-			if (criteria.getTenantId() != null)
-				processInstance = wfService.getProcessInstance(requestInfo, waterConnection.getApplicationNo(),
-						criteria.getTenantId(), null);
-			else
-				processInstance = wfService.getProcessInstance(requestInfo, waterConnection.getApplicationNo(),
-						waterConnection.getTenantId(), null);
-			if (!ObjectUtils.isEmpty(processInstance)) {
+			if (!ObjectUtils.isEmpty(processInstances.get(waterConnection.getApplicationNo()))) {
+				ProcessInstance processInstance = processInstances.get(waterConnection.getApplicationNo());
 				waterConnection.getProcessInstance().setBusinessService(processInstance.getBusinessService());
 				waterConnection.getProcessInstance().setModuleName(processInstance.getModuleName());
 				if (!ObjectUtils.isEmpty(processInstance.getAssignes()))
 					waterConnection.getProcessInstance().setAssignes(processInstance.getAssignes());
 			}
-			requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 		}
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 	}
 
 	public void enrichDocumentDetails(List<WaterConnection> waterConnectionList, SearchCriteria criteria,
@@ -629,56 +646,12 @@ public class EnrichmentService {
 		if (CollectionUtils.isEmpty(connectionHolderIds))
 			return null;
 
-		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(waterConnection.getTenantId(), requestInfo);
-		userSearchRequest.setUuid(connectionHolderIds);
-		PlainAccessRequest apiPlainAccessRequest = userSearchRequest.getRequestInfo().getPlainAccessRequest();
-		List<String> plainRequestFieldsList = new ArrayList<String>() {{
-			add("mobileNumber");
-			add("guardian");
-			add("fatherOrHusbandName");
-			add("correspondenceAddress");
-			add("userName");
-			add("name");
-			add("gender");
-		}};
+		unmaskingUtil.getOwnerDetailsUnmasked(waterConnection, requestInfo);
+		UserDetailResponse userDetailResponse = new UserDetailResponse();
 
-		PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(connectionHolderIds.iterator().next())
-				.plainRequestFields(plainRequestFieldsList).build();
-
-		requestInfo.setPlainAccessRequest(plainAccessRequest);
-
-		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
-
-		int k;
-		for (OwnerInfo connectionHolder : waterConnection.getConnectionHolders()) {
-			k = 0;
-			for (OwnerInfo userDetail : userDetailResponse.getUser()) {
-				if (connectionHolder.getUuid().equals(userDetail.getUuid())) {
-					if (!connectionHolder.getFatherOrHusbandName().contains("*")) {
-						userDetailResponse.getUser().get(k).setFatherOrHusbandName(connectionHolder.getFatherOrHusbandName());
-					}
-					if (!connectionHolder.getMobileNumber().contains("*")) {
-						userDetailResponse.getUser().get(k).setMobileNumber(connectionHolder.getMobileNumber());
-					}
-					if (!connectionHolder.getCorrespondenceAddress().contains("*")) {
-						userDetailResponse.getUser().get(k).setCorrespondenceAddress(connectionHolder.getCorrespondenceAddress());
-					}
-					if (!connectionHolder.getUserName().contains("*")) {
-						userDetailResponse.getUser().get(k).setUserName(connectionHolder.getUserName());
-					}
-					if (!connectionHolder.getName().contains("*")) {
-						userDetailResponse.getUser().get(k).setName(connectionHolder.getName());
-					}
-					if (!connectionHolder.getGender().contains("*")) {
-						userDetailResponse.getUser().get(k).setGender(connectionHolder.getGender());
-					}
-				}
-				k++;
-			}
-		}
-		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 		List<WaterConnection> waterConnectionList = new ArrayList<>();
 		waterConnectionList.add(waterConnection);
+		userDetailResponse.setUser(waterConnection.getConnectionHolders());
 		enrichConnectionHolderInfo(userDetailResponse, waterConnectionList, requestInfo);
 		return userDetailResponse.getUser().get(0);
 	}

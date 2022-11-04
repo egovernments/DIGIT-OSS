@@ -67,6 +67,8 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 				currentWaterConnection.setRoadCuttingArea(rs.getFloat("roadcuttingarea"));
 				currentWaterConnection.setRoadType(rs.getString("roadtype"));
 				currentWaterConnection.setDisconnectionReason(rs.getString("disconnectionReason"));
+				currentWaterConnection.setIsDisconnectionTemporary(rs.getBoolean("isDisconnectionTemporary"));
+
 				PGobject pgObj = (PGobject) rs.getObject("additionaldetails");
 				this.setFull_count(rs.getInt("full_count"));
 				ObjectNode additionalDetails = null;
@@ -196,7 +198,7 @@ public class WaterRowMapper implements ResultSetExtractor<List<WaterConnection>>
 				isPrimaryOwner = null;
 			}
 			OwnerInfo connectionHolderInfo = OwnerInfo.builder()
-					.relationship(Relationship.fromValue(rs.getString("holderrelationship")))
+					.relationship(rs.getString("holderrelationship"))
 					.status(Status.fromValue(rs.getString("holderstatus"))).tenantId(rs.getString("holdertenantid"))
 					.ownerType(rs.getString("connectionholdertype")).isPrimaryOwner(isPrimaryOwner).uuid(uuid).build();
 			waterConnection.addConnectionHolderInfo(connectionHolderInfo);

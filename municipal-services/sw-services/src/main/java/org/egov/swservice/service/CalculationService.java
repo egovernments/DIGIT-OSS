@@ -1,15 +1,24 @@
 package org.egov.swservice.service;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.egov.swservice.web.models.CalculationCriteria;
-import org.egov.swservice.web.models.CalculationReq;
-import org.egov.swservice.web.models.CalculationRes;
-import org.egov.swservice.web.models.Property;
-import org.egov.swservice.web.models.SewerageConnectionRequest;
+import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
+import org.egov.swservice.config.SWConfiguration;
+import org.egov.swservice.repository.SewerageDao;
+import org.egov.swservice.util.SWConstants;
+import org.egov.swservice.web.models.*;
 import org.egov.swservice.repository.ServiceRequestRepository;
 import org.egov.swservice.util.SewerageServicesUtil;
+import org.egov.swservice.web.models.collection.Bill;
+import org.egov.swservice.web.models.collection.BillResponse;
+import org.egov.swservice.workflow.WorkflowIntegrator;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +26,9 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
+
+import static org.egov.swservice.util.SWConstants.PENDING_FOR_PAYMENT_STATUS_CODE;
+import static org.egov.swservice.util.SWConstants.WORKFLOW_NODUE_COMMENT;
 
 @Service
 @Slf4j
@@ -30,6 +42,21 @@ public class CalculationService {
 
 	@Autowired
 	private SewerageServicesUtil sewerageServicesUtil;
+
+	@Autowired
+	private WorkflowIntegrator wfIntegrator;
+
+	@Autowired
+	private SWConfiguration config;
+
+	@Autowired
+	private SewerageDao sewerageDao;
+
+	@Autowired
+	private SewerageService sewerageService;
+
+	@Autowired
+	private EnrichmentService enrichmentService;
 
 	/**
 	 * 
@@ -79,4 +106,31 @@ public class CalculationService {
 				}
 			}
 		}
+
+	public boolean fetchBill(String tenantId, String connectionNo, RequestInfo requestInfo) {
+		boolean isNoPayment = false;
+		try {
+			Object result = serviceRequestRepository.fetchResult(getFetchBillURL(tenantId, connectionNo)
+					, RequestInfoWrapper.builder().requestInfo(requestInfo).build());
+			BillResponse billResponse = mapper.convertValue(result, BillResponse.class);
+			for (Bill bill : billResponse.getBill()) {
+				if (bill.getTotalAmount().equals(BigDecimal.valueOf(0.0))) {
+					isNoPayment = true;
+				}
+			}
+		} catch (Exception ex) {
+			throw new CustomException("SEWERAGE_FETCH_BILL_ERRORCODE", "Error while fetching the bill" + ex.getMessage());
+		}
+		return isNoPayment;
+	}
+	private StringBuilder getFetchBillURL(String tenantId, String connectionNo) {
+
+		return new StringBuilder().append(config.getBillingServiceHost())
+				.append(config.getFetchBillEndPoint()).append(SWConstants.URL_PARAMS_SEPARATER)
+				.append(SWConstants.TENANT_ID_FIELD_FOR_SEARCH_URL).append(tenantId)
+				.append(SWConstants.SEPARATER).append(SWConstants.CONSUMER_CODE_SEARCH_FIELD_NAME)
+				.append(connectionNo).append(SWConstants.SEPARATER)
+				.append(SWConstants.BUSINESSSERVICE_FIELD_FOR_SEARCH_URL)
+				.append(SWConstants.SEWERAGE_TAX_SERVICE_CODE);
+	}
 }

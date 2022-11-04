@@ -365,4 +365,16 @@ public class TradeUtil {
 		return tenantIdToReminderPeriod;
 		
 	}
+
+    public Object getBillingSlabs(RequestInfo requestInfo, String tenantId) {
+        Map<String, Object> billingSlabSearchReq = new HashMap<>();
+        billingSlabSearchReq.put("RequestInfo", requestInfo);
+        Object result = serviceRequestRepository.fetchResult(getBillingSlabUrl(tenantId), billingSlabSearchReq);
+        return result;
+    }
+
+    public StringBuilder getBillingSlabUrl(String tenantId) {
+        return new StringBuilder().append(config.getCalculatorHost()).append(config.getBillingSlabEndPoint())
+                .append("?").append("tenantId=").append(tenantId);
+    }
 }

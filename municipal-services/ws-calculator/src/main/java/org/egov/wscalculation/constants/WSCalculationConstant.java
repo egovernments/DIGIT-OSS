@@ -332,4 +332,14 @@ public class WSCalculationConstant {
 
 	public static final String NEW_WATER_CONNECTION = "NEW_WATER_CONNECTION";
 
+	public static final String NEWWATER_BUSINESS_SERVICE = "NewWS1";
+
+	public static final String MODIFY_BUSINESS_SERVICE = "ModifyWSConnection";
+
+	public static final String DISCONNECTION_BUSINESS_SERVICE = "DisconnectWSConnection";
+
+	public static final String PENDING_FOR_DISCONNECTION_EXECUTION = "PENDING_FOR_DISCONNECTION_EXECUTION";
+
+	public static final String DISCONNECTION_EXECUTED = "DISCONNECTION_EXECUTED";
+
 }

@@ -4,7 +4,7 @@
 
 	<groupId>com.example</groupId>
 	<artifactId>sw-services</artifactId>
-	<version>1.4.5-SNAPSHOT</version>
+	<version>1.7.4-SNAPSHOT</version>
 	<name>sw_service</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -77,7 +77,7 @@
 		<dependency>
 			<groupId>org.egov</groupId>
 			<artifactId>enc-client</artifactId>
-			<version>2.0.1-SNAPSHOT</version>
+			<version>2.0.4-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.springframework.kafka</groupId>

@@ -39,6 +39,13 @@ public class SewerageConnectionRequest {
 	@JsonProperty("disconnectRequest")
 	private boolean disconnectRequest;
 
+	@Builder.Default
+	@JsonProperty("isCreateCall")
+	private boolean isCreateCall = false;
+
+	@JsonProperty("disconnectRequest")
+	private boolean disconnectRequest;
+
 	public SewerageConnectionRequest requestInfo(RequestInfo requestInfo) {
 		this.requestInfo = requestInfo;
 		return this;

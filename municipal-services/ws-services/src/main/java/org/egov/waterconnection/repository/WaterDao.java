@@ -17,7 +17,9 @@ public interface WaterDao {
 	
 	void updateWaterConnection(WaterConnectionRequest waterConnectionRequest, boolean isStateUpdatable);
 	
-	WaterConnectionResponse getWaterConnectionListForPlaneSearch(SearchCriteria criteria,RequestInfo requestInfo);
+
+	WaterConnectionResponse getWaterConnectionListForPlainSearch(SearchCriteria criteria,RequestInfo requestInfo);
+
 
 	void updateOldWaterConnections(WaterConnectionRequest waterConnectionRequest);
 

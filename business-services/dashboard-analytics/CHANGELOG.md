@@ -2,7 +2,9 @@
 
 All notable changes to this module will be documented in this file.
 
+## 1.1.8 - 2022-11-04
 
+- caching added to search API for performance improvement
 
 ## 1.1.7 - 2022-03-02
 - LineChart ResponseHandler modified to consider the empty value for particular interval 

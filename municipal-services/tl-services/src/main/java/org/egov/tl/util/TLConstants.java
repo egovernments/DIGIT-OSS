@@ -419,6 +419,14 @@ public class TLConstants {
     
     public static final String RENEWED_COUNT = "renewedCount";
 
+    public static final String BILLINGSLAB_TRADETYPE_JSONPATH_CODE = "$.billingSlab.*.tradeType";
+
+    public static final String BILLINGSLAB_TRADETYPE_JSONPATH_UOM = "$.billingSlab.*.uom";
+
+    public static final String BILLINGSLAB_ACCESSORY_JSONPATH_CODE = "$.billingSlab.*.accessoryCategory";
+
+    public static final String BILLINGSLAB_ACCESSORY_JSONPATH_UOM = "$.billingSlab.*.uom";
+
     public TLConstants() {}
 
 

@@ -26,4 +26,14 @@ public class InboxElasticSearchCriteria {
     @JsonProperty("toDate")
     private long toDate;
 
+    @JsonProperty("offset")
+    private Integer offset;
+
+    @JsonProperty("limit")
+    @Max(value = 300)
+    private Integer limit;
+
+    @JsonProperty("sortOrder")
+    private String sortOrder;
+
 }

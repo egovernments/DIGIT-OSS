@@ -121,7 +121,7 @@ public class ElasticSearchQueryBuilder {
             List<JsonNode> clauses = new LinkedList<>();
             List<JsonNode> mobileClause = new LinkedList<>();
             //encrypting criteria for mobileNumber
-            /*try {
+            try {
                 if (criteria == null) {
                     return null;
                 }
@@ -133,7 +133,7 @@ public class ElasticSearchQueryBuilder {
             } catch (Exception e) {
                 log.error("Error occurred while encrypting W&S search criteria", e);
                 throw new CustomException("WnS_CRITERIA_ENCRYPTION_ERROR", "Unknown error occurred in encryption process");
-            }*/
+            }
             HashMap<String, Object> moduleSearchCriteria = criteria.getModuleSearchCriteria();
             //Adding "must" terms for the search parameters in criteria
             if (!StringUtils.isEmpty(moduleSearchCriteria.get("mobileNumber"))) {

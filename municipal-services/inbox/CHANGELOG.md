@@ -2,6 +2,14 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.2.2 - 2022-09-10
+
+- Added elastic search call for privacy audit report.
+
+## 1.2.1 - 2022-08-29
+
+- Added serviceSLA for W&S inbox objects
+
 ## 1.2.0 - 2022-08-18
 
 - Support Inbox for  WnS service

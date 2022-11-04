@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.5">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Collections" enabled="true">
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <stringProp name="TestPlan.comments"></stringProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <stringProp name="TestPlan.user_define_classpath"></stringProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Http URL/API Test" enabled="true">
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" enabled="true">
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+          <stringProp name="LoopController.loops">1</stringProp>
+        </elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+        <boolProp name="ThreadGroup.scheduler">false</boolProp>
+        <stringProp name="ThreadGroup.duration">0</stringProp>
+        <stringProp name="ThreadGroup.delay">0</stringProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+      </ThreadGroup>
+      <hashTree>
+        <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="Cookie Manager" enabled="true">
+          <collectionProp name="CookieManager.cookies"/>
+          <boolProp name="CookieManager.clearEachIteration">false</boolProp>
+          <boolProp name="CookieManager.controlledByThreadGroup">false</boolProp>
+        </CookieManager>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="payment create" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+	&quot;RequestInfo&quot;: {&#xd;
+    &quot;apiId&quot;: &quot;string&quot;,&#xd;
+    &quot;ver&quot;: &quot;string&quot;,&#xd;
+    &quot;ts&quot;: 0,&#xd;
+    &quot;action&quot;: &quot;string&quot;,&#xd;
+    &quot;did&quot;: &quot;string&quot;,&#xd;
+    &quot;key&quot;: &quot;string&quot;,&#xd;
+    &quot;msgId&quot;: &quot;string&quot;,&#xd;
+    &quot;authToken&quot;: &quot;37dcdbcc-db50-4ac7-a8c3-1889ec8622c2&quot;&#xd;
+    },&#xd;
+  &quot;Payment&quot;:{&#xd;
+  	&quot;tenantId&quot;:&quot;pb.amritsar&quot;,&#xd;
+  	&quot;instrumentNumber&quot;:&quot;dsd&quot;,&#xd;
+  	&quot;instrumentDate&quot;:&quot;112232323&quot;,&#xd;
+  	&quot;totalAmountPaid&quot;:100,&#xd;
+  	&quot;paymentMode&quot;:&quot;CASH&quot;,&#xd;
+  	&quot;paidBy&quot;:&quot;xyz&quot;,&#xd;
+  	&quot;mobileNumber&quot;:&quot;7878787878&quot;,&#xd;
+  	&quot;paymentDetails&quot;:[{&#xd;
+  		&quot;businessService&quot;:&quot;SW&quot;,  // add respective businessService&#xd;
+  		&quot;billId&quot;:&quot;6a141863-11a1-4885-840d-ba8f25418603&quot;,  //add bill id&#xd;
+  		&quot;totalAmountPaid&quot;: 100&#xd;
+  	}&#xd;
+  		]&#xd;
+  	&#xd;
+  }&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">qa.digit.org</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/collection-services/payments/_create</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="Content-Type" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="payment search_consumercode" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;RequestInfo&quot;: {&#xd;
+        &quot;apiId&quot;: &quot;string&quot;,&#xd;
+        &quot;ver&quot;: &quot;string&quot;,&#xd;
+        &quot;ts&quot;: 0,&#xd;
+        &quot;action&quot;: &quot;string&quot;,&#xd;
+        &quot;did&quot;: &quot;string&quot;,&#xd;
+        &quot;key&quot;: &quot;string&quot;,&#xd;
+        &quot;msgId&quot;: &quot;string&quot;,&#xd;
+        &quot;authToken&quot;: &quot;4c203698-f4f0-443c-b058-d393a604a971&quot;,&#xd;
+        &quot;userInfo&quot;: {&quot;id&quot;:12022,&quot;uuid&quot;:&quot;4b3c9a8b-a6e6-4e84-99dd-19c883a876aa&quot;,&quot;userName&quot;:&quot;QAMCS&quot;,&quot;name&quot;:&quot;Misc Collector&quot;,&quot;mobileNumber&quot;:&quot;9666554533&quot;,&quot;emailId&quot;:&quot;gubbi678@gmail.com&quot;,&quot;locale&quot;:null,&quot;type&quot;:&quot;EMPLOYEE&quot;,&quot;roles&quot;:[{&quot;name&quot;:&quot;CSC Collection Operator&quot;,&quot;code&quot;:&quot;CSC_COLL_OPERATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Employee&quot;,&quot;code&quot;:&quot;EMPLOYEE&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collections Receipt Creator&quot;,&quot;code&quot;:&quot;COLL_RECEIPT_CREATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:null,&quot;code&quot;:&quot;ULB Operator&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Customer Support Representative&quot;,&quot;code&quot;:&quot;CSR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collections Remitter&quot;,&quot;code&quot;:&quot;COLL_REMIT_TO_BANK&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collection Report Viewer&quot;,&quot;code&quot;:&quot;COLL_REP_VIEW&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Universal Collection Employee&quot;,&quot;code&quot;:&quot;UC_EMP&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Abstract Estimate Creator&quot;,&quot;code&quot;:&quot;AE_CREATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Counter Employee&quot;,&quot;code&quot;:&quot;CEMP&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Admin of a ULB&quot;,&quot;code&quot;:&quot;CITY_ADMIN&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;State Administrator&quot;,&quot;code&quot;:&quot;STADMIN&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Grievance Officer&quot;,&quot;code&quot;:&quot;GO&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Super User&quot;,&quot;code&quot;:&quot;SUPERUSER&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;FSM Payment Collector&quot;,&quot;code&quot;:&quot;FSM_COLLECTOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Bank Collection Operator&quot;,&quot;code&quot;:&quot;BANK_COLL_OPERATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collection Operator&quot;,&quot;code&quot;:&quot;COLL_OPERATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;}],&quot;active&quot;:true,&quot;tenantId&quot;:&quot;pb.amritsar&quot;,&quot;permanentCity&quot;:&quot;Amritsar&quot;}&#xd;
+    }&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">qa.digit.org</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/collection-services/payments/SW/_search?tenantId=pb.amritsar&amp;consumerCodes=SW/107/2022-23/438239</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="Content-Type" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="payment update" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;RequestInfo&quot;: {&#xd;
+        &quot;apiId&quot;: &quot;string&quot;,&#xd;
+        &quot;ver&quot;: &quot;string&quot;,&#xd;
+        &quot;ts&quot;: 0,&#xd;
+        &quot;action&quot;: &quot;string&quot;,&#xd;
+        &quot;did&quot;: &quot;string&quot;,&#xd;
+        &quot;key&quot;: &quot;string&quot;,&#xd;
+        &quot;msgId&quot;: &quot;string&quot;,&#xd;
+        &quot;authToken&quot;: &quot;${authToken_amritsar}&quot;,&#xd;
+        &quot;userInfo&quot;: {&#xd;
+            &quot;id&quot;: 12022,&#xd;
+            &quot;uuid&quot;: &quot;4b3c9a8b-a6e6-4e84-99dd-19c883a876aa&quot;,&#xd;
+            &quot;userName&quot;: &quot;QAMCS&quot;,&#xd;
+            &quot;name&quot;: &quot;Misc Collector&quot;,&#xd;
+            &quot;mobileNumber&quot;: &quot;9666554533&quot;,&#xd;
+            &quot;emailId&quot;: &quot;gubbi678@gmail.com&quot;,&#xd;
+            &quot;locale&quot;: null,&#xd;
+            &quot;type&quot;: &quot;EMPLOYEE&quot;,&#xd;
+            &quot;roles&quot;: [&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;CSC Collection Operator&quot;,&#xd;
+                    &quot;code&quot;: &quot;CSC_COLL_OPERATOR&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Employee&quot;,&#xd;
+                    &quot;code&quot;: &quot;EMPLOYEE&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Collections Receipt Creator&quot;,&#xd;
+                    &quot;code&quot;: &quot;COLL_RECEIPT_CREATOR&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: null,&#xd;
+                    &quot;code&quot;: &quot;ULB Operator&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Customer Support Representative&quot;,&#xd;
+                    &quot;code&quot;: &quot;CSR&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Collections Remitter&quot;,&#xd;
+                    &quot;code&quot;: &quot;COLL_REMIT_TO_BANK&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Collection Report Viewer&quot;,&#xd;
+                    &quot;code&quot;: &quot;COLL_REP_VIEW&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Universal Collection Employee&quot;,&#xd;
+                    &quot;code&quot;: &quot;UC_EMP&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Abstract Estimate Creator&quot;,&#xd;
+                    &quot;code&quot;: &quot;AE_CREATOR&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Counter Employee&quot;,&#xd;
+                    &quot;code&quot;: &quot;CEMP&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Admin of a ULB&quot;,&#xd;
+                    &quot;code&quot;: &quot;CITY_ADMIN&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;State Administrator&quot;,&#xd;
+                    &quot;code&quot;: &quot;STADMIN&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Grievance Officer&quot;,&#xd;
+                    &quot;code&quot;: &quot;GO&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Super User&quot;,&#xd;
+                    &quot;code&quot;: &quot;SUPERUSER&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;FSM Payment Collector&quot;,&#xd;
+                    &quot;code&quot;: &quot;FSM_COLLECTOR&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Bank Collection Operator&quot;,&#xd;
+                    &quot;code&quot;: &quot;BANK_COLL_OPERATOR&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                },&#xd;
+                {&#xd;
+                    &quot;name&quot;: &quot;Collection Operator&quot;,&#xd;
+                    &quot;code&quot;: &quot;COLL_OPERATOR&quot;,&#xd;
+                    &quot;tenantId&quot;: &quot;pb.amritsar&quot;&#xd;
+                }&#xd;
+            ],&#xd;
+            &quot;active&quot;: true,&#xd;
+            &quot;tenantId&quot;: &quot;pb.amritsar&quot;,&#xd;
+            &quot;permanentCity&quot;: &quot;Amritsar&quot;&#xd;
+        }&#xd;
+    },&#xd;
+    &quot;paymentWorkflows&quot;: [&#xd;
+        {&#xd;
+            &quot;paymentId&quot;: &quot;a5aa8f22-dfd1-4065-ad56-6531a320d530&quot;,&#xd;
+            &quot;action&quot;: &quot;CANCEL&quot;,&#xd;
+            &quot;tenantId&quot;: &quot;pb.amritsar&quot;,&#xd;
+            &quot;reason&quot;: &quot;official order&quot;,&#xd;
+            &quot;additionalDetails&quot;: null&#xd;
+        }&#xd;
+    ]&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">qa.digit.org</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/collection-services/payments/SW/_workflow</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers"/>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="payments search_receiptNumbers" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;RequestInfo&quot;: {&#xd;
+        &quot;apiId&quot;: &quot;string&quot;,&#xd;
+        &quot;ver&quot;: &quot;string&quot;,&#xd;
+        &quot;ts&quot;: 0,&#xd;
+        &quot;action&quot;: &quot;string&quot;,&#xd;
+        &quot;did&quot;: &quot;string&quot;,&#xd;
+        &quot;key&quot;: &quot;string&quot;,&#xd;
+        &quot;msgId&quot;: &quot;string&quot;,&#xd;
+        &quot;authToken&quot;: &quot;4c203698-f4f0-443c-b058-d393a604a971&quot;,&#xd;
+        &quot;userInfo&quot;: {&quot;id&quot;:12022,&quot;uuid&quot;:&quot;4b3c9a8b-a6e6-4e84-99dd-19c883a876aa&quot;,&quot;userName&quot;:&quot;QAMCS&quot;,&quot;name&quot;:&quot;Misc Collector&quot;,&quot;mobileNumber&quot;:&quot;9666554533&quot;,&quot;emailId&quot;:&quot;gubbi678@gmail.com&quot;,&quot;locale&quot;:null,&quot;type&quot;:&quot;EMPLOYEE&quot;,&quot;roles&quot;:[{&quot;name&quot;:&quot;CSC Collection Operator&quot;,&quot;code&quot;:&quot;CSC_COLL_OPERATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Employee&quot;,&quot;code&quot;:&quot;EMPLOYEE&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collections Receipt Creator&quot;,&quot;code&quot;:&quot;COLL_RECEIPT_CREATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:null,&quot;code&quot;:&quot;ULB Operator&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Customer Support Representative&quot;,&quot;code&quot;:&quot;CSR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collections Remitter&quot;,&quot;code&quot;:&quot;COLL_REMIT_TO_BANK&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collection Report Viewer&quot;,&quot;code&quot;:&quot;COLL_REP_VIEW&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Universal Collection Employee&quot;,&quot;code&quot;:&quot;UC_EMP&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Abstract Estimate Creator&quot;,&quot;code&quot;:&quot;AE_CREATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Counter Employee&quot;,&quot;code&quot;:&quot;CEMP&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Admin of a ULB&quot;,&quot;code&quot;:&quot;CITY_ADMIN&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;State Administrator&quot;,&quot;code&quot;:&quot;STADMIN&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Grievance Officer&quot;,&quot;code&quot;:&quot;GO&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Super User&quot;,&quot;code&quot;:&quot;SUPERUSER&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;FSM Payment Collector&quot;,&quot;code&quot;:&quot;FSM_COLLECTOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Bank Collection Operator&quot;,&quot;code&quot;:&quot;BANK_COLL_OPERATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collection Operator&quot;,&quot;code&quot;:&quot;COLL_OPERATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;}],&quot;active&quot;:true,&quot;tenantId&quot;:&quot;pb.amritsar&quot;,&quot;permanentCity&quot;:&quot;Amritsar&quot;}&#xd;
+    }&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">qa.digit.org</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/collection-services/payments/SW/_search?tenantId=pb.amritsar&amp;receiptNumbers=SW/2022-23/1356064</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="Content-Type" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="payments search_transactionNumber" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;RequestInfo&quot;: {&#xd;
+        &quot;apiId&quot;: &quot;string&quot;,&#xd;
+        &quot;ver&quot;: &quot;string&quot;,&#xd;
+        &quot;ts&quot;: 0,&#xd;
+        &quot;action&quot;: &quot;string&quot;,&#xd;
+        &quot;did&quot;: &quot;string&quot;,&#xd;
+        &quot;key&quot;: &quot;string&quot;,&#xd;
+        &quot;msgId&quot;: &quot;string&quot;,&#xd;
+        &quot;authToken&quot;: &quot;4c203698-f4f0-443c-b058-d393a604a971&quot;,&#xd;
+        &quot;userInfo&quot;: {&quot;id&quot;:12022,&quot;uuid&quot;:&quot;4b3c9a8b-a6e6-4e84-99dd-19c883a876aa&quot;,&quot;userName&quot;:&quot;QAMCS&quot;,&quot;name&quot;:&quot;Misc Collector&quot;,&quot;mobileNumber&quot;:&quot;9666554533&quot;,&quot;emailId&quot;:&quot;gubbi678@gmail.com&quot;,&quot;locale&quot;:null,&quot;type&quot;:&quot;EMPLOYEE&quot;,&quot;roles&quot;:[{&quot;name&quot;:&quot;CSC Collection Operator&quot;,&quot;code&quot;:&quot;CSC_COLL_OPERATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Employee&quot;,&quot;code&quot;:&quot;EMPLOYEE&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collections Receipt Creator&quot;,&quot;code&quot;:&quot;COLL_RECEIPT_CREATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:null,&quot;code&quot;:&quot;ULB Operator&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Customer Support Representative&quot;,&quot;code&quot;:&quot;CSR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collections Remitter&quot;,&quot;code&quot;:&quot;COLL_REMIT_TO_BANK&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collection Report Viewer&quot;,&quot;code&quot;:&quot;COLL_REP_VIEW&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Universal Collection Employee&quot;,&quot;code&quot;:&quot;UC_EMP&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Abstract Estimate Creator&quot;,&quot;code&quot;:&quot;AE_CREATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Counter Employee&quot;,&quot;code&quot;:&quot;CEMP&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Admin of a ULB&quot;,&quot;code&quot;:&quot;CITY_ADMIN&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;State Administrator&quot;,&quot;code&quot;:&quot;STADMIN&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Grievance Officer&quot;,&quot;code&quot;:&quot;GO&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Super User&quot;,&quot;code&quot;:&quot;SUPERUSER&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;FSM Payment Collector&quot;,&quot;code&quot;:&quot;FSM_COLLECTOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Bank Collection Operator&quot;,&quot;code&quot;:&quot;BANK_COLL_OPERATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collection Operator&quot;,&quot;code&quot;:&quot;COLL_OPERATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;}],&quot;active&quot;:true,&quot;tenantId&quot;:&quot;pb.amritsar&quot;,&quot;permanentCity&quot;:&quot;Amritsar&quot;}&#xd;
+    }&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">qa.digit.org</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/collection-services/payments/SW/_search?tenantId=pb.amritsar&amp;transactionNumber=amritsar2101641377</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="Content-Type" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="payments search_mobileNumber" enabled="true">
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;RequestInfo&quot;: {&#xd;
+        &quot;apiId&quot;: &quot;string&quot;,&#xd;
+        &quot;ver&quot;: &quot;string&quot;,&#xd;
+        &quot;ts&quot;: 0,&#xd;
+        &quot;action&quot;: &quot;string&quot;,&#xd;
+        &quot;did&quot;: &quot;string&quot;,&#xd;
+        &quot;key&quot;: &quot;string&quot;,&#xd;
+        &quot;msgId&quot;: &quot;string&quot;,&#xd;
+        &quot;authToken&quot;: &quot;4c203698-f4f0-443c-b058-d393a604a971&quot;,&#xd;
+        &quot;userInfo&quot;: {&quot;id&quot;:12022,&quot;uuid&quot;:&quot;4b3c9a8b-a6e6-4e84-99dd-19c883a876aa&quot;,&quot;userName&quot;:&quot;QAMCS&quot;,&quot;name&quot;:&quot;Misc Collector&quot;,&quot;mobileNumber&quot;:&quot;9666554533&quot;,&quot;emailId&quot;:&quot;gubbi678@gmail.com&quot;,&quot;locale&quot;:null,&quot;type&quot;:&quot;EMPLOYEE&quot;,&quot;roles&quot;:[{&quot;name&quot;:&quot;CSC Collection Operator&quot;,&quot;code&quot;:&quot;CSC_COLL_OPERATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Employee&quot;,&quot;code&quot;:&quot;EMPLOYEE&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collections Receipt Creator&quot;,&quot;code&quot;:&quot;COLL_RECEIPT_CREATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:null,&quot;code&quot;:&quot;ULB Operator&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Customer Support Representative&quot;,&quot;code&quot;:&quot;CSR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collections Remitter&quot;,&quot;code&quot;:&quot;COLL_REMIT_TO_BANK&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collection Report Viewer&quot;,&quot;code&quot;:&quot;COLL_REP_VIEW&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Universal Collection Employee&quot;,&quot;code&quot;:&quot;UC_EMP&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Abstract Estimate Creator&quot;,&quot;code&quot;:&quot;AE_CREATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Counter Employee&quot;,&quot;code&quot;:&quot;CEMP&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Admin of a ULB&quot;,&quot;code&quot;:&quot;CITY_ADMIN&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;State Administrator&quot;,&quot;code&quot;:&quot;STADMIN&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Grievance Officer&quot;,&quot;code&quot;:&quot;GO&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Super User&quot;,&quot;code&quot;:&quot;SUPERUSER&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;FSM Payment Collector&quot;,&quot;code&quot;:&quot;FSM_COLLECTOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Bank Collection Operator&quot;,&quot;code&quot;:&quot;BANK_COLL_OPERATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;},{&quot;name&quot;:&quot;Collection Operator&quot;,&quot;code&quot;:&quot;COLL_OPERATOR&quot;,&quot;tenantId&quot;:&quot;pb.amritsar&quot;}],&quot;active&quot;:true,&quot;tenantId&quot;:&quot;pb.amritsar&quot;,&quot;permanentCity&quot;:&quot;Amritsar&quot;}&#xd;
+    }&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">qa.digit.org</stringProp>
+          <stringProp name="HTTPSampler.port"></stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
+          <stringProp name="HTTPSampler.contentEncoding"></stringProp>
+          <stringProp name="HTTPSampler.path">/collection-services/payments/SW/_search?tenantId=pb.amritsar&amp;mobileNumber=7878787878</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+          <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
+          <stringProp name="HTTPSampler.connect_timeout"></stringProp>
+          <stringProp name="HTTPSampler.response_timeout"></stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+            <collectionProp name="HeaderManager.headers">
+              <elementProp name="Content-Type" elementType="Header">
+                <stringProp name="Header.name">Content-Type</stringProp>
+                <stringProp name="Header.value">application/json</stringProp>
+              </elementProp>
+            </collectionProp>
+          </HeaderManager>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

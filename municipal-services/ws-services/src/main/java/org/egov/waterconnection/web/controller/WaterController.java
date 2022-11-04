@@ -44,6 +44,7 @@ public class WaterController {
 	@RequestMapping(value = "/_create", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<WaterConnectionResponse> createWaterConnection(
 			@Valid @RequestBody WaterConnectionRequest waterConnectionRequest) {
+		waterConnectionRequest.setCreateCall(true);
 		List<WaterConnection> waterConnection = waterService.createWaterConnection(waterConnectionRequest);
 		WaterConnectionResponse response = WaterConnectionResponse.builder().waterConnection(waterConnection)
 				.responseInfo(responseInfoFactory
@@ -78,10 +79,10 @@ public class WaterController {
 	}
 
 	@RequestMapping(value = "/_plainsearch", method = RequestMethod.POST)
-	public ResponseEntity<WaterConnectionResponse> planeSearch(
+	public ResponseEntity<WaterConnectionResponse> plainSearch(
 			@Valid @RequestBody RequestInfoWrapper requestInfoWrapper,
 			@Valid @ModelAttribute SearchCriteria criteria) {
-		WaterConnectionResponse response = waterService.planeSearch(criteria, requestInfoWrapper.getRequestInfo());
+		WaterConnectionResponse response = waterService.plainSearch(criteria, requestInfoWrapper.getRequestInfo());
 		response.setResponseInfo(
 				responseInfoFactory.createResponseInfoFromRequestInfo(requestInfoWrapper.getRequestInfo(), true));
 		return new ResponseEntity<>(response, HttpStatus.OK);

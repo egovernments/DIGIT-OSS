@@ -1,11 +1,31 @@
 # Change log
 All notable changes to this module will be documented in this file.
 
-## 1.4.5 - 2022-07-27
+## 1.7.4 - 2022-11-03
+
+- Added the logic for update workflow if payement is 0
+
+## 1.7.3 - 2022-11-03
+
+- Optimised multiple workflow calls happening in _search api
+
+## 1.7.2 - 2022-11-03
+
+- Updated logic for _plainsearch api
+
+## 1.7.1 - 2022-11-03
+
+- Incorporated privacy decryption for notification flow for disconnection water applications
+
+## 1.7.0 - 2022-11-03
+
+- Notifications added for disconnection flow for water applications
+
+## 1.6.0 - 2022-08-27
 
 - Added privacy changes for water applications
 
-## 1.4.4 - 2022-07-07
+## 1.5.0 - 2022-07-07
 
 - Added disconnection flow for water applications
 

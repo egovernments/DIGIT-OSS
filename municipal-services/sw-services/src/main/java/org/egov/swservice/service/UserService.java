@@ -78,6 +78,9 @@ public class UserService {
 
 					StringBuilder uri = new StringBuilder(configuration.getUserHost())
 							.append(configuration.getUserContextPath()).append(configuration.getUserUpdateEndPoint());
+					if (userDetailResponse.getUser() != null && holderInfo.getRelationship().contains("*")) {
+						holderInfo.setRelationship(userDetailResponse.getUser().get(0).getRelationship());
+					}
 					userDetailResponse = userCall(new ConnectionUserRequest(request.getRequestInfo(), holderInfo), uri);
 					if (userDetailResponse.getUser().get(0).getUuid() == null) {
 						throw new CustomException("INVALID_USER_RESPONSE", "The user updated has uuid as null");
@@ -109,31 +112,48 @@ public class UserService {
 		Set<String> listOfMobileNumbers = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders()
 				.stream().map(OwnerInfo::getMobileNumber).collect(Collectors.toSet());
 
-		OwnerInfo maskedConnectionHolder = new OwnerInfo();
-		OwnerInfo plainConnectionHolderFromDb = new OwnerInfo();
+		OwnerInfo maskedConnectionHolder = null;
+		OwnerInfo plainConnectionHolderFromDb = null;
 		OwnerInfo connectionHolder = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0);
 
-		SewerageConnection newSewerageConnection = new SewerageConnection();
-		if (!listOfMobileNumbers.isEmpty() &&
-				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).getMobileNumber().contains("*")) {
+		SewerageConnection newSewerageConnection;
+		/*
+		 * Replacing the requestBody connectionHolder data and data from dB for those fields that come as masked (data containing "*" is
+		 * identified as masked) in requestBody
+		 *
+		 * */
+		if (!listOfMobileNumbers.isEmpty()) {
 			newSewerageConnection = sewerageConnectionRequest.getSewerageConnection();
-			maskedConnectionHolder = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0);
-			plainConnectionHolderFromDb = enrichmentService.getConnectionHolderDetailsForUpdateCall(newSewerageConnection,
-					sewerageConnectionRequest.getRequestInfo());
-			if (maskedConnectionHolder != null && maskedConnectionHolder.getMobileNumber().contains("*")) {
-				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).setMobileNumber(plainConnectionHolderFromDb.getMobileNumber());
-			}
-			if (maskedConnectionHolder != null && maskedConnectionHolder.getFatherOrHusbandName().contains("*")) {
-				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).setFatherOrHusbandName(plainConnectionHolderFromDb.getFatherOrHusbandName());
-			}
-			if (maskedConnectionHolder != null && maskedConnectionHolder.getCorrespondenceAddress().contains("*")) {
-				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).setCorrespondenceAddress(plainConnectionHolderFromDb.getCorrespondenceAddress());
-			}
-			if (maskedConnectionHolder != null && maskedConnectionHolder.getUserName().contains("*")) {
-				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).setUserName(plainConnectionHolderFromDb.getUserName());
-			}
-			if (maskedConnectionHolder != null && maskedConnectionHolder.getName().contains("*")) {
-				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().get(0).setName(plainConnectionHolderFromDb.getName());
+			maskedConnectionHolder = connectionHolder;
+
+
+			/*
+			 * If it is not _create call/connectionNo already exists (for Modify and Disconnection Applications),
+			 * then a connHolder comparison with existing connHolder for application happens
+			 * */
+
+			if (!sewerageConnectionRequest.isCreateCall() || !StringUtils.isEmpty(newSewerageConnection.getConnectionNo())) {
+				// Check if connHolder already exists
+				if (maskedConnectionHolder != null && !StringUtils.isEmpty(maskedConnectionHolder.getUuid())) {
+
+					plainConnectionHolderFromDb = enrichmentService.getConnectionHolderDetailsForUpdateCall(newSewerageConnection,
+							sewerageConnectionRequest.getRequestInfo());
+					if (maskedConnectionHolder != null && maskedConnectionHolder.getMobileNumber().contains("*")) {
+						connectionHolder.setMobileNumber(plainConnectionHolderFromDb.getMobileNumber());
+					}
+					if (maskedConnectionHolder != null && maskedConnectionHolder.getFatherOrHusbandName().contains("*")) {
+						connectionHolder.setFatherOrHusbandName(plainConnectionHolderFromDb.getFatherOrHusbandName());
+					}
+					if (maskedConnectionHolder != null && maskedConnectionHolder.getCorrespondenceAddress().contains("*")) {
+						connectionHolder.setCorrespondenceAddress(plainConnectionHolderFromDb.getCorrespondenceAddress());
+					}
+					if (maskedConnectionHolder != null && maskedConnectionHolder.getUserName().contains("*")) {
+						connectionHolder.setUserName(plainConnectionHolderFromDb.getUserName());
+					}
+					if (maskedConnectionHolder != null && maskedConnectionHolder.getName().contains("*")) {
+						connectionHolder.setName(plainConnectionHolderFromDb.getName());
+					}
+				}
 			}
 		}
 

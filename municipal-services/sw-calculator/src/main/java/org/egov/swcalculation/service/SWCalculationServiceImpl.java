@@ -125,33 +125,36 @@ public class SWCalculationServiceImpl implements SWCalculationService {
 		BigDecimal rebate = BigDecimal.ZERO;
 		BigDecimal fee = BigDecimal.ZERO;
 
+		Map<String, Object> financialYearMaster =  (Map<String, Object>) masterMap
+				.get(SWCalculationConstant.BILLING_PERIOD);
+		Long fromDate = (Long) financialYearMaster.get(SWCalculationConstant.STARTING_DATE_APPLICABLES);
+		Long toDate = (Long) financialYearMaster.get(SWCalculationConstant.ENDING_DATE_APPLICABLES);
+
 		if(isLastElementWithDisconnectionRequest) {
 			if (sewerageConnection.getApplicationStatus().equalsIgnoreCase(SWCalculationConstant.PENDING_FOR_PAYMENT) ||
 					sewerageConnection.getApplicationStatus().equalsIgnoreCase(SWCalculationConstant.CONNECTION_INACTIVATED)) {
 
-				Map<String, Object> finalMap = new HashMap<>();
-
 				List<SewerageConnection> sewerageConnectionList = util.getSewerageConnection(requestInfo, criteria.getConnectionNo(), requestInfo.getUserInfo().getTenantId());
 				for (SewerageConnection connection : sewerageConnectionList) {
 					if (connection.getApplicationType().equalsIgnoreCase(NEW_SEWERAGE_CONNECTION)) {
-						Map<String, Object> bills = util.getBillData(requestInfo, requestInfo.getUserInfo().getTenantId(), connection.getApplicationNo());
-						List<String> bill = (List<String>) bills.get(BILL_KEY);
-						Map<String, String> billMap = mapper.convertValue(bill.get(0), Map.class);
-						Double amount = 0.0;
-						List<Map<String, String>> billDetails = mapper.convertValue(billMap.get(BILL_DETAILS_KEY), List.class);
-
-						Collections.sort(billDetails, (l1, l2) -> {
-							return new Long(l1.get(TO_PERIOD_KEY)).compareTo(new Long(l2.get(TO_PERIOD_KEY)));
-						});
-						finalMap = mapper.convertValue(billDetails.get(0), Map.class);
-						Long billingPeriod = Long.parseLong(finalMap.get(TO_PERIOD_KEY).toString()) - Long.parseLong(finalMap.get(FROM_PERIOD_KEY).toString());
-						BigDecimal finalSewerageCharge = sewerageCharge.add(BigDecimal.valueOf((Double.parseDouble(finalMap.get(AMOUNT_KEY).toString()) *
-								(Double.parseDouble(finalMap.get(TO_PERIOD_KEY).toString()) - sewerageConnection.getDateEffectiveFrom())) / billingPeriod));
-						estimates.stream().forEach(estimate -> {
-							if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
-								estimate.setEstimateAmount(finalSewerageCharge);
+						List<Demand> demandsList = demandService.searchDemand(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()), fromDate, toDate, requestInfo, null);
+						if(!CollectionUtils.isEmpty(demandsList)) {
+							BigDecimal totalTaxAmount = BigDecimal.ZERO;
+							for(Demand demands : demandsList) {
+								List<DemandDetail> demandDetails = demands.getDemandDetails();
+								for (DemandDetail demandDetail : demandDetails) {
+									totalTaxAmount = totalTaxAmount.add(demandDetail.getTaxAmount());
+								}
 							}
-						});
+							Long taxPeriod = toDate - fromDate;
+							BigDecimal finalSewerageCharge = sewerageCharge.add(BigDecimal.valueOf((Double.parseDouble(totalTaxAmount.toString()) *
+									(sewerageConnection.getConnectionExecutionDate() - Double.parseDouble(toDate.toString()))) / taxPeriod));
+							estimates.stream().forEach(estimate -> {
+								if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
+									estimate.setEstimateAmount(finalSewerageCharge);
+								}
+							});
+						}
 					}
 				}
 

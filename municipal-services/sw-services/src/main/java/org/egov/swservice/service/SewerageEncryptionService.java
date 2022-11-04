@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 
 /* Encrypts Water Applications' data(connectionHolderDetails, PlumberInfo) for existing records */
 import static org.egov.swservice.util.SWConstants.WNS_ENCRYPTION_MODEL;
+import static org.egov.swservice.util.SWConstants.WNS_PLUMBER_ENCRYPTION_MODEL;
 
 @Slf4j
 @Service
@@ -100,8 +101,8 @@ public class SewerageEncryptionService {
             try {
                 for (SewerageConnection sewerageConnection : sewerageConnectionList) {
                     /* encrypt here */
-                    /*sewerageConnection = encryptionDecryptionUtil.encryptObject(sewerageConnection, WNS_ENCRYPTION_MODEL, SewerageConnection.class);
-*/
+                    sewerageConnection = encryptionDecryptionUtil.encryptObject(sewerageConnection, WNS_ENCRYPTION_MODEL, SewerageConnection.class);
+                    sewerageConnection = encryptionDecryptionUtil.encryptObject(sewerageConnection, WNS_PLUMBER_ENCRYPTION_MODEL, SewerageConnection.class);
                     SewerageConnectionRequest sewerageConnectionRequest = SewerageConnectionRequest.builder()
                             .requestInfo(requestInfo)
                             .sewerageConnection(sewerageConnection)
@@ -110,7 +111,7 @@ public class SewerageEncryptionService {
                     sewerageDao.updateOldSewerageConnections(sewerageConnectionRequest);
 
                     /* decrypt here */
-                   /* sewerageConnection = encryptionDecryptionUtil.decryptObject(sewerageConnection, WNS_ENCRYPTION_MODEL, SewerageConnection.class, requestInfo);*/
+                    sewerageConnection = encryptionDecryptionUtil.decryptObject(sewerageConnection, WNS_ENCRYPTION_MODEL, SewerageConnection.class, requestInfo);
                 }
             } catch (Exception e) {
                 log.error("Encryption failed at batch count of : " + startBatch);

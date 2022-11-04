@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
+import org.egov.common.contract.request.User;
 import org.egov.pgr.config.PGRConfiguration;
 import org.egov.pgr.repository.ServiceRequestRepository;
 import org.egov.pgr.util.HRMSUtil;
@@ -13,7 +15,6 @@ import org.egov.pgr.web.models.Notification.*;
 import org.egov.pgr.web.models.ServiceWrapper;
 import org.egov.pgr.web.models.RequestInfoWrapper;
 import org.egov.pgr.web.models.ServiceRequest;
-import org.egov.pgr.web.models.User;
 import org.egov.pgr.web.models.workflow.ProcessInstance;
 import org.egov.pgr.web.models.workflow.ProcessInstanceResponse;
 import org.egov.tracer.model.CustomException;
@@ -523,6 +524,12 @@ public class NotificationService {
      * @return - Returns User object with given UUID
      */
     public User fetchUserByUUID(String uuidstring, RequestInfo requestInfo, String tenantId) {
+        User userInfoCopy = requestInfo.getUserInfo();
+
+        User userInfo = getInternalMicroserviceUser(tenantId);
+
+        requestInfo.setUserInfo(userInfo);
+
         StringBuilder uri = new StringBuilder();
         uri.append(config.getUserHost()).append(config.getUserSearchEndpoint());
         Map<String, Object> userSearchRequest = new HashMap<>();
@@ -544,6 +551,7 @@ public class NotificationService {
             log.error("Exception while trying parse user object: ",e);
         }
 
+        requestInfo.setUserInfo(userInfoCopy);
         return user;
     }
 
@@ -587,6 +595,12 @@ public class NotificationService {
 
     public ProcessInstance getEmployeeName(String tenantId, String serviceRequestId, RequestInfo requestInfo,String action){
         ProcessInstance processInstanceToReturn = new ProcessInstance();
+        User userInfoCopy = requestInfo.getUserInfo();
+
+        User userInfo = getInternalMicroserviceUser(tenantId);
+
+        requestInfo.setUserInfo(userInfo);
+
         RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
         StringBuilder URL = workflowService.getprocessInstanceSearchURL(tenantId,serviceRequestId);
         URL.append("&").append("history=true");
@@ -605,6 +619,7 @@ public class NotificationService {
             if(processInstance.getAction().equalsIgnoreCase(action))
                 processInstanceToReturn= processInstance;
         }
+        requestInfo.setUserInfo(userInfoCopy);
         return processInstanceToReturn;
     }
 
@@ -767,6 +782,20 @@ public class NotificationService {
         return mapOfPhoneNoAndUUIDs;
     }
 
+    private User getInternalMicroserviceUser(String tenantId)
+    {
+        //Creating role with INTERNAL_MICROSERVICE_ROLE
+        Role role = Role.builder()
+                .name("Internal Microservice Role").code("INTERNAL_MICROSERVICE_ROLE")
+                .tenantId(tenantId).build();
 
+        //Creating userinfo with uuid and role of internal micro service role
+        User userInfo = User.builder()
+                .uuid(config.getEgovInternalMicroserviceUserUuid())
+                .type("SYSTEM")
+                .roles(Collections.singletonList(role)).id(0L).build();
+
+        return userInfo;
+    }
 
 }

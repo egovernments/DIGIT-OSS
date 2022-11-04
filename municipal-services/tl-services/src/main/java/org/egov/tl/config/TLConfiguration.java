@@ -340,5 +340,8 @@ public class TLConfiguration {
     @Value("${egov.application.validity}")
     private String applicationValidity;
 
+    @Value("${egov.tl.calculator.billingSlab.endpoint}")
+    private String billingSlabEndPoint;
+
 
 }

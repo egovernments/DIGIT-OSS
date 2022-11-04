@@ -18,6 +18,8 @@ import java.util.*;
 /* Encrypts Water Applications' data(connectionHolderDetails, PlumberInfo) for existing records */
 import static org.egov.waterconnection.constants.WCConstants.WNS_ENCRYPTION_MODEL;
 
+import static org.egov.waterconnection.constants.WCConstants.WNS_PLUMBER_ENCRYPTION_MODEL;
+
 @Slf4j
 @Service
 public class WaterEncryptionService {
@@ -96,12 +98,13 @@ public class WaterEncryptionService {
         while (startBatch < count) {
             long startTime = System.nanoTime();
             List<WaterConnection> waterConnectionList = new LinkedList<>();
-            waterConnectionResponse = waterService.planeSearch(criteria, requestInfo);
+            waterConnectionResponse = waterService.plainSearch(criteria, requestInfo);
             try {
                 for (WaterConnection waterConnection : waterConnectionResponse.getWaterConnection()) {
                     /* encrypt here */
-                   /* waterConnection = encryptionDecryptionUtil.encryptObject(waterConnection, WNS_ENCRYPTION_MODEL, WaterConnection.class);
-*/
+                    waterConnection = encryptionDecryptionUtil.encryptObject(waterConnection, WNS_ENCRYPTION_MODEL, WaterConnection.class);
+                    waterConnection = encryptionDecryptionUtil.encryptObject(waterConnection, WNS_PLUMBER_ENCRYPTION_MODEL, WaterConnection.class);
+
                     WaterConnectionRequest waterConnectionRequest = WaterConnectionRequest.builder()
                             .requestInfo(requestInfo)
                             .waterConnection(waterConnection)
@@ -110,7 +113,7 @@ public class WaterEncryptionService {
                     waterDao.updateOldWaterConnections(waterConnectionRequest);
                     countPushed++;
                     /* decrypt here */
-                   /* waterConnection = encryptionDecryptionUtil.decryptObject(waterConnection, WNS_ENCRYPTION_MODEL, WaterConnection.class, requestInfo);*/
+                    waterConnection = encryptionDecryptionUtil.decryptObject(waterConnection, WNS_ENCRYPTION_MODEL, WaterConnection.class, requestInfo);
                     waterConnectionList.add(waterConnection);
                 }
             } catch (Exception e) {

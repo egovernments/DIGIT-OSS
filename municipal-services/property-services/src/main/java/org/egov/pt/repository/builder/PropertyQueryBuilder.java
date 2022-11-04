@@ -188,11 +188,18 @@ public class PropertyQueryBuilder {
 		}
 		else
 		{
-			if(criteria.getTenantId()!=null)
-			{
-				addClauseIfRequired(preparedStmtList,builder);
-				builder.append("property.tenantid=?");
-				preparedStmtList.add(criteria.getTenantId());
+			String tenantId = criteria.getTenantId();
+			
+			if (tenantId != null) {
+				if (tenantId.equalsIgnoreCase(config.getStateLevelTenantId())) {
+					addClauseIfRequired(preparedStmtList,builder);
+					builder.append(" property.tenantId LIKE ? ");
+					preparedStmtList.add(tenantId + '%');
+				} else {
+					addClauseIfRequired(preparedStmtList,builder);
+					builder.append(" property.tenantId= ? ");
+					preparedStmtList.add(tenantId);
+				}
 			}
 		}
 		if (criteria.getFromDate() != null)
@@ -313,11 +320,17 @@ public class PropertyQueryBuilder {
 		}
 		else
 		{
-			if(criteria.getTenantId()!=null)
-			{
-				addClauseIfRequired(preparedStmtList,builder);
-				builder.append("property.tenantid=?");
-				preparedStmtList.add(criteria.getTenantId());
+			String tenantId = criteria.getTenantId();
+			if (tenantId != null) {
+				if (tenantId.equalsIgnoreCase(config.getStateLevelTenantId())) {
+					addClauseIfRequired(preparedStmtList,builder);
+					builder.append(" property.tenantId LIKE ? ");
+					preparedStmtList.add(tenantId + '%');
+				} else {
+					addClauseIfRequired(preparedStmtList,builder);
+					builder.append(" property.tenantId= ? ");
+					preparedStmtList.add(tenantId);
+				}
 			}
 		}
 		if (criteria.getFromDate() != null)

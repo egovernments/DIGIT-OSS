@@ -109,7 +109,7 @@ public class InboxConfiguration {
 	@Value("${egov.internal.microservice.user.uuid}")
 	private String egovInternalMicroserviceUserUuid;
 
-	@Value("${state.level.tenant.id}")
+	@Value("${parent.level.tenant.id}")
 	private String parentLevelTenantId;
 
 	// ES Config
@@ -133,4 +133,11 @@ public class InboxConfiguration {
 
 	@Value("${es.search.pagination.max.search.limit}")
 	private Long maxSearchLimit;
+
+	@Value("${state.level.tenant.id}")
+	private String stateLevelTenantId;
+
+	@Value("${es.search.default.sort.order}")
+	private String defaultSortOrder;
 }
+

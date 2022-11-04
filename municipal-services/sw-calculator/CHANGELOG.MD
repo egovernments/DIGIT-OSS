@@ -1,7 +1,19 @@
 # Change log
 All notable changes to this module will be documented in this file.
 
-## 1.3.4 - 2022-07-07
+## 1.4.3 - 2022-11-03
+
+- Enabled adding meter reading till pending for disconnection execution for disconnection flow
+
+## 1.4.2 - 2022-11-03
+
+- Added propertyId in additional details for demand creation
+
+## 1.4.1 - 2022-11-03
+
+- Changed disconnection calculations for sewerage applications
+
+## 1.4.0 - 2022-07-07
 
 - Added disconnection flow calculations for sewerage applications
 

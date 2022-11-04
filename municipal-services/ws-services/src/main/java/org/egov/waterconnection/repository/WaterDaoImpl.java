@@ -94,10 +94,11 @@ public class WaterDaoImpl implements WaterDao {
 	
 	@Override
 	public void updateWaterConnection(WaterConnectionRequest waterConnectionRequest, boolean isStateUpdatable) {
+		String reqAction = waterConnectionRequest.getWaterConnection().getProcessInstance().getAction();
 		if (isStateUpdatable) {
-				waterConnectionProducer.push(updateWaterConnection, waterConnectionRequest);
-		} else if (WCConstants.EXECUTE_DISCONNECTION.equalsIgnoreCase(waterConnectionRequest.getWaterConnection().getProcessInstance().getAction())) {
-			waterConnectionRequest.getWaterConnection().setStatus(Connection.StatusEnum.INACTIVE);
+			if (WCConstants.EXECUTE_DISCONNECTION.equalsIgnoreCase(reqAction)) {
+				waterConnectionRequest.getWaterConnection().setStatus(Connection.StatusEnum.INACTIVE);
+			}
 			waterConnectionProducer.push(updateWaterConnection, waterConnectionRequest);
 		} else {
 			waterConnectionProducer.push(wsConfiguration.getWorkFlowUpdateTopic(), waterConnectionRequest);
@@ -151,7 +152,7 @@ public class WaterDaoImpl implements WaterDao {
 	}
 	
 	@Override
-	public WaterConnectionResponse getWaterConnectionListForPlaneSearch(SearchCriteria criteria, RequestInfo requestInfo) {
+	public WaterConnectionResponse getWaterConnectionListForPlainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
 
 		List<WaterConnection> waterConnectionList = new ArrayList<>();
 		List<Object> preparedStatement = new ArrayList<>();
@@ -173,7 +174,7 @@ public class WaterDaoImpl implements WaterDao {
 
 		criteria.setIds(ids);
 		
-		String query = wsQueryBuilder.getSearchQueryStringForPlaneSearch(criteria, preparedStatement, requestInfo);
+		String query = wsQueryBuilder.getSearchQueryStringForPlainSearch(criteria, preparedStatement, requestInfo);
 
 		if (query == null)
 			return null;

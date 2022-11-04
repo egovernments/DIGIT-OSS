@@ -56,6 +56,9 @@ public class PropertyCriteria {
 	private String oldPropertyId;
 
 	private Set<String> creationReason;
+	
+	@Builder.Default
+	private Boolean isSearchInternal = false;
 
 	@Builder.Default
 	private Boolean isInboxSearch = false;
@@ -64,6 +67,8 @@ public class PropertyCriteria {
 
 	@Builder.Default
 	private Boolean isRequestForCount = false;
-	
-	
+
+	@Builder.Default
+	private Boolean isRequestForOldDataEncryption = false;
+
 }

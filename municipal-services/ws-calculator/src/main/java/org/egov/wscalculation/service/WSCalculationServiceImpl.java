@@ -158,6 +158,10 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 		BigDecimal rebate = BigDecimal.ZERO;
 		BigDecimal fee = BigDecimal.ZERO;
 
+		Map<String, Object> financialYearMaster =  (Map<String, Object>) masterMap
+				.get(WSCalculationConstant.BILLING_PERIOD);
+		Long fromDate = (Long) financialYearMaster.get(WSCalculationConstant.STARTING_DATE_APPLICABLES);
+		Long toDate = (Long) financialYearMaster.get(WSCalculationConstant.ENDING_DATE_APPLICABLES);
 		if(isLastElementWithDisconnectionRequest) {
 			if (waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.PENDING_FOR_PAYMENT) ||
 					waterConnection.getApplicationStatus().equalsIgnoreCase(WSCalculationConstant.CONNECTION_INACTIVATED)) {
@@ -166,24 +170,24 @@ public class WSCalculationServiceImpl implements WSCalculationService {
 				List<WaterConnection> waterConnectionList = calculatorUtil.getWaterConnection(requestInfo, criteria.getConnectionNo(), requestInfo.getUserInfo().getTenantId());
 				for (WaterConnection connection : waterConnectionList) {
 					if (connection.getApplicationType().equalsIgnoreCase(NEW_WATER_CONNECTION)) {
-						Map<String, Object> bills = util.getBillData(requestInfo, requestInfo.getUserInfo().getTenantId(), connection.getApplicationNo());
-						List<String> bill = (List<String>) bills.get(BILL_KEY);
-						Map<String, String> billMap = mapper.convertValue(bill.get(0), Map.class);
-						Double amount = 0.0;
-						List<Map<String, String>> billDetails = mapper.convertValue(billMap.get(BILL_DETAILS_KEY), List.class);
-
-						Collections.sort(billDetails, (l1, l2) -> {
-							return new Long(l1.get(TO_PERIOD_KEY)).compareTo(new Long(l2.get(TO_PERIOD_KEY)));
-						});
-						finalMap = mapper.convertValue(billDetails.get(0), Map.class);
-						Long billingPeriod = Long.parseLong(finalMap.get(TO_PERIOD_KEY).toString()) - Long.parseLong(finalMap.get(FROM_PERIOD_KEY).toString());
-						BigDecimal finalWaterCharge = waterCharge.add(BigDecimal.valueOf((Double.parseDouble(finalMap.get(AMOUNT_KEY).toString()) *
-								(Double.parseDouble(finalMap.get(TO_PERIOD_KEY).toString()) - waterConnection.getDateEffectiveFrom())) / billingPeriod));
-						estimates.stream().forEach(estimate -> {
-							if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
-								estimate.setEstimateAmount(finalWaterCharge);
+						List<Demand> demandsList = demandService.searchDemand(requestInfo.getUserInfo().getTenantId(), Collections.singleton(connection.getConnectionNo()), fromDate, toDate, requestInfo, null);
+						if(!CollectionUtils.isEmpty(demandsList)) {
+							BigDecimal totalTaxAmount = BigDecimal.ZERO;
+							for(Demand demands : demandsList) {
+								List<DemandDetail> demandDetails = demands.getDemandDetails();
+								for (DemandDetail demandDetail : demandDetails) {
+									totalTaxAmount = totalTaxAmount.add(demandDetail.getTaxAmount());
+								}
 							}
-						});
+							Long taxPeriod = toDate - fromDate;
+							BigDecimal finalWaterCharge = waterCharge.add(BigDecimal.valueOf((Double.parseDouble(totalTaxAmount.toString()) *
+									(waterConnection.getConnectionExecutionDate() - Double.parseDouble(toDate.toString()))) / taxPeriod));
+							estimates.stream().forEach(estimate -> {
+								if (taxHeadCategoryMap.get(estimate.getTaxHeadCode()).equals(CHARGES)) {
+									estimate.setEstimateAmount(finalWaterCharge);
+								}
+							});
+						}
 					}
 				}
 			}

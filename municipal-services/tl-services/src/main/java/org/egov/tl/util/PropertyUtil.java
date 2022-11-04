@@ -63,7 +63,7 @@ public class PropertyUtil {
                 }
             } else {
                 messageTemplate = util.getMessageTemplate(TLConstants.NOTIFICATION_PROPERTY_TAGGED + ".email", localizationMessages);
-                messageTemplate = messageTemplate.replace(NOTIF_OWNER_NAME_KEY, license.getTradeLicenseDetail().getOwners().get(0).getName());
+                messageTemplate = messageTemplate.replace(NOTIF_PROPERTY_OWNER_NAME_KEY, license.getTradeLicenseDetail().getOwners().get(0).getName());
             }
         } else {
             if(TL_BUSINESSSERVICE.equals(source)){
@@ -75,7 +75,7 @@ public class PropertyUtil {
                 }
             } else {
                 messageTemplate = util.getMessageTemplate(TLConstants.NOTIFICATION_PROPERTY_TAGGED, localizationMessages);
-                messageTemplate = messageTemplate.replace(NOTIF_OWNER_NAME_KEY, license.getTradeLicenseDetail().getOwners().get(0).getName());
+                messageTemplate = messageTemplate.replace(NOTIF_PROPERTY_OWNER_NAME_KEY, license.getTradeLicenseDetail().getOwners().get(0).getName());
             }
         }
         messageTemplate = messageTemplate.replace(NOTIF_TRADE_NAME_KEY, license.getTradeName());

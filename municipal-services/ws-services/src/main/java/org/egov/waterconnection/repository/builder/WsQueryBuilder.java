@@ -43,7 +43,7 @@ public class WsQueryBuilder {
 			+ " conn.action, conn.adhocpenalty, conn.adhocrebate, conn.adhocpenaltyreason, conn.applicationType, conn.channel, conn.dateEffectiveFrom,"
 			+ " conn.adhocpenaltycomment, conn.adhocrebatereason, conn.adhocrebatecomment, conn.createdBy as ws_createdBy, conn.lastModifiedBy as ws_lastModifiedBy,"
 			+ " conn.createdTime as ws_createdTime, conn.lastModifiedTime as ws_lastModifiedTime,conn.additionaldetails, "
-			+ " conn.locality, conn.isoldapplication, conn.roadtype, conn.disconnectionreason, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id,"
+			+ " conn.locality, conn.isoldapplication, conn.roadtype, conn.disconnectionreason, conn.isDisconnectionTemporary, document.id as doc_Id, document.documenttype, document.filestoreid, document.active as doc_active, plumber.id as plumber_id,"
 			+ " plumber.name as plumber_name, plumber.licenseno, roadcuttingInfo.id as roadcutting_id, roadcuttingInfo.roadtype as roadcutting_roadtype, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea, roadcuttingInfo.roadcuttingarea as roadcutting_roadcuttingarea,"
 			+ " roadcuttingInfo.active as roadcutting_active, plumber.mobilenumber as plumber_mobileNumber, plumber.gender as plumber_gender, plumber.fatherorhusbandname, plumber.correspondenceaddress,"
 			+ " plumber.relationship, " + holderSelectValues
@@ -348,16 +348,17 @@ public class WsQueryBuilder {
 			queryString.append(" OR");
 		}
 	}
-	public String getSearchQueryStringForPlaneSearch(SearchCriteria criteria, List<Object> preparedStatement,
+
+	public String getSearchQueryStringForPlainSearch(SearchCriteria criteria, List<Object> preparedStatement,
 			RequestInfo requestInfo) {
 		if (criteria.isEmpty())
 			return null;
 		StringBuilder query = new StringBuilder(WATER_SEARCH_QUERY);
-		query = applyFiltersForPlaneSearch(query, preparedStatement, criteria);
-		return addPaginationWrapperForPlaneSearch(query.toString(), preparedStatement, criteria);
+		query = applyFiltersForPlainSearch(query, preparedStatement, criteria);
+		return addPaginationWrapperForPlainSearch(query.toString(), preparedStatement, criteria);
 	}
 	
-	public StringBuilder applyFiltersForPlaneSearch(StringBuilder query, List<Object> preparedStatement, SearchCriteria criteria) {
+	public StringBuilder applyFiltersForPlainSearch(StringBuilder query, List<Object> preparedStatement, SearchCriteria criteria) {
 		if (!StringUtils.isEmpty(criteria.getTenantId())) {
 			addClauseIfRequired(preparedStatement, query);
 			if (criteria.getTenantId().equalsIgnoreCase(config.getStateLevelTenantId())) {
@@ -370,10 +371,14 @@ public class WsQueryBuilder {
 		}
 		return query;
 	}
-	
-	private String addPaginationWrapperForPlaneSearch(String query, List<Object> preparedStmtList, SearchCriteria criteria) {
-		String string = addOrderByClauseForPlaneSearch(criteria);
-		Integer limit = config.getDefaultLimit();
+
+	private String addPaginationWrapperForPlainSearch(String query, List<Object> preparedStmtList, SearchCriteria criteria) {
+		String string = addOrderByClauseForPlainSearch(criteria);
+		StringBuilder queryString = new StringBuilder(query);
+		queryString.append(string);
+		String finalQuery = addPaginationWrapper(queryString.toString(), preparedStmtList, criteria);
+
+		/*Integer limit = config.getDefaultLimit();
 		Integer offset = config.getDefaultOffset();
 		String finalQuery = null;
 		
@@ -405,12 +410,12 @@ public class WsQueryBuilder {
 			finalQuery = finalQuery.replace("{pagination}", " offset ?  limit ?  ");
 			preparedStmtList.add(offset);
 			preparedStmtList.add(limit + offset);
-		}
-		System.out.println("Final Query ::" + finalQuery);
+		}*/
+		System.out.println("\nFinal Query ::" + finalQuery);
 		return finalQuery;
 	}
 	
-	private String addOrderByClauseForPlaneSearch(SearchCriteria criteria) {
+	private String addOrderByClauseForPlainSearch(SearchCriteria criteria) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(" ORDER BY wc.appCreatedDate ");
 		if (criteria.getSortOrder() == SearchCriteria.SortOrder.ASC)

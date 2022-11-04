@@ -124,6 +124,9 @@ public class WSConfiguration {
 
     	@Value("${egov.user.search.path}")
     	private String userSearchEndpoint;
+
+	@Value("${egov.internal.microservice.user.uuid}")
+	private String egovInternalMicroserviceUserUuid;
     
     	// water connection Calculator
     	@Value("${egov.ws.calculation.host}")
@@ -228,4 +231,11 @@ public class WSConfiguration {
 
 	@Value("${egov.water.connection.document.access.audit.kafka.topic}")
 	private String documentAuditTopic;
+
+	@Value("${egov.billing.service.host}")
+	private String billingServiceHost;
+
+	@Value("${egov.fetch.bill.endpoint}")
+	private String fetchBillEndPoint;
+
 }

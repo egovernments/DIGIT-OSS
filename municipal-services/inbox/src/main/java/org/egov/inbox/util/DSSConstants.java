@@ -42,6 +42,8 @@ public class DSSConstants {
 
     public static final String ELASTICSEARCH_HIT_KEY = "hits";
 
+    public static final String ELASTICSEARCH_TOTAL_KEY = "total";
+
     public static final String ELASTICSEARCH_DATAVIEWEDBY_KEY = "dataViewedBy";
 
     public static final String ELASTICSEARCH_ROLES_KEY = "roles";
@@ -51,6 +53,12 @@ public class DSSConstants {
     public static final String PLACEHOLDER_FROMDATE_KEY = "$fromDate";
 
     public static final String PLACEHOLDER_TODATE_KEY = "$toDate";
+
+    public static final String PLACEHOLDER_OFFSET_KEY = "$offset";
+
+    public static final String PLACEHOLDER_LIMIT_KEY = "$limit";
+
+    public static final String PLACEHOLDER_SORT_ORDER_KEY = "$sortOrder";
 
     public static final String INTERNALMICROSERVICEROLE_NAME = "Internal Microservice Role";
 

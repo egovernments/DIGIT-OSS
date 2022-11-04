@@ -103,6 +103,14 @@ public class SearchCriteria {
 	@JsonProperty("isFilestoreIdRequire")
 	private Boolean isFilestoreIdRequire = false;
 
+	@Builder.Default
+	@JsonProperty("isInternalCall")
+	private Boolean	isInternalCall = false;
+
+	@Builder.Default
+	@JsonProperty("isSkipLevelSearch")
+	private Boolean	isSkipLevelSearch = false;
+
 	public boolean isEmpty() {
 		return (StringUtils.isEmpty(this.tenantId) && StringUtils.isEmpty(this.mobileNumber)
 				&& StringUtils.isEmpty(this.propertyId) && CollectionUtils.isEmpty(this.ids)

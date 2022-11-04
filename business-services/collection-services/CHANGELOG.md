@@ -2,6 +2,9 @@
 
 # Changelog
 All notable changes to this module will be documented in this file.
+## 1.1.7 - 2022-11-04
+- Added jmeter scripts
+
 ## 1.1.6 - 2022-01-13
 - Updated to log4j2 version 2.17.1
 

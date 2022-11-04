@@ -70,23 +70,20 @@ public class EncryptionDecryptionUtil {
             if (objectToDecrypt == null) {
                 return null;
             }
-            
-            RequestInfo requestInfoForDecryption = copyRequestInfoForEncryption(requestInfo);
-        
-            if (!(objectToDecrypt instanceof List)) {
+
+           if (!(objectToDecrypt instanceof List)) {
                 objectToDecryptNotList = true;
                 objectToDecrypt = Collections.singletonList(objectToDecrypt);
             }
-            final User encrichedUserInfo = getEncrichedandCopiedUserInfo(requestInfo.getUserInfo());
-            requestInfoForDecryption.setUserInfo(encrichedUserInfo);
 
-            Map<String,String> keyPurposeMap = getKeyToDecrypt(objectToDecrypt, encrichedUserInfo);
-            String purpose = keyPurposeMap.get("purpose");
+            Map<String, String> keyPurposeMap = getKeyToDecrypt(objectToDecrypt);
+            String purpose = keyPurposeMap.get("PropertyEncDisabledSearch");
 
-            if(key == null)
+            if(key.equalsIgnoreCase("Property"))
                 key = keyPurposeMap.get("key");
 
-            P decryptedObject = (P) encryptionService.decryptJson(requestInfoForDecryption,objectToDecrypt, key, purpose, classType);
+            P decryptedObject = (P) encryptionService.decryptJson(requestInfo, objectToDecrypt, key, purpose, classType);
+
             if (decryptedObject == null) {
                 throw new CustomException("DECRYPTION_NULL_ERROR", "Null object found on performing decryption");
             }
@@ -187,15 +184,13 @@ public class EncryptionDecryptionUtil {
                 .build();
     }
 
-    public Map<String,String> getKeyToDecrypt(Object objectToDecrypt, User userInfo) {
+    public Map<String,String> getKeyToDecrypt(Object objectToDecrypt) {
         Map<String,String> keyPurposeMap = new HashMap<>();
 
         if (!abacEnabled){
-            keyPurposeMap.put("key","UserSelf");
+            keyPurposeMap.put("key","PropertyDecrypDisabled");
             keyPurposeMap.put("purpose","AbacDisabled");
         }
-
-
         else{
             keyPurposeMap.put("key","Property");
             keyPurposeMap.put("purpose","PropertySearch");

@@ -367,5 +367,14 @@ public class SWCalculationConstant {
 
 	public static final String NEW_SEWERAGE_CONNECTION = "NEW_SEWERAGE_CONNECTION";
 
+	public static final String NEWSEWERAGE_BUSINESS_SERVICE = "NewSW1";
+
+	public static final String MODIFY_BUSINESS_SERVICE = "ModifySWConnection";
+
+	public static final String DISCONNECTION_BUSINESS_SERVICE = "DisconnectSWConnection";
+
+	public static final String PENDING_FOR_DISCONNECTION_EXECUTION = "PENDING_FOR_DISCONNECTION_EXECUTION";
+
+	public static final String DISCONNECTION_EXECUTED = "DISCONNECTION_EXECUTED";
 
 }

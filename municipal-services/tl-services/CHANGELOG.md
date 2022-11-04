@@ -2,6 +2,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.8 - 2022-11-03
+
+- Restricted notification when property is tagged and created for initiated status
+
 ## 1.1.7 - 2022-03-03
 
 - Added channel based notification

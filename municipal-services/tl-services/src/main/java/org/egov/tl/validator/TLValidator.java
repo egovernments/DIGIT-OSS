@@ -64,7 +64,7 @@ public class TLValidator {
      *  Validate the create Requesr
      * @param request The input TradeLicenseRequest Object
      */
-    public void validateCreate(TradeLicenseRequest request, Object mdmsData) {
+    public void validateCreate(TradeLicenseRequest request, Object mdmsData, Object billingSlabs) {
         List<TradeLicense> licenses = request.getLicenses();
         String businessService = request.getLicenses().isEmpty()?null:request.getLicenses().get(0).getBusinessService();
         if(licenses.get(0).getApplicationType() != null && licenses.get(0).getApplicationType().toString().equals(TLConstants.APPLICATION_TYPE_RENEWAL)){
@@ -83,7 +83,7 @@ public class TLValidator {
                 validateBPASpecificValidations(request);
                 break;
         }
-        mdmsValidator.validateMdmsData(request, mdmsData);
+        mdmsValidator.validateMdmsData(request, mdmsData, billingSlabs);
         validateInstitution(request);
         validateDuplicateDocuments(request);
     }
@@ -309,7 +309,7 @@ public class TLValidator {
      *  Validates the update request
      * @param request The input TradeLicenseRequest Object
      */
-    public void validateUpdate(TradeLicenseRequest request, List<TradeLicense> searchResult, Object mdmsData) {
+    public void validateUpdate(TradeLicenseRequest request, List<TradeLicense> searchResult, Object mdmsData, Object billingSlabs) {
         List<TradeLicense> licenses = request.getLicenses();
         if (searchResult.size() != licenses.size())
             throw new CustomException("INVALID UPDATE", "The license to be updated is not in database");
@@ -331,7 +331,7 @@ public class TLValidator {
                 validateBPASpecificValidations(request);
                 break;
         }
-        mdmsValidator.validateMdmsData(request, mdmsData);
+        mdmsValidator.validateMdmsData(request, mdmsData, billingSlabs);
         validateTradeUnits(request);
         validateDuplicateDocuments(request);
         setFieldsFromSearch(request, searchResult, mdmsData);

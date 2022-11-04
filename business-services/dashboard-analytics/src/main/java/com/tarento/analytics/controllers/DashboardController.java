@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tarento.analytics.org.service.ClientServiceFactory;
 import com.tarento.analytics.service.AmazonS3ClientService;
 import org.apache.commons.lang3.StringUtils;
@@ -47,6 +48,8 @@ public class DashboardController {
 	private MetadataService metadataService;
 	@Autowired
 	private AmazonS3ClientService amazonS3ClientService;
+	@Autowired
+	private ObjectMapper objectMapper;
 
 /*    @Autowired
 	private ClientService clientService;*/
@@ -125,8 +128,14 @@ public class DashboardController {
 
 		//Getting the request information only from the Full Request
 		AggregateRequestDto requestInfo = requestDto.getAggregationRequestDto();
+
+		// For performance enhancement, this creates a key which will cache the response
+		String requestBodyString = objectMapper.writeValueAsString(requestInfo);
+		String headersString = objectMapper.writeValueAsString(requestDto.getHeaders());
+		StringBuilder finalString = new StringBuilder(requestBodyString).append(headersString);
+		requestInfo.setHashKey(finalString.toString().hashCode());
+
 		Map<String, Object> headers = requestDto.getHeaders();
-		//requestInfo.getFilters().putAll(headers);
 		String response = "";
 		try {
 			if (headers.isEmpty()) {

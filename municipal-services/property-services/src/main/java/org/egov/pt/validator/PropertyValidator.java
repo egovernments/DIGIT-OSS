@@ -27,6 +27,7 @@ import org.egov.pt.models.workflow.State;
 import org.egov.pt.service.DiffService;
 import org.egov.pt.service.PropertyService;
 import org.egov.pt.service.WorkflowService;
+import org.egov.pt.util.EncryptionDecryptionUtil;
 import  org.egov.pt.util.PTConstants;
 import org.egov.pt.util.PropertyUtil;
 import org.egov.pt.web.contracts.PropertyRequest;
@@ -66,7 +67,9 @@ public class PropertyValidator {
     
     @Autowired
     private WorkflowService workflowService;
-	
+
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
 
     /**
      * Validate the masterData and ctizenInfo of the given propertyRequest
@@ -157,7 +160,7 @@ public class PropertyValidator {
             validateAssessees(request,propertyFromSearch, errorMap);
 
         Boolean isstateUpdatable =  false;
-        
+
 		// third variable is needed only for mutation
 		List<String> fieldsUpdated = diffService.getUpdatedFields(property, propertyFromSearch, "");
 		
@@ -223,22 +226,14 @@ public class PropertyValidator {
 	 * @param request
 	 * @return
 	 */
-	public Property validateCommonUpdateInformation(PropertyRequest request) {
+	public void validateCommonUpdateInformation(PropertyRequest request, Property propertyFromSearch) {
 
 		Map<String, String> errorMap = new HashMap<>();
 		Property property = request.getProperty();
 		validateIds(request, errorMap);
 		validateMobileNumber(request, errorMap);
 
-        PropertyCriteria criteria = getPropertyCriteriaForSearch(request);
-        List<Property> propertiesFromSearchResponse = service.searchProperty(criteria, request.getRequestInfo());
-        boolean ifPropertyExists=PropertyExists(propertiesFromSearchResponse);
-		if (!ifPropertyExists) {
-			throw new CustomException("EG_PT_PROPERTY_NOT_FOUND", "The property to be updated does not exist in the system");
-		}
 
-		Property propertyFromSearch = propertiesFromSearchResponse.get(0);
-		
 		CreationReason reason = property.getCreationReason();
 		if (!propertyFromSearch.getStatus().equals(Status.ACTIVE)
 				&& !propertyFromSearch.getCreationReason().equals(reason)) {
@@ -248,8 +243,8 @@ public class PropertyValidator {
 			throw new CustomException("EG_PT_ERROR_CREATION_REASON",
 					"The Creation reason sent in the update Request is Invalid, The Creationg reason cannot be create for an ACTIVE record");
 		}
-
-		property.getAddress().setId(propertiesFromSearchResponse.get(0).getAddress().getId());
+		
+		property.getAddress().setId(propertyFromSearch.getAddress().getId());
         validateMasterData(request, errorMap);
 
 		if (propertyFromSearch.getStatus().equals(Status.INWORKFLOW) && (property.getAcknowldgementNumber() == null
@@ -259,8 +254,6 @@ public class PropertyValidator {
 
 		if (!errorMap.isEmpty())
 			throw new CustomException(errorMap);
-		
-		return propertyFromSearch;
 	}
 
     /**
@@ -454,6 +447,7 @@ public class PropertyValidator {
 
 		PropertyCriteria propertyCriteria = new PropertyCriteria();
 		propertyCriteria.setTenantId(property.getTenantId());
+		propertyCriteria.setIsSearchInternal(true);
 
 		if (null != property.getPropertyId()) {
 
@@ -824,18 +818,12 @@ public class PropertyValidator {
 			throw new CustomException(errorMap);
 	}
 
-	public Property validateAlternateMobileNumberInformation(PropertyRequest request) {
+	public void validateAlternateMobileNumberInformation(PropertyRequest request, Property propertyFromSearch) {
 		
 		Map<String, String> errorMap = new HashMap<>();
 		Property property = request.getProperty();
 		validateIds(request, errorMap);	
-		
-		PropertyCriteria criteria = getPropertyCriteriaForSearch(request);
-        List<Property> propertiesFromSearchResponse = service.searchProperty(criteria, request.getRequestInfo());
-        boolean ifPropertyExists=PropertyExists(propertiesFromSearchResponse);
-		if (!ifPropertyExists) {
-			throw new CustomException("EG_PT_PROPERTY_NOT_FOUND", "The property to be updated does not exist in the system");
-		}
+	
 
 		List <String> alternateNumbersinRequest = new ArrayList<String>();
 		for(OwnerInfo owner : property.getOwners()) {
@@ -848,8 +836,6 @@ public class PropertyValidator {
 			throw new CustomException("EG_PT_ALTERNATE_NUMBERS_NOT_FOUND", "The alternate mobile number details are null");
 		}
 		
-		Property propertyFromSearch = propertiesFromSearchResponse.get(0);	
-
 		Map<String, String> userToAlternateNumberMap = new HashMap<String,String>(); 
 		
 		for(OwnerInfo owner : propertyFromSearch.getOwners()) {
@@ -887,8 +873,6 @@ public class PropertyValidator {
 		}
 		
 		if(!property.getStatus().equals(Status.ACTIVE)) {throw new CustomException("EG_PT_ALTERNATE_INACTIVE","Alternate number details cannot be updated if status is not active");}
-		
-		return propertyFromSearch;
 	}
 
 }

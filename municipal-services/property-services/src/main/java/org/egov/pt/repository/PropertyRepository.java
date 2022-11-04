@@ -243,9 +243,8 @@ public class PropertyRepository {
 
 	public Integer getCount(PropertyCriteria propertyCriteria, RequestInfo requestInfo) {
 		
-		Boolean isOpenSearch = util.isPropertySearchOpen(requestInfo.getUserInfo());
         List<Object> preparedStmtList = new ArrayList<>();
-        String query = queryBuilder.getPropertySearchQuery(propertyCriteria, preparedStmtList, isOpenSearch, false);
+        String query = queryBuilder.getPropertySearchQuery(propertyCriteria, preparedStmtList, false, false);
         Integer count =  jdbcTemplate.queryForObject(query, preparedStmtList.toArray(), Integer.class);
         return count;
     }

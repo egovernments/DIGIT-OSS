@@ -1,7 +1,11 @@
 
 All notable changes to this module will be documented in this file.
-## 1.3.4 - 2022-01-13
+## 1.3.5 - 2022-11-13
+- Amendment Query bug fix
+
+## 1.3.4 - 2022-01-04
 - Updated to log4j2 version 2.17.1
+
 ## 1.3.3 - 2021-07-26
 
  - Earliest bill search

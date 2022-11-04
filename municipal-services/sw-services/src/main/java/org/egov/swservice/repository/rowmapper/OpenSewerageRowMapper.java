@@ -83,7 +83,7 @@ public class OpenSewerageRowMapper implements ResultSetExtractor<List<SewerageCo
                 isPrimaryOwner = null;
             }
             OwnerInfo connectionHolderInfo = OwnerInfo.builder()
-                    .relationship(Relationship.fromValue(rs.getString("holderrelationship")))
+                    .relationship(rs.getString("holderrelationship"))
                     .status(Status.fromValue(rs.getString("holderstatus")))
                     .tenantId(rs.getString("holdertenantid")).ownerType(rs.getString("connectionholdertype"))
                     .isPrimaryOwner(isPrimaryOwner).uuid(uuid).build();

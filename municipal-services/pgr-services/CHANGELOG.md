@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
+## 1.1.7 - 2022-11-03
+
+- Incorporated privacy decryption for notification flow
+
 ## 1.1.6 - 2022-08-03
 - Added channel based notification
 

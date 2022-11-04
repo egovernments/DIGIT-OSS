@@ -538,14 +538,13 @@ public class InboxService {
 		businessService = moduleSearchCriteria.get(BS_BUSINESS_SERVICE_PARAM).toString();
 		// businessObjects.getJSONObject(0).getString("businessService");
 		srvSearchMap = fetchAppropriateServiceSearchMap(businessService, moduleName);
-		if (!isSearchResultEmpty && (businessService.equalsIgnoreCase(BS_WS) || businessService.equalsIgnoreCase(BS_SW))) {
+		if (!isSearchResultEmpty && processCriteria.getModuleName().equalsIgnoreCase(BS)) {
 			moduleSearchCriteria.put(srvSearchMap.get("consumerCodeParam"), moduleSearchCriteria.get(BS_CONSUMER_NO_PARAM));
 			moduleSearchCriteria.remove(BS_CONSUMER_NO_PARAM);
 			moduleSearchCriteria.remove(BS_BUSINESS_SERVICE_PARAM);
 			moduleSearchCriteria.remove(BS_APPLICATION_NUMBER_PARAM);
 			moduleSearchCriteria.remove("status");
-			if(businessService.equalsIgnoreCase(BS_WS) || businessService.equalsIgnoreCase(BS_SW))
-				moduleSearchCriteria.put("searchType", "CONNECTION");
+			moduleSearchCriteria.put("searchType", "CONNECTION");
 			serviceSearchObject = fetchModuleSearchObjects(moduleSearchCriteria, businessServiceName,
 					criteria.getTenantId(), requestInfo, srvSearchMap);
 			moduleSearchCriteria.remove("searchType");
@@ -651,10 +650,7 @@ public class InboxService {
 			//When Bill Amendment objects are searched
 				for (String businessKey : businessKeys) {
 					Inbox inbox = new Inbox();
-					if (processInstanceMap.get(businessKey) == null) {
-						totalCount--;
-						continue;
-					}
+
 					inbox.setProcessInstance(processInstanceMap.get(businessKey));
 					inbox.setBusinessObject(toMap((JSONObject) businessMap.get(businessKey)));
 					inbox.setServiceObject(toMap(
@@ -1139,6 +1135,8 @@ public class InboxService {
 		searchParams.forEach((param) -> {
 
 			if (!param.equalsIgnoreCase("tenantId")) {
+				if (param.equalsIgnoreCase("limit"))
+				    return;
 
 				if (moduleSearchCriteria.get(param) instanceof Collection) {
 					url.append("&").append(param).append("=");

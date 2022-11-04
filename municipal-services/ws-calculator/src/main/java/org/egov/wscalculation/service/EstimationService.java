@@ -5,12 +5,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.egov.common.contract.request.RequestInfo;
@@ -225,8 +220,13 @@ public class EstimationService {
 					"Calculation attribute master not found!!");
 		JSONArray filteredMasters = JsonPath.read(calculationAttributeMap,
 				"$.CalculationAttribute[?(@.name=='" + connectionType + "')]");
-		JSONObject master = mapper.convertValue(filteredMasters.get(0), JSONObject.class);
-		return master.getAsString(WSCalculationConstant.ATTRIBUTE);
+		if (!CollectionUtils.isEmpty(filteredMasters)) {
+			JSONObject master = mapper.convertValue(filteredMasters.get(0), JSONObject.class);
+			return master.getAsString(WSCalculationConstant.ATTRIBUTE);
+		} else {
+			throw new CustomException("CALCULATION_ATTRIBUTE_MASTER_NOT_FOUND",
+					"Calculation attribute master not found the connection type :" + connectionType);
+		}
 	}
 	
 	/**

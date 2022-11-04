@@ -55,11 +55,11 @@ public class DSSInboxFilterService {
             aggregateRequestDto.setModuleLevel("");
             filters.put(TENANT_ID, new ArrayList<>());
             aggregateRequestDto.setFilters(filters);
-            headers.put(TENANT_ID, request.getTenantId());
+            String tenantId = config.getStateLevelTenantId();
+            headers.put(TENANT_ID, tenantId);
             aggRequest.setHeaders(headers);
 
             //mdms cala to fetch aggregation data
-            String tenantId = request.getTenantId().split("\\.")[0];
             Object mdmsData = mdmsCall(tenantId, AGGREGATE_MASTER_CODE);
             List<Map> aggregationData = JsonPath.read(mdmsData, MDMS_AGGREGATE_PATH);
 

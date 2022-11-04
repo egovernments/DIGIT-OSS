@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import lombok.extern.slf4j.Slf4j;
+import org.egov.common.contract.request.PlainAccessRequest;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.repository.SewerageDao;
@@ -12,12 +13,14 @@ import org.egov.swservice.repository.SewerageDaoImpl;
 import org.egov.swservice.util.EncryptionDecryptionUtil;
 import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.util.SewerageServicesUtil;
+import org.egov.swservice.util.UnmaskingUtil;
 import org.egov.swservice.validator.ActionValidator;
 import org.egov.swservice.validator.MDMSValidator;
 import org.egov.swservice.validator.SewerageConnectionValidator;
 import org.egov.swservice.validator.ValidateProperty;
 import org.egov.swservice.web.models.*;
 import org.egov.swservice.web.models.workflow.BusinessService;
+import org.egov.swservice.web.models.workflow.ProcessInstance;
 import org.egov.swservice.workflow.WorkflowIntegrator;
 import org.egov.swservice.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
@@ -27,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import static org.egov.swservice.util.SWConstants.*;
@@ -79,6 +83,12 @@ public class SewerageServiceImpl implements SewerageService {
 
 	@Autowired
 	EncryptionDecryptionUtil encryptionDecryptionUtil;
+
+	@Autowired
+	private	PaymentUpdateService paymentUpdateService;
+
+	@Autowired
+	private UnmaskingUtil unmaskingUtil;
 	
 	/**
 	 * @param sewerageConnectionRequest
@@ -98,6 +108,12 @@ public class SewerageServiceImpl implements SewerageService {
 		
 		else if (sewerageServicesUtil.isModifyConnectionRequest(sewerageConnectionRequest)) {
 			List<SewerageConnection> sewerageConnectionList = getAllSewerageApplications(sewerageConnectionRequest);
+			swapConnHolders(sewerageConnectionRequest,sewerageConnectionList);
+
+			//Swap masked Plumber info with unmasked plumberInfo from previous applications
+			if(!ObjectUtils.isEmpty(sewerageConnectionList.get(0).getPlumberInfo()))
+				unmaskingUtil.getUnmaskedPlumberInfo(sewerageConnectionRequest.getSewerageConnection().getPlumberInfo(), sewerageConnectionList.get(0).getPlumberInfo());
+
 			if (!CollectionUtils.isEmpty(sewerageConnectionList)) {
 				workflowService.validateInProgressWF(sewerageConnectionList, sewerageConnectionRequest.getRequestInfo(),
 						sewerageConnectionRequest.getSewerageConnection().getTenantId());
@@ -115,22 +131,21 @@ public class SewerageServiceImpl implements SewerageService {
 			wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
 
 		/* encrypt here */
-		/*sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.encryptObject(sewerageConnectionRequest.getSewerageConnection(), WNS_ENCRYPTION_MODEL, SewerageConnection.class));
-		//Encrypting connectionHolder details(if exists) before pushing the data to indexes
-		if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
-			int k = 0;
-			for (OwnerInfo holderInfo : sewerageConnectionRequest.getSewerageConnection().getConnectionHolders()) {
-				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().set(k, encryptionDecryptionUtil.encryptObject(holderInfo, WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class));
-				k++;
-			}
-		}*/
+		sewerageConnectionRequest.setSewerageConnection(encryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection()));
+
 		sewerageDao.saveSewerageConnection(sewerageConnectionRequest);
 
 		/* decrypt here */
-		/*sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), WNS_ENCRYPTION_MODEL, SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
-		if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders()))
-			sewerageConnectionRequest.getSewerageConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
-*/
+		sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), WNS_ENCRYPTION_MODEL, SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
+		//PlumberInfo masked during Create call of New Application
+		if (reqType == 0)
+			sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), WNS_PLUMBER_ENCRYPTION_MODEL, SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
+		//PlumberInfo unmasked during create call of Disconnect/Modify Applications
+		else
+			sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), "WnSConnectionPlumberDecrypDisabled", SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
+		List<OwnerInfo> connectionHolders = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders();
+		if (!CollectionUtils.isEmpty(connectionHolders))
+			sewerageConnectionRequest.getSewerageConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(connectionHolders, WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
 	}
 
@@ -141,7 +156,12 @@ public class SewerageServiceImpl implements SewerageService {
 		}
 		
 		List<SewerageConnection> previousConnectionsList = getAllSewerageApplications(sewerageConnectionRequest);
-		
+		swapConnHolders(sewerageConnectionRequest,previousConnectionsList);
+
+		//Swap masked Plumber info with unmasked plumberInfo from previous applications
+		if(!ObjectUtils.isEmpty(previousConnectionsList.get(0).getPlumberInfo()))
+			unmaskingUtil.getUnmaskedPlumberInfo(sewerageConnectionRequest.getSewerageConnection().getPlumberInfo(), previousConnectionsList.get(0).getPlumberInfo());
+
 		for(SewerageConnection connection : previousConnectionsList) {
 			if(!(connection.getApplicationStatus().equalsIgnoreCase(SWConstants.STATUS_APPROVED) || connection.getApplicationStatus().equalsIgnoreCase(SWConstants.MODIFIED_FINAL_STATE))) {
 				throw new CustomException("INVALID_REQUEST",
@@ -160,10 +180,25 @@ public class SewerageServiceImpl implements SewerageService {
 	 * @return List of matching sewerage connection
 	 */
 	public List<SewerageConnection> search(SearchCriteria criteria, RequestInfo requestInfo) {
-
+		//Creating copies of apiPlainAcessRequests for decryption process
+		//Any decryption process returns the  requestInfo with only the already used plain Access Request fields
+		PlainAccessRequest apiPlainAccessRequest = null, apiPlainAccessRequestCopy = null;
+		if (!ObjectUtils.isEmpty(requestInfo.getPlainAccessRequest())) {
+			PlainAccessRequest plainAccessRequest = requestInfo.getPlainAccessRequest();
+			if (!StringUtils.isEmpty(plainAccessRequest.getRecordId()) && !ObjectUtils.isEmpty(plainAccessRequest.getPlainRequestFields())) {
+				apiPlainAccessRequest = new PlainAccessRequest(plainAccessRequest.getRecordId(), plainAccessRequest.getPlainRequestFields());
+				apiPlainAccessRequestCopy = new PlainAccessRequest(plainAccessRequest.getRecordId(), plainAccessRequest.getPlainRequestFields());
+			}
+		}
 		/* encrypt here */
-		/*criteria = encryptionDecryptionUtil.encryptObject(criteria, WNS_ENCRYPTION_MODEL, SearchCriteria.class);
-*/
+		if (criteria.getIsInternalCall()) {
+			criteria = encryptionDecryptionUtil.encryptObject(criteria, "WnSConnectionDecrypDisabled", SearchCriteria.class);
+			criteria = encryptionDecryptionUtil.encryptObject(criteria, "WnSConnectionPlumberDecrypDisabled", SearchCriteria.class);
+		} else {
+			criteria = encryptionDecryptionUtil.encryptObject(criteria, WNS_ENCRYPTION_MODEL, SearchCriteria.class);
+			criteria = encryptionDecryptionUtil.encryptObject(criteria, WNS_PLUMBER_ENCRYPTION_MODEL, SearchCriteria.class);
+		}
+
 		List<SewerageConnection> sewerageConnectionList = getSewerageConnectionsList(criteria, requestInfo);
 		if(!StringUtils.isEmpty(criteria.getSearchType()) &&
 				criteria.getSearchType().equals(SWConstants.SEARCH_TYPE_CONNECTION)){
@@ -180,10 +215,16 @@ public class SewerageServiceImpl implements SewerageService {
 		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
 		enrichmentService.enrichProcessInstance(sewerageConnectionList, criteria, requestInfo);
 //		enrichmentService.enrichDocumentDetails(sewerageConnectionList, criteria, requestInfo);
-
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
 		/* decrypt here */
-		/*return encryptionDecryptionUtil.decryptObject(sewerageConnectionList, WNS_ENCRYPTION_MODEL, SewerageConnection.class, requestInfo);*/
-		return sewerageConnectionList;
+		if (criteria.getIsInternalCall()) {
+			sewerageConnectionList = encryptionDecryptionUtil.decryptObject(sewerageConnectionList, "WnSConnectionPlumberDecrypDisabled", SewerageConnection.class, requestInfo);
+			requestInfo.setPlainAccessRequest(apiPlainAccessRequestCopy);
+			return encryptionDecryptionUtil.decryptObject(sewerageConnectionList, "WnSConnectionDecrypDisabled", SewerageConnection.class, requestInfo);
+		}
+		sewerageConnectionList = encryptionDecryptionUtil.decryptObject(sewerageConnectionList, WNS_PLUMBER_ENCRYPTION_MODEL, SewerageConnection.class, requestInfo);
+		requestInfo.setPlainAccessRequest(apiPlainAccessRequestCopy);
+		return encryptionDecryptionUtil.decryptObject(sewerageConnectionList, WNS_ENCRYPTION_MODEL, SewerageConnection.class, requestInfo);
 	}
 
 	/**
@@ -255,6 +296,11 @@ public class SewerageServiceImpl implements SewerageService {
 				sewerageConnectionRequest.getRequestInfo());
 		SewerageConnection searchResult = getConnectionForUpdateRequest(
 				sewerageConnectionRequest.getSewerageConnection().getId(), sewerageConnectionRequest.getRequestInfo());
+
+		boolean isPlumberSwapped = unmaskingUtil.getUnmaskedPlumberInfo(sewerageConnectionRequest.getSewerageConnection().getPlumberInfo(), searchResult.getPlumberInfo());
+		if (isPlumberSwapped)
+			sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), "WnSConnectionPlumberDecrypDisabled", SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
+
 		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest);
 		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
 		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
@@ -274,14 +320,7 @@ public class SewerageServiceImpl implements SewerageService {
 		enrichmentService.postStatusEnrichment(sewerageConnectionRequest);
 
 		/* encrypt here */
-		/*sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.encryptObject(sewerageConnectionRequest.getSewerageConnection(), WNS_ENCRYPTION_MODEL, SewerageConnection.class));
-		if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
-			int k = 0;
-			for (OwnerInfo holderInfo : sewerageConnectionRequest.getSewerageConnection().getConnectionHolders()) {
-				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().set(k, encryptionDecryptionUtil.encryptObject(holderInfo, WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class));
-				k++;
-			}
-		}*/
+		sewerageConnectionRequest.setSewerageConnection(encryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection()));
 
 		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
 				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
@@ -290,11 +329,75 @@ public class SewerageServiceImpl implements SewerageService {
 		enrichmentService.enrichProcessInstance(Arrays.asList(sewerageConnectionRequest.getSewerageConnection()), criteria, sewerageConnectionRequest.getRequestInfo());
 
 		/* decrypt here */
-		/*sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), WNS_ENCRYPTION_MODEL, SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
-		if (!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders()))
-			sewerageConnectionRequest.getSewerageConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
-*/
+		sewerageConnectionRequest.setSewerageConnection(decryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection(), sewerageConnectionRequest.getRequestInfo()));
+
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
+	}
+
+	private List<SewerageConnection> updateSewerageConnectionForDisconnectFlow(SewerageConnectionRequest sewerageConnectionRequest) {
+		SearchCriteria criteria = new SearchCriteria();
+		
+		sewerageConnectionValidator.validateSewerageConnection(sewerageConnectionRequest, SWConstants.DISCONNECT_CONNECTION);
+		mDMSValidator.validateMasterData(sewerageConnectionRequest, SWConstants.DISCONNECT_CONNECTION);
+		Property property = validateProperty.getOrValidateProperty(sewerageConnectionRequest);
+		validateProperty.validatePropertyFields(property,sewerageConnectionRequest.getRequestInfo());
+		String previousApplicationStatus = workflowService.getApplicationStatus(
+				sewerageConnectionRequest.getRequestInfo(),
+				sewerageConnectionRequest.getSewerageConnection().getApplicationNo(),
+				sewerageConnectionRequest.getSewerageConnection().getTenantId(),config.getDisconnectBusinessServiceName() );
+		BusinessService businessService = workflowService.getBusinessService(config.getDisconnectBusinessServiceName(),
+				sewerageConnectionRequest.getSewerageConnection().getTenantId(),
+				sewerageConnectionRequest.getRequestInfo());
+		SewerageConnection searchResult = getConnectionForUpdateRequest(
+				sewerageConnectionRequest.getSewerageConnection().getId(), sewerageConnectionRequest.getRequestInfo());
+
+		boolean isPlumberSwapped = unmaskingUtil.getUnmaskedPlumberInfo(sewerageConnectionRequest.getSewerageConnection().getPlumberInfo(), searchResult.getPlumberInfo());
+		if (isPlumberSwapped)
+			sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), "WnSConnectionPlumberDecrypDisabled", SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
+
+		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest);
+		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
+		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
+		sewerageDaoImpl.pushForEditNotification(sewerageConnectionRequest);
+		userService.updateUser(sewerageConnectionRequest, searchResult);
+		calculationService.calculateFeeAndGenerateDemand(sewerageConnectionRequest, property);
+		//check whether amount is due
+		boolean isNoPayment = false;
+		SewerageConnection sewerageConnection = sewerageConnectionRequest.getSewerageConnection();
+		ProcessInstance processInstance = sewerageConnection.getProcessInstance();
+		if (SWConstants.APPROVE_DISCONNECTION_CONST.equalsIgnoreCase(processInstance.getAction())) {
+			isNoPayment = calculationService.fetchBill(sewerageConnection.getTenantId(), sewerageConnection.getConnectionNo(), sewerageConnectionRequest.getRequestInfo());
+			if (isNoPayment) {
+				processInstance.setComment(WORKFLOW_NO_PAYMENT_CODE);
+			}
+		}
+		// Call workflow
+		wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
+		// Enrich file store Id After payment
+		enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
+		enrichmentService.postStatusEnrichment(sewerageConnectionRequest);
+
+		/* encrypt here */
+		sewerageConnectionRequest.setSewerageConnection(encryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection()));
+
+		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
+				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
+
+		// setting oldApplication Flag
+		markOldApplication(sewerageConnectionRequest);
+		if (!StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getTenantId()))
+			criteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
+		enrichmentService.enrichProcessInstance(Arrays.asList(sewerageConnectionRequest.getSewerageConnection()), criteria, sewerageConnectionRequest.getRequestInfo());
+
+		//Updating the workflow from approve for disconnection to pending for disconnection execution when there are no dues
+		if(SWConstants.APPROVE_DISCONNECTION_CONST.equalsIgnoreCase(processInstance.getAction()) && isNoPayment){
+			paymentUpdateService.noPaymentWorkflow(sewerageConnectionRequest, property, sewerageConnectionRequest.getRequestInfo());
+		}
+
+		/* decrypt here */
+		sewerageConnectionRequest.setSewerageConnection(decryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection(), sewerageConnectionRequest.getRequestInfo()));
+		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
+		
 	}
 
 	private List<SewerageConnection> updateSewerageConnectionForDisconnectFlow(SewerageConnectionRequest sewerageConnectionRequest) {
@@ -359,9 +462,13 @@ public class SewerageServiceImpl implements SewerageService {
 	 * @return list of sewerage connection list
 	 */
 	private List<SewerageConnection> getAllSewerageApplications(SewerageConnectionRequest sewerageConnectionRequest) {
+		SewerageConnection sewerageConnection = sewerageConnectionRequest.getSewerageConnection();
 		SearchCriteria criteria = SearchCriteria.builder()
-				.connectionNumber(Stream.of(sewerageConnectionRequest.getSewerageConnection().getConnectionNo().toString()).collect(Collectors.toSet())).isCountCall(false)
+				.connectionNumber(Stream.of(sewerageConnection.getConnectionNo().toString()).collect(Collectors.toSet())).isCountCall(false)
 				.build();
+		if(sewerageConnectionRequest.isDisconnectRequest() ||
+				!StringUtils.isEmpty(sewerageConnection.getConnectionNo()))
+			criteria.setIsInternalCall(true);
 		return search(criteria, sewerageConnectionRequest.getRequestInfo());
 	}
 
@@ -384,6 +491,11 @@ public class SewerageServiceImpl implements SewerageService {
 				sewerageConnectionRequest.getRequestInfo());
 		SewerageConnection searchResult = getConnectionForUpdateRequest(
 				sewerageConnectionRequest.getSewerageConnection().getId(), sewerageConnectionRequest.getRequestInfo());
+
+		boolean isPlumberSwapped = unmaskingUtil.getUnmaskedPlumberInfo(sewerageConnectionRequest.getSewerageConnection().getPlumberInfo(), searchResult.getPlumberInfo());
+		if (isPlumberSwapped)
+			sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), "WnSConnectionPlumberDecrypDisabled", SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
+
 		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest);
 		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
 		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
@@ -391,9 +503,17 @@ public class SewerageServiceImpl implements SewerageService {
 		sewerageDaoImpl.pushForEditNotification(sewerageConnectionRequest);
 		// Call workflow
 		wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
+
+		/* encrypt here */
+		sewerageConnectionRequest.setSewerageConnection(encryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection()));
+
 		sewerageDaoImpl.updateSewerageConnection(sewerageConnectionRequest, sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
 		// setting oldApplication Flag
 		markOldApplication(sewerageConnectionRequest);
+
+		/* decrypt here */
+		sewerageConnectionRequest.setSewerageConnection(decryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection(), sewerageConnectionRequest.getRequestInfo()));
+
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
 	}
 
@@ -405,6 +525,7 @@ public class SewerageServiceImpl implements SewerageService {
 			for(SewerageConnection sewerageConnection:sewerageConnectionList){
 				if(!sewerageConnection.getOldApplication() && !(sewerageConnection.getApplicationNo().equalsIgnoreCase(currentModifiedApplicationNo))){
 					sewerageConnection.setOldApplication(Boolean.TRUE);
+					sewerageConnection = encryptConnectionDetails(sewerageConnection);
 					SewerageConnectionRequest previousSewerageConnectionRequest = SewerageConnectionRequest.builder().requestInfo(sewerageConnectionRequest.getRequestInfo())
 							.sewerageConnection(sewerageConnection).build();
 					sewerageDaoImpl.updateSewerageConnection(previousSewerageConnectionRequest,Boolean.TRUE);
@@ -414,15 +535,9 @@ public class SewerageServiceImpl implements SewerageService {
 	}
 	
 	public List<SewerageConnection> plainSearch(SearchCriteria criteria, RequestInfo requestInfo) {
+		criteria.setIsSkipLevelSearch(Boolean.TRUE);
 		List<SewerageConnection> sewerageConnectionList = getSewerageConnectionsPlainSearchList(criteria, requestInfo);
-		if(!StringUtils.isEmpty(criteria.getSearchType()) &&
-				criteria.getSearchType().equals(SWConstants.SEARCH_TYPE_CONNECTION)){
-			sewerageConnectionList = enrichmentService.filterConnections(sewerageConnectionList);
-			if(criteria.getIsPropertyDetailsRequired()){
-				sewerageConnectionList = enrichmentService.enrichPropertyDetails(sewerageConnectionList, criteria, requestInfo);
-
-			}
-		}
+		sewerageConnectionList = enrichmentService.enrichPropertyDetails(sewerageConnectionList, criteria, requestInfo);
 		validateProperty.validatePropertyForConnection(sewerageConnectionList);
 		enrichmentService.enrichConnectionHolderDeatils(sewerageConnectionList, criteria, requestInfo);
 		return sewerageConnectionList;
@@ -432,4 +547,72 @@ public class SewerageServiceImpl implements SewerageService {
 		return sewerageDao.getSewerageConnectionPlainSearchList(criteria, requestInfo);
 	}
 
+	/**
+	 * Replace the requestBody data and data from dB for those fields that come as masked (data containing "*" is
+	 * identified as masked) in requestBody
+	 *
+	 * @param sewerageConnectionRequest contains requestBody of sewerageConnection
+	 * @param previousConnectionsList contains unmasked data from the search result of sewerageConnection
+	 *
+	 */
+	private void swapConnHolders(SewerageConnectionRequest sewerageConnectionRequest, List<SewerageConnection> previousConnectionsList) {
+
+		if (!ObjectUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders()) &&
+				!ObjectUtils.isEmpty(previousConnectionsList.get(0).getConnectionHolders())) {
+
+			List<OwnerInfo> connHolders = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders();
+			List<OwnerInfo> searchedConnHolders = previousConnectionsList.get(0).getConnectionHolders();
+
+			if (!ObjectUtils.isEmpty(connHolders.get(0).getOwnerType()) &&
+					!ObjectUtils.isEmpty(searchedConnHolders.get(0).getOwnerType())) {
+
+				int k = 0;
+				for (OwnerInfo holderInfo : connHolders) {
+					if (holderInfo.getOwnerType().contains("*"))
+						holderInfo.setOwnerType(searchedConnHolders.get(k).getOwnerType());
+					if (holderInfo.getRelationship().contains("*"))
+						holderInfo.setRelationship(searchedConnHolders.get(k).getRelationship());
+					k++;
+
+				}
+			}
+		}
+	}
+
+	/**
+	 * Encrypts sewerageConnection details
+	 *
+	 * @param sewerageConnection contains  sewerageConnection object
+	 *
+	 */
+	private SewerageConnection encryptConnectionDetails(SewerageConnection sewerageConnection) {
+		/* encrypt here */
+		sewerageConnection = encryptionDecryptionUtil.encryptObject(sewerageConnection, WNS_ENCRYPTION_MODEL, SewerageConnection.class);
+		sewerageConnection = encryptionDecryptionUtil.encryptObject(sewerageConnection, WNS_PLUMBER_ENCRYPTION_MODEL, SewerageConnection.class);
+		List<OwnerInfo> connectionHolders = sewerageConnection.getConnectionHolders();
+		if (!CollectionUtils.isEmpty(connectionHolders)) {
+			int k = 0;
+			for (OwnerInfo holderInfo : connectionHolders) {
+				sewerageConnection.getConnectionHolders().set(k, encryptionDecryptionUtil.encryptObject(holderInfo, WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class));
+				k++;
+			}
+		}
+		return sewerageConnection;
+	}
+
+	/**
+	 * Decrypts sewerageConnection details
+	 *
+	 * @param sewerageConnection contains  sewerageConnection object
+	 */
+	private SewerageConnection decryptConnectionDetails(SewerageConnection sewerageConnection, RequestInfo requestInfo) {
+		/* decrypt here */
+		sewerageConnection = encryptionDecryptionUtil.decryptObject(sewerageConnection, WNS_ENCRYPTION_MODEL, SewerageConnection.class, requestInfo);
+		sewerageConnection = encryptionDecryptionUtil.decryptObject(sewerageConnection, WNS_PLUMBER_ENCRYPTION_MODEL, SewerageConnection.class, requestInfo);
+		List<OwnerInfo> connectionHolders = sewerageConnection.getConnectionHolders();
+		if (!CollectionUtils.isEmpty(connectionHolders))
+			sewerageConnection.setConnectionHolders(encryptionDecryptionUtil.decryptObject(connectionHolders, WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, requestInfo));
+
+		return sewerageConnection;
+	}
 }

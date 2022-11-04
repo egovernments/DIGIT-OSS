@@ -59,6 +59,9 @@ public class PGRConfiguration {
     @Value("${egov.user.update.path}")
     private String userUpdateEndpoint;
 
+    @Value("${egov.internal.microservice.user.uuid}")
+    private String egovInternalMicroserviceUserUuid;
+
     //Idgen Config
     @Value("${egov.idgen.host}")
     private String idGenHost;

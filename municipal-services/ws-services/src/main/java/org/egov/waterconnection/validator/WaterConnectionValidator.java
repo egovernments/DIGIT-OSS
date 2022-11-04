@@ -10,12 +10,15 @@ import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.service.MeterInfoValidator;
 import org.egov.waterconnection.service.PropertyValidator;
 import org.egov.waterconnection.service.WaterFieldValidator;
+import org.egov.waterconnection.util.EncryptionDecryptionUtil;
+import org.egov.waterconnection.web.models.OwnerInfo;
 import org.egov.waterconnection.web.models.ValidatorResult;
 import org.egov.waterconnection.web.models.WaterConnection;
 import org.egov.waterconnection.web.models.WaterConnectionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +37,8 @@ public class WaterConnectionValidator {
 	@Autowired
 	private MeterInfoValidator meterInfoValidator;
 
+	@Autowired
+	EncryptionDecryptionUtil encryptionDecryptionUtil;
 
 	/**Used strategy pattern for avoiding multiple if else condition
 	 * 
@@ -139,6 +144,33 @@ public class WaterConnectionValidator {
 	private void setFieldsFromSearch(WaterConnectionRequest request, WaterConnection searchResult, int reqType) {
 		if (reqType == WCConstants.UPDATE_APPLICATION) {
 			request.getWaterConnection().setConnectionNo(searchResult.getConnectionNo());
+		}
+
+		/*
+		 * Replace the requestBody data and data from dB for those fields that come as masked (data containing "*" is
+		 * identified as masked) in requestBody
+		 *
+		 * */
+		if (!CollectionUtils.isEmpty(request.getWaterConnection().getConnectionHolders()) &&
+				!CollectionUtils.isEmpty(searchResult.getConnectionHolders())) {
+
+			List<OwnerInfo> connHolders = request.getWaterConnection().getConnectionHolders();
+			searchResult = encryptionDecryptionUtil.decryptObject(searchResult, "WnSConnectionDecrypDisabled", WaterConnection.class, request.getRequestInfo());
+			List<OwnerInfo> searchedConnHolders = searchResult.getConnectionHolders();
+
+			if (!ObjectUtils.isEmpty(connHolders.get(0).getOwnerType()) &&
+					!ObjectUtils.isEmpty(searchedConnHolders.get(0).getOwnerType())) {
+
+				int k = 0;
+				for (OwnerInfo holderInfo : connHolders) {
+					if (holderInfo.getOwnerType().contains("*"))
+						holderInfo.setOwnerType(searchedConnHolders.get(k).getOwnerType());
+					if (holderInfo.getRelationship().contains("*"))
+						holderInfo.setRelationship(searchedConnHolders.get(k).getRelationship());
+
+					k++;
+				}
+			}
 		}
 	}
 }

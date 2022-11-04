@@ -1,13 +1,14 @@
 package org.egov.waterconnection.workflow;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.kafka.common.protocol.types.Field;
+
 import org.egov.common.contract.request.PlainAccessRequest;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
@@ -130,50 +131,55 @@ public class WorkflowService {
 	 *            The RequestInfo object of the request
 	 * @return BusinessService for the the given tenantId
 	 */
-	public ProcessInstance getProcessInstance(RequestInfo requestInfo, String applicationNo, String tenantId,
-			String businessServiceName) {
-		StringBuilder url = getProcessInstanceSearchURL(tenantId, applicationNo, businessServiceName);
+	public Map<String, ProcessInstance> getProcessInstances(RequestInfo requestInfo, Set<String> applicationNumbers, String tenantId,
+															String businessServiceName) {
+		StringBuilder url = getProcessInstanceSearchURL(tenantId, applicationNumbers, businessServiceName);
 		RequestInfoWrapper requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
 		Object result = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
-
+		Map<String, ProcessInstance> processInstanceMap = new HashMap<>();
 		PlainAccessRequest apiPlainAccessRequest = requestInfo.getPlainAccessRequest();
 		/* Creating a PlainAccessRequest object to get unmasked mobileNumber for Assignee */
 		List<String> plainRequestFieldsList = new ArrayList<String>() {{
 			add("mobileNumber");
 		}};
 
-
 		ProcessInstanceResponse response = null;
 		try {
 			response = mapper.convertValue(result, ProcessInstanceResponse.class);
-			if (!CollectionUtils.isEmpty(response.getProcessInstances())) {
-				if (response.getProcessInstances().get(0).getAssignes() != null) {
-					PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(response.
-									getProcessInstances().get(0).getAssignes().get(0).getUuid())
-							.plainRequestFields(plainRequestFieldsList).build();
+			List<ProcessInstance> processInstanceList = new ArrayList<>();
+			for (ProcessInstance processInstance : response.getProcessInstances()) {
+				if (!ObjectUtils.isEmpty(processInstance)) {
+					if (processInstance.getAssignes() != null) {
+						PlainAccessRequest plainAccessRequest = PlainAccessRequest.builder().recordId(processInstance.getAssignes().get(0).getUuid())
+								.plainRequestFields(plainRequestFieldsList).build();
 
-					requestInfo.setPlainAccessRequest(plainAccessRequest);
-					requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+						requestInfo.setPlainAccessRequest(plainAccessRequest);
+						requestInfoWrapper = RequestInfoWrapper.builder().requestInfo(requestInfo).build();
+					}
 				}
+				Object resultNew = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
+				response = mapper.convertValue(resultNew, ProcessInstanceResponse.class);
+				//Re-setting the original PlainAccessRequest object that came from api request
+				requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
+
+				Optional<ProcessInstance> processInstances = Optional.ofNullable(processInstance);
+				if (!ObjectUtils.isEmpty(response.getProcessInstances())) {
+					if (processInstances.get().getAssignes() != null) {
+						/* encrypt here */
+						processInstances.get().setAssignes((List<org.egov.common.contract.request.User>) encryptionDecryptionUtil.encryptObject(processInstances.get().getAssignes(), WNS_OWNER_ENCRYPTION_MODEL, User.class));
+
+						/* decrypt here */
+						processInstances.get().setAssignes(encryptionDecryptionUtil.decryptObject(processInstances.get().getAssignes(), WNS_OWNER_ENCRYPTION_MODEL, User.class, requestInfo));
+					}
+				}
+				processInstanceMap.put(processInstance.getBusinessId(), processInstance);
 			}
-			Object resultNew = serviceRequestRepository.fetchResult(url, requestInfoWrapper);
-			response = mapper.convertValue(resultNew, ProcessInstanceResponse.class);
-			//Re-setting the original PlainAccessRequest object that came from api request
-			requestInfo.setPlainAccessRequest(apiPlainAccessRequest);
-		} catch (IllegalArgumentException e) {
+			/*processInstanceMap = processInstances.stream()
+					.collect(Collectors.toMap(ProcessInstance::getBusinessId, Function.identity()));*/
+			return processInstanceMap;
+		} catch(IllegalArgumentException e){
 			throw new CustomException("PARSING_ERROR", "Failed to parse response of process instance");
 		}
-		if (!ObjectUtils.isEmpty(response.getProcessInstances())) {
-			Optional<ProcessInstance> processInstance = response.getProcessInstances().stream().findFirst();
-			/* encrypt here */
-			/*processInstance.get().setAssignes((List<org.egov.common.contract.request.User>) encryptionDecryptionUtil.encryptObject(processInstance.get().getAssignes(), WNS_OWNER_ENCRYPTION_MODEL, User.class));
-
-			*//* decrypt here *//*
-			processInstance.get().setAssignes(encryptionDecryptionUtil.decryptObject(processInstance.get().getAssignes(), WNS_OWNER_ENCRYPTION_MODEL, User.class, requestInfo));
-*/
-			return processInstance.get();
-		}
-		return null;
 	}
 
 	/**
@@ -203,8 +209,11 @@ public class WorkflowService {
 	 */
 	public String getApplicationStatus(RequestInfo requestInfo, String applicationNo, String tenantId,
 			String businessServiceName) {
-		return getProcessInstance(requestInfo, applicationNo, tenantId, businessServiceName).getState()
-				.getApplicationStatus();
+		Map<String, ProcessInstance> processInstanceMap = (Map<String, ProcessInstance>) getProcessInstances(requestInfo, Collections.singleton(applicationNo), tenantId, businessServiceName);
+		if(!ObjectUtils.isEmpty(processInstanceMap.get(applicationNo))) {
+			return processInstanceMap.get(applicationNo).getState().getApplicationStatus();
+		}
+		return null;
 	}
 
 	private List<ProcessInstance> getProcessInstance(RequestInfo requestInfo, Set<String> applicationNos,

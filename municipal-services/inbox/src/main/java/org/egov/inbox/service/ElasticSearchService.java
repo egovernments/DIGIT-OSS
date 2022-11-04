@@ -138,12 +138,16 @@ public class ElasticSearchService {
         try {
             ResponseEntity<Object> response = retryTemplate.postForEntity(url, requestEntity);
             responseNode = new ObjectMapper().convertValue(response.getBody(), JsonNode.class);
+            Object total = responseNode.get(ELASTICSEARCH_HIT_KEY).get(ELASTICSEARCH_TOTAL_KEY);
             JsonNode output = responseNode.get(ELASTICSEARCH_HIT_KEY).get(ELASTICSEARCH_HIT_KEY);
             if(output.size()==0){
                 throw new CustomException("NO_DATA", "No logs data for the given user with the provided search criteria");
             }
             List<Map<String,Object>> result = new ArrayList<>();
             List<String> userIds = new ArrayList<>();
+            Map<String,Object> totalHits = new HashMap<>();
+            totalHits.put(ELASTICSEARCH_TOTAL_KEY,total);
+            result.add(totalHits);
             if (!isNull(output) && output.isArray()) {
                 for(JsonNode objectnode : output){
                     Map<String,Object> data = new HashMap<>();
@@ -155,12 +159,16 @@ public class ElasticSearchService {
                     result.add(data);
                 }
             }
-            Map<String, User> mapping = getPlainOwnerDetails(request.getRequestInfo(), userIds, request.getInboxElasticSearchCriteria().getTenantId());
+            Map<String, Object> mapping = getPlainOwnerDetails(request.getRequestInfo(), userIds, request.getInboxElasticSearchCriteria().getTenantId());
+            if(mapping.size() != userIds.size())
+                getremainingCitizenUserDetails(request.getRequestInfo(),userIds,request.getInboxElasticSearchCriteria().getTenantId(), mapping);
+
             for(int i=0;i<result.size();i++){
                 String uuid = (String) result.get(i).get(ELASTICSEARCH_USERID_KEY);
-                if(mapping.get(uuid)!= null){
-                    result.get(i).put(ELASTICSEARCH_DATAVIEWEDBY_KEY,mapping.get(uuid).getName());
-                    result.get(i).put(ELASTICSEARCH_ROLES_KEY,mapping.get(uuid).getRoles());
+                Map<String,Object> userData = (Map<String, Object>) mapping.get(uuid);
+                if(userData!= null){
+                    result.get(i).put(ELASTICSEARCH_DATAVIEWEDBY_KEY,userData.get("name"));
+                    result.get(i).put(ELASTICSEARCH_ROLES_KEY,userData.get("roles"));
                 }
                 else
                     result.get(i).put("user",null);
@@ -175,6 +183,26 @@ public class ElasticSearchService {
         return finalResult;
     }
 
+    /**
+     * Gets plain data of citizen user details
+     * @param requestInfo requestinfo
+     * @param uuids List of user uuids
+     * @param tenantId tenantid
+     * @param mapping map of uuid and employee user
+     */
+    private void getremainingCitizenUserDetails(RequestInfo requestInfo, List<String> uuids, String tenantId, Map<String,Object> mapping){
+        Map<String,Object> citizenUser = new HashMap<>();
+        List<String> citizenUuids = new ArrayList<>();
+
+        // Getting the citizen user uuid from the collatted uuid list
+        for(String uuid : uuids){
+            if(!mapping.containsKey(uuid))
+                citizenUuids.add(uuid);
+        }
+        citizenUser = getPlainOwnerDetails(requestInfo, uuids, centralInstanceUtil.getStateLevelTenant(tenantId));
+        mapping.putAll(citizenUser);
+    }
+
 
     /**
      * Enrich elastic search query
@@ -185,24 +213,94 @@ public class ElasticSearchService {
      */
     public String enrichSearchQuery(RequestInfo requestInfo, InboxElasticSearchCriteria criteria, String searchQuery, List<String> placeHolderList){
        String elasticSearchQuery = searchQuery;
+        Long limit = config.getDefaultLimit();
+        Long offset = config.getDefaultOffset();
+        String sortOrder = config.getDefaultSortOrder();
+
+        if(criteria.getLimit() != null && criteria.getLimit() <= config.getMaxSearchLimit())
+            limit = Long.valueOf(criteria.getLimit());
+
+        if(criteria.getLimit() != null && criteria.getLimit() > config.getMaxSearchLimit())
+            limit = Long.valueOf(config.getMaxSearchLimit());
+
+        if(criteria.getOffset() != null)
+            offset = Long.valueOf(criteria.getOffset());
+
+        if(criteria.getSortOrder() != null)
+            sortOrder = criteria.getSortOrder();
+
         for(String placeholder:placeHolderList){
 
             if(placeholder.equalsIgnoreCase(PLACEHOLDER_FROMDATE_KEY)){
-                String fromDate = String.valueOf(criteria.getFromDate());
+                String fromDate = "0";
+                if(criteria.getFromDate()!=0)
+                    fromDate = String.valueOf(criteria.getFromDate());
                 elasticSearchQuery = elasticSearchQuery.replace(PLACEHOLDER_FROMDATE_KEY,fromDate);
 
             }
 
             if(placeholder.equalsIgnoreCase(PLACEHOLDER_TODATE_KEY)){
-                String toDate = String.valueOf(criteria.getToDate());
+                String toDate = String.valueOf(System.currentTimeMillis());
+                if(criteria.getToDate()!=0)
+                    toDate = String.valueOf(criteria.getToDate());
                 elasticSearchQuery = elasticSearchQuery.replace(PLACEHOLDER_TODATE_KEY,toDate);
 
             }
 
-            if(placeholder.equalsIgnoreCase(PLACEHOLDER_UUID_KEY))
-                elasticSearchQuery = elasticSearchQuery.replace(PLACEHOLDER_UUID_KEY,requestInfo.getUserInfo().getUuid());
+            if(placeholder.equalsIgnoreCase(PLACEHOLDER_OFFSET_KEY))
+                elasticSearchQuery = elasticSearchQuery.replace(PLACEHOLDER_OFFSET_KEY,String.valueOf(offset));
+
+            if(placeholder.equalsIgnoreCase(PLACEHOLDER_LIMIT_KEY))
+                elasticSearchQuery = elasticSearchQuery.replace(PLACEHOLDER_LIMIT_KEY,String.valueOf(limit));
+
+            if(placeholder.equalsIgnoreCase(PLACEHOLDER_SORT_ORDER_KEY))
+                elasticSearchQuery = elasticSearchQuery.replace(PLACEHOLDER_SORT_ORDER_KEY,sortOrder);
+
+
+            if(placeholder.equalsIgnoreCase(PLACEHOLDER_UUID_KEY)){
+                String mobileNumber = requestInfo.getUserInfo().getMobileNumber();
+                String tenantId = centralInstanceUtil.getStateLevelTenant(criteria.getTenantId());
+                List<String> usersUuid = getUsersUuid(requestInfo,mobileNumber,tenantId);
+                String multiMatchQuery = String.join(" OR ",usersUuid);
+                elasticSearchQuery = elasticSearchQuery.replace(PLACEHOLDER_UUID_KEY,multiMatchQuery);
+            }
         }
         return elasticSearchQuery;
+    }
+
+    /**
+     * Searches the citizen user based on mobileNumber and returns the list of their UUIDS
+     * @param requestInfo RequestInfo
+     * @param mobileNumber Citizen mobile number
+     * @param tenantId tenantId for citizen search
+     * @return List of citizen user uuids
+     */
+    private List<String> getUsersUuid(RequestInfo requestInfo, String mobileNumber, String tenantId ){
+        List<String> usersUuid = new ArrayList<>();
+        StringBuilder uri = new StringBuilder();
+        uri.append(config.getUserHost()).append(config.getUserSearchEndpoint()); // URL for user search call
+        Map<String, Object> userSearchRequest = new HashMap<>();
+
+        // Setting user search criteria
+        userSearchRequest.put("RequestInfo", requestInfo);
+        userSearchRequest.put("tenantId", tenantId);
+        userSearchRequest.put("mobileNumber",mobileNumber);
+        userSearchRequest.put("type","CITIZEN");
+        UserDetailResponse userDetailResponse = null;
+
+        try {
+            LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>) serviceRequestRepository.fetchResult(uri, userSearchRequest);
+            List<LinkedHashMap<String, Object>> users = (List<LinkedHashMap<String, Object>>) responseMap.get("user");
+            if(null != users) {
+                users.forEach( user -> {
+                    usersUuid.add((String)user.get("uuid"));
+                });
+            }
+        } catch (Exception e) {
+            throw new CustomException("EG_USER_SEARCH_ERROR", "Service returned null while fetching user : "+e.getMessage());
+        }
+
+        return usersUuid;
     }
 
     private HttpHeaders getHttpHeaders() {
@@ -229,8 +327,8 @@ public class ElasticSearchService {
      * @param uuids List of user uuids
      * @param tenantId tenantid
      */
-    private Map<String,User> getPlainOwnerDetails(RequestInfo requestInfo, List<String> uuids, String tenantId){
-        Map<String,User> mapping = new HashMap<>();
+    private Map<String,Object> getPlainOwnerDetails(RequestInfo requestInfo, List<String> uuids, String tenantId){
+        Map<String,Object> mapping = new HashMap<>();
         User userInfoCopy = requestInfo.getUserInfo();
         StringBuilder uri = new StringBuilder();
         uri.append(config.getUserHost()).append(config.getUserSearchEndpoint()); // URL for user search call
@@ -260,11 +358,11 @@ public class ElasticSearchService {
             List<LinkedHashMap<String, Object>> users = (List<LinkedHashMap<String, Object>>) responseMap.get("user");
             String dobFormat = "yyyy-MM-dd";
 
-            // parsing the user response and coverting object into User.class pojo
-            parseResponse(responseMap,dobFormat);
-            userDetailResponse = 	mapper.convertValue(responseMap, UserDetailResponse.class);
-            for(User user: userDetailResponse.getUser())
-                mapping.put(user.getUuid(),user);
+            // parsing the user response
+            parseResponse(responseMap,dobFormat,mapping);
+
+            /*for(User user: userDetailResponse.getUser())
+                mapping.put(user.getUuid(),user);*/
 
         } catch (Exception e) {
             throw new CustomException("EG_USER_SEARCH_ERROR", "Service returned null while fetching user");
@@ -276,12 +374,12 @@ public class ElasticSearchService {
 
     /**
      * Converts date to required date format
-     * @param responeMap date to be parsed
+     * @param responseMap date to be parsed
      * @param dobFormat Format of the date
      */
-    private void parseResponse(LinkedHashMap<String, Object> responeMap,String dobFormat) {
+    private void parseResponse(LinkedHashMap<String, Object> responseMap,String dobFormat, Map<String,Object> mapping) {
 
-        List<LinkedHashMap<String, Object>> users = (List<LinkedHashMap<String, Object>>)responeMap.get("user");
+        List<LinkedHashMap<String, Object>> users = (List<LinkedHashMap<String, Object>>)responseMap.get("user");
         String format1 = "dd-MM-yyyy HH:mm:ss";
 
         if(null != users) {
@@ -295,6 +393,8 @@ public class ElasticSearchService {
                             map.put("dob",dateTolong((String)map.get("dob"),dobFormat));
                         if((String)map.get("pwdExpiryDate")!=null)
                             map.put("pwdExpiryDate",dateTolong((String)map.get("pwdExpiryDate"),format1));
+
+                        mapping.put((String)map.get("uuid"),map);
                     }
             );
         }

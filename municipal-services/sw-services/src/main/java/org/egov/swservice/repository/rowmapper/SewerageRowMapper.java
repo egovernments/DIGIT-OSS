@@ -54,6 +54,8 @@ public class SewerageRowMapper implements ResultSetExtractor<List<SewerageConnec
                 sewarageConnection.setRoadType(rs.getString("roadtype"));
                 sewarageConnection.setOldApplication(rs.getBoolean("isoldapplication"));
                 sewarageConnection.setDisconnectionReason(rs.getString("disconnectionReason"));
+                sewarageConnection.setIsDisconnectionTemporary(rs.getBoolean("isDisconnectionTemporary"));
+
                 // get property id and get property object
                 PGobject pgObj = (PGobject) rs.getObject("additionaldetails");
 				ObjectNode addtionalDetails = null;
@@ -177,7 +179,7 @@ public class SewerageRowMapper implements ResultSetExtractor<List<SewerageConnec
                 isPrimaryOwner = null;
             }
             OwnerInfo connectionHolderInfo = OwnerInfo.builder()
-                    .relationship(Relationship.fromValue(rs.getString("holderrelationship")))
+                    .relationship(rs.getString("holderrelationship"))
                     .status(Status.fromValue(rs.getString("holderstatus")))
                     .tenantId(rs.getString("holdertenantid")).ownerType(rs.getString("connectionholdertype"))
                     .isPrimaryOwner(isPrimaryOwner).uuid(uuid).build();

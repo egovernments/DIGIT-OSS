@@ -36,6 +36,10 @@ public class WaterConnectionRequest {
 	@JsonProperty("disconnectRequest")
 	private boolean disconnectRequest;
 
+	@Builder.Default
+	@JsonProperty("isCreateCall")
+	private boolean isCreateCall = false;
+
 	public WaterConnectionRequest requestInfo(RequestInfo requestInfo) {
 		this.requestInfo = requestInfo;
 		return this;

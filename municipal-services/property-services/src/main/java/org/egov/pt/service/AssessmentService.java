@@ -73,6 +73,7 @@ public class AssessmentService {
 	 * @return
 	 */
 	public Assessment createAssessment(AssessmentRequest request) {
+		
 		Property property = utils.getPropertyForAssessment(request);
 		validator.validateAssessmentCreate(request, property);
 		assessmentEnrichmentService.enrichAssessmentCreate(request);

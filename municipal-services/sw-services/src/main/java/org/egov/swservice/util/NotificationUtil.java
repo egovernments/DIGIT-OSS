@@ -5,6 +5,8 @@ import java.util.*;
 import com.jayway.jsonpath.Filter;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
+import org.egov.common.contract.request.Role;
+import org.egov.common.contract.request.User;
 import org.egov.mdms.model.MasterDetail;
 import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
@@ -140,6 +142,10 @@ public class NotificationUtil {
 		if(reqType == SWConstants.MODIFY_CONNECTION){
 			notificationCode = new StringBuilder("SW_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
 		}
+		if (reqType == DISCONNECT_CONNECTION)
+		{
+			notificationCode = new StringBuilder("SW_DISCONNECT_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_SMS_MESSAGE");
+		}
 		return getMessageTemplate(notificationCode.toString(), localizationMessage);
 	}
 
@@ -157,6 +163,10 @@ public class NotificationUtil {
 		if (reqType == SWConstants.MODIFY_CONNECTION) {
 			builder.append("SW_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_EMAIL_MESSAGE");
 		}
+		if (reqType == DISCONNECT_CONNECTION)
+		{
+			builder.append("SW_DISCONNECT_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_EMAIL_MESSAGE");
+		}
 		return getMessageTemplate(builder.toString(), localizationMessage);
 	}
 	/**
@@ -172,6 +182,10 @@ public class NotificationUtil {
 		}
 		if(reqType == SWConstants.MODIFY_CONNECTION){
 			notificationCode.append("SW_MODIFY_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_APP_MESSAGE");
+		}
+		if (reqType == DISCONNECT_CONNECTION)
+		{
+			notificationCode = new StringBuilder("SW_DISCONNECT_").append(action.toUpperCase()).append("_").append(applicationStatus.toUpperCase()).append("_APP_MESSAGE");
 		}
 		return getMessageTemplate(notificationCode.toString(), localizationMessage);
 	}
@@ -286,5 +300,25 @@ public class NotificationUtil {
 		return mdmsCriteriaReq;
 	}
 
+	/**
+	 *
+	 * @param tenantId
+	 * @return internal microservice user to fetch plain user details
+	 */
+	public User getInternalMicroserviceUser(String tenantId)
+	{
+		//Creating role with INTERNAL_MICROSERVICE_ROLE
+		Role role = Role.builder()
+				.name("Internal Microservice Role").code("INTERNAL_MICROSERVICE_ROLE")
+				.tenantId(tenantId).build();
+
+		//Creating userinfo with uuid and role of internal micro service role
+		User userInfo = User.builder()
+				.uuid(config.getEgovInternalMicroserviceUserUuid())
+				.type("SYSTEM")
+				.roles(Collections.singletonList(role)).id(0L).build();
+
+		return userInfo;
+	}
 
 }

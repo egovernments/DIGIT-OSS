@@ -16,6 +16,7 @@ import com.tarento.analytics.service.impl.RestService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -45,6 +46,7 @@ public class MdmsServiceImpl implements ClientService {
     Map<String, List<String>> groupTenantIds;
 
     @Override
+    @Cacheable(value="versions", key="#request.hashKey")
     public AggregateDto getAggregatedData(AggregateRequestDto request, List<RoleDto> roles) throws AINException, IOException {
         // Read visualization Code
         String chartId = request.getVisualizationCode();
