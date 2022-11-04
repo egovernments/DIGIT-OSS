@@ -2,7 +2,7 @@
 
 # Changelog
 All notable changes to this module will be documented in this file.
-## 1.1.7 - 2022-11-04
+## 1.1.7-beta - 2022-11-04
 - Added jmeter scripts
 
 ## 1.1.6 - 2022-01-13

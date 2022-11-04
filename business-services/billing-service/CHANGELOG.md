@@ -1,6 +1,6 @@
 
 All notable changes to this module will be documented in this file.
-## 1.3.5 - 2022-11-13
+## 1.3.5-beta - 2022-11-13
 - Amendment Query bug fix
 
 ## 1.3.4 - 2022-01-04
