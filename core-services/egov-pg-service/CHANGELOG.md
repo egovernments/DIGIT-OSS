@@ -3,7 +3,7 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.2.4 - 2022-09-20
+## 1.2.4-beta - 2022-09-20
 - Upgraded spring-boot-starter-parent to 2.2.13 and spring beans to 5.2.20.RELEASE
 - Added internal microservice role to support plain access user search
 

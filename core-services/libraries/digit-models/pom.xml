@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.egov.services</groupId>
     <artifactId>digit-models</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-beta-SNAPSHOT</version>
     <name>digit-models</name>
     <description>Shared classes among services</description>
     <distributionManagement>

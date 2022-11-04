@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.2.5 - 2022-09-20
+## 1.2.5-beta - 2022-09-20
 - Upgraded spring-boot-starter-parent to 2.2.13 and spring beans to 5.2.20.RELEASE
 
 ## 1.2.4 - 2022-01-13

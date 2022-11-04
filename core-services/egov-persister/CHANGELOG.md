@@ -1,7 +1,7 @@
 
 All notable changes to this module will be documented in this file.
 
-## 1.1.5 - 2022-09-20
+## 1.1.5-beta - 2022-09-20
 - Enhanced persister service for the implementation of audit service feature.
 - Upgraded spring-boot-starter-parent to 2.2.13 and spring beans to 5.2.20.RELEASE
 

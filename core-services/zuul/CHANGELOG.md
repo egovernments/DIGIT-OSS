@@ -1,7 +1,7 @@
 
 All notable changes to this module will be documented in this file.
 
-## 1.3.2 - 2022-09-20
+## 1.3.2-beta - 2022-09-20
 - Upgraded spring-boot-starter-parent to 2.2.13 and spring beans to 5.2.20.RELEASE
 - Updated to log4j2 version 2.17.1
 

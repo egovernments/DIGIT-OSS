@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.3.0 - 2022-06-22
+## 1.3.0-beta - 2022-06-22
 
 - Enhanced user service for the implementation of privacy feature.
 - Added logback-classic version 1.2.0 and updated tracer to remove a critical vulnerabilities

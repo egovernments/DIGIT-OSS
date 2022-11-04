@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>egov-national-dashboard-ingest</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1-beta-SNAPSHOT</version>
 	<name>egov-national-dashboard-ingest</name>
 	<description>Service to ingest data for national dashboards</description>
 	<properties>
