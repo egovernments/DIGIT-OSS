@@ -112,9 +112,21 @@ public class IntegrationService {
                             values = valuesAfterLoc;
                         }
                         Map<Object, Object> map = new LinkedHashMap<>();
-                        for (int i = 0; i < keys.size(); i++) {
-                            map.put(keys.get(i), values.get(i));
-                        }
+                        /*
+                         * Temp fix to combine columns since report service will be deprecated
+                         * 
+                         * using a short term solution
+                         */
+						if (reportDefinition.getReportName().equalsIgnoreCase("TradeLicenseDailyCollectionReport")) {
+							List<Object> valuesSuffix = JsonPath.read(document, patterns[3]);
+							for (int i = 0; i < keys.size(); i++) {
+								map.put(keys.get(i), values.get(i)+"/"+valuesSuffix.get(i));
+							}
+						} else {
+							for (int i = 0; i < keys.size(); i++) {
+								map.put(keys.get(i), values.get(i));
+							}
+						}
 
                         columnDetail.setDefaultValue(map);
                     } catch (Exception e) {
