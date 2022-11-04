@@ -11,6 +11,7 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import InfoIcon from '@mui/icons-material/Info';
 import axios from 'axios';
 const AppliedDetailForm = (props) => {
+  
   const [finalSubmitData, setFinalSubmitData] = useState([])
   const [form, setForm] = useState([]);
   const [dgps, setDgps] = useState('');
@@ -1283,6 +1284,78 @@ useEffect(() => {
                   </div>
                   <div className="col col-3">
                     <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">Upload Layout Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+
+                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setDevelopmentPlan(e.target.value)} value={developmentPlan}></input>
+                  </div>
+
+                </div>
+                <div className="row">
+                  <div className="col col-3">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Copy of plans showing cross sections of proposed roads indicating, in particular, the width of proposed carriage ways cycle tracks and footpaths etc">Plans showing cross sections &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+
+                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setSitePlan(e.target.value)} value={sitePlan}>
+                    </input>
+                  </div>
+                  <div className="col col-3">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Copy of plans indicating, in addition, the position of sewers, stormwater channels, water supply and any other public health services.">Plans indicating, in addition, the position of public health services. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+
+                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setDemocraticPlan(e.target.value)} value={democraticPlan}></input>
+                  </div>
+                  <div className="col col-3">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Copy of detailed specifications and designs of road works and estimated costs thereof">Specifications and designs of road works  &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+
+                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setSectoralPlan(e.target.value)} value={sectoralPlan}></input>
+                  </div>
+                  <div className="col col-3">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Copy of detailed specifications and designs of sewerage, storm, water and water supply works and estimated costs thereof">Designs of sewerage, storm, water and water supply works  &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+
+                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setDevelopmentPlan(e.target.value)} value={developmentPlan}></input>
+                  </div>
+
+                </div>
+                <div className="row">
+                  <div className="col col-3">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Copy of detailed specifications and designs for disposal and treatment of storm and sullage water and estimated costs of works.">Designs for disposal and treatment of storm and sullage water  &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+
+                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setSitePlan(e.target.value)} value={sitePlan}>
+                    </input>
+                  </div>
+                  <div className="col col-3">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Whether intimated each of the allottees through registered post regarding the proposed changes in the layout plan: - If yes selected upload">Undertaking that no change has been made in the phasing  &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+
+                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setDemocraticPlan(e.target.value)} value={democraticPlan}></input>
+                  </div>
+                  <div className="col col-3">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload">Whether you hosted the existing approved layout plan  &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+
+                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setSectoralPlan(e.target.value)} value={sectoralPlan}></input>
+                  </div>
+                  <div className="col col-3">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">Report any objection from any of the allottees   &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+
+                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setDevelopmentPlan(e.target.value)} value={developmentPlan}></input>
+                  </div>
+
+                </div>
+                <div className="row">
+                  <div className="col col-3">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Consent of RERA if there is any change in the phasing .">Consent of RERA   &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+
+                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setSitePlan(e.target.value)} value={sitePlan}>
+                    </input>
+                  </div>
+                  <div className="col col-3">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Undertaking that no change has been made in the phasing ">Undertaking &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+
+                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setDemocraticPlan(e.target.value)} value={democraticPlan}></input>
+                  </div>
+                  <div className="col col-3">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Copy of detailed specifications and designs for electric supply including street lighting">Detailed specifications and designs for electric supply   &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
+
+                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setSectoralPlan(e.target.value)} value={sectoralPlan}></input>
+                  </div>
+                  <div className="col col-3">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Explanatory note regarding the salient feature of the proposed colony.">Salient feature of the proposed colony   &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon></h6>
 
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} onChange={(e) => setDevelopmentPlan(e.target.value)} value={developmentPlan}></input>
                   </div>

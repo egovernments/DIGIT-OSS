@@ -123,6 +123,7 @@ const optionsPotentialList = [
 ];
 
 const ApllicantPuropseForm = (props) => {
+  console.log("Props",props)
   const columns = [
     {
       key: "tehsil",
@@ -277,11 +278,11 @@ const ApllicantPuropseForm = (props) => {
   const [showhide1, setShowhide1] = useState("No");
   const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
-  const [consolidateValue, setConsolidateValue] = useState(null);
-  const nextFormStep = () => setFormStep((currentStep) => currentStep + 1);
-
-  const prevFormStep = () => setFormStep((currentStep) => currentStep - 1);
-
+  const [consolidateValue, setConsolidateValue] = useState(null);  
+  const [submitDataLabel, setSubmitDataLabel] = useState([]);
+  const [finalSubmitData, setFinalSubmitData] = useState([]);
+const ID = props.getId;
+console.log("ID",ID);
   useEffect(() => {
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
@@ -547,244 +548,7 @@ const ApllicantPuropseForm = (props) => {
     console.log("data==============", data);
   }
 
-  const PurposeFormSubmitHandler = async (data) => {
-    console.log("data===", data);
-    props.Step2Continue({ data });
-    try {
-      const postDistrict = {
-        NewServiceInfo: {
-          newServiceInfoData: [
-            {
-              ApplicantInfo: {
-                authorizedDeveloper: "",
-                authorizedPerson: "sd",
-                authorizedmobile: "sds",
-                alternatemobile: "1e",
-                authorizedEmail: "eeds",
-                authorizedPan: "fsd",
-                authorizedAddress: "",
-                village: "village",
-                authorizedPinCode: "",
-                tehsil: "dsf",
-                district: "sdf",
-                state: "dsf",
-                status: "fgr",
-                LC: LC,
-                address: address,
-                permanentAddress: "fgd",
-                notSigned: "fgver",
-                email: "gfg",
-                authorized: "rgsf",
-              },
-              ApplicantPurpose: {
-                purposeDd: "",
-                potential: "",
-                district: "",
-                state: "",
-                ApplicationPurposeData1: {
-                  tehsil: "tahsil",
-                  revenueEstate: "",
-                  mustil: "",
-                  consolidation: "",
-                  sarsai: "",
-                  kanal: "",
-                  marla: "",
-                  bigha: "",
-                  biswansi: "",
-                  biswa: "",
-                  landOwner: "",
-                  developerCompany: "",
-                  registeringdate: "",
-                  validitydate: "",
-                  colirrevocialble: "",
-                  authSignature: "",
-                  nameAuthSign: "",
-                  registeringAuthority: "",
-                  registeringAuthorityDoc: "",
-                },
-              },
-              LandSchedule: {
-                licenseApplied: "lic",
-                LicNo: "",
-                potential: "",
-                siteLoc: "",
-                approach: "",
-                approachRoadWidth: "",
-                specify: "",
-                typeLand: "",
-                thirdParty: "",
-                migrationLic: "",
-                encumburance: "",
-                litigation: "",
-                court: "",
-                insolvency: "",
-                appliedLand: "",
-                revenuerasta: "",
-                watercourse: "",
-                compactBlock: "",
-                sandwiched: "",
-                acquistion: "",
-                section4: "",
-                section6: "",
-                orderUpload: "",
-                approachable: "",
-                vacant: "",
-                construction: "",
-                ht: "",
-                gas: "",
-                nallah: "",
-                road: "",
-                land: "",
-                utilityLine: "",
-                landSchedule: "",
-                mutation: "",
-                jambandhi: "",
-                LayoutPlan: "",
-                proposedLayoutPlan: "",
-                revisedLansSchedule: "",
-              },
-              DetailsofAppliedLand: {
-                dgps: "dsg",
-                DetailsAppliedLandData1: {
-                  resplotno: "asa",
-                  reslengthmtr: "",
-                  reswidthmtr: "",
-                  resareasq: "",
-                  npnlplotno: "",
-                  npnllengthmtr: "",
-                  npnlwidthmtr: "",
-                  npnlareasq: "",
-                  ewsplotno: "",
-                  ewslengthmtr: "",
-                  ewswidthmtr: "",
-                  ewsareasq: "",
-                  complotno: "",
-                  comlengthmtr: "",
-                  comwidthmtr: "",
-                  comareasq: "",
-                  siteplotno: "",
-                  sitelengthmtr: "",
-                  sitewidthmtr: "",
-                  siteareasq: "",
-                  parkplotno: "",
-                  parklengthmtr: "",
-                  parkwidthmtr: "",
-                  parkareasq: "",
-                  publicplotno: "",
-                  publiclengthmtr: "",
-                  publicwidthmtr: "",
-                  publicareasq: "",
-                  stpplotno: "",
-                  stplengthmtr: "",
-                  stpwidthmtr: "",
-                  stpareasq: "",
-                  etpplotno: "",
-                  etplengthmtr: "",
-                  etpwidthmtr: "",
-                  etpareasq: "",
-                  wtpplotno: "",
-                  wtplengthmtr: "",
-                  wtpwidthmtr: "",
-                  wtpareasq: "",
-                  ugtplotno: "",
-                  ugtlengthmtr: "",
-                  ugtwidthmtr: "",
-                  ugtareasq: "",
-                  milkboothplotno: "",
-                  milkboothlengthmtr: "",
-                  milkboothwidthmtr: "",
-                  milkboothareasq: "",
-                  gssplotno: "",
-                  gsslengthmtr: "",
-                  gssareasq: "",
-                  resDimension: "",
-                  resEnteredArea: "",
-                  comDimension: "",
-                  comEnteredArea: "",
-                  secPlanPlot: "",
-                  secPlanLength: "",
-                  secPlanDim: "",
-                  secPlanEntered: "",
-                  greenBeltPlot: "",
-                  greenBeltLength: "",
-                  greenBeltDim: "",
-                  greenBeltEntered: "",
-                  internalPlot: "",
-                  internalLength: "",
-                  internalDim: "",
-                  internalEntered: "",
-                  otherPlot: "",
-                  otherLength: "",
-                  otherDim: "",
-                  otherEntered: "",
-                  undeterminedPlot: "",
-                  undeterminedLength: "",
-                  undeterminedDim: "",
-                  undeterminedEntered: "",
-                },
-                DetailsAppliedLandDdjay2: {
-                  frozenNo: "qw",
-                  frozenArea: "",
-                  organize: "",
-                },
-                DetailsAppliedLandIndustrial3: {
-                  colonyfiftyNo: "qwq",
-                  colonyfiftyArea: "",
-                  fiftyToTwoNo: "",
-                  fiftyToTwoArea: "",
-                  twoHundredNo: "",
-                  twoHundredArea: "",
-                  resiNo: "",
-                  resiArea: "",
-                  commerNo: "",
-                  commerArea: "",
-                  labourNo: "",
-                  labourArea: "",
-                },
-                DetailsAppliedLandResidential4: {
-                  npnlNo: "wew",
-                  npnlArea: "",
-                  ewsNo: "",
-                  ewsArea: "",
-                },
-                DetailsAppliedLandNpnl5: {
-                  surrender: "sds",
-                  pocketProposed: "",
-                  deposit: "",
-                  surrendered: "",
-                },
-                DetailsAppliedLand6: {
-                  sitePlan: "sdsd",
-                  democraticPlan: "",
-                  sectoralPlan: "",
-                  developmentPlan: "",
-                  uploadLayoutPlan: "",
-                },
-              },
-              FeesAndCharges: {
-                totalArea: "sdsd",
-                purpose: "",
-                devPlan: "",
-                scrutinyFee: "",
-                licenseFee: "",
-                conversionCharges: "",
-                payableNow: "",
-                remark: "",
-                adjustFee: "",
-              },
-            },
-          ],
-        },
-      };
-
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-      });
-      setFinalSubmitData(Resp.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
@@ -826,17 +590,85 @@ const ApllicantPuropseForm = (props) => {
   };
   useEffect(() => {
     getDocumentData();
-  }, [file]);
+  }, [file]); 
+  
+  const getSubmitDataLabel = async () => {
+    try {
+      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
+        return response;
+      });
+      console.log("RESP+++", Resp?.data)
+      setSubmitDataLabel(Resp?.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  useEffect(() => {
+    getSubmitDataLabel();
+  }, []);
 
-  let kanal=0;
-  let marla=98;
+  const PurposeFormSubmitHandler = async (data) => {
+    console.log("data===", data);
+    try {
+      const postDistrict = 
+      {
+        
+          "NewServiceInfo": 
+                  {
+                  "pageName": "ApplicantPurpose",
+                  "id": props.getId,
+              "newServiceInfoData": 
+                  {
+                      "ApplicantPurpose": {
+                          purposeDd: data?.purposeDd?.Label,
+                          potential: data?.potential?.label,
+                          district: data?.district?.label,
+                          state: data.state,
+                          "applicationPurposeData1": {
+                              tehsil: data?.tehsil?.label,
+                              revenueEstate: data?.revenueEstate?.label,
+                              mustil: data?.rectangleNo,
+                              consolidation: data?.consolidationType,
+                              sarsai: data?.sarsai,
+                              kanal: data?.kanal,
+                              marla: data?.marla,
+                              bigha: data?.bigha,
+                              biswansi: data?.biswansi,
+                              biswa: data?.biswa,
+                              landOwner:data?.landOwner,
+                              developerCompany: data?.devCompany,
+                              registeringdate: data?.registering,
+                              validitydate: data?.dateValidity,
+                              "colirrevocialble": "",
+                              authSignature: data?.authorizedSign,
+                              nameAuthSign: data?.authorizedDev,
+                              registeringAuthority: data?.registeringAuth
+                          }
+                      }
+                  
+                  }
+          },
+          
+      
+      };
 
+      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
+        return Resp;
+      });
+      
+      console.log("MMM",Resp?.data?.NewServiceInfo?.[0]?.id)
+    props.Step2Continue(data,Resp?.data?.NewServiceInfo?.[0]?.id);
+      setFinalSubmitData(Resp.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div>
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h1>New License</h1>
+          <h1>New License </h1>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -1048,7 +880,8 @@ const ApllicantPuropseForm = (props) => {
                     <h2>Rectangle No./Mustil <span style={{ color: "red" }}>*</span></h2>
                   </Form.Label>
                 </div>
-                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No." />
+                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No."  {...register("rectangleNo")}
+ />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.mustil && errors?.mustil?.message}
                 </h3>
@@ -1142,7 +975,7 @@ const ApllicantPuropseForm = (props) => {
                     <h2>Name of Land Owner<span style={{ color: "red" }}>*</span></h2>
                   </label>
                 </div>
-                <Form.Control type="text" className="form-control" placeholder="N/A" {...register("landOwner")} />
+                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")}/>
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
