@@ -4,10 +4,10 @@ import { Card, Row, Col } from "react-bootstrap";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AddIcon from "@mui/icons-material/Add";
-import InfoIcon from "@mui/icons-material/Info";
+// import InfoIcon from "@mui/icons-material/Info";
 
 import Collapse from "react-bootstrap/Collapse";
-import Modal from "react-bootstrap/Modal";
+
 import ModalChild from "../Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -30,6 +30,7 @@ const LicenseDetailsScrutiny = (props) => {
   const [color, setColor] = useState({ yes: false, no: false });
   const [smShow2, setSmShow2] = useState(false);
   const [smShow3, setSmShow3] = useState(false);
+
   const [labelValue, setLabelValue] = useState("");
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
@@ -209,10 +210,10 @@ const LicenseDetailsScrutiny = (props) => {
     return obj.label === "Email ID for communication";
   });
   const developerInputFiledColor19 = uncheckedValue.filter((obj) => {
-    return obj.label === "Name of individual Land owner/ land-owning company/ firm/ LLP etc.";
+    return obj.label === "Developer's type.";
   });
   const developerInputCheckedFiledColor19 = checkValue.filter((obj) => {
-    return obj.label === "Name of individual Land owner/ land-owning company/ firm/ LLP etc.";
+    return obj.label === "Developer's type";
   });
   const developerInputFiledColor20 = uncheckedValue.filter((obj) => {
     return obj.label === "Name";
@@ -336,26 +337,41 @@ const LicenseDetailsScrutiny = (props) => {
                     <div className="col-sm-12">
                       {/* <div className="form-group row"> */}
                       <div className="col-sm-4">
-                        <Form.Select
+                        {/* <Form.Select
                           type="text"
                           placeholder=""
-                          // onChange={handleChangesetPurpose}
-                          // onChange1={handleChange}
+                        
                           onClick={handleshow9}
                           style={{ maxWidth: 200, marginRight: 5, height: 40 }}
-                          // disabled
+                         
                         >
                           <option value="">--Purpose--</option>
                           <option value="01">Individual</option>
                           <option value="02">Company</option>
                           <option value="03">LLP</option>
                           <option value="04">Society</option>
-                        </Form.Select>
+                        </Form.Select> */}
+                        <div style={{ display: "flex" }}>
+                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          &nbsp;&nbsp;
+                          <ReportProblemIcon
+                            style={{
+                              color:
+                                developerInputFiledColor19.length > 0
+                                  ? developerInputFiledColor19[0].color.data
+                                  : developerInputCheckedFiledColor19.length > 0
+                                  ? developerInputCheckedFiledColor19[0].color.data
+                                  : "#FFB602",
+                            }}
+                            onClick={() => {
+                              setLabelValue("Developer's type"), setSmShow(true), console.log("modal open");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                {/* </div> */}
               </Card>
 
               {showhide9 === "01" && (

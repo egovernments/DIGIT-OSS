@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form } from "react-bootstrap";
+import { Row, Col, Form, Button } from "react-bootstrap";
 import { TextInput } from "@egovernments/digit-ui-react-components";
 import { Upload } from "react-bootstrap-icons";
 
@@ -21,20 +21,24 @@ const ServicePlan = () => {
     console.log("data===", LOCNumber);
   };
   return (
-    <div style={{ marginTop: 50 }}>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <span className="surveyformfield">
-              <label>LOI Number</label>
-              <TextInput name="LOINumber" onChange={(e) => setLOCNumber(e.target.value)} type="text" value={LOCNumber} />
-            </span>
+    <div className="card" style={{ marginTop: 50 }}>
+      <form onSubmit={handleSubmit}>
+        <Row>
+          <Col className="ms-auto" md={4} xxl lg="4">
+            <div>
+              <span className="surveyformfield">
+                <label>LOI Number</label>
+                <TextInput name="LOINumber" onChange={(e) => setLOCNumber(e.target.value)} type="text" value={LOCNumber} />
+              </span>
+            </div>
+          </Col>
+          <Col className="ms-auto" md={4} xxl lg="4">
             <div>
               <div>
                 <Form.Label>
-                  <b>Is the uploaded Service Plan in accordance to the Standard designs?</b>
+                  Is the uploaded Service Plan in accordance to the Standard designs? <span style={{ color: "red" }}>*</span>{" "}
                 </Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                {/* &nbsp;&nbsp; */}
               </div>
               <Form.Check
                 onChange={(e) => console.log(e)}
@@ -55,11 +59,11 @@ const ServicePlan = () => {
                 inline
               ></Form.Check>
             </div>
+          </Col>
+          <Col className="ms-auto" md={4} xxl lg="4">
             <div>
               <div>
-                <Form.Label>
-                  <b>Undertaking</b>
-                </Form.Label>
+                <Form.Label>Undertaking</Form.Label>
                 <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
               </div>
               <Form.Check
@@ -81,47 +85,56 @@ const ServicePlan = () => {
                 inline
               ></Form.Check>
             </div>
-          </div>
-          <div>
-            <table>
-              <tr>
-                <th>Sr. No.</th>
-                <th>Type Of Map/Plan</th>
-                <th>Annexure</th>
-              </tr>
-              {getData?.map((item, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{item?.name}</td>
-                    <td>
-                      <div class="mainWrapper">
-                        <div class="btnimg">
-                          <Upload class="text-success" />
-                        </div>
-                        <input
-                          type="file"
-                          name="file"
-                          onChange={(e) => {
-                            setData(
-                              getData?.map((tag, indi) => {
-                                return indi === index ? { ...tag, image: e.target.files[0] } : { ...tag };
-                              })
-                            );
-                          }}
-                        />
-                        {item?.image?.name}
+          </Col>
+        </Row>
+
+        <div style={{ magrin: 7 }}>
+          <table>
+            <tr>
+              <th class="fw-normal" style={{ magrin: 5, textAlign: "center" }}>
+                Sr. No.
+              </th>
+              <th class="fw-normal" style={{ magrin: 5, textAlign: "center" }}>
+                Type Of Map/Plan
+              </th>
+              <th class="fw-normal" style={{ magrin: 5, textAlign: "center" }}>
+                Annexure
+              </th>
+            </tr>
+            {getData?.map((item, index) => {
+              return (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{item?.name}</td>
+                  <td style={{ magrin: 5, textAlign: "center" }}>
+                    <div class="mainWrapper">
+                      <div class="btnimg">
+                        <Upload class="text-success" />
                       </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </table>
-          </div>
-          {/* <input type="file" /> */}
-          <input type="submit" />
-        </form>
-      </div>
+                      <input
+                        type="file"
+                        name="file"
+                        onChange={(e) => {
+                          setData(
+                            getData?.map((tag, indi) => {
+                              return indi === index ? { ...tag, image: e.target.files[0] } : { ...tag };
+                            })
+                          );
+                        }}
+                      />
+                      {item?.image?.name}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </table>
+        </div>
+        {/* <input type="file" /> */}
+        <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+          <Button style={{ textAlign: "right" }}>Submit</Button>
+        </div>
+      </form>
     </div>
   );
 };
