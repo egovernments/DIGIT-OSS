@@ -129,6 +129,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     
     const [docUpload,setDocuploadData]=useState([])
     const [file,setFile]=useState(null);
+
+    const devRegId = localStorage.getItem('devRegId');
+    console.log(devRegId);
     const handleshow = (e) => {
       const getshow = e.target.value;
       setShowhide(getshow);
@@ -163,7 +166,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
          formData.append(
              "file",file.file      );
          formData.append(
-             "tenantId","hr"      );  
+             "tenantId",tenantId      );  
          formData.append(
              "module","property-upload"      );
           formData.append(
@@ -241,28 +244,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
       setmodal(!modal)
     }
   }
-  console.log("FORMARRAYVAL",modalValuesArray);
+  // console.log("FORMARRAYVAL",modalValuesArray);
   useEffect(()=>{
     HandleGetMCNdata();
   },[cin_Number])
   
-  // const postAddInfo=async()=>{
-  
-  //   try{
-  //     const Resp =  await axios.post("http://localhost:8081/user/developer/_registration",
-  //     {headers:{
-  //         'Content-Type': 'application/json',
-  //         'Access-Control-Allow-origin':"*",
-  //     }})
-  //     .then((Resp)=>{
-  //         console.log("FORMDATA",Resp.devDetail)
-  //         return Resp;
-  //     })
-  
-  //   }catch(error){
-  //     console.log(error)
-  //   }
-  // }
+
   
     const [noofRows, setNoOfRows] = useState(1);
     const [aoofRows, setAoOfRows] = useState(1);
@@ -284,7 +271,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
               "auth_token": ""
           },
       }
-        const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=36&isAllData=true`,requestResp,{
+        const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
   
         });
         console.log(getDevDetails?.data);
@@ -297,7 +284,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     }, []);
     
   // if (isLoading) return <Loader />;
-  const AddInfoForm = async (e) => {
+  const goNext = async (e) => {
 
     if (!(formTab?.result && formTab?.result?.Licenses[0]?.id)) {
       let addInfoDev = {
@@ -317,107 +304,19 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
       localStorage.setItem("addInfo",JSON.stringify(addInfoDev));
 
       const developerRegisterData = {
+        "id":devRegId,
+        "pageName":"addInfo",
         "devDetail": {
-            "licenceDetails": {
-              // licenseDet:licenseDet
-            },
-            "addInfo": {
-              addInfoDev:addInfoDev
-            },
-            "aurthorizedUserInfoArray": [
-                {
-                    "userName": "",
-                    "name": "",
-                    "gender": "",
-                    "mobileNumber": "",
-                    "emailId": "",
-                    "dob": "",
-                    "pan": "",
-                    "active": "",
-                    "type": "",
-                    "password": "",
-                    "tenantId": tenantId,
-                    "roles": [
-                        {
-                            "code": "CITIZEN",
-                            "name": "Citizen",
-                            "tenantId": "default"
-                        }
-                    ]
-                }
-            ],
-            "capacityDevelopAColony": {
-                "individualCertificateCA": "",
-                "companyBalanceSheet": "",
-                "paidUpCapital": "",
-                "networthPartners": "",
-                "networthFirm": "",
-                "capacityDevelopColonyHdruAct": [
-                    {
-                        "licenceNumber": "",
-                        "nameOfDeveloper": "",
-                        "purposeOfColony": "",
-                        "sectorAndDevelopmentPlan": "",
-                        "validatingLicence": ""
-                    }
-                ],
-                "capacityDevelopColonyLawAct": [
-                    {
-                        "serialNumber": "",
-                        "coloniesDeveloped": "",
-                        "area": "",
-                        "purpose": "",
-                        "statusOfDevelopment": "",
-                        "outstandingDues": ""
-                    }
-                ],
-                "technicalExpertEngaged": [
-                    {
-                        "engineerName": "",
-                        "engineerQualification": "",
-                        "engineerSign": "",
-                        "engineerDegree": "",
-                        "architectName": "",
-                        "architectQualification": "",
-                        "architectSign": "",
-                        "architectDegree": "",
-                        "townPlannerName": "",
-                        "townPlannerQualification": "",
-                        "townPlannerSign": "",
-                        "townPlannerDegree": "",
-                        "existingDeveloperAgreement": "",
-                        "existingDeveloperAgreementDoc": "",
-                        "technicalCapacity": "",
-                        "technicalCapacityDoc": "",
-                        "engineerNameN": "",
-                        "engineerDocN": "",
-                        "architectNameN": "",
-                        "architectDocN": "",
-                        "uplaodSpaBoard": "",
-                        "uplaodSpaBoardDoc": ""
-                    }
-                ],
-                "designationDirector": [
-                    {
-                        "agreementDoc": "",
-                        "boardDoc": ""
-                    }
-                ],
-                "obtainedLicense": [
-                    {
-                        "registeredDoc": "",
-                        "boardDocY": "",
-                        "earlierDocY": "",
-                        "boardDocN": "",
-                        "earlierDocN": "",
-                        "technicalAssistanceAgreementDoc": ""
-                    }
-                ]
-            }
+        
+        "addInfo": {
+          addInfoDev:addInfoDev
         }
       }
-      Digit.OBPSService.createDeveloper(developerRegisterData, tenantId)
+      }
+      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
+          console.log("DATA",result?.id);
+          // localStorage.setItem('devRegId',JSON.stringify(result?.id));
           setIsDisableForNext(false);
           let data = { 
             result: result, 
@@ -425,11 +324,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
             Correspondenceaddress: Correspondenceaddress,
             addressLineOneCorrespondence: addressLineOneCorrespondence,
             addressLineTwoCorrespondence: addressLineTwoCorrespondence,
-  
+
             isAddressSame: isAddressSame }
           //1, units
           onSelect("", data, "", true);
-  
+
         })
         .catch((e) => {
           setIsDisableForNext(false);
@@ -464,7 +363,7 @@ const onSkip = () => onSelect();
         <FormStep 
           // onSubmit={AddInfoForm}
           config={config}
-          onSelect={AddInfoForm}
+          onSelect={goNext}
           onSkip={onSkip}
           isDisabled={showDevTypeFields === "00" || showDevTypeFields==undefined}
           t={t}

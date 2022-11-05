@@ -3,30 +3,16 @@ import React, { useState, useEffect } from "react";
 import { Form, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
-// import Button from '@material-ui/core/Button';
-// import TextField from '@material-ui/core/TextField';
 import { convertEpochToDate } from "../utils/index";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers";
-// import { VALIDATION_SCHEMA } from "../utils/developerRegisterSchema";
 const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  //   control,
-  //   setValue,
-  // } = useForm({
-  //   mode: "onSubmit",
-  //   reValidateMode: "onBlur",
-  //   resolver: yupResolver(VALIDATION_SCHEMA),
-  //   shouldFocusError: true,
-  // });
+  
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
+  // const [id,setId] = useState("")
   const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name: "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
   const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.formData?.LicneseDetails?.gender);
@@ -71,6 +57,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   ];
 
   const [panValidation,setPanValidation] = useState("");
+  const [PanValError,setPanValError] = useState("");
   // function setValue(value, input) {
   //   setDOB(config.key, { ...formData[config.key], [input]: value });
   // }
@@ -151,7 +138,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       console.log("PANDET",panResp?.data);
     } catch(error){
         console.log(error?.response?.data?.errorDescription);
-        const errorPanVal = error?.response?.data?.errorDescription
+        setPanValError(error?.response?.data?.errorDescription) 
     }
   }
 console.log(panValidation);
@@ -326,135 +313,18 @@ console.log(panValidation);
         });
 
         const developerRegisterData = {
-        "devDetail": {
-            "licenceDetails": {
-              licenseDet:licenseDet
-            },
-            "addInfo": {
-                "showDevTypeFields": "",
-                "cin_Number": "",
-                "companyName": "",
-                "incorporationDate": "",
-                "registeredAddress": "",
-                "email": "",
-                "registeredContactNo": "",
-                "gst_Number": "",
-                "directorsInformation": [
-                    {
-                        "contactNumber": "",
-                        "din": "",
-                        "name": ""
-                    },
-                    {
-                        "contactNumber": "",
-                        "din": "",
-                        "name": ""
-                    }
-                ],
-                "shareHoldingPatterens": [
-                    {
-                        "name": "",
-                        "designition": "",
-                        "percentage": "",
-                        "uploadPdf": "",
-                        "serialNumber": ""
-                    }
-                ]
-            },
-            "aurthorizedUserInfoArray": [
-                {
-                    "userName": "",
-                    "name": "",
-                    "gender": "",
-                    "mobileNumber": "",
-                    "emailId": "",
-                    "dob": "",
-                    "pan": "",
-                    "active": "",
-                    "type": "",
-                    "password": "",
-                    "tenantId": tenantId,
-                    "roles": [
-                        {
-                            "code": "CITIZEN",
-                            "name": "Citizen",
-                            "tenantId": "default"
-                        }
-                    ]
-                }
-            ],
-            "capacityDevelopAColony": {
-                "individualCertificateCA": "",
-                "companyBalanceSheet": "",
-                "paidUpCapital": "",
-                "networthPartners": "",
-                "networthFirm": "",
-                "capacityDevelopColonyHdruAct": [
-                    {
-                        "licenceNumber": "",
-                        "nameOfDeveloper": "",
-                        "purposeOfColony": "",
-                        "sectorAndDevelopmentPlan": "",
-                        "validatingLicence": ""
-                    }
-                ],
-                "capacityDevelopColonyLawAct": [
-                    {
-                        "serialNumber": "",
-                        "coloniesDeveloped": "",
-                        "area": "",
-                        "purpose": "",
-                        "statusOfDevelopment": "",
-                        "outstandingDues": ""
-                    }
-                ],
-                "technicalExpertEngaged": [
-                    {
-                        "engineerName": "",
-                        "engineerQualification": "",
-                        "engineerSign": "",
-                        "engineerDegree": "",
-                        "architectName": "",
-                        "architectQualification": "",
-                        "architectSign": "",
-                        "architectDegree": "",
-                        "townPlannerName": "",
-                        "townPlannerQualification": "",
-                        "townPlannerSign": "",
-                        "townPlannerDegree": "",
-                        "existingDeveloperAgreement": "",
-                        "existingDeveloperAgreementDoc": "",
-                        "technicalCapacity": "",
-                        "technicalCapacityDoc": "",
-                        "engineerNameN": "",
-                        "engineerDocN": "",
-                        "architectNameN": "",
-                        "architectDocN": "",
-                        "uplaodSpaBoard": "",
-                        "uplaodSpaBoardDoc": ""
-                    }
-                ],
-                "designationDirector": [
-                    {
-                        "agreementDoc": "",
-                        "boardDoc": ""
-                    }
-                ],
-                "obtainedLicense": [
-                    {
-                        "registeredDoc": "",
-                        "boardDocY": "",
-                        "earlierDocY": "",
-                        "boardDocN": "",
-                        "earlierDocN": "",
-                        "technicalAssistanceAgreementDoc": ""
-                    }
-                ]
-            }
+          "pageName":"licenceDetails",
+          "devDetail": {
+              "licenceDetails": {
+                licenseDet:licenseDet
+              },
+             
+          }
         }
-      }
-      Digit.OBPSService.createDeveloper(developerRegisterData, tenantId)
+      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
+          console.log("DATA",result?.id);
+          localStorage.setItem('devRegId',JSON.stringify(result?.id));
           setIsDisableForNext(false);
           let data = { 
             result: result, 
@@ -474,144 +344,7 @@ console.log(panValidation);
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
       
-    // DEVELOPER API CALL
-    // try{
-    //   const developerRegisterData = {
-    //     "devDetail": {
-    //         "licenceDetails": {
-    //           licenseDet:licenseDet
-    //         },
-    //         "addInfo": {
-    //             "showDevTypeFields": "02",
-    //             "cin_Number": "U72200CH1998PTC022006",
-    //             "companyName": "MAPDATA SCIENCES INDIA PRIVATE LIMITED",
-    //             "incorporationDate": "03/12/1998",
-    //             "registeredAddress": "PLOT NO.10, 2ND FLOOR RGTP, KISHANGARH CHANDIGARH Chandigarh CH 160101 IN",
-    //             "email": "charan.singh@mapds.com.au",
-    //             "registeredContactNo": "",
-    //             "gst_Number": "",
-    //             "directorsInformation": [
-    //                 {
-    //                     "contactNumber": "",
-    //                     "din": "0002260042",
-    //                     "name": "CHARAN SINGH"
-    //                 },
-    //                 {
-    //                     "contactNumber": "",
-    //                     "din": "0003529888",
-    //                     "name": "BRETT JOHN BUNDOCK"
-    //                 }
-    //             ],
-    //             "shareHoldingPatterens": [
-    //                 {
-    //                     "name": "DLF",
-    //                     "designition": "developer",
-    //                     "percentage": "45",
-    //                     "uploadPdf": null,
-    //                     "serialNumber": null
-    //                 }
-    //             ]
-    //         },
-    //         "aurthorizedUserInfoArray": [
-    //             {
-    //                 "userName": "Deep",
-    //                 "name": "Deep",
-    //                 "gender": "MALE",
-    //                 "mobileNumber": "8126287097",
-    //                 "emailId": "sudeep@gmail.com",
-    //                 "dob": "1997-01-08",
-    //                 "pan": "BRTPO8978U",
-    //                 "active": true,
-    //                 "type": "CITIZEN",
-    //                 "password": "Password@123",
-    //                 "tenantId": "hr",
-    //                 "roles": [
-    //                     {
-    //                         "code": "CITIZEN",
-    //                         "name": "Citizen",
-    //                         "tenantId": "default"
-    //                     }
-    //                 ]
-    //             }
-    //         ],
-    //         "capacityDevelopAColony": {
-    //             "individualCertificateCA": "",
-    //             "companyBalanceSheet": "",
-    //             "paidUpCapital": "",
-    //             "networthPartners": "",
-    //             "networthFirm": "",
-    //             "capacityDevelopColonyHdruAct": [
-    //                 {
-    //                     "licenceNumber": "1112",
-    //                     "nameOfDeveloper": "abc",
-    //                     "purposeOfColony": "hyper",
-    //                     "sectorAndDevelopmentPlan": "abghed",
-    //                     "validatingLicence": "yes"
-    //                 }
-    //             ],
-    //             "capacityDevelopColonyLawAct": [
-    //                 {
-    //                     "serialNumber": "23",
-    //                     "coloniesDeveloped": "yes",
-    //                     "area": "12345",
-    //                     "purpose": "for building",
-    //                     "statusOfDevelopment": "good",
-    //                     "outstandingDues": ""
-    //                 }
-    //             ],
-    //             "technicalExpertEngaged": [
-    //                 {
-    //                     "engineerName": "",
-    //                     "engineerQualification": "",
-    //                     "engineerSign": "",
-    //                     "engineerDegree": "",
-    //                     "architectName": "",
-    //                     "architectQualification": "",
-    //                     "architectSign": "",
-    //                     "architectDegree": "",
-    //                     "townPlannerName": "",
-    //                     "townPlannerQualification": "",
-    //                     "townPlannerSign": "",
-    //                     "townPlannerDegree": "",
-    //                     "existingDeveloperAgreement": "",
-    //                     "existingDeveloperAgreementDoc": "",
-    //                     "technicalCapacity": "",
-    //                     "technicalCapacityDoc": "",
-    //                     "engineerNameN": "",
-    //                     "engineerDocN": "",
-    //                     "architectNameN": "",
-    //                     "architectDocN": "",
-    //                     "uplaodSpaBoard": "",
-    //                     "uplaodSpaBoardDoc": ""
-    //                 }
-    //             ],
-    //             "designationDirector": [
-    //                 {
-    //                     "agreementDoc": "",
-    //                     "boardDoc": ""
-    //                 }
-    //             ],
-    //             "obtainedLicense": [
-    //                 {
-    //                     "registeredDoc": "",
-    //                     "boardDocY": "",
-    //                     "earlierDocY": "",
-    //                     "boardDocN": "",
-    //                     "earlierDocN": "",
-    //                     "technicalAssistanceAgreementDoc": ""
-    //                 }
-    //             ]
-    //         }
-    //     }
-    //   }
-    //   const devDetailsDataCall = await axios.post(`/user/developer/registration`,developerRegisterData,{
-        
-    //   });
-    //   console.log(devDetailsDataCall);
-    // }
-    // catch(error){
-    //   console.log(error.message);
-    // }
+    
     
     }
     else {
@@ -760,7 +493,7 @@ console.log(panValidation);
                   {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
                   />
                   {PanNumber&&PanNumber.length>0&&!PanNumber.match(Digit.Utils.getPattern('PAN'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
-                  {/* <h3 className="error-message" style={{color:"red"}}>{errorPanVal}</h3> */}
+                  <h3 className="error-message" style={{color:"red"}}>{PanValError}</h3>
               </Form.Group>
             </Row>
           </Card>
