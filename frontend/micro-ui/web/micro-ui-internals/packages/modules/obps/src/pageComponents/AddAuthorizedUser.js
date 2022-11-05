@@ -104,25 +104,25 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     setAurthorizedPan(e.target.value.toUpperCase());
   }
 
-  // const handleMobileChange = async (event) => {
-  //   const { value } = event.target;
-  //   setParmas({ ...params, aurthorizedMobileNumber: value });
-  //   const data = {
-  //     ...aurthorizedMobileNumber,
-  //     tenantId: "hr",
-  //     userType: getUserType(),
-  //   };
-  //   if (isUserRegistered) {
-  //     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
-  //     if (!err) {
-  //       alert("please Enter Login",res)
-  //       return;
-  //     } 
-  //   } else {
-  //     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
-  //     alert("Please register yourself",res)
-  //   }
-  // };
+  const handleMobileChange = async (event) => {
+    const { value } = event.target;
+    setParmas({ ...params, aurthorizedMobileNumber: value });
+    const data = {
+      ...aurthorizedMobileNumber,
+      tenantId: "hr",
+      userType: getUserType(),
+    };
+    if (isUserRegistered) {
+      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
+      if (!err) {
+        alert("please Enter Login",res)
+        return;
+      } 
+    } else {
+      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
+      alert("Please register yourself",res)
+    }
+  };
   
   
 
@@ -269,9 +269,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
         name: aurthorizedUserName,
         gender: gender.value,
         mobileNumber: aurthorizedMobileNumber,
-        emailId: aurthorizedEmail,
-        dob: aurthorizedDob,
-        pan: aurthorizedPan,
+        // emailId: aurthorizedEmail,
+        // dob: aurthorizedDob,
+        // pan: aurthorizedPan,
         "type": "CITIZEN",
         "password": "Password@123",
         
@@ -360,6 +360,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
       .then((result, err) => {
         setIsDisableForNext(false);
+        
         let data = { 
           result: result, 
           formData: formData, 
@@ -578,7 +579,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                                 placeholder=""
                                 class="employee-card-input"
                                 // onChange={(e) => setAurthorizedMobileNumber(e.target.value)}
-                                onChange={setAurthorizedMobileNumber}
+                                onChange={handleMobileChange}
                                 maxlength={"10"}
                                 pattern={"[6-9]{1}[0-9]{9}"}
                                 required={true}

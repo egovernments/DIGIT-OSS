@@ -4,14 +4,14 @@ import Hamburger from "./Hamburger";
 import { NotificationBell } from "./svgindex";
 
 const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDetails, notificationCount, notificationCountLoaded, cityOfCitizenShownBesideLogo, onNotificationIconClick, hideNotificationIconOnSomeUrlsWhenNotLoggedIn }) => {
-  const [profileName,setProfileName]=useState("Noname")
-  const userData = JSON.parse(localStorage.getItem('user-info'));
+  // const [profileName,setProfileName]=useState("Noname")
+  // const userData = JSON.parse(localStorage.getItem('user-info'));
   // console.log(userData);
-  useEffect(()=>{
-    if (userData!==null && userData!==undefined && userData.name!==undefined) {
-      setProfileName(userData.name)
-    }
-  }, [userData])
+  // useEffect(()=>{
+  //   if (userData!==null && userData!==undefined && userData.name!==undefined) {
+  //     setProfileName(userData.name)
+  //   }
+  // }, [userData])
 
   return (
     <div className="navbar">
@@ -26,7 +26,7 @@ const TopBar = ({ img, isMobile, logoUrl, onLogout, toggleSidebar, ulb, userDeta
           alt="TCP"
         />
         <div className="RightMostTopBarOptions">
-        <h3 className="mx-2 fw-bold">{profileName}</h3>
+        {/* <h3 className="mx-2 fw-bold">{profileName}</h3> */}
           {!hideNotificationIconOnSomeUrlsWhenNotLoggedIn ? <span className="EventNotificationWrapper" onClick={onNotificationIconClick}>
             { notificationCountLoaded && notificationCount ? <span><p>{notificationCount}</p></span> : null }
             <NotificationBell style={{display:"inline-block"}} />
