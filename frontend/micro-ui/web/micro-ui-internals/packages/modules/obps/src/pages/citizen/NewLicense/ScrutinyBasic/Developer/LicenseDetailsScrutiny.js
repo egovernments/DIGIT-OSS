@@ -307,7 +307,7 @@ const LicenseDetailsScrutiny = (props) => {
         className="collapse-header"
         onClick={() => setOpen(!open)}
         aria-controls="example-collapse-text"
-        aria-expanded={open2}
+        aria-expanded={open}
         style={{
           background: "#f1f1f1",
           padding: "0.25rem 1.25rem",
@@ -323,7 +323,7 @@ const LicenseDetailsScrutiny = (props) => {
         <span style={{ color: "#817f7f" }} className="">
           Add Info
         </span>
-        {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+        {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
 
       <Collapse in={open}>
