@@ -123,7 +123,7 @@ const optionsPotentialList = [
 ];
 
 const ApllicantPuropseForm = (props) => {
-  console.log("Props",props)
+  console.log("Props", props);
   const columns = [
     {
       key: "tehsil",
@@ -149,23 +149,17 @@ const ApllicantPuropseForm = (props) => {
     {
       title: "Kanal/Bigha",
       dataIndex: "",
-      render: (text) => (
-        text?.kanal? text?.kanal : text?.bigha
-         ),
+      render: (text) => (text?.kanal ? text?.kanal : text?.bigha),
     },
     {
       title: "Marla/Biswa",
       dataIndex: "",
-      render: (text) => (
-       text?.marla? text?.marla : text?.biswa
-        ),
+      render: (text) => (text?.marla ? text?.marla : text?.biswa),
     },
     {
       title: "Sarsai/Biswansi",
       dataIndex: "",
-      render: (text) => (
-        text?.sarsai? text?.sarsai : text?.biswansi
-         ),
+      render: (text) => (text?.sarsai ? text?.sarsai : text?.biswansi),
     },
     {
       // key: "action",
@@ -188,75 +182,72 @@ const ApllicantPuropseForm = (props) => {
     },
   ];
   const consolidatedColumns = [
-      {
-        key: "tehsil",
-        title: "Tehsil",
-        dataIndex: "tehsil",
-      },
-      {
-        key: "revenueEstate",
-        title: "Revenue Estate",
-        dataIndex: "revenueEstate",
-      },
-      {
-        key: "rectangleNo",
-        title: "Rectangle No.",
-        dataIndex: "rectangleNo",
-      },
-      {
-        key: "killa",
-        title: "Killa",
-        dataIndex: "killa",
-      },
-      {
-        key: "landOwner",
-        title: "Land Owner",
-        dataIndex: "landOwner",
-      },
-      {
-        key: "consolidationType",
-        title: "Consolidation Type",
-        dataIndex: "consolidationType",
-      },
-      {
-        key: "bigha",
-        title: "Kanal/Bigha",
-        dataIndex: "bigha",
-      },
-      {
-        // key: "biswa",
-        title: "Marla/Biswa",
-        dataIndex: "",
-        render: (text) => (
-          <div onClick={()=>console.log("text",text)}>text</div>
-          ),
-      },
-      {
-        key: "biswansi",
-        title: "Sarsai/Biswansi",
-        dataIndex: "biswansi",
-      },
-      {
-        // key: "action",
-        title: "Action",
-        dataIndex: "",
-        render: (data) => (
-          <div>
-            <h6
-              onClick={() => {
-                setmodal(true);
-                setSpecificTableData(data);
-                // console.log("data", data)
-              }}
-            >
-              Edit
-            </h6>
-            <h6>Delete</h6>
-          </div>
-        ),
-      },
-    ];
- 
+    {
+      key: "tehsil",
+      title: "Tehsil",
+      dataIndex: "tehsil",
+    },
+    {
+      key: "revenueEstate",
+      title: "Revenue Estate",
+      dataIndex: "revenueEstate",
+    },
+    {
+      key: "rectangleNo",
+      title: "Rectangle No.",
+      dataIndex: "rectangleNo",
+    },
+    {
+      key: "killa",
+      title: "Killa",
+      dataIndex: "killa",
+    },
+    {
+      key: "landOwner",
+      title: "Land Owner",
+      dataIndex: "landOwner",
+    },
+    {
+      key: "consolidationType",
+      title: "Consolidation Type",
+      dataIndex: "consolidationType",
+    },
+    {
+      key: "bigha",
+      title: "Kanal/Bigha",
+      dataIndex: "bigha",
+    },
+    {
+      // key: "biswa",
+      title: "Marla/Biswa",
+      dataIndex: "",
+      render: (text) => <div onClick={() => console.log("text", text)}>text</div>,
+    },
+    {
+      key: "biswansi",
+      title: "Sarsai/Biswansi",
+      dataIndex: "biswansi",
+    },
+    {
+      // key: "action",
+      title: "Action",
+      dataIndex: "",
+      render: (data) => (
+        <div>
+          <h6
+            onClick={() => {
+              setmodal(true);
+              setSpecificTableData(data);
+              // console.log("data", data)
+            }}
+          >
+            Edit
+          </h6>
+          <h6>Delete</h6>
+        </div>
+      ),
+    },
+  ];
 
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
@@ -268,6 +259,8 @@ const ApllicantPuropseForm = (props) => {
   const [tehsilData, setTehsilData] = useState([]);
   const [revenueStateData, setRevenuStateData] = useState([]);
   const [mustilData, setMustilData] = useState([]);
+  const [potentialDataLabels, setPotentialDataLabels] = useState([]);
+  const [purposeDataLabels, setPurposeDataLabels] = useState([]);
   const [districtDataLbels, setDistrictDataLabels] = useState([]);
   const [tehsilDataLabels, setTehsilDataLabels] = useState([]);
   const [revenueDataLabels, setRevenueDataLabels] = useState([]);
@@ -278,11 +271,11 @@ const ApllicantPuropseForm = (props) => {
   const [showhide1, setShowhide1] = useState("No");
   const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
-  const [consolidateValue, setConsolidateValue] = useState(null);  
+  const [consolidateValue, setConsolidateValue] = useState(null);
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
   const [finalSubmitData, setFinalSubmitData] = useState([]);
-const ID = props.getId;
-console.log("ID",ID);
+  const ID = props.getId;
+  console.log("ID", ID);
   useEffect(() => {
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
@@ -295,7 +288,6 @@ console.log("ID",ID);
       setValue("biswansi", specificTableData?.biswansi);
       setValue("biswa", specificTableData?.biswa);
       setValue("landOwner", specificTableData?.landOwner);
-
     }
     console.log("specificTableData", specificTableData);
   }, [specificTableData]);
@@ -435,11 +427,7 @@ console.log("ID",ID);
 
     try {
       const Resp = await axios
-        .post(
-          "/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code,
-          datpost,
-          {}
-        )
+        .post("/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code, datpost, {})
         .then((response) => {
           return response;
         });
@@ -454,7 +442,7 @@ console.log("ID",ID);
     }
   };
 
-  const getLandOwnerStateData = async (khewats ) => {
+  const getLandOwnerStateData = async (khewats) => {
     const datatopos = {
       RequestInfo: {
         apiId: "Rainmaker",
@@ -468,25 +456,16 @@ console.log("ID",ID);
         authToken: "",
       },
     };
- console.log("khewat",khewats)
+    console.log("khewat", khewats);
     try {
       const Resp = await axios
         .post(
-          "/egov-mdms-service/v1/_owner?" +
-          "dCode=" +
-          district +
-          "&" +
-          "tCode=" +
-          tehsilCode +
-          "&NVCode=" +
-          tehsilCode +
-          "&khewat=" +
-          khewats,
+          "/egov-mdms-service/v1/_owner?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + tehsilCode + "&khewat=" + khewats,
           datatopos,
           {}
         )
         .then((response) => {
-          console.log("Resp",response)
+          console.log("Resp", response);
           return response;
         });
       setKhewatData(Resp.data);
@@ -505,9 +484,9 @@ console.log("ID",ID);
     DistrictApiCall();
   }, []);
 
-  useEffect(()=>{
-    console.log("Revenue",revenueDataLabels)
-  },[revenueDataLabels])
+  useEffect(() => {
+    console.log("Revenue", revenueDataLabels);
+  }, [revenueDataLabels]);
 
   const ApplicantPurposeModalData = (data) => {
     console.log("data++++++", data);
@@ -544,18 +523,17 @@ console.log("ID",ID);
     });
   };
 
-  const applicantPurposeBack=async(data)=>{
+  const applicantPurposeBack = async (data) => {
     console.log("data==============", data);
-  }
+  };
 
-  
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
   const handleChangePurpose = (data) => {
     const purposeSelected = data?.label;
     setSelectPurpose(purposeSelected);
-    localStorage.setItem("purpose", (purposeSelected));
+    localStorage.setItem("purpose", purposeSelected);
   };
   const handleChangePotential = (data) => {
     const potentialSelected = data?.label;
@@ -590,14 +568,14 @@ console.log("ID",ID);
   };
   useEffect(() => {
     getDocumentData();
-  }, [file]); 
-  
+  }, [file]);
+
   const getSubmitDataLabel = async () => {
     try {
       const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
         return response;
       });
-      console.log("RESP+++", Resp?.data)
+      console.log("RESP+++", Resp?.data);
       setSubmitDataLabel(Resp?.data);
     } catch (error) {
       console.log(error.message);
@@ -610,54 +588,47 @@ console.log("ID",ID);
   const PurposeFormSubmitHandler = async (data) => {
     console.log("data===", data);
     try {
-      const postDistrict = 
-      {
-        
-          "NewServiceInfo": 
-                  {
-                  "pageName": "ApplicantPurpose",
-                  "id": props.getId,
-              "newServiceInfoData": 
-                  {
-                      "ApplicantPurpose": {
-                          purposeDd: data?.purposeDd?.Label,
-                          potential: data?.potential?.label,
-                          district: data?.district?.label,
-                          state: data.state,
-                          "applicationPurposeData1": {
-                              tehsil: data?.tehsil?.label,
-                              revenueEstate: data?.revenueEstate?.label,
-                              mustil: data?.rectangleNo,
-                              consolidation: data?.consolidationType,
-                              sarsai: data?.sarsai,
-                              kanal: data?.kanal,
-                              marla: data?.marla,
-                              bigha: data?.bigha,
-                              biswansi: data?.biswansi,
-                              biswa: data?.biswa,
-                              landOwner:data?.landOwner,
-                              developerCompany: data?.devCompany,
-                              registeringdate: data?.registering,
-                              validitydate: data?.dateValidity,
-                              "colirrevocialble": "",
-                              authSignature: data?.authorizedSign,
-                              nameAuthSign: data?.authorizedDev,
-                              registeringAuthority: data?.registeringAuth
-                          }
-                      }
-                  
-                  }
+      const postDistrict = {
+        NewServiceInfo: {
+          pageName: "ApplicantPurpose",
+          id: props.getId,
+          newServiceInfoData: {
+            ApplicantPurpose: {
+              purposeDd: data?.purposeDd?.Label,
+              potential: data?.potential?.label,
+              district: data?.district?.label,
+              state: data.state,
+              applicationPurposeData1: {
+                tehsil: data?.tehsil?.label,
+                revenueEstate: data?.revenueEstate?.label,
+                mustil: data?.rectangleNo,
+                consolidation: data?.consolidationType,
+                sarsai: data?.sarsai,
+                kanal: data?.kanal,
+                marla: data?.marla,
+                bigha: data?.bigha,
+                biswansi: data?.biswansi,
+                biswa: data?.biswa,
+                landOwner: data?.landOwner,
+                developerCompany: data?.devCompany,
+                registeringdate: data?.registering,
+                validitydate: data?.dateValidity,
+                colirrevocialble: "",
+                authSignature: data?.authorizedSign,
+                nameAuthSign: data?.authorizedDev,
+                registeringAuthority: data?.registeringAuth,
+              },
+            },
           },
-          
-      
+        },
       };
 
       const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
         return Resp;
       });
-      
-      console.log("MMM",Resp?.data?.NewServiceInfo?.[0]?.id)
-    props.Step2Continue(data,Resp?.data?.NewServiceInfo?.[0]?.id);
+
+      console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
+      props.Step2Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
       setFinalSubmitData(Resp.data);
     } catch (error) {
       console.log(error.message);
@@ -675,7 +646,9 @@ console.log("ID",ID);
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <h2>Puropse Of License<span style={{ color: "red" }}>*</span></h2>
+                      <h2>
+                        Puropse Of License<span style={{ color: "red" }}>*</span>
+                      </h2>
                     </Form.Label>
                   </div>
 
@@ -695,7 +668,9 @@ console.log("ID",ID);
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <h2>Potential Zone<span style={{ color: "red" }}>*</span></h2>
+                      <h2>
+                        Potential Zone<span style={{ color: "red" }}>*</span>
+                      </h2>
                     </Form.Label>
                   </div>
                   <ReactMultiSelect
@@ -714,7 +689,9 @@ console.log("ID",ID);
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <h2>District<span style={{ color: "red" }}>*</span></h2>
+                      <h2>
+                        District<span style={{ color: "red" }}>*</span>
+                      </h2>
                     </Form.Label>
                   </div>
                   <ReactMultiSelect
@@ -736,7 +713,9 @@ console.log("ID",ID);
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <h2>State<span style={{ color: "red" }}>*</span></h2>
+                      <h2>
+                        State<span style={{ color: "red" }}>*</span>
+                      </h2>
                     </Form.Label>
                   </div>
 
@@ -771,13 +750,17 @@ console.log("ID",ID);
 
               <div className="applt" style={{ overflow: "auto" }}>
                 <WorkingTable columns={columns} data={modalData} />
-
-
               </div>
             </Form.Group>
             <div class="row">
               <div class="col-sm-12 text-left">
-                <button type="submit" id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }} onClick={applicantPurposeBack}>
+                <button
+                  type="submit"
+                  id="btnClear"
+                  class="btn btn-primary btn-md center-block"
+                  style={{ marginBottom: "-44px" }}
+                  onClick={applicantPurposeBack}
+                >
                   Back
                 </button>
               </div>
@@ -833,7 +816,9 @@ console.log("ID",ID);
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Tehsil <span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Tehsil <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <ReactMultiSelect
@@ -853,22 +838,21 @@ console.log("ID",ID);
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Name of Revenue Estate <span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Name of Revenue Estate <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <ReactMultiSelect
                   control={control}
                   {...register("revenueEstate")}
-
                   data={revenueDataLabels}
                   labels="Revenue Estate"
                   onChange={(e) => {
                     getMustilData(e.code);
                     getLandOwnerStateData(e.khewats);
-                   
                   }}
                 />
-              
 
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.revenueEstate && errors?.revenueEstate?.message}
@@ -877,11 +861,12 @@ console.log("ID",ID);
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Rectangle No./Mustil <span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Rectangle No./Mustil <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
-                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No."  {...register("rectangleNo")}
- />
+                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No." {...register("rectangleNo")} />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.mustil && errors?.mustil?.message}
                 </h3>
@@ -892,17 +877,19 @@ console.log("ID",ID);
               <Col md={4} xxl lg="12">
                 <div>
                   <label>
-                    <h2>Consolidation Type<span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Consolidation Type<span style={{ color: "red" }}>*</span>
+                    </h2>
                   </label>{" "}
                   &nbsp;&nbsp;
                   <input type="radio" id="Yes" value="Consolidated" name="Yes" onClick={handleshow2} {...register("consolidationType")} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
-                  <label htmlFor="gen" >Consolidated</label>&nbsp;&nbsp;
+                  <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
                   <input type="radio" id="No" value="Non-Consolidated" name="Yes" onClick={handleshow2} {...register("consolidationType")} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
-                  <label htmlFor="npnl" >Non-Consolidated</label>
+                  <label htmlFor="npnl">Non-Consolidated</label>
                   {/* </Form.Select> */}
                 </div>{" "}
                 {showhide2 === "Consolidated" && (
@@ -972,10 +959,12 @@ console.log("ID",ID);
               <Col md={4} xxl lg="6">
                 <div>
                   <label>
-                    <h2>Name of Land Owner<span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Name of Land Owner<span style={{ color: "red" }}>*</span>
+                    </h2>
                   </label>
                 </div>
-                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")}/>
+                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")} />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
@@ -990,42 +979,47 @@ console.log("ID",ID);
                   <input type="radio" value="Yes" id="Yes" name="Yes" onClick={handleshow1} />
                   &nbsp;&nbsp;
                   <label for="Yes">
-                    <h6>
-                      Yes
-                    </h6>
+                    <h6>Yes</h6>
                   </label>
                   &nbsp;&nbsp;
                   <input type="radio" value="No" id="No" name="Yes" onClick={handleshow1} />
                   &nbsp;&nbsp;
                   <label for="No">
-                    <h6>
-                      No
-                    </h6>
+                    <h6>No</h6>
                   </label>
                 </h2>
                 {showhide1 === "Yes" && (
                   <div className="row ">
                     <div className="col col-4">
-                      <label >
-                        <h2>Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered<span style={{ color: "red" }}>*</span></h2>
+                      <label>
+                        <h2>
+                          Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered
+                          <span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
                       <Form.Control type="text" className="form-control" placeholder="N/A" {...register("devCompany")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label >
-                        <h2>Date of registering collaboration agreement<span style={{ color: "red" }}>*</span></h2>
+                      <label>
+                        <h2>
+                          Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
                       <Form.Control type="date" className="form-control" placeholder="N/A" {...register("registering")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label >
-                        <h2>Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span></h2>
+                      <label>
+                        <h2>
+                          Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
                       <Form.Control type="date" className="form-control" placeholder="N/A" {...register("dateValidity")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 35 }}>
-                      <label >
-                        <h2>Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span></h2>
+                      <label>
+                        <h2>
+                          Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
                       <br></br>
                       <input type="radio" value="Yes" id="Yes1" name="Yes" />
@@ -1042,29 +1036,35 @@ console.log("ID",ID);
                     </div>
 
                     <div className="col col-4" style={{ marginTop: 35 }}>
-                      <label >
-                        <h2>Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span></h2>
+                      <label>
+                        <h2>
+                          Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
                       <Form.Control type="text" className="form-control" placeholder="N/A" {...register("authorizedSign")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label >
-                        <h2>Name of authorized signatory on behalf of developer to sign Collaboration agreement<span style={{ color: "red" }}>*</span></h2>
-
+                      <label>
+                        <h2>
+                          Name of authorized signatory on behalf of developer to sign Collaboration agreement<span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
                       <Form.Control type="date" className="form-control" placeholder="N/A" {...register("authorizedDev")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 20 }}>
-                      <label >
-                        <h2>Registring Authority<span style={{ color: "red" }}>*</span></h2>
+                      <label>
+                        <h2>
+                          Registring Authority<span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
                       <br></br>
                       <Form.Control type="text" className="form-control" placeholder="N/A" {...register("registeringAuth")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label >
+                      <label>
                         <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                          Registring Authority document <span style={{ color: "red" }}>*</span><ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                          Registring Authority document <span style={{ color: "red" }}>*</span>
+                          <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                         </h2>
                       </label>
                       <br></br>

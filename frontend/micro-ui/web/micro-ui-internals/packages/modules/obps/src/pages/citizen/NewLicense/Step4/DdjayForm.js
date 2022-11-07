@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import 'bootstrap/dist/css/bootstrap.css';
+import "bootstrap/dist/css/bootstrap.css";
 import { useForm } from "react-hook-form";
 // import { tr, thead, TableContainer, td, tbody, Table, Paper } from '@material-ui/core';
 // import AddIcon from "@material-ui/icons/Add";
@@ -9,16 +9,26 @@ import { Card, Row, Col } from "react-bootstrap";
 // import CalculateIcon from '@mui/icons-material/Calculate';
 
 const DDJAYForm = (props) => {
-
-  const { register, handleSubmit, formState: { errors } } = useForm([{ XLongitude: '', YLatitude: '' }]);
   const formSubmit = (data) => {
     console.log("data", data);
   };
   const [DdjayFormSubmitted, SetDdjayFormSubmitted] = useState(false);
-  const DDJAYFormSubmitHandler = (e) => {
-    e.preventDefault();
+  const DDJAYFormSubmitHandler = async (data) => {
     SetDdjayFormSubmitted(true);
-  }
+  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    setValue,
+    reset,
+  } = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onBlur",
+    // resolver: yupResolver(VALIDATION_SCHEMA),
+    shouldFocusError: true,
+  });
   const [showhide, setShowhide] = useState("No");
   const [showhide1, setShowhide1] = useState("No");
   const [showhide0, setShowhide0] = useState("No");
@@ -37,79 +47,78 @@ const DDJAYForm = (props) => {
   const [showhide14, setShowhide14] = useState("No");
   const [showhide18, setShowhide18] = useState("2");
 
-  const handleshow = e => {
+  const handleshow = (e) => {
     const getshow = e.target.value;
     setShowhide(getshow);
-  }
-  const handleshow0 = e => {
+  };
+  const handleshow0 = (e) => {
     const getshow = e.target.value;
     setShowhide0(getshow);
-  }
-  const handleshow1 = e => {
+  };
+  const handleshow1 = (e) => {
     const getshow = e.target.value;
     setShowhide1(getshow);
-  }
-  const handleshow2 = e => {
+  };
+  const handleshow2 = (e) => {
     const getshow = e.target.value;
     setShowhide2(getshow);
-  }
-  const handleshow3 = e => {
+  };
+  const handleshow3 = (e) => {
     const getshow = e.target.value;
     setShowhide3(getshow);
-  }
-  const handleshow4 = e => {
+  };
+  const handleshow4 = (e) => {
     const getshow = e.target.value;
     setShowhide4(getshow);
-  }
-  const handleshow5 = e => {
+  };
+  const handleshow5 = (e) => {
     const getshow = e.target.value;
     setShowhide5(getshow);
-  }
-  const handleshow6 = e => {
+  };
+  const handleshow6 = (e) => {
     const getshow = e.target.value;
     setShowhide6(getshow);
-  }
-  const handleshow7 = e => {
+  };
+  const handleshow7 = (e) => {
     const getshow = e.target.value;
     setShowhide7(getshow);
-  }
-  const handleshow8 = e => {
+  };
+  const handleshow8 = (e) => {
     const getshow = e.target.value;
     setShowhide8(getshow);
-  }
-  const handleshow9 = e => {
+  };
+  const handleshow9 = (e) => {
     const getshow = e.target.value;
     setShowhide9(getshow);
-  }
-  const handleshow10 = e => {
+  };
+  const handleshow10 = (e) => {
     const getshow = e.target.value;
     setShowhide10(getshow);
-  }
-  const handleshow11 = e => {
+  };
+  const handleshow11 = (e) => {
     const getshow = e.target.value;
     setShowhide11(getshow);
-  }
-  const handleshow12 = e => {
+  };
+  const handleshow12 = (e) => {
     const getshow = e.target.value;
     setShowhide12(getshow);
-  }
-  const handleshow13 = e => {
+  };
+  const handleshow13 = (e) => {
     const getshow = e.target.value;
     setShowhide13(getshow);
-  }
-  const handleshow14 = e => {
+  };
+  const handleshow14 = (e) => {
     const getshow = e.target.value;
     setShowhide14(getshow);
-  }
-  const handleshow18 = e => {
+  };
+  const handleshow18 = (e) => {
     const getshow = e.target.value;
     setShowhide18(getshow);
-  }
+  };
 
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
-
-  }
+  };
   useEffect(() => {
     if (DdjayFormSubmitted) {
       props.DdjayFormSubmit(true);
@@ -117,7 +126,7 @@ const DDJAYForm = (props) => {
   }, [DdjayFormSubmitted]);
 
   return (
-    <Form onSubmit={DDJAYFormSubmitHandler} style={{ display: props.displayDdjay }}>
+    <form onSubmit={handleSubmit(DDJAYFormSubmitHandler)} style={{ display: props.displayDdjay }}>
       <Form.Group className="justify-content-center" controlId="formBasicEmail">
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col col-12>
@@ -127,21 +136,23 @@ const DDJAYForm = (props) => {
               <thead>
                 <tr>
                   <td>Detail of plots</td>
-                  <td >No.</td>
-                  <td >Area</td>
+                  <td>No.</td>
+                  <td>Area</td>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td >
+                  <td>
                     <div className="px-2">
-                      <p className="mb-2" >Details of frozen plots (50%)
-                      </p>
+                      <p className="mb-2">Details of frozen plots (50%)</p>
                     </div>
                   </td>
-                  <td align="right">  <input type="number" className="form-control" /></td>
+                  <td align="right">
+                    {" "}
+                    <input type="number" className="form-control" {...register("frozenNo")} />
+                  </td>
                   <td component="th" scope="row">
-                    <input type="number" className="form-control" />
+                    <input type="number" className="form-control" {...register("frozenArea")} />
                   </td>
                 </tr>
               </tbody>
@@ -150,33 +161,30 @@ const DDJAYForm = (props) => {
             <br></br>
             <div className="row">
               <div className="col col-12">
-                <h6> Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan (Yes/No)&nbsp;&nbsp;
-
-
-                  <input type="radio" value="Yes" id="Yes"
-                    onChange1={handleChange} name="Yes" onClick={handleshow12} />&nbsp;&nbsp;
+                <h6>
+                  {" "}
+                  Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan (Yes/No)&nbsp;&nbsp;
+                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow12} />
+                  &nbsp;&nbsp;
                   <label for="Yes">Yes</label>&nbsp;&nbsp;
-
-                  <input type="radio" value="No" id="No"
-                    onChange1={handleChange} name="Yes" onClick={handleshow12} />&nbsp;&nbsp;
-                  <label for="No">No</label></h6>
-                {
-                  showhide12 === "Yes" && (
-                    <div className="row " >
-                      <div className="col col-6">
-                        <label >Area of such Pocket (in acres)</label>
-                        <input type="text" className="form-control" />
-                      </div>
-
+                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow12} />
+                  &nbsp;&nbsp;
+                  <label for="No">No</label>
+                </h6>
+                {showhide12 === "Yes" && (
+                  <div className="row ">
+                    <div className="col col-6">
+                      <label>Area of such Pocket (in acres)</label>
+                      <input type="text" className="form-control" {...register("organizeArea")} />
                     </div>
-
-                  )
-                }
+                  </div>
+                )}
               </div>
             </div>
           </Col>
         </Row>
       </Form.Group>
-    </Form>)
+    </form>
+  );
 };
 export default DDJAYForm;
