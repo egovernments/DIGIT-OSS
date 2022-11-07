@@ -1,17 +1,19 @@
 package org.egov.report.service;
 
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TimeZone;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.domain.model.RequestInfoWrapper;
 import org.egov.swagger.model.ColumnDetail;
 import org.egov.swagger.model.ColumnDetail.TypeEnum;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.egov.swagger.model.MetadataResponse;
 import org.egov.swagger.model.ReportDefinition;
 import org.egov.swagger.model.SearchColumn;
@@ -23,6 +25,8 @@ import org.springframework.web.client.RestTemplate;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Service
 public class IntegrationService {
@@ -32,6 +36,9 @@ public class IntegrationService {
 
     @Value("${id.timezone}")
     private String timezone;
+    
+    @Value("${name.username.combinedreports.list}")
+    private List<String> nameAndUsernameCombinedReports;
 
     public MetadataResponse getData(ReportDefinition reportDefinition, MetadataResponse metadataResponse, RequestInfo requestInfo, String moduleName) {
 
@@ -117,7 +124,8 @@ public class IntegrationService {
                          * 
                          * using a short term solution
                          */
-						if (reportDefinition.getReportName().equalsIgnoreCase("TradeLicenseDailyCollectionReport")) {
+
+                        if (nameAndUsernameCombinedReports.contains(reportDefinition.getReportName())) {
 							List<Object> valuesSuffix = JsonPath.read(document, patterns[3]);
 							for (int i = 0; i < keys.size(); i++) {
 								map.put(keys.get(i), values.get(i)+"/"+valuesSuffix.get(i));
