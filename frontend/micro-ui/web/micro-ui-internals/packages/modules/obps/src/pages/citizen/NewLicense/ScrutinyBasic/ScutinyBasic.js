@@ -311,8 +311,8 @@ const ScrutitnyForms = () => {
           {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}
         </div>
       </div>
-      {/* <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-        <DisApprovalList
+      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+        {/* <DisApprovalList
           disapprovallistDeveloper={displayPurpose}
           disapprovallistGeneral={displayGeneral}
           disapprovallistAppliedLand={displayAppliedLand}
@@ -323,9 +323,10 @@ const ScrutitnyForms = () => {
           disapprovalCheckedPurpose={displayPurposeCHeckedList}
           DisApprovalListFeeandCharges={displayFeeandCharges}
           dataList={disapprovalData}
-        ></DisApprovalList>
-        <HistoryList></HistoryList>
-      </div> */}
+        ></DisApprovalList> */}
+        {/* <HistoryList></HistoryList> */}
+      </div>
+
       <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
         <ScrutinyDevelopment
           remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}

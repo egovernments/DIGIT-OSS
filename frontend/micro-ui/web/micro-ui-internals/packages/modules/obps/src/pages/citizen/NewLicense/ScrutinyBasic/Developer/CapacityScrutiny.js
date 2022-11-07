@@ -1,91 +1,3 @@
-// import * as React from "react";
-// import Box from "@mui/material/Box";
-// import Button from "@mui/material/Button";
-// import Dialog from "@mui/material/Dialog";
-// import DialogActions from "@mui/material/DialogActions";
-// import DialogContent from "@mui/material/DialogContent";
-// import DialogContentText from "@mui/material/DialogContentText";
-// import DialogTitle from "@mui/material/DialogTitle";
-// import FormControl from "@mui/material/FormControl";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import InputLabel from "@mui/material/InputLabel";
-// import MenuItem from "@mui/material/MenuItem";
-// import Select from "@mui/material/Select";
-// import Switch from "@mui/material/Switch";
-
-// export default function MaxWidthDialog() {
-//   const [open, setOpen] = React.useState(false);
-//   const [fullWidth, setFullWidth] = React.useState(true);
-//   const [maxWidth, setMaxWidth] = React.useState("sm");
-
-//   const handleClickOpen = () => {
-//     setOpen(true);
-//   };
-
-//   const handleClose = () => {
-//     setOpen(false);
-//   };
-
-//   const handleMaxWidthChange = (event) => {
-//     setMaxWidth(
-//       // @ts-expect-error autofill of arbitrary value is not handled.
-//       event.target.value
-//     );
-//   };
-
-//   const handleFullWidthChange = (event) => {
-//     setFullWidth(event.target.checked);
-//   };
-
-//   return (
-//     <React.Fragment>
-//       <Button variant="outlined" onClick={handleClickOpen}>
-//         Open max-width dialog
-//       </Button>
-//       <Dialog fullWidth={fullWidth} maxWidth={maxWidth} open={open} onClose={handleClose}>
-//         <DialogTitle>Optional sizes</DialogTitle>
-//         <DialogContent>
-//           <DialogContentText>You can set my maximum width and whether to adapt or not.</DialogContentText>
-//           <Box
-//             noValidate
-//             component="form"
-//             sx={{
-//               display: "flex",
-//               flexDirection: "column",
-//               m: "auto",
-//               width: "fit-content",
-//             }}
-//           >
-//             <FormControl sx={{ mt: 2, minWidth: 120 }}>
-//               <InputLabel htmlFor="max-width">maxWidth</InputLabel>
-//               <Select
-//                 autoFocus
-//                 value={maxWidth}
-//                 onChange={handleMaxWidthChange}
-//                 label="maxWidth"
-//                 inputProps={{
-//                   name: "max-width",
-//                   id: "max-width",
-//                 }}
-//               >
-//                 <MenuItem value={false}>false</MenuItem>
-//                 <MenuItem value="xs">xs</MenuItem>
-//                 <MenuItem value="sm">sm</MenuItem>
-//                 <MenuItem value="md">md</MenuItem>
-//                 <MenuItem value="lg">lg</MenuItem>
-//                 <MenuItem value="xl">xl</MenuItem>
-//               </Select>
-//             </FormControl>
-//             <FormControlLabel sx={{ mt: 1 }} control={<Switch checked={fullWidth} onChange={handleFullWidthChange} />} label="Full width" />
-//           </Box>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={handleClose}>Close</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </React.Fragment>
-//   );
-// }
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { useForm } from "react-hook-form";
@@ -103,22 +15,15 @@ import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
+import ModalChild from "../Remarks/ModalChild";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+
 const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data }) => {
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
-  // const financialCapacity = useSelector(selectFinancialCapacity)
-  // const cin_Number = useSelector(selectCinNumber)
-  // const companyName = useSelector(selectCompanayNAme)
-  // const dateOfCorporation = useSelector(selectDateOfCorporation)
-  // const registeredAddress = useSelector(selectRegisteredAddress)
-  // const email = useSelector(selectEmail)
-  // const mobileNumber = useSelector(selectMobileNumber)
-  // const gst_Number = useSelector(selectGst_Number)
-  // const shareHoldingPatterens = useSelector(selectShareHoldingPatterens)
-  // const directorsData = useSelector(selectDirectorsInformation);
-  // const authUserName = useSelector(selectmodalAuthUserValuesArray);
+
   const [isDevType, setIsDevType] = useState(false);
   const [isDevTypeComp, setIsDevTypeComp] = useState(false);
   const [modal, setmodal] = useState(false);
@@ -178,6 +83,125 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
   // console.log("AUTHNAME", authUserName);
 
   // const dispatch = useDispatch();
+
+  const [uncheckedValue, setUncheckedVlue] = useState([]);
+  const [checkValue, setCheckedVAlue] = useState([]);
+
+  const [open2, setOpen2] = useState(false);
+  const [messege, setMessege] = useState("");
+  const [developerLabel, setDeveloperLabel] = useState(true);
+  const [show, setshow] = useState(false);
+  const [show3, setshow3] = useState(false);
+  const [smShow, setSmShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [noChecked, setNochecked] = useState(true);
+  const [warningOrred, setwarningOrred] = useState("#ffcf33");
+  const [color, setColor] = useState({ yes: false, no: false });
+  const [smShow2, setSmShow2] = useState(false);
+  const [smShow3, setSmShow3] = useState(false);
+  const [labelValue, setLabelValue] = useState("");
+
+  const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
+  const [isyesOrNochecked, setYesorNochecked] = useState(true);
+  const [fieldValue, setFieldValue] = useState("");
+  // const [fieldValue1, setFieldValue1] = useState("");
+
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
+
+  const handlemodaldData = (data) => {
+    setmodaldData(data.data);
+    setSmShow(false);
+  };
+
+  const handleYesOrNochecked = (data) => {
+    setYesorNochecked(data.data);
+  };
+  const handlemodalsubmit = () => {
+    console.log("here");
+    const filteredObj = uncheckedValue.filter((obj) => {
+      return obj.label == modaldData.label;
+    });
+    const filteredObjCheked = checkValue.filter((obj) => {
+      return obj.label == modaldData.label;
+    });
+    if (filteredObj.length !== 0) {
+      const removedList = uncheckedValue.filter((obj) => {
+        return obj.label !== modaldData.label;
+      });
+      setUncheckedVlue(removedList);
+    }
+    if (filteredObjCheked.length !== 0) {
+      const removedList = checkValue.filter((obj) => {
+        return obj.label !== modaldData.label;
+      });
+      setCheckedVAlue(removedList);
+    }
+
+    if (isyesOrNochecked === false) {
+      if (modaldData.label !== "" || modaldData.Remarks !== "") {
+        if (filteredObj.length === 0) {
+          setUncheckedVlue((prev) => [...prev, modaldData]);
+        }
+      }
+    } else {
+      if (modaldData.label !== "" || modaldData.Remarks !== "") {
+        if (filteredObjCheked.length === 0) {
+          setCheckedVAlue((prev) => [...prev, modaldData]);
+        }
+      }
+    }
+  };
+  useEffect(() => {
+    console.log("called");
+    handlemodalsubmit();
+  }, [modaldData.Remarks]);
+  //   useEffect(() => {
+  //     props.passUncheckedList({ data: uncheckedValue });
+  //   }, [uncheckedValue]);
+
+  //   useEffect(() => {
+  //     props.passCheckedList({ data: checkValue });
+  //   }, [checkValue]);
+  console.log("unchecked values", uncheckedValue);
+
+  console.log(uncheckedValue.indexOf("developer"));
+
+  const developerInputFiledColor = uncheckedValue.filter((obj) => {
+    return obj.label === "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act,1975";
+  });
+  const developerInputCheckedFiledColor = checkValue.filter((obj) => {
+    return obj.label === "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act,1975";
+  });
+  const developerInputFiledColor1 = uncheckedValue.filter((obj) => {
+    return obj.label === "Whether any technical expert(s) engaged";
+  });
+  const developerInputCheckedFiledColor1 = checkValue.filter((obj) => {
+    return obj.label === "Whether any technical expert(s) engaged";
+  });
+  const developerInputFiledColor2 = uncheckedValue.filter((obj) => {
+    return obj.label === "technical capacity sought";
+  });
+  const developerInputCheckedFiledColor2 = checkValue.filter((obj) => {
+    return obj.label === "technical capacity sought";
+  });
+  const developerInputFiledColor3 = uncheckedValue.filter((obj) => {
+    return obj.label === "Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as";
+  });
+  const developerInputCheckedFiledColor3 = checkValue.filter((obj) => {
+    return obj.label === "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act,1975";
+  });
+  const developerInputFiledColor4 = uncheckedValue.filter((obj) => {
+    return obj.label === "the proposed developer company/firm";
+  });
+  const developerInputCheckedFiledColor4 = checkValue.filter((obj) => {
+    return obj.label === "the proposed developer company/firm";
+  });
+
+  ////////////////////////////////////////////
   const {
     register,
     handleSubmit,
@@ -187,24 +211,12 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
     console.log("data", data);
   };
   const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] = useState(false);
-  // const AppliedDetailFormSubmitHandler = (e) => {
-  //   e.preventDefault();
-  //   SetAppliedDetailFormSubmitted(true);
-  // };
-  // useEffect(() => {
-  //   if (AppliedDetailFormSubmitted) {
-  //     props.AppliedDetailsFormSubmit(true);
-  //   }
-  // }, [AppliedDetailFormSubmitted]);
+
   const [open, setOpen] = useState(false);
   const [showhide, setShowhide] = useState("No");
   const [showhide1, setShowhide1] = useState("no");
   const [showhide0, setShowhide0] = useState("No");
-  // const [showhide2, setShowhide2] = useState("No");
-  // const [showhide3, setShowhide3] = useState("No");
-  // const [showhide4, setShowhide4] = useState("No");
-  // const [showhide5, setShowhide5] = useState("No");
-  const [showhide6, setShowhide6] = useState("no");
+  const [showhide6, setShowhide6] = useState("No");
 
   const handleshow = (e) => {
     const getshow = e.target.value;
@@ -218,22 +230,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
     const getshow = e.target.value;
     setShowhide1(getshow);
   };
-  // const handleshow2 = (e) => {
-  //   const getshow = e.target.value;
-  //   setShowhide2(getshow);
-  // };
-  // const handleshow3 = (e) => {
-  //   const getshow = e.target.value;
-  //   setShowhide3(getshow);
-  // };
-  // const handleshow4 = (e) => {
-  //   const getshow = e.target.value;
-  //   setShowhide4(getshow);
-  // };
-  // const handleshow5 = (e) => {
-  //   const getshow = e.target.value;
-  //   setShowhide5(getshow);
-  // };
+
   const handleshow6 = (e) => {
     const getshow = e.target.value;
     setShowhide6(getshow);
@@ -244,13 +241,6 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
   };
 
   const devTypeFlagVal = localStorage.getItem("devTypeValueFlag");
-
-  // if(devTypeFlagVal == "1"){
-  //     setIsDevType(true);
-  // }
-  // if(devTypeFlagVal == "0"){
-  //     setIsDevTypeComp(true);
-  // }
 
   const handleArrayValues = () => {
     if (licenceNumber !== "" && nameOfDeveloper !== "" && purposeOfColony !== "") {
@@ -375,10 +365,10 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                     <table className="table table-bordered" size="sm">
                       <thead>
                         <tr>
-                          <th>S.No.</th>
-                          <th>Particulars of document</th>
-                          <th>Details </th>
-                          <th>Annexure </th>
+                          <th class="fw-normal">S.No.</th>
+                          <th class="fw-normal">Particulars of document</th>
+                          <th class="fw-normal">Details </th>
+                          <th class="fw-normal">Annexure </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -403,10 +393,10 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                     <table className="table table-bordered" size="sm">
                       <thead>
                         <tr>
-                          <th>S.No.</th>
-                          <th>Particulars of document</th>
-                          <th>Details </th>
-                          <th>Annexure </th>
+                          <th class="fw-normal">S.No.</th>
+                          <th class="fw-normal">Particulars of document</th>
+                          <th class="fw-normal">Details </th>
+                          <th class="fw-normal">Annexure </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -441,10 +431,10 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                     <table className="table table-bordered" size="sm">
                       <thead>
                         <tr>
-                          <th>S.No.</th>
-                          <th>Particulars of document</th>
-                          <th>Details </th>
-                          <th>Annexure </th>
+                          <th class="fw-normal">S.No.</th>
+                          <th class="fw-normal">Particulars of document</th>
+                          <th class="fw-normal">Details </th>
+                          <th class="fw-normal">Annexure </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -481,12 +471,38 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                 &nbsp;&nbsp;&nbsp; (i) Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act,
                 1975: *{" "}
               </p>
-              <div className="form-group">
-                <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
-                <label for="Yes">Yes</label>
-
-                <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
-                <label for="No">No</label>
+              <div>
+                <div style={{ display: "flex" }}>
+                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
+                  <label for="Yes">Yes</label>
+                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
+                  <label for="No">No</label>
+                  &nbsp;&nbsp;
+                  <ReportProblemIcon
+                    style={{
+                      color:
+                        developerInputFiledColor.length > 0
+                          ? developerInputFiledColor[0].color.data
+                          : developerInputCheckedFiledColor.length > 0
+                          ? developerInputCheckedFiledColor[0].color.data
+                          : "#FFB602",
+                    }}
+                    onClick={() => {
+                      setLabelValue(
+                        "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act,1975"
+                      ),
+                        setSmShow(true),
+                        console.log("modal open");
+                    }}
+                  ></ReportProblemIcon>
+                  <ModalChild
+                    labelmodal={labelValue}
+                    passmodalData={handlemodaldData}
+                    isYesorNoChecked={handleYesOrNochecked}
+                    displaymodal={smShow}
+                    setColor={setColor}
+                  ></ModalChild>
+                </div>
                 {/* {showhide0 === "Yes" && ( */}
                 <div className="card-body">
                   {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
@@ -494,12 +510,12 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                     <Table className="table table-bordered">
                       <thead>
                         <tr>
-                          <th>S. no</th>
-                          <th> Licence No / year and date of grant of licence </th>
-                          <th>Name of developer *</th>
-                          <th>Purpose of colony </th>
-                          <th>Sector and development plan </th>
-                          <th>Validity of licence including renewals if any</th>
+                          <th class="fw-normal">S. no</th>
+                          <th class="fw-normal"> Licence No / year and date of grant of licence </th>
+                          <th class="fw-normal">Name of developer *</th>
+                          <th class="fw-normal">Purpose of colony </th>
+                          <th class="fw-normal">Sector and development plan </th>
+                          <th class="fw-normal">Validity of licence including renewals if any</th>
                           {/* <th>Remove</th> */}
                         </tr>
                       </thead>
@@ -649,6 +665,30 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
               <p>
                 &nbsp;&nbsp;&nbsp;(ii) Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as .
               </p>
+              <div style={{ display: "flex" }}>
+                {/* <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.authorizedmobile : null}
+              disabled
+            ></Form.Control> */}
+                &nbsp;&nbsp;
+                <ReportProblemIcon
+                  style={{
+                    color:
+                      developerInputFiledColor3.length > 0
+                        ? developerInputFiledColor3[0].color.data
+                        : developerInputCheckedFiledColor3.length > 0
+                        ? developerInputCheckedFiledColor3[0].color.data
+                        : "#FFB602",
+                  }}
+                  onClick={() => {
+                    setLabelValue("Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as"),
+                      setSmShow(true),
+                      console.log("modal open");
+                    // setFieldValue(personalinfo !== null ? personalinfo.authorizedmobile : null);
+                  }}
+                ></ReportProblemIcon>
+              </div>
               <div>
                 <div className="card-body">
                   {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
@@ -657,12 +697,12 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                       <thead>
                         <tr>
                           {/* <th>Add More</th> */}
-                          <th>S.No</th>
-                          <th>Colonies developed</th>
-                          <th>Area</th>
-                          <th>Purpose</th>
-                          <th>Status of development</th>
-                          <th>Outstanding Dues</th>
+                          <th class="fw-normal">S.No</th>
+                          <th class="fw-normal">Colonies developed</th>
+                          <th class="fw-normal">Area</th>
+                          <th class="fw-normal">Purpose</th>
+                          <th class="fw-normal">Status of development</th>
+                          <th class="fw-normal">Outstanding Dues</th>
                           {/* <th>Action</th> */}
                         </tr>
                       </thead>
@@ -825,12 +865,33 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
               <div className="hl"></div>
               <p>&nbsp;&nbsp;&nbsp;(iii) Whether any technical expert(s) engaged</p>
 
-              <div className="form-group">
-                <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
+              <div>
+                {/* <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
                 <label for="Yes">Yes</label>
 
                 <input type="radio" value="No" id="No" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
-                <label for="No">No</label>
+                <label for="No">No</label> */}
+
+                <div style={{ display: "flex" }}>
+                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
+                  <label for="Yes">Yes</label>
+                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
+                  <label for="No">No</label>
+                  &nbsp;&nbsp;
+                  <ReportProblemIcon
+                    style={{
+                      color:
+                        developerInputFiledColor1.length > 0
+                          ? developerInputFiledColor1[0].color.data
+                          : developerInputCheckedFiledColor1.length > 0
+                          ? developerInputCheckedFiledColor1[0].color.data
+                          : "#FFB602",
+                    }}
+                    onClick={() => {
+                      setLabelValue("Whether any technical expert(s) engaged"), setSmShow(true), console.log("modal open");
+                    }}
+                  ></ReportProblemIcon>
+                </div>
                 {/* {showhide1 === "Yes" && ( */}
                 <div className="row ">
                   <div className="form-group row">
@@ -839,11 +900,11 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                         <Table className="table table-bordered">
                           <thead>
                             <tr>
-                              <th>S.No</th>
-                              <th>Professional </th>
-                              <th>Qualification</th>
-                              <th>Signature</th>
-                              <th>Annexure</th>
+                              <th class="fw-normal">S.No</th>
+                              <th class="fw-normal">Professional </th>
+                              <th class="fw-normal">Qualification</th>
+                              <th class="fw-normal">Signature</th>
+                              <th class="fw-normal">Annexure</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1072,8 +1133,24 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                 &nbsp;&nbsp;&nbsp;(iv) If director/partner of the proposed developer company/firm also holds designation of director/partner in any
                 other company/firm who has already obtained license(s) under act of 1975:
               </p>
+              <div style={{ display: "flex" }}>
+                &nbsp;&nbsp;
+                <ReportProblemIcon
+                  style={{
+                    color:
+                      developerInputFiledColor4.length > 0
+                        ? developerInputFiledColor4[0].color.data
+                        : developerInputCheckedFiledColor4.length > 0
+                        ? developerInputCheckedFiledColor4[0].color.data
+                        : "#FFB602",
+                  }}
+                  onClick={() => {
+                    setLabelValue("the proposed developer company/firm "), setSmShow(true), console.log("modal open");
+                  }}
+                ></ReportProblemIcon>
+              </div>
 
-              <div className="form-group">
+              <div>
                 <input
                   type="radio"
                   value="Yes"
@@ -1105,9 +1182,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                         <Table className="table table-bordered" size="sm">
                           <thead>
                             <tr>
-                              <th>S.No.</th>
-                              <th>Professional </th>
-                              <th> Annexure</th>
+                              <th class="fw-normal">S.No.</th>
+                              <th class="fw-normal">Professional </th>
+                              <th class="fw-normal"> Annexure</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1153,82 +1230,102 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                 2. In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside
                 Haryana:
               </p>
-              <div className="form-group">
-                <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
+              <div>
+                {/* <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
                 <label for="Yes">Yes</label>
 
                 <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
-                <label for="No">No</label>
-                {/* {showhide6 === "Yes" && ( */}
-                <div className="row ">
-                  <div className="form-group row">
-                    <div className="col-sm-12">
-                      <Col xs="12" md="12" sm="12">
-                        <div>
-                          <Table className="table table-bordered" size="sm">
-                            <thead>
-                              <tr>
-                                <th>S.No.</th>
-                                <th>Agreement*</th>
-                                <th>Annexure </th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td> 1 </td>
-                                <td> Registered and Irrevocable Agreement</td>
-                                <td align="center" size="large">
-                                  <div className="row">
-                                    <button className="btn btn-sm col-md-6">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6">
-                                      <FileDownloadIcon color="primary" />
-                                    </button>
-                                  </div>
-                                </td>
-                              </tr>
+                <label for="No">No</label> */}
+                <div style={{ display: "flex" }}>
+                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
+                  <label for="Yes">Yes</label>
+                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
+                  <label for="No">No</label>
+                  &nbsp;&nbsp;
+                  <ReportProblemIcon
+                    style={{
+                      color:
+                        developerInputFiledColor2.length > 0
+                          ? developerInputFiledColor2[0].color.data
+                          : developerInputCheckedFiledColor2.length > 0
+                          ? developerInputCheckedFiledColor2[0].color.data
+                          : "#FFB602",
+                    }}
+                    onClick={() => {
+                      setLabelValue("technical capacity sought"), setSmShow(true), console.log("modal open");
+                    }}
+                  ></ReportProblemIcon>
+                </div>
+                {showhide6 === "Yes" && (
+                  <div className="row ">
+                    <div className="form-group row">
+                      <div className="col-sm-12">
+                        <Col xs="12" md="12" sm="12">
+                          <div>
+                            <Table className="table table-bordered" size="sm">
+                              <thead>
+                                <tr>
+                                  <th class="fw-normal">S.No.</th>
+                                  <th class="fw-normal">Agreement*</th>
+                                  <th class="fw-normal">Annexure </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td> 1 </td>
+                                  <td> Registered and Irrevocable Agreement</td>
+                                  <td align="center" size="large">
+                                    <div className="row">
+                                      <button className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </button>
+                                      <button className="btn btn-sm col-md-6">
+                                        <FileDownloadIcon color="primary" />
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
 
-                              <tr>
-                                <td> 2 </td>
-                                <td>Board resolutions of authorized signatory of firm/company provided technical assistance</td>
-                                <td align="center" size="large">
-                                  <div className="row">
-                                    <button className="btn btn-sm col-md-6">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6">
-                                      <FileDownloadIcon color="primary" />
-                                    </button>
-                                  </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <td> 3 </td>
+                                <tr>
+                                  <td> 2 </td>
+                                  <td>Board resolutions of authorized signatory of firm/company provided technical assistance</td>
+                                  <td align="center" size="large">
+                                    <div className="row">
+                                      <button className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </button>
+                                      <button className="btn btn-sm col-md-6">
+                                        <FileDownloadIcon color="primary" />
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td> 3 </td>
 
-                                <td>
-                                  Auto populate details of earlier license(s) granted to existing developer company/firm to set up a colony under act
-                                  of 1975.
-                                </td>
-                                <td align="center" size="large">
-                                  <div className="row">
-                                    <button className="btn btn-sm col-md-6">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6">
-                                      <FileDownloadIcon color="primary" />
-                                    </button>
-                                  </div>
-                                </td>
-                              </tr>
-                            </tbody>{" "}
-                          </Table>
-                        </div>
-                      </Col>
+                                  <td>
+                                    Auto populate details of earlier license(s) granted to existing developer company/firm to set up a colony under
+                                    act of 1975.
+                                  </td>
+                                  <td align="center" size="large">
+                                    <div className="row">
+                                      <button className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </button>
+                                      <button className="btn btn-sm col-md-6">
+                                        <FileDownloadIcon color="primary" />
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>{" "}
+                            </Table>
+                          </div>
+                        </Col>
+                      </div>
                     </div>
                   </div>
-                </div>
-                {/* )} */}
+                )}
                 {showhide6 === "No" && (
                   <div className="row ">
                     <div className="form-group row">
@@ -1237,9 +1334,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                           <Table className="table table-bordered" size="sm">
                             <thead>
                               <tr>
-                                <th>S.No.</th>
-                                <th>Agreement*</th>
-                                <th>Annexure </th>
+                                <th class="fw-normal">S.No.</th>
+                                <th class="fw-normal">Agreement*</th>
+                                <th class="fw-normal">Annexure </th>
                               </tr>
                             </thead>
                             <tbody>
