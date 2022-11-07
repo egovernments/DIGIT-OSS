@@ -69,13 +69,13 @@ const CheckPage = ({ onSubmit, value }) => {
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
+          <StatusTable>
             <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_LICENSE_DETAILS_LABEL`)}</CardHeader>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display: "inline" }}
               onClick={() => routeTo(`${routeLink}/provide-license-type`)}
             />
-            <StatusTable>
               <Row
                 className="border-none"
                 label={t(`BPA_LICENSE_TYPE`)}
@@ -88,13 +88,13 @@ const CheckPage = ({ onSubmit, value }) => {
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
+          <StatusTable>
             <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_LICENSE_DET_CAPTION`)}</CardHeader>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display: "inline" }}
               onClick={() => routeTo(`${routeLink}/license-details`)}
             />
-            <StatusTable>
               <Row
                 className="border-none"
                 label={t(`BPA_APPLICANT_NAME_LABEL`)}
@@ -108,6 +108,7 @@ const CheckPage = ({ onSubmit, value }) => {
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
+          <StatusTable>
             <div style={{ marginRight: "24px" }}>
               <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_LICENSEE_PERMANENT_LABEL`)}</CardHeader>
             </div>
@@ -117,8 +118,10 @@ const CheckPage = ({ onSubmit, value }) => {
               onClick={() => routeTo(`${routeLink}/Permanent-address`)}
             />
             <Row className="border-none" text={t(formData?.LicneseDetails?.PermanentAddress)} />
+            </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
+          <StatusTable>
             <div style={{ marginRight: "24px" }}>
               <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_COMMUNICATION_ADDRESS_HEADER_DETAILS`)}</CardHeader>
             </div>
@@ -128,8 +131,10 @@ const CheckPage = ({ onSubmit, value }) => {
               onClick={() => routeTo(`${routeLink}/correspondence-address`)}
             />
             <Row className="border-none" text={t(value?.Correspondenceaddress)} />
+            </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
+          <StatusTable>
             <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -150,6 +155,7 @@ const CheckPage = ({ onSubmit, value }) => {
                 </StatusTable>
               </div>
             ))}
+          </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
             <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_SUMMARY_FEE_EST")}</CardHeader>

@@ -192,13 +192,13 @@ const CheckPage = ({ onSubmit, value }) => {
         </StatusTable>
       </Card>
       <Card style={{paddingRight:"16px"}}>
+      <StatusTable>
         <CardHeader>{t("BPA_PLOT_DETAILS_TITLE")}</CardHeader>
         <LinkButton
           label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
           style={{ width: "100px", display: "inline" }}
           onClick={() => routeTo(`${routeLink}/plot-details`)}
         />
-        <StatusTable>
           <Row className="border-none" label={`${t(`BPA_BOUNDARY_PLOT_AREA_LABEL`)}`} text={datafromAPI?.planDetail?.planInformation?.plotArea ? `${datafromAPI?.planDetail?.planInformation?.plotArea} ${t(`BPA_SQ_FT_LABEL`)}` : t("CS_NA")} textStyle={{paddingLeft:"12px"}}/>
           <Row className="border-none" label={`${t(`BPA_PLOT_NUMBER_LABEL`)}`} text={datafromAPI?.planDetail?.planInformation?.plotNo || t("CS_NA")} />
           <Row className="border-none" label={`${t(`BPA_KHATHA_NUMBER_LABEL`)}`} text={datafromAPI?.planDetail?.planInformation?.khataNo || t("CS_NA")} />
@@ -267,6 +267,7 @@ const CheckPage = ({ onSubmit, value }) => {
         </StatusTable>
       </Card>
       <Card style={{paddingRight:"16px"}}>
+        <StatusTable>
         <CardHeader>{t("BPA_DOCUMENT_DETAILS_LABEL")}</CardHeader>
         <LinkButton
           label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -274,8 +275,10 @@ const CheckPage = ({ onSubmit, value }) => {
           onClick={() => routeTo(`${routeLink}/document-details`)}
         />
         {<DocumentsPreview documents={getOrderDocuments(applicationDocs)} svgStyles = {{}} isSendBackFlow = {false} isHrLine = {true} titleStyles ={{fontSize: "18px", lineHeight: "24px", "fontWeight": 700, marginBottom: "10px"}}/>}
+        </StatusTable>
       </Card>
       <Card style={{paddingRight:"16px"}}>
+      <StatusTable>
         <CardHeader>{t("BPA_NOC_DETAILS_SUMMARY")}</CardHeader>
         <LinkButton
           label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -296,6 +299,7 @@ const CheckPage = ({ onSubmit, value }) => {
             </StatusTable>
           </div>
         ))}
+        </StatusTable>
         </Card>
         <Card style={{paddingRight:"16px"}}>
         <CardSubHeader>{`${t("BPA_SUMMARY_FEE_EST")}`}</CardSubHeader>

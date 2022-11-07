@@ -12,7 +12,7 @@ const Download = ({ dowloadOptions }) => {
         className="multilinkWrapper"
         onHeadClick={() => setShowOptions(!showOptions)}
         displayOptions={showOptions}
-        showOptions={setShowOptions}
+        // showOptions={setShowOptions}
         options={dowloadOptions}
         style={{ right: "0", position: "unset", top: "0px", margin: "0px" }}
         optionsStyle={{ right: "10px", top: "unset", margin: "0px", position: "absolute" }}

@@ -325,6 +325,7 @@ const CheckPage = ({ onSubmit, value }) => {
         </Card>
       </div> : null}
       <Card style={{paddingRight:"16px"}}>
+      <StatusTable>
         <CardHeader>{t("BPA_DOCUMENT_DETAILS_LABEL")}</CardHeader>
         <LinkButton
           label={<EditIcon style={{ marginTop: "-10px", float: "right", position: "relative", bottom: "32px" }} />}
@@ -332,6 +333,7 @@ const CheckPage = ({ onSubmit, value }) => {
           onClick={() => routeTo(`${routeLink}/document-details`)}
         />
         {<DocumentsPreview documents={getOrderDocuments(applicationDocs)} svgStyles = {{}} isSendBackFlow = {false} isHrLine = {true} titleStyles ={{fontSize: "18px", lineHeight: "24px", "fontWeight": 700, marginBottom: "10px"}}/>}
+        </StatusTable>
       </Card>
       <Card style={{paddingRight:"16px"}}>
         <CardHeader>{t("BPA_NOC_DETAILS_SUMMARY")}</CardHeader>
