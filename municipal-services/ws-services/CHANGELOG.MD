@@ -1,7 +1,7 @@
 # Change log
 All notable changes to this module will be documented in this file.
 
-## 1.7.4 - 2022-11-03
+## 1.7.4-beta - 2022-11-03
 
 - Added the logic for update workflow if payement is 0
 

@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.1.0 - 2022-03-29
+## 1.1.0-beta - 2022-03-29
 
 - Made Number of trip editable and price calculation will be based on number of trips
 - Removed vehicle type check from the price calculation for desludging application 

@@ -4,7 +4,7 @@
 
 	<groupId>com.example</groupId>
 	<artifactId>sw-services</artifactId>
-	<version>1.7.4-SNAPSHOT</version>
+	<version>1.7.4-beta-SNAPSHOT</version>
 	<name>sw_service</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>

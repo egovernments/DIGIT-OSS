@@ -1,6 +1,6 @@
 # Changelog
 All notable changes to this module will be documented in this file.
-## 1.2.0 - 2022-04-20
+## 1.2.0-beta - 2022-04-20
 - Added bulk bill feature for w&s
 
 ## 1.1.3 - 2022-04-28

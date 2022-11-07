@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.0.5
+## 1.0.5-beta
 - Added search filter for mobileno
 - Return applicant name and current owner
 

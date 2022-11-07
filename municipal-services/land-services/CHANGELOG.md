@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.0.4 - 2022-01-13
+## 1.0.4-beta - 2022-01-13
 
 - Updated to log4j2 version 2.17.1
 

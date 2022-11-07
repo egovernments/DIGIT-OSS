@@ -35,9 +35,6 @@ public class SewerageConnectionRequest {
 
 	@JsonProperty("SewerageConnection")
 	private SewerageConnection sewerageConnection = null;
-	
-	@JsonProperty("disconnectRequest")
-	private boolean disconnectRequest;
 
 	@Builder.Default
 	@JsonProperty("isCreateCall")

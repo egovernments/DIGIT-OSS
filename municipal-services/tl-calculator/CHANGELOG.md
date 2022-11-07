@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.1.5 - 2022-03-03
+## 1.1.5-beta - 2022-03-03
 
 - Added _estimate API 
 

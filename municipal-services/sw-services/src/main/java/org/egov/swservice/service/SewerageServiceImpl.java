@@ -336,7 +336,7 @@ public class SewerageServiceImpl implements SewerageService {
 
 	private List<SewerageConnection> updateSewerageConnectionForDisconnectFlow(SewerageConnectionRequest sewerageConnectionRequest) {
 		SearchCriteria criteria = new SearchCriteria();
-		
+
 		sewerageConnectionValidator.validateSewerageConnection(sewerageConnectionRequest, SWConstants.DISCONNECT_CONNECTION);
 		mDMSValidator.validateMasterData(sewerageConnectionRequest, SWConstants.DISCONNECT_CONNECTION);
 		Property property = validateProperty.getOrValidateProperty(sewerageConnectionRequest);
@@ -385,6 +385,7 @@ public class SewerageServiceImpl implements SewerageService {
 
 		// setting oldApplication Flag
 		markOldApplication(sewerageConnectionRequest);
+
 		if (!StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getTenantId()))
 			criteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
 		enrichmentService.enrichProcessInstance(Arrays.asList(sewerageConnectionRequest.getSewerageConnection()), criteria, sewerageConnectionRequest.getRequestInfo());
@@ -396,44 +397,9 @@ public class SewerageServiceImpl implements SewerageService {
 
 		/* decrypt here */
 		sewerageConnectionRequest.setSewerageConnection(decryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection(), sewerageConnectionRequest.getRequestInfo()));
-		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
-		
-	}
 
-	private List<SewerageConnection> updateSewerageConnectionForDisconnectFlow(SewerageConnectionRequest sewerageConnectionRequest) {
-		SearchCriteria criteria = new SearchCriteria();
-		
-		sewerageConnectionValidator.validateSewerageConnection(sewerageConnectionRequest, SWConstants.DISCONNECT_CONNECTION);
-		mDMSValidator.validateMasterData(sewerageConnectionRequest, SWConstants.DISCONNECT_CONNECTION);
-		Property property = validateProperty.getOrValidateProperty(sewerageConnectionRequest);
-		validateProperty.validatePropertyFields(property,sewerageConnectionRequest.getRequestInfo());
-		String previousApplicationStatus = workflowService.getApplicationStatus(
-				sewerageConnectionRequest.getRequestInfo(),
-				sewerageConnectionRequest.getSewerageConnection().getApplicationNo(),
-				sewerageConnectionRequest.getSewerageConnection().getTenantId(),config.getDisconnectBusinessServiceName() );
-		BusinessService businessService = workflowService.getBusinessService(config.getDisconnectBusinessServiceName(),
-				sewerageConnectionRequest.getSewerageConnection().getTenantId(),
-				sewerageConnectionRequest.getRequestInfo());
-		SewerageConnection searchResult = getConnectionForUpdateRequest(
-				sewerageConnectionRequest.getSewerageConnection().getId(), sewerageConnectionRequest.getRequestInfo());
-		enrichmentService.enrichUpdateSewerageConnection(sewerageConnectionRequest);
-		actionValidator.validateUpdateRequest(sewerageConnectionRequest, businessService, previousApplicationStatus);
-		sewerageConnectionValidator.validateUpdate(sewerageConnectionRequest, searchResult);
-		sewerageDaoImpl.pushForEditNotification(sewerageConnectionRequest);
-		userService.updateUser(sewerageConnectionRequest, searchResult);
-		// Call workflow
-		wfIntegrator.callWorkFlow(sewerageConnectionRequest, property);
-		calculationService.calculateFeeAndGenerateDemand(sewerageConnectionRequest, property);
-		// Enrich file store Id After payment
-		enrichmentService.enrichFileStoreIds(sewerageConnectionRequest);
-		enrichmentService.postStatusEnrichment(sewerageConnectionRequest);
-		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
-				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
-		if (!StringUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getTenantId()))
-			criteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
-		enrichmentService.enrichProcessInstance(Arrays.asList(sewerageConnectionRequest.getSewerageConnection()), criteria, sewerageConnectionRequest.getRequestInfo());
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
-		
+
 	}
 
 	/**

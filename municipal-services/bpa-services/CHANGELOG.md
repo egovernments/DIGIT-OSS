@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.1.6
+## 1.1.6-beta
 
 - When demand is not applicable then skip the payment stage
 

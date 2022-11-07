@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.1.7 - 2022-11-03
+## 1.1.7-beta - 2022-11-03
 
 - Incorporated privacy decryption for notification flow
 

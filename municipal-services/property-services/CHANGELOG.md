@@ -1,7 +1,7 @@
 
 All notable changes to this module will be documented in this file.
 
-## 1.2.0 - 2022-08-02
+## 1.2.0-beta - 2022-08-02
 
 - Added privacy changes for Property applications
 

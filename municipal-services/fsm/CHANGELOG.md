@@ -2,7 +2,7 @@
 # Changelog
 All notable changes to this module will be documented in this file.
 
-## 1.2.0 - 2022-08-04
+## 1.2.0-beta - 2022-08-04
 - Unrestricted service request assignment in  ULB employee flow
 - Unrestricted service request assignment in  DSO flow
 
