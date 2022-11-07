@@ -22,7 +22,7 @@ import SearchDropDown from "../../../../react-components/src/atoms/searchDropDow
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
-const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, ownerIndex }) => {
+const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
@@ -102,16 +102,16 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
       this.setState({ isRadioSelected: true });
     };
     const [showhide0, setShowhide0] = useState("No");
-    const [showDevTypeFields, setShowDevTypeFields] = useState("00");
+    const [showDevTypeFields, setShowDevTypeFields] = useState(formData?.LicneseDetails?.showDevTypeFields || formData?.formData?.LicneseDetails?.showDevTypeFields || "00");
     const [FormSubmitted, setFormSubmitted] = useState(false);
     const [showhide, setShowhide] = useState("No");
-    const [cin_Number, setCinNo] = useState(formTab?.LicneseDetails?.cin_Number || formTab?.LicneseDetails?.cin_Number || "");
-    const [companyName, setCompanyName] = useState(formTab?.LicneseDetails?.companyName || formTab?.LicneseDetails?.companyName || "");
-    const [incorporationDate, setIncorporation] = useState(formTab?.LicneseDetails?.incorporationDate || formTab?.LicneseDetails?.incorporationDate || "");
-    const [registeredAddress, setRegistered] = useState(formTab?.LicneseDetails?.registeredAddress || formTab?.LicneseDetails?.registeredAddress || "");
-    const [email, setEmail] = useState(formTab?.LicneseDetails?.email || formTab?.LicneseDetails?.email || "");
-    const [emailUser, setUserEmail] = useState(formTab?.LicneseDetails?.email || formTab?.LicneseDetails?.email || "");
-    const [registeredContactNo, setMobile] = useState(formTab?.LicneseDetails?.registeredContactNo || formTab?.LicneseDetails?.registeredContactNo || "");
+    const [cin_Number, setCinNo] = useState(formData?.LicneseDetails?.cin_Number || formData?.formData?.LicneseDetails?.cin_Number || "");
+    const [companyName, setCompanyName] = useState(formData?.LicneseDetails?.companyName || formData?.LicneseDetails?.companyName || "");
+    const [incorporationDate, setIncorporation] = useState(formData?.LicneseDetails?.incorporationDate || formData?.LicneseDetails?.incorporationDate || "");
+    const [registeredAddress, setRegistered] = useState(formData?.LicneseDetails?.registeredAddress || formData?.LicneseDetails?.registeredAddress || "");
+    const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
+    const [emailUser, setUserEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
+    const [registeredContactNo, setMobile] = useState(formData?.LicneseDetails?.registeredContactNo || formData?.LicneseDetails?.registeredContactNo || "");
     const [gst_Number, setGST] = useState("");
     const [sharName, setTbName] = useState("");
     const [designition, setDesignition] = useState("");
@@ -129,6 +129,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     
     const [docUpload,setDocuploadData]=useState([])
     const [file,setFile]=useState(null);
+    const [developerDataAddinfo,setDeveloperDataAddinfo] = useState([])
+    const [showDevTypeFieldsValue,setShowDevTypeFieldsValue] = useState("")
+
+    const devRegId = localStorage.getItem('devRegId');
+    console.log(devRegId);
     const handleshow = (e) => {
       const getshow = e.target.value;
       setShowhide(getshow);
@@ -163,7 +168,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
          formData.append(
              "file",file.file      );
          formData.append(
-             "tenantId","hr"      );  
+             "tenantId",tenantId      );  
          formData.append(
              "module","property-upload"      );
           formData.append(
@@ -241,28 +246,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
       setmodal(!modal)
     }
   }
-  console.log("FORMARRAYVAL",modalValuesArray);
+  // console.log("FORMARRAYVAL",modalValuesArray);
   useEffect(()=>{
     HandleGetMCNdata();
   },[cin_Number])
   
-  // const postAddInfo=async()=>{
-  
-  //   try{
-  //     const Resp =  await axios.post("http://localhost:8081/user/developer/_registration",
-  //     {headers:{
-  //         'Content-Type': 'application/json',
-  //         'Access-Control-Allow-origin':"*",
-  //     }})
-  //     .then((Resp)=>{
-  //         console.log("FORMDATA",Resp.devDetail)
-  //         return Resp;
-  //     })
-  
-  //   }catch(error){
-  //     console.log(error)
-  //   }
-  // }
+
   
     const [noofRows, setNoOfRows] = useState(1);
     const [aoofRows, setAoOfRows] = useState(1);
@@ -284,10 +273,16 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
               "auth_token": ""
           },
       }
-        const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=36&isAllData=true`,requestResp,{
+        const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
   
         });
-        console.log(getDevDetails?.data);
+        const developerDataGet = getDevDetails?.data; 
+        setDeveloperDataAddinfo((prev)=>[...prev,developerDataGet]);
+        console.log(developerDataAddinfo?.data);
+        
+        const valueOfDrop = getDevDetails?.data?.devDetail[0]?.addInfo?.showDevTypeFields
+        console.log("DeveloperGEtData",valueOfDrop);
+        setShowDevTypeFieldsValue(valueOfDrop);
       } catch (error) {
         console.log(error);
       }
@@ -297,10 +292,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     }, []);
     
   // if (isLoading) return <Loader />;
-  const AddInfoForm = async (e) => {
+  const goNext = async (e) => {
 
-    if (!(formTab?.result && formTab?.result?.Licenses[0]?.id)) {
-      let addInfoDev = {
+    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+      let addInfo = {
         showDevTypeFields:showDevTypeFields,
         cin_Number: cin_Number,
         companyName: companyName,
@@ -312,112 +307,22 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
         directorsInformation: DirectorData,
         shareHoldingPatterens:modalValuesArray
       }
-      onSelect(config.key, addInfoDev);
-      console.log("DATALICDET",addInfoDev);
-      localStorage.setItem("addInfo",JSON.stringify(addInfoDev));
+      onSelect(config.key, addInfo);
+      console.log("DATALICDET",addInfo);
+      localStorage.setItem("addInfo",JSON.stringify(addInfo));
 
       const developerRegisterData = {
+        "id":devRegId,
+        "pageName":"addInfo",
         "devDetail": {
-            "licenceDetails": {
-              // licenseDet:licenseDet
-            },
-            "addInfo": {
-              addInfoDev:addInfoDev
-            },
-            "aurthorizedUserInfoArray": [
-                {
-                    "userName": "",
-                    "name": "",
-                    "gender": "",
-                    "mobileNumber": "",
-                    "emailId": "",
-                    "dob": "",
-                    "pan": "",
-                    "active": "",
-                    "type": "",
-                    "password": "",
-                    "tenantId": tenantId,
-                    "roles": [
-                        {
-                            "code": "CITIZEN",
-                            "name": "Citizen",
-                            "tenantId": "default"
-                        }
-                    ]
-                }
-            ],
-            "capacityDevelopAColony": {
-                "individualCertificateCA": "",
-                "companyBalanceSheet": "",
-                "paidUpCapital": "",
-                "networthPartners": "",
-                "networthFirm": "",
-                "capacityDevelopColonyHdruAct": [
-                    {
-                        "licenceNumber": "",
-                        "nameOfDeveloper": "",
-                        "purposeOfColony": "",
-                        "sectorAndDevelopmentPlan": "",
-                        "validatingLicence": ""
-                    }
-                ],
-                "capacityDevelopColonyLawAct": [
-                    {
-                        "serialNumber": "",
-                        "coloniesDeveloped": "",
-                        "area": "",
-                        "purpose": "",
-                        "statusOfDevelopment": "",
-                        "outstandingDues": ""
-                    }
-                ],
-                "technicalExpertEngaged": [
-                    {
-                        "engineerName": "",
-                        "engineerQualification": "",
-                        "engineerSign": "",
-                        "engineerDegree": "",
-                        "architectName": "",
-                        "architectQualification": "",
-                        "architectSign": "",
-                        "architectDegree": "",
-                        "townPlannerName": "",
-                        "townPlannerQualification": "",
-                        "townPlannerSign": "",
-                        "townPlannerDegree": "",
-                        "existingDeveloperAgreement": "",
-                        "existingDeveloperAgreementDoc": "",
-                        "technicalCapacity": "",
-                        "technicalCapacityDoc": "",
-                        "engineerNameN": "",
-                        "engineerDocN": "",
-                        "architectNameN": "",
-                        "architectDocN": "",
-                        "uplaodSpaBoard": "",
-                        "uplaodSpaBoardDoc": ""
-                    }
-                ],
-                "designationDirector": [
-                    {
-                        "agreementDoc": "",
-                        "boardDoc": ""
-                    }
-                ],
-                "obtainedLicense": [
-                    {
-                        "registeredDoc": "",
-                        "boardDocY": "",
-                        "earlierDocY": "",
-                        "boardDocN": "",
-                        "earlierDocN": "",
-                        "technicalAssistanceAgreementDoc": ""
-                    }
-                ]
-            }
-        }
+        
+        "addInfo": addInfo
       }
-      Digit.OBPSService.createDeveloper(developerRegisterData, tenantId)
+      }
+      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
+          console.log("DATA",result?.id);
+          // localStorage.setItem('devRegId',JSON.stringify(result?.id));
           setIsDisableForNext(false);
           let data = { 
             result: result, 
@@ -425,11 +330,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
             Correspondenceaddress: Correspondenceaddress,
             addressLineOneCorrespondence: addressLineOneCorrespondence,
             addressLineTwoCorrespondence: addressLineTwoCorrespondence,
-  
+
             isAddressSame: isAddressSame }
           //1, units
           onSelect("", data, "", true);
-  
+
         })
         .catch((e) => {
           setIsDisableForNext(false);
@@ -438,13 +343,18 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
         });
     }
     else {
-      let data = formTab?.formTab;
-      data.LicneseAddInfo.cin_Number = cin_Number;
-      data.LicneseAddInfo.companyName = companyName;
-      data.LicneseAddInfo.incorporationDate = incorporationDate;
-      data.LicneseAddInfo.registeredAddress = registeredAddress;
-      data.LicneseAddInfo.registeredContactNo = registeredContactNo;
-      onSelect("", formTab)
+      let data = formData?.formData;
+        data.LicneseDetails.showDevTypeFields = showDevTypeFields,
+        data.LicneseDetails.cin_Number = cin_Number,
+        data.LicneseDetails.companyName = companyName,
+        data.LicneseDetails.incorporationDate = incorporationDate,
+        data.LicneseDetails.registeredAddress = registeredAddress,
+        data.LicneseDetails.email = email,
+        data.LicneseDetails.registeredContactNo = registeredContactNo,
+        data.LicneseDetails.gst_Number = gst_Number,
+        data.LicneseDetails.directorsInformation = DirectorData,
+        data.LicneseDetails.shareHoldingPatterens = modalValuesArray
+      onSelect("", formData)
     }
 
     
@@ -464,7 +374,7 @@ const onSkip = () => onSelect();
         <FormStep 
           // onSubmit={AddInfoForm}
           config={config}
-          onSelect={AddInfoForm}
+          onSelect={goNext}
           onSkip={onSkip}
           isDisabled={showDevTypeFields === "00" || showDevTypeFields==undefined}
           t={t}
@@ -482,7 +392,9 @@ const onSkip = () => onSelect();
                           listOfData={optionsArrList}
                           labels="Selct Type"
                           getSelectedValue={devType}
+                          name="showDevTypeFields"
                           placeholder={showDevTypeFields}
+                          value={showDevTypeFields}
                           isMendatory={false}
                           {...(validation = {
                             isRequired: true,
@@ -657,6 +569,7 @@ const onSkip = () => onSelect();
                         type="text"
                         onChange={(e) => setCinNo(e.target.value.toUpperCase())}
                         value={cin_Number}
+                        name="cin_Number"
                         isMendatory={false}
                         placeholder={cin_Number}
                         className="employee-card-input"

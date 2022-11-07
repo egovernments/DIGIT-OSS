@@ -33,19 +33,19 @@ export const OBPSService = {
       params: {},
       auth: true,
     }),
-  createDeveloper: (details, tenantId) =>
+    CREATEDeveloper: (details, tenantId) =>
     Request({
-      url: Urls.obps.createDeveloper,
+      url: Urls.obps.createDev,
       data: details,
       setTimeParam: false,
       userService: true,
       method: "POST",
       auth: true,
     }),
-  getDeveloperData: (tenantId, sourceRefId) =>
+  GETDEVELOPERData: (devId) =>
     Request({
       url: Urls.obps.getDeveloperData,
-      params: { tenantId, ...sourceRefId },
+      params: { devId },
       auth: true,
       userService: true,
       method: "GET"

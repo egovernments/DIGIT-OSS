@@ -23,7 +23,7 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
     const [isDevTypeComp, setIsDevTypeComp] = useState(false)
     const [modal, setmodal] = useState(false);
     const [modalColony, setmodalColony] = useState(false);
-    const [capacityDevelopColonyHdruAct, setModalCapacityDevelopColonyHdruAct] = useState(formData?.DeveloperCapacity?.capacityDevelopColonyHdruAct || []);
+    const [capacityDevelopColonyHdruAct, setModalCapacityDevelopColonyHdruAct] = useState([]);
     // const [modalColonyDevGrpValuesArray, setModalColonyDevGrpValuesArray] = useState([]);
     const [capacityDevelopColonyLawAct, setCapacityDevelopColonyLawAct] = useState(formData?.DeveloperCapacity?.capacityDevelopColonyLawAct || []);
     const [capacityDevelopAColony, setcapacityDevelopAColony] = useState([]);
@@ -95,7 +95,7 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
   window.onunload = function () {
     sessionStorage.removeItem("Digit.BUILDING_PERMIT");
   }
-
+  const devRegId = localStorage.getItem('devRegId');
   function selectChecked(e) {
     if (isAddressSame == false) {
       setisAddressSame(true);
@@ -118,8 +118,7 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
   const formSubmit = (data) => {
     console.log("data", data);
   };
-  const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] =
-    useState(false);
+  const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] = useState(false);
   // const AppliedDetailFormSubmitHandler = (e) => {
   //   e.preventDefault();
   //   SetAppliedDetailFormSubmitted(true);
@@ -189,10 +188,38 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
     getDocumentData();
   }, [file]);
 
+  const getDeveloperData = async ()=>{
+    try {
+      const requestResp = {
+        
+        "RequestInfo": {
+            "api_id": "1",
+            "ver": "1",
+            "ts": "",
+            "action": "_getDeveloperById",
+            "did": "",
+            "key": "",
+            "msg_id": "",
+            "requester_id": "",
+            "auth_token": ""
+        },
+    }
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
+
+      });
+      console.log(getDevDetails?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    getDeveloperData()
+  }, []);
+
 
 const handleArrayValues = () => {
 
-  if (licenceNumber !== "" && nameOfDeveloper !== "" && purposeOfColony !== "") {
+//   if (licenceNumber !== "" && nameOfDeveloper !== "" && purposeOfColony !== "") {
 
     const values = {
       
@@ -205,13 +232,10 @@ const handleArrayValues = () => {
     }
     setModalCapacityDevelopColonyHdruAct((prev) => [...prev, values]);
     setmodal(!modal)
-  }
+//   }
   console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
   localStorage.setItem("DevCapacityDetails", JSON.stringify(capacityDevelopColonyHdruAct))
 }
-
-
-
 
 const handleColonyDevGrp=()=>{
   const colonyDevValues = {
@@ -228,10 +252,9 @@ const handleColonyDevGrp=()=>{
   setmodalColony(!modalColony)
   console.log("DevCapacityColony", capacityDevelopColonyLawAct);
 }
-  const goNext = () => {
-
+  const goNext = async (e) => {
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
-      setIsDisableForNext(true);
+    //   setIsDisableForNext(true);
       let payload = {
         "Licenses": [
           {
@@ -287,6 +310,83 @@ const handleColonyDevGrp=()=>{
           setShowToast({ key: "error" });
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
+
+        
+      const developerRegisterData = {
+        "id":devRegId,
+        "pageName":"capacityDevelopAColony",
+        "devDetail": {
+          
+            "capacityDevelopAColony": {
+                "individualCertificateCA": "",
+                "companyBalanceSheet": "",
+                "paidUpCapital": "",
+                "networthPartners": "",
+                "networthFirm": "",
+                capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
+                capacityDevelopColonyLawAct: capacityDevelopColonyLawAct,
+                technicalExpertEngaged: [{
+                    engineerName: engineerName,
+                    engineerQualification: engineerQualification,
+                    engineerSign: engineerSign,
+                    engineerDegree: engineerDegree,
+                    architectName: architectName,
+                    architectQualification: architectQualification,
+                    architectSign: architectSign,
+                    architectDegree: architectDegree,
+                    townPlannerName: townPlannerName,
+                    townPlannerQualification: townPlannerQualification,
+                    townPlannerSign: townPlannerSign,
+                    townPlannerDegree: townPlannerDegree,
+                    existingDeveloperAgreement: existingDeveloperAgreement,
+                    existingDeveloperAgreementDoc: existingDeveloperAgreementDoc,
+                    technicalCapacity: technicalCapacity,
+                    technicalCapacityDoc: technicalCapacityDoc,
+                    engineerNameN: engineerNameN,
+                    engineerDocN: engineerDocN,
+                    architectNameN: architectNameN,
+                    architectDocN: architectDocN,
+                    uplaodSpaBoard: uplaodSpaBoard,
+                    uplaodSpaBoardDoc: uplaodSpaBoardDoc
+                }],
+                designationDirector: [{
+                    agreementDoc: agreementDoc,
+                    boardDoc: boardDoc
+                }],
+                obtainedLicense: [{
+                    registeredDoc: registeredDoc,
+                    boardDocY: boardDocY,
+                    earlierDocY: earlierDocY,
+                    boardDocN: boardDocN,
+                    earlierDocN: earlierDocN,
+                    technicalAssistanceAgreementDoc: technicalAssistanceAgreementDoc
+                }]
+            }
+        }
+      }
+
+      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+      .then((result, err) => {
+        console.log("DATA",result?.id);
+        // localStorage.setItem('devRegId',JSON.stringify(result?.id));
+        setIsDisableForNext(false);
+        let data = { 
+          result: result, 
+          formData: formData, 
+          Correspondenceaddress: Correspondenceaddress,
+          addressLineOneCorrespondence: addressLineOneCorrespondence,
+          addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+
+          isAddressSame: isAddressSame }
+        //1, units
+        onSelect("", data, "", true);
+
+      })
+      .catch((e) => {
+        setIsDisableForNext(false);
+        setShowToast({ key: "error" });
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
     }
     else {
       formData.Correspondenceaddress = Correspondenceaddress;

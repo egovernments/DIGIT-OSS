@@ -3,34 +3,20 @@ import React, { useState, useEffect } from "react";
 import { Form, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
-// import Button from '@material-ui/core/Button';
-// import TextField from '@material-ui/core/TextField';
 import { convertEpochToDate } from "../utils/index";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers";
-// import { VALIDATION_SCHEMA } from "../utils/developerRegisterSchema";
 const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  //   control,
-  //   setValue,
-  // } = useForm({
-  //   mode: "onSubmit",
-  //   reValidateMode: "onBlur",
-  //   resolver: yupResolver(VALIDATION_SCHEMA),
-  //   shouldFocusError: true,
-  // });
+
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
-  const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name: "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
+  // const [id,setId] = useState("")
+  const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
   const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.formData?.LicneseDetails?.gender);
-  const [mobileNumber, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber: "") ||
+  const [mobileNumber, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber : "") ||
     formData?.LicneseDetails?.mobileNumber || formData?.formData?.LicneseDetails?.mobileNumber || ""
   );
   const [dob, setDOB] = useState(formData?.LicneseDetails?.dob || formData?.formData?.LicneseDetails?.dob || "");
@@ -44,7 +30,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [addressLineFour, setAddressLineFour] = useState(formData?.LicneseDetails?.addressLineFour || formData?.formData?.LicneseDetails?.addressLineFour || "");
   const [city, setCity] = useState(formData?.LicneseDetails?.city || formData?.formData?.LicneseDetails?.city || "");
   const [pincode, setPincode] = useState(formData?.LicneseDetails?.pincode || formData?.formData?.LicneseDetails?.pincode || "");
-  const [addressSameAsPermanent,setSelectedChecked] = useState(formData?.LicenseDetails?.addressSameAsPermanent || formData?.LicenseDetails?.addressSameAsPermanent || "")
+  const [addressSameAsPermanent, setSelectedChecked] = useState(formData?.LicenseDetails?.addressSameAsPermanent || formData?.LicenseDetails?.addressSameAsPermanent || "")
   const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.Correspondenceaddress || formData?.formData?.Correspondenceaddress || "");
   const [addressLineOneCorrespondence, setAddressLineOneCorrespondence] = useState(formData?.addressLineOneCorrespondence || formData?.formData?.addressLineOneCorrespondence || "");
   const [addressLineTwoCorrespondence, setAddressLineTwoCorrespondence] = useState(formData?.addressLineTwoCorrespondence || formData?.formData?.addressLineTwoCorrespondence || "");
@@ -70,17 +56,18 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     },
   ];
 
-  const [panValidation,setPanValidation] = useState("");
+  const [panValidation, setPanValidation] = useState("");
+  const [PanValError, setPanValError] = useState("");
   // function setValue(value, input) {
   //   setDOB(config.key, { ...formData[config.key], [input]: value });
   // }
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
-  if(isOpenLinkFlow)  
+  if (isOpenLinkFlow)
     window.onunload = function () {
       sessionStorage.removeItem("Digit.BUILDING_PERMIT");
     }
-  
+
   const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
 
   let menu = [];
@@ -88,11 +75,11 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
       menu.push({ i18nKey: `COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
     });
-    const editScreen = false;
+  const editScreen = false;
   // if (isLoading) return <Loader />;
   const panVerification = async () => {
     try {
-      const panVal =  {
+      const panVal = {
         "txnId": "f7f1469c-29b0-4325-9dfc-c567200a70f7",
         "format": "xml",
         "certificateParameters": {
@@ -142,42 +129,44 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           }
         }
       }
-      const panResp = await axios.post(`/certificate/v3/pan/pancr`,panVal, {headers:{
-        'Content-Type': 'application/json',
-        'X-APISETU-APIKEY':'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
-        'X-APISETU-CLIENTID':'in.gov.tcpharyana',
-        'Access-Control-Allow-Origin':"*",
-      }}) 
-      console.log("PANDET",panResp?.data);
-    } catch(error){
-        console.log(error?.response?.data?.errorDescription);
-        const errorPanVal = error?.response?.data?.errorDescription
+      const panResp = await axios.post(`/certificate/v3/pan/pancr`, panVal, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-APISETU-APIKEY': 'PDSHazinoV47E18bhNuBVCSEm90pYjEF',
+          'X-APISETU-CLIENTID': 'in.gov.tcpharyana',
+          'Access-Control-Allow-Origin': "*",
+        }
+      })
+      console.log("PANDET", panResp?.data);
+    } catch (error) {
+      console.log(error?.response?.data?.errorDescription);
+      setPanValError(error?.response?.data?.errorDescription)
     }
   }
-console.log(panValidation);
+  console.log(panValidation);
   useEffect(() => {
-    if(PanNumber.length === 10){
+    if (PanNumber.length === 10) {
       panVerification();
     }
   }, [PanNumber]);
 
-  const getDeveloperData = async ()=>{
+  const getDeveloperData = async () => {
     try {
       const requestResp = {
-        
+
         "RequestInfo": {
-            "api_id": "1",
-            "ver": "1",
-            "ts": "",
-            "action": "_getDeveloperById",
-            "did": "",
-            "key": "",
-            "msg_id": "",
-            "requester_id": "",
-            "auth_token": ""
+          "api_id": "1",
+          "ver": "1",
+          "ts": "",
+          "action": "_getDeveloperById",
+          "did": "",
+          "key": "",
+          "msg_id": "",
+          "requester_id": "",
+          "auth_token": ""
         },
-    }
-      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=36&isAllData=true`,requestResp,{
+      }
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=36&isAllData=true`, requestResp, {
 
       });
       console.log(getDevDetails?.data);
@@ -233,7 +222,7 @@ console.log(panValidation);
     setSelectedChecked(e.target.value);
     if (isAddressSame == false) {
       setisAddressSame(true);
-      setSelectedChecked(formData?.LicenseDetails?.addressSameAsPermanent ? formData?.LicenseDetails?.addressSameAsPermanent: formData?.LicenseDetails?.addressSameAsPermanent)
+      setSelectedChecked(formData?.LicenseDetails?.addressSameAsPermanent ? formData?.LicenseDetails?.addressSameAsPermanent : formData?.LicenseDetails?.addressSameAsPermanent)
       setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress);
       setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOneCorrespondence ? formData?.LicneseDetails?.addressLineOneCorrespondence : formData?.LicneseDetails?.addressLineOne);
       setAddressLineTwoCorrespondence(formData?.LicneseDetails?.addressLineTwo ? formData?.LicneseDetails?.addressLineTwo : formData?.formData?.LicneseDetails?.addressLineTwo);
@@ -275,7 +264,7 @@ console.log(panValidation);
   function selectPincodeCorrespondence(e) {
     setPincodeCorrespondence(e.target.value);
   }
-  
+
   const goNext = async () => {
 
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
@@ -283,16 +272,16 @@ console.log(panValidation);
         name: name,
         mobileNumber: mobileNumber,
         gender: gender,
-        email: email, 
-        dob:dob,
+        email: email,
+        dob: dob,
         PanNumber: PanNumber,
         addressLineOne: addressLineOne,
         addressLineTwo: addressLineTwo,
         addressLineThree: addressLineThree,
         addressLineFour: addressLineFour,
-        city:city,
+        city: city,
         pincode: pincode,
-        addressSameAsPermanent:addressSameAsPermanent,
+        addressSameAsPermanent: addressSameAsPermanent,
         addressLineOneCorrespondence: addressLineOneCorrespondence,
         addressLineTwoCorrespondence: addressLineTwoCorrespondence,
         addressLineThreeCorrespondence: addressLineThreeCorrespondence,
@@ -302,19 +291,20 @@ console.log(panValidation);
       }
 
       onSelect(config.key, licenseDet);
-      console.log("DATALICDET",licenseDet);
-      localStorage.setItem("licenceDetails",JSON.stringify(licenseDet));
+      console.log("DATALICDET", licenseDet);
+      localStorage.setItem("licenceDetails", JSON.stringify(licenseDet));
       Digit.OBPSService.BPAREGCreate(licenseDet, tenantId)
         .then((result, err) => {
           setIsDisableForNext(false);
-          let data = { 
-            result: result, 
-            formData: formData, 
+          let data = {
+            result: result,
+            formData: formData,
             Correspondenceaddress: Correspondenceaddress,
             addressLineOneCorrespondence: addressLineOneCorrespondence,
             addressLineTwoCorrespondence: addressLineTwoCorrespondence,
 
-            isAddressSame: isAddressSame }
+            isAddressSame: isAddressSame
+          }
           //1, units
           onSelect("", data, "", true);
 
@@ -325,145 +315,47 @@ console.log(panValidation);
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
 
-        const developerRegisterData = {
+      const developerRegisterData = {
+
         "devDetail": {
-            "licenceDetails": {
-              licenseDet:licenseDet
-            },
-            "addInfo": {
-                "showDevTypeFields": "",
-                "cin_Number": "",
-                "companyName": "",
-                "incorporationDate": "",
-                "registeredAddress": "",
-                "email": "",
-                "registeredContactNo": "",
-                "gst_Number": "",
-                "directorsInformation": [
-                    {
-                        "contactNumber": "",
-                        "din": "",
-                        "name": ""
-                    },
-                    {
-                        "contactNumber": "",
-                        "din": "",
-                        "name": ""
-                    }
-                ],
-                "shareHoldingPatterens": [
-                    {
-                        "name": "",
-                        "designition": "",
-                        "percentage": "",
-                        "uploadPdf": "",
-                        "serialNumber": ""
-                    }
-                ]
-            },
-            "aurthorizedUserInfoArray": [
-                {
-                    "userName": "",
-                    "name": "",
-                    "gender": "",
-                    "mobileNumber": "",
-                    "emailId": "",
-                    "dob": "",
-                    "pan": "",
-                    "active": "",
-                    "type": "",
-                    "password": "",
-                    "tenantId": tenantId,
-                    "roles": [
-                        {
-                            "code": "CITIZEN",
-                            "name": "Citizen",
-                            "tenantId": "default"
-                        }
-                    ]
-                }
-            ],
-            "capacityDevelopAColony": {
-                "individualCertificateCA": "",
-                "companyBalanceSheet": "",
-                "paidUpCapital": "",
-                "networthPartners": "",
-                "networthFirm": "",
-                "capacityDevelopColonyHdruAct": [
-                    {
-                        "licenceNumber": "",
-                        "nameOfDeveloper": "",
-                        "purposeOfColony": "",
-                        "sectorAndDevelopmentPlan": "",
-                        "validatingLicence": ""
-                    }
-                ],
-                "capacityDevelopColonyLawAct": [
-                    {
-                        "serialNumber": "",
-                        "coloniesDeveloped": "",
-                        "area": "",
-                        "purpose": "",
-                        "statusOfDevelopment": "",
-                        "outstandingDues": ""
-                    }
-                ],
-                "technicalExpertEngaged": [
-                    {
-                        "engineerName": "",
-                        "engineerQualification": "",
-                        "engineerSign": "",
-                        "engineerDegree": "",
-                        "architectName": "",
-                        "architectQualification": "",
-                        "architectSign": "",
-                        "architectDegree": "",
-                        "townPlannerName": "",
-                        "townPlannerQualification": "",
-                        "townPlannerSign": "",
-                        "townPlannerDegree": "",
-                        "existingDeveloperAgreement": "",
-                        "existingDeveloperAgreementDoc": "",
-                        "technicalCapacity": "",
-                        "technicalCapacityDoc": "",
-                        "engineerNameN": "",
-                        "engineerDocN": "",
-                        "architectNameN": "",
-                        "architectDocN": "",
-                        "uplaodSpaBoard": "",
-                        "uplaodSpaBoardDoc": ""
-                    }
-                ],
-                "designationDirector": [
-                    {
-                        "agreementDoc": "",
-                        "boardDoc": ""
-                    }
-                ],
-                "obtainedLicense": [
-                    {
-                        "registeredDoc": "",
-                        "boardDocY": "",
-                        "earlierDocY": "",
-                        "boardDocN": "",
-                        "earlierDocN": "",
-                        "technicalAssistanceAgreementDoc": ""
-                    }
-                ]
-            }
+          "licenceDetails": {
+            name: name,
+        mobileNumber: mobileNumber,
+        gender: [{gender}],
+        email: email,
+        dob: dob,
+        PanNumber: PanNumber,
+        addressLineOne: addressLineOne,
+        addressLineTwo: addressLineTwo,
+        addressLineThree: addressLineThree,
+        addressLineFour: addressLineFour,
+        city: city,
+        pincode: pincode,
+        addressSameAsPermanent: addressSameAsPermanent,
+        addressLineOneCorrespondence: addressLineOneCorrespondence,
+        addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+        addressLineThreeCorrespondence: addressLineThreeCorrespondence,
+        addressLineFourCorrespondence: addressLineFourCorrespondence,
+        cityCorrespondence: cityCorrespondence,
+        pincodeCorrespondence: pincodeCorrespondence
+          }
         }
+
       }
-      Digit.OBPSService.createDeveloper(developerRegisterData, tenantId)
+      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
+          console.log("DATA", result?.id);
+          localStorage.setItem('devRegId', JSON.stringify(result?.id));
           setIsDisableForNext(false);
-          let data = { 
-            result: result, 
-            formData: formData, 
+          let data = {
+            result: result,
+            formData: formData,
             Correspondenceaddress: Correspondenceaddress,
             addressLineOneCorrespondence: addressLineOneCorrespondence,
             addressLineTwoCorrespondence: addressLineTwoCorrespondence,
 
-            isAddressSame: isAddressSame }
+            isAddressSame: isAddressSame
+          }
           //1, units
           onSelect("", data, "", true);
 
@@ -473,146 +365,8 @@ console.log(panValidation);
           setShowToast({ key: "error" });
           setError(e?.response?.data?.Errors[0]?.message || null);
         });
-      
-    // DEVELOPER API CALL
-    // try{
-    //   const developerRegisterData = {
-    //     "devDetail": {
-    //         "licenceDetails": {
-    //           licenseDet:licenseDet
-    //         },
-    //         "addInfo": {
-    //             "showDevTypeFields": "02",
-    //             "cin_Number": "U72200CH1998PTC022006",
-    //             "companyName": "MAPDATA SCIENCES INDIA PRIVATE LIMITED",
-    //             "incorporationDate": "03/12/1998",
-    //             "registeredAddress": "PLOT NO.10, 2ND FLOOR RGTP, KISHANGARH CHANDIGARH Chandigarh CH 160101 IN",
-    //             "email": "charan.singh@mapds.com.au",
-    //             "registeredContactNo": "",
-    //             "gst_Number": "",
-    //             "directorsInformation": [
-    //                 {
-    //                     "contactNumber": "",
-    //                     "din": "0002260042",
-    //                     "name": "CHARAN SINGH"
-    //                 },
-    //                 {
-    //                     "contactNumber": "",
-    //                     "din": "0003529888",
-    //                     "name": "BRETT JOHN BUNDOCK"
-    //                 }
-    //             ],
-    //             "shareHoldingPatterens": [
-    //                 {
-    //                     "name": "DLF",
-    //                     "designition": "developer",
-    //                     "percentage": "45",
-    //                     "uploadPdf": null,
-    //                     "serialNumber": null
-    //                 }
-    //             ]
-    //         },
-    //         "aurthorizedUserInfoArray": [
-    //             {
-    //                 "userName": "Deep",
-    //                 "name": "Deep",
-    //                 "gender": "MALE",
-    //                 "mobileNumber": "8126287097",
-    //                 "emailId": "sudeep@gmail.com",
-    //                 "dob": "1997-01-08",
-    //                 "pan": "BRTPO8978U",
-    //                 "active": true,
-    //                 "type": "CITIZEN",
-    //                 "password": "Password@123",
-    //                 "tenantId": "hr",
-    //                 "roles": [
-    //                     {
-    //                         "code": "CITIZEN",
-    //                         "name": "Citizen",
-    //                         "tenantId": "default"
-    //                     }
-    //                 ]
-    //             }
-    //         ],
-    //         "capacityDevelopAColony": {
-    //             "individualCertificateCA": "",
-    //             "companyBalanceSheet": "",
-    //             "paidUpCapital": "",
-    //             "networthPartners": "",
-    //             "networthFirm": "",
-    //             "capacityDevelopColonyHdruAct": [
-    //                 {
-    //                     "licenceNumber": "1112",
-    //                     "nameOfDeveloper": "abc",
-    //                     "purposeOfColony": "hyper",
-    //                     "sectorAndDevelopmentPlan": "abghed",
-    //                     "validatingLicence": "yes"
-    //                 }
-    //             ],
-    //             "capacityDevelopColonyLawAct": [
-    //                 {
-    //                     "serialNumber": "23",
-    //                     "coloniesDeveloped": "yes",
-    //                     "area": "12345",
-    //                     "purpose": "for building",
-    //                     "statusOfDevelopment": "good",
-    //                     "outstandingDues": ""
-    //                 }
-    //             ],
-    //             "technicalExpertEngaged": [
-    //                 {
-    //                     "engineerName": "",
-    //                     "engineerQualification": "",
-    //                     "engineerSign": "",
-    //                     "engineerDegree": "",
-    //                     "architectName": "",
-    //                     "architectQualification": "",
-    //                     "architectSign": "",
-    //                     "architectDegree": "",
-    //                     "townPlannerName": "",
-    //                     "townPlannerQualification": "",
-    //                     "townPlannerSign": "",
-    //                     "townPlannerDegree": "",
-    //                     "existingDeveloperAgreement": "",
-    //                     "existingDeveloperAgreementDoc": "",
-    //                     "technicalCapacity": "",
-    //                     "technicalCapacityDoc": "",
-    //                     "engineerNameN": "",
-    //                     "engineerDocN": "",
-    //                     "architectNameN": "",
-    //                     "architectDocN": "",
-    //                     "uplaodSpaBoard": "",
-    //                     "uplaodSpaBoardDoc": ""
-    //                 }
-    //             ],
-    //             "designationDirector": [
-    //                 {
-    //                     "agreementDoc": "",
-    //                     "boardDoc": ""
-    //                 }
-    //             ],
-    //             "obtainedLicense": [
-    //                 {
-    //                     "registeredDoc": "",
-    //                     "boardDocY": "",
-    //                     "earlierDocY": "",
-    //                     "boardDocN": "",
-    //                     "earlierDocN": "",
-    //                     "technicalAssistanceAgreementDoc": ""
-    //                 }
-    //             ]
-    //         }
-    //     }
-    //   }
-    //   const devDetailsDataCall = await axios.post(`/user/developer/registration`,developerRegisterData,{
-        
-    //   });
-    //   console.log(devDetailsDataCall);
-    // }
-    // catch(error){
-    //   console.log(error.message);
-    // }
-    
+
+
     }
     else {
       let data = formData?.formData;
@@ -639,52 +393,52 @@ console.log(panValidation);
 
         {isOpenLinkFlow && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
         <Timeline currentStep={1} flow="STAKEHOLDER" />
-        {!isLoading ? 
-        <FormStep
-          config={config}
-          onSelect={goNext}
-          onSkip={onSkip}
-          t={t}
-          isDisabled={!name || !mobileNumber || !gender || !dob || !email || !PanNumber}
-        >
-          <Card className="mb-3">
-            {/* <h4></h4> */}
-            <Row className="justify-content-between">
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${t("BPA_APPLICANT_NAME_LABEL")}*`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={false}
-                  optionKey="i18nKey"
-                  name="name"
-                  value={name}
-                  onChange={SelectName}
-                  disabled="disabled"
-                  {...(validation = {
-                    isRequired: true,
-                    pattern: "^[a-zA-Z-.`' ]*$",
-                    type: "text",
-                    title: t("PT_NAME_ERROR_MESSAGE"),
-                  })}
-                />
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")}*`}</CardLabel>
-                <div className="row">
-                <Dropdown
-                  style={{ width: "100%" }}
-                  className="form-field"
-                  selected={gender?.length === 1 ? gender[0] : gender}
-                  disable={gender?.length === 1 || editScreen}
-                  option={menu}
-                  select={setGenderName}
-                  value={gender}
-                  optionKey="code"
-                  t={t}
-                  name="gender"
-                />
-                  {/* <RadioButtons
+        {!isLoading ?
+          <FormStep
+            config={config}
+            onSelect={goNext}
+            onSkip={onSkip}
+            t={t}
+            isDisabled={!name || !mobileNumber || !gender || !dob || !email || !PanNumber}
+          >
+            <Card className="mb-3">
+              {/* <h4></h4> */}
+              <Row className="justify-content-between">
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${t("BPA_APPLICANT_NAME_LABEL")}*`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="name"
+                    value={name}
+                    onChange={SelectName}
+                    disabled="disabled"
+                    {...(validation = {
+                      isRequired: true,
+                      pattern: "^[a-zA-Z-.`' ]*$",
+                      type: "text",
+                      title: t("PT_NAME_ERROR_MESSAGE"),
+                    })}
+                  />
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")}*`}</CardLabel>
+                  <div className="row">
+                    <Dropdown
+                      style={{ width: "100%" }}
+                      className="form-field"
+                      selected={gender?.length === 1 ? gender[0] : gender}
+                      disable={gender?.length === 1 || editScreen}
+                      option={menu}
+                      select={setGenderName}
+                      value={gender}
+                      optionKey="code"
+                      t={t}
+                      name="gender"
+                    />
+                    {/* <RadioButtons
                   t={t}
                   options={menu}
                   optionsKey="code"
@@ -695,22 +449,22 @@ console.log(panValidation);
                   isDependent={true}
                   labelKey="COMMON_GENDER"
                   /> */}
-                </div>
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${t("BPA_OWNER_MOBILE_NO_LABEL")}*`}</CardLabel>
-                <MobileNumber
-                  value={mobileNumber}
-                  name="mobileNumber"
-                  onChange={(value) => setMobileNo({ target: { value } })}
-                  disable={mobileNumber && !isOpenLinkFlow ? true : false}
-                  {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-                />
-              </Form.Group>
-              {inputs?.map((input, index) => (
-              <Form.Group className="col-md-4">
-              <CardLabel>{`${"Enter Date of Birth"}*`}</CardLabel>
-                {/* <DatePicker 
+                  </div>
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${t("BPA_OWNER_MOBILE_NO_LABEL")}*`}</CardLabel>
+                  <MobileNumber
+                    value={mobileNumber}
+                    name="mobileNumber"
+                    onChange={(value) => setMobileNo({ target: { value } })}
+                    disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                    {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+                  />
+                </Form.Group>
+                {inputs?.map((input, index) => (
+                  <Form.Group className="col-md-4">
+                    <CardLabel>{`${"Enter Date of Birth"}*`}</CardLabel>
+                    {/* <DatePicker 
                   t={t}
                   type="date"
                   isMandatory={false}
@@ -719,55 +473,55 @@ console.log(panValidation);
                   name="dob"
                   onChange={setDateofBirth}
                 /> */}
-                <DatePicker
-                isMandatory={true}
-                date={dob}
-                onChange={(e) => setDOB(e)}
-                disable={false}
-                max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
-              />
-              </Form.Group>
-              )
-              )}
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${t("BPA_APPLICANT_EMAIL_LABEL")}*`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"email"}
-                  isMandatory={true}
-                  optionKey="i18nKey"
-                  name="email"
-                  value={email}
-                  placeholder={email}
-                  onChange={selectEmail}
+                    <DatePicker
+                      isMandatory={true}
+                      date={dob}
+                      onChange={(e) => setDOB(e)}
+                      disable={false}
+                      max={convertEpochToDate(new Date().setFullYear(new Date().getFullYear() - 18))}
+                    />
+                  </Form.Group>
+                )
+                )}
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${t("BPA_APPLICANT_EMAIL_LABEL")}*`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"email"}
+                    isMandatory={true}
+                    optionKey="i18nKey"
+                    name="email"
+                    value={email}
+                    placeholder={email}
+                    onChange={selectEmail}
                   //disable={editScreen}
-                  
-                />
-                {email&&email.length>0&&!email.match(Digit.Utils.getPattern('Email'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{("Invalid Email Address")}</CardLabelError>}
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${t("BPA_APPLICANT_PAN_NO")}*`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={true}
-                  optionKey="i18nKey"
-                  name="PanNumber"
-                  required={true}
-                  value={PanNumber}
-                  placeholder={PanNumber}
-                  onChange={selectPanNumber}
-                  {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
+
                   />
-                  {PanNumber&&PanNumber.length>0&&!PanNumber.match(Digit.Utils.getPattern('PAN'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
-                  {/* <h3 className="error-message" style={{color:"red"}}>{errorPanVal}</h3> */}
-              </Form.Group>
-            </Row>
-          </Card>
-          <Card className="mb-3">
-            <h4 className="mb-2 fw-bold">Permanent Address</h4>
-            <Row className="justify-content-between">
-              {/* <Form.Group className="col-md-4">
+                  {email && email.length > 0 && !email.match(Digit.Utils.getPattern('Email')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{("Invalid Email Address")}</CardLabelError>}
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${t("BPA_APPLICANT_PAN_NO")}*`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={true}
+                    optionKey="i18nKey"
+                    name="PanNumber"
+                    required={true}
+                    value={PanNumber}
+                    placeholder={PanNumber}
+                    onChange={selectPanNumber}
+                    {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
+                  />
+                  {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
+                  <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
+                </Form.Group>
+              </Row>
+            </Card>
+            <Card className="mb-3">
+              <h4 className="mb-2 fw-bold">Permanent Address</h4>
+              <Row className="justify-content-between">
+                {/* <Form.Group className="col-md-4">
                 <CardLabel>{`${t("BPA_PERMANANT_ADDRESS_LABEL")}*`}</CardLabel>
                 <TextArea
                   t={t}
@@ -779,118 +533,118 @@ console.log(panValidation);
                   value={PermanentAddress}
                   />
               </Form.Group> */}
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${"Address Line 1"}*`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={false}
-                  optionKey="i18nKey"
-                  name="addressLineOne"
-                  value={addressLineOne}
-                  placeholder={addressLineOne}
-                  onChange={selectHouseNumber}
-                  {...(validation = {
-                    isRequired: true,
-                    type: "text",
-                    title: ("Please Enter Address line 1"),
-                  })}
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Address Line 1"}*`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="addressLineOne"
+                    value={addressLineOne}
+                    placeholder={addressLineOne}
+                    onChange={selectHouseNumber}
+                    {...(validation = {
+                      isRequired: true,
+                      type: "text",
+                      title: ("Please Enter Address line 1"),
+                    })}
                   />
                   {/* <Form.Control type="text" placeholder="N/A" {...register("addressLineOne")}   onChange={(e) => setAddressLineOne(e.target.value)} value={addressLineOne}/>
               <h3 className="error-message"style={{color:"red"}}>{errors?.addressLineOne && errors?.addressLineOne?.message}</h3> */}
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${"Address Line 2"}`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={false}
-                  optionKey="i18nKey"
-                  name="addressLineTwo"
-                  value={addressLineTwo}
-                  placeholder={addressLineTwo}
-                  onChange={selectColonyName}
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Address Line 2"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="addressLineTwo"
+                    value={addressLineTwo}
+                    placeholder={addressLineTwo}
+                    onChange={selectColonyName}
                   />
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${"Address Line 3"}`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={false}
-                  optionKey="i18nKey"
-                  name="addressLineThree"
-                  value={addressLineThree}
-                  placeholder={addressLineThree}
-                  onChange={selectStreetName}
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Address Line 3"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="addressLineThree"
+                    value={addressLineThree}
+                    placeholder={addressLineThree}
+                    onChange={selectStreetName}
                   />
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${"Address Line 4"}`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={false}
-                  optionKey="i18nKey"
-                  name="addressLineFour"
-                  value={addressLineFour}
-                  placeholder={addressLineFour}
-                  onChange={selectLocality}
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Address Line 4"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="addressLineFour"
+                    value={addressLineFour}
+                    placeholder={addressLineFour}
+                    onChange={selectLocality}
                   />
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${"City"}*`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={false}
-                  optionKey="i18nKey"
-                  name="city"
-                  value={city}
-                  placeholder={city}
-                  onChange={selectCity}
-                  {...(validation = {
-                    isRequired: true,
-                    type: "text",
-                    title: ("Please Enter City"),
-                  })}
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"City"}*`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="city"
+                    value={city}
+                    placeholder={city}
+                    onChange={selectCity}
+                    {...(validation = {
+                      isRequired: true,
+                      type: "text",
+                      title: ("Please Enter City"),
+                    })}
                   />
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${"Pincode"}*`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={false}
-                  optionKey="i18nKey"
-                  name="pincode"
-                  value={pincode}
-                  placeholder={pincode}
-                  onChange={selectPincode}
-                  maxlength={"6"}
-                  {...(validation = {
-                    isRequired: true,
-                    type: "text",
-                    title: ("Please Enter Pincode"),
-                  })}
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Pincode"}*`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="pincode"
+                    value={pincode}
+                    placeholder={pincode}
+                    onChange={selectPincode}
+                    maxlength={"6"}
+                    {...(validation = {
+                      isRequired: true,
+                      type: "text",
+                      title: ("Please Enter Pincode"),
+                    })}
                   />
-                  {pincode&&pincode.length>0&&!pincode.match(Digit.Utils.getPattern('Pincode'))&&<CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red'}}>{t("Please enter valid Pincode")}</CardLabelError>}
-              </Form.Group>
-            </Row>
-          </Card>
-          <Card className="mb-3">
-            <h4 className="mb-2 fw-bold">Correspondence Address</h4>
-            <Row className="justify-content-between">
-              <Form.Group className="col-md-12">
-                <CheckBox
-                  label={t("BPA_SAME_AS_PERMANENT_ADDRESS")}
-                  onChange={(e) => selectChecked(e)}
-                  value={isAddressSame}
-                  checked={isAddressSame}
-                  style={{ paddingBottom: "10px", paddingTop: "10px" }}
+                  {pincode && pincode.length > 0 && !pincode.match(Digit.Utils.getPattern('Pincode')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Pincode")}</CardLabelError>}
+                </Form.Group>
+              </Row>
+            </Card>
+            <Card className="mb-3">
+              <h4 className="mb-2 fw-bold">Correspondence Address</h4>
+              <Row className="justify-content-between">
+                <Form.Group className="col-md-12">
+                  <CheckBox
+                    label={t("BPA_SAME_AS_PERMANENT_ADDRESS")}
+                    onChange={(e) => selectChecked(e)}
+                    value={isAddressSame}
+                    checked={isAddressSame}
+                    style={{ paddingBottom: "10px", paddingTop: "10px" }}
                   />
-              </Form.Group> 
-              {/* <Form.Group className="col-md-4">
+                </Form.Group>
+                {/* <Form.Group className="col-md-4">
                 <CardLabel>{`${t("BPA_APPLICANT_CORRESPONDENCE_ADDRESS_LABEL")}`}</CardLabel>
                 <TextArea
                   t={t}
@@ -903,93 +657,93 @@ console.log(panValidation);
                   disable={isAddressSame}
                   />
               </Form.Group> */}
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${"Address Line 1"}*`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={true}
-                  optionKey="i18nKey"
-                  name="addressLineOneCorrespondence"
-                  value={addressLineOneCorrespondence}
-                  placeholder={addressLineOneCorrespondence}
-                  onChange={selecthouseNumberCorrespondenceaddress}
-                  disable={isAddressSame}
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Address Line 1"}*`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={true}
+                    optionKey="i18nKey"
+                    name="addressLineOneCorrespondence"
+                    value={addressLineOneCorrespondence}
+                    placeholder={addressLineOneCorrespondence}
+                    onChange={selecthouseNumberCorrespondenceaddress}
+                    disable={isAddressSame}
                   />
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${"Address Line 2"}`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={false}
-                  optionKey="i18nKey"
-                  name="addressLineTwoCorrespondence"
-                  value={addressLineTwoCorrespondence}
-                  placeholder={addressLineTwoCorrespondence}
-                  onChange={selectColonyNameCorrespondence}
-                  disable={isAddressSame}
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Address Line 2"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="addressLineTwoCorrespondence"
+                    value={addressLineTwoCorrespondence}
+                    placeholder={addressLineTwoCorrespondence}
+                    onChange={selectColonyNameCorrespondence}
+                    disable={isAddressSame}
                   />
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${"Address Line 3"}`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={false}
-                  optionKey="i18nKey"
-                  name="addressLineThreeCorrespondence"
-                  value={addressLineThreeCorrespondence}
-                  placeholder={addressLineThreeCorrespondence}
-                  onChange={selectStreetNameCorrespondence}
-                  disable={isAddressSame}
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Address Line 3"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="addressLineThreeCorrespondence"
+                    value={addressLineThreeCorrespondence}
+                    placeholder={addressLineThreeCorrespondence}
+                    onChange={selectStreetNameCorrespondence}
+                    disable={isAddressSame}
                   />
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${"Address Line 4"}`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={false}
-                  optionKey="i18nKey"
-                  name="addressLineFourCorrespondence"
-                  value={addressLineFourCorrespondence}
-                  placeholder={addressLineFourCorrespondence}
-                  onChange={selectLocalityCorrespondence}
-                  disable={isAddressSame}
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Address Line 4"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="addressLineFourCorrespondence"
+                    value={addressLineFourCorrespondence}
+                    placeholder={addressLineFourCorrespondence}
+                    onChange={selectLocalityCorrespondence}
+                    disable={isAddressSame}
                   />
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${"City"}*`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={true}
-                  optionKey="i18nKey"
-                  name="cityCorrespondence"
-                  value={cityCorrespondence}
-                  placeholder={cityCorrespondence}
-                  onChange={selectCityCorrespondence}
-                  disable={isAddressSame}
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"City"}*`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={true}
+                    optionKey="i18nKey"
+                    name="cityCorrespondence"
+                    value={cityCorrespondence}
+                    placeholder={cityCorrespondence}
+                    onChange={selectCityCorrespondence}
+                    disable={isAddressSame}
                   />
-              </Form.Group>
-              <Form.Group className="col-md-4">
-                <CardLabel>{`${"Pincode"}*`}</CardLabel>
-                <TextInput
-                  t={t}
-                  type={"text"}
-                  isMandatory={true}
-                  optionKey="i18nKey"
-                  name="pincodeCorrespondence"
-                  value={pincodeCorrespondence}
-                  placeholder={pincodeCorrespondence}
-                  onChange={selectPincodeCorrespondence}
-                  disable={isAddressSame}
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Pincode"}*`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={true}
+                    optionKey="i18nKey"
+                    name="pincodeCorrespondence"
+                    value={pincodeCorrespondence}
+                    placeholder={pincodeCorrespondence}
+                    onChange={selectPincodeCorrespondence}
+                    disable={isAddressSame}
                   />
-              </Form.Group>
-            </Row>
-          </Card>
-        </FormStep> : <Loader /> }
+                </Form.Group>
+              </Row>
+            </Card>
+          </FormStep> : <Loader />}
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ const SelectTradeName = ({ t, config, onSelect, value, userType, formData }) => 
   let validation = {};
   const onSkip = () => onSelect();
   const [TradeName, setTradeName] = useState(formData.TradeDetails?.TradeName);
+  const [DeveloperName, setDeveloperName] = useState(formData.TradeDetails?.DeveloperName);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const isEdit = window.location.href.includes("/edit-application/") || window.location.href.includes("renew-trade");
@@ -16,10 +17,13 @@ const SelectTradeName = ({ t, config, onSelect, value, userType, formData }) => 
   function setSelectTradeName(e) {
     setTradeName(e.target.value);
   }
+  function setSelectDeveloperName(e) {
+    setDeveloperName(e.target.value);
+  }
 
   const goNext = () => {
     sessionStorage.setItem("CurrentFinancialYear", FY);
-    onSelect(config.key, { TradeName });
+    onSelect(config.key, { TradeName, DeveloperName});
   };
   if (isLoading) {
     return <Loader></Loader>
@@ -44,6 +48,18 @@ const SelectTradeName = ({ t, config, onSelect, value, userType, formData }) => 
           name="TradeName"
           value={TradeName}
           onChange={setSelectTradeName}
+          disable={isEdit}
+          {...(validation = { pattern: "^[a-zA-Z-.`' ]*$", isRequired: true, type: "text", title: t("TL_INVALID_TRADE_NAME") })}
+        />
+        <CardLabel>{`${"Developer Name"}`}</CardLabel>
+        <TextInput
+          t={t}
+          isMandatory={false}
+          type={"text"}
+          optionKey="i18nKey"
+          name="DeveloperName"
+          value={DeveloperName}
+          onChange={setSelectDeveloperName}
           disable={isEdit}
           {...(validation = { pattern: "^[a-zA-Z-.`' ]*$", isRequired: true, type: "text", title: t("TL_INVALID_TRADE_NAME") })}
         />
