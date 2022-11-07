@@ -39,49 +39,19 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   const getUserType = () => Digit.UserService.getType();
   const [params, setParmas] = useState(isUserRegistered?{}:location?.state?.data);
   const [modal, setmodal] = useState(false);
-  const [aurthorizedUserName, setAurtorizedUserName] = useState(formData?.AddAuthorizeduser?.aurthorizedUserName || formData?.AddAuthorizeduser?.aurthorizedUserName || "");
-  const [aurthorizedMobileNumber, setAurthorizedMobileNumber] = useState(formData?.AddAuthorizeduser?.aurthorizedMobileNumber || formData?.AddAuthorizeduser?.aurthorizedMobileNumber || "");
-  const [aurthorizedEmail, setAurthorizedEmail] = useState(formData?.AddAuthorizeduser?.aurthorizedEmail || formData?.AddAuthorizeduser?.aurthorizedEmail || "");
-  const [aurthorizedDob, setAurthorizedDob] = useState(formData?.AddAuthorizeduser?.aurthorizedDob || formData?.AddAuthorizeduser?.aurthorizedDob || "");
-  const [gender, setGender] = useState(formData?.AddAuthorizeduser?.gender || formData?.formData?.AddAuthorizeduser?.gender);
-  const [aurthorizedPan, setAurthorizedPan] = useState(formData?.AddAuthorizeduser?.aurthorizedPan || formData?.AddAuthorizeduser?.aurthorizedPan || "");
+  const [aurthorizedUserName, setAurtorizedUserName] = useState(formData?.LicneseDetails?.aurthorizedUserName || formData?.LicneseDetails?.aurthorizedUserName || "");
+  const [aurthorizedMobileNumber, setAurthorizedMobileNumber] = useState(formData?.LicneseDetails?.aurthorizedMobileNumber || formData?.LicneseDetails?.aurthorizedMobileNumber || "");
+  const [aurthorizedEmail, setAurthorizedEmail] = useState(formData?.LicneseDetails?.aurthorizedEmail || formData?.LicneseDetails?.aurthorizedEmail || "");
+  const [aurthorizedDob, setAurthorizedDob] = useState(formData?.LicneseDetails?.aurthorizedDob || formData?.LicneseDetails?.aurthorizedDob || "");
+  const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.LicneseDetails?.gender);
+  const [aurthorizedPan, setAurthorizedPan] = useState(formData?.LicneseDetails?.aurthorizedPan || formData?.LicneseDetails?.aurthorizedPan || "");
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
   const [docUpload,setDocuploadData]=useState([])
   const [file,setFile]=useState(null);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   const devRegId = localStorage.getItem('devRegId');
-  //   const dispatch=useDispatch();
-  // const Modal = () => (
-  //   <Popup trigger={<button className="button"> Open Modal </button>} modal>
-  //     <span> Modal content </span>
-  //   </Popup>
-  // );
-
-  // function UploadDocuments() {
-  //   const [inputFields, setInputFields] = useState([{
-  //     fullName:'',
-
-  // } ]);
-
-  // const addInputField = ()=>{
-
-  //     setInputFields([...inputFields, {
-  //         fullName:'',
-  //     } ])
-
-  // }
-  // const removeInputFields = (index)=>{
-  //     const rows = [...inputFields];
-  //     rows.splice(index, 1);
-  //     setInputFields(rows);
-  // }
-  // const handleChange = (index, evnt)=>{
-
-  // const { name, value } = evnt.target;
-  // const list = [...inputFields];
-  // list[index][name] = value;
-  // setInputFields(list);
+  
   const {
     register,
     handleSumit,
@@ -104,25 +74,25 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     setAurthorizedPan(e.target.value.toUpperCase());
   }
 
-  const handleMobileChange = async (event) => {
-    const { value } = event.target;
-    setParmas({ ...params, aurthorizedMobileNumber: value });
-    const data = {
-      ...aurthorizedMobileNumber,
-      tenantId: "hr",
-      userType: getUserType(),
-    };
-    if (isUserRegistered) {
-      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
-      if (!err) {
-        alert("please Enter Login",res)
-        return;
-      } 
-    } else {
-      const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
-      alert("Please register yourself",res)
-    }
-  };
+  // const handleMobileChange = async (event) => {
+  //   const { value } = event.target;
+  //   setParmas({ ...params, aurthorizedMobileNumber: value });
+  //   const data = {
+  //     ...aurthorizedMobileNumber,
+  //     tenantId: "hr",
+  //     userType: getUserType(),
+  //   };
+  //   if (isUserRegistered) {
+  //     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
+  //     if (!err) {
+  //       alert("please Enter Login",res)
+  //       return;
+  //     } 
+  //   } else {
+  //     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
+  //     alert("Please register yourself",res)
+  //   }
+  // };
   
   
 
@@ -135,11 +105,30 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     });
     const editScreen = false;
 
-    const getDeveloperData = async (tenantId, params) => {
-      const response = await OBPSService.getDeveloperData(tenantId, params);
-      return response;
+    const getDeveloperData = async ()=>{
+      try {
+        const requestResp = {
+          
+          "RequestInfo": {
+              "api_id": "1",
+              "ver": "1",
+              "ts": "",
+              "action": "_getDeveloperById",
+              "did": "",
+              "key": "",
+              "msg_id": "",
+              "requester_id": "",
+              "auth_token": ""
+          },
+      }
+        const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
+  
+        });
+        console.log(getDevDetails?.data);
+      } catch (error) {
+        console.log(error);
+      }
     }
-
     useEffect(() => {
       getDeveloperData()
     }, []);
@@ -269,9 +258,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
         name: aurthorizedUserName,
         gender: gender.value,
         mobileNumber: aurthorizedMobileNumber,
-        // emailId: aurthorizedEmail,
-        // dob: aurthorizedDob,
-        // pan: aurthorizedPan,
+        emailId: aurthorizedEmail,
+        dob: aurthorizedDob,
+        pan: aurthorizedPan,
         "type": "CITIZEN",
         "password": "Password@123",
         
@@ -287,26 +276,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
     setAurthorizedUserInfoArray((prev) => [...prev, user]);
     try {
-      const requestResp = {
-        
-          // "RequestInfo": {
-          //     "api_id": "1",
-          //     "ver": "1",
-          //     "ts": null,
-          //     "action": "create",
-          //     "did": "",
-          //     "key": "",
-          //     "msg_id": "",
-          //     "requester_id": "",
-          //     "auth_token": null,
-          //     "userInfo":{
-          //        userInfo:userInfo,
-          //     }
-          // },
-          // user:user,
-          
-
-          
+      const requestResp = {          
             "requestInfo": {
               "apiId": "Rainmaker",
               "ver": ".01",
@@ -336,31 +306,29 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
   };
 
-  const handleAurthorizedUserFormSubmit = async (e) => {
+  const goNext = async (e) => {
     //   e.preventDefault();
-
-    const addAuthUserformData = {
-      aurthorizedUserInfoArray
-    }
-    onSelect(config.key, formData);
-    console.log(addAuthUserformData);
-    localStorage.setItem("data_user", JSON.stringify(addAuthUserformData))
-    
-    const developerRegisterData = {
-      "devDetail": {
+    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+      const addAuthUserformData = {
+        aurthorizedUserInfoArray:aurthorizedUserInfoArray
+      }
+      onSelect(config.key, formData);
+      console.log(addAuthUserformData);
+      localStorage.setItem("data_user", JSON.stringify(addAuthUserformData))
+      
+      const developerRegisterData = {
         "id":devRegId,
         "pageName":"aurthorizedUserInfoArray",
-          "aurthorizedUserInfoArray": [
-              {
-                addAuthUserformData:addAuthUserformData
-              }
-          ],
+        "devDetail": {
+          
+            "aurthorizedUserInfoArray": aurthorizedUserInfoArray
+        }
       }
-    }
-    Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
       .then((result, err) => {
+        console.log("DATA",result?.id);
+        // localStorage.setItem('devRegId',JSON.stringify(result?.id));
         setIsDisableForNext(false);
-        
         let data = { 
           result: result, 
           formData: formData, 
@@ -378,7 +346,11 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
         setShowToast({ key: "error" });
         setError(e?.response?.data?.Errors[0]?.message || null);
       });
-      
+    }else {
+      let data = formData?.formData;
+      data.LicneseDetails.addAuthUserformData = addAuthUserformData;
+      onSelect("", formData)
+    }
     
 
    
@@ -392,7 +364,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
         className="card"
         // onSubmit={handleAurthorizedUserFormSubmit}
         config={config}
-        onSelect={handleAurthorizedUserFormSubmit}
+        onSelect={goNext}
         onSkip={onSkip}
         t={t}
       >
@@ -578,8 +550,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                                 name="name[]"
                                 placeholder=""
                                 class="employee-card-input"
-                                // onChange={(e) => setAurthorizedMobileNumber(e.target.value)}
-                                onChange={handleMobileChange}
+                                value={aurthorizedMobileNumber}
+                                onChange={(e) => setAurthorizedMobileNumber(e.target.value)}
                                 maxlength={"10"}
                                 pattern={"[6-9]{1}[0-9]{9}"}
                                 required={true}

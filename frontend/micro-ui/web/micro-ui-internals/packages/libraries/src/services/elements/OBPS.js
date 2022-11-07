@@ -42,10 +42,10 @@ export const OBPSService = {
       method: "POST",
       auth: true,
     }),
-  getDeveloperData: (tenantId, sourceRefId) =>
+  GETDEVELOPERData: (devId) =>
     Request({
       url: Urls.obps.getDeveloperData,
-      params: { tenantId, ...sourceRefId },
+      params: { devId },
       auth: true,
       userService: true,
       method: "GET"
