@@ -6,7 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
 
-const ApllicantFormStep1 = (props) => {
+const ApllicantFormStep1 = () => {
   const {
     register,
     handleSubmit,
@@ -23,36 +23,33 @@ const ApllicantFormStep1 = (props) => {
   const tenant = Digit.ULBService.getCurrentTenantId();
   const [developerData, setDeveloperData] = useState([]);
   const [developerDataLabel, setDeveloperDataLabel] = useState([]);
-  const [submitDataLabel, setSubmitDataLabel] = useState([]);
-  const [finalSubmitData, setFinalSubmitData] = useState([]);
-  const[applicationId,setApplicationId]=useState("")
+
   const ApplicantFormSubmitHandlerForm = async (data) => {
     console.log("data===+++++", data);
-  
+
     try {
       const postDistrict = {
         NewServiceInfo: {
           newServiceInfoData: [
             {
               ApplicantInfo: {
-                 authorizedPerson: data.authorizedPerson,
+                authorizedPerson: data.authorizedPerson,
                 authorizedmobile: data.authorizedmobile,
                 // alternatemobile:usersResponse?.user?.[0]?.altContactNumber,
                 authorizedEmail: data.authorizedEmail,
                 authorizedPan: data.authorizedPan,
                 // authorizedAddress: usersResponse?.user?.[0]?.permanentAddress,
-                village:data.village ,
-                authorizedPinCode:data.authorizedPinCode,
-                tehsil:data.tehsil,
-                district:data.district,
-                state:data.state,
+                village: data.village,
+                authorizedPinCode: data.authorizedPinCode,
+                tehsil: data.tehsil,
+                district: data.district,
+                state: data.state,
                 status: data.status,
                 permanentAddress: data.permanentAddress,
                 LC: data.LC,
                 notSigned: data.notSigned,
                 email: data.email,
-                authorized: data.authorized
-                
+                authorized: data.authorized,
               },
               ApplicantPurpose: {
                 purposeDd: "",
@@ -255,13 +252,9 @@ const ApllicantFormStep1 = (props) => {
         },
       };
 
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-        
-      });
-      console.log("Resp",Resp.data)
+      const Resp = await axios.post("/land-services/new/_create", postDistrict);
+      console.log("Resp", Resp.data);
       // props.Step1Continue(data);
-   setFinalSubmitData(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -277,6 +270,7 @@ const ApllicantFormStep1 = (props) => {
       console.log(error.message);
     }
   };
+
   useEffect(() => {
     getDeveloperData();
   }, []);
@@ -289,6 +283,7 @@ const ApllicantFormStep1 = (props) => {
       setValue("authorizedAddress", usersResponse?.user?.[0]?.permanentAddress);
     }
   };
+
   useEffect(() => {
     getUserInfo();
   }, []);
@@ -338,6 +333,7 @@ const ApllicantFormStep1 = (props) => {
       console.log(error.message);
     }
   };
+
   useEffect(() => {
     getDeveloperDataLabel();
   }, []);
@@ -407,12 +403,12 @@ const ApllicantFormStep1 = (props) => {
       const Resp = await axios.get("http://10.1.1.18:8443/land-services/new/licenses/_get?id=1099696").then((response) => {
         return response;
       });
-      console.log("RESP+++", Resp)
-      setSubmitDataLabel(Resp?.data);
+      console.log("RESP+++", Resp);
     } catch (error) {
       console.log(error.message);
     }
   };
+
   useEffect(() => {
     getSubmitDataLabel();
   }, []);
@@ -427,7 +423,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Developer <span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Developer <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <input type="text" className="form-control" placeholder="N/A" disabled {...register("authorizedDeveloper")} />
@@ -438,8 +436,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Authorized Person Name <span style={{ color: "red" }}>*</span></h2>
-
+                    <h2>
+                      Authorized Person Name <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -456,7 +455,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Authorized Mobile No<span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Authorized Mobile No<span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -476,7 +477,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Alternate Mobile No<span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Alternate Mobile No<span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -493,7 +496,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>EmailId<span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      EmailId<span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -510,7 +515,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>PAN No <span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      PAN No <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -530,7 +537,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Address 1<span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Address 1<span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -547,7 +556,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Village/City <span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Village/City <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -564,7 +575,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Pincode<span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Pincode<span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -584,7 +597,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Tehshil<span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Tehshil<span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -601,7 +616,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>District<span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      District<span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -618,7 +635,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>State<span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      State<span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -638,7 +657,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Status (Individual/ Company/ Firm/ LLP etc.)<span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Status (Individual/ Company/ Firm/ LLP etc.)<span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -651,8 +672,10 @@ const ApllicantFormStep1 = (props) => {
               </Col>
               <Col md={4} xxl lg="4">
                 <div>
-                  <Form.Label >
-                    <h2>LC-I signed by <span style={{ color: "red" }}>*</span></h2>
+                  <Form.Label>
+                    <h2>
+                      LC-I signed by <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Form.Control type="text" placeholder="" {...register("LC")} />
@@ -664,7 +687,9 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>Address for communication <span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Address for communication <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -681,11 +706,13 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2 data-toggle="tooltip" data-placement="top" title="Permanent address in case of individual/ registered office address in case other than individual">
-
+                    <h2
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Permanent address in case of individual/ registered office address in case other than individual"
+                    >
                       Permanent address/ registered office address<span style={{ color: "red" }}>*</span>
                       &nbsp;{" "}
-
                     </h2>
                   </Form.Label>
                 </div>
@@ -700,24 +727,28 @@ const ApllicantFormStep1 = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2 data-toggle="tooltip" data-placement="top" title="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)">
-
+                    <h2
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)"
+                    >
                       If LC-I is not signed by self <span style={{ color: "red" }}>*</span>
                       &nbsp;{" "}
-
                     </h2>
                   </Form.Label>
                 </div>
-                <Form.Control type="text" placeholder= {...register("notSigned")} />
+                <Form.Control type="text" placeholder="" {...register("notSigned")} />
 
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.notSigned && errors?.notSigned?.message}
                 </h3>
               </Col>
-              <Col md={4} xxl lg="4" >
+              <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h2>EmailId for communication <span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      EmailId for communication <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <Controller
@@ -734,7 +765,9 @@ const ApllicantFormStep1 = (props) => {
               <div className="col col-4">
                 <div>
                   <Form.Label>
-                    <h2>Name of the authorized person to sign the application <span style={{ color: "red" }}>*</span></h2>
+                    <h2>
+                      Name of the authorized person to sign the application <span style={{ color: "red" }}>*</span>
+                    </h2>
                     <i className="fa fa-info-circle-fill" />
                   </Form.Label>
                 </div>
@@ -755,7 +788,6 @@ const ApllicantFormStep1 = (props) => {
               </button>
             </div>
           </div>
-          ``
         </Card>
       </Card>
     </form>
