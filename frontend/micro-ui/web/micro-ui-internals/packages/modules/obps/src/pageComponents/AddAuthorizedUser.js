@@ -33,6 +33,69 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
+  const devRegId = localStorage.getItem('devRegId');
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = Digit.ULBService.getStateId();
+  // console.log(userInfo?.info?.id);
+  const getDeveloperData = async ()=>{
+    try {
+      const requestResp = {
+        
+        "RequestInfo": {
+            "api_id": "1",
+            "ver": "1",
+            "ts": "",
+            "action": "_getDeveloperById",
+            "did": "",
+            "key": "",
+            "msg_id": "",
+            "requester_id": "",
+            "auth_token": ""
+        },
+    }
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
+
+      });
+      const developerDataGet = getDevDetails?.data; 
+      console.log("ADDAUTHUSER",getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
+      // setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    getDeveloperData()
+  }, []);
+
+  const authUserSearch = async ()=>{
+    try {
+      const requestResp = {
+        
+        "RequestInfo": {
+          "api_id": "org.egov.pgr",
+          "ver": "1.0",
+          "ts": "",
+          "res_msg_id": "uief87324",
+          "msg_id": "654654",
+          "status": "successful",
+          "auth_token": ""
+           },
+           "parentid":userInfo?.info?.id,
+            "tenantId": tenantId
+    }
+      const getAuthUserDetails = await axios.post(`/user/_search`,requestResp,{
+
+      });
+      const developerDataGet = getAuthUserDetails?.data; 
+      console.log("U",developerDataGet);
+      setAurthorizedUserInfoArray(developerDataGet?.user);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    authUserSearch()
+  },[])
   let validation = {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
   
@@ -48,9 +111,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
   const [docUpload,setDocuploadData]=useState([])
   const [file,setFile]=useState(null);
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = Digit.ULBService.getStateId();
-  const devRegId = localStorage.getItem('devRegId');
+  
+  
   
   const {
     register,
@@ -105,33 +167,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     });
     const editScreen = false;
 
-    const getDeveloperData = async ()=>{
-      try {
-        const requestResp = {
-          
-          "RequestInfo": {
-              "api_id": "1",
-              "ver": "1",
-              "ts": "",
-              "action": "_getDeveloperById",
-              "did": "",
-              "key": "",
-              "msg_id": "",
-              "requester_id": "",
-              "auth_token": ""
-          },
-      }
-        const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
-  
-        });
-        console.log(getDevDetails?.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    useEffect(() => {
-      getDeveloperData()
-    }, []);
+    
 
   
   const panVerification = async () => {
@@ -261,6 +297,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
         emailId: aurthorizedEmail,
         dob: aurthorizedDob,
         pan: aurthorizedPan,
+        "parentId":userInfo?.info?.id,
         "type": "CITIZEN",
         "password": "Password@123",
         
@@ -286,6 +323,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
               "key": "",
               "msgId": "20170310130900|en_IN",
               "authToken": "dce88a06-7e09-4923-97f9-f15af2deea66",
+              
               userInfo:userInfo
             },
             user:user
@@ -388,7 +426,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                   <th>Mobile Number</th>
                   <th>Email</th>
                   <th>Gender</th>
-                  <th>Date of Birth</th>
+                  {/* <th>Date of Birth</th> */}
                   <th>PAN No.</th>
                   <th>Upload Aadhar PDF</th>
                   <th>Upload Digital Signature PDF</th>
@@ -439,7 +477,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                               class="employee-card-input"
                             />
                           </td>
-                          <td>
+                          {/* <td>
                             <input
                               type="text"
                               name="dob[]"
@@ -447,7 +485,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                               value={elementInArray.dob || DD-MM-YYYY}
                               class="employee-card-input"
                             />
-                          </td>
+                          </td> */}
                           <td>
                             <input
                               type="text"

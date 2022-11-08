@@ -11,6 +11,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
+  const devRegId = localStorage.getItem('devRegId');
   let isOpenLinkFlow = window.location.href.includes("openlink");
   // const [id,setId] = useState("")
   const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
@@ -166,7 +167,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           "auth_token": ""
         },
       }
-      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=36&isAllData=true`, requestResp, {
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`, requestResp, {
 
       });
       console.log(getDevDetails?.data);
@@ -318,26 +319,27 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       const developerRegisterData = {
 
         "devDetail": {
+          "parentid":userInfo?.info?.id,
           "licenceDetails": {
             name: name,
-        mobileNumber: mobileNumber,
-        gender: [{gender}],
-        email: email,
-        dob: dob,
-        PanNumber: PanNumber,
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        addressLineThree: addressLineThree,
-        addressLineFour: addressLineFour,
-        city: city,
-        pincode: pincode,
-        addressSameAsPermanent: addressSameAsPermanent,
-        addressLineOneCorrespondence: addressLineOneCorrespondence,
-        addressLineTwoCorrespondence: addressLineTwoCorrespondence,
-        addressLineThreeCorrespondence: addressLineThreeCorrespondence,
-        addressLineFourCorrespondence: addressLineFourCorrespondence,
-        cityCorrespondence: cityCorrespondence,
-        pincodeCorrespondence: pincodeCorrespondence
+            mobileNumber: mobileNumber,
+            gender: [{gender}],
+            email: email,
+            dob: dob,
+            PanNumber: PanNumber,
+            addressLineOne: addressLineOne,
+            addressLineTwo: addressLineTwo,
+            addressLineThree: addressLineThree,
+            addressLineFour: addressLineFour,
+            city: city,
+            pincode: pincode,
+            addressSameAsPermanent: addressSameAsPermanent,
+            addressLineOneCorrespondence: addressLineOneCorrespondence,
+            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+            addressLineThreeCorrespondence: addressLineThreeCorrespondence,
+            addressLineFourCorrespondence: addressLineFourCorrespondence,
+            cityCorrespondence: cityCorrespondence,
+            pincodeCorrespondence: pincodeCorrespondence
           }
         }
 
