@@ -261,8 +261,8 @@ const ApplicationBillAmendment = () => {
         businessId: state?.data?.applicationDetails?.amendment?.amendmentId,
         action: "RE-SUBMIT",
         tenantId: tenantId,
-        businessService: "BS.AMENDMENT",
-        moduleName: "BS"
+        businessService: state?.data?.applicationDetails?.applicationData?.serviceType === "WATER" ? "WS.AMENDMENT":"SW.AMENDMENT",
+        moduleName: state?.data?.applicationDetails?.applicationData?.serviceType === "WATER" ? "WS":"SW",
       }
       const AmendmentUpdate = { ...state?.data?.applicationDetails?.applicationData?.billAmendmentDetails, workflow, ...data?.Amendment }
       mutate({ AmendmentUpdate }, {

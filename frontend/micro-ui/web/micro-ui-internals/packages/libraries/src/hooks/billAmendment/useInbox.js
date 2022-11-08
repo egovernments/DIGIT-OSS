@@ -20,10 +20,10 @@ const useBillAmendmentInbox = ({ tenantId, filters, config = {} }) => {
   }
 
   if (window.location.href.includes("/ws/water/bill-amendment/inbox")) {
-    businessService = ["BS.AMENDMENT"];
+    businessService = ["WS.AMENDMENT"];
   }
   if (window.location.href.includes("/ws/sewerage/bill-amendment/inbox")) {
-    businessService = ["BS.AMENDMENT"];
+    businessService = ["SW.AMENDMENT"];
   }
 
   const _filters = {

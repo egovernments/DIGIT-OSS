@@ -88,11 +88,11 @@ const Home = ({
     let Links = Digit.ComponentRegistryService.getComponent(`${code}Links`) || (() => <React.Fragment />);
     let mdmsDataObj = isLinkDataFetched ? processLinkData(linkData, code, t) : undefined;
 
-    if (mdmsDataObj?.header === "ACTION_TEST_WS") {
-      mdmsDataObj?.links.sort((a, b) => {
-        return b.orderNumber - a.orderNumber;
+    //if (mdmsDataObj?.header === "ACTION_TEST_WS") {
+      mdmsDataObj?.links && mdmsDataObj?.links.sort((a, b) => {
+        return a.orderNumber - b.orderNumber;
       });
-    }
+    // }
     return (
       <React.Fragment>
         <Route key={index} path={`${path}/${code.toLowerCase()}-home`}>

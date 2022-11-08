@@ -1223,7 +1223,8 @@ export const WSSearch = {
     };
   },
 
-  applicationDetailsBillAmendment: async (t, tenantId, applicationNumber, serviceType = "WATER", config = {}, businessService="BS.AMENDMENT") => {
+  applicationDetailsBillAmendment: async (t, tenantId, applicationNumber, serviceType = "WATER", config = {}, businessService="WS.AMENDMENT") => {
+    businessService = serviceType === "WATER" ? "WS.AMENDMENT" : "SW.AMENDMENT";
     const businessServiceWf = await WorkflowService.init(tenantId,businessService)
     
     let billAmendSearchService="WS";

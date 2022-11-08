@@ -19,7 +19,7 @@ const Inbox = ({ parentRoute }) => {
 
   const filterFormDefaultValues = {
     applicationStatus: [],
-    businessService: checkPathName ? ["BS.AMENDMENT"] : ["BS.AMENDMENT"],
+    businessService: checkPathName ? ["WS.AMENDMENT"] : ["SW.AMENDMENT"],
     moduleName: checkPathName ? "bsWs-service" : "bsSw-service",
     locality: [],
     assignee: "ASSIGNED_TO_ALL",
@@ -115,7 +115,7 @@ const Inbox = ({ parentRoute }) => {
     config : { cacheTime : 0}
   });
 
-  const { data: statusData, isLoading } = Digit.Hooks.useApplicationStatusGeneral({ businessServices: ["BS.AMENDMENT"], tenantId }, { enabled: statuses?.length>0});
+  const { data: statusData, isLoading } = Digit.Hooks.useApplicationStatusGeneral({ businessServices: ["WS.AMENDMENT","SW.AMENDMENT"], tenantId }, { enabled: statuses?.length>0});
   
   statuses?.map(status => {
     statusData?.otherRoleStates?.map(state=>{

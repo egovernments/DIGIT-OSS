@@ -23,7 +23,7 @@ const BillAmendmentCard = () => {
 
   const filterFormDefaultBillAmendmentValues = {
     applicationStatus: [],
-    businessService: ["BS.AMENDMENT"],
+    businessService: ["WS.AMENDMENT"],
     moduleName: "bsWs-service",
     locality: [],
     assignee: "ASSIGNED_TO_ALL",

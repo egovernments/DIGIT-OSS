@@ -96,7 +96,7 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
   function submit(data) {
     if(applicationData?.isBillAmend){
       const comments = data?.comments ? data.comments : null
-     
+    
       const additionalDetails = { ...applicationData?.billAmendmentDetails?.additionalDetails, comments } 
      const amendment = {
        ...applicationData?.billAmendmentDetails,
@@ -104,8 +104,8 @@ const ActionModal = ({ t, action, tenantId, state, id, closeModal, submitAction,
           businessId:applicationData?.billAmendmentDetails?.amendmentId,
           action:action?.action,
           tenantId:tenantId,
-          businessService:"BS.AMENDMENT",
-          moduleName:"BS",
+          businessService:applicationData?.applicationType?.includes("WATER")?"WS.AMENDMENT":"SW.AMENDMENT",
+          moduleName:applicationData?.applicationType?.includes("WATER")?"WS":"SW",
           assignes: !selectedApprover?.uuid ? [] : [{ uuid: selectedApprover?.uuid }],
           comment: data?.comments || "",
           documents: uploadedFile

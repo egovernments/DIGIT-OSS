@@ -161,7 +161,7 @@ export const WorkflowService = {
         let timeline = TLEnrichedWithWorflowData.map((instance, ind) => {
           let checkPoint = {
             performedAction: instance.action,
-            status: moduleCode === "BS.AMENDMENT" ? instance.state.state :instance.state.applicationStatus,
+            status: moduleCode === "WS.AMENDMENT" ||  moduleCode === "SW.AMENDMENT" ? instance.state.state :instance.state.applicationStatus,
             state: instance.state.state,
             assigner: getAssignerDetails(instance, TLEnrichedWithWorflowData[ind - 1], moduleCode),
             rating: instance?.rating,
