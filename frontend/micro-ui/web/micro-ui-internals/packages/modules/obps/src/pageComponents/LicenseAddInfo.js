@@ -25,9 +25,68 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
+  const devRegId = localStorage.getItem('devRegId');
   const userInfo = Digit.UserService.getUser();
+  const refreshPage = async () => {
+    window.location.reload(false);
+  }
+
+  useEffect(() =>{
+    refreshPage()
+  },[])
   let isOpenLinkFlow = window.location.href.includes("openlink");
-  
+  const getDeveloperData = async ()=>{
+    try {
+      const requestResp = {
+        
+        "RequestInfo": {
+            "api_id": "1",
+            "ver": "1",
+            "ts": "",
+            "action": "_getDeveloperById",
+            "did": "",
+            "key": "",
+            "msg_id": "",
+            "requester_id": "",
+            "auth_token": ""
+        },
+    }
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
+
+      });
+      const developerDataGet = getDevDetails?.data; 
+      setDeveloperDataAddinfo((prev)=>[...prev,developerDataGet]);
+      console.log(developerDataAddinfo?.data);
+      
+      // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.shareHoldingPatterens); 
+      setShowDevTypeFields(developerDataGet?.devDetail[0]?.addInfo?.showDevTypeFields);
+      setCinNo(developerDataGet?.devDetail[0]?.addInfo?.cin_Number);
+      setCompanyName(developerDataGet?.devDetail[0]?.addInfo?.companyName);
+      setIncorporation(developerDataGet?.devDetail[0]?.addInfo?.incorporationDate);
+      setRegistered(developerDataGet?.devDetail[0]?.addInfo?.registeredAddress);
+      setEmail(developerDataGet?.devDetail[0]?.addInfo?.email);
+      setUserEmail(developerDataGet?.devDetail[0]?.addInfo?.emailUser);
+      setMobile(developerDataGet?.devDetail[0]?.addInfo?.mobileNumber);
+      setGST(developerDataGet?.devDetail[0]?.addInfo?.gst_Number);
+      setTbName(developerDataGet?.devDetail[0]?.addInfo?.sharName);
+      setDesignition(developerDataGet?.devDetail[0]?.addInfo?.designition);
+      setPercetage(developerDataGet?.devDetail[0]?.addInfo?.percentage);
+      setUploadPDF(developerDataGet?.devDetail[0]?.addInfo?.uploadPdf);
+      setSerialNumber(developerDataGet?.devDetail[0]?.addInfo?.serialNumber);
+      setDirectorData(developerDataGet?.devDetail[0]?.addInfo?.directorsInformation || "");
+      setModalNAme(developerDataGet?.devDetail[0]?.addInfo?.modalNAme);
+      setModaldesignition(developerDataGet?.devDetail[0]?.addInfo?.modaldesignition);
+      setModalPercentage(developerDataGet?.devDetail[0]?.addInfo?.modalPercentage);
+      setModalValuesArray(developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens || "");
+      setFinancialCapacity(developerDataGet?.devDetail[0]?.addInfo?.financialCapacity);
+      // setShowDevTypeFields(valueOfDrop);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    getDeveloperData()
+  }, []);
   const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name: "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [mobileNumberUser, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber: "") ||
     formData?.LicneseDetails?.mobileNumberUser || formData?.formData?.LicneseDetails?.mobileNumberUser || ""
@@ -124,7 +183,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const [modalPercentage,setModalPercentage]=useState("");
     // const dispatch = useDispatch();
     
-    const [modalValuesArray,setModalValuesArray]= useState([]);
+    const [modalValuesArray,setModalValuesArray]= useState([] || developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens);
     const [financialCapacity,setFinancialCapacity]= useState([]);
     
     const [docUpload,setDocuploadData]=useState([])
@@ -132,7 +191,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const [developerDataAddinfo,setDeveloperDataAddinfo] = useState([])
     const [showDevTypeFieldsValue,setShowDevTypeFieldsValue] = useState("")
 
-    const devRegId = localStorage.getItem('devRegId');
+    
     console.log(devRegId);
     const handleshow = (e) => {
       const getshow = e.target.value;
@@ -257,39 +316,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const [aoofRows, setAoOfRows] = useState(1);
  
     
-    const getDeveloperData = async ()=>{
-      try {
-        const requestResp = {
-          
-          "RequestInfo": {
-              "api_id": "1",
-              "ver": "1",
-              "ts": "",
-              "action": "_getDeveloperById",
-              "did": "",
-              "key": "",
-              "msg_id": "",
-              "requester_id": "",
-              "auth_token": ""
-          },
-      }
-        const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
-  
-        });
-        const developerDataGet = getDevDetails?.data; 
-        setDeveloperDataAddinfo((prev)=>[...prev,developerDataGet]);
-        console.log(developerDataAddinfo?.data);
-        
-        const valueOfDrop = getDevDetails?.data?.devDetail[0]?.addInfo?.showDevTypeFields
-        console.log("DeveloperGEtData",valueOfDrop);
-        setShowDevTypeFieldsValue(valueOfDrop);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    useEffect(() => {
-      getDeveloperData()
-    }, []);
+   
     
   // if (isLoading) return <Loader />;
   const goNext = async (e) => {
@@ -810,7 +837,7 @@ const onSkip = () => onSelect();
                     </thead>
                     <tbody>
                       {
-                        (modalValuesArray.length>0)?
+                        ( modalValuesArray.length>0)?
                         modalValuesArray.map((elementInArray, input) => {
                           return (
                             <tr>
@@ -1030,7 +1057,9 @@ const onSkip = () => onSelect();
                       </tr>
                     </thead>
                     <tbody>
-                      {DirectorData.map((elementInArray, input) => {
+                      {
+                        (DirectorData.length>0)?
+                      DirectorData.map((elementInArray, input) => {
                         return (
                           <tr key={input}>
                             <td>{input+1}</td>
@@ -1070,7 +1099,7 @@ const onSkip = () => onSelect();
                             </td>
                           </tr>
                         );
-                      })}
+                      }):<p></p>}
                     </tbody>
                   </table>
                 </div>
@@ -1333,7 +1362,7 @@ const onSkip = () => onSelect();
                     </thead>
                     <tbody>
                       {
-                        (modalValuesArray.length>0)?
+                        ( modalValuesArray.length>0)?
                         modalValuesArray.map((elementInArray, input) => {
                           return (
                             <tr>

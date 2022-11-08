@@ -13,9 +13,80 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData }) => {
     const { pathname: url } = useLocation();
     let validation = {};
+    const devRegId = localStorage.getItem('devRegId');
     const onSkip = () => onSelect();
-    const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.Correspondenceaddress || formData?.formData?.Correspondenceaddress || "");
-    const [isAddressSame, setisAddressSame] = useState(formData?.isAddressSame || formData?.formData?.isAddressSame || false);
+    const getDeveloperData = async ()=>{
+        try {
+          const requestResp = {
+            
+            "RequestInfo": {
+                "api_id": "1",
+                "ver": "1",
+                "ts": "",
+                "action": "_getDeveloperById",
+                "did": "",
+                "key": "",
+                "msg_id": "",
+                "requester_id": "",
+                "auth_token": ""
+            },
+            }
+            const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
+
+            });
+            const developerDataGet = getDevDetails?.data; 
+            console.log(developerDataGet);
+            console.log("TECHEXP",developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.engineerName);
+            setModalCapacityDevelopColonyHdruAct(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.capacityDevelopColonyHdruAct || "");
+            setCapacityDevelopColonyLawAct(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.capacityDevelopColonyLawAct || "");
+            setModalLcNo(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.licenceNumber);
+            setEngineerName(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.engineerName)
+            setEngineerQualification(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.engineerQualification)
+            setEngineerSign(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.engineerSign)
+            setEngineerDegree(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.engineerDegree)
+            setArchitectName(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.architectName)
+            setArchitectQualification(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.architectQualification)
+            setArchitectSign(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.architectSign)
+            setArchitectDegree(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.architectDegree)
+            setTownPlannerName(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.townPlannerName)
+            setTownPlannerQualification(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.townPlannerQualification)
+            setTownPlannerSign(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.townPlannerSign)
+            setTownPlannerDegree(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.townPlannerDegree)
+            setExistingDev(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.existingDeveloperAgreement)
+            setExistingDevDoc(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.existingDeveloperAgreementDoc)
+            setTechnicalCapacity(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalCapacity)
+            setTechnicalCapacityDoc(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalCapacityDoc)
+            setengineerNameN(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged?.engineerNameN)
+            setEngineerDocN(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.engineerDocN)
+            setArchitectNameN(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.architectNameN)
+            setArchitectDocN(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.architectDocN)
+            setUplaodSpaBoard(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.uplaodSpaBoard)
+            setUplaodSpaBoardDoc(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.uplaodSpaBoardDoc)
+            setAgreementDoc(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.agreementDoc)
+            setBoardDoc(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.boardDoc)
+            setRegisteredDoc(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.registeredDoc)
+            setBoardDocY(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.boardDocY)
+            setEarlierDocY(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.earlierDocY)
+            setBoardDocN(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.boardDocN)
+            setEarlierDocN(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.earlierDocN)
+            setTechnicalAssistanceAgreementDoc(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalAssistanceAgreementDoc)
+            setDocuploadData(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.docUpload)
+            setFile(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.file)
+            setIndividualCertificateCA(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.individualCertificateCA)
+            setCompanyBalanceSheet(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.companyBalanceSheet)
+            setPaidUpCapital(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.paidUpCapital)
+            setNetworthPartners(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.networthPartners)
+            setNetworthFirm(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.networthFirm)
+            console.log("Developer-Capacity",getDevDetails?.data?.devDetail[0]?.capacityDevelopAColony);
+        } catch (error) {
+            console.log(error);
+        }
+      }
+      useEffect(() => {
+        getDeveloperData()
+      }, []);
+    const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.LicneseDetails?.Correspondenceaddress || formData?.formData?.LicneseDetails?.Correspondenceaddress || "");
+    const [isAddressSame, setisAddressSame] = useState(formData?.LicneseDetails?.isAddressSame || formData?.formData?.LicneseDetails?.isAddressSame || false);
     const [error, setError] = useState(null);
     const [showToast, setShowToast] = useState(null);
     const [isDisableForNext, setIsDisableForNext] = useState(false);
@@ -25,52 +96,52 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
     const [modalColony, setmodalColony] = useState(false);
     const [capacityDevelopColonyHdruAct, setModalCapacityDevelopColonyHdruAct] = useState([]);
     // const [modalColonyDevGrpValuesArray, setModalColonyDevGrpValuesArray] = useState([]);
-    const [capacityDevelopColonyLawAct, setCapacityDevelopColonyLawAct] = useState(formData?.DeveloperCapacity?.capacityDevelopColonyLawAct || []);
+    const [capacityDevelopColonyLawAct, setCapacityDevelopColonyLawAct] = useState(formData?.LicneseDetails?.capacityDevelopColonyLawAct || []);
     const [capacityDevelopAColony, setcapacityDevelopAColony] = useState([]);
   
-    const [licenceNumber, setModalLcNo] = useState(formData?.DeveloperCapacity?.licenceNumber || "");
-    const [nameOfDeveloper, setModalDevName] = useState(formData?.DeveloperCapacity?.nameOfDeveloper || "");
-    const [purposeOfColony, setModalPurposeCol] = useState(formData?.DeveloperCapacity?.purposeOfColony || "");
-    const [sectorAndDevelopmentPlan, setModalDevPlan] = useState(formData?.DeveloperCapacity?.sectorAndDevelopmentPlan || "");
-    const [validatingLicence, setModalDevValidity] = useState(formData?.DeveloperCapacity?.validatingLicence || "");
+    const [licenceNumber, setModalLcNo] = useState(formData?.LicneseDetails?.licenceNumber || "");
+    const [nameOfDeveloper, setModalDevName] = useState(formData?.LicneseDetails?.nameOfDeveloper || "");
+    const [purposeOfColony, setModalPurposeCol] = useState(formData?.LicneseDetails?.purposeOfColony || "");
+    const [sectorAndDevelopmentPlan, setModalDevPlan] = useState(formData?.LicneseDetails?.sectorAndDevelopmentPlan || "");
+    const [validatingLicence, setModalDevValidity] = useState(formData?.LicneseDetails?.validatingLicence || "");
   
     
-    const [coloniesDeveloped,setColonyDev] = useState(formData?.DeveloperCapacity?.coloniesDeveloped || "");
-    const [area,setColonyArea] = useState(formData?.DeveloperCapacity?.area || "");
-    const [purpose,setColonyPurpose] = useState(formData?.DeveloperCapacity?.purpose || "");
-    const [statusOfDevelopment,setColonyStatusDev] = useState(formData?.DeveloperCapacity?.statusOfDevelopment || "");
-    const [outstandingDues,setColonyoutstandingDue] = useState(formData?.DeveloperCapacity?.outstandingDues || "");
+    const [coloniesDeveloped,setColonyDev] = useState(formData?.LicneseDetails?.coloniesDeveloped || "");
+    const [area,setColonyArea] = useState(formData?.LicneseDetails?.area || "");
+    const [purpose,setColonyPurpose] = useState(formData?.LicneseDetails?.purpose || "");
+    const [statusOfDevelopment,setColonyStatusDev] = useState(formData?.LicneseDetails?.statusOfDevelopment || "");
+    const [outstandingDues,setColonyoutstandingDue] = useState(formData?.LicneseDetails?.outstandingDues || "");
   
-    const [engineerName,setEngineerName] = useState(formData?.DeveloperCapacity?.engineerName || "")
-    const [engineerQualification,setEngineerQualification] = useState(formData?.DeveloperCapacity?.engineerQualification || "")
-    const [engineerSign,setEngineerSign] = useState(formData?.DeveloperCapacity?.engineerSign || "")
-    const [engineerDegree,setEngineerDegree] = useState(formData?.DeveloperCapacity?.engineerDegree || "")
-    const [architectName,setArchitectName] = useState(formData?.DeveloperCapacity?.architectName || "")
-    const [architectQualification,setArchitectQualification] = useState(formData?.DeveloperCapacity?.architectQualification || "")
-    const [architectSign,setArchitectSign] = useState(formData?.DeveloperCapacity?.architectSign || "")
-    const [architectDegree,setArchitectDegree] = useState(formData?.DeveloperCapacity?.architectDegree || "")
-    const [townPlannerName,setTownPlannerName] = useState(formData?.DeveloperCapacity?.townPlannerName || "")
-    const [townPlannerQualification,setTownPlannerQualification] = useState(formData?.DeveloperCapacity?.townPlannerQualification || "")
-    const [townPlannerSign,setTownPlannerSign] = useState(formData?.DeveloperCapacity?.townPlannerSign || "")
-    const [townPlannerDegree,setTownPlannerDegree] = useState(formData?.DeveloperCapacity?.townPlannerDegree || "")
-    const [existingDeveloperAgreement,setExistingDev] = useState(formData?.DeveloperCapacity?.existingDeveloperAgreement || "")
-    const [existingDeveloperAgreementDoc,setExistingDevDoc] = useState(formData?.DeveloperCapacity?.existingDeveloperAgreementDoc || "")
-    const [technicalCapacity,setTechnicalCapacity] = useState(formData?.DeveloperCapacity?.technicalCapacity || "")
-    const [technicalCapacityDoc,setTechnicalCapacityDoc] = useState(formData?.DeveloperCapacity?.technicalCapacityDoc || "")
-    const [engineerNameN,setengineerNameN] = useState(formData?.DeveloperCapacity?.engineerNameN || "")
-    const [engineerDocN,setEngineerDocN] = useState(formData?.DeveloperCapacity?.engineerDocN || "")
-    const [architectNameN,setArchitectNameN] = useState(formData?.DeveloperCapacity?.architectNameN || "")
-    const [architectDocN,setArchitectDocN] = useState(formData?.DeveloperCapacity?.architectDocN || "")
-    const [uplaodSpaBoard,setUplaodSpaBoard] = useState(formData?.DeveloperCapacity?.uplaodSpaBoard || "")
-    const [uplaodSpaBoardDoc,setUplaodSpaBoardDoc] = useState(formData?.DeveloperCapacity?.uplaodSpaBoardDoc || "")
-    const [agreementDoc,setAgreementDoc] = useState(formData?.DeveloperCapacity?.agreementDoc || "")
-    const [boardDoc,setBoardDoc] = useState(formData?.DeveloperCapacity?.boardDoc || "")
-    const [registeredDoc,setRegisteredDoc] = useState(formData?.DeveloperCapacity?.registeredDoc || "")
-    const [boardDocY,setBoardDocY] = useState(formData?.DeveloperCapacity?.boardDocY || "")
-    const [earlierDocY,setEarlierDocY] = useState(formData?.DeveloperCapacity?.earlierDocY || "")
-    const [boardDocN,setBoardDocN] = useState(formData?.DeveloperCapacity?.boardDocN || "")
-    const [earlierDocN,setEarlierDocN] = useState(formData?.DeveloperCapacity?.earlierDocN || "")
-    const [technicalAssistanceAgreementDoc,setTechnicalAssistanceAgreementDoc] = useState(formData?.DeveloperCapacity?.technicalAssistanceAgreementDoc || "")
+    const [engineerName,setEngineerName] = useState(formData?.LicneseDetails?.engineerName || "")
+    const [engineerQualification,setEngineerQualification] = useState(formData?.LicneseDetails?.engineerQualification || "")
+    const [engineerSign,setEngineerSign] = useState(formData?.LicneseDetails?.engineerSign || "")
+    const [engineerDegree,setEngineerDegree] = useState(formData?.LicneseDetails?.engineerDegree || "")
+    const [architectName,setArchitectName] = useState(formData?.LicneseDetails?.architectName || "")
+    const [architectQualification,setArchitectQualification] = useState(formData?.LicneseDetails?.architectQualification || "")
+    const [architectSign,setArchitectSign] = useState(formData?.LicneseDetails?.architectSign || "")
+    const [architectDegree,setArchitectDegree] = useState(formData?.LicneseDetails?.architectDegree || "")
+    const [townPlannerName,setTownPlannerName] = useState(formData?.LicneseDetails?.townPlannerName || "")
+    const [townPlannerQualification,setTownPlannerQualification] = useState(formData?.LicneseDetails?.townPlannerQualification || "")
+    const [townPlannerSign,setTownPlannerSign] = useState(formData?.LicneseDetails?.townPlannerSign || "")
+    const [townPlannerDegree,setTownPlannerDegree] = useState(formData?.LicneseDetails?.townPlannerDegree || "")
+    const [existingDeveloperAgreement,setExistingDev] = useState(formData?.LicneseDetails?.existingDeveloperAgreement || "")
+    const [existingDeveloperAgreementDoc,setExistingDevDoc] = useState(formData?.LicneseDetails?.existingDeveloperAgreementDoc || "")
+    const [technicalCapacity,setTechnicalCapacity] = useState(formData?.LicneseDetails?.technicalCapacity || "")
+    const [technicalCapacityDoc,setTechnicalCapacityDoc] = useState(formData?.LicneseDetails?.technicalCapacityDoc || "")
+    const [engineerNameN,setengineerNameN] = useState(formData?.LicneseDetails?.engineerNameN || "")
+    const [engineerDocN,setEngineerDocN] = useState(formData?.LicneseDetails?.engineerDocN || "")
+    const [architectNameN,setArchitectNameN] = useState(formData?.LicneseDetails?.architectNameN || "")
+    const [architectDocN,setArchitectDocN] = useState(formData?.LicneseDetails?.architectDocN || "")
+    const [uplaodSpaBoard,setUplaodSpaBoard] = useState(formData?.LicneseDetails?.uplaodSpaBoard || "")
+    const [uplaodSpaBoardDoc,setUplaodSpaBoardDoc] = useState(formData?.LicneseDetails?.uplaodSpaBoardDoc || "")
+    const [agreementDoc,setAgreementDoc] = useState(formData?.LicneseDetails?.agreementDoc || "")
+    const [boardDoc,setBoardDoc] = useState(formData?.LicneseDetails?.boardDoc || "")
+    const [registeredDoc,setRegisteredDoc] = useState(formData?.LicneseDetails?.registeredDoc || "")
+    const [boardDocY,setBoardDocY] = useState(formData?.LicneseDetails?.boardDocY || "")
+    const [earlierDocY,setEarlierDocY] = useState(formData?.LicneseDetails?.earlierDocY || "")
+    const [boardDocN,setBoardDocN] = useState(formData?.LicneseDetails?.boardDocN || "")
+    const [earlierDocN,setEarlierDocN] = useState(formData?.LicneseDetails?.earlierDocN || "")
+    const [technicalAssistanceAgreementDoc,setTechnicalAssistanceAgreementDoc] = useState(formData?.LicneseDetails?.technicalAssistanceAgreementDoc || "")
     const [docUpload,setDocuploadData]=useState([])
     const [file,setFile]=useState(null);
     const [individualCertificateCA,setIndividualCertificateCA] = useState("");
@@ -95,7 +166,7 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
   window.onunload = function () {
     sessionStorage.removeItem("Digit.BUILDING_PERMIT");
   }
-  const devRegId = localStorage.getItem('devRegId');
+ 
   function selectChecked(e) {
     if (isAddressSame == false) {
       setisAddressSame(true);
@@ -188,33 +259,6 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
     getDocumentData();
   }, [file]);
 
-  const getDeveloperData = async ()=>{
-    try {
-      const requestResp = {
-        
-        "RequestInfo": {
-            "api_id": "1",
-            "ver": "1",
-            "ts": "",
-            "action": "_getDeveloperById",
-            "did": "",
-            "key": "",
-            "msg_id": "",
-            "requester_id": "",
-            "auth_token": ""
-        },
-    }
-      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
-
-      });
-      console.log(getDevDetails?.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  useEffect(() => {
-    getDeveloperData()
-  }, []);
 
 
 const handleArrayValues = () => {
@@ -1045,6 +1089,7 @@ const handleColonyDevGrp=()=>{
                                         <input
                                         typr="text"
                                         onChange={(e) => setEngineerName(e.target.value)}
+                                        value={engineerName}
                                         placeholder="Name of Engineer"
                                         class="employee-card-input"
                                         />
@@ -1053,6 +1098,7 @@ const handleColonyDevGrp=()=>{
                                         <input
                                         type="text"
                                         onChange={(e) => setEngineerQualification(e.target.value)}
+                                        value={engineerQualification}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1084,6 +1130,7 @@ const handleColonyDevGrp=()=>{
                                     <input
                                         typr="text"
                                         onChange={(e) => setArchitectName(e.target.value)}
+                                        value={architectName}
                                         placeholder="Name of Architect"
                                         class="employee-card-input"
                                         />
@@ -1092,6 +1139,7 @@ const handleColonyDevGrp=()=>{
                                         <input
                                         type="text"
                                         onChange={((e) => setArchitectQualification(e.target.value))}
+                                        value={architectQualification}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1122,6 +1170,7 @@ const handleColonyDevGrp=()=>{
                                     <input
                                         type="text"
                                         onChange={((e) => setTownPlannerName(e.target.value))}
+                                        value={townPlannerName}
                                         placeholder="Name of Town Planner"
                                         class="employee-card-input"
                                         />
@@ -1130,6 +1179,7 @@ const handleColonyDevGrp=()=>{
                                         <input
                                         type="text"
                                         onChange={((e) => setTownPlannerQualification(e.target.value))}
+                                        value={townPlannerQualification}
                                         placeholder=""
                                         class="employee-card-input"
                                         />
@@ -1205,6 +1255,7 @@ const handleColonyDevGrp=()=>{
                                         type="text"
                                         onChange={((e) => setTechnicalCapacity(e.target.value))}
                                         placeholder="Technical Capacity"
+                                        value={technicalCapacity}
                                         class="employee-card-input"
                                         />
                                     </td>
@@ -1225,6 +1276,7 @@ const handleColonyDevGrp=()=>{
                                         type="text"
                                         placeholder="Name of Engineer"
                                         onChange={((e)=> setengineerNameN(e.target.value))}
+                                        value={engineerNameN}
                                         class="employee-card-input"
                                         />
                                     </td>
@@ -1245,6 +1297,7 @@ const handleColonyDevGrp=()=>{
                                         type="text"
                                         placeholder="Name of Architect"
                                         onChange={((e)=> setArchitectNameN(e.target.value))}
+                                        value={architectNameN}
                                         class="employee-card-input"
                                         />
                                     </td>
