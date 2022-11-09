@@ -26,6 +26,7 @@ const Genarelinfo = (props) => {
   // const [fieldValue, setFieldValue] = useState("");
 
   const genarelinfo = props.genarelinfo;
+  const dataIcons = props. dataForIcons;
 
   const applicantInfoPersonal = props.ApiResponseData;
   console.log("personal info applicant data1", applicantInfoPersonal);
