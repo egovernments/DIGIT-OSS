@@ -143,10 +143,10 @@ public class InboxService {
         Integer flag=0;
         if (processCriteria.getModuleName().equalsIgnoreCase(BS_WS)) {
         	flag=1;
-        	processCriteria.setModuleName(BS);
+        	processCriteria.setModuleName(BS_WS_MODULENAME);
         } else if(processCriteria.getModuleName().equalsIgnoreCase(BS_SW)) {
         	flag=2;
-        	processCriteria.setModuleName(BS);
+        	processCriteria.setModuleName(BS_SW_MODULENAME);
         }
 
         Integer totalCount = 0;
@@ -435,7 +435,7 @@ public class InboxService {
             }
                      
             // Redirect request to searcher in case of WS to fetch acknowledgement IDS
-            if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(BS) 
+            if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(BS_WS_MODULENAME)
             		&& flag==1) {
             	processCriteria.setModuleName(BS_WS);
                 totalCount = billInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap,
@@ -456,11 +456,11 @@ public class InboxService {
                     isSearchResultEmpty = true;
                 }
                 moduleSearchCriteria.put("isPropertyDetailsRequired", true);
-                processCriteria.setModuleName(BS);
+                processCriteria.setModuleName(BS_WS_MODULENAME);
             }
 
             // Redirect request to searcher in case of SW to fetch acknowledgement IDS
-            if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(BS) 
+            if (!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(BS_SW_MODULENAME)
             		&& flag==2) {
             	processCriteria.setModuleName(BS_SW);
                 totalCount = billInboxFilterService.fetchApplicationCountFromSearcher(criteria, StatusIdNameMap,
@@ -481,7 +481,7 @@ public class InboxService {
                     isSearchResultEmpty = true;
                 }
                 moduleSearchCriteria.put("isPropertyDetailsRequired", true);
-                processCriteria.setModuleName(BS);
+                processCriteria.setModuleName(BS_SW_MODULENAME);
             }
             /*
              * if(!ObjectUtils.isEmpty(processCriteria.getModuleName()) && processCriteria.getModuleName().equals(PT)){ Boolean
@@ -533,12 +533,14 @@ public class InboxService {
 	    Map<String, String> srvSearchMap;
 	    JSONArray serviceSearchObject = new JSONArray();
 	    Map<String, Object> serviceSearchMap ;
+        String businessServiceForAmendment = businessServiceName.get(0);
+        Boolean isBusinessServiceWSOrSW = businessServiceForAmendment.equalsIgnoreCase(BS_WS_SERVICE) || businessServiceForAmendment.equalsIgnoreCase(BS_SW_SERVICE);
 	    if (businessObjects != null && businessObjects.length() > 0
-		&& businessServiceName.get(0).equalsIgnoreCase(BS_SERVICE)) {
+                && isBusinessServiceWSOrSW) {
 		businessService = moduleSearchCriteria.get(BS_BUSINESS_SERVICE_PARAM).toString();
 		// businessObjects.getJSONObject(0).getString("businessService");
 		srvSearchMap = fetchAppropriateServiceSearchMap(businessService, moduleName);
-		if (!isSearchResultEmpty && processCriteria.getModuleName().equalsIgnoreCase(BS)) {
+		if (!isSearchResultEmpty && (processCriteria.getModuleName().equalsIgnoreCase(BS_WS_MODULENAME) || processCriteria.getModuleName().equalsIgnoreCase(BS_SW_MODULENAME))) {
 			moduleSearchCriteria.put(srvSearchMap.get("consumerCodeParam"), moduleSearchCriteria.get(BS_CONSUMER_NO_PARAM));
 			moduleSearchCriteria.remove(BS_CONSUMER_NO_PARAM);
 			moduleSearchCriteria.remove(BS_BUSINESS_SERVICE_PARAM);
@@ -618,7 +620,7 @@ public class InboxService {
                 if (CollectionUtils.isEmpty(businessKeys)) {
                     businessMap.keySet().forEach(businessKey -> {
                         if(null != processInstanceMap.get(businessKey)) {
-                            if (!businessServiceName.get(0).equalsIgnoreCase(BS_SERVICE)) {
+                            if (!isBusinessServiceWSOrSW) {
                             	//For non- Bill Amendment Inbox search
                                 Inbox inbox = new Inbox();
                                 inbox.setProcessInstance(processInstanceMap.get(businessKey));
@@ -635,11 +637,11 @@ public class InboxService {
                             }
                         }
                     });
-                  if (businessServiceName.get(0).equalsIgnoreCase(BS_SERVICE))
-                  	totalCount = processInstanceMap.size();
+                    if (isBusinessServiceWSOrSW)
+                  	    totalCount = processInstanceMap.size();
                 } else {
                 	//For non- Bill Amendment Inbox search
-			if (!businessServiceName.get(0).equalsIgnoreCase(BS_SERVICE)) {
+			if (!isBusinessServiceWSOrSW) {
 				businessKeys.forEach(businessKey -> {
 					Inbox inbox = new Inbox();
 					inbox.setProcessInstance(processInstanceMap.get(businessKey));

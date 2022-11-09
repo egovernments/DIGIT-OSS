@@ -5,6 +5,10 @@ public class BSConstants {
 	public static final String BS_WS = "bsWs-service";
 	public static final String BS_SW = "bsSw-service";
 	public static final String BS_SERVICE = "BS.AMENDMENT";
+	public static final String BS_WS_SERVICE = "WS.AMENDMENT";
+	public static final String BS_SW_SERVICE = "SW.AMENDMENT";
+	public static final String BS_WS_MODULENAME = "WS";
+	public static final String BS_SW_MODULENAME = "SW";
 	public static final String BS = "BS";
 	public static final String MOBILE_NUMBER_PARAM = "mobileNumber";
 	public static final String BS_BUSINESS_SERVICE_PARAM = "businessService";

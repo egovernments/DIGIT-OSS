@@ -137,7 +137,7 @@ public class ElasticSearchQueryBuilder {
             HashMap<String, Object> moduleSearchCriteria = criteria.getModuleSearchCriteria();
             //Adding "must" terms for the search parameters in criteria
             if (!StringUtils.isEmpty(moduleSearchCriteria.get("mobileNumber"))) {
-                mobileClause.add(getInnerNodeForMobileNumber(moduleSearchCriteria.get("mobileNumber").toString(), "Data.connectionHolders.mobileNumber.keyword", "Data.additionalDetails.ownerMobileNumber.keyword"));
+                mobileClause.add(getInnerNodeForMobileNumber(moduleSearchCriteria.get("mobileNumber").toString(), "Data.connectionHolders.mobileNumber.keyword", "Data.ownerMobileNumbers.keyword"));
             }
             if (!StringUtils.isEmpty(moduleSearchCriteria.get("locality"))) {
                 clauses.add(getInnerNode(moduleSearchCriteria.get("locality").toString(), "Data.additionalDetails.locality.keyword"));
