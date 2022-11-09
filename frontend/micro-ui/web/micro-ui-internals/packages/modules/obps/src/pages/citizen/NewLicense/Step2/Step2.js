@@ -249,6 +249,15 @@ const ApllicantPuropseForm = (props) => {
     },
   ];
 
+  const stateId = Digit.ULBService.getStateId();
+  const { data: Menu = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "Purpose");
+  let menu = [];
+  Menu &&
+    Menu["common-masters"] &&
+    Menu["common-masters"].StructureType.map((ob) => {
+      console.log("log", ob);
+    });
+  console.log("kjh", menu);
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
   const [getColumns, setColumns] = useState(columns);
@@ -637,7 +646,7 @@ const ApllicantPuropseForm = (props) => {
     <div>
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h1>New License </h1>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
               <Row className="ml-auto" style={{ marginBottom: 5 }}>

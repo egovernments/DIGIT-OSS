@@ -402,7 +402,7 @@ const ApllicantFormStep1 = (props) => {
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4>New License </h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
           <Form.Group className="justify-content-center" controlId="formBasicEmail">
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
