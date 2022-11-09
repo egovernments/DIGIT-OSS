@@ -14,6 +14,7 @@ const WSDocsRequired = ({ onSelect, userType, onSkip, config }) => {
 
   sessionStorage.removeItem("Digit.PT_CREATE_EMP_WS_NEW_FORM");
   sessionStorage.removeItem("IsDetailsExists");
+  sessionStorage.removeItem("FORMSTATE_ERRORS");
 
   const { isLoading: wsDocsLoading, data: wsDocs } = Digit.Hooks.ws.WSSearchMdmsTypes.useWSServicesMasters(tenantId);
 

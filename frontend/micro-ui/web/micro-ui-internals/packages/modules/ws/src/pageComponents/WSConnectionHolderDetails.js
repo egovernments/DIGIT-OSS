@@ -266,6 +266,14 @@ const ConnectionDetails = (_props) => {
   }, [connectionHolderDetails]);
 
   useEffect(() => {
+    if (sameAsOwnerDetails) {
+      clearErrors("ConnectionHolderDetails");
+    } else {
+      trigger();
+    }
+  }, [sameAsOwnerDetails])
+  
+  useEffect(() => {
     if (Object.keys(errors).length && !_.isEqual(formState.errors[config.key]?.type || {}, errors)) {
       setError(config.key, { type: errors });
     } else if (!Object.keys(errors).length && formState.errors[config.key] && isErrors) {

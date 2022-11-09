@@ -92,6 +92,7 @@ const NewApplication = () => {
   const onFormValueChange = (setValue, formData, formState) => {
     if (!_.isEqual(sessionFormData, formData)) {
       setSessionFormData({ ...sessionFormData, ...formData });
+      sessionStorage.setItem("FORMSTATE_ERRORS", JSON.stringify(formState?.errors));
     }
 
     if (Object.keys(formState.errors).length > 0 && Object.keys(formState.errors).length == 1 && formState?.errors?.["ConnectionHolderDetails"]?.type && Object.keys(formState?.errors?.["ConnectionHolderDetails"]?.type)?.length == 1 && formState.errors["ConnectionHolderDetails"] && Object.values(formState.errors["ConnectionHolderDetails"].type).filter((ob) => ob.type === "required" && (ob?.ref?.value !== "")).length > 0  /*&&  !formData?.cpt?.details?.propertyId*/) setSubmitValve(true);
@@ -110,11 +111,12 @@ const NewApplication = () => {
         }
     }
 
-    if(!canSubmit){
+    const errors = sessionStorage.getItem("FORMSTATE_ERRORS");
+    const formStateErros = typeof(errors) == "string" ? JSON.parse(errors) : {};
+
+    if(Object.keys(formStateErros).length > 0){
       setShowToast({ warning: true, message: "PLEASE_FILL_MANDATORY_DETAILS" });
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
+      return;
     }
     else{
 
@@ -271,7 +273,7 @@ const NewApplication = () => {
         onSubmit={onSubmit}
         defaultValues={sessionFormData}
       ></FormComposer>
-      {showToast && <Toast isDleteBtn={true} error={showToast?.key === "error" ? true : false} warning={showToast?.warning} label={t(showToast?.message)} onClose={closeToast} />}
+      {showToast && <Toast isDleteBtn={true} error={showToast?.key === "error" ? true : false} warning={showToast?.warning} label={t(showToast?.message)} onClose={closeToast} isWarning={showToast?.isWarning}/>}
       {/* {showToast && <Toast error={showToast.key} label={t(showToast?.message)} onClose={closeToast} />} */}
     </React.Fragment>
   );

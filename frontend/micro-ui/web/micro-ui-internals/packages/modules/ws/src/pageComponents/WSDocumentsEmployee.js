@@ -192,7 +192,7 @@ function SelectDocument({
     } else if (isHidden) {
       removeError();
     }
-  }, [uploadedFile, selectedDocument, isHidden]);
+  }, [uploadedFile, selectedDocument, isHidden, formData?.ConnectionDetails?.[0]]);
 
 
   useEffect(() => {
