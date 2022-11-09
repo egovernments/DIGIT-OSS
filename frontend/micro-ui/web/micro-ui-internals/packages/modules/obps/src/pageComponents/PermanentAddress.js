@@ -178,7 +178,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
         console.log("File",formData)
 
        try {
-           const Resp = await axios.post("http://10.1.1.18:8083/filestore/v1/files",formData,
+           const Resp = await axios.post("/filestore/v1/files",formData,
            {headers:{
                "content-type":"multipart/form-data"
            }}).then((response) => {

@@ -27,13 +27,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const { pathname: url } = useLocation();
   const devRegId = localStorage.getItem('devRegId');
   const userInfo = Digit.UserService.getUser();
-  const refreshPage = async () => {
-    window.location.reload(false);
-  }
+  // const refreshPage = async () => {
+  //   window.location.reload(false);
+  // }
 
-  useEffect(() =>{
-    refreshPage()
-  },[])
+  // useEffect(() =>{
+  //   refreshPage()
+  // },[])
   let isOpenLinkFlow = window.location.href.includes("openlink");
   const getDeveloperData = async ()=>{
     try {
