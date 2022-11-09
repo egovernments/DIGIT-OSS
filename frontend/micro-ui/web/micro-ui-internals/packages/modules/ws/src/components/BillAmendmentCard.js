@@ -35,7 +35,7 @@ const BillAmendmentCard = () => {
   };
 
   const formInitBilAmendmentValueSW = {
-    filterForm: {...filterFormDefaultBillAmendmentValues,moduleName: "bsSw-service"},
+    filterForm: {...filterFormDefaultBillAmendmentValues,businessService:["SW.AMENDMENT"], moduleName: "bsSw-service"},
     searchForm: searchFormDefaultValues,
     tableForm: tableOrderFormDefaultValues,
   };

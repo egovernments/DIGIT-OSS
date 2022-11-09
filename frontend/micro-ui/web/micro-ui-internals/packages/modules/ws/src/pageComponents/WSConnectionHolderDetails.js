@@ -330,7 +330,7 @@ const ConnectionDetails = (_props) => {
                 render={(props) => (
                   <div style={{ display: "flex", alignItems: "baseline", marginRight: checkifPrivacyValid() ? "-4%" : "-4%" }}>
                     <TextInput
-                      value={props.value}
+                      value={getValues("name")}
                       autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "name"}
                       errorStyle={localFormState.touched.name && errors?.name?.message ? true : false}
                       onChange={(e) => {
@@ -341,7 +341,7 @@ const ConnectionDetails = (_props) => {
                       labelStyle={{ marginTop: "unset" }}
                       onBlur={props.onBlur}
                       style={
-                        checkifPrivacyValid() && !props.value?.includes("*")
+                        checkifPrivacyValid() && !getValues("name")?.includes("*")
                           ? !Digit.Utils.checkPrivacy(privacyData, { uuid: connectionHolderDetail?.uuid, fieldName: "name", model: "User" }) &&
                             !Digit.Utils.checkPrivacy(privacyData, { uuid: connectionHolderDetail?.uuid, fieldName: "mobileNumber", model: "User" })
                             ? { width: "96%" }
@@ -356,7 +356,7 @@ const ConnectionDetails = (_props) => {
                             setName(e);
                             props.onChange(e);
                           }}
-                          iseyevisible={props.value?.includes("*") ? true : false}
+                          iseyevisible={getValues("name")?.includes("*") ? true : false}
                           privacy={{
                             uuid: connectionHolderDetail?.uuid,
                             fieldName: "name",
@@ -469,13 +469,14 @@ const ConnectionDetails = (_props) => {
                 //type="number"
                 isMandatory={true}
                 render={(props) => (
-                  <div style={{ display: "flex", alignItems: "baseline", marginRight: props.value?.includes("*") ? "-20px" : "-4%" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", marginRight: getValues("mobileNumber")?.includes("*") ? "-20px" : "-4%" }}>
                     <div className="employee-card-input employee-card-input--front" style={{ position: "relative", marginTop: "4px" }}>
                       +91
                     </div>
                     <TextInput
                       //type="number"
-                      value={props.value}
+                      //value={props.value}
+                      value={getValues("mobileNumber")}
                       autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "mobileNumber"}
                       errorStyle={localFormState.touched.mobileNumber && errors?.mobileNumber?.message ? true : false}
                       onChange={(e) => {
@@ -486,7 +487,7 @@ const ConnectionDetails = (_props) => {
                       labelStyle={{ marginTop: "unset" }}
                       onBlur={props.onBlur}
                       style={
-                        checkifPrivacyValid() && !props.value?.includes("*")
+                        checkifPrivacyValid() && !getValues("mobileNumber")?.includes("*")
                           ? !Digit.Utils.checkPrivacy(privacyData, {
                               uuid: connectionHolderDetail?.uuid,
                               fieldName: "connectionHoldersMobileNumber",
@@ -505,7 +506,7 @@ const ConnectionDetails = (_props) => {
                             setMobileNumber(e);
                             props.onChange(e);
                           }}
-                          iseyevisible={props.value?.includes("*") ? true : false}
+                          iseyevisible={getValues("mobileNumber")?.includes("*") ? true : false}
                           privacy={{
                             uuid: connectionHolderDetail?.uuid,
                             fieldName: "connectionHoldersMobileNumber",
@@ -547,9 +548,9 @@ const ConnectionDetails = (_props) => {
                 }}
                 isMandatory={true}
                 render={(props) => (
-                  <div style={{ display: "flex", alignItems: "baseline", marginRight: props.value?.includes("*") ? "-20px" : "-4%" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", marginRight: getValues("guardian")?.includes("*") ? "-20px" : "-4%" }}>
                     <TextInput
-                      value={props.value}
+                      value={getValues("guardian")}
                       autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "guardian"}
                       errorStyle={localFormState.touched.guardian && errors?.guardian?.message ? true : false}
                       onChange={(e) => {
@@ -560,7 +561,7 @@ const ConnectionDetails = (_props) => {
                       labelStyle={{ marginTop: "unset" }}
                       onBlur={props.onBlur}
                       style={
-                        checkifPrivacyValid() && !props.value?.includes("*")
+                        checkifPrivacyValid() && !getValues("guardian")?.includes("*")
                           ? !Digit.Utils.checkPrivacy(privacyData, {
                               uuid: connectionHolderDetail?.uuid,
                               fieldName: "fatherOrHusbandName",
@@ -579,7 +580,7 @@ const ConnectionDetails = (_props) => {
                             setGuardian(e);
                             props.onChange(e);
                           }}
-                          iseyevisible={props.value?.includes("*") ? true : false}
+                          iseyevisible={getValues("guardian")?.includes("*") ? true : false}
                           privacy={{
                             uuid: connectionHolderDetail?.uuid,
                             fieldName: "fatherOrHusbandName",
@@ -690,9 +691,9 @@ const ConnectionDetails = (_props) => {
                 }}
                 isMandatory={true}
                 render={(props) => (
-                  <div style={{ display: "flex", alignItems: "baseline", marginRight: props.value?.includes("*") ? "-20px" : "-4%" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", marginRight: getValues("address")?.includes("*") ? "-20px" : "-4%" }}>
                     <TextInput
-                      value={props.value}
+                      value={getValues("address")}
                       autoFocus={focusIndex.index === connectionHolderDetail?.key && focusIndex.type === "address"}
                       errorStyle={localFormState.touched.address && errors?.address?.message ? true : false}
                       onChange={(e) => {
@@ -703,7 +704,7 @@ const ConnectionDetails = (_props) => {
                       labelStyle={{ marginTop: "unset" }}
                       onBlur={props.onBlur}
                       style={
-                        checkifPrivacyValid() && !props.value?.includes("*")
+                        checkifPrivacyValid() && !getValues("address")?.includes("*")
                           ? !Digit.Utils.checkPrivacy(privacyData, {
                               uuid: connectionHolderDetail?.uuid,
                               fieldName: "correspondenceAddress",
@@ -722,7 +723,7 @@ const ConnectionDetails = (_props) => {
                             setAddress(e);
                             props.onChange(e);
                           }}
-                          iseyevisible={props.value?.includes("*") ? true : false}
+                          iseyevisible={getValues("address")?.includes("*") ? true : false}
                           privacy={{
                             uuid: connectionHolderDetail?.uuid,
                             fieldName: "correspondenceAddress",

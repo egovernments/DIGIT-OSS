@@ -19,15 +19,15 @@ export const Row = (props) => {
       if (val?.className) {
         return (
           <p className={val?.className} style={val?.style} key={index}>
-            {val?.value}
+            {/*val?.value*/}
             {/*  
               Feature :: Privacy
               privacy object set to the Mask Component
              */}
             {props?.privacy && (
-              <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
+              <span style={{ display: "inline-flex", width: "fit-content" }}>
                 {/* <UnMaskComponent iseyevisible={val?.value?.includes("*")?true:false}></UnMaskComponent> */}
-                <WrapUnMaskComponent   value={value} iseyevisible={val?.value?.includes("*")?true:false} privacy={props?.privacy?.[index]} />
+                <WrapUnMaskComponent  value={val?.value} iseyevisible={val?.value?.includes("*")?true:false} privacy={props?.privacy?.[index]} />
 
               </span>
             )}
