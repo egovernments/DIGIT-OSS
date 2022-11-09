@@ -45,7 +45,8 @@ const Personalinfo = (props) => {
   const [labelValue, setLabelValue] = useState("");
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
-
+  
+  const iconStates = props.dataForIcons
   const applicantInfoPersonal = props.ApiResponseData;
   console.log("personal info applicant data", applicantInfoPersonal);
 
@@ -173,6 +174,7 @@ const Personalinfo = (props) => {
           <Collapse in={open2}>
             <div id="example-collapse-text" style={{ marginTop: 12, paddingLeft: 12, paddingRight: 12 }}>
               <PersonalinfoChild
+                iconColorState={iconStates}
                 showTable={currentRemarklifo}
                 personalinfo={applicantInfoPersonal !== null ? applicantInfoPersonal : null}
                 displayPersonal={open2 ? "block" : "none"}

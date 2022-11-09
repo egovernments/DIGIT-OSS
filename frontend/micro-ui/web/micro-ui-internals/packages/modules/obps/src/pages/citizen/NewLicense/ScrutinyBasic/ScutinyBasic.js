@@ -50,6 +50,7 @@ const ScrutitnyForms = () => {
   const [remarksChanges, setRemarksChanges] = useState("");
   const [disapprovalData, setDisapprovalData] = useState({});
   const [applictaionNo, setApplicationNO] = useState(null);
+  const [iconStates,setIconState]= useState(null)
 
   const getUncheckedPersonalinfos = (data) => {
     setDisplayPersonalInfo(data.data);
@@ -113,7 +114,33 @@ const ScrutitnyForms = () => {
       console.log(error);
     }
   };
+  const handleGetFiledsStatesById=async()=>{
+      const dataToPass={
+        "requestInfo": {
+            "api_id": "1",
+            "ver": "1",
+            "ts": null,
+            "action": "create",
+            "did": "",
+            "key": "",
+            "msg_id": "",
+            "requester_id": "",
+            "auth_token": null
+        }
+    };
+    try {
+      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=123", dataToPass).then((response) => {
+        return response.data;
+      });
 
+      console.log("Response From API", Resp);
+      setIconState(Resp);
+      // setApiResponse(Resp);
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
   const handleGetDisapprovalList = async () => {
     const dataToPass = {
       requestInfo: {
@@ -184,10 +211,14 @@ const ScrutitnyForms = () => {
     handleGetRemarkssValues();
   }, []);
 
+  useEffect(()=>{
+    handleGetFiledsStatesById();
+  },[]);
+
   const curentDataPersonal = (data) => {
     setRemarksChanges(data.data);
   };
-
+  
   console.log(uncheckedValue);
   console.log("React", purpose);
 
@@ -267,6 +298,7 @@ const ScrutitnyForms = () => {
               onClick={() => setOpen(!open)}
               ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantInfo : null}
               showTable={curentDataPersonal}
+              dataForIcons={iconStates}
             ></Personalinfo>
           </div>
           <div>
@@ -276,6 +308,7 @@ const ScrutitnyForms = () => {
               passCheckedList={getCheckedGeneralInfoValue}
               onClick={() => setOpen(!open)}
               ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantPurpose : null}
+              dataForIcons={iconStates}
             ></Genarelinfo>
             {/* </Col> */}
           </div>

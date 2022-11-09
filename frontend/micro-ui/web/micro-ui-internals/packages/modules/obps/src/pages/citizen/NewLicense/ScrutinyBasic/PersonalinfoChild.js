@@ -45,10 +45,176 @@ const PersonalinfoChild = (props) => {
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
   const [fieldValue, setFieldValue] = useState("");
-  // const [fieldValue1, setFieldValue1] = useState("");
+  const [colorOfDeveloperIcon,setColorofDeveloperIcon]=useState("#FFB602");
+  const [colorOfDeveloperIcon1,setColorofDeveloperIcon1]=useState("#FFB602");
+  const [colorOfDeveloperIcon2,setColorofDeveloperIcon2]=useState("#FFB602");
+  const [colorOfDeveloperIcon3,setColorofDeveloperIcon3]=useState("#FFB602");
+  // const [colorOfDeveloperIcon4,setColorofDeveloperIcon4]=useState("#FFB602");
+  // const [colorOfDeveloperIcon5,setColorofDeveloperIcon5]=useState("#FFB602");
+  // const [colorOfDeveloperIcon6,setColorofDeveloperIcon6]=useState("#FFB602");
+  // const [colorOfDeveloperIcon7,setColorofDeveloperIcon7]=useState("#FFB602");
+  
+
+    // const [fieldValue1, setFieldValue1] = useState("");
 
   const personalinfo = props.personalinfo;
+  const iconStates = props.iconColorState;
 
+
+  const getColorofFieldIcon=()=>{
+    if (iconStates!==null && iconStates!==undefined) {
+      console.log("color method called");
+      const fieldPresent = iconStates.egScrutiny.filter((el)=> {
+        if (el.fieldIdL==="Developer") {
+            return el;
+        }
+      });
+      console.log("filteration value", fieldPresent);
+      if (!fieldPresent[0].isApproved) {
+        setColorofDeveloperIcon("#ff0000");
+      }else if (fieldPresent[0].isApproved) {
+        setColorofDeveloperIcon("#09cb3d")
+      }
+    }
+  };
+  const getColorofFieldIcon1=()=>{
+    if (iconStates!==null && iconStates!==undefined) {
+      console.log("color method called");
+      const fieldPresent = iconStates.egScrutiny.filter((el)=> {
+        if (el.fieldIdL==="Authorized Person Name") {
+            return el;
+        }
+      });
+      console.log("filteration value1", fieldPresent);
+      if (!fieldPresent[0].isApproved) {
+        setColorofDeveloperIcon1("#ff0000");
+      }else if (fieldPresent[0].isApproved) {
+        setColorofDeveloperIcon1("#09cb3d")
+      }
+    }
+  };
+  const getColorofFieldIcon2=()=>{
+    if (iconStates!==null && iconStates!==undefined) {
+      console.log("color method called");
+      const fieldPresent = iconStates.egScrutiny.filter((el)=> {
+        if (el.fieldIdL==="Autrhoized Mobile No") {
+            return el;
+        }
+      });
+      console.log("filteration value2", fieldPresent);
+      if (!fieldPresent[0].isApproved) {
+        setColorofDeveloperIcon2("#ff0000");
+      }else if (fieldPresent[0].isApproved) {
+        setColorofDeveloperIcon2("#09cb3d")
+      }
+    }
+  };
+  const getColorofFieldIcon3=()=>{
+    if (iconStates!==null && iconStates!==undefined) {
+      console.log("color method called");
+      const fieldPresent = iconStates.egScrutiny.filter((el)=> {
+        if (el.fieldIdL==="Authorized MobileNo. 2 ") {
+            return el;
+        }
+      });
+      console.log("filteration value3", fieldPresent);
+      if (!fieldPresent[0].isApproved) {
+        setColorofDeveloperIcon3("#ff0000");
+      }else if (fieldPresent[0].isApproved) {
+        setColorofDeveloperIcon3("#09cb3d")
+      }
+    }
+  };
+  // const getColorofFieldIcon4=()=>{
+  //   if (iconStates!==null && iconStates!==undefined) {
+  //     console.log("color method called");
+  //     const fieldPresent = iconStates.egScrutiny.filter((el)=> {
+  //       if (el.fieldIdL==="Email ID") {
+  //           return el;
+  //       }
+  //     });
+  //     console.log("filteration value4", fieldPresent);
+  //     if (!fieldPresent[0].isApproved) {
+  //       setColorofDeveloperIcon4("#ff0000");
+  //     }else if (fieldPresent[0].isApproved) {
+  //       setColorofDeveloperIcon4("#09cb3d")
+  //     }
+  //   }
+  // };
+  // const getColorofFieldIcon5=()=>{
+  //   if (iconStates!==null && iconStates!==undefined) {
+  //     console.log("color method called");
+  //     const fieldPresent = iconStates.egScrutiny.filter((el)=> {
+  //       if (el.fieldIdL==="PAN No.") {
+  //           return el;
+  //       }
+  //     });
+  //     console.log("filteration value5", fieldPresent);
+  //     if (!fieldPresent[0].isApproved) {
+  //       setColorofDeveloperIcon5("#ff0000");
+  //     }else if (fieldPresent[0].isApproved) {
+  //       setColorofDeveloperIcon5("#09cb3d")
+  //     }
+  //   }
+  // };
+  // const getColorofFieldIcon6=()=>{
+  //   if (iconStates!==null && iconStates!==undefined) {
+  //     console.log("color method called");
+  //     const fieldPresent = iconStates.egScrutiny.filter((el)=> {
+  //       if (el.fieldIdL==="Address  1") {
+  //           return el;
+  //       }
+  //     });
+  //     console.log("filteration value6", fieldPresent);
+  //     if (!fieldPresent[0].isApproved) {
+  //       setColorofDeveloperIcon6("#ff0000");
+  //     }else if (fieldPresent[0].isApproved) {
+  //       setColorofDeveloperIcon6("#09cb3d")
+  //     }
+  //   }
+  // };
+  // const getColorofFieldIcon7=()=>{
+  //   if (iconStates!==null && iconStates!==undefined) {
+  //     console.log("color method called");
+  //     const fieldPresent = iconStates.egScrutiny.filter((el)=> {
+  //       if (el.fieldIdL==="Village/City") {
+  //           return el;
+  //       }
+  //     });
+  //     console.log("filteration value6", fieldPresent);
+  //     if (!fieldPresent[0].isApproved) {
+  //       setColorofDeveloperIcon7("#ff0000");
+  //     }else if (fieldPresent[0].isApproved) {
+  //       setColorofDeveloperIcon7("#09cb3d")
+  //     }
+  //   }
+  // };
+
+  useEffect(()=>{
+    getColorofFieldIcon();
+    getColorofFieldIcon1();
+   
+    
+    // getColorofFieldIcon8();
+
+  })
+  useEffect(()=>{
+    getColorofFieldIcon2();
+    getColorofFieldIcon3();
+  })
+  // useEffect(()=>{
+  //   getColorofFieldIcon4();
+  //   getColorofFieldIcon5();
+  
+  // })
+  // useEffect(()=>{
+   
+  //   getColorofFieldIcon6();
+  //   getColorofFieldIcon7();
+  // })
+ 
+  
+  
   const currentRemarks = (data) => {
     props.showTable({ data: data.data });
   };
@@ -235,7 +401,10 @@ const PersonalinfoChild = (props) => {
   });
 
   console.log("color for the deeloper", developerInputFiledColor);
-
+  console.log("icon color stats", iconStates);
+  console.log("color for developers", colorOfDeveloperIcon)
+  console.log("color for developers1", colorOfDeveloperIcon1)
+  console.log("color for developers3", colorOfDeveloperIcon3)
   return (
     <Form.Group style={{ display: props.displayPersonal, border: "2px solid #e9ecef", margin: 5 }}>
       <Row className="ms-auto" style={{ marginTop: 20, marginBottom: 20 }}>
@@ -258,9 +427,11 @@ const PersonalinfoChild = (props) => {
                 color:
                   developerInputFiledColor.length > 0
                     ? developerInputFiledColor[0].color.data
-                    : developerInputCheckedFiledColor.length > 0
-                    ? developerInputCheckedFiledColor[0].color.data
-                    : "#FFB602",
+                    : developerInputCheckedFiledColor.length > 0? 
+                    developerInputCheckedFiledColor[0].color.data
+                    :
+                    colorOfDeveloperIcon
+                
               }}
               onClick={() => {
                 setLabelValue("Developer"),
@@ -302,7 +473,8 @@ const PersonalinfoChild = (props) => {
                     ? developerInputFiledColor1[0].color.data
                     : developerInputCheckedFiledColor1.length > 0
                     ? developerInputCheckedFiledColor1[0].color.data
-                    : "#FFB602",
+                    : 
+                    colorOfDeveloperIcon1
               }}
               onClick={() => {
                 setLabelValue("Authorized Person Name"),
@@ -341,39 +513,6 @@ const PersonalinfoChild = (props) => {
             <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
             {/* <ReportProblemIcon style={{ color: warningOrred }} onClick={() => setSmShow(true)}></ReportProblemIcon> */}
           </div>
-
-          {/* <Form.Check
-          value="Authorized Mobile No"
-          type="radio"
-          id="default-radio"
-          //  label={<AiFillCheckCircle class="fa fa-check text-success" size={18}></AiFillCheckCircle>}
-          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          name="group2"
-          inline
-        ></Form.Check>
-        <Form.Check
-          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-          value="Authorized Mobile No"
-          type="radio"
-          id="default-radio"
-          //  label={<AiFillCloseCircle class="fa fa-times text-danger" size={18}></AiFillCloseCircle>}
-          label={<CancelIcon color="error" />}
-          name="group2"
-          inline
-        ></Form.Check> */}
-
-          {/*  <div style={{ display: "flex" }}>
-          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
-          &nbsp;&nbsp;
-          <ReportProblemIcon
-            style={{
-              color: "black",
-            }}
-            onClick={() => {
-              setLabelValue("developer"), setSmShow(true), console.log("modal open");
-            }}
-          ></ReportProblemIcon></div> */}
-
           <div style={{ display: "flex" }}>
             <Form.Control
               style={{ maxWidth: 200, marginRight: 5, height: 30 }}
@@ -388,10 +527,11 @@ const PersonalinfoChild = (props) => {
                     ? developerInputFiledColor2[0].color.data
                     : developerInputCheckedFiledColor2.length > 0
                     ? developerInputCheckedFiledColor2[0].color.data
-                    : "#FFB602",
+                    : 
+                     colorOfDeveloperIcon2
               }}
               onClick={() => {
-                setLabelValue("Authorized Mobile No"),
+                setLabelValue("Autrhoized Mobile No"),
                   setSmShow(true),
                   console.log("modal open"),
                   setFieldValue(personalinfo !== null ? personalinfo.authorizedmobile : null);
@@ -490,7 +630,9 @@ const PersonalinfoChild = (props) => {
                     ? developerInputFiledColor3[0].color.data
                     : developerInputCheckedFiledColor3.length > 0
                     ? developerInputCheckedFiledColor3[0].color.data
-                    : "#FFB602",
+                    : 
+                    colorOfDeveloperIcon3
+                    
               }}
               onClick={() => {
                 setLabelValue("Authorized MobileNo. 2 "),
@@ -543,7 +685,9 @@ const PersonalinfoChild = (props) => {
                     ? developerInputFiledColor4[0].color.data
                     : developerInputCheckedFiledColor4.length > 0
                     ? developerInputCheckedFiledColor4[0].color.data
-                    : "#FFB602",
+                    :  "#FFB602",
+                    // colorOfDeveloperIcon4
+                    
               }}
               onClick={() => {
                 setLabelValue("Email ID"),
@@ -595,7 +739,8 @@ const PersonalinfoChild = (props) => {
                     ? developerInputFiledColor5[0].color.data
                     : developerInputCheckedFiledColor5.length > 0
                     ? developerInputCheckedFiledColor5[0].color.data
-                    : "#FFB602",
+                    :  "#FFB602",
+                    // colorOfDeveloperIcon5
               }}
               onClick={() => {
                 setLabelValue("PAN No."),
@@ -649,7 +794,8 @@ const PersonalinfoChild = (props) => {
                     ? developerInputFiledColor6[0].color.data
                     : developerInputCheckedFiledColor6.length > 0
                     ? developerInputCheckedFiledColor6[0].color.data
-                    : "#FFB602",
+                    :  "#FFB602",
+                    // colorOfDeveloperIcon6
               }}
               onClick={() => {
                 setLabelValue("Address  1"),
@@ -701,7 +847,8 @@ const PersonalinfoChild = (props) => {
                     ? developerInputFiledColor7[0].color.data
                     : developerInputCheckedFiledColor7.length > 0
                     ? developerInputCheckedFiledColor7[0].color.data
-                    : "#FFB602",
+                    :  "#FFB602",
+                    // colorOfDeveloperIcon7
               }}
               onClick={() => {
                 setLabelValue("Village/City"),
