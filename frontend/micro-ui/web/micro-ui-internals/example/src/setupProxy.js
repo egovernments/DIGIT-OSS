@@ -3,11 +3,11 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const createProxy = createProxyMiddleware({
   //target: process.env.REACT_APP_PROXY_API || "https://uat.digit.org",
   // target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
-  target: process.env.REACT_APP_PROXY_API || "http://10.1.1.18:8443",
+  target: process.env.REACT_APP_PROXY_API || "http://tcp.abm.com:8443",
   changeOrigin: true,
 });
 const assetsProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_ASSETS || "http://10.1.1.18:8443",
+  target: process.env.REACT_APP_PROXY_ASSETS || "http://tcp.abm.com:8443",
   changeOrigin: true,
 });
 const apiSetuProxy = createProxyMiddleware({

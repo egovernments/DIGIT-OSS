@@ -523,8 +523,8 @@ const ApllicantPuropseForm = (props) => {
     });
   };
 
-  const applicantPurposeBack = async (data) => {
-    console.log("data==============", data);
+  const applicantPurposeBack = async () => {
+    props.Step2Back();
   };
 
   const handleChange = (e) => {
@@ -626,8 +626,6 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
         return Resp;
       });
-
-      console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
       props.Step2Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
       setFinalSubmitData(Resp.data);
     } catch (error) {
@@ -752,24 +750,17 @@ const ApllicantPuropseForm = (props) => {
                 <WorkingTable columns={columns} data={modalData} />
               </div>
             </Form.Group>
+
             <div class="row">
               <div class="col-sm-12 text-left">
-                <button
-                  type="submit"
-                  id="btnClear"
-                  class="btn btn-primary btn-md center-block"
-                  style={{ marginBottom: "-44px" }}
-                  onClick={applicantPurposeBack}
-                >
+                <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => applicantPurposeBack()}>
                   Back
-                </button>
-              </div>
-              <div class="row">
-                <div class="col-sm-12 text-right">
-                  <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-                    Save and Continue
-                  </button>
                 </div>
+              </div>
+              <div class="col-sm-12 text-right">
+                <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+                  Save and Continue
+                </button>
               </div>
             </div>
           </Card>

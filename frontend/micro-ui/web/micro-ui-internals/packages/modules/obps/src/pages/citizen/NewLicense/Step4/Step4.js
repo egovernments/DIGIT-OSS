@@ -999,18 +999,15 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td align="right">
-                            {" "}
                             <input type="number" {...register("undeterminedPlot")} />
                           </td>
                           <td component="th" scope="row">
                             <input type="text" className="form-control" {...register("undeterminedLength")} />
                           </td>
                           <td align="right">
-                            {" "}
                             <input type="number" className="form-control" {...register("undeterminedDim")} />
                           </td>
                           <td align="right">
-                            {" "}
                             <input type="number" className="form-control" {...register("undeterminedAreaenter")} />
                           </td>
                         </tr>
@@ -1038,12 +1035,16 @@ const AppliedDetailForm = (props) => {
                         {" "}
                         Whether you want to surrender the 10% area of license colony to Govt. the instead of providing 10% under EWS and NPNL plots{" "}
                       </td>
-                      <td component="th" scope="row">
+                      <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                         <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow0} />
-                        <label for="Yes">Yes</label>
+                        <label style={{ margin: "0" }} for="Yes">
+                          Yes
+                        </label>
 
                         <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
-                        <label for="No">No</label>
+                        <label style={{ margin: "0" }} for="No">
+                          No
+                        </label>
                         {showhide0 === "Yes" && (
                           <div className="row ">
                             <div className="col col-12">
@@ -1058,26 +1059,27 @@ const AppliedDetailForm = (props) => {
                     <tr>
                       <td>2. </td>
                       <td>Whether any pocket proposed to be transferred less than 1 acre </td>
-                      <td component="th" scope="row">
+                      <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                         <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow13} />
-                        <label for="Yes">Yes</label>
+                        <label style={{ margin: "0" }} for="Yes">
+                          Yes
+                        </label>
 
                         <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow13} />
-                        <label for="No">No</label>
+                        <label style={{ margin: "0" }} for="No">
+                          No
+                        </label>
                         {showhide13 === "Yes" && (
                           <div className="row ">
                             <div className="col col-6">
                               <label>
-                                {" "}
                                 Dimension (in mtr)&nbsp;&nbsp;
                                 <CalculateIcon color="primary" />
                               </label>
-
                               <input type="text" className="form-control" {...register("pocketDim")} />
                             </div>
                             <div className="col col-6">
                               <label> Enter Area </label>
-
                               <input type="text" className="form-control" {...register("pocketAreaenter")} />
                             </div>
                           </div>
@@ -1087,12 +1089,15 @@ const AppliedDetailForm = (props) => {
                     <tr>
                       <td>3. </td>
                       <td>Whether you want to deposit an amount @ of 3 times of collector rate instead of the surrender 10% land to Govt. </td>
-                      <td component="th" scope="row">
+                      <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                         <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow1} />
-                        <label for="Yes">Yes</label>
-
+                        <label style={{ margin: "0" }} for="Yes">
+                          Yes
+                        </label>
                         <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow1} />
-                        <label for="No">No</label>
+                        <label style={{ margin: "0" }} for="No">
+                          No
+                        </label>
                         {showhide1 === "Yes" && (
                           <div className="row ">
                             <div className="col col-12">
@@ -1100,7 +1105,6 @@ const AppliedDetailForm = (props) => {
                                 Area in Acres &nbsp;&nbsp;
                                 <CalculateIcon color="primary" />
                               </label>
-
                               <input type="text" className="form-control" {...register("depositArea")} />
                             </div>
                           </div>
@@ -1110,12 +1114,16 @@ const AppliedDetailForm = (props) => {
                     <tr>
                       <td>4. </td>
                       <td>Whether the surrendered area is having a minimum of 18 mtr independent access </td>
-                      <td component="th" scope="row">
+                      <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                         <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow14} />
-                        <label for="Yes">Yes</label>
+                        <label style={{ margin: "0" }} for="Yes">
+                          Yes
+                        </label>
 
                         <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow14} />
-                        <label for="No">No</label>
+                        <label style={{ margin: "0" }} for="No">
+                          No
+                        </label>
                         {showhide14 === "Yes" && (
                           <div className="row ">
                             <div className="col col-12">
@@ -1128,7 +1136,6 @@ const AppliedDetailForm = (props) => {
                             </div>
                             <div className="col col-12">
                               <label>Enter Area</label>
-
                               <input type="text" className="form-control" />
                             </div>
                           </div>
@@ -1143,48 +1150,45 @@ const AppliedDetailForm = (props) => {
                 <br></br>
                 <div className="row">
                   <div className="col col-3">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Demarcation plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h6>
-
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Democratic Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h6>
-
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Sectoral Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h6>
-
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Upload Layout Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h6>
-
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                 </div>
                 <div className="row">
                   <div className="col col-3">
                     <h6
+                      style={{ display: "flex" }}
                       data-toggle="tooltip"
                       data-placement="top"
                       title="Copy of plans showing cross sections of proposed roads indicating, in particular, the width of proposed carriage ways cycle tracks and footpaths etc"
                     >
                       Plans showing cross sections &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h6>
-
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
                     <h6
+                      style={{ display: "flex" }}
                       data-toggle="tooltip"
                       data-placement="top"
                       title="Copy of plans indicating, in addition, the position of sewers, stormwater channels, water supply and any other public health services."
@@ -1197,17 +1201,18 @@ const AppliedDetailForm = (props) => {
                   </div>
                   <div className="col col-3">
                     <h6
+                      style={{ display: "flex" }}
                       data-toggle="tooltip"
                       data-placement="top"
                       title="Copy of detailed specifications and designs of road works and estimated costs thereof"
                     >
                       Specifications and designs of road works &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h6>
-
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
                     <h6
+                      style={{ display: "flex" }}
                       data-toggle="tooltip"
                       data-placement="top"
                       title="Copy of detailed specifications and designs of sewerage, storm, water and water supply works and estimated costs thereof"
@@ -1221,6 +1226,7 @@ const AppliedDetailForm = (props) => {
                 <div className="row">
                   <div className="col col-3">
                     <h6
+                      style={{ display: "flex" }}
                       data-toggle="tooltip"
                       data-placement="top"
                       title="Copy of detailed specifications and designs for disposal and treatment of storm and sullage water and estimated costs of works."
@@ -1233,6 +1239,7 @@ const AppliedDetailForm = (props) => {
                   </div>
                   <div className="col col-3">
                     <h6
+                      style={{ display: "flex" }}
                       data-toggle="tooltip"
                       data-placement="top"
                       title="Whether intimated each of the allottees through registered post regarding the proposed changes in the layout plan: - If yes selected upload"
@@ -1244,6 +1251,7 @@ const AppliedDetailForm = (props) => {
                   </div>
                   <div className="col col-3">
                     <h6
+                      style={{ display: "flex" }}
                       data-toggle="tooltip"
                       data-placement="top"
                       title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
@@ -1254,7 +1262,7 @@ const AppliedDetailForm = (props) => {
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Report any objection from any of the allottees &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h6>
 
@@ -1263,14 +1271,24 @@ const AppliedDetailForm = (props) => {
                 </div>
                 <div className="row">
                   <div className="col col-3">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Consent of RERA if there is any change in the phasing .">
+                    <h6
+                      style={{ display: "flex" }}
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Consent of RERA if there is any change in the phasing ."
+                    >
                       Consent of RERA &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h6>
 
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Undertaking that no change has been made in the phasing ">
+                    <h6
+                      style={{ display: "flex" }}
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Undertaking that no change has been made in the phasing "
+                    >
                       Undertaking &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h6>
 
@@ -1278,6 +1296,7 @@ const AppliedDetailForm = (props) => {
                   </div>
                   <div className="col col-3">
                     <h6
+                      style={{ display: "flex" }}
                       data-toggle="tooltip"
                       data-placement="top"
                       title="Copy of detailed specifications and designs for electric supply including street lighting"
@@ -1288,7 +1307,12 @@ const AppliedDetailForm = (props) => {
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Explanatory note regarding the salient feature of the proposed colony.">
+                    <h6
+                      style={{ display: "flex" }}
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="Explanatory note regarding the salient feature of the proposed colony."
+                    >
                       Salient feature of the proposed colony &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h6>
 
@@ -1297,16 +1321,14 @@ const AppliedDetailForm = (props) => {
                 </div>
                 <div class="row">
                   <div class="col-sm-12 text-left">
-                    <button id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
+                    <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => props?.step4Back()}>
                       Back
-                    </button>
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-12 text-right">
-                      <button id="btnSearch" class="btn btn-primary btn-md center-block">
-                        Save and Continue
-                      </button>
                     </div>
+                  </div>
+                  <div class="col-sm-12 text-right">
+                    <button id="btnSearch" class="btn btn-primary btn-md center-block">
+                      Save and Continue
+                    </button>
                   </div>
                 </div>
               </Col>

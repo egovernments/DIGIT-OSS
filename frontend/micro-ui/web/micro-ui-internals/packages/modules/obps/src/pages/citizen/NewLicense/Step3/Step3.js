@@ -1162,28 +1162,28 @@ const LandScheduleForm = (props) => {
                 <br></br>
                 <div className="row">
                   <div className="col col-3">
-                    <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Land schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Copy of Mutation &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Copy of Jamabandi &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Details of lease / patta, if any &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
@@ -1193,14 +1193,14 @@ const LandScheduleForm = (props) => {
                 <br></br>
                 <div className="row">
                   <div className="col col-3">
-                    <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Add sales/Deed/exchange/gift deed, mutation, lease/Patta &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       {" "}
                       Copy of spa/GPA/board resolution to sign collaboration agrrement &nbsp;&nbsp;
                       <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
@@ -1209,14 +1209,14 @@ const LandScheduleForm = (props) => {
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Revised Land Schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Copy of Shajra Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
@@ -1225,9 +1225,9 @@ const LandScheduleForm = (props) => {
                 </div>
                 <div class="row">
                   <div class="col-sm-12 text-left">
-                    <button id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
+                    <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => props?.Step3Back()}>
                       Back
-                    </button>
+                    </div>
                   </div>
                   <div class="row">
                     <div class="col-sm-12 text-right">
