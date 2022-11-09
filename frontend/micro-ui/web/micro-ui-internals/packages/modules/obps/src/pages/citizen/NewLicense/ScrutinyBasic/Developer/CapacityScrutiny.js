@@ -1,91 +1,3 @@
-// import * as React from "react";
-// import Box from "@mui/material/Box";
-// import Button from "@mui/material/Button";
-// import Dialog from "@mui/material/Dialog";
-// import DialogActions from "@mui/material/DialogActions";
-// import DialogContent from "@mui/material/DialogContent";
-// import DialogContentText from "@mui/material/DialogContentText";
-// import DialogTitle from "@mui/material/DialogTitle";
-// import FormControl from "@mui/material/FormControl";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import InputLabel from "@mui/material/InputLabel";
-// import MenuItem from "@mui/material/MenuItem";
-// import Select from "@mui/material/Select";
-// import Switch from "@mui/material/Switch";
-
-// export default function MaxWidthDialog() {
-//   const [open, setOpen] = React.useState(false);
-//   const [fullWidth, setFullWidth] = React.useState(true);
-//   const [maxWidth, setMaxWidth] = React.useState("sm");
-
-//   const handleClickOpen = () => {
-//     setOpen(true);
-//   };
-
-//   const handleClose = () => {
-//     setOpen(false);
-//   };
-
-//   const handleMaxWidthChange = (event) => {
-//     setMaxWidth(
-//       // @ts-expect-error autofill of arbitrary value is not handled.
-//       event.target.value
-//     );
-//   };
-
-//   const handleFullWidthChange = (event) => {
-//     setFullWidth(event.target.checked);
-//   };
-
-//   return (
-//     <React.Fragment>
-//       <Button variant="outlined" onClick={handleClickOpen}>
-//         Open max-width dialog
-//       </Button>
-//       <Dialog fullWidth={fullWidth} maxWidth={maxWidth} open={open} onClose={handleClose}>
-//         <DialogTitle>Optional sizes</DialogTitle>
-//         <DialogContent>
-//           <DialogContentText>You can set my maximum width and whether to adapt or not.</DialogContentText>
-//           <Box
-//             noValidate
-//             component="form"
-//             sx={{
-//               display: "flex",
-//               flexDirection: "column",
-//               m: "auto",
-//               width: "fit-content",
-//             }}
-//           >
-//             <FormControl sx={{ mt: 2, minWidth: 120 }}>
-//               <InputLabel htmlFor="max-width">maxWidth</InputLabel>
-//               <Select
-//                 autoFocus
-//                 value={maxWidth}
-//                 onChange={handleMaxWidthChange}
-//                 label="maxWidth"
-//                 inputProps={{
-//                   name: "max-width",
-//                   id: "max-width",
-//                 }}
-//               >
-//                 <MenuItem value={false}>false</MenuItem>
-//                 <MenuItem value="xs">xs</MenuItem>
-//                 <MenuItem value="sm">sm</MenuItem>
-//                 <MenuItem value="md">md</MenuItem>
-//                 <MenuItem value="lg">lg</MenuItem>
-//                 <MenuItem value="xl">xl</MenuItem>
-//               </Select>
-//             </FormControl>
-//             <FormControlLabel sx={{ mt: 1 }} control={<Switch checked={fullWidth} onChange={handleFullWidthChange} />} label="Full width" />
-//           </Box>
-//         </DialogContent>
-//         <DialogActions>
-//           <Button onClick={handleClose}>Close</Button>
-//         </DialogActions>
-//       </Dialog>
-//     </React.Fragment>
-//   );
-// }
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { useForm } from "react-hook-form";
@@ -103,23 +15,15 @@ import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 
+import ModalChild from "../Remarks/ModalChild";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
 const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data }) => {
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
-  // const financialCapacity = useSelector(selectFinancialCapacity)
-  // const cin_Number = useSelector(selectCinNumber)
-  // const companyName = useSelector(selectCompanayNAme)
-  // const dateOfCorporation = useSelector(selectDateOfCorporation)
-  // const registeredAddress = useSelector(selectRegisteredAddress)
-  // const email = useSelector(selectEmail)
-  // const mobileNumber = useSelector(selectMobileNumber)
-  // const gst_Number = useSelector(selectGst_Number)
-  // const shareHoldingPatterens = useSelector(selectShareHoldingPatterens)
-  // const directorsData = useSelector(selectDirectorsInformation);
-  // const authUserName = useSelector(selectmodalAuthUserValuesArray);
+
   const [isDevType, setIsDevType] = useState(false);
   const [isDevTypeComp, setIsDevTypeComp] = useState(false);
   const [modal, setmodal] = useState(false);
@@ -179,6 +83,125 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
   // console.log("AUTHNAME", authUserName);
 
   // const dispatch = useDispatch();
+
+  const [uncheckedValue, setUncheckedVlue] = useState([]);
+  const [checkValue, setCheckedVAlue] = useState([]);
+
+  const [open2, setOpen2] = useState(false);
+  const [messege, setMessege] = useState("");
+  const [developerLabel, setDeveloperLabel] = useState(true);
+  const [show, setshow] = useState(false);
+  const [show3, setshow3] = useState(false);
+  const [smShow, setSmShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const [noChecked, setNochecked] = useState(true);
+  const [warningOrred, setwarningOrred] = useState("#ffcf33");
+  const [color, setColor] = useState({ yes: false, no: false });
+  const [smShow2, setSmShow2] = useState(false);
+  const [smShow3, setSmShow3] = useState(false);
+  const [labelValue, setLabelValue] = useState("");
+
+  const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
+  const [isyesOrNochecked, setYesorNochecked] = useState(true);
+  const [fieldValue, setFieldValue] = useState("");
+  // const [fieldValue1, setFieldValue1] = useState("");
+
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
+
+  const handlemodaldData = (data) => {
+    setmodaldData(data.data);
+    setSmShow(false);
+  };
+
+  const handleYesOrNochecked = (data) => {
+    setYesorNochecked(data.data);
+  };
+  const handlemodalsubmit = () => {
+    console.log("here");
+    const filteredObj = uncheckedValue.filter((obj) => {
+      return obj.label == modaldData.label;
+    });
+    const filteredObjCheked = checkValue.filter((obj) => {
+      return obj.label == modaldData.label;
+    });
+    if (filteredObj.length !== 0) {
+      const removedList = uncheckedValue.filter((obj) => {
+        return obj.label !== modaldData.label;
+      });
+      setUncheckedVlue(removedList);
+    }
+    if (filteredObjCheked.length !== 0) {
+      const removedList = checkValue.filter((obj) => {
+        return obj.label !== modaldData.label;
+      });
+      setCheckedVAlue(removedList);
+    }
+
+    if (isyesOrNochecked === false) {
+      if (modaldData.label !== "" || modaldData.Remarks !== "") {
+        if (filteredObj.length === 0) {
+          setUncheckedVlue((prev) => [...prev, modaldData]);
+        }
+      }
+    } else {
+      if (modaldData.label !== "" || modaldData.Remarks !== "") {
+        if (filteredObjCheked.length === 0) {
+          setCheckedVAlue((prev) => [...prev, modaldData]);
+        }
+      }
+    }
+  };
+  useEffect(() => {
+    console.log("called");
+    handlemodalsubmit();
+  }, [modaldData.Remarks]);
+  //   useEffect(() => {
+  //     props.passUncheckedList({ data: uncheckedValue });
+  //   }, [uncheckedValue]);
+
+  //   useEffect(() => {
+  //     props.passCheckedList({ data: checkValue });
+  //   }, [checkValue]);
+  console.log("unchecked values", uncheckedValue);
+
+  console.log(uncheckedValue.indexOf("developer"));
+
+  const developerInputFiledColor = uncheckedValue.filter((obj) => {
+    return obj.label === "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act,1975";
+  });
+  const developerInputCheckedFiledColor = checkValue.filter((obj) => {
+    return obj.label === "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act,1975";
+  });
+  const developerInputFiledColor1 = uncheckedValue.filter((obj) => {
+    return obj.label === "Whether any technical expert(s) engaged";
+  });
+  const developerInputCheckedFiledColor1 = checkValue.filter((obj) => {
+    return obj.label === "Whether any technical expert(s) engaged";
+  });
+  const developerInputFiledColor2 = uncheckedValue.filter((obj) => {
+    return obj.label === "technical capacity sought";
+  });
+  const developerInputCheckedFiledColor2 = checkValue.filter((obj) => {
+    return obj.label === "technical capacity sought";
+  });
+  const developerInputFiledColor3 = uncheckedValue.filter((obj) => {
+    return obj.label === "Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as";
+  });
+  const developerInputCheckedFiledColor3 = checkValue.filter((obj) => {
+    return obj.label === "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act,1975";
+  });
+  const developerInputFiledColor4 = uncheckedValue.filter((obj) => {
+    return obj.label === "the proposed developer company/firm";
+  });
+  const developerInputCheckedFiledColor4 = checkValue.filter((obj) => {
+    return obj.label === "the proposed developer company/firm";
+  });
+
+  ////////////////////////////////////////////
   const {
     register,
     handleSubmit,
@@ -188,24 +211,12 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
     console.log("data", data);
   };
   const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] = useState(false);
-  // const AppliedDetailFormSubmitHandler = (e) => {
-  //   e.preventDefault();
-  //   SetAppliedDetailFormSubmitted(true);
-  // };
-  // useEffect(() => {
-  //   if (AppliedDetailFormSubmitted) {
-  //     props.AppliedDetailsFormSubmit(true);
-  //   }
-  // }, [AppliedDetailFormSubmitted]);
+
   const [open, setOpen] = useState(false);
   const [showhide, setShowhide] = useState("No");
   const [showhide1, setShowhide1] = useState("no");
   const [showhide0, setShowhide0] = useState("No");
-  // const [showhide2, setShowhide2] = useState("No");
-  // const [showhide3, setShowhide3] = useState("No");
-  // const [showhide4, setShowhide4] = useState("No");
-  // const [showhide5, setShowhide5] = useState("No");
-  const [showhide6, setShowhide6] = useState("no");
+  const [showhide6, setShowhide6] = useState("No");
 
   const handleshow = (e) => {
     const getshow = e.target.value;
@@ -219,22 +230,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
     const getshow = e.target.value;
     setShowhide1(getshow);
   };
-  // const handleshow2 = (e) => {
-  //   const getshow = e.target.value;
-  //   setShowhide2(getshow);
-  // };
-  // const handleshow3 = (e) => {
-  //   const getshow = e.target.value;
-  //   setShowhide3(getshow);
-  // };
-  // const handleshow4 = (e) => {
-  //   const getshow = e.target.value;
-  //   setShowhide4(getshow);
-  // };
-  // const handleshow5 = (e) => {
-  //   const getshow = e.target.value;
-  //   setShowhide5(getshow);
-  // };
+
   const handleshow6 = (e) => {
     const getshow = e.target.value;
     setShowhide6(getshow);
@@ -245,13 +241,6 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
   };
 
   const devTypeFlagVal = localStorage.getItem("devTypeValueFlag");
-
-  // if(devTypeFlagVal == "1"){
-  //     setIsDevType(true);
-  // }
-  // if(devTypeFlagVal == "0"){
-  //     setIsDevTypeComp(true);
-  // }
 
   const handleArrayValues = () => {
     if (licenceNumber !== "" && nameOfDeveloper !== "" && purposeOfColony !== "") {
@@ -285,69 +274,6 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
   const submitTechdevData = async (e) => {
     //   e.preventDefault();
     const formDataValues = {
-      // "developerDetail" :[
-      //   {
-      //     "devDetail":{
-      //       addInfo:{
-      //         financialCapacity:financialCapacity,
-      //         cin_Number:cin_Number,
-      //         companyName:companyName,
-      //         dateOfCorporation:dateOfCorporation,
-      //         registeredAddress:registeredAddress,
-      //         email:email,
-      //         mobileNumber:mobileNumber,
-      //         gst_Number:gst_Number,
-      //         shareHoldingPatterens:shareHoldingPatterens,
-      //         directorsData:directorsData,
-      //       },
-      //       addRemoveAuthoizedUsers:{
-      //         authUserName:authUserName
-      //       },
-      //       capacityDevelopAColony: {
-      //         capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
-      //         capacityDevelopColonyLawAct:capacityDevelopColonyLawAct,
-      //         technicalExpertEngaged:{
-      //           engineerName:engineerName,
-      //           engineerQualification:engineerQualification,
-      //           engineerSign:engineerSign,
-      //           engineerDegree:engineerDegree,
-      //           architectName:architectName,
-      //           architectQualification:architectQualification,
-      //           architectSign:architectSign,
-      //           architectDegree:architectDegree,
-      //           townPlannerName:townPlannerName,
-      //           townPlannerQualification:townPlannerQualification,
-      //           townPlannerSign:townPlannerSign,
-      //           townPlannerDegree:townPlannerDegree,
-      //           existingDeveloperAgreement:existingDeveloperAgreement,
-      //           existingDeveloperAgreementDoc:existingDeveloperAgreementDoc,
-      //           technicalCapacity:technicalCapacity,
-      //           technicalCapacityDoc:technicalCapacityDoc,
-      //           engineerNameN:engineerNameN,
-      //           engineerDocN:engineerDocN,
-      //           architectNameN:architectNameN,
-      //           architectDocN:architectDocN,
-      //           uplaodSpaBoard:uplaodSpaBoard,
-      //           uplaodSpaBoardDoc:uplaodSpaBoardDoc
-      //         },
-      //         designationDirector:{
-      //           agreementDoc:agreementDoc,
-      //           boardDoc:boardDoc
-      //         },
-      //         obtainedLicense:{
-      //           registeredDoc:registeredDoc,
-      //           boardDocY:boardDocY,
-      //           earlierDocY:earlierDocY,
-      //           boardDocN:boardDocN,
-      //           earlierDocN:earlierDocN,
-      //           technicalAssistanceAgreementDoc:technicalAssistanceAgreementDoc
-      //         }
-
-      //       },
-
-      //     }
-      //   }
-      // ]
       capacityDevelopAColony: {
         capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
         capacityDevelopColonyLawAct: capacityDevelopColonyLawAct,
@@ -390,27 +316,10 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
       },
     };
     onSelect(config.key, formDataValues);
-    //   try {
-    //     let res = await axios.post("http://localhost:8081/user/developer/_registration",formDataValues,{
-    //       headers:{
-    //         'Content-Type': 'application/json',
-    //         'Access-Control-Allow-origin':"*",
-    //     }
-    //     }).then((response)=>{
-    //       return response
-    //     });
-
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
 
     console.log("FINAL SUBMIT", formDataValues);
     localStorage.setItem("capacity", JSON.stringify(formDataValues));
     setcapacityDevelopAColony((prev) => [...prev, formDataValues]);
-
-    // dispatch(setTechnicalData(
-    //   formDataValues
-    // ))
   };
   const jsonobj = localStorage.getItem("capacity");
   console.log(JSON.parse(jsonobj));
@@ -421,9 +330,6 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
   const onSkip = () => onSelect();
   return (
     <div>
-      {/* // <div className={isOpenLinkFlow ? "OpenlinkContainer" : ""}>
-        //     <Timeline currentStep={4} flow="STAKEHOLDER" /> */}
-
       <div
         className="collapse-header"
         onClick={() => setOpen(!open)}
@@ -449,13 +355,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
 
       <Collapse in={open}>
         <div id="example-collapse-text">
-          <FormStep
-            config={config}
-            onSelect={submitTechdevData}
-            onSkip={onSkip}
-            // onClick={submitTechdevData}
-            t={t}
-          >
+          <FormStep config={config} onSelect={submitTechdevData} onSkip={onSkip} t={t}>
             {devTypeFlagVal === "01" && (
               <div className="card-body">
                 <div className="form-group row mb-12">
@@ -465,10 +365,10 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                     <table className="table table-bordered" size="sm">
                       <thead>
                         <tr>
-                          <th>S.No.</th>
-                          <th>Particulars of document</th>
-                          <th>Details </th>
-                          <th>Annexure </th>
+                          <th class="fw-normal">S.No.</th>
+                          <th class="fw-normal">Particulars of document</th>
+                          <th class="fw-normal">Details </th>
+                          <th class="fw-normal">Annexure </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -489,16 +389,14 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
             {devTypeFlagVal === "02" && (
               <div className="card-body">
                 <div className="form-group row">
-                  {/* <label className="col-sm-3 col-form-label">Company</label> */}
                   <div className="col-sm-12">
-                    {/* <input type="text" className="employee-card-input" id="Email" placeholder="Enter Email" /> */}
                     <table className="table table-bordered" size="sm">
                       <thead>
                         <tr>
-                          <th>S.No.</th>
-                          <th>Particulars of document</th>
-                          <th>Details </th>
-                          <th>Annexure </th>
+                          <th class="fw-normal">S.No.</th>
+                          <th class="fw-normal">Particulars of document</th>
+                          <th class="fw-normal">Details </th>
+                          <th class="fw-normal">Annexure </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -508,9 +406,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                           <td>
                             <input type="file" name="upload" placeholder="" class="employee-card-input" />
                           </td>
-                          <td align="center" size="large">
-                            {/* <FileUploadIcon /> */}
-                          </td>
+                          <td align="center" size="large"></td>
                         </tr>
                         <tr>
                           <td> 2 </td>
@@ -518,9 +414,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                           <td>
                             <input type="file" name="upload" placeholder="" class="employee-card-input" />
                           </td>
-                          <td align="center" size="large">
-                            {/* <FileUploadIcon /> */}
-                          </td>
+                          <td align="center" size="large"></td>
                         </tr>
                       </tbody>
                     </table>
@@ -537,10 +431,10 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                     <table className="table table-bordered" size="sm">
                       <thead>
                         <tr>
-                          <th>S.No.</th>
-                          <th>Particulars of document</th>
-                          <th>Details </th>
-                          <th>Annexure </th>
+                          <th class="fw-normal">S.No.</th>
+                          <th class="fw-normal">Particulars of document</th>
+                          <th class="fw-normal">Details </th>
+                          <th class="fw-normal">Annexure </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -570,207 +464,231 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                 </div>
               </div>
             )}
-            {/* <div>
-                    <h5 className="card-h">
-                    {" "}
-                    Capacity of Developer to develop a colony:
-                    </h5>
-                </div> */}
+
             <div className="card-body">
               <p>1. I/ We hereby submit the following information/ enclose the relevant documents:-</p>
               <p>
                 &nbsp;&nbsp;&nbsp; (i) Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act,
                 1975: *{" "}
               </p>
-              <div className="form-group">
-                <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow0} />
-                <label for="Yes">Yes</label>
+              <div>
+                <div style={{ display: "flex" }}>
+                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
+                  <label for="Yes">Yes</label>
+                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
+                  <label for="No">No</label>
+                  &nbsp;&nbsp;
+                  <ReportProblemIcon
+                    style={{
+                      color:
+                        developerInputFiledColor.length > 0
+                          ? developerInputFiledColor[0].color.data
+                          : developerInputCheckedFiledColor.length > 0
+                          ? developerInputCheckedFiledColor[0].color.data
+                          : "#FFB602",
+                    }}
+                    onClick={() => {
+                      setLabelValue(
+                        "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act,1975"
+                      ),
+                        setSmShow(true),
+                        console.log("modal open");
+                    }}
+                  ></ReportProblemIcon>
+                  <ModalChild
+                    labelmodal={labelValue}
+                    passmodalData={handlemodaldData}
+                    isYesorNoChecked={handleYesOrNochecked}
+                    displaymodal={smShow}
+                    setColor={setColor}
+                  ></ModalChild>
+                </div>
+                {/* {showhide0 === "Yes" && ( */}
+                <div className="card-body">
+                  {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
+                  <div className="table-bd">
+                    <Table className="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th class="fw-normal">S. no</th>
+                          <th class="fw-normal"> Licence No / year and date of grant of licence </th>
+                          <th class="fw-normal">Name of developer *</th>
+                          <th class="fw-normal">Purpose of colony </th>
+                          <th class="fw-normal">Sector and development plan </th>
+                          <th class="fw-normal">Validity of licence including renewals if any</th>
+                          {/* <th>Remove</th> */}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* {capacityDevelopColonyHdruAct.length > 0
+                          ? capacityDevelopColonyHdruAct.map((elementInArray, input) => {
+                              return ( */}
+                        <tr>
+                          <td>{/* {input + 1} */}</td>
+                          <td>
+                            <input
+                              type="text"
+                              // value={elementInArray.licenceNumber}
+                              // placeholder={elementInArray.licenceNumber}
+                              class="employee-card-input"
+                              disabled
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              // value={elementInArray.nameOfDeveloper}
+                              // placeholder={elementInArray.nameOfDeveloper}
+                              class="employee-card-input"
+                              disabled
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              // value={elementInArray.purposeOfColony}
+                              // placeholder={elementInArray.purposeOfColony}
+                              class="employee-card-input"
+                              disabled
+                            />
+                          </td>
+                          <td>
+                            <div className="row">
+                              <button className="btn btn-sm col-md-6">
+                                <VisibilityIcon color="info" className="icon" />
+                              </button>
+                              <button className="btn btn-sm col-md-6">
+                                <FileDownloadIcon color="primary" />
+                              </button>
+                            </div>
+                          </td>
+                          <td>
+                            <div className="row">
+                              <button className="btn btn-sm col-md-6">
+                                <VisibilityIcon color="info" className="icon" />
+                              </button>
+                              <button className="btn btn-sm col-md-6">
+                                <FileDownloadIcon color="primary" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                    <div>
+                      {/* <div>
+                        <Modal size="lg" isOpen={modal} toggle={() => setmodal(!modal)}>
+                          <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
 
-                <input type="radio" value="No" id="No" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow0} />
-                <label for="No">No</label>
-                {showhide0 === "Yes" && (
-                  <div className="card-body">
-                    {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
-                    <div className="table-bd">
-                      <Table className="table table-bordered">
-                        <thead>
-                          <tr>
-                            <th>S. no</th>
-                            <th> Licence No / year and date of grant of licence </th>
-                            <th>Name of developer *</th>
-                            <th>Purpose of colony </th>
-                            <th>Sector and development plan </th>
-                            <th>Validity of licence including renewals if any</th>
-                            {/* <th>Remove</th> */}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {capacityDevelopColonyHdruAct.length > 0 ? (
-                            capacityDevelopColonyHdruAct.map((elementInArray, input) => {
-                              return (
-                                <tr>
-                                  <td>{input + 1}</td>
-                                  <td>
-                                    <input
-                                      type="text"
-                                      value={elementInArray.licenceNumber}
-                                      placeholder={elementInArray.licenceNumber}
-                                      class="employee-card-input"
-                                    />
-                                  </td>
-                                  <td>
-                                    <input
-                                      type="text"
-                                      value={elementInArray.nameOfDeveloper}
-                                      placeholder={elementInArray.nameOfDeveloper}
-                                      class="employee-card-input"
-                                    />
-                                  </td>
-                                  <td>
-                                    <input
-                                      type="text"
-                                      value={elementInArray.purposeOfColony}
-                                      placeholder={elementInArray.purposeOfColony}
-                                      class="employee-card-input"
-                                    />
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <button className="btn btn-sm col-md-6">
-                                        <VisibilityIcon color="info" className="icon" />
-                                      </button>
-                                      <button className="btn btn-sm col-md-6">
-                                        <FileDownloadIcon color="primary" />
-                                      </button>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div className="row">
-                                      <button className="btn btn-sm col-md-6">
-                                        <VisibilityIcon color="info" className="icon" />
-                                      </button>
-                                      <button className="btn btn-sm col-md-6">
-                                        <FileDownloadIcon color="primary" />
-                                      </button>
-                                    </div>
-                                  </td>
-                                </tr>
-                              );
-                            })
-                          ) : (
-                            <p>Click on Add more</p>
-                          )}
-                        </tbody>
-                      </Table>
-                      <div>
-                        <button
-                          type="button"
-                          style={{
-                            float: "left",
-                            backgroundColor: "#0b3629",
-                            color: "white",
-                          }}
-                          className="btn mt-3"
-                          // onClick={() => setNoOfRows(noofRows + 1)}
-                          onClick={() => setmodal(true)}
-                        >
-                          Add More
-                        </button>
-
-                        <div>
-                          <Modal size="lg" isOpen={modal} toggle={() => setmodal(!modal)}>
-                            <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
-
-                            <ModalBody>
-                              <div className="card2">
-                                <div className="popupcard">
-                                  <form className="text1">
-                                    <Row>
-                                      <Col md={4} xxl lg="4">
-                                        <label htmlFor="name" className="text">
-                                          Licence No / year of licence
-                                        </label>
-                                        <input
-                                          type="text"
-                                          onChange={(e) => setModalLcNo(e.target.value)}
-                                          placeholder=""
-                                          class="employee-card-input"
-                                        />
-                                      </Col>
-                                      <Col md={4} xxl lg="4">
-                                        <label htmlFor="name" className="text">
-                                          Name of developer *
-                                        </label>
-                                        <input
-                                          type="text"
-                                          onChange={(e) => setModalDevName(e.target.value)}
-                                          placeholder=""
-                                          class="employee-card-input"
-                                        />
-                                      </Col>
-                                      <Col md={4} xxl lg="4">
-                                        <label htmlFor="name" className="text">
-                                          Purpose of colony
-                                        </label>
-                                        <input
-                                          type="text"
-                                          onChange={(e) => setModalPurposeCol(e.target.value)}
-                                          placeholder=""
-                                          class="employee-card-input"
-                                        />
-                                      </Col>
-                                    </Row>
-                                    <Row>
-                                      <Col md={4} xxl lg="4">
-                                        <label htmlFor="name" className="text">
-                                          Sector and development plan
-                                        </label>
-                                        <input
-                                          type="file"
-                                          onChange={(e) => setModalDevPlan(e.target.value)}
-                                          placeholder=""
-                                          class="employee-card-input"
-                                        />
-                                      </Col>
-                                      <Col md={4} xxl lg="4">
-                                        <label htmlFor="name" className="text">
-                                          Validity of licence{" "}
-                                        </label>
-                                        <input
-                                          type="file"
-                                          onChange={(e) => setModalDevValidity(e.target.value)}
-                                          placeholder=""
-                                          class="employee-card-input"
-                                        />
-                                      </Col>
-                                    </Row>
-                                  </form>
-                                </div>
-                                <div className="submit-btn">
-                                  <div className="form-group col-md6 mt-6">
-                                    <button type="button" onClick={handleArrayValues} style={{ float: "right" }} className="btn btn-success">
-                                      Submit
-                                    </button>
-                                  </div>
+                          <ModalBody>
+                            <div className="card2">
+                              <div className="popupcard">
+                                <form className="text1">
+                                  <Row>
+                                    <Col md={4} xxl lg="4">
+                                      <label htmlFor="name" className="text">
+                                        Licence No / year of licence
+                                      </label>
+                                      <input type="text" onChange={(e) => setModalLcNo(e.target.value)} placeholder="" class="employee-card-input" />
+                                    </Col>
+                                    <Col md={4} xxl lg="4">
+                                      <label htmlFor="name" className="text">
+                                        Name of developer *
+                                      </label>
+                                      <input
+                                        type="text"
+                                        onChange={(e) => setModalDevName(e.target.value)}
+                                        placeholder=""
+                                        class="employee-card-input"
+                                      />
+                                    </Col>
+                                    <Col md={4} xxl lg="4">
+                                      <label htmlFor="name" className="text">
+                                        Purpose of colony
+                                      </label>
+                                      <input
+                                        type="text"
+                                        onChange={(e) => setModalPurposeCol(e.target.value)}
+                                        placeholder=""
+                                        class="employee-card-input"
+                                      />
+                                    </Col>
+                                  </Row>
+                                  <Row>
+                                    <Col md={4} xxl lg="4">
+                                      <label htmlFor="name" className="text">
+                                        Sector and development plan
+                                      </label>
+                                      <input
+                                        type="file"
+                                        onChange={(e) => setModalDevPlan(e.target.value)}
+                                        placeholder=""
+                                        class="employee-card-input"
+                                      />
+                                    </Col>
+                                    <Col md={4} xxl lg="4">
+                                      <label htmlFor="name" className="text">
+                                        Validity of licence{" "}
+                                      </label>
+                                      <input
+                                        type="file"
+                                        onChange={(e) => setModalDevValidity(e.target.value)}
+                                        placeholder=""
+                                        class="employee-card-input"
+                                      />
+                                    </Col>
+                                  </Row>
+                                </form>
+                              </div>
+                              <div className="submit-btn">
+                                <div className="form-group col-md6 mt-6">
+                                  <button type="button" onClick={handleArrayValues} style={{ float: "right" }} className="btn btn-success">
+                                    Submit
+                                  </button>
                                 </div>
                               </div>
-                            </ModalBody>
-                            <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
-                          </Modal>
-                        </div>
-                      </div>
-
-                      <br></br>
-                      <br></br>
+                            </div>
+                          </ModalBody>
+                          <ModalFooter toggle={() => setmodal(!modal)}></ModalFooter>
+                        </Modal>
+                      </div> */}
                     </div>
+
+                    <br></br>
+                    <br></br>
                   </div>
-                )}
+                </div>
+                {/* )} */}
               </div>
 
               <div className="hl"></div>
               <p>
                 &nbsp;&nbsp;&nbsp;(ii) Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as .
               </p>
+              <div style={{ display: "flex" }}>
+                {/* <Form.Control
+              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
+              placeholder={personalinfo !== null ? personalinfo.authorizedmobile : null}
+              disabled
+            ></Form.Control> */}
+                &nbsp;&nbsp;
+                <ReportProblemIcon
+                  style={{
+                    color:
+                      developerInputFiledColor3.length > 0
+                        ? developerInputFiledColor3[0].color.data
+                        : developerInputCheckedFiledColor3.length > 0
+                        ? developerInputCheckedFiledColor3[0].color.data
+                        : "#FFB602",
+                  }}
+                  onClick={() => {
+                    setLabelValue("Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as"),
+                      setSmShow(true),
+                      console.log("modal open");
+                    // setFieldValue(personalinfo !== null ? personalinfo.authorizedmobile : null);
+                  }}
+                ></ReportProblemIcon>
+              </div>
               <div>
                 <div className="card-body">
                   {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
@@ -779,69 +697,75 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                       <thead>
                         <tr>
                           {/* <th>Add More</th> */}
-                          <th>S.No</th>
-                          <th>Colonies developed</th>
-                          <th>Area</th>
-                          <th>Purpose</th>
-                          <th>Status of development</th>
-                          <th>Outstanding Dues</th>
+                          <th class="fw-normal">S.No</th>
+                          <th class="fw-normal">Colonies developed</th>
+                          <th class="fw-normal">Area</th>
+                          <th class="fw-normal">Purpose</th>
+                          <th class="fw-normal">Status of development</th>
+                          <th class="fw-normal">Outstanding Dues</th>
                           {/* <th>Action</th> */}
                         </tr>
                       </thead>
                       <tbody>
-                        {capacityDevelopColonyLawAct.length > 0 ? (
+                        {/* {capacityDevelopColonyLawAct.length > 0 ? (
                           capacityDevelopColonyLawAct.map((elementInArray, input) => {
-                            return (
-                              <tr>
-                                <td>{input + 1}</td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    value={elementInArray.coloniesDeveloped}
-                                    placeholder={elementInArray.coloniesDeveloped}
-                                    class="employee-card-input"
-                                  />
-                                </td>
-                                <td>
-                                  <input type="text" value={elementInArray.area} placeholder={elementInArray.area} class="employee-card-input" />
-                                </td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    value={elementInArray.purpose}
-                                    placeholder={elementInArray.purpose}
-                                    class="employee-card-input"
-                                  />
-                                </td>
-                                <td>
-                                  <div className="row">
-                                    <button className="btn btn-sm col-md-6">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6">
-                                      <FileDownloadIcon color="primary" />
-                                    </button>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div className="row">
-                                    <button className="btn btn-sm col-md-6">
-                                      <VisibilityIcon color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6">
-                                      <FileDownloadIcon color="primary" />
-                                    </button>
-                                  </div>
-                                </td>
-                              </tr>
-                            );
+                            return ( */}
+                        <tr>
+                          <td>{/* {input + 1} */}</td>
+                          <td>
+                            <input
+                              type="text"
+                              // value={elementInArray.licenceNumber}
+                              // placeholder={elementInArray.licenceNumber}
+                              class="employee-card-input"
+                              disabled
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              // value={elementInArray.area} placeholder={elementInArray.area}
+                              class="employee-card-input"
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="text"
+                              // value={elementInArray.licenceNumber}
+                              // placeholder={elementInArray.licenceNumber}
+                              class="employee-card-input"
+                              disabled
+                            />
+                          </td>
+                          <td>
+                            <div className="row">
+                              <button className="btn btn-sm col-md-6">
+                                <VisibilityIcon color="info" className="icon" />
+                              </button>
+                              <button className="btn btn-sm col-md-6">
+                                <FileDownloadIcon color="primary" />
+                              </button>
+                            </div>
+                          </td>
+                          <td>
+                            <div className="row">
+                              <button className="btn btn-sm col-md-6">
+                                <VisibilityIcon color="info" className="icon" />
+                              </button>
+                              <button className="btn btn-sm col-md-6">
+                                <FileDownloadIcon color="primary" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                        {/* );
                           })
                         ) : (
                           <p>Click on add more</p>
-                        )}
+                        )} */}
                       </tbody>
                     </Table>
-                    <div>
+                    {/* <div>
                       <button
                         type="button"
                         style={{
@@ -850,14 +774,13 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                           color: "white",
                         }}
                         className="btn mt-3"
-                        // onClick={() => setNoOfRows(noofRows + 1)}
                         onClick={() => setmodalColony(true)}
                       >
                         Add More
                       </button>
 
-                      <div>
-                        <Modal size="lg" isOpen={modalColony} toggle={() => setmodalColony(!modalColony)}>
+                      <div> */}
+                    {/* <Modal size="lg" isOpen={modalColony} toggle={() => setmodalColony(!modalColony)}>
                           <ModalHeader toggle={() => setmodalColony(!modalColony)}></ModalHeader>
 
                           <ModalBody>
@@ -930,9 +853,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                             </div>
                           </ModalBody>
                           <ModalFooter toggle={() => setmodalColony(!modalColony)}></ModalFooter>
-                        </Modal>
-                      </div>
-                    </div>
+                        </Modal> */}
+                    {/* </div>
+                    </div> */}
                     <br></br>
                     <br></br>
                   </div>
@@ -942,129 +865,187 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
               <div className="hl"></div>
               <p>&nbsp;&nbsp;&nbsp;(iii) Whether any technical expert(s) engaged</p>
 
-              <div className="form-group">
-                <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
+              <div>
+                {/* <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
                 <label for="Yes">Yes</label>
 
                 <input type="radio" value="No" id="No" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
-                <label for="No">No</label>
-                {showhide1 === "Yes" && (
-                  <div className="row ">
-                    <div className="form-group row">
-                      <div className="col-sm-12">
-                        <div className="table-bd">
-                          <Table className="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th>S.No</th>
-                                <th>Professional </th>
-                                <th>Qualification</th>
-                                <th>Signature</th>
-                                <th>Annexure</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>1</td>
-                                <td>
-                                  <input
-                                    typr="text"
-                                    onChange={(e) => setEngineerName(e.target.value)}
-                                    placeholder="Name of Engineer"
-                                    class="employee-card-input"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    onChange={(e) => setEngineerQualification(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                  />
-                                </td>
+                <label for="No">No</label> */}
 
-                                <td>
-                                  <input type="file" onChange={(e) => setEngineerSign(e.target.value)} placeholder="" class="employee-card-input" />
-                                </td>
-                                <td align="center" size="large">
-                                  <input type="file" onChange={(e) => setEngineerDegree(e.target.value)} placeholder="" class="employee-card-input" />
-                                </td>
-                              </tr>
+                <div style={{ display: "flex" }}>
+                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
+                  <label for="Yes">Yes</label>
+                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
+                  <label for="No">No</label>
+                  &nbsp;&nbsp;
+                  <ReportProblemIcon
+                    style={{
+                      color:
+                        developerInputFiledColor1.length > 0
+                          ? developerInputFiledColor1[0].color.data
+                          : developerInputCheckedFiledColor1.length > 0
+                          ? developerInputCheckedFiledColor1[0].color.data
+                          : "#FFB602",
+                    }}
+                    onClick={() => {
+                      setLabelValue("Whether any technical expert(s) engaged"), setSmShow(true), console.log("modal open");
+                    }}
+                  ></ReportProblemIcon>
+                </div>
+                {/* {showhide1 === "Yes" && ( */}
+                <div className="row ">
+                  <div className="form-group row">
+                    <div className="col-sm-12">
+                      <div className="table-bd">
+                        <Table className="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th class="fw-normal">S.No</th>
+                              <th class="fw-normal">Professional </th>
+                              <th class="fw-normal">Qualification</th>
+                              <th class="fw-normal">Signature</th>
+                              <th class="fw-normal">Annexure</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>1</td>
+                              <td>
+                                <input
+                                  type="text"
+                                  // value={elementInArray.licenceNumber}
+                                  // placeholder={elementInArray.licenceNumber}
+                                  class="employee-card-input"
+                                  disabled
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  // value={elementInArray.licenceNumber}
+                                  // placeholder={elementInArray.licenceNumber}
+                                  class="employee-card-input"
+                                  disabled
+                                />
+                              </td>
 
-                              <tr>
-                                <td>2</td>
-                                <td>
-                                  <input
-                                    typr="text"
-                                    onChange={(e) => setArchitectName(e.target.value)}
-                                    placeholder="Name of Architect"
-                                    class="employee-card-input"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    onChange={(e) => setArchitectQualification(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                  />
-                                </td>
+                              <td>
+                                <div className="row">
+                                  <button className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </button>
+                                  <button className="btn btn-sm col-md-6">
+                                    <FileDownloadIcon color="primary" />
+                                  </button>
+                                </div>
+                              </td>
+                              <td align="center" size="large">
+                                <div className="row">
+                                  <button className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </button>
+                                  <button className="btn btn-sm col-md-6">
+                                    <FileDownloadIcon color="primary" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
 
-                                <td>
-                                  <input type="file" onChange={(e) => setArchitectSign(e.target.value)} placeholder="" class="employee-card-input" />
-                                </td>
-                                <td align="center" size="large">
-                                  <input type="file" onChange={(e) => setArchitectDegree(e.target.value)} class="employee-card-input" />
-                                </td>
-                              </tr>
+                            <tr>
+                              <td>2</td>
+                              <td>
+                                <input
+                                  type="text"
+                                  // value={elementInArray.licenceNumber}
+                                  // placeholder={elementInArray.licenceNumber}
+                                  class="employee-card-input"
+                                  disabled
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  // value={elementInArray.licenceNumber}
+                                  // placeholder={elementInArray.licenceNumber}
+                                  class="employee-card-input"
+                                  disabled
+                                />
+                              </td>
 
-                              <tr>
-                                <td>3</td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    onChange={(e) => setTownPlannerName(e.target.value)}
-                                    placeholder="Name of Town Planner"
-                                    class="employee-card-input"
-                                  />
-                                </td>
-                                <td>
-                                  <input
-                                    type="text"
-                                    onChange={(e) => setTownPlannerQualification(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                  />
-                                </td>
+                              <td>
+                                <div className="row">
+                                  <button className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </button>
+                                  <button className="btn btn-sm col-md-6">
+                                    <FileDownloadIcon color="primary" />
+                                  </button>
+                                </div>
+                              </td>
+                              <td align="center" size="large">
+                                <div className="row">
+                                  <button className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </button>
+                                  <button className="btn btn-sm col-md-6">
+                                    <FileDownloadIcon color="primary" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
 
-                                <td>
-                                  <input
-                                    type="file"
-                                    onChange={(e) => setTownPlannerSign(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                  />
-                                </td>
-                                <td align="center" size="large">
-                                  <input
-                                    type="file"
-                                    onChange={(e) => setTownPlannerDegree(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                  />
-                                </td>
-                              </tr>
-                            </tbody>
-                          </Table>
-                        </div>
+                            <tr>
+                              <td>3</td>
+                              <td>
+                                <input
+                                  type="text"
+                                  // value={elementInArray.licenceNumber}
+                                  // placeholder={elementInArray.licenceNumber}
+                                  class="employee-card-input"
+                                  disabled
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="text"
+                                  // value={elementInArray.licenceNumber}
+                                  // placeholder={elementInArray.licenceNumber}
+                                  class="employee-card-input"
+                                  disabled
+                                />
+                              </td>
+
+                              <td>
+                                <div className="row">
+                                  <button className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </button>
+                                  <button className="btn btn-sm col-md-6">
+                                    <FileDownloadIcon color="primary" />
+                                  </button>
+                                </div>
+                              </td>
+                              <td align="center" size="large">
+                                <div className="row">
+                                  <button className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </button>
+                                  <button className="btn btn-sm col-md-6">
+                                    <FileDownloadIcon color="primary" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </Table>
                       </div>
                     </div>
                   </div>
-                )}
+                </div>
+                {/* )} */}
                 {showhide1 === "No" && (
                   <div className="row ">
                     <div className="form-group row">
-                      {/* <label className="col-sm-3 col-form-label">Company</label> */}
                       <div className="col-sm-12">
                         <div className="table-bd">
                           <Table className="table table-bordered" size="sm">
@@ -1078,15 +1059,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                             <tbody>
                               <tr>
                                 <td> 1 &nbsp;&nbsp;</td>
-                                <td>
-                                  {" "}
-                                  Agreement with existing colonizer/developer who has already developed a colony
-                                  {/* <input
-                                        type="text"
-                                        onChange={((e) => setExistingDev(e.target.value))}
-                                        placeholder=""
-                                        /> */}
-                                </td>
+                                <td>Agreement with existing colonizer/developer who has already developed a colony</td>
                                 <td align="center" size="large">
                                   <input type="file" onChange={(e) => setExistingDevDoc(e.target.value)} placeholder="" class="employee-card-input" />
                                 </td>
@@ -1141,15 +1114,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                               </tr>
                               <tr>
                                 <td> 5&nbsp;&nbsp; </td>
-                                <td>
-                                  {/* <input
-                                        type="text"
-                                        onChange={((e) => setUplaodSpaBoard(e.target.value))} 
-                                        placeholder=""
-                                        class="employee-card-input"
-                                        /> */}
-                                  Upload SPA/GPA/ Board Resolution to sign collaboration agreement on behalf of land owner(s)
-                                </td>
+                                <td>Upload SPA/GPA/ Board Resolution to sign collaboration agreement on behalf of land owner(s)</td>
                                 <td align="center" size="large">
                                   <input type="file" class="employee-card-input" onChange={(e) => setUplaodSpaBoardDoc(e.target.value)} />
                                 </td>
@@ -1159,8 +1124,6 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                         </div>
                       </div>
                     </div>
-
-                    {/* <input type="text" className="employee-card-input" /> */}
                   </div>
                 )}
               </div>
@@ -1170,16 +1133,33 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                 &nbsp;&nbsp;&nbsp;(iv) If director/partner of the proposed developer company/firm also holds designation of director/partner in any
                 other company/firm who has already obtained license(s) under act of 1975:
               </p>
+              <div style={{ display: "flex" }}>
+                &nbsp;&nbsp;
+                <ReportProblemIcon
+                  style={{
+                    color:
+                      developerInputFiledColor4.length > 0
+                        ? developerInputFiledColor4[0].color.data
+                        : developerInputCheckedFiledColor4.length > 0
+                        ? developerInputCheckedFiledColor4[0].color.data
+                        : "#FFB602",
+                  }}
+                  onClick={() => {
+                    setLabelValue("the proposed developer company/firm "), setSmShow(true), console.log("modal open");
+                  }}
+                ></ReportProblemIcon>
+              </div>
 
-              <div className="form-group">
+              <div>
                 <input
                   type="radio"
                   value="Yes"
                   id="Yes"
                   className="mx-2 mt-1"
-                  onChange={(e) => handleChange(e.target.value)}
-                  name="Yes"
-                  onClick={handleshow}
+                  // onChange={(e) => handleChange(e.target.value)}
+                  // name="Yes"
+                  // onClick={handleshow}
+                  disabled
                 />
                 <label for="Yes">Yes</label>
 
@@ -1188,46 +1168,61 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                   value="No"
                   id="No"
                   className="mx-2 mt-1"
-                  onChange={(e) => handleChange(e.target.value)}
-                  name="Yes"
-                  onClick={handleshow}
+                  // onChange={(e) => handleChange(e.target.value)}
+                  // name="Yes"
+                  // onClick={handleshow}
+                  disabled
                 />
                 <label for="No">No</label>
-                {showhide === "Yes" && (
-                  <div className="row ">
-                    <div className="form-group row">
-                      <div className="col-sm-12">
-                        <Col xs="12" md="12" sm="12">
-                          <Table className="table table-bordered" size="sm">
-                            <thead>
-                              <tr>
-                                <th>S.No.</th>
-                                <th>Professional </th>
-                                <th> Annexure</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td> 1 &nbsp;&nbsp;</td>
-                                <td> Agreement between the entities to provide technical assistance</td>
-                                <td align="center" size="large">
-                                  <input type="file" onChange={(e) => setAgreementDoc(e.target.value)} class="employee-card-input" />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td> 2&nbsp;&nbsp; </td>
-                                <td>Board resolutions of authorized signatory of firm/company provided technical assistance</td>
-                                <td align="center" size="large">
-                                  <input type="file" onChange={(e) => setBoardDoc(e.target.value)} class="employee-card-input" />
-                                </td>
-                              </tr>
-                            </tbody>
-                          </Table>
-                        </Col>
-                      </div>
+                {/* {showhide === "Yes" && ( */}
+                <div className="row ">
+                  <div className="form-group row">
+                    <div className="col-sm-12">
+                      <Col xs="12" md="12" sm="12">
+                        <Table className="table table-bordered" size="sm">
+                          <thead>
+                            <tr>
+                              <th class="fw-normal">S.No.</th>
+                              <th class="fw-normal">Professional </th>
+                              <th class="fw-normal"> Annexure</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td> 1 &nbsp;&nbsp;</td>
+                              <td> Agreement between the entities to provide technical assistance</td>
+                              <td align="center" size="large">
+                                <div className="row">
+                                  <button className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </button>
+                                  <button className="btn btn-sm col-md-6">
+                                    <FileDownloadIcon color="primary" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td> 2&nbsp;&nbsp; </td>
+                              <td>Board resolutions of authorized signatory of firm/company provided technical assistance</td>
+                              <td align="center" size="large">
+                                <div className="row">
+                                  <button className="btn btn-sm col-md-6">
+                                    <VisibilityIcon color="info" className="icon" />
+                                  </button>
+                                  <button className="btn btn-sm col-md-6">
+                                    <FileDownloadIcon color="primary" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </Table>
+                      </Col>
                     </div>
                   </div>
-                )}
+                </div>
+                {/* )} */}
               </div>
 
               <div className="hl"></div>
@@ -1235,12 +1230,32 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                 2. In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside
                 Haryana:
               </p>
-              <div className="form-group">
-                <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow6} />
+              <div>
+                {/* <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
                 <label for="Yes">Yes</label>
 
-                <input type="radio" value="No" id="No" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow6} />
-                <label for="No">No</label>
+                <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
+                <label for="No">No</label> */}
+                <div style={{ display: "flex" }}>
+                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
+                  <label for="Yes">Yes</label>
+                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
+                  <label for="No">No</label>
+                  &nbsp;&nbsp;
+                  <ReportProblemIcon
+                    style={{
+                      color:
+                        developerInputFiledColor2.length > 0
+                          ? developerInputFiledColor2[0].color.data
+                          : developerInputCheckedFiledColor2.length > 0
+                          ? developerInputCheckedFiledColor2[0].color.data
+                          : "#FFB602",
+                    }}
+                    onClick={() => {
+                      setLabelValue("technical capacity sought"), setSmShow(true), console.log("modal open");
+                    }}
+                  ></ReportProblemIcon>
+                </div>
                 {showhide6 === "Yes" && (
                   <div className="row ">
                     <div className="form-group row">
@@ -1250,9 +1265,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                             <Table className="table table-bordered" size="sm">
                               <thead>
                                 <tr>
-                                  <th>S.No.</th>
-                                  <th>Agreement*</th>
-                                  <th>Annexure </th>
+                                  <th class="fw-normal">S.No.</th>
+                                  <th class="fw-normal">Agreement*</th>
+                                  <th class="fw-normal">Annexure </th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -1260,7 +1275,14 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                                   <td> 1 </td>
                                   <td> Registered and Irrevocable Agreement</td>
                                   <td align="center" size="large">
-                                    <input type="file" onChange={(e) => setRegisteredDoc(e.target.value)} class="employee-card-input" />
+                                    <div className="row">
+                                      <button className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </button>
+                                      <button className="btn btn-sm col-md-6">
+                                        <FileDownloadIcon color="primary" />
+                                      </button>
+                                    </div>
                                   </td>
                                 </tr>
 
@@ -1268,7 +1290,14 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                                   <td> 2 </td>
                                   <td>Board resolutions of authorized signatory of firm/company provided technical assistance</td>
                                   <td align="center" size="large">
-                                    <input type="file" onChange={(e) => setBoardDocY(e.target.value)} class="employee-card-input" />
+                                    <div className="row">
+                                      <button className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </button>
+                                      <button className="btn btn-sm col-md-6">
+                                        <FileDownloadIcon color="primary" />
+                                      </button>
+                                    </div>
                                   </td>
                                 </tr>
                                 <tr>
@@ -1279,7 +1308,14 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                                     act of 1975.
                                   </td>
                                   <td align="center" size="large">
-                                    <input type="file" onChange={(e) => setEarlierDocY(e.target.value)} class="employee-card-input" />
+                                    <div className="row">
+                                      <button className="btn btn-sm col-md-6">
+                                        <VisibilityIcon color="info" className="icon" />
+                                      </button>
+                                      <button className="btn btn-sm col-md-6">
+                                        <FileDownloadIcon color="primary" />
+                                      </button>
+                                    </div>
                                   </td>
                                 </tr>
                               </tbody>{" "}
@@ -1298,9 +1334,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                           <Table className="table table-bordered" size="sm">
                             <thead>
                               <tr>
-                                <th>S.No.</th>
-                                <th>Agreement*</th>
-                                <th>Annexure </th>
+                                <th class="fw-normal">S.No.</th>
+                                <th class="fw-normal">Agreement*</th>
+                                <th class="fw-normal">Annexure </th>
                               </tr>
                             </thead>
                             <tbody>
@@ -1308,11 +1344,14 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                                 <td> 1 </td>
                                 <td>Agreement between the entities to provide technical assistance</td>
                                 <td align="center" size="large">
-                                  <input
-                                    type="file"
-                                    onChange={(e) => setTechnicalAssistanceAgreementDoc(e.target.value)}
-                                    class="employee-card-input"
-                                  />
+                                  <div className="row">
+                                    <button className="btn btn-sm col-md-6">
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </button>
+                                    <button className="btn btn-sm col-md-6">
+                                      <FileDownloadIcon color="primary" />
+                                    </button>
+                                  </div>
                                 </td>
                               </tr>
 
@@ -1320,7 +1359,14 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                                 <td> 2 </td>
                                 <td>Board resolutions of authorized signatory of firm/company provided technical assistance</td>
                                 <td align="center" size="large">
-                                  <input type="file" onChange={(e) => setBoardDocN(e.target.value)} class="employee-card-input" />
+                                  <div className="row">
+                                    <button className="btn btn-sm col-md-6">
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </button>
+                                    <button className="btn btn-sm col-md-6">
+                                      <FileDownloadIcon color="primary" />
+                                    </button>
+                                  </div>
                                 </td>
                               </tr>
                               <tr>
@@ -1331,7 +1377,14 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                                   of 1975.
                                 </td>
                                 <td align="center" size="large">
-                                  <input type="file" onChange={(e) => setEarlierDocN(e.target.value)} class="employee-card-input" />
+                                  <div className="row">
+                                    <button className="btn btn-sm col-md-6">
+                                      <VisibilityIcon color="info" className="icon" />
+                                    </button>
+                                    <button className="btn btn-sm col-md-6">
+                                      <FileDownloadIcon color="primary" />
+                                    </button>
+                                  </div>
                                 </td>
                               </tr>
                             </tbody>
@@ -1342,16 +1395,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                   </div>
                 )}
               </div>
-              {/* </Col> */}
             </div>
-            {/* <div className="form-group col-md2 mt-4">
-                    <button 
-                        className="btn btn-success" 
-                        style={{ float: "right" }} 
-                        >
-                    Submit
-                    </button>
-                </div> */}
           </FormStep>
         </div>
       </Collapse>

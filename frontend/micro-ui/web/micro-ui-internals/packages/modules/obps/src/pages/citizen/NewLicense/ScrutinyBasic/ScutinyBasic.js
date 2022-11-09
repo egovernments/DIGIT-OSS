@@ -45,6 +45,7 @@ const ScrutitnyForms = () => {
   const [open, setOpen] = useState(false);
   const [apiResppnse, setApiResponse] = useState({});
   const [remarksResponse, setRemarksResponse] = useState({});
+  const [sumrol, setSumrol] = useState({});
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [remarksChanges, setRemarksChanges] = useState("");
   const [disapprovalData, setDisapprovalData] = useState({});
@@ -339,22 +340,12 @@ const ScrutitnyForms = () => {
             ></Feeandcharges>
             {/* </Col> */}
           </div>
-          {/* <div>
-            <LicenseDetailsScrutiny
-              licenseDetailsInfoRef={licenseDetailsInfoRef}
-              purpose={purpose}
-              passUncheckedList={getUncheckedLicenseDetailsInfo}
-              passCheckedList={getCheckedLicenseDetailsInfoValue}
-              
-              onClick={() => setOpen(!open)}
-            ></LicenseDetailsScrutiny>
-          </div> */}
 
           {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}
         </div>
       </div>
-      {/* <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-        <DisApprovalList
+      <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
+        {/* <DisApprovalList
           disapprovallistDeveloper={displayPurpose}
           disapprovallistGeneral={displayGeneral}
           disapprovallistAppliedLand={displayAppliedLand}
@@ -365,11 +356,15 @@ const ScrutitnyForms = () => {
           disapprovalCheckedPurpose={displayPurposeCHeckedList}
           DisApprovalListFeeandCharges={displayFeeandCharges}
           dataList={disapprovalData}
-        ></DisApprovalList>
-        <HistoryList></HistoryList>
-      </div> */}
-      <div style={{ position: "relative", width: "100%", height: "50%", display: "flex" }}>
-        <ScrutinyDevelopment remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}></ScrutinyDevelopment>
+        ></DisApprovalList> */}
+        {/* <HistoryList></HistoryList> */}
+      </div>
+
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+        <ScrutinyDevelopment
+          remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}
+          // remarksum={sumrol.egScrutiny !== undefined ? sumrol.egScrutiny : null}
+        ></ScrutinyDevelopment>
       </div>
     </div>
   );

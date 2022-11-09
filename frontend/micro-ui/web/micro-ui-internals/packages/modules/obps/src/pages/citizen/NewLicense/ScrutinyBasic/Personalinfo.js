@@ -18,6 +18,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import PersonalinfoChild from "./PersonalinfoChild";
 import LicenseDetailsScrutiny from "../ScrutinyBasic/Developer/LicenseDetailsScrutiny";
 import CapacityScrutiny from "../ScrutinyBasic/Developer/CapacityScrutiny";
+// import DocumentScrutiny from "./Developer/DocumentScrutiny";
 import Collapse from "react-bootstrap/Collapse";
 import Modal from "react-bootstrap/Modal";
 import ModalChild from "./Remarks/ModalChild";
@@ -182,6 +183,7 @@ const Personalinfo = (props) => {
           </Collapse>
           <LicenseDetailsScrutiny />
           <CapacityScrutiny />
+          {/* <DocumentScrutiny /> */}
         </div>
       </Collapse>
       {/* </Card> */}
