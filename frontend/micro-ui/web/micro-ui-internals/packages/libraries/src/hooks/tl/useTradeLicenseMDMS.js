@@ -8,6 +8,9 @@ const useTradeLicenseMDMS = (tenantId, moduleCode, type, filter, config = {}) =>
   const useStructureType = () => {
     return useQuery("TL_STRUCTURE_TYPE", () => MdmsService.getTLStructureType(tenantId, moduleCode, type), config);
   };
+  const usePurposeType = () => {
+    return useQuery("TL_PURPOSE_TYPE", () => MdmsService.getPurposeType(tenantId, moduleCode, type), config);
+  };
   const useTradeUnitsData = () => {
     return useQuery("TL_TRADE_UNITS", () => MdmsService.getTradeUnitsData(tenantId, moduleCode, type, filter), config);
   };
@@ -16,22 +19,24 @@ const useTradeLicenseMDMS = (tenantId, moduleCode, type, filter, config = {}) =>
   };
   const useTradeOwnershipSubType = () => {
     return useQuery("TL_TRADE_OWNERSHIP_CATEGORY", () => MdmsService.GetTradeOwnerShipCategory(tenantId, moduleCode, type), {
-      select: data => {
-        const {"common-masters":{OwnerShipCategory: categoryData} ={}} = data
-        const filteredSubtypesData = categoryData.filter( e => e.code.includes(filter.keyToSearchOwnershipSubtype)).map( e => ({...e, i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${e.code.replaceAll(".", "_")}`}))
-        return filteredSubtypesData
+      select: (data) => {
+        const { "common-masters": { OwnerShipCategory: categoryData } = {} } = data;
+        const filteredSubtypesData = categoryData
+          .filter((e) => e.code.includes(filter.keyToSearchOwnershipSubtype))
+          .map((e) => ({ ...e, i18nKey: `COMMON_MASTERS_OWNERSHIPCATEGORY_${e.code.replaceAll(".", "_")}` }));
+        return filteredSubtypesData;
       },
-      ...config
+      ...config,
     });
   };
 
   const useOwnerTypeWithSubtypes = () => {
     return useQuery("TL_TRADE_OWNERSSHIP_TYPE", () => MdmsService.GetTradeOwnerShipCategory(tenantId, moduleCode, type), {
-      select: data => {
-        const {"common-masters":{OwnerShipCategory: categoryData} ={}} = data
+      select: (data) => {
+        const { "common-masters": { OwnerShipCategory: categoryData } = {} } = data;
         let OwnerShipCategory = {};
         let ownerShipdropDown = [];
-        
+
         function getDropdwonForProperty(ownerShipdropDown) {
           if (filter?.userType === "employee") {
             const arr = ownerShipdropDown
@@ -42,29 +47,33 @@ const useTradeLicenseMDMS = (tenantId, moduleCode, type, filter, config = {}) =>
                   ownerShipDetails.value.split(".")[1] ? ownerShipDetails.value.split(".")[1] : ownerShipDetails.value.split(".")[0]
                 }`,
               }));
-              const finalArr = arr.filter(data => data.code.includes("INDIVIDUAL") || data.code.includes("OTHER"))
-      
+            const finalArr = arr.filter((data) => data.code.includes("INDIVIDUAL") || data.code.includes("OTHER"));
+
             return finalArr;
           }
-      
-          const res = ownerShipdropDown?.length ? ownerShipdropDown?.map((ownerShipDetails) => ({
-                ...ownerShipDetails,
-                i18nKey: `PT_OWNERSHIP_${
-                  ownerShipDetails.value.split(".")[1] ? ownerShipDetails.value.split(".")[1] : ownerShipDetails.value.split(".")[0]
-                }`,
-              })).reduce((acc, ownerShipDetails) => {
-                if(ownerShipDetails.code.includes("INDIVIDUAL")){
-                  return [...acc, ownerShipDetails]
-                } else if (ownerShipDetails.code.includes("OTHER")) {
-                  const { code, value, ...everythingElse } = ownerShipDetails
-                  const mutatedOwnershipDetails =  { code: code.split(".")[0], value: value.split(".")[0], ...everythingElse }
-                  return [...acc, mutatedOwnershipDetails]
-                } else {
-                  return acc
-                }
-              },[]) : null
-              
-          return res
+
+          const res = ownerShipdropDown?.length
+            ? ownerShipdropDown
+                ?.map((ownerShipDetails) => ({
+                  ...ownerShipDetails,
+                  i18nKey: `PT_OWNERSHIP_${
+                    ownerShipDetails.value.split(".")[1] ? ownerShipDetails.value.split(".")[1] : ownerShipDetails.value.split(".")[0]
+                  }`,
+                }))
+                .reduce((acc, ownerShipDetails) => {
+                  if (ownerShipDetails.code.includes("INDIVIDUAL")) {
+                    return [...acc, ownerShipDetails];
+                  } else if (ownerShipDetails.code.includes("OTHER")) {
+                    const { code, value, ...everythingElse } = ownerShipDetails;
+                    const mutatedOwnershipDetails = { code: code.split(".")[0], value: value.split(".")[0], ...everythingElse };
+                    return [...acc, mutatedOwnershipDetails];
+                  } else {
+                    return acc;
+                  }
+                }, [])
+            : null;
+
+          return res;
         }
 
         function formDropdown(category) {
@@ -76,9 +85,11 @@ const useTradeLicenseMDMS = (tenantId, moduleCode, type, filter, config = {}) =>
           };
         }
 
-        categoryData.length > 0 ? categoryData?.map((category) => {
-          OwnerShipCategory[category.code] = category;
-        }) : null
+        categoryData.length > 0
+          ? categoryData?.map((category) => {
+              OwnerShipCategory[category.code] = category;
+            })
+          : null;
 
         if (OwnerShipCategory) {
           Object.keys(OwnerShipCategory).forEach((category) => {
@@ -86,11 +97,10 @@ const useTradeLicenseMDMS = (tenantId, moduleCode, type, filter, config = {}) =>
             ownerShipdropDown.push(formDropdown(OwnerShipCategory[category]));
           });
         }
-        
+
         return getDropdwonForProperty(ownerShipdropDown);
-    
       },
-      ...config
+      ...config,
     });
   };
   const useTLAccessoriesType = () => {
@@ -108,6 +118,8 @@ const useTradeLicenseMDMS = (tenantId, moduleCode, type, filter, config = {}) =>
       return useTLDocuments();
     case "StructureType":
       return useStructureType();
+    case "Purpose":
+      return usePurposeType();
     case "TradeUnits":
       return useTradeUnitsData();
     case "TLOwnerShipCategory":
