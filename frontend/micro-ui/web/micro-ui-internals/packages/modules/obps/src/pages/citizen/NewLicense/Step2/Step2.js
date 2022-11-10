@@ -250,14 +250,9 @@ const ApllicantPuropseForm = (props) => {
   ];
 
   const stateId = Digit.ULBService.getStateId();
-  const { data: Menu = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "Purpose");
-  let menu = [];
-  Menu &&
-    Menu["common-masters"] &&
-    Menu["common-masters"].StructureType.map((ob) => {
-      console.log("log", ob);
-    });
-  console.log("kjh", menu);
+  const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
+  console.log("kjh", PurposeType);
+
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
   const [getColumns, setColumns] = useState(columns);
@@ -584,7 +579,7 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
         return response;
       });
-      console.log("RESP+++", Resp?.data);
+      console.log("RESP+++", Resp?.data?.newServiceInfoData[0]?.ApplicantPurpose?.potential);
       setSubmitDataLabel(Resp?.data);
     } catch (error) {
       console.log(error.message);
