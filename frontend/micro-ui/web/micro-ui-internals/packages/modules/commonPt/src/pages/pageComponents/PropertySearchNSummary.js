@@ -165,6 +165,10 @@ const PropertySearchNSummary = ({ config, onSelect, userType, formData, setError
                     requestBody: {},
                     requestParam: { tenantId:propertyDetails?.Properties[0]?.tenantId, propertyIds:propertyDetails?.Properties[0]?.propertyId },
                     jsonPath: "Properties[0].address.street",
+                    d: (res) => {
+                      let resultString = (_.get(res,"Properties[0].address.doorNo") ?  `${_.get(res,"Properties[0].address.doorNo")}, ` : "") + (_.get(res,"Properties[0].address.street")? `${_.get(res,"Properties[0].address.street")}, ` : "") + (_.get(res,"Properties[0].address.landmark") ? `${_.get(res,"Properties[0].address.landmark")}`:"")
+                      return resultString;
+                    },
                     isArray: false,
                   },
           

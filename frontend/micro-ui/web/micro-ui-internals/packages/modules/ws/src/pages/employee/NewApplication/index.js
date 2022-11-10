@@ -114,7 +114,7 @@ const NewApplication = () => {
     const errors = sessionStorage.getItem("FORMSTATE_ERRORS");
     const formStateErros = typeof(errors) == "string" ? JSON.parse(errors) : {};
 
-    if(Object.keys(formStateErros).length > 0){
+    if(Object.keys(formStateErros).length > 0 && !(Object.keys(formStateErros).length == 1 && formStateErros?.["ConnectionHolderDetails"]?.type && Object.keys(formStateErros?.["ConnectionHolderDetails"]?.type)?.length == 1 && formStateErros["ConnectionHolderDetails"] && Object.values(formStateErros["ConnectionHolderDetails"].type).filter((ob) => ob.type === "required" && (ob?.ref?.value !== "")).length > 0) ){
       setShowToast({ warning: true, message: "PLEASE_FILL_MANDATORY_DETAILS" });
       return;
     }

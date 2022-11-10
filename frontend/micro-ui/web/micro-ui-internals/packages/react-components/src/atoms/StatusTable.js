@@ -14,12 +14,12 @@ export const Row = (props) => {
   let value = props.text;
   let valueStyle = props.textStyle || {};
   let labelStyle = props.labelStyle || {};
-  if (Array.isArray(props.text)) {
+  if (Array.isArray(props.text) && !props?.privacy) {
     value = props.text.map((val, index) => {
       if (val?.className) {
         return (
           <p className={val?.className} style={val?.style} key={index}>
-            {/*val?.value*/}
+            {val?.value}
             {/*  
               Feature :: Privacy
               privacy object set to the Mask Component
@@ -44,7 +44,7 @@ export const Row = (props) => {
                 privacy object set to the Mask Component
               */}
               {/* <UnMaskComponent iseyevisible={val?.includes("*")?true:false} privacy={props?.privacy}></UnMaskComponent> */}
-              <WrapUnMaskComponent   value={value} iseyevisible={val?.includes("*")?true:false} privacy={Array.isArray(props?.privacy) ? props?.privacy?.[index] : props?.privacy} />
+              <WrapUnMaskComponent   value={val} iseyevisible={val?.includes("*")?true:false} privacy={Array.isArray(props?.privacy) ? props?.privacy?.[index] : props?.privacy} />
 
             </span>
           )}
@@ -57,6 +57,25 @@ export const Row = (props) => {
   // margin-left: 10px;
   // }
 
+  if(Array?.isArray(props?.privacy) && Array.isArray(props?.text))
+  {
+    return(    
+        <div style={props.rowContainerStyle} className={`${props.last ? "row last" : "row"} ${props?.className || ""}`}>
+          <h2 style={labelStyle}>{props.label}</h2>
+          {props?.text?.map((ob,index) => (
+          <div className="value" style={index == 0 ? {...valueStyle, wordBreak: "break-word",marginLeft:"28.5%",width:"20%"} : {...valueStyle, wordBreak: "break-word",color:"grey",display:"inline",fontSize:"13px",paddingLeft:"10px"}}>
+            <WrapUnMaskComponent   value={ob?.value} iseyevisible={ob?.value && ob?.value?.toString()?.includes("*")?true:false} privacy={props?.privacy?.[index]} />
+            {props.caption && <div className="caption">{props.caption}</div>}
+          </div>))}
+          {props.actionButton ? (
+            <div style={props.actionButtonStyle} className="action-button">
+              {props.actionButton}
+            </div>
+          ) : null}
+        </div>
+     )  
+  }
+  else{
   return (
     <div style={props.rowContainerStyle} className={`${props.last ? "row last" : "row"} ${props?.className || ""}`}>
       <h2 style={labelStyle}>{props.label}</h2>
@@ -77,6 +96,7 @@ export const Row = (props) => {
       ) : null}
     </div>
   );
+      }
 };
 
 export const MediaRow = (props) => {

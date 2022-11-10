@@ -50,7 +50,8 @@ const WrapUnMaskComponent = React.memo(({ privacy = {}, value, unmaskField, ...r
 
   return privacy?.uuid && data ? (
     <React.Fragment>
-      {!unmaskField && t(data)}
+      {!unmaskField && !loadData?.oldValue && t(data)}
+      {!unmaskField && loadData?.oldValue && data}
       {!unmaskField && privacy?.showValue && formatValue(value)}
     </React.Fragment>
   ) : (

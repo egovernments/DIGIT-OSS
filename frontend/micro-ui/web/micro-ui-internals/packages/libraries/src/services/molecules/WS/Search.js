@@ -703,7 +703,7 @@ export const WSSearch = {
           title: "WS_PROPERTY_ADDRESS_LABEL",
           value: getAddress(propertyDataDetails?.address, t),
           isNotTranslated: true,
-          privacy: { uuid: propertyDataDetails?.owners?.[0]?.uuid, fieldName: ["doorNo", "street", "landmark"], model: "Property",showValue: true,
+          privacy: [{ uuid: propertyDataDetails?.owners?.[0]?.uuid, fieldName: ["doorNo", "street", "landmark"], model: "Property",showValue: true,
           loadData: {
             serviceName: "/property-services/property/_search",
             requestBody: {},
@@ -714,7 +714,21 @@ export const WSSearch = {
               let resultString = (_.get(res,"Properties[0].address.doorNo") ?  `${_.get(res,"Properties[0].address.doorNo")}, ` : "") + (_.get(res,"Properties[0].address.street")? `${_.get(res,"Properties[0].address.street")}, ` : "") + (_.get(res,"Properties[0].address.landmark") ? `${_.get(res,"Properties[0].address.landmark")}`:"")
               return resultString;
             }
-          }, },
+          }},
+          { uuid: oldPropertyDetails?.owners?.[0]?.uuid, fieldName: ["doorNo", "street", "landmark"], model: "Property",showValue: true,
+          loadData: {
+              serviceName: "/property-services/property/_search",
+              requestBody: {},
+              requestParam: { tenantId, propertyIds : wsOldDetails?.propertyId },
+              jsonPath: "Properties[0].address.street",
+              isArray: false,
+              oldValue: true,
+              d: (res) => {
+                let resultString = (_.get(res,"Properties[0].address.doorNo") ?  `${_.get(res,"Properties[0].address.doorNo")}, ` : "") + (_.get(res,"Properties[0].address.street")? `${_.get(res,"Properties[0].address.street")}, ` : "") + (_.get(res,"Properties[0].address.landmark") ? `${_.get(res,"Properties[0].address.landmark")}`:"")
+                return resultString;
+              }
+            }
+          }],
           oldValue: getAddress(propertyDataDetails?.address, t) != getAddress(oldPropertyDetails?.address, t) ?
             [
               { value: getAddress(propertyDataDetails?.address, t), className: "newValue", style: { display: "inline" } },
@@ -736,6 +750,7 @@ export const WSSearch = {
     const uuid = wsDataDetails?.connectionHolders?.[0]?.uuid;
     const olduuid = wsOldData?.connectionHolders?.[0]?.uuid;
     const applicationNoForPrivacy = wsDataDetails?.applicationNo;
+    const OldapplicationNo = wsOldData?.applicationNo;
 
     let connectionHolderDetails = {
       title: "WS_COMMON_CONNECTION_HOLDER_DETAILS_HEADER",
@@ -768,9 +783,14 @@ export const WSSearch = {
               loadData: {
                 serviceName: serviceType === "WATER" ? "/ws-services/wc/_search" : "/sw-services/swc/_search",
                 requestBody: {},
-                requestParam: { tenantId, applicationNumber },
+                requestParam: { tenantId, applicationNumber:OldapplicationNo},
                 jsonPath: serviceType === "WATER" ? "WaterConnection[0].connectionHolders[0].gender" : "SewerageConnections[0].connectionHolders[0].gender",
                 isArray: false,
+                oldValue: true,
+                d: (res) => {
+                  let resultString = (res?.WaterConnection?.[0] ? `${t("WS_OLD_LABEL_NAME")} ${t(res?.WaterConnection?.[0]?.connectionHolders?.[0]?.gender)}` : `${t("WS_OLD_LABEL_NAME")} ${t(res?.SewerageConnections?.[0]?.connectionHolders?.[0]?.gender)}`);
+                  return resultString;
+                }
               }, }],
               oldValue: wsDataDetails?.connectionHolders?.[0]?.gender != wsOldData?.connectionHolders?.[0]?.gender ? [
                 { value: wsDataDetails?.connectionHolders?.[0]?.gender ? t(`${wsDataDetails?.connectionHolders?.[0]?.gender}`) : t("NA"), className: "newValue", style: { display: "inline" } },
@@ -800,9 +820,14 @@ export const WSSearch = {
                 loadData: {
                   serviceName: serviceType === "WATER" ? "/ws-services/wc/_search" : "/sw-services/swc/_search",
                   requestBody: {},
-                  requestParam: { tenantId, applicationNumber },
+                  requestParam: { tenantId, applicationNumber:OldapplicationNo },
                   jsonPath: serviceType === "WATER" ? "WaterConnection[0].connectionHolders[0].mobileNumber" : "SewerageConnections[0].connectionHolders[0].mobileNumber",
                   isArray: false,
+                  oldValue: true,
+                  d: (res) => {
+                    let resultString = (res?.WaterConnection?.[0] ? `${t("WS_OLD_LABEL_NAME")} ${res?.WaterConnection?.[0]?.connectionHolders?.[0]?.mobileNumber}` : `${t("WS_OLD_LABEL_NAME")} ${res?.SewerageConnections?.[0]?.connectionHolders?.[0]?.mobileNumber}`);
+                    return resultString;
+                  }
                 },
               }],
               oldValue: wsDataDetails?.connectionHolders?.[0]?.mobileNumber != wsOldData?.connectionHolders?.[0]?.mobileNumber ? [
@@ -832,9 +857,14 @@ export const WSSearch = {
                 loadData: {
                   serviceName: serviceType === "WATER" ? "/ws-services/wc/_search" : "/sw-services/swc/_search",
                   requestBody: {},
-                  requestParam: { tenantId, applicationNumber },
+                  requestParam: { tenantId, applicationNumber:OldapplicationNo},
                   jsonPath: serviceType === "WATER" ? "WaterConnection[0].connectionHolders[0].fatherOrHusbandName" : "SewerageConnections[0].connectionHolders[0].fatherOrHusbandName",
                   isArray: false,
+                  oldValue: true,
+                  d: (res) => {
+                    let resultString = (res?.WaterConnection?.[0] ? `${t("WS_OLD_LABEL_NAME")} ${res?.WaterConnection?.[0]?.connectionHolders?.[0]?.fatherOrHusbandName}` : `${t("WS_OLD_LABEL_NAME")} ${res?.SewerageConnections?.[0]?.connectionHolders?.[0]?.fatherOrHusbandName}`);
+                    return resultString;
+                  }
                 },
               }],
               oldValue: wsDataDetails?.connectionHolders?.[0]?.fatherOrHusbandName != wsOldData?.connectionHolders?.[0]?.fatherOrHusbandName ? [
@@ -860,9 +890,14 @@ export const WSSearch = {
             loadData: {
               serviceName: serviceType === "WATER" ? "/ws-services/wc/_search" : "/sw-services/swc/_search",
               requestBody: {},
-              requestParam: { tenantId, applicationNumber },
+              requestParam: { tenantId, applicationNumber:OldapplicationNo },
               jsonPath: serviceType === "WATER" ? "WaterConnection[0].connectionHolders[0].relationship" : "SewerageConnections[0].connectionHolders[0].relationship",
               isArray: false,
+              oldValue: true,
+              d: (res) => {
+                let resultString = (res?.WaterConnection?.[0] ? `${t("WS_OLD_LABEL_NAME")} ${t(res?.WaterConnection?.[0]?.connectionHolders?.[0]?.relationship)}` : `${t("WS_OLD_LABEL_NAME")} ${t(res?.SewerageConnections?.[0]?.connectionHolders?.[0]?.relationship)}`);
+                return resultString;
+              }
             }, }],
               oldValue: wsDataDetails?.connectionHolders?.[0]?.relationship != wsOldData?.connectionHolders?.[0]?.relationship ? [
                 { value: `${wsDataDetails?.connectionHolders?.[0]?.relationship ? t(`${wsDataDetails?.connectionHolders?.[0]?.relationship}`) : t("NA")}`, className: "newValue", style: { display: "inline" } },
@@ -898,9 +933,14 @@ export const WSSearch = {
                 loadData: {
                   serviceName: serviceType === "WATER" ? "/ws-services/wc/_search" : "/sw-services/swc/_search",
                   requestBody: {},
-                  requestParam: { tenantId, applicationNumber },
+                  requestParam: { tenantId, applicationNumber:OldapplicationNo},
                   jsonPath: serviceType === "WATER" ? "WaterConnection[0].connectionHolders[0].correspondenceAddress" : "SewerageConnections[0].connectionHolders[0].correspondenceAddress",
                   isArray: false,
+                  oldValue: true,
+                  d: (res) => {
+                    let resultString = (res?.WaterConnection?.[0] ? `${t("WS_OLD_LABEL_NAME")} ${res?.WaterConnection?.[0]?.connectionHolders?.[0]?.correspondenceAddress}` : `${t("WS_OLD_LABEL_NAME")} ${res?.SewerageConnections?.[0]?.connectionHolders?.[0]?.correspondenceAddress}`);
+                    return resultString;
+                  }
                 },
               }],
               oldValue: wsDataDetails?.connectionHolders?.[0]?.correspondenceAddress != wsOldData?.connectionHolders?.[0]?.correspondenceAddress ? [
@@ -922,7 +962,7 @@ export const WSSearch = {
                 jsonPath: serviceType === "WATER" ? "WaterConnection[0].connectionHolders[0].ownerType" : "SewerageConnections[0].connectionHolders[0].ownerType",
                 isArray: false,
                 d: (res) => {
-                  let resultString = (res?.WaterConnection?.[0] ? t(`PROPERTYTAX_OWNERTYPE_${res?.WaterConnection?.[0]?.connectionHolders?.[0]?.ownerType?.toUpperCase()}`) : t(`PROPERTYTAX_OWNERTYPE_${res?.SewerageConnections?.[0]?.connectionHolders?.[0]?.ownerType?.toUpperCase()}`));
+                  let resultString = (res?.WaterConnection?.[0]? t(`PROPERTYTAX_OWNERTYPE_${res?.WaterConnection?.[0]?.connectionHolders?.[0]?.ownerType?.toUpperCase()}`) : t(`PROPERTYTAX_OWNERTYPE_${res?.SewerageConnections?.[0]?.connectionHolders?.[0]?.ownerType?.toUpperCase()}`));
                   return resultString;
                 }
             }, },
@@ -930,11 +970,12 @@ export const WSSearch = {
               loadData: {
                 serviceName: serviceType === "WATER" ? "/ws-services/wc/_search" : "/sw-services/swc/_search",
                 requestBody: {},
-                requestParam: { tenantId, applicationNumber },
+                requestParam: { tenantId, applicationNumber:OldapplicationNo },
                 jsonPath: serviceType === "WATER" ? "WaterConnection[0].connectionHolders[0].ownerType" : "SewerageConnections[0].connectionHolders[0].ownerType",
                 isArray: false,
+                oldValue: true,
                 d: (res) => {
-                  let resultString = (res?.WaterConnection?.[0] ? t(`PROPERTYTAX_OWNERTYPE_${res?.WaterConnection?.[0]?.connectionHolders?.[0]?.ownerType?.toUpperCase()}`) : t(`PROPERTYTAX_OWNERTYPE_${res?.SewerageConnections?.[0]?.connectionHolders?.[0]?.ownerType?.toUpperCase()}`));
+                  let resultString = (res?.WaterConnection?.[0] ? `${t("WS_OLD_LABEL_NAME")} ${t(`PROPERTYTAX_OWNERTYPE_${res?.WaterConnection?.[0]?.connectionHolders?.[0]?.ownerType?.toUpperCase()}`)}` : `${t("WS_OLD_LABEL_NAME")} ${t(`PROPERTYTAX_OWNERTYPE_${res?.SewerageConnections?.[0]?.connectionHolders?.[0]?.ownerType?.toUpperCase()}`)}`);
                   return resultString;
                 }
             }, }],
