@@ -108,6 +108,23 @@ const ApllicantFormStep1 = (props) => {
   useEffect(() => {
     if (developerDataLabel !== undefined && developerDataLabel !== null) {
       setValue(
+        "authorizedDeveloper",
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.name : "N/A"
+      );
+      setValue(
+        "authorizedmobile",
+        developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.devDetail?.[0]?.aurthorizedUserInfoArray?.[0]?.name
+          : "N/A"
+      );
+      setValue(
+        "authorizedPerson ",
+        developerDataLabel !== null && developerDataLabel !== undefined
+          ? developerDataLabel?.devDetail?.[0]?.aurthorizedUserInfoArray?.[0]?.mobileNumber
+          : "N/A"
+      );
+
+      setValue(
         "village",
         developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.city : "N/A"
       );
@@ -152,6 +169,9 @@ const ApllicantFormStep1 = (props) => {
     try {
       const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${dataId}`);
       console.log("RESP+++", Resp);
+      const userData = Resp?.data?.newServiceInfoData?.[0]?.ApplicantInfo;
+      setValue("notSigned", userData?.notSigned);
+      setValue("LC", userData?.LC);
       setSubmitDataLabel(Resp?.data);
     } catch (error) {
       console.log(error.message);

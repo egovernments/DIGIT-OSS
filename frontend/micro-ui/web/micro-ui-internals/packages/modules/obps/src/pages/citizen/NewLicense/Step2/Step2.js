@@ -659,7 +659,7 @@ const ApllicantPuropseForm = (props) => {
                     name="purposeDd"
                     onChange={handleChangePurpose}
                     placeholder="Purpose"
-                    data={optionsPurposeList}
+                    data={PurposeType?.name}
                     labels="Purpose"
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
