@@ -10,6 +10,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
+  const USERID = userInfo?.info?.id
+  console.log("USERID",USERID)
   let validation = {};
   const devRegId = localStorage.getItem('devRegId');
   let isOpenLinkFlow = window.location.href.includes("openlink");
@@ -138,13 +140,13 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           'Access-Control-Allow-Origin': "*",
         }
       })
-      console.log("PANDET", panResp?.data);
+      // console.log("PANDET", panResp?.data);
     } catch (error) {
       console.log(error?.response?.data?.errorDescription);
       setPanValError(error?.response?.data?.errorDescription)
     }
   }
-  console.log(panValidation);
+  // console.log(panValidation);
   useEffect(() => {
     if (PanNumber.length === 10) {
       panVerification();
@@ -170,7 +172,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`, requestResp, {
 
       });
-      console.log(getDevDetails?.data);
+      // console.log(getDevDetails?.data);
     } catch (error) {
       console.log(error);
     }
@@ -219,7 +221,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setPincode(e.target.value);
   }
   function selectChecked(e) {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setSelectedChecked(e.target.value);
     if (isAddressSame == false) {
       setisAddressSame(true);
@@ -292,7 +294,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       }
 
       onSelect(config.key, licenseDet);
-      console.log("DATALICDET", licenseDet);
+      // console.log("DATALICDET", licenseDet);
       localStorage.setItem("licenceDetails", JSON.stringify(licenseDet));
       Digit.OBPSService.BPAREGCreate(licenseDet, tenantId)
         .then((result, err) => {
@@ -319,7 +321,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       const developerRegisterData = {
 
         "devDetail": {
-          "parentid":userInfo?.info?.id,
+          "id":USERID,
           "licenceDetails": {
             name: name,
             mobileNumber: mobileNumber,
@@ -346,7 +348,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       }
       Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
-          console.log("DATA", result?.id);
+          // console.log("DATA", result?.id);
           localStorage.setItem('devRegId', JSON.stringify(result?.id));
           setIsDisableForNext(false);
           let data = {
