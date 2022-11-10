@@ -318,7 +318,7 @@ export const FormComposer = (props) => {
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} onKeyDown={(e) => checkKeyDown(e)} id={props.formId} className={props.className}>
-      <Card style={getCardStyles()}>
+      <Card style={getCardStyles()} className={props?.cardClassName ? props.cardClassName : ""}>
         {!props.childrenAtTheBottom && props.children}
         {props.heading && <CardSubHeader style={{ ...props.headingStyle }}> {props.heading} </CardSubHeader>}
         {props.description && <CardLabelDesc className={"repos"}> {props.description} </CardLabelDesc>}

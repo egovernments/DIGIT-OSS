@@ -339,6 +339,7 @@ const BpaApplicationDetail = () => {
         onFormValueChange={onFormValueChange}
         breaklineStyle={{ border: "0px" }}
         className={"employeeCard-override"}
+        cardClassName={"employeeCard-override"}
       />}
       <ApplicationDetailsTemplate
         applicationDetails={data}
