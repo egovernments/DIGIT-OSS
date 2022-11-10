@@ -33,41 +33,67 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   let isOpenLinkFlow = window.location.href.includes("openlink");
 
 
-
-  useEffect(() => {    
-    const interval = setTimeout(function() {
-      getDeveloperData()
-      // console.log("It has been 3 seconds.");
-      }, 3000);
-  
-    return () => clearTimeout(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
-  }, [])
-
-  const getDeveloperData = async () => {
+  const getDeveloperData = async ()=>{
+   
     try {
       const requestResp = {
-
+        
         "RequestInfo": {
-          "api_id": "1",
-          "ver": "1",
-          "ts": "",
-          "action": "_getDeveloperById",
-          "did": "",
-          "key": "",
-          "msg_id": "",
-          "requester_id": "",
-          "auth_token": ""
+            "api_id": "1",
+            "ver": "1",
+            "ts": "",
+            "action": "_getDeveloperById",
+            "did": "",
+            "key": "",
+            "msg_id": "",
+            "requester_id": "",
+            "auth_token": ""
         },
-      }
-      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${localStorage.getItem('devRegId')}&isAllData=true`, requestResp, {
+    }
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${localStorage.getItem('devRegId')}&isAllData=true`,requestResp,{
 
       });
-      // console.log(getDevDetails?.data);
+      const developerDataGet = getDevDetails?.data; 
+      setDeveloperDataAddinfo((prev)=>[...prev,developerDataGet]);
+      console.log(developerDataAddinfo?.data);
+      
+      // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.shareHoldingPatterens); 
+      setShowDevTypeFields(developerDataGet?.devDetail[0]?.addInfo?.showDevTypeFields);
+      setCinNo(developerDataGet?.devDetail[0]?.addInfo?.cin_Number);
+      setCompanyName(developerDataGet?.devDetail[0]?.addInfo?.companyName);
+      setIncorporation(developerDataGet?.devDetail[0]?.addInfo?.incorporationDate);
+      setRegistered(developerDataGet?.devDetail[0]?.addInfo?.registeredAddress);
+      setEmail(developerDataGet?.devDetail[0]?.addInfo?.email);
+      setUserEmail(developerDataGet?.devDetail[0]?.addInfo?.emailUser);
+      setMobile(developerDataGet?.devDetail[0]?.addInfo?.mobileNumber);
+      setGST(developerDataGet?.devDetail[0]?.addInfo?.gst_Number);
+      setTbName(developerDataGet?.devDetail[0]?.addInfo?.sharName);
+      setDesignition(developerDataGet?.devDetail[0]?.addInfo?.designition);
+      setPercetage(developerDataGet?.devDetail[0]?.addInfo?.percentage);
+      setUploadPDF(developerDataGet?.devDetail[0]?.addInfo?.uploadPdf);
+      setSerialNumber(developerDataGet?.devDetail[0]?.addInfo?.serialNumber);
+      setDirectorData(developerDataGet?.devDetail[0]?.addInfo?.directorsInformation || "");
+      setModalNAme(developerDataGet?.devDetail[0]?.addInfo?.modalNAme);
+      setModaldesignition(developerDataGet?.devDetail[0]?.addInfo?.modaldesignition);
+      setModalPercentage(developerDataGet?.devDetail[0]?.addInfo?.modalPercentage);
+      setModalValuesArray(developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens || "");
+      setFinancialCapacity(developerDataGet?.devDetail[0]?.addInfo?.financialCapacity);
+      // setShowDevTypeFields(valueOfDrop);
     } catch (error) {
       console.log(error);
     }
   }
- 
+
+  useEffect(() => {
+    const interval = setTimeout(function() {
+      getDeveloperData()
+      }, 300);
+  
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, [])
+  // useEffect(() => {
+    
+  // }, []);
   const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name: "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [mobileNumberUser, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber: "") ||
     formData?.LicneseDetails?.mobileNumberUser || formData?.formData?.LicneseDetails?.mobileNumberUser || ""
