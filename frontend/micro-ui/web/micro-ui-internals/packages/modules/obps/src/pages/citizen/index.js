@@ -36,7 +36,7 @@ import Inbox from "./ArchitectInbox";
 //import EdcrInbox from "./EdcrInbox";
 import OBPSResponse from "../employee/OBPSResponse";
 import CommonForm from "../citizen/NewLicense/common/index";
-import ScrutinyFormcontainer from "../citizen/NewLicense/ScrutinyContainer/scrutinyformcontainer";
+import ScrutinyFormcontainer from "../citizen/NewLicense/ScrutinyContainer/ScrutinyFormContainer";
 import ServiceCard from "../citizen/NewLicense/AllService/Service";
 import ZoningPlan from "../citizen/NewLicense/AllService/Module/ZoningPlan/ZoningPlan";
 const App = ({ path }) => {
