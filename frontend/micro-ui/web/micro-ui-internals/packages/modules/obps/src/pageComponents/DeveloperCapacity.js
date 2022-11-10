@@ -10,7 +10,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData }) => {
+const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) => {
     const { pathname: url } = useLocation();
     let validation = {};
     const devRegId = localStorage.getItem('devRegId');
@@ -37,6 +37,10 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
             const developerDataGet = getDevDetails?.data; 
             console.log(developerDataGet);
             console.log("TECHEXP",developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.engineerName);
+            setValueHrdu(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.permissionGrantedHRDU);
+            setValueTechExpert(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpert);
+            setValueDesignatedDirectors(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.designatedDirectors);
+            setValueAlreadyObtainedLic(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.alreadtObtainedLic);
             setModalCapacityDevelopColonyHdruAct(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.capacityDevelopColonyHdruAct || "");
             setCapacityDevelopColonyLawAct(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.capacityDevelopColonyLawAct || "");
             setModalLcNo(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.licenceNumber);
@@ -149,9 +153,12 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
     const [paidUpCapital,setPaidUpCapital] = useState("");
     const [networthPartners,setNetworthPartners] = useState("");
     const [networthFirm,setNetworthFirm] = useState("");
-  const [showhide, setShowhide] = useState("No");
-  const [showhide1, setShowhide1] = useState("no");
-  const [showhide0, setShowhide0] = useState("No");
+  const [permissionGrantedHRDU, setValueHrdu] = useState("");
+  const [technicalExpert, setValueTechExpert] = useState("");
+  const [designatedDirectors, setValueDesignatedDirectors] = useState("");
+  const [alreadtObtainedLic, setValueAlreadyObtainedLic] = useState("");
+  const [showhide1, setShowhide1] = useState("Y");
+  const [showhide0, setShowhide0] = useState("Y");
   // const [showhide2, setShowhide2] = useState("No");
   // const [showhide3, setShowhide3] = useState("No");
   // const [showhide4, setShowhide4] = useState("No");
@@ -199,11 +206,26 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
   //     props.AppliedDetailsFormSubmit(true);
   //   }
   // }, [AppliedDetailFormSubmitted]);
-  
+  const changeValueHrdu = (e) => {
+    console.log(e.target.value);
+    setValueHrdu(e.target.value)
+  }
+  const changeTechnicalExpert = (e) => {
+    console.log(e.target.value);
+    setValueTechExpert(e.target.value)
+  }
+  const changeDesignatedDirectors = (e) => {
+    console.log(e.target.value);
+    setValueDesignatedDirectors(e.target.value)
+  }
+  const changeAlreadyObtainedLic = (e) => {
+    console.log(e.target.value);
+    setValueAlreadyObtainedLic(e.target.value)
+  }
 
   const handleshow = (e) => {
     const getshow = e.target.value;
-    setShowhide(getshow);
+    console.log(getshow)
   };
   const handleshow0 = (e) => {
     const getshow = e.target.value;
@@ -367,6 +389,10 @@ const handleColonyDevGrp=()=>{
                 "paidUpCapital": "",
                 "networthPartners": "",
                 "networthFirm": "",
+                "permissionGrantedHRDU":permissionGrantedHRDU,
+                "technicalExpert":technicalExpert,
+                "designatedDirectors":designatedDirectors,
+                "alreadtObtainedLic":alreadtObtainedLic,
                 capacityDevelopColonyHdruAct: capacityDevelopColonyHdruAct,
                 capacityDevelopColonyLawAct: capacityDevelopColonyLawAct,
                 technicalExpertEngaged: [{
@@ -638,26 +664,24 @@ const handleColonyDevGrp=()=>{
                     <div className="form-group">
                     <input
                         type="radio"
-                        value="Yes"
-                        id="Yes"
+                        value="Y"
+                        id="permissionGrantedHRDU"
                         className="mx-2 mt-1"
-                        onChange={handleChange}
-                        name="Yes"
-                        onClick={handleshow0}
+                        onChange={changeValueHrdu}
+                        name="permissionGrantedHRDU"
                     />
                     <label for="Yes">Yes</label>
 
                     <input
                         type="radio"
-                        value="No"
-                        id="No"
+                        value="N"
+                        id="permissionGrantedHRDUN"
                         className="mx-2 mt-1"
-                        onChange={handleChange}
-                        name="Yes"
-                        onClick={handleshow0}
+                        onChange={changeValueHrdu}
+                        name="permissionGrantedHRDU"
                     />
                     <label for="No">No</label>
-                    {showhide0 === "Yes" && (
+                    {permissionGrantedHRDU === "Y" && (
                         <div className="card-body">
                         {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
                         <div className="table-bd">
@@ -1048,26 +1072,24 @@ const handleColonyDevGrp=()=>{
                     <div className="form-group">
                     <input
                         type="radio"
-                        value="Yes"
-                        id="Yes"
+                        value="Y"
+                        id="technicalExpert"
                         className="mx-2 mt-1"
-                        onChange={handleChange}
-                        name="Yes"
-                        onClick={handleshow1}
+                        onChange={changeTechnicalExpert}
+                        name="technicalExpert"
                     />
                     <label for="Yes">Yes</label>
 
                     <input
                         type="radio"
-                        value="No"
-                        id="No"
+                        value="N"
+                        id="technicalExpertN"
                         className="mx-2 mt-1"
-                        onChange={handleChange}
-                        name="Yes"
-                        onClick={handleshow1}
+                        onChange={changeTechnicalExpert}
+                        name="technicalExpert"
                     />
                     <label for="No">No</label>
-                    {showhide1 === "Yes" && (
+                    {technicalExpert === "Y" && (
                         <div className="row ">
                         <div className="form-group row">
                             <div className="col-sm-12">
@@ -1212,7 +1234,7 @@ const handleColonyDevGrp=()=>{
                         </div>
                         </div>
                     )}
-                    {showhide1 === "No" && (
+                    {technicalExpert === "N" && (
                         <div className="row ">
                         <div className="form-group row">
                             {/* <label className="col-sm-3 col-form-label">Company</label> */}
@@ -1355,26 +1377,24 @@ const handleColonyDevGrp=()=>{
                     <div className="form-group">
                     <input
                         type="radio"
-                        value="Yes"
-                        id="Yes"
+                        value="Y"
+                        id="designatedDirectors"
                         className="mx-2 mt-1"
-                        onChange={(e)=>handleChange(e.target.value)}
-                        name="Yes"
-                        onClick={handleshow}
+                        onChange={changeDesignatedDirectors}
+                        name="designatedDirectors"
                     />
                     <label for="Yes">Yes</label>
 
                     <input
                         type="radio"
-                        value="No"
-                        id="No"
+                        value="N"
+                        id="designatedDirectorsN"
                         className="mx-2 mt-1"
-                        onChange={(e)=>handleChange(e.target.value)}
-                        name="Yes"
-                        onClick={handleshow}
+                        onChange={changeDesignatedDirectors}
+                        name="designatedDirectors"
                     />
                     <label for="No">No</label>
-                    {showhide === "Yes" && (
+                    {designatedDirectors === "Y" && (
                         <div className="row ">
                         <div className="form-group row">
                             <div className="col-sm-12">
@@ -1435,26 +1455,25 @@ const handleColonyDevGrp=()=>{
                     <div className="form-group">
                     <input
                         type="radio"
-                        value="Yes"
-                        id="Yes"
+                        value="Y"
+                        id="alreadtObtainedLic"
                         className="mx-2 mt-1"
-                        onChange={handleChange}
-                        name="Yes"
-                        onClick={handleshow6}
+                        onChange={changeAlreadyObtainedLic}
+                        name="alreadtObtainedLic"
                     />
                     <label for="Yes">Yes</label>
 
                     <input
                         type="radio"
-                        value="No"
-                        id="No"
+                        value="N"
+                        id="alreadtObtainedLicN"
                         className="mx-2 mt-1"
-                        onChange={handleChange}
-                        name="Yes"
+                        onChange={changeAlreadyObtainedLic}
+                        name="alreadtObtainedLic"
                         onClick={handleshow6}
                     />
                     <label for="No">No</label>
-                    {showhide6 === "Yes" && (
+                    {alreadtObtainedLic === "Y" && (
                         <div className="row ">
                         <div className="form-group row">
                             <div className="col-sm-12">
@@ -1522,7 +1541,7 @@ const handleColonyDevGrp=()=>{
                         </div>
                         </div>
                     )}
-                    {showhide6 === "No" && (
+                    {alreadtObtainedLic === "N" && (
                         <div className="row ">
                         <div className="form-group row">
                             <div className="col-sm-12">
@@ -1612,4 +1631,4 @@ const handleColonyDevGrp=()=>{
   );
 };
 
-export default CorrospondenceAddress;
+export default DeveloperCapacity;

@@ -386,7 +386,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
       });
     }else {
       let data = formData?.formData;
-      data.LicneseDetails.addAuthUserformData = addAuthUserformData;
+      // data.LicneseDetails.addAuthUserformData = addAuthUserformData;
       onSelect("", formData)
     }
     
