@@ -40,13 +40,13 @@
 
 package org.egov.demand.config;
 
-import java.util.Map;
-
+import lombok.Getter;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-import lombok.Getter;
-import lombok.ToString;
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 @Getter
@@ -192,5 +192,7 @@ public class ApplicationProperties {
     
     @Value("${amendment.id.format.name}")
     private String amendmentIdFormatName;
-    
+
+	@Value("${statelevel.rolecode.excluded.list}")
+	private List<String> statelevelRolecodeExclusionList;
 }
