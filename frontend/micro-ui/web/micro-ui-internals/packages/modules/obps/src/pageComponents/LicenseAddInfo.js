@@ -27,15 +27,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const { pathname: url } = useLocation();
   const devRegId = localStorage.getItem('devRegId');
   const userInfo = Digit.UserService.getUser();
-  // const refreshPage = async () => {
-  //   window.location.reload(false);
-  // }
+  const MINUTE_MS = 6000;
 
-  // useEffect(() =>{
-  //   refreshPage()
-  // },[])
+  
   let isOpenLinkFlow = window.location.href.includes("openlink");
   const getDeveloperData = async ()=>{
+   
     try {
       const requestResp = {
         
@@ -84,9 +81,18 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       console.log(error);
     }
   }
+
   useEffect(() => {
-    getDeveloperData()
-  }, []);
+    const interval = setTimeout(function() {
+      getDeveloperData()
+      console.log("It has been 3 seconds.");
+      }, 3000);
+  
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, [])
+  // useEffect(() => {
+    
+  // }, []);
   const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name: "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [mobileNumberUser, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber: "") ||
     formData?.LicneseDetails?.mobileNumberUser || formData?.formData?.LicneseDetails?.mobileNumberUser || ""
@@ -272,8 +278,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             'Access-Control-Allow-Origin':"*",
           }})
   
-          console.log("CIN",Resp.data)
-          console.log(Directory.data);
+          // console.log("CIN",Resp.data)
+          // console.log(Directory.data);
           setDirectorData(Directory.data);
           setCompanyName(Resp.data.companyName)
           setIncorporation(Resp.data.incorporationDate)
@@ -417,7 +423,7 @@ const onSkip = () => onSelect();
 
                         <SearchDropDown
                           listOfData={optionsArrList}
-                          labels="Selct Type"
+                          labels={"Selct Type" || showDevTypeFields}
                           getSelectedValue={devType}
                           name="showDevTypeFields"
                           placeholder={showDevTypeFields}
