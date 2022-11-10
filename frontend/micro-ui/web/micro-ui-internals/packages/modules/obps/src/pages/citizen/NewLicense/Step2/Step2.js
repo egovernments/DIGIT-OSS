@@ -2,12 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
-import InfoIcon from "@mui/icons-material/Info";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import WorkingTable from "../../../../components/Table";
@@ -123,7 +118,6 @@ const optionsPotentialList = [
 ];
 
 const ApllicantPuropseForm = (props) => {
-  console.log("Props", props);
   const columns = [
     {
       key: "tehsil",
@@ -171,7 +165,6 @@ const ApllicantPuropseForm = (props) => {
             onClick={() => {
               setmodal(true);
               setSpecificTableData(data);
-              console.log("data", data);
             }}
           >
             Edit
@@ -238,7 +231,6 @@ const ApllicantPuropseForm = (props) => {
             onClick={() => {
               setmodal(true);
               setSpecificTableData(data);
-              // console.log("data", data)
             }}
           >
             Edit
@@ -249,10 +241,6 @@ const ApllicantPuropseForm = (props) => {
     },
   ];
 
-  const stateId = Digit.ULBService.getStateId();
-  const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
-  console.log("kjh", PurposeType);
-
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
   const [getColumns, setColumns] = useState(columns);
@@ -260,11 +248,6 @@ const ApllicantPuropseForm = (props) => {
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
   const [districtData, setDistrictData] = useState([]);
-  const [tehsilData, setTehsilData] = useState([]);
-  const [revenueStateData, setRevenuStateData] = useState([]);
-  const [mustilData, setMustilData] = useState([]);
-  const [potentialDataLabels, setPotentialDataLabels] = useState([]);
-  const [purposeDataLabels, setPurposeDataLabels] = useState([]);
   const [districtDataLbels, setDistrictDataLabels] = useState([]);
   const [tehsilDataLabels, setTehsilDataLabels] = useState([]);
   const [revenueDataLabels, setRevenueDataLabels] = useState([]);
@@ -276,10 +259,8 @@ const ApllicantPuropseForm = (props) => {
   const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
   const [consolidateValue, setConsolidateValue] = useState(null);
-  const [submitDataLabel, setSubmitDataLabel] = useState([]);
-  const [finalSubmitData, setFinalSubmitData] = useState([]);
-  const ID = props.getId;
-  console.log("ID", ID);
+  const [purposeOptions, setPurposeOptions] = useState([]);
+
   useEffect(() => {
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
@@ -293,7 +274,6 @@ const ApllicantPuropseForm = (props) => {
       setValue("biswa", specificTableData?.biswa);
       setValue("landOwner", specificTableData?.landOwner);
     }
-    console.log("specificTableData", specificTableData);
   }, [specificTableData]);
 
   const {
@@ -322,6 +302,16 @@ const ApllicantPuropseForm = (props) => {
     }
     setShowhide2(getshow);
   };
+
+  const stateId = Digit.ULBService.getStateId();
+  const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
+
+  useEffect(() => {
+    const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
+      return { value: data?.purposeCode, label: data?.name };
+    });
+    setPurposeOptions(purpose);
+  }, [PurposeType]);
 
   const DistrictApiCall = async () => {
     try {
@@ -371,7 +361,6 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {}).then((response) => {
         return response;
       });
-      setTehsilData(Resp.data);
       if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
         Resp.data.map((el, i) => {
           setTehsilDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.code }]);
@@ -402,7 +391,6 @@ const ApllicantPuropseForm = (props) => {
         .then((response) => {
           return response;
         });
-      setRevenuStateData(Resp.data);
 
       if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
         Resp.data.map((el, i) => {
@@ -435,7 +423,6 @@ const ApllicantPuropseForm = (props) => {
         .then((response) => {
           return response;
         });
-      setMustilData(Resp.data.must);
       if (Resp.data.must.length > 0 && Resp.data.must !== undefined && Resp.data.must !== null) {
         Resp.data.must.map((el, i) => {
           setMustilDataLabels((prev) => [...prev, { label: el, id: i, value: el }]);
@@ -460,7 +447,6 @@ const ApllicantPuropseForm = (props) => {
         authToken: "",
       },
     };
-    console.log("khewat", khewats);
     try {
       const Resp = await axios
         .post(
@@ -469,7 +455,6 @@ const ApllicantPuropseForm = (props) => {
           {}
         )
         .then((response) => {
-          console.log("Resp", response);
           return response;
         });
       setKhewatData(Resp.data);
@@ -488,12 +473,7 @@ const ApllicantPuropseForm = (props) => {
     DistrictApiCall();
   }, []);
 
-  useEffect(() => {
-    console.log("Revenue", revenueDataLabels);
-  }, [revenueDataLabels]);
-
   const ApplicantPurposeModalData = (data) => {
-    console.log("data++++++", data);
     data["tehsil"] = data?.tehsil?.label;
     data["revenueEstate"] = data?.revenueEstate?.label;
     data["rectangleNo"] = data?.rectangleNo;
@@ -579,8 +559,6 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
         return response;
       });
-      console.log("RESP+++", Resp?.data?.newServiceInfoData[0]?.ApplicantPurpose?.potential);
-      setSubmitDataLabel(Resp?.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -590,7 +568,6 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const PurposeFormSubmitHandler = async (data) => {
-    console.log("data===", data);
     try {
       const postDistrict = {
         NewServiceInfo: {
@@ -631,7 +608,6 @@ const ApllicantPuropseForm = (props) => {
         return Resp;
       });
       props.Step2Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
-      setFinalSubmitData(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -659,7 +635,7 @@ const ApllicantPuropseForm = (props) => {
                     name="purposeDd"
                     onChange={handleChangePurpose}
                     placeholder="Purpose"
-                    data={optionsPurposeList}
+                    data={purposeOptions}
                     labels="Purpose"
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
