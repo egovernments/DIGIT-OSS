@@ -111,6 +111,14 @@ const CustomHorizontalBarChart = ({
     return `${tickFormat}`;
   };
 
+  const getVerticalWidth = (layout) => {
+    if (window?.location.href.includes("dss/dashboard/pgr")) {
+      return layout === "vertical" ? 150 : 60 
+    } else {
+      return layout === "vertical" ? 120 : 60
+    }
+  }
+
   const bars = response?.responseData?.data?.map((bar) => bar?.headerName);
   return (
     <Fragment>
@@ -157,7 +165,7 @@ const CustomHorizontalBarChart = ({
               tickCount={10}
               tickFormatter={tickFormatter}
               unit={id === "fsmCapacityUtilization" ? "%" : ""}
-              width={layout === "vertical" ? 120 : 60}
+              width={getVerticalWidth(layout)}
             />
             <XAxis dataKey={xDataKey} type={xAxisType} tick={{ fontSize: "14px", fill: "#505A5F" }} tickCount={10} tickFormatter={tickFormatter} />
             {bars?.map((bar, id) => (

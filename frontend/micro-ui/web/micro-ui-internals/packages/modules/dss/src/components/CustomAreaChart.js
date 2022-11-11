@@ -301,6 +301,7 @@ const CustomAreaChart = ({ xDataKey = "name", yDataKey = getValue, data, setChar
             <XAxis dataKey="name" />
             <YAxis
               tickFormatter={yAxistickFormatter}
+              width={value?.denomination == "Unit" ? 100 : 60} //60 is by default
               /*
             Removed this custom yaxis label for all line charts 
             label={{
