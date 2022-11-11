@@ -168,7 +168,6 @@ const ApllicantFormStep1 = (props) => {
   const getSubmitDataLabel = async () => {
     try {
       const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${dataId}`);
-      console.log("RESP+++", Resp);
       const userData = Resp?.data?.newServiceInfoData?.[0]?.ApplicantInfo;
       setValue("notSigned", userData?.notSigned);
       setValue("LC", userData?.LC);

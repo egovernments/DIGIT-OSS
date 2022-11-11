@@ -60,6 +60,14 @@ const CommonForm = () => {
     setIsStep5(false);
     setStep(3);
   };
+  const handleBack4 = () => {
+    setIsStep1(false);
+    setIsStep2(false);
+    setIsStep3(true);
+    setIsStep4(false);
+    setIsStep5(false);
+    setStep(3);
+  };
 
   const handlestep3 = (data, id) => {
     console.log("true", data);
@@ -98,7 +106,7 @@ const CommonForm = () => {
       ) : isStep3 ? (
         <AppliedDetailForm getId={getId} Step4Continue={handlestep4} step4Back={handleBack3} />
       ) : isStep4 ? (
-        <FeesChargesForm getId={getId} Step5Continue={handlestep5} />
+        <FeesChargesForm getId={getId} Step5Continue={handlestep5} step5Back={handleBack4} />
       ) : (
         <ApllicantFormStep1 getId={getId} Step1Continue={handleStep1} />
       )}
