@@ -68,6 +68,9 @@ public class PropertyConfiguration {
     @Value("${egov.user.search.path}")
     private String userSearchEndpoint;
 
+    @Value("${egov.internal.microservice.user.uuid}")
+    private String egovInternalMicroserviceUserUuid;
+
 
     //IDGEN config
     

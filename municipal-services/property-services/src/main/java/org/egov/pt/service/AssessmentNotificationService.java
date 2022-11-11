@@ -1,11 +1,7 @@
 package org.egov.pt.service;
 
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.apache.http.client.utils.URIBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.pt.config.PropertyConfiguration;
 import org.egov.pt.models.Assessment;
@@ -16,6 +12,7 @@ import org.egov.pt.models.event.Event;
 import org.egov.pt.models.event.EventRequest;
 import org.egov.pt.models.workflow.ProcessInstance;
 import org.egov.pt.util.NotificationUtil;
+import org.egov.pt.util.UnmaskingUtil;
 import org.egov.pt.web.contracts.AssessmentRequest;
 import org.egov.pt.web.contracts.EmailRequest;
 import org.egov.pt.web.contracts.SMSRequest;
@@ -23,7 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import lombok.extern.slf4j.Slf4j;
+import java.math.BigDecimal;
+import java.util.*;
 
 import static org.egov.pt.util.PTConstants.*;
 
@@ -41,12 +39,15 @@ public class AssessmentNotificationService {
     
     private BillingService billingService;
 
+    private UnmaskingUtil unmaskingUtil;
+
     @Autowired
-    public AssessmentNotificationService(NotificationUtil util, PropertyService propertyService, PropertyConfiguration config,BillingService billingService ) {
+    public AssessmentNotificationService(NotificationUtil util, PropertyService propertyService, PropertyConfiguration config,BillingService billingService,UnmaskingUtil unmaskingUtil ) {
         this.util = util;
         this.propertyService = propertyService;
         this.config = config;
         this.billingService = billingService;
+        this.unmaskingUtil = unmaskingUtil;
     }
 
     public void process(String topicName, AssessmentRequest assessmentRequest){
@@ -57,14 +58,18 @@ public class AssessmentNotificationService {
 
         PropertyCriteria criteria = PropertyCriteria.builder().tenantId(tenantId)
                                     .propertyIds(Collections.singleton(assessment.getPropertyId()))
+                                    .isSearchInternal(Boolean.TRUE)
                                     .build();
+
+
         List<Property> properties = propertyService.searchProperty(criteria, requestInfo);
 
         if(CollectionUtils.isEmpty(properties))
             log.error("NO_PROPERTY_FOUND","No property found for the assessment: "+assessment.getPropertyId());
 
         Property property = properties.get(0);
-        
+        unmaskingUtil.getOwnerDetailsUnmasked(property,requestInfo);
+
         BillResponse billResponse = billingService.fetchBill(property, requestInfo);
         BigDecimal dueAmount = billResponse.getBill().get(0).getTotalAmount();
 
@@ -110,6 +115,7 @@ public class AssessmentNotificationService {
                 util.sendEmail(emailRequests);
             }
             }
+
     }
 
 
