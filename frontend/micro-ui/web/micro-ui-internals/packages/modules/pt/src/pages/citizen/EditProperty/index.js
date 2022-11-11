@@ -427,13 +427,13 @@ const EditProperty = ({ parentRoute }) => {
   const updateProperty = window.location.href.includes("action=UPDATE");
   const typeOfProperty = window.location.href.includes("UPDATE") ? true : false;
   const ptProperty = JSON.parse(sessionStorage.getItem("pt-property")) || { };
-  const data = { Properties: [ptProperty] };
-  /* const { isLoading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
-    { filters: typeOfProperty ? { propertyIds } : { acknowledgementIds } },
+  //const data = { Properties: [ptProperty] };
+    const { isLoading: isPTloading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
+    { filters: typeOfProperty ? { propertyIds, isSearchInternal:true  } : { acknowledgementIds, isSearchInternal:true  } },
     {
-      filters: typeOfProperty ? { propertyIds } : { acknowledgementIds },
+      filters: typeOfProperty ? { propertyIds, isSearchInternal:true  } : { acknowledgementIds, isSearchInternal:true  },
     }
-  ); */
+  ); 
   sessionStorage.setItem("isEditApplication", false);
 
   useEffect(() => {
@@ -451,7 +451,7 @@ const EditProperty = ({ parentRoute }) => {
       let propertyEditDetails = getPropertyEditDetails(application);
       setParams({ ...params, ...propertyEditDetails });
     }
-  }, []);
+  }, [data]);
 
   const goNext = (skipStep, index, isAddMultiple, key) => {
     let currentPath = pathname.split("/").pop(),
@@ -573,7 +573,7 @@ const EditProperty = ({ parentRoute }) => {
   };
 
 
-  if (isLoading) {
+  if (isLoading || isPTloading) {
     return <Loader />;
   }
 

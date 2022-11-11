@@ -107,7 +107,8 @@ const PlumberDetails = (_props) => {
             const keys = Object.keys(formValue);
             const part = {};
             keys.forEach((key) => (part[key] = plumberDetail[key]));
-            if (!_.isEqual(formValue, part)) {
+            let plumbermobileCheck = window.location.href.includes("ws/config-by-disconnection-application") ? (formValue?.plumberMobileNo !== undefined && part?.plumberMobileNo) : true;
+            if (!_.isEqual(formValue, part) && plumbermobileCheck) {
                 let isErrorsFound = true;
                 Object.keys(formValue).map(data => {
                     if (!formValue[data] && isErrorsFound) {
