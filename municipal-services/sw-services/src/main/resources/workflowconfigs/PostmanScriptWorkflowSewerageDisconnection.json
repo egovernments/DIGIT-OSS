@@ -135,7 +135,7 @@ curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/b
 					"docUploadRequired": false,
 					"isStartState": false,
 					"isTerminateState": false,
-					"isStateUpdatable": true,
+					"isStateUpdatable": false,
 					"actions": [
 						{
 							"action": "SEND_BACK_FOR_FIELD_INSPECTION",

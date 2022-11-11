@@ -162,7 +162,7 @@ curl --location --request POST 'https://dev.digit.org/egov-workflow-v2/egov-wf/b
 					"applicationStatus": "PENDING_APPROVAL_FOR_CONNECTION",
 					"docUploadRequired": false,
 					"isStartState": false,
-					"isStateUpdatable": true,
+					"isStateUpdatable": false,
 					"isTerminateState": false,
 					"actions": [
 						{

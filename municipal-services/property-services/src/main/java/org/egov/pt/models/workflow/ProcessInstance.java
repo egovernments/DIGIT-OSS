@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.egov.pt.models.Document;
+import org.egov.pt.models.OwnerInfo;
 import org.egov.pt.models.user.User;
 import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.validation.annotation.Validated;
@@ -89,7 +90,7 @@ public class ProcessInstance {
 	private List<Document> documents;
 
 	@JsonProperty("assignes")
-	private List<User> assignes;
+	private List<OwnerInfo> assignes;
 
 	public ProcessInstance addDocumentsItem(Document documentsItem) {
 		if (this.documents == null) {
