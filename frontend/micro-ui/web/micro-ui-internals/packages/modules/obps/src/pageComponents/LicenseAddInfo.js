@@ -22,12 +22,78 @@ import SearchDropDown from "../../../../react-components/src/atoms/searchDropDow
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
-const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, ownerIndex }) => {
+const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
+  const devRegId = localStorage.getItem('devRegId');
   const userInfo = Digit.UserService.getUser();
-  let isOpenLinkFlow = window.location.href.includes("openlink");
+
+
   
+  let isOpenLinkFlow = window.location.href.includes("openlink");
+
+
+  const getDeveloperData = async ()=>{
+   
+    try {
+      const requestResp = {
+        
+        "RequestInfo": {
+            "api_id": "1",
+            "ver": "1",
+            "ts": "",
+            "action": "_getDeveloperById",
+            "did": "",
+            "key": "",
+            "msg_id": "",
+            "requester_id": "",
+            "auth_token": ""
+        },
+    }
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${localStorage.getItem('devRegId')}&isAllData=true`,requestResp,{
+
+      });
+      const developerDataGet = getDevDetails?.data; 
+      setDeveloperDataAddinfo((prev)=>[...prev,developerDataGet]);
+      console.log(developerDataAddinfo?.data);
+      
+      // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.shareHoldingPatterens); 
+      setShowDevTypeFields(developerDataGet?.devDetail[0]?.addInfo?.showDevTypeFields);
+      setCinNo(developerDataGet?.devDetail[0]?.addInfo?.cin_Number);
+      setCompanyName(developerDataGet?.devDetail[0]?.addInfo?.companyName);
+      setIncorporation(developerDataGet?.devDetail[0]?.addInfo?.incorporationDate);
+      setRegistered(developerDataGet?.devDetail[0]?.addInfo?.registeredAddress);
+      setEmail(developerDataGet?.devDetail[0]?.addInfo?.email);
+      setUserEmail(developerDataGet?.devDetail[0]?.addInfo?.emailUser);
+      setMobile(developerDataGet?.devDetail[0]?.addInfo?.mobileNumber);
+      setGST(developerDataGet?.devDetail[0]?.addInfo?.gst_Number);
+      setTbName(developerDataGet?.devDetail[0]?.addInfo?.sharName);
+      setDesignition(developerDataGet?.devDetail[0]?.addInfo?.designition);
+      setPercetage(developerDataGet?.devDetail[0]?.addInfo?.percentage);
+      setUploadPDF(developerDataGet?.devDetail[0]?.addInfo?.uploadPdf);
+      setSerialNumber(developerDataGet?.devDetail[0]?.addInfo?.serialNumber);
+      setDirectorData(developerDataGet?.devDetail[0]?.addInfo?.directorsInformation || "");
+      setModalNAme(developerDataGet?.devDetail[0]?.addInfo?.modalNAme);
+      setModaldesignition(developerDataGet?.devDetail[0]?.addInfo?.modaldesignition);
+      setModalPercentage(developerDataGet?.devDetail[0]?.addInfo?.modalPercentage);
+      setModalValuesArray(developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens || "");
+      setFinancialCapacity(developerDataGet?.devDetail[0]?.addInfo?.financialCapacity);
+      // setShowDevTypeFields(valueOfDrop);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    const interval = setTimeout(function() {
+      getDeveloperData()
+      }, 300);
+  
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, [])
+  // useEffect(() => {
+    
+  // }, []);
   const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name: "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [mobileNumberUser, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber: "") ||
     formData?.LicneseDetails?.mobileNumberUser || formData?.formData?.LicneseDetails?.mobileNumberUser || ""
@@ -76,23 +142,23 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     const optionsArrList = [
       {
         label: "Individual",
-        value: "01",
-        id: "0",
-      },
-      {
-        label: "Company",
-        value: "02",
+        value: "Individual",
         id: "1",
       },
       {
-        label: "LLP",
-        value: "03",
+        label: "Company",
+        value: "Company",
         id: "2",
       },
       {
-        label: "Society",
-        value: "04",
+        label: "LLP",
+        value: "LLP",
         id: "3",
+      },
+      {
+        label: "Society",
+        value: "Society",
+        id: "4",
       },
     ]
     // onchange = (e) => {
@@ -102,16 +168,16 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
       this.setState({ isRadioSelected: true });
     };
     const [showhide0, setShowhide0] = useState("No");
-    const [showDevTypeFields, setShowDevTypeFields] = useState("00");
+    const [showDevTypeFields, setShowDevTypeFields] = useState(formData?.LicneseDetails?.showDevTypeFields || formData?.formData?.LicneseDetails?.showDevTypeFields || "00");
     const [FormSubmitted, setFormSubmitted] = useState(false);
     const [showhide, setShowhide] = useState("No");
-    const [cin_Number, setCinNo] = useState(formTab?.LicneseDetails?.cin_Number || formTab?.LicneseDetails?.cin_Number || "");
-    const [companyName, setCompanyName] = useState(formTab?.LicneseDetails?.companyName || formTab?.LicneseDetails?.companyName || "");
-    const [incorporationDate, setIncorporation] = useState(formTab?.LicneseDetails?.incorporationDate || formTab?.LicneseDetails?.incorporationDate || "");
-    const [registeredAddress, setRegistered] = useState(formTab?.LicneseDetails?.registeredAddress || formTab?.LicneseDetails?.registeredAddress || "");
-    const [email, setEmail] = useState(formTab?.LicneseDetails?.email || formTab?.LicneseDetails?.email || "");
-    const [emailUser, setUserEmail] = useState(formTab?.LicneseDetails?.email || formTab?.LicneseDetails?.email || "");
-    const [registeredContactNo, setMobile] = useState(formTab?.LicneseDetails?.registeredContactNo || formTab?.LicneseDetails?.registeredContactNo || "");
+    const [cin_Number, setCinNo] = useState(formData?.LicneseDetails?.cin_Number || formData?.formData?.LicneseDetails?.cin_Number || "");
+    const [companyName, setCompanyName] = useState(formData?.LicneseDetails?.companyName || formData?.LicneseDetails?.companyName || "");
+    const [incorporationDate, setIncorporation] = useState(formData?.LicneseDetails?.incorporationDate || formData?.LicneseDetails?.incorporationDate || "");
+    const [registeredAddress, setRegistered] = useState(formData?.LicneseDetails?.registeredAddress || formData?.LicneseDetails?.registeredAddress || "");
+    const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
+    const [emailUser, setUserEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
+    const [registeredContactNo, setMobile] = useState(formData?.LicneseDetails?.registeredContactNo || formData?.LicneseDetails?.registeredContactNo || "");
     const [gst_Number, setGST] = useState("");
     const [sharName, setTbName] = useState("");
     const [designition, setDesignition] = useState("");
@@ -124,11 +190,16 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
     const [modalPercentage,setModalPercentage]=useState("");
     // const dispatch = useDispatch();
     
-    const [modalValuesArray,setModalValuesArray]= useState([]);
+    const [modalValuesArray,setModalValuesArray]= useState([] || developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens);
     const [financialCapacity,setFinancialCapacity]= useState([]);
     
     const [docUpload,setDocuploadData]=useState([])
     const [file,setFile]=useState(null);
+    const [developerDataAddinfo,setDeveloperDataAddinfo] = useState([])
+    const [showDevTypeFieldsValue,setShowDevTypeFieldsValue] = useState("")
+
+    
+    console.log(devRegId);
     const handleshow = (e) => {
       const getshow = e.target.value;
       setShowhide(getshow);
@@ -163,7 +234,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
          formData.append(
              "file",file.file      );
          formData.append(
-             "tenantId","hr"      );  
+             "tenantId",tenantId      );  
          formData.append(
              "module","property-upload"      );
           formData.append(
@@ -208,8 +279,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
             'Access-Control-Allow-Origin':"*",
           }})
   
-          console.log("CIN",Resp.data)
-          console.log(Directory.data);
+          // console.log("CIN",Resp.data)
+          // console.log(Directory.data);
           setDirectorData(Directory.data);
           setCompanyName(Resp.data.companyName)
           setIncorporation(Resp.data.incorporationDate)
@@ -241,40 +312,24 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
       setmodal(!modal)
     }
   }
-  console.log("FORMARRAYVAL",modalValuesArray);
+  // console.log("FORMARRAYVAL",modalValuesArray);
   useEffect(()=>{
     HandleGetMCNdata();
   },[cin_Number])
   
-  // const postAddInfo=async()=>{
-  
-  //   try{
-  //     const Resp =  await axios.post("http://localhost:8081/user/developer/_registration",
-  //     {headers:{
-  //         'Content-Type': 'application/json',
-  //         'Access-Control-Allow-origin':"*",
-  //     }})
-  //     .then((Resp)=>{
-  //         console.log("FORMDATA",Resp.devDetail)
-  //         return Resp;
-  //     })
-  
-  //   }catch(error){
-  //     console.log(error)
-  //   }
-  // }
+
   
     const [noofRows, setNoOfRows] = useState(1);
     const [aoofRows, setAoOfRows] = useState(1);
  
     
-    
+   
     
   // if (isLoading) return <Loader />;
-  const AddInfoForm = async (e) => {
+  const goNext = async (e) => {
 
-    if (!(formTab?.result && formTab?.result?.Licenses[0]?.id)) {
-      let licenseDet = {
+    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+      let addInfo = {
         showDevTypeFields:showDevTypeFields,
         cin_Number: cin_Number,
         companyName: companyName,
@@ -286,19 +341,57 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData,formTab, owner
         directorsInformation: DirectorData,
         shareHoldingPatterens:modalValuesArray
       }
-      onSelect(config.key, licenseDet);
-      console.log("DATALICDET",licenseDet);
-      localStorage.setItem("addInfo",JSON.stringify(licenseDet));
+      onSelect(config.key, addInfo);
+      console.log("DATALICDET",addInfo);
+      localStorage.setItem("addInfo",JSON.stringify(addInfo));
+
+      const developerRegisterData = {
+        "id":devRegId,
+        "pageName":"addInfo",
+        "devDetail": {
+        
+        "addInfo": addInfo
+      }
+      }
+      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+        .then((result, err) => {
+          console.log("DATA",result?.id);
+          // localStorage.setItem('devRegId',JSON.stringify(result?.id));
+          setIsDisableForNext(false);
+          let data = { 
+            result: result, 
+            formData: formData, 
+            Correspondenceaddress: Correspondenceaddress,
+            addressLineOneCorrespondence: addressLineOneCorrespondence,
+            addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+
+            isAddressSame: isAddressSame }
+          //1, units
+          onSelect("", data, "", true);
+
+        })
+        .catch((e) => {
+          setIsDisableForNext(false);
+          setShowToast({ key: "error" });
+          setError(e?.response?.data?.Errors[0]?.message || null);
+        });
     }
     else {
-      let data = formTab?.formTab;
-      data.LicneseAddInfo.cin_Number = cin_Number;
-      data.LicneseAddInfo.companyName = companyName;
-      data.LicneseAddInfo.incorporationDate = incorporationDate;
-      data.LicneseAddInfo.registeredAddress = registeredAddress;
-      data.LicneseAddInfo.registeredContactNo = registeredContactNo;
-      onSelect("", formTab)
+      let data = formData?.formData;
+        data.LicneseDetails.showDevTypeFields = showDevTypeFields,
+        data.LicneseDetails.cin_Number = cin_Number,
+        data.LicneseDetails.companyName = companyName,
+        data.LicneseDetails.incorporationDate = incorporationDate,
+        data.LicneseDetails.registeredAddress = registeredAddress,
+        data.LicneseDetails.email = email,
+        data.LicneseDetails.registeredContactNo = registeredContactNo,
+        data.LicneseDetails.gst_Number = gst_Number,
+        data.LicneseDetails.directorsInformation = DirectorData,
+        data.LicneseDetails.shareHoldingPatterens = modalValuesArray
+      onSelect("", formData)
     }
+
+    
 
   };
 
@@ -315,7 +408,7 @@ const onSkip = () => onSelect();
         <FormStep 
           // onSubmit={AddInfoForm}
           config={config}
-          onSelect={AddInfoForm}
+          onSelect={goNext}
           onSkip={onSkip}
           isDisabled={showDevTypeFields === "00" || showDevTypeFields==undefined}
           t={t}
@@ -331,9 +424,11 @@ const onSkip = () => onSelect();
 
                         <SearchDropDown
                           listOfData={optionsArrList}
-                          labels="Selct Type"
+                          labels={"Selct Type" || showDevTypeFields}
                           getSelectedValue={devType}
+                          name="showDevTypeFields"
                           placeholder={showDevTypeFields}
+                          value={showDevTypeFields}
                           isMendatory={false}
                           {...(validation = {
                             isRequired: true,
@@ -353,7 +448,7 @@ const onSkip = () => onSelect();
             </div>
 
             {/* FOR INDIVIDUAL */}
-            {showDevTypeFields === "01" && (
+            {showDevTypeFields === "Individual" && (
             <div className="card mb-3">
               {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -493,7 +588,7 @@ const onSkip = () => onSelect();
             )}
           
             {/* FOR COMPANY */}
-            {showDevTypeFields === "02" && (
+            {showDevTypeFields === "Company" && (
             <div className="card mb-3">
               {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -508,6 +603,7 @@ const onSkip = () => onSelect();
                         type="text"
                         onChange={(e) => setCinNo(e.target.value.toUpperCase())}
                         value={cin_Number}
+                        name="cin_Number"
                         isMendatory={false}
                         placeholder={cin_Number}
                         className="employee-card-input"
@@ -731,7 +827,7 @@ const onSkip = () => onSelect();
               </div>
             </div>
             )}
-            {showDevTypeFields === "02" && (
+            {showDevTypeFields === "Company" && (
             <div className="card mb-3">
             <h5 className="card-title fw-bold">Shareholding Patterns</h5>
               <div className="card-body">
@@ -748,7 +844,7 @@ const onSkip = () => onSelect();
                     </thead>
                     <tbody>
                       {
-                        (modalValuesArray.length>0)?
+                        ( modalValuesArray.length>0)?
                         modalValuesArray.map((elementInArray, input) => {
                           return (
                             <tr>
@@ -952,7 +1048,7 @@ const onSkip = () => onSelect();
               </div>
             </div>
              )}
-            {showDevTypeFields === "02" && (
+            {showDevTypeFields === "Company" && (
             <div className="card mb-3">
             <h5 className="card-title fw-bold">Directors Information</h5>
               <div className="card-body">
@@ -963,12 +1059,14 @@ const onSkip = () => onSelect();
                         <th>Sr. No</th>
                         <th>DIN Number</th>
                         <th>Name</th>
-                        <th>PAN Number</th>
+                        <th>Contact Number</th>
                         <th>Upload PDF</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {DirectorData.map((elementInArray, input) => {
+                      {
+                        (DirectorData.length>0)?
+                      DirectorData.map((elementInArray, input) => {
                         return (
                           <tr key={input}>
                             <td>{input+1}</td>
@@ -1008,7 +1106,7 @@ const onSkip = () => onSelect();
                             </td>
                           </tr>
                         );
-                      })}
+                      }):<p></p>}
                     </tbody>
                   </table>
                 </div>
@@ -1018,7 +1116,7 @@ const onSkip = () => onSelect();
             )}
 
             {/* FOR COMPANY */}
-            {showDevTypeFields === "03" && (
+            {showDevTypeFields === "LLP" && (
             <div className="card mb-3">
               {/* <div className="card-header">
               <h5 className="card-title"> Developer</h5>
@@ -1254,7 +1352,7 @@ const onSkip = () => onSelect();
               </div>
             </div>
             )}
-            {showDevTypeFields === "03" && (
+            {showDevTypeFields === "LLP" && (
             <div className="card mb-3">
             <h5 className="card-title fw-bold">Shareholding Patterns</h5>
               <div className="card-body">
@@ -1271,7 +1369,7 @@ const onSkip = () => onSelect();
                     </thead>
                     <tbody>
                       {
-                        (modalValuesArray.length>0)?
+                        ( modalValuesArray.length>0)?
                         modalValuesArray.map((elementInArray, input) => {
                           return (
                             <tr>
@@ -1470,7 +1568,7 @@ const onSkip = () => onSelect();
               </div>
             </div>
              )}
-            {showDevTypeFields === "03" && (
+            {showDevTypeFields === "LLP" && (
             <div className="card mb-3">
             <h5 className="card-title fw-bold">Directors Information</h5>
               <div className="card-body">
@@ -1481,7 +1579,7 @@ const onSkip = () => onSelect();
                         <th>Sr. No</th>
                         <th>DIN Number</th>
                         <th>Name</th>
-                        <th>PAN Number</th>
+                        <th>Contact Number</th>
                         <th>Upload PDF</th>
                       </tr>
                     </thead>

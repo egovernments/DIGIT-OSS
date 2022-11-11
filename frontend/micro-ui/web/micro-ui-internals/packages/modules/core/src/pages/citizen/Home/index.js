@@ -1,10 +1,19 @@
 import {
-    Calender, CardBasedOptions, CaseIcon, ComplaintIcon, DocumentIcon, HomeIcon, Loader, OBPSIcon, PTIcon, StandaloneSearchBar, WhatsNewCard
+  Calender,
+  CardBasedOptions,
+  CaseIcon,
+  ComplaintIcon,
+  DocumentIcon,
+  HomeIcon,
+  Loader,
+  OBPSIcon,
+  PTIcon,
+  StandaloneSearchBar,
+  WhatsNewCard,
 } from "@egovernments/digit-ui-react-components";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useHistory } from "react-router-dom";
-import bannerImg from "../../../Images/bg-login.jpg"
 const Home = () => {
   const { t } = useTranslation();
   const history = useHistory();
@@ -42,19 +51,23 @@ const Home = () => {
         onClick: () => history.push("/digit-ui/citizen/pgr-home"),
       },
       {
-        name: t("MODULE_PT"),
+        // name: t("MODULE_PT"),
+        name: "Application for  Electrical Plan",
         Icon: <PTIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/pt-home"),
+        onClick: () => history.push("/digit-ui/citizen/electrical-plan"),
+        // onClick: () => history.push("/digit-ui/citizen/pt-home"),
       },
       {
-        name: "Bank Guarantee",
+        // name: t("MODULE_TL"),
+        name: "Application for  Service Plan",
         Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/obps/bank"),
+        onClick: () => history.push("/digit-ui/citizen/service-plan"),
+        // onClick: () => history.push("/digit-ui/citizen/tl-home"),
       },
       {
-          name: "New License Services",
-          Icon: <CaseIcon className="fill-path-primary-main" />,
-          onClick: () => history.push("/digit-ui/citizen/obps/tab")
+        name: "New License Services",
+        Icon: <CaseIcon className="fill-path-primary-main" />,
+        onClick: () => history.push("/digit-ui/citizen/obps/tab"),
       },
       {
         name: t("CS_COMMON_INBOX_BPA"),
@@ -104,7 +117,7 @@ const Home = () => {
     <div className="HomePageWrapper">
       <div className="BannerWithSearch">
         {/* <img src={stateInfo?.bannerUrl} /> */}
-        <img src={bannerImg} />
+        {/* <img src={"http://filesuploadbucket1aws.s3.amazonaws.com/tcp-haryana/bg-login.jpg"} /> */}
         <div className="Search">
           <StandaloneSearchBar placeholder={t("CS_COMMON_SEARCH_PLACEHOLDER")} />
         </div>

@@ -11,25 +11,26 @@ const assetsProxy = createProxyMiddleware({
   changeOrigin: true,
 });
 const apiSetuProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_SETU || "https://qa.digit.org",
+  target: process.env.REACT_APP_PROXY_SETU || "https://apisetu.gov.in",
   changeOrigin: true,
 });
-const LicProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_MDMS || "http://10.1.1.18:8443",
-  changeOrigin: true,
-});
-const docUploadProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_UPLOAD_DOC || "http://10.1.1.18:8443",
-  changeOrigin: true,
-});
-const devRegistration = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_DEV_REG || "http://10.1.1.18:8443",
-  changeOrigin: true,
-});
-const LicNewRegistration = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_NEW_LIC || "http://10.1.1.18:8443",
-  changeOrigin: true,
-});
+// const LicProxy = createProxyMiddleware({
+//   target: process.env.REACT_APP_PROXY_MDMS || "http://10.1.1.18:8443",
+//   changeOrigin: true,
+// });
+// const docUploadProxy = createProxyMiddleware({
+//   target: process.env.REACT_APP_PROXY_UPLOAD_DOC || "http://10.1.1.18:8443",
+//   changeOrigin: true,
+// });
+// const devRegistration = createProxyMiddleware({
+//   target: process.env.REACT_APP_PROXY_DEV_REG || "http://10.1.1.18:8443",
+//   changeOrigin: true,
+// });
+// const EgScrutinyProxy = createProxyMiddleware({
+//   target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://10.1.1.18:8443",
+//   changeOrigin: true,
+// });
+
 module.exports = function (app) {
   [
     "/egov-mdms-service",
@@ -72,11 +73,27 @@ module.exports = function (app) {
     "/egov-survey-services",
     "/ws-services",
     "/sw-services",
+    "/user/developer/_getAuthorizedUser",
+    "/user/developer/_getDeveloperById",
+    "/land-services/new/_create",
+    "/egov-mdms-service/v1/_district",
+    "/egov-mdms-service/v1/_tehsil",
+    "/egov-mdms-service/v1/_village",
+    "/egov-mdms-service/v1/_must",
+    "/egov-mdms-service/v1/_owner",
+    "/filestore/v1/files",
+    "/land-services/_calculate",
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
-  ["/mca/v1/companies", "/mca-directors/v1/companies", "/certificate/v3/pan/pancr"].forEach((location) => app.use(location, apiSetuProxy));
-  ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
-  ["/filestore/v1"].forEach((location) => app.use(location, docUploadProxy));
-  ["/user/developer"].forEach((location) => app.use(location, devRegistration));
-  ["/land-services/new"].forEach((location) => app.use(location, LicNewRegistration));
+  [
+    "/mca/v1/companies",
+    "/mca-directors/v1/companies",
+    "/certificate/v3/pan/pancr"
+  ].forEach((location) => app.use(location, apiSetuProxy));
+  // ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
+  // ["/filestore/v1"].forEach((location) => app.use(location, docUploadProxy));
+  // ["/user/developer"].forEach((location) => app.use(location, devRegistration));
+  // ["/land-services/egscrutiny",
+  //  "/land-services/new/licenses"
+  // ].forEach((location) => app.use(location, EgScrutinyProxy));
 };

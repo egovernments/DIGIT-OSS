@@ -21,60 +21,99 @@ import { convertEpochToDate } from "../utils/index";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import axios from "axios";
+const TYPE_REGISTER = { type: "register" };
+const TYPE_LOGIN = { type: "login" };
 // const tenantId = Digit.ULBService.getCurrentTenantId();
 
 //for Redux use only
 // import { setAurthorizedUserData } from "../Redux/Slicer/Slicer";
 // import { useDispatch } from "react-redux";
 
-const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
+const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegistered = true }) => {
 
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
+  const devRegId = localStorage.getItem('devRegId');
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = Digit.ULBService.getStateId();
+  // console.log(userInfo?.info?.id);
+  const getDeveloperData = async ()=>{
+    try {
+      const requestResp = {
+        
+        "RequestInfo": {
+            "api_id": "1",
+            "ver": "1",
+            "ts": "",
+            "action": "_getDeveloperById",
+            "did": "",
+            "key": "",
+            "msg_id": "",
+            "requester_id": "",
+            "auth_token": ""
+        },
+    }
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
+
+      });
+      const developerDataGet = getDevDetails?.data; 
+      console.log("ADDAUTHUSER",getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
+      // setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    getDeveloperData()
+  }, []);
+
+  const authUserSearch = async ()=>{
+    try {
+      const requestResp = {
+        
+        "RequestInfo": {
+          "api_id": "org.egov.pgr",
+          "ver": "1.0",
+          "ts": "",
+          "res_msg_id": "uief87324",
+          "msg_id": "654654",
+          "status": "successful",
+          "auth_token": ""
+           },
+           "parentid":userInfo?.info?.id,
+            "tenantId": tenantId
+    }
+      const getAuthUserDetails = await axios.post(`/user/_search`,requestResp,{
+
+      });
+      const developerDataGet = getAuthUserDetails?.data; 
+      console.log("U",developerDataGet);
+      setAurthorizedUserInfoArray(developerDataGet?.user);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    authUserSearch()
+  },[])
   let validation = {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
+  
+  const getUserType = () => Digit.UserService.getType();
+  const [params, setParmas] = useState(isUserRegistered?{}:location?.state?.data);
   const [modal, setmodal] = useState(false);
-  const [aurthorizedUserName, setAurtorizedUserName] = useState(formData?.AddAuthorizeduser?.aurthorizedUserName || formData?.AddAuthorizeduser?.aurthorizedUserName || "");
-  const [aurthorizedMobileNumber, setAurthorizedMobileNumber] = useState(formData?.AddAuthorizeduser?.aurthorizedMobileNumber || formData?.AddAuthorizeduser?.aurthorizedMobileNumber || "");
-  const [aurthorizedEmail, setAurthorizedEmail] = useState(formData?.AddAuthorizeduser?.aurthorizedEmail || formData?.AddAuthorizeduser?.aurthorizedEmail || "");
-  const [aurthorizedDob, setAurthorizedDob] = useState(formData?.AddAuthorizeduser?.aurthorizedDob || formData?.AddAuthorizeduser?.aurthorizedDob || "");
-  const [gender, setGender] = useState(formData?.AddAuthorizeduser?.gender || formData?.formData?.AddAuthorizeduser?.gender);
-  const [aurthorizedPan, setAurthorizedPan] = useState(formData?.AddAuthorizeduser?.aurthorizedPan || formData?.AddAuthorizeduser?.aurthorizedPan || "");
+  const [aurthorizedUserName, setAurtorizedUserName] = useState(formData?.LicneseDetails?.aurthorizedUserName || formData?.LicneseDetails?.aurthorizedUserName || "");
+  const [aurthorizedMobileNumber, setAurthorizedMobileNumber] = useState(formData?.LicneseDetails?.aurthorizedMobileNumber || formData?.LicneseDetails?.aurthorizedMobileNumber || "");
+  const [aurthorizedEmail, setAurthorizedEmail] = useState(formData?.LicneseDetails?.aurthorizedEmail || formData?.LicneseDetails?.aurthorizedEmail || "");
+  const [aurthorizedDob, setAurthorizedDob] = useState(formData?.LicneseDetails?.aurthorizedDob || formData?.LicneseDetails?.aurthorizedDob || "");
+  const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.LicneseDetails?.gender);
+  const [aurthorizedPan, setAurthorizedPan] = useState(formData?.LicneseDetails?.aurthorizedPan || formData?.LicneseDetails?.aurthorizedPan || "");
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
   const [docUpload,setDocuploadData]=useState([])
   const [file,setFile]=useState(null);
-  const stateId = Digit.ULBService.getStateId();
-  //   const dispatch=useDispatch();
-  // const Modal = () => (
-  //   <Popup trigger={<button className="button"> Open Modal </button>} modal>
-  //     <span> Modal content </span>
-  //   </Popup>
-  // );
-
-  // function UploadDocuments() {
-  //   const [inputFields, setInputFields] = useState([{
-  //     fullName:'',
-
-  // } ]);
-
-  // const addInputField = ()=>{
-
-  //     setInputFields([...inputFields, {
-  //         fullName:'',
-  //     } ])
-
-  // }
-  // const removeInputFields = (index)=>{
-  //     const rows = [...inputFields];
-  //     rows.splice(index, 1);
-  //     setInputFields(rows);
-  // }
-  // const handleChange = (index, evnt)=>{
-
-  // const { name, value } = evnt.target;
-  // const list = [...inputFields];
-  // list[index][name] = value;
-  // setInputFields(list);
+  
+  
+  
   const {
     register,
     handleSumit,
@@ -97,6 +136,28 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     setAurthorizedPan(e.target.value.toUpperCase());
   }
 
+  // const handleMobileChange = async (event) => {
+  //   const { value } = event.target;
+  //   setParmas({ ...params, aurthorizedMobileNumber: value });
+  //   const data = {
+  //     ...aurthorizedMobileNumber,
+  //     tenantId: "hr",
+  //     userType: getUserType(),
+  //   };
+  //   if (isUserRegistered) {
+  //     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_LOGIN } });
+  //     if (!err) {
+  //       alert("please Enter Login",res)
+  //       return;
+  //     } 
+  //   } else {
+  //     const [res, err] = await sendOtp({ otp: { ...data, ...TYPE_REGISTER } });
+  //     alert("Please register yourself",res)
+  //   }
+  // };
+  
+  
+
   const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
 
   let menu = [];
@@ -106,6 +167,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     });
     const editScreen = false;
 
+    
+
+  
   const panVerification = async () => {
     try {
       const panVal =  {
@@ -177,6 +241,15 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     }
   }, [aurthorizedPan])
 
+  const sendOtp = async (data) => {
+    try {
+      const res = await Digit.UserService.sendOtp(data, stateCode);
+      return [res, null];
+    } catch (err) {
+      return [null, err];
+    }
+  };
+
   const getDocumentData = async () => {
     if(file===null){
        return
@@ -185,7 +258,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
        formData.append(
            "file",file.file      );
        formData.append(
-           "tenantId","hr"      );  
+           "tenantId", tenantId      );  
        formData.append(
            "module","property-upload"      );
         formData.append(
@@ -217,43 +290,46 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     setmodal(false);
     console.log("submitted");
     const user = {
-      userName: aurthorizedUserName,
-      name: aurthorizedUserName,
-      gender: gender.value,
-      mobileNumber: aurthorizedMobileNumber,
-      emailId: aurthorizedEmail,
-      dob: aurthorizedDob,
-      pan: aurthorizedPan,
-      "active": true,
-      "type": "CITIZEN",
-      "password": "Password@123",
-      "tenantId": "hr",
-      "roles": [
-          {
-              "code": "CITIZEN",
-              "name": "Citizen",
-              "tenantId": "default"
-          }
-      ]
+        userName: aurthorizedUserName,
+        name: aurthorizedUserName,
+        gender: gender.value,
+        mobileNumber: aurthorizedMobileNumber,
+        emailId: aurthorizedEmail,
+        dob: aurthorizedDob,
+        pan: aurthorizedPan,
+        "parentId":userInfo?.info?.id,
+        "type": "CITIZEN",
+        "password": "Password@123",
+        
+        "roles": [
+            {
+                "code": "CITIZEN",
+                "name": "Citizen",
+                "tenantId": "default"
+            }
+        ],
+        "tenantId": "hr",
     }
 
     setAurthorizedUserInfoArray((prev) => [...prev, user]);
     try {
-      const requestResp = {
-        
-          "RequestInfo": {
-              "api_id": "1",
-              "ver": "1",
+      const requestResp = {          
+            "requestInfo": {
+              "apiId": "Rainmaker",
+              "ver": ".01",
               "ts": null,
-              "action": "create",
-              "did": "",
+              "action": "_update",
+              "did": "1",
               "key": "",
-              "msg_id": "",
-              "requester_id": "",
-              "auth_token": null
-          },
+              "msgId": "20170310130900|en_IN",
+              "authToken": "dce88a06-7e09-4923-97f9-f15af2deea66",
+              
+              userInfo:userInfo
+            },
+            user:user
+          
       }
-      const postDataAuthUser = axios.post(`/user/users/_createnovalidate`,requestResp,user,{headers:{
+      const postDataAuthUser = axios.post(`/user/users/_createnovalidate`,requestResp,{headers:{
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin':"*",
       }})
@@ -263,20 +339,56 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
     catch(error){
       console.log(error.message);
     }
+
+    
+
   };
 
-  const handleAurthorizedUserFormSubmit = async (e) => {
+  const goNext = async (e) => {
     //   e.preventDefault();
-
-    const formData = {
-      aurthorizedUserInfoArray
-    }
-    onSelect(config.key, formData);
-    console.log(formData);
-    localStorage.setItem("data_user", JSON.stringify(formData))
-    
-    
+    if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
+      const addAuthUserformData = {
+        aurthorizedUserInfoArray:aurthorizedUserInfoArray
+      }
+      onSelect(config.key, formData);
+      console.log(addAuthUserformData);
+      localStorage.setItem("data_user", JSON.stringify(addAuthUserformData))
       
+      const developerRegisterData = {
+        "id":devRegId,
+        "pageName":"aurthorizedUserInfoArray",
+        "devDetail": {
+          
+            "aurthorizedUserInfoArray": aurthorizedUserInfoArray
+        }
+      }
+      Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
+      .then((result, err) => {
+        console.log("DATA",result?.id);
+        // localStorage.setItem('devRegId',JSON.stringify(result?.id));
+        setIsDisableForNext(false);
+        let data = { 
+          result: result, 
+          formData: formData, 
+          Correspondenceaddress: Correspondenceaddress,
+          addressLineOneCorrespondence: addressLineOneCorrespondence,
+          addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+
+          isAddressSame: isAddressSame }
+        //1, units
+        onSelect("", data, "", true);
+
+      })
+      .catch((e) => {
+        setIsDisableForNext(false);
+        setShowToast({ key: "error" });
+        setError(e?.response?.data?.Errors[0]?.message || null);
+      });
+    }else {
+      let data = formData?.formData;
+      // data.LicneseDetails.addAuthUserformData = addAuthUserformData;
+      onSelect("", formData)
+    }
     
 
    
@@ -290,7 +402,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
         className="card"
         // onSubmit={handleAurthorizedUserFormSubmit}
         config={config}
-        onSelect={handleAurthorizedUserFormSubmit}
+        onSelect={goNext}
         onSkip={onSkip}
         t={t}
       >
@@ -314,7 +426,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                   <th>Mobile Number</th>
                   <th>Email</th>
                   <th>Gender</th>
-                  <th>Date of Birth</th>
+                  {/* <th>Date of Birth</th> */}
                   <th>PAN No.</th>
                   <th>Upload Aadhar PDF</th>
                   <th>Upload Digital Signature PDF</th>
@@ -365,15 +477,15 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                               class="employee-card-input"
                             />
                           </td>
-                          <td>
+                          {/* <td>
                             <input
                               type="text"
                               name="dob[]"
                               placeholder={elementInArray.dob}
-                              value={elementInArray.dob || dd-mm-yyyy}
+                              value={elementInArray.dob || DD-MM-YYYY}
                               class="employee-card-input"
                             />
-                          </td>
+                          </td> */}
                           <td>
                             <input
                               type="text"
@@ -476,6 +588,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data }) => {
                                 name="name[]"
                                 placeholder=""
                                 class="employee-card-input"
+                                value={aurthorizedMobileNumber}
                                 onChange={(e) => setAurthorizedMobileNumber(e.target.value)}
                                 maxlength={"10"}
                                 pattern={"[6-9]{1}[0-9]{9}"}

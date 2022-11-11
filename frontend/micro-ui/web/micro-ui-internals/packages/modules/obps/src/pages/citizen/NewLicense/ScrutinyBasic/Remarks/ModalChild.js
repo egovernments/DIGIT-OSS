@@ -8,46 +8,49 @@ function ModalChild(props) {
   const smShow = props.displaymodal;
   const setSmShow = useState(false);
   const [RemarksDeveloper, setDeveloperRemarks] = useState("");
+  const [RemarksEntered, setRemarksEntered] = useState("");
   const [iscrosschecked, setCrosschecked] = useState("");
   const [warningorred, setwarningOrred] = useState("#DAA520");
   const [yesOrNoClicked, setIsYesorNoClicked] = useState(true);
+  const inputFieldValue = props.fieldValue;
+  const inputFieldLabel = props.labelValue;
+  const dateTime = new Date();
 
   const handlemodalsubmit = async () => {
-    props.passmodalData({ data: { label: iscrosschecked, Remarks: RemarksDeveloper, color: warningorred } });
+    props.passmodalData({ data: { label: iscrosschecked, Remarks: RemarksDeveloper.data, color: warningorred } });
     const postData = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        action: "_create",
-        did: 1,
+      requestInfo: {
+        api_id: "1",
+        ver: "1",
+        ts: null,
+        action: "create",
+        did: "",
         key: "",
-        msgId: "20170310130900|en_IN",
-        ts: 0,
-        ver: ".01",
-        authToken: "80458c19-3b48-4aa8-b86e-e2e195e6753a",
-        userInfo: {
-          uuid: "5fe074f2-c12d-4a27-bd7b-92d15f9ab19c",
-          name: "rahul7",
-          userName: "rahul7",
-          tenantId: "hr",
-          id: 97,
-          mobileNumber: "7895877833",
-        },
+        msg_id: "",
+        requester_id: "",
+        auth_token: null,
       },
-      EgScrutiny: {
-        id: 97,
-        applicationId: 123,
+      egScrutiny: {
+        applicationId: "123",
         comment: RemarksDeveloper.data,
-        createdOn: 10,
-        fieldValue: "avc",
-        field_d: 12,
+        fieldValue: inputFieldValue,
+        fieldIdL: iscrosschecked,
         isApproved: yesOrNoClicked,
-        userid: 12,
+        userid: "123",
+        serviceId: "123",
+        documentId: null,
+        ts: dateTime.toUTCString(),
       },
     };
 
-    const Resp = await axios.post("", postData, {}).then((response) => {
-      return response.data;
-    });
+    try {
+      const Resp = await axios.post("/land-services/egscrutiny/_create", postData, {}).then((response) => {
+        return response.data;
+      });
+    } catch (error) {
+      console.log(error);
+    }
+    props.remarksUpdate({ data: RemarksDeveloper.data });
     console.log("response from API", Resp);
   };
   console.log("smshow", smShow);
@@ -63,7 +66,19 @@ function ModalChild(props) {
       onHide={() => setSmShow(false)}
     >
       <Modal.Header closeButton>
-        <Modal.Title id="example-modal-sizes-title-sm">{props.labelmodal}</Modal.Title>
+        <Modal.Title id="example-modal-sizes-title-sm">
+          <Row style={{ display: "flex" }}>
+            <Col xs={4} md={4} style={{ marginRight: "100px" }}>
+              {" "}
+              {props.labelmodal}
+            </Col>
+            <Col xs={4} md={4}>
+              <h5 style={{ fontSize: "15", borderColor: "#C3C3C3", fontStyle: "none" }}>
+                <i>{inputFieldValue}</i>
+              </h5>
+            </Col>
+          </Row>
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {" "}
@@ -77,7 +92,7 @@ function ModalChild(props) {
           type="radio"
           id="default-radio"
           // label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          label="Yes"
+          label="Approved"
           name="group0"
           inline
         ></Form.Check>
@@ -91,21 +106,32 @@ function ModalChild(props) {
           type="radio"
           id="default-radio"
           // label={<CancelIcon color="error" />}
-          label="No"
+          label="Disapproved"
           name="group0"
           inline
         ></Form.Check>
-        <Col xs={12} md={4}>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Remarks</Form.Label>
-            <Form.Control type="text" placeholder="" autoFocus onChange={(e) => setDeveloperRemarks({ data: e.target.value })} />
-          </Form.Group>
-          <div class="col-md-4 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-            <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
-              Submit
-            </Button>
-          </div>
-        </Col>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Col xs={12} md={12}>
+            <Form.Label style={{ margin: 5 }}>Remarks</Form.Label>
+            <textarea
+              class="form-control"
+              id="exampleFormControlTextarea1"
+              placeholder="Enter your Remarks"
+              autoFocus
+              onChange={(e) => {
+                setDeveloperRemarks({ data: e.target.value });
+                // setRemarksEntered(e.target.value);
+              }}
+              rows="3"
+            />
+            {/* <Form.Control type="text" /> */}
+          </Col>
+        </Form.Group>
+        <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+          <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
+            Submit
+          </Button>
+        </div>
         {/* <div class="col-md-4 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
           <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
             Submit
