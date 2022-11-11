@@ -167,7 +167,7 @@ const Personalinfo = (props) => {
             }}
           >
             <span style={{ color: "#817f7f" }} className="">
-              Personalinfo
+              Personal Info
             </span>
             {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>

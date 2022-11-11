@@ -362,9 +362,9 @@ const FeesChargesForm = (props) => {
                       (iii)&nbsp;Adjust Fees &nbsp;&nbsp;
                     </h6>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide0 === "Yes" && (
                       <div className="row ">
                         <div className="col col-12">

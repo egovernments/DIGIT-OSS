@@ -61,7 +61,7 @@ import BPAAcknowledgement from "./pages/citizen/NewBuildingPermit/OBPSAcknowledg
 import OCBPAAcknowledgement from "./pages/citizen/OCBuildingPermit/OBPSAcknowledgement";
 import OCSendBackAcknowledgement from "./pages/citizen/OCSendBackToCitizen/Acknowledgement";
 import StakeholderAcknowledgement from "./pages/citizen/StakeholderRegistration/StakeholderAcknowledgement";
-import '~antd/dist/antd.min.css';
+// import '~antd/dist/antd.min.css';
 
 const OBPSModule = ({ stateCode, userType, tenants }) => {
   const moduleCode = ["bpa", "bpareg", "common"]; //"bpa";

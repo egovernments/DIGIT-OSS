@@ -331,13 +331,13 @@ const LicenseDetailsScrutiny = (props) => {
           <Form.Group style={{ display: props.displayLicenseDetails, margin: 5 }}>
             <div>
               <Card style={{ margin: 2 }}>
-                <h5>Developer's type</h5>
                 <div className="card-body">
+                <h5>Developer's type</h5>
                   <div className="row">
                     <div className="col-sm-12">
                       {/* <div className="form-group row"> */}
-                      <div className="col-sm-4">
-                        {/* <Form.Select
+                      <div className="col-sm-4 p-0 pt-1">
+                        <Form.Select
                           type="text"
                           placeholder=""
                         
@@ -350,7 +350,7 @@ const LicenseDetailsScrutiny = (props) => {
                           <option value="02">Company</option>
                           <option value="03">LLP</option>
                           <option value="04">Society</option>
-                        </Form.Select> */}
+                        </Form.Select>
                         <div style={{ display: "flex" }}>
                           <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
                           &nbsp;&nbsp;

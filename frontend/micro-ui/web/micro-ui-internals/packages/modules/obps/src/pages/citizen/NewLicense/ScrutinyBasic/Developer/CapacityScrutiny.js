@@ -348,7 +348,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
         }}
       >
         <span style={{ color: "#817f7f" }} className="">
-          DeveloperCapacity
+          Developer Capacity
         </span>
         {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
@@ -466,19 +466,16 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
             )}
 
             <div className="card-body">
-              <p>1. I/ We hereby submit the following information/ enclose the relevant documents:-</p>
-              <p>
-                &nbsp;&nbsp;&nbsp; (i) Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act,
-                1975: *{" "}
+              <p>1. We hereby submit the following information/ enclose the relevant documents:-</p>
+              <p className="ml-3">
+                (i) Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975: *{" "}
               </p>
-              <div>
-                <div style={{ display: "flex" }}>
-                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
-                  <label for="Yes">Yes</label>
-                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
-                  <label for="No">No</label>
-                  &nbsp;&nbsp;
-                  <ReportProblemIcon
+                 <div className="d-flex flex-row align-items-center ml-4">
+                  <input type="radio" value="Yes" id="Yes" disabled />
+                  <label className="m-0  mx-1" for="Yes">Yes</label>
+                  <input type="radio" value="No" id="No"  disabled />
+                  <label className="m-0 mx-2" for="No">No</label>
+                <ReportProblemIcon
                     style={{
                       color:
                         developerInputFiledColor.length > 0
@@ -495,6 +492,8 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                         console.log("modal open");
                     }}
                   ></ReportProblemIcon>
+                  
+                  
                   <ModalChild
                     labelmodal={labelValue}
                     passmodalData={handlemodaldData}
@@ -503,6 +502,8 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                     setColor={setColor}
                   ></ModalChild>
                 </div>
+              <div>
+               
                 {/* {showhide0 === "Yes" && ( */}
                 <div className="card-body">
                   {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
@@ -662,16 +663,8 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
               </div>
 
               <div className="hl"></div>
-              <p>
-                &nbsp;&nbsp;&nbsp;(ii) Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as .
-              </p>
-              <div style={{ display: "flex" }}>
-                {/* <Form.Control
-              style={{ maxWidth: 200, marginRight: 5, height: 30 }}
-              placeholder={personalinfo !== null ? personalinfo.authorizedmobile : null}
-              disabled
-            ></Form.Control> */}
-                &nbsp;&nbsp;
+              <p className="ml-3">
+                (ii) Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as .
                 <ReportProblemIcon
                   style={{
                     color:
@@ -688,7 +681,8 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                     // setFieldValue(personalinfo !== null ? personalinfo.authorizedmobile : null);
                   }}
                 ></ReportProblemIcon>
-              </div>
+              </p>
+              
               <div>
                 <div className="card-body">
                   {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
@@ -863,22 +857,13 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
               </div>
 
               <div className="hl"></div>
-              <p>&nbsp;&nbsp;&nbsp;(iii) Whether any technical expert(s) engaged</p>
-
-              <div>
-                {/* <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
-                <label for="Yes">Yes</label>
-
-                <input type="radio" value="No" id="No" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
-                <label for="No">No</label> */}
-
-                <div style={{ display: "flex" }}>
+              <p className="ml-3 d-flex flex-row mb-4">(iii) Whether any technical expert(s) engaged   &nbsp;&nbsp;&nbsp;
+                <div className="d-flex flex-row align-items-center ml-2">
                   <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
-                  <label for="Yes">Yes</label>
+                  <label className="m-0  mx-1" for="Yes">Yes</label>
                   <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
-                  <label for="No">No</label>
-                  &nbsp;&nbsp;
-                  <ReportProblemIcon
+                  <label className="m-0 mx-2" for="No">No</label>
+              <ReportProblemIcon
                     style={{
                       color:
                         developerInputFiledColor1.length > 0
@@ -892,9 +877,17 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                     }}
                   ></ReportProblemIcon>
                 </div>
+                  </p>
+              <div>
+                {/* <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
+                <label className="m-0  mx-1" for="Yes">Yes</label>
+                
+                <input type="radio" value="No" id="No" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
+              <label className="m-0 mx-2" for="No">No</label> */}
+
                 {/* {showhide1 === "Yes" && ( */}
-                <div className="row ">
-                  <div className="form-group row">
+                <div>
+                  <div className="row">
                     <div className="col-sm-12">
                       <div className="table-bd">
                         <Table className="table table-bordered">
@@ -1129,12 +1122,33 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
               </div>
 
               <div className="hl"></div>
-              <p>
-                &nbsp;&nbsp;&nbsp;(iv) If director/partner of the proposed developer company/firm also holds designation of director/partner in any
+              <p className="ml-3 d-flex mb-3">
+                (iv) If director/partner of the proposed developer company/firm also holds designation of director/partner in any
                 other company/firm who has already obtained license(s) under act of 1975:
-              </p>
-              <div style={{ display: "flex" }}>
-                &nbsp;&nbsp;
+              <div className="d-flex flex-row align-items-center ml-4 mt-1 mb-3">
+                <input
+                  type="radio"
+                  value="Yes"
+                  id="Yes"
+                  className="mx-2 mt-1"
+                  // onChange={(e) => handleChange(e.target.value)}
+                  // name="Yes"
+                  // onClick={handleshow}
+                  disabled
+                />
+                <label className="m-0  mx-1" for="Yes">Yes</label>
+
+                <input
+                  type="radio"
+                  value="No"
+                  id="No"
+                  className="mx-2 mt-1"
+                  // onChange={(e) => handleChange(e.target.value)}
+                  // name="Yes"
+                  // onClick={handleshow}
+                  disabled
+                />
+                <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
                     color:
@@ -1148,32 +1162,11 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                     setLabelValue("the proposed developer company/firm "), setSmShow(true), console.log("modal open");
                   }}
                 ></ReportProblemIcon>
-              </div>
+                </div>
+              </p>
 
               <div>
-                <input
-                  type="radio"
-                  value="Yes"
-                  id="Yes"
-                  className="mx-2 mt-1"
-                  // onChange={(e) => handleChange(e.target.value)}
-                  // name="Yes"
-                  // onClick={handleshow}
-                  disabled
-                />
-                <label for="Yes">Yes</label>
-
-                <input
-                  type="radio"
-                  value="No"
-                  id="No"
-                  className="mx-2 mt-1"
-                  // onChange={(e) => handleChange(e.target.value)}
-                  // name="Yes"
-                  // onClick={handleshow}
-                  disabled
-                />
-                <label for="No">No</label>
+              
                 {/* {showhide === "Yes" && ( */}
                 <div className="row ">
                   <div className="form-group row">
@@ -1226,22 +1219,15 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
               </div>
 
               <div className="hl"></div>
-              <p>
+              <p className="ml-3 d-flex mb-3">
                 2. In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside
                 Haryana:
-              </p>
-              <div>
-                {/* <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
-                <label for="Yes">Yes</label>
-
+              <div className="d-flex flex-row align-items-center ml-2">
+                <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
+                <label className="m-0  mx-1" for="Yes">Yes</label>
                 <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
-                <label for="No">No</label> */}
-                <div style={{ display: "flex" }}>
-                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
-                  <label for="Yes">Yes</label>
-                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
-                  <label for="No">No</label>
-                  &nbsp;&nbsp;
+                <label className="m-0 mx-2" for="No">No</label>
+                
                   <ReportProblemIcon
                     style={{
                       color:
@@ -1255,7 +1241,14 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                       setLabelValue("technical capacity sought"), setSmShow(true), console.log("modal open");
                     }}
                   ></ReportProblemIcon>
-                </div>
+              </div>
+              </p>
+              <div>
+                {/* <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
+                <label className="m-0  mx-1" for="Yes">Yes</label>
+
+                <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
+                <label className="m-0 mx-2" for="No">No</label> */}
                 {showhide6 === "Yes" && (
                   <div className="row ">
                     <div className="form-group row">
@@ -1331,7 +1324,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                     <div className="form-group row">
                       <div className="col-sm-12">
                         <div>
-                          <Table className="table table-bordered" size="sm">
+                          <Table className="table table-bordered ml-2" size="sm">
                             <thead>
                               <tr>
                                 <th class="fw-normal">S.No.</th>

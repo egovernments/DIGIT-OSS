@@ -374,34 +374,34 @@ const Developerinfo = (props) => {
     return obj.label === "(b)Construction: (Yes/No)";
   });
   const developerInputFiledColor30 = uncheckedValue.filter((obj) => {
-    return obj.label === "(c)HT line:(Yes/No)";
+    return obj.label === "(c)HT line";
   });
   const developerInputCheckedFiledColor30 = checkValue.filter((obj) => {
-    return obj.label === "(c)HT line:(Yes/No)";
+    return obj.label === "(c)HT line";
   });
   const developerInputFiledColor31 = uncheckedValue.filter((obj) => {
-    return obj.label === "(d) IOC Gas Pipeline:(Yes/No)";
+    return obj.label === "(d) IOC Gas Pipeline";
   });
   const developerInputCheckedFiledColor31 = checkValue.filter((obj) => {
-    return obj.label === "(d) IOC Gas Pipeline:(Yes/No)";
+    return obj.label === "(d) IOC Gas Pipeline";
   });
   const developerInputFiledColor32 = uncheckedValue.filter((obj) => {
-    return obj.label === "(e)Nallah:(Yes/No)";
+    return obj.label === "(e)Nallah";
   });
   const developerInputCheckedFiledColor32 = checkValue.filter((obj) => {
-    return obj.label === "(e)Nallah:(Yes/No)";
+    return obj.label === "(e)Nallah";
   });
   const developerInputFiledColor33 = uncheckedValue.filter((obj) => {
-    return obj.label === "(f)Any revenue rasta/road:(Yes/No)";
+    return obj.label === "(f)Any revenue rasta/road";
   });
   const developerInputCheckedFiledColor33 = checkValue.filter((obj) => {
-    return obj.label === "(f)Any revenue rasta/road:(Yes/No)";
+    return obj.label === "(f)Any revenue rasta/road";
   });
   const developerInputFiledColor34 = uncheckedValue.filter((obj) => {
-    return obj.label === "(g)Any marginal land:(Yes/No)";
+    return obj.label === "(g)Any marginal land";
   });
   const developerInputCheckedFiledColor34 = checkValue.filter((obj) => {
-    return obj.label === "(g)Any marginal land:(Yes/No)";
+    return obj.label === "(g)Any marginal land";
   });
   const developerInputFiledColor35 = uncheckedValue.filter((obj) => {
     return obj.label === "Utility Line";
@@ -517,17 +517,13 @@ const Developerinfo = (props) => {
                 <Form.Label
                 // placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
                 >
-                  (i)Whether licence applied for additional area ?
-                </Form.Label>
-                {/* &nbsp;&nbsp;
-                
-                <br></br> */}
+                  (i)Whether licence applied for additional area ? 
 
-                <div style={{ display: "flex" }}>
+                  <div  className="d-flex flex-row">
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow} disabled />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
+                  <label className="m-0  mx-2" for="Yes">Yes</label>
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow} disabled />
-                  <label for="No">No</label>
+                  <label className="m-0 mx-2" for="No">No</label>
                   {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                   <ReportProblemIcon
                     style={{
@@ -543,6 +539,7 @@ const Developerinfo = (props) => {
                       //  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
                     }}
                   ></ReportProblemIcon>
+                  
                   <ModalChild
                     labelmodal={labelValue}
                     passmodalData={handlemodaldData}
@@ -553,6 +550,13 @@ const Developerinfo = (props) => {
                     // remarksUpdate={currentRemarks}
                   ></ModalChild>
                 </div>
+
+                </Form.Label>
+                {/* &nbsp;&nbsp;
+                
+                <br></br> */}
+
+                
               </Col>
             </Row>
 
@@ -564,7 +568,7 @@ const Developerinfo = (props) => {
                     <h5>License No. of Parent License &nbsp;</h5>
                   </label>
 
-                  <div style={{ display: "flex" }}>
+                  <div className="d-flex flex-row align-items-center my-1 ">
                     <Form.Control
                       height={30}
                       style={{ maxWidth: 200, marginRight: 5 }}
@@ -596,7 +600,7 @@ const Developerinfo = (props) => {
                     </h6>
                   </label>
 
-                  <div style={{ display: "flex" }}>
+                  <div  className="d-flex flex-row  align-items-center">
                     <Form.Select
                       type="text"
                       placeholder="Puropse"
@@ -635,7 +639,7 @@ const Developerinfo = (props) => {
                     {/* Site Location Purpose */}
                     <h5>Site Location Purpose: &nbsp;</h5>
                   </label>
-                  <div style={{ display: "flex" }}>
+                  <div  className="d-flex flex-row  align-items-center">
                     <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     <ReportProblemIcon
                       style={{
@@ -660,7 +664,7 @@ const Developerinfo = (props) => {
                     <h5>Approach Type (Type of Policy) &nbsp;</h5>
                   </label>
 
-                  <div style={{ display: "flex" }}>
+                  <div  className="d-flex flex-row  align-items-center">
                     <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     <ReportProblemIcon
                       style={{
@@ -681,7 +685,7 @@ const Developerinfo = (props) => {
                   <label>
                     <h6>Approach Road Width&nbsp;&nbsp;</h6>{" "}
                   </label>
-                  <div style={{ display: "flex" }}>
+                  <div  className="d-flex flex-row  align-items-center">
                     <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     <ReportProblemIcon
                       style={{
@@ -702,7 +706,7 @@ const Developerinfo = (props) => {
                   <label>
                     <h6>Specify Others</h6>
                   </label>
-                  <div style={{ display: "flex" }}>
+                  <div  className="d-flex flex-row  align-items-center">
                     <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     <ReportProblemIcon
                       style={{
@@ -723,7 +727,7 @@ const Developerinfo = (props) => {
               <Row className="ms-auto" style={{ marginBottom: 20 }}>
                 <div className="col col-4">
                   <h6>Type of land</h6>{" "}
-                  <div style={{ display: "flex" }}>
+                  <div  className="d-flex flex-row  align-items-center">
                     <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     <ReportProblemIcon
                       style={{
@@ -742,21 +746,8 @@ const Developerinfo = (props) => {
                 </div>
 
                 <div className="col col-4">
-                  <h6>Third-party right created</h6>
+                  <h6>Third-party right created&nbsp;
 
-                  <div style={{ display: "flex" }}>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow13} disabled />
-                    &nbsp;&nbsp;
-                    <label for="Yes">
-                      <h6>Yes</h6>
-                    </label>
-                    &nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow13} disabled />
-                    &nbsp;&nbsp;
-                    <label for="No">
-                      <h6>No</h6>
-                    </label>
-                    <DownloadForOfflineIcon color="primary" />
                     <ReportProblemIcon
                       style={{
                         color:
@@ -770,6 +761,21 @@ const Developerinfo = (props) => {
                         setLabelValue("Third-party right created"), setSmShow(true), console.log("modal open");
                       }}
                     ></ReportProblemIcon>
+                  </h6>
+
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow13} disabled />
+                    &nbsp;&nbsp;
+                    <label className="m-0 mx-2" for="Yes">
+                      Yes
+                    </label>
+                    &nbsp;&nbsp;
+                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow13} disabled />
+                    &nbsp;&nbsp;
+                    <label className="m-0 mx-2" for="No">
+                      No
+                    </label>
+                    <DownloadForOfflineIcon color="primary" />
                   </div>
                 </div>
 
@@ -800,12 +806,12 @@ const Developerinfo = (props) => {
               <Col md={4} xxl lg="12">
                 <Form.Label>(ii)Whether licence applied under Migration policy?</Form.Label>
                 &nbsp;&nbsp;
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow17} disabled />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow17} disabled />
-                  <label for="No">No</label>
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
                       color:
@@ -832,23 +838,19 @@ const Developerinfo = (props) => {
                 )}
               </Col>
             </Row>
-            <hr></hr>
-            <h5 className="text-black">
+            <hr className="mb-3"></hr>
+            <h5 className="text-black ml-2">
               2. Any encumbrance with respect to following :&nbsp;&nbsp;
-              <div style={{ display: "flex" }}>
+              <div className="d-flex mt-2 align-items-center">
                 {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
-                <label htmlFor="gen">Rehan / Mortgage</label>&nbsp;&nbsp;
+                <label className="m-0 mx-2" htmlFor="gen">Rehan / Mortgage</label>
                 <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} />
-                &nbsp;&nbsp;
-                <label for="Yes"></label>&nbsp;&nbsp;&nbsp;&nbsp;
-                <label htmlFor="npnl">Patta/Lease</label>&nbsp;&nbsp;
+                <label className="m-0 mx-2" htmlFor="npnl">Patta/Lease</label>
                 <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} />
-                &nbsp;&nbsp;
-                <label for="Yes"></label>&nbsp;&nbsp;&nbsp;&nbsp;
-                <label htmlFor="npnl">Gair/Marusi</label>&nbsp;&nbsp;
+                <label className="m-0 mx-2" htmlFor="npnl">Gair/Marusi</label>
                 <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} />
-                &nbsp;&nbsp;
                 <ReportProblemIcon
+                className="m-0 mx-2"
                   style={{
                     color:
                       developerInputFiledColor10.length > 0
@@ -863,7 +865,6 @@ const Developerinfo = (props) => {
                 ></ReportProblemIcon>
               </div>
             </h5>
-            <br></br>
             {/* <label htmlFor="gen">Rehan / Mortgage</label>&nbsp;&nbsp;
             <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} />
             &nbsp;&nbsp;
@@ -875,9 +876,8 @@ const Developerinfo = (props) => {
             <label htmlFor="npnl">Gair/Marusi</label>&nbsp;&nbsp;
             <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} />
             &nbsp;&nbsp; */}
-            <label for="Yes"></label>
-            <div className="row">
-              <div className="col col-4">
+            <div className="row ml-3 mb-3">
+              <div className="col col-4 m-0 p-0">
                 <label htmlFor="npnl">
                   <h6>Any other, please specify</h6>
                 </label>
@@ -885,7 +885,7 @@ const Developerinfo = (props) => {
               </div>
             </div>
             <hr />
-            <h6>
+            <h6 className="m-3">
               (ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator&nbsp;&nbsp;
               {/* <Form.Check
                 value=" Existing litigation"
@@ -904,12 +904,12 @@ const Developerinfo = (props) => {
                 name="group47"
                 inline
               ></Form.Check> */}
-              <div style={{ display: "flex" }}>
+              <div className="d-flex mt-2">
                 {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                 <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label>
+                <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
                     color:
@@ -928,11 +928,11 @@ const Developerinfo = (props) => {
               </div>
             </h6>
             {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-            <label for="Yes">Yes</label>&nbsp;&nbsp;
+            <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
             <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-            <label for="No">No</label> */}
+            <label className="m-0 mx-2" for="No">No</label> */}
             <hr />
-            <h6>
+            <h6 className="m-3">
               (iii) Court orders, if any, affecting applied land&nbsp;&nbsp;
               {/* <Form.Check
                 value=" Court orders"
@@ -951,12 +951,12 @@ const Developerinfo = (props) => {
                 name="group48"
                 inline
               ></Form.Check> */}
-              <div style={{ display: "flex" }}>
+              <div className="d-flex mt-2">
                 {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                 <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label>
+                <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
                     color:
@@ -973,11 +973,11 @@ const Developerinfo = (props) => {
               </div>
             </h6>
             {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-            <label for="Yes">Yes</label>&nbsp;&nbsp;
+            <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
             <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-            <label for="No">No</label> */}
+            <label className="m-0 mx-2" for="No">No</label> */}
             <hr />
-            <h6>
+            <h6 className="m-3">
               (iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed :&nbsp;&nbsp;
               {/* <Form.Check
                 value=" Any insolvency"
@@ -996,12 +996,12 @@ const Developerinfo = (props) => {
                 name="group49"
                 inline
               ></Form.Check> */}
-              <div style={{ display: "flex" }}>
+              <div className="d-flex mt-2">
                 {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                 <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label>
+                <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
                     color:
@@ -1020,15 +1020,15 @@ const Developerinfo = (props) => {
               </div>
             </h6>
             {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-            <label for="Yes">Yes</label>&nbsp;&nbsp;
+            <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
             <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-            <label for="No">No</label> */}
-            <hr />
-            <h5 className="text-black">3.Shajra Plan</h5>
-            <div className="row">
-              <div className="col col-3 ">
+            <label className="m-0 mx-2" for="No">No</label> */}
+            <hr className="mb-3" />
+            <h5 className="text-black ml-2 mb-2">3.Shajra Plan</h5>
+            <div className="row mx-1">
+              <div className="col col-3 p-1">
                 <h6>
-                  (a)As per applied land (Yes/No) &nbsp;&nbsp;
+                  (a)&nbsp;As per applied land&nbsp;
                   {/* <Form.Check
                     value=" As per applied land "
                     type="radio"
@@ -1046,12 +1046,12 @@ const Developerinfo = (props) => {
                     name="group50"
                     inline
                   ></Form.Check> */}
-                  <div style={{ display: "flex" }}>
+                  <div className="d-flex flex-row align-items-center my-1 ">
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
                         color:
@@ -1068,12 +1068,12 @@ const Developerinfo = (props) => {
                   </div>
                 </h6>
                 {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label> */}
+                <label className="m-0 mx-2" for="No">No</label> */}
               </div>
 
-              <div className="col col-3 ">
+              <div className="col col-3 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?">
                   (b)&nbsp;Revenue rasta&nbsp;
                   {/* <InfoIcon style={{color:"blue"}}/>  */}
@@ -1095,12 +1095,12 @@ const Developerinfo = (props) => {
                     name="group51"
                     inline
                   ></Form.Check> */}
-                  <div style={{ display: "flex" }}>
+                  <div className="d-flex flex-row align-items-center my-1 ">
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow1} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow1} />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
                         color:
@@ -1117,9 +1117,9 @@ const Developerinfo = (props) => {
                   </div>
                 </h6>
                 {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow1} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow1} />
-                <label for="No">No</label> */}
+                <label className="m-0 mx-2" for="No">No</label> */}
                 {showhide2 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
@@ -1130,7 +1130,7 @@ const Developerinfo = (props) => {
                 )}
               </div>
 
-              <div className="col col-3 ">
+              <div className="col col-3 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?">
                   (c)&nbsp;Watercourse running&nbsp;
                   {/* <InfoIcon style={{color:"blue"}}/>  */}
@@ -1156,12 +1156,12 @@ const Developerinfo = (props) => {
                     name="group53"
                     inline
                   ></Form.Check> */}
-                  <div style={{ display: "flex" }}>
+                  <div className="d-flex flex-row align-items-center my-1 ">
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow2} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow2} />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
                         color:
@@ -1178,9 +1178,9 @@ const Developerinfo = (props) => {
                   </div>
                 </h6>
                 {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow2} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow2} />
-                <label for="No">No</label> */}
+                <label className="m-0 mx-2" for="No">No</label> */}
                 {showhide3 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
@@ -1190,9 +1190,9 @@ const Developerinfo = (props) => {
                   </div>
                 )}
               </div>
-              <div className="col col-3 ">
+              <div className="col col-3 p-1">
                 <h6>
-                  (d)Whether in Compact Block (Yes/No) &nbsp;&nbsp;
+                  (d)&nbsp;Whether in Compact Block
                   {/* <Form.Check
                     value=" Compact Block"
                     type="radio"
@@ -1214,12 +1214,12 @@ const Developerinfo = (props) => {
                     name="group55"
                     inline
                   ></Form.Check> */}
-                  <div style={{ display: "flex" }}>
+                  <div className="d-flex flex-row align-items-center my-1 ">
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
                         color:
@@ -1236,22 +1236,22 @@ const Developerinfo = (props) => {
                   </div>
                 </h6>
                 {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label> */}
+                <label className="m-0 mx-2" for="No">No</label> */}
               </div>
               <br></br>
               <div className="row">
-                <div className="col col-3 ">
+                <div className="col col-3 p-1">
                   <h6 data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land.">
                     (e)&nbsp;Land Sandwiched&nbsp;
                     {/* <InfoIcon style={{color:"blue"}}/>  */}
                     &nbsp;&nbsp;
-                    <div style={{ display: "flex" }}>
+                    <div className="d-flex flex-row align-items-center my-1 ">
                       <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                      <label for="Yes">Yes</label>&nbsp;&nbsp;
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                       <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                      <label for="No">No</label>
+                      <label className="m-0 mx-2" for="No">No</label>
                       <ReportProblemIcon
                         style={{
                           color:
@@ -1268,15 +1268,15 @@ const Developerinfo = (props) => {
                     </div>
                   </h6>
                 </div>
-                <div className="col col-3 ">
+                <div className="col col-3 p-1">
                   <h6>
-                    (f)Acquisition status (Yes/No) &nbsp;&nbsp;
-                    <div style={{ display: "flex" }}>
+                    (f)&nbsp;Acquisition status&nbsp;
+                    <div className="d-flex flex-row align-items-center my-1 ">
                       {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                       <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow3} />
-                      <label for="Yes">Yes</label>&nbsp;&nbsp;
+                      <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                       <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow3} />
-                      <label for="No">No</label>
+                      <label className="m-0 mx-2" for="No">No</label>
                       <ReportProblemIcon
                         style={{
                           color:
@@ -1302,11 +1302,10 @@ const Developerinfo = (props) => {
                     </div>
                   )}
                 </div>
-                <div className="col col-3">
+                <div className="col col-3 p-1">
                   <div>
-                    <label>Date of section 4 notification </label>
-                    &nbsp;&nbsp;
-                    <div style={{ display: "flex" }}>
+                    <label className="m-0">Date of section 4 notification </label>
+                    <div className="d-flex flex-row align-items-center my-1 ">
                       <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                       <ReportProblemIcon
                         style={{
@@ -1325,11 +1324,10 @@ const Developerinfo = (props) => {
                     {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
                   </div>
                 </div>
-                <div className="col col-3">
+                <div className="col col-3 p-1">
                   <div>
-                    <label>Date of section 6 notification</label>
-                    &nbsp;&nbsp;
-                    <div style={{ display: "flex" }}>
+                    <label className="m-0">Date of section 6 notification</label>
+                    <div className="d-flex flex-row align-items-center my-1 ">
                       <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                       <ReportProblemIcon
                         style={{
@@ -1350,18 +1348,17 @@ const Developerinfo = (props) => {
                 </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col col-12 ">
+            <div className="row mx-1">
+              <div className="col col-12 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
-                  (g)&nbsp;Orders Upload &nbsp;
+                  (g)&nbsp;Orders Upload
                   {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  &nbsp;&nbsp;
-                  <div style={{ display: "flex" }}>
+                  <div className="d-flex flex-row align-items-center my-1 ">
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow16} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow16} />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
                         color:
@@ -1380,18 +1377,18 @@ const Developerinfo = (props) => {
 
                 {showhide16 === "Yes" && (
                   <div className="row ">
-                    <div className="col col-3 ">
+                    <div className="col col-3 p-1">
                       <h6>
                         (h) Whether land compensation received&nbsp;&nbsp;
                         <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
                         &nbsp;&nbsp;
-                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+                        <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                         <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
                         &nbsp;&nbsp;
-                        <label for="No">No</label>
+                        <label className="m-0 mx-2" for="No">No</label>
                       </h6>
 
-                      <div style={{ display: "flex" }}>
+                      <div className="d-flex flex-row align-items-center my-1 ">
                         <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                         <ReportProblemIcon
                           style={{
@@ -1408,13 +1405,13 @@ const Developerinfo = (props) => {
                         ></ReportProblemIcon>
                       </div>
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-3 p-1">
                       <div className="form-group">
                         <label htmlFor="releasestatus">
                           <h6>Status of release</h6>
                         </label>
 
-                        <div style={{ display: "flex" }}>
+                        <div className="d-flex flex-row align-items-center my-1 ">
                           <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
@@ -1438,7 +1435,7 @@ const Developerinfo = (props) => {
                         </select>
                       </div>
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-3 p-1">
                       <div className="form-group ">
                         <label htmlFor="awarddate">
                           <h6>Date of Award</h6>
@@ -1460,7 +1457,7 @@ const Developerinfo = (props) => {
                           name="group64"
                           inline
                         ></Form.Check> */}
-                        <div style={{ display: "flex" }}>
+                        <div className="d-flex flex-row align-items-center my-1 ">
                           <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
@@ -1479,13 +1476,13 @@ const Developerinfo = (props) => {
                         {/* <input type="date" name="awarddate" className="form-control"></input> */}
                       </div>
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-3 p-1">
                       <div className="form-group ">
                         <label htmlFor="releasedate">
                           <h6>Date of Release</h6>{" "}
                         </label>
 
-                        <div style={{ display: "flex" }}>
+                        <div className="d-flex flex-row align-items-center my-1 ">
                           <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
@@ -1504,7 +1501,7 @@ const Developerinfo = (props) => {
                         <input type="date" name="releasedate" className="form-control"></input>
                       </div>
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-3 p-1">
                       <div className="form-group ">
                         <label htmlFor="sitedetails">
                           <h6>Site Details</h6>
@@ -1526,7 +1523,7 @@ const Developerinfo = (props) => {
                           name="group66"
                           inline
                         ></Form.Check> */}
-                        <div style={{ display: "flex" }}>
+                        <div className="d-flex flex-row align-items-center my-1 ">
                           <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                           <ReportProblemIcon
                             style={{
@@ -1550,17 +1547,16 @@ const Developerinfo = (props) => {
               </div>
             </div>
             <br></br>
-            <div className="row">
-              <div className="col col-12 ">
+            <div className="row mx-1">
+              <div className="col col-12 p-1">
                 <h6>
-                  whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)
-                  &nbsp;&nbsp;
-                  <div style={{ display: "flex" }}>
+                  whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road.
+                  <div className="d-flex flex-row align-items-center my-1 ">
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
                         color:
@@ -1581,23 +1577,23 @@ const Developerinfo = (props) => {
                   </div>
                 </h6>
                 {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label> */}
+                <label className="m-0 mx-2" for="No">No</label> */}
               </div>
             </div>
-            <hr />
-            <h5 className="text-black">4.Site condition</h5>
-            <div className="row">
-              <div className="col col-3">
+            <hr className="my-3"/>
+            <h5 className="text-black ml-2 mb-2">4. Site condition</h5>
+            <div className="row mx-1">
+              <div className="col col-3 p-1">
                 <h6>
-                  (a)vacant: (Yes/No){" "}
-                  <div style={{ display: "flex" }}>
+                  (a) vacant: (Yes/No){" "}
+                  <div className="d-flex flex-row align-items-center my-1 ">
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
                         color:
@@ -1614,17 +1610,17 @@ const Developerinfo = (props) => {
                   </div>
                 </h6>
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6 onChange={(e) => setConstruction(e.target.value)} value={construction}>
-                  (b)Construction: (Yes/No)
+                  (b) Construction: (Yes/No)
                 </h6>
 
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                  <label for="No">No</label>
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
                       color:
@@ -1649,17 +1645,17 @@ const Developerinfo = (props) => {
                   </div>
                 )}
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6 onChange={(e) => setHt(e.target.value)} value={ht}>
-                  (c)HT line:(Yes/No)
+                  (c) HT line
                 </h6>
 
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                  <label for="No">No</label>
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
                       color:
@@ -1670,7 +1666,7 @@ const Developerinfo = (props) => {
                           : "#FFB602",
                     }}
                     onClick={() => {
-                      setLabelValue("(c)HT line:(Yes/No)"), setSmShow(true), console.log("modal open");
+                      setLabelValue("(c)HT line"), setSmShow(true), console.log("modal open");
                     }}
                   ></ReportProblemIcon>
                 </div>
@@ -1684,16 +1680,16 @@ const Developerinfo = (props) => {
                   </div>
                 )}
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6 onChange={(e) => setGas(e.target.value)} value={gas}>
-                  (d) IOC Gas Pipeline:(Yes/No)
+                  (d) IOC Gas Pipeline
                 </h6>
 
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                  <label for="No">No</label>
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
                       color:
@@ -1704,14 +1700,14 @@ const Developerinfo = (props) => {
                           : "#FFB602",
                     }}
                     onClick={() => {
-                      setLabelValue("(d) IOC Gas Pipeline:(Yes/No)"), setSmShow(true), console.log("modal open");
+                      setLabelValue("(d) IOC Gas Pipeline"), setSmShow(true), console.log("modal open");
                     }}
                   ></ReportProblemIcon>
                 </div>
                 {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                 <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                <label for="No">No</label> */}
+                <label className="m-0 mx-2" for="No">No</label> */}
                 {showhide6 === "Yes" && (
                   <div className="row ">
                     <div className="col col">
@@ -1722,18 +1718,18 @@ const Developerinfo = (props) => {
                 )}
               </div>
             </div>
-            <br></br>
-            <div className="row ">
-              <div className="col col-3">
+            {/* <br></br> */}
+            <div className="row mx-1">
+              <div className="col col-3 p-1">
                 <h6 onChange={(e) => setNallah(e.target.value)} value={nallah}>
-                  (e)Nallah:(Yes/No){" "}
+                  (e) Nallah{" "}
                 </h6>
 
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                  <label for="No">No</label>
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
                       color:
@@ -1744,7 +1740,7 @@ const Developerinfo = (props) => {
                           : "#FFB602",
                     }}
                     onClick={() => {
-                      setLabelValue("(e)Nallah:(Yes/No)"), setSmShow(true), console.log("modal open");
+                      setLabelValue("(e)Nallah"), setSmShow(true), console.log("modal open");
                     }}
                   ></ReportProblemIcon>
                 </div>
@@ -1758,15 +1754,15 @@ const Developerinfo = (props) => {
                   </div>
                 )}
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6 onChange={(e) => setRoad(e.target.value)} value={road}>
-                  (f)Any revenue rasta/road:(Yes/No)
+                  (f) Any revenue rasta/road
                 </h6>{" "}
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                  <label for="No">No</label>
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
                       color:
@@ -1777,7 +1773,7 @@ const Developerinfo = (props) => {
                           : "#FFB602",
                     }}
                     onClick={() => {
-                      setLabelValue("(f)Any revenue rasta/road:(Yes/No)"), setSmShow(true), console.log("modal open");
+                      setLabelValue("(f)Any revenue rasta/road"), setSmShow(true), console.log("modal open");
                     }}
                   ></ReportProblemIcon>
                 </div>
@@ -1790,15 +1786,15 @@ const Developerinfo = (props) => {
                   </div>
                 )}
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6 onChange={(e) => setLand(e.target.value)} value={land}>
-                  (g)Any marginal land:(Yes/No)
+                  (g) Any marginal land
                 </h6>{" "}
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                  <label for="No">No</label>
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
                       color:
@@ -1809,7 +1805,7 @@ const Developerinfo = (props) => {
                           : "#FFB602",
                     }}
                     onClick={() => {
-                      setLabelValue("(g)Any marginal land:(Yes/No)"), setSmShow(true), console.log("modal open");
+                      setLabelValue("(g)Any marginal land"), setSmShow(true), console.log("modal open");
                     }}
                   ></ReportProblemIcon>
                 </div>
@@ -1822,7 +1818,7 @@ const Developerinfo = (props) => {
                   </div>
                 )}
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6
                   data-toggle="tooltip"
                   data-placement="top"
@@ -1832,11 +1828,11 @@ const Developerinfo = (props) => {
                   (h)&nbsp;Utility Line &nbsp;
                 </h6>
 
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                  <label for="No">No</label>
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
                       color:
@@ -1862,10 +1858,10 @@ const Developerinfo = (props) => {
                 )}
               </div>
             </div>
-            <hr />
-            <h5 className="text-black">
+            <hr className="my-3"/>
+            <h5 className="text-black ml-2 mb-2">
               5. Enclose the following documents as Annexures&nbsp;&nbsp;
-              <div style={{ display: "flex" }}>
+              <div className="d-flex flex-row align-items-center my-1 ">
                 <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                 <ReportProblemIcon
                   style={{
@@ -1882,11 +1878,10 @@ const Developerinfo = (props) => {
                 ></ReportProblemIcon>
               </div>
             </h5>
-            <div className="row">
-              <div className="col col-3">
+            <div className="row mx-1">
+              <div className="col col-3 p-1">
                 <h6>Land schedule</h6>
-                &nbsp;&nbsp;
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -1903,10 +1898,9 @@ const Developerinfo = (props) => {
                   ></ReportProblemIcon>
                 </div>
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6>Copy of Mutation</h6>
-                &nbsp;&nbsp;
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -1923,10 +1917,9 @@ const Developerinfo = (props) => {
                   ></ReportProblemIcon>
                 </div>
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6>Copy of Jamabandi</h6>
-                &nbsp;&nbsp;
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -1943,10 +1936,9 @@ const Developerinfo = (props) => {
                   ></ReportProblemIcon>
                 </div>
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6>Details of lease / patta, if any</h6>
-                &nbsp;&nbsp;
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -1965,12 +1957,12 @@ const Developerinfo = (props) => {
               </div>
             </div>
             <br></br>
-            <div className="row">
-              <div className="col col-3">
-                &nbsp;&nbsp;
+            <div className="row mx-1">
+              <div className="col col-3 p-1">
+                {/* &nbsp;&nbsp; */}
                 <h6>Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration</h6>
-                &nbsp;&nbsp;
-                <div style={{ display: "flex" }}>
+                {/* &nbsp;&nbsp; */}
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
 
                   <ReportProblemIcon
@@ -1990,10 +1982,10 @@ const Developerinfo = (props) => {
                   ></ReportProblemIcon>
                 </div>
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6>Proposed Layout of Plan /site plan for area applied for migration.</h6>
-                &nbsp;&nbsp;
-                <div style={{ display: "flex" }}>
+                {/* <br/> */}
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
@@ -2010,10 +2002,10 @@ const Developerinfo = (props) => {
                   ></ReportProblemIcon>
                 </div>
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6>Revised Land Schedule</h6>
-                &nbsp;&nbsp;
-                <div style={{ display: "flex" }}>
+                <br/><br/>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{

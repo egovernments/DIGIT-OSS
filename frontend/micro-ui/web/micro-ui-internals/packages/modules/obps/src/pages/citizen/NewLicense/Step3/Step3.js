@@ -662,10 +662,10 @@ const LandScheduleForm = (props) => {
                   (iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed &nbsp;&nbsp;
                   <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow12} />
                   &nbsp;&nbsp;
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                   <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow12} />
                   &nbsp;&nbsp;
-                  <label for="No">No</label>
+                  <label className="m-0 mx-2" for="No">No</label>
                 </h6>
                 <div className="row">
                   <div className="col col-12 ">
@@ -724,10 +724,10 @@ const LandScheduleForm = (props) => {
                     </h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow1} />
                     &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow1} />
                     &nbsp;&nbsp;
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide1 === "Yes" && (
                       <div className="row ">
                         <div className="col col">
@@ -749,10 +749,10 @@ const LandScheduleForm = (props) => {
                     </h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow2} />
                     &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow2} />
                     &nbsp;&nbsp;
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide2 === "Yes" && (
                       <div className="row ">
                         <div className="col col">
@@ -770,10 +770,10 @@ const LandScheduleForm = (props) => {
                     <h2>(d)Whether in Compact Block (Yes/No)</h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow15} />
                     &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow15} />
                     &nbsp;&nbsp;
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide15 === "Yes" && (
                       <div className="row ">
                         <div className="col col">
@@ -794,10 +794,10 @@ const LandScheduleForm = (props) => {
                     </h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow20} />
                     &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow20} />
                     &nbsp;&nbsp;
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide20 === "Yes" && (
                       <div className="row ">
                         <div className="col col-12">
@@ -813,10 +813,10 @@ const LandScheduleForm = (props) => {
                     <h2>(f)Acquisition status (Yes/No)</h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow3} />
                     &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow3} />
                     &nbsp;&nbsp;
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide3 === "Yes" && (
                       <div className="row ">
                         <div className="col col-12">
@@ -865,10 +865,10 @@ const LandScheduleForm = (props) => {
                             (h) Whether land compensation received&nbsp;&nbsp;
                             <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
                             &nbsp;&nbsp;
-                            <label for="Yes">Yes</label>&nbsp;&nbsp;
+                            <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                             <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
                             &nbsp;&nbsp;
-                            <label for="No">No</label>
+                            <label className="m-0 mx-2" for="No">No</label>
                           </h2>
                         </div>
                         <div className="col col-3">
@@ -919,9 +919,9 @@ const LandScheduleForm = (props) => {
                     </label>{" "}
                     &nbsp;&nbsp;
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                   </div>
                 </div>
                 <br></br>
@@ -934,10 +934,10 @@ const LandScheduleForm = (props) => {
                     <h2>(a)vacant(Yes/No)</h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow17} />
                     &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow17} />
                     &nbsp;&nbsp;
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide17 === "Yes" && (
                       <div className="row ">
                         <div className="col col">
@@ -962,9 +962,9 @@ const LandScheduleForm = (props) => {
                   <div className="col col-3">
                     <h2>(b)Construction: (Yes/No)</h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide4 === "Yes" && (
                       <div className="row ">
                         <div className="col col">
@@ -987,9 +987,9 @@ const LandScheduleForm = (props) => {
                   <div className="col col-3">
                     <h2>(c)HT line:(Yes/No)</h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide5 === "Yes" && (
                       <div className="row ">
                         <div className="col col">
@@ -1014,9 +1014,9 @@ const LandScheduleForm = (props) => {
                   <div className="col col-3">
                     <h2>(d) IOC Gas Pipeline:(Yes/No)</h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide6 === "Yes" && (
                       <div className="row ">
                         <div className="col col">
@@ -1040,9 +1040,9 @@ const LandScheduleForm = (props) => {
                   <div className="col col-3">
                     <h2>(e)Nallah:(Yes/No)</h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide7 === "Yes" && (
                       <div className="row ">
                         <div className="col col">
@@ -1063,9 +1063,9 @@ const LandScheduleForm = (props) => {
                   <div className="col col-3">
                     <h2>(f)Any revenue rasta/road:(Yes/No)</h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide8 === "Yes" && (
                       <div className="row ">
                         <div className="col col">
@@ -1093,9 +1093,9 @@ const LandScheduleForm = (props) => {
                   <div className="col col-3">
                     <h2>(g)Any marginal land:(Yes/No)</h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide9 === "Yes" && (
                       <div className="row ">
                         <div className="col col">
@@ -1127,9 +1127,9 @@ const LandScheduleForm = (props) => {
                       (h)&nbsp;Utility Line &nbsp; &nbsp;
                     </h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide0 === "Yes" && (
                       <div className="row ">
                         <div className="col col">

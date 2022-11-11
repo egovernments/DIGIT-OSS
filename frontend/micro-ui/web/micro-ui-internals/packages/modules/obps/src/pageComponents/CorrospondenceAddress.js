@@ -501,7 +501,7 @@ const handleColonyDevGrp=()=>{
                         name="Yes"
                         onClick={handleshow0}
                     />
-                    <label for="Yes">Yes</label>
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
 
                     <input
                         type="radio"
@@ -512,7 +512,7 @@ const handleColonyDevGrp=()=>{
                         name="Yes"
                         onClick={handleshow0}
                     />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide0 === "Yes" && (
                         <div className="card-body">
                         {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
@@ -911,7 +911,7 @@ const handleColonyDevGrp=()=>{
                         name="Yes"
                         onClick={handleshow1}
                     />
-                    <label for="Yes">Yes</label>
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
 
                     <input
                         type="radio"
@@ -922,7 +922,7 @@ const handleColonyDevGrp=()=>{
                         name="Yes"
                         onClick={handleshow1}
                     />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide1 === "Yes" && (
                         <div className="row ">
                         <div className="form-group row">
@@ -1209,7 +1209,7 @@ const handleColonyDevGrp=()=>{
                         name="Yes"
                         onClick={handleshow}
                     />
-                    <label for="Yes">Yes</label>
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
 
                     <input
                         type="radio"
@@ -1220,7 +1220,7 @@ const handleColonyDevGrp=()=>{
                         name="Yes"
                         onClick={handleshow}
                     />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide === "Yes" && (
                         <div className="row ">
                         <div className="form-group row">
@@ -1289,7 +1289,7 @@ const handleColonyDevGrp=()=>{
                         name="Yes"
                         onClick={handleshow6}
                     />
-                    <label for="Yes">Yes</label>
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
 
                     <input
                         type="radio"
@@ -1300,7 +1300,7 @@ const handleColonyDevGrp=()=>{
                         name="Yes"
                         onClick={handleshow6}
                     />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">No</label>
                     {showhide6 === "Yes" && (
                         <div className="row ">
                         <div className="form-group row">

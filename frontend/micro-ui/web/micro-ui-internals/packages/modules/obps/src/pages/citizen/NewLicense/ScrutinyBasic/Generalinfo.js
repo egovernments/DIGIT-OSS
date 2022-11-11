@@ -253,7 +253,7 @@ const Genarelinfo = (props) => {
       </div>
       <Collapse in={open2}>
         <div id="example-collapse-text">
-          <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 10 }}>
+          <Form.Group className="justify-content-center" controlId="formBasicEmail" style={{ border: "2px solid #e9ecef", margin: 10, padding: 20 }}>
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
               <Col md={4} xxl lg="3">
                 <Form.Label>
@@ -263,7 +263,7 @@ const Genarelinfo = (props) => {
                   </h5>
                 </Form.Label>
 
-                <div style={{ display: "flex" }}>
+                <div className="d-flex flex-row  align-items-center">
                   <Form.Control
                     type="text"
                     placeholder={Genarelinfo !== null ? Genarelinfo.purposeDd : null}
@@ -325,8 +325,8 @@ const Genarelinfo = (props) => {
                     Potential Zone:&nbsp;<span style={{ color: "red" }}>*</span>
                   </h5>
                 </label>
-                &nbsp;&nbsp; &nbsp;&nbsp;
-                <div style={{ display: "flex" }}>
+                 &nbsp;  &nbsp;
+                <div className="d-flex flex-row  align-items-center">
                   <Form.Control
                     height={30}
                     style={{ maxWidth: 200, marginRight: 5 }}
@@ -371,10 +371,10 @@ const Genarelinfo = (props) => {
                     </h5>
                     {/* <span style={{ color: "red" }}>*</span> */}
                   </Form.Label>
-                  &nbsp;&nbsp;
+                   &nbsp;
                 </div>
                 <div>
-                  <div style={{ display: "flex" }}>
+                  <div className="d-flex flex-row  align-items-center">
                     <Form.Control
                       height={30}
                       style={{ maxWidth: 200, marginRight: 5 }}
@@ -410,10 +410,10 @@ const Genarelinfo = (props) => {
                     </h5>
                     {/* <span style={{ color: "red" }}>*</span> */}
                   </Form.Label>
-                  &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                   &nbsp;  &nbsp;  &nbsp;
                 </div>
                 <div>
-                  <div style={{ display: "flex" }}>
+                  <div className="d-flex flex-row  align-items-center">
                     <Form.Control
                       height={30}
                       style={{ maxWidth: 200, marginRight: 5 }}
@@ -445,12 +445,12 @@ const Genarelinfo = (props) => {
         <div id="example-collapse-text"> */}
             <div className="ml-auto" style={{ marginTop: 20 }}>
               <h2 style={{ fontSize: 24 }}>2. Details of applied land:</h2>
-              <p>
+              <p className="ml-3 mt-1">
                 Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development
                 agreements/ Memorandum of Understanding etc. and similar agreements registered with competent authority.
               </p>
-              <p>
-                <b>(i) Khasra-wise information to be provided in the following format:</b>&nbsp;&nbsp;
+              <p className="ml-3 mt-1">
+                <b>(i) Khasra-wise information to be provided in the following format:</b> &nbsp;
               </p>
             </div>
             {/* <div className="ml-auto"></div> */}
@@ -461,8 +461,8 @@ const Genarelinfo = (props) => {
                 <thead>
                   <tr>
                     <th class="fw-normal">
-                      Tehsil
-                      <div style={{ display: "flex" }}>
+                      Tehsil    &nbsp;
+                      {/* <div className="d-flex flex-row  align-items-center"> */}
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
@@ -477,11 +477,11 @@ const Genarelinfo = (props) => {
                             setLabelValue("Tehsil"), setSmShow(true), console.log("modal open");
                           }}
                         ></ReportProblemIcon>
-                      </div>
+                      {/* </div> */}
                     </th>
                     <th class="fw-normal">
-                      Revenue estate
-                      <div style={{ display: "flex" }}>
+                      Revenue estate    &nbsp;
+                      {/* <div className="d-flex flex-row  align-items-center"> */}
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
@@ -496,11 +496,11 @@ const Genarelinfo = (props) => {
                             setLabelValue("Revenue estate"), setSmShow(true), console.log("modal open");
                           }}
                         ></ReportProblemIcon>
-                      </div>
+                      {/* </div> */}
                     </th>
                     <th class="fw-normal">
-                      Rectangle No.
-                      <div style={{ display: "flex" }}>
+                      Rectangle No.   &nbsp;
+                      {/* <div className="d-flex flex-row  align-items-center"> */}
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
@@ -515,11 +515,11 @@ const Genarelinfo = (props) => {
                             setLabelValue("Rectangle No."), setSmShow(true), console.log("modal open");
                           }}
                         ></ReportProblemIcon>
-                      </div>
+                      {/* </div> */}
                     </th>
                     <th class="fw-normal">
-                      Killa
-                      <div style={{ display: "flex" }}>
+                      Killa  &nbsp;
+                      {/* <div className="d-flex flex-row  align-items-center"> */}
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
@@ -534,11 +534,11 @@ const Genarelinfo = (props) => {
                             setLabelValue("Killa"), setSmShow(true), console.log("modal open");
                           }}
                         ></ReportProblemIcon>
-                      </div>
+                      {/* </div> */}
                     </th>
                     <th class="fw-normal">
-                      Land owner
-                      <div style={{ display: "flex" }}>
+                      Land owner  &nbsp;
+                      {/* <div className="d-flex flex-row  align-items-center"> */}
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
@@ -553,11 +553,11 @@ const Genarelinfo = (props) => {
                             setLabelValue("Land owner"), setSmShow(true), console.log("modal open");
                           }}
                         ></ReportProblemIcon>
-                      </div>
+                      {/* </div> */}
                     </th>
                     <th class="fw-normal">
-                      Consolidation Type{" "}
-                      <div style={{ display: "flex" }}>
+                      Consolidation Type  &nbsp;
+                      {/* <div className="d-flex flex-row  align-items-center"> */}
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
@@ -572,11 +572,11 @@ const Genarelinfo = (props) => {
                             setLabelValue("Consolidation Type"), setSmShow(true), console.log("modal open");
                           }}
                         ></ReportProblemIcon>
-                      </div>
+                      {/* </div> */}
                     </th>
                     <th class="fw-normal">
-                      Kanal/Bigha{" "}
-                      <div style={{ display: "flex" }}>
+                      Kanal/Bigha  &nbsp;
+                      {/* <div className="d-flex flex-row  align-items-center"> */}
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
@@ -591,11 +591,11 @@ const Genarelinfo = (props) => {
                             setLabelValue("Kanal/Bigha"), setSmShow(true), console.log("modal open");
                           }}
                         ></ReportProblemIcon>
-                      </div>
+                      {/* </div> */}
                     </th>
                     <th class="fw-normal">
-                      Marla/Biswa{" "}
-                      <div style={{ display: "flex" }}>
+                      Marla/Biswa  &nbsp;
+                      {/* <div className="d-flex flex-row  align-items-center"> */}
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
@@ -610,19 +610,19 @@ const Genarelinfo = (props) => {
                             setLabelValue("Marla/Biswa"), setSmShow(true), console.log("modal open");
                           }}
                         ></ReportProblemIcon>
-                      </div>
+                      {/* </div> */}
                     </th>
 
                     {/* <th>Sarsai</th>
                 <th>Bigha</th>
                 <th>Biswa</th>
                 <th>Biswansi</th>
-                <th>Area &nbsp;&nbsp;</th> */}
+                <th>Area  &nbsp;</th> */}
                     <th class="fw-normal">
                       {" "}
                       {/* <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)"> */}
-                      Khewat
-                      <div style={{ display: "flex" }}>
+                      Khewat  &nbsp;
+                      {/* <div className="d-flex flex-row  align-items-center"> */}
                         {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                         <ReportProblemIcon
                           style={{
@@ -637,9 +637,9 @@ const Genarelinfo = (props) => {
                             setLabelValue("Khewat"), setSmShow(true), console.log("modal open");
                           }}
                         ></ReportProblemIcon>
-                      </div>
+                      {/* </div> */}
                       {/* <InfoIcon style={{color:"blue"}}/>  */}
-                      &nbsp;&nbsp;
+                     
                       {/* </h6> */}
                     </th>
                   </tr>
