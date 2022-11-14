@@ -99,7 +99,7 @@ public class UserService {
 		uri.append(propertiesManager.getUserHost()).append(propertiesManager.getUserSearchEndpoint()); // URL for user search call
 		Map<String, Object> userSearchRequest = new HashMap<>();
 		userSearchRequest.put("RequestInfo", requestInfo);
-		userSearchRequest.put("tenantId", propertiesManager.getParentLevelTenantId());
+		userSearchRequest.put("tenantId", propertiesManager.getStateLevelTenantId());
 		userSearchRequest.put("roleCodes", Collections.singletonList(INTERNALMICROSERVICEROLE_CODE));
 		try {
 			LinkedHashMap<String, Object> responseMap = (LinkedHashMap<String, Object>) restCallRepository.fetchResult(uri, userSearchRequest);
@@ -118,10 +118,10 @@ public class UserService {
 		//Creating role with INTERNAL_MICROSERVICE_ROLE
 		Role role = Role.builder()
 				.name(INTERNALMICROSERVICEROLE_NAME).code(INTERNALMICROSERVICEROLE_CODE)
-				.tenantId(propertiesManager.getParentLevelTenantId()).build();
+				.tenantId(propertiesManager.getStateLevelTenantId()).build();
 		User user = User.builder().userName(INTERNALMICROSERVICEUSER_USERNAME)
 				.name(INTERNALMICROSERVICEUSER_NAME).mobileNumber(INTERNALMICROSERVICEUSER_MOBILENO)
-				.type(INTERNALMICROSERVICEUSER_TYPE).tenantId(propertiesManager.getParentLevelTenantId())
+				.type(INTERNALMICROSERVICEUSER_TYPE).tenantId(propertiesManager.getStateLevelTenantId())
 				.roles(Collections.singletonList(role)).id(0L).build();
 
 		userCreateRequest.put("RequestInfo", requestInfo);
