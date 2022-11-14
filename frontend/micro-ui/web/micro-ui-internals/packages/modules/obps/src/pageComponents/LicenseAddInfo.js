@@ -60,6 +60,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.shareHoldingPatterens); 
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.addInfo?.showDevTypeFields);
       setCinNo(developerDataGet?.devDetail[0]?.addInfo?.cin_Number);
+      // setName(developerDataGet?.devDetail[0]?.addInfo?.name);
       setCompanyName(developerDataGet?.devDetail[0]?.addInfo?.companyName);
       setIncorporation(developerDataGet?.devDetail[0]?.addInfo?.incorporationDate);
       setRegistered(developerDataGet?.devDetail[0]?.addInfo?.registeredAddress);
@@ -331,11 +332,15 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
       let addInfo = {
         showDevTypeFields:showDevTypeFields,
+        name: name,
+        emailUser:emailUser,
+        mobileNumberUser:mobileNumberUser,
         cin_Number: cin_Number,
         companyName: companyName,
         incorporationDate: incorporationDate,
         registeredAddress: registeredAddress,
         email: email,
+        
         registeredContactNo: registeredContactNo,
         gst_Number: gst_Number,
         directorsInformation: DirectorData,
@@ -384,6 +389,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         data.LicneseDetails.incorporationDate = incorporationDate,
         data.LicneseDetails.registeredAddress = registeredAddress,
         data.LicneseDetails.email = email,
+        
         data.LicneseDetails.registeredContactNo = registeredContactNo,
         data.LicneseDetails.gst_Number = gst_Number,
         data.LicneseDetails.directorsInformation = DirectorData,
@@ -526,8 +532,8 @@ const onSkip = () => onSelect();
                       <label htmlFor="email"> Email </label>
                       <input
                         type="text"
-                        value={emailUser}
-                        placeholder={emailUser}
+                        value={email}
+                        placeholder={email}
                         disabled="disabled"
                         className="employee-card-input"
                       // name="email"
@@ -1584,7 +1590,9 @@ const onSkip = () => onSelect();
                       </tr>
                     </thead>
                     <tbody>
-                      {DirectorData.map((elementInArray, input) => {
+                      {
+                      (DirectorData.length>0)?
+                      DirectorData.map((elementInArray, input) => {
                         return (
                           <tr key={input}>
                             <td>{input}</td>
@@ -1625,7 +1633,7 @@ const onSkip = () => onSelect();
                             </td>
                           </tr>
                         );
-                      })}
+                      }):<p></p>}
                     </tbody>
                   </table>
                 </div>

@@ -89,7 +89,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       useEffect(() => {
         getDeveloperData()
       }, []);
-    const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.LicneseDetails?.Correspondenceaddress || formData?.formData?.LicneseDetails?.Correspondenceaddress || "");
+    const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.LicneseDetails?.Correspondenceaddress || formData?.formData?.LicneseDetails?.Correspondenceaddress || "HR");
     const [isAddressSame, setisAddressSame] = useState(formData?.LicneseDetails?.isAddressSame || formData?.formData?.LicneseDetails?.isAddressSame || false);
     const [error, setError] = useState(null);
     const [showToast, setShowToast] = useState(null);
@@ -299,7 +299,7 @@ const handleArrayValues = () => {
     setModalCapacityDevelopColonyHdruAct((prev) => [...prev, values]);
     setmodal(!modal)
 //   }
-  console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
+//   console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
   localStorage.setItem("DevCapacityDetails", JSON.stringify(capacityDevelopColonyHdruAct))
 }
 

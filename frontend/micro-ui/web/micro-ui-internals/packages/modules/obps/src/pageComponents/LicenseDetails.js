@@ -33,6 +33,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [addressLineFour, setAddressLineFour] = useState(formData?.LicneseDetails?.addressLineFour || formData?.formData?.LicneseDetails?.addressLineFour || "");
   const [city, setCity] = useState(formData?.LicneseDetails?.city || formData?.formData?.LicneseDetails?.city || "");
   const [pincode, setPincode] = useState(formData?.LicneseDetails?.pincode || formData?.formData?.LicneseDetails?.pincode || "");
+  const [village, setVillage] = useState(formData?.LicneseDetails?.village || formData?.formData?.LicneseDetails?.village || "");
+  const [tehsil, setTehsil] = useState(formData?.LicneseDetails?.tehsil || formData?.formData?.LicneseDetails?.tehsil || "");
+  const [state, setState] = useState(formData?.LicneseDetails?.state || formData?.formData?.LicneseDetails?.state || "");
+  const [district, setDistrict] = useState(formData?.LicneseDetails?.district || formData?.formData?.LicneseDetails?.district || "");
   const [addressSameAsPermanent, setSelectedChecked] = useState(formData?.LicenseDetails?.addressSameAsPermanent || formData?.LicenseDetails?.addressSameAsPermanent || "")
   const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.Correspondenceaddress || formData?.formData?.Correspondenceaddress || "");
   const [addressLineOneCorrespondence, setAddressLineOneCorrespondence] = useState(formData?.addressLineOneCorrespondence || formData?.formData?.addressLineOneCorrespondence || "");
@@ -41,6 +45,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [addressLineFourCorrespondence, setAddressLineFourCorrespondence] = useState(formData?.addressLineFourCorrespondence || formData?.formData?.addressLineFourCorrespondence || "");
   const [cityCorrespondence, setCityCorrespondence] = useState(formData?.cityCorrespondence || formData?.formData?.cityCorrespondence || "");
   const [pincodeCorrespondence, setPincodeCorrespondence] = useState(formData?.pincodeCorrespondence || formData?.formData?.pincodeCorrespondence || "");
+  const [villageCorrespondence, setVillageCorrespondence] = useState(formData?.villageCorrespondence || formData?.formData?.villageCorrespondence || "");
+  const [tehsilCorrespondence, setTehsilCorrespondence] = useState(formData?.tehsilCorrespondence || formData?.formData?.tehsilCorrespondence || "");
+  const [stateCorrespondence, setStateCorrespondence] = useState(formData?.stateCorrespondence || formData?.formData?.stateCorrespondence || "");
+  const [districtCorrespondence, setDistrictCorrespondence] = useState(formData?.districtCorrespondence || formData?.formData?.districtCorrespondence || "");
   const [isAddressSame, setisAddressSame] = useState(formData?.isAddressSame || formData?.formData?.isAddressSame || false);
   const [error, setError] = useState(null);
   const [showToast, setShowToast] = useState(null);
@@ -220,19 +228,35 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   function selectPincode(e) {
     setPincode(e.target.value);
   }
+  function selectVillage(e) {
+    setVillage(e.target.value);
+  }
+  function selectTehsil(e) {
+    setTehsil(e.target.value);
+  }
+  function selectDistrict(e) {
+    setDistrict(e.target.value);
+  }
+  function selectState(e) {
+    setState(e.target.value);
+  }
   function selectChecked(e) {
     // console.log(e.target.value);
     setSelectedChecked(e.target.value);
     if (isAddressSame == false) {
       setisAddressSame(true);
-      setSelectedChecked(formData?.LicenseDetails?.addressSameAsPermanent ? formData?.LicenseDetails?.addressSameAsPermanent : formData?.LicenseDetails?.addressSameAsPermanent)
+      // setSelectedChecked(formData?.LicenseDetails?.addressSameAsPermanent ? formData?.LicenseDetails?.addressSameAsPermanent : formData?.LicenseDetails?.addressSameAsPermanent)
       setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress);
-      setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOneCorrespondence ? formData?.LicneseDetails?.addressLineOneCorrespondence : formData?.LicneseDetails?.addressLineOne);
+      setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOne ? formData?.LicneseDetails?.addressLineOne : formData?.LicneseDetails?.addressLineOne);
       setAddressLineTwoCorrespondence(formData?.LicneseDetails?.addressLineTwo ? formData?.LicneseDetails?.addressLineTwo : formData?.formData?.LicneseDetails?.addressLineTwo);
       setAddressLineThreeCorrespondence(formData?.LicneseDetails?.addressLineThree ? formData?.LicneseDetails?.addressLineThree : formData?.formData?.LicneseDetails?.addressLineThree);
       setAddressLineFourCorrespondence(formData?.LicneseDetails?.addressLineFour ? formData?.LicneseDetails?.addressLineFour : formData?.formData?.LicneseDetails?.addressLineFour);
       setCityCorrespondence(formData?.LicneseDetails?.city ? formData?.LicneseDetails?.city : formData?.formData?.LicneseDetails?.city);
       setPincodeCorrespondence(formData?.LicneseDetails?.pincode ? formData?.LicneseDetails?.pincode : formData?.formData?.LicneseDetails?.pincode);
+      setVillageCorrespondence(formData?.LicneseDetails?.village ? formData?.LicneseDetails?.village : formData?.formData?.LicneseDetails?.village);
+      setTehsilCorrespondence(formData?.LicneseDetails?.tehsil ? formData?.LicneseDetails?.tehsil : formData?.formData?.LicneseDetails?.tehsil);
+      setStateCorrespondence(formData?.LicneseDetails?.state ? formData?.LicneseDetails?.state : formData?.formData?.LicneseDetails?.state);
+      setDistrictCorrespondence(formData?.LicneseDetails?.district ? formData?.LicneseDetails?.district : formData?.formData?.LicneseDetails?.district);
     }
     else {
       Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
@@ -244,6 +268,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       setAddressLineFourCorrespondence("");
       setCityCorrespondence("");
       setPincodeCorrespondence("");
+      setVillageCorrespondence("");
+      setTehsilCorrespondence("");
+      setStateCorrespondence("");
+      setDistrictCorrespondence("");
     }
   }
   function selectCorrespondenceaddress(e) {
@@ -267,6 +295,20 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   function selectPincodeCorrespondence(e) {
     setPincodeCorrespondence(e.target.value);
   }
+  function selectVillageCorrespondence(e) {
+    setVillageCorrespondence(e.target.value);
+  }
+  function selectTehsilCorrespondence(e) {
+    setTehsilCorrespondence("");
+  }
+  function selectStateCorrespondence(e) {
+    setStateCorrespondence("");
+  }
+  function selectDistrictCorrespondence(e) {
+    setDistrictCorrespondence("");
+  }
+      
+      
 
   const goNext = async () => {
 
@@ -321,7 +363,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       const developerRegisterData = {
 
         "devDetail": {
-          "id":USERID,
+          
           "licenceDetails": {
             name: name,
             mobileNumber: mobileNumber,
@@ -335,13 +377,20 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             addressLineFour: addressLineFour,
             city: city,
             pincode: pincode,
-            addressSameAsPermanent: addressSameAsPermanent,
+            village: village,
+            tehsil: tehsil,
+            state: state,
+            district: district,
             addressLineOneCorrespondence: addressLineOneCorrespondence,
             addressLineTwoCorrespondence: addressLineTwoCorrespondence,
             addressLineThreeCorrespondence: addressLineThreeCorrespondence,
             addressLineFourCorrespondence: addressLineFourCorrespondence,
             cityCorrespondence: cityCorrespondence,
-            pincodeCorrespondence: pincodeCorrespondence
+            pincodeCorrespondence: pincodeCorrespondence,
+            villageCorrespondence: villageCorrespondence,
+            tehsilCorrespondence: tehsilCorrespondence,
+            stateCorrespondence: stateCorrespondence,
+            districtCorrespondence: districtCorrespondence,
           }
         }
 
@@ -634,6 +683,78 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
                   {pincode && pincode.length > 0 && !pincode.match(Digit.Utils.getPattern('Pincode')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Pincode")}</CardLabelError>}
                 </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Village"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="village"
+                    value={village}
+                    placeholder={village}
+                    onChange={selectVillage}
+                    {...(validation = {
+                      isRequired: false,
+                      type: "text",
+                      title: ("Please Enter VIllage"),
+                    })}
+                  />
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Tehsil"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="tehsil"
+                    value={tehsil}
+                    placeholder={tehsil}
+                    onChange={selectTehsil}
+                    {...(validation = {
+                      isRequired: false,
+                      type: "text",
+                      title: ("Please Enter Tehsil"),
+                    })}
+                  />
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"State"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="state"
+                    value={state}
+                    placeholder={state}
+                    onChange={selectState}
+                    {...(validation = {
+                      isRequired: false,
+                      type: "text",
+                      title: ("Please Enter State"),
+                    })}
+                  />
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"District"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="district"
+                    value={district}
+                    placeholder={district}
+                    onChange={selectDistrict}
+                    {...(validation = {
+                      isRequired: false,
+                      type: "text",
+                      title: ("Please Enter District"),
+                    })}
+                  />
+                </Form.Group>
               </Row>
             </Card>
             <Card className="mb-3">
@@ -743,6 +864,78 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     placeholder={pincodeCorrespondence}
                     onChange={selectPincodeCorrespondence}
                     disable={isAddressSame}
+                  />
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Village"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="villageCorrespondence"
+                    value={villageCorrespondence}
+                    placeholder={villageCorrespondence}
+                    onChange={selectVillageCorrespondence}
+                    {...(validation = {
+                      isRequired: false,
+                      type: "text",
+                      title: ("Please Enter VIllage"),
+                    })}
+                  />
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"Tehsil"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="tehsilCorrespondence"
+                    value={tehsilCorrespondence}
+                    placeholder={tehsilCorrespondence}
+                    onChange={selectTehsilCorrespondence}
+                    {...(validation = {
+                      isRequired: false,
+                      type: "text",
+                      title: ("Please Enter Tehsil"),
+                    })}
+                  />
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"State"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="stateCorrespondence"
+                    value={stateCorrespondence}
+                    placeholder={stateCorrespondence}
+                    onChange={selectStateCorrespondence}
+                    {...(validation = {
+                      isRequired: false,
+                      type: "text",
+                      title: ("Please Enter State"),
+                    })}
+                  />
+                </Form.Group>
+                <Form.Group className="col-md-4">
+                  <CardLabel>{`${"District"}`}</CardLabel>
+                  <TextInput
+                    t={t}
+                    type={"text"}
+                    isMandatory={false}
+                    optionKey="i18nKey"
+                    name="districtCorrespondence"
+                    value={districtCorrespondence}
+                    placeholder={districtCorrespondence}
+                    onChange={selectDistrictCorrespondence}
+                    {...(validation = {
+                      isRequired: false,
+                      type: "text",
+                      title: ("Please Enter District"),
+                    })}
                   />
                 </Form.Group>
               </Row>

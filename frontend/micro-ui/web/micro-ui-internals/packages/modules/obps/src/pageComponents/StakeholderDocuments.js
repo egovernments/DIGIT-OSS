@@ -89,7 +89,6 @@ const StakeholderDocuments = ({ t, config, onSelect, userType, formData, setErro
                     config={config}
                     onSelect={handleSubmit}
                     onSkip={onSkip}
-                    isDisabled={enableSubmit}
                     onAdd={onAdd}
                     cardStyle={{paddingRight:"16px"}}
                 >
