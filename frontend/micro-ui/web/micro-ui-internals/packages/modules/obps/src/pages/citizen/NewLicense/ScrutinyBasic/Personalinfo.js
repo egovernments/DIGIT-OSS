@@ -45,7 +45,7 @@ const Personalinfo = (props) => {
   const [labelValue, setLabelValue] = useState("");
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
-  
+
   const iconStates = props.dataForIcons
   const applicantInfoPersonal = props.ApiResponseData;
   console.log("personal info applicant data", applicantInfoPersonal);
@@ -112,15 +112,15 @@ const Personalinfo = (props) => {
   return (
     <Form
       ref={props.personalInfoRef}
-      // style={{
-      //   width: "100%",
-      //   height: props.heightPersonal,
-      //   overflow: "hidden",
-      //   marginBottom: 20,
-      //   borderColor: "#C3C3C3",
-      //   borderStyle: "solid",
-      //   borderWidth: 2,
-      // }}
+    // style={{
+    //   width: "100%",
+    //   height: props.heightPersonal,
+    //   overflow: "hidden",
+    //   marginBottom: 20,
+    //   borderColor: "#C3C3C3",
+    //   borderStyle: "solid",
+    //   borderWidth: 2,
+    // }}
     >
       {/* <Alert variant="warning">{messege}</Alert> */}
       <div
@@ -166,8 +166,8 @@ const Personalinfo = (props) => {
               alignContent: "center",
             }}
           >
-            <span style={{ color: "#817f7f" }} className="">
-              Personal Info
+            <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+              - Personal Info
             </span>
             {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
           </div>
@@ -181,8 +181,18 @@ const Personalinfo = (props) => {
               />
             </div>
           </Collapse>
-          <LicenseDetailsScrutiny />
-          <CapacityScrutiny />
+          <LicenseDetailsScrutiny
+            iconColorState={iconStates}
+            showTable={currentRemarklifo}
+            addInfo={applicantInfoPersonal !== null ? applicantInfoPersonal : null}
+            displayPersonal={open2 ? "block" : "none"}
+          />
+          <CapacityScrutiny
+            iconColorState={iconStates}
+            showTable={currentRemarklifo}
+            capacityScrutinyInfo={applicantInfoPersonal !== null ? applicantInfoPersonal : null}
+            displayPersonal={open2 ? "block" : "none"}
+          />
           {/* <DocumentScrutiny /> */}
         </div>
       </Collapse>

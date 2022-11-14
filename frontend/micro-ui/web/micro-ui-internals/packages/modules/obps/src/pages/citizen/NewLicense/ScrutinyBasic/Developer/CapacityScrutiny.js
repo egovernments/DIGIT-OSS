@@ -17,8 +17,9 @@ import RemoveIcon from "@mui/icons-material/Remove";
 
 import ModalChild from "../Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import { useStyles } from "../css/personalInfoChild.style";
 
-const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data }) => {
+const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data, capacityScrutinyInfo, iconColorState }) => {
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
   let validation = {};
@@ -92,30 +93,19 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
   const [developerLabel, setDeveloperLabel] = useState(true);
   const [show, setshow] = useState(false);
   const [show3, setshow3] = useState(false);
-  const [smShow, setSmShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const [noChecked, setNochecked] = useState(true);
   const [warningOrred, setwarningOrred] = useState("#ffcf33");
   const [color, setColor] = useState({ yes: false, no: false });
-  const [smShow2, setSmShow2] = useState(false);
-  const [smShow3, setSmShow3] = useState(false);
-  const [labelValue, setLabelValue] = useState("");
 
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
-  const [fieldValue, setFieldValue] = useState("");
   // const [fieldValue1, setFieldValue1] = useState("");
 
-  const currentRemarks = (data) => {
-    props.showTable({ data: data.data });
-  };
 
-  const handlemodaldData = (data) => {
-    setmodaldData(data.data);
-    setSmShow(false);
-  };
+
 
   const handleYesOrNochecked = (data) => {
     setYesorNochecked(data.data);
@@ -328,8 +318,102 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
   const [noofRow, setNoOfRow] = useState(1);
   const [noofRow1, setNoOfRow1] = useState(1);
   const onSkip = () => onSelect();
+
+
+
+
+
+  const classes = useStyles();
+
+  const [smShow, setSmShow] = useState(false);
+  const [labelValue, setLabelValue] = useState("");
+  const Colors = {
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+    info: "#FFB602"
+  }
+  const [selectedFieldData, setSelectedFieldData] = useState();
+  const [fieldValue, setFieldValue] = useState("");
+  const [openedModal, setOpennedModal] = useState("")
+  const [fieldIconColors, setFieldIconColors] = useState({
+    caution1: Colors.info,
+    caution2: Colors.info,
+    caution3: Colors.info,
+    caution4: Colors.info,
+    caution5: Colors.info,
+  })
+
+  const fieldIdList = [{ label: "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975", key: "caution1" },{ label: "Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as", key: "caution2" },{ label: "Whether any technical expert(s) engaged", key: "caution3" },{ label: "If director/partner of the proposed developer company/firm also holds designation of director/partner in any other company/firm who has already obtained license(s) under act of 1975", key: "caution4" },{ label: "In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside Haryana", key: "caution5" },]
+
+
+  const getColorofFieldIcon = () => {
+    let tempFieldColorState = fieldIconColors;
+    fieldIdList.forEach((item) => { 
+      if (iconColorState !== null && iconColorState !== undefined) {
+        console.log("color method called");
+        const fieldPresent = iconColorState.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+
+        }
+      }
+    })
+
+    setFieldIconColors(tempFieldColorState);
+
+  };
+
+
+  useEffect(() => {
+    getColorofFieldIcon();
+    console.log("repeating1...",)
+  }, [iconColorState])
+
+  useEffect(() => {
+    if (labelValue) {
+      const fieldPresent = iconColorState.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      setSelectedFieldData(fieldPresent[0]);
+    } else {
+      setSelectedFieldData(null);
+    }
+  }, [labelValue])
+
+
+
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
+
+  const handlemodaldData = (data) => {
+    // setmodaldData(data.data);
+    setSmShow(false);
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
+    }
+    setOpennedModal("");
+    setLabelValue("");
+  };
+
+
+
+
+
+
   return (
     <div>
+      <ModalChild
+        labelmodal={labelValue}
+        passmodalData={handlemodaldData}
+        displaymodal={smShow}
+        onClose={() => setSmShow(false)}
+        selectedFieldData={selectedFieldData}
+        fieldValue={fieldValue}
+        remarksUpdate={currentRemarks}
+      ></ModalChild>
+
       <div
         className="collapse-header"
         onClick={() => setOpen(!open)}
@@ -347,8 +431,8 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
           alignContent: "center",
         }}
       >
-        <span style={{ color: "#817f7f" }} className="">
-          Developer Capacity
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+          - Developer Capacity
         </span>
         {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
@@ -470,40 +554,27 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
               <p className="ml-3">
                 (i) Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975: *{" "}
               </p>
-                 <div className="d-flex flex-row align-items-center ml-4">
-                  <input type="radio" value="Yes" id="Yes" disabled />
-                  <label className="m-0  mx-1" for="Yes">Yes</label>
-                  <input type="radio" value="No" id="No"  disabled />
-                  <label className="m-0 mx-2" for="No">No</label>
+              <div className="d-flex flex-row align-items-center ml-4">
+                <input type="radio" value="Yes" checked={capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null} id="Yes" disabled />
+                <label className="m-0  mx-1" for="Yes">Yes</label>
+                <input type="radio" value="No" id="No" checked={capacityScrutinyInfo !== null ? !capacityScrutinyInfo?.caution1: null} disabled />
+                <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
-                    style={{
-                      color:
-                        developerInputFiledColor.length > 0
-                          ? developerInputFiledColor[0].color.data
-                          : developerInputCheckedFiledColor.length > 0
-                          ? developerInputCheckedFiledColor[0].color.data
-                          : "#FFB602",
-                    }}
-                    onClick={() => {
-                      setLabelValue(
-                        "Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act,1975"
-                      ),
-                        setSmShow(true),
-                        console.log("modal open");
-                    }}
-                  ></ReportProblemIcon>
-                  
-                  
-                  <ModalChild
-                    labelmodal={labelValue}
-                    passmodalData={handlemodaldData}
-                    isYesorNoChecked={handleYesOrNochecked}
-                    displaymodal={smShow}
-                    setColor={setColor}
-                  ></ModalChild>
-                </div>
+                  style={{
+                    color: fieldIconColors.caution1
+                  }}
+                  onClick={() => {
+                    setOpennedModal("caution1")
+                    setLabelValue("Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null);
+                  }}
+                ></ReportProblemIcon>
+
+              </div>
               <div>
-               
+
                 {/* {showhide0 === "Yes" && ( */}
                 <div className="card-body">
                   {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
@@ -667,22 +738,18 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
                 (ii) Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as .
                 <ReportProblemIcon
                   style={{
-                    color:
-                      developerInputFiledColor3.length > 0
-                        ? developerInputFiledColor3[0].color.data
-                        : developerInputCheckedFiledColor3.length > 0
-                        ? developerInputCheckedFiledColor3[0].color.data
-                        : "#FFB602",
+                    color: fieldIconColors.caution2
                   }}
                   onClick={() => {
+                    setOpennedModal("caution2")
                     setLabelValue("Licences/permissions granted to Developer/ group company for development of colony under any other law/Act as"),
-                      setSmShow(true),
-                      console.log("modal open");
-                    // setFieldValue(personalinfo !== null ? personalinfo.authorizedmobile : null);
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution2: null);
                   }}
                 ></ReportProblemIcon>
               </p>
-              
+
               <div>
                 <div className="card-body">
                   {/* <h5 className="card-h">Add/Remove Authorized Users</h5> */}
@@ -859,25 +926,24 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
               <div className="hl"></div>
               <p className="ml-3 d-flex flex-row mb-4">(iii) Whether any technical expert(s) engaged   &nbsp;&nbsp;&nbsp;
                 <div className="d-flex flex-row align-items-center ml-2">
-                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
+                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" checked={capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution3: null} disabled />
                   <label className="m-0  mx-1" for="Yes">Yes</label>
-                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
+                  <input type="radio" value="No" id="No" className="mx-2 mt-1" checked={capacityScrutinyInfo !== null ? !capacityScrutinyInfo?.caution3: null} disabled />
                   <label className="m-0 mx-2" for="No">No</label>
-              <ReportProblemIcon
+                  <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor1.length > 0
-                          ? developerInputFiledColor1[0].color.data
-                          : developerInputCheckedFiledColor1.length > 0
-                          ? developerInputCheckedFiledColor1[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.caution3
                     }}
                     onClick={() => {
-                      setLabelValue("Whether any technical expert(s) engaged"), setSmShow(true), console.log("modal open");
+                      setOpennedModal("caution3")
+                    setLabelValue("Whether any technical expert(s) engaged"),
+                    setSmShow(true),
+                    console.log("modal open"),
+                    setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution3: null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                  </p>
+              </p>
               <div>
                 {/* <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" onChange={handleChange} name="Yes" onClick={handleshow1} />
                 <label className="m-0  mx-1" for="Yes">Yes</label>
@@ -1125,48 +1191,49 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
               <p className="ml-3 d-flex mb-3">
                 (iv) If director/partner of the proposed developer company/firm also holds designation of director/partner in any
                 other company/firm who has already obtained license(s) under act of 1975:
-              <div className="d-flex flex-row align-items-center ml-4 mt-1 mb-3">
-                <input
-                  type="radio"
-                  value="Yes"
-                  id="Yes"
-                  className="mx-2 mt-1"
-                  // onChange={(e) => handleChange(e.target.value)}
-                  // name="Yes"
-                  // onClick={handleshow}
-                  disabled
-                />
-                <label className="m-0  mx-1" for="Yes">Yes</label>
+                <div className="d-flex flex-row align-items-center ml-4 mt-1 mb-3">
+                  <input
+                    type="radio"
+                    value="Yes"
+                    id="Yes"
+                    className="mx-2 mt-1"
+                    checked={capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution4: null}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // name="Yes"
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0  mx-1" for="Yes">Yes</label>
 
-                <input
-                  type="radio"
-                  value="No"
-                  id="No"
-                  className="mx-2 mt-1"
-                  // onChange={(e) => handleChange(e.target.value)}
-                  // name="Yes"
-                  // onClick={handleshow}
-                  disabled
-                />
-                <label className="m-0 mx-2" for="No">No</label>
-                <ReportProblemIcon
-                  style={{
-                    color:
-                      developerInputFiledColor4.length > 0
-                        ? developerInputFiledColor4[0].color.data
-                        : developerInputCheckedFiledColor4.length > 0
-                        ? developerInputCheckedFiledColor4[0].color.data
-                        : "#FFB602",
-                  }}
-                  onClick={() => {
-                    setLabelValue("the proposed developer company/firm "), setSmShow(true), console.log("modal open");
-                  }}
-                ></ReportProblemIcon>
+                  <input
+                    type="radio"
+                    value="No"
+                    id="No"
+                    className="mx-2 mt-1"
+                    checked={capacityScrutinyInfo !== null ? !capacityScrutinyInfo?.caution4: null}
+                    // onChange={(e) => handleChange(e.target.value)}
+                    // name="Yes"
+                    // onClick={handleshow}
+                    disabled
+                  />
+                  <label className="m-0 mx-2" for="No">No</label>
+                  <ReportProblemIcon
+                    style={{
+                      color:fieldIconColors.caution4
+                    }}
+                    onClick={() => {
+                      setOpennedModal("caution4")
+                      setLabelValue("If director/partner of the proposed developer company/firm also holds designation of director/partner in any other company/firm who has already obtained license(s) under act of 1975"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution4: null);
+                    }}
+                  ></ReportProblemIcon>
                 </div>
               </p>
 
               <div>
-              
+
                 {/* {showhide === "Yes" && ( */}
                 <div className="row ">
                   <div className="form-group row">
@@ -1222,26 +1289,25 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data 
               <p className="ml-3 d-flex mb-3">
                 2. In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside
                 Haryana:
-              <div className="d-flex flex-row align-items-center ml-2">
-                <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />
-                <label className="m-0  mx-1" for="Yes">Yes</label>
-                <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled />
-                <label className="m-0 mx-2" for="No">No</label>
-                
+                <div className="d-flex flex-row align-items-center ml-2">
+                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled checked={capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution5: null} />
+                  <label className="m-0  mx-1" for="Yes">Yes</label>
+                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled checked={capacityScrutinyInfo !== null ? !capacityScrutinyInfo?.caution5: null} />
+                  <label className="m-0 mx-2" for="No">No</label>
+
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor2.length > 0
-                          ? developerInputFiledColor2[0].color.data
-                          : developerInputCheckedFiledColor2.length > 0
-                          ? developerInputCheckedFiledColor2[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.caution5
                     }}
                     onClick={() => {
-                      setLabelValue("technical capacity sought"), setSmShow(true), console.log("modal open");
+                      setOpennedModal("caution5")
+                      setLabelValue("In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside Haryana"),
+                      setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution5: null);
                     }}
                   ></ReportProblemIcon>
-              </div>
+                </div>
               </p>
               <div>
                 {/* <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled />

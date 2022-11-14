@@ -25,8 +25,12 @@ import AddIcon from "@mui/icons-material/Add";
 import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useStyles } from "./css/personalInfoChild.style";
 
 const AppliedLandinfo = (props) => {
+
+  const dataIcons = props.dataForIcons;
+
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   console.log(uncheckedValue);
   const [migrationApllied, setMigrationApplied] = useState(true);
@@ -47,19 +51,14 @@ const AppliedLandinfo = (props) => {
   const [color, setColor] = useState({ yes: false, no: false });
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
-  const [smShow, setSmShow] = useState(false);
   const [noOfRows, setNoOfRows] = useState(1);
   const [noOfRow, setNoOfRow] = useState(1);
   const [noOfRow1, setNoOfRow1] = useState(1);
   const Purpose = props.purpose;
-  const [labelValue, setLabelValue] = useState("");
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
 
-  const handlemodaldData = (data) => {
-    setmodaldData(data.data);
-    setSmShow(false);
-  };
+
 
   const handleYesOrNochecked = (data) => {
     setYesorNochecked(data.data);
@@ -237,6 +236,88 @@ const AppliedLandinfo = (props) => {
   //   return obj.label === "Name of individual Land owner/ land-owning company/ firm/ LLP etc.";
   // });
   console.log("Akash", Purpose);
+
+
+  const classes = useStyles();
+
+  const [smShow, setSmShow] = useState(false);
+  const [labelValue, setLabelValue] = useState("");
+  const Colors = {
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+    info: "#FFB602"
+  }
+  const [selectedFieldData, setSelectedFieldData] = useState();
+  const [fieldValue, setFieldValue] = useState("");
+  const [openedModal, setOpennedModal] = useState("")
+  const [fieldIconColors, setFieldIconColors] = useState({
+    dgpsPoint: Colors.info,
+    detailsOfPlots: Colors.info,
+    areaUnder: Colors.info,
+    nilp: Colors.info,
+    sitePlan: Colors.info,
+    democraticPlan: Colors.info,
+    sectoralPlan: Colors.info,
+    developmentPlan: Colors.info,
+    uploadLayoutPlan: Colors.info,
+  })
+
+  const fieldIdList = [{ label: "DGPS Point", key: "dgpsPoint" }, { label: "Details of Plots", key: "detailsOfPlots" }, { label: "Area Under", key: "areaUnder" }, { label: "NILP", key: "nilp" }, { label: "Site plan", key: "nilp" }, { label: "Democratic Plan", key: "nilp" }, { label: "Sectoral Plan/Layout Plan", key: "sectoralPlan" }, { label: "Development Plan", key: "developmentPlan" }, { label: "Upload Layout Plan", key: "uploadLayoutPlan" },];
+
+
+  const getColorofFieldIcon = () => {
+    let tempFieldColorState = fieldIconColors;
+    fieldIdList.forEach((item) => {
+      if (dataIcons !== null && dataIcons !== undefined) {
+        console.log("color method called");
+        const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+
+        }
+      }
+    })
+
+    setFieldIconColors(tempFieldColorState);
+
+  };
+
+
+  useEffect(() => {
+    getColorofFieldIcon();
+    console.log("repeating1...",)
+  }, [dataIcons])
+
+  useEffect(() => {
+    if (labelValue) {
+      const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      setSelectedFieldData(fieldPresent[0]);
+    } else {
+      setSelectedFieldData(null);
+    }
+  }, [labelValue])
+
+
+
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
+
+  const handlemodaldData = (data) => {
+    // setmodaldData(data.data);
+    setSmShow(false);
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
+    }
+    setOpennedModal("");
+    setLabelValue("");
+  };
+
+
+
   return (
     <Form
       ref={props.appliedLandInfoRef}
@@ -270,6 +351,17 @@ const AppliedLandinfo = (props) => {
           padding: 2,
         }}
       > */}
+
+      <ModalChild
+        labelmodal={labelValue}
+        passmodalData={handlemodaldData}
+        displaymodal={smShow}
+        onClose={() => setSmShow(false)}
+        selectedFieldData={selectedFieldData}
+        fieldValue={fieldValue}
+        remarksUpdate={currentRemarks}
+      ></ModalChild>
+
       <div>
         <div
           className="collapse-header"
@@ -307,24 +399,16 @@ const AppliedLandinfo = (props) => {
                   1. DGPS points <span className="text-primary"> (Click here for instructions to capture DGPS points)</span>
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor.length > 0
-                          ? developerInputFiledColor[0].color.data
-                          : developerInputCheckedFiledColor.length > 0
-                            ? developerInputCheckedFiledColor[0].color.data
-                            : "#FFB602",
+                      color: fieldIconColors.dgpsPoint
                     }}
                     onClick={() => {
-                      setLabelValue("Click here for instructions to capture DGPS points)"), setSmShow(true), console.log("modal open");
+                      setLabelValue("DGPS points"),
+                        setOpennedModal("dgpsPoint")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue();
                     }}
                   ></ReportProblemIcon>
-                  <ModalChild
-                    labelmodal={labelValue}
-                    passmodalData={handlemodaldData}
-                    isYesorNoChecked={handleYesOrNochecked}
-                    displaymodal={smShow}
-                    setColor={setColor}
-                  ></ModalChild>
                 </div>
                 {/* </h5> */}
 
@@ -333,11 +417,11 @@ const AppliedLandinfo = (props) => {
                   <div className="row ">
                     <br></br>
                     <div className="col col-6">
-                      <label htmlFor="pitentialZone">X:Longitude</label>
+                      <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
                       <input type="number" name="XLongitude" className="form-control" disabled />
                     </div>
                     <div className="col col-6">
-                      <label htmlFor="pitentialZone">Y:Latitude</label>
+                      <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
                       <input type="number" name="YLatitude" className="form-control" disabled />
                     </div>
                   </div>
@@ -347,11 +431,11 @@ const AppliedLandinfo = (props) => {
                   <div className="row ">
                     <br></br>
                     <div className="col col-6">
-                      <label htmlFor="pitentialZone">X:Longitude</label>
+                      <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
                       <input type="number" name="XLongitude" className="form-control" disabled />
                     </div>
                     <div className="col col-6">
-                      <label htmlFor="pitentialZone">Y:Latitude</label>
+                      <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
                       <input type="number" name="YLatitude" className="form-control" disabled />
                     </div>
                   </div>
@@ -363,11 +447,11 @@ const AppliedLandinfo = (props) => {
                     <br></br>
                     <div className="row ">
                       <div className="col col-6">
-                        <label htmlFor="pitentialZone">X:Longitude</label>
+                        <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
                         <input type="number" name="XLongitude" className="form-control" disabled />
                       </div>
                       <div className="col col-6">
-                        <label htmlFor="pitentialZone">Y:Latitude</label>
+                        <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
                         <input type="number" name="YLatitude" className="form-control" disabled />
                       </div>
                     </div>
@@ -379,11 +463,11 @@ const AppliedLandinfo = (props) => {
                     <div className="row ">
                       <br></br>
                       <div className="col col-6">
-                        <label htmlFor="pitentialZone">X:Longitude</label>
+                        <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
                         <input type="number" name="XLongitude" className="form-control" disabled />
                       </div>
                       <div className="col col-6">
-                        <label htmlFor="pitentialZone">Y:Latitude</label>
+                        <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
                         <input type="number" name="YLatitude" className="form-control" disabled />
                       </div>
                     </div>
@@ -394,11 +478,11 @@ const AppliedLandinfo = (props) => {
                     return (
                       <div className="row ">
                         <div className="col col-6">
-                          <label htmlFor="pitentialZone">X:Longiude</label>
+                          <label className={classes.formLabel} htmlFor="pitentialZone">X:Longiude</label>
                           <input type="number" name="XLongitude" className="form-control" disabled />
                         </div>
                         <div className="col col-6">
-                          <label htmlFor="pitentialZone">Y:Latitude</label>
+                          <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
                           <input type="number" name="YLatitude" className="form-control" disabled />
                         </div>
                       </div>
@@ -406,33 +490,32 @@ const AppliedLandinfo = (props) => {
                   })}
                 </div>
 
-                <hr className="my-3"/>
+                <hr className="my-3" />
                 {/* <Collapse in={open}>
         <div id="example-collapse-text"> */}
-                <h5 className="text-black d-flex flex-row align-items-center" style={{ marginTop: "3%" }}>
+                <h5 className={`text-black d-flex flex-row align-items-center ${classes.formLabel}`} style={{ marginTop: "3%" }}>
                   2.Details of Plots
                   <div className="ml-3 d-flex flex-row align-items-center">
                     <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} disabled />
-                    <label className="m-0 mx-1" htmlFor="gen">Regular</label>&nbsp;&nbsp;
+                    <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="gen">Regular</label>&nbsp;&nbsp;
                     <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} disabled />
-                    <label className="m-0 mx-1" htmlFor="npnl">Irregular</label>
+                    <label  className={`${classes.formLabel}  m-0  mx-1`} htmlFor="npnl">Irregular</label>
                   </div>
-                    <div style={{ margin: 5 }}>
-                      {" "}
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor1.length > 0
-                              ? developerInputFiledColor1[0].color.data
-                              : developerInputCheckedFiledColor1.length > 0
-                                ? developerInputCheckedFiledColor1[0].color.data
-                                : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("2.Details of Plots"), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
+                  <div style={{ margin: 5 }}>
+                    {" "}
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.detailsOfPlots
+                      }}
+                      onClick={() => {
+                        setLabelValue("Details of Plots"),
+                        setOpennedModal("detailsOfPlots")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue();
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
                 </h5>
                 <br></br>
                 {showhide18 === "1" && (
@@ -853,15 +936,14 @@ const AppliedLandinfo = (props) => {
                         Area Under
                         <ReportProblemIcon
                           style={{
-                            color:
-                              developerInputFiledColor3.length > 0
-                                ? developerInputFiledColor3[0].color.data
-                                : developerInputCheckedFiledColor3.length > 0
-                                  ? developerInputCheckedFiledColor3[0].color.data
-                                  : "#FFB602",
+                            color: fieldIconColors.areaUnder
                           }}
                           onClick={() => {
-                            setLabelValue("Area Under"), setSmShow(true), console.log("modal open");
+                            setLabelValue("Area Under"),
+                        setOpennedModal("areaUnder")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue();
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -1033,15 +1115,14 @@ const AppliedLandinfo = (props) => {
                     {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
                     <ReportProblemIcon
                       style={{
-                        color:
-                          developerInputFiledColor2.length > 0
-                            ? developerInputFiledColor2[0].color.data
-                            : developerInputCheckedFiledColor2.length > 0
-                              ? developerInputCheckedFiledColor2[0].color.data
-                              : "#FFB602",
+                        color: fieldIconColors.nilp
                       }}
                       onClick={() => {
-                        setLabelValue("NILP"), setSmShow(true), console.log("modal open");
+                        setLabelValue("NILP"),
+                        setOpennedModal("nilp")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue();
                       }}
                     ></ReportProblemIcon>
                   </div>
@@ -1060,28 +1141,28 @@ const AppliedLandinfo = (props) => {
                     </div>
                     <div class="col-9 border p-2 d-flex flex-row justify-content-start align-items-center ">
                       <p>
-                      {" "}
+                        {" "}
                         Whether you want to surrender the 10% area of license colony to Govt. the instead of providing 10% under EWS and NPNL plots{" "}
                       </p>
                     </div>
                     <div class="col-2 border p-1 d-flex flex-row justify-content-center align-items-center ">
                       <input
-                          type="radio"
-                          value="Yes"
-                          id="Yes"
-                          disabled
-                        // onChange={handleChange} name="Yes" onClick={handleshow0}
-                        />
-                        <label className="m-0  mx-2" for="Yes">Yes</label>
+                        type="radio"
+                        value="Yes"
+                        id="Yes"
+                        disabled
+                      // onChange={handleChange} name="Yes" onClick={handleshow0}
+                      />
+                      <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
 
-                        <input
-                          type="radio"
-                          value="No"
-                          id="No"
-                          disabled
-                        // onChange={handleChange} name="Yes" onClick={handleshow0}
-                        />
-                        <label className="m-0 mx-2" for="No">No</label></div>
+                      <input
+                        type="radio"
+                        value="No"
+                        id="No"
+                        disabled
+                      // onChange={handleChange} name="Yes" onClick={handleshow0}
+                      />
+                      <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
                   </div>
                   <div class="row">
                     <div class="col-1 border p-1 d-flex flex-row justify-content-center align-items-center">
@@ -1089,28 +1170,28 @@ const AppliedLandinfo = (props) => {
                     </div>
                     <div class="col-9 border p-2 d-flex flex-row justify-content-start align-items-center ">
                       <p>
-                      {" "}
-                      Whether any pocket proposed to be transferred less than 1 acre{" "}
+                        {" "}
+                        Whether any pocket proposed to be transferred less than 1 acre{" "}
                       </p>
                     </div>
                     <div class="col-2 border p-1 d-flex flex-row justify-content-center align-items-center ">
                       <input
-                          type="radio"
-                          value="Yes"
-                          id="Yes"
-                          disabled
-                        // onChange={handleChange} name="Yes" onClick={handleshow0}
-                        />
-                        <label className="m-0  mx-2" for="Yes">Yes</label>
+                        type="radio"
+                        value="Yes"
+                        id="Yes"
+                        disabled
+                      // onChange={handleChange} name="Yes" onClick={handleshow0}
+                      />
+                      <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
 
-                        <input
-                          type="radio"
-                          value="No"
-                          id="No"
-                          disabled
-                        // onChange={handleChange} name="Yes" onClick={handleshow0}
-                        />
-                        <label className="m-0 mx-2" for="No">No</label></div>
+                      <input
+                        type="radio"
+                        value="No"
+                        id="No"
+                        disabled
+                      // onChange={handleChange} name="Yes" onClick={handleshow0}
+                      />
+                      <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
                   </div>
                   <div class="row">
                     <div class="col-1 border p-1 d-flex flex-row justify-content-center align-items-center">
@@ -1118,28 +1199,28 @@ const AppliedLandinfo = (props) => {
                     </div>
                     <div class="col-9 border p-2 d-flex flex-row justify-content-start align-items-center ">
                       <p>
-                      {" "}
-                      Whether you want to deposit an amount @ of 3 times of collector rate instead of the surrender 10% land to Govt.{" "}
+                        {" "}
+                        Whether you want to deposit an amount @ of 3 times of collector rate instead of the surrender 10% land to Govt.{" "}
                       </p>
                     </div>
                     <div class="col-2 border p-1 d-flex flex-row justify-content-center align-items-center ">
                       <input
-                          type="radio"
-                          value="Yes"
-                          id="Yes"
-                          disabled
-                        // onChange={handleChange} name="Yes" onClick={handleshow0}
-                        />
-                        <label className="m-0  mx-2" for="Yes">Yes</label>
+                        type="radio"
+                        value="Yes"
+                        id="Yes"
+                        disabled
+                      // onChange={handleChange} name="Yes" onClick={handleshow0}
+                      />
+                      <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
 
-                        <input
-                          type="radio"
-                          value="No"
-                          id="No"
-                          disabled
-                        // onChange={handleChange} name="Yes" onClick={handleshow0}
-                        />
-                        <label className="m-0 mx-2" for="No">No</label></div>
+                      <input
+                        type="radio"
+                        value="No"
+                        id="No"
+                        disabled
+                      // onChange={handleChange} name="Yes" onClick={handleshow0}
+                      />
+                      <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
                   </div>
                   <div class="row">
                     <div class="col-1 border p-1 d-flex flex-row justify-content-center align-items-center">
@@ -1147,40 +1228,40 @@ const AppliedLandinfo = (props) => {
                     </div>
                     <div class="col-9 border p-2 d-flex flex-row justify-content-start align-items-center ">
                       <p>
-                      {" "}
-                      Whether the surrendered area is having a minimum of 18 mtr independent access{" "}
+                        {" "}
+                        Whether the surrendered area is having a minimum of 18 mtr independent access{" "}
                       </p>
                     </div>
                     <div class="col-2 border p-1 d-flex flex-row justify-content-center align-items-center ">
                       <input
-                          type="radio"
-                          value="Yes"
-                          id="Yes"
-                          disabled
-                        // onChange={handleChange} name="Yes" onClick={handleshow0}
-                        />
-                        <label className="m-0  mx-2" for="Yes">Yes</label>
+                        type="radio"
+                        value="Yes"
+                        id="Yes"
+                        disabled
+                      // onChange={handleChange} name="Yes" onClick={handleshow0}
+                      />
+                      <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
 
-                        <input
-                          type="radio"
-                          value="No"
-                          id="No"
-                          disabled
-                        // onChange={handleChange} name="Yes" onClick={handleshow0}
-                        />
-                        <label className="m-0 mx-2" for="No">No</label></div>
+                      <input
+                        type="radio"
+                        value="No"
+                        id="No"
+                        disabled
+                      // onChange={handleChange} name="Yes" onClick={handleshow0}
+                      />
+                      <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
                   </div>
                 </div>
 
 
-                
+
 
                 <hr className="mb-4" />
 
                 <h5 className="text-black" style={{ marginBottom: "2%" }}>
                   Mandatory Documents
                 </h5>
-                <div className="row">
+                <div className={`${classes.formLabel} row`}>
                   <div className="col col-3">
                     <h6 className="d-flex flex-row align-items-center">
                       Site plan.
@@ -1189,15 +1270,14 @@ const AppliedLandinfo = (props) => {
                         {<DownloadForOfflineIcon color="primary" className="mx-1" />}
                         <ReportProblemIcon
                           style={{
-                            color:
-                              developerInputFiledColor4.length > 0
-                                ? developerInputFiledColor4[0].color.data
-                                : developerInputCheckedFiledColor4.length > 0
-                                  ? developerInputCheckedFiledColor4[0].color.data
-                                  : "#FFB602",
+                            color: fieldIconColors.sitePlan
                           }}
                           onClick={() => {
-                            setLabelValue("Site plan."), setSmShow(true), console.log("modal open");
+                            setLabelValue("Site plan"),
+                        setOpennedModal("sitePlan")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue();
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -1214,15 +1294,14 @@ const AppliedLandinfo = (props) => {
                         {<DownloadForOfflineIcon color="primary" className="mx-1" />}
                         <ReportProblemIcon
                           style={{
-                            color:
-                              developerInputFiledColor8.length > 0
-                                ? developerInputFiledColor8[0].color.data
-                                : developerInputCheckedFiledColor8.length > 0
-                                  ? developerInputCheckedFiledColor8[0].color.data
-                                  : "#FFB602",
+                            color: fieldIconColors.democraticPlan
                           }}
                           onClick={() => {
-                            setLabelValue("Democratic Plan."), setSmShow(true), console.log("modal open");
+                            setLabelValue("Democratic Plan"),
+                        setOpennedModal("democraticPlan")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue();
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -1233,23 +1312,22 @@ const AppliedLandinfo = (props) => {
                   <div className="col col-3">
                     <h5 className="d-flex flex-row align-items-center" >Sectoral Plan/Layout Plan.
 
-                    <div style={{ display: "flex" }}>
-                      {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                      {<DownloadForOfflineIcon color="primary" className="mx-1" />}
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor5.length > 0
-                              ? developerInputFiledColor5[0].color.data
-                              : developerInputCheckedFiledColor5.length > 0
-                                ? developerInputCheckedFiledColor5[0].color.data
-                                : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("Sectoral Plan/Layout Plan."), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
+                      <div style={{ display: "flex" }}>
+                        {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                        {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                        <ReportProblemIcon
+                          style={{
+                            color:fieldIconColors.sectoralPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Sectoral Plan/Layout Plan"),
+                        setOpennedModal("sectoralPlan")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue();
+                          }}
+                        ></ReportProblemIcon>
+                      </div>
                     </h5>
                     {/* <input type="file" className="form-control" disabled />
                     {<DownloadForOfflineIcon color="primary" />} */}
@@ -1257,50 +1335,47 @@ const AppliedLandinfo = (props) => {
                   <div className="col col-3">
                     <h5 className="d-flex flex-row align-items-center">Development Plan.
 
-                    {/* <input type="file" className="form-control" disabled /> */}
-                    {/* {<DownloadForOfflineIcon color="primary" />} */}
-                    <div style={{ display: "flex" }}>
-                      {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                      {<DownloadForOfflineIcon color="primary" className="mx-1"/>}
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor6.length > 0
-                              ? developerInputFiledColor6[0].color.data
-                              : developerInputCheckedFiledColor6.length > 0
-                                ? developerInputCheckedFiledColor6[0].color.data
-                                : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("Development Plan. "), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
+                      {/* <input type="file" className="form-control" disabled /> */}
+                      {/* {<DownloadForOfflineIcon color="primary" />} */}
+                      <div style={{ display: "flex" }}>
+                        {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                        {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                        <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.developmentPlan
+                          }}
+                          onClick={() => {
+                            setLabelValue("Development Plan"),
+                            setOpennedModal("developmentPlan")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue();                          }}
+                        ></ReportProblemIcon>
+                      </div>
                     </h5>
                   </div>
                   <div className="row">
                     <div className="col">
                       <div className="form-group">
                         <h5 className="d-flex flex-row">
-                          Upload Layout Plan 
-                        <div style={{ display: "flex" }}>
-                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {/* <Form.Control  disabled></Form.Control> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
-                          <ReportProblemIcon
-                            style={{
-                              color:
-                                developerInputFiledColor7.length > 0
-                                  ? developerInputFiledColor7[0].color.data
-                                  : developerInputCheckedFiledColor7.length > 0
-                                    ? developerInputCheckedFiledColor7[0].color.data
-                                    : "#FFB602",
-                            }}
-                            onClick={() => {
-                              setLabelValue("(Click here for instructions to capture DGPS points)"), setSmShow(true), console.log("modal open");
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
+                          Upload Layout Plan
+                          <div style={{ display: "flex" }}>
+                            {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                            {/* <Form.Control  disabled></Form.Control> */}
+                            {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                            <ReportProblemIcon
+                              style={{
+                                color: fieldIconColors.uploadLayoutPlan
+                              }}
+                              onClick={() => {
+                                setLabelValue("Upload Layout Plan"),
+                            setOpennedModal("uploadLayoutPlan")
+                          setSmShow(true),
+                            console.log("modal open"),
+                            setFieldValue();  
+                              }}
+                            ></ReportProblemIcon>
+                          </div>
                         </h5>
                         <span className="text-primary"> (Click here for instructions to capture DGPS points)</span>
                       </div>

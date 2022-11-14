@@ -46,7 +46,7 @@ function ModalChild(props) {
       };
   
       try {
-        const Resp = await axios.post("/land-services/egscrutiny/_create", postData, {}).then((response) => {
+        const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
           return response.data;
         });
       } catch (error) {
@@ -63,9 +63,9 @@ function ModalChild(props) {
   useEffect(()=>{
     console.log("loggg",props.selectedFieldData)
     if(props.selectedFieldData){
-      console.log("loggg changing...",props.selectedFieldData);
+      console.log("loggg changing123...",props.selectedFieldData);
       setStatus(props.selectedFieldData.isApproved?"approved":"disapproved");
-      setDeveloperRemarks({data:props.selectedFieldData.comments?props.selectedFieldData.comments:""});
+      setDeveloperRemarks({data:props.selectedFieldData.comment?props.selectedFieldData.comment:""});
       // setDeveloperRemarks({data:props.selectedFieldData.isApproved?"approved":"disapproved"});
     }else {
       console.log("loggg setting null...",props.selectedFieldData)

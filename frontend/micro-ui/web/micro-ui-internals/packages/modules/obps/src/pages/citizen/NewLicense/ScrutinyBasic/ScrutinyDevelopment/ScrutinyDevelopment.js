@@ -13,7 +13,7 @@ const ScrutinyDevelopment = (props) => {
       style={{
         top: windowHeight * 0.3,
         minWidth: "90%",
-        maxWidth: "100%",
+        maxWidth: "98%",
         maxHeight: "100%",
         minHeight: "40%",
       }}
