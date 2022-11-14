@@ -145,11 +145,11 @@ const Feeandcharges = (props) => {
             className="justify-content-center"
           >
             <h1>New License</h1>
-            <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
+            <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "10px" }}>
               <Form.Group className="justify-content-center" controlId="formBasicEmail">
                 <Row className="ml-auto" style={{ marginBottom: 5 }}>
                   <Col col-12>
-                    <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px", marginLeft: "273px" }}>
+                    <table className="table table-bordered mx-auto mb-3" style={{ backgroundColor: "rgb(251 251 253))", width: "629px"}}>
                       <thead>
                         <tr>
                           <th>Total Area</th>
@@ -193,29 +193,30 @@ const Feeandcharges = (props) => {
                     </table>
 
                     <div className="row">
-                      <div className="col col-4">
+                      <div className="col col-5">
                         <h6 data-toggle="tooltip" data-placement="top" title="Total Fees (License fee 25% + Scrutiny Fees)">
-                          (i)&nbsp;Amount Payable at the time of Application &nbsp;&nbsp;
+                          (i)&nbsp;Amount Payable at the time of Application
                         </h6>
 
                         <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" />
                         {errors.totalFee && <p></p>}
                       </div>
 
-                      <div className="col col-4">
+                      <div className="col col-5">
                         <h6>(ii)Remark (If any)</h6>
                         <input type="text" className="form-control" minLength={2} maxLength={100} />
                         {errors.remark && <p></p>}
                       </div>
 
-                      <div className="col col-4">
+                      <div className="col col-2">
                         <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)">
-                          (iii)&nbsp;Adjust Fees &nbsp;&nbsp;
+                          (iii)&nbsp;Adjust Fees
                         </h6>
+                        <div className="mt-2 ml-1">
                         <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                        <label for="Yes">Yes</label>&nbsp;&nbsp;
+                        <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
                         <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
-                        <label for="No">No</label>
+                        <label className="m-0 mx-2" for="No">No</label>
                         {showhide0 === "Yes" && (
                           <div className="row ">
                             <div className="col col-12">
@@ -228,6 +229,7 @@ const Feeandcharges = (props) => {
                             </div>
                           </div>
                         )}
+                        </div>
                       </div>
                     </div>
                     <br></br>

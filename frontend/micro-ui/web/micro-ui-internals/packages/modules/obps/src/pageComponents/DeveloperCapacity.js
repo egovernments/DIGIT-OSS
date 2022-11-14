@@ -670,7 +670,7 @@ const handleColonyDevGrp=()=>{
                         onChange={changeValueHrdu}
                         name="permissionGrantedHRDU"
                     />
-                    <label for="Yes">Yes</label>
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
 
                     <input
                         type="radio"
@@ -1078,7 +1078,7 @@ const handleColonyDevGrp=()=>{
                         onChange={changeTechnicalExpert}
                         name="technicalExpert"
                     />
-                    <label for="Yes">Yes</label>
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
 
                     <input
                         type="radio"
@@ -1383,7 +1383,7 @@ const handleColonyDevGrp=()=>{
                         onChange={changeDesignatedDirectors}
                         name="designatedDirectors"
                     />
-                    <label for="Yes">Yes</label>
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
 
                     <input
                         type="radio"
@@ -1461,7 +1461,7 @@ const handleColonyDevGrp=()=>{
                         onChange={changeAlreadyObtainedLic}
                         name="alreadtObtainedLic"
                     />
-                    <label for="Yes">Yes</label>
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
 
                     <input
                         type="radio"

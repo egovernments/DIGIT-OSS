@@ -155,11 +155,11 @@ const DDJAYForm = (props) => {
 
                   <input type="radio" value="Yes" id="Yes"
                     onChange1={handleChange} name="Yes" onClick={handleshow12} />&nbsp;&nbsp;
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
 
                   <input type="radio" value="No" id="No"
                     onChange1={handleChange} name="Yes" onClick={handleshow12} />&nbsp;&nbsp;
-                  <label for="No">No</label></h6>
+                  <label className="m-0 mx-2" for="No">No</label></h6>
                 {
                   showhide12 === "Yes" && (
                     <div className="row " >

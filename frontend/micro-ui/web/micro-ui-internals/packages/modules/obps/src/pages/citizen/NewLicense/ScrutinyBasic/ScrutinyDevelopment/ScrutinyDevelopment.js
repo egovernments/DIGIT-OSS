@@ -13,7 +13,7 @@ const ScrutinyDevelopment = (props) => {
       style={{
         top: windowHeight * 0.3,
         minWidth: "90%",
-        maxWidth: "100%",
+        maxWidth: "98%",
         maxHeight: "100%",
         minHeight: "40%",
       }}
@@ -37,16 +37,16 @@ const ScrutinyDevelopment = (props) => {
                 return ( */}
 
             <Col>
-              <b>ApplicationId</b>
+              <b>Application Id.</b>
               {/* {el.applicationId} */}
             </Col>
             <Col>
-              <b>Service Id</b>
+              <b>Service Id.</b>
 
               {/* {el.serviceId} */}
             </Col>
             <Col>
-              <b> Diary No</b>
+              <b> Diary No.</b>
 
               {/* {el.documentId} */}
             </Col>
