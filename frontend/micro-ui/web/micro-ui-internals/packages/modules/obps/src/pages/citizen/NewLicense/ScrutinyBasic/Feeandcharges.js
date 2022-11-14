@@ -162,13 +162,13 @@ const Feeandcharges = (props) => {
                         <tr>
                           <th>Purpose</th>
                           <td>
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" disabled />
                           </td>
                         </tr>
                         <tr>
                           <th>Dev Plan</th>
                           <td>
-                            <input type="text" className="form-control" />
+                            <input type="text" className="form-control" disabled />
                           </td>
                         </tr>
                         <tr>
