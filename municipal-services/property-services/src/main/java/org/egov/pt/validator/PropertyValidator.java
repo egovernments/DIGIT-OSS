@@ -136,7 +136,7 @@ public class PropertyValidator {
 
 			} else if(!isBuiltUpAreaNull) {
 
-				if (consDtl.getBuiltUpArea().compareTo(configs.getMinUnitArea()) <= 0)
+				if (consDtl.getBuiltUpArea().compareTo(configs.getMinUnitArea()) < 0)
 					errorMap.put("EG_PT_UNIT_BUILTUPAREA_ERROR", "BuiltUpArea cannot be lesser than minimum value of : "
 							+ configs.getMinUnitArea() + " " + configs.getLandAreaUnit());
 
