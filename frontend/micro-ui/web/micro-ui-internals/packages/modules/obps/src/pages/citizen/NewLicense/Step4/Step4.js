@@ -500,17 +500,17 @@ const AppliedDetailForm = (props) => {
                   </div>
                   {[...Array(noOfRows)].map((elementInArray, index) => {
                     return (
-                      <div className="row ">
-                        <div className="col col-4">
-                          <label>{index + 1}</label>
-                        </div>
-                        <div className="col col-4">
-                          <label>X:Longiude</label>
-                          <input type="number" name="XLongitude" className="form-control" />
-                        </div>
-                        <div className="col col-4">
-                          <label>Y:Latitude</label>
-                          <input type="number" name="YLatitude" className="form-control" />
+                      <div>
+                        {index + 1}
+                        <div className="row ">
+                          <div className="col col-4">
+                            <label>X:Longiude</label>
+                            <input type="number" name="XLongitude" className="form-control" />
+                          </div>
+                          <div className="col col-4">
+                            <label>Y:Latitude</label>
+                            <input type="number" name="YLatitude" className="form-control" />
+                          </div>
                         </div>
                       </div>
                     );
@@ -850,7 +850,7 @@ const AppliedDetailForm = (props) => {
                         <tr>
                           <td>Details of Plot</td>
                           <td>
-                            Dimensions (in mtr) <CalculateIcon color="primary" />
+                            Dimensions (in mtrs) <CalculateIcon color="primary" />
                           </td>
                           <td>Enter Area</td>
                         </tr>
@@ -895,10 +895,10 @@ const AppliedDetailForm = (props) => {
                           <td>Detail of plots</td>
                           <td> Plot No.</td>
                           <td>
-                            Length (in mtr) <CalculateIcon color="primary" />
+                            Length (in mtrs) <CalculateIcon color="primary" />
                           </td>
                           <td>
-                            Dimension (in mtr) <CalculateIcon color="primary" />
+                            Dimension (in mtrs) <CalculateIcon color="primary" />
                           </td>
                           <td>Enter Area</td>
                         </tr>
@@ -999,10 +999,10 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td align="right">
-                            <input type="number" {...register("undeterminedPlot")} />
+                            <input type="number" className="form-control" {...register("undeterminedPlot")} />
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("undeterminedLength")} />
+                            <input type="number" className="form-control" {...register("undeterminedLength")} />
                           </td>
                           <td align="right">
                             <input type="number" className="form-control" {...register("undeterminedDim")} />

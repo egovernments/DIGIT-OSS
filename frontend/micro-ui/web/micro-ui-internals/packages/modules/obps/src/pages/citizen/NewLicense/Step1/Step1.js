@@ -26,9 +26,8 @@ const ApllicantFormStep1 = (props) => {
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
   const [finalSubmitData, setFinalSubmitData] = useState([]);
   const [applicationId, setApplicationId] = useState("");
+  const dataId = userInfo?.id;
   const ApplicantFormSubmitHandlerForm = async (data) => {
-    console.log("data===+++++", data);
-
     try {
       const postDistrict = {
         NewServiceInfo: {
@@ -54,176 +53,6 @@ const ApllicantFormStep1 = (props) => {
               email: data.email,
               authorized: data.authorized,
             },
-            ApplicantPurpose: {},
-            LandSchedule: {
-              licenseApplied: "yes for fdhf",
-              LicNo: "",
-              potential: "",
-              siteLoc: "",
-              approach: "",
-              approachRoadWidth: "",
-              specify: "",
-              typeLand: "",
-              thirdParty: "",
-              migrationLic: "",
-              encumburance: "",
-              litigation: "",
-              court: "",
-              insolvency: "",
-              appliedLand: "",
-              revenuerasta: "",
-              watercourse: "",
-              compactBlock: "",
-              sandwiched: "",
-              acquistion: "",
-              section4: "",
-              section6: "",
-              orderUpload: "",
-              approachable: "",
-              vacant: "",
-              construction: "",
-              ht: "",
-              gas: "",
-              nallah: "",
-              road: "",
-              land: "",
-              utilityLine: "",
-              landSchedule: "",
-              mutation: "",
-              jambandhi: "",
-              LayoutPlan: "",
-              proposedLayoutPlan: "",
-              revisedLansSchedule: "",
-            },
-            DetailsofAppliedLand: {
-              dgps: "675657",
-              DetailsAppliedLandData1: {
-                resplotno: "asa",
-                reslengthmtr: "",
-                reswidthmtr: "",
-                resareasq: "",
-                npnlplotno: "",
-                npnllengthmtr: "",
-                npnlwidthmtr: "",
-                npnlareasq: "",
-                ewsplotno: "",
-                ewslengthmtr: "",
-                ewswidthmtr: "",
-                ewsareasq: "",
-                complotno: "",
-                comlengthmtr: "",
-                comwidthmtr: "",
-                comareasq: "",
-                siteplotno: "",
-                sitelengthmtr: "",
-                sitewidthmtr: "",
-                siteareasq: "",
-                parkplotno: "",
-                parklengthmtr: "",
-                parkwidthmtr: "",
-                parkareasq: "",
-                publicplotno: "",
-                publiclengthmtr: "",
-                publicwidthmtr: "",
-                publicareasq: "",
-                stpplotno: "",
-                stplengthmtr: "",
-                stpwidthmtr: "",
-                stpareasq: "",
-                etpplotno: "",
-                etplengthmtr: "",
-                etpwidthmtr: "",
-                etpareasq: "",
-                wtpplotno: "",
-                wtplengthmtr: "",
-                wtpwidthmtr: "",
-                wtpareasq: "",
-                ugtplotno: "",
-                ugtlengthmtr: "",
-                ugtwidthmtr: "",
-                ugtareasq: "",
-                milkboothplotno: "",
-                milkboothlengthmtr: "",
-                milkboothwidthmtr: "",
-                milkboothareasq: "",
-                gssplotno: "",
-                gsslengthmtr: "",
-                gssareasq: "",
-                resDimension: "",
-                resEnteredArea: "",
-                comDimension: "",
-                comEnteredArea: "",
-                secPlanPlot: "",
-                secPlanLength: "",
-                secPlanDim: "",
-                secPlanEntered: "",
-                greenBeltPlot: "",
-                greenBeltLength: "",
-                greenBeltDim: "",
-                greenBeltEntered: "",
-                internalPlot: "",
-                internalLength: "",
-                internalDim: "",
-                internalEntered: "",
-                otherPlot: "",
-                otherLength: "",
-                otherDim: "",
-                otherEntered: "",
-                undeterminedPlot: "",
-                undeterminedLength: "",
-                undeterminedDim: "",
-                undeterminedEntered: "",
-              },
-              DetailsAppliedLandDdjay2: {
-                frozenNo: "qw",
-                frozenArea: "",
-                organize: "",
-              },
-              DetailsAppliedLandIndustrial3: {
-                colonyfiftyNo: "qwq",
-                colonyfiftyArea: "",
-                fiftyToTwoNo: "",
-                fiftyToTwoArea: "",
-                twoHundredNo: "",
-                twoHundredArea: "",
-                resiNo: "",
-                resiArea: "",
-                commerNo: "",
-                commerArea: "",
-                labourNo: "",
-                labourArea: "",
-              },
-              DetailsAppliedLandResidential4: {
-                npnlNo: "wew",
-                npnlArea: "",
-                ewsNo: "",
-                ewsArea: "",
-              },
-              DetailsAppliedLandNpnl5: {
-                surrender: "sds",
-                pocketProposed: "",
-                deposit: "",
-                surrendered: "",
-              },
-              DetailsAppliedLand6: {
-                sitePlan: "sdsd",
-                democraticPlan: "",
-                sectoralPlan: "",
-                developmentPlan: "",
-                uploadLayoutPlan: "",
-              },
-            },
-            FeesAndCharges: {
-              totalArea: "125.569",
-              purpose: "",
-              devPlan: "",
-              scrutinyFee: "",
-              licenseFee: "",
-              conversionCharges: "",
-              payableNow: "",
-              remark: "",
-              adjustFee: "",
-            },
           },
         },
         RequestInfo: {
@@ -239,29 +68,16 @@ const ApllicantFormStep1 = (props) => {
         },
       };
       const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
+        console.log("daat", Resp);
         return Resp;
       });
-      console.log("Resp", Resp?.data?.NewServiceInfo?.[0]?.id);
+
       props.Step1Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
       setFinalSubmitData(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
   };
-
-  const getDeveloperData = async () => {
-    try {
-      const Resp = await axios.get("http://10.1.1.18:8443/user/developer/_getAuthorizedUser?mobileNumber=1111111111").then((response) => {
-        return response;
-      });
-      setDeveloperData(Resp.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  useEffect(() => {
-    getDeveloperData();
-  }, []);
 
   const getUserInfo = async () => {
     const uuid = userInfo?.uuid;
@@ -275,44 +91,9 @@ const ApllicantFormStep1 = (props) => {
     getUserInfo();
   }, []);
 
-  useEffect(() => {
-    if (developerData !== undefined && developerData !== null) {
-      setValue(
-        "authorizedDeveloper",
-        developerData !== null && developerData !== undefined
-          ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
-          : "N/A"
-      ),
-        setValue(
-          "authorizedPerson",
-          developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName
-            : "N/A"
-        ),
-        setValue(
-          "authorizedmobile",
-          developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber
-            : "N/A"
-        ),
-        setValue(
-          "authorizedEmail",
-          developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId
-            : "N/A"
-        ),
-        setValue(
-          "authorizedPan",
-          developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan
-            : "N/A"
-        );
-    }
-  }, [developerData]);
-
   const getDeveloperDataLabel = async () => {
     try {
-      const Resp = await axios.get("http://10.1.1.18:8443/user/developer/_getDeveloperById?id=36&isAllData=true").then((response) => {
+      const Resp = await axios.get("http://10.1.1.18:8443/user/developer/_getDeveloperById?id=119&isAllData=true").then((response) => {
         return response;
       });
       setDeveloperDataLabel(Resp.data);
@@ -327,69 +108,69 @@ const ApllicantFormStep1 = (props) => {
   useEffect(() => {
     if (developerDataLabel !== undefined && developerDataLabel !== null) {
       setValue(
-        "village",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.city : "N/A"
+        "authorizedDeveloper",
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.name : "N/A"
       );
       setValue(
-        "tehsil",
+        "authorizedmobile",
         developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.tehsil
+          ? developerDataLabel?.devDetail?.[0]?.aurthorizedUserInfoArray?.[0]?.name
           : "N/A"
       );
       setValue(
-        "district",
+        "authorizedPerson ",
         developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.district
-          : "N/A"
-      );
-      setValue(
-        "state",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.state : "N/A"
-      );
-      setValue(
-        "status",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.showDevTypeFields
-          : "N/A"
-      );
-      setValue(
-        "address",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.registeredAddress
-          : "N/A"
-      );
-      setValue(
-        "authorizedAddress",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.addressLineOne
-          : "N/A"
-      );
-      setValue(
-        "authorizedPinCode",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.pincode
+          ? developerDataLabel?.devDetail?.[0]?.aurthorizedUserInfoArray?.[0]?.mobileNumber
           : "N/A"
       );
 
       setValue(
-        "email",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.email : "N/A"
+        "village",
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.city : "N/A"
       );
       setValue(
+        "tehsil",
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.tehsil : "N/A"
+      );
+      setValue(
+        "district",
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.district : "N/A"
+      );
+      setValue(
+        "state",
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.state : "N/A"
+      );
+      setValue(
+        "status",
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.addInfo?.showDevTypeFields : "N/A"
+      );
+      setValue(
+        "address",
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.addInfo?.registeredAddress : "N/A"
+      );
+      setValue(
+        "authorizedAddress",
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.addressLineOne : "N/A"
+      );
+      setValue(
+        "authorizedPinCode",
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.pincode : "N/A"
+      );
+
+      setValue("email", developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.addInfo?.email : "N/A");
+      setValue(
         "permanentAddress",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.registeredAddress
-          : "N/A"
+        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.addInfo?.registeredAddress : "N/A"
       );
     }
   }, [developerDataLabel]);
 
   const getSubmitDataLabel = async () => {
     try {
-      const Resp = await axios.get("http://10.1.1.18:8443/land-services/new/licenses/_get?id=1099696").then((response) => {
-        return response;
-      });
-      console.log("RESP+++", Resp);
+      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${dataId}`);
+      const userData = Resp?.data?.newServiceInfoData?.[0]?.ApplicantInfo;
+      setValue("notSigned", userData?.notSigned);
+      setValue("LC", userData?.LC);
       setSubmitDataLabel(Resp?.data);
     } catch (error) {
       console.log(error.message);
