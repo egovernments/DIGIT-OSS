@@ -555,9 +555,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                 (i) Whether the Developer/ group company has earlier been granted permission to set up a colony under HDRU Act, 1975: *{" "}
               </p>
               <div className="d-flex flex-row align-items-center ml-4">
-                <input type="radio" value="Yes" checked={capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution1: null} id="Yes" disabled />
+                <input type="radio" value="Yes" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "Y"?true:false} id="Yes" disabled />
                 <label className="m-0  mx-1" for="Yes">Yes</label>
-                <input type="radio" value="No" id="No" checked={capacityScrutinyInfo !== null ? !capacityScrutinyInfo?.caution1: null} disabled />
+                <input type="radio" value="No" id="No" checked={capacityScrutinyInfo?.permissionGrantedHRDU === "N"?true:false} disabled />
                 <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
@@ -595,56 +595,65 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                         {/* {capacityDevelopColonyHdruAct.length > 0
                           ? capacityDevelopColonyHdruAct.map((elementInArray, input) => {
                               return ( */}
-                        <tr>
-                          <td>{/* {input + 1} */}</td>
-                          <td>
-                            <input
-                              type="text"
-                              // value={elementInArray.licenceNumber}
-                              // placeholder={elementInArray.licenceNumber}
-                              class="employee-card-input"
-                              disabled
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              // value={elementInArray.nameOfDeveloper}
-                              // placeholder={elementInArray.nameOfDeveloper}
-                              class="employee-card-input"
-                              disabled
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="text"
-                              // value={elementInArray.purposeOfColony}
-                              // placeholder={elementInArray.purposeOfColony}
-                              class="employee-card-input"
-                              disabled
-                            />
-                          </td>
-                          <td>
-                            <div className="row">
-                              <button className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </button>
-                              <button className="btn btn-sm col-md-6">
-                                <FileDownloadIcon color="primary" />
-                              </button>
-                            </div>
-                          </td>
-                          <td>
-                            <div className="row">
-                              <button className="btn btn-sm col-md-6">
-                                <VisibilityIcon color="info" className="icon" />
-                              </button>
-                              <button className="btn btn-sm col-md-6">
-                                <FileDownloadIcon color="primary" />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
+
+                        {
+                          capacityScrutinyInfo?.capacityDevelopColonyHdruAct?.map((item,index)=>(
+
+                            <tr>
+                            <td>{index+1}</td>
+                            <td>
+                              <input
+                                type="text"
+                                // value={item?.licenceNumber}
+                                placeholder={item?.licenceNumber}
+                                class="employee-card-input"
+                                disabled
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                // value={item?.nameOfDeveloper}
+                                placeholder={item?.nameOfDeveloper}
+                                class="employee-card-input"
+                                disabled
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="text"
+                                // value={item?.purposeOfColony}
+                                placeholder={item?.purposeOfColony}
+                                class="employee-card-input"
+                                disabled
+                              />
+                            </td>
+                            <td>
+                              <div className="row">
+                                <button className="btn btn-sm col-md-6">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </button>
+                                <button className="btn btn-sm col-md-6">
+                                  <FileDownloadIcon color="primary" />
+                                </button>
+                              </div>
+                            </td>
+                            <td>
+                              <div className="row">
+                                <button className="btn btn-sm col-md-6">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </button>
+                                <button className="btn btn-sm col-md-6">
+                                  <FileDownloadIcon color="primary" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+
+                          ))
+                        }
+
+                       
                       </tbody>
                     </Table>
                     <div>
@@ -771,13 +780,16 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                         {/* {capacityDevelopColonyLawAct.length > 0 ? (
                           capacityDevelopColonyLawAct.map((elementInArray, input) => {
                             return ( */}
+
+                        {
+                          capacityScrutinyInfo?.capacityDevelopColonyLawAct?.map((item,index)=>(
                         <tr>
-                          <td>{/* {input + 1} */}</td>
+                          <td>{index + 1}</td>
                           <td>
                             <input
                               type="text"
                               // value={elementInArray.licenceNumber}
-                              // placeholder={elementInArray.licenceNumber}
+                              placeholder={item?.coloniesDeveloped}
                               class="employee-card-input"
                               disabled
                             />
@@ -786,14 +798,16 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                             <input
                               type="text"
                               // value={elementInArray.area} placeholder={elementInArray.area}
+                              placeholder={item?.area}
                               class="employee-card-input"
+                              disabled
                             />
                           </td>
                           <td>
                             <input
                               type="text"
                               // value={elementInArray.licenceNumber}
-                              // placeholder={elementInArray.licenceNumber}
+                              placeholder={item?.purpose}
                               class="employee-card-input"
                               disabled
                             />
@@ -819,6 +833,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                             </div>
                           </td>
                         </tr>
+
+                          ))
+                        }
                         {/* );
                           })
                         ) : (
@@ -926,9 +943,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
               <div className="hl"></div>
               <p className="ml-3 d-flex flex-row mb-4">(iii) Whether any technical expert(s) engaged   &nbsp;&nbsp;&nbsp;
                 <div className="d-flex flex-row align-items-center ml-2">
-                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" checked={capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution3: null} disabled />
+                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" checked={capacityScrutinyInfo?.technicalExpert === "Y" ? true : false} disabled />
                   <label className="m-0  mx-1" for="Yes">Yes</label>
-                  <input type="radio" value="No" id="No" className="mx-2 mt-1" checked={capacityScrutinyInfo !== null ? !capacityScrutinyInfo?.caution3: null} disabled />
+                  <input type="radio" value="No" id="No" className="mx-2 mt-1" checked={capacityScrutinyInfo?.technicalExpert === "N" ? true : false} disabled />
                   <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
@@ -973,7 +990,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                 <input
                                   type="text"
                                   // value={elementInArray.licenceNumber}
-                                  // placeholder={elementInArray.licenceNumber}
+                                  placeholder={capacityScrutinyInfo?.technicalExpertEngaged[0]?.engineerName}
                                   class="employee-card-input"
                                   disabled
                                 />
@@ -982,7 +999,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                 <input
                                   type="text"
                                   // value={elementInArray.licenceNumber}
-                                  // placeholder={elementInArray.licenceNumber}
+                                  placeholder={capacityScrutinyInfo?.technicalExpertEngaged[0]?.engineerQualification}
                                   class="employee-card-input"
                                   disabled
                                 />
@@ -1016,7 +1033,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                 <input
                                   type="text"
                                   // value={elementInArray.licenceNumber}
-                                  // placeholder={elementInArray.licenceNumber}
+                                  placeholder={capacityScrutinyInfo?.technicalExpertEngaged[0]?.architectName}
                                   class="employee-card-input"
                                   disabled
                                 />
@@ -1025,7 +1042,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                 <input
                                   type="text"
                                   // value={elementInArray.licenceNumber}
-                                  // placeholder={elementInArray.licenceNumber}
+                                  placeholder={capacityScrutinyInfo?.technicalExpertEngaged[0]?.architectQualification}
                                   class="employee-card-input"
                                   disabled
                                 />
@@ -1059,7 +1076,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                 <input
                                   type="text"
                                   // value={elementInArray.licenceNumber}
-                                  // placeholder={elementInArray.licenceNumber}
+                                  placeholder={capacityScrutinyInfo?.technicalExpertEngaged[0]?.townPlannerName}
                                   class="employee-card-input"
                                   disabled
                                 />
@@ -1068,7 +1085,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                                 <input
                                   type="text"
                                   // value={elementInArray.licenceNumber}
-                                  // placeholder={elementInArray.licenceNumber}
+                                  placeholder={capacityScrutinyInfo?.technicalExpertEngaged[0]?.townPlannerQualification}
                                   class="employee-card-input"
                                   disabled
                                 />
@@ -1197,7 +1214,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                     value="Yes"
                     id="Yes"
                     className="mx-2 mt-1"
-                    checked={capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution4: null}
+                    checked={capacityScrutinyInfo?.designatedDirectors === "Y" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // name="Yes"
                     // onClick={handleshow}
@@ -1210,7 +1227,7 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                     value="No"
                     id="No"
                     className="mx-2 mt-1"
-                    checked={capacityScrutinyInfo !== null ? !capacityScrutinyInfo?.caution4: null}
+                    checked={capacityScrutinyInfo?.designatedDirectors === "N" ?true:false}
                     // onChange={(e) => handleChange(e.target.value)}
                     // name="Yes"
                     // onClick={handleshow}
@@ -1290,9 +1307,9 @@ const DeveloperCapacity = ({ t, config, onSelect, formData, formDataValue, data,
                 2. In case of technical capacity sought from another company/firm who has already obtained license(s) under act of 1975 or outside
                 Haryana:
                 <div className="d-flex flex-row align-items-center ml-2">
-                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled checked={capacityScrutinyInfo !== null ? capacityScrutinyInfo?.caution5: null} />
+                  <input type="radio" value="Yes" id="Yes" className="mx-2 mt-1" disabled checked={capacityScrutinyInfo?.alreadtObtainedLic === "Y" ? true : false} />
                   <label className="m-0  mx-1" for="Yes">Yes</label>
-                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled checked={capacityScrutinyInfo !== null ? !capacityScrutinyInfo?.caution5: null} />
+                  <input type="radio" value="No" id="No" className="mx-2 mt-1" disabled checked={capacityScrutinyInfo?.alreadtObtainedLic === "N" ? true : false} />
                   <label className="m-0 mx-2" for="No">No</label>
 
                   <ReportProblemIcon
