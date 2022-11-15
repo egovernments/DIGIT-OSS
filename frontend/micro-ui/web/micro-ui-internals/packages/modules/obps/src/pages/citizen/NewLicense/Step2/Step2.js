@@ -6,116 +6,7 @@ import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import WorkingTable from "../../../../components/Table";
-
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
-
-const tableData = [
-  {
-    key: "1",
-    tehsil: "Mike",
-    revenueEstate: 32,
-    rectangleNo: "10 Downing Street",
-    landOwner: "10 Downing Street",
-    consolidationType: "10 Downing Street",
-    kanal: "10 Downing Street",
-    marla: "10 Downing Street",
-  },
-];
-
-const optionsPurposeList = [
-  {
-    label: "Plotted Commercial",
-    value: "plotted",
-    id: "1",
-  },
-  {
-    label: "Group Housing Commercial",
-    value: "G",
-    id: "2",
-  },
-  {
-    label: "AGH",
-    value: "03",
-    id: "3",
-  },
-  {
-    label: "Commercial Integrated",
-    value: "04",
-    id: "3",
-  },
-  {
-    label: "Commercial Plotted",
-    value: "C",
-    id: "3",
-  },
-  {
-    label: "Industrial Colony Commercial",
-    value: "06",
-    id: "3",
-  },
-  {
-    label: "IT Colony Commercial",
-    value: "I",
-    id: "3",
-  },
-  {
-    label: "DDJAY",
-    value: "DDJAY",
-    id: "3",
-  },
-  {
-    label: "NILP",
-    value: "N",
-    id: "3",
-  },
-  {
-    label: "Low Density Ecofriendly",
-    value: "10",
-    id: "3",
-  },
-  {
-    label: "TOD Commercial",
-    value: "TC",
-    id: "3",
-  },
-  {
-    label: "TOD Group housing",
-    value: "TG",
-    id: "3",
-  },
-];
-const optionsPotentialList = [
-  {
-    label: "Hyper",
-    value: "Hyper",
-    id: "1",
-  },
-  {
-    label: "High I",
-    value: "High I",
-    id: "2",
-  },
-  {
-    label: "High II",
-    value: "High II",
-    id: "3",
-  },
-  {
-    label: "Medium",
-    value: "Medium",
-    id: "3",
-  },
-  {
-    label: "Low I",
-    value: "Low I",
-    id: "3",
-  },
-  {
-    label: "Low II",
-    value: "Low II",
-    id: "3",
-  },
-];
 
 const ApllicantPuropseForm = (props) => {
   const columns = [
@@ -174,100 +65,27 @@ const ApllicantPuropseForm = (props) => {
       ),
     },
   ];
-  const consolidatedColumns = [
-    {
-      key: "tehsil",
-      title: "Tehsil",
-      dataIndex: "tehsil",
-    },
-    {
-      key: "revenueEstate",
-      title: "Revenue Estate",
-      dataIndex: "revenueEstate",
-    },
-    {
-      key: "rectangleNo",
-      title: "Rectangle No.",
-      dataIndex: "rectangleNo",
-    },
-    {
-      key: "killa",
-      title: "Killa",
-      dataIndex: "killa",
-    },
-    {
-      key: "landOwner",
-      title: "Land Owner",
-      dataIndex: "landOwner",
-    },
-    {
-      key: "consolidationType",
-      title: "Consolidation Type",
-      dataIndex: "consolidationType",
-    },
-    {
-      key: "bigha",
-      title: "Kanal/Bigha",
-      dataIndex: "bigha",
-    },
-    {
-      // key: "biswa",
-      title: "Marla/Biswa",
-      dataIndex: "",
-      render: (text) => <div onClick={() => console.log("text", text)}>text</div>,
-    },
-    {
-      key: "biswansi",
-      title: "Sarsai/Biswansi",
-      dataIndex: "biswansi",
-    },
-    {
-      // key: "action",
-      title: "Action",
-      dataIndex: "",
-      render: (data) => (
-        <div>
-          <h6
-            onClick={() => {
-              setmodal(true);
-              setSpecificTableData(data);
-            }}
-          >
-            Edit
-          </h6>
-          <h6>Delete</h6>
-        </div>
-      ),
-    },
-  ];
 
-  const [purposeDd, setSelectPurpose] = useState("");
-  const [potential, setPotentialDev] = useState("");
-  const [getColumns, setColumns] = useState(columns);
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
-  const [districtData, setDistrictData] = useState([]);
   const [districtDataLbels, setDistrictDataLabels] = useState([]);
   const [tehsilDataLabels, setTehsilDataLabels] = useState([]);
   const [revenueDataLabels, setRevenueDataLabels] = useState([]);
   const [mustilDataLabels, setMustilDataLabels] = useState([]);
-  const [docUpload, setDocuploadData] = useState([]);
   const [file, setFile] = useState(null);
   const [modal, setmodal] = useState(false);
-  const [showhide1, setShowhide1] = useState("No");
-  const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
-  const [consolidateValue, setConsolidateValue] = useState(null);
+  const [consolidateValue, setConsolidateValue] = useState("consolidated");
+  const [getCollaboration, setCollaboration] = useState("");
   const [purposeOptions, setPurposeOptions] = useState([]);
   const [potentialOptons, setPotentialOptions] = useState([]);
-  const [submitDataLabel, setSubmitDataLabel] = useState([]);
 
   useEffect(() => {
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
       setValue("revenueEstate", specificTableData?.revenueEstate);
-      setValue("rectangleNo", specificTableData?.rectangleNo);
+      setValue("mustil", specificTableData?.mustil);
       setValue("kanal", specificTableData?.kanal);
       setValue("marla", specificTableData?.marla);
       setValue("sarsai", specificTableData?.sarsai);
@@ -288,22 +106,11 @@ const ApllicantPuropseForm = (props) => {
   } = useForm({
     mode: "onSubmit",
     reValidateMode: "onBlur",
-    // resolver: yupResolver(VALIDATION_SCHEMA),
+    defaultValues: {
+      consolidationType: "consolidated",
+    },
     shouldFocusError: true,
   });
-  const handleshow1 = (e) => {
-    const getshow = e.target.value;
-    setShowhide1(getshow);
-  };
-  const handleshow2 = (e) => {
-    const getshow = e.target.value;
-    if (getshow === "1") {
-      setConsolidateValue("consolidated");
-    } else {
-      setConsolidateValue("non-consolidated");
-    }
-    setShowhide2(getshow);
-  };
 
   const stateId = Digit.ULBService.getStateId();
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
@@ -315,7 +122,6 @@ const ApllicantPuropseForm = (props) => {
       return { value: data?.purposeCode, label: data?.name };
     });
     setPurposeOptions(purpose);
-    console.log("potential", purposeOptions);
   }, [PurposeType]);
 
   useEffect(() => {
@@ -344,7 +150,6 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post("/egov-mdms-service/v1/_district", postDistrict).then((Resp) => {
         return Resp;
       });
-      setDistrictData(Resp.data);
       if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
         Resp.data.map((el, i) => {
           setDistrictDataLabels((prev) => [...prev, { label: el.districtName, id: el.districtCode, value: el.districtCode }]);
@@ -486,54 +291,60 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const ApplicantPurposeModalData = (data) => {
-    data["tehsil"] = data?.tehsil?.label;
-    data["revenueEstate"] = data?.revenueEstate?.label;
-    data["rectangleNo"] = data?.rectangleNo;
-    if (showhide2 === "consolidated") {
+    data["tehsil"] = data?.tehsil?.value;
+    data["revenueEstate"] = data?.revenueEstate?.value;
+    data["mustil"] = data?.mustil?.value;
+    delete data?.district;
+    delete data?.potential;
+    delete data?.purpose;
+    delete data?.state;
+
+    if (data?.consolidationType === "consolidated") {
       delete data?.bigha;
       delete data?.biswa;
       delete data?.biswansi;
     }
-    if (showhide2 === "Non-Consolidated") {
+    if (data?.consolidationType === "non-consolidated") {
       delete data?.marla;
       delete data?.kanal;
       delete data?.sarsai;
     }
-    if (data.consolidationType === "consolidated") {
-      setColumns(columns);
-    } else {
-      setColumns(consolidatedColumns);
-    }
+
     setModalData((prev) => [...prev, data]);
     setmodal(false);
     reset({
       tehsil: "",
       revenueEstate: "",
-      rectangleNo: "",
+      mustil: "",
       kanal: "",
       marla: "",
       sarsai: "",
       bigha: "",
       biswa: "",
       biswansi: "",
+      agreementIrrevocialble: "",
+      agreementValidFrom: "",
+      agreementValidTill: "",
+      authSignature: "",
+      collaboration: "",
+      developerCompany: "",
+      landOwner: "",
+      nameAuthSign: "",
+      registeringAuthority: "",
     });
+    setCollaboration("");
   };
 
   const applicantPurposeBack = async () => {
     props.Step2Back();
   };
 
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
   const handleChangePurpose = (data) => {
     const purposeSelected = data?.label;
-    setSelectPurpose(purposeSelected);
     localStorage.setItem("purpose", purposeSelected);
   };
   const handleChangePotential = (data) => {
     const potentialSelected = data?.label;
-    setPotentialDev(potentialSelected);
     localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
 
@@ -557,7 +368,6 @@ const ApllicantPuropseForm = (props) => {
         .then((response) => {
           return response;
         });
-      setDocuploadData(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -570,21 +380,18 @@ const ApllicantPuropseForm = (props) => {
     try {
       const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`);
       const userData = Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose;
-      console.log("DSD", userData);
-      setValue("purposeDd", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.purposeDd?.name);
-      setValue("potential", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.potential?.name);
-      setValue("district", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.district?.name);
-      console.log("+++", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.potential?.name);
-      setValue("consolidationType", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.consolidationType);
-      setValue("kanal", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.kanal);
-      setValue("devCompany", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.developerCompany);
-      setValue("devCompany", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.developerCompany);
-      setValue("registering", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.registeringdate);
-      setValue("dateValidity", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.validitydate);
-      setValue("authorizedSign", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.authSignature);
-      setValue("authorizedDev", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.nameAuthSign);
-      setValue("registeringAuth", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.registeringAuthority);
-      setSubmitDataLabel(Resp?.data);
+      // setValue("purpose", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.purpose?.name);
+      // setValue("potential", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.potential?.name);
+      // setValue("district", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.district?.name);
+      // // setValue("consolidationType", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.consolidationType);
+      // setValue("kanal", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.kanal);
+      // setValue("developerCompany", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.developerCompany);
+      // setValue("developerCompany", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.developerCompany);
+      // setValue("agreementValidFrom", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.registeringdate);
+      // setValue("agreementValidTill", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.validitydate);
+      // setValue("authSignature", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.authSignature);
+      // setValue("nameAuthSign", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.nameAuthSign);
+      // setValue("registeringAuthority", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.registeringAuthority);
     } catch (error) {
       console.log(error.message);
     }
@@ -594,43 +401,31 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const PurposeFormSubmitHandler = async (data) => {
-    try {
-      const postDistrict = {
-        NewServiceInfo: {
-          pageName: "ApplicantPurpose",
-          id: props.getId,
-          newServiceInfoData: {
-            ApplicantPurpose: {
-              purposeDd: data?.purposeDd?.name,
-              potential: data?.potential?.label,
-              district: data?.district?.label,
-              state: data.state,
-              applicationPurposeData1: {
-                tehsil: data?.tehsil?.label,
-                revenueEstate: data?.revenueEstate?.label,
-                mustil: data?.rectangleNo,
-                consolidation: data?.consolidationType,
-                sarsai: data?.sarsai,
-                kanal: data?.kanal,
-                marla: data?.marla,
-                bigha: data?.bigha,
-                biswansi: data?.biswansi,
-                biswa: data?.biswa,
-                landOwner: data?.landOwner,
-                developerCompany: data?.devCompany,
-                registeringdate: data?.registering,
-                validitydate: data?.dateValidity,
-                colirrevocialble: "",
-                authSignature: data?.authorizedSign,
-                nameAuthSign: data?.authorizedDev,
-                registeringAuthority: data?.registeringAuth,
-              },
-            },
+    // console.log("data====", modalData);
+
+    // const formattedData = {
+    //   data,
+    //   detailsOfAppliedland: modalData,
+    // };
+    // console.log("formattedData", formattedData);
+    // props.Step2Continue(data, 7);
+    // console.log("modalData===", modalData);
+    const postDistrict = {
+      NewServiceInfo: {
+        pageName: "ApplicantPurpose",
+        id: props.getId,
+        newServiceInfoData: {
+          ApplicantPurpose: {
+            data,
+            AppliedLandDetails: modalData,
           },
         },
-      };
-
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
+      },
+    };
+    console.log("modalData===", postDistrict);
+    return;
+    try {
+      const Resp = await axios.post("/land-services/new/_create", formattedData).then((Resp) => {
         return Resp;
       });
       props.Step2Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
@@ -658,14 +453,14 @@ const ApllicantPuropseForm = (props) => {
 
                   <ReactMultiSelect
                     control={control}
-                    name="purposeDd"
+                    name="purpose"
                     onChange={handleChangePurpose}
                     placeholder="Purpose"
                     data={purposeOptions}
                     labels="Purpose"
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.purposeDd && errors?.purposeDd?.message}
+                    {errors?.purpose && errors?.purpose?.message}
                   </h3>
                 </Col>
 
@@ -780,14 +575,24 @@ const ApllicantPuropseForm = (props) => {
           reset({
             tehsil: "",
             revenueEstate: "",
-            rectangleNo: "",
+            mustil: "",
             kanal: "",
             marla: "",
             sarsai: "",
             bigha: "",
             biswa: "",
             biswansi: "",
+            agreementIrrevocialble: "",
+            agreementValidFrom: "",
+            agreementValidTill: "",
+            authSignature: "",
+            collaboration: "",
+            developerCompany: "",
+            landOwner: "",
+            nameAuthSign: "",
+            registeringAuthority: "",
           });
+          setCollaboration("");
           setmodal(!modal);
         }}
       >
@@ -797,14 +602,24 @@ const ApllicantPuropseForm = (props) => {
             reset({
               tehsil: "",
               revenueEstate: "",
-              rectangleNo: "",
+              mustil: "",
               kanal: "",
               marla: "",
               sarsai: "",
               bigha: "",
               biswa: "",
               biswansi: "",
+              agreementIrrevocialble: "",
+              agreementValidFrom: "",
+              agreementValidTill: "",
+              authSignature: "",
+              collaboration: "",
+              developerCompany: "",
+              landOwner: "",
+              nameAuthSign: "",
+              registeringAuthority: "",
             });
+            setCollaboration("");
           }}
         ></ModalHeader>
         <ModalBody>
@@ -863,7 +678,7 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </Form.Label>
                 </div>
-                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No." {...register("rectangleNo")} />
+                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No." {...register("mustil")} />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.mustil && errors?.mustil?.message}
                 </h3>
@@ -873,23 +688,35 @@ const ApllicantPuropseForm = (props) => {
             <Row className="ml-auto mb-3">
               <Col md={4} xxl lg="12">
                 <div>
-                  <label>
-                    <h2>
-                      Consolidation Type<span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </label>{" "}
-                  &nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="Consolidated" name="Yes" onClick={handleshow2} {...register("consolidationType")} />
-                  &nbsp;&nbsp;
-                  <label for="Yes"></label>
-                  <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
-                  <input type="radio" id="No" value="Non-Consolidated" name="Yes" onClick={handleshow2} {...register("consolidationType")} />
-                  &nbsp;&nbsp;
-                  <label for="Yes"></label>
-                  <label htmlFor="npnl">Non-Consolidated</label>
-                  {/* </Form.Select> */}
-                </div>{" "}
-                {showhide2 === "Consolidated" && (
+                  <h2>
+                    Consolidation Type<span style={{ color: "red" }}>*</span>
+                  </h2>
+
+                  <label htmlFor="consolidated">
+                    <input
+                      {...register("consolidationType")}
+                      type="radio"
+                      value="consolidated"
+                      defaultChecked={true}
+                      defaultValue="consolidated"
+                      id="consolidated"
+                      onClick={() => setConsolidateValue("consolidated")}
+                    />
+                    Consolidated
+                  </label>
+                  <label htmlFor="non-consolidated">
+                    <input
+                      {...register("consolidationType")}
+                      type="radio"
+                      value="non-consolidated"
+                      id="non-consolidated"
+                      onClick={() => setConsolidateValue("non-consolidated")}
+                    />
+                    Non-Consolidated
+                  </label>
+                </div>
+
+                {consolidateValue == "consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
@@ -919,7 +746,7 @@ const ApllicantPuropseForm = (props) => {
                     </tbody>
                   </table>
                 )}
-                {showhide2 === "Non-Consolidated" && (
+                {consolidateValue == "non-consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
@@ -970,22 +797,19 @@ const ApllicantPuropseForm = (props) => {
             </Row>
             <Row className="ml-auto mb-3">
               <div className="col col-12">
-                <h2 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
+                <h2>
                   Collaboration agreement Owner<span style={{ color: "red" }}>*</span>
-                  &nbsp;&nbsp;
-                  <input type="radio" value="Yes" id="Yes" name="Yes" onClick={handleshow1} />
-                  &nbsp;&nbsp;
-                  <label for="Yes">
-                    <h6>Yes</h6>
-                  </label>
-                  &nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" name="Yes" onClick={handleshow1} />
-                  &nbsp;&nbsp;
-                  <label for="No">
-                    <h6>No</h6>
-                  </label>
                 </h2>
-                {showhide1 === "Yes" && (
+
+                <label htmlFor="collaboration">
+                  <input {...register("collaboration")} type="radio" value="no" id="yes" onClick={() => setCollaboration("yes")} />
+                  Yes
+                </label>
+                <label htmlFor="collaboration">
+                  <input {...register("collaboration")} type="radio" value="yes" id="no" onClick={() => setCollaboration("no")} />
+                  No
+                </label>
+                {getCollaboration === "yes" && (
                   <div className="row ">
                     <div className="col col-4">
                       <label>
@@ -994,7 +818,7 @@ const ApllicantPuropseForm = (props) => {
                           <span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="text" className="form-control" placeholder="" {...register("devCompany")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
                       <label>
@@ -1002,7 +826,7 @@ const ApllicantPuropseForm = (props) => {
                           Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="date" className="form-control" placeholder="" {...register("registering")} />
+                      <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidFrom")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
                       <label>
@@ -1010,25 +834,19 @@ const ApllicantPuropseForm = (props) => {
                           Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="date" className="form-control" placeholder="" {...register("dateValidity")} />
+                      <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidTill")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 35 }}>
-                      <label>
-                        <h2>
-                          Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
-                        </h2>
+                      <h2>
+                        Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <label htmlFor="agreementIrrevocialble">
+                        <input {...register("agreementIrrevocialble")} type="radio" value="no" id="agreementIrrevocialble" />
+                        Yes
                       </label>
-                      <br></br>
-                      <input type="radio" value="Yes" id="Yes1" name="Yes" />
-                      &nbsp;&nbsp;
-                      <label for="Yes">
-                        <h6>Yes</h6>
-                      </label>
-                      &nbsp;&nbsp;
-                      <input type="radio" value="No" id="No1" onChange={handleChange} name="Yes" />
-                      &nbsp;&nbsp;
-                      <label for="No">
-                        <h6>No</h6>
+                      <label htmlFor="agreementIrrevocialble">
+                        <input {...register("agreementIrrevocialble")} type="radio" value="yes" id="agreementIrrevocialble" />
+                        No
                       </label>
                     </div>
 
@@ -1038,7 +856,7 @@ const ApllicantPuropseForm = (props) => {
                           Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="text" className="form-control" placeholder="" {...register("authorizedSign")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
                       <label>
@@ -1046,7 +864,7 @@ const ApllicantPuropseForm = (props) => {
                           Name of authorized signatory on behalf of developer to sign Collaboration agreement<span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="date" className="form-control" placeholder="" {...register("authorizedDev")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 20 }}>
                       <label>
@@ -1055,7 +873,7 @@ const ApllicantPuropseForm = (props) => {
                         </h2>
                       </label>
                       <br></br>
-                      <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuth")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
                       <label>
@@ -1065,7 +883,7 @@ const ApllicantPuropseForm = (props) => {
                         </h2>
                       </label>
                       <br></br>
-                      <Form.Control type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} />
+                      <Form.Control type="file" className="form-control" {...register("registeringAuthorityDocId")} />
                     </div>
                   </div>
                 )}
