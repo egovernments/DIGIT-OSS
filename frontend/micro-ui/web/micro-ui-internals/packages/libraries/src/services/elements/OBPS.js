@@ -113,8 +113,8 @@ export const OBPSService = {
       url: Urls.obps.bpaRegGetBill,
       useCache: false,
       method: "POST",
-      auth: false,
-      userService: false,
+      auth: true,
+      userService: true,
       params: { tenantId, ...filters },
     })
       .then((d) => {
