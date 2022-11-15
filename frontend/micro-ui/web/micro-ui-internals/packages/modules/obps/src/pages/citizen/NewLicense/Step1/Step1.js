@@ -58,7 +58,7 @@ const ApllicantFormStep1 = (props) => {
         return Resp;
       });
       // setApplicantId(Resp?.data?.LicenseServiceResponseInfo?.[0]?.id.toString());
-      props.Step1Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.id.toString());
+      props.Step1Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.id?.toString());
     } catch (error) {
       console.log(error.message);
     }
@@ -127,7 +127,7 @@ const ApllicantFormStep1 = (props) => {
     const search = location?.search;
     const params = new URLSearchParams(search);
     const id = params.get("id");
-    setApplicantId(id.toString());
+    setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
 
