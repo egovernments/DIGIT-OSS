@@ -496,11 +496,26 @@ class ShowField extends Component {
           }
 
           // for PDF alignment issues
-          let bodyDataLength = doc.content[2].table.body[0].length;
-          let dataLengthPer = `${(100/bodyDataLength)}%`
-          doc.defaultStyle.alignment = 'center';
-          doc.styles.tableHeader.alignment = 'center';
-          doc.content[2].table.widths = Array(doc.content[2].table.body[0].length + 1).join(`${dataLengthPer}?`).split('?');
+          if (
+            doc &&
+            doc.content &&
+            doc.content.length &&
+            doc.content[2] &&
+            doc.content[2].table &&
+            doc.content[2].table.body &&
+            doc.content[2].table.body.length &&
+            doc.content[2].table.body[0] &&
+            doc.content[2].table.body[0].length &&
+            doc.content[2].table.body[0].length > 6
+          ) {
+            let bodyDataLength = doc.content[2].table.body[0].length;
+            let dataLengthPer = `${(100 / bodyDataLength)}%`;
+            doc.defaultStyle.alignment = 'center';
+            doc.styles.tableHeader.alignment = 'center';
+            doc.content[2].table.widths = Array(doc.content[2].table.body[0].length + 1).join(`${dataLengthPer}?`).split('?');
+          }
+          
+          
 
           if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
             const pdfData = pdfMake.createPdf(doc);
