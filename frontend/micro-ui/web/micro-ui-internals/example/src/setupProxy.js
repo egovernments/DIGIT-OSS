@@ -83,6 +83,8 @@ module.exports = function (app) {
     "/egov-mdms-service/v1/_owner",
     "/filestore/v1/files",
     "/land-services/_calculate",
+    "/user/developer/_getAuthorizedUser",
+    "/land-services/new/licenses/_get"
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
   [
