@@ -5,8 +5,16 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
+import { useHistory, useLocation } from "react-router-dom";
 
 const ApllicantFormStep1 = (props) => {
+  const location = useLocation();
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const tenant = Digit.ULBService.getCurrentTenantId();
+  const [developerDataLabel, setDeveloperDataLabel] = useState([]);
+  // const [getAppliantInfoData, setAppliantInfoData] = useState(null);
+  const [applicantId, setApplicantId] = useState("");
+
   const {
     register,
     handleSubmit,
@@ -19,61 +27,38 @@ const ApllicantFormStep1 = (props) => {
     resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
-  const userInfo = Digit.UserService.getUser()?.info || {};
-  const tenant = Digit.ULBService.getCurrentTenantId();
-  const [developerData, setDeveloperData] = useState([]);
-  const [developerDataLabel, setDeveloperDataLabel] = useState([]);
-  const [submitDataLabel, setSubmitDataLabel] = useState([]);
-  const [finalSubmitData, setFinalSubmitData] = useState([]);
-  const [applicationId, setApplicationId] = useState("");
-  const dataId = userInfo?.id;
-  const ApplicantFormSubmitHandlerForm = async (data) => {
-    try {
-      const postDistrict = {
-        NewServiceInfo: {
-          pageName: "ApplicantInfo",
 
-          newServiceInfoData: {
-            ApplicantInfo: {
-              authorizedPerson: data.authorizedPerson,
-              authorizedmobile: data.authorizedmobile,
-              alternatemobile: data.altContactNumber,
-              authorizedEmail: data.authorizedEmail,
-              authorizedPan: data.authorizedPan,
-              authorizedAddress: data.permanentAddress,
-              village: data.village,
-              authorizedPinCode: data.authorizedPinCode,
-              tehsil: data.tehsil,
-              district: data.district,
-              state: data.state,
-              status: data.status,
-              permanentAddress: data.permanentAddress,
-              LC: data.LC,
-              notSigned: data.notSigned,
-              email: data.email,
-              authorized: data.authorized,
-            },
-          },
+  const ApplicantFormSubmitHandlerForm = async (data) => {
+    const postDistrict = {
+      pageName: "ApplicantInfo",
+      id: applicantId,
+      LicenseDetails: {
+        ApplicantInfo: {
+          ...data,
+          devDetail: developerDataLabel,
         },
-        RequestInfo: {
-          apiId: "Rainmaker",
-          ver: "v1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key: "",
-          msgId: "090909",
-          requesterId: "",
-          authToken: "",
+      },
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: "",
+        userInfo: {
+          tenantId: "hr",
         },
-      };
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        console.log("daat", Resp);
+      },
+    };
+    try {
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict).then((Resp) => {
         return Resp;
       });
-
-      props.Step1Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
-      setFinalSubmitData(Resp.data);
+      // setApplicantId(Resp?.data?.LicenseServiceResponseInfo?.[0]?.id.toString());
+      props.Step1Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.id.toString());
     } catch (error) {
       console.log(error.message);
     }
@@ -83,101 +68,67 @@ const ApllicantFormStep1 = (props) => {
     const uuid = userInfo?.uuid;
     if (uuid) {
       const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
-      setValue("alternatemobile", usersResponse?.user?.[0]?.altContactNumber);
-      setValue("authorizedAddress", usersResponse?.user?.[0]?.permanentAddress);
+      const userData = usersResponse?.user?.[0];
+      setValue("authorized", userData?.name);
+      getDeveloperDataLabel(userData?.parentId);
     }
   };
+
+  const getDeveloperDataLabel = async (id) => {
+    try {
+      const Resp = await axios.get(`http://10.1.1.18:8443/user/developer/_getDeveloperById?id=${id}&isAllData=false`);
+      setDeveloperDataLabel(Resp.data?.devDetail?.[0]);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   useEffect(() => {
     getUserInfo();
   }, []);
 
-  const getDeveloperDataLabel = async () => {
-    try {
-      const Resp = await axios.get("http://10.1.1.18:8443/user/developer/_getDeveloperById?id=119&isAllData=true").then((response) => {
-        return response;
-      });
-      setDeveloperDataLabel(Resp.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
   useEffect(() => {
-    getDeveloperDataLabel();
-  }, []);
-
-  useEffect(() => {
-    if (developerDataLabel !== undefined && developerDataLabel !== null) {
-      setValue(
-        "authorizedDeveloper",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.name : "N/A"
-      );
-      setValue(
-        "authorizedmobile",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.aurthorizedUserInfoArray?.[0]?.name
-          : "N/A"
-      );
-      setValue(
-        "authorizedPerson ",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.aurthorizedUserInfoArray?.[0]?.mobileNumber
-          : "N/A"
-      );
-
-      setValue(
-        "village",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.city : "N/A"
-      );
-      setValue(
-        "tehsil",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.tehsil : "N/A"
-      );
-      setValue(
-        "district",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.district : "N/A"
-      );
-      setValue(
-        "state",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.state : "N/A"
-      );
-      setValue(
-        "status",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.addInfo?.showDevTypeFields : "N/A"
-      );
-      setValue(
-        "address",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.addInfo?.registeredAddress : "N/A"
-      );
-      setValue(
-        "authorizedAddress",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.addressLineOne : "N/A"
-      );
-      setValue(
-        "authorizedPinCode",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.licenceDetails?.pincode : "N/A"
-      );
-
-      setValue("email", developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.addInfo?.email : "N/A");
+    if (developerDataLabel) {
+      setValue("authorizedDeveloper", developerDataLabel?.licenceDetails?.name);
+      setValue("authorizedPerson", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name);
+      setValue("authorizedmobile", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.mobileNumber);
+      setValue("alternatemobile", developerDataLabel?.licenceDetails?.mobileNumber);
+      setValue("authorizedEmail", developerDataLabel?.licenceDetails?.email);
+      setValue("authorizedPan", developerDataLabel?.licenceDetails?.panNumber);
+      setValue("authorizedAddress", developerDataLabel?.licenceDetails?.addressLineOne);
+      setValue("village", developerDataLabel?.licenceDetails?.village);
+      setValue("authorizedPinCode", developerDataLabel?.licenceDetails?.pincode);
+      setValue("tehsil", developerDataLabel?.licenceDetails?.tehsil);
+      setValue("district", developerDataLabel?.licenceDetails?.district);
+      setValue("state", developerDataLabel?.licenceDetails?.state);
+      setValue("status", developerDataLabel?.addInfo?.showDevTypeFields);
+      setValue("address", developerDataLabel?.addInfo?.registeredAddress);
       setValue(
         "permanentAddress",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.addInfo?.registeredAddress : "N/A"
+        `${developerDataLabel?.licenceDetails?.addressLineOne} ${developerDataLabel?.licenceDetails?.addressLineTwo} ${developerDataLabel?.licenceDetails?.addressLineThree}`
       );
+      setValue("email", developerDataLabel?.addInfo?.email);
     }
   }, [developerDataLabel]);
 
-  const getSubmitDataLabel = async () => {
+  const getApplicantUserData = async (id) => {
+    console.log("here");
     try {
-      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${dataId}`);
-      const userData = Resp?.data?.newServiceInfoData?.[0]?.ApplicantInfo;
+      const Resp = await axios.get(`http://10.1.1.18:8443/tl-services/new/licenses/_get?id=${id}`);
+      const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
+      console.log(Resp?.data?.newServiceInfoData[0]?.ApplicantInfo);
       setValue("notSigned", userData?.notSigned);
       setValue("LC", userData?.LC);
-      setSubmitDataLabel(Resp?.data);
     } catch (error) {
       console.log(error.message);
     }
   };
   useEffect(() => {
-    getSubmitDataLabel();
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+    setApplicantId(id.toString());
+    if (id) getApplicantUserData(id);
   }, []);
 
   return (
