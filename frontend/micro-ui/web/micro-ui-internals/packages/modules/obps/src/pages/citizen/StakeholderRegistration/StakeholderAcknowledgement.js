@@ -38,9 +38,11 @@ const StakeholderAcknowledgement = ({ data, onSuccess }) => {
   //const isPropertyMutation = window.location.href.includes("property-mutation");
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const mutation = Digit.Hooks.obps.useStakeholderAPI(
+    
     data?.address?.city ? data.address?.city?.code : tenantId,
     true
   );
+  console.log("ACKNOLEDGE",mutation);
   const { data: storeData } = Digit.Hooks.useStore.getInitData();
   const { tenants } = storeData || {};
   let isOpenLinkFlow = window.location.href.includes("openlink");

@@ -1,4 +1,4 @@
-import { BackButton, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, TextInput, ViewsIcon, DownloadIcon } from "@egovernments/digit-ui-react-components";
+import { BackButton, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, TextInput, ViewsIcon, DownloadIcon, Dropdown } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
@@ -50,7 +50,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
             "auth_token": ""
         },
     }
-      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${localStorage.getItem('devRegId')}&isAllData=true`,requestResp,{
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`,requestResp,{
 
       });
       const developerDataGet = getDevDetails?.data; 
@@ -64,8 +64,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setCompanyName(developerDataGet?.devDetail[0]?.addInfo?.companyName);
       setIncorporation(developerDataGet?.devDetail[0]?.addInfo?.incorporationDate);
       setRegistered(developerDataGet?.devDetail[0]?.addInfo?.registeredAddress);
-      setEmail(developerDataGet?.devDetail[0]?.addInfo?.email);
-      setUserEmail(developerDataGet?.devDetail[0]?.addInfo?.emailUser);
+      setUserEmail(developerDataGet?.devDetail[0]?.addInfo?.email);
+      setUserEmailInd(developerDataGet?.devDetail[0]?.addInfo?.emailId);
       setMobile(developerDataGet?.devDetail[0]?.addInfo?.mobileNumber);
       setGST(developerDataGet?.devDetail[0]?.addInfo?.gst_Number);
       setTbName(developerDataGet?.devDetail[0]?.addInfo?.sharName);
@@ -99,7 +99,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [mobileNumberUser, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber: "") ||
     formData?.LicneseDetails?.mobileNumberUser || formData?.formData?.LicneseDetails?.mobileNumberUser || ""
   );
-  
+  const [emailId, setUserEmailInd] = useState((!isOpenLinkFlow ? userInfo?.info?.emailId: "") || formData?.LicneseDetails?.emailId || formData?.formData?.LicneseDetails?.emailId || "")
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
 
@@ -119,6 +119,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     });
     
     const [modal, setmodal] = useState(false);
+    const [modalDirectors, setmodalDirector] = useState(false);
     const [data, setData] = useState([])
     const [devDetail, setdevDetail] = useState([])
     
@@ -176,8 +177,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const [companyName, setCompanyName] = useState(formData?.LicneseDetails?.companyName || formData?.LicneseDetails?.companyName || "");
     const [incorporationDate, setIncorporation] = useState(formData?.LicneseDetails?.incorporationDate || formData?.LicneseDetails?.incorporationDate || "");
     const [registeredAddress, setRegistered] = useState(formData?.LicneseDetails?.registeredAddress || formData?.LicneseDetails?.registeredAddress || "");
-    const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
-    const [emailUser, setUserEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
+    // const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
+    const [email, setUserEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
     const [registeredContactNo, setMobile] = useState(formData?.LicneseDetails?.registeredContactNo || formData?.LicneseDetails?.registeredContactNo || "");
     const [gst_Number, setGST] = useState("");
     const [sharName, setTbName] = useState("");
@@ -192,6 +193,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     // const dispatch = useDispatch();
     
     const [modalValuesArray,setModalValuesArray]= useState([] || developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens);
+    const [modalDirectorValuesArray,setModalDirectorValuesArray] = useState([]);
+    const [modalDIN,setModalDIN] = useState("")
+    const [modalDirectorName,setModalDirectorName] = useState("")
+    const [modalDirectorContact,setModalContactDirector] = useState("")
     const [financialCapacity,setFinancialCapacity]= useState([]);
     
     const [docUpload,setDocuploadData]=useState([])
@@ -212,9 +217,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     function setMobileNo(e) {
       setMobileNumber(e.target.value);
     }
-    // function setUserEmail(e) {
-    //   setUserEmailId(e.target.value);
-    // }
+    function setUserEmailId(e) {
+      setUserEmail(e.target.value);
+    }
+    function setUserEmailIndVal(e) {
+      setUserEmailInd(e.target.value);
+    }
     
     const handleshow0 = (e) => {
       const getshow = e.target.value;
@@ -227,6 +235,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setShowDevTypeFields(getDevTypeValue);
       localStorage.setItem('devTypeValueFlag',getDevTypeValue)
     }
+function setDevType(value){
+  setShowDevTypeFields(value)
+}
     const getDocumentData = async () => {
       if(file===null){
          return
@@ -285,7 +296,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
           setDirectorData(Directory.data);
           setCompanyName(Resp.data.companyName)
           setIncorporation(Resp.data.incorporationDate)
-          setEmail(Resp.data.email)
+          setUserEmail(Resp.data.email)
           //console.log(Resp.data.Email)
        setRegistered(Resp.data.registeredAddress)
        setMobile(Resp.data.registeredContactNo)
@@ -313,6 +324,21 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setmodal(!modal)
     }
   }
+  const handleDirectorsArrayValues=()=>{
+    
+    if (modalDIN!=="" && modalDirectorName!=="" && modalDirectorContact!=="") {
+      
+      const values ={
+        "din":modalDIN,
+        "name":modalDirectorName,
+        "contactNumber":modalDirectorContact,
+        "uploadPdf": null,
+        "serialNumber": null
+      }
+      setDirectorData((prev)=>[...prev,values]);
+      setmodalDirector(!modalDirectors)
+    }
+  }
   // console.log("FORMARRAYVAL",modalValuesArray);
   useEffect(()=>{
     HandleGetMCNdata();
@@ -333,17 +359,16 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       let addInfo = {
         showDevTypeFields:showDevTypeFields,
         name: name,
-        emailUser:emailUser,
         mobileNumberUser:mobileNumberUser,
         cin_Number: cin_Number,
         companyName: companyName,
         incorporationDate: incorporationDate,
         registeredAddress: registeredAddress,
         email: email,
-        
+        emailId:emailId,
         registeredContactNo: registeredContactNo,
         gst_Number: gst_Number,
-        directorsInformation: DirectorData,
+        directorsInformation: DirectorData || modalDirectorValuesArray,
         shareHoldingPatterens:modalValuesArray
       }
       onSelect(config.key, addInfo);
@@ -351,8 +376,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       localStorage.setItem("addInfo",JSON.stringify(addInfo));
 
       const developerRegisterData = {
-        "id":devRegId,
+        "id":userInfo?.info?.id,
         "pageName":"addInfo",
+        "createdBy":userInfo?.info?.id,
+        "updatedBy":userInfo?.info?.id,
         "devDetail": {
         
         "addInfo": addInfo
@@ -428,7 +455,7 @@ const onSkip = () => onSelect();
                     <div className="form-group row">
                       <div className="col-sm-3">
 
-                        <SearchDropDown
+                        {/* <SearchDropDown
                           listOfData={optionsArrList}
                           labels={"Selct Type" || showDevTypeFields}
                           getSelectedValue={devType}
@@ -440,7 +467,19 @@ const onSkip = () => onSelect();
                             isRequired: true,
                             title: t("Please Select Developer type")
                           })}
-                          />
+                          /> */}
+
+                        <Dropdown
+                          style={{ width: "100%" }}
+                          className="form-field"
+                          selected={showDevTypeFields}
+                          option={optionsArrList}
+                          select={setDevType}
+                          value={showDevTypeFields}
+                        
+                          t={t}
+                          name="showDevTypeFields"
+                        />
                           
                         {/* <MuiDropdown 
                           listOfData={optionsArrList}
@@ -532,8 +571,10 @@ const onSkip = () => onSelect();
                       <label htmlFor="email"> Email </label>
                       <input
                         type="text"
-                        value={email}
-                        placeholder={email}
+                        value={emailId}
+                        placeholder={emailId}
+                        name="emailId"
+                        onChange={(value) => setUserEmailIndVal({ target: { value } })}
                         disabled="disabled"
                         className="employee-card-input"
                       // name="email"
@@ -651,7 +692,8 @@ const onSkip = () => onSelect();
                         type="text"
                         value={companyName}
                         placeholder={companyName}
-                        disabled="disabled"
+                        onChange={(e) => setCompanyName(e.target.value)}
+                        // disabled="disabled"
                         className="employee-card-input"
                       // placeholder=""
                       // {...register("name", {
@@ -681,7 +723,8 @@ const onSkip = () => onSelect();
                         type="text"
                         value={incorporationDate}
                         placeholder={incorporationDate}
-                        disabled="disabled"
+                        onChange={(e) => setIncorporation(e.target.value)}
+                        // disabled="disabled"
                         className="employee-card-input"
                       // placeholder=""
                       // {...register("name", {
@@ -711,7 +754,8 @@ const onSkip = () => onSelect();
                         type="text"
                         value={registeredAddress}
                         placeholder={registeredAddress}
-                        disabled="disabled"
+                        onChange={(e) => setRegistered(e.target.value)}
+                        // disabled="disabled"
                         className="employee-card-input"
                       // name="name"
                       // className={`employee-card-input`}
@@ -743,7 +787,8 @@ const onSkip = () => onSelect();
                         type="text"
                         value={email}
                         placeholder={email}
-                        disabled="disabled"
+                        onChange={(e) => setUserEmailId(e.target.value)}
+                        // disabled="disabled"
                         className="employee-card-input"
                       // name="email"
                       // className={`employee-card-input`}
@@ -768,7 +813,8 @@ const onSkip = () => onSelect();
                         type="text"
                         value={registeredContactNo}
                         placeholder={registeredContactNo}
-                        disabled="disabled"
+                        onChange={(e) => setMobileNo(e.target.value)}
+                        // disabled="disabled"
                         className="employee-card-input"
                       // name="name"
                       // className={`employee-card-input`}
@@ -803,6 +849,7 @@ const onSkip = () => onSelect();
                         type="text"
                         value={gst_Number}
                       placeholder={gst_Number}
+                      onChange={(e) => setGST(e.target.value)}
                         className="employee-card-input"
                       // className={`employee-card-input`}
                       // placeholder=""
@@ -1116,7 +1163,122 @@ const onSkip = () => onSelect();
                     </tbody>
                   </table>
                 </div>
-                
+                <div>
+                  <button
+                    type="button"
+                    style={{
+                      color: "white",
+                    }}
+                    className="btn btn-primary mt-3"
+                    // onClick={() => setNoOfRows(noofRows + 1)}
+                    onClick={() => setmodalDirector(true)}
+                  >
+                    Add More
+                  </button>
+
+                  <div>
+                    <Modal
+                      size="lg"
+                      isOpen={modalDirectors}
+                      toggle={() => setmodalDirector(!modalDirectors)}
+                    >
+                      <ModalHeader
+                        toggle={() => setmodalDirector(!modalDirectors)}
+                      ></ModalHeader>
+
+                      <ModalBody>
+                        <div className="card2">
+                          <div className="popupcard">
+                            
+                          <form className="text1">
+                              <Row>
+                                <Col md={3} xxl lg="4">
+                                  <label htmlFor="name" className="text">DIN Number</label>
+                                  <input
+                                    type="text"
+                                    
+                                    onChange={(e)=>setModalDIN(e.target.value)}
+                                    placeholder=""
+                                    class="employee-card-input"
+                                    {...(validation = {
+                                      isRequired: true,
+                                      pattern: "^[a-zA-Z]*$",
+                                      type: "text",
+                                      title: "Please Enter DIN No."
+                                    })}
+                                  />
+                                </Col>
+                                <Col md={3} xxl lg="4">
+                                  <label htmlFor="name" className="text">Name</label>
+                                  <input
+                                    type="text"
+                                    
+                                    onChange={(e)=>setModalDirectorName(e.target.value)}
+                                    placeholder=""
+                                    class="employee-card-input"
+                                    {...(validation = {
+                                      isRequired: true,
+                                      pattern: "^[a-zA-Z]*$",
+                                      type: "text",
+                                      title: "Please Enter Name"
+                                    })}
+                                  />
+                                </Col>
+                                <Col md={3} xxl lg="4">
+                                  <label htmlFor="name" className="text">	Contact Number</label>
+                                  <input
+                                    type="text"
+                                    
+                                    onChange={(e)=>setModalContactDirector(e.target.value)}
+                                    placeholder=""
+                                    class="employee-card-input"
+                                    {...(validation = {
+                                      isRequired: true,
+                                      pattern: "^[a-zA-Z]*$",
+                                      type: "text",
+                                      title: "Please Enter Contact no."
+                                    })}
+                                  />
+                                </Col>
+                                <Col md={3} xxl lg="4">
+                                  <label htmlFor="name" className="text">Upload PDF</label>
+                                  <input
+                                    type="file"
+                                    value={uploadPdf}
+                                    placeholder=""
+                                    class="employee-card-input"
+                                    onChange={(e)=>setFile({file:e.target.files[0]})}
+                                    {...(validation = {
+                                      isRequired: true,
+                                      title: "Please upload document"
+                                    })}
+                                  />
+                                </Col>
+
+                              </Row>
+                            </form>
+
+                          </div>
+                          <div className="submit-btn">
+                            <div className="form-group col-md6 mt-6">
+                              <button
+                                type="button"
+                                style={{ float: "right" }}
+                                className="btn btn-success"
+                                onClick={handleDirectorsArrayValues}
+                              >
+                                Submit
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </ModalBody>
+                      <ModalFooter
+                        toggle={() => setmodalDirector(!modalDirectors)}
+                      ></ModalFooter>
+                    </Modal>
+                  </div>
+                </div>
               </div>
             </div>
             )}

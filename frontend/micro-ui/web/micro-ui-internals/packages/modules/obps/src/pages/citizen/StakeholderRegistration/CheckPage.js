@@ -12,6 +12,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const history = useHistory();
   const match = useRouteMatch();
   let user = Digit.UserService.getUser()
+  console.log("USER-INFO",user);
   const tenantId = user && user?.info && user?.info?.permanentCity ? user?.info?.permanentCity : Digit.ULBService.getCurrentTenantId();
   const tenant = Digit.ULBService.getStateId();
   let isopenlink = window.location.href.includes("/openlink/");
@@ -77,7 +78,7 @@ const CheckPage = ({ onSubmit, value }) => {
             />
             <StatusTable>
               <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} textStyle={{ paddingLeft: "12px" }} text={t(formData?.LicneseDetails?.name)} />
-              <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(formData?.LicneseDetails?.gender.i18nKey)} />
+              {/* <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(formData?.LicneseDetails?.gender.i18nKey)} /> */}
               <Row className="border-none" label={t(`BPA_OWNER_MOBILE_NO_LABEL`)} text={formData?.LicneseDetails?.mobileNumber} />
               <Row className="border-none" label={t(`BPA_APPLICANT_EMAIL_LABEL`)} text={formData?.LicneseDetails?.email || t("CS_NA")} />
               <Row className="border-none" label={t(`BPA_APPLICANT_PAN_NO`)} text={formData?.LicneseDetails?.PanNumber || t("CS_NA")} />
