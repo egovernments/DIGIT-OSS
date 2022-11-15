@@ -272,13 +272,13 @@ const PlumberDetails = (_props) => {
                                                 fieldName: "plumberInfoMobileNumber",
                                                 model: "WnSConnectionPlumber",
                                                 loadData: {
-                                                  serviceName: formData?.connectionDetails?.[0]?.formDetails?.applicationData?.serviceType === "WATER" ? "/ws-services/wc/_search" : "/sw-services/swc/_search",
+                                                  serviceName: formData?.connectionDetails?.[0]?.formDetails?.applicationData?.serviceType === "WATER" || formData?.disConnectionDetails?.[0]?.consumerNumber?.includes("WS") ? "/ws-services/wc/_search" : "/sw-services/swc/_search",
                                                   requestBody: {},
                                                   requestParam: {
                                                     tenantId: formData?.connectionDetails?.[0]?.formDetails?.tenantId,
                                                     applicationNumber: plumberDetail?.applicationNo,
                                                   },
-                                                  jsonPath: formData?.connectionDetails?.[0]?.formDetails?.applicationData?.serviceType === "WATER"
+                                                  jsonPath: formData?.connectionDetails?.[0]?.formDetails?.applicationData?.serviceType === "WATER" || formData?.disConnectionDetails?.[0]?.consumerNumber?.includes("WS") 
                                                     ? "WaterConnection[0].plumberInfo[0].mobileNumber"
                                                     : "SewerageConnections[0].plumberInfo[0].mobileNumber",
                                                   isArray: false,
