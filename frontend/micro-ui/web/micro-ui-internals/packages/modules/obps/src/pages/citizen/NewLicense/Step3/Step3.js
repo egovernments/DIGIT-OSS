@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
+// import { Checkbox } from "@mui/material";
+
 import CalculateIcon from "@mui/icons-material/Calculate";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import InfoIcon from "@mui/icons-material/Info";
@@ -27,14 +29,13 @@ const LandScheduleForm = (props) => {
     // resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
-  const formSubmit = (data) => {
-    console.log("data", data);
-  };
+
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
   const landScheduleFormSubmitHandler = async (data) => {
     console.log("data------", data);
+    return;
     try {
       const postDistrict = {
         NewServiceInfo: {
@@ -280,7 +281,7 @@ const LandScheduleForm = (props) => {
               <Col col-12>
                 <div className="row">
                   <div className="col col-12 ">
-                    <h2>
+                    {/* <h2>
                       1.&nbsp;(i)Whether licence applied for additional area ?<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                       <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow} />
                       &nbsp;&nbsp;
@@ -293,7 +294,8 @@ const LandScheduleForm = (props) => {
                       <label for="No">
                         <h6>No</h6>
                       </label>
-                    </h2>
+                    </h2> */}
+                    {/* <Controller name="checkbox" control={control} rules={{ required: true }} render={({ field }) => <Checkbox {...field} />} /> */}
                     {showhide === "Yes" && (
                       <div className="row">
                         <div className="col col-3">

@@ -16,8 +16,8 @@ const CommonForm = () => {
   const [step, setStep] = useState(1);
   const [getId, setId] = useState("");
 
-  const handleStep1 = (data, id) => {
-    setId(id.toString());
+  const handleStep1 = (id) => {
+    setId(id);
     setIsStep1(true);
     setIsStep2(false);
     setIsStep3(false);
@@ -26,7 +26,7 @@ const CommonForm = () => {
     setStep(2);
   };
   const handlestep2 = (data, id) => {
-    setId(id.toString());
+    setId(id?.toString());
     setIsStep2(true);
     setIsStep1(false);
     setIsStep3(false);
@@ -35,7 +35,7 @@ const CommonForm = () => {
     setStep(3);
   };
 
-  const handleBack = () => {
+  const handleBack = (id) => {
     setIsStep1(false);
     setIsStep2(false);
     setIsStep3(false);
@@ -70,7 +70,6 @@ const CommonForm = () => {
   };
 
   const handlestep3 = (data, id) => {
-    console.log("true", data);
     setId(id.toString());
     setIsStep3(true);
     setIsStep1(false);
@@ -79,7 +78,6 @@ const CommonForm = () => {
     setStep(4);
   };
   const handlestep4 = (data, id) => {
-    console.log("true", data);
     setId(id.toString());
     setIsStep4(true);
     setIsStep1(false);
@@ -88,7 +86,6 @@ const CommonForm = () => {
     setStep(5);
   };
   const handlestep5 = (data, id) => {
-    console.log("true", data);
     setId(id.toString());
     setIsStep5(true);
     setIsStep1(false);
