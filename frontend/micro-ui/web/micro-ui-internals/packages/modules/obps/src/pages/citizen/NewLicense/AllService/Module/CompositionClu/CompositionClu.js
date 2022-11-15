@@ -10,9 +10,7 @@ function CompositionClu() {
     register,
     handleSumit,
     formState: { error },
-  } = useForm([
-    { Sr: "", Name: "", Mobile: "", Email: "", PAN: "", Aadhar: "" },
-  ]);
+  } = useForm([{ Sr: "", Name: "", Mobile: "", Email: "", PAN: "", Aadhar: "" }]);
   const formSubmit = (data) => {
     console.log("data", data);
   };
@@ -22,33 +20,30 @@ function CompositionClu() {
     setShowhide(getshow);
   };
 
+  const compositionClu = (data) => console.log(data);
   const [noofRows, setNoOfRows] = useState(1);
 
   return (
     <div className="container my-5">
       <div className=" col-12 m-auto">
         <div className="card">
-          <Form>
-            <h4 className="text-center">
-              Composition of urban Area Violation in CLU
-            </h4>
+          <form onSubmit={handleSubmit(compositionClu)}>
+            <h4 className="text-center">Composition of urban Area Violation in CLU</h4>
             <Row>
               <Col className="col-4">
                 <Form.Group controlId="formGridCase">
                   <Form.Label>
-                    Name of original land owner{" "}
-                    <span style={{ color: "red" }}>*</span>
+                    <h2>Name of original land owner </h2>{" "}
                   </Form.Label>
-                  <Form.Control type="number" placeholder="" />
+                  <input type="number" placeholder="" className="form-control" {...register("originalLand")} />
                 </Form.Group>
               </Col>
               <Col className="col-4">
                 <Form.Group controlId="formGridCase">
                   <Form.Label>
-                    Land holding of above{" "}
-                    <span style={{ color: "red" }}>*</span>
+                    <h2> Land holding of above </h2>{" "}
                   </Form.Label>
-                  <Form.Control type="text" placeholder="" />
+                  <input type="text" placeholder="" className="form-control" {...register("landHolding")} />
                 </Form.Group>
               </Col>
             </Row>
@@ -56,8 +51,7 @@ function CompositionClu() {
             <Row>
               <div class="bordere">
                 <p>
-                  Total land sold in parts{" "}
-                  <span style={{ color: "red" }}>*</span>
+                  <h2> Total land sold in parts </h2>{" "}
                 </p>
                 <div class="table-responsive">
                   <table class="table table-bordered">
@@ -77,19 +71,19 @@ function CompositionClu() {
                       <tr>
                         <th scope="row">1</th>
                         <td>
-                          <Form.Control type="text" placeholder="" />
+                          <input type="text" placeholder="" className="form-control" {...register("areaParts")} />
                         </td>
                         <td>
-                          <Form.Control type="text" placeholder="" />
+                          <input type="text" placeholder="" className="form-control" {...register("srNo")} />
                         </td>
                       </tr>
                       <tr>
                         <th scope="row">2</th>
                         <td>
-                          <Form.Control type="text" placeholder="" />
+                          <input type="text" placeholder="" className="form-control" {...register("khasraNo")} />
                         </td>
                         <td>
-                          <Form.Control type="text" placeholder="" />
+                          <input type="text" placeholder="" className="form-control" {...register("area")} />
                         </td>
                       </tr>
                       {[...Array(noofRows)].map((elementInArray, input) => {
@@ -97,10 +91,10 @@ function CompositionClu() {
                           <tr>
                             <th scope="row">3</th>
                             <td>
-                              <Form.Control type="text" placeholder="" />
+                              <input type="text" placeholder="" />
                             </td>
                             <td>
-                              <Form.Control type="text" placeholder="" />
+                              <input type="text" placeholder="" />
                             </td>
                           </tr>
                         );
@@ -110,20 +104,10 @@ function CompositionClu() {
                 </div>
               </div>
               <div>
-                <button
-                  type="button"
-                  style={{ float: "left" }}
-                  className="btn btn-primary"
-                  onClick={() => setNoOfRows(noofRows + 1)}
-                >
+                <button type="button" style={{ float: "left" }} className="btn btn-primary" onClick={() => setNoOfRows(noofRows + 1)}>
                   Add more
                 </button>
-                <button
-                  type="button"
-                  style={{ float: "right" }}
-                  className="btn btn-danger"
-                  onClick={() => setNoOfRows(noofRows - 1)}
-                >
+                <button type="button" style={{ float: "right" }} className="btn btn-danger" onClick={() => setNoOfRows(noofRows - 1)}>
                   Delete
                 </button>
               </div>
@@ -133,29 +117,23 @@ function CompositionClu() {
               <Col className="col-4">
                 <Form.Group controlId="formGridState">
                   <Form.Label>
-                    Total Area in Sq. meter{" "}
-                    <span style={{ color: "red" }}>*</span>
+                    <h2> Total Area in Sq. meter</h2>{" "}
                   </Form.Label>
-                  <Form.Control type="number" />
+                  <input type="number" className="form-control" placeholder="" {...register("totalArea")} />
                 </Form.Group>
               </Col>
             </Row>
-            <div class="form-group">
-              <label for="exampleFormControlTextarea1">
-                Explain the reason for the violation{" "}
-                <span style={{ color: "red" }}>*</span>
-              </label>
-              <textarea
-                class="form-control"
-                id="exampleFormControlTextarea1"
-                rows="3"
-              ></textarea>
-            </div>
+            <Col className="col-4">
+              <Form.Group controlId="formGridState">
+                <Form.Label>
+                  <h2> Explain the reason for the violation</h2>{" "}
+                </Form.Label>
+                <input type="number" className="form-control" placeholder="" rows="3" {...register("violationReason")} />
+              </Form.Group>
+            </Col>
             <div class="bordere">
               <div class="table-responsive">
                 <table class="table table-bordered">
-                  {/* <caption>List of users</caption> */}
-
                   <thead>
                     <tr>
                       <th scope="col">Sr.No</th>
@@ -166,12 +144,9 @@ function CompositionClu() {
                   <tbody>
                     <tr>
                       <th scope="row">1</th>
+                      <td>Date of sale deeds.</td>
                       <td>
-                        Date of sale deeds.
-                        <span style={{ color: "red" }}>*</span>
-                      </td>
-                      <td>
-                        <Form.Control type="file" placeholder="" />
+                        <input type="file" className="form-control" placeholder="" {...register("dateOfSaleDeed")} />
                       </td>
                     </tr>
 
@@ -181,7 +156,7 @@ function CompositionClu() {
                         Any other.<span style={{ color: "red" }}>*</span>
                       </td>
                       <td>
-                        <Form.Control type="file" placeholder="" />
+                        <input type="file" className="form-control" placeholder="" {...register("anyOther")} />
                       </td>
                     </tr>
                   </tbody>
@@ -190,24 +165,14 @@ function CompositionClu() {
             </div>
 
             <Row className="justify-content-end">
-              <Button
-                variant="outline-primary"
-                className="col-md-2 my-2 mx-2"
-                type="submit"
-                aria-label="right-end"
-              >
+              <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
                 Save as Draft
               </Button>
-              <Button
-                variant="outline-primary"
-                className="col-md-2 my-2 mx-2"
-                type="submit"
-                aria-label="right-end"
-              >
+              <Button variant="outline-primary" className="col-md-2 my-2 mx-2" type="submit" aria-label="right-end">
                 Submit
               </Button>
             </Row>
-          </Form>
+          </form>
         </div>
       </div>
     </div>

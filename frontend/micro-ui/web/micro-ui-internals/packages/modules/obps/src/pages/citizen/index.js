@@ -38,7 +38,14 @@ import OBPSResponse from "../employee/OBPSResponse";
 import CommonForm from "../citizen/NewLicense/common/index";
 import ScrutinyFormcontainer from "../citizen/NewLicense/ScrutinyContainer/ScrutinyFormContainer";
 import ServiceCard from "../citizen/NewLicense/AllService/Service";
+
 import ZoningPlan from "../citizen/NewLicense/AllService/Module/ZoningPlan/ZoningPlan";
+import Beneficial from "../citizen/NewLicense/AllService/Module/BeneficialInterest/Beneficial";
+import CompletionLic from "../citizen/NewLicense/AllService/Module/CompletionLic/CompletionLic";
+import CompositionClu from "../citizen/NewLicense/AllService/Module/CompositionClu/CompositionClu";
+import ExtensionClu from "../citizen/NewLicense/AllService/Module/ExtensionClu/ExtensionClu";
+import TransferLic from "./NewLicense/AllService/Module/TransferLic/TransferLicense";
+import LayoutPlan from "./NewLicense/AllService/Module/LayoutPlan/LayoutPlan";
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
@@ -100,6 +107,13 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} />
         <PrivateRoute path={`${path}/service`} component={ServiceCard} />
         <PrivateRoute path={`${path}/zoningPlan`} component={ZoningPlan} />
+        <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
+        <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
+        <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
+        <PrivateRoute path={`${path}/ExtensionClu`} component={ExtensionClu} />
+        <PrivateRoute path={`${path}/TransferLic`} component={TransferLic} />
+        <PrivateRoute path={`${path}/LayoutPlan`} component={LayoutPlan} />
+
       </Switch>
     </React.Fragment>
   );

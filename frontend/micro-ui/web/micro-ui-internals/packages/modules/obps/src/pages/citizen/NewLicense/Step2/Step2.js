@@ -2,12 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
-import InfoIcon from "@mui/icons-material/Info";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import WorkingTable from "../../../../components/Table";
@@ -123,7 +118,6 @@ const optionsPotentialList = [
 ];
 
 const ApllicantPuropseForm = (props) => {
-  console.log("Props", props);
   const columns = [
     {
       key: "tehsil",
@@ -171,7 +165,6 @@ const ApllicantPuropseForm = (props) => {
             onClick={() => {
               setmodal(true);
               setSpecificTableData(data);
-              console.log("data", data);
             }}
           >
             Edit
@@ -238,7 +231,6 @@ const ApllicantPuropseForm = (props) => {
             onClick={() => {
               setmodal(true);
               setSpecificTableData(data);
-              // console.log("data", data)
             }}
           >
             Edit
@@ -249,15 +241,6 @@ const ApllicantPuropseForm = (props) => {
     },
   ];
 
-  const stateId = Digit.ULBService.getStateId();
-  const { data: Menu = {} } = Digit.Hooks.tl.useTradeLicenseMDMS(stateId, "common-masters", "Purpose");
-  let menu = [];
-  Menu &&
-    Menu["common-masters"] &&
-    Menu["common-masters"].StructureType.map((ob) => {
-      console.log("log", ob);
-    });
-  console.log("kjh", menu);
   const [purposeDd, setSelectPurpose] = useState("");
   const [potential, setPotentialDev] = useState("");
   const [getColumns, setColumns] = useState(columns);
@@ -265,11 +248,6 @@ const ApllicantPuropseForm = (props) => {
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
   const [districtData, setDistrictData] = useState([]);
-  const [tehsilData, setTehsilData] = useState([]);
-  const [revenueStateData, setRevenuStateData] = useState([]);
-  const [mustilData, setMustilData] = useState([]);
-  const [potentialDataLabels, setPotentialDataLabels] = useState([]);
-  const [purposeDataLabels, setPurposeDataLabels] = useState([]);
   const [districtDataLbels, setDistrictDataLabels] = useState([]);
   const [tehsilDataLabels, setTehsilDataLabels] = useState([]);
   const [revenueDataLabels, setRevenueDataLabels] = useState([]);
@@ -281,10 +259,10 @@ const ApllicantPuropseForm = (props) => {
   const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
   const [consolidateValue, setConsolidateValue] = useState(null);
+  const [purposeOptions, setPurposeOptions] = useState([]);
+  const [potentialOptons, setPotentialOptions] = useState([]);
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
-  const [finalSubmitData, setFinalSubmitData] = useState([]);
-  const ID = props.getId;
-  console.log("ID", ID);
+
   useEffect(() => {
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
@@ -298,7 +276,6 @@ const ApllicantPuropseForm = (props) => {
       setValue("biswa", specificTableData?.biswa);
       setValue("landOwner", specificTableData?.landOwner);
     }
-    console.log("specificTableData", specificTableData);
   }, [specificTableData]);
 
   const {
@@ -327,6 +304,26 @@ const ApllicantPuropseForm = (props) => {
     }
     setShowhide2(getshow);
   };
+
+  const stateId = Digit.ULBService.getStateId();
+  const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
+
+  const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["potentialZone"]);
+
+  useEffect(() => {
+    const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
+      return { value: data?.purposeCode, label: data?.name };
+    });
+    setPurposeOptions(purpose);
+    console.log("potential", purposeOptions);
+  }, [PurposeType]);
+
+  useEffect(() => {
+    const potential = PotentialType?.["common-masters"]?.potentialZone?.map(function (data) {
+      return { value: data?.code, label: data?.zone };
+    });
+    setPotentialOptions(potential);
+  }, [PotentialType]);
 
   const DistrictApiCall = async () => {
     try {
@@ -376,7 +373,6 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {}).then((response) => {
         return response;
       });
-      setTehsilData(Resp.data);
       if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
         Resp.data.map((el, i) => {
           setTehsilDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.code }]);
@@ -407,7 +403,6 @@ const ApllicantPuropseForm = (props) => {
         .then((response) => {
           return response;
         });
-      setRevenuStateData(Resp.data);
 
       if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
         Resp.data.map((el, i) => {
@@ -440,7 +435,6 @@ const ApllicantPuropseForm = (props) => {
         .then((response) => {
           return response;
         });
-      setMustilData(Resp.data.must);
       if (Resp.data.must.length > 0 && Resp.data.must !== undefined && Resp.data.must !== null) {
         Resp.data.must.map((el, i) => {
           setMustilDataLabels((prev) => [...prev, { label: el, id: i, value: el }]);
@@ -465,7 +459,6 @@ const ApllicantPuropseForm = (props) => {
         authToken: "",
       },
     };
-    console.log("khewat", khewats);
     try {
       const Resp = await axios
         .post(
@@ -474,7 +467,6 @@ const ApllicantPuropseForm = (props) => {
           {}
         )
         .then((response) => {
-          console.log("Resp", response);
           return response;
         });
       setKhewatData(Resp.data);
@@ -493,12 +485,7 @@ const ApllicantPuropseForm = (props) => {
     DistrictApiCall();
   }, []);
 
-  useEffect(() => {
-    console.log("Revenue", revenueDataLabels);
-  }, [revenueDataLabels]);
-
   const ApplicantPurposeModalData = (data) => {
-    console.log("data++++++", data);
     data["tehsil"] = data?.tehsil?.label;
     data["revenueEstate"] = data?.revenueEstate?.label;
     data["rectangleNo"] = data?.rectangleNo;
@@ -581,10 +568,22 @@ const ApllicantPuropseForm = (props) => {
 
   const getSubmitDataLabel = async () => {
     try {
-      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
-        return response;
-      });
-      console.log("RESP+++", Resp?.data);
+      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`);
+      const userData = Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose;
+      console.log("DSD", userData);
+      setValue("purposeDd", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.purposeDd?.name);
+      setValue("potential", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.potential?.name);
+      setValue("district", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.district?.name);
+      console.log("+++", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.potential?.name);
+      setValue("consolidationType", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.consolidationType);
+      setValue("kanal", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.kanal);
+      setValue("devCompany", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.developerCompany);
+      setValue("devCompany", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.developerCompany);
+      setValue("registering", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.registeringdate);
+      setValue("dateValidity", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.validitydate);
+      setValue("authorizedSign", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.authSignature);
+      setValue("authorizedDev", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.nameAuthSign);
+      setValue("registeringAuth", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.registeringAuthority);
       setSubmitDataLabel(Resp?.data);
     } catch (error) {
       console.log(error.message);
@@ -595,7 +594,6 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const PurposeFormSubmitHandler = async (data) => {
-    console.log("data===", data);
     try {
       const postDistrict = {
         NewServiceInfo: {
@@ -603,7 +601,7 @@ const ApllicantPuropseForm = (props) => {
           id: props.getId,
           newServiceInfoData: {
             ApplicantPurpose: {
-              purposeDd: data?.purposeDd?.Label,
+              purposeDd: data?.purposeDd?.name,
               potential: data?.potential?.label,
               district: data?.district?.label,
               state: data.state,
@@ -636,7 +634,6 @@ const ApllicantPuropseForm = (props) => {
         return Resp;
       });
       props.Step2Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
-      setFinalSubmitData(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -664,7 +661,7 @@ const ApllicantPuropseForm = (props) => {
                     name="purposeDd"
                     onChange={handleChangePurpose}
                     placeholder="Purpose"
-                    data={optionsPurposeList}
+                    data={purposeOptions}
                     labels="Purpose"
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
@@ -684,7 +681,7 @@ const ApllicantPuropseForm = (props) => {
                     control={control}
                     name="potential"
                     placeholder="Potential"
-                    data={optionsPotentialList}
+                    data={potentialOptons}
                     labels="Potential"
                     onChange={handleChangePotential}
                   />
@@ -910,13 +907,13 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("kanal")} />
+                          <Form.Control type="text" className="form-control" placeholder="" {...register("kanal")} />
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("marla")} />
+                          <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} />
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("sarsai")} />
+                          <Form.Control type="text" className="form-control" placeholder="" {...register("sarsai")} />
                         </td>
                       </tr>
                     </tbody>
@@ -997,7 +994,7 @@ const ApllicantPuropseForm = (props) => {
                           <span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="text" className="form-control" placeholder="N/A" {...register("devCompany")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("devCompany")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
                       <label>
@@ -1005,7 +1002,7 @@ const ApllicantPuropseForm = (props) => {
                           Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="date" className="form-control" placeholder="N/A" {...register("registering")} />
+                      <Form.Control type="date" className="form-control" placeholder="" {...register("registering")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
                       <label>
@@ -1013,7 +1010,7 @@ const ApllicantPuropseForm = (props) => {
                           Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="date" className="form-control" placeholder="N/A" {...register("dateValidity")} />
+                      <Form.Control type="date" className="form-control" placeholder="" {...register("dateValidity")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 35 }}>
                       <label>
@@ -1041,7 +1038,7 @@ const ApllicantPuropseForm = (props) => {
                           Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="text" className="form-control" placeholder="N/A" {...register("authorizedSign")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("authorizedSign")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
                       <label>
@@ -1049,7 +1046,7 @@ const ApllicantPuropseForm = (props) => {
                           Name of authorized signatory on behalf of developer to sign Collaboration agreement<span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="date" className="form-control" placeholder="N/A" {...register("authorizedDev")} />
+                      <Form.Control type="date" className="form-control" placeholder="" {...register("authorizedDev")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 20 }}>
                       <label>
@@ -1058,7 +1055,7 @@ const ApllicantPuropseForm = (props) => {
                         </h2>
                       </label>
                       <br></br>
-                      <Form.Control type="text" className="form-control" placeholder="N/A" {...register("registeringAuth")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuth")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
                       <label>

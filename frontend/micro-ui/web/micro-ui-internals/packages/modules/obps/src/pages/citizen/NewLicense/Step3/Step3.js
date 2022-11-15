@@ -108,10 +108,10 @@ const LandScheduleForm = (props) => {
 
   const getSubmitDataLabel = async () => {
     try {
-      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
-        return response;
-      });
-      console.log("RESP+++", Resp?.data);
+      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`);
+      const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
+      console.log("fef", userData);
+
       setSubmitDataLabel(Resp?.data);
     } catch (error) {
       console.log(error.message);
@@ -1018,7 +1018,7 @@ const LandScheduleForm = (props) => {
                     )}
                   </div>
                   <div className="col col-3">
-                    <h2>(d)  &nbsp;IOC Gas Pipeline:(Yes/No)</h2>
+                    <h2>(d)&nbsp;IOC Gas Pipeline:(Yes/No)</h2>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow6} />
                     &nbsp;&nbsp;
                     <label for="Yes">Yes</label>&nbsp;&nbsp;
@@ -1209,16 +1209,26 @@ const LandScheduleForm = (props) => {
                 <br></br>
                 <div className="row">
                   <div className="col col-3">
-                    <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                      Add sales/Deed/exchange/gift deed, mutation, lease/Patta &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                    <h2
+                      style={{ display: "flex" }}
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title=" Add sales/Deed/exchange/gift deed, mutation, lease/Patta"
+                    >
+                      Add sales/Deed/exchange &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
                     <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
                   </div>
                   <div className="col col-3">
-                    <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
+                    <h2
+                      style={{ display: "flex" }}
+                      data-toggle="tooltip"
+                      data-placement="top"
+                      title="    Copy of spa/GPA/board resolution to sign collaboration agrrement"
+                    >
                       {" "}
-                      Copy of spa/GPA/board resolution to sign collaboration agrrement &nbsp;&nbsp;
+                      Copy of spa/GPA/board resolution &nbsp;&nbsp;
                       <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
