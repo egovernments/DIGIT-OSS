@@ -38,8 +38,7 @@ function SurrenderLic() {
               <Col className="col-4">
                 <Form.Group as={Col} controlId="formGridState">
                   <Form.Label>
-                    Select Type (Complete or Partial){" "}
-                    <span style={{ color: "red" }}>*</span>
+                    Select Type (Complete or Partial) <span style={{ color: "red" }}>*</span>
                   </Form.Label>
                   <Form.Select onChange={(e) => handleshowhide(e)}>
                     <option value=" ">----Select value-----</option>
@@ -49,62 +48,52 @@ function SurrenderLic() {
                 </Form.Group>
               </Col>
               <Col className="col-4">
-              <Form.Group as={Row} className="mb-12">
-              <Form.Label>
-              Area falling under 24m road /service road or sector dividing road (Yes/no)
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-                                <Row>
-                                  <Col className="col-3">
-                                    <Form.Check
-                                      type="radio"
-                                      label="Yes"
-                                      name="formHorizontalRadios"
-                                      id="formHorizontalRadios1"
-                                      value="8"
-                                      onChange={(e) => handleselects(e)}
-                                    />
-                                  </Col>
-                                  <Col className="col-3">
-                                    <Form.Check
-                                      type="radio"
-                                      label="No"
-                                      name="formHorizontalRadios"
-                                      id="formHorizontalRadios2"
-                                    />
-                                  </Col>
-                                </Row>
-                              </Form.Group>
+                <Form.Group as={Row} className="mb-12">
+                  <Form.Label>
+                    Area falling under 24m road /service road or sector dividing road (Yes/no)
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                  <Row>
+                    <Col className="col-3">
+                      <Form.Check
+                        type="radio"
+                        label="Yes"
+                        name="formHorizontalRadios"
+                        id="formHorizontalRadios1"
+                        value="8"
+                        onChange={(e) => handleselects(e)}
+                      />
+                    </Col>
+                    <Col className="col-3">
+                      <Form.Check type="radio" label="No" name="formHorizontalRadios" id="formHorizontalRadios2" />
+                    </Col>
+                  </Row>
+                </Form.Group>
               </Col>
               <Col className="col-4">
-              <Form.Group as={Row} className="mb-12">
-              <Form.Label>
-              RERA registration of project
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-                                <Row>
-                                  <Col className="col-3">
-                                    <Form.Check
-                                      type="radio"
-                                      label="Yes"
-                                      name="formHorizontalRadios"
-                                      id="formHorizontalRadios1"
-                                      value="9"
-                                      onChange={(e) => handleselects(e)}
-                                    />
-                                  </Col>
-                                  <Col className="col-3">
-                                    <Form.Check
-                                      type="radio"
-                                      label="No"
-                                      name="formHorizontalRadios"
-                                      id="formHorizontalRadios2"
-                                    />
-                                  </Col>
-                                </Row>
-                              </Form.Group>
+                <Form.Group as={Row} className="mb-12">
+                  <Form.Label>
+                    RERA registration of project
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                  <Row>
+                    <Col className="col-3">
+                      <Form.Check
+                        type="radio"
+                        label="Yes"
+                        name="formHorizontalRadios"
+                        id="formHorizontalRadios1"
+                        value="9"
+                        onChange={(e) => handleselects(e)}
+                      />
+                    </Col>
+                    <Col className="col-3">
+                      <Form.Check type="radio" label="No" name="formHorizontalRadios" id="formHorizontalRadios2" />
+                    </Col>
+                  </Row>
+                </Form.Group>
               </Col>
-             
+
               <Col className="col-4">
                 <Form.Group as={Col} controlId="formGridArea">
                   {/* <Form.Label>Password</Form.Label>
@@ -132,7 +121,7 @@ function SurrenderLic() {
                 <div class="bordere">
                   <div class="table-responsive">
                     <table class="table">
-                       <thead>
+                      <thead>
                         <tr>
                           <th scope="col">Sr.No</th>
                           <th scope="col">Field Name</th>
@@ -154,9 +143,7 @@ function SurrenderLic() {
                           <th scope="row">2</th>
                           <td>
                             {" "}
-                            Declaration IDW Works Approved Scanned Copy of
-                            Zoning/Layout Plan{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            Declaration IDW Works Approved Scanned Copy of Zoning/Layout Plan <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
                             <input type="file"></input>
@@ -176,9 +163,7 @@ function SurrenderLic() {
                           <th scope="row">4</th>
                           <td>
                             {" "}
-                            EDC availed or not e.g. surrounding roads are
-                            constructed or not{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            EDC availed or not e.g. surrounding roads are constructed or not <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
                             <input type="file"></input>
@@ -188,8 +173,7 @@ function SurrenderLic() {
                           <th scope="row">5</th>
                           <td>
                             {" "}
-                            Area falling under 24m road /service road or sector
-                            dividing road and green belt If yes{" "}
+                            Area falling under 24m road /service road or sector dividing road and green belt If yes{" "}
                             <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
@@ -286,7 +270,7 @@ function SurrenderLic() {
                         <tr>
                           <th scope="row">1</th>
                           <td>
-                          Declaration of Third-Party Rights 
+                            Declaration of Third-Party Rights
                             <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
@@ -297,8 +281,7 @@ function SurrenderLic() {
                           <th scope="row">2</th>
                           <td>
                             {" "}
-                            Declaration IDW Works{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            Declaration IDW Works <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
                             <input type="file"></input>
@@ -319,8 +302,7 @@ function SurrenderLic() {
                           <th scope="row">4</th>
                           <td>
                             {" "}
-                            EDC availed or not e.g. surrounding roads are constructed or not {" "}
-                            <span style={{ color: "red" }}>*</span>
+                            EDC availed or not e.g. surrounding roads are constructed or not <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
                             <input type="file"></input>
@@ -330,8 +312,7 @@ function SurrenderLic() {
                           <th scope="row">5</th>
                           <td>
                             {" "}
-                            Area falling under 24m road /service road or sector dividing road{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            Area falling under 24m road /service road or sector dividing road <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
                             <input type="file"></input>
@@ -373,48 +354,46 @@ function SurrenderLic() {
                             </fieldset>
                           </td>
                         </tr>
-                        </tbody>
+                      </tbody>
                     </table>
 
                     {selects === "3" && (
                       <table class="table">
                         <tbody>
-                        <tr>
-                          <th scope="row">7</th>
-                          <td>
-                            {" "}
-                            Gift Deed 
-                            <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">8</th>
-                          <td>
-                            {" "}
-                            Mutation.
-                            <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">9</th>
-                          <td>
-                            {" "}
-                            Jamabandhi  <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        
-                        
-                      </tbody>
-                    </table>
+                          <tr>
+                            <th scope="row">7</th>
+                            <td>
+                              {" "}
+                              Gift Deed
+                              <span style={{ color: "red" }}>*</span>
+                            </td>
+                            <td>
+                              <input type="file"></input>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row">8</th>
+                            <td>
+                              {" "}
+                              Mutation.
+                              <span style={{ color: "red" }}>*</span>
+                            </td>
+                            <td>
+                              <input type="file"></input>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row">9</th>
+                            <td>
+                              {" "}
+                              Jamabandhi <span style={{ color: "red" }}>*</span>
+                            </td>
+                            <td>
+                              <input type="file"></input>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     )}
                   </div>
                 </div>

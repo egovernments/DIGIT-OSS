@@ -149,9 +149,9 @@ const ServicePlanService = () => {
           <div className="table table-bordered table-responsive">
             <thead>
               <tr>
-                <td style={{ textAlign: "center", fontFamily: "bold" }}> Sr.No.</td>
-                <td style={{ textAlign: "center", fontFamily: "bold" }}>Type Of Map/Plan</td>
-                <td style={{ textAlign: "center", fontFamily: "bold" }}>Annexure</td>
+                <td style={{ textAlign: "center" }}> Sr.No.</td>
+                <td style={{ textAlign: "center" }}>Type Of Map/Plan</td>
+                <td style={{ textAlign: "center" }}>Annexure</td>
               </tr>
             </thead>
             <tbody>
