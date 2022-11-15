@@ -53,7 +53,7 @@ const BillAmendmentCard = () => {
 
   useEffect(() => {
     if (!isBillAMDInboxLoading || !isSWBillAMDInboxLoading) {
-      const billCount = billData?.totalCount && swbillData?.totalCount ? billData?.totalCount + swbillData?.totalCount : 0;
+      const billCount = billData?.totalCount && swbillData?.totalCount ? billData?.totalCount + swbillData?.totalCount : (billData?.totalCount?billData?.totalCount:(swbillData?.totalCount?swbillData?.totalCount:0));
       setTotalCount(billCount);
     }
   }, [billData,swbillData]);

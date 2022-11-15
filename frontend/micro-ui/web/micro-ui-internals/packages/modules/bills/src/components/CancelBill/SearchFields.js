@@ -103,6 +103,7 @@ const SearchFields = ({ register, control, reset, tenantId, t,formState}) => {
                             onBlur={props.onBlur}
                             t={t}
                             selected={props.value}
+                            optionCardStyles={{zIndex:"0"}}
                         />
                     )}
                 />

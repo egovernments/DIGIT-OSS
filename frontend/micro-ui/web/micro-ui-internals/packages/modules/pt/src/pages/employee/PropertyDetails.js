@@ -129,7 +129,7 @@ const PropertyDetails = () => {
           e.additionalDetails.owners.map((owner, ind) => {
             owner.values.map((value) => {
               if (value.title == "PT_OWNERSHIP_INFO_MOBILE_NO") {
-                value.textStyle = { display: "flex" };
+                value.textStyle = { display: "flex", wordBreak:"revert" };
                 value.caption = (
                   <span
                     onClick={() => {
