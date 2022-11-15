@@ -494,6 +494,14 @@ class ShowField extends Component {
             doc.content[1].margin = reportHeader.length > 6 ? [380, 10, 10, 12] : [180, 10, 10, 12];
             doc.content[2].margin = reportHeader.length > 6 ? null : reportHeader.length <3?[180, 10, 10, 12]: [60, 10, 10, 12];
           }
+
+          // for PDF alignment issues
+          let bodyDataLength = doc.content[2].table.body[0].length;
+          let dataLengthPer = `${(100/bodyDataLength)}%`
+          doc.defaultStyle.alignment = 'center';
+          doc.styles.tableHeader.alignment = 'center';
+          doc.content[2].table.widths = Array(doc.content[2].table.body[0].length + 1).join(`${dataLengthPer}?`).split('?');
+
           if (window && window.mSewaApp && window.mSewaApp.isMsewaApp && window.mSewaApp.isMsewaApp() && window.mSewaApp.downloadBase64File) {
             const pdfData = pdfMake.createPdf(doc);
             downloadPDFFileUsingBase64(pdfData, `${_this.state.reportName}.pdf`);
