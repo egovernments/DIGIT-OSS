@@ -109,7 +109,7 @@ const LandScheduleForm = (props) => {
 
   const getSubmitDataLabel = async () => {
     try {
-      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`);
+      const Resp = await axios.get(`/land-services/new/licenses/_get?id=${props.getId}`);
       const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
       console.log("fef", userData);
       setSubmitDataLabel(Resp?.data);
@@ -253,7 +253,7 @@ const LandScheduleForm = (props) => {
 
     try {
       const Resp = await axios
-        .post("http://10.1.1.18:8443/filestore/v1/files", formData, {
+        .post("/filestore/v1/files", formData, {
           headers: {
             "content-type": "multipart/form-data",
           },
