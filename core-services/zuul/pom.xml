@@ -10,7 +10,7 @@
   </parent>
   <groupId>com.example</groupId>
   <artifactId>zuul</artifactId>
-  <version>1.3.2-beta-SNAPSHOT</version>
+  <version>1.3.2_beta-SNAPSHOT</version>
   <name>zuul</name>
   <description>Api gateway for egov</description>
   <properties>

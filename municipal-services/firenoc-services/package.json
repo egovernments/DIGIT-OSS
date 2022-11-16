@@ -1,6 +1,6 @@
 {
   "name": "egov-firenoc-services",
-  "version": "1.3.2-beta",
+  "version": "1.3.2_beta",
   "private": true,
   "description": "Starter project for an ES6 RESTful Express API",
   "main": "dist",

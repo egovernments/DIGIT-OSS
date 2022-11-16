@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>egov-document-uploader</artifactId>
-	<version>1.1.1-beta-SNAPSHOT</version>
+	<version>1.1.1_beta-SNAPSHOT</version>
 	<name>egov-document-uploader</name>
 	<description>Document Uploader Service</description>
 	<properties>

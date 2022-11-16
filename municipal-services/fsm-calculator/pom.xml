@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>org.egov</groupId>
 	<artifactId>fsm-calculator</artifactId>
-	<version>1.1.0-beta-SNAPSHOT</version>
+	<version>1.1.0_beta-SNAPSHOT</version>
 	<name>fsm-calculator</name>
 	<description>Demo project for Spring Boot</description>
 
