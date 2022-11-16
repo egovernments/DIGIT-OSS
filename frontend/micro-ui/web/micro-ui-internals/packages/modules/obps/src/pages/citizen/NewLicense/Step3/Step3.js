@@ -1,21 +1,47 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { useForm, Controller } from "react-hook-form";
-import { Button, Form } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 // import { Checkbox } from "@mui/material";
-
 import CalculateIcon from "@mui/icons-material/Calculate";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import InfoIcon from "@mui/icons-material/Info";
 import axios from "axios";
+import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
+
+const potentialOptons = [
+  {
+    label: "Hyper",
+    value: "K.Mishra",
+  },
+  {
+    label: "High I",
+    value: "potential 2",
+  },
+  {
+    label: "High II",
+    value: "potential 2",
+  },
+  {
+    label: "Medium",
+    value: "potential 2",
+  },
+  {
+    label: "Low I",
+    value: "potential 2",
+  },
+  {
+    label: "Low II",
+    value: "potential 2",
+  },
+];
+
 const LandScheduleForm = (props) => {
-  const [finalSubmitData, setFinalSubmitData] = useState([]);
-  const [form, setForm] = useState([]);
   const [file, setFile] = useState(null);
   const [docUpload, setDocuploadData] = useState([]);
   const [LandFormSubmitted, SetLandFormSubmitted] = useState(false);
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
+
   const {
     register,
     handleSubmit,
@@ -23,16 +49,10 @@ const LandScheduleForm = (props) => {
     control,
     setValue,
     reset,
-  } = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onBlur",
-    // resolver: yupResolver(VALIDATION_SCHEMA),
-    shouldFocusError: true,
-  });
+    getValues,
+    watch,
+  } = useForm();
 
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
   const landScheduleFormSubmitHandler = async (data) => {
     console.log("data------", data);
     return;
@@ -101,18 +121,17 @@ const LandScheduleForm = (props) => {
     }
   };
 
-  useEffect(() => {
-    if (LandFormSubmitted) {
-      props.landFormSubmit(true);
-    }
-  }, [LandFormSubmitted]);
+  // useEffect(() => {
+  //   if (LandFormSubmitted) {
+  //     props.landFormSubmit(true);
+  //   }
+  // }, [LandFormSubmitted]);
 
   const getSubmitDataLabel = async () => {
     try {
       const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`);
       const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
-      console.log("fef", userData);
-      setSubmitDataLabel(Resp?.data);
+      setSubmitDataLabel(userData);
     } catch (error) {
       console.log(error.message);
     }
@@ -120,126 +139,6 @@ const LandScheduleForm = (props) => {
   useEffect(() => {
     getSubmitDataLabel();
   }, []);
-  const [showhide, setShowhide] = useState("No");
-  const [showhide1, setShowhide1] = useState("No");
-  const [showhide2, setShowhide2] = useState("No");
-  const [showhide3, setShowhide3] = useState("No");
-  const [showhide4, setShowhide4] = useState("No");
-  const [showhide5, setShowhide5] = useState("No");
-  const [showhide6, setShowhide6] = useState("No");
-  const [showhide7, setShowhide7] = useState("No");
-  const [showhide8, setShowhide8] = useState("No");
-  const [showhide9, setShowhide9] = useState("No");
-  const [showhide0, setShowhide0] = useState("No");
-  const [showhide10, setShowhide10] = useState("No");
-  const [showhide11, setShowhide11] = useState("No");
-  const [showhide12, setShowhide12] = useState("No");
-  const [showhide13, setShowhide13] = useState("No");
-  const [showhide14, setShowhide14] = useState("No");
-  const [showhide15, setShowhide15] = useState("No");
-  const [showhide16, setShowhide16] = useState("No");
-  const [showhide17, setShowhide17] = useState("No");
-  const [showhide18, setShowhide18] = useState("No");
-  const [showhide19, setShowhide19] = useState("No");
-  const [showhide20, setShowhide20] = useState("No");
-  const [showhide21, setShowhide21] = useState("No");
-  const [showhide23, setShowhide23] = useState("No");
-  const handleshow = (e) => {
-    const getshow = e.target.value;
-    setShowhide(getshow);
-  };
-  const handleshow1 = (e) => {
-    const getshow = e.target.value;
-    setShowhide1(getshow);
-  };
-  const handleshow2 = (e) => {
-    const getshow = e.target.value;
-    setShowhide2(getshow);
-  };
-  const handleshow3 = (e) => {
-    const getshow = e.target.value;
-    setShowhide3(getshow);
-  };
-  const handleshow4 = (e) => {
-    const getshow = e.target.value;
-    setShowhide4(getshow);
-  };
-  const handleshow5 = (e) => {
-    const getshow = e.target.value;
-    setShowhide5(getshow);
-  };
-  const handleshow6 = (e) => {
-    const getshow = e.target.value;
-    setShowhide6(getshow);
-  };
-  const handleshow7 = (e) => {
-    const getshow = e.target.value;
-    setShowhide7(getshow);
-  };
-  const handleshow8 = (e) => {
-    const getshow = e.target.value;
-    setShowhide8(getshow);
-  };
-  const handleshow9 = (e) => {
-    const getshow = e.target.value;
-    setShowhide9(getshow);
-  };
-  const handleshow0 = (e) => {
-    const getshow = e.target.value;
-    setShowhide0(getshow);
-  };
-  const handleshow10 = (e) => {
-    const getshow = e.target.value;
-    setShowhide10(getshow);
-  };
-  const handleshow11 = (e) => {
-    const getshow = e.target.value;
-    setShowhide11(getshow);
-  };
-  const handleshow12 = (e) => {
-    const getshow = e.target.value;
-    setShowhide12(getshow);
-  };
-  const handleshow13 = (e) => {
-    const getshow = e.target.value;
-    setShowhide13(getshow);
-  };
-  const handleshow14 = (e) => {
-    const getshow = e.target.value;
-    setShowhide14(getshow);
-  };
-  const handleshow15 = (e) => {
-    const getshow = e.target.value;
-    setShowhide15(getshow);
-  };
-  const handleshow16 = (e) => {
-    const getshow = e.target.value;
-    setShowhide16(getshow);
-  };
-  const handleshow17 = (e) => {
-    const getshow = e.target.value;
-    setShowhide17(getshow);
-  };
-  const handleshow18 = (e) => {
-    const getshow = e.target.value;
-    setShowhide18(getshow);
-  };
-  const handleshow19 = (e) => {
-    const getshow = e.target.value;
-    setShowhide19(getshow);
-  };
-  const handleshow20 = (e) => {
-    const getshow = e.target.value;
-    setShowhide20(getshow);
-  };
-  const handleshow21 = (e) => {
-    const getshow = e.target.value;
-    setShowhide21(getshow);
-  };
-  const handleshow23 = (e) => {
-    const getshow = e.target.value;
-    setShowhide23(getshow);
-  };
 
   const getDocumentData = async () => {
     if (file === null) {
@@ -266,6 +165,7 @@ const LandScheduleForm = (props) => {
       console.log(error.message);
     }
   };
+
   useEffect(() => {
     getDocumentData();
   }, [file]);
@@ -280,22 +180,22 @@ const LandScheduleForm = (props) => {
               <Col col-12>
                 <div className="row">
                   <div className="col col-12 ">
-                    {/* <h2>
-                      1.&nbsp;(i)Whether licence applied for additional area ?<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
-                      <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow} />
-                      &nbsp;&nbsp;
-                      <label for="Yes">
-                        <h6>Yes</h6>
+                    <div>
+                      <h2>
+                        1.&nbsp;(i)Whether licence applied for additional area ?<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                      </h2>
+
+                      <label htmlFor="licenceApplied">
+                        <input {...register("licenceApplied")} type="radio" value="yes" id="licenceApplied" />
+                        Yes
                       </label>
-                      &nbsp;&nbsp;
-                      <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow} />
-                      &nbsp;&nbsp;
-                      <label for="No">
-                        <h6>No</h6>
+                      <label htmlFor="licenceApplied">
+                        <input {...register("licenceApplied")} type="radio" value="no" id="licenceApplied" />
+                        No
                       </label>
-                    </h2> */}
-                    {/* <Controller name="checkbox" control={control} rules={{ required: true }} render={({ field }) => <Checkbox {...field} />} /> */}
-                    {showhide === "Yes" && (
+                    </div>
+
+                    {watch("licenceApplied") === "yes" && (
                       <div className="row">
                         <div className="col col-3">
                           <label>
@@ -311,15 +211,13 @@ const LandScheduleForm = (props) => {
                               Potential Zone <span style={{ color: "red" }}>*</span>
                             </h2>
                           </label>
-                          <select className="form-control" id="potential" {...register("potential")}>
-                            <option value="">--Potential Zone--</option>
-                            <option value="K.Mishra">Hyper</option>
-                            <option value="potential 1">High I</option>
-                            <option value="potential 2">High II</option>
-                            <option value="potential 2">Medium</option>
-                            <option value="potential 2">Low I</option>
-                            <option value="potential 2">Low II</option>
-                          </select>
+                          <ReactMultiSelect
+                            control={control}
+                            name="potential"
+                            placeholder="Potential Zone"
+                            data={potentialOptons}
+                            labels="Potential"
+                          />
                         </div>
                         <div className="col col-3">
                           <label>
@@ -335,11 +233,12 @@ const LandScheduleForm = (props) => {
                               Approach Type (Type of Policy) <span style={{ color: "red" }}>*</span>
                             </h2>
                           </label>
-                          <select className="form-control" id="approach" {...register("approach")}>
+                          <ReactMultiSelect control={control} name="approach" placeholder="Approach" data={potentialOptons} labels="Potential" />
+                          {/* <select className="form-control" id="approach" {...register("approach")}>
                             <option value="K.Mishra"></option>
                             <option value="potential 1"></option>
                             <option value="potential 2"></option>
-                          </select>
+                          </select> */}
                         </div>
                         <div className="col col-3">
                           <label>
@@ -364,32 +263,29 @@ const LandScheduleForm = (props) => {
                               Type of land<span style={{ color: "red" }}>*</span>
                             </h2>
                           </label>
-                          <select className="form-control" id="typeland" {...register("typeland")}>
+                          <ReactMultiSelect control={control} name="typeland" placeholder="Type of Land" data={potentialOptons} labels="typeland" />
+
+                          {/* <select className="form-control" id="typeland" {...register("typeland")}>
                             <option value="">Type of Land</option>
                             <option value="">Chahi/nehri</option>
                             <option>Gair Mumkins</option>
                             <option>Others</option>
-                          </select>
+                          </select> */}
                         </div>
                         <div className="col col-3 ">
-                          <label>
-                            <h2>
-                              Third-party right created<span style={{ color: "red" }}>*</span>
-                            </h2>
+                          <h2>
+                            Third-party right created<span style={{ color: "red" }}>*</span>
+                          </h2>
+
+                          <label htmlFor="thirdPartyRightCreated">
+                            <input {...register("thirdPartyRightCreated")} type="radio" value="yes" id="thirdPartyRightCreated" />
+                            Yes
                           </label>
-                          <br></br>
-                          <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow13} />
-                          &nbsp;&nbsp;
-                          <label for="Yes">
-                            <h6>Yes</h6>
+                          <label htmlFor="thirdPartyRightCreated">
+                            <input {...register("thirdPartyRightCreated")} type="radio" value="no" id="thirdPartyRightCreated" />
+                            No
                           </label>
-                          &nbsp;&nbsp;
-                          <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow13} />
-                          &nbsp;&nbsp;
-                          <label for="No">
-                            <h6>No</h6>
-                          </label>
-                          {showhide13 === "Yes" && (
+                          {watch("thirdPartyRightCreated") === "yes" && (
                             <div className="row ">
                               <div className="col col-12">
                                 <label>
@@ -398,7 +294,7 @@ const LandScheduleForm = (props) => {
                                     Remark<span style={{ color: "red" }}>*</span>
                                   </h2>{" "}
                                 </label>
-                                <input type="text" className="form-control" {...register("thirdParty")} />
+                                <input type="text" className="form-control" {...register("remark")} />
                               </div>
                               <div className="col col-12">
                                 <label>
@@ -407,20 +303,19 @@ const LandScheduleForm = (props) => {
                                     Document Upload <span style={{ color: "red" }}>*</span>
                                   </h2>
                                 </label>
-                                <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
+                                <input type="file" className="form-control" {...register("documentUpload")} />
                               </div>
                             </div>
                           )}
-                          {showhide13 === "No" && (
+                          {watch("thirdPartyRightCreated") === "no" && (
                             <div className="row ">
                               <div className="col col">
                                 <label>
-                                  {" "}
                                   <h2>
                                     Document Upload <span style={{ color: "red" }}>*</span>
-                                  </h2>{" "}
+                                  </h2>
                                 </label>
-                                <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
+                                <input type="file" className="form-control" {...register("documentUpload")} />
                               </div>
                             </div>
                           )}
@@ -432,21 +327,20 @@ const LandScheduleForm = (props) => {
                 &nbsp;&nbsp;
                 <div className="row">
                   <div className="col col-12 ">
-                    <h2>
-                      &nbsp;&nbsp;(ii)Whether licence applied under Migration Policy ?&nbsp;&nbsp;
-                      <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow19} />
-                      &nbsp;&nbsp;
-                      <label for="Yes">
-                        <h6>Yes</h6>
-                      </label>
-                      &nbsp;&nbsp;
-                      <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow19} />
-                      &nbsp;&nbsp;
-                      <label for="No">
-                        <h6>No</h6>
-                      </label>
-                    </h2>
-                    {showhide19 === "Yes" && (
+                    <div>
+                      <h2>
+                        &nbsp;&nbsp;(ii)Whether licence applied under Migration Policy ?&nbsp;&nbsp;
+                        <label htmlFor="licenceAppliedUnderMigration">
+                          <input {...register("licenceAppliedUnderMigration")} type="radio" value="yes" id="licenceAppliedUnderMigration" />
+                          Yes
+                        </label>
+                        <label htmlFor="licenceAppliedUnderMigration">
+                          <input {...register("licenceAppliedUnderMigration")} type="radio" value="no" id="licenceAppliedUnderMigration" />
+                          No
+                        </label>
+                      </h2>
+                    </div>
+                    {watch("licenceAppliedUnderMigration") === "yes" && (
                       <div className="row">
                         <div className="col col-3">
                           <label>
@@ -458,14 +352,16 @@ const LandScheduleForm = (props) => {
                           <label>
                             <h2>Purpose of Parent License</h2>
                           </label>
-                          <select className="form-control" id="potential" {...register("purpose")}>
+                          <ReactMultiSelect control={control} name="purpose" placeholder="Purpose" data={potentialOptons} labels="purpose" />
+
+                          {/* <select className="form-control" id="potential" {...register("purpose")}>
                             <option value="">Purpose</option>
                             <option>AGH</option>
                             <option> DDJAY</option>
                             <option>Commercial Plotted</option>
                             <option>Residential Plotted Colony</option>
                             <option>TOD Commercial</option>
-                          </select>
+                          </select> */}
                         </div>
                         <div className="col col-3">
                           <label>
@@ -483,19 +379,16 @@ const LandScheduleForm = (props) => {
                           <label>
                             <h2>Validity of Parent License </h2>{" "}
                           </label>
-                          <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow21} />
-                          &nbsp;&nbsp;
-                          <label for="Yes">
-                            <h6>Yes</h6>
+                          <label htmlFor="ValidityOfParentLicense">
+                            <input {...register("ValidityOfParentLicense")} type="radio" value="yes" id="ValidityOfParentLicense" />
+                            Yes
                           </label>
-                          &nbsp;&nbsp;
-                          <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow21} />
-                          &nbsp;&nbsp;
-                          <label for="No">
-                            <h6>No</h6>
+                          <label htmlFor="ValidityOfParentLicense">
+                            <input {...register("ValidityOfParentLicense")} type="radio" value="no" id="ValidityOfParentLicense" />
+                            No
                           </label>
                         </div>
-                        {showhide21 === "Yes" && (
+                        {watch("ValidityOfParentLicense") === "yes" && (
                           <div className="row ">
                             <div className="col col-6">
                               <label>
@@ -507,12 +400,7 @@ const LandScheduleForm = (props) => {
                               <label>
                                 <h2>Freshly applied area,other than migration</h2>{" "}
                               </label>
-                              <input
-                                type="text"
-                                className="form-control"
-                                {...register("freshlyApplied")}
-                                onChange={(e) => setFile({ file: e.target.files[0] })}
-                              />
+                              <input type="text" className="form-control" {...register("freshlyApplied")} />
                             </div>
                           </div>
                         )}
@@ -521,24 +409,20 @@ const LandScheduleForm = (props) => {
                             Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration &nbsp;&nbsp;
                             <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h2>
-
-                          <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                          <input type="file" className="form-control" {...register("approvedLayoutOfPlan")} />
                         </div>
                         <div className="col col-3">
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                            {" "}
                             Proposed Layout of Plan /site plan for area applied for migration. &nbsp;&nbsp;
                             <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h2>
-
-                          <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                          <input type="file" className="form-control" {...register("proposedLayoutOfPlan")} />
                         </div>
                         <div className="col col-3">
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
                             Upload Previously approved Layout Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h2>
-
-                          <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                          <input type="file" className="form-control" {...register("uploadPreviouslyApprovedLayoutPlan")} />
                         </div>
                       </div>
                     )}
@@ -546,31 +430,21 @@ const LandScheduleForm = (props) => {
                 </div>
                 <hr></hr>
                 <br></br>
-                <h4>
-                  2. Any encumbrance with respect to following <br></br>
-                  <br></br>
-                  <label>
-                    <h2>Rehan / Mortgage</h2>
+                <div>
+                  <h4>2. Any encumbrance with respect to following </h4>
+                  <label htmlFor="encumbranceWithRespect">
+                    <input {...register("encumbranceWithRespect")} type="radio" value="rehan/mortgage" id="encumbranceWithRespect" />
+                    Rehan / Mortgage
                   </label>
-                  &nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} />
-                  &nbsp;&nbsp;
-                  <label for="Yes"></label>&nbsp;&nbsp;&nbsp;&nbsp;
-                  <label>
-                    <h2>Patta/Lease</h2>
+                  <label htmlFor="encumbranceWithRespect">
+                    <input {...register("encumbranceWithRespect")} type="radio" value="patta/lease" id="encumbranceWithRespect" />
+                    Patta/Lease
                   </label>
-                  &nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} />
-                  &nbsp;&nbsp;
-                  <label for="Yes"></label>&nbsp;&nbsp;&nbsp;&nbsp;
-                  <label>
-                    <h2>Gair/Marusi</h2>
+                  <label htmlFor="encumbranceWithRespect">
+                    <input {...register("encumbranceWithRespect")} type="radio" value="gair/marusi" id="encumbranceWithRespect" />
+                    Gair/Marusi
                   </label>
-                  &nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} />
-                  &nbsp;&nbsp;
-                  <label for="Yes"></label>
-                </h4>
+                </div>
                 <div className="row">
                   <div className="col col-4">
                     <label>
@@ -582,23 +456,20 @@ const LandScheduleForm = (props) => {
                 <br></br>
                 <hr />
                 <br></br>
-                <h6>
-                  (ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator. &nbsp;&nbsp;
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow10} />
-                  &nbsp;&nbsp;
-                  <label for="Yes">
-                    <h6>Yes</h6>
+                <div>
+                  <h6>(ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator. </h6>
+                  <label htmlFor="existingLitigation">
+                    <input {...register("existingLitigation")} type="radio" value="yes" id="existingLitigation" />
+                    Yes
                   </label>
-                  &nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow10} />
-                  &nbsp;&nbsp;
-                  <label for="No">
-                    <h6>No</h6>
+                  <label htmlFor="existingLitigation">
+                    <input {...register("existingLitigation")} type="radio" value="no" id="existingLitigation" />
+                    No
                   </label>
-                </h6>
+                </div>
                 <div className="row">
                   <div className="col col-12 ">
-                    {showhide10 === "Yes" && (
+                    {watch("existingLitigation") === "yes" && (
                       <div className="row ">
                         <div className="col col-6">
                           <label>
@@ -608,10 +479,9 @@ const LandScheduleForm = (props) => {
                         </div>
                         <div className="col col-6">
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                            {" "}
                             Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h2>
-                          <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
+                          <input type="file" className="form-control" {...register("docUpload")} />
                         </div>
                       </div>
                     )}
@@ -620,37 +490,32 @@ const LandScheduleForm = (props) => {
                 <br></br>
                 <hr />
                 <br></br>
-                <h6>
-                  (iii) Court orders, if any, affecting applied land. &nbsp;&nbsp;
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow11} />
-                  &nbsp;&nbsp;
-                  <label for="Yes">
-                    <h6>Yes</h6>
+                <div>
+                  <h6>(iii) Court orders, if any, affecting applied land. &nbsp;&nbsp;</h6>
+                  <label htmlFor="courtOrders">
+                    <input {...register("courtOrders")} type="radio" value="yes" id="courtOrders" />
+                    Yes
                   </label>
-                  &nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow11} />
-                  &nbsp;&nbsp;
-                  <label for="No">
-                    <h6>No</h6>
+                  <label htmlFor="courtOrders">
+                    <input {...register("courtOrders")} type="radio" value="no" id="courtOrders" />
+                    No
                   </label>
-                </h6>
+                </div>
                 <div className="row">
                   <div className="col col-12 ">
-                    {showhide11 === "Yes" && (
+                    {watch("courtOrders") === "yes" && (
                       <div className="row ">
                         <div className="col col-6">
                           <label>
-                            {" "}
                             <h2>Remark/Case No.</h2>{" "}
                           </label>
                           <input type="text" className="form-control" {...register("caseNo")} />
                         </div>
                         <div className="col col-6">
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                            {" "}
                             Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h2>
-                          <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
+                          <input type="file" className="form-control" {...register("docUpload")} />
                         </div>
                       </div>
                     )}
@@ -659,18 +524,20 @@ const LandScheduleForm = (props) => {
                 <br></br>
                 <hr />
                 <br></br>
-                <h6>
-                  (iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed.&nbsp;&nbsp;
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow12} />
-                  &nbsp;&nbsp;
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow12} />
-                  &nbsp;&nbsp;
-                  <label for="No">No</label>
-                </h6>
+                <div>
+                  <h6>(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed.&nbsp;&nbsp;</h6>
+                  <label htmlFor="liquidationProceedings">
+                    <input {...register("liquidationProceedings")} type="radio" value="yes" id="liquidationProceedings" />
+                    Yes
+                  </label>
+                  <label htmlFor="liquidationProceedings">
+                    <input {...register("liquidationProceedings")} type="radio" value="no" id="liquidationProceedings" />
+                    No
+                  </label>
+                </div>
                 <div className="row">
                   <div className="col col-12 ">
-                    {showhide12 === "Yes" && (
+                    {watch("liquidationProceedings") === "yes" && (
                       <div className="row ">
                         <div className="col col-6">
                           <label>
@@ -683,7 +550,7 @@ const LandScheduleForm = (props) => {
                             {" "}
                             Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h2>
-                          <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
+                          <input type="file" className="form-control" {...register("docUpload")} />
                         </div>
                       </div>
                     )}
@@ -696,24 +563,21 @@ const LandScheduleForm = (props) => {
                 <div className="row">
                   <div className="col col-3 ">
                     <h2>(a)&nbsp;As per applied land (Yes/No)</h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow14} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">
-                      <h6>Yes</h6>
+                    <label htmlFor="appliedLand">
+                      <input {...register("appliedLand")} type="radio" value="yes" id="appliedLand" />
+                      Yes
                     </label>
-                    &nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow14} />
-                    &nbsp;&nbsp;
-                    <label for="No">
-                      <h6>No</h6>
+                    <label htmlFor="appliedLand">
+                      <input {...register("appliedLand")} type="radio" value="no" id="appliedLand" />
+                      No
                     </label>
-                    {showhide14 === "Yes" && (
+                    {watch("appliedLand") === "yes" && (
                       <div className="row ">
                         <div className="col col-12">
                           <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
                             Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h6>
-                          <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
+                          <input type="file" className="form-control" {...register("docUpload")} />
                         </div>
                       </div>
                     )}
@@ -723,13 +587,15 @@ const LandScheduleForm = (props) => {
                     <h2 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?">
                       (b)&nbsp;Revenue rasta&nbsp;&nbsp; &nbsp;&nbsp;
                     </h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow1} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow1} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide1 === "Yes" && (
+                    <label htmlFor="revenueRasta">
+                      <input {...register("revenueRasta")} type="radio" value="yes" id="revenueRasta" />
+                      Yes
+                    </label>
+                    <label htmlFor="revenueRasta">
+                      <input {...register("revenueRasta")} type="radio" value="no" id="revenueRasta" />
+                      No
+                    </label>
+                    {watch("revenueRasta") === "yes" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
@@ -748,13 +614,15 @@ const LandScheduleForm = (props) => {
                     <h2 data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?">
                       (c)&nbsp;Watercourse running&nbsp;&nbsp;
                     </h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow2} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow2} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide2 === "Yes" && (
+                    <label htmlFor="watercourseRunning">
+                      <input {...register("watercourseRunning")} type="radio" value="yes" id="watercourseRunning" />
+                      Yes
+                    </label>
+                    <label htmlFor="watercourseRunning">
+                      <input {...register("watercourseRunning")} type="radio" value="no" id="watercourseRunning" />
+                      No
+                    </label>
+                    {watch("watercourseRunning") === "yes" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
@@ -769,13 +637,15 @@ const LandScheduleForm = (props) => {
 
                   <div className="col col-3 ">
                     <h2>(d) &nbsp;Whether in Compact Block (Yes/No)</h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow15} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow15} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide15 === "Yes" && (
+                    <label htmlFor="compactBlock">
+                      <input {...register("compactBlock")} type="radio" value="yes" id="compactBlock" />
+                      Yes
+                    </label>
+                    <label htmlFor="compactBlock">
+                      <input {...register("compactBlock")} type="radio" value="no" id="compactBlock" />
+                      No
+                    </label>
+                    {watch("compactBlock") === "yes" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
@@ -786,20 +656,22 @@ const LandScheduleForm = (props) => {
                       </div>
                     )}
                   </div>
-                </div>{" "}
+                </div>
                 <br></br>
                 <div className="row">
                   <div className="col col-3 ">
                     <h2 data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land.">
                       (e)&nbsp;Land Sandwiched&nbsp;&nbsp;
                     </h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow20} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow20} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide20 === "Yes" && (
+                    <label htmlFor="landSandwiched">
+                      <input {...register("landSandwiched")} type="radio" value="yes" id="landSandwiched" />
+                      Yes
+                    </label>
+                    <label htmlFor="landSandwiched">
+                      <input {...register("landSandwiched")} type="radio" value="no" id="landSandwiched" />
+                      No
+                    </label>
+                    {watch("landSandwiched") === "yes" && (
                       <div className="row ">
                         <div className="col col-12">
                           <label>
@@ -812,13 +684,15 @@ const LandScheduleForm = (props) => {
                   </div>
                   <div className="col col-3 ">
                     <h2>(f)&nbsp;Acquisition status (Yes/No)</h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow3} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow3} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide3 === "Yes" && (
+                    <label htmlFor="acquisitionStatus">
+                      <input {...register("acquisitionStatus")} type="radio" value="yes" id="acquisitionStatus" />
+                      Yes
+                    </label>
+                    <label htmlFor="acquisitionStatus">
+                      <input {...register("acquisitionStatus")} type="radio" value="no" id="acquisitionStatus" />
+                      No
+                    </label>
+                    {watch("acquisitionStatus") === "yes" && (
                       <div className="row ">
                         <div className="col col-12">
                           <label>Remark</label>
@@ -848,40 +722,44 @@ const LandScheduleForm = (props) => {
                     <label>
                       <h2>(g)&nbsp;&nbsp;Whether details/orders of release/exclusion of land uploaded.&nbsp;&nbsp;</h2>
                     </label>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow16} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">
-                      <h6>Yes</h6>
+                    <label htmlFor="exclusionOfLandUploaded">
+                      <input {...register("exclusionOfLandUploaded")} type="radio" value="yes" id="exclusionOfLandUploaded" />
+                      Yes
                     </label>
-                    &nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow16} />
-                    &nbsp;&nbsp;
-                    <label for="No">
-                      <h6>No</h6>
+                    <label htmlFor="exclusionOfLandUploaded">
+                      <input {...register("exclusionOfLandUploaded")} type="radio" value="no" id="exclusionOfLandUploaded" />
+                      No
                     </label>
-                    {showhide16 === "Yes" && (
+                    {watch("exclusionOfLandUploaded") === "yes" && (
                       <div className="row ">
                         <div className="col col-3 ">
-                          <h2>
-                            (h) Whether land compensation received&nbsp;&nbsp;
-                            <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                            &nbsp;&nbsp;
-                            <label for="Yes">Yes</label>&nbsp;&nbsp;
-                            <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                            &nbsp;&nbsp;
-                            <label for="No">No</label>
-                          </h2>
+                          <h2>(h) Whether land compensation received&nbsp;&nbsp;</h2>
+                          <label htmlFor="whetherLandCompensation">
+                            <input {...register("whetherLandCompensation")} type="radio" value="yes" id="whetherLandCompensation" />
+                            Yes
+                          </label>
+                          <label htmlFor="whetherLandCompensation">
+                            <input {...register("whetherLandCompensation")} type="radio" value="no" id="whetherLandCompensation" />
+                            No
+                          </label>
                         </div>
                         <div className="col col-3">
                           <label>
                             <h2>Status of release</h2>
                           </label>
-                          <select className="form-control" id="releasestatus" {...register("releasestatus")}>
+                          {/* <select className="form-control" id="releasestatus" {...register("releasestatus")}>
                             <option value=""></option>
                             <option></option>
                             <option></option>
                             <option></option>
-                          </select>
+                          </select> */}
+                          <ReactMultiSelect
+                            control={control}
+                            name="releasestatus"
+                            placeholder="Status of release"
+                            data={potentialOptons}
+                            labels="Potential"
+                          />
                           <div className="invalid-feedback">{errors?.releasestatus?.message}</div>
                         </div>
                         <div className="col col-3">
@@ -912,19 +790,18 @@ const LandScheduleForm = (props) => {
                 <br></br>
                 <div className="row">
                   <div className="col col-12">
-                    <label>
-                      <h2>
-                        (h)&nbsp;&nbsp;whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing
-                        road. (yes/no)
-                      </h2>
-                    </label>{" "}
-                    &nbsp;&nbsp;
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
+                    <h2>
+                      (h)&nbsp;&nbsp;whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing
+                      road. (yes/no)
+                    </h2>
+                    <label htmlFor="appliedSiteIsApproachable">
+                      <input {...register("appliedSiteIsApproachable")} type="radio" value="yes" id="appliedSiteIsApproachable" />
+                      Yes
+                    </label>
+                    <label htmlFor="appliedSiteIsApproachable">
+                      <input {...register("appliedSiteIsApproachable")} type="radio" value="no" id="appliedSiteIsApproachable" />
+                      No
+                    </label>
                   </div>
                 </div>
                 <br></br>
@@ -935,13 +812,15 @@ const LandScheduleForm = (props) => {
                 <div className="row">
                   <div className="col col-3">
                     <h2>(a) &nbsp;Vacant: (Yes/No)</h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow17} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow17} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide17 === "Yes" && (
+                    <label htmlFor="vacant">
+                      <input {...register("vacant")} type="radio" value="yes" id="vacant" />
+                      Yes
+                    </label>
+                    <label htmlFor="vacant">
+                      <input {...register("vacant")} type="radio" value="no" id="vacant" />
+                      No
+                    </label>
+                    {watch("vacant") === "yes" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
@@ -951,7 +830,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       </div>
                     )}
-                    {showhide17 === "No" && (
+                    {watch("vacant") === "no" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
@@ -964,40 +843,44 @@ const LandScheduleForm = (props) => {
                   </div>
                   <div className="col col-3">
                     <h2>(b) &nbsp;Construction: (Yes/No)</h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide4 === "Yes" && (
+                    <label htmlFor="construction">
+                      <input {...register("construction")} type="radio" value="yes" id="construction" />
+                      Yes
+                    </label>
+                    <label htmlFor="construction">
+                      <input {...register("construction")} type="radio" value="no" id="construction" />
+                      No
+                    </label>
+                    {watch("construction") === "yes" && (
                       <div className="row ">
                         <div className="col col">
                           <label>Type of Construction</label>
-                          <input type="text" className="form-control" {...register("ConstType")} />
+                          <input type="text" className="form-control" {...register("constType")} />
                         </div>
                       </div>
                     )}
-                    {showhide4 === "No" && (
+                    {watch("construction") === "no" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
                             <h2>Remark</h2>
                           </label>
-                          <input type="text" className="form-control" {...register("ConstRemark")} />
+                          <input type="text" className="form-control" {...register("constRemark")} />
                         </div>
                       </div>
                     )}
                   </div>
                   <div className="col col-3">
                     <h2>(c) &nbsp;HT line:(Yes/No)</h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide5 === "Yes" && (
+                    <label htmlFor="HTLine">
+                      <input {...register("HTLine")} type="radio" value="yes" id="HTLine" />
+                      Yes
+                    </label>
+                    <label htmlFor="HTLine">
+                      <input {...register("HTLine")} type="radio" value="no" id="HTLine" />
+                      No
+                    </label>
+                    {watch("HTLine") === "yes" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
@@ -1007,7 +890,7 @@ const LandScheduleForm = (props) => {
                         </div>
                       </div>
                     )}
-                    {showhide5 === "No" && (
+                    {watch("HTLine") === "no" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
@@ -1020,13 +903,15 @@ const LandScheduleForm = (props) => {
                   </div>
                   <div className="col col-3">
                     <h2>(d)&nbsp;IOC Gas Pipeline:(Yes/No)</h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide6 === "Yes" && (
+                    <label htmlFor="IOCGasPipeline">
+                      <input {...register("IOCGasPipelinee")} type="radio" value="yes" id="IOCGasPipeline" />
+                      Yes
+                    </label>
+                    <label htmlFor="IOCGasPipeline">
+                      <input {...register("IOCGasPipeline")} type="radio" value="no" id="IOCGasPipeline" />
+                      No
+                    </label>
+                    {watch("IOCGasPipeline") === "yes" && (
                       <div className="row ">
                         <div className="col col">
                           <label>IOC Remark</label>
@@ -1034,11 +919,11 @@ const LandScheduleForm = (props) => {
                         </div>
                       </div>
                     )}
-                    {showhide6 === "No" && (
+                    {watch("IOCGasPipeline") === "no" && (
                       <div className="row ">
                         <div className="col col">
                           <label>Remark</label>
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" {...register("iocRemarkA")} />
                         </div>
                       </div>
                     )}
@@ -1048,13 +933,15 @@ const LandScheduleForm = (props) => {
                 <div className="row ">
                   <div className="col col-3">
                     <h2>(e) &nbsp;Nallah:(Yes/No)</h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide7 === "Yes" && (
+                    <label htmlFor="nallah">
+                      <input {...register("nallah")} type="radio" value="yes" id="nallah" />
+                      Yes
+                    </label>
+                    <label htmlFor="nallah">
+                      <input {...register("nallah")} type="radio" value="no" id="nallah" />
+                      No
+                    </label>
+                    {watch("nallah") === "yes" && (
                       <div className="row ">
                         <div className="col col">
                           <label>Nallah Remark</label>
@@ -1062,24 +949,26 @@ const LandScheduleForm = (props) => {
                         </div>
                       </div>
                     )}
-                    {showhide7 === "No" && (
+                    {watch("nallah") === "no" && (
                       <div className="row ">
                         <div className="col col">
                           <label>Remark</label>
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" {...register("nallahRemarkA")} />
                         </div>
                       </div>
                     )}
                   </div>
                   <div className="col col-3">
                     <h2>(f) &nbsp;Any revenue rasta/road:(Yes/No)</h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide8 === "Yes" && (
+                    <label htmlFor="anyRevenueRasta">
+                      <input {...register("anyRevenueRasta")} type="radio" value="yes" id="anyRevenueRasta" />
+                      Yes
+                    </label>
+                    <label htmlFor="anyRevenueRasta">
+                      <input {...register("anyRevenueRasta")} type="radio" value="no" id="anyRevenueRasta" />
+                      No
+                    </label>
+                    {watch("anyRevenueRasta") === "yes" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
@@ -1092,26 +981,28 @@ const LandScheduleForm = (props) => {
                         </div>
                       </div>
                     )}
-                    {showhide8 === "No" && (
+                    {watch("anyRevenueRasta") === "no" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
                             <h2>Remark</h2>
                           </label>
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" {...register("roadRemarkA")} />
                         </div>
                       </div>
                     )}
                   </div>
                   <div className="col col-3">
                     <h2>(g) &nbsp;Any marginal land:(Yes/No)</h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide9 === "Yes" && (
+                    <label htmlFor="marginalLand">
+                      <input {...register("marginalLand")} type="radio" value="yes" id="marginalLand" />
+                      Yes
+                    </label>
+                    <label htmlFor="marginalLand">
+                      <input {...register("marginalLand")} type="radio" value="no" id="marginalLand" />
+                      No
+                    </label>
+                    {watch("marginalLand") === "yes" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
@@ -1121,13 +1012,13 @@ const LandScheduleForm = (props) => {
                         </div>
                       </div>
                     )}
-                    {showhide9 === "No" && (
+                    {watch("marginalLand") === "no" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
                             <h2>Remark </h2>
                           </label>
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" {...register("marginalRemarkA")} />
                         </div>
                       </div>
                     )}
@@ -1136,18 +1027,19 @@ const LandScheduleForm = (props) => {
                     <h2
                       data-toggle="tooltip"
                       data-placement="top"
-                      title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)
-"
+                      title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)"
                     >
                       (h)&nbsp;Utility Line &nbsp; &nbsp;
                     </h2>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                    &nbsp;&nbsp;
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                    &nbsp;&nbsp;
-                    <label for="No">No</label>
-                    {showhide0 === "Yes" && (
+                    <label htmlFor="utilityLine">
+                      <input {...register("utilityLine")} type="radio" value="yes" id="utilityLine" />
+                      Yes
+                    </label>
+                    <label htmlFor="utilityLine">
+                      <input {...register("utilityLine")} type="radio" value="no" id="utilityLine" />
+                      No
+                    </label>
+                    {watch("utilityLine") === "yes" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
@@ -1160,13 +1052,13 @@ const LandScheduleForm = (props) => {
                         </div>
                       </div>
                     )}
-                    {showhide0 === "No" && (
+                    {watch("utilityLine") === "no" && (
                       <div className="row ">
                         <div className="col col">
                           <label>
                             <h2>Remark</h2>
                           </label>
-                          <input type="text" className="form-control" />
+                          <input type="text" className="form-control" {...register("utilityRemarkA")} />
                         </div>
                       </div>
                     )}
@@ -1183,28 +1075,27 @@ const LandScheduleForm = (props) => {
                       Land schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
-                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                    <input type="file" className="form-control" {...register("landScheduleFile")} />
                   </div>
                   <div className="col col-3">
                     <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Copy of Mutation &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
-                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                    <input type="file" className="form-control" {...register("copyOfMutationFile")} />
                   </div>
                   <div className="col col-3">
                     <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Copy of Jamabandi &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
-                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                    <input type="file" className="form-control" {...register("copyOfJamabandiFile")} />
                   </div>
                   <div className="col col-3">
                     <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Details of lease / patta, if any &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
-
-                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                    <input type="file" className="form-control" {...register("detailsOfLease")} />
                   </div>
                 </div>
                 <br></br>
@@ -1218,8 +1109,7 @@ const LandScheduleForm = (props) => {
                     >
                       Add sales/Deed/exchange &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
-
-                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                    <input type="file" className="form-control" {...register("addSalesFile")} />
                   </div>
                   <div className="col col-3">
                     <h2
@@ -1228,26 +1118,22 @@ const LandScheduleForm = (props) => {
                       data-placement="top"
                       title="    Copy of spa/GPA/board resolution to sign collaboration agrrement"
                     >
-                      {" "}
                       Copy of spa/GPA/board resolution &nbsp;&nbsp;
                       <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
-
-                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                    <input type="file" className="form-control" {...register("copyOfSpaFile")} />
                   </div>
                   <div className="col col-3">
                     <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Revised Land Schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
-
-                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                    <input type="file" className="form-control" {...register("revisedLandSchedule")} />
                   </div>
                   <div className="col col-3">
                     <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Copy of Shajra Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
-
-                    <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                    <input type="file" className="form-control" {...register("copyOfShajraPlan")} />
                   </div>
                 </div>
                 <div class="row">

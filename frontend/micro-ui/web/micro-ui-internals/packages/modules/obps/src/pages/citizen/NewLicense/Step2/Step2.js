@@ -9,6 +9,39 @@ import WorkingTable from "../../../../components/Table";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 
 const ApllicantPuropseForm = (props) => {
+  const resetFields = {
+    tehsil: "",
+    revenueEstate: "",
+    mustil: "",
+    kanal: "",
+    marla: "",
+    sarsai: "",
+    bigha: "",
+    biswa: "",
+    biswansi: "",
+    agreementIrrevocialble: "",
+    agreementValidFrom: "",
+    agreementValidTill: "",
+    authSignature: "",
+    collaboration: "",
+    developerCompany: "",
+    landOwner: "",
+    nameAuthSign: "",
+    registeringAuthority: "",
+  };
+  const datapost = {
+    RequestInfo: {
+      apiId: "Rainmaker",
+      ver: "v1",
+      ts: 0,
+      action: "_search",
+      did: "",
+      key: "",
+      msgId: "090909",
+      requesterId: "",
+      authToken: "",
+    },
+  };
   const columns = [
     {
       key: "tehsil",
@@ -31,20 +64,76 @@ const ApllicantPuropseForm = (props) => {
       title: "Consolidation Type",
       dataIndex: "consolidationType",
     },
+    { key: "kanal", title: "Kanal", dataIndex: "kanal" },
     {
-      title: "Kanal/Bigha",
-      dataIndex: "",
-      render: (text) => (text?.kanal ? text?.kanal : text?.bigha),
+      key: "kanal",
+      title: "Bigha",
+      dataIndex: "bigha",
     },
     {
-      title: "Marla/Biswa",
-      dataIndex: "",
-      render: (text) => (text?.marla ? text?.marla : text?.biswa),
+      key: "marla",
+      title: "Marla",
+      dataIndex: "marla",
     },
     {
-      title: "Sarsai/Biswansi",
-      dataIndex: "",
-      render: (text) => (text?.sarsai ? text?.sarsai : text?.biswansi),
+      key: "biswa",
+      title: "Biswa",
+      dataIndex: "biswa",
+    },
+    {
+      key: "sarsai",
+      title: "Sarsai",
+      dataIndex: "sarsai",
+    },
+    {
+      key: "biswansi",
+      title: "Biswansi",
+      dataIndex: "biswansi",
+    },
+    {
+      key: "landOwner",
+      title: "Name of Land Owner",
+      dataIndex: "landOwner",
+    },
+    {
+      key: "agreementIrrevocialble",
+      title: "Whether collaboration agreement irrevocable (Yes/No)",
+      dataIndex: "agreementIrrevocialble",
+    },
+    {
+      key: "agreementValidFrom",
+      title: "Date of registering collaboration agreement",
+      dataIndex: "agreementValidFrom",
+    },
+    {
+      key: "agreementValidTill",
+      title: "Date of validity of collaboration agreement",
+      dataIndex: "agreementValidTill",
+    },
+    {
+      key: "authSignature",
+      title: "Name of authorized signatory on behalf of land owner(s)",
+      dataIndex: "authSignature",
+    },
+    {
+      key: "collaboration",
+      title: "Collaboration agreement Owner",
+      dataIndex: "collaboration",
+    },
+    {
+      key: "developerCompany",
+      title: "Name of the developer company",
+      dataIndex: "developerCompany",
+    },
+    {
+      key: "nameAuthSign",
+      title: " Name of authorized signatory",
+      dataIndex: "nameAuthSign",
+    },
+    {
+      key: "registeringAuthority",
+      title: "Registring Authority",
+      dataIndex: "registeringAuthority",
     },
     {
       // key: "action",
@@ -69,17 +158,17 @@ const ApllicantPuropseForm = (props) => {
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
-  const [districtDataLbels, setDistrictDataLabels] = useState([]);
-  const [tehsilDataLabels, setTehsilDataLabels] = useState([]);
-  const [revenueDataLabels, setRevenueDataLabels] = useState([]);
-  const [mustilDataLabels, setMustilDataLabels] = useState([]);
+  const [districtDataLbels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
+  const [tehsilDataLabels, setTehsilDataLabels] = useState({ data: [], isLoading: true });
+  const [revenueDataLabels, setRevenueDataLabels] = useState({ data: [], isLoading: true });
+  const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
   const [file, setFile] = useState(null);
   const [modal, setmodal] = useState(false);
   const [tehsilCode, setTehsilCode] = useState(null);
   const [consolidateValue, setConsolidateValue] = useState("consolidated");
   const [getCollaboration, setCollaboration] = useState("");
-  const [purposeOptions, setPurposeOptions] = useState([]);
-  const [potentialOptons, setPotentialOptions] = useState([]);
+  const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
+  const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
 
   useEffect(() => {
     if (specificTableData) {
@@ -103,6 +192,7 @@ const ApllicantPuropseForm = (props) => {
     control,
     setValue,
     reset,
+    getValues,
   } = useForm({
     mode: "onSubmit",
     reValidateMode: "onBlur",
@@ -115,174 +205,84 @@ const ApllicantPuropseForm = (props) => {
   const stateId = Digit.ULBService.getStateId();
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
-  const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["potentialZone"]);
+  const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
 
   useEffect(() => {
     const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
       return { value: data?.purposeCode, label: data?.name };
     });
-    setPurposeOptions(purpose);
+    setPurposeOptions({ data: purpose, isLoading: false });
   }, [PurposeType]);
 
   useEffect(() => {
-    const potential = PotentialType?.["common-masters"]?.potentialZone?.map(function (data) {
+    const potential = PotentialType?.["common-masters"]?.PotentialZone?.map(function (data) {
       return { value: data?.code, label: data?.zone };
     });
-    setPotentialOptions(potential);
+    setPotentialOptions({ data: potential, isLoading: false });
   }, [PotentialType]);
 
   const DistrictApiCall = async () => {
     try {
-      const postDistrict = {
-        RequestInfo: {
-          apiId: "Rainmaker",
-          ver: "v1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key: "",
-          msgId: "090909",
-          requesterId: "",
-          authToken: "",
-        },
-      };
-
-      const Resp = await axios.post("/egov-mdms-service/v1/_district", postDistrict).then((Resp) => {
-        return Resp;
+      const Resp = await axios.post("/egov-mdms-service/v1/_district", datapost);
+      const distData = Resp?.data?.map((el) => {
+        return { label: el?.districtName, id: el?.districtCode, value: el?.districtCode };
       });
-      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-        Resp.data.map((el, i) => {
-          setDistrictDataLabels((prev) => [...prev, { label: el.districtName, id: el.districtCode, value: el.districtCode }]);
-        });
-      }
+      setDistrictDataLabels({ data: distData, isLoading: false });
     } catch (error) {
-      console.log(error.message);
+      console.log(error?.message);
     }
   };
+
   const getTehslidata = async (data) => {
-    const datapost = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: "",
-      },
-    };
-
     try {
-      const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {}).then((response) => {
-        return response;
+      const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {});
+      const tehsilData = Resp?.data?.map((el) => {
+        return { label: el?.name, id: el?.code, value: el?.code };
       });
-      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-        Resp.data.map((el, i) => {
-          setTehsilDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.code }]);
-        });
-      }
+      setTehsilDataLabels({ data: tehsilData, isLoading: false });
     } catch (error) {
-      console.log(error.message);
+      console.log(error?.message);
     }
   };
+
   const getRevenuStateData = async (code) => {
-    const datatopost = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: "",
-      },
-    };
-
     try {
-      const Resp = await axios
-        .post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datatopost, {})
-        .then((response) => {
-          return response;
-        });
-
-      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-        Resp.data.map((el, i) => {
-          setRevenueDataLabels((prev) => [...prev, { label: el.name, id: el.khewats, value: el.code, khewats: el.khewats, code: el.code }]);
-        });
-      }
+      const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
+      const revenData = Resp?.data?.map((el) => {
+        return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
+      });
+      setRevenueDataLabels({ data: revenData, isLoading: false });
     } catch (error) {
-      console.log(error.message);
+      console.log(error?.message);
     }
   };
 
   const getMustilData = async (code) => {
-    const datpost = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: "",
-      },
-    };
-
     try {
-      const Resp = await axios
-        .post("/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code, datpost, {})
-        .then((response) => {
-          return response;
-        });
-      if (Resp.data.must.length > 0 && Resp.data.must !== undefined && Resp.data.must !== null) {
-        Resp.data.must.map((el, i) => {
-          setMustilDataLabels((prev) => [...prev, { label: el, id: i, value: el }]);
-        });
-      }
+      const Resp = await axios.post(
+        "/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code,
+        datapost,
+        {}
+      );
+      const mustData = Resp?.data?.must?.map((el, i) => {
+        return { label: el, id: i, value: el };
+      });
+      setMustilDataLabels({ data: mustData, isLoading: false });
     } catch (error) {
-      console.log(error.message);
+      return error;
     }
   };
 
   const getLandOwnerStateData = async (khewats) => {
-    const datatopos = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: "",
-      },
-    };
     try {
-      const Resp = await axios
-        .post(
-          "/egov-mdms-service/v1/_owner?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + tehsilCode + "&khewat=" + khewats,
-          datatopos,
-          {}
-        )
-        .then((response) => {
-          return response;
-        });
-      setKhewatData(Resp.data);
-
-      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-        Resp.data.map((el, i) => {
-          setKhewatDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.khewats }]);
-        });
-      }
+      const Resp = await axios.post(
+        "/egov-mdms-service/v1/_owner?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + tehsilCode + "&khewat=" + khewats,
+        datapost,
+        {}
+      );
+      console.log("Resp.data", Resp?.data);
     } catch (error) {
-      console.log(error.message);
+      console.log(error?.message);
     }
   };
 
@@ -309,129 +309,59 @@ const ApllicantPuropseForm = (props) => {
       delete data?.kanal;
       delete data?.sarsai;
     }
+    console.log("data===", data);
 
     setModalData((prev) => [...prev, data]);
     setmodal(false);
-    reset({
-      tehsil: "",
-      revenueEstate: "",
-      mustil: "",
-      kanal: "",
-      marla: "",
-      sarsai: "",
-      bigha: "",
-      biswa: "",
-      biswansi: "",
-      agreementIrrevocialble: "",
-      agreementValidFrom: "",
-      agreementValidTill: "",
-      authSignature: "",
-      collaboration: "",
-      developerCompany: "",
-      landOwner: "",
-      nameAuthSign: "",
-      registeringAuthority: "",
-    });
+    reset(resetFields);
     setCollaboration("");
   };
 
-  const applicantPurposeBack = async () => {
-    props.Step2Back();
-  };
-
-  const handleChangePurpose = (data) => {
-    const purposeSelected = data?.label;
-    localStorage.setItem("purpose", purposeSelected);
-  };
-  const handleChangePotential = (data) => {
-    const potentialSelected = data?.label;
-    localStorage.setItem("potential", JSON.stringify(potentialSelected));
-  };
-
-  const getDocumentData = async () => {
-    if (file === null) {
-      return;
-    }
-    const formData = new FormData();
-    formData.append("file", file.file);
-    formData.append("tenantId", "hr");
-    formData.append("module", "property-upload");
-    formData.append("tag", "tag-property");
-
-    try {
-      const Resp = await axios
-        .post("http://10.1.1.18:8083/filestore/v1/files", formData, {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          return response;
-        });
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  useEffect(() => {
-    getDocumentData();
-  }, [file]);
-
-  const getSubmitDataLabel = async () => {
-    try {
-      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`);
-      const userData = Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose;
-      // setValue("purpose", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.purpose?.name);
-      // setValue("potential", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.potential?.name);
-      // setValue("district", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.district?.name);
-      // // setValue("consolidationType", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.consolidationType);
-      // setValue("kanal", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.kanal);
-      // setValue("developerCompany", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.developerCompany);
-      // setValue("developerCompany", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.developerCompany);
-      // setValue("agreementValidFrom", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.registeringdate);
-      // setValue("agreementValidTill", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.validitydate);
-      // setValue("authSignature", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.authSignature);
-      // setValue("nameAuthSign", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.nameAuthSign);
-      // setValue("registeringAuthority", Resp?.data?.newServiceInfoData?.[0]?.ApplicantPurpose?.applicationPurposeData1?.registeringAuthority);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  useEffect(() => {
-    getSubmitDataLabel();
-  }, []);
-
   const PurposeFormSubmitHandler = async (data) => {
-    // console.log("data====", modalData);
-
-    // const formattedData = {
-    //   data,
-    //   detailsOfAppliedland: modalData,
-    // };
-    // console.log("formattedData", formattedData);
-    // props.Step2Continue(data, 7);
-    // console.log("modalData===", modalData);
+    props.Step2Continue(data, "9");
+    return;
+    const token = window?.localStorage?.getItem("token");
     const postDistrict = {
-      NewServiceInfo: {
-        pageName: "ApplicantPurpose",
-        id: props.getId,
-        newServiceInfoData: {
-          ApplicantPurpose: {
-            data,
-            AppliedLandDetails: modalData,
-          },
+      pageName: "ApplicantPurpose",
+      id: props.getId,
+      createdBy: props?.userInfo?.id,
+      updatedBy: props?.userInfo?.id,
+      LicenseDetails: {
+        ApplicantPurpose: {
+          ...data,
+          AppliedLandDetails: modalData,
         },
+      },
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: props?.userInfo,
       },
     };
     console.log("modalData===", postDistrict);
-    return;
     try {
-      const Resp = await axios.post("/land-services/new/_create", formattedData).then((Resp) => {
-        return Resp;
-      });
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+      console.log(Resp?.data);
       props.Step2Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  const handleChangePurpose = (data) => {
+    const purposeSelected = data?.label;
+    window?.localStorage.setItem("purpose", purposeSelected);
+  };
+  const handleChangePotential = (data) => {
+    const potentialSelected = data?.label;
+    window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
 
   return (
@@ -456,8 +386,9 @@ const ApllicantPuropseForm = (props) => {
                     name="purpose"
                     onChange={handleChangePurpose}
                     placeholder="Purpose"
-                    data={purposeOptions}
+                    data={purposeOptions?.data}
                     labels="Purpose"
+                    loading={purposeOptions?.isLoading}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.purpose && errors?.purpose?.message}
@@ -476,9 +407,10 @@ const ApllicantPuropseForm = (props) => {
                     control={control}
                     name="potential"
                     placeholder="Potential"
-                    data={potentialOptons}
+                    data={potentialOptons?.data}
                     labels="Potential"
                     onChange={handleChangePotential}
+                    loading={potentialOptons?.isLoading}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
                     {errors?.potential && errors?.potential?.message}
@@ -497,8 +429,9 @@ const ApllicantPuropseForm = (props) => {
                     control={control}
                     name="district"
                     placeholder="District"
-                    data={districtDataLbels}
+                    data={districtDataLbels?.data}
                     labels="District"
+                    loading={districtDataLbels?.isLoading}
                     onChange={(e) => {
                       getTehslidata(e.value);
                       setDistrict(e.value);
@@ -541,7 +474,14 @@ const ApllicantPuropseForm = (props) => {
                 <br></br>
               </div>
               <div className="ml-auto">
-                <Button type="button" variant="primary" onClick={() => setmodal(true)}>
+                <Button
+                  type="button"
+                  variant="primary"
+                  onClick={() => {
+                    if (!getValues()?.district) alert("Please Select District First To Proceed Further");
+                    else setmodal(true);
+                  }}
+                >
                   Enter Details
                 </Button>
               </div>
@@ -554,7 +494,7 @@ const ApllicantPuropseForm = (props) => {
 
             <div class="row">
               <div class="col-sm-12 text-left">
-                <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => applicantPurposeBack()}>
+                <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => props.Step2Back()}>
                   Back
                 </div>
               </div>
@@ -572,26 +512,7 @@ const ApllicantPuropseForm = (props) => {
         size="xl"
         isOpen={modal}
         toggle={() => {
-          reset({
-            tehsil: "",
-            revenueEstate: "",
-            mustil: "",
-            kanal: "",
-            marla: "",
-            sarsai: "",
-            bigha: "",
-            biswa: "",
-            biswansi: "",
-            agreementIrrevocialble: "",
-            agreementValidFrom: "",
-            agreementValidTill: "",
-            authSignature: "",
-            collaboration: "",
-            developerCompany: "",
-            landOwner: "",
-            nameAuthSign: "",
-            registeringAuthority: "",
-          });
+          reset(resetFields);
           setCollaboration("");
           setmodal(!modal);
         }}
@@ -599,26 +520,7 @@ const ApllicantPuropseForm = (props) => {
         <ModalHeader
           toggle={() => {
             setmodal(!modal);
-            reset({
-              tehsil: "",
-              revenueEstate: "",
-              mustil: "",
-              kanal: "",
-              marla: "",
-              sarsai: "",
-              bigha: "",
-              biswa: "",
-              biswansi: "",
-              agreementIrrevocialble: "",
-              agreementValidFrom: "",
-              agreementValidTill: "",
-              authSignature: "",
-              collaboration: "",
-              developerCompany: "",
-              landOwner: "",
-              nameAuthSign: "",
-              registeringAuthority: "",
-            });
+            reset(resetFields);
             setCollaboration("");
           }}
         ></ModalHeader>
@@ -636,8 +538,9 @@ const ApllicantPuropseForm = (props) => {
                 <ReactMultiSelect
                   control={control}
                   {...register("tehsil")}
-                  data={tehsilDataLabels}
+                  data={tehsilDataLabels?.data}
                   labels="Tehsil"
+                  loading={tehsilDataLabels?.isLoading}
                   onChange={(e) => {
                     getRevenuStateData(e.value);
                     setTehsilCode(e.value);
@@ -658,8 +561,9 @@ const ApllicantPuropseForm = (props) => {
                 <ReactMultiSelect
                   control={control}
                   {...register("revenueEstate")}
-                  data={revenueDataLabels}
+                  data={revenueDataLabels?.data}
                   labels="Revenue Estate"
+                  loading={revenueDataLabels?.isLoading}
                   onChange={(e) => {
                     getMustilData(e.code);
                     getLandOwnerStateData(e.khewats);
@@ -678,7 +582,14 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </Form.Label>
                 </div>
-                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No." {...register("mustil")} />
+                <ReactMultiSelect
+                  control={control}
+                  name="mustil"
+                  data={mustilDataLabels?.data}
+                  loading={mustilDataLabels?.isLoading}
+                  labels="Rectangle No."
+                  {...register("mustil")}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.mustil && errors?.mustil?.message}
                 </h3>

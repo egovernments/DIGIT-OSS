@@ -21,17 +21,23 @@ const ApllicantFormStep1 = (props) => {
     formState: { errors },
     control,
     setValue,
+    getValues,
   } = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onBlur",
+    mode: "onChange",
+    reValidateMode: "onChange",
     resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
 
   const ApplicantFormSubmitHandlerForm = async (data) => {
+    props.Step1Continue("12", "userInfo");
+    return;
+    const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "ApplicantInfo",
       id: applicantId,
+      createdBy: userInfo?.id,
+      updatedBy: userInfo?.id,
       LicenseDetails: {
         ApplicantInfo: {
           ...data,
@@ -47,18 +53,13 @@ const ApllicantFormStep1 = (props) => {
         key: "",
         msgId: "090909",
         requesterId: "",
-        authToken: "",
-        userInfo: {
-          tenantId: "hr",
-        },
+        authToken: token,
+        userInfo: userInfo,
       },
     };
     try {
-      const Resp = await axios.post("/tl-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-      });
-      // setApplicantId(Resp?.data?.LicenseServiceResponseInfo?.[0]?.id.toString());
-      props.Step1Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.id.toString());
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+      props.Step1Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.id?.toString(), userInfo);
     } catch (error) {
       console.log(error.message);
     }
@@ -67,10 +68,15 @@ const ApllicantFormStep1 = (props) => {
   const getUserInfo = async () => {
     const uuid = userInfo?.uuid;
     if (uuid) {
-      const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
-      const userData = usersResponse?.user?.[0];
-      setValue("authorized", userData?.name);
-      getDeveloperDataLabel(userData?.parentId);
+      try {
+        const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
+        const userData = usersResponse?.user[0];
+        console.log(usersResponse, "usersResponse?.user");
+        setValue("authorized", userData?.name);
+        getDeveloperDataLabel(userData?.parentId);
+      } catch (error) {
+        return error;
+      }
     }
   };
 
@@ -127,9 +133,13 @@ const ApllicantFormStep1 = (props) => {
     const search = location?.search;
     const params = new URLSearchParams(search);
     const id = params.get("id");
-    setApplicantId(id.toString());
+    setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
+
+  useEffect(() => {
+    console.log("getValues", getValues());
+  }, [getValues()]);
 
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
