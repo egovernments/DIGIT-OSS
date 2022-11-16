@@ -106,7 +106,7 @@ const CheckPage = ({ onSubmit, value }) => {
             </StatusTable>
             {/* <Row className="border-none" text={t(formData?.LicneseDetails?.cin_Number)} /> */}
           </Card>
-          <Card style={{ paddingRight: "16px" }}>
+          {/* <Card style={{ paddingRight: "16px" }}>
             <div style={{ marginRight: "24px" }}>
               <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_COMMUNICATION_ADDRESS_HEADER_DETAILS`)}</CardHeader>
             </div>
@@ -116,7 +116,7 @@ const CheckPage = ({ onSubmit, value }) => {
               onClick={() => routeTo(`${routeLink}/correspondence-address`)}
             />
             <Row className="border-none" text={t(value?.Correspondenceaddress)} />
-          </Card>
+          </Card> */}
           <Card style={{ paddingRight: "16px" }}>
             <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
             <LinkButton

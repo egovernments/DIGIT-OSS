@@ -233,6 +233,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   //   setEmail(e.target.value);
   // }
   function setGenderName(value) {
+    console.log("GENDER",value);
     setGender(value);
   }
 
@@ -243,7 +244,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setDOB(e.target.value);
   }
   function selectPanNumber(e) {
-    setPanNumber(e.target.value.toUpperCase());
+    setPanNumber(e.target.value);
     if(e.target.value === 10){
       panVerification();
     }
@@ -453,7 +454,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           "licenceDetails": {
             name: name,
             mobileNumber: mobileNumber,
-            gender: gender.value,
+            gender: [{gender}],
             email: email,
             dob: dob,
             PanNumber: PanNumber,
@@ -513,7 +514,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       let data = formData?.formData;
       data.LicneseDetails.name = name;
       data.LicneseDetails.mobileNumber = mobileNumber;
-      data.LicneseDetails.gender = gender.value;
+      data.LicneseDetails.gender = gender;
       data.LicneseDetails.email = email;
       data.LicneseDetails.PanNumber = PanNumber;
       formData.Correspondenceaddress = Correspondenceaddress;
@@ -652,6 +653,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     value={PanNumber}
                     placeholder={PanNumber}
                     onChange={selectPanNumber}
+                    className="text-uppercase"
                     // onChange={(e) => setPanNumber(e.target.value)}
                     {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
                   />

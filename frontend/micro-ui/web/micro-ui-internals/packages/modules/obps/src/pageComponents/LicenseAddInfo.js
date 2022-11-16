@@ -170,7 +170,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       this.setState({ isRadioSelected: true });
     };
     const [showhide0, setShowhide0] = useState("No");
-    const [showDevTypeFields, setShowDevTypeFields] = useState(formData?.LicneseDetails?.showDevTypeFields || formData?.formData?.LicneseDetails?.showDevTypeFields || "00");
+    const [showDevTypeFields, setShowDevTypeFields] = useState(formData?.LicneseDetails?.showDevTypeFields || formData?.formData?.LicneseDetails?.showDevTypeFields || "");
     const [FormSubmitted, setFormSubmitted] = useState(false);
     const [showhide, setShowhide] = useState("No");
     const [cin_Number, setCinNo] = useState(formData?.LicneseDetails?.cin_Number || formData?.formData?.LicneseDetails?.cin_Number || "");
@@ -223,7 +223,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     function setUserEmailIndVal(e) {
       setUserEmailInd(e.target.value);
     }
-    
+    function selectCinNumber(e){
+      setCinNo(e.target.value)
+    }
     const handleshow0 = (e) => {
       const getshow = e.target.value;
       setShowhide0(getshow);
@@ -455,10 +457,11 @@ const onSkip = () => onSelect();
                     <div className="form-group row">
                       <div className="col-sm-3">
 
-                        {/* <SearchDropDown
+                        <SearchDropDown
                           listOfData={optionsArrList}
-                          labels={"Selct Type" || showDevTypeFields}
+                          labels={"Selct Type"}
                           getSelectedValue={devType}
+                          selected={showDevTypeFields}
                           name="showDevTypeFields"
                           placeholder={showDevTypeFields}
                           value={showDevTypeFields}
@@ -467,9 +470,10 @@ const onSkip = () => onSelect();
                             isRequired: true,
                             title: t("Please Select Developer type")
                           })}
-                          /> */}
+                          />
 
-                        <Dropdown
+                        {/* <Dropdown
+                          labels={"Selct Type"}
                           style={{ width: "100%" }}
                           className="form-field"
                           selected={showDevTypeFields}
@@ -479,7 +483,7 @@ const onSkip = () => onSelect();
                         
                           t={t}
                           name="showDevTypeFields"
-                        />
+                        /> */}
                           
                         {/* <MuiDropdown 
                           listOfData={optionsArrList}
@@ -645,15 +649,16 @@ const onSkip = () => onSelect();
                 <div className="row">
                   <div className="col col-4">
                     <div className="form-group">
-                      <label htmlFor="name">CIN Number *</label>
+                      <label htmlFor="name">CIN Number <span className="text-danger font-weight-bold">*</span></label>
                       <TextInput
                         type="text"
-                        onChange={(e) => setCinNo(e.target.value.toUpperCase())}
+                        onChange={selectCinNumber}
+                        // onChange={(e) => setCinNo(e.target.value)}
                         value={cin_Number}
                         name="cin_Number"
                         isMendatory={false}
                         placeholder={cin_Number}
-                        className="employee-card-input"
+                        className="employee-card-input text-uppercase"
                         max={"21"}
                         {...(validation = {
                           isRequired: true,
