@@ -18,18 +18,18 @@ const apiSetuProxy = createProxyMiddleware({
 //   target: process.env.REACT_APP_PROXY_MDMS || "http://10.1.1.18:8443",
 //   changeOrigin: true,
 // });
-// const docUploadProxy = createProxyMiddleware({
-//   target: process.env.REACT_APP_PROXY_UPLOAD_DOC || "http://10.1.1.18:8443",
-//   changeOrigin: true,
-// });
+const docUploadProxy = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_UPLOAD_DOC || "http://10.1.1.18:8443",
+  changeOrigin: true,
+});
 // const devRegistration = createProxyMiddleware({
 //   target: process.env.REACT_APP_PROXY_DEV_REG || "http://10.1.1.18:8443",
 //   changeOrigin: true,
 // });
-// const EgScrutinyProxy = createProxyMiddleware({
-//   target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://10.1.1.18:8443",
-//   changeOrigin: true,
-// });
+const EgScrutinyProxy = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://10.1.1.18:8443",
+  changeOrigin: true,
+});
 
 module.exports = function (app) {
   [
@@ -85,15 +85,11 @@ module.exports = function (app) {
     "/land-services/_calculate",
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
-  [
-    "/mca/v1/companies",
-    "/mca-directors/v1/companies",
-    "/certificate/v3/pan/pancr"
-  ].forEach((location) => app.use(location, apiSetuProxy));
+  ["/mca/v1/companies", "/mca-directors/v1/companies", "/certificate/v3/pan/pancr"].forEach((location) => app.use(location, apiSetuProxy));
   // ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
-  // ["/filestore/v1"].forEach((location) => app.use(location, docUploadProxy));
+  ["/filestore/v1"].forEach((location) => app.use(location, docUploadProxy));
   // ["/user/developer"].forEach((location) => app.use(location, devRegistration));
-  // ["/land-services/egscrutiny",
-  //  "/land-services/new/licenses"
-  // ].forEach((location) => app.use(location, EgScrutinyProxy));
+  ["/land-services/egscrutiny", "/land-services/new/licenses", "/land-services/electric/plan", "/land-services/serviceplan"].forEach((location) =>
+    app.use(location, EgScrutinyProxy)
+  );
 };

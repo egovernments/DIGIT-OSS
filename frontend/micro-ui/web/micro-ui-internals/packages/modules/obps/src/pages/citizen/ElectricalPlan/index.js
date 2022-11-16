@@ -23,14 +23,7 @@ const electricalPlanService = () => {
         },
 
         electricPlanRequest: {
-          electricInfra: "true",
-          electricDistribution: data?.electricInfra,
-          electricalCapacity: data?.electricalCapacity,
-          switchingStation: data?.switchingStation,
-          loadSancation: data?.loadSancation,
-          environmentalClearance: data?.environmentalClearance?.[0]?.name,
-          autoCad: data?.autoCad?.[0]?.name,
-          verifiedPlan: data?.verifiedPlan?.[0]?.name,
+          ...data,
         },
       };
       const Resp = await axios.post("/land-services/electric/plan/_create", postDistrict);
