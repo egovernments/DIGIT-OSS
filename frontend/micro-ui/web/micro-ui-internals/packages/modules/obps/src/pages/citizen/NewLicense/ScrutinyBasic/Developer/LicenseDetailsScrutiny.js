@@ -162,7 +162,7 @@ const LicenseDetailsScrutiny = (props) => {
                   <h5 className={[classes.formLabel, "d-flex flex-row align-items-center"]}>Developer's type <div className="d-flex flex-row align-items-center ml-2">
                     <Form.Control
                       className={classes.formControl}
-                      placeholder={addInfo !== null ? addInfo?.developerType : null}
+                      placeholder={addInfo?.showDevTypeFields}
                       disabled
                     ></Form.Control>
                     &nbsp;&nbsp;
@@ -175,7 +175,7 @@ const LicenseDetailsScrutiny = (props) => {
                         setLabelValue("Developer's type"),
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(addInfo !== null ? addInfo.authorizedDeveloper : null);
+                          setFieldValue(addInfo?.showDevTypeFields || null);
                       }}
                     ></ReportProblemIcon>
 

@@ -184,13 +184,13 @@ const Personalinfo = (props) => {
           <LicenseDetailsScrutiny
             iconColorState={iconStates}
             showTable={currentRemarklifo}
-            addInfo={applicantInfoPersonal !== null ? applicantInfoPersonal : null}
+            addInfo={applicantInfoPersonal?.devDetail?.addInfo ? applicantInfoPersonal?.devDetail?.addInfo : null}
             displayPersonal={open2 ? "block" : "none"}
           />
           <CapacityScrutiny
             iconColorState={iconStates}
             showTable={currentRemarklifo}
-            capacityScrutinyInfo={applicantInfoPersonal !== null ? applicantInfoPersonal : null}
+            capacityScrutinyInfo={applicantInfoPersonal?.devDetail?.capacityDevelopAColony ? applicantInfoPersonal?.devDetail?.capacityDevelopAColony : null}
             displayPersonal={open2 ? "block" : "none"}
           />
           {/* <DocumentScrutiny /> */}
