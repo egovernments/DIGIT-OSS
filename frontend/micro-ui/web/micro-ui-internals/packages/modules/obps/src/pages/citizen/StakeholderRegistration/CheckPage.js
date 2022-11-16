@@ -96,7 +96,14 @@ const CheckPage = ({ onSubmit, value }) => {
               style={{ width: "100px", display: "inline" }}
               onClick={() => routeTo(`${routeLink}/license-add-info`)}
             />
-            <Row className="border-none" label={"Developer's type"} text={formData?.LicneseDetails?.devDetail?.licenceDetails?.addInfo?.cin_Number || t("CS_NA")} />
+            <StatusTable>
+              <Row className="border-none" label={"Developer's type"} text={formData?.LicenseAddInfo?.showDevTypeFields || t("CS_NA")} />
+              <Row className="border-none" label={"CIN Number"} text={formData?.LicenseAddInfo?.cin_Number || t("CS_NA")} />
+              <Row className="border-none" label={"Company Name"} text={formData?.LicenseAddInfo?.companyName || t("CS_NA")} />
+              <Row className="border-none" label={"Email"} text={formData?.LicenseAddInfo?.email || t("CS_NA")} />
+              <Row className="border-none" label={"IncorporationDate"} text={formData?.LicenseAddInfo?.incorporationDate || t("CS_NA")} />
+              <Row className="border-none" label={"Mobile Number"} text={formData?.LicenseAddInfo?.mobileNumberUser || t("CS_NA")} />
+            </StatusTable>
             {/* <Row className="border-none" text={t(formData?.LicneseDetails?.cin_Number)} /> */}
           </Card>
           <Card style={{ paddingRight: "16px" }}>
