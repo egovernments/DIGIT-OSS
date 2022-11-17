@@ -360,7 +360,7 @@ export const WSSearch = {
       ],
       additionalDetails: {
         redirectUrl: {
-          title: "View Complete Property details",
+          title: t("WS_VIEW_PROPERTY_DETAILS"),
           url: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}?from=WS_APPLICATION_DETAILS_HEADER`,
         },
       },
@@ -741,7 +741,7 @@ export const WSSearch = {
       ],
       additionalDetails: {
         redirectUrl: {
-          title: "View Complete Property details",
+          title: t("WS_VIEW_PROPERTY_DETAILS"),
           url: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}?from=WS_APPLICATION_DETAILS_HEADER`,
         },
       },
@@ -1821,7 +1821,7 @@ export const WSSearch = {
       ],
       additionalDetails: {
         redirectUrl: {
-          title: "View Complete Property details",
+          title: t("WS_VIEW_PROPERTY_DETAILS"),
           url: `/digit-ui/employee/pt/property-details/${propertyDataDetails?.propertyId}?from=WS_APPLICATION_DETAILS_HEADER`,
         },
       },

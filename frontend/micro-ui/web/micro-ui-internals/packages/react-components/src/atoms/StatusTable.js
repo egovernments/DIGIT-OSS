@@ -79,7 +79,7 @@ export const Row = (props) => {
   return (
     <div style={props.rowContainerStyle} className={`${props.last ? "row last" : "row"} ${props?.className || ""}`}>
       <h2 style={labelStyle}>{props.label}</h2>
-      <div className="value" style={{...valueStyle, wordBreak: "break-word"}}>
+      <div className="value" style={{...valueStyle/*, wordBreak: "break-word"*/}}>
         {/* {value}////
         {props?.privacy && (
           <span style={{ display: "inline-flex", width: "fit-content", marginLeft: "10px" }}>
