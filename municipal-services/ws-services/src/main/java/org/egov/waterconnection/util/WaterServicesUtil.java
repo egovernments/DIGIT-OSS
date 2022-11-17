@@ -1,8 +1,7 @@
 package org.egov.waterconnection.util;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.minidev.json.JSONObject;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
 import org.egov.mdms.model.MasterDetail;
@@ -11,15 +10,9 @@ import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
-import org.egov.waterconnection.web.models.AuditDetails;
-import org.egov.waterconnection.web.models.Property;
-import org.egov.waterconnection.web.models.PropertyCriteria;
-import org.egov.waterconnection.web.models.PropertyResponse;
-import org.egov.waterconnection.web.models.RequestInfoWrapper;
-import org.egov.waterconnection.web.models.SearchCriteria;
-import org.egov.waterconnection.web.models.WaterConnectionRequest;
-import org.egov.waterconnection.web.models.workflow.BusinessService;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
+import org.egov.waterconnection.web.models.*;
+import org.egov.waterconnection.web.models.workflow.BusinessService;
 import org.egov.waterconnection.workflow.WorkflowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,9 +20,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import net.minidev.json.JSONObject;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class WaterServicesUtil {
@@ -102,7 +94,14 @@ public class WaterServicesUtil {
 			propertyCriteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
 		}
 		if (waterConnectionRequest.getRequestInfo().getUserInfo() != null
-				&& "SYSTEM".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getType())) {
+				&& "SYSTEM".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getType())
+		        && "INTERNAL_MICROSERVICE_ROLE".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getRoles().get(0).getCode()) )
+		{
+			propertyCriteria.setTenantId(waterConnectionRequest.getWaterConnection().getTenantId());
+		}
+		if (waterConnectionRequest.getRequestInfo().getUserInfo() != null
+				&& "SYSTEM".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getType())
+				&& !("INTERNAL_MICROSERVICE_ROLE".equalsIgnoreCase(waterConnectionRequest.getRequestInfo().getUserInfo().getRoles().get(0).getCode()))) {
 			waterConnectionRequest.getRequestInfo().getUserInfo().setType("EMPLOYEE");
 			List<Role> oldRoles = waterConnectionRequest.getRequestInfo().getUserInfo().getRoles();
 			List<Role>  newRoles = new ArrayList<>();

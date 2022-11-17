@@ -1,8 +1,7 @@
 package org.egov.swservice.util;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.minidev.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
@@ -11,15 +10,9 @@ import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.swservice.config.SWConfiguration;
-import org.egov.swservice.web.models.AuditDetails;
-import org.egov.swservice.web.models.Property;
-import org.egov.swservice.web.models.PropertyCriteria;
-import org.egov.swservice.web.models.PropertyResponse;
-import org.egov.swservice.web.models.RequestInfoWrapper;
-import org.egov.swservice.web.models.SearchCriteria;
-import org.egov.swservice.web.models.SewerageConnectionRequest;
-import org.egov.swservice.web.models.workflow.BusinessService;
 import org.egov.swservice.repository.ServiceRequestRepository;
+import org.egov.swservice.web.models.*;
+import org.egov.swservice.web.models.workflow.BusinessService;
 import org.egov.swservice.workflow.WorkflowService;
 import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +20,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import net.minidev.json.JSONObject;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class SewerageServicesUtil {
@@ -86,7 +78,14 @@ public class SewerageServicesUtil {
 			propertyCriteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
 		}
 		if (sewerageConnectionRequest.getRequestInfo().getUserInfo() != null
-				&& "SYSTEM".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType())) {
+				&& "SYSTEM".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType())
+				&& "INTERNAL_MICROSERVICE_ROLE".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getRoles().get(0).getCode()) )
+		{
+			propertyCriteria.setTenantId(sewerageConnectionRequest.getSewerageConnection().getTenantId());
+		}
+		if (sewerageConnectionRequest.getRequestInfo().getUserInfo() != null
+				&& "SYSTEM".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getType())
+				&& !("INTERNAL_MICROSERVICE_ROLE".equalsIgnoreCase(sewerageConnectionRequest.getRequestInfo().getUserInfo().getRoles().get(0).getCode()))) {
 			sewerageConnectionRequest.getRequestInfo().getUserInfo().setType("EMPLOYEE");
 			List<Role> oldRoles = sewerageConnectionRequest.getRequestInfo().getUserInfo().getRoles();
 			List<Role>  newRoles = new ArrayList<>();

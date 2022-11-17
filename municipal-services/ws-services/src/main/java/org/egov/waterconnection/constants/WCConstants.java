@@ -329,6 +329,8 @@ public class WCConstants {
 
 	public static final String WNS_OWNER_ENCRYPTION_MODEL = "WnSConnectionOwner";
 
+	public static final String WNS_OWNER_DECRYPTION_MODEL = "WnSConnectionOwnerDecrypDisabled";
+
 	public static final String WNS_PLUMBER_ENCRYPTION_MODEL = "WnSConnectionPlumber";
 
 	public static final String URL_PARAMS_SEPARATER = "?";

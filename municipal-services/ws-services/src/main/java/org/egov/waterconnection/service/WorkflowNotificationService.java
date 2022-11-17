@@ -13,7 +13,9 @@ import org.egov.tracer.model.CustomException;
 import org.egov.waterconnection.config.WSConfiguration;
 import org.egov.waterconnection.constants.WCConstants;
 import org.egov.waterconnection.repository.ServiceRequestRepository;
+import org.egov.waterconnection.util.EncryptionDecryptionUtil;
 import org.egov.waterconnection.util.NotificationUtil;
+import org.egov.waterconnection.util.UnmaskingUtil;
 import org.egov.waterconnection.util.WaterServicesUtil;
 import org.egov.waterconnection.validator.ValidateProperty;
 import org.egov.waterconnection.web.models.*;
@@ -66,6 +68,12 @@ public class WorkflowNotificationService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UnmaskingUtil unmaskingUtil;
+
+    @Autowired
+    private EncryptionDecryptionUtil encryptionDecryptionUtil;
+
     String tenantIdReplacer = "$tenantId";
     String urlReplacer = "url";
     String requestInfoReplacer = "RequestInfo";
@@ -98,8 +106,13 @@ public class WorkflowNotificationService {
                 log.info("Notification Disabled For State :" + request.getWaterConnection().getProcessInstance().getAction()+"_"+applicationStatus);
                 return;
             }
+            User userInfoCopy = request.getRequestInfo().getUserInfo();
+            User userInfo = notificationUtil.getInternalMicroserviceUser(request.getWaterConnection().getTenantId());
+            request.getRequestInfo().setUserInfo(userInfo);
+
             Property property = validateProperty.getOrValidateProperty(request);
 
+            request.getRequestInfo().setUserInfo(userInfoCopy);
             if(configuredChannelNames.contains(CHANNEL_NAME_EVENT)){
                 if (config.getIsUserEventsNotificationEnabled() != null && config.getIsUserEventsNotificationEnabled()) {
                     EventRequest eventRequest = getEventRequest(request, topic, property, applicationStatus);
@@ -121,10 +134,10 @@ public class WorkflowNotificationService {
                         notificationUtil.sendEmail(emailRequests);
                     }
                 }}
-
         } catch (Exception ex) {
             log.error("Error occured while processing the record from topic : " + topic, ex);
         }
+
     }
 
     /**
@@ -171,35 +184,33 @@ public class WorkflowNotificationService {
             return null;
         }
 
-        Set<String> ownersUuids = new HashSet<>();
+        request.getWaterConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(request.getWaterConnection().getConnectionHolders(), WNS_OWNER_DECRYPTION_MODEL, OwnerInfo.class, request.getRequestInfo()));
+
+        Map<String, String> mobileNumbersAndNames = new HashMap<>();
+        Map<String, String> mapOfPhoneNoAndUUIDs = new HashMap<>();
+
+        Set<String> ownersMobileNumbers = new HashSet<>();
         //Send the notification to all owners
             property.getOwners().forEach(owner -> {
-                if (owner.getUuid() != null)
-                    ownersUuids.add(owner.getUuid());
+                if (owner.getMobileNumber() != null)
+                    ownersMobileNumbers.add(owner.getMobileNumber());
             });
 
             //send the notification to the connection holders
             if (!CollectionUtils.isEmpty(request.getWaterConnection().getConnectionHolders())) {
                 request.getWaterConnection().getConnectionHolders().forEach(holder -> {
-                    if (!StringUtils.isEmpty(holder.getUuid())) {
-                        ownersUuids.add(holder.getUuid());
+                    if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+                        ownersMobileNumbers.add(holder.getMobileNumber());
                     }
                 });
             }
 
-             UserDetailResponse userDetailResponse = fetchUserByUUID(ownersUuids,request.getRequestInfo(),request.getWaterConnection().getTenantId());
-            Map<String, String> mobileNumbersAndNames = new HashMap<>();
-            for(OwnerInfo user:userDetailResponse.getUser())
-            {
+            for(String mobileNumber:ownersMobileNumbers) {
+                UserDetailResponse userDetailResponse = fetchUserByUsername(mobileNumber, request.getRequestInfo(), request.getWaterConnection().getTenantId());
+                OwnerInfo user = userDetailResponse.getUser().get(0);
                 mobileNumbersAndNames.put(user.getMobileNumber(),user.getName());
-            }
-
-            Map<String, String> mapOfPhoneNoAndUUIDs = new HashMap<>();
-            for(OwnerInfo user:userDetailResponse.getUser())
-            {
                 mapOfPhoneNoAndUUIDs.put(user.getMobileNumber(),user.getUuid());
             }
-
 
             //Send the notification to applicant
             if(!StringUtils.isEmpty(request.getRequestInfo().getUserInfo().getMobileNumber()))
@@ -846,6 +857,28 @@ public class WorkflowNotificationService {
 
         UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(tenantId, requestInfo);
         userSearchRequest.setUuid(uuids);
+
+        UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+        requestInfo.setUserInfo(userInfoCopy);
+        return userDetailResponse;
+    }
+
+    /**
+     * Fetches User Object based on the UUID.
+     *
+     * @param username - username of User
+     * @param requestInfo - Request Info Object
+     * @param tenantId - Tenant Id
+     * @return - Returns User object with given UUID
+     */
+    public UserDetailResponse fetchUserByUsername(String username, RequestInfo requestInfo, String tenantId) {
+        User userInfoCopy = requestInfo.getUserInfo();
+
+        User userInfo = notificationUtil.getInternalMicroserviceUser(tenantId);
+        requestInfo.setUserInfo(userInfo);
+
+        UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(tenantId, requestInfo);
+        userSearchRequest.setUserName(username);
 
         UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
         requestInfo.setUserInfo(userInfoCopy);

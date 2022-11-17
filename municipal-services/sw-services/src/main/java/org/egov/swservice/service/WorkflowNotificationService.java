@@ -1,17 +1,17 @@
 package org.egov.swservice.service;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.Map.Entry;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.User;
 import org.egov.swservice.config.SWConfiguration;
 import org.egov.swservice.repository.ServiceRequestRepository;
+import org.egov.swservice.util.EncryptionDecryptionUtil;
 import org.egov.swservice.util.NotificationUtil;
 import org.egov.swservice.util.SWConstants;
 import org.egov.swservice.util.SewerageServicesUtil;
@@ -29,13 +29,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-
-import lombok.extern.slf4j.Slf4j;
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.Map.Entry;
 
 import static org.egov.swservice.util.SWConstants.*;
 
@@ -66,6 +65,9 @@ public class WorkflowNotificationService {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private EncryptionDecryptionUtil encryptionDecryptionUtil;
 
 	String tenantIdReplacer = "$tenantId";
 	String urlReplacer = "url";
@@ -99,7 +101,13 @@ public class WorkflowNotificationService {
 						+ request.getSewerageConnection().getProcessInstance().getAction()+"_"+applicationStatus);
 				return;
 			}
+			User userInfoCopy = request.getRequestInfo().getUserInfo();
+			User userInfo = notificationUtil.getInternalMicroserviceUser(request.getSewerageConnection().getTenantId());
+			request.getRequestInfo().setUserInfo(userInfo);
+
 			Property property = validateProperty.getOrValidateProperty(request);
+
+			request.getRequestInfo().setUserInfo(userInfoCopy);
 
 			List<String> configuredChannelNames =  notificationUtil.fetchChannelList(request.getRequestInfo(), request.getSewerageConnection().getTenantId(), SEWERAGE_SERVICE_BUSINESS_ID, request.getSewerageConnection().getProcessInstance().getAction());
 
@@ -178,33 +186,31 @@ public class WorkflowNotificationService {
 			return null;
 		}
 
-		Set<String> ownersUuids = new HashSet<>();
+		sewerageConnectionRequest.getSewerageConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders(), WNS_OWNER_DECRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
 
+		Map<String, String> mobileNumbersAndNames = new HashMap<>();
+		Map<String, String> mapOfPhoneNoAndUUIDs = new HashMap<>();
+
+		Set<String> ownersMobileNumbers = new HashSet<>();
 			//Send the notification to all owners
 			property.getOwners().forEach(owner -> {
-				if (owner.getUuid() != null)
-					ownersUuids.add(owner.getUuid());
+				if (owner.getMobileNumber() != null)
+					ownersMobileNumbers.add(owner.getMobileNumber());
 			});
 
 			//send the notification to the connection holders
 			if(!CollectionUtils.isEmpty(sewerageConnectionRequest.getSewerageConnection().getConnectionHolders())) {
 				sewerageConnectionRequest.getSewerageConnection().getConnectionHolders().forEach(holder -> {
-					if (!StringUtils.isEmpty(holder.getUuid())) {
-						ownersUuids.add(holder.getUuid());
+					if (!StringUtils.isEmpty(holder.getMobileNumber())) {
+						ownersMobileNumbers.add(holder.getMobileNumber());
 					}
 				});
 			}
 
-			UserDetailResponse userDetailResponse = fetchUserByUUID(ownersUuids,sewerageConnectionRequest.getRequestInfo(),sewerageConnectionRequest.getSewerageConnection().getTenantId());
-			Map<String, String> mobileNumbersAndNames = new HashMap<>();
-			for(OwnerInfo user:userDetailResponse.getUser())
-			{
+			for(String mobileNumber:ownersMobileNumbers) {
+				UserDetailResponse userDetailResponse = fetchUserByUsername(mobileNumber, sewerageConnectionRequest.getRequestInfo(), sewerageConnectionRequest.getSewerageConnection().getTenantId());
+				OwnerInfo user = userDetailResponse.getUser().get(0);
 				mobileNumbersAndNames.put(user.getMobileNumber(),user.getName());
-			}
-
-			Map<String, String> mapOfPhoneNoAndUUIDs = new HashMap<>();
-			for(OwnerInfo user:userDetailResponse.getUser())
-			{
 				mapOfPhoneNoAndUUIDs.put(user.getMobileNumber(),user.getUuid());
 			}
 
@@ -867,4 +873,25 @@ public class WorkflowNotificationService {
 		return userDetailResponse;
 	}
 
+	/**
+	 * Fetches User Object based on the UUID.
+	 *
+	 * @param username - username of User
+	 * @param requestInfo - Request Info Object
+	 * @param tenantId - Tenant Id
+	 * @return - Returns User object with given UUID
+	 */
+	public UserDetailResponse fetchUserByUsername(String username, RequestInfo requestInfo, String tenantId) {
+		User userInfoCopy = requestInfo.getUserInfo();
+
+		User userInfo = notificationUtil.getInternalMicroserviceUser(tenantId);
+		requestInfo.setUserInfo(userInfo);
+
+		UserSearchRequest userSearchRequest = userService.getBaseUserSearchRequest(tenantId, requestInfo);
+		userSearchRequest.setUserName(username);
+
+		UserDetailResponse userDetailResponse = userService.getUser(userSearchRequest);
+		requestInfo.setUserInfo(userInfoCopy);
+		return userDetailResponse;
+	}
 }

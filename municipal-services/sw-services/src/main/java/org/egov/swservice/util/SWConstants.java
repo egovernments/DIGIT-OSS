@@ -89,7 +89,7 @@ public class SWConstants {
 	public static final String SW_DISCONNECT_EDIT_SMS = "WS_DISCONNECT_EDIT_SMS_MESSAGE";
 
 	public static final String SW_DISCONNECT_EDIT_INAPP = "WS_DISCONNECT_EDIT_APP_MESSAGE";
-	
+
 	public static final String SUBMIT_APPLICATION_STATUS_CODE = "SUBMIT_APPLICATION_PENDING_FOR_APPROVAL";
 
 	public static final String APPROVE_CONNECTION_STATUS_CODE = "APPROVE_CONNECTION_APPROVED";
@@ -301,6 +301,8 @@ public class SWConstants {
 	public static final String WNS_ENCRYPTION_MODEL = "WnSConnection";
 
 	public static final String WNS_OWNER_ENCRYPTION_MODEL = "WnSConnectionOwner";
+
+	public static final String WNS_OWNER_DECRYPTION_MODEL  = "WnSConnectionOwnerDecrypDisabled";
 
 	public static final String WNS_PLUMBER_ENCRYPTION_MODEL = "WnSConnectionPlumber";
 

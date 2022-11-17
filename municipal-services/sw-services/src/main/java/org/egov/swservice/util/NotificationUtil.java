@@ -1,8 +1,8 @@
 package org.egov.swservice.util;
 
-import java.util.*;
-
 import com.jayway.jsonpath.Filter;
+import com.jayway.jsonpath.JsonPath;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.egov.common.contract.request.RequestInfo;
 import org.egov.common.contract.request.Role;
@@ -12,20 +12,18 @@ import org.egov.mdms.model.MdmsCriteria;
 import org.egov.mdms.model.MdmsCriteriaReq;
 import org.egov.mdms.model.ModuleDetail;
 import org.egov.swservice.config.SWConfiguration;
+import org.egov.swservice.producer.SewarageConnectionProducer;
+import org.egov.swservice.repository.ServiceRequestRepository;
 import org.egov.swservice.web.models.EmailRequest;
 import org.egov.swservice.web.models.EventRequest;
 import org.egov.swservice.web.models.SMSRequest;
-import org.egov.swservice.producer.SewarageConnectionProducer;
-import org.egov.swservice.repository.ServiceRequestRepository;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-
-import com.jayway.jsonpath.JsonPath;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.*;
 
 import static com.jayway.jsonpath.Criteria.where;
 import static com.jayway.jsonpath.Filter.filter;
@@ -196,6 +194,7 @@ public class NotificationUtil {
 	 * @param request - Event Request Object
 	 */
 	public void sendEventNotification(EventRequest request) {
+		log.info("Pushing Event: " + request.toString());
 		producer.push(config.getSaveUserEventsTopic(), request);
 	}
 	
