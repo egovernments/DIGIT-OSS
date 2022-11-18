@@ -89,7 +89,7 @@ const WSApplicationDetails = () => {
     const tenantInfo = data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId;
     let res = data?.WaterConnection?.[0] || data?.SewerageConnections?.[0];
     const PDFdata = getDisconnectPDFData({ ...res }, { ...PTData?.Properties?.[0] }, tenantInfo, t);
-    PDFdata.then((ress) => Digit.Utils.pdf.generate(ress));
+    PDFdata.then((ress) => Digit.Utils.pdf.generatev1(ress));
     setShowOptions(false);
   };
 
@@ -110,7 +110,8 @@ const WSApplicationDetails = () => {
     const tenantId = Digit.ULBService.getCurrentTenantId();
     const state = Digit.ULBService.getStateId();
 
-    const payments = await Digit.PaymentService.getReciept(tenantId, "WS.ONE_TIME_FEE", { consumerCodes: data?.WaterConnection?.[0]?.applicationNo });
+    let key = data?.WaterConnection?.[0] ? "WS.ONE_TIME_FEE" : "SW.ONE_TIME_FEE"
+    const payments = await Digit.PaymentService.getReciept(tenantId, key, { consumerCodes: data?.WaterConnection?.[0] ? data?.WaterConnection?.[0]?.applicationNo : data?.SewerageConnections?.[0]?.applicationNo });
     let response = { filestoreIds: [payments.Payments[0]?.fileStoreId] };
 
     if (!payments.Payments[0]?.fileStoreId) {

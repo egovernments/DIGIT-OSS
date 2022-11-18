@@ -372,6 +372,11 @@ function ApplicationDetailsContent({
                     workflowDetails?.data?.timeline.map((checkpoint, index, arr) => {
                       let timelineStatusPostfix = "";
                       if (window.location.href.includes("/obps/")) {
+                        if(workflowDetails?.data?.timeline[index-1]?.state?.includes("BACK_FROM") || workflowDetails?.data?.timeline[index-1]?.state?.includes("SEND_TO_CITIZEN"))
+                        timelineStatusPostfix = `_NOT_DONE`
+                        else if(checkpoint?.performedAction === "SEND_TO_ARCHITECT")
+                        timelineStatusPostfix = `_BY_ARCHITECT_DONE`
+                        else
                         timelineStatusPostfix = index == 0 ? "" : `_DONE`;
                       }
                       
