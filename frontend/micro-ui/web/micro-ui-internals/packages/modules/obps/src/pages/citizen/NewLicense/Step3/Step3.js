@@ -183,16 +183,15 @@ const LandScheduleForm = (props) => {
                     <div>
                       <h2>
                         1.&nbsp;(i)Whether licence applied for additional area ?<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                        <label htmlFor="licenceApplied">
+                          <input {...register("licenceApplied")} type="radio" value="yes" id="licenceApplied" />
+                          Yes
+                        </label>
+                        <label htmlFor="licenceApplied">
+                          <input {...register("licenceApplied")} type="radio" value="no" id="licenceApplied" />
+                          No
+                        </label>
                       </h2>
-
-                      <label htmlFor="licenceApplied">
-                        <input {...register("licenceApplied")} type="radio" value="yes" id="licenceApplied" />
-                        Yes
-                      </label>
-                      <label htmlFor="licenceApplied">
-                        <input {...register("licenceApplied")} type="radio" value="no" id="licenceApplied" />
-                        No
-                      </label>
                     </div>
 
                     {watch("licenceApplied") === "yes" && (
@@ -733,7 +732,7 @@ const LandScheduleForm = (props) => {
                     {watch("exclusionOfLandUploaded") === "yes" && (
                       <div className="row ">
                         <div className="col col-3 ">
-                          <h2>(h) Whether land compensation received&nbsp;&nbsp;</h2>
+                          <h2>Whether land compensation received&nbsp;&nbsp;</h2>
                           <label htmlFor="whetherLandCompensation">
                             <input {...register("whetherLandCompensation")} type="radio" value="yes" id="whetherLandCompensation" />
                             Yes
@@ -923,7 +922,7 @@ const LandScheduleForm = (props) => {
                       <div className="row ">
                         <div className="col col">
                           <label>Remark</label>
-                          <input type="text" className="form-control" {...register("iocRemarkA")} />
+                          <input type="text" className="form-control" />
                         </div>
                       </div>
                     )}
