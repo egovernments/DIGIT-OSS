@@ -5,7 +5,9 @@ import { useForm } from "react-hook-form";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
+import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
+import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 
 const ApllicantPuropseForm = (props) => {
@@ -194,8 +196,9 @@ const ApllicantPuropseForm = (props) => {
     reset,
     getValues,
   } = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onBlur",
+    mode: "onChange",
+    reValidateMode: "onChange",
+    // resolver: yupResolver(VALIDATION_SCHEMA),
     defaultValues: {
       consolidationType: "consolidated",
     },
@@ -391,7 +394,7 @@ const ApllicantPuropseForm = (props) => {
                     loading={purposeOptions?.isLoading}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.purpose && errors?.purpose?.message}
+                    {errors?.purpose?.value && errors?.purpose?.value?.message}
                   </h3>
                 </Col>
 
@@ -413,7 +416,7 @@ const ApllicantPuropseForm = (props) => {
                     loading={potentialOptons?.isLoading}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.potential && errors?.potential?.message}
+                    {errors?.potential?.value && errors?.potential?.value?.message}
                   </h3>
                 </Col>
 
@@ -439,7 +442,7 @@ const ApllicantPuropseForm = (props) => {
                   />
 
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.district && errors?.district?.message}
+                    {errors?.district?.value && errors?.district?.value?.message}
                   </h3>
                 </Col>
                 <Col md={4} xxl lg="3">
