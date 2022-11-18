@@ -794,32 +794,25 @@ const onSkip = () => onSelect();
                   <div className="col col-4">
                     <div className="form-group ">
                       <label htmlFor="email"> Email <span className="text-danger font-weight-bold">*</span></label>
-                      <input
-                        type="text"
+                      
+                      <TextInput
+                        t={t}
+                        type={"email"}
+                        isMandatory={false}
+                        optionKey="i18nKey"
+                        name="email"
                         value={email}
                         placeholder={email}
-                        onChange={setUserEmailId}
-                        isMandatory={false}
-                        // disabled="disabled"
-                        className="employee-card-input"
+                        // onChange={setEmail}
+                        onChange={(e) => setUserEmailId(e.target.value)}
+                        //disable={editScreen}
                         {...(validation = {
                           isRequired: true,
                           required: "Email is required"
                         })}
-                      // name="email"
-                      // className={`employee-card-input`}
-                      // placeholder=""
-                      // {...register("email", {
-                      //   required: "Email is required",
-                      //   pattern: {
-                      //     value: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/,
-                      //     message: "Email must be a valid email address",
-                      //   },
-                      // })}
-                      />
-                      {/* <div className="invalid-feedback">
-                        {errors?.email?.message}
-                      </div> */}
+
+                  />
+                  {email && email.length > 0 && !email.match(Digit.Utils.getPattern('Email')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{("Invalid Email Address")}</CardLabelError>}
                     </div>
                   </div>
                   <div className="col col-4">
