@@ -1,4 +1,4 @@
-import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown } from "@egovernments/digit-ui-react-components";
+import { FormStep,TextInput, MobileNumber, CardLabel, CardLabelError, Dropdown, RemoveIcon  } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
@@ -135,7 +135,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   function selectPanNumber(e) {
     setAurthorizedPan(e.target.value.toUpperCase());
   }
-
+  function selectAurthorizedMobileNumber(value){
+    setAurthorizedMobileNumber(value);
+  }
   // const handleMobileChange = async (event) => {
   //   const { value } = event.target;
   //   setParmas({ ...params, aurthorizedMobileNumber: value });
@@ -344,6 +346,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
   };
 
+  const deleteTableRows = (i)=>{
+    const rows = [...aurthorizedUserInfoArray];
+    rows.splice(i, 1);
+    setAurthorizedUserInfoArray(rows);
+  }
+
   const goNext = async (e) => {
     //   e.preventDefault();
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
@@ -430,8 +438,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                   <th>Gender</th>
                   {/* <th>Date of Birth</th> */}
                   <th>PAN No.</th>
-                  <th>Upload Aadhar PDF</th>
-                  <th>Upload Digital Signature PDF</th>
+                  <th>View Aadhar PDF</th>
+                  <th>View Digital Signature PDF</th>
+                  {/* <th>Action</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -499,30 +508,37 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           </td>
                           <td>
                             <div className="row">
-                              <button className="btn btn-sm col-md-6">
+                              <button className="btn btn-sm col">
                                 <VisibilityIcon color="info" className="icon" />
                               </button>
-                              <button className="btn btn-sm col-md-6">
+                              {/* <button className="btn btn-sm col-md-6">
                                 <FileDownloadIcon color="primary" />
-                              </button>
+                              </button> */}
 
                             </div>
                           </td>
                           <td>
                             <div className="row">
-                              <button className="btn btn-sm col-md-6">
+                              <button className="btn btn-sm col">
                                 <VisibilityIcon color="info" className="icon" />
                               </button>
-                              <button className="btn btn-sm col-md-6">
+                              {/* <button className="btn btn-sm col-md-6">
                                 <FileDownloadIcon color="primary" />
-                              </button>
+                              </button> */}
 
                             </div>
                           </td>
+                          {/* <td>
+                            <button
+                              onClick={()=>(deleteTableRows(-1))}
+                            >
+                              <RemoveIcon />
+                            </button>
+                          </td> */}
                         </tr>
                       );
                     })
-                    : <div className="justify-content-center">
+                    : <div className="d-none">
                       Click on Add to add a aurthorized user
                     </div>
                 }
@@ -559,7 +575,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         <form className="text1">
                           <Row>
                             <Col md={3} xxl lg="3">
-                              <label htmlFor="name" className="text">Name</label>
+                              <label htmlFor="name" className="text">Name  <span className="text-danger font-weight-bold">*</span></label>
                               {/* <input
                                 type="text"
                                 name="name[]"
@@ -584,34 +600,50 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                               />
                             </Col>
                             <Col md={3} xxl lg="3">
-                              <label htmlFor="name" className="text">Mobile Number</label>
-                              <input
+                              <label htmlFor="name" className="text">Mobile Number  <span className="text-danger font-weight-bold">*</span></label>
+                              <MobileNumber
                                 type="tel"
                                 name="name[]"
                                 placeholder=""
                                 class="employee-card-input"
                                 value={aurthorizedMobileNumber}
-                                onChange={(e) => setAurthorizedMobileNumber(e.target.value)}
+                                onChange={selectAurthorizedMobileNumber}
                                 maxlength={"10"}
+                                isMandatory={false}
                                 pattern={"[6-9]{1}[0-9]{9}"}
                                 required={true}
                                 {...(validation = {
                                   isRequired: true,
-                                  pattern: "^[a-zA-Z-.`' ]*$",
-                                  title: t("PT_NAME_ERROR_MESSAGE"),
                                 })}
                               />
-                             
+                             {aurthorizedMobileNumber && aurthorizedMobileNumber.length > 0 && !aurthorizedMobileNumber.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
                             </Col>
                             <Col md={3} xxl lg="3">
                               <label htmlFor="name" className="text">Email</label>
-                              <input
+                              {/* <input
                                 type="email"
                                 name="name[]"
                                 placeholder=""
                                 class="employee-card-input"
                                 onChange={(e) => setAurthorizedEmail(e.target.value)}
+                              /> */}
+                              <TextInput
+                                t={t}
+                                type={"email"}
+                                isMandatory={false}
+                                optionKey="i18nKey"
+                                name="aurthorizedEmail"
+                                value={aurthorizedEmail}
+                                placeholder={aurthorizedEmail}
+                                // onChange={setEmail}
+                                onChange={(e) => setAurthorizedEmail(e.target.value)}
+                              //disable={editScreen}
+                                {...(validation = {
+                                  isRequired:true,
+                                  title: "Please enter Email"
+                                })}
                               />
+                              {aurthorizedEmail && aurthorizedEmail.length > 0 && !aurthorizedEmail.match(Digit.Utils.getPattern('Email')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{("Invalid Email Address")}</CardLabelError>}
                             </Col>
                             <Col md={3} xxl lg="3">
                                 <label htmlFor="name" className="text">Gender</label>

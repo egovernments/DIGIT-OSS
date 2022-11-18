@@ -1,4 +1,4 @@
-import { BackButton, CardLabel, FormStep, Loader, MobileNumber, RadioButtons, TextInput, ViewsIcon, DownloadIcon, Dropdown } from "@egovernments/digit-ui-react-components";
+import { BackButton, CardLabel, CardLabelError, FormStep, Loader, MobileNumber, RadioButtons, TextInput, ViewsIcon, DownloadIcon, Dropdown, DatePicker, RemoveIcon } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Timeline from "../components/Timeline";
@@ -17,7 +17,7 @@ import {
   ModalFooter,
 } from "reactstrap";
 import axios from "axios";
-// import ReactMultiSelct from "../../../../react-components/src/atoms/ReactMultiSelect";
+import ReactMultiSelect from "../../../../react-components/src/atoms/ReactMultiSelect";
 import SearchDropDown from "../../../../react-components/src/atoms/searchDropDown";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
@@ -79,6 +79,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setModalPercentage(developerDataGet?.devDetail[0]?.addInfo?.modalPercentage);
       setModalValuesArray(developerDataGet?.devDetail[0]?.addInfo?.shareHoldingPatterens || "");
       setFinancialCapacity(developerDataGet?.devDetail[0]?.addInfo?.financialCapacity);
+      setRegisteredMobileNumber(developerDataGet?.devDetail[0]?.addInfo?.registeredContactNo)
       // setShowDevTypeFields(valueOfDrop);
     } catch (error) {
       console.log(error);
@@ -102,7 +103,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [emailId, setUserEmailInd] = useState((!isOpenLinkFlow ? userInfo?.info?.emailId: "") || formData?.LicneseDetails?.emailId || formData?.formData?.LicneseDetails?.emailId || "")
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
-
+  const [developerTypeOptions,setDevTypeOptions] = useState({data: [], isLoading : true})
   
   const isCitizenUrl = Digit.Utils.browser.isMobile() ? true : false;
 
@@ -111,12 +112,31 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       sessionStorage.removeItem("Digit.BUILDING_PERMIT");
     }
     const { isLoading, data: genderTypeData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["GenderType"]);
+    const { data: optionsArrList } = Digit.Hooks.obps.useMDMS(stateId, "Developer-type", ["DeveloperType"]);
 
     let menu = [];
     genderTypeData &&
     genderTypeData["common-masters"].GenderType.filter(data => data.active).map((genderDetails) => {
-      menu.push({ i18nKey: `COMMON_GENDER_${genderDetails.code}`, code: `${genderDetails.code}`, value: `${genderDetails.code}` });
+      menu.push({ code: `${genderDetails.code}`, value: `${genderDetails.code}` });
     });
+    // console.log("GENDERs",menu);
+    
+    let arrayDevList = [];
+    optionsArrList &&
+    optionsArrList["Developer-type"].DeveloperType.map((devTypeDetails) => {
+      arrayDevList.push({ code: `${devTypeDetails.code}`, value: `${devTypeDetails.code}` });
+    });
+    
+    // console.log("DEVTYPE ARRAY OPT",arrayDevList);
+
+    // useEffect(() => {
+    //   const devTypeDataList = optionsArrList?.["Developer-type"]?.DeveloperType?.map(function (data) {
+        
+    //     return { value: data?.code, label: data?.Type };
+    //   });
+    //   setDevTypeOptions({data: devTypeDataList, isLoading: false});
+    //   // console.log("DEVTYPE OPT",devTypeDataList);
+    // }, [optionsArrList]);
     
     const [modal, setmodal] = useState(false);
     const [modalDirectors, setmodalDirector] = useState(false);
@@ -141,28 +161,28 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     ]);
 
     
-    const optionsArrList = [
-      {
-        label: "Individual",
-        value: "Individual",
-        id: "1",
-      },
-      {
-        label: "Company",
-        value: "Company",
-        id: "2",
-      },
-      {
-        label: "LLP",
-        value: "LLP",
-        id: "3",
-      },
-      {
-        label: "Society",
-        value: "Society",
-        id: "4",
-      },
-    ]
+    // const optionsArrList = [
+    //   {
+    //     label: "Individual",
+    //     value: "Individual",
+    //     id: "1",
+    //   },
+    //   {
+    //     label: "Company",
+    //     value: "Company",
+    //     id: "2",
+    //   },
+    //   {
+    //     label: "LLP",
+    //     value: "LLP",
+    //     id: "3",
+    //   },
+    //   {
+    //     label: "Society",
+    //     value: "Society",
+    //     id: "4",
+    //   },
+    // ]
     // onchange = (e) => {
     //   this.setState({ value: e.target.value });
     // };
@@ -178,8 +198,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const [incorporationDate, setIncorporation] = useState(formData?.LicneseDetails?.incorporationDate || formData?.LicneseDetails?.incorporationDate || "");
     const [registeredAddress, setRegistered] = useState(formData?.LicneseDetails?.registeredAddress || formData?.LicneseDetails?.registeredAddress || "");
     // const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
-    const [email, setUserEmail] = useState(formData?.LicneseDetails?.email || formData?.LicneseDetails?.email || "");
-    const [registeredContactNo, setMobile] = useState(formData?.LicneseDetails?.registeredContactNo || formData?.LicneseDetails?.registeredContactNo || "");
+    const [email, setUserEmail] = useState(formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
+    const [registeredContactNo, setRegisteredMobileNumber] = useState(formData?.LicneseDetails?.registeredContactNo || formData?.LicneseDetails?.registeredContactNo || "");
     const [gst_Number, setGST] = useState("");
     const [sharName, setTbName] = useState("");
     const [designition, setDesignition] = useState("");
@@ -205,26 +225,31 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const [showDevTypeFieldsValue,setShowDevTypeFieldsValue] = useState("")
 
     
-    console.log(devRegId);
+    // console.log(devRegId);
     const handleshow = (e) => {
       const getshow = e.target.value;
       setShowhide(getshow);
     };
-
+    function selectModalContactDirector(value){
+      setModalContactDirector(value)
+    }
     function SelectName(e) {
       setName(e.target.value);
     }
     function setMobileNo(e) {
       setMobileNumber(e.target.value);
     }
-    function setUserEmailId(e) {
-      setUserEmail(e.target.value);
+    function selectRegisteredMobile(e) {
+      setRegisteredMobileNumber(e.target.value);
+    }
+    function setUserEmailId(value) {
+      setUserEmail(value);
     }
     function setUserEmailIndVal(e) {
       setUserEmailInd(e.target.value);
     }
     function selectCinNumber(e){
-      setCinNo(e.target.value)
+      setCinNo(e.target.value.toUpperCase())
     }
     const handleshow0 = (e) => {
       const getshow = e.target.value;
@@ -232,14 +257,15 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       localStorage.setItem('devTypeFlag',getshow)
     };
 
-    const devType = (data) => {
-      const getDevTypeValue = data.data;
+    const setDevType = (data) => {
+      const getDevTypeValue = data?.value;
       setShowDevTypeFields(getDevTypeValue);
       localStorage.setItem('devTypeValueFlag',getDevTypeValue)
     }
-function setDevType(value){
-  setShowDevTypeFields(value)
-}
+// function setDevType(value){
+//   setShowDevTypeFields(value)
+//   console.log(value);
+// }
     const getDocumentData = async () => {
       if(file===null){
          return
@@ -352,7 +378,16 @@ function setDevType(value){
     const [aoofRows, setAoOfRows] = useState(1);
  
     
-   
+    const deleteTableRows = (i)=>{
+      const rows = [...modalValuesArray];
+      rows.splice(i, 1);
+      setModalValuesArray(rows);
+    }
+    const deleteDirectorTableRows = (i)=>{
+      const DirectorTableRows = [...DirectorData];
+      DirectorTableRows.splice(i, 1);
+      setDirectorData(DirectorTableRows);
+    }
     
   // if (isLoading) return <Loader />;
   const goNext = async (e) => {
@@ -374,7 +409,7 @@ function setDevType(value){
         shareHoldingPatterens:modalValuesArray
       }
       onSelect(config.key, addInfo);
-      console.log("DATALICDET",addInfo);
+      // console.log("DATALICDET",addInfo);
       localStorage.setItem("addInfo",JSON.stringify(addInfo));
 
       const developerRegisterData = {
@@ -389,7 +424,7 @@ function setDevType(value){
       }
       Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
-          console.log("DATA",result?.id);
+          // console.log("DATA",result?.id);
           // localStorage.setItem('devRegId',JSON.stringify(result?.id));
           setIsDisableForNext(false);
           let data = { 
@@ -455,35 +490,21 @@ const onSkip = () => onSelect();
                 <div className="row">
                   <div className="col-sm-12">
                     <div className="form-group row">
-                      <div className="col-sm-3">
-
-                        <SearchDropDown
-                          listOfData={optionsArrList}
-                          labels={"Selct Type"}
-                          getSelectedValue={devType}
-                          selected={showDevTypeFields}
-                          name="showDevTypeFields"
-                          placeholder={showDevTypeFields}
-                          value={showDevTypeFields}
-                          isMendatory={false}
-                          {...(validation = {
-                            isRequired: true,
-                            title: t("Please Select Developer type")
-                          })}
-                          />
-
-                        {/* <Dropdown
-                          labels={"Selct Type"}
-                          style={{ width: "100%" }}
+                      <div className="col-sm-4">
+                        <CardLabel>{`${t("BPA_APPLICANT_DEVELOPER_TYPE_LABEL")}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
+                        <Dropdown
+                          labels="Select Type"
                           className="form-field"
                           selected={showDevTypeFields}
-                          option={optionsArrList}
+                          option={arrayDevList}
                           select={setDevType}
                           value={showDevTypeFields}
-                        
+                          optionKey="value"
+                          name={showDevTypeFields}
+                          placeholder={showDevTypeFields}
+                          style={{width:"100%"}}
                           t={t}
-                          name="showDevTypeFields"
-                        /> */}
+                        />
                           
                         {/* <MuiDropdown 
                           listOfData={optionsArrList}
@@ -685,21 +706,27 @@ const onSkip = () => onSelect();
                       //   },
                       // })}
                       />
-                      
+                      {cin_Number && cin_Number.length > 0 && !cin_Number.match(Digit.Utils.getPattern('CIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
                     </div>
                   </div>
                   <div className="col col-4">
                     <div className="form-group">
 
-                      <label htmlFor="name">Company Name</label>
+                      <label htmlFor="name">Company Name <span className="text-danger font-weight-bold">*</span></label>
 
-                      <input
+                      <TextInput
                         type="text"
                         value={companyName}
                         placeholder={companyName}
                         onChange={(e) => setCompanyName(e.target.value)}
                         // disabled="disabled"
                         className="employee-card-input"
+                        isMendatory={false}
+                        {...(validation = {
+                          isRequired: true,
+                          type: "text",
+                          title: "Please Enter Company Name"
+                        })}
                       // placeholder=""
                       // {...register("name", {
                       //   required: "Name is required",
@@ -723,78 +750,62 @@ const onSkip = () => onSelect();
                   </div>
                   <div className="col col-4">
                     <div className="form-group">
-                      <label htmlFor="name">Date of Incorporation</label>
-                      <input
+                      <label htmlFor="name">Date of Incorporation <span className="text-danger font-weight-bold">*</span></label>
+                      <DatePicker
+                        isMandatory={false}
+                        date={incorporationDate}
+                        onChange={(e) => setIncorporation(e)}
+                        disable={false}
+                        {...(validation = {
+                          isRequired: true,
+                          type: "date",
+                          title: "Please Enter Date of Incorporation"
+                        })}
+                      />
+                      {/* <input
                         type="text"
                         value={incorporationDate}
                         placeholder={incorporationDate}
                         onChange={(e) => setIncorporation(e.target.value)}
                         // disabled="disabled"
                         className="employee-card-input"
-                      // placeholder=""
-                      // {...register("name", {
-                      //   required: "Name is required",
-                      //   pattern: {
-                      //     value: /^[a-zA-Z]+$/,
-                      //     message: "Name must be a valid string",
-                      //   },
-                      //   minLength: {
-                      //     value: 3,
-                      //     message:
-                      //       "Name should be greater than 3 characters",
-                      //   },
-                      //   maxLength: {
-                      //     value: 20,
-                      //     message:
-                      //       "Name shouldn't be greater than 20 characters",
-                      //   },
-                      // })}
-                      />
+                      /> */}
                     </div>
                   </div>
                   <div className="col col-4">
                     <div className="form-group">
-                      <label htmlFor="name">Registered Address</label>
-                      <input
+                      <label htmlFor="name">Registered Address <span className="text-danger font-weight-bold">*</span></label>
+                      <TextInput
                         type="text"
                         value={registeredAddress}
                         placeholder={registeredAddress}
                         onChange={(e) => setRegistered(e.target.value)}
                         // disabled="disabled"
                         className="employee-card-input"
-                      // name="name"
-                      // className={`employee-card-input`}
-                      // placeholder=""
-                      // {...register("name", {
-                      //   required: "Name is required",
-                      //   pattern: {
-                      //     value: /^[a-zA-Z]+$/,
-                      //     message: "Name must be a valid string",
-                      //   },
-                      //   minLength: {
-                      //     value: 3,
-                      //     message:
-                      //       "Name should be greater than 3 characters",
-                      //   },
-                      //   maxLength: {
-                      //     value: 20,
-                      //     message:
-                      //       "Name shouldn't be greater than 20 characters",
-                      //   },
-                      // })}
+                        isMandatory={false}
+                        {...(validation = {
+                          isRequired: true,
+                          required: "Address is required"
+                        })}
                       />
+                      {registeredAddress && !registeredAddress.length > 0 && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
                     </div>
                   </div>
                   <div className="col col-4">
                     <div className="form-group ">
-                      <label htmlFor="email"> Email </label>
+                      <label htmlFor="email"> Email <span className="text-danger font-weight-bold">*</span></label>
                       <input
                         type="text"
                         value={email}
                         placeholder={email}
-                        onChange={(e) => setUserEmailId(e.target.value)}
+                        onChange={setUserEmailId}
+                        isMandatory={false}
                         // disabled="disabled"
                         className="employee-card-input"
+                        {...(validation = {
+                          isRequired: true,
+                          required: "Email is required"
+                        })}
                       // name="email"
                       // className={`employee-card-input`}
                       // placeholder=""
@@ -813,48 +824,33 @@ const onSkip = () => onSelect();
                   </div>
                   <div className="col col-4">
                     <div className="form-group">
-                      <label htmlFor="name">Mobile No.</label>
-                      <input
-                        type="text"
+                      <label htmlFor="name">Mobile No. <span className="text-danger font-weight-bold">*</span></label>
+                      
+                      <MobileNumber
                         value={registeredContactNo}
-                        placeholder={registeredContactNo}
-                        onChange={(e) => setMobileNo(e.target.value)}
-                        // disabled="disabled"
-                        className="employee-card-input"
-                      // name="name"
-                      // className={`employee-card-input`}
-                      // placeholder=""
-                      // {...register("name", {
-                      //   required: "Name is required",
-                      //   pattern: {
-                      //     value: /^[a-zA-Z]+$/,
-                      //     message: "Name must be a valid string",
-                      //   },
-                      //   minLength: {
-                      //     value: 3,
-                      //     message:
-                      //       "Name should be greater than 3 characters",
-                      //   },
-                      //   maxLength: {
-                      //     value: 20,
-                      //     message:
-                      //       "Name shouldn't be greater than 20 characters",
-                      //   },
-                      // })}
+                        type="number"
+                        maxlength={"10"}
+                        pattern={"[6-9]{1}[0-9]{9}"}                        
+                        name="registeredContactNo"
+                        onChange={(value) => selectRegisteredMobile({ target: { value } })}
+                        isMandatory={false}
+                        {...(validation = {
+                          isRequired: true,
+                          title: "Please enter Mobile no."
+                        })}
+                        
                       />
-                      {/* <div className="invalid-feedback">
-                        {errors?.name?.message}
-                      </div> */}
+                      {registeredContactNo && registeredContactNo.length > 0 && !registeredContactNo.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
                     </div>
                   </div>
                   <div className="col col-4">
                     <div className="form-group">
-                      <label htmlFor="name">GST No.</label>
-                      <input
+                      <label htmlFor="name">GST No. <span className="text-danger font-weight-bold">*</span></label>
+                      <TextInput
                         type="text"
                         value={gst_Number}
-                      placeholder={gst_Number}
-                      onChange={(e) => setGST(e.target.value)}
+                        placeholder={gst_Number}
+                        onChange={(e) => setGST(e.target.value.toUpperCase())}
                         className="employee-card-input"
                       // className={`employee-card-input`}
                       // placeholder=""
@@ -876,6 +872,7 @@ const onSkip = () => onSelect();
                       //   },
                       // })}
                       />
+                      {gst_Number && gst_Number.length > 0 && !gst_Number.match(Digit.Utils.getPattern('GSTNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_GST_NO")}</CardLabelError>}
                       {/* <div className="invalid-feedback">
                         {errors?.name?.message}
                       </div> */}
@@ -897,7 +894,8 @@ const onSkip = () => onSelect();
                         <th>Name</th>
                         <th>Designition</th>
                         <th>Percentage</th>
-                        <th>View PDF</th>
+                        <th>View Document</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -942,17 +940,24 @@ const onSkip = () => onSelect();
                                   <button className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </button>
-                                  <button className="btn btn-sm col-md-6">
+                                  {/* <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary"  />
-                                  </button>
+                                  </button> */}
                                 
                                 </div>
+                              </td>
+                              <td>
+                                <button
+                                  onClick={()=>(deleteTableRows(-1))}
+                                >
+                                  <RemoveIcon />
+                                </button>
                               </td>
                             </tr>
                           );
                         })
                         :
-                        <p className="text-danger text-center">Click on the Add More Button</p>
+                        <p className="text-danger text-center d-none">Click on the Add More Button</p>
                       }
                     </tbody>
                   </table>
@@ -983,7 +988,6 @@ const onSkip = () => onSelect();
                   >
                     Add More
                   </button>
-
                   <div>
                     <Modal
                       size="lg"
@@ -1002,11 +1006,12 @@ const onSkip = () => onSelect();
                               <Row>
                                 <Col md={3} xxl lg="4">
                                   <label htmlFor="name" className="text">Name *</label>
-                                  <input
+                                  <TextInput
                                     type="text"
-                                    
+                                    isMandatory={false}
                                     onChange={(e)=>setModalNAme(e.target.value)}
                                     placeholder=""
+                                    required
                                     class="employee-card-input"
                                     {...(validation = {
                                       isRequired: true,
@@ -1018,9 +1023,9 @@ const onSkip = () => onSelect();
                                 </Col>
                                 <Col md={3} xxl lg="4">
                                   <label htmlFor="name" className="text">	Designition *</label>
-                                  <input
+                                  <TextInput
                                     type="text"
-                                    
+                                    isMandatory={false}
                                     onChange={(e)=>setModaldesignition(e.target.value)}
                                     placeholder=""
                                     class="employee-card-input"
@@ -1035,9 +1040,9 @@ const onSkip = () => onSelect();
 
                                 <Col md={3} xxl lg="4">
                                   <label htmlFor="name" className="text">Percentage *</label>
-                                  <input
+                                  <TextInput
                                     type="flot"
-                                    
+                                    isMandatory={false}
                                     onChange={(e)=>setModalPercentage(e.target.value)}
                                     placeholder=""
                                     class="employee-card-input"
@@ -1118,7 +1123,8 @@ const onSkip = () => onSelect();
                         <th>DIN Number</th>
                         <th>Name</th>
                         <th>Contact Number</th>
-                        <th>Upload PDF</th>
+                        <th>View Document</th>
+                        <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1162,6 +1168,13 @@ const onSkip = () => onSelect();
                                 class="employee-card-input"
                               />
                             </td>
+                            <td>
+                                <button
+                                  onClick={()=>(deleteDirectorTableRows(-1))}
+                                >
+                                  <RemoveIcon />
+                                </button>
+                              </td>
                           </tr>
                         );
                       }):<p></p>}
@@ -1199,10 +1212,10 @@ const onSkip = () => onSelect();
                               <Row>
                                 <Col md={3} xxl lg="4">
                                   <label htmlFor="name" className="text">DIN Number</label>
-                                  <input
+                                  <TextInput
                                     type="text"
-                                    
-                                    onChange={(e)=>setModalDIN(e.target.value)}
+                                    isMandatory={false}
+                                    onChange={(e)=>setModalDIN(e.target.value.toUpperCase())}
                                     placeholder=""
                                     class="employee-card-input"
                                     {...(validation = {
@@ -1212,6 +1225,7 @@ const onSkip = () => onSelect();
                                       title: "Please Enter DIN No."
                                     })}
                                   />
+                                  {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('CIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
                                 </Col>
                                 <Col md={3} xxl lg="4">
                                   <label htmlFor="name" className="text">Name</label>
@@ -1230,23 +1244,30 @@ const onSkip = () => onSelect();
                                   />
                                 </Col>
                                 <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">	Contact Number</label>
-                                  <input
-                                    type="text"
-                                    
-                                    onChange={(e)=>setModalContactDirector(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
+                                  <label htmlFor="name" className="text">	Contact Number <span className="text-danger font-weight-bold">*</span></label>
+                                  {/* <MobileNumber
+                                    maxlength={"10"}
+                                    pattern={"[6-9]{1}[0-9]{9}"}
+                                    required={true}
+
+                                    name="modalDirectorContact"
+                                    onChange={(value) => setModalContactDirector({ target: { value } })}
+                                    isMandatory={false}
                                     {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please Enter Contact no."
+                                      pattern: "[6-9]{1}[0-9]{9}", type: "text", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")
                                     })}
+                                    
+                                  /> */}
+                                  <MobileNumber
+                                    value={modalDirectorContact}
+                                    name="modalDirectorContact"
+                                    onChange={selectModalContactDirector}
+                                    // disable={modalDirectorContact && !isOpenLinkFlow ? true : false}
+                                    {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
                                   />
                                 </Col>
                                 <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Upload PDF</label>
+                                  <label htmlFor="name" className="text">Upload document</label>
                                   <input
                                     type="file"
                                     value={uploadPdf}
@@ -1462,6 +1483,7 @@ const onSkip = () => onSelect();
                         value={registeredContactNo}
                         placeholder={registeredContactNo}
                         className="employee-card-input"
+                        maxlength={"10"}
                       // name="name"
                       // className={`employee-card-input`}
                       // placeholder=""
