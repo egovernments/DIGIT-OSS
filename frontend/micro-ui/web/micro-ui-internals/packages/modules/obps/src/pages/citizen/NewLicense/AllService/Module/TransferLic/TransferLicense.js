@@ -7,7 +7,15 @@ import { useForm } from "react-hook-form";
 import { Card } from "react-bootstrap";
 
 function TransferLicense() {
-  const { register, handleSubmit } = useForm();
+ 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    setValue,
+  } = useForm({});
+
   const transferLic = (data) => console.log(data);
 
   const [selects, setSelects] = useState();
@@ -27,10 +35,10 @@ function TransferLicense() {
   return (
     <form onSubmit={handleSubmit(transferLic)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Approval of demarcation cum zoning plan in CLU</h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }} className="text-center">Transfer of License</h4>
         <div className="card">
-          <Form>
-            <h4 className="text-center">Transfer of License</h4>
+      
+          {/* <h4 className="text-center">Transfer of License</h4> */}
             <Row className="col-12">
               <Form.Group as={Col} controlId="formGridLicence">
                 <Form.Label>
@@ -54,8 +62,8 @@ function TransferLicense() {
                 <div>
                   {showhide === "5" ||
                     (showhide === "2" && (
-                      <div className="col-md-12 form-group">
-                        <Form.Label>
+                      <div className="col-md-12 ">
+                        <Form.Label className="fw-normal">
                           Area in Acres <span style={{ color: "red" }}>*</span>
                         </Form.Label>
                         <input type="number" placeholder="" className="form-control" {...register("araeInAcres")} />
@@ -548,10 +556,19 @@ function TransferLicense() {
               </div>
             </Row>
 
-            <Button variant="primary" type="submit">
+            <div class="row">
+          <div class="col-sm-12 text-right">
+            <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
               Submit
-            </Button>
-          </Form>
+            </button>
+          </div>
+          <div class="col-sm-12 text-right">
+            <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}>
+              Save as Draft
+            </button>
+          </div>
+        </div>
+        
         </div>
       </Card>
     </form>

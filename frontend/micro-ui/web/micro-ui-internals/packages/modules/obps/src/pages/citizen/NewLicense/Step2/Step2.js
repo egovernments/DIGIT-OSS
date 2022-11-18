@@ -25,6 +25,11 @@ const ApllicantPuropseForm = (props) => {
       title: "Rectangle No.",
       dataIndex: "rectangleNo",
     },
+    {
+      key: "landOwner",
+      title: "Land Owner",
+      dataIndex: "landOwner",
+    },
 
     {
       key: "consolidationType",
@@ -32,19 +37,74 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "consolidationType",
     },
     {
-      title: "Kanal/Bigha",
+      title: "Kanal",
       dataIndex: "",
-      render: (text) => (text?.kanal ? text?.kanal : text?.bigha),
+      // render: (text) => (text?.kanal ? text?.kanal : text?.bigha),
     },
     {
-      title: "Marla/Biswa",
+      title: "Marla",
       dataIndex: "",
-      render: (text) => (text?.marla ? text?.marla : text?.biswa),
+      // render: (text) => (text?.marla ? text?.marla : text?.biswa),
     },
     {
-      title: "Sarsai/Biswansi",
+      title: "Sarsai",
       dataIndex: "",
-      render: (text) => (text?.sarsai ? text?.sarsai : text?.biswansi),
+      // render: (text) => (text?.sarsai ? text?.sarsai : text?.biswansi),
+    },
+    {
+      title: "Bigha",
+      dataIndex: "",
+      // render: (text) => (text?.kanal ? text?.kanal : text?.bigha),
+    },
+    {
+      title: "Biswa",
+      dataIndex: "",
+      // render: (text) => (text?.marla ? text?.marla : text?.biswa),
+    },
+    {
+      title: "Biswansi",
+      dataIndex: "",
+      // render: (text) => (text?.sarsai ? text?.sarsai : text?.biswansi),
+    },
+    {
+      key: "collaborationAgreement",
+      title: "Collaboration Agreement",
+      dataIndex: "collaborationAgreement",
+    },
+    {
+      key: "developerCompany",
+      title: "Developer Company",
+      dataIndex: "developerCompany",
+    },
+    {
+      key: "dateOfRegistring",
+      title: "Date of Registering",
+      dataIndex: "dateOfRegistring",
+    },
+    {
+      key: "dateOfValidity",
+      title: "Date of Validity",
+      dataIndex: "dateOfValidity",
+    },
+    {
+      key: "collaborationAgreementIrrevociable",
+      title: "Collaboration Agreement Irrevociable",
+      dataIndex: "collaborationAgreementIrrevociable",
+    },
+    {
+      key: "nameOfAuthorizedSignatory",
+      title: "Name of Authorized Signatory",
+      dataIndex: "nameOfAuthorizedSignatory",
+    },
+    {
+      key: "nameOfAuthorizedSignatoryDeveloper",
+      title: "Name of Authorized Signatory Developoer",
+      dataIndex: "nameOfAuthorizedSignatoryDeveloper",
+    },
+    {
+      key: "registeringhAuthority",
+      title: "Registering Authority",
+      dataIndex: "registeringhAuthority",
     },
     {
       // key: "action",
@@ -401,6 +461,7 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const PurposeFormSubmitHandler = async (data) => {
+    props.Step2Continue(data,3);
     // console.log("data====", modalData);
 
     // const formattedData = {

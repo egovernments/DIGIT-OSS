@@ -8,6 +8,12 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
+// import Pdf from "react-to-pdf";
+// import ReactToPdf from "ReactToPdf";
+// import { Document, Page, pdfjs } from 'react-pdf';
+// import Pdf from "react-to-pdf";
+
+
 
 // import InfoIcon from '@mui/icons-material/Info';
 // import TextField from '@mui/material/TextField';
@@ -22,6 +28,8 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
+
 
 const FeesChargesForm = (props) => {
   // const [show, setShow] = useState(false);
@@ -49,6 +57,7 @@ const FeesChargesForm = (props) => {
   const [finalSubmitData, setFinalSubmitData] = useState([]);
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
+  // const ref = React.createRef();
   const {
     register,
     handleSubmit,
@@ -453,10 +462,20 @@ const FeesChargesForm = (props) => {
                 </div>
                 <div class="row">
                   <div class="col-sm-12 text-right">
-                    <button id="btnSearch" class="btn btn-primary btn-md ">
+                    {/* <button id="btnSearch" class="btn btn-primary btn-md ">
                       {" "}
                       View as PDF &nbsp;&nbsp; <VisibilityIcon color="white" />
-                    </button>{" "}
+                    </button>{" "} */}
+                    {/* <div>
+    <ReactToPdf targetRef={ref} filename="div-blue.pdf">
+        {({toPdf}) => (
+            <button onClick={toPdf}>Generate pdf</button>
+        )}
+    </ReactToPdf>
+    <div style={{width: 500, height: 500, background: 'blue'}} ref={ref}/>
+</div> */}
+
+
                     &nbsp;&nbsp;
                     <button id="btnClear" class="btn btn-primary btn-md ">
                       Submit

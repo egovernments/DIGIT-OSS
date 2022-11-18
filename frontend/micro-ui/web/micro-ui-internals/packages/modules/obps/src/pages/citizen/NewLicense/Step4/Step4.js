@@ -139,6 +139,7 @@ const AppliedDetailForm = (props) => {
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
   const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] = useState(false);
   const AppliedDetailFormSubmitHandler = async (data) => {
+    props.Step4Continue(data,5);
     console.log("data------", data);
     try {
       const postDistrict = {

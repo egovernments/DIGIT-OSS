@@ -34,6 +34,7 @@ const LandScheduleForm = (props) => {
     this.setState({ isRadioSelected: true });
   };
   const landScheduleFormSubmitHandler = async (data) => {
+    props.Step3Continue(data,4);
     console.log("data------", data);
     return;
     try {
@@ -281,7 +282,7 @@ const LandScheduleForm = (props) => {
               <Col col-12>
                 <div className="row">
                   <div className="col col-12 ">
-                    {/* <h2>
+                    <h2>
                       1.&nbsp;(i)Whether licence applied for additional area ?<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                       <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow} />
                       &nbsp;&nbsp;
@@ -294,7 +295,7 @@ const LandScheduleForm = (props) => {
                       <label for="No">
                         <h6>No</h6>
                       </label>
-                    </h2> */}
+                    </h2>
                     {/* <Controller name="checkbox" control={control} rules={{ required: true }} render={({ field }) => <Checkbox {...field} />} /> */}
                     {showhide === "Yes" && (
                       <div className="row">

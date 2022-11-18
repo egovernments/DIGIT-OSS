@@ -4,6 +4,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useForm } from "react-hook-form";
+import { Card } from "react-bootstrap";
 
 function LayoutPlanClu() {
   const [selects, setSelects] = useState();
@@ -55,30 +56,35 @@ function LayoutPlanClu() {
                       Any other feature
                       <span style={{ color: "red" }}>*</span>
                     </Form.Label>
-                    <Col className="col-2">
+                    <Row>
+                    <Col className="col-3">
                       <Form.Check
                         type="radio"
+                        value="true"
                         label="Yes"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios1"
-                        value="4"
-                        placeholder=""
-                        className="form-control"
-                        {...register("anyFeature")}
+                      name="Anyotherfeature"
+                      id="Anyotherfeature"
+                     
+                      {...register(" Anyotherfeature")}
+                        onChange={(e) => handleselects(e)}
                       />
+                 
+                      <Form.Check 
+                      type="radio" 
+                     
+                      value="false"
+                      label="No"
+                    name="Anyotherfeature"
+                    id="Anyotherfeature"
+                    {...register("Anyotherfeature")}
+                        onChange={(e) => handleselects(e)}
+                        />
                     </Col>
-                    <Col className="col-2">
-                      <Form.Check
-                        type="radio"
-                        label="No"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios2"
-                        placeholder=""
-                        className="form-control"
-                        {...register("anyFeature")}
-                      />
-                    </Col>
+                  </Row>
+                 
+                     
                   </Form.Group>
+                 
                 </fieldset>
               </Col>
               <Col className="col-4">
@@ -98,14 +104,12 @@ function LayoutPlanClu() {
           </Form>
           <div className=" col-12 m-auto">
             <div className="card">
-              <div class="bordere">
-                <div class="table-responsive">
-                  <table class="table">
+            <div className="table table-bordered table-responsive">
                     <thead>
                       <tr>
-                        <th scope="col">Sr.No</th>
-                        <th scope="col">Field Name</th>
-                        <th scope="col">Upload Documents</th>
+                        <th style={{ textAlign: "center" }}>Sr.No</th>
+                        <th style={{ textAlign: "center" }}>Field Name</th>
+                        <th style={{ textAlign: "center" }}>Upload Documents</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -139,7 +143,7 @@ function LayoutPlanClu() {
                         </td>
                       </tr>
                     </tbody>
-                  </table>
+                  
                 </div>
               </div>
 
@@ -153,7 +157,7 @@ function LayoutPlanClu() {
               </Row>
             </div>
           </div>
-        </div>
+        
       </Card>
     </form>
   );

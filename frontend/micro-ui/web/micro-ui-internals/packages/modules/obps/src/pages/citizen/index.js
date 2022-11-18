@@ -46,6 +46,15 @@ import CompositionClu from "../citizen/NewLicense/AllService/Module/CompositionC
 import ExtensionClu from "../citizen/NewLicense/AllService/Module/ExtensionClu/ExtensionClu";
 import TransferLic from "./NewLicense/AllService/Module/TransferLic/TransferLicense";
 import LayoutPlan from "./NewLicense/AllService/Module/LayoutPlan/LayoutPlan";
+import SurrenderLic from "./NewLicense/AllService/Module/SurrenderLic/SurrenderLic";
+import ExtensionCom from "./NewLicense/AllService/Module/ExtensionCommunity/ExtensionCom";
+import Standard from "./NewLicense/AllService/Module/StandardDesign/StandardDesign";
+import LayoutPlanClu from "./NewLicense/AllService/Module/LayoutPlan/LayoutPlan";
+
+// import LandScheduleForm from "./NewLicense/Step3/Step3";
+// import AppliedDetailForm from "./NewLicense/Step4/Step4";
+// import FeesChargesForm from "./NewLicense/Step5/Step5";
+
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
@@ -113,6 +122,13 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/ExtensionClu`} component={ExtensionClu} />
         <PrivateRoute path={`${path}/TransferLic`} component={TransferLic} />
         <PrivateRoute path={`${path}/LayoutPlan`} component={LayoutPlan} />
+        <PrivateRoute path={`${path}/SurrenderLic`} component={SurrenderLic} />
+        <PrivateRoute path={`${path}/ExtensionCom`} component={ExtensionCom} />
+        <PrivateRoute path={`${path}/Standard`} component={Standard} />
+     
+        <PrivateRoute path={`${path}/LayoutPlanClu`} component={LayoutPlanClu} />
+        {/* <PrivateRoute path={`${path}/AppliedDetailForm`} component={AppliedDetailForm} />
+        <PrivateRoute path={`${path}/FeesChargesForm`} component={FeesChargesForm} /> */}
 
       </Switch>
     </React.Fragment>
