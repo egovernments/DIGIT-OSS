@@ -9,6 +9,7 @@ const ServicePlanService = () => {
   const [LOCNumber, setLOCNumber] = useState("");
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
   const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
+  const [docUpload, setDocuploadData] = useState([]);
 
   const servicePlan = async (data) => {
     console.log(data);
@@ -66,6 +67,8 @@ const ServicePlanService = () => {
         .then((response) => {
           return response;
         });
+
+      setDocuploadData(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
