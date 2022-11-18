@@ -83,7 +83,8 @@ const ApllicantFormStep1 = (props) => {
   const getDeveloperDataLabel = async (id) => {
     try {
       const Resp = await axios.get(`http://10.1.1.18:8443/user/developer/_getDeveloperById?id=${id}&isAllData=false`);
-      setDeveloperDataLabel(Resp.data?.devDetail?.[0]);
+      console.log("Resp.data", Resp?.data);
+      setDeveloperDataLabel(Resp?.data?.devDetail?.[0]);
     } catch (error) {
       console.log(error.message);
     }
@@ -136,10 +137,6 @@ const ApllicantFormStep1 = (props) => {
     setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
-
-  useEffect(() => {
-    console.log("getValues", getValues());
-  }, [getValues()]);
 
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
