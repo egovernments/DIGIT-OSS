@@ -44,11 +44,11 @@ const ScrutinyFormcontainer = (props) => {
       <Row style={{ top: 30, padding: 10 }}>
         <ScrutitnyForms></ScrutitnyForms>
       </Row>
-      <Row style={{ top: 30, padding: 10 }}>
+      <Row style={{ top: 30, padding: "10px 22px" }}>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
           <Card>
-            <Card.Header style={{ fontSize: "17px", lineHeight: "18px" }}>
-              <Card.Title style={{ fontFamily: "Roboto", fontSize: 20, fontWeight: "bold", textAlign: "center" }}>Summary</Card.Title>
+            <Card.Header style={{ fontSize: "17px", lineHeight: "18px", margin: "0px 15px" }}>
+              <Card.Title className="m-0" style={{ fontFamily: "Roboto", fontSize: 20, fontWeight: "bold", textAlign: "center" }}>Summary</Card.Title>
             </Card.Header>
             <Col xs={12} md={12}>
               <Form.Label style={{ margin: 5 }}></Form.Label>

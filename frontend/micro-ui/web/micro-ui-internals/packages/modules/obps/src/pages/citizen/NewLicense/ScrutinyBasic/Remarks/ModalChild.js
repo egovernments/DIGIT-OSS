@@ -1,59 +1,79 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Form, Col, Row } from "react-bootstrap";
 import axios from "axios";
+import { useStyles } from "./styles/modalChild.style";
 
 function ModalChild(props) {
+  const classes = useStyles();
   const smShow = props.displaymodal;
-  const setSmShow = useState(false);
   const [RemarksDeveloper, setDeveloperRemarks] = useState("");
   const [RemarksEntered, setRemarksEntered] = useState("");
-  const [iscrosschecked, setCrosschecked] = useState("");
-  const [warningorred, setwarningOrred] = useState("#DAA520");
-  const [yesOrNoClicked, setIsYesorNoClicked] = useState(true);
+  const [yesOrNoClicked, setIsYesorNoClicked] = useState();
+  const [status,setStatus] = useState("");
   const inputFieldValue = props.fieldValue;
   const inputFieldLabel = props.labelValue;
   const dateTime = new Date();
 
   const handlemodalsubmit = async () => {
-    props.passmodalData({ data: { label: iscrosschecked, Remarks: RemarksDeveloper.data, color: warningorred } });
-    const postData = {
-      requestInfo: {
-        api_id: "1",
-        ver: "1",
-        ts: null,
-        action: "create",
-        did: "",
-        key: "",
-        msg_id: "",
-        requester_id: "",
-        auth_token: null,
-      },
-      egScrutiny: {
-        applicationId: "123",
-        comment: RemarksDeveloper.data,
-        fieldValue: inputFieldValue,
-        fieldIdL: iscrosschecked,
-        isApproved: yesOrNoClicked,
-        userid: "123",
-        serviceId: "123",
-        documentId: null,
-        ts: dateTime.toUTCString(),
-      },
-    };
-
-    try {
-      const Resp = await axios.post("/land-services/egscrutiny/_create", postData, {}).then((response) => {
-        return response.data;
-      });
-    } catch (error) {
-      console.log(error);
+    if(status){
+      console.log("log",props.labelmodal)
+      props.passmodalData({ data: { label: props.labelmodal, Remarks: RemarksDeveloper.data, isApproved:status==="approved"?true:false } });
+      const postData = {
+        requestInfo: {
+          api_id: "1",
+          ver: "1",
+          ts: null,
+          action: "create",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          auth_token: null,
+        },
+        egScrutiny: {
+          applicationId: "123",
+          comment: RemarksDeveloper.data,
+          fieldValue: inputFieldValue,
+          fieldIdL: props.labelmodal,
+          isApproved: status==="approved"?true:false,
+          userid: "123",
+          serviceId: "123",
+          documentId: null,
+          ts: dateTime.toUTCString(),
+        },
+      };
+  
+      try {
+        const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
+          return response.data;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      props.remarksUpdate({ data: RemarksDeveloper.data });
+      console.log("response from API", Resp);
+    } else {
+      props.passmodalData();
     }
-    props.remarksUpdate({ data: RemarksDeveloper.data });
-    console.log("response from API", Resp);
   };
   console.log("smshow", smShow);
+
+  useEffect(()=>{
+    console.log("loggg",props.selectedFieldData)
+    if(props.selectedFieldData){
+      console.log("loggg changing123...",props.selectedFieldData);
+      setStatus(props.selectedFieldData.isApproved?"approved":"disapproved");
+      setDeveloperRemarks({data:props.selectedFieldData.comment?props.selectedFieldData.comment:""});
+      // setDeveloperRemarks({data:props.selectedFieldData.isApproved?"approved":"disapproved"});
+    }else {
+      console.log("loggg setting null...",props.selectedFieldData)
+      setStatus(null);
+      setDeveloperRemarks({data:""})
+    }
+  },[props.selectedFieldData])
+
   return (
     <Modal
       size="lg"
@@ -63,12 +83,17 @@ function ModalChild(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
       style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" }}
-      onHide={() => setSmShow(false)}
+      onHide={props.onClose}
     >
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-sm">
-          <Row style={{ display: "flex" }}>
-            <Col xs={4} md={4} style={{ marginRight: "100px" }}>
+            <div>
+              <h3>{props.labelmodal}</h3>
+              <p className={classes.subHead}>{inputFieldValue}</p>
+            </div>
+
+          {/* <Row>
+            <Col xs={4} md={4}>
               {" "}
               {props.labelmodal}
             </Col>
@@ -77,17 +102,15 @@ function ModalChild(props) {
                 <i>{inputFieldValue}</i>
               </h5>
             </Col>
-          </Row>
+          </Row> */}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {" "}
         <Form.Check
-          value={props.labelmodal}
-          onChange={(e) => {
-            props.setColor({ yes: true, no: false });
-            setIsYesorNoClicked(true);
-            setCrosschecked(e.target.value), setwarningOrred({ data: "#09cb3d" }), props.isYesorNoChecked({ data: true });
+          checked={status === "approved"}
+          onChange={() => {
+            setStatus("approved")
           }}
           type="radio"
           id="default-radio"
@@ -97,12 +120,10 @@ function ModalChild(props) {
           inline
         ></Form.Check>
         <Form.Check
+         checked={status === "disapproved"}
           onChange={(e) => {
-            props.setColor({ yes: false, no: true });
-            setIsYesorNoClicked(false);
-            setCrosschecked(e.target.value), setwarningOrred({ data: "#ff0000" }), props.isYesorNoChecked({ data: false });
+            setStatus("disapproved")
           }}
-          value={props.labelmodal}
           type="radio"
           id="default-radio"
           // label={<CancelIcon color="error" />}
@@ -123,6 +144,7 @@ function ModalChild(props) {
                 // setRemarksEntered(e.target.value);
               }}
               rows="3"
+              value={RemarksDeveloper.data}
             />
             {/* <Form.Control type="text" /> */}
           </Col>

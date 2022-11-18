@@ -104,7 +104,7 @@ const ScrutitnyForms = () => {
   };
   const handleGetInputFieldsValues = async () => {
     try {
-      const Resp = await axios.get("/land-services/new/licenses/_get?id=3").then((response) => {
+      const Resp = await axios.get("/tl-services/new/licenses/_get?id=42").then((response) => {
         return response.data;
       });
 
@@ -129,7 +129,7 @@ const ScrutitnyForms = () => {
         }
     };
     try {
-      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=123", dataToPass).then((response) => {
+      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=123&userId=0", dataToPass).then((response) => {
         return response.data;
       });
 
@@ -189,7 +189,7 @@ const ScrutitnyForms = () => {
       },
     };
     try {
-      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=123", dataToSend).then((response) => {
+      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=123&userId=0", dataToSend).then((response) => {
         return response.data;
       });
 
@@ -319,6 +319,9 @@ const ScrutitnyForms = () => {
               passUncheckedList={getUncheckedPurposeinfos}
               passCheckedList={getCheckedPurposeInfoValue}
               onClick={() => setOpen(!open)}
+              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].LandSchedule
+                : null}
+              dataForIcons={iconStates}
             ></Developerinfo>
             {/* </Col> */}
           </div>
@@ -329,6 +332,7 @@ const ScrutitnyForms = () => {
               passUncheckedList={getUncheckedAppliedLandInfo}
               passCheckedList={getCheckedAppliedInfoValue}
               heightApplied={defaultheightApplied}
+              dataForIcons={iconStates}
             ></AppliedLandinfo>
             {/* </Col> */}
           </div>

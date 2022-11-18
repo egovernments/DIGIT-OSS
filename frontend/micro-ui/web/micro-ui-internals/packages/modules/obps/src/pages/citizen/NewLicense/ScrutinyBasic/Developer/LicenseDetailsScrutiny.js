@@ -11,295 +11,122 @@ import Collapse from "react-bootstrap/Collapse";
 import ModalChild from "../Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { useStyles } from "../css/personalInfoChild.style";
 
 const LicenseDetailsScrutiny = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   const [checkValue, setCheckedVAlue] = useState([]);
   const [open, setOpen] = useState(false);
-  const [open2, setOpen2] = useState(false);
-  const [messege, setMessege] = useState("");
-  const [developerLabel, setDeveloperLabel] = useState(true);
-  const [show, setshow] = useState(false);
-  const [show3, setshow3] = useState(false);
   const [smShow, setSmShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const Colors = {
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+    info: "#FFB602"
+  }
+  const [selectedFieldData, setSelectedFieldData] = useState();
+  const [fieldValue, setFieldValue] = useState("");
+  const [openedModal, setOpennedModal] = useState("")
 
   const [noChecked, setNochecked] = useState(true);
   const [warningOrred, setwarningOrred] = useState("#ffcf33");
   const [color, setColor] = useState({ yes: false, no: false });
-  const [smShow2, setSmShow2] = useState(false);
-  const [smShow3, setSmShow3] = useState(false);
-
   const [labelValue, setLabelValue] = useState("");
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
 
-  const handlemodaldData = (data) => {
-    setmodaldData(data.data);
-    setSmShow(false);
-  };
+  const [fieldIconColors, setFieldIconColors] = useState({
+    developerType: Colors.info,
+    developerName: Colors.info,
+    developerEmail: Colors.info,
+    developerMobileNo: Colors.info,
+    cinNo: Colors.info,
+    companyName: Colors.info,
+    dateOfIncorporation: Colors.info,
+    regAddress: Colors.info,
+    email: Colors.info,
+    mobileNo: Colors.info,
+    gstNo: Colors.info
+  })
 
-  const handleYesOrNochecked = (data) => {
-    setYesorNochecked(data.data);
-  };
-  const handlemodalsubmit = () => {
-    console.log("here");
-    const filteredObj = uncheckedValue.filter((obj) => {
-      return obj.label == modaldData.label;
-    });
-    const filteredObjCheked = checkValue.filter((obj) => {
-      return obj.label == modaldData.label;
-    });
-    if (filteredObj.length !== 0) {
-      const removedList = uncheckedValue.filter((obj) => {
-        return obj.label !== modaldData.label;
-      });
-      setUncheckedVlue(removedList);
-    }
-    if (filteredObjCheked.length !== 0) {
-      const removedList = checkValue.filter((obj) => {
-        return obj.label !== modaldData.label;
-      });
-      setCheckedVAlue(removedList);
-    }
+  const fieldIdList = [{ label: "Developer's Type", key: "developerType" }, { label: "Developer's Name", key: "developerName" }, { label: "Developer's Email", key: "developerEmail" }, { label: "Developer's Mobile No.", key: "developerMobileNo" }, { label: "CIN No.", key: "cinNo" }, { label: "Company's Name", key: "companyName" }, { label: "Date of Incorporation", key: "dateOfIncorporation" }, { label: "Registered Address", key: "regAddress" }, { label: "Email", key: "email" }, { label: "Mobile No.", key: "mobileNo" }, { label: "GST No.", key: "gstNo" }]
 
-    if (isyesOrNochecked === false) {
-      if (modaldData.label !== "" || modaldData.Remarks !== "") {
-        if (filteredObj.length === 0) {
-          setUncheckedVlue((prev) => [...prev, modaldData]);
+  const addInfo = props.addInfo;
+  const iconStates = props.iconColorState;
+
+  const classes = useStyles();
+
+  const getColorofFieldIcon = () => {
+    let tempFieldColorState = fieldIconColors;
+    fieldIdList.forEach((item) => {
+      if (iconStates !== null && iconStates !== undefined) {
+        console.log("color method called");
+        const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        console.log("filteration value", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value1", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+
         }
       }
+    })
+
+    setFieldIconColors(tempFieldColorState);
+
+  };
+
+
+  useEffect(() => {
+    getColorofFieldIcon();
+    console.log("repeating1...",)
+  }, [iconStates])
+
+  useEffect(() => {
+    if (labelValue) {
+      const fieldPresent = iconStates.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      setSelectedFieldData(fieldPresent[0]);
     } else {
-      if (modaldData.label !== "" || modaldData.Remarks !== "") {
-        if (filteredObjCheked.length === 0) {
-          setCheckedVAlue((prev) => [...prev, modaldData]);
-        }
-      }
+      setSelectedFieldData(null);
     }
+  }, [labelValue])
+
+
+  const handlemodaldData = (data) => {
+    setSmShow(false);
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
+    }
+    setOpennedModal("");
+    setLabelValue("");
   };
-  // useEffect(() => {
-  //   console.log("called");
-  //   handlemodalsubmit();
-  // }, [modaldData.Remarks]);
-  // useEffect(() => {
-  //   props.passUncheckedList({ data: uncheckedValue });
-  // }, [uncheckedValue]);
 
-  // useEffect(() => {
-  //   props.passCheckedList({ data: checkValue });
-  // }, [checkValue]);
-  // console.log("unchecked values", uncheckedValue);
 
-  // console.log(uncheckedValue.indexOf("developer"));
-
-  const developerInputFiledColor = uncheckedValue.filter((obj) => {
-    return obj.label === "developer";
-  });
-  const developerInputCheckedFiledColor = checkValue.filter((obj) => {
-    return obj.label === "developer";
-  });
-  console.log("color from array", developerInputFiledColor);
-
-  const developerInputFiledColor1 = uncheckedValue.filter((obj) => {
-    return obj.label === "Authorized Person Name";
-  });
-  const developerInputCheckedFiledColor1 = checkValue.filter((obj) => {
-    return obj.label === "Authorized Person Name";
-  });
-  const developerInputFiledColor2 = uncheckedValue.filter((obj) => {
-    return obj.label === "Authorized Mobile No";
-  });
-  const developerInputCheckedFiledColor2 = checkValue.filter((obj) => {
-    return obj.label === "Authorized Mobile No";
-  });
-  const developerInputFiledColor3 = uncheckedValue.filter((obj) => {
-    return obj.label === "Authorized MobileNo. 2";
-  });
-  const developerInputCheckedFiledColor3 = checkValue.filter((obj) => {
-    return obj.label === "Authorized MobileNo. 2";
-  });
-  const developerInputFiledColor4 = uncheckedValue.filter((obj) => {
-    return obj.label === "Email ID";
-  });
-  const developerInputCheckedFiledColor4 = checkValue.filter((obj) => {
-    return obj.label === "Email ID";
-  });
-  const developerInputFiledColor5 = uncheckedValue.filter((obj) => {
-    return obj.label === "PAN No.";
-  });
-  const developerInputCheckedFiledColor5 = checkValue.filter((obj) => {
-    return obj.label === "PAN No.";
-  });
-  const developerInputFiledColor6 = uncheckedValue.filter((obj) => {
-    return obj.label === "Address  1";
-  });
-  const developerInputCheckedFiledColor6 = checkValue.filter((obj) => {
-    return obj.label === "Address  1";
-  });
-  const developerInputFiledColor7 = uncheckedValue.filter((obj) => {
-    return obj.label === "Village/City";
-  });
-  const developerInputCheckedFiledColor7 = checkValue.filter((obj) => {
-    return obj.label === "Village/City";
-  });
-  const developerInputFiledColor8 = uncheckedValue.filter((obj) => {
-    return obj.label === "Pincode";
-  });
-  const developerInputCheckedFiledColor8 = checkValue.filter((obj) => {
-    return obj.label === "Pincode";
-  });
-  const developerInputFiledColor9 = uncheckedValue.filter((obj) => {
-    return obj.label === "Tehsil";
-  });
-  const developerInputCheckedFiledColor9 = checkValue.filter((obj) => {
-    return obj.label === "Tehsil";
-  });
-  const developerInputFiledColor10 = uncheckedValue.filter((obj) => {
-    return obj.label === "District";
-  });
-  const developerInputCheckedFiledColor10 = checkValue.filter((obj) => {
-    return obj.label === "District";
-  });
-  const developerInputFiledColor11 = uncheckedValue.filter((obj) => {
-    return obj.label === "State";
-  });
-  const developerInputCheckedFiledColor11 = checkValue.filter((obj) => {
-    return obj.label === "State";
-  });
-  const developerInputFiledColor12 = uncheckedValue.filter((obj) => {
-    return obj.label === "Status (Individual/ Company/ Firm/ LLP etc.)";
-  });
-  const developerInputCheckedFiledColor12 = checkValue.filter((obj) => {
-    return obj.label === "Status (Individual/ Company/ Firm/ LLP etc.)";
-  });
-  const developerInputFiledColor13 = uncheckedValue.filter((obj) => {
-    return obj.label === "LC-I signed by";
-  });
-  const developerInputCheckedFiledColor13 = checkValue.filter((obj) => {
-    return obj.label === "LC-I signed by";
-  });
-  const developerInputFiledColor14 = uncheckedValue.filter((obj) => {
-    return obj.label === "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)";
-  });
-  const developerInputCheckedFiledColor14 = checkValue.filter((obj) => {
-    return obj.label === "If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)";
-  });
-  const developerInputFiledColor15 = uncheckedValue.filter((obj) => {
-    return obj.label === "Permanent address in case of individual/ registered office address in case other than individual";
-  });
-  const developerInputCheckedFiledColor15 = checkValue.filter((obj) => {
-    return obj.label === "Permanent address in case of individual/ registered office address in case other than individual";
-  });
-  const developerInputFiledColor16 = uncheckedValue.filter((obj) => {
-    return obj.label === "Address for communication";
-  });
-  const developerInputCheckedFiledColor16 = checkValue.filter((obj) => {
-    return obj.label === "Address for communication";
-  });
-  const developerInputFiledColor17 = uncheckedValue.filter((obj) => {
-    return obj.label === "Name of the authorized person to sign the application";
-  });
-  const developerInputCheckedFiledColor17 = checkValue.filter((obj) => {
-    return obj.label === "Name of the authorized person to sign the application";
-  });
-  const developerInputFiledColor18 = uncheckedValue.filter((obj) => {
-    return obj.label === "Email ID for communication";
-  });
-  const developerInputCheckedFiledColor18 = checkValue.filter((obj) => {
-    return obj.label === "Email ID for communication";
-  });
-  const developerInputFiledColor19 = uncheckedValue.filter((obj) => {
-    return obj.label === "Developer's type.";
-  });
-  const developerInputCheckedFiledColor19 = checkValue.filter((obj) => {
-    return obj.label === "Developer's type";
-  });
-  const developerInputFiledColor20 = uncheckedValue.filter((obj) => {
-    return obj.label === "Name";
-  });
-  const developerInputCheckedFiledColor20 = checkValue.filter((obj) => {
-    return obj.label === "Name";
-  });
-  const developerInputFiledColor21 = uncheckedValue.filter((obj) => {
-    return obj.label === "Email";
-  });
-  const developerInputCheckedFiledColor21 = checkValue.filter((obj) => {
-    return obj.label === "Email";
-  });
-  const developerInputFiledColor22 = uncheckedValue.filter((obj) => {
-    return obj.label === "Mobile No.";
-  });
-  const developerInputCheckedFiledColor22 = checkValue.filter((obj) => {
-    return obj.label === "Mobile No.";
-  });
-  //////////
-  const developerInputFiledColor23 = uncheckedValue.filter((obj) => {
-    return obj.label === "CIN Number";
-  });
-  const developerInputCheckedFiledColor23 = checkValue.filter((obj) => {
-    return obj.label === "CIN Number";
-  });
-  const developerInputFiledColor24 = uncheckedValue.filter((obj) => {
-    return obj.label === "Company Name";
-  });
-  const developerInputCheckedFiledColor24 = checkValue.filter((obj) => {
-    return obj.label === "Company Name";
-  });
-  const developerInputFiledColor25 = uncheckedValue.filter((obj) => {
-    return obj.label === "Date of Incorporation";
-  });
-  const developerInputCheckedFiledColor25 = checkValue.filter((obj) => {
-    return obj.label === "Date of Incorporation";
-  });
-
-  const developerInputFiledColor26 = uncheckedValue.filter((obj) => {
-    return obj.label === "Registered Address";
-  });
-  const developerInputCheckedFiledColor26 = checkValue.filter((obj) => {
-    return obj.label === "Registered Address";
-  });
-  const developerInputFiledColor27 = uncheckedValue.filter((obj) => {
-    return obj.label === "Email";
-  });
-  const developerInputCheckedFiledColor27 = checkValue.filter((obj) => {
-    return obj.label === "Email";
-  });
-  const developerInputFiledColor28 = uncheckedValue.filter((obj) => {
-    return obj.label === "Mobile No.";
-  });
-  const developerInputCheckedFiledColor28 = checkValue.filter((obj) => {
-    return obj.label === "Mobile No.";
-  });
-  const developerInputFiledColor29 = uncheckedValue.filter((obj) => {
-    return obj.label === "GST No.";
-  });
-  const developerInputCheckedFiledColor29 = checkValue.filter((obj) => {
-    return obj.label === "GST No.";
-  });
-  // const handleChange = (e) => {
-  //   this.setState({ isRadioSelected: true });
-  // };
   const [showhide9, setShowhide9] = useState("0");
   const handleshow9 = (e) => {
     const getshow = e.target.value;
     setShowhide9(getshow);
   };
 
-  console.log("color for the deeloper", developerInputFiledColor);
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
+
+  // console.log("color for the deeloper", developerInputFiledColor);
 
   return (
     <Form
       ref={props.licenseDetailsInfoRef}
-      // style={{
-      //   width: "100%",
-      //   height: props.heightPersonal,
-      //   overflow: "hidden",
-      //   marginBottom: 20,
-      //   borderColor: "#C3C3C3",
-      //   borderStyle: "solid",
-      //   borderWidth: 2,
-      // }}
+    // style={{
+    //   width: "100%",
+    //   height: props.heightPersonal,
+    //   overflow: "hidden",
+    //   marginBottom: 20,
+    //   borderColor: "#C3C3C3",
+    //   borderStyle: "solid",
+    //   borderWidth: 2,
+    // }}
     >
       {/* <Alert variant="warning">{messege}</Alert> */}
 
@@ -320,8 +147,8 @@ const LicenseDetailsScrutiny = (props) => {
           alignContent: "center",
         }}
       >
-        <span style={{ color: "#817f7f" }} className="">
-          Add Info
+        <span style={{ color: "#817f7f", fontSize: 14 }} className="">
+          - Add Info
         </span>
         {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
@@ -331,19 +158,49 @@ const LicenseDetailsScrutiny = (props) => {
           <Form.Group style={{ display: props.displayLicenseDetails, margin: 5 }}>
             <div>
               <Card style={{ margin: 2 }}>
-                <h5>Developer's type</h5>
                 <div className="card-body">
+                  <h5 className={[classes.formLabel, "d-flex flex-row align-items-center"]}>Developer's type <div className="d-flex flex-row align-items-center ml-2">
+                    <Form.Control
+                      className={classes.formControl}
+                      placeholder={addInfo?.showDevTypeFields}
+                      disabled
+                    ></Form.Control>
+                    &nbsp;&nbsp;
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.developerType
+                      }}
+                      onClick={() => {
+                        setOpennedModal("developerType")
+                        setLabelValue("Developer's type"),
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(addInfo?.showDevTypeFields || null);
+                      }}
+                    ></ReportProblemIcon>
+
+                    <ModalChild
+                      labelmodal={labelValue}
+                      passmodalData={handlemodaldData}
+                      displaymodal={smShow}
+                      onClose={() => setSmShow(false)}
+                      selectedFieldData={selectedFieldData}
+                      fieldValue={fieldValue}
+                      remarksUpdate={currentRemarks}
+                    ></ModalChild>
+
+                  </div></h5>
                   <div className="row">
                     <div className="col-sm-12">
                       {/* <div className="form-group row"> */}
-                      <div className="col-sm-4">
+                      <div className="col-sm-4 p-0 pt-1">
                         {/* <Form.Select
                           type="text"
                           placeholder=""
-                        
+
                           onClick={handleshow9}
                           style={{ maxWidth: 200, marginRight: 5, height: 40 }}
-                         
+
                         >
                           <option value="">--Purpose--</option>
                           <option value="01">Individual</option>
@@ -351,23 +208,7 @@ const LicenseDetailsScrutiny = (props) => {
                           <option value="03">LLP</option>
                           <option value="04">Society</option>
                         </Form.Select> */}
-                        <div style={{ display: "flex" }}>
-                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
-                          &nbsp;&nbsp;
-                          <ReportProblemIcon
-                            style={{
-                              color:
-                                developerInputFiledColor19.length > 0
-                                  ? developerInputFiledColor19[0].color.data
-                                  : developerInputCheckedFiledColor19.length > 0
-                                  ? developerInputCheckedFiledColor19[0].color.data
-                                  : "#FFB602",
-                            }}
-                            onClick={() => {
-                              setLabelValue("Developer's type"), setSmShow(true), console.log("modal open");
-                            }}
-                          ></ReportProblemIcon>
-                        </div>
+
                       </div>
                     </div>
                   </div>
@@ -383,59 +224,57 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5>Name &nbsp;</h5>
+                            <h5 className={classes.formLabel}>Name &nbsp;</h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.developerName : null}
+                            disabled></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor20.length > 0
-                                  ? developerInputFiledColor20[0].color.data
-                                  : developerInputCheckedFiledColor20.length > 0
-                                  ? developerInputCheckedFiledColor20[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.developerName
                             }}
                             onClick={() => {
-                              setLabelValue("Name"), setSmShow(true), console.log("modal open");
+                              setOpennedModal("developerName")
+                              setLabelValue("Developer's Name"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.developerName : null);
                             }}
                           ></ReportProblemIcon>
-                          <ModalChild
-                            labelmodal={labelValue}
-                            passmodalData={handlemodaldData}
-                            isYesorNoChecked={handleYesOrNochecked}
-                            displaymodal={smShow}
-                            setColor={setColor}
-                          ></ModalChild>
+
+
+
                         </div>
                       </Col>
                       <Col md={4} xxl lg="4">
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5>Email &nbsp;</h5>
+                            <h5 className={classes.formLabel}>Email &nbsp;</h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          <Form.Control className={classes.formControl}
+                            placeholder={addInfo !== null ? addInfo?.developerEmail : null}
+                            disabled></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor21.length > 0
-                                  ? developerInputFiledColor21[0].color.data
-                                  : developerInputCheckedFiledColor21.length > 0
-                                  ? developerInputCheckedFiledColor21[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.developerEmail
                             }}
                             onClick={() => {
-                              setLabelValue("Email"), setSmShow(true), console.log("modal open");
+                              setOpennedModal("developerEmail")
+                              setLabelValue("Developer's Email"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.developerEmail : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -444,25 +283,26 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5>Mobile No. &nbsp;</h5>
+                            <h5 className={classes.formLabel}>Mobile No. &nbsp;</h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          <Form.Control className={classes.formControl}
+                            placeholder={ addInfo !== null ? addInfo?.developerMobileNo : null }
+                            disabled ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor22.length > 0
-                                  ? developerInputFiledColor22[0].color.data
-                                  : developerInputCheckedFiledColor22.length > 0
-                                  ? developerInputCheckedFiledColor22[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.developerMobileNo
                             }}
                             onClick={() => {
-                              setLabelValue("Mobile No."), setSmShow(true), console.log("modal open");
+                              setOpennedModal("developerMobileNo")
+                              setLabelValue("Developer's Mobile No."),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.developerMobileNo : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -487,19 +327,20 @@ const LicenseDetailsScrutiny = (props) => {
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          <Form.Control className={classes.formControl}
+                            placeholder={ addInfo !== null ? addInfo?.cinNo : null }
+                            disabled ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor23.length > 0
-                                  ? developerInputFiledColor23[0].color.data
-                                  : developerInputCheckedFiledColor23.length > 0
-                                  ? developerInputCheckedFiledColor23[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.cinNo
                             }}
                             onClick={() => {
-                              setLabelValue("CIN Number"), setSmShow(true), console.log("modal open");
+                              setOpennedModal("cinNo")
+                              setLabelValue("CIN No."),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.developerMobileNo : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -508,25 +349,26 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5>Company Name &nbsp;</h5>
+                            <h5 className={classes.formLabel}>Company Name &nbsp;</h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          <Form.Control className={classes.formControl}
+                            placeholder={ addInfo !== null ? addInfo?.companyName : null }
+                            disabled></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor24.length > 0
-                                  ? developerInputFiledColor24[0].color.data
-                                  : developerInputCheckedFiledColor24.length > 0
-                                  ? developerInputCheckedFiledColor24[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.companyName
                             }}
                             onClick={() => {
-                              setLabelValue("Company Name"), setSmShow(true), console.log("modal open");
+                              setOpennedModal("companyName")
+                              setLabelValue("Company's Name"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.companyName : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -535,25 +377,26 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5>Date of Incorporation &nbsp;</h5>
+                            <h5 className={classes.formLabel}>Date of Incorporation &nbsp;</h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          <Form.Control className={classes.formControl}
+                            placeholder={ addInfo !== null ? addInfo?.dateOfIncorporation : null }
+                            disabled ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor25.length > 0
-                                  ? developerInputFiledColor25[0].color.data
-                                  : developerInputCheckedFiledColor25.length > 0
-                                  ? developerInputCheckedFiledColor25[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.dateOfIncorporation
                             }}
                             onClick={() => {
-                              setLabelValue("Date of Incorporation"), setSmShow(true), console.log("modal open");
+                              setOpennedModal("dateOfIncorporation")
+                              setLabelValue("Date of Incorporation"),
+                                setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(addInfo !== null ? addInfo?.dateOfIncorporation : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -562,25 +405,26 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5>Registered Address &nbsp;</h5>
+                            <h5 className={classes.formLabel}>Registered Address &nbsp;</h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          <Form.Control className={classes.formControl}
+                            placeholder={ addInfo !== null ? addInfo?.regAddress : null }
+                            disabled ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor26.length > 0
-                                  ? developerInputFiledColor26[0].color.data
-                                  : developerInputCheckedFiledColor26.length > 0
-                                  ? developerInputCheckedFiledColor26[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.regAddress
                             }}
                             onClick={() => {
-                              setLabelValue("Registered Address"), setSmShow(true), console.log("modal open");
+                              setOpennedModal("regAddress")
+                              setLabelValue("Registered Address"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(addInfo !== null ? addInfo?.regAddress : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -589,25 +433,26 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5>Email &nbsp;</h5>
+                            <h5 className={classes.formLabel}>Email &nbsp;</h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          <Form.Control className={classes.formControl}
+                            placeholder={ addInfo !== null ? addInfo?.email : null }
+                            disabled ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor27.length > 0
-                                  ? developerInputFiledColor27[0].color.data
-                                  : developerInputCheckedFiledColor27.length > 0
-                                  ? developerInputCheckedFiledColor27[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.email
                             }}
                             onClick={() => {
-                              setLabelValue("Email"), setSmShow(true), console.log("modal open");
+                              setOpennedModal("email")
+                              setLabelValue("Email"),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(addInfo !== null ? addInfo?.email : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -616,25 +461,26 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5>Mobile No. &nbsp;</h5>
+                            <h5 className={classes.formLabel}>Mobile No. &nbsp;</h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          <Form.Control className={classes.formControl}
+                            placeholder={ addInfo !== null ? addInfo?.mobileNo : null }
+                            disabled></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor28.length > 0
-                                  ? developerInputFiledColor28[0].color.data
-                                  : developerInputCheckedFiledColor28.length > 0
-                                  ? developerInputCheckedFiledColor28[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.mobileNo
                             }}
                             onClick={() => {
-                              setLabelValue("Mobile No."), setSmShow(true), console.log("modal open");
+                              setOpennedModal("mobileNo")
+                              setLabelValue("Mobile No."),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(addInfo !== null ? addInfo?.mobileNo : null);
                             }}
                           ></ReportProblemIcon>
                         </div>
@@ -643,25 +489,26 @@ const LicenseDetailsScrutiny = (props) => {
                         <div>
                           <Form.Label>
                             {/* <b>individual Land owner</b> */}
-                            <h5>GST No. &nbsp;</h5>
+                            <h5 className={classes.formLabel}>GST No. &nbsp;</h5>
                           </Form.Label>
                           <span style={{ color: "red" }}>*</span>
                         </div>
 
                         <div style={{ display: "flex" }}>
-                          <Form.Control style={{ maxWidth: 200, marginRight: 5, height: 30 }} disabled></Form.Control>
+                          <Form.Control className={classes.formControl}
+                            placeholder={ addInfo !== null ? addInfo?.gstNo : null }
+                            disabled ></Form.Control>
                           &nbsp;&nbsp;
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor29.length > 0
-                                  ? developerInputFiledColor29[0].color.data
-                                  : developerInputCheckedFiledColor29.length > 0
-                                  ? developerInputCheckedFiledColor29[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.gstNo
                             }}
                             onClick={() => {
-                              setLabelValue("GST No."), setSmShow(true), console.log("modal open");
+                              setOpennedModal("gstNo")
+                              setLabelValue("GST No."),
+                              setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(addInfo !== null ? addInfo?.gstNo : null);
                             }}
                           ></ReportProblemIcon>
                         </div>

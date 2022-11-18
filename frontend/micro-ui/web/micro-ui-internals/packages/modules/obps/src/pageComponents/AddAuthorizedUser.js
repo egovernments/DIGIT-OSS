@@ -53,7 +53,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
             "auth_token": ""
         },
     }
-      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`,requestResp,{
 
       });
       const developerDataGet = getDevDetails?.data; 
@@ -355,8 +355,10 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
       localStorage.setItem("data_user", JSON.stringify(addAuthUserformData))
       
       const developerRegisterData = {
-        "id":devRegId,
+        "id":userInfo?.info?.id,
         "pageName":"aurthorizedUserInfoArray",
+        "createdBy":userInfo?.info?.id,
+        "updatedBy":userInfo?.info?.id,
         "devDetail": {
           
             "aurthorizedUserInfoArray": aurthorizedUserInfoArray
