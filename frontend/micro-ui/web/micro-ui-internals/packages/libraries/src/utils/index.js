@@ -35,7 +35,7 @@ const getPattern = type => {
     case "Address":
       return /^[^\$\"<>?\\\\~`!@$%^()+={}\[\]*:;“”‘’]{1,500}$/i;
     case "PAN":
-      return /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/i;
+      return /^[A-Z]{5}\d{4}[A-Z]{1}$/i;
     case "TradeName":
       return /^[-@.\/#&+\w\s]*$/
     case "Date":
@@ -46,6 +46,8 @@ const getPattern = type => {
       return /^(0)*[1-9][0-9]{0,6}$/i;
     case "NoOfEmp":
       return /^(0)*[1-9][0-9]{0,6}$/i;
+    case "CIN":
+      return /^[L|U]{1}\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i;
     case "GSTNo":
       return /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/i;
     case "DoorHouseNo":

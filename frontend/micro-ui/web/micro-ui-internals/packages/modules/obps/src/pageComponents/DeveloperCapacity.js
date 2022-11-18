@@ -1,4 +1,4 @@
-import { BackButton, CardLabel, CheckBox, FormStep, TextArea, Toast } from "@egovernments/digit-ui-react-components";
+import { BackButton, CardLabel, CheckBox, FormStep, TextArea, TextInput, Toast,RemoveIcon  } from "@egovernments/digit-ui-react-components";
 import React, { useState, useEffect } from "react";
 import Timeline from "../components/Timeline";
 import { useForm } from "react-hook-form";
@@ -326,6 +326,12 @@ const handleArrayValues = () => {
   localStorage.setItem("DevCapacityDetails", JSON.stringify(capacityDevelopColonyHdruAct))
 }
 
+const deleteTableRows = (i)=>{
+    const rows = [...capacityDevelopColonyHdruAct];
+    rows.splice(i, 1);
+    setModalCapacityDevelopColonyHdruAct(rows);
+}
+
 const handleColonyDevGrp=()=>{
   const colonyDevValues = {
     
@@ -341,6 +347,14 @@ const handleColonyDevGrp=()=>{
   setmodalColony(!modalColony)
   console.log("DevCapacityColony", capacityDevelopColonyLawAct);
 }
+
+
+const deleteLawActTableRows = (i)=>{
+    const rows = [...capacityDevelopColonyLawAct];
+    rows.splice(i, 1);
+    setCapacityDevelopColonyLawAct(rows);
+}
+
   const goNext = async (e) => {
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
     //   setIsDisableForNext(true);
@@ -348,13 +362,14 @@ const handleColonyDevGrp=()=>{
         "parentId":userInfo?.info?.id,
         "Licenses": [
             {
+            "applicationType": "NEW",
               "tradeLicenseDetail": {
                 "owners": [
                   {
                     "parentid":userInfo?.info?.id,
                     "gender": "MALE",
-                    "mobileNumber": mobileNumber,
-                    "name": name,
+                    "mobileNumber": userInfo?.info?.mobileNumber,
+                    "name": userInfo?.info?.name,
                     "dob": null,
                     "emailId": email,
                     "permanentAddress": PermanentAddress,
@@ -380,7 +395,7 @@ const handleColonyDevGrp=()=>{
               "licenseType": "PERMANENT",
               "businessService": "BPAREG",
               "tenantId": stateId,
-              "action": "NOWORKFLOW"
+              "action": "INITIATED"
             }
           ]
       }
@@ -502,7 +517,7 @@ const handleColonyDevGrp=()=>{
           onSelect={goNext}
           onSkip={onSkip}
           t={t}
-          isDisabled={isDisableForNext}
+          isDisabled={isDisableForNext || !permissionGrantedHRDU}
         >
           {/* <CheckBox
             label={t("BPA_SAME_AS_PERMANENT_ADDRESS")}
@@ -683,7 +698,7 @@ const handleColonyDevGrp=()=>{
                     <p>
                     &nbsp;&nbsp;&nbsp; (i) Whether the Developer/ group company has
                     earlier been granted permission to set up a colony under HDRU
-                    Act, 1975: *{" "}
+                    Act, 1975: <span className="text-danger font-weight-bold">*</span>
                     </p>
                     <div className="form-group">
                     <input
@@ -718,7 +733,7 @@ const handleColonyDevGrp=()=>{
                                 <th>Purpose of colony </th>
                                 <th>Sector and development plan </th>
                                 <th>Validity of licence including renewals if any</th>
-                                {/* <th>Remove</th> */}
+                                <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -766,18 +781,25 @@ const handleColonyDevGrp=()=>{
                                         </td>
                                         <td>
                                             <div className="row">
-                                            <button className="btn btn-sm col-md-6">
+                                            <button className="btn btn-sm col">
                                                 <VisibilityIcon color="info" className="icon" />
                                             </button>
-                                            <button className="btn btn-sm col-md-6">
+                                            {/* <button className="btn btn-sm col-md-6">
                                                 <FileDownloadIcon color="primary"  />
-                                            </button>
+                                            </button> */}
                                             
                                             </div>
                                         </td>
+                                        <td>
+                                            <button
+                                            onClick={()=>(deleteTableRows(-1))}
+                                            >
+                                            <RemoveIcon />
+                                            </button>
+                                        </td>
                                     </tr>
                                     )
-                                    }) : <p>Click on Add more</p>
+                                    }) : <p className="d-none">Click on Add more</p>
                                 }
                             </tbody>
                             </Table>
@@ -824,11 +846,16 @@ const handleColonyDevGrp=()=>{
                                             </Col>
                                             <Col md={4} xxl lg="4">
                                             <label htmlFor="name" className="text">Name of developer *</label>
-                                            <input
+                                            <TextInput
                                                 type="text"
                                                 onChange={(e) => setModalDevName(e.target.value)}
                                                 placeholder=""
                                                 class="employee-card-input"
+                                                isMandatory={false}
+                                                {...(validation = {
+                                                    isRequired: true,
+                                                    title: "Please enter Name"
+                                                })}
                                             />
                                             </Col>
                                             <Col md={4} xxl lg="4">
@@ -916,7 +943,7 @@ const handleColonyDevGrp=()=>{
                                 <th>Purpose</th>
                                 <th>Status of development</th>
                                 <th>Outstanding Dues</th>
-                                {/* <th>Action</th> */}
+                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -952,29 +979,36 @@ const handleColonyDevGrp=()=>{
                                         </td>
                                         <td>
                                             <div className="row">
-                                                <button className="btn btn-sm col-md-6">
+                                                <button className="btn btn-sm col-md-12">
                                                     <VisibilityIcon color="info" className="icon" />
                                                 </button>
-                                                <button className="btn btn-sm col-md-6">
+                                                {/* <button className="btn btn-sm col-md-6">
                                                     <FileDownloadIcon color="primary"  />
-                                                </button>
+                                                </button> */}
                                                 
                                             </div>
                                         </td>
                                         <td>
                                             <div className="row">
-                                                <button className="btn btn-sm col-md-6">
+                                                <button className="btn btn-sm col-md-12">
                                                     <VisibilityIcon color="info" className="icon" />
                                                 </button>
-                                                <button className="btn btn-sm col-md-6">
+                                                {/* <button className="btn btn-sm col-md-6">
                                                     <FileDownloadIcon color="primary"  />
-                                                </button>
+                                                </button> */}
                                                 
                                             </div>
                                         </td>
+                                        <td>
+                                            <button
+                                            onClick={()=>(deleteLawActTableRows(-1))}
+                                            >
+                                            <RemoveIcon />
+                                            </button>
+                                        </td>
                                     </tr>
                                     )}
-                                    ):<p>Click on add more</p>
+                                    ):<p className="d-none">Click on add more</p>
                         }
                             </tbody>
                         </Table>
