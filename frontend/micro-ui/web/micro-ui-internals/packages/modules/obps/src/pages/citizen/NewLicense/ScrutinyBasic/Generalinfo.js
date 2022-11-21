@@ -243,12 +243,23 @@ const Genarelinfo = (props) => {
     killa: Colors.info,
     landOwner: Colors.info,
     consolidationType: Colors.info,
+    kanal: Colors.info,
+    marla: Colors.info,
+    sarsai: Colors.info,
     bigha: Colors.info,
     biswa: Colors.info,
-    khewat: Colors.info,
+    biswansi : Colors.info,
+    collabrationAgreement : Colors.info,
+    developerCompany : Colors.info,
+    dateOfRegistering : Colors.info,
+    dateOfValidity : Colors.info,
+    agreementIrrevocialble : Colors.info,
+    nameOfAuthSignatory : Colors.info,
+    nameOfAuthSignatoryDeveloper : Colors.info,
+    registeringAuthority : Colors.info,
   })
 
-  const fieldIdList = [{ label: "Purpose Of License", key: "purpose" }, { label: "Potential Zone", key: "potential" }, { label: "District", key: "district" }, { label: "State", key: "state" }, { label: "Tehsil", key: "tehsil" }, { label: "Revenue estate", key: "revenue" }, { label: "Rectangle No.", key: "rectangleNo" }, { label: "Killa", key: "killa" }, { label: "Land Owner", key: "landOwner" }, { label: "Consolidation Type", key: "consolidationType" }, { label: "Bigha", key: "bigha" }, { label: "Biswa", key: "biswa" }, { label: "Khewat", key: "khewat" }];
+  const fieldIdList = [{ label: "Purpose Of License", key: "purpose" }, { label: "Potential Zone", key: "potential" }, { label: "District", key: "district" }, { label: "State", key: "state" }, { label: "Tehsil", key: "tehsil" }, { label: "Revenue estate", key: "revenue" }, { label: "Rectangle No.", key: "rectangleNo" }, { label: "Killa", key: "killa" }, { label: "Land Owner", key: "landOwner" }, { label: "Consolidation Type", key: "consolidationType" }, { label: "Kanal", key: "kanal" }, { label: "Marla", key: "marla" }, { label: "Sarsai", key: "sarsai" }, { label: "Bigha", key: "bigha" }, { label: "Biswa", key: "biswa" }, { label: "Biswansi", key: "biswansi" }, { label: "Collaboration Agreement", key: "collabrationAgreement" }, { label: "Developer Company", key: "developerCompany" }, { label: "Date of Registering", key: "dateOfRegistering" }, { label: "Date of Validity", key: "dateOfValidity" }, { label: "Collaboration Agreement Irrevociable", key: "agreementIrrevocialble" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatory" }, { label: "Name of Authorized Signatory Developer", key: "nameOfAuthSignatoryDeveloper" }, { label: "Registering Authority", key: "registeringAuthority" }];
 
 
   const getColorofFieldIcon = () => {
@@ -521,84 +532,83 @@ const Genarelinfo = (props) => {
                 <b>(i) Khasra-wise information to be provided in the following format:</b> 
               </p>
             </div>
-            {/* <div className="ml-auto"></div> */}
             <br></br>
 
-            <div>
+            <div style={{overflow:"scroll"}}>
               <table className="table table-bordered">
                 <thead>
+                  
                   <tr className="border-bottom-0">
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Tehsil    
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      {/* </div> */}
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Revenue estate    
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      {/* </div> */}
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Rectangle No.   
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      {/* </div> */}
+                      Rectangle No.  
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Killa  
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      {/* </div> */}
-                    </th>
-                    <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Land owner  
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      {/* </div> */}
+                      Land owner 
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Consolidation Type  
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      {/* </div> */}
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Kanal/Bigha  
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      {/* </div> */}
+                      Kanal 
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      Marla/Biswa  
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      {/* </div> */}
+                      Marla  
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Sarsai
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Bigha 
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Biswa 
                     </th>
 
-                    {/* <th>Sarsai</th>
-                <th>Bigha</th>
-                <th>Biswa</th>
-                <th>Biswansi</th>
-                <th>Area  </th> */}
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
-                      {" "}
-                      {/* <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)"> */}
-                      Khewat  
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      
-                      {/* </div> */}
-                      {/* <InfoIcon style={{color:"blue"}}/>  */}
-
-                      {/* </h6> */}
+                      Biswansi 
                     </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Collaboration Agreement
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Developer Company
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Date of Registering
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Date of Validity
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Collaboration Agreement Irrevociable
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Name of Authorized Signatory
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Name of Authorized Signatory Developer
+                    </th>
+
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                        Registering Authority
+                    </th>
+
                   </tr>
                   <tr className="border-top-0">
                     <th class="fw-normal py-0 border-top-0">
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                       <ReportProblemIcon
                         style={{
                           color: fieldIconColors.tehsil
@@ -608,14 +618,11 @@ const Genarelinfo = (props) => {
                           setOpennedModal("tehsil")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0].tehsil : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
                         }}
                       ></ReportProblemIcon>
-                      {/* </div> */}
                     </th>
                     <th class="fw-normal py-0 border-top-0">
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                       <ReportProblemIcon
                         style={{
                           color: fieldIconColors.revenue
@@ -628,11 +635,8 @@ const Genarelinfo = (props) => {
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.revenueEstate : null);
                         }}
                       ></ReportProblemIcon>
-                      {/* </div> */}
                     </th>
                     <th class="fw-normal py-0 border-top-0">
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                       <ReportProblemIcon
                         style={{
                           color: fieldIconColors.rectangleNo
@@ -642,31 +646,11 @@ const Genarelinfo = (props) => {
                           setOpennedModal("rectangeNo")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.rectangleNo : null);
                         }}
                       ></ReportProblemIcon>
-                      {/* </div> */}
                     </th>
                     <th class="fw-normal py-0 border-top-0">
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
-                      <ReportProblemIcon
-                        style={{
-                          color: fieldIconColors.killa
-                        }}
-                        onClick={() => {
-                          setLabelValue("Killa"),
-                          setOpennedModal("killa")
-                          setSmShow(true),
-                          console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
-                        }}
-                      ></ReportProblemIcon>
-                      {/* </div> */}
-                    </th>
-                    <th class="fw-normal py-0 border-top-0">
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                       <ReportProblemIcon
                         style={{
                           color: fieldIconColors.landOwner
@@ -676,14 +660,11 @@ const Genarelinfo = (props) => {
                           setOpennedModal("landOwner")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.landOwner : null);
                         }}
                       ></ReportProblemIcon>
-                      {/* </div> */}
                     </th>
                     <th class="fw-normal py-0 border-top-0">
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                       <ReportProblemIcon
                         style={{
                           color: fieldIconColors.consolidationType
@@ -693,10 +674,52 @@ const Genarelinfo = (props) => {
                           setOpennedModal("consolidationType")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.tehsil : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.consolidationType : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.kanal
+                        }}
+                        onClick={() => {
+                          setLabelValue("Kanal"),
+                          setOpennedModal("kanal")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.kanal : null);
                         }}
                       ></ReportProblemIcon>
                       {/* </div> */}
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.marla
+                        }}
+                        onClick={() => {
+                          setLabelValue("Marla"),
+                          setOpennedModal("marla")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.marla : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.sarsai
+                        }}
+                        onClick={() => {
+                          setLabelValue("Sarsai"),
+                          setOpennedModal("sarsai")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.sarsai : null);
+                        }}
+                      ></ReportProblemIcon>
                     </th>
                     <th class="fw-normal py-0 border-top-0">
                       {/* <div className="d-flex flex-row  align-items-center"> */}
@@ -716,8 +739,6 @@ const Genarelinfo = (props) => {
                       {/* </div> */}
                     </th>
                     <th class="fw-normal py-0 border-top-0">
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                       <ReportProblemIcon
                         style={{
                           color: fieldIconColors.biswa
@@ -730,86 +751,210 @@ const Genarelinfo = (props) => {
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswa : null);
                         }}
                       ></ReportProblemIcon>
-                      {/* </div> */}
                     </th>
-
-                    {/* <th>Sarsai</th>
-                <th>Bigha</th>
-                <th>Biswa</th>
-                <th>Biswansi</th>
-                <th>Area  </th> */}
                     <th class="fw-normal py-0 border-top-0">
-                      {" "}
-                      {/* <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)"> */}
-                      
-                      {/* <div className="d-flex flex-row  align-items-center"> */}
-                      {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
                       <ReportProblemIcon
                         style={{
-                          color: fieldIconColors.khewat
+                          color: fieldIconColors.biswansi
                         }}
                         onClick={() => {
-                          setLabelValue("Khewat"),
-                          setOpennedModal("khewat")
+                          setLabelValue("Biswansi"),
+                          setOpennedModal("biswansi")
                           setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.khewat : null);
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.biswansi : null);
                         }}
                       ></ReportProblemIcon>
-                      {/* </div> */}
-                      {/* <InfoIcon style={{color:"blue"}}/>  */}
-
-                      {/* </h6> */}
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      {" "}
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.collabrationAgreement
+                        }}
+                        onClick={() => {
+                          setLabelValue("Collabration Agreement"),
+                          setOpennedModal("collabrationAgreement")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.collaboration : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      {" "}
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.developerCompany
+                        }}
+                        onClick={() => {
+                          setLabelValue("Developer Company"),
+                          setOpennedModal("developerCompany")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.developerCompany : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      {" "}
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.dateOfRegistering
+                        }}
+                        onClick={() => {
+                          setLabelValue("Date of Registering"),
+                          setOpennedModal("dateOfRegistering")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.agreementValidFrom : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      {" "}
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.dateOfValidity
+                        }}
+                        onClick={() => {
+                          setLabelValue("Date of Validity"),
+                          setOpennedModal("dateOfValidity")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.validitydate : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      {" "}
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.agreementIrrevocialble
+                        }}
+                        onClick={() => {
+                          setLabelValue("Collabration Agreement Irrevociable"),
+                          setOpennedModal("agreementIrrevocialble")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.agreementIrrevocialble : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      {" "}
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.nameOfAuthSignatory
+                        }}
+                        onClick={() => {
+                          setLabelValue("Name of Authorized Signatory"),
+                          setOpennedModal("nameOfAuthSignatory")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.nameAuthSign : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      {" "}
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.nameOfAuthSignatoryDeveloper
+                        }}
+                        onClick={() => {
+                          setLabelValue("Name of Authorized Signatory Developer"),
+                          setOpennedModal("nameOfAuthSignatoryDeveloper")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.nameAuthSign : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      {" "}
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.registeringAuthority
+                        }}
+                        onClick={() => {
+                          setLabelValue("Registering Authority"),
+                          setOpennedModal("registeringAuthority")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.registeringAuthority : null);
+                        }}
+                      ></ReportProblemIcon>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
+                {
+                    applicantInfoPersonal?.AppliedLandDetails?.map((item,index)=>{
+                      
                   <tr>
                     <td>
-                      <input type="text" className="form-control" disabled />
+                      <input type="text" className="form-control" placeholder={item?.tehsil} disabled />
                     </td>
                     <td>
-                      <input type="text" className="form-control" disabled />
+                      <input type="text" className="form-control" placeholder={item?.revenueEstate} disabled />
                     </td>
                     <td>
-                      <input type="text" className="form-control" disabled />
+                      <input type="text" className="form-control" placeholder={item?.rectangleNo} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" disabled />
+                      <input type="text" className="form-control" placeholder={item?.landOwner} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" disabled />
+                      <input type="text" className="form-control" placeholder={item?.consolidationType} disabled />
                     </td>
                     <td class="text-center">
                       {" "}
-                      <input type="text" className="form-control" disabled />{" "}
+                      <input type="text" className="form-control" placeholder={item?.kanal} disabled />{" "}
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" disabled />
+                      <input type="text" className="form-control" placeholder={item?.marla} disabled />
                     </td>
                     <td class="text-center">
-                      <input type="text" className="form-control" disabled />
+                      <input type="text" className="form-control" placeholder={item?.srasai} disabled />
                     </td>
-                    {/* <td class="text-center">
-                  <input type="text" className="form-control" disabled />
-                </td>
-                <td class="text-center">
-                  <input type="text" className="form-control" disabled />
-                </td>
-                <td class="text-center">
-                  <input type="text" className="form-control" disabled />
-                </td>
-                <td class="text-center">
-                  <input type="text" className="form-control" disabled />
-                </td>
-                <td class="text-center">
-                  <input type="text" className="form-control" disabled />
-                </td> */}
                     <td class="text-center">
-                      {" "}
-                      <input type="text" className="form-control" disabled />
+                      <input type="text" className="form-control" placeholder={item?.bigha} disabled />
                     </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" placeholder={item?.biswa} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" placeholder={item?.biswansi} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" placeholder={item?.collaboration} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" placeholder={item?.developerCompany} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" placeholder={item?.agreementValidFrom} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" placeholder={item?.validitydate} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" placeholder={item?.agreementIrrevocialble} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" placeholder={item?.nameAuthSign} disabled />
+                    </td>
+                    <td class="text-center">
+                      <input type="text" className="form-control" placeholder={item?.nameAuthSign} disabled />
+                    </td><td class="text-center">
+                      <input type="text" className="form-control" placeholder={item?.registeringAuthority} disabled />
+                    </td>
+
+                    
                   </tr>
+                    })
+                  }
                 </tbody>
               </table>
             </div>
@@ -820,8 +965,6 @@ const Genarelinfo = (props) => {
             </div> */}
           </Form.Group>
           <br></br>
-
-          {/* <hr></hr> */}
         </div>
       </Collapse>
       {/* </Card> */}
