@@ -85,6 +85,14 @@ const TextInput = (props) => {
             autoComplete="off"
             disabled={props.disabled}
           />
+          
+        )}
+        {props.errorMsg && (
+          <span className="text-danger">
+            {props.errorMsg === true
+              ? `Please enter ${props.title}.`
+              : props.errorMsg}
+          </span>
         )}
         {props.type === "date" && <DatePicker {...props} date={date} setDate={setDate} data={data} />}
         {props.signature ? props.signatureImg : null}
@@ -101,6 +109,7 @@ TextInput.propTypes = {
   onChange: PropTypes.func,
   ref: PropTypes.func,
   value: PropTypes.any,
+  errorMsg: PropTypes.any,
 };
 
 TextInput.defaultProps = {
