@@ -161,7 +161,7 @@ const FeesChargesForm = (props) => {
     try {
       const Resp = await axios
         .get(
-          "http://10.1.1.18:8443/land-services/_calculate?feeType=scrutinyFeeCharges&purposename=residentialPlottedColony&arce=1" +
+          "http://103.166.62.118:8443/land-services/_calculate?feeType=scrutinyFeeCharges&purposename=residentialPlottedColony&arce=1" +
             "&potenialZone=" +
             potential +
             "&colonyType=" +
@@ -182,7 +182,7 @@ const FeesChargesForm = (props) => {
 
   const getSubmitDataLabel = async () => {
     try {
-      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
+      const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
         return response;
       });
       console.log("RESP+++", Resp?.data);

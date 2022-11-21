@@ -30,8 +30,6 @@ const ApllicantFormStep1 = (props) => {
   });
 
   const ApplicantFormSubmitHandlerForm = async (data) => {
-    props.Step1Continue("12", "userInfo");
-    return;
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "ApplicantInfo",
@@ -82,7 +80,7 @@ const ApllicantFormStep1 = (props) => {
 
   const getDeveloperDataLabel = async (id) => {
     try {
-      const Resp = await axios.get(`http://10.1.1.18:8443/user/developer/_getDeveloperById?id=${id}&isAllData=false`);
+      const Resp = await axios.get(`http://103.166.62.118:8443/user/developer/_getDeveloperById?id=${id}&isAllData=false`);
       console.log("Resp.data", Resp?.data);
       setDeveloperDataLabel(Resp?.data?.devDetail?.[0]);
     } catch (error) {
@@ -121,7 +119,7 @@ const ApllicantFormStep1 = (props) => {
   const getApplicantUserData = async (id) => {
     console.log("here");
     try {
-      const Resp = await axios.get(`http://10.1.1.18:8443/tl-services/new/licenses/_get?id=${id}`);
+      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
       const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
       console.log(Resp?.data?.newServiceInfoData[0]?.ApplicantInfo);
       setValue("notSigned", userData?.notSigned);
