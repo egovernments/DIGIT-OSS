@@ -14,7 +14,7 @@ x-common-path: >-
   https://raw.githubusercontent.com/egovernments/egov-services/master/docs/common/contracts/v1-0-0.yml
 paths:
 ######################################### 
-  /payments/v1/_search:
+  /transaction/v1/_search:
     post:
       summary: Retrieves the current status of a payment
       description: |
@@ -76,7 +76,7 @@ paths:
         - Payment
 
 #########################################
-  /payments/v1/_create:
+  /transaction/v1/_create:
     post:
       summary: Initiates a new payment transaction.
       description: Initiates a new payment transaction, on successful validation, a redirect is issued to the payment gateway.
@@ -100,7 +100,7 @@ paths:
 
 #########################################
 
-  /payments/v1/_update:
+  /transaction/v1/_update:
     post:
       summary: Update an existing payment.
       description: Updates an existing payment transaction, to be used only by payment gateways to update status of payments. Verifies the authenticity of the request with the payment gateway. Forward all query params received from payment gateway
