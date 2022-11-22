@@ -37,6 +37,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
             arrayDevList.push({ code: `${purposeTypeDetails.name}`, value: `${purposeTypeDetails.purposeCode}` });
         });
 
+    const {setValue, getValues, watch} = useForm();
+
+    const DevelopersAllData = getValues();
+    console.log("DEVEDATAGEGT",DevelopersAllData);
+    // const [Documents,getValues] = useState([]);
 
     const onSkip = () => onSelect();
     const getDeveloperData = async () => {
@@ -60,12 +65,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
             });
             const developerDataGet = getDevDetails?.data;
             // console.log(developerDataGet);
-            // console.log("TECHEXP",developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.engineerName);
+            console.log("TECHEXP",developerDataGet?.devDetail[0]?.capacityDevelopAColony?.capacityDevelopColonyHdruAct?.sectorAndDevelopmentPlan);
             setValueHrdu(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.permissionGrantedHRDU);
             setValueTechExpert(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpert);
             setValueDesignatedDirectors(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.designatedDirectors);
             setValueAlreadyObtainedLic(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.alreadtObtainedLic);
             setModalCapacityDevelopColonyHdruAct(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.capacityDevelopColonyHdruAct || "");
+            setModalDevPlan(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.capacityDevelopColonyHdruAct[1]?.sectorAndDevelopmentPlan || "");
+            setModalDevValidity(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.capacityDevelopColonyHdruAct[1]?.validatingLicence || "");
             setCapacityDevelopColonyLawAct(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.capacityDevelopColonyLawAct || "");
             setModalLcNo(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.licenceNumber);
             setEngineerName(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.engineerName)
@@ -114,7 +121,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     useEffect(() => {
         getDeveloperData()
     }, []);
-
+    const [Documents, setDocumentsData] = useState([]);
     const [genderUser, setGenderMF] = useState(formData?.LicneseDetails?.genderUser || formData?.formData?.LicneseDetails?.genderUser || "");
     const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
     const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
@@ -155,18 +162,18 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
     const [engineerName, setEngineerName] = useState(formData?.LicneseDetails?.engineerName || "")
     const [engineerQualification, setEngineerQualification] = useState(formData?.LicneseDetails?.engineerQualification || "")
-    const [engineerSign, setEngineerSign] = useState(formData?.LicneseDetails?.engineerSign || "")
-    const [engineerDegree, setEngineerDegree] = useState(formData?.LicneseDetails?.engineerDegree || "")
+    const [engineerSign, setEngineerSign] = useState(formData?.LicneseDetails?.engineerSign || DevelopersAllData?.engineerSign || "")
+    const [engineerDegree, setEngineerDegree] = useState(formData?.LicneseDetails?.engineerDegree || DevelopersAllData?.engineerDegree || "")
     const [architectName, setArchitectName] = useState(formData?.LicneseDetails?.architectName || "")
     const [architectQualification, setArchitectQualification] = useState(formData?.LicneseDetails?.architectQualification || "")
-    const [architectSign, setArchitectSign] = useState(formData?.LicneseDetails?.architectSign || "")
-    const [architectDegree, setArchitectDegree] = useState(formData?.LicneseDetails?.architectDegree || "")
+    const [architectSign, setArchitectSign] = useState(formData?.LicneseDetails?.architectSign || DevelopersAllData?.architectSign || "")
+    const [architectDegree, setArchitectDegree] = useState(formData?.LicneseDetails?.architectDegree || DevelopersAllData?.architectDegree || "")
     const [townPlannerName, setTownPlannerName] = useState(formData?.LicneseDetails?.townPlannerName || "")
     const [townPlannerQualification, setTownPlannerQualification] = useState(formData?.LicneseDetails?.townPlannerQualification || "")
-    const [townPlannerSign, setTownPlannerSign] = useState(formData?.LicneseDetails?.townPlannerSign || "")
+    const [townPlannerSign, setTownPlannerSign] = useState(formData?.LicneseDetails?.townPlannerSign || DevelopersAllData?.architectDegree ||  "")
     const [townPlannerDegree, setTownPlannerDegree] = useState(formData?.LicneseDetails?.townPlannerDegree || "")
-    const [existingDeveloperAgreement, setExistingDev] = useState(formData?.LicneseDetails?.existingDeveloperAgreement || "")
-    const [existingDeveloperAgreementDoc, setExistingDevDoc] = useState(formData?.LicneseDetails?.existingDeveloperAgreementDoc || "")
+    const [existingDeveloperAgreement, setExistingDev] = useState(formData?.LicneseDetails?.existingDeveloperAgreement || DevelopersAllData?.existingDeveloperAgreement ||  "")
+    const [existingDeveloperAgreementDoc, setExistingDevDoc] = useState(formData?.LicneseDetails?.existingDeveloperAgreementDoc || DevelopersAllData?.existingDeveloperAgreementDoc || "")
     const [technicalCapacity, setTechnicalCapacity] = useState(formData?.LicneseDetails?.technicalCapacity || "")
     const [technicalCapacityDoc, setTechnicalCapacityDoc] = useState(formData?.LicneseDetails?.technicalCapacityDoc || "")
     const [engineerNameN, setengineerNameN] = useState(formData?.LicneseDetails?.engineerNameN || "")
@@ -186,10 +193,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     const [docUpload, setDocuploadData] = useState("")
     const [file, setFile] = useState("");
     const [filesUp, setFilesUp] = useState(null);
-    const [individualCertificateCA, setIndividualCertificateCA] = useState("");
-    const [companyBalanceSheet, setCompanyBalanceSheet] = useState("");
-    const [paidUpCapital, setPaidUpCapital] = useState("");
-    const [networthPartners, setNetworthPartners] = useState("");
+    const [individualCertificateCA, setIndividualCertificateCA] = useState(DevelopersAllData?.individualCertificateCA || "");
+    const [companyBalanceSheet, setCompanyBalanceSheet] = useState( DevelopersAllData?.companyBalanceSheet || "");
+    const [paidUpCapital, setPaidUpCapital] = useState(DevelopersAllData?.paidUpCapital || "");
+    const [networthPartners, setNetworthPartners] = useState(DevelopersAllData?.networthPartners || "");
     const [networthFirm, setNetworthFirm] = useState("");
     const [permissionGrantedHRDU, setValueHrdu] = useState("");
     const [technicalExpert, setValueTechExpert] = useState("");
@@ -207,6 +214,12 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     //   const filteredDocument = documents?.filter((item) => item?.documentType?.includes(doc?.code))[0];
     const [uploadedFile, setUploadedFile] = useState(null);
     const [urlGetForFile, setFIleUrl] = useState("");
+    const [urlGetValidateLicFile, setValidateLicUrl] = useState("");
+    const [urlGetStatusDevFile, setStatusDevUrl] = useState("");
+    const [urlGetOutstandingFile, setOutStandingUrl] = useState("");
+    const [urlGetCompanyBalanceSheet, setCompanyBalanceSheetUrl] = useState("");
+    const [urlGetPaidUpCapital, setPaidUpCapitalUrl] = useState("");
+    const [urlGetIndividualCertificateCA, setIndividualCertificatCAUrl] = useState("");
     if (isopenlink)
         window.onunload = function () {
             sessionStorage.removeItem("Digit.BUILDING_PERMIT");
@@ -226,14 +239,13 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     function selectCorrespondenceaddress(e) {
         setCorrespondenceaddress(e.target.value);
     }
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm([{ XLongitude: "", YLatitude: "" }]);
-    const formSubmit = (data) => {
-        console.log("data", data);
-    };
+ 
+    // const formSubmit = (data) => {
+    //     console.log("data", data);
+    // };
+
+    
+
     const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] = useState(false);
 
     const [showCapacityDevelopColony, setShowCapacityDevelopColony] = useState(false);
@@ -300,59 +312,198 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
     };
 
     const devTypeFlagVal = localStorage.getItem('devTypeValueFlag');
-    const getDocumentData = async () => {
-        if (file === null) {
-            return
-        }
-        const formData = new FormData();
-        formData.append("file", file.file);
-        formData.append("tenantId", tenantId);
-        formData.append("module", "property-upload");
-        try {
-            const Resp = await axios.post("/filestore/v1/files", formData,
-                {
-                    headers: {
-                        "content-type": "multipart/form-data"
-                    }
-                }).then((response) => {
-                    return response
-                });
-            const docValue = Resp.data?.files[0]?.fileStoreId
-            setModalDevPlan(docValue);
-        } catch (error) {
-            console.log(error.message);
-        }
-        getDocData();
-    }
-    useEffect(() => {
-        getDocumentData();
-    }, [file]);
-
-    //   function selectfile(e) {
-    //     setFilesUp(e.target.files[0]);
+    // const getDocumentData = async () => {
+    //     if (file === null) {
+    //         return
+    //     }
+    //     const formData = new FormData();
+    //     formData.append("file", file.file);
+    //     formData.append("tenantId", tenantId);
+    //     formData.append("module", "property-upload");
+    //     try {
+    //         const Resp = await axios.post("/filestore/v1/files", formData,
+    //             {
+    //                 headers: {
+    //                     "content-type": "multipart/form-data"
+    //                 }
+    //             }).then((response) => {
+    //                 return response
+    //             });
+    //         const docValue = Resp.data?.files[0]?.fileStoreId
+    //         setModalDevPlan(docValue);
+    //     } catch (error) {
+    //         console.log(error.message);
+    //     }
+    //     getDocData();
     // }
+    
+    const getDocumentData = async (file, fieldName) => {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("tenantId", "hr");
+        formData.append("module", "property-upload");
+        formData.append("tag", "tag-property");
+        // setLoader(true);
+        try {
+          const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
+            return response;
+          });
+          console.log(Resp?.data?.files);
+          setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+          // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+          console.log("getValues()=====", getValues());
+          setDocumentsData(getValues())
+        //   setLoader(false);
+        
+        } catch (error) {
+        //   setLoader(false);
+          console.log(error.message);
+        }
+    };
 
     const getDocData = async () => {
-        // const tId = tenantId;
-        // const fileStoreLabel = sectorAndDevelopmentPlan;
-        if (sectorAndDevelopmentPlan === null) {
-            return
-        }
-        try {
-            const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${sectorAndDevelopmentPlan}`, {
+        if ((Documents?.sectorAndDevelopmentPlan !== null || Documents?.sectorAndDevelopmentPlan !== undefined) && (sectorAndDevelopmentPlan!==null || sectorAndDevelopmentPlan!=="")) {       
+            try {
+                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.sectorAndDevelopmentPlan}`, {
 
-            });
-            const FILDATA = response.data?.fileStoreIds[0]?.url;
-            setFIleUrl(FILDATA)
-            console.log("GET DOCUMENT LABEL", FILDATA);
-        } catch (error) {
-            console.log(error.message);
+                });
+                const FILDATA = response.data?.fileStoreIds[0]?.url;
+                setFIleUrl(FILDATA)
+                console.log("GET DOCUMENT LABEL", FILDATA);
+            } catch (error) {
+                console.log(error.message);
+            }
         }
     }
 
     useEffect(() => {
         getDocData();
-    }, [sectorAndDevelopmentPlan])
+    }, [Documents?.sectorAndDevelopmentPlan]);
+
+    const getDocValidLic = async () => {
+        if ((Documents?.validatingLicence !== null || Documents?.validatingLicence !== undefined) && (validatingLicence!==null || validatingLicence!=="")) {
+            
+            try {
+                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.validatingLicence}`, {
+
+                });
+                const FILDATA = response.data?.fileStoreIds[0]?.url;
+                setValidateLicUrl(FILDATA)
+                console.log("GET VALID LIC", FILDATA);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+    }
+
+    useEffect(() => {
+        getDocValidLic();
+    }, [Documents?.validatingLicence]);
+
+    // COLONIES DEVELOPED GET UPLOADED DOC
+    const getDocStatusDev = async () => {
+        if ((Documents?.statusOfDevelopment !== null || Documents?.statusOfDevelopment !== undefined) && (statusOfDevelopment!==null || statusOfDevelopment!=="")) {
+            
+            try {
+                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.statusOfDevelopment}`, {
+
+                });
+                const FILDATA = response.data?.fileStoreIds[0]?.url;
+                setStatusDevUrl(FILDATA)
+                console.log("GET DOCUMENT LABEL", FILDATA);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+    }
+
+    useEffect(() => {
+        getDocStatusDev();
+    }, [Documents?.statusOfDevelopment]);
+
+
+    const getOutstandingDues = async () => {
+        if ((Documents?.outstandingDues !== null || Documents?.outstandingDues !== undefined) && (outstandingDues!==null || outstandingDues!=="")) {
+            
+            try {
+                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.outstandingDues}`, {
+
+                });
+                const FILDATA = response.data?.fileStoreIds[0]?.url;
+                setOutStandingUrl(FILDATA)
+                console.log("GET DOCUMENT LABEL", FILDATA);
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+    }
+
+    useEffect(() => {
+        getOutstandingDues();
+    }, [Documents?.outstandingDues]);
+
+    // PARTICULAR OF DOCUMENTS
+
+    
+    const getCompanyBalanceSheet = async () => {
+        if ((DevelopersAllData?.companyBalanceSheet !== null || DevelopersAllData?.companyBalanceSheet !== undefined) && (companyBalanceSheet!==null || companyBalanceSheet!=="")) {
+            
+            try {
+                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.companyBalanceSheet}`, {
+
+                });
+                const FILDATA = response.data?.fileStoreIds[0]?.url;
+                setCompanyBalanceSheetUrl(FILDATA)
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+    }
+
+    useEffect(() => {
+        getCompanyBalanceSheet();
+    }, [DevelopersAllData?.companyBalanceSheet]);
+    
+    
+    const getPaidUpCapital = async () => {
+        if ((DevelopersAllData?.paidUpCapital !== null || DevelopersAllData?.paidUpCapital !== undefined) && (paidUpCapital!==null || paidUpCapital!=="")) {
+            
+            try {
+                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.paidUpCapital}`, {
+
+                });
+                const FILDATA = response.data?.fileStoreIds[0]?.url;
+                setPaidUpCapitalUrl(FILDATA)
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+    }
+
+    useEffect(() => {
+        getPaidUpCapital();
+    }, [DevelopersAllData?.paidUpCapital]);
+    
+    
+    const getIndividualCertificateCA = async () => {
+        if ((DevelopersAllData?.individualCertificateCA !== null || DevelopersAllData?.individualCertificateCA !== undefined) && (individualCertificateCA!==null || individualCertificateCA!=="")) {
+            
+            try {
+                const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${DevelopersAllData?.individualCertificateCA}`, {
+
+                });
+                const FILDATA = response.data?.fileStoreIds[0]?.url;
+                setIndividualCertificatCAUrl(FILDATA)
+            } catch (error) {
+                console.log(error.message);
+            }
+        }
+    }
+
+    useEffect(() => {
+        getPaidUpCapital();
+    }, [DevelopersAllData?.individualCertificateCA]);
+    
 
     const setpurposeType = (data) => {
         const getDevTypeValue = data?.value;
@@ -368,13 +519,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 licenceNumber: licenceNumber,
                 nameOfDeveloper: nameOfDeveloper,
                 purposeOfColony: purposeOfColony,
-                sectorAndDevelopmentPlan: sectorAndDevelopmentPlan,
-                validatingLicence: sectorAndDevelopmentPlan
+                sectorAndDevelopmentPlan: Documents?.sectorAndDevelopmentPlan,
+                validatingLicence: Documents?.validatingLicence
 
             }
             setModalCapacityDevelopColonyHdruAct((prev) => [...prev, values]);
             console.log("WIHT DOC", values);
             getDocData();
+            getDocValidLic();
             handleCloseCapacityDevelopColony()
         }
         //   console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
@@ -394,12 +546,14 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 coloniesDeveloped: coloniesDeveloped,
                 area: area,
                 purpose: purpose,
-                statusOfDevelopment: statusOfDevelopment,
-                outstandingDues: outstandingDues
+                statusOfDevelopment: Documents?.statusOfDevelopment,
+                outstandingDues: Documents?.outstandingDues
 
 
             }
             setCapacityDevelopColonyLawAct((prev) => [...prev, colonyDevValues]);
+            getDocStatusDev();
+            getOutstandingDues();
             handleCloseColoniesDeveloped();
             console.log("DevCapacityColony", capacityDevelopColonyLawAct);
         }
@@ -482,11 +636,11 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 "devDetail": {
 
                     "capacityDevelopAColony": {
-                        "individualCertificateCA": "",
-                        "companyBalanceSheet": "",
-                        "paidUpCapital": "",
-                        "networthPartners": "",
-                        "networthFirm": "",
+                        "individualCertificateCA": individualCertificateCA,
+                        "companyBalanceSheet": companyBalanceSheet,
+                        "paidUpCapital": paidUpCapital,
+                        "networthPartners": networthPartners,
+                        "networthFirm": networthFirm,
                         "permissionGrantedHRDU": permissionGrantedHRDU,
                         "technicalExpert": technicalExpert,
                         "designatedDirectors": designatedDirectors,
@@ -623,14 +777,18 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                 <td>
                                                     <input
                                                         type="file"
-                                                        name="upload"
+                                                        name="individualCertificateCA"
                                                         placeholder=""
                                                         class="employee-card-input"
-                                                        onChange={(e) => setFile({ file: e.target.files[0] })}
+                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA")}
                                                     />
                                                 </td>
                                                 <td align="center" size="large">
-                                                    {/* <FileUploadIcon /> */}
+                                                    {DevelopersAllData?.individualCertificateCA !== "" ? 
+                                                        <a href={urlGetIndividualCertificateCA} target="_blank" className="btn btn-sm col-md-6">
+                                                            <VisibilityIcon color="info" className="icon" />
+                                                        </a>:<p></p>
+                                                    }
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -660,15 +818,19 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                 <td>
                                                     <input
                                                         type="file"
-                                                        name="upload"
+                                                        name="companyBalanceSheet"
                                                         placeholder=""
                                                         class="employee-card-input"
-                                                        onChange={(e) => setFile({ file: e.target.files[0] })}
+                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet")}
                                                     />
 
                                                 </td>
                                                 <td align="center" size="large">
-                                                    {/* <FileUploadIcon /> */}
+                                                    {DevelopersAllData?.companyBalanceSheet !== "" ? 
+                                                        <a href={urlGetCompanyBalanceSheet} target="_blank" className="btn btn-sm col-md-6">
+                                                            <VisibilityIcon color="info" className="icon" />
+                                                        </a>:<p></p>
+                                                    }
                                                 </td>
                                             </tr>
                                             <tr>
@@ -677,14 +839,19 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                 <td>
                                                     <input
                                                         type="file"
-                                                        name="upload"
+                                                        name="paidUpCapital"
                                                         placeholder=""
                                                         class="employee-card-input"
-                                                        onChange={(e) => setFile({ file: e.target.files[0] })}
+                                                        onChange={(e) => getDocumentData(e?.target?.files[0], "paidUpCapital")}
                                                     />
                                                 </td>
                                                 <td align="center" size="large">
-                                                    {/* <FileUploadIcon /> */}
+                                                    {DevelopersAllData?.paidUpCapital !== "" ? 
+                                                        <a href={urlGetPaidUpCapital} target="_blank" className="btn btn-sm col-md-6">
+                                                            <VisibilityIcon color="info" className="icon" />
+                                                        </a>:<p></p>
+                                                    }
+                                                    
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -842,7 +1009,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                     <td>
                                                                         <div className="row">
                                                                             {elementInArray.validatingLicence !== "" ? 
-                                                                                <a href={urlGetForFile} target="_blank" className="btn btn-sm col-md-6">
+                                                                                <a href={urlGetValidateLicFile} target="_blank" className="btn btn-sm col-md-6">
                                                                                     <VisibilityIcon color="info" className="icon" />
                                                                                 </a>:<p></p>
                                                                             }
@@ -926,13 +1093,20 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                         <Row>
                                                             <Col md={4} xxl lg="4">
                                                                 <label htmlFor="name" className="text">Sector and development plan</label>
-                                                                <input
+                                                                {/* <input
                                                                     type="file"
                                                                     accept=".pdf"
                                                                     // onChange={(e) => setModalDevPlan(e.target.value)}
                                                                     onChange={(e) => setFile({ file: e.target.files[0] })}
                                                                     placeholder=""
                                                                     class="employee-card-input"
+                                                                /> */}
+                                                                <input
+                                                                    type="file"
+                                                                    className="form-control"
+                                                                    name="sectorAndDevelopmentPlan"
+                                                                    // {...register("thirdPartyDoc")}
+                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "sectorAndDevelopmentPlan")}
                                                                 />
                                                             </Col>
                                                             <Col md={4} xxl lg="4">
@@ -940,8 +1114,10 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 <input
                                                                     type="file"
                                                                     accept=".pdf"
+                                                                    name="validatingLicence"
                                                                     // onChange={(e) => setModalDevValidity(e.target.value)}
-                                                                    onChange={(e) => setFile({ file: e.target.files[0] })}
+                                                                    // onChange={(e) => setFile({ file: e.target.files[0] })}
+                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "validatingLicence")}
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                 />
@@ -1027,23 +1203,20 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 </td>
                                                                 <td>
                                                                     <div className="row">
-                                                                        <button className="btn btn-sm col-md-12">
-                                                                            <VisibilityIcon color="info" className="icon" />
-                                                                        </button>
-                                                                        {/* <button className="btn btn-sm col-md-6">
-                                                    <FileDownloadIcon color="primary"  />
-                                                </button> */}
-
+                                                                        {elementInArray.statusOfDevelopment !== "" ? 
+                                                                            <a href={urlGetStatusDevFile} target="_blank" className="btn btn-sm col-md-6">
+                                                                                <VisibilityIcon color="info" className="icon" />
+                                                                            </a>:<p></p>
+                                                                        }
                                                                     </div>
                                                                 </td>
                                                                 <td>
                                                                     <div className="row">
-                                                                        <button className="btn btn-sm col-md-12">
-                                                                            <VisibilityIcon color="info" className="icon" />
-                                                                        </button>
-                                                                        {/* <button className="btn btn-sm col-md-6">
-                                                    <FileDownloadIcon color="primary"  />
-                                                </button> */}
+                                                                        {elementInArray.outstandingDues !== "" ? 
+                                                                            <a href={urlGetOutstandingFile} target="_blank" className="btn btn-sm col-md-6">
+                                                                                <VisibilityIcon color="info" className="icon" />
+                                                                            </a>:<p></p>
+                                                                        }
 
                                                                     </div>
                                                                 </td>
@@ -1117,7 +1290,8 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             <input
                                                                 type="file"
                                                                 // onChange={(e) => setColonyStatusDev(e.target.value)}
-                                                                onChange={(e) => setFile({ file: e.target.files[0] })}
+                                                                
+                                                                onChange={(e) => getDocumentData(e.target.files[0],"statusOfDevelopment" )}
                                                                 placeholder=""
                                                                 class="employee-card-input"
                                                             />
@@ -1127,7 +1301,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                             <input
                                                                 type="file"
                                                                 // onChange={(e) => setColonyoutstandingDue(e.target.value)}
-                                                                onChange={(e) => setFile({ file: e.target.files[0] })}
+                                                                onChange={(e) => getDocumentData(e.target.files[0],"outstandingDues" )}
                                                                 placeholder=""
                                                                 class="employee-card-input"
                                                             />
@@ -1216,19 +1390,17 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                                 <input
                                                                     type="file"
                                                                     // onChange={(e) => setEngineerSign(e.target.value)}
-                                                                    onChange={(e) => setFile({ file: e.target.files[0] })}
+                                                                    onChange={(e) => getDocumentData(e?.target?.files[0], "" )}
                                                                     placeholder=""
                                                                     class="employee-card-input"
                                                                 />
                                                             </td>
                                                             <td align="center" size="large">
-                                                                <input
-                                                                    type="file"
-                                                                    // onChange={(e) => setEngineerDegree(e.target.value)}
-                                                                    onChange={(e) => setFile({ file: e.target.files[0] })}
-                                                                    placeholder=""
-                                                                    class="employee-card-input"
-                                                                />
+                                                                {DevelopersAllData?.paidUpCapital !== "" ? 
+                                                                    <a href={urlGetPaidUpCapital} target="_blank" className="btn btn-sm col-md-6">
+                                                                        <VisibilityIcon color="info" className="icon" />
+                                                                    </a>:<p></p>
+                                                                }
                                                             </td>
                                                         </tr>
 
