@@ -21,6 +21,7 @@ import org.egov.tracer.model.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 @Component
 public class UnmaskingUtil {
@@ -101,7 +102,7 @@ public class UnmaskingUtil {
 
 	private void updateMaskedOwnerInfoWithUnmaskedFields(OwnerInfo ownerInfo, OwnerInfo unmaskedUser) {
 
-		if (ownerInfo.getFatherOrHusbandName().contains("*")) {
+		if (!StringUtils.isEmpty(ownerInfo.getFatherOrHusbandName()) && ownerInfo.getFatherOrHusbandName().contains("*")) {
 			ownerInfo.setFatherOrHusbandName(unmaskedUser.getFatherOrHusbandName());
 		}
 		if (ownerInfo.getMobileNumber().contains("*")) {
