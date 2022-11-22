@@ -35,6 +35,7 @@ const ApllicantFormStep1 = (props) => {
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "ApplicantInfo",
+      ApplicationStatus: "INITIATE",
       id: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,

@@ -338,13 +338,10 @@ const ApllicantPuropseForm = (props) => {
   };
 
   const PurposeFormSubmitHandler = async (data) => {
-    props.Step2Continue();
-    return;
     data["purpose"] = data?.purpose?.value;
     data["potential"] = data?.potential?.value;
     data["district"] = watch("district")?.value;
     data["state"] = "Haryana";
-
     delete data?.tehsil;
     delete data?.revenueEstate;
     delete data?.mustil;
@@ -368,14 +365,12 @@ const ApllicantPuropseForm = (props) => {
     delete data?.khewats;
     delete data?.rowid;
 
-    // console.log("data", data);
-    // return;
-
     const token = window?.localStorage?.getItem("token");
     if (!modalData?.length) alert("Please enter atleast one record");
     else {
       const postDistrict = {
         pageName: "ApplicantPurpose",
+        ApplicationStatus: "INITIATE",
         id: props.getId,
         createdBy: props?.userData?.id,
         updatedBy: props?.userData?.id,

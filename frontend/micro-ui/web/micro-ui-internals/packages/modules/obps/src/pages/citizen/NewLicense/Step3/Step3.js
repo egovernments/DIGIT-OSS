@@ -100,11 +100,10 @@ const LandScheduleForm = (props) => {
     data["approachType"] = data?.approachType?.value;
     data["typeLand"] = data?.typeLand?.value;
     data["purposeParentLic"] = data?.purposeParentLic?.value;
-    console.log("data=====", data);
-    props.Step3Continue();
-    return;
+
     const postDistrict = {
       pageName: "LandSchedule",
+      ApplicationStatus: "INITIATE",
       id: props.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
@@ -127,10 +126,7 @@ const LandScheduleForm = (props) => {
       },
     };
     try {
-      const Resp = await axios.post("/tl-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-      });
-      console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       setLoader(false);
       props.Step3Continue();
     } catch (error) {
