@@ -10,18 +10,20 @@ import { useForm } from "react-hook-form";
 // import Select from 'react-bootstrap/Select';
 import { Button } from 'react-bootstrap';
 import Popup from "reactjs-popup";
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from "reactstrap";
+// import {
+//   Modal,
+//   ModalHeader,
+//   ModalBody,
+//   ModalFooter,
+// } from "reactstrap";
+import {Modal, ModalHeader, ModalFooter, ModalBody } from 'react-bootstrap';
 import axios from "axios";
 import ReactMultiSelect from "../../../../react-components/src/atoms/ReactMultiSelect";
 import SearchDropDown from "../../../../react-components/src/atoms/searchDropDown";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import Delete from "@mui/icons-material/Delete";
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
   let validation = {};
   const { pathname: url } = useLocation();
@@ -57,7 +59,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setDeveloperDataAddinfo((prev)=>[...prev,developerDataGet]);
       console.log(developerDataAddinfo?.data);
       
-      // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.shareHoldingPatterens); 
+      console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.registeredContactNo); 
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.addInfo?.showDevTypeFields);
       setCinNo(developerDataGet?.devDetail[0]?.addInfo?.cin_Number);
       // setName(developerDataGet?.devDetail[0]?.addInfo?.name);
@@ -66,7 +68,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       setRegistered(developerDataGet?.devDetail[0]?.addInfo?.registeredAddress);
       setUserEmail(developerDataGet?.devDetail[0]?.addInfo?.email);
       setUserEmailInd(developerDataGet?.devDetail[0]?.addInfo?.emailId);
-      setMobile(developerDataGet?.devDetail[0]?.addInfo?.mobileNumber);
+      // setMobile(developerDataGet?.devDetail[0]?.addInfo?.mobileNumber);
       setGST(developerDataGet?.devDetail[0]?.addInfo?.gst_Number);
       setTbName(developerDataGet?.devDetail[0]?.addInfo?.sharName);
       setDesignition(developerDataGet?.devDetail[0]?.addInfo?.designition);
@@ -93,9 +95,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   
     return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
   }, [])
-  // useEffect(() => {
-    
-  // }, []);
+  
+ 
+
   const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name: "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [mobileNumberUser, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber: "") ||
     formData?.LicneseDetails?.mobileNumberUser || formData?.formData?.LicneseDetails?.mobileNumberUser || ""
@@ -127,16 +129,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       arrayDevList.push({ code: `${devTypeDetails.code}`, value: `${devTypeDetails.code}` });
     });
     
-    // console.log("DEVTYPE ARRAY OPT",arrayDevList);
-
-    // useEffect(() => {
-    //   const devTypeDataList = optionsArrList?.["Developer-type"]?.DeveloperType?.map(function (data) {
-        
-    //     return { value: data?.code, label: data?.Type };
-    //   });
-    //   setDevTypeOptions({data: devTypeDataList, isLoading: false});
-    //   // console.log("DEVTYPE OPT",devTypeDataList);
-    // }, [optionsArrList]);
+    
     
     const [modal, setmodal] = useState(false);
     const [modalDirectors, setmodalDirector] = useState(false);
@@ -160,32 +153,6 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       { Sr: "", name: "", mobileNumber: "", email: "", PAN: "", Aadhar: "" },
     ]);
 
-    
-    // const optionsArrList = [
-    //   {
-    //     label: "Individual",
-    //     value: "Individual",
-    //     id: "1",
-    //   },
-    //   {
-    //     label: "Company",
-    //     value: "Company",
-    //     id: "2",
-    //   },
-    //   {
-    //     label: "LLP",
-    //     value: "LLP",
-    //     id: "3",
-    //   },
-    //   {
-    //     label: "Society",
-    //     value: "Society",
-    //     id: "4",
-    //   },
-    // ]
-    // onchange = (e) => {
-    //   this.setState({ value: e.target.value });
-    // };
     const handleChange = (e) => {
       this.setState({ isRadioSelected: true });
     };
@@ -224,7 +191,24 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const [developerDataAddinfo,setDeveloperDataAddinfo] = useState([])
     const [showDevTypeFieldsValue,setShowDevTypeFieldsValue] = useState("")
 
-    
+    const [show, setShow] = useState(false);
+    const [showStake, setShowStakeholder] = useState(false);
+
+    const handleShowStakeholder = () => {
+      setShowStakeholder(true)
+      setModalNAme("");
+      setModaldesignition("");
+      setModalPercentage("");
+    };
+    const handleCloseStakeholder = () => setShowStakeholder(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => {
+      setShow(true)
+      setModalDIN("");
+      setModalDirectorName("");
+      setModalContactDirector("");
+    };
     // console.log(devRegId);
     const handleshow = (e) => {
       const getshow = e.target.value;
@@ -239,8 +223,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     function setMobileNo(e) {
       setMobileNumber(e.target.value);
     }
-    function selectRegisteredMobile(e) {
-      setRegisteredMobileNumber(e.target.value);
+    function selectRegisteredMobile(value) {
+      setRegisteredMobileNumber(value);
     }
     function setUserEmailId(value) {
       setUserEmail(value);
@@ -337,6 +321,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   
       }
   }
+
+  const clearForm = () => {
+    document.getElementById("myForm").reset(); 
+    // this.setState({
+    //   item: ""
+    // })
+  }
   const handleArrayValues=()=>{
     
     if (modalNAme!=="" && modaldesignition!=="" && modalPercentage!=="") {
@@ -345,11 +336,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         "name":modalNAme,
         "designition":modaldesignition,
         "percentage":modalPercentage,
-        "uploadPdf": null,
+        "document": docUpload,
         "serialNumber": null
       }
       setModalValuesArray((prev)=>[...prev,values]);
-      setmodal(!modal)
+      
+      handleCloseStakeholder();
     }
   }
   const handleDirectorsArrayValues=()=>{
@@ -360,11 +352,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         "din":modalDIN,
         "name":modalDirectorName,
         "contactNumber":modalDirectorContact,
-        "uploadPdf": null,
+        "document": docUpload,
         "serialNumber": null
       }
       setDirectorData((prev)=>[...prev,values]);
-      setmodalDirector(!modalDirectors)
+     handleClose();
     }
   }
   // console.log("FORMARRAYVAL",modalValuesArray);
@@ -539,58 +531,10 @@ const onSkip = () => onSelect();
                         onChange={(e) => SelectName(e.target.value)}
                         disabled="disabled"
                         className="employee-card-input"
-                      // placeholder=""
-                      // {...register("name", {
-                      //   required: "Name is required",
-                      //   pattern: {
-                      //     value: /^[a-zA-Z]+$/,
-                      //     message: "Name must be a valid string",
-                      //   },
-                      //   minLength: {
-                      //     value: 3,
-                      //     message:
-                      //       "Name should be greater than 3 characters",
-                      //   },
-                      //   maxLength: {
-                      //     value: 20,
-                      //     message:
-                      //       "Name shouldn't be greater than 20 characters",
-                      //   },
-                      // })}
+                      
                       />
                     </div>
                   </div>
-                  {/* <div className="col col-4">
-                    <div className="form-group">
-                      <label htmlFor="name">Registered Address</label>
-                      <input
-                        type="text"
-                        value={registeredAddress}
-                      placeholder={registeredAddress}
-                        className="employee-card-input"
-                      name="name"
-                      className={`employee-card-input`}
-                      placeholder=""
-                      {...register("name", {
-                        required: "Name is required",
-                        pattern: {
-                          value: /^[a-zA-Z]+$/,
-                          message: "Name must be a valid string",
-                        },
-                        minLength: {
-                          value: 3,
-                          message:
-                            "Name should be greater than 3 characters",
-                        },
-                        maxLength: {
-                          value: 20,
-                          message:
-                            "Name shouldn't be greater than 20 characters",
-                        },
-                      })}
-                      />
-                    </div>
-                  </div> */}
                   <div className="col col-4">
                     <div className="form-group ">
                       <label htmlFor="email"> Email </label>
@@ -687,24 +631,6 @@ const onSkip = () => onSelect();
                           type: "text",
                           title: "Please Enter CIN Number"
                         })}
-                      // placeholder=""
-                      // {...register("name", {
-                      //   required: "Name is required",
-                      //   pattern: {
-                      //     value: /^[a-zA-Z]+$/,
-                      //     message: "Name must be a valid string",
-                      //   },
-                      //   minLength: {
-                      //     value: 3,
-                      //     message:
-                      //       "Name should be greater than 3 characters",
-                      //   },
-                      //   maxLength: {
-                      //     value: 20,
-                      //     message:
-                      //       "Name shouldn't be greater than 20 characters",
-                      //   },
-                      // })}
                       />
                       {cin_Number && cin_Number.length > 0 && !cin_Number.match(Digit.Utils.getPattern('CIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
                     </div>
@@ -819,19 +745,26 @@ const onSkip = () => onSelect();
                     <div className="form-group">
                       <label htmlFor="name">Mobile No. <span className="text-danger font-weight-bold">*</span></label>
                       
-                      <MobileNumber
+                      {/* <MobileNumber
                         value={registeredContactNo}
-                        type="number"
                         maxlength={"10"}
                         pattern={"[6-9]{1}[0-9]{9}"}                        
                         name="registeredContactNo"
-                        onChange={(value) => selectRegisteredMobile({ target: { value } })}
+                        onChange={selectRegisteredMobile}
                         isMandatory={false}
                         {...(validation = {
                           isRequired: true,
                           title: "Please enter Mobile no."
                         })}
                         
+                      /> */}
+                      <MobileNumber
+                        value={registeredContactNo}
+                        name="registeredContactNo"
+                        maxlength={"10"}
+                        onChange={(value) => selectRegisteredMobile({ target: { value } })}
+                        // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                        {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
                       />
                       {registeredContactNo && registeredContactNo.length > 0 && !registeredContactNo.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
                     </div>
@@ -845,6 +778,7 @@ const onSkip = () => onSelect();
                         placeholder={gst_Number}
                         onChange={(e) => setGST(e.target.value.toUpperCase())}
                         className="employee-card-input"
+                        name={gst_Number}
                       // className={`employee-card-input`}
                       // placeholder=""
                       // {...register("name", {
@@ -930,9 +864,11 @@ const onSkip = () => onSelect();
                               </td>
                               <td>
                                 <div className="row">
-                                  <button className="btn btn-sm col-md-6">
+                                  {(!elementInArray.document == "")?
+                                  <a href="javascript:void(0)" className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
-                                  </button>
+                                  </a>:<p></p>
+                                  }
                                   {/* <button className="btn btn-sm col-md-6">
                                     <FileDownloadIcon color="primary"  />
                                   </button> */}
@@ -943,7 +879,7 @@ const onSkip = () => onSelect();
                                 <button
                                   onClick={()=>(deleteTableRows(-1))}
                                 >
-                                  <RemoveIcon />
+                                  <DeleteIcon color="danger" className="icon" />
                                 </button>
                               </td>
                             </tr>
@@ -977,130 +913,97 @@ const onSkip = () => onSelect();
                     }}
                     className="btn btn-primary mt-3"
                     // onClick={() => setNoOfRows(noofRows + 1)}
-                    onClick={() => setmodal(true)}
+                    // onClick={() => setmodal(true)}
+                    onClick={handleShowStakeholder}
                   >
                     Add More
                   </button>
-                  <div>
-                    <Modal
-                      size="lg"
-                      isOpen={modal}
-                      toggle={() => setmodal(!modal)}
-                    >
-                      <ModalHeader
-                        toggle={() => setmodal(!modal)}
-                      ></ModalHeader>
+                  <Modal show={showStake} onHide={handleCloseStakeholder} animation={false}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Add Stakeholders</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <form className="text1" id="myForm">
+                        <Row>
+                          <Col md={3} xxl lg="4">
+                            <label htmlFor="name" className="text">Name *</label>
+                            <TextInput
+                              type="text"
+                              isMandatory={false}
+                              onChange={(e) => setModalNAme(e.target.value)}
+                              placeholder=""
+                              required
+                              class="employee-card-input"
+                              {...(validation = {
+                                isRequired: true,
+                                pattern: "^[a-zA-Z]*$",
+                                type: "text",
+                                title: "Please Enter Name"
+                              })}
+                            />
+                          </Col>
+                          <Col md={3} xxl lg="4">
+                            <label htmlFor="name" className="text">	Designition *</label>
+                            <TextInput
+                              type="text"
+                              isMandatory={false}
+                              onChange={(e) => setModaldesignition(e.target.value)}
+                              placeholder=""
+                              class="employee-card-input"
+                              {...(validation = {
+                                isRequired: true,
+                                pattern: "^[a-zA-Z]*$",
+                                type: "text",
+                                title: "Please Enter Designition"
+                              })}
+                            />
+                          </Col>
 
-                      <ModalBody>
-                        <div className="card2">
-                          <div className="popupcard">
-                            
-                          <form className="text1">
-                              <Row>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Name *</label>
-                                  <TextInput
-                                    type="text"
-                                    isMandatory={false}
-                                    onChange={(e)=>setModalNAme(e.target.value)}
-                                    placeholder=""
-                                    required
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please Enter Name"
-                                    })}
-                                  />
-                                </Col>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">	Designition *</label>
-                                  <TextInput
-                                    type="text"
-                                    isMandatory={false}
-                                    onChange={(e)=>setModaldesignition(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please Enter Designition"
-                                    })}
-                                  />
-                                </Col>
+                          <Col md={3} xxl lg="4">
+                            <label htmlFor="name" className="text">Percentage *</label>
+                            <TextInput
+                              type="flot"
+                              isMandatory={false}
+                              onChange={(e) => setModalPercentage(e.target.value)}
+                              placeholder=""
+                              class="employee-card-input"
+                              {...(validation = {
+                                isRequired: true,
+                                pattern: "^[0-9]*$",
+                                type: "text",
+                                title: "Please Enter Percentage"
+                              })}
+                            />
+                            {modalPercentage && modalPercentage.length > 0 && !modalPercentage.match(Digit.Utils.getPattern('Percentage')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PERCENTAGE")}</CardLabelError>}
+                          </Col>
+                          <Col md={3} xxl lg="4">
+                            <label htmlFor="name" className="text">Upload Document</label>
+                            <input
+                              type="file"
+                              // value={file}
+                              placeholder=""
+                              class="employee-card-input"
+                              onChange={(e) => setFile({ file: e.target.files[0] })}
+                              {...(validation = {
+                                isRequired: true,
+                                title: "Please upload document"
+                              })}
+                            />
+                          </Col>
 
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Percentage *</label>
-                                  <TextInput
-                                    type="flot"
-                                    isMandatory={false}
-                                    onChange={(e)=>setModalPercentage(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please Enter Percentage"
-                                    })}
-                                  />
-                                </Col>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Upload PDF</label>
-                                  <input
-                                    type="file"
-                                    value={uploadPdf}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    onChange={(e)=>setFile({file:e.target.files[0]})}
-                                    {...(validation = {
-                                      isRequired: true,
-                                      title: "Please upload document"
-                                    })}
-                                  />
-                                </Col>
-
-                              </Row>
-                            </form>
-
-                          </div>
-                          <div className="submit-btn">
-                            <div className="form-group col-md6 mt-6">
-                              <button
-                                type="button"
-                                style={{ float: "right" }}
-                                className="btn btn-success"
-                                onClick={handleArrayValues}
-                              >
-                                Submit
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </ModalBody>
-                      <ModalFooter
-                        toggle={() => setmodal(!modal)}
-                      ></ModalFooter>
-                    </Modal>
-                  </div>
+                        </Row>
+                      </form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="secondary" onClick={handleCloseStakeholder}>
+                        Close
+                      </Button>
+                      <Button variant="primary" onClick={handleArrayValues}>
+                        Save Changes
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
                 </div>
-                {/* <button
-                    type="button"
-                    style={{ float: "right" }}
-                    className="btn btn-danger"
-                    onClick={() => setNoOfRows(noofRows - 1)}
-                  >
-                    Remove
-                  </button> */}
-
-                {/* <div className="form-group">
-                      <button type="submit" className="btn btn-success">
-                        {" "}
-                        Save{" "}
-                      </button>
-                    </div> */}
               </div>
             </div>
              )}
@@ -1148,24 +1051,24 @@ const onSkip = () => onSelect();
                             <td>
                               <input
                                 type="text"
+                                disabled="disabled"
                                 value={elementInArray.contactNumber}
                                 placeholder={elementInArray.contactNumber}
                                 class="employee-card-input"
                               />
                             </td>
                             <td>
-                              <input
-                                type="file"
-                                value={uploadPdf}
-                                placeholder=""
-                                class="employee-card-input"
-                              />
+                              {(!elementInArray.document == "")?
+                              <a href="javascript:void(0)" className="btn btn-sm col-md-12 text-center">
+                                <VisibilityIcon color="info" className="icon" />
+                              </a>:<p></p>
+                              }
                             </td>
                             <td>
                                 <button
                                   onClick={()=>(deleteDirectorTableRows(-1))}
                                 >
-                                  <RemoveIcon />
+                                  <DeleteIcon color="danger" className="icon" />
                                 </button>
                               </td>
                           </tr>
@@ -1182,121 +1085,90 @@ const onSkip = () => onSelect();
                     }}
                     className="btn btn-primary mt-3"
                     // onClick={() => setNoOfRows(noofRows + 1)}
-                    onClick={() => setmodalDirector(true)}
+                    // onClick={() => setmodalDirector(true)}
+                    onClick={handleShow}
                   >
                     Add More
                   </button>
+                  <Modal show={show} onHide={handleClose} animation={false}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>Add Directors Info</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <form className="text1">
+                        <Row>
+                          <Col md={3} xxl lg="4">
+                            <label htmlFor="name" className="text">DIN Number</label>
+                            <TextInput
+                              type="number"
+                              isMandatory={false}
+                              onChange={(e) => setModalDIN(e.target.value.toUpperCase())}
+                              placeholder=""
+                              max={8}
+                              class="employee-card-input"
+                              {...(validation = {
+                                isRequired: true,
+                                title: "Please Enter DIN No."
+                              })}
+                            />
+                            {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('DIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
+                          </Col>
+                          <Col md={3} xxl lg="4">
+                            <label htmlFor="name" className="text">Name</label>
+                            <input
+                              type="text"
 
-                  <div>
-                    <Modal
-                      size="lg"
-                      isOpen={modalDirectors}
-                      toggle={() => setmodalDirector(!modalDirectors)}
-                    >
-                      <ModalHeader
-                        toggle={() => setmodalDirector(!modalDirectors)}
-                      ></ModalHeader>
-
-                      <ModalBody>
-                        <div className="card2">
-                          <div className="popupcard">
+                              onChange={(e) => setModalDirectorName(e.target.value)}
+                              placeholder=""
+                              class="employee-card-input"
+                              {...(validation = {
+                                isRequired: true,
+                                pattern: "^[a-zA-Z]*$",
+                                type: "text",
+                                title: "Please Enter Name"
+                              })}
+                            />
+                          </Col>
+                          <Col md={3} xxl lg="4">
+                            <label htmlFor="name" className="text">	Contact Number <span className="text-danger font-weight-bold">*</span></label>
                             
-                          <form className="text1">
-                              <Row>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">DIN Number</label>
-                                  <TextInput
-                                    type="text"
-                                    isMandatory={false}
-                                    onChange={(e)=>setModalDIN(e.target.value.toUpperCase())}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please Enter DIN No."
-                                    })}
-                                  />
-                                  {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('CIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
-                                </Col>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Name</label>
-                                  <input
-                                    type="text"
-                                    
-                                    onChange={(e)=>setModalDirectorName(e.target.value)}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    {...(validation = {
-                                      isRequired: true,
-                                      pattern: "^[a-zA-Z]*$",
-                                      type: "text",
-                                      title: "Please Enter Name"
-                                    })}
-                                  />
-                                </Col>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">	Contact Number <span className="text-danger font-weight-bold">*</span></label>
-                                  {/* <MobileNumber
-                                    maxlength={"10"}
-                                    pattern={"[6-9]{1}[0-9]{9}"}
-                                    required={true}
+                            <MobileNumber
+                              value={modalDirectorContact}
+                              name="modalDirectorContact"
+                              onChange={selectModalContactDirector}
+                              // disable={modalDirectorContact && !isOpenLinkFlow ? true : false}
+                              {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
+                            />
+                            {modalDirectorContact && modalDirectorContact.length > 0 && !modalDirectorContact.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
+                          </Col>
+                          <Col md={3} xxl lg="4">
+                            <label htmlFor="name" className="text">Upload document</label>
+                            <input
+                              type="file"
+                              value={uploadPdf}
+                              placeholder=""
+                              class="employee-card-input"
+                              onChange={(e) => setFile({ file: e.target.files[0] })}
+                              {...(validation = {
+                                isRequired: true,
+                                title: "Please upload document"
+                              })}
+                            />
+                          </Col>
 
-                                    name="modalDirectorContact"
-                                    onChange={(value) => setModalContactDirector({ target: { value } })}
-                                    isMandatory={false}
-                                    {...(validation = {
-                                      pattern: "[6-9]{1}[0-9]{9}", type: "text", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")
-                                    })}
-                                    
-                                  /> */}
-                                  <MobileNumber
-                                    value={modalDirectorContact}
-                                    name="modalDirectorContact"
-                                    onChange={selectModalContactDirector}
-                                    // disable={modalDirectorContact && !isOpenLinkFlow ? true : false}
-                                    {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
-                                  />
-                                </Col>
-                                <Col md={3} xxl lg="4">
-                                  <label htmlFor="name" className="text">Upload document</label>
-                                  <input
-                                    type="file"
-                                    value={uploadPdf}
-                                    placeholder=""
-                                    class="employee-card-input"
-                                    onChange={(e)=>setFile({file:e.target.files[0]})}
-                                    {...(validation = {
-                                      isRequired: true,
-                                      title: "Please upload document"
-                                    })}
-                                  />
-                                </Col>
-
-                              </Row>
-                            </form>
-
-                          </div>
-                          <div className="submit-btn">
-                            <div className="form-group col-md6 mt-6">
-                              <button
-                                type="button"
-                                style={{ float: "right" }}
-                                className="btn btn-success"
-                                onClick={handleDirectorsArrayValues}
-                              >
-                                Submit
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </ModalBody>
-                      <ModalFooter
-                        toggle={() => setmodalDirector(!modalDirectors)}
-                      ></ModalFooter>
-                    </Modal>
-                  </div>
+                        </Row>
+                      </form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant="secondary" onClick={handleClose}>
+                        Close
+                      </Button>
+                      <Button variant="primary" onClick={handleDirectorsArrayValues}>
+                        Save Changes
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                  
                 </div>
               </div>
             </div>

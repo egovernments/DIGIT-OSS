@@ -48,6 +48,8 @@ const getPattern = type => {
       return /^(0)*[1-9][0-9]{0,6}$/i;
     case "CIN":
       return /^[L|U]{1}\d{5}[A-Z]{2}\d{4}[A-Z]{3}\d{6}$/i;
+    case "DIN":
+      return /^[1-9][0-9]{7}$/i;
     case "GSTNo":
       return /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d[Z]{1}[A-Z\d]{1}$/i;
     case "DoorHouseNo":
@@ -82,6 +84,8 @@ const getPattern = type => {
       return /^[^\$\"'<>?\\\\~`!@$%^()+={}\[\]*.:;“”‘’]{1,50}$/i;
     case "OldLicenceNo":
       return /^[a-zA-Z0-9-/]{0,64}$/;
+    case "Percentage":
+      return /^\b(?<!\.)(?!0+(?:\.0+)?%)(?:\d|[1-9]\d|100)(?:(?<!100)\.\d+)?%/i;
   }
 };
 
