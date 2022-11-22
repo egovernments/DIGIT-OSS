@@ -30,7 +30,10 @@ const LicNewRegistration = createProxyMiddleware({
   target: process.env.REACT_APP_PROXY_NEW_LIC || "http://103.166.62.118:8443",
   changeOrigin: true,
 });
-
+const EgScrutinyProxy = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://103.166.62.118:8443",
+  changeOrigin: true,
+});
 module.exports = function (app) {
   [
     "/egov-mdms-service",
