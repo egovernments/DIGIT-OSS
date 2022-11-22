@@ -358,17 +358,17 @@ const Genarelinfo = (props) => {
                   </h5>
                 </Form.Label>
 
-                <div className="d-flex flex-row  align-items-center">
-                  <Form.Control
+                <div style={{ display: "flex" }}>
+                  {/* <Form.Control
                     type="text"
                     placeholder={applicantInfoPersonal !== null ? applicantInfoPersonal?.purpose : null}
                     // onChange={handleChangesetPurpose}
                     height={30}
                     style={{ maxWidth: 200, marginRight: 5 }}
                     disabled
-                  >
-                    {/* <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} readOnly> */}
-                    {/* <option value="">--Purpose--</option>
+                  > */}
+                    <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} readOnly>
+                    <option value="">--Purpose--</option>
                     <option value="01">Plotted Commercial</option>
                     <option value="02">Group Housing Commercial</option>
                     <option value="03">AGH </option>
@@ -377,9 +377,9 @@ const Genarelinfo = (props) => {
                     <option value="06">Industrial Colony Commercial</option>
                     <option value="07">IT Colony Commercial</option>
                     <option value="08">DDJAY</option>
-                    <option value="12">TOD Group housing</option> */}
-                    {/* </select> */}
-                  </Form.Control>
+                    <option value="12">TOD Group housing</option>
+                    </select>
+                  {/* </Form.Control> */}
                   <ReportProblemIcon
                     style={{
                       color: fieldIconColors.purpose
@@ -960,9 +960,9 @@ const Genarelinfo = (props) => {
             </div>
             {/* </div>
       </Collapse> */}
-            {/* <div style={{ position: "relative", marginBottom: 40 }}>
+            <div style={{ position: "relative", marginBottom: 40 }}>
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue, purpose: purpose })}>Submit</Button>
-            </div> */}
+            </div>
           </Form.Group>
           <br></br>
         </div>

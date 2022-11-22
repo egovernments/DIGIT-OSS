@@ -51,6 +51,7 @@ const AppliedDetailForm = (props) => {
   });
 
   const AppliedDetailFormSubmitHandler = async (data) => {
+    props.Step4Continue(data,5);
     console.log("data------", data);
     props.Step4Continue(data, "5");
     // return;

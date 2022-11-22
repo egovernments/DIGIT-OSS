@@ -41,7 +41,29 @@ import ServiceCard from "../citizen/NewLicense/AllService/Service";
 import ServicePlanService from "./ServicePlan";
 import electricalPlanService from "./ElectricalPlan";
 import renewalClu from "./NewLicense/AllService/Module/Renewal/Renewal";
-import ZoningPlan from "../citizen/NewLicense/AllService/Module/ZoningPlan/ZoningPlan";
+import ZoningPlan from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ZoningPlan/ZoningPlan";
+import Beneficial from "../citizen/NewLicense/AllService/Module/BeneficialInterest/Beneficial";
+import CompletionLic from "../citizen/NewLicense/AllService/Module/CompletionLic/CompletionLic";
+// import CompositionClu from "../citizen/NewLicense/AllService/Module/CompositionClu/CompositionClu";
+// import ExtensionClu from "../citizen/NewLicense/AllService/Module/ExtensionClu/ExtensionClu";
+import TransferLic from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferLicense";
+// import LayoutPlan from "./NewLicense/AllService/Module/LayoutPlan/LayoutPlan";
+import SurrenderLic from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
+// import ExtensionCom from "./NewLicense/AllService/Module/ExtensionCommunity/ExtensionCom";
+// import Standard from "./NewLicense/AllService/Module/StandardDesign/StandardDesign";
+// import LayoutPlanClu from "./NewLicense/AllService/Module/LayoutPlan/LayoutPlan";
+
+import Beneficialscrutiny from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Beneficial";
+import Completionscrutiny from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
+import CompositionClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/CompositionClu/CompositionClu";
+import ExtensionClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionClu";
+import ExtensionCom from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ExtensionCommunity/ExtensionCom";
+import LayoutPlanClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/LayoutPlan/LayoutPlan";
+import Standard from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/StandardDesign/StandardDesign";
+// import LandScheduleForm from "./NewLicense/Step3/Step3";
+// import AppliedDetailForm from "./NewLicense/Step4/Step4";
+// import FeesChargesForm from "./NewLicense/Step5/Step5";
+
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
@@ -104,8 +126,26 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
         <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} />
         <PrivateRoute path={`${path}/service`} component={ServiceCard} />
+        <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
+        <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
         <PrivateRoute path={`${path}/zoningPlan`} component={ZoningPlan} />
-        <PrivateRoute path={`${path}/renewalClu`} component={renewalClu} />
+        {/* .............................................................................. */}
+
+
+
+
+
+        <PrivateRoute path={`${path}/Beneficialscrutiny`} component={Beneficialscrutiny} />
+        <PrivateRoute path={`${path}/Completionscrutiny`} component={Completionscrutiny} />
+        <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
+        <PrivateRoute path={`${path}/ExtensionClu`} component={ExtensionClu} />
+        <PrivateRoute path={`${path}/ExtensionCom`} component={ExtensionCom} />
+        <PrivateRoute path={`${path}/LayoutPlanClu`} component={LayoutPlanClu} />
+        <PrivateRoute path={`${path}/Standard`} component={Standard} />
+        <PrivateRoute path={`${path}/TransferLic`} component={TransferLic} />
+        <PrivateRoute path={`${path}/SurrenderLic`} component={SurrenderLic} />
+        <PrivateRoute path={`${path}/Standard`} component={Standard} />
+
       </Switch>
     </React.Fragment>
   );

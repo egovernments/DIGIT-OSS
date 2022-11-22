@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { Card, Row, Col, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+
+import Collapse from "react-bootstrap/Collapse";
+
 
 function ExtensionCom() {
   const [selects, setSelects] = useState();
@@ -20,9 +25,33 @@ function ExtensionCom() {
   } = useForm({});
 
   const extensionCom = (data) => console.log(data);
-
+const [open2, setOpen2] = useState(false);
   return (
     <form onSubmit={handleSubmit(extensionCom)}>
+        <div
+        className="collapse-header"
+        onClick={() => setOpen2(!open2)}
+        aria-controls="example-collapse-text"
+        aria-expanded={open2}
+        style={{
+          background: "#f1f1f1",
+          padding: "0.25rem 1.25rem",
+          borderRadius: "0.25rem",
+          fontWeight: "600",
+          display: "flex",
+          cursor: "pointer",
+          color: "#817f7f",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <span style={{ color: "#817f7f" }} className="">
+        Extension (construction in community sites)
+        </span>
+        {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+      </div>
+      <Collapse in={open2}>
+        <div id="example-collapse-text">
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Extension (construction in community sites)</h4>
         <div className="card">
@@ -339,6 +368,8 @@ function ExtensionCom() {
           </div>
         </div>
       </Card>
+      </div>
+      </Collapse>
     </form>
   );
 }

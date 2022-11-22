@@ -5,6 +5,10 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { useForm } from "react-hook-form";
 import { Card } from "react-bootstrap";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+
+import Collapse from "react-bootstrap/Collapse";
 
 function Standard() {
   const [selects, setSelects] = useState();
@@ -17,9 +21,34 @@ function Standard() {
   };
   const { register, handleSubmit } = useForm();
   const standardDesign = (data) => console.log(data);
+  const [open2, setOpen2] = useState(false);
 
   return (
     <form onSubmit={handleSubmit(standardDesign)}>
+         <div
+        className="collapse-header"
+        onClick={() => setOpen2(!open2)}
+        aria-controls="example-collapse-text"
+        aria-expanded={open2}
+        style={{
+          background: "#f1f1f1",
+          padding: "0.25rem 1.25rem",
+          borderRadius: "0.25rem",
+          fontWeight: "600",
+          display: "flex",
+          cursor: "pointer",
+          color: "#817f7f",
+          justifyContent: "space-between",
+          alignContent: "center",
+        }}
+      >
+        <span style={{ color: "#817f7f" }} className="">
+        Approval of Standard Design
+        </span>
+        {open2 ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
+      </div>
+      <Collapse in={open2}>
+        <div id="example-collapse-text">
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
         <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Approval of Standard Design</h4>
         <div className="card">
@@ -73,6 +102,8 @@ function Standard() {
           </Row>
         </div>
       </Card>
+      </div>
+      </Collapse>
     </form>
   );
 }
