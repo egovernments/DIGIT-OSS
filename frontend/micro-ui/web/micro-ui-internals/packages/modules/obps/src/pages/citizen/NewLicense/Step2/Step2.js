@@ -203,7 +203,7 @@ const ApllicantPuropseForm = (props) => {
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    // resolver: yupResolver(VALIDATION_SCHEMA),
+    resolver: yupResolver(VALIDATION_SCHEMA),
     defaultValues: {
       consolidationType: "consolidated",
     },
@@ -412,7 +412,8 @@ const ApllicantPuropseForm = (props) => {
   };
 
   const handleChangePurpose = (data) => {
-    const purposeSelected = data?.label;
+    console.log("data", data);
+    const purposeSelected = data?.value;
     window?.localStorage.setItem("purpose", purposeSelected);
   };
   const handleChangePotential = (data) => {
