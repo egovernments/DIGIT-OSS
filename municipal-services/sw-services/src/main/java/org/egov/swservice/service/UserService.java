@@ -138,19 +138,21 @@ public class UserService {
 
 					plainConnectionHolderFromDb = enrichmentService.getConnectionHolderDetailsForUpdateCall(newSewerageConnection,
 							sewerageConnectionRequest.getRequestInfo());
-					if (maskedConnectionHolder != null && maskedConnectionHolder.getMobileNumber().contains("*")) {
+					if (maskedConnectionHolder.getMobileNumber().contains("*")) {
 						connectionHolder.setMobileNumber(plainConnectionHolderFromDb.getMobileNumber());
 					}
-					if (maskedConnectionHolder != null && maskedConnectionHolder.getFatherOrHusbandName().contains("*")) {
+					if (!StringUtils.isEmpty(maskedConnectionHolder.getFatherOrHusbandName())
+							&& maskedConnectionHolder.getFatherOrHusbandName().contains("*")) {
 						connectionHolder.setFatherOrHusbandName(plainConnectionHolderFromDb.getFatherOrHusbandName());
 					}
-					if (maskedConnectionHolder != null && maskedConnectionHolder.getCorrespondenceAddress().contains("*")) {
+					if (!StringUtils.isEmpty(maskedConnectionHolder.getCorrespondenceAddress())
+							&& maskedConnectionHolder.getCorrespondenceAddress().contains("*")) {
 						connectionHolder.setCorrespondenceAddress(plainConnectionHolderFromDb.getCorrespondenceAddress());
 					}
-					if (maskedConnectionHolder != null && maskedConnectionHolder.getUserName().contains("*")) {
+					if (maskedConnectionHolder.getUserName().contains("*")) {
 						connectionHolder.setUserName(plainConnectionHolderFromDb.getUserName());
 					}
-					if (maskedConnectionHolder != null && maskedConnectionHolder.getName().contains("*")) {
+					if (maskedConnectionHolder.getName().contains("*")) {
 						connectionHolder.setName(plainConnectionHolderFromDb.getName());
 					}
 				}
