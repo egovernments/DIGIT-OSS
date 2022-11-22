@@ -19,6 +19,7 @@ const DDJAYForm = (props) => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     control,
     setValue,

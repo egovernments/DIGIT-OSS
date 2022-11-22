@@ -165,6 +165,7 @@ const ApllicantPuropseForm = (props) => {
   const [revenueDataLabels, setRevenueDataLabels] = useState({ data: [], isLoading: true });
   const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
   const [file, setFile] = useState(null);
+  const [docUpload, setDocuploadData] = useState([]);
   const [modal, setmodal] = useState(false);
   const [tehsilCode, setTehsilCode] = useState(null);
   const [consolidateValue, setConsolidateValue] = useState("consolidated");
@@ -252,14 +253,13 @@ const ApllicantPuropseForm = (props) => {
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
       const revenData = Resp?.data?.map((el) => {
-        return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
+        return { label: el?.name, id: el?.code, value: el?.code };
       });
       setRevenueDataLabels({ data: revenData, isLoading: false });
     } catch (error) {
       console.log(error?.message);
     }
   };
-
   const getMustilData = async (code) => {
     try {
       const Resp = await axios.post(
@@ -321,7 +321,11 @@ const ApllicantPuropseForm = (props) => {
   };
 
   const PurposeFormSubmitHandler = async (data) => {
-    props.Step2Continue(data, "9");
+    data["purpose"] = data?.purpose?.value;
+    data["potential"] = data?.potential?.value;
+    data["district"] = data?.district?.value;
+    console.log("data------", data);
+    // props.Step2Continue(data, "9");
     // return;
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
@@ -352,11 +356,41 @@ const ApllicantPuropseForm = (props) => {
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       console.log(Resp?.data);
-      props.Step2Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
+      props.Step2Continue();
     } catch (error) {
       console.log(error.message);
     }
   };
+
+  const getDocumentData = async () => {
+    if (file === null) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", file.file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+
+    try {
+      const Resp = await axios
+        .post("/filestore/v1/files", formData, {
+          // headers: {
+          //   "content-type": "multipart/form-data",
+          // },
+        })
+        .then((response) => {
+          return response;
+        });
+      setDocuploadData(Resp.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getDocumentData();
+  }, [file]);
 
   const handleChangePurpose = (data) => {
     const purposeSelected = data?.label;
@@ -577,6 +611,7 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.revenueEstate && errors?.revenueEstate?.message}
                 </h3>
               </Col>
+
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
@@ -797,7 +832,7 @@ const ApllicantPuropseForm = (props) => {
                         </h2>
                       </label>
                       <br></br>
-                      <Form.Control type="file" className="form-control" {...register("registeringAuthorityDocId")} />
+                      <Form.Control type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                     </div>
                   </div>
                 )}

@@ -53,133 +53,35 @@ const AppliedDetailForm = (props) => {
     console.log("data------", data);
     props.Step4Continue(data, "5");
     // return;
-    try {
-      const postDistrict = {
-        NewServiceInfo: {
-          pageName: "DetailsofAppliedLand",
-          id: props.getId,
-          newServiceInfoData: {
-            // DetailsofAppliedLand: {
-            //   dgps: data.dgpsLongitude,
-            //   dgps: data.dgpsLatitude,
-            //   DetailsAppliedLandData1: {
-            //     npnlplotno: data.npnlPlot,
-            //     npnllengthmtr: data.npnlLength,
-            //     npnlwidthmtr: data.npnlWidth,
-            //     npnlareasq: data.npnlArea,
-            //     ewsplotno: data.ewsPlot,
-            //     ewslengthmtr: data.ewsLength,
-            //     ewswidthmtr: data.ewsWidth,
-            //     ewsareasq: data.ewsArea,
-            //     complotno: data.comPlot,
-            //     comlengthmtr: data.comLength,
-            //     comwidthmtr: data.comWidth,
-            //     comareasq: data.comArea,
-            //     siteplotno: data.sitePlot,
-            //     sitelengthmtr: data.siteLength,
-            //     sitewidthmtr: data.siteWidth,
-            //     siteareasq: data.siteArea,
-            //     parkplotno: data.parkPlot,
-            //     parklengthmtr: data.parkLength,
-            //     parkwidthmtr: data.parkWidth,
-            //     parkareasq: data.parkArea,
-            //     publicplotno: data.publicPlot,
-            //     publiclengthmtr: data.publicLength,
-            //     publicwidthmtr: data.publicWidth,
-            //     publicareasq: data.publicArea,
-            //     stpplotno: data.stpPlot,
-            //     stplengthmtr: data.stpLength,
-            //     stpwidthmtr: data.stpWidth,
-            //     stpareasq: data.stpArea,
-            //     etpplotno: data.etpPlot,
-            //     etplengthmtr: data.etpLength,
-            //     etpwidthmtr: data.etpWidth,
-            //     etpareasq: data.etpArea,
-            //     wtpplotno: data.wtpPlot,
-            //     wtplengthmtr: data.wtpLength,
-            //     wtpwidthmtr: data.wtpWidth,
-            //     wtpareasq: data.wtpArea,
-            //     ugtplotno: data.ugtPlot,
-            //     ugtlengthmtr: data.ugtLength,
-            //     ugtwidthmtr: data.ugtWidth,
-            //     ugtareasq: data.ugtArea,
-            //     milkboothplotno: data.milkboothPlot,
-            //     milkboothlengthmtr: data.milkBoothLength,
-            //     milkboothwidthmtr: data.milkBoothWidth,
-            //     milkboothareasq: data.milkBoothArea,
-            //     gssplotno: data.gssPlot,
-            //     gsslengthmtr: data.gssLength,
-            //     gssareasq: data.gssArea,
-            //     resDimension: data.resdimension,
-            //     resEnteredArea: data.resAreaenter,
-            //     comDimension: data.comDimension,
-            //     comEnteredArea: data.comAreaEnter,
-            //     secPlanPlot: data.planPlot,
-            //     secPlanLength: data.planLength,
-            //     secPlanDim: data.planDim,
-            //     secPlanEntered: data.planAreaenter,
-            //     greenBeltPlot: data.greenBeltPlot,
-            //     greenBeltLength: data.greenBeltLength,
-            //     greenBeltDim: data.greenBeltDim,
-            //     greenBeltEntered: data.greenBeltAreaenter,
-            //     internalPlot: data.internazlplanPlot,
-            //     internalLength: data.internalPlanLLength,
-            //     internalDim: data.internalplanWidth,
-            //     internalEntered: data.internalPlanAreaenter,
-            //     otherPlot: data.roadPlot,
-            //     otherLength: data.roadLength,
-            //     otherDim: data.roadWidth,
-            //     otherEntered: data.roadAreaenter,
-            //     undeterminedPlot: data.undeterminedPlot,
-            //     undeterminedLength: data.undeterminedLength,
-            //     undeterminedDim: data.undeterminedWidth,
-            //     undeterminedEntered: data.undeterminedAreaenter,
-            //   },
-            //   DetailsAppliedLandDdjay2: {
-            //     frozenNo: data.frozenNo,
-            //     frozenArea: data.frozenArea,
-            //     organize: data.organizeArea,
-            //   },
-            //   DetailsAppliedLandIndustrial3: {
-            //     colonyfiftyNo: "qwq",
-            //     colonyfiftyArea: "",
-            //     fiftyToTwoNo: "",
-            //     fiftyToTwoArea: "",
-            //     twoHundredNo: "",
-            //     twoHundredArea: "",
-            //     resiNo: "",
-            //     resiArea: "",
-            //     commerNo: "",
-            //     commerArea: "",
-            //     labourNo: "",
-            //     labourArea: "",
-            //   },
-            //   DetailsAppliedLandResidential4: {
-            //     npnlNo: "wew",
-            //     npnlArea: "",
-            //     ewsNo: "",
-            //     ewsArea: "",
-            //   },
-            //   DetailsAppliedLandNpnl5: {
-            //     surrender: "sds",
-            //     pocketProposed: "",
-            //     deposit: "",
-            //     surrendered: "",
-            //   },
-            //   DetailsAppliedLand6: {
-            //     sitePlan: "sdsd",
-            //     democraticPlan: "",
-            //     sectoralPlan: "",
-            //     developmentPlan: "",
-            //     uploadLayoutPlan: "",
-            //   },
-            // },
+    const token = window?.localStorage?.getItem("token");
+    const postDistrict = {
+      NewServiceInfo: {
+        pageName: "DetailsofAppliedLand",
+        id: props.getId,
+        createdBy: props?.userInfo?.id,
+        updatedBy: props?.userInfo?.id,
+        LicenseDetails: {
+          DetailsofAppliedLand: {
+            ...data,
           },
         },
-      };
-      const Resp = await axios.post("/tl-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-      });
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: token,
+          userInfo: props?.userInfo,
+        },
+      },
+    };
+
+    try {
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
       props.Step4Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
     } catch (error) {
@@ -216,7 +118,7 @@ const AppliedDetailForm = (props) => {
 
   const getSubmitDataLabel = async () => {
     try {
-      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
+      const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
         return response;
       });
     } catch (error) {

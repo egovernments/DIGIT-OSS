@@ -96,12 +96,20 @@ const LandScheduleForm = (props) => {
   } = useForm();
 
   const landScheduleFormSubmitHandler = async (data) => {
+    data["potential"] = data?.potential?.value;
+    data["approachType"] = data?.approachType?.value;
+    data["typeLand"] = data?.typeLand?.value;
+    data["purposeParentLic"] = data?.purposeParentLic?.value;
+
+    data[""];
     console.log("data------", data);
     props.Step3Continue(data, "5");
     // return;
+    const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "LandSchedule",
       id: props.getId,
+
       createdBy: props?.userInfo?.id,
       updatedBy: props?.userInfo?.id,
       LicenseDetails: {
@@ -109,6 +117,7 @@ const LandScheduleForm = (props) => {
           ...data,
         },
       },
+
       RequestInfo: {
         apiId: "Rainmaker",
         ver: "v1",
@@ -124,32 +133,32 @@ const LandScheduleForm = (props) => {
     };
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
+      console.log("MMM", Resp?.data);
       props.Step3Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
       // SetLandFormSubmitted(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
   };
-
+  console.log("props", props);
   // useEffect(() => {
   //   if (LandFormSubmitted) {
   //     props.landFormSubmit(true);
   //   }
   // }, [LandFormSubmitted]);
 
-  // const getSubmitDataLabel = async () => {
-  //   try {
-  //     const Resp = await axios.get(`/land-services/new/licenses/_get?id=${props.getId}`);
-  //     const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
-  //     setSubmitDataLabel(userData);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getSubmitDataLabel();
-  // }, []);
+  const getSubmitDataLabel = async () => {
+    try {
+      const Resp = await axios.get(`/land-services/new/licenses/_get?id=${props.getId}`);
+      const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
+      setSubmitDataLabel(userData);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  useEffect(() => {
+    getSubmitDataLabel();
+  }, []);
 
   const getDocumentData = async () => {
     if (file === null) {
@@ -164,9 +173,9 @@ const LandScheduleForm = (props) => {
     try {
       const Resp = await axios
         .post("/filestore/v1/files", formData, {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
+          // headers: {
+          //   "content-type": "multipart/form-data",
+          // },
         })
         .then((response) => {
           return response;
@@ -266,7 +275,7 @@ const LandScheduleForm = (props) => {
                               Specify Others<span style={{ color: "red" }}>*</span>
                             </h2>
                           </label>
-                          <input type="number" {...register("specify")} className="form-control" />
+                          <input type="text" {...register("specify")} className="form-control" />
                         </div>
                         <div className="col col-3">
                           <label>
@@ -314,7 +323,7 @@ const LandScheduleForm = (props) => {
                                     Document Upload <span style={{ color: "red" }}>*</span>
                                   </h2>
                                 </label>
-                                <input type="file" className="form-control" {...register("thirdPartyDoc")} />
+                                <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                               </div>
                             </div>
                           )}
@@ -326,7 +335,7 @@ const LandScheduleForm = (props) => {
                                     Document Upload <span style={{ color: "red" }}>*</span>
                                   </h2>
                                 </label>
-                                <input type="file" className="form-control" {...register("thirdPartyDoc")} />
+                                <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                               </div>
                             </div>
                           )}
@@ -376,7 +385,7 @@ const LandScheduleForm = (props) => {
                           <label>
                             <h2>License No.</h2>
                           </label>
-                          <input type="text" className="form-control" {...register("licenseNo")} />
+                          <input type="number" className="form-control" {...register("licNo")} />
                         </div>
                         <div className="col col-3">
                           <label>
@@ -418,20 +427,20 @@ const LandScheduleForm = (props) => {
                             Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration &nbsp;&nbsp;
                             <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h2>
-                          <input type="file" className="form-control" {...register("approvedLayoutPlan")} />
+                          <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                         </div>
                         <div className="col col-3">
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
                             Proposed Layout of Plan /site plan for area applied for migration. &nbsp;&nbsp;
                             <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h2>
-                          <input type="file" className="form-control" {...register("proposedLayoutPlan")} />
+                          <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                         </div>
                         <div className="col col-3">
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
                             Upload Previously approved Layout Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h2>
-                          <input type="file" className="form-control" {...register("uploadPreviouslyLayoutPlan")} />
+                          <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                         </div>
                       </div>
                     )}
@@ -490,7 +499,7 @@ const LandScheduleForm = (props) => {
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
                             Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h2>
-                          <input type="file" className="form-control" {...register("litigationDoc")} />
+                          <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                         </div>
                       </div>
                     )}
@@ -524,7 +533,7 @@ const LandScheduleForm = (props) => {
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
                             Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h2>
-                          <input type="file" className="form-control" {...register("courtDoc")} />
+                          <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                         </div>
                       </div>
                     )}
@@ -559,7 +568,7 @@ const LandScheduleForm = (props) => {
                             {" "}
                             Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h2>
-                          <input type="file" className="form-control" {...register("insolvencyDoc")} />
+                          <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                         </div>
                       </div>
                     )}
@@ -586,7 +595,7 @@ const LandScheduleForm = (props) => {
                           <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
                             Document Upload &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                           </h6>
-                          <input type="file" className="form-control" {...register("docUpload")} />
+                          <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                         </div>
                       </div>
                     )}
@@ -660,7 +669,7 @@ const LandScheduleForm = (props) => {
                           <label>
                             <h2>Remark</h2>{" "}
                           </label>
-                          <input type="number" className="form-control" {...register("compactBlockRemark")} />
+                          <input type="text" className="form-control" {...register("compactBlockRemark")} />
                         </div>
                       </div>
                     )}
@@ -1106,27 +1115,27 @@ const LandScheduleForm = (props) => {
                       Land schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
-                    <input type="file" className="form-control" {...register("landSchedule")} />
+                    <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                   </div>
                   <div className="col col-3">
                     <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Copy of Mutation &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
-                    <input type="file" className="form-control" {...register("mutation")} />
+                    <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                   </div>
                   <div className="col col-3">
                     <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Copy of Jamabandi &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
 
-                    <input type="file" className="form-control" {...register("jambandhi")} />
+                    <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                   </div>
                   <div className="col col-3">
                     <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Details of lease / patta, if any &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
-                    <input type="file" className="form-control" {...register("detailsOfLease")} />
+                    <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                   </div>
                 </div>
                 <br></br>
@@ -1140,7 +1149,7 @@ const LandScheduleForm = (props) => {
                     >
                       Add sales/Deed/exchange &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
-                    <input type="file" className="form-control" {...register("addSalesDeed")} />
+                    <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                   </div>
                   <div className="col col-3">
                     <h2
@@ -1152,19 +1161,19 @@ const LandScheduleForm = (props) => {
                       Copy of spa/GPA/board resolution &nbsp;&nbsp;
                       <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
-                    <input type="file" className="form-control" {...register("copyofSpaBoard")} />
+                    <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                   </div>
                   <div className="col col-3">
                     <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Revised Land Schedule &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
-                    <input type="file" className="form-control" {...register("revisedLansSchedule")} />
+                    <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                   </div>
                   <div className="col col-3">
                     <h2 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                       Copy of Shajra Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                     </h2>
-                    <input type="file" className="form-control" {...register("copyOfShajraPlan")} />
+                    <input type="file" className="form-control" onChange={(e) => setFile({ file: e.target.files[0] })} />
                   </div>
                 </div>
                 <div class="row">
