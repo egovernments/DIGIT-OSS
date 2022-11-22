@@ -377,8 +377,8 @@ const ApllicantPuropseForm = (props) => {
       const postDistrict = {
         pageName: "ApplicantPurpose",
         id: props.getId,
-        createdBy: props?.userInfo?.id,
-        updatedBy: props?.userInfo?.id,
+        createdBy: props?.userData?.id,
+        updatedBy: props?.userData?.id,
         LicenseDetails: {
           ApplicantPurpose: {
             ...data,
@@ -395,7 +395,7 @@ const ApllicantPuropseForm = (props) => {
           msgId: "090909",
           requesterId: "",
           authToken: token,
-          userInfo: props?.userInfo,
+          userInfo: props?.userData,
         },
       };
       setLoader(true);
@@ -429,10 +429,7 @@ const ApllicantPuropseForm = (props) => {
     formData.append("tag", "tag-property");
     setLoader(true);
     try {
-      const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
-        return response;
-      });
-      console.log(Resp?.data?.files?.[0]?.fileStoreId);
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
       setDocId(Resp?.data?.files?.[0]?.fileStoreId);
       setLoader(false);
     } catch (error) {
@@ -807,14 +804,14 @@ const ApllicantPuropseForm = (props) => {
                 </h2>
 
                 <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="no" id="yes" onClick={() => setCollaboration("yes")} />
+                  <input {...register("collaboration")} type="radio" value="N" id="yes" onClick={() => setCollaboration("Y")} />
                   Yes
                 </label>
                 <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="yes" id="no" onClick={() => setCollaboration("no")} />
+                  <input {...register("collaboration")} type="radio" value="Y" id="no" onClick={() => setCollaboration("N")} />
                   No
                 </label>
-                {getCollaboration === "yes" && (
+                {getCollaboration === "Y" && (
                   <div className="row ">
                     <div className="col col-4">
                       <label>
@@ -846,11 +843,11 @@ const ApllicantPuropseForm = (props) => {
                         Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
                       </h2>
                       <label htmlFor="agreementIrrevocialble">
-                        <input {...register("agreementIrrevocialble")} type="radio" value="no" id="agreementIrrevocialble" />
+                        <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
                         Yes
                       </label>
                       <label htmlFor="agreementIrrevocialble">
-                        <input {...register("agreementIrrevocialble")} type="radio" value="yes" id="agreementIrrevocialble" />
+                        <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
                         No
                       </label>
                     </div>

@@ -56,8 +56,22 @@ const AppliedDetailForm = (props) => {
         NewServiceInfo: {
           pageName: "DetailsofAppliedLand",
           id: props.getId,
+          createdBy: props?.userData?.id,
+          updatedBy: props?.userData?.id,
           newServiceInfoData: {
             ...data,
+          },
+          RequestInfo: {
+            apiId: "Rainmaker",
+            ver: "v1",
+            ts: 0,
+            action: "_search",
+            did: "",
+            key: "",
+            msgId: "090909",
+            requesterId: "",
+            authToken: token,
+            userInfo: props?.userData,
           },
         },
       };
@@ -125,9 +139,11 @@ const AppliedDetailForm = (props) => {
                             <input type="number" className="form-control" {...register(`dgpsPoints.${index}.YLatitude`)} />
                           </div>
                         </div>
-                        <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => remove(index)}>
-                          Delete
-                        </button>
+                        {index > 3 && (
+                          <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => remove(index)}>
+                            Delete
+                          </button>
+                        )}
                       </div>
                     ))}
                     <button
@@ -223,15 +239,15 @@ const AppliedDetailForm = (props) => {
                     </h2>
 
                     <label htmlFor="detailsOfPlots">
-                      <input {...register("detailsOfPlots")} type="radio" value="yes" id="detailsOfPlots" />
+                      <input {...register("detailsOfPlots")} type="radio" value="Y" id="detailsOfPlots" />
                       Yes
                     </label>
                     <label htmlFor="detailsOfPlots">
-                      <input {...register("detailsOfPlots")} type="radio" value="no" id="detailsOfPlots" />
+                      <input {...register("detailsOfPlots")} type="radio" value="N" id="detailsOfPlots" />
                       No
                     </label>
                   </div>
-                  {watch("detailsOfPlots") === "yes" && (
+                  {watch("detailsOfPlots") === "Y" && (
                     <div className="table table-bordered table-responsive">
                       <thead>
                         <tr>
@@ -541,7 +557,7 @@ const AppliedDetailForm = (props) => {
                       </tbody>
                     </div>
                   )}
-                  {watch("detailsOfPlots") === "no" && (
+                  {watch("detailsOfPlots") === "N" && (
                     <div>
                       <div className="table table-bordered table-responsive ">
                         <thead>
@@ -735,14 +751,14 @@ const AppliedDetailForm = (props) => {
                         </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="wantToSurrender">
-                            <input {...register("wantToSurrender")} type="radio" value="yes" id="wantToSurrender" />
+                            <input {...register("wantToSurrender")} type="radio" value="Y" id="wantToSurrender" />
                             Yes
                           </label>
                           <label htmlFor="wantToSurrender">
-                            <input {...register("wantToSurrender")} type="radio" value="no" id="wantToSurrender" />
+                            <input {...register("wantToSurrender")} type="radio" value="N" id="wantToSurrender" />
                             No
                           </label>
-                          {watch("wantToSurrender") === "yes" && (
+                          {watch("wantToSurrender") === "Y" && (
                             <div className="row ">
                               <div className="col col-12">
                                 <label>Area in Acres </label>
@@ -758,14 +774,14 @@ const AppliedDetailForm = (props) => {
                         <td>Whether any pocket proposed to be transferred less than 1 acre </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="pocketProposed">
-                            <input {...register("pocketProposed")} type="radio" value="yes" id="pocketProposed" />
+                            <input {...register("pocketProposed")} type="radio" value="Y" id="pocketProposed" />
                             Yes
                           </label>
                           <label htmlFor="pocketProposed">
-                            <input {...register("pocketProposed")} type="radio" value="no" id="pocketProposed" />
+                            <input {...register("pocketProposed")} type="radio" value="N" id="pocketProposed" />
                             No
                           </label>
-                          {watch("pocketProposed") === "yes" && (
+                          {watch("pocketProposed") === "Y" && (
                             <div className="row ">
                               <div className="col col-6">
                                 <label>
@@ -787,14 +803,14 @@ const AppliedDetailForm = (props) => {
                         <td>Whether you want to deposit an amount @ of 3 times of collector rate instead of the surrender 10% land to Govt. </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="deposit">
-                            <input {...register("deposit")} type="radio" value="yes" id="deposit" />
+                            <input {...register("deposit")} type="radio" value="Y" id="deposit" />
                             Yes
                           </label>
                           <label htmlFor="deposit">
-                            <input {...register("deposit")} type="radio" value="no" id="deposit" />
+                            <input {...register("deposit")} type="radio" value="N" id="deposit" />
                             No
                           </label>
-                          {watch("deposit") === "yes" && (
+                          {watch("deposit") === "Y" && (
                             <div className="row ">
                               <div className="col col-12">
                                 <label>
@@ -812,14 +828,14 @@ const AppliedDetailForm = (props) => {
                         <td>Whether the surrendered area is having a minimum of 18 mtr independent access </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="surrenderedArea">
-                            <input {...register("surrenderedArea")} type="radio" value="yes" id="surrenderedArea" />
+                            <input {...register("surrenderedArea")} type="radio" value="Y" id="surrenderedArea" />
                             Yes
                           </label>
                           <label htmlFor="surrenderedArea">
-                            <input {...register("surrenderedArea")} type="radio" value="no" id="surrenderedArea" />
+                            <input {...register("surrenderedArea")} type="radio" value="N" id="surrenderedArea" />
                             No
                           </label>
-                          {watch("surrenderedArea") === "yes" && (
+                          {watch("surrenderedArea") === "Y" && (
                             <div className="row ">
                               <div className="col col-12">
                                 <label>
