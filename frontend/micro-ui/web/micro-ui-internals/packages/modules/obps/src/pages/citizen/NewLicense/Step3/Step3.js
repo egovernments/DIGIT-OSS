@@ -49,9 +49,6 @@ const releaseStatus = [
 ];
 
 const LandScheduleForm = (props) => {
-  console.log("props", props);
-  const [LandFormSubmitted, SetLandFormSubmitted] = useState(false);
-  const [submitDataLabel, setSubmitDataLabel] = useState([]);
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
   const [getPotentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [typeOfLand, setYypeOfLand] = useState({ data: [], isLoading: true });
@@ -60,7 +57,7 @@ const LandScheduleForm = (props) => {
   const stateId = Digit.ULBService.getStateId();
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
 
-  const { data: LandType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
+  const { data: LandData } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["LandType"]);
 
   const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
 
@@ -79,11 +76,12 @@ const LandScheduleForm = (props) => {
   }, [PotentialType]);
 
   useEffect(() => {
-    const landType = LandType?.["common-masters"]?.LandType?.map(function (data) {
+    const landType = LandData?.["common-masters"]?.LandType?.map(function (data) {
+      console.log("data===", data);
       return { value: data?.code, label: data?.zone };
     });
     setYypeOfLand({ data: landType, isLoading: false });
-  }, [LandType]);
+  }, [LandData]);
 
   const {
     register,
@@ -97,13 +95,13 @@ const LandScheduleForm = (props) => {
   } = useForm();
 
   const landScheduleFormSubmitHandler = async (data) => {
-    console.log("data------", data);
+    setLoader(true);
     data["potential"] = data?.potential?.value;
     data["approachType"] = data?.approachType?.value;
     data["typeLand"] = data?.typeLand?.value;
     data["purposeParentLic"] = data?.purposeParentLic?.value;
     console.log("data=====", data);
-    // props.Step3Continue();
+    props.Step3Continue();
     return;
     const postDistrict = {
       pageName: "LandSchedule",
@@ -129,14 +127,14 @@ const LandScheduleForm = (props) => {
       },
     };
     try {
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict).then((Resp) => {
         return Resp;
       });
-
       console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
+      setLoader(false);
       props.Step3Continue();
-      SetLandFormSubmitted(Resp.data);
     } catch (error) {
+      setLoader(false);
       console.log(error.message);
     }
   };
@@ -145,7 +143,6 @@ const LandScheduleForm = (props) => {
     try {
       const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`);
       const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
-      setSubmitDataLabel(userData);
     } catch (error) {
       console.log(error.message);
     }
@@ -162,11 +159,8 @@ const LandScheduleForm = (props) => {
     formData.append("tag", "tag-property");
     setLoader(true);
     try {
-      const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
-        return response;
-      });
-      console.log(Resp?.data?.files);
-      setValue("fieldName", Resp?.data?.files?.[0]?.fileStoreId);
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
       setLoader(false);
     } catch (error) {
@@ -320,7 +314,7 @@ const LandScheduleForm = (props) => {
                                   <input
                                     type="file"
                                     className="form-control"
-                                    {...register("thirdPartyDoc")}
+                                    // {...register("thirdPartyDoc")}
                                     onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
                                   />
                                 </div>
@@ -337,7 +331,7 @@ const LandScheduleForm = (props) => {
                                   <input
                                     type="file"
                                     className="form-control"
-                                    {...register("thirdPartyDoc")}
+                                    // {...register("thirdPartyDoc")}
                                     onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
                                   />
                                 </div>
@@ -434,7 +428,7 @@ const LandScheduleForm = (props) => {
                             <input
                               type="file"
                               className="form-control"
-                              {...register("approvedLayoutPlan")}
+                              // {...register("approvedLayoutPlan")}
                               onChange={(e) => getDocumentData(e?.target?.files[0], "approvedLayoutPlan")}
                             />
                           </div>
@@ -446,7 +440,7 @@ const LandScheduleForm = (props) => {
                             <input
                               type="file"
                               className="form-control"
-                              {...register("proposedLayoutPlan")}
+                              // {...register("proposedLayoutPlan")}
                               onChange={(e) => getDocumentData(e?.target?.files[0], "proposedLayoutPlan")}
                             />
                           </div>
@@ -457,7 +451,7 @@ const LandScheduleForm = (props) => {
                             <input
                               type="file"
                               className="form-control"
-                              {...register("uploadPreviouslyLayoutPlan")}
+                              // {...register("uploadPreviouslyLayoutPlan")}
                               onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPreviouslyLayoutPlan")}
                             />
                           </div>
@@ -521,7 +515,7 @@ const LandScheduleForm = (props) => {
                             <input
                               type="file"
                               className="form-control"
-                              {...register("litigationDoc")}
+                              // {...register("litigationDoc")}
                               onChange={(e) => getDocumentData(e?.target?.files[0], "litigationDoc")}
                             />
                           </div>
@@ -560,7 +554,7 @@ const LandScheduleForm = (props) => {
                             <input
                               type="file"
                               className="form-control"
-                              {...register("courtDoc")}
+                              // {...register("courtDoc")}
                               onChange={(e) => getDocumentData(e?.target?.files[0], "courtDoc")}
                             />
                           </div>
@@ -600,7 +594,7 @@ const LandScheduleForm = (props) => {
                             <input
                               type="file"
                               className="form-control"
-                              {...register("insolvencyDoc")}
+                              // {...register("insolvencyDoc")}
                               onChange={(e) => getDocumentData(e?.target?.files[0], "insolvencyDoc")}
                             />
                           </div>
@@ -632,7 +626,7 @@ const LandScheduleForm = (props) => {
                             <input
                               type="file"
                               className="form-control"
-                              {...register("docUpload")}
+                              // {...register("docUpload")}
                               onChange={(e) => getDocumentData(e?.target?.files[0], "docUpload")}
                             />
                           </div>
@@ -1149,7 +1143,7 @@ const LandScheduleForm = (props) => {
                       <input
                         type="file"
                         className="form-control"
-                        {...register("landSchedule")}
+                        // {...register("landSchedule")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "landSchedule")}
                       />
                     </div>
@@ -1161,7 +1155,7 @@ const LandScheduleForm = (props) => {
                       <input
                         type="file"
                         className="form-control"
-                        {...register("mutation")}
+                        // {...register("mutation")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "mutation")}
                       />
                     </div>
@@ -1173,7 +1167,7 @@ const LandScheduleForm = (props) => {
                       <input
                         type="file"
                         className="form-control"
-                        {...register("jambandhi")}
+                        // {...register("jambandhi")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "jambandhi")}
                       />
                     </div>
@@ -1184,7 +1178,7 @@ const LandScheduleForm = (props) => {
                       <input
                         type="file"
                         className="form-control"
-                        {...register("detailsOfLease")}
+                        // {...register("detailsOfLease")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "detailsOfLease")}
                       />
                     </div>
@@ -1203,7 +1197,7 @@ const LandScheduleForm = (props) => {
                       <input
                         type="file"
                         className="form-control"
-                        {...register("addSalesDeed")}
+                        // {...register("addSalesDeed")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "addSalesDeed")}
                       />
                     </div>
@@ -1220,7 +1214,7 @@ const LandScheduleForm = (props) => {
                       <input
                         type="file"
                         className="form-control"
-                        {...register("copyofSpaBoard")}
+                        // {...register("copyofSpaBoard")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "copyofSpaBoard")}
                       />
                     </div>
@@ -1231,7 +1225,7 @@ const LandScheduleForm = (props) => {
                       <input
                         type="file"
                         className="form-control"
-                        {...register("revisedLansSchedule")}
+                        // {...register("revisedLansSchedule")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "revisedLansSchedule")}
                       />
                     </div>
@@ -1242,7 +1236,7 @@ const LandScheduleForm = (props) => {
                       <input
                         type="file"
                         className="form-control"
-                        {...register("copyOfShajraPlan")}
+                        // {...register("copyOfShajraPlan")}
                         onChange={(e) => getDocumentData(e?.target?.files[0], "copyOfShajraPlan")}
                       />
                     </div>

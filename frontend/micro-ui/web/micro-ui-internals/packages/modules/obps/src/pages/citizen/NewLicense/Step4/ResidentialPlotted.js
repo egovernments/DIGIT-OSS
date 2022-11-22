@@ -119,7 +119,7 @@ const ResidentialPlottedForm = (props) => {
   }, [ResidentialPlottedFormSubmitted]);
 
   return (
-    <Form onSubmit={ResidentialPlottedFormSubmitHandler} style={{ display: props.displayResidential }}>
+    <Form style={{ display: props.displayResidential }}>
       <Form.Group className="justify-content-center" controlId="formBasicEmail">
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col col-12>
@@ -141,11 +141,10 @@ const ResidentialPlottedForm = (props) => {
                     </div>
                   </td>
                   <td align="right">
-                    {" "}
-                    <input type="number" className="form-control" />
+                    <input type="number" className="form-control" {...register("genPlot")} />
                   </td>
                   <td component="th" scope="row">
-                    <input type="text" className="form-control" />
+                    <input type="text" className="form-control" {...register("genPlot")} />
                   </td>
                 </tr>
                 <tr>
@@ -156,10 +155,10 @@ const ResidentialPlottedForm = (props) => {
                   </td>
                   <td align="right">
                     {" "}
-                    <input type="number" className="form-control" />
+                    <input type="number" className="form-control" {...register("genPlot")} />
                   </td>
                   <td component="th" scope="row">
-                    <input type="text" className="form-control" />
+                    <input type="text" className="form-control" {...register("genPlot")} />
                   </td>
                 </tr>
               </tbody>
