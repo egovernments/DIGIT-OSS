@@ -143,11 +143,7 @@ const LandScheduleForm = (props) => {
 
   const getSubmitDataLabel = async () => {
     try {
-<<<<<<< HEAD
-      const Resp = await axios.get(`/land-services/new/licenses/_get?id=${props.getId}`);
-=======
       const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`);
->>>>>>> 5231275a86e7cab16a629dfb7fa8b3aab3353be0
       const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
       setSubmitDataLabel(userData);
     } catch (error) {
@@ -166,18 +162,6 @@ const LandScheduleForm = (props) => {
     formData.append("tag", "tag-property");
     setLoader(true);
     try {
-<<<<<<< HEAD
-      const Resp = await axios
-        .post("/filestore/v1/files", formData, {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          return response;
-        });
-      setDocuploadData(Resp.data);
-=======
       const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
         return response;
       });
@@ -185,7 +169,6 @@ const LandScheduleForm = (props) => {
       setValue("fieldName", Resp?.data?.files?.[0]?.fileStoreId);
       // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
       setLoader(false);
->>>>>>> 5231275a86e7cab16a629dfb7fa8b3aab3353be0
     } catch (error) {
       setLoader(false);
       console.log(error.message);

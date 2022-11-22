@@ -14,22 +14,6 @@ const apiSetuProxy = createProxyMiddleware({
   target: process.env.REACT_APP_PROXY_SETU || "https://apisetu.gov.in",
   changeOrigin: true,
 });
-<<<<<<< HEAD
-// const LicProxy = createProxyMiddleware({
-//   target: process.env.REACT_APP_PROXY_MDMS || "http://10.1.1.18:8443",
-//   changeOrigin: true,
-// });
-// const docUploadProxy = createProxyMiddleware({
-//   target: process.env.REACT_APP_PROXY_UPLOAD_DOC || "http://10.1.1.18:8443",
-//   changeOrigin: true,
-// });
-// const devRegistration = createProxyMiddleware({
-//   target: process.env.REACT_APP_PROXY_DEV_REG || "http://10.1.1.18:8443",
-//   changeOrigin: true,
-// });
-const EgScrutinyProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://10.1.1.18:8443",
-=======
 const LicProxy = createProxyMiddleware({
   target: process.env.REACT_APP_PROXY_MDMS || "http://103.166.62.118:8443",
   changeOrigin: true,
@@ -44,7 +28,6 @@ const devRegistration = createProxyMiddleware({
 });
 const LicNewRegistration = createProxyMiddleware({
   target: process.env.REACT_APP_PROXY_NEW_LIC || "http://103.166.62.118:8443",
->>>>>>> 5231275a86e7cab16a629dfb7fa8b3aab3353be0
   changeOrigin: true,
 });
 
