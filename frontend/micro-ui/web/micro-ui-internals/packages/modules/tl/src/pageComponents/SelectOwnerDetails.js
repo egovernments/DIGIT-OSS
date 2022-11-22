@@ -219,7 +219,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     {...{
                       validation: {
                         isRequired: true,
-                        pattern: "^[a-zA-Z-.`' ]*$",
+                        pattern: "^[a-z0-9]+( [a-z0-9]+)*$",
                         type: "text",
                         title: t("TL_NAME_ERROR_MESSAGE"),
                       },
@@ -248,7 +248,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     {...{
                       validation: {
                         // isRequired: true,
-                        pattern: "^[a-zA-Z-.`' ]*$",
+                        pattern: "^[a-z0-9]+( [a-z0-9]+)*$",
                         type: "text",
                         title: t("TL_NAME_ERROR_MESSAGE"),
                       },
@@ -267,7 +267,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                     {...{
                       validation: {
                         // isRequired: true,
-                        pattern: "^[a-zA-Z-.`' ]*$",
+                        pattern: "^[a-z0-9]+( [a-z0-9]+)*$",
                         type: "text",
                         title: t("TL_NAME_ERROR_MESSAGE"),
                       },
@@ -413,7 +413,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                   {...{
                     validation: {
                       isRequired: true,
-                      pattern: "^[a-zA-Z-.`' ]*$",
+                      pattern: "^[a-z0-9]+( [a-z0-9]+)*$",
                       type: "text",
                       title: t("TL_NAME_ERROR_MESSAGE"),
                     },
@@ -475,7 +475,7 @@ const SelectOwnerDetails = ({ t, config, onSelect, userType, formData }) => {
                   {...{
                     validation: {
                       isRequired: true,
-                      pattern: "^[a-zA-Z-.`' ]*$",
+                      pattern: "^[a-z0-9]+( [a-z0-9]+)*$",
                       type: "text",
                       title: t("TL_NAME_ERROR_MESSAGE"),
                     },

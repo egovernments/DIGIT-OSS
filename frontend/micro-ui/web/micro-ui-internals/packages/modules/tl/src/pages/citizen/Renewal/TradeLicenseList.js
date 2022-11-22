@@ -40,7 +40,10 @@ const TradeLicenseList = ({ application }) => {
   }
 
   const getToastMessages = () => {
-    if(allowedToNextYear == false && oldRenewalAppNo && application?.status !== "MANUALEXPIRED")
+    if(isrenewalspresent){
+      setShowToast({ error: true, label: `${t("TL_RENEWAL_PRESENT_ERROR")}` });
+    }
+    else if(allowedToNextYear == false && oldRenewalAppNo && application?.status !== "MANUALEXPIRED")
     {
       setShowToast({ error: true, label: `${t("TL_ERROR_TOAST_RENEWAL_1")} ${oldRenewalAppNo} ${t("TL_ERROR_TOAST_RENEWAL_2")}` });
     }
@@ -59,12 +62,20 @@ const TradeLicenseList = ({ application }) => {
     const filters = { licenseNumbers, offset: 0 };
     let numOfApplications = await TLSearch.numberOfApplications(application?.tenantId, filters);
     let allowedToNextYear= false;
+    isrenewalspresent = false;
     let latestRenewalYearofAPP = "";
     let financialYear = cloneDeep(application?.financialYear);
       const financialYearDate = financialYear?.split('-')[1];
       const finalFinancialYear = `20${Number(financialYearDate)}-${Number(financialYearDate)+1}`
       const latestFinancialYear = Math.max.apply(Math, numOfApplications?.filter(ob => ob.licenseNumber === application?.licenseNumber)?.map(function(o){return parseInt(o.financialYear.split("-")[0])}))
       const isAllowedToNextYear = numOfApplications?.filter(data => (data.financialYear == finalFinancialYear && data?.status !== "REJECTED"));
+    let FY = getvalidfromdate("", mdmsFinancialYear).finYearRange;
+    numOfApplications &&
+    numOfApplications.map((ob) => {
+        if (ob.financialYear === FY) {
+          isrenewalspresent = true;
+        }
+      });
       if (isAllowedToNextYear?.length > 0){
          setAllowedToNextYear(false);
          setoldRenewalAppNo(isAllowedToNextYear?.[0]?.applicationNumber);
@@ -78,7 +89,7 @@ const TradeLicenseList = ({ application }) => {
         setAllowedToNextYear(true);
       }
     setNumberOfApplications(numOfApplications)
-    if(allowedToNextYear == false || application?.status === "CANCELLED" || (application?.status === "MANUALEXPIRED" /* && latestRenewalYearofAPP */))
+    if(isrenewalspresent || allowedToNextYear == false || application?.status === "CANCELLED" || (application?.status === "MANUALEXPIRED" /* && latestRenewalYearofAPP */))
     getToastMessages();
     else
     history.push(`/digit-ui/citizen/tl/tradelicence/renew-trade/${application.licenseNumber}/${application.tenantId}`);

@@ -95,10 +95,13 @@ const WSApplicationDetails = () => {
 
   async function getDisconnectionNoticeSearch() {
     let key = "ws-waterdisconnectionnotice";
-    let details = { WaterConnection: [ data?.WaterConnection?.[0] ] }
-    if (!(applicationNobyData?.includes("WS"))) {
+    let details = {};
+    if ((applicationNobyData?.includes("WS"))) {
+    details = { WaterConnection: [ {...data?.WaterConnection?.[0],property:PTData?.Properties?.[0]} ] }
+    }
+    else {
       key = "ws-seweragedisconnectionnotice";
-      details = { SewerageConnection: [data?.SewerageConnections?.[0]] }
+      details = { SewerageConnection: [{...data?.SewerageConnections?.[0],property:PTData?.Properties?.[0]}] }
     }
     let response = await Digit.WSService.WSDisconnectionNotice(data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId, details, key);
     const fileStore = await Digit.PaymentService.printReciept(data?.WaterConnection?.[0]?.tenantId || data?.SewerageConnections?.[0]?.tenantId, { fileStoreIds: response.filestoreIds[0] });
@@ -132,13 +135,13 @@ const WSApplicationDetails = () => {
   const wsEstimateDownloadObject = {
     order: 1,
     label: t("WS_ESTIMATION_NOTICE"),
-    onClick: () => getFiles([data?.WaterConnection?.[0]?.additionalDetails?.estimationFileStoreId], stateCode),
+    onClick: () => data?.WaterConnection?.[0] ? getFiles([data?.WaterConnection?.[0]?.additionalDetails?.estimationFileStoreId], stateCode) : getFiles([data?.SewerageConnections?.[0]?.additionalDetails?.estimationFileStoreId], stateCode),
   };
 
   const sanctionDownloadObject = {
     order: 2,
     label: t("WS_SANCTION_LETTER"),
-    onClick: () => getFiles([data?.WaterConnection?.[0]?.additionalDetails?.sanctionFileStoreId], stateCode),
+    onClick: () => data?.WaterConnection?.[0] ? getFiles([data?.WaterConnection?.[0]?.additionalDetails?.sanctionFileStoreId], stateCode) : getFiles([data?.SewerageConnections?.[0]?.additionalDetails?.sanctionFileStoreId], stateCode),
   };
 
   const applicationDownloadObject = {

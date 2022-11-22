@@ -482,7 +482,7 @@ export const convertToUpdateTrade = (data = {}, datafromflow, tenantId) => {
 
 export const getvalidfromdate = (date, fy) => {
   let temp = parseInt(fy[0].id);
-  let object;
+  let object = fy?.[0];
   fy && fy.map((ob) => {
     if (parseInt(ob.id) > temp) {
       object = ob;
@@ -541,7 +541,7 @@ export const convertToEditTrade = (data, fy = []) => {
         applicationDate: data?.applicationDate,
         commencementDate: data?.commencementDate,
         issuedDate: data?.issuedDate,
-        financialYear: nextFinancialYearForRenewal || "2020-21",
+        financialYear: nextFinancialYearForRenewal || "2022-23",
         validFrom: data?.validFrom,
         validTo: data?.validTo,
         action: "INITIATE",
