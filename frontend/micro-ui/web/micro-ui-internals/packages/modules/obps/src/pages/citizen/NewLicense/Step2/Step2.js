@@ -9,8 +9,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
+import Spinner from "../../../../components/Loader";
 
 const ApllicantPuropseForm = (props) => {
+  console.log("props", props);
+
   const resetFields = {
     tehsil: "",
     revenueEstate: "",
@@ -164,13 +167,14 @@ const ApllicantPuropseForm = (props) => {
   const [tehsilDataLabels, setTehsilDataLabels] = useState({ data: [], isLoading: true });
   const [revenueDataLabels, setRevenueDataLabels] = useState({ data: [], isLoading: true });
   const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
-  const [file, setFile] = useState(null);
   const [modal, setmodal] = useState(false);
   const [tehsilCode, setTehsilCode] = useState(null);
   const [consolidateValue, setConsolidateValue] = useState("consolidated");
   const [getCollaboration, setCollaboration] = useState("");
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
   const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
+  const [docId, setDocId] = useState(null);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     if (specificTableData) {
@@ -195,6 +199,7 @@ const ApllicantPuropseForm = (props) => {
     setValue,
     reset,
     getValues,
+    watch,
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -251,6 +256,7 @@ const ApllicantPuropseForm = (props) => {
   const getRevenuStateData = async (code) => {
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
+      console.log("resp=====", Resp?.data);
       const revenData = Resp?.data?.map((el) => {
         return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
       });
@@ -276,14 +282,24 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
-  const getLandOwnerStateData = async (khewats) => {
+  const getLandOwnerStateData = async (text) => {
     try {
       const Resp = await axios.post(
-        "/egov-mdms-service/v1/_owner?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + tehsilCode + "&khewat=" + khewats,
+        "/egov-mdms-service/v1/_owner?" +
+          "dCode=" +
+          district +
+          "&" +
+          "tCode=" +
+          tehsilCode +
+          "&NVCode=" +
+          watch("revenueEstate")?.value +
+          "&khewat=" +
+          text,
         datapost,
         {}
       );
-      console.log("Resp.data", Resp?.data);
+      // console.log("Resp=====", Resp?.data?.[0]?.name);
+      setValue("landOwner", Resp?.data?.[0]?.name);
     } catch (error) {
       console.log(error?.message);
     }
@@ -293,68 +309,105 @@ const ApllicantPuropseForm = (props) => {
     DistrictApiCall();
   }, []);
 
-  const ApplicantPurposeModalData = (data) => {
-    data["tehsil"] = data?.tehsil?.value;
-    data["revenueEstate"] = data?.revenueEstate?.value;
-    data["mustil"] = data?.mustil?.value;
-    delete data?.district;
-    delete data?.potential;
-    delete data?.purpose;
-    delete data?.state;
+  const ApplicantPurposeModalData = (modalData) => {
+    modalData["tehsil"] = modalData?.tehsil?.value;
+    modalData["revenueEstate"] = modalData?.revenueEstate?.value;
+    modalData["mustil"] = modalData?.mustil?.value;
+    modalData["registeringAuthorityDoc"] = docId;
+    delete modalData?.district;
+    delete modalData?.potential;
+    delete modalData?.purpose;
+    delete modalData?.state;
 
-    if (data?.consolidationType === "consolidated") {
-      delete data?.bigha;
-      delete data?.biswa;
-      delete data?.biswansi;
+    if (modalData?.consolidationType === "consolidated") {
+      delete modalData?.bigha;
+      delete modalData?.biswa;
+      delete modalData?.biswansi;
     }
-    if (data?.consolidationType === "non-consolidated") {
-      delete data?.marla;
-      delete data?.kanal;
-      delete data?.sarsai;
+    if (modalData?.consolidationType === "non-consolidated") {
+      delete modalData?.marla;
+      delete modalData?.kanal;
+      delete modalData?.sarsai;
     }
-    console.log("data===", data);
+    modalData["rowid"] = "1";
 
-    setModalData((prev) => [...prev, data]);
+    setModalData((prev) => [...prev, modalData]);
     setmodal(false);
-    reset(resetFields);
+    // reset(resetFields);
     setCollaboration("");
   };
 
   const PurposeFormSubmitHandler = async (data) => {
-    props.Step2Continue(data, "9");
+    props.Step2Continue();
     return;
+    data["purpose"] = data?.purpose?.value;
+    data["potential"] = data?.potential?.value;
+    data["district"] = watch("district")?.value;
+    data["state"] = "Haryana";
+
+    delete data?.tehsil;
+    delete data?.revenueEstate;
+    delete data?.mustil;
+    delete data?.kanal;
+    delete data?.marla;
+    delete data?.sarsai;
+    delete data?.bigha;
+    delete data?.biswa;
+    delete data?.biswansi;
+    delete data?.agreementIrrevocialble;
+    delete data?.agreementValidFrom;
+    delete data?.agreementValidTill;
+    delete data?.authSignature;
+    delete data?.collaboration;
+    delete data?.developerCompany;
+    delete data?.landOwner;
+    delete data?.nameAuthSign;
+    delete data?.registeringAuthority;
+    delete data?.registeringAuthorityDoc;
+    delete data?.consolidationType;
+    delete data?.khewats;
+    delete data?.rowid;
+
+    // console.log("data", data);
+    // return;
+
     const token = window?.localStorage?.getItem("token");
-    const postDistrict = {
-      pageName: "ApplicantPurpose",
-      id: props.getId,
-      createdBy: props?.userInfo?.id,
-      updatedBy: props?.userInfo?.id,
-      LicenseDetails: {
-        ApplicantPurpose: {
-          ...data,
-          AppliedLandDetails: modalData,
+    if (!modalData?.length) alert("Please enter atleast one record");
+    else {
+      const postDistrict = {
+        pageName: "ApplicantPurpose",
+        id: props.getId,
+        createdBy: props?.userInfo?.id,
+        updatedBy: props?.userInfo?.id,
+        LicenseDetails: {
+          ApplicantPurpose: {
+            ...data,
+            AppliedLandDetails: modalData,
+          },
         },
-      },
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: token,
-        userInfo: props?.userInfo,
-      },
-    };
-    console.log("modalData===", postDistrict);
-    try {
-      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      console.log(Resp?.data);
-      props.Step2Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
-    } catch (error) {
-      console.log(error.message);
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: token,
+          userInfo: props?.userInfo,
+        },
+      };
+      setLoader(true);
+      try {
+        const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+        console.log(Resp?.data);
+        setLoader(false);
+        props.Step2Continue();
+      } catch (error) {
+        setLoader(false);
+        console.log(error.message);
+      }
     }
   };
 
@@ -367,8 +420,38 @@ const ApllicantPuropseForm = (props) => {
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
 
+  const getDocumentData = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
+        return response;
+      });
+      console.log(Resp?.data?.files?.[0]?.fileStoreId);
+      setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      setLoader(false);
+    } catch (error) {
+      setLoader(false);
+      console.log(error.message);
+    }
+  };
+
+  let delay;
+
+  useEffect(() => {
+    delay = setTimeout(() => {
+      if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
+    }, 1000);
+    return () => clearTimeout(delay);
+  }, [watch("khewats")]);
+
   return (
     <div>
+      {loader && <Spinner />}
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
           <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
@@ -436,6 +519,7 @@ const ApllicantPuropseForm = (props) => {
                     labels="District"
                     loading={districtDataLbels?.isLoading}
                     onChange={(e) => {
+                      console.log("e===", e);
                       getTehslidata(e.value);
                       setDistrict(e.value);
                     }}
@@ -515,7 +599,7 @@ const ApllicantPuropseForm = (props) => {
         size="xl"
         isOpen={modal}
         toggle={() => {
-          reset(resetFields);
+          // reset(resetFields);
           setCollaboration("");
           setmodal(!modal);
         }}
@@ -523,7 +607,7 @@ const ApllicantPuropseForm = (props) => {
         <ModalHeader
           toggle={() => {
             setmodal(!modal);
-            reset(resetFields);
+            // reset(resetFields);
             setCollaboration("");
           }}
         ></ModalHeader>
@@ -568,8 +652,8 @@ const ApllicantPuropseForm = (props) => {
                   labels="Revenue Estate"
                   loading={revenueDataLabels?.isLoading}
                   onChange={(e) => {
+                    console.log("e", e);
                     getMustilData(e.code);
-                    getLandOwnerStateData(e.khewats);
                   }}
                 />
 
@@ -693,6 +777,12 @@ const ApllicantPuropseForm = (props) => {
               </Col>
             </Row>
 
+            <div>
+              <label>Enter Khewat</label>
+
+              <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
+            </div>
+
             <Row className="ml-auto mb-3">
               <Col md={4} xxl lg="6">
                 <div>
@@ -797,7 +887,12 @@ const ApllicantPuropseForm = (props) => {
                         </h2>
                       </label>
                       <br></br>
-                      <Form.Control type="file" className="form-control" {...register("registeringAuthorityDocId")} />
+                      <input
+                        type="file"
+                        className="form-control"
+                        {...register("registeringAuthorityDoc")}
+                        onChange={(e) => getDocumentData(e?.target?.files[0])}
+                      />
                     </div>
                   </div>
                 )}
