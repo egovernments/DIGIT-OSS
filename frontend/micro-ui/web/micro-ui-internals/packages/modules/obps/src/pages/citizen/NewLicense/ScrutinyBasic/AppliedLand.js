@@ -30,6 +30,7 @@ import { useStyles } from "./css/personalInfoChild.style";
 const AppliedLandinfo = (props) => {
 
   const dataIcons = props.dataForIcons;
+  const appliedLandData = props.ApiResponseData;
 
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   console.log(uncheckedValue);
@@ -255,14 +256,26 @@ const AppliedLandinfo = (props) => {
     detailsOfPlots: Colors.info,
     areaUnder: Colors.info,
     nilp: Colors.info,
-    sitePlan: Colors.info,
+
+    demarcationPlan: Colors.info,
     democraticPlan: Colors.info,
     sectoralPlan: Colors.info,
-    developmentPlan: Colors.info,
     uploadLayoutPlan: Colors.info,
+    crossSectionPlans: Colors.info,
+    publicHealthServicePositionPlan: Colors.info,
+    designsOfRoadWorks: Colors.info,
+    designOfStormAndWaterSupply: Colors.info,
+    designForDisposal: Colors.info,
+    undertakingThatNoChange: Colors.info,
+    existingApprovedLayoutPlan: Colors.info,
+    anyObjection: Colors.info,
+    consentOfRERA: Colors.info,
+    undertaking: Colors.info,
+    designForElectricSupply: Colors.info,
+    salientFeatureColony: Colors.info
   })
 
-  const fieldIdList = [{ label: "DGPS Point", key: "dgpsPoint" }, { label: "Details of Plots", key: "detailsOfPlots" }, { label: "Area Under", key: "areaUnder" }, { label: "NILP", key: "nilp" }, { label: "Site plan", key: "nilp" }, { label: "Democratic Plan", key: "nilp" }, { label: "Sectoral Plan/Layout Plan", key: "sectoralPlan" }, { label: "Development Plan", key: "developmentPlan" }, { label: "Upload Layout Plan", key: "uploadLayoutPlan" },];
+  const fieldIdList = [{ label: "DGPS Point", key: "dgpsPoint" }, { label: "Details of Plots", key: "detailsOfPlots" }, { label: "Area Under", key: "areaUnder" }, { label: "NILP", key: "nilp" }, { label: "Demarcation plan", key: "demarcationPlan" }, { label: "Democratic Plan", key: "democraticPlan" }, { label: "Sectoral Plan/Layout Plan", key: "sectoralPlan" }, { label: "Upload Layout Plan", key: "uploadLayoutPlan" }, { label: "Plan showing cross sections", key: "crossSectionPlans" }, { label: "Plan indicating positions of public health services", key: "publicHealthServicePositionPlan" }, { label: "Specifications and designs of road works", key: "designsOfRoadWorks" }, { label: "Designs and Sewerage, storm and water supply", key: "designOfStormAndWaterSupply" }, { label: "Designs of disposal and treatment of storm", key: "designForDisposal" }, { label: "Upload Layout Undertaking that no change", key: "undertakingThatNoChange" }, { label: "Whether you hosted the existing approved layout plan", key: "existingApprovedLayoutPlan" }, { label: "Report any objection from any of the alottees", key: "anyObjection" }, { label: "Consent of RERA", key: "consentOfRERA" }, { label: "Undertaking", key: "undertaking" }, { label: "Detailed specification and design for electric supply", key: "designForElectricSupply" }, { label: "Salient feature of the proposed colony", key: "salientFeatureColony" }];
 
 
   const getColorofFieldIcon = () => {
@@ -406,7 +419,7 @@ const AppliedLandinfo = (props) => {
                         setOpennedModal("dgpsPoint")
                       setSmShow(true),
                         console.log("modal open"),
-                        setFieldValue();
+                        setFieldValue("");
                     }}
                   ></ReportProblemIcon>
                 </div>
@@ -418,11 +431,11 @@ const AppliedLandinfo = (props) => {
                     <br></br>
                     <div className="col col-6">
                       <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
-                      <input type="number" name="XLongitude" className="form-control" disabled />
+                      <input type="number" name="XLongitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point1?.longitude} />
                     </div>
                     <div className="col col-6">
                       <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                      <input type="number" name="YLatitude" className="form-control" disabled />
+                      <input type="number" name="YLatitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point1?.latitude} />
                     </div>
                   </div>
                 </div>
@@ -432,11 +445,11 @@ const AppliedLandinfo = (props) => {
                     <br></br>
                     <div className="col col-6">
                       <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
-                      <input type="number" name="XLongitude" className="form-control" disabled />
+                      <input type="number" name="XLongitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point2?.longitude} />
                     </div>
                     <div className="col col-6">
                       <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                      <input type="number" name="YLatitude" className="form-control" disabled />
+                      <input type="number" name="YLatitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point2?.latitude} />
                     </div>
                   </div>
                 </div>
@@ -448,11 +461,11 @@ const AppliedLandinfo = (props) => {
                     <div className="row ">
                       <div className="col col-6">
                         <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
-                        <input type="number" name="XLongitude" className="form-control" disabled />
+                        <input type="number" name="XLongitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point3?.longitude} />
                       </div>
                       <div className="col col-6">
                         <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                        <input type="number" name="YLatitude" className="form-control" disabled />
+                        <input type="number" name="YLatitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point3?.latitude} />
                       </div>
                     </div>
                   </div>
@@ -464,11 +477,11 @@ const AppliedLandinfo = (props) => {
                       <br></br>
                       <div className="col col-6">
                         <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
-                        <input type="number" name="XLongitude" className="form-control" disabled />
+                        <input type="number" name="XLongitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point4?.longitude} />
                       </div>
                       <div className="col col-6">
                         <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                        <input type="number" name="YLatitude" className="form-control" disabled />
+                        <input type="number" name="YLatitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point4?.latitude} />
                       </div>
                     </div>
                     &nbsp;&nbsp;&nbsp;
@@ -479,11 +492,11 @@ const AppliedLandinfo = (props) => {
                       <div className="row ">
                         <div className="col col-6">
                           <label className={classes.formLabel} htmlFor="pitentialZone">X:Longiude</label>
-                          <input type="number" name="XLongitude" className="form-control" disabled />
+                          <input type="number" name="XLongitude" className="form-control" disabled placeholder={elementInArray?.longitude} />
                         </div>
                         <div className="col col-6">
                           <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                          <input type="number" name="YLatitude" className="form-control" disabled />
+                          <input type="number" name="YLatitude" className="form-control" disabled placeholder={elementInArray?.latitude} />
                         </div>
                       </div>
                     );
@@ -496,10 +509,10 @@ const AppliedLandinfo = (props) => {
                 <h5 className={`text-black d-flex flex-row align-items-center ${classes.formLabel}`} style={{ marginTop: "3%" }}>
                   2.Details of Plots
                   <div className="ml-3 d-flex flex-row align-items-center">
-                    <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} disabled />
+                    <input type="radio" id="Yes" value="1" name="Yes" disabled checked={appliedLandData?.detailsOfPlots === "1" ? true : false} />
                     <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="gen">Regular</label>&nbsp;&nbsp;
-                    <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} disabled />
-                    <label  className={`${classes.formLabel}  m-0  mx-1`} htmlFor="npnl">Irregular</label>
+                    <input type="radio" id="Yes" value="2" name="Yes" checked={appliedLandData?.detailsOfPlots === "2" ? true : false} disabled />
+                    <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="npnl">Irregular</label>
                   </div>
                   <div style={{ margin: 5 }}>
                     {" "}
@@ -509,16 +522,16 @@ const AppliedLandinfo = (props) => {
                       }}
                       onClick={() => {
                         setLabelValue("Details of Plots"),
-                        setOpennedModal("detailsOfPlots")
-                      setSmShow(true),
-                        console.log("modal open"),
-                        setFieldValue();
+                          setOpennedModal("detailsOfPlots")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(appliedLandData?.detailsOfPlots === "1" ? "Regular" : appliedLandData?.detailsOfPlots === "2" ? "Irregular" : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
                 </h5>
                 <br></br>
-                {showhide18 === "1" && (
+                {appliedLandData?.detailsOfPlots === "1" && (
                   <div className="table table-bordered table-responsive">
                     <thead>
                       <tr>
@@ -539,20 +552,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.residential?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -562,20 +575,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.gen?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.gen?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.gen?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.gen?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -585,20 +598,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.npnl?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.npnl?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.npnl?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.npnl?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -608,20 +621,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.ews?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.ews?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.ews?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.ews?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -636,20 +649,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.commercial?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.commercial?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.commercial?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.commercial?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -664,20 +677,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.communitySites?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.communitySites?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.communitySites?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.communitySites?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -692,20 +705,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.parks?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.parks?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.parks?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.parks?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -720,20 +733,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.publicUtilities?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.publicUtilities?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.publicUtilities?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.publicUtilities?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -743,20 +756,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="number" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.stp?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.stp?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.stp?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.stp?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -766,20 +779,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="number" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.etp?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.etp?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.etp?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.etp?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -789,20 +802,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="number" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.wtp?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.wtp?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.wtp?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.wtp?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -812,20 +825,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="number" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.ugt?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.ugt?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.ugt?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.ugt?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -835,20 +848,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="number" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.milkBooth?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.milkBooth?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.milkBooth?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.milkBooth?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -858,26 +871,26 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="number" className="form-control" disabled />
+                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.wss?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.wss?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.wss?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled />
+                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.wss?.area} />
                         </td>
                       </tr>
                     </tbody>
                   </div>
                 )}
-                {showhide18 === "2" && (
+                {appliedLandData?.detailsOfPlots === "2" && (
                   <div>
                     <div className="table table-bordered table-responsive ">
                       <thead>
@@ -901,11 +914,11 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.dimensions} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.enteredArea} />
                           </td>
                         </tr>
                         <tr>
@@ -921,11 +934,11 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.dimensions} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.enteredArea} />
                           </td>
                         </tr>
                       </tbody>
@@ -940,10 +953,10 @@ const AppliedLandinfo = (props) => {
                           }}
                           onClick={() => {
                             setLabelValue("Area Under"),
-                        setOpennedModal("areaUnder")
-                      setSmShow(true),
-                        console.log("modal open"),
-                        setFieldValue();
+                              setOpennedModal("areaUnder")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue();
                           }}
                         ></ReportProblemIcon>
                       </div>
@@ -972,18 +985,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.seactoralPlanRoad?.detailsOfPlot} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.seactoralPlanRoad?.plotNo} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.seactoralPlanRoad?.length} />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.seactoralPlanRoad?.dimensions} />
                           </td>
                         </tr>
                         <tr>
@@ -999,18 +1012,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.greenBelt?.detailsOfPlot} />
+                          </td>
+                          <td align="right">
+                            {" "}
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.greenBelt?.plotNo} />
+                          </td>
+                          <td align="right">
+                            {" "}
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.greenBelt?.length} />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" disabled />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" disabled />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.greenBelt?.dimensions} />
                           </td>
                         </tr>
                         <tr>
@@ -1026,18 +1039,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.wideInternalCirculationPlan?.detailsOfPlot} />
+                          </td>
+                          <td align="right">
+                            {" "}
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.wideInternalCirculationPlan?.plotNo} />
+                          </td>
+                          <td align="right">
+                            {" "}
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.wideInternalCirculationPlan?.length} />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" disabled />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" disabled />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.wideInternalCirculationPlan?.dimensions} />
                           </td>
                         </tr>
                         <tr>
@@ -1053,18 +1066,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.otherRoads?.detailsOfPlot} />
+                          </td>
+                          <td align="right">
+                            {" "}
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.otherRoads?.plotNo} />
+                          </td>
+                          <td align="right">
+                            {" "}
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.otherRoads?.length} />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" disabled />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" disabled />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.otherRoads?.dimensions} />
                           </td>
                         </tr>
                         <tr>
@@ -1080,33 +1093,32 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.undeterminedUse?.detailsOfPlot} />
+                          </td>
+                          <td align="right">
+                            {" "}
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.undeterminedUse?.plotNo} />
+                          </td>
+                          <td align="right">
+                            {" "}
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.undeterminedUse?.length} />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" disabled />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" disabled />
-                          </td>
-                          <td align="right">
-                            {" "}
-                            <input type="number" className="form-control" disabled />
+                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.undeterminedUse?.dimensions} />
                           </td>
                         </tr>
                       </tbody>
                     </div>
                   </div>
                 )}
-
                 <div>
-                  <DDJAYForm displayDdjay={Purpose === "08" ? "block" : "none"}></DDJAYForm>
+                  <DDJAYForm displayDdjay={Purpose === "08" ? "block" : "none"} data={appliedLandData?.ddjay}></DDJAYForm>
                 </div>
                 <div>
-                  <ResidentialPlottedForm displayResidential={Purpose === "03" ? "block" : "none"}></ResidentialPlottedForm>
+                  <ResidentialPlottedForm displayResidential={Purpose === "03" ? "block" : "none"} data={appliedLandData?.residential} ></ResidentialPlottedForm>
                 </div>
                 <div>
-                  <IndustrialPlottedForm displayIndustrial={Purpose === "06" ? "block" : "none"}></IndustrialPlottedForm>
+                  <IndustrialPlottedForm displayIndustrial={Purpose === "06" ? "block" : "none"} data={appliedLandData?.industrial}></IndustrialPlottedForm>
                 </div>
 
                 <h5 className="text-black mt-4">
@@ -1119,10 +1131,10 @@ const AppliedLandinfo = (props) => {
                       }}
                       onClick={() => {
                         setLabelValue("NILP"),
-                        setOpennedModal("nilp")
-                      setSmShow(true),
-                        console.log("modal open"),
-                        setFieldValue();
+                          setOpennedModal("nilp")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue();
                       }}
                     ></ReportProblemIcon>
                   </div>
@@ -1145,24 +1157,37 @@ const AppliedLandinfo = (props) => {
                         Whether you want to surrender the 10% area of license colony to Govt. the instead of providing 10% under EWS and NPNL plots{" "}
                       </p>
                     </div>
-                    <div class="col-2 border p-1 d-flex flex-row justify-content-center align-items-center ">
-                      <input
-                        type="radio"
-                        value="Yes"
-                        id="Yes"
-                        disabled
-                      // onChange={handleChange} name="Yes" onClick={handleshow0}
-                      />
-                      <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
+                    <div className="col-2 border p-1">
 
-                      <input
-                        type="radio"
-                        value="No"
-                        id="No"
-                        disabled
-                      // onChange={handleChange} name="Yes" onClick={handleshow0}
-                      />
-                      <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
+                      <div class="d-flex flex-row justify-content-center align-items-center ">
+                        <input
+                          type="radio"
+                          value="Yes"
+                          id="Yes"
+                          disabled
+                          checked={appliedLandData?.nilp?.surrenderAreaOfLicenceCol === "Y" ? true : false}
+                        />
+                        <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
+
+                        <input
+                          type="radio"
+                          value="No"
+                          id="No"
+                          disabled
+                          checked={appliedLandData?.nilp?.surrenderAreaOfLicenceCol === "N" ? true : false}
+                        />
+                        <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
+
+                      {appliedLandData?.nilp?.surrenderAreaOfLicenceCol === "Y" && (
+                        <div className="row ">
+                          <div className="col col">
+                            <label className="m-0">Area in Acres</label>
+                            <input type="text" className="form-control" placeholder={appliedLandData?.nilp?.surrenderAreaOfLicenceColArea} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
                   </div>
                   <div class="row">
                     <div class="col-1 border p-1 d-flex flex-row justify-content-center align-items-center">
@@ -1174,24 +1199,41 @@ const AppliedLandinfo = (props) => {
                         Whether any pocket proposed to be transferred less than 1 acre{" "}
                       </p>
                     </div>
-                    <div class="col-2 border p-1 d-flex flex-row justify-content-center align-items-center ">
-                      <input
-                        type="radio"
-                        value="Yes"
-                        id="Yes"
-                        disabled
-                      // onChange={handleChange} name="Yes" onClick={handleshow0}
-                      />
-                      <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
+                    <div className="col-2 border p-1">
 
-                      <input
-                        type="radio"
-                        value="No"
-                        id="No"
-                        disabled
-                      // onChange={handleChange} name="Yes" onClick={handleshow0}
-                      />
-                      <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
+                      <div class="d-flex flex-row justify-content-center align-items-center ">
+                        <input
+                          type="radio"
+                          value="Yes"
+                          id="Yes"
+                          disabled
+                          checked={appliedLandData?.nilp?.proposedPocket === "Y" ? true : false}
+                        />
+                        <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
+
+                        <input
+                          type="radio"
+                          value="No"
+                          id="No"
+                          disabled
+                          checked={appliedLandData?.nilp?.proposedPocket === "N" ? true : false}
+                        />
+                        <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
+
+                      {appliedLandData?.nilp?.proposedPocket === "Y" && (
+                        <div className="row ">
+                          <div className="col-12">
+                            <label className="m-0">Dimension(in mtr)</label>
+                            <input type="text" className="form-control" placeholder={appliedLandData?.nilp?.proposedPocketDimensions} />
+                          </div>
+                          <div className="col-12">
+                            <label className="m-0">Area</label>
+                            <input type="text" className="form-control" placeholder={appliedLandData?.nilp?.proposedPocketArea} />
+                          </div>
+                        </div>
+
+                      )}
+                    </div>
                   </div>
                   <div class="row">
                     <div class="col-1 border p-1 d-flex flex-row justify-content-center align-items-center">
@@ -1203,24 +1245,36 @@ const AppliedLandinfo = (props) => {
                         Whether you want to deposit an amount @ of 3 times of collector rate instead of the surrender 10% land to Govt.{" "}
                       </p>
                     </div>
-                    <div class="col-2 border p-1 d-flex flex-row justify-content-center align-items-center ">
-                      <input
-                        type="radio"
-                        value="Yes"
-                        id="Yes"
-                        disabled
-                      // onChange={handleChange} name="Yes" onClick={handleshow0}
-                      />
-                      <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
+                    <div className="col-2 border p-1">
 
-                      <input
-                        type="radio"
-                        value="No"
-                        id="No"
-                        disabled
-                      // onChange={handleChange} name="Yes" onClick={handleshow0}
-                      />
-                      <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
+                      <div class="d-flex flex-row justify-content-center align-items-center ">
+                        <input
+                          type="radio"
+                          value="Yes"
+                          id="Yes"
+                          disabled
+                          checked={appliedLandData?.nilp?.depositAnAmount === "Y" ? true : false}
+                        />
+                        <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
+
+                        <input
+                          type="radio"
+                          value="No"
+                          id="No"
+                          disabled
+                          checked={appliedLandData?.nilp?.depositAnAmount === "N" ? true : false}
+                        />
+                        <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
+
+                      {appliedLandData?.nilp?.depositAnAmount === "Y" && (
+                        <div className="row ">
+                          <div className="col col">
+                            <label className="m-0">Area in acres</label>
+                            <input type="text" className="form-control" placeholder={appliedLandData?.nilp?.depositAnAmountArea} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <div class="row">
                     <div class="col-1 border p-1 d-flex flex-row justify-content-center align-items-center">
@@ -1232,24 +1286,41 @@ const AppliedLandinfo = (props) => {
                         Whether the surrendered area is having a minimum of 18 mtr independent access{" "}
                       </p>
                     </div>
-                    <div class="col-2 border p-1 d-flex flex-row justify-content-center align-items-center ">
-                      <input
-                        type="radio"
-                        value="Yes"
-                        id="Yes"
-                        disabled
-                      // onChange={handleChange} name="Yes" onClick={handleshow0}
-                      />
-                      <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
+                    <div className="col-2 border p-1">
 
-                      <input
-                        type="radio"
-                        value="No"
-                        id="No"
-                        disabled
-                      // onChange={handleChange} name="Yes" onClick={handleshow0}
-                      />
-                      <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
+                      <div class="d-flex flex-row justify-content-center align-items-center ">
+                        <input
+                          type="radio"
+                          value="Yes"
+                          id="Yes"
+                          disabled
+                          checked={appliedLandData?.nilp?.surrenderAreaIndependentAccess === "Y" ? true : false}
+                        />
+                        <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
+
+                        <input
+                          type="radio"
+                          value="No"
+                          id="No"
+                          disabled
+                          checked={appliedLandData?.nilp?.surrenderAreaIndependentAccess === "N" ? true : false}
+                        />
+                        <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
+
+                      {appliedLandData?.nilp?.surrenderAreaIndependentAccess === "Y" && (
+                        <div className="row ">
+                          <div className="col-12">
+                            <label className="m-0">Dimension(in mtr)</label>
+                            <input type="text" className="form-control" placeholder={appliedLandData?.nilp?.surrenderAreaIndependentAccessDimensions} />
+                          </div>
+                          <div className="col-12">
+                            <label className="m-0">Area</label>
+                            <input type="text" className="form-control" placeholder={appliedLandData?.nilp?.surrenderAreaIndependentAccessArea} />
+                          </div>
+                        </div>
+
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -1263,29 +1334,29 @@ const AppliedLandinfo = (props) => {
                 </h5>
                 <div className={`${classes.formLabel} row`}>
                   <div className="col col-3">
-                    <h6 className="d-flex flex-row align-items-center">
-                      Site plan.
+                    <h5 className="d-flex flex-column mb-2">
+                      Demarcation Plan
                       <div style={{ display: "flex" }}>
                         {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
                         {<DownloadForOfflineIcon color="primary" className="mx-1" />}
                         <ReportProblemIcon
                           style={{
-                            color: fieldIconColors.sitePlan
+                            color: fieldIconColors.demarcationPlan
                           }}
                           onClick={() => {
-                            setLabelValue("Site plan"),
-                        setOpennedModal("sitePlan")
-                      setSmShow(true),
-                        console.log("modal open"),
-                        setFieldValue();
+                            setLabelValue("Demarcation plan"),
+                              setOpennedModal("demarcationPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue();
                           }}
                         ></ReportProblemIcon>
                       </div>
-                    </h6>
+                    </h5>
                     {/* <input type="file" className="form-control" disabled /> */}
                   </div>
                   <div className="col col-3">
-                    <h6 className="d-flex flex-row align-items-center">
+                  <h5 className="d-flex flex-column mb-2">
                       Democratic Plan.
                       <div style={{ display: "flex" }}>
                         {/* Site plan. */}
@@ -1298,66 +1369,45 @@ const AppliedLandinfo = (props) => {
                           }}
                           onClick={() => {
                             setLabelValue("Democratic Plan"),
-                        setOpennedModal("democraticPlan")
-                      setSmShow(true),
-                        console.log("modal open"),
-                        setFieldValue();
+                              setOpennedModal("democraticPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue();
                           }}
                         ></ReportProblemIcon>
                       </div>
-                    </h6>
+                    </h5>
                     {/* <input type="file" className="form-control" disabled />
                     {<DownloadForOfflineIcon color="primary" />} */}
                   </div>
                   <div className="col col-3">
-                    <h5 className="d-flex flex-row align-items-center" >Sectoral Plan/Layout Plan.
+                    <h5 className="d-flex flex-column mb-2" >Sectoral Plan/Layout Plan.
 
                       <div style={{ display: "flex" }}>
                         {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
                         {<DownloadForOfflineIcon color="primary" className="mx-1" />}
                         <ReportProblemIcon
                           style={{
-                            color:fieldIconColors.sectoralPlan
+                            color: fieldIconColors.sectoralPlan
                           }}
                           onClick={() => {
                             setLabelValue("Sectoral Plan/Layout Plan"),
-                        setOpennedModal("sectoralPlan")
-                      setSmShow(true),
-                        console.log("modal open"),
-                        setFieldValue();
+                              setOpennedModal("sectoralPlan")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue();
                           }}
                         ></ReportProblemIcon>
                       </div>
                     </h5>
                     {/* <input type="file" className="form-control" disabled />
                     {<DownloadForOfflineIcon color="primary" />} */}
-                  </div>
-                  <div className="col col-3">
-                    <h5 className="d-flex flex-row align-items-center">Development Plan.
 
-                      {/* <input type="file" className="form-control" disabled /> */}
-                      {/* {<DownloadForOfflineIcon color="primary" />} */}
-                      <div style={{ display: "flex" }}>
-                        {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                        {<DownloadForOfflineIcon color="primary" className="mx-1" />}
-                        <ReportProblemIcon
-                          style={{
-                            color: fieldIconColors.developmentPlan
-                          }}
-                          onClick={() => {
-                            setLabelValue("Development Plan"),
-                            setOpennedModal("developmentPlan")
-                          setSmShow(true),
-                            console.log("modal open"),
-                            setFieldValue();                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                    </h5>
+
                   </div>
-                  <div className="row">
-                    <div className="col">
+                    <div className="col col-3">
                       <div className="form-group">
-                        <h5 className="d-flex flex-row">
+                        <h5 className="d-flex flex-column mb-2">
                           Upload Layout Plan
                           <div style={{ display: "flex" }}>
                             {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
@@ -1369,18 +1419,312 @@ const AppliedLandinfo = (props) => {
                               }}
                               onClick={() => {
                                 setLabelValue("Upload Layout Plan"),
-                            setOpennedModal("uploadLayoutPlan")
-                          setSmShow(true),
-                            console.log("modal open"),
-                            setFieldValue();  
+                                  setOpennedModal("uploadLayoutPlan")
+                                setSmShow(true),
+                                  console.log("modal open"),
+                                  setFieldValue();
                               }}
                             ></ReportProblemIcon>
                           </div>
                         </h5>
-                        <span className="text-primary"> (Click here for instructions to capture DGPS points)</span>
+                        {/* <span className="text-primary"> (Click here for instructions to capture DGPS points)</span> */}
                       </div>
                     </div>
+
+                  <div className="row">
+                    <div className="col col-3">
+                      <h5 className="d-flex flex-column mb-2">Plans showing cross sections
+
+                        {/* <input type="file" className="form-control" disabled /> */}
+                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.crossSectionPlans
+                            }}
+                            onClick={() => {
+                              setLabelValue("Plan showing cross sections"),
+                                setOpennedModal("crossSectionPlans")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue();
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </h5>
+                    </div>
+
+                    <div className="col col-3">
+                      <h5 className="d-flex flex-column mb-2">Plan indicating positions of public health services
+
+                        {/* <input type="file" className="form-control" disabled /> */}
+                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.publicHealthServicePositionPlan
+                            }}
+                            onClick={() => {
+                              setLabelValue("Plan indicating positions of public health services"),
+                                setOpennedModal("publicHealthServicePositionPlan")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue();
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </h5>
+                    </div>
+
+                    <div className="col col-3">
+                      <h5 className="d-flex flex-column mb-2">Specifications and designs of road works
+                        {/* <input type="file" className="form-control" disabled /> */}
+                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.designsOfRoadWorks
+                            }}
+                            onClick={() => {
+                              setLabelValue("Specifications and designs of road works"),
+                                setOpennedModal("designsOfRoadWorks")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue();
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </h5>
+                    </div>
+
+                    <div className="col col-3">
+                      <h5 className="d-flex flex-column mb-2">Designs and Sewerage, storm and water supply
+                        {/* <input type="file" className="form-control" disabled /> */}
+                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.designOfStormAndWaterSupply
+                            }}
+                            onClick={() => {
+                              setLabelValue("Designs and Sewerage, storm and water supply"),
+                                setOpennedModal("designOfStormAndWaterSupply")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue();
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </h5>
+                    </div>
+
                   </div>
+
+                  <div className="row">
+                    <div className="col col-3">
+                      <h5 className="d-flex flex-column mb-2">Designs of disposal and treatment of storm
+
+                        {/* <input type="file" className="form-control" disabled /> */}
+                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.designForDisposal
+                            }}
+                            onClick={() => {
+                              setLabelValue("Designs of disposal and treatment of storm"),
+                                setOpennedModal("designForDisposal")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue();
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </h5>
+                    </div>
+
+                    <div className="col col-3">
+                      <h5 className="d-flex flex-column mb-2">Upload Layout Undertaking that no change
+
+                        {/* <input type="file" className="form-control" disabled /> */}
+                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.undertakingThatNoChange
+                            }}
+                            onClick={() => {
+                              setLabelValue("Upload Layout Undertaking that no change"),
+                                setOpennedModal("undertakingThatNoChange")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue();
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </h5>
+                    </div>
+
+                    <div className="col col-3">
+                      <h5 className="d-flex flex-column mb-2">Whether you hosted the existing approved layout plan
+                        {/* <input type="file" className="form-control" disabled /> */}
+                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.existingApprovedLayoutPlan
+                            }}
+                            onClick={() => {
+                              setLabelValue("Whether you hosted the existing approved layout plan"),
+                                setOpennedModal("existingApprovedLayoutPlan")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue();
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </h5>
+                    </div>
+
+                    <div className="col col-3">
+                      <h5 className="d-flex flex-column mb-2">Report any objection from any of the alottees
+
+                        {/* <input type="file" className="form-control" disabled /> */}
+                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.anyObjection
+                            }}
+                            onClick={() => {
+                              setLabelValue("Report any objection from any of the alottees"),
+                                setOpennedModal("anyObjection")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue();
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </h5>
+                    </div>
+
+                  </div>
+
+                  <div className="row">
+                    <div className="col col-3">
+                      <h5 className="d-flex flex-column mb-2">Consent of RERA
+
+                        {/* <input type="file" className="form-control" disabled /> */}
+                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.consentOfRERA
+                            }}
+                            onClick={() => {
+                              setLabelValue("Consent of RERA"),
+                                setOpennedModal("consentOfRERA")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue();
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </h5>
+                    </div>
+
+                    <div className="col col-3">
+                      <h5 className="d-flex flex-column mb-2">Undertaking
+
+                        {/* <input type="file" className="form-control" disabled /> */}
+                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.undertaking
+                            }}
+                            onClick={() => {
+                              setLabelValue("Undertaking"),
+                                setOpennedModal("undertaking")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue();
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </h5>
+                    </div>
+
+                    <div className="col col-3">
+                      <h5 className="d-flex flex-column mb-2">Detailed specification and design for electric supply
+
+                        {/* <input type="file" className="form-control" disabled /> */}
+                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.designForElectricSupply
+                            }}
+                            onClick={() => {
+                              setLabelValue("Detailed specification and design for electric supply"),
+                                setOpennedModal("designForElectricSupply")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue();
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </h5>
+                    </div>
+
+                    <div className="col col-3">
+                      <h5 className="d-flex flex-column mb-2">Salient feature of the proposed colony
+
+                        {/* <input type="file" className="form-control" disabled /> */}
+                        {/* {<DownloadForOfflineIcon color="primary" />} */}
+                        <div style={{ display: "flex" }}>
+                          {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
+                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.salientFeatureColony
+                            }}
+                            onClick={() => {
+                              setLabelValue("Salient feature of the proposed colony"),
+                                setOpennedModal("salientFeatureColony")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue();
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </h5>
+                    </div>
+
+                  </div>
+
                 </div>
 
                 {/* <Button style={{ alignSelf: "center", marginTop: 20, marginright: 867 }} variant="primary" type="submit">
