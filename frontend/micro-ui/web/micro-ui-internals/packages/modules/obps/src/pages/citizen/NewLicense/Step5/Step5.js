@@ -55,6 +55,7 @@ const FeesChargesForm = (props) => {
     formState: { errors },
     control,
     setValue,
+    watch,
     reset,
   } = useForm({
     mode: "onSubmit",
@@ -71,33 +72,36 @@ const FeesChargesForm = (props) => {
   const [FeesChargesFormSubmitted, SetFeesChargesFormSubmitted] = useState(false);
   const FeesChrgesFormSubmitHandler = async (data) => {
     console.log("data------", data);
-    try {
-      const postDistrict = {
-        NewServiceInfo: {
-          pageName: "FeesAndCharges",
-          id: props.getId,
-          newServiceInfoData: {
-            FeesAndCharges: {
-              totalArea: data.totalArea,
-              purpose: data.purpose,
-              devPlan: data.potential,
-              scrutinyFee: data.scrutinyFee,
-              licenseFee: data.licenseFee,
-              conversionCharges: data.conversionCharges,
-              remark: data.remark,
-              adjustFee: data.licNumber,
-            },
-          },
+    props.Step5Continue(data, "5");
+    const token = window?.localStorage?.getItem("token");
+    const postDistrict = {
+      pageName: "FeesAndCharges",
+      id: props.getId,
+      createdBy: props?.userData?.id,
+      updatedBy: props?.userData?.id,
+      LicenseDetails: {
+        FeesAndCharges: {
+          ...data,
         },
-      };
+      },
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: props?.userData,
+      },
+    };
 
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-      });
-
+    try {
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
-      props.Step5Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
-      SetFeesChargesFormSubmitted(Resp.data);
+      props.Step5Continue();
     } catch (error) {
       console.log(error.message);
     }
@@ -334,6 +338,7 @@ const FeesChargesForm = (props) => {
                     <input
                       type="text"
                       className="form-control"
+                      {...register("amountPayable")}
                       minLength={1}
                       maxLength={20}
                       pattern="[0-9]*"
@@ -361,11 +366,15 @@ const FeesChargesForm = (props) => {
                     <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)">
                       (iii)&nbsp;Adjust Fees &nbsp;&nbsp;
                     </h6>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
-                    <label className="m-0 mx-2" for="No">No</label>
-                    {showhide0 === "Yes" && (
+                    <label htmlFor="adjustFee">
+                      <input {...register("adjustFee")} type="radio" value="Y" id="adjustFee" />
+                      Yes
+                    </label>
+                    <label htmlFor="adjustFee">
+                      <input {...register("adjustFee")} type="radio" value="N" id="adjustFee" />
+                      No
+                    </label>
+                    {watch("adjustFee") === "Y" && (
                       <div className="row ">
                         <div className="col col-12">
                           <label>Enter License Number/LOI number</label>

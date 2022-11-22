@@ -121,7 +121,7 @@ const ApllicantFormStep1 = (props) => {
     try {
       const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
       const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
-      console.log(Resp?.data?.newServiceInfoData[0]?.ApplicantInfo);
+      console.log("hh", Resp?.data?.newServiceInfoData[0]?.ApplicantInfo);
       setValue("notSigned", userData?.notSigned);
       setValue("LC", userData?.LC);
     } catch (error) {
@@ -132,6 +132,7 @@ const ApllicantFormStep1 = (props) => {
     const search = location?.search;
     const params = new URLSearchParams(search);
     const id = params.get("id");
+
     setApplicantId(id?.toString());
     if (id) getApplicantUserData(id);
   }, []);
@@ -139,7 +140,7 @@ const ApllicantFormStep1 = (props) => {
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>License </h4>
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
           <Form.Group className="justify-content-center" controlId="formBasicEmail">
             <Row className="ml-auto" style={{ marginBottom: 5 }}>

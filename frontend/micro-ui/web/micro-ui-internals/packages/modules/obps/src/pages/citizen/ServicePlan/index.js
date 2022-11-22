@@ -5,10 +5,11 @@ import axios from "axios";
 
 const ServicePlanService = () => {
   const { register, handleSubmit } = useForm();
-
+  const [file, setFile] = useState(null);
   const [LOCNumber, setLOCNumber] = useState("");
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
-  const [developerDataLabel, setDeveloperDataLabel] = useState([]);
+  const [ServicePlanDataLabel, setServicePlanDataLabel] = useState([]);
+  const [docUpload, setDocuploadData] = useState([]);
 
   const servicePlan = async (data) => {
     console.log(data);
@@ -27,23 +28,54 @@ const ServicePlanService = () => {
         },
 
         servicePlanRequest: {
-          loiNumber: "",
-          undertaking: "false",
-          selfCertifiedDrawingsFromCharetedEng: "false",
-          selfCertifiedDrawingFromEmpaneledDoc: "",
-          environmentalClearance: "",
-          shapeFileAsPerTemplate: "",
-          autoCadFile: "",
-          certifieadCopyOfThePlan: "",
+          ...data,
+          //   loiNumber: data?.loiNumber,
+          //   undertaking: data?.undertaking,
+          //   selfCertifiedDrawingsFromCharetedEng: data?.selfCertifiedDrawingsFromCharetedEng,
+          //   selfCertifiedDrawingFromEmpaneledDoc: data?.selfCertifiedDrawingFromEmpaneledDoc?.[0]?.name,
+          //   environmentalClearance: data?.environmentalClearance?.[0]?.name,
+          //   shapeFileAsPerTemplate: data?.shapeFileAsPerTemplate?.[0]?.name,
+          //   autoCadFile: data?.autoCadFile?.[0]?.name,
+          //   certifieadCopyOfThePlan: data?.certifieadCopyOfThePlan?.[0]?.name,
         },
       };
       const Resp = await axios.post("/land-services/serviceplan/_create", postDistrict);
-      setDeveloperDataLabel(Resp.data);
+      setServicePlanDataLabel(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
   };
+  console.log("uu", ServicePlanDataLabel);
 
+  const getDocumentData = async () => {
+    if (file === null) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("file", file.file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+
+    try {
+      const Resp = await axios
+        .post("/filestore/v1/files", formData, {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          return response;
+        });
+
+      setDocuploadData(Resp.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  useEffect(() => {
+    getDocumentData();
+  }, [file]);
   // const getSubmitDataLabel = async () => {
   //   try {
   //     const postDistrict = {
@@ -78,11 +110,10 @@ const ServicePlanService = () => {
             <Col className="col-4">
               <div>
                 <label>
-                  {" "}
                   <h2>
                     LOI Number <span style={{ color: "red" }}>*</span>
                   </h2>
-                </label>{" "}
+                </label>
               </div>
               <input
                 type="number"
@@ -101,21 +132,21 @@ const ServicePlanService = () => {
                 </label>
               </div>
               <Form.Check
-                value="uploadedServicePlan"
+                value="true"
                 type="radio"
                 id="default-radio"
                 label="Yes"
-                name="uploadedServicePlan"
-                {...register("uploadedServicePlan")}
+                name="true"
+                {...register("selfCertifiedDrawingsFromCharetedEng")}
                 inline
               ></Form.Check>
               <Form.Check
-                value="uploadedServicePlan"
+                value="false"
                 type="radio"
                 id="default-radio"
                 label="No"
-                name="uploadedServicePlan"
-                {...register("uploadedServicePlan")}
+                name="false"
+                {...register("selfCertifiedDrawingsFromCharetedEng")}
                 inline
               ></Form.Check>
             </Col>
@@ -125,24 +156,8 @@ const ServicePlanService = () => {
                   <h2>Undertaking</h2>
                 </label>
               </div>
-              <Form.Check
-                value="Undertaking"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="Undertaking"
-                {...register("Undertaking")}
-                inline
-              ></Form.Check>
-              <Form.Check
-                value="Undertaking"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="Undertaking"
-                {...register("Undertaking")}
-                inline
-              ></Form.Check>
+              <Form.Check value="true" type="radio" id="default-radio" label="Yes" name="true" {...register("undertaking")} inline></Form.Check>
+              <Form.Check value="false" type="radio" id="default-radio" label="No" name="false" {...register("undertaking")} inline></Form.Check>
             </Col>
           </Row>
           <br></br>
@@ -165,7 +180,12 @@ const ServicePlanService = () => {
                   <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("selfCertified")} />
+                  <input
+                    type="file"
+                    className="form-control"
+                    {...register("selfCertifiedDrawingFromEmpaneledDoc")}
+                    onChange1={(e) => setFile({ file: e.target.files[0] })}
+                  />
                 </td>
               </tr>
               <tr>
@@ -178,7 +198,12 @@ const ServicePlanService = () => {
                   <h2>Environmental Clearance.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("environmental")} />
+                  <input
+                    type="file"
+                    className="form-control"
+                    {...register("environmentalClearance")}
+                    onChange1={(e) => setFile({ file: e.target.files[0] })}
+                  />
                 </td>
               </tr>
               <tr>
@@ -191,7 +216,12 @@ const ServicePlanService = () => {
                   <h2>PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("pDF")} />
+                  <input
+                    type="file"
+                    className="form-control"
+                    {...register("shapeFileAsPerTemplate")}
+                    onChange1={(e) => setFile({ file: e.target.files[0] })}
+                  />
                 </td>
               </tr>
               <tr>
@@ -204,7 +234,7 @@ const ServicePlanService = () => {
                   <h2>AutoCAD (DXF) file.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("autoCad")} />
+                  <input type="file" className="form-control" {...register("autoCadFile")} onChange1={(e) => setFile({ file: e.target.files[0] })} />
                 </td>
               </tr>
               <tr>
@@ -217,7 +247,12 @@ const ServicePlanService = () => {
                   <h2>Certified copy of the plan verified by a third party.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("certifiedCopy")} />
+                  <input
+                    type="file"
+                    className="form-control"
+                    {...register("certifieadCopyOfThePlan")}
+                    onChange1={(e) => setFile({ file: e.target.files[0] })}
+                  />
                 </td>
               </tr>
             </tbody>

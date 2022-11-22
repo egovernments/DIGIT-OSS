@@ -23,14 +23,7 @@ const electricalPlanService = () => {
         },
 
         electricPlanRequest: {
-          electricInfra: "true",
-          electricDistribution: "false",
-          electricalCapacity: "false",
-          switchingStation: "true",
-          landSanction: "false",
-          environmentClearance: "",
-          autoCad: "",
-          verifiedPlan: "",
+          ...data,
         },
       };
       const Resp = await axios.post("/land-services/electric/plan/_create", postDistrict);
@@ -66,22 +59,22 @@ const electricalPlanService = () => {
 
                 <Form.Check
                   onChange={(e) => console.log(e)}
-                  value="electricalInfrastructure"
+                  value="true"
                   type="radio"
                   id="default-radio"
                   label="Yes"
-                  name="electricalInfrastructure"
-                  {...register("electricalInfrastructure")}
+                  name="true"
+                  {...register("electricInfra")}
                   inline
                 ></Form.Check>
                 <Form.Check
                   onChange={(e) => console.log(e)}
-                  value="electricalInfrastructure"
+                  value="false"
                   type="radio"
                   id="default-radio"
                   label="No"
-                  name="electricalInfrastructure"
-                  {...register("electricalInfrastructure")}
+                  name="false"
+                  {...register("electricInfra")}
                   inline
                 ></Form.Check>
               </div>
@@ -95,22 +88,22 @@ const electricalPlanService = () => {
               </div>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="electricityDistribution"
+                value="true"
                 type="radio"
                 id="default-radio"
                 label="Yes"
-                name="electricityDistribution"
-                {...register("electricityDistribution")}
+                name="true"
+                {...register("electricDistribution")}
                 inline
               ></Form.Check>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="electricityDistribution"
+                value="false"
                 type="radio"
                 id="default-radio"
                 label="No"
-                name="electricityDistribution"
-                {...register("electricityDistribution")}
+                name="false"
+                {...register("electricDistribution")}
                 inline
               ></Form.Check>
             </Col>
@@ -122,22 +115,22 @@ const electricalPlanService = () => {
               </div>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="proposedElectricalSubstation"
+                value="true"
                 type="radio"
                 id="default-radio"
                 label="Yes"
-                name="proposedElectricalSubstation"
-                {...register("proposedElectricalSubstation")}
+                name="true"
+                {...register("electricalCapacity")}
                 inline
               ></Form.Check>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="proposedElectricalSubstation"
+                value="false"
                 type="radio"
                 id="default-radio"
                 label="No"
-                name="proposedElectricalSubstation"
-                {...register("proposedElectricalSubstation")}
+                name="false"
+                {...register("electricalCapacity")}
                 inline
               ></Form.Check>
             </Col>
@@ -150,21 +143,21 @@ const electricalPlanService = () => {
               </div>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="switchingStation"
+                value="true"
                 type="radio"
                 id="default-radio"
                 label="Yes"
-                name="switchingStation"
+                name="true"
                 {...register("switchingStation")}
                 inline
               ></Form.Check>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="switchingStation"
+                value="false"
                 type="radio"
                 id="default-radio"
                 label="No"
-                name="switchingStation"
+                name="false"
                 {...register("switchingStation")}
                 inline
               ></Form.Check>
@@ -177,22 +170,22 @@ const electricalPlanService = () => {
               </div>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="LoadSanctionApproval"
+                value="true"
                 type="radio"
                 id="default-radio"
                 label="Yes"
-                name="LoadSanctionApproval"
-                {...register("LoadSanctionApproval")}
+                name="true"
+                {...register("LoadSancation")}
                 inline
               ></Form.Check>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="LoadSanctionApproval"
+                value="false"
                 type="radio"
                 id="default-radio"
                 label="No"
-                name="LoadSanctionApproval"
-                {...register("LoadSanctionApproval")}
+                name="false"
+                {...register("LoadSancation")}
                 inline
               ></Form.Check>
             </Col>
@@ -231,7 +224,7 @@ const electricalPlanService = () => {
                   <h2>Environmental Clearance.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("environmentClearance")} />
+                  <input type="file" className="form-control" {...register("environmentalClearance")} />
                 </td>
               </tr>
               <tr>
@@ -270,7 +263,7 @@ const electricalPlanService = () => {
                   <h2>Certified copy of the plan verified by a third party.</h2>
                 </td>
                 <td component="th" scope="row">
-                  <input type="file" className="form-control" {...register("certifiedCopy")} />
+                  <input type="file" className="form-control" {...register("verifiedPlan")} />
                 </td>
               </tr>
             </tbody>

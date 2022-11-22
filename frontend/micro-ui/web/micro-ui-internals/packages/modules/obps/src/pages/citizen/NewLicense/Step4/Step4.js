@@ -12,6 +12,7 @@ import axios from "axios";
 import Spinner from "../../../../components/Loader";
 
 const AppliedDetailForm = (props) => {
+  console.log("DD", props);
   const Purpose = localStorage.getItem("purpose");
   const [file, setFile] = useState(null);
   const [loader, setLoader] = useState(false);
@@ -23,7 +24,7 @@ const AppliedDetailForm = (props) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      dgpsPoints: [
+      dgps: [
         {
           XLongitude: "",
           YLatitude: "",
@@ -46,26 +47,42 @@ const AppliedDetailForm = (props) => {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "dgpsPoints",
+    name: "dgps",
   });
 
   const AppliedDetailFormSubmitHandler = async (data) => {
     console.log("data------", data);
-    try {
-      const postDistrict = {
-        NewServiceInfo: {
-          pageName: "DetailsofAppliedLand",
-          id: props.getId,
-          newServiceInfoData: {
-            ...data,
-          },
+    props.Step4Continue(data, "5");
+    // return;
+    const token = window?.localStorage?.getItem("token");
+    const postDistrict = {
+      pageName: "DetailsofAppliedLand",
+      id: props.getId,
+      createdBy: props?.userData?.id,
+      updatedBy: props?.userData?.id,
+      LicenseDetails: {
+        DetailsofAppliedLand: {
+          ...data,
         },
-      };
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-      });
+      },
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: props?.userData,
+      },
+    };
+
+    try {
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
-      props.Step4Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
+      props.Step4Continue();
     } catch (error) {
       console.log(error.message);
     }
@@ -118,16 +135,18 @@ const AppliedDetailForm = (props) => {
                         <div className="row ">
                           <div className="col col-4">
                             <label>X:Longitude</label>
-                            <input type="number" className="form-control" {...register(`dgpsPoints.${index}.XLongitude`)} />
+                            <input type="number" className="form-control" {...register(`dgps.${index}.XLongitude`)} />
                           </div>
                           <div className="col col-4">
                             <label>Y:Latitude</label>
-                            <input type="number" className="form-control" {...register(`dgpsPoints.${index}.YLatitude`)} />
+                            <input type="number" className="form-control" {...register(`dgps.${index}.YLatitude`)} />
                           </div>
                         </div>
-                        <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => remove(index)}>
-                          Delete
-                        </button>
+                        {index > 3 && (
+                          <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => remove(index)}>
+                            Delete
+                          </button>
+                        )}
                       </div>
                     ))}
                     <button
@@ -153,8 +172,8 @@ const AppliedDetailForm = (props) => {
                       </div>
                     </div>
                   </div>
-                </div> */}
-                  {/* <div className="px-2">
+                </div>
+                  <div className="px-2">
                   <div>
                     (iii)Add point 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <div className="row ">
@@ -168,11 +187,11 @@ const AppliedDetailForm = (props) => {
                       </div>
                     </div>
                   </div>
-                </div> */}
+                </div>
                   <div className="px-2">
                     <div>
-                      {/* (iv)Add point 4 &nbsp; */}
-                      {/* <div className="row ">
+                      (iv)Add point 4 &nbsp;
+                      <div className="row ">
                       <div className="col col-4">
                         <label>X:Longitude</label>
                         <input type="number" name="XLongitude" className="form-control" {...register("dsLongitude")} />
@@ -181,8 +200,8 @@ const AppliedDetailForm = (props) => {
                         <label>Y:Latitude</label>
                         <input type="number" name="YLatitude" className="form-control" {...register("dgLatitude")} />
                       </div>
-                    </div> */}
-                      {/* <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => setNoOfRows(noOfRows - 1)}>
+                    </div>
+                      <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => setNoOfRows(noOfRows - 1)}>
                       Delete
                     </button>
                     &nbsp;&nbsp;&nbsp;
@@ -193,12 +212,12 @@ const AppliedDetailForm = (props) => {
                       onClick={() => setNoOfRows(noOfRows + 1)}
                     >
                       Add
-                    </button> */}
+                    </button>
                     </div>
-                    {/* {[...Array(noOfRows)].map((elementInArray, index) => {
+                    {[...Array(noOfRows)].map((elementInArray, index) => {
                     return (
                       <div>
-                        {index + 1}
+                        <div>Add point {index + 1} &nbsp;</div>
                         <div className="row ">
                           <div className="col col-4">
                             <label>X:Longiude</label>
@@ -212,26 +231,25 @@ const AppliedDetailForm = (props) => {
                       </div>
                     );
                   })} */}
-                  </div>
+
                   <br></br>
                   <hr />
                   <br></br>
                   <div>
-                    <h5>2.Details of Plots&nbsp;&nbsp;</h5>
-                    <h2>
-                      Third-party right created<span style={{ color: "red" }}>*</span>
-                    </h2>
-
-                    <label htmlFor="detailsOfPlots">
-                      <input {...register("detailsOfPlots")} type="radio" value="yes" id="detailsOfPlots" />
-                      Yes
-                    </label>
-                    <label htmlFor="detailsOfPlots">
-                      <input {...register("detailsOfPlots")} type="radio" value="no" id="detailsOfPlots" />
-                      No
-                    </label>
+                    <h5>
+                      2.Details of Plots&nbsp;&nbsp;
+                      <label htmlFor="regularOptions">
+                        &nbsp;&nbsp;
+                        <input {...register("regularOptions")} type="radio" value="regular" id="regularOptions" />
+                        &nbsp;&nbsp; Regular &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="regularOptions">
+                        <input {...register("regularOptions")} type="radio" value="Irregular" id="regularOptions" />
+                        &nbsp;&nbsp; Irregular &nbsp;&nbsp;
+                      </label>
+                    </h5>
                   </div>
-                  {watch("detailsOfPlots") === "yes" && (
+                  {watch("regularOptions") === "regular" && (
                     <div className="table table-bordered table-responsive">
                       <thead>
                         <tr>
@@ -263,19 +281,20 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("genPlot")} />
+                            <input type="text" className="form-control" {...register("resplotno")} />
                           </td>
 
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("genLength")} />
+                            <input type="number" className="form-control" {...register("reslengthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("genWidth")} />
+                            <input type="number" className="form-control" {...register("reswidthmtr")} />
                           </td>
                           <td align="right">
-                            <input type="number" className="form-control" {...register("genArea")} />
+                            {" "}
+                            <input type="number" className="form-control" {...register("resareasq")} />
                           </td>
                         </tr>
                         <tr>
@@ -285,18 +304,20 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("npnlPlot")} />
+                            <input type="text" className="form-control" {...register("npnlplotno")} />
                           </td>
 
                           <td align="right">
-                            <input type="number" className="form-control" {...register("npnlLength")} />
-                          </td>
-                          <td align="right">
-                            <input type="number" className="form-control" {...register("npnlWidth")} />
+                            {" "}
+                            <input type="number" className="form-control" {...register("npnllengthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("npnlArea")} />
+                            <input type="number" className="form-control" {...register("npnlwidthmtr")} />
+                          </td>
+                          <td align="right">
+                            {" "}
+                            <input type="number" className="form-control" {...register("npnlareasq")} />
                           </td>
                         </tr>
                         <tr>
@@ -306,20 +327,20 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("ewsPlot")} />
+                            <input type="text" className="form-control" {...register("ewsplotno")} />
                           </td>
 
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("ewsLength")} />
+                            <input type="number" className="form-control" {...register("ewslengthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("ewsWidth")} />
+                            <input type="number" className="form-control" {...register("ewswidthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("ewsArea")} />
+                            <input type="number" className="form-control" {...register("ewsareasq")} />
                           </td>
                         </tr>
                         <tr>
@@ -329,20 +350,20 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("comPlot")} />
+                            <input type="text" className="form-control" {...register("complotno")} />
                           </td>
 
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("comLength")} />
+                            <input type="number" className="form-control" {...register("comlengthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("comWidth")} />
+                            <input type="number" className="form-control" {...register("comwidthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("comArea")} />
+                            <input type="number" className="form-control" {...register("comareasq")} />
                           </td>
                         </tr>
                         <tr>
@@ -352,20 +373,20 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("sitePlot")} />
+                            <input type="text" className="form-control" {...register("siteplotno")} />
                           </td>
 
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("siteLength")} />
+                            <input type="number" className="form-control" {...register("sitelengthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("siteWidth")} />
+                            <input type="number" className="form-control" {...register("sitewidthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("siteArea")} />
+                            <input type="number" className="form-control" {...register("siteareasq")} />
                           </td>
                         </tr>
                         <tr>
@@ -375,20 +396,20 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("parkPlot")} />
+                            <input type="text" className="form-control" {...register("parkplotno")} />
                           </td>
 
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("parkLength")} />
+                            <input type="number" className="form-control" {...register("parklengthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("parkWidth")} />
+                            <input type="number" className="form-control" {...register("parkwidthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("parkArea")} />
+                            <input type="number" className="form-control" {...register("parkareasq")} />
                           </td>
                         </tr>
                         <tr>
@@ -407,20 +428,20 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("publicPlot")} />
+                            <input type="text" className="form-control" {...register("publicplotno")} />
                           </td>
 
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("publicLength")} />
+                            <input type="number" className="form-control" {...register("publiclengthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("publicWidth")} />
+                            <input type="number" className="form-control" {...register("publicwidthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("publicAreasq")} />
+                            <input type="number" className="form-control" {...register("publicareasq")} />
                           </td>
                         </tr>
                         <tr>
@@ -430,20 +451,20 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("etpPlot")} />
+                            <input type="text" className="form-control" {...register("etpplotno")} />
                           </td>
 
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("etpLength")} />
+                            <input type="number" className="form-control" {...register("etplengthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("etpWidth")} />
+                            <input type="number" className="form-control" {...register("etpwidthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("etpAreasq")} />
+                            <input type="number" className="form-control" {...register("etpareasq")} />
                           </td>
                         </tr>
                         <tr>
@@ -453,20 +474,20 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("wtpPlot")} />
+                            <input type="text" className="form-control" {...register("wtpplotno")} />
                           </td>
 
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("wtpLength")} />
+                            <input type="number" className="form-control" {...register("wtplengthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("wtpWidth")} />
+                            <input type="number" className="form-control" {...register("wtpwidthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("wtpAreasq")} />
+                            <input type="number" className="form-control" {...register("wtpareasq")} />
                           </td>
                         </tr>
                         <tr>
@@ -476,20 +497,20 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("ugtPlot")} />
+                            <input type="text" className="form-control" {...register("ugtplotno")} />
                           </td>
 
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("ugtLength")} />
+                            <input type="number" className="form-control" {...register("ugtlengthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("ugtWidth")} />
+                            <input type="number" className="form-control" {...register("ugtwidthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("ugtAreasq")} />
+                            <input type="number" className="form-control" {...register("ugtareasq")} />
                           </td>
                         </tr>
                         <tr>
@@ -499,20 +520,20 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("milkBoothPlot")} />
+                            <input type="text" className="form-control" {...register("milkboothplotno")} />
                           </td>
 
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("milkBoothLength")} />
+                            <input type="number" className="form-control" {...register("milkboothlengthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("milkBoothWidth")} />
+                            <input type="number" className="form-control" {...register("milkboothwidthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("milkBoothAreasq")} />
+                            <input type="number" className="form-control" {...register("milkboothareasq")} />
                           </td>
                         </tr>
                         <tr>
@@ -522,26 +543,26 @@ const AppliedDetailForm = (props) => {
                             </div>
                           </td>
                           <td component="th" scope="row">
-                            <input type="text" className="form-control" {...register("gssPlot")} />
+                            <input type="text" className="form-control" {...register("gssplotno")} />
                           </td>
 
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("gssLength")} />
+                            <input type="number" className="form-control" {...register("gsslengthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("gssWidth")} />
+                            <input type="number" className="form-control" {...register("gssWidthmtr")} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" {...register("gssAreasq")} />
+                            <input type="number" className="form-control" {...register("gssareasq")} />
                           </td>
                         </tr>
                       </tbody>
                     </div>
                   )}
-                  {watch("detailsOfPlots") === "no" && (
+                  {watch("regularOptions") === "Irregular" && (
                     <div>
                       <div className="table table-bordered table-responsive ">
                         <thead>
@@ -566,7 +587,7 @@ const AppliedDetailForm = (props) => {
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("resAreaenter")} />
+                              <input type="number" className="form-control" {...register("resEnteredArea")} />
                             </td>
                           </tr>
                           <tr>
@@ -581,7 +602,7 @@ const AppliedDetailForm = (props) => {
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("comAreaenter")} />
+                              <input type="number" className="form-control" {...register("comEnteredArea")} />
                             </td>
                           </tr>
                         </tbody>
@@ -610,18 +631,18 @@ const AppliedDetailForm = (props) => {
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("planPlot")} />{" "}
+                              <input type="number" className="form-control" {...register("secPlanPlot")} />{" "}
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("planLength")} />
+                              <input type="number" className="form-control" {...register("secPlanLength")} />
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("planDim")} />{" "}
+                              <input type="number" className="form-control" {...register("secPlanDim")} />{" "}
                             </td>
                             <td component="th" scope="row">
-                              <input type="text" className="form-control" {...register("planAreaenter")} />
+                              <input type="text" className="form-control" {...register("secPlanEntered")} />
                             </td>
                           </tr>
                           <tr>
@@ -639,11 +660,11 @@ const AppliedDetailForm = (props) => {
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("greenBeltDim")} />
+                              <input type="number" className="form-control" {...register("greenBeltDim ")} />
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("greenBeltAreaenter")} />
+                              <input type="number" className="form-control" {...register("greenBeltEntered")} />
                             </td>
                           </tr>
                           <tr>
@@ -654,18 +675,18 @@ const AppliedDetailForm = (props) => {
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("internalPlanPlot")} />
+                              <input type="number" className="form-control" {...register("internalPlot ")} />
                             </td>
                             <td component="th" scope="row">
-                              <input type="text" className="form-control" {...register("internalPlanLength")} />
+                              <input type="text" className="form-control" {...register("internalLength")} />
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("internalPlanDim")} />
+                              <input type="number" className="form-control" {...register("internalDim")} />
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("internalPlanAreaenter")} />
+                              <input type="number" className="form-control" {...register("internalEntered")} />
                             </td>
                           </tr>
                           <tr>
@@ -676,18 +697,18 @@ const AppliedDetailForm = (props) => {
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("roadPlot")} />
+                              <input type="number" className="form-control" {...register("otherPlot")} />
                             </td>
                             <td component="th" scope="row">
-                              <input type="text" className="form-control" {...register("roadLength")} />
+                              <input type="text" className="form-control" {...register("otherLength")} />
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("roadDim")} />
+                              <input type="number" className="form-control" {...register("otherDim")} />
                             </td>
                             <td align="right">
                               {" "}
-                              <input type="number" className="form-control" {...register("roadAreaenter")} />
+                              <input type="number" className="form-control" {...register("otherEntered")} />
                             </td>
                           </tr>
                           <tr>
@@ -706,7 +727,7 @@ const AppliedDetailForm = (props) => {
                               <input type="number" className="form-control" {...register("undeterminedDim")} />
                             </td>
                             <td align="right">
-                              <input type="number" className="form-control" {...register("undeterminedAreaenter")} />
+                              <input type="number" className="form-control" {...register("undeterminedEntered")} />
                             </td>
                           </tr>
                         </tbody>
@@ -734,15 +755,15 @@ const AppliedDetailForm = (props) => {
                           Whether you want to surrender the 10% area of license colony to Govt. the instead of providing 10% under EWS and NPNL plots{" "}
                         </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                          <label htmlFor="wantToSurrender">
-                            <input {...register("wantToSurrender")} type="radio" value="yes" id="wantToSurrender" />
+                          <label htmlFor="surrender">
+                            <input {...register("surrender")} type="radio" value="Y" id="surrender" />
                             Yes
                           </label>
-                          <label htmlFor="wantToSurrender">
-                            <input {...register("wantToSurrender")} type="radio" value="no" id="wantToSurrender" />
+                          <label htmlFor="surrender">
+                            <input {...register("surrender")} type="radio" value="N" id="surrender" />
                             No
                           </label>
-                          {watch("wantToSurrender") === "yes" && (
+                          {watch("surrender") === "Y" && (
                             <div className="row ">
                               <div className="col col-12">
                                 <label>Area in Acres </label>
@@ -758,14 +779,14 @@ const AppliedDetailForm = (props) => {
                         <td>Whether any pocket proposed to be transferred less than 1 acre </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="pocketProposed">
-                            <input {...register("pocketProposed")} type="radio" value="yes" id="pocketProposed" />
+                            <input {...register("pocketProposed")} type="radio" value="Y" id="pocketProposed" />
                             Yes
                           </label>
                           <label htmlFor="pocketProposed">
-                            <input {...register("pocketProposed")} type="radio" value="no" id="pocketProposed" />
+                            <input {...register("pocketProposed")} type="radio" value="N" id="pocketProposed" />
                             No
                           </label>
-                          {watch("pocketProposed") === "yes" && (
+                          {watch("pocketProposed") === "Y" && (
                             <div className="row ">
                               <div className="col col-6">
                                 <label>
@@ -776,7 +797,7 @@ const AppliedDetailForm = (props) => {
                               </div>
                               <div className="col col-6">
                                 <label> Enter Area </label>
-                                <input type="text" className="form-control" {...register("pocketAreaenter")} />
+                                <input type="text" className="form-control" {...register("pocketAreaEnter")} />
                               </div>
                             </div>
                           )}
@@ -787,14 +808,14 @@ const AppliedDetailForm = (props) => {
                         <td>Whether you want to deposit an amount @ of 3 times of collector rate instead of the surrender 10% land to Govt. </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="deposit">
-                            <input {...register("deposit")} type="radio" value="yes" id="deposit" />
+                            <input {...register("deposit")} type="radio" value="Y" id="deposit" />
                             Yes
                           </label>
                           <label htmlFor="deposit">
-                            <input {...register("deposit")} type="radio" value="no" id="deposit" />
+                            <input {...register("deposit")} type="radio" value="N" id="deposit" />
                             No
                           </label>
-                          {watch("deposit") === "yes" && (
+                          {watch("deposit") === "Y" && (
                             <div className="row ">
                               <div className="col col-12">
                                 <label>
@@ -811,15 +832,15 @@ const AppliedDetailForm = (props) => {
                         <td>4. </td>
                         <td>Whether the surrendered area is having a minimum of 18 mtr independent access </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                          <label htmlFor="surrenderedArea">
-                            <input {...register("surrenderedArea")} type="radio" value="yes" id="surrenderedArea" />
+                          <label htmlFor="surrendered">
+                            <input {...register("surrendered")} type="radio" value="Y" id="surrendered" />
                             Yes
                           </label>
-                          <label htmlFor="surrenderedArea">
-                            <input {...register("surrenderedArea")} type="radio" value="no" id="surrenderedArea" />
+                          <label htmlFor="surrendered">
+                            <input {...register("surrendered")} type="radio" value="N" id="surrendered" />
                             No
                           </label>
-                          {watch("surrenderedArea") === "yes" && (
+                          {watch("surrendered") === "Y" && (
                             <div className="row ">
                               <div className="col col-12">
                                 <label>
@@ -848,7 +869,7 @@ const AppliedDetailForm = (props) => {
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Demarcation plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
@@ -1035,4 +1056,5 @@ const AppliedDetailForm = (props) => {
     </div>
   );
 };
+
 export default AppliedDetailForm;

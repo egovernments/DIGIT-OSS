@@ -102,17 +102,20 @@ const LandScheduleForm = (props) => {
     data["purposeParentLic"] = data?.purposeParentLic?.value;
     console.log("data=====", data);
     props.Step3Continue();
-    return;
+    const token = window?.localStorage?.getItem("token");
+    // return;
     const postDistrict = {
       pageName: "LandSchedule",
       id: props.getId,
-      createdBy: props?.userInfo?.id,
-      updatedBy: props?.userInfo?.id,
+
+      createdBy: props?.userData?.id,
+      updatedBy: props?.userData?.id,
       LicenseDetails: {
         LandSchedule: {
           ...data,
         },
       },
+
       RequestInfo: {
         apiId: "Rainmaker",
         ver: "v1",
@@ -123,7 +126,7 @@ const LandScheduleForm = (props) => {
         msgId: "090909",
         requesterId: "",
         authToken: token,
-        userInfo: props?.userInfo,
+        userInfo: props?.userData,
       },
     };
     try {
@@ -187,16 +190,16 @@ const LandScheduleForm = (props) => {
                         </h2>
 
                         <label htmlFor="licenseApplied">
-                          <input {...register("licenseApplied")} type="radio" value="yes" id="licenseApplied" />
+                          <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
                           Yes
                         </label>
                         <label htmlFor="licenseApplied">
-                          <input {...register("licenseApplied")} type="radio" value="no" id="licenseApplied" />
+                          <input {...register("licenseApplied")} type="radio" value="N" id="licenseApplied" />
                           No
                         </label>
                       </div>
 
-                      {watch("licenseApplied") === "yes" && (
+                      {watch("licenseApplied") === "Y" && (
                         <div className="row">
                           <div className="col col-3">
                             <label>
@@ -286,14 +289,14 @@ const LandScheduleForm = (props) => {
                             </h2>
 
                             <label htmlFor="thirdParty">
-                              <input {...register("thirdParty")} type="radio" value="yes" id="thirdParty" />
+                              <input {...register("thirdParty")} type="radio" value="Y" id="thirdParty" />
                               Yes
                             </label>
                             <label htmlFor="thirdParty">
-                              <input {...register("thirdParty")} type="radio" value="no" id="thirdParty" />
+                              <input {...register("thirdParty")} type="radio" value="N" id="thirdParty" />
                               No
                             </label>
-                            {watch("thirdParty") === "yes" && (
+                            {watch("thirdParty") === "Y" && (
                               <div className="row ">
                                 <div className="col col-12">
                                   <label>
@@ -320,7 +323,7 @@ const LandScheduleForm = (props) => {
                                 </div>
                               </div>
                             )}
-                            {watch("thirdParty") === "no" && (
+                            {watch("thirdParty") === "N" && (
                               <div className="row ">
                                 <div className="col col">
                                   <label>
@@ -349,16 +352,16 @@ const LandScheduleForm = (props) => {
                         <h2>
                           &nbsp;&nbsp;(ii)Whether licence applied under Migration Policy ?&nbsp;&nbsp;
                           <label htmlFor="migrationLic">
-                            <input {...register("migrationLic")} type="radio" value="yes" id="migrationLic" />
+                            <input {...register("migrationLic")} type="radio" value="Y" id="migrationLic" />
                             Yes
                           </label>
                           <label htmlFor="migrationLic">
-                            <input {...register("migrationLic")} type="radio" value="no" id="migrationLic" />
+                            <input {...register("migrationLic")} type="radio" value="N" id="migrationLic" />
                             No
                           </label>
                         </h2>
                       </div>
-                      {watch("migrationLic") === "yes" && (
+                      {watch("migrationLic") === "Y" && (
                         <div className="row">
                           <div className="col col-3">
                             <label>
@@ -396,15 +399,15 @@ const LandScheduleForm = (props) => {
                               <h2>Validity of Parent License </h2>{" "}
                             </label>
                             <label htmlFor="validityOfParentLic">
-                              <input {...register("validityOfParentLic")} type="radio" value="yes" id="validityOfParentLic" />
+                              <input {...register("validityOfParentLic")} type="radio" value="Y" id="validityOfParentLic" />
                               Yes
                             </label>
                             <label htmlFor="validityOfParentLic">
-                              <input {...register("validityOfParentLic")} type="radio" value="no" id="validityOfParentLic" />
+                              <input {...register("validityOfParentLic")} type="radio" value="N" id="validityOfParentLic" />
                               No
                             </label>
                           </div>
-                          {watch("validityOfParentLic") === "yes" && (
+                          {watch("validityOfParentLic") === "Y" && (
                             <div className="row ">
                               <div className="col col-6">
                                 <label>
@@ -490,17 +493,17 @@ const LandScheduleForm = (props) => {
                   <div>
                     <h6>(ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator. </h6>
                     <label htmlFor="litigation">
-                      <input {...register("litigation")} type="radio" value="yes" id="litigation" />
+                      <input {...register("litigation")} type="radio" value="Y" id="litigation" />
                       Yes
                     </label>
                     <label htmlFor="litigation">
-                      <input {...register("litigation")} type="radio" value="no" id="litigation" />
+                      <input {...register("litigation")} type="radio" value="N" id="litigation" />
                       No
                     </label>
                   </div>
                   <div className="row">
                     <div className="col col-12 ">
-                      {watch("litigation") === "yes" && (
+                      {watch("litigation") === "Y" && (
                         <div className="row ">
                           <div className="col col-6">
                             <label>
@@ -529,17 +532,17 @@ const LandScheduleForm = (props) => {
                   <div>
                     <h6>(iii) Court orders, if any, affecting applied land. &nbsp;&nbsp;</h6>
                     <label htmlFor="court">
-                      <input {...register("court")} type="radio" value="yes" id="court" />
+                      <input {...register("court")} type="radio" value="Y" id="court" />
                       Yes
                     </label>
                     <label htmlFor="court">
-                      <input {...register("court")} type="radio" value="no" id="court" />
+                      <input {...register("court")} type="radio" value="N" id="court" />
                       No
                     </label>
                   </div>
                   <div className="row">
                     <div className="col col-12 ">
-                      {watch("court") === "yes" && (
+                      {watch("court") === "Y" && (
                         <div className="row ">
                           <div className="col col-6">
                             <label>
@@ -568,17 +571,17 @@ const LandScheduleForm = (props) => {
                   <div>
                     <h6>(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed.&nbsp;&nbsp;</h6>
                     <label htmlFor="insolvency">
-                      <input {...register("insolvency")} type="radio" value="yes" id="insolvency" />
+                      <input {...register("insolvency")} type="radio" value="Y" id="insolvency" />
                       Yes
                     </label>
                     <label htmlFor="insolvency">
-                      <input {...register("insolvency")} type="radio" value="no" id="insolvency" />
+                      <input {...register("insolvency")} type="radio" value="N" id="insolvency" />
                       No
                     </label>
                   </div>
                   <div className="row">
                     <div className="col col-12 ">
-                      {watch("insolvency") === "yes" && (
+                      {watch("insolvency") === "Y" && (
                         <div className="row ">
                           <div className="col col-6">
                             <label>
@@ -610,14 +613,14 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3 ">
                       <h2>(a)&nbsp;As per applied land (Yes/No)</h2>
                       <label htmlFor="appliedLand">
-                        <input {...register("appliedLand")} type="radio" value="yes" id="appliedLand" />
+                        <input {...register("appliedLand")} type="radio" value="Y" id="appliedLand" />
                         Yes
                       </label>
                       <label htmlFor="appliedLand">
-                        <input {...register("appliedLand")} type="radio" value="no" id="appliedLand" />
+                        <input {...register("appliedLand")} type="radio" value="N" id="appliedLand" />
                         No
                       </label>
-                      {watch("appliedLand") === "yes" && (
+                      {watch("appliedLand") === "Y" && (
                         <div className="row ">
                           <div className="col col-12">
                             <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
@@ -639,14 +642,14 @@ const LandScheduleForm = (props) => {
                         (b)&nbsp;Revenue rasta&nbsp;&nbsp; &nbsp;&nbsp;
                       </h2>
                       <label htmlFor="revenueRasta">
-                        <input {...register("revenueRasta")} type="radio" value="yes" id="revenueRasta" />
+                        <input {...register("revenueRasta")} type="radio" value="Y" id="revenueRasta" />
                         Yes
                       </label>
                       <label htmlFor="revenueRasta">
-                        <input {...register("revenueRasta")} type="radio" value="no" id="revenueRasta" />
+                        <input {...register("revenueRasta")} type="radio" value="N" id="revenueRasta" />
                         No
                       </label>
-                      {watch("revenueRasta") === "yes" && (
+                      {watch("revenueRasta") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -666,14 +669,14 @@ const LandScheduleForm = (props) => {
                         (c)&nbsp;Watercourse running&nbsp;&nbsp;
                       </h2>
                       <label htmlFor="waterCourse">
-                        <input {...register("waterCourse")} type="radio" value="yes" id="waterCourse" />
+                        <input {...register("waterCourse")} type="radio" value="Y" id="waterCourse" />
                         Yes
                       </label>
                       <label htmlFor="waterCourse">
-                        <input {...register("waterCourse")} type="radio" value="no" id="waterCourse" />
+                        <input {...register("waterCourse")} type="radio" value="N" id="waterCourse" />
                         No
                       </label>
-                      {watch("waterCourse") === "yes" && (
+                      {watch("waterCourse") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -689,14 +692,14 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3 ">
                       <h2>(d) &nbsp;Whether in Compact Block (Yes/No)</h2>
                       <label htmlFor="compactBlock">
-                        <input {...register("compactBlock")} type="radio" value="yes" id="compactBlock" />
+                        <input {...register("compactBlock")} type="radio" value="Y" id="compactBlock" />
                         Yes
                       </label>
                       <label htmlFor="compactBlock">
-                        <input {...register("compactBlock")} type="radio" value="no" id="compactBlock" />
+                        <input {...register("compactBlock")} type="radio" value="N" id="compactBlock" />
                         No
                       </label>
-                      {watch("compactBlock") === "yes" && (
+                      {watch("compactBlock") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -715,14 +718,14 @@ const LandScheduleForm = (props) => {
                         (e)&nbsp;Land Sandwiched&nbsp;&nbsp;
                       </h2>
                       <label htmlFor="landSandwiched">
-                        <input {...register("landSandwiched")} type="radio" value="yes" id="landSandwiched" />
+                        <input {...register("landSandwiched")} type="radio" value="Y" id="landSandwiched" />
                         Yes
                       </label>
                       <label htmlFor="landSandwiched">
-                        <input {...register("landSandwiched")} type="radio" value="no" id="landSandwiched" />
+                        <input {...register("landSandwiched")} type="radio" value="N" id="landSandwiched" />
                         No
                       </label>
-                      {watch("landSandwiched") === "yes" && (
+                      {watch("landSandwiched") === "Y" && (
                         <div className="row ">
                           <div className="col col-12">
                             <label>
@@ -736,14 +739,14 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3 ">
                       <h2>(f)&nbsp;Acquisition status (Yes/No)</h2>
                       <label htmlFor="acquistion">
-                        <input {...register("acquistion")} type="radio" value="yes" id="acquistion" />
+                        <input {...register("acquistion")} type="radio" value="Y" id="acquistion" />
                         Yes
                       </label>
                       <label htmlFor="acquistion">
-                        <input {...register("acquistion")} type="radio" value="no" id="acquistion" />
+                        <input {...register("acquistion")} type="radio" value="N" id="acquistion" />
                         No
                       </label>
-                      {watch("acquistion") === "yes" && (
+                      {watch("acquistion") === "Y" && (
                         <div className="row ">
                           <div className="col col-12">
                             <label>Remark</label>
@@ -774,23 +777,23 @@ const LandScheduleForm = (props) => {
                         <h2>(g)&nbsp;&nbsp;Whether details/orders of release/exclusion of land uploaded.&nbsp;&nbsp;</h2>
                       </label>
                       <label htmlFor="orderUpload">
-                        <input {...register("orderUpload")} type="radio" value="yes" id="orderUpload" />
+                        <input {...register("orderUpload")} type="radio" value="Y" id="orderUpload" />
                         Yes
                       </label>
                       <label htmlFor="orderUpload">
-                        <input {...register("orderUpload")} type="radio" value="no" id="orderUpload" />
+                        <input {...register("orderUpload")} type="radio" value="N" id="orderUpload" />
                         No
                       </label>
-                      {watch("orderUpload") === "yes" && (
+                      {watch("orderUpload") === "Y" && (
                         <div className="row ">
                           <div className="col col-3 ">
                             <h2>(h) Whether land compensation received&nbsp;&nbsp;</h2>
                             <label htmlFor="landCompensation">
-                              <input {...register("landCompensation")} type="radio" value="yes" id="landCompensation" />
+                              <input {...register("landCompensation")} type="radio" value="Y" id="landCompensation" />
                               Yes
                             </label>
                             <label htmlFor="landCompensation">
-                              <input {...register("landCompensation")} type="radio" value="no" id="landCompensation" />
+                              <input {...register("landCompensation")} type="radio" value="N" id="landCompensation" />
                               No
                             </label>
                           </div>
@@ -841,11 +844,11 @@ const LandScheduleForm = (props) => {
                         road. (yes/no)
                       </h2>
                       <label htmlFor="siteApproachable">
-                        <input {...register("siteApproachable")} type="radio" value="yes" id="siteApproachable" />
+                        <input {...register("siteApproachable")} type="radio" value="Y" id="siteApproachable" />
                         Yes
                       </label>
                       <label htmlFor="siteApproachable">
-                        <input {...register("siteApproachable")} type="radio" value="no" id="siteApproachable" />
+                        <input {...register("siteApproachable")} type="radio" value="N" id="siteApproachable" />
                         No
                       </label>
                     </div>
@@ -859,14 +862,14 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2>(a) &nbsp;Vacant: (Yes/No)</h2>
                       <label htmlFor="vacant">
-                        <input {...register("vacant")} type="radio" value="yes" id="vacant" />
+                        <input {...register("vacant")} type="radio" value="Y" id="vacant" />
                         Yes
                       </label>
                       <label htmlFor="vacant">
-                        <input {...register("vacant")} type="radio" value="no" id="vacant" />
+                        <input {...register("vacant")} type="radio" value="N" id="vacant" />
                         No
                       </label>
-                      {watch("vacant") === "yes" && (
+                      {watch("vacant") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -876,7 +879,7 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("vacant") === "no" && (
+                      {watch("vacant") === "N" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -890,14 +893,14 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2>(b) &nbsp;Construction: (Yes/No)</h2>
                       <label htmlFor="construction">
-                        <input {...register("construction")} type="radio" value="yes" id="construction" />
+                        <input {...register("construction")} type="radio" value="Y" id="construction" />
                         Yes
                       </label>
                       <label htmlFor="construction">
-                        <input {...register("construction")} type="radio" value="no" id="construction" />
+                        <input {...register("construction")} type="radio" value="N" id="construction" />
                         No
                       </label>
-                      {watch("construction") === "yes" && (
+                      {watch("construction") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>Type of Construction</label>
@@ -905,7 +908,7 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("construction") === "no" && (
+                      {watch("construction") === "N" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -919,14 +922,14 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2>(c) &nbsp;HT line:(Yes/No)</h2>
                       <label htmlFor="HTLine">
-                        <input {...register("ht")} type="radio" value="yes" id="HTLine" />
+                        <input {...register("ht")} type="radio" value="Y" id="HTLine" />
                         Yes
                       </label>
                       <label htmlFor="HTLine">
-                        <input {...register("ht")} type="radio" value="no" id="HTLine" />
+                        <input {...register("ht")} type="radio" value="N" id="HTLine" />
                         No
                       </label>
-                      {watch("ht") === "yes" && (
+                      {watch("ht") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -936,7 +939,7 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("ht") === "no" && (
+                      {watch("ht") === "N" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -951,14 +954,14 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2>(d)&nbsp;IOC Gas Pipeline:(Yes/No)</h2>
                       <label htmlFor="IOCGasPipeline">
-                        <input {...register("gas")} type="radio" value="yes" id="IOCGasPipeline" />
+                        <input {...register("gas")} type="radio" value="Y" id="IOCGasPipeline" />
                         Yes
                       </label>
                       <label htmlFor="IOCGasPipeline">
-                        <input {...register("gas")} type="radio" value="no" id="IOCGasPipeline" />
+                        <input {...register("gas")} type="radio" value="N" id="IOCGasPipeline" />
                         No
                       </label>
-                      {watch("gas") === "yes" && (
+                      {watch("gas") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>IOC Remark</label>
@@ -966,7 +969,7 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("gas") === "no" && (
+                      {watch("gas") === "N" && (
                         <div className="row ">
                           <div className="col col">
                             <label>IOC Remark</label>
@@ -981,14 +984,14 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2>(e) &nbsp;Nallah:(Yes/No)</h2>
                       <label htmlFor="nallah">
-                        <input {...register("nallah")} type="radio" value="yes" id="nallah" />
+                        <input {...register("nallah")} type="radio" value="Y" id="nallah" />
                         Yes
                       </label>
                       <label htmlFor="nallah">
-                        <input {...register("nallah")} type="radio" value="no" id="nallah" />
+                        <input {...register("nallah")} type="radio" value="N" id="nallah" />
                         No
                       </label>
-                      {watch("nallah") === "yes" && (
+                      {watch("nallah") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>Nallah Remark</label>
@@ -996,7 +999,7 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("nallah") === "no" && (
+                      {watch("nallah") === "N" && (
                         <div className="row ">
                           <div className="col col">
                             <label>Nallah Remark</label>
@@ -1008,14 +1011,14 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2>(f) &nbsp;Any revenue rasta/road:(Yes/No)</h2>
                       <label htmlFor="road">
-                        <input {...register("road")} type="radio" value="yes" id="road" />
+                        <input {...register("road")} type="radio" value="Y" id="road" />
                         Yes
                       </label>
                       <label htmlFor="road">
-                        <input {...register("road")} type="radio" value="no" id="road" />
+                        <input {...register("road")} type="radio" value="N" id="road" />
                         No
                       </label>
-                      {watch("road") === "yes" && (
+                      {watch("road") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -1037,7 +1040,7 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("road") === "no" && (
+                      {watch("road") === "N" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -1051,14 +1054,14 @@ const LandScheduleForm = (props) => {
                     <div className="col col-3">
                       <h2>(g) &nbsp;Any marginal land:(Yes/No)</h2>
                       <label htmlFor="marginalLand">
-                        <input {...register("marginalLand")} type="radio" value="yes" id="marginalLand" />
+                        <input {...register("marginalLand")} type="radio" value="Y" id="marginalLand" />
                         Yes
                       </label>
                       <label htmlFor="marginalLand">
-                        <input {...register("marginalLand")} type="radio" value="no" id="marginalLand" />
+                        <input {...register("marginalLand")} type="radio" value="N" id="marginalLand" />
                         No
                       </label>
-                      {watch("marginalLand") === "yes" && (
+                      {watch("marginalLand") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -1068,7 +1071,7 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("marginalLand") === "no" && (
+                      {watch("marginalLand") === "N" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -1088,14 +1091,14 @@ const LandScheduleForm = (props) => {
                         (h)&nbsp;Utility Line &nbsp; &nbsp;
                       </h2>
                       <label htmlFor="utilityLine">
-                        <input {...register("utilityLine")} type="radio" value="yes" id="utilityLine" />
+                        <input {...register("utilityLine")} type="radio" value="Y" id="utilityLine" />
                         Yes
                       </label>
                       <label htmlFor="utilityLine">
-                        <input {...register("utilityLine")} type="radio" value="no" id="utilityLine" />
+                        <input {...register("utilityLine")} type="radio" value="N" id="utilityLine" />
                         No
                       </label>
-                      {watch("utilityLine") === "yes" && (
+                      {watch("utilityLine") === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label>
@@ -1117,7 +1120,7 @@ const LandScheduleForm = (props) => {
                           </div>
                         </div>
                       )}
-                      {watch("utilityLine") === "no" && (
+                      {watch("utilityLine") === "N" && (
                         <div className="row ">
                           <div className="col col">
                             <label>

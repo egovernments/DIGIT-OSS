@@ -258,14 +258,13 @@ const ApllicantPuropseForm = (props) => {
       const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
       console.log("resp=====", Resp?.data);
       const revenData = Resp?.data?.map((el) => {
-        return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
+        return { label: el?.name, id: el?.code, value: el?.code };
       });
       setRevenueDataLabels({ data: revenData, isLoading: false });
     } catch (error) {
       console.log(error?.message);
     }
   };
-
   const getMustilData = async (code) => {
     try {
       const Resp = await axios.post(
@@ -339,7 +338,7 @@ const ApllicantPuropseForm = (props) => {
 
   const PurposeFormSubmitHandler = async (data) => {
     props.Step2Continue();
-    return;
+    // return;
     data["purpose"] = data?.purpose?.value;
     data["potential"] = data?.potential?.value;
     data["district"] = watch("district")?.value;
@@ -662,6 +661,7 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.revenueEstate && errors?.revenueEstate?.message}
                 </h3>
               </Col>
+
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
@@ -777,14 +777,15 @@ const ApllicantPuropseForm = (props) => {
                 )}
               </Col>
             </Row>
-
-            <div>
-              <label>Enter Khewat</label>
-
-              <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
-            </div>
-
             <Row className="ml-auto mb-3">
+              <Col md={4} xxl lg="6">
+                <div>
+                  <label>
+                    <h2>Enter Khewat</h2>
+                  </label>
+                </div>
+                <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
+              </Col>
               <Col md={4} xxl lg="6">
                 <div>
                   <label>
@@ -807,14 +808,14 @@ const ApllicantPuropseForm = (props) => {
                 </h2>
 
                 <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="no" id="yes" onClick={() => setCollaboration("yes")} />
+                  <input {...register("collaboration")} type="radio" value="N" id="yes" onClick={() => setCollaboration("yes")} />
                   Yes
                 </label>
                 <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="yes" id="no" onClick={() => setCollaboration("no")} />
+                  <input {...register("collaboration")} type="radio" value="Y" id="no" onClick={() => setCollaboration("no")} />
                   No
                 </label>
-                {getCollaboration === "yes" && (
+                {getCollaboration === "Y" && (
                   <div className="row ">
                     <div className="col col-4">
                       <label>
@@ -846,11 +847,11 @@ const ApllicantPuropseForm = (props) => {
                         Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
                       </h2>
                       <label htmlFor="agreementIrrevocialble">
-                        <input {...register("agreementIrrevocialble")} type="radio" value="no" id="agreementIrrevocialble" />
+                        <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
                         Yes
                       </label>
                       <label htmlFor="agreementIrrevocialble">
-                        <input {...register("agreementIrrevocialble")} type="radio" value="yes" id="agreementIrrevocialble" />
+                        <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
                         No
                       </label>
                     </div>
