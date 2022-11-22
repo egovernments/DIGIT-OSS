@@ -11,26 +11,25 @@ const assetsProxy = createProxyMiddleware({
   changeOrigin: true,
 });
 const apiSetuProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_SETU || "https://apisetu.gov.in",
+  target: process.env.REACT_APP_PROXY_SETU || "https://qa.digit.org",
   changeOrigin: true,
 });
-// const LicProxy = createProxyMiddleware({
-//   target: process.env.REACT_APP_PROXY_MDMS || "http://103.166.62.118:8443",
-//   changeOrigin: true,
-// });
+const LicProxy = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_MDMS || "http://103.166.62.118:8443",
+  changeOrigin: true,
+});
 const docUploadProxy = createProxyMiddleware({
   target: process.env.REACT_APP_PROXY_UPLOAD_DOC || "http://103.166.62.118:8443",
   changeOrigin: true,
 });
-// const devRegistration = createProxyMiddleware({
-//   target: process.env.REACT_APP_PROXY_DEV_REG || "http://103.166.62.118:8443",
-//   changeOrigin: true,
-// });
-const EgScrutinyProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://103.166.62.118:8443",
+const devRegistration = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_DEV_REG || "http://103.166.62.118:8443",
   changeOrigin: true,
 });
-
+const LicNewRegistration = createProxyMiddleware({
+  target: process.env.REACT_APP_PROXY_NEW_LIC || "http://103.166.62.118:8443",
+  changeOrigin: true,
+});
 module.exports = function (app) {
   [
     "/egov-mdms-service",
