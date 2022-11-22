@@ -1,378 +1,193 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import DDJAYForm from "../Step4/DdjayForm";
 import ResidentialPlottedForm from "./ResidentialPlotted";
 import IndustrialPlottedForm from "./IndustrialPlotted";
-import { Button, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import InfoIcon from "@mui/icons-material/Info";
 import axios from "axios";
+
 const AppliedDetailForm = (props) => {
-  const [finalSubmitData, setFinalSubmitData] = useState([]);
-  const [form, setForm] = useState([]);
-  const [dgps, setDgps] = useState("");
-  const [resplotno, setResPlotno] = useState("");
-  const [reslengthmtr, setResLengthmtr] = useState("");
-  const [reswidthmtr, setResWidthmtr] = useState("");
-  const [resareasq, setResAreasq] = useState("");
-  const [genplotno, setGenPlotno] = useState("");
-  const [genlengthmtr, setGenLengthmtr] = useState("");
-  const [genwidthmtr, setGenWidthmtr] = useState("");
-  const [genareasq, setGenAreasq] = useState("");
-  const [complotno, setComPlotno] = useState("");
-  const [comlengthmtr, setComLengthmtr] = useState("");
-  const [comwidthmtr, setComWidthmtr] = useState("");
-  const [comareasq, setComAreasq] = useState("");
-  const [siteplotno, setSitePlotno] = useState("");
-  const [sitelengthmtr, setSiteLengthmtr] = useState("");
-  const [sitewidthmtr, setSiteWidthmtr] = useState("");
-  const [siteareasq, setSiteAreasq] = useState("");
-  const [parkplotno, setParkPlotno] = useState("");
-  const [parklengthmtr, setParkLengthmtr] = useState("");
-  const [parkwidthmtr, setParkWidthmtr] = useState("");
-  const [parkareasq, setParkAreasq] = useState("");
-  const [publicplotno, setPublicPlotno] = useState("");
-  const [publiclengthmtr, setPublicLengthmtr] = useState("");
-  const [publicwidthmtr, setPublicWidthmtr] = useState("");
-  const [publicareasq, setPublicAreasq] = useState("");
-  const [irPlotDimen, setIrPlotDimen] = useState("");
-  const [npnlplotno, setNpnlPlotNo] = useState("");
-  const [irSizeDimen, setIrSizeDimen] = useState("");
-  const [npnllengthmtr, setNpnlLengthMtr] = useState("");
-  const [npnlwidthmtr, setNpnlWidthMtr] = useState("");
-  const [npnlareasq, setNpnlareasq] = useState("");
-  const [ewsplotno, setEwsplotno] = useState("");
-  const [ewslengthmtr, setEwslengthmtr] = useState("");
-  const [npnlNo, setNpnlNo] = useState("");
-  const [npnlArea, setNpnlArea] = useState("");
-  const [ewsNo, setEwsNo] = useState("");
-  const [ewsArea, setEwsArea] = useState("");
-  const [frozenNo, setFrozenNo] = useState("");
-  const [frozenArea, setFrozenArea] = useState("");
-  const [ewswidthmtr, setEwswidthmtr] = useState("");
-  const [ewsareasq, setEwsareasq] = useState("");
-  const [stpplotno, setStpplotno] = useState("");
-  const [stplengthmtr, setStplengthmtr] = useState("");
-  const [stpwidthmtr, setStpwidthmtr] = useState("");
-  const [stpareasq, setStpareasq] = useState("");
-  const [etpplotno, setEtpplotno] = useState("");
-  const [etplengthmtr, setEtplengthmtr] = useState("");
-  const [resiNo, setResiNo] = useState("");
-  const [resiArea, setResiArea] = useState("");
-  const [commerNo, setCommerNo] = useState("");
-  const [commerArea, setCommerArea] = useState("");
-  const [labourNo, setLabourNo] = useState("");
-  const [labourArea, setLabourArea] = useState("");
-  const [etpwidthmtr, setEtpwidthmtr] = useState("");
-  const [etpareasq, setEtpareasq] = useState("");
-  const [wtpplotno, setWtpplotno] = useState("");
-  const [wtplengthmtr, setWtplengthmtr] = useState("");
-  const [wtpwidthmtr, setWtpwidthmtr] = useState("");
-  const [wtpareasq, setWtpareasq] = useState("");
-  const [ugtplotno, setUgtplotno] = useState("");
-  const [ugtlengthmtr, setUgtlengthmtr] = useState("");
-  const [ugtwidthmtr, setUgtwidthmtr] = useState("");
-  const [ugtareasq, setUgtareasq] = useState("");
-  const [milkboothplotno, setMilkboothplotno] = useState("");
-  const [milkboothlengthmtr, setMilkboothlengthmtr] = useState("");
-  const [milkboothwidthmtr, setMilkboothwidthmtr] = useState("");
-  const [milkboothareasq, setMilkboothareasq] = useState("");
-  const [gssplotno, setGssplotno] = useState("");
-  const [gsslengthmtr, setGsslengthmtr] = useState("");
-  const [gsswidthmtr, setGsswidthmtr] = useState("");
-  const [gssareasq, setGssareasq] = useState("");
-  const [resDimension, setResDimension] = useState("");
-  const [resEnteredArea, setResEnteredArea] = useState("");
-  const [comDimension, setComDimension] = useState("");
-  const [comEnteredArea, setComEnteredArea] = useState("");
-  const [secPlanPlot, setSecPlanPlot] = useState("");
-  const [secPlanDim, setSecPlanDim] = useState("");
-  const [secPlanLength, setSecPlanLength] = useState("");
-  const [secPlanEntered, setSecPlanEntered] = useState("");
-  const [greenBeltPlot, setGreenBeltPlot] = useState("");
-  const [greenBeltLength, setGreenBeltLength] = useState("");
-  const [greenBeltDim, setgGreenBeltDim] = useState("");
-  const [greenBeltEntered, setGreenBeltEntered] = useState("");
-  const [internalPlot, setInternalPlot] = useState("");
-  const [internalLength, setInternalLength] = useState("");
-  const [internalDim, setInternalDim] = useState("");
-  const [internalEntered, setInternalEntered] = useState("");
-  const [otherPlot, setOtherPlot] = useState("");
-  const [otherDim, setOtherDim] = useState("");
-  const [otherLength, setOtherLength] = useState("");
-  const [otherEntered, setOtherEntered] = useState("");
-  const [undeterminedPlot, setUndeterminedPlot] = useState("");
-  const [undeterminedLength, setUndeterminedLength] = useState("");
-  const [undeterminedDim, setUndeterminedDim] = useState("");
-  const [undeterminedEntered, setUndeterminedEntered] = useState("");
-  const [organize, setOrganize] = useState("");
-  const [colonyfiftyNo, setColonyfiftyNo] = useState("");
-  const [colonyfiftyArea, setColonyfiftyArea] = useState("");
-  const [fiftyToTwoNo, setFiftyToTwoNo] = useState("");
-  const [fiftyToTwoArea, setFiftyToTwoArea] = useState("");
-  const [twoHundredNo, setTwoHundredNo] = useState("");
-  const [twoHundredArea, setTwoHundredArea] = useState("");
-  const [surrender, setSurrender] = useState("");
-  const [pocketProposed, setPocketProposed] = useState("");
-  const [surrendered, setSurrendered] = useState("");
-  const [deposit, setDeposit] = useState("");
-  const [sitePlan, setSitePlan] = useState("");
-  const [democraticPlan, setDemocraticPlan] = useState("");
-  const [developmentPlan, setDevelopmentPlan] = useState("");
-  const [sectoralPlan, setSectoralPlan] = useState("");
-  const [uploadLayoutPlan, setUploadLayoutPlan] = useState("");
   const Purpose = localStorage.getItem("purpose");
   console.log("adf", Purpose);
   const [file, setFile] = useState(null);
-  const [docUpload, setDocuploadData] = useState([]);
+  const [noOfRows, setNoOfRows] = useState(1);
   const {
+    watch,
     register,
     handleSubmit,
+    control,
     formState: { errors },
-  } = useForm([{ XLongitude: "", YLatitude: "" }]);
-  const formSubmit = (data) => {
-    console.log("data", data);
-  };
-  const [submitDataLabel, setSubmitDataLabel] = useState([]);
-  const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] = useState(false);
+  } = useForm({
+    defaultValues: {
+      dgpsPoints: [
+        {
+          XLongitude: "",
+          YLatitude: "",
+        },
+        {
+          XLongitude: "",
+          YLatitude: "",
+        },
+        {
+          XLongitude: "",
+          YLatitude: "",
+        },
+        {
+          XLongitude: "",
+          YLatitude: "",
+        },
+      ],
+    },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "dgpsPoints",
+  });
+
   const AppliedDetailFormSubmitHandler = async (data) => {
     props.Step4Continue(data,5);
     console.log("data------", data);
+    props.Step4Continue(data, "5");
+    // return;
     try {
       const postDistrict = {
         NewServiceInfo: {
           pageName: "DetailsofAppliedLand",
           id: props.getId,
           newServiceInfoData: {
-            DetailsofAppliedLand: {
-              dgps: data.dgpsLongitude,
-              dgps: data.dgpsLatitude,
-              DetailsAppliedLandData1: {
-                npnlplotno: data.npnlPlot,
-                npnllengthmtr: data.npnlLength,
-                npnlwidthmtr: data.npnlWidth,
-                npnlareasq: data.npnlArea,
-                ewsplotno: data.ewsPlot,
-                ewslengthmtr: data.ewsLength,
-                ewswidthmtr: data.ewsWidth,
-                ewsareasq: data.ewsArea,
-                complotno: data.comPlot,
-                comlengthmtr: data.comLength,
-                comwidthmtr: data.comWidth,
-                comareasq: data.comArea,
-                siteplotno: data.sitePlot,
-                sitelengthmtr: data.siteLength,
-                sitewidthmtr: data.siteWidth,
-                siteareasq: data.siteArea,
-                parkplotno: data.parkPlot,
-                parklengthmtr: data.parkLength,
-                parkwidthmtr: data.parkWidth,
-                parkareasq: data.parkArea,
-                publicplotno: data.publicPlot,
-                publiclengthmtr: data.publicLength,
-                publicwidthmtr: data.publicWidth,
-                publicareasq: data.publicArea,
-                stpplotno: data.stpPlot,
-                stplengthmtr: data.stpLength,
-                stpwidthmtr: data.stpWidth,
-                stpareasq: data.stpArea,
-                etpplotno: data.etpPlot,
-                etplengthmtr: data.etpLength,
-                etpwidthmtr: data.etpWidth,
-                etpareasq: data.etpArea,
-                wtpplotno: data.wtpPlot,
-                wtplengthmtr: data.wtpLength,
-                wtpwidthmtr: data.wtpWidth,
-                wtpareasq: data.wtpArea,
-                ugtplotno: data.ugtPlot,
-                ugtlengthmtr: data.ugtLength,
-                ugtwidthmtr: data.ugtWidth,
-                ugtareasq: data.ugtArea,
-                milkboothplotno: data.milkboothPlot,
-                milkboothlengthmtr: data.milkBoothLength,
-                milkboothwidthmtr: data.milkBoothWidth,
-                milkboothareasq: data.milkBoothArea,
-                gssplotno: data.gssPlot,
-                gsslengthmtr: data.gssLength,
-                gssareasq: data.gssArea,
-                resDimension: data.resdimension,
-                resEnteredArea: data.resAreaenter,
-                comDimension: data.comDimension,
-                comEnteredArea: data.comAreaEnter,
-                secPlanPlot: data.planPlot,
-                secPlanLength: data.planLength,
-                secPlanDim: data.planDim,
-                secPlanEntered: data.planAreaenter,
-                greenBeltPlot: data.greenBeltPlot,
-                greenBeltLength: data.greenBeltLength,
-                greenBeltDim: data.greenBeltDim,
-                greenBeltEntered: data.greenBeltAreaenter,
-                internalPlot: data.internazlplanPlot,
-                internalLength: data.internalPlanLLength,
-                internalDim: data.internalplanWidth,
-                internalEntered: data.internalPlanAreaenter,
-                otherPlot: data.roadPlot,
-                otherLength: data.roadLength,
-                otherDim: data.roadWidth,
-                otherEntered: data.roadAreaenter,
-                undeterminedPlot: data.undeterminedPlot,
-                undeterminedLength: data.undeterminedLength,
-                undeterminedDim: data.undeterminedWidth,
-                undeterminedEntered: data.undeterminedAreaenter,
-              },
-              DetailsAppliedLandDdjay2: {
-                frozenNo: data.frozenNo,
-                frozenArea: data.frozenArea,
-                organize: data.organizeArea,
-              },
-              DetailsAppliedLandIndustrial3: {
-                colonyfiftyNo: "qwq",
-                colonyfiftyArea: "",
-                fiftyToTwoNo: "",
-                fiftyToTwoArea: "",
-                twoHundredNo: "",
-                twoHundredArea: "",
-                resiNo: "",
-                resiArea: "",
-                commerNo: "",
-                commerArea: "",
-                labourNo: "",
-                labourArea: "",
-              },
-              DetailsAppliedLandResidential4: {
-                npnlNo: "wew",
-                npnlArea: "",
-                ewsNo: "",
-                ewsArea: "",
-              },
-              DetailsAppliedLandNpnl5: {
-                surrender: "sds",
-                pocketProposed: "",
-                deposit: "",
-                surrendered: "",
-              },
-              DetailsAppliedLand6: {
-                sitePlan: "sdsd",
-                democraticPlan: "",
-                sectoralPlan: "",
-                developmentPlan: "",
-                uploadLayoutPlan: "",
-              },
-            },
+            // DetailsofAppliedLand: {
+            //   dgps: data.dgpsLongitude,
+            //   dgps: data.dgpsLatitude,
+            //   DetailsAppliedLandData1: {
+            //     npnlplotno: data.npnlPlot,
+            //     npnllengthmtr: data.npnlLength,
+            //     npnlwidthmtr: data.npnlWidth,
+            //     npnlareasq: data.npnlArea,
+            //     ewsplotno: data.ewsPlot,
+            //     ewslengthmtr: data.ewsLength,
+            //     ewswidthmtr: data.ewsWidth,
+            //     ewsareasq: data.ewsArea,
+            //     complotno: data.comPlot,
+            //     comlengthmtr: data.comLength,
+            //     comwidthmtr: data.comWidth,
+            //     comareasq: data.comArea,
+            //     siteplotno: data.sitePlot,
+            //     sitelengthmtr: data.siteLength,
+            //     sitewidthmtr: data.siteWidth,
+            //     siteareasq: data.siteArea,
+            //     parkplotno: data.parkPlot,
+            //     parklengthmtr: data.parkLength,
+            //     parkwidthmtr: data.parkWidth,
+            //     parkareasq: data.parkArea,
+            //     publicplotno: data.publicPlot,
+            //     publiclengthmtr: data.publicLength,
+            //     publicwidthmtr: data.publicWidth,
+            //     publicareasq: data.publicArea,
+            //     stpplotno: data.stpPlot,
+            //     stplengthmtr: data.stpLength,
+            //     stpwidthmtr: data.stpWidth,
+            //     stpareasq: data.stpArea,
+            //     etpplotno: data.etpPlot,
+            //     etplengthmtr: data.etpLength,
+            //     etpwidthmtr: data.etpWidth,
+            //     etpareasq: data.etpArea,
+            //     wtpplotno: data.wtpPlot,
+            //     wtplengthmtr: data.wtpLength,
+            //     wtpwidthmtr: data.wtpWidth,
+            //     wtpareasq: data.wtpArea,
+            //     ugtplotno: data.ugtPlot,
+            //     ugtlengthmtr: data.ugtLength,
+            //     ugtwidthmtr: data.ugtWidth,
+            //     ugtareasq: data.ugtArea,
+            //     milkboothplotno: data.milkboothPlot,
+            //     milkboothlengthmtr: data.milkBoothLength,
+            //     milkboothwidthmtr: data.milkBoothWidth,
+            //     milkboothareasq: data.milkBoothArea,
+            //     gssplotno: data.gssPlot,
+            //     gsslengthmtr: data.gssLength,
+            //     gssareasq: data.gssArea,
+            //     resDimension: data.resdimension,
+            //     resEnteredArea: data.resAreaenter,
+            //     comDimension: data.comDimension,
+            //     comEnteredArea: data.comAreaEnter,
+            //     secPlanPlot: data.planPlot,
+            //     secPlanLength: data.planLength,
+            //     secPlanDim: data.planDim,
+            //     secPlanEntered: data.planAreaenter,
+            //     greenBeltPlot: data.greenBeltPlot,
+            //     greenBeltLength: data.greenBeltLength,
+            //     greenBeltDim: data.greenBeltDim,
+            //     greenBeltEntered: data.greenBeltAreaenter,
+            //     internalPlot: data.internazlplanPlot,
+            //     internalLength: data.internalPlanLLength,
+            //     internalDim: data.internalplanWidth,
+            //     internalEntered: data.internalPlanAreaenter,
+            //     otherPlot: data.roadPlot,
+            //     otherLength: data.roadLength,
+            //     otherDim: data.roadWidth,
+            //     otherEntered: data.roadAreaenter,
+            //     undeterminedPlot: data.undeterminedPlot,
+            //     undeterminedLength: data.undeterminedLength,
+            //     undeterminedDim: data.undeterminedWidth,
+            //     undeterminedEntered: data.undeterminedAreaenter,
+            //   },
+            //   DetailsAppliedLandDdjay2: {
+            //     frozenNo: data.frozenNo,
+            //     frozenArea: data.frozenArea,
+            //     organize: data.organizeArea,
+            //   },
+            //   DetailsAppliedLandIndustrial3: {
+            //     colonyfiftyNo: "qwq",
+            //     colonyfiftyArea: "",
+            //     fiftyToTwoNo: "",
+            //     fiftyToTwoArea: "",
+            //     twoHundredNo: "",
+            //     twoHundredArea: "",
+            //     resiNo: "",
+            //     resiArea: "",
+            //     commerNo: "",
+            //     commerArea: "",
+            //     labourNo: "",
+            //     labourArea: "",
+            //   },
+            //   DetailsAppliedLandResidential4: {
+            //     npnlNo: "wew",
+            //     npnlArea: "",
+            //     ewsNo: "",
+            //     ewsArea: "",
+            //   },
+            //   DetailsAppliedLandNpnl5: {
+            //     surrender: "sds",
+            //     pocketProposed: "",
+            //     deposit: "",
+            //     surrendered: "",
+            //   },
+            //   DetailsAppliedLand6: {
+            //     sitePlan: "sdsd",
+            //     democraticPlan: "",
+            //     sectoralPlan: "",
+            //     developmentPlan: "",
+            //     uploadLayoutPlan: "",
+            //   },
+            // },
           },
         },
       };
-
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict).then((Resp) => {
         return Resp;
       });
-
       console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
       props.Step4Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
-      SetAppliedDetailFormSubmitted(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
   };
-  const [showhide, setShowhide] = useState("No");
-  const [showhide1, setShowhide1] = useState("No");
-  const [showhide0, setShowhide0] = useState("No");
-  const [showhide2, setShowhide2] = useState("No");
-  const [showhide3, setShowhide3] = useState("No");
-  const [showhide4, setShowhide4] = useState("No");
-  const [showhide5, setShowhide5] = useState("No");
-  const [showhide6, setShowhide6] = useState("No");
-  const [showhide7, setShowhide7] = useState("No");
-  const [showhide8, setShowhide8] = useState("No");
-  const [showhide9, setShowhide9] = useState("No");
-  const [showhide10, setShowhide10] = useState("No");
-  const [showhide11, setShowhide11] = useState("No");
-  const [showhide12, setShowhide12] = useState("No");
-  const [showhide13, setShowhide13] = useState("No");
-  const [showhide14, setShowhide14] = useState("No");
-  const [showhide18, setShowhide18] = useState("2");
 
-  const handleshow = (e) => {
-    const getshow = e.target.value;
-    setShowhide(getshow);
-  };
-  const handleshow0 = (e) => {
-    const getshow = e.target.value;
-    setShowhide0(getshow);
-  };
-  const handleshow1 = (e) => {
-    const getshow = e.target.value;
-    setShowhide1(getshow);
-  };
-  const handleshow2 = (e) => {
-    const getshow = e.target.value;
-    setShowhide2(getshow);
-  };
-  const handleshow3 = (e) => {
-    const getshow = e.target.value;
-    setShowhide3(getshow);
-  };
-  const handleshow4 = (e) => {
-    const getshow = e.target.value;
-    setShowhide4(getshow);
-  };
-  const handleshow5 = (e) => {
-    const getshow = e.target.value;
-    setShowhide5(getshow);
-  };
-  const handleshow6 = (e) => {
-    const getshow = e.target.value;
-    setShowhide6(getshow);
-  };
-  const handleshow7 = (e) => {
-    const getshow = e.target.value;
-    setShowhide7(getshow);
-  };
-  const handleshow8 = (e) => {
-    const getshow = e.target.value;
-    setShowhide8(getshow);
-  };
-  const handleshow9 = (e) => {
-    const getshow = e.target.value;
-    setShowhide9(getshow);
-  };
-  const handleshow10 = (e) => {
-    const getshow = e.target.value;
-    setShowhide10(getshow);
-  };
-  const handleshow11 = (e) => {
-    const getshow = e.target.value;
-    setShowhide11(getshow);
-  };
-  const handleshow12 = (e) => {
-    const getshow = e.target.value;
-    setShowhide12(getshow);
-  };
-  const handleshow13 = (e) => {
-    const getshow = e.target.value;
-    setShowhide13(getshow);
-  };
-  const handleshow14 = (e) => {
-    const getshow = e.target.value;
-    setShowhide14(getshow);
-  };
-  const handleshow18 = (e) => {
-    const getshow = e.target.value;
-    setShowhide18(getshow);
-  };
-  onchange = (e) => {
-    this.setState({ value: e.target.value });
-  };
-
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
-  const [noOfRows, setNoOfRows] = useState(1);
-  const [noOfRow, setNoOfRow] = useState(1);
-  const [noOfRow1, setNoOfRow1] = useState(1);
   const getDocumentData = async () => {
     if (file === null) {
       return;
@@ -392,7 +207,6 @@ const AppliedDetailForm = (props) => {
         .then((response) => {
           return response;
         });
-      setDocuploadData(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -406,8 +220,6 @@ const AppliedDetailForm = (props) => {
       const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
         return response;
       });
-      console.log("RESP+++", Resp?.data);
-      setSubmitDataLabel(Resp?.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -442,6 +254,32 @@ const AppliedDetailForm = (props) => {
                       </div>
                     </div>
                   </div>
+                  {/* {fields?.map((item, index) => (
+                    <div key={item?.id}>
+                      <span>Add point {index + 1} &nbsp;</span>
+                      <div className="row ">
+                        <div className="col col-4">
+                          <label>X:Longitude</label>
+                          <input type="number" className="form-control" {...register(`dgpsPoints.${index}.XLongitude`)} />
+                        </div>
+                        <div className="col col-4">
+                          <label>Y:Latitude</label>
+                          <input type="number" className="form-control" {...register(`dgpsPoints.${index}.YLatitude`)} />
+                        </div>
+                      </div>
+                      <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => remove(index)}>
+                        Delete
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    style={{ float: "right", marginRight: 15 }}
+                    className="btn btn-primary"
+                    onClick={() => append({ XLongitude: "", YLatitude: "" })}
+                  >
+                    Add
+                  </button> */}
                 </div>
                 <div className="px-2">
                   <div>
@@ -502,7 +340,7 @@ const AppliedDetailForm = (props) => {
                   {[...Array(noOfRows)].map((elementInArray, index) => {
                     return (
                       <div>
-                        {index + 1}
+                        <div>Add point {index + 1} &nbsp;</div>
                         <div className="row ">
                           <div className="col col-4">
                             <label>X:Longiude</label>
@@ -520,18 +358,21 @@ const AppliedDetailForm = (props) => {
                 <br></br>
                 <hr />
                 <br></br>
-                <h5>
-                  2.Details of Plots&nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} />
-                  &nbsp;&nbsp;
-                  <label for="Yes"></label>
-                  <label htmlFor="gen">Regular</label>&nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} />
-                  &nbsp;&nbsp;
-                  <label for="Yes"></label>
-                  <label htmlFor="npnl">Irregular</label>
-                </h5>{" "}
-                {showhide18 === "1" && (
+                <div>
+                  <h5>
+                    2.Details of Plots&nbsp;&nbsp;
+                    <label htmlFor="detailsOfPlots">
+                      &nbsp;&nbsp;
+                      <input {...register("detailsOfPlots")} type="radio" value="yes" id="detailsOfPlots" />
+                      &nbsp;&nbsp; Regular &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="detailsOfPlots">
+                      <input {...register("detailsOfPlots")} type="radio" value="no" id="detailsOfPlots" />
+                      &nbsp;&nbsp; Irregular &nbsp;&nbsp;
+                    </label>
+                  </h5>
+                </div>
+                {watch("detailsOfPlots") === "yes" && (
                   <div className="table table-bordered table-responsive">
                     <thead>
                       <tr>
@@ -844,7 +685,7 @@ const AppliedDetailForm = (props) => {
                     </tbody>
                   </div>
                 )}
-                {showhide18 === "2" && (
+                {watch("detailsOfPlots") === "no" && (
                   <div>
                     <div className="table table-bordered table-responsive ">
                       <thead>
@@ -1016,9 +857,9 @@ const AppliedDetailForm = (props) => {
                     </div>
                   </div>
                 )}
-                <div>{Purpose === "DDJAY" && <DDJAYForm></DDJAYForm>}</div>
-                <div>{Purpose === "03" && <ResidentialPlottedForm></ResidentialPlottedForm>}</div>
-                <div>{Purpose === "06" && <IndustrialPlottedForm></IndustrialPlottedForm>}</div>
+                <div>{Purpose === "Deen Dayal Jan Awas Yojna-Affordable Plotted 2016" && <DDJAYForm></DDJAYForm>}</div>
+                <div>{Purpose === "Residential Plotted Colony" && <ResidentialPlottedForm></ResidentialPlottedForm>}</div>
+                <div>{Purpose === "Industrial Plotted colony in Industrial Zone" && <IndustrialPlottedForm></IndustrialPlottedForm>}</div>
                 <h5 className="text-black">NILP </h5>
                 <br></br>
                 <div className="table table-bordered table-responsive">
@@ -1037,16 +878,15 @@ const AppliedDetailForm = (props) => {
                         Whether you want to surrender the 10% area of license colony to Govt. the instead of providing 10% under EWS and NPNL plots{" "}
                       </td>
                       <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                        <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow0} />
-                        <label style={{ margin: "0" }} for="Yes">
+                        <label htmlFor="wantToSurrender">
+                          <input {...register("wantToSurrender")} type="radio" value="yes" id="wantToSurrender" />
                           Yes
                         </label>
-
-                        <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
-                        <label style={{ margin: "0" }} for="No">
+                        <label htmlFor="wantToSurrender">
+                          <input {...register("wantToSurrender")} type="radio" value="no" id="wantToSurrender" />
                           No
                         </label>
-                        {showhide0 === "Yes" && (
+                        {watch("wantToSurrender") === "yes" && (
                           <div className="row ">
                             <div className="col col-12">
                               <label>Area in Acres </label>
@@ -1061,16 +901,15 @@ const AppliedDetailForm = (props) => {
                       <td>2. </td>
                       <td>Whether any pocket proposed to be transferred less than 1 acre </td>
                       <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                        <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow13} />
-                        <label style={{ margin: "0" }} for="Yes">
+                        <label htmlFor="pocketProposed">
+                          <input {...register("pocketProposed")} type="radio" value="yes" id="pocketProposed" />
                           Yes
                         </label>
-
-                        <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow13} />
-                        <label style={{ margin: "0" }} for="No">
+                        <label htmlFor="pocketProposed">
+                          <input {...register("pocketProposed")} type="radio" value="no" id="pocketProposed" />
                           No
                         </label>
-                        {showhide13 === "Yes" && (
+                        {watch("pocketProposed") === "yes" && (
                           <div className="row ">
                             <div className="col col-6">
                               <label>
@@ -1091,15 +930,15 @@ const AppliedDetailForm = (props) => {
                       <td>3. </td>
                       <td>Whether you want to deposit an amount @ of 3 times of collector rate instead of the surrender 10% land to Govt. </td>
                       <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                        <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow1} />
-                        <label style={{ margin: "0" }} for="Yes">
+                        <label htmlFor="deposit">
+                          <input {...register("deposit")} type="radio" value="yes" id="deposit" />
                           Yes
                         </label>
-                        <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow1} />
-                        <label style={{ margin: "0" }} for="No">
+                        <label htmlFor="deposit">
+                          <input {...register("deposit")} type="radio" value="no" id="deposit" />
                           No
                         </label>
-                        {showhide1 === "Yes" && (
+                        {watch("deposit") === "yes" && (
                           <div className="row ">
                             <div className="col col-12">
                               <label>
@@ -1116,16 +955,15 @@ const AppliedDetailForm = (props) => {
                       <td>4. </td>
                       <td>Whether the surrendered area is having a minimum of 18 mtr independent access </td>
                       <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                        <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow14} />
-                        <label style={{ margin: "0" }} for="Yes">
+                        <label htmlFor="surrenderedArea">
+                          <input {...register("surrenderedArea")} type="radio" value="yes" id="surrenderedArea" />
                           Yes
                         </label>
-
-                        <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow14} />
-                        <label style={{ margin: "0" }} for="No">
+                        <label htmlFor="surrenderedArea">
+                          <input {...register("surrenderedArea")} type="radio" value="no" id="surrenderedArea" />
                           No
                         </label>
-                        {showhide14 === "Yes" && (
+                        {watch("surrenderedArea") === "yes" && (
                           <div className="row ">
                             <div className="col col-12">
                               <label>

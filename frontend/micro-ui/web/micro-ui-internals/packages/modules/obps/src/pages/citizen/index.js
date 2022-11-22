@@ -42,8 +42,8 @@ import ServicePlanService from "./ServicePlan";
 import electricalPlanService from "./ElectricalPlan";
 import renewalClu from "./NewLicense/AllService/Module/Renewal/Renewal";
 import ZoningPlan from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ZoningPlan/ZoningPlan";
-// import Beneficial from "../citizen/NewLicense/AllService/Module/BeneficialInterest/Beneficial";
-// import CompletionLic from "../citizen/NewLicense/AllService/Module/CompletionLic/CompletionLic";
+import Beneficial from "../citizen/NewLicense/AllService/Module/BeneficialInterest/Beneficial";
+import CompletionLic from "../citizen/NewLicense/AllService/Module/CompletionLic/CompletionLic";
 // import CompositionClu from "../citizen/NewLicense/AllService/Module/CompositionClu/CompositionClu";
 // import ExtensionClu from "../citizen/NewLicense/AllService/Module/ExtensionClu/ExtensionClu";
 import TransferLic from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferLicense";
@@ -53,8 +53,8 @@ import SurrenderLic from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/Surrende
 // import Standard from "./NewLicense/AllService/Module/StandardDesign/StandardDesign";
 // import LayoutPlanClu from "./NewLicense/AllService/Module/LayoutPlan/LayoutPlan";
 
-import Beneficial from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Beneficial";
-import CompletionLic from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
+import Beneficialscrutiny from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Beneficial";
+import Completionscrutiny from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
 import CompositionClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/CompositionClu/CompositionClu";
 import ExtensionClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionClu";
 import ExtensionCom from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ExtensionCommunity/ExtensionCom";
@@ -126,6 +126,8 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
         <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} />
         <PrivateRoute path={`${path}/service`} component={ServiceCard} />
+        <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
+        <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
         <PrivateRoute path={`${path}/zoningPlan`} component={ZoningPlan} />
         {/* .............................................................................. */}
 
@@ -133,8 +135,8 @@ const App = ({ path }) => {
 
 
 
-        <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
-        <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
+        <PrivateRoute path={`${path}/Beneficialscrutiny`} component={Beneficialscrutiny} />
+        <PrivateRoute path={`${path}/Completionscrutiny`} component={Completionscrutiny} />
         <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
         <PrivateRoute path={`${path}/ExtensionClu`} component={ExtensionClu} />
         <PrivateRoute path={`${path}/ExtensionCom`} component={ExtensionCom} />

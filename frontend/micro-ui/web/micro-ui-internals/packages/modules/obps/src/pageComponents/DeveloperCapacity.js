@@ -13,7 +13,18 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) => {
     const { pathname: url } = useLocation();
     let validation = {};
+    const userInfo = Digit.UserService.getUser();
     const devRegId = localStorage.getItem('devRegId');
+    let isOpenLinkFlow = window.location.href.includes("openlink");
+    React.useEffect(async () => {
+        const uuid = userInfo?.info?.uuid;
+        const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
+        setParentId(usersResponse?.user[0]?.parentId);
+        setGenderMF(usersResponse?.user[0]?.gender);
+        console.log("USERID",usersResponse?.user[0]?.gender)
+      },[userInfo?.info?.uuid])
+
+
     const onSkip = () => onSelect();
     const getDeveloperData = async ()=>{
         try {
@@ -31,12 +42,12 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                 "auth_token": ""
             },
             }
-            const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`,requestResp,{
+            const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`,requestResp,{
 
             });
             const developerDataGet = getDevDetails?.data; 
-            console.log(developerDataGet);
-            console.log("TECHEXP",developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.engineerName);
+            // console.log(developerDataGet);
+            // console.log("TECHEXP",developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpertEngaged[0]?.engineerName);
             setValueHrdu(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.permissionGrantedHRDU);
             setValueTechExpert(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.technicalExpert);
             setValueDesignatedDirectors(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.designatedDirectors);
@@ -82,6 +93,7 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
             setNetworthPartners(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.networthPartners)
             setNetworthFirm(developerDataGet?.devDetail[0]?.capacityDevelopAColony?.networthFirm)
             console.log("Developer-Capacity",getDevDetails?.data?.devDetail[0]?.capacityDevelopAColony);
+            setPanNumber(developerDataGet?.devDetail[0]?.licenceDetails?.PanNumber);
         } catch (error) {
             console.log(error);
         }
@@ -89,6 +101,17 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
       useEffect(() => {
         getDeveloperData()
       }, []);
+
+    const [genderUser, setGenderMF] = useState(formData?.LicneseDetails?.genderUser || formData?.formData?.LicneseDetails?.genderUser || "");
+    const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
+    const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
+    const [mobileNumber, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber : "") ||
+    formData?.LicneseDetails?.mobileNumber || formData?.formData?.LicneseDetails?.mobileNumber || ""
+  );
+    const [PermanentAddress, setPermanentAddress] = useState(formData?.LicneseDetails?.PermanentAddress || formData?.formData?.LicneseDetails?.PermanentAddress);
+    const [PanNumber, setPanNumber] = useState(
+        formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || ""
+      );
     const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.LicneseDetails?.Correspondenceaddress || formData?.formData?.LicneseDetails?.Correspondenceaddress || "HR");
     const [isAddressSame, setisAddressSame] = useState(formData?.LicneseDetails?.isAddressSame || formData?.formData?.LicneseDetails?.isAddressSame || false);
     const [error, setError] = useState(null);
@@ -322,47 +345,46 @@ const handleColonyDevGrp=()=>{
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
     //   setIsDisableForNext(true);
       let payload = {
+        "parentId":userInfo?.info?.id,
         "Licenses": [
-          {
-            "tradeLicenseDetail": {
-              "owners": [
-                {
-                  "gender": formData?.LicneseDetails?.gender?.code,
-                  "mobileNumber": formData?.LicneseDetails?.mobileNumber,
-                  "name": formData?.LicneseDetails?.name,
-                  "dob": null,
-                  "emailId": formData?.LicneseDetails?.email,
-                  "permanentAddress": "dfdjsfdsf",
-                  "correspondenceAddress": Correspondenceaddress,
-                  "pan":formData?.LicneseDetails?.PanNumber,
-                  // "permanentPinCode": "143001"
-                }
-              ],
-              "subOwnerShipCategory": "INDIVIDUAL",
-              "tradeUnits": [
-                {
-                  "tradeType": formData?.LicneseType?.LicenseType?.tradeType,
-                }
-              ],
-              "additionalDetail": {
-                "counsilForArchNo": formData?.LicneseType?.ArchitectNo,
+            {
+              "tradeLicenseDetail": {
+                "owners": [
+                  {
+                    "parentid":userInfo?.info?.id,
+                    "gender": "MALE",
+                    "mobileNumber": mobileNumber,
+                    "name": name,
+                    "dob": null,
+                    "emailId": email,
+                    "permanentAddress": PermanentAddress,
+                    "correspondenceAddress": Correspondenceaddress,
+                    "pan":PanNumber,
+                    // "permanentPinCode": "143001"
+                  }
+                ],
+                "subOwnerShipCategory": "INDIVIDUAL",
+                "tradeType": "BUILDER.CLASSA",
+                
+                "additionalDetail": {
+                  "counsilForArchNo": null,
+                },
+                "address": {
+                  "city": "",
+                  "landmark": "",
+                  "pincode": ""
+                },
+                "institution": null,
+                "applicationDocuments": null
               },
-              "address": {
-                "city": "",
-                "landmark": "",
-                "pincode": ""
-              },
-              "institution": null,
-              "applicationDocuments": null
-            },
-            "licenseType": "PERMANENT",
-            "businessService": "BPAREG",
-            "tenantId": stateId,
-            "action": "NOWORKFLOW"
-          }
-        ]
+              "licenseType": "PERMANENT",
+              "businessService": "BPAREG",
+              "tenantId": stateId,
+              "action": "NOWORKFLOW"
+            }
+          ]
       }
-
+      
       Digit.OBPSService.BPAREGCreate(payload, tenantId)
         .then((result, err) => {
           setIsDisableForNext(false);
@@ -379,8 +401,10 @@ const handleColonyDevGrp=()=>{
 
         
       const developerRegisterData = {
-        "id":devRegId,
+        "id":userInfo?.info?.id,
         "pageName":"capacityDevelopAColony",
+        "createdBy":userInfo?.info?.id,
+        "updatedBy":userInfo?.info?.id,
         "devDetail": {
           
             "capacityDevelopAColony": {
@@ -670,7 +694,7 @@ const handleColonyDevGrp=()=>{
                         onChange={changeValueHrdu}
                         name="permissionGrantedHRDU"
                     />
-                    <label for="Yes">Yes</label>
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
 
                     <input
                         type="radio"
@@ -1078,7 +1102,7 @@ const handleColonyDevGrp=()=>{
                         onChange={changeTechnicalExpert}
                         name="technicalExpert"
                     />
-                    <label for="Yes">Yes</label>
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
 
                     <input
                         type="radio"
@@ -1383,7 +1407,7 @@ const handleColonyDevGrp=()=>{
                         onChange={changeDesignatedDirectors}
                         name="designatedDirectors"
                     />
-                    <label for="Yes">Yes</label>
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
 
                     <input
                         type="radio"
@@ -1461,7 +1485,7 @@ const handleColonyDevGrp=()=>{
                         onChange={changeAlreadyObtainedLic}
                         name="alreadtObtainedLic"
                     />
-                    <label for="Yes">Yes</label>
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
 
                     <input
                         type="radio"

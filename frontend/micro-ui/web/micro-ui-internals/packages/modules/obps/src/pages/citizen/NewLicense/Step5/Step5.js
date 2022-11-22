@@ -80,33 +80,34 @@ const FeesChargesForm = (props) => {
   const [FeesChargesFormSubmitted, SetFeesChargesFormSubmitted] = useState(false);
   const FeesChrgesFormSubmitHandler = async (data) => {
     console.log("data------", data);
+    props.Step5Continue(data, "5");
     try {
       const postDistrict = {
         NewServiceInfo: {
           pageName: "FeesAndCharges",
           id: props.getId,
           newServiceInfoData: {
-            FeesAndCharges: {
-              totalArea: data.totalArea,
-              purpose: data.purpose,
-              devPlan: data.potential,
-              scrutinyFee: data.scrutinyFee,
-              licenseFee: data.licenseFee,
-              conversionCharges: data.conversionCharges,
-              remark: data.remark,
-              adjustFee: data.licNumber,
-            },
+            // FeesAndCharges: {
+            //   totalArea: data.totalArea,
+            //   purpose: data.purpose,
+            //   devPlan: data.potential,
+            //   scrutinyFee: data.scrutinyFee,
+            //   licenseFee: data.licenseFee,
+            //   conversionCharges: data.conversionCharges,
+            //   remark: data.remark,
+            //   adjustFee: data.licNumber,
+            // },
           },
         },
       };
 
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict).then((Resp) => {
         return Resp;
       });
 
       console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
       props.Step5Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
-      SetFeesChargesFormSubmitted(Resp.data);
+      // SetFeesChargesFormSubmitted(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -371,9 +372,14 @@ const FeesChargesForm = (props) => {
                       (iii)&nbsp;Adjust Fees &nbsp;&nbsp;
                     </h6>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <label className="m-0  mx-2" for="Yes">
+                      Yes
+                    </label>
+                    &nbsp;&nbsp;
                     <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
-                    <label for="No">No</label>
+                    <label className="m-0 mx-2" for="No">
+                      No
+                    </label>
                     {showhide0 === "Yes" && (
                       <div className="row ">
                         <div className="col col-12">

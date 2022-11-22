@@ -15,9 +15,11 @@ const CommonForm = () => {
   const [isStep5, setIsStep5] = useState(false);
   const [step, setStep] = useState(1);
   const [getId, setId] = useState("");
+  const [userData, setUserData] = useState(null);
 
-  const handleStep1 = (id) => {
+  const handleStep1 = (id, userInfo) => {
     setId(id);
+    setUserData(userInfo);
     setIsStep1(true);
     setIsStep2(false);
     setIsStep3(false);
@@ -97,9 +99,9 @@ const CommonForm = () => {
     <div>
       <TimelineNewLic currentStep={step} flow="NEWLICENSE" />
       {isStep1 ? (
-        <ApllicantPuropseForm getId={getId} Step2Continue={handlestep2} Step2Back={handleBack} />
+        <ApllicantPuropseForm userData={userData} getId={getId} Step2Continue={handlestep2} Step2Back={handleBack} />
       ) : isStep2 ? (
-        <LandScheduleForm getId={getId} Step3Continue={handlestep3} Step3Back={handleBack2} />
+        <LandScheduleForm getId={getId} userData={userData} Step3Continue={handlestep3} Step3Back={handleBack2} />
       ) : isStep3 ? (
         <AppliedDetailForm getId={getId} Step4Continue={handlestep4} step4Back={handleBack3} />
       ) : isStep4 ? (

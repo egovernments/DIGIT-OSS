@@ -12,6 +12,7 @@ const CheckPage = ({ onSubmit, value }) => {
   const history = useHistory();
   const match = useRouteMatch();
   let user = Digit.UserService.getUser()
+  // console.log("USER-INFO",user);
   const tenantId = user && user?.info && user?.info?.permanentCity ? user?.info?.permanentCity : Digit.ULBService.getCurrentTenantId();
   const tenant = Digit.ULBService.getStateId();
   let isopenlink = window.location.href.includes("/openlink/");
@@ -23,6 +24,7 @@ const CheckPage = ({ onSubmit, value }) => {
     }
 
   const { result, formData, documents } = value;
+  console.log("form DATA",value?.formData);
   let consumerCode = value?.result?.Licenses[0].applicationNumber;
   const fetchBillParams = { consumerCode };
 
@@ -76,13 +78,13 @@ const CheckPage = ({ onSubmit, value }) => {
               onClick={() => routeTo(`${routeLink}/license-details`)}
             />
             <StatusTable>
-              <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} textStyle={{ paddingLeft: "12px" }} text={t(formData?.LicneseDetails?.name)} />
-              <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(formData?.LicneseDetails?.gender.i18nKey)} />
-              <Row className="border-none" label={t(`BPA_OWNER_MOBILE_NO_LABEL`)} text={formData?.LicneseDetails?.mobileNumber} />
-              <Row className="border-none" label={t(`BPA_APPLICANT_EMAIL_LABEL`)} text={formData?.LicneseDetails?.email || t("CS_NA")} />
-              <Row className="border-none" label={t(`BPA_APPLICANT_PAN_NO`)} text={formData?.LicneseDetails?.PanNumber || t("CS_NA")} />
-              <Row className="border-none" label={`Pin Code`} text={formData?.LicneseDetails?.pincode || t("CS_NA")} />
-              <Row className="border-none" label={`Date of Birth`} text={formData?.LicneseDetails?.dob || t("CS_NA")} />
+              <Row className="border-none" label={t(`BPA_APPLICANT_NAME_LABEL`)} textStyle={{ paddingLeft: "12px" }} text={t(formData?.LicneseDetails?.devDetail?.licenceDetails?.name)} />
+              {/* <Row className="border-none" label={t(`BPA_APPLICANT_GENDER_LABEL`)} text={t(formData?.LicneseDetails?.gender.i18nKey)} /> */}
+              <Row className="border-none" label={t(`BPA_OWNER_MOBILE_NO_LABEL`)} text={formData?.LicneseDetails?.devDetail?.licenceDetails?.mobileNumber} />
+              <Row className="border-none" label={t(`BPA_APPLICANT_EMAIL_LABEL`)} text={formData?.LicneseDetails?.devDetail?.licenceDetails?.email || t("CS_NA")} />
+              <Row className="border-none" label={t(`BPA_APPLICANT_PAN_NO`)} text={formData?.LicneseDetails?.devDetail?.licenceDetails?.PanNumber || t("CS_NA")} />
+              <Row className="border-none" label={`Pin Code`} text={formData?.LicneseDetails?.devDetail?.licenceDetails?.pincode || t("CS_NA")} />
+              <Row className="border-none" label={`Date of Birth`} text={formData?.LicneseDetails?.devDetail?.licenceDetails?.dob || t("CS_NA")} />
             </StatusTable>
           </Card>
           <Card style={{ paddingRight: "16px" }}>
@@ -92,12 +94,19 @@ const CheckPage = ({ onSubmit, value }) => {
             <LinkButton
               label={<EditIcon style={{ marginTop: "-15px", float: "right", position: "relative", bottom: "32px" }} />}
               style={{ width: "100px", display: "inline" }}
-              onClick={() => routeTo(`${routeLink}/Permanent-address`)}
+              onClick={() => routeTo(`${routeLink}/license-add-info`)}
             />
-            <Row className="border-none" text={t(formData?.LicneseDetails?.PermanentAddress)} />
+            <StatusTable>
+              <Row className="border-none" label={"Developer's type"} text={formData?.LicenseAddInfo?.showDevTypeFields || t("CS_NA")} />
+              <Row className="border-none" label={"CIN Number"} text={formData?.LicenseAddInfo?.cin_Number || t("CS_NA")} />
+              <Row className="border-none" label={"Company Name"} text={formData?.LicenseAddInfo?.companyName || t("CS_NA")} />
+              <Row className="border-none" label={"Email"} text={formData?.LicenseAddInfo?.email || t("CS_NA")} />
+              <Row className="border-none" label={"IncorporationDate"} text={formData?.LicenseAddInfo?.incorporationDate || t("CS_NA")} />
+              <Row className="border-none" label={"Mobile Number"} text={formData?.LicenseAddInfo?.mobileNumberUser || t("CS_NA")} />
+            </StatusTable>
             {/* <Row className="border-none" text={t(formData?.LicneseDetails?.cin_Number)} /> */}
           </Card>
-          <Card style={{ paddingRight: "16px" }}>
+          {/* <Card style={{ paddingRight: "16px" }}>
             <div style={{ marginRight: "24px" }}>
               <CardHeader styles={{ fontSize: "24px" }}>{t(`BPA_COMMUNICATION_ADDRESS_HEADER_DETAILS`)}</CardHeader>
             </div>
@@ -107,7 +116,7 @@ const CheckPage = ({ onSubmit, value }) => {
               onClick={() => routeTo(`${routeLink}/correspondence-address`)}
             />
             <Row className="border-none" text={t(value?.Correspondenceaddress)} />
-          </Card>
+          </Card> */}
           <Card style={{ paddingRight: "16px" }}>
             <CardHeader styles={{ fontSize: "24px" }}>{t("BPA_DOC_DETAILS_SUMMARY")}</CardHeader>
             <LinkButton

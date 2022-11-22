@@ -7,25 +7,90 @@ import { convertEpochToDate } from "../utils/index";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
-
+  const tenantId = Digit.ULBService.getCurrentTenantId();
+  const stateId = Digit.ULBService.getStateId();
   const { pathname: url } = useLocation();
   const userInfo = Digit.UserService.getUser();
-  const USERID = userInfo?.info?.id
-  console.log("USERID",USERID)
+  const USERID = userInfo
+  React.useEffect(async () => {
+    const uuid = userInfo?.info?.uuid;
+    const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
+    console.log("USERID",usersResponse?.user[0]?.parentId)
+    setParentId(usersResponse?.user[0]?.parentId);
+    setGenderMF(usersResponse?.user[0]?.gender);
+  },[userInfo?.info?.uuid])
+  
+  
   let validation = {};
   const devRegId = localStorage.getItem('devRegId');
   let isOpenLinkFlow = window.location.href.includes("openlink");
-  // const [id,setId] = useState("")
+  // const [id,setId] = useState("");
+
+  const getDeveloperData = async () => {
+    try {
+      const requestResp = {
+
+        "RequestInfo": {
+          "api_id": "1",
+          "ver": "1",
+          "ts": "",
+          "action": "_getDeveloperById",
+          "did": "",
+          "key": "",
+          "msg_id": "",
+          "requester_id": "",
+          "auth_token": ""
+        },
+      }
+      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${userInfo?.info?.id}&isAllData=true`, requestResp, {
+        
+      });
+      const licenseDataList = getDevDetails?.data;
+      console.log("LICENCE DET",getDevDetails?.data.devDetail[0]?.licenceDetails?.email);
+      setEmail(licenseDataList?.devDetail[0]?.licenceDetails?.email);
+      setDOB(licenseDataList?.devDetail[0]?.licenceDetails?.dob);
+      setGender(licenseDataList?.devDetail[0]?.licenceDetails?.gender)
+      setPanNumber(licenseDataList?.devDetail[0]?.licenceDetails?.panNumber);
+      setAddressLineOne(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineOne);
+      setAddressLineTwo(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineTwo);
+      setAddressLineThree(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineThree);
+      setAddressLineFour(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineFour);
+      setCity(licenseDataList?.devDetail[0]?.licenceDetails?.city);
+      setPincode(licenseDataList?.devDetail[0]?.licenceDetails?.pincode);
+      setVillage(licenseDataList?.devDetail[0]?.licenceDetails?.village);
+      setTehsil(licenseDataList?.devDetail[0]?.licenceDetails?.tehsil);
+      setState(licenseDataList?.devDetail[0]?.licenceDetails?.state);
+      setDistrict(licenseDataList?.devDetail[0]?.licenceDetails?.district);
+      setAddressLineOneCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineOneCorrespondence);
+      setAddressLineTwoCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineTwoCorrespondence);
+      setAddressLineThreeCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineThreeCorrespondence);
+      setAddressLineFourCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineFourCorrespondence);
+      setCityCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.cityCorrespondence);
+      setPincodeCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.pincodeCorrespondence);
+      setVillageCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.villageCorrespondence);
+      setTehsilCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.tehsilCorrespondence);
+      setStateCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.stateCorrespondence);
+      setDistrictCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.districtCorrespondence);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    getDeveloperData()
+  }, []);
+  const onSkip = () => onSelect();
+
+  const [genderUser, setGenderMF] = useState(formData?.LicneseDetails?.genderUser || formData?.formData?.LicneseDetails?.genderUser || "");
   const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name : "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
-  const [email, setEmail] = useState(formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
+  const [email, setEmail] = useState((!isOpenLinkFlow ? userInfo?.info?.emailId : "") || formData?.LicneseDetails?.email || formData?.formData?.LicneseDetails?.email || "");
   const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.formData?.LicneseDetails?.gender);
   const [mobileNumber, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber : "") ||
     formData?.LicneseDetails?.mobileNumber || formData?.formData?.LicneseDetails?.mobileNumber || ""
   );
   const [dob, setDOB] = useState(formData?.LicneseDetails?.dob || formData?.formData?.LicneseDetails?.dob || "");
-  const [PanNumber, setPanNumber] = useState(
-    formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || ""
+  const [PanNumber, setPanNumber] = useState(formData?.LicneseDetails?.PanNumber || formData?.formData?.LicneseDetails?.PanNumber || ""
   );
+  const [parentId, setParentId] = useState(formData?.LicneseDetails?.parentId || formData?.formData?.LicneseDetails?.parentId);
   const [PermanentAddress, setPermanentAddress] = useState(formData?.LicneseDetails?.PermanentAddress || formData?.formData?.LicneseDetails?.PermanentAddress);
   const [addressLineOne, setAddressLineOne] = useState(formData?.LicneseDetails?.addressLineOne || formData?.formData?.LicneseDetails?.addressLineOne || "");
   const [addressLineTwo, setAddressLineTwo] = useState(formData?.LicneseDetails?.addressLineTwo || formData?.formData?.LicneseDetails?.addressLineTwo || "");
@@ -52,8 +117,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   const [isAddressSame, setisAddressSame] = useState(formData?.isAddressSame || formData?.formData?.isAddressSame || false);
   const [error, setError] = useState(null);
   const [showToast, setShowToast] = useState(null);
-  const tenantId = Digit.ULBService.getCurrentTenantId();
-  const stateId = Digit.ULBService.getStateId();
+  
   const inputs = [
     {
       label: "HR_BIRTH_DATE_LABEL",
@@ -155,46 +219,21 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
   }
   // console.log(panValidation);
-  useEffect(() => {
-    if (PanNumber.length === 10) {
-      panVerification();
-    }
-  }, [PanNumber]);
+  // useEffect(() => {
+  //   if (PanNumber) {
+      
+  //   }
+  // }, [PanNumber]);
 
-  const getDeveloperData = async () => {
-    try {
-      const requestResp = {
-
-        "RequestInfo": {
-          "api_id": "1",
-          "ver": "1",
-          "ts": "",
-          "action": "_getDeveloperById",
-          "did": "",
-          "key": "",
-          "msg_id": "",
-          "requester_id": "",
-          "auth_token": ""
-        },
-      }
-      const getDevDetails = await axios.get(`/user/developer/_getDeveloperById?id=${devRegId}&isAllData=true`, requestResp, {
-
-      });
-      // console.log(getDevDetails?.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  useEffect(() => {
-    getDeveloperData()
-  }, []);
+ 
   function SelectName(e) {
     setName(e.target.value);
   }
-  function selectEmail(e) {
-    setEmail(e.target.value);
-  }
+  // function selectEmail(e) {
+  //   setEmail(e.target.value);
+  // }
   function setGenderName(value) {
+    console.log("GENDER",value);
     setGender(value);
   }
 
@@ -205,7 +244,10 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setDOB(e.target.value);
   }
   function selectPanNumber(e) {
-    setPanNumber(e.target.value.toUpperCase());
+    setPanNumber(e.target.value);
+    if(e.target.value === 10){
+      panVerification();
+    }
   }
   function selectPermanentAddress(e) {
     setPermanentAddress(e.target.value);
@@ -247,22 +289,22 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       setisAddressSame(true);
       // setSelectedChecked(formData?.LicenseDetails?.addressSameAsPermanent ? formData?.LicenseDetails?.addressSameAsPermanent : formData?.LicenseDetails?.addressSameAsPermanent)
       setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress);
-      setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOne ? formData?.LicneseDetails?.addressLineOne : formData?.LicneseDetails?.addressLineOne);
-      setAddressLineTwoCorrespondence(formData?.LicneseDetails?.addressLineTwo ? formData?.LicneseDetails?.addressLineTwo : formData?.formData?.LicneseDetails?.addressLineTwo);
-      setAddressLineThreeCorrespondence(formData?.LicneseDetails?.addressLineThree ? formData?.LicneseDetails?.addressLineThree : formData?.formData?.LicneseDetails?.addressLineThree);
-      setAddressLineFourCorrespondence(formData?.LicneseDetails?.addressLineFour ? formData?.LicneseDetails?.addressLineFour : formData?.formData?.LicneseDetails?.addressLineFour);
-      setCityCorrespondence(formData?.LicneseDetails?.city ? formData?.LicneseDetails?.city : formData?.formData?.LicneseDetails?.city);
-      setPincodeCorrespondence(formData?.LicneseDetails?.pincode ? formData?.LicneseDetails?.pincode : formData?.formData?.LicneseDetails?.pincode);
-      setVillageCorrespondence(formData?.LicneseDetails?.village ? formData?.LicneseDetails?.village : formData?.formData?.LicneseDetails?.village);
-      setTehsilCorrespondence(formData?.LicneseDetails?.tehsil ? formData?.LicneseDetails?.tehsil : formData?.formData?.LicneseDetails?.tehsil);
-      setStateCorrespondence(formData?.LicneseDetails?.state ? formData?.LicneseDetails?.state : formData?.formData?.LicneseDetails?.state);
-      setDistrictCorrespondence(formData?.LicneseDetails?.district ? formData?.LicneseDetails?.district : formData?.formData?.LicneseDetails?.district);
+      setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOneCorrespondence ? formData?.LicneseDetails?.addressLineOneCorrespondence : formData?.LicneseDetails?.addressLineOne);
+      setAddressLineTwoCorrespondence(formData?.LicneseDetails?.addressLineTwoCorrespondence ? formData?.LicneseDetails?.addressLineTwoCorrespondence : formData?.formData?.LicneseDetails?.addressLineTwo);
+      setAddressLineThreeCorrespondence(formData?.LicneseDetails?.addressLineThreeCorrespondence ? formData?.LicneseDetails?.addressLineThreeCorrespondence : formData?.formData?.LicneseDetails?.addressLineThree);
+      setAddressLineFourCorrespondence(formData?.LicneseDetails?.addressLineFourCorrespondence ? formData?.LicneseDetails?.addressLineFourCorrespondence : formData?.formData?.LicneseDetails?.addressLineFour);
+      setCityCorrespondence(formData?.LicneseDetails?.cityCorrespondence ? formData?.LicneseDetails?.cityCorrespondence : formData?.formData?.LicneseDetails?.city);
+      setPincodeCorrespondence(formData?.LicneseDetails?.pincodeCorrespondence ? formData?.LicneseDetails?.pincodeCorrespondence : formData?.formData?.LicneseDetails?.pincode);
+      setVillageCorrespondence(formData?.LicneseDetails?.villageCorrespondence ? formData?.LicneseDetails?.villageCorrespondence : formData?.formData?.LicneseDetails?.village);
+      setTehsilCorrespondence(formData?.LicneseDetails?.tehsilCorrespondence ? formData?.LicneseDetails?.tehsilCorrespondence : formData?.formData?.LicneseDetails?.tehsil);
+      setStateCorrespondence(formData?.LicneseDetails?.stateCorrespondence ? formData?.LicneseDetails?.stateCorrespondence : formData?.formData?.LicneseDetails?.state);
+      setDistrictCorrespondence(formData?.LicneseDetails?.districtCorrespondence ? formData?.LicneseDetails?.districtCorrespondence : formData?.formData?.LicneseDetails?.district);
     }
     else {
       Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
       setisAddressSame(false);
       setCorrespondenceaddress("");
-      setAddressLineOneCorrespondence("");
+      setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOneCorrespondence || "");
       setAddressLineTwoCorrespondence("");
       setAddressLineThreeCorrespondence("");
       setAddressLineFourCorrespondence("");
@@ -299,13 +341,13 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setVillageCorrespondence(e.target.value);
   }
   function selectTehsilCorrespondence(e) {
-    setTehsilCorrespondence("");
+    setTehsilCorrespondence(e.target.value);
   }
   function selectStateCorrespondence(e) {
-    setStateCorrespondence("");
+    setStateCorrespondence(e.target.value);
   }
   function selectDistrictCorrespondence(e) {
-    setDistrictCorrespondence("");
+    setDistrictCorrespondence(e.target.value);
   }
       
       
@@ -314,29 +356,72 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
       let licenseDet = {
-        name: name,
-        mobileNumber: mobileNumber,
-        gender: gender,
-        email: email,
-        dob: dob,
-        PanNumber: PanNumber,
-        addressLineOne: addressLineOne,
-        addressLineTwo: addressLineTwo,
-        addressLineThree: addressLineThree,
-        addressLineFour: addressLineFour,
-        city: city,
-        pincode: pincode,
-        addressSameAsPermanent: addressSameAsPermanent,
-        addressLineOneCorrespondence: addressLineOneCorrespondence,
-        addressLineTwoCorrespondence: addressLineTwoCorrespondence,
-        addressLineThreeCorrespondence: addressLineThreeCorrespondence,
-        addressLineFourCorrespondence: addressLineFourCorrespondence,
-        cityCorrespondence: cityCorrespondence,
-        pincodeCorrespondence: pincodeCorrespondence
+        
+        // name: name,
+        // mobileNumber: mobileNumber,
+        // gender: gender,
+        // email: email,
+        // dob: dob,
+        // PanNumber: PanNumber,
+        // addressLineOne: addressLineOne,
+        // addressLineTwo: addressLineTwo,
+        // addressLineThree: addressLineThree,
+        // addressLineFour: addressLineFour,
+        // city: city,
+        // pincode: pincode,
+        // addressSameAsPermanent: addressSameAsPermanent,
+        // addressLineOneCorrespondence: addressLineOneCorrespondence,
+        // addressLineTwoCorrespondence: addressLineTwoCorrespondence,
+        // addressLineThreeCorrespondence: addressLineThreeCorrespondence,
+        // addressLineFourCorrespondence: addressLineFourCorrespondence,
+        // cityCorrespondence: cityCorrespondence,
+        // villageCorrespondence:villageCorrespondence,
+        // tehsilCorrespondence: tehsilCorrespondence,
+        // stateCorrespondence: stateCorrespondence,
+        // districtCorrespondence: districtCorrespondence,
+        // pincodeCorrespondence: pincodeCorrespondence,
+
+        "Licenses": [
+          {
+            "tradeLicenseDetail": {
+              "owners": [
+                {
+                  "parentid":userInfo?.info?.id,
+                  "gender": genderUser,
+                  "mobileNumber": mobileNumber,
+                  "name": name,
+                  "dob": null,
+                  "emailId": email,
+                  "permanentAddress": PermanentAddress,
+                  "correspondenceAddress": Correspondenceaddress,
+                  "pan":PanNumber,
+                  "uuid":userInfo?.info?.uuid
+                  // "permanentPinCode": "143001"
+                }
+              ],
+              "subOwnerShipCategory": "INDIVIDUAL",
+              "tradeType": "BUILDER.CLASSA",
+              
+              "additionalDetail": {
+                "counsilForArchNo": null,
+              },
+              "address": {
+                "city": "",
+                "landmark": "",
+                "pincode": ""
+              },
+              "institution": null,
+              "applicationDocuments": null
+            },
+            "licenseType": "PERMANENT",
+            "businessService": "BPAREG",
+            "tenantId": stateId,
+            "action": "NOWORKFLOW"
+          }
+        ]
       }
 
       onSelect(config.key, licenseDet);
-      // console.log("DATALICDET", licenseDet);
       localStorage.setItem("licenceDetails", JSON.stringify(licenseDet));
       Digit.OBPSService.BPAREGCreate(licenseDet, tenantId)
         .then((result, err) => {
@@ -361,7 +446,9 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
         });
 
       const developerRegisterData = {
-
+        "createdBy":userInfo?.info?.id,
+        "updatedBy":userInfo?.info?.id,
+        "id":userInfo?.info?.id,
         "devDetail": {
           
           "licenceDetails": {
@@ -391,10 +478,12 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             tehsilCorrespondence: tehsilCorrespondence,
             stateCorrespondence: stateCorrespondence,
             districtCorrespondence: districtCorrespondence,
+            addressSameAsPermanent: addressSameAsPermanent
           }
         }
 
       }
+      onSelect(config.key, developerRegisterData);
       Digit.OBPSService.CREATEDeveloper(developerRegisterData, tenantId)
         .then((result, err) => {
           // console.log("DATA", result?.id);
@@ -437,8 +526,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
 
   };
-
-  const onSkip = () => onSelect();
+  
 
   return (
     <div>
@@ -458,7 +546,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
               {/* <h4></h4> */}
               <Row className="justify-content-between">
                 <Form.Group className="col-md-4">
-                  <CardLabel>{`${t("BPA_APPLICANT_NAME_LABEL")}*`}</CardLabel>
+                  <CardLabel>{`${t("BPA_APPLICANT_NAME_LABEL")}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
                   <TextInput
                     t={t}
                     type={"text"}
@@ -477,13 +565,13 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
                 </Form.Group>
                 <Form.Group className="col-md-4">
-                  <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")}*`}</CardLabel>
+                  <CardLabel>{`${t("BPA_APPLICANT_GENDER_LABEL")}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
                   <div className="row">
                     <Dropdown
                       style={{ width: "100%" }}
                       className="form-field"
                       selected={gender?.length === 1 ? gender[0] : gender}
-                      disable={gender?.length === 1 || editScreen}
+                      // disable={gender?.length === 1 || editScreen}
                       option={menu}
                       select={setGenderName}
                       value={gender}
@@ -505,7 +593,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   </div>
                 </Form.Group>
                 <Form.Group className="col-md-4">
-                  <CardLabel>{`${t("BPA_OWNER_MOBILE_NO_LABEL")}*`}</CardLabel>
+                  <CardLabel>{`${t("BPA_OWNER_MOBILE_NO_LABEL")}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
                   <MobileNumber
                     value={mobileNumber}
                     name="mobileNumber"
@@ -516,7 +604,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 </Form.Group>
                 {inputs?.map((input, index) => (
                   <Form.Group className="col-md-4">
-                    <CardLabel>{`${"Enter Date of Birth"}*`}</CardLabel>
+                    <CardLabel>{`${"Enter Date of Birth"}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
                     {/* <DatePicker 
                   t={t}
                   type="date"
@@ -537,7 +625,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 )
                 )}
                 <Form.Group className="col-md-4">
-                  <CardLabel>{`${t("BPA_APPLICANT_EMAIL_LABEL")}*`}</CardLabel>
+                  <CardLabel>{`${t("BPA_APPLICANT_EMAIL_LABEL")}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
                   <TextInput
                     t={t}
                     type={"email"}
@@ -546,14 +634,15 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     name="email"
                     value={email}
                     placeholder={email}
-                    onChange={selectEmail}
+                    // onChange={setEmail}
+                    onChange={(e) => setEmail(e.target.value)}
                   //disable={editScreen}
 
                   />
                   {email && email.length > 0 && !email.match(Digit.Utils.getPattern('Email')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{("Invalid Email Address")}</CardLabelError>}
                 </Form.Group>
                 <Form.Group className="col-md-4">
-                  <CardLabel>{`${t("BPA_APPLICANT_PAN_NO")}*`}</CardLabel>
+                  <CardLabel>{`${t("BPA_APPLICANT_PAN_NO")}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
                   <TextInput
                     t={t}
                     type={"text"}
@@ -564,6 +653,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     value={PanNumber}
                     placeholder={PanNumber}
                     onChange={selectPanNumber}
+                    className="text-uppercase"
+                    // onChange={(e) => setPanNumber(e.target.value)}
                     {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
                   />
                   {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
@@ -587,7 +678,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group> */}
                 <Form.Group className="col-md-4">
-                  <CardLabel>{`${"Address Line 1"}*`}</CardLabel>
+                  <CardLabel>{`${"Address Line 1"}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
                   <TextInput
                     t={t}
                     type={"text"}
@@ -646,7 +737,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
                 </Form.Group>
                 <Form.Group className="col-md-4">
-                  <CardLabel>{`${"City"}*`}</CardLabel>
+                  <CardLabel>{`${"City"}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
                   <TextInput
                     t={t}
                     type={"text"}
@@ -783,7 +874,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                   />
               </Form.Group> */}
                 <Form.Group className="col-md-4">
-                  <CardLabel>{`${"Address Line 1"}*`}</CardLabel>
+                  <CardLabel>{`${"Address Line 1"}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
                   <TextInput
                     t={t}
                     type={"text"}
@@ -877,6 +968,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     value={villageCorrespondence}
                     placeholder={villageCorrespondence}
                     onChange={selectVillageCorrespondence}
+                    disable={isAddressSame}
                     {...(validation = {
                       isRequired: false,
                       type: "text",
@@ -895,6 +987,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     value={tehsilCorrespondence}
                     placeholder={tehsilCorrespondence}
                     onChange={selectTehsilCorrespondence}
+                    disable={isAddressSame}
                     {...(validation = {
                       isRequired: false,
                       type: "text",
@@ -913,6 +1006,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     value={stateCorrespondence}
                     placeholder={stateCorrespondence}
                     onChange={selectStateCorrespondence}
+                    disable={isAddressSame}
                     {...(validation = {
                       isRequired: false,
                       type: "text",
@@ -931,6 +1025,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     value={districtCorrespondence}
                     placeholder={districtCorrespondence}
                     onChange={selectDistrictCorrespondence}
+                    disable={isAddressSame}
                     {...(validation = {
                       isRequired: false,
                       type: "text",

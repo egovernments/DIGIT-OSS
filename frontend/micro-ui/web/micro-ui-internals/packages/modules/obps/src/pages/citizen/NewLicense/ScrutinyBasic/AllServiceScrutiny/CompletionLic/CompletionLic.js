@@ -7,10 +7,15 @@ import { useForm } from "react-hook-form";
 import { Card } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-
 import Collapse from "react-bootstrap/Collapse";
 
-function CompletionLic() {
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import ModalChild from "../../Remarks/ModalChild";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import { useStyles } from "../../css/personalInfoChild.style";
+import '../../css/personalInfoChild.style.js'
+
+function Completionscrutiny() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
   const [open2, setOpen2] = useState(false);
@@ -29,6 +34,59 @@ function CompletionLic() {
   } = useForm({});
 
   const completionLic = (data) => console.log(data);
+
+  const classes = useStyles();
+
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
+
+  
+  const [smShow, setSmShow] = useState(false);
+  const [labelValue, setLabelValue] = useState("");
+  const Colors = {
+    approved:"#09cb3d",
+    disapproved:"#ff0000",
+    info:"#FFB602"
+  }
+
+  const handlemodaldData = (data) => {
+    // setmodaldData(data.data);
+    setSmShow(false);
+    console.log("here",openedModal,data);
+    if(openedModal && data){
+      setFieldIconColors({...fieldIconColors,[openedModal]:data.data.isApproved?Colors.approved:Colors.disapproved})
+    }
+      setOpennedModal("");
+      setLabelValue("");
+  };
+  const [selectedFieldData,setSelectedFieldData] = useState();
+  const [fieldValue, setFieldValue] = useState("");
+  const [openedModal, setOpennedModal] = useState("")
+  const [fieldIconColors, setFieldIconColors] = useState({
+    developer: Colors.info,
+    authPersonName: Colors.info,
+    authMobileNo1: Colors.info,
+    authMobileNo2: Colors.info,
+    emailId: Colors.info,
+    pan: Colors.info,
+    address: Colors.info,
+    city: Colors.info,
+    pin: Colors.info,
+    tehsil: Colors.info,
+    district: Colors.info,
+    state: Colors.info,
+    type: Colors.info,
+    lciSignedBy: Colors.info,
+    lciNotSigned: Colors.info,
+    parmanentAddress: Colors.info,
+    addressForCommunication: Colors.info,
+    authPerson: Colors.info,
+    emailForCommunication: Colors.info
+  })
+
+  const fieldIdList = [{label:"Developer",key:"developer"},{label:"Authorized Person Name",key:"authPersonName"},{label:"Autrhoized Mobile No",key:"authMobileNo1"},{label:"Authorized MobileNo. 2 ",key:"authMobileNo2"},{label:"Email ID",key:"emailId"},{label:"PAN No.",key:"pan"},{label:"Address  1",key:"address"},{label:"Village/City",key:"city"},{label:"Pincode",key:"pin"},{label:"Tehsil",key:"tehsil"},{label:"District",key:"district"},{label:"State",key:"state"},{label:"Status (Individual/ Company/ Firm/ LLP etc.)",key:"type"},{label:"LC-I signed by",key:"lciSignedBy"},{label:"If LC-I is not signed by self (in case of an individual) nature of authorization (GPA/SPA)",key:"lciNotSigned"},{label: "Permanent address in case of individual/ registered office address in case other than individual", key:"parmanentAddress"},{label:"Address for communication",key:"addressForCommunication"},{label:"Name of the authorized person to sign the application",key:"authPerson"},{label:"Email ID for communication",key:"emailForCommunication"}]
+
   return (
   
         
@@ -64,44 +122,144 @@ function CompletionLic() {
        
             <Row>
               <Col className="col-4">
-                <Form.Group controlId="formGridCase">
-                  <Form.Label>
-                    <h2>License No </h2>
-                  </Form.Label>
-                  <input type="number" className="form-control" placeholder="" {...register("licNo")} />
-                </Form.Group>
+                {/* <Form.Group controlId="formGridCase"> */}
+                  <div>
+                <Form.Label>
+              <h5 className={classes.formLabel}>Licence No &nbsp;</h5>
+            </Form.Label>
+            <span className={classes.required}>*</span> &nbsp;&nbsp;
+          </div>
+            <div className={classes.fieldContainer}>
+            {/* <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control> */}
+            <input type="number" className={classes.formControl} placeholder="" {...register("licNo")} disabled />
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Licence No")
+                  setLabelValue("Licence No"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+             <ModalChild
+              labelmodal={labelValue}
+              passmodalData={handlemodaldData}
+              displaymodal={smShow}
+              onClose={()=>setSmShow(false)}
+              selectedFieldData={selectedFieldData}
+              fieldValue={fieldValue}
+              remarksUpdate={currentRemarks}
+            ></ModalChild>
+             </div>
+                {/* </Form.Group> */}
               </Col>
               <Col className="col-4">
-                <Form.Group controlId="formGridCase">
-                  <Form.Label data-toggle="tooltip" data-placement="top" title="The license is valid at the time of completion certificate">
-                    <h2>completion certificate</h2>
-                  </Form.Label>
-                  <input type="text" className="form-control" placeholder="" {...register("completionCertificate")} />
-                </Form.Group>
+                  <div>
+                <Form.Label data-toggle="tooltip" data-placement="top" title="The license is valid at the time of completion certificate">
+              <h5 className={classes.formLabel}>completion certificate&nbsp;</h5>
+            </Form.Label>
+            <span className={classes.required}>*</span> &nbsp;&nbsp;
+          </div>
+            <div className={classes.fieldContainer}>
+            {/* <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control> */}
+             <input type="text" className={classes.formControl} placeholder="" {...register("completionCertificate")}  disabled/>
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("The license is valid at the time of completion certificate")
+                  setLabelValue("The license is valid at the time of completion certificate"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
               </Col>
               <Col className="col-4">
-                <Form.Group controlId="formGridState">
-                  <Form.Label
-                    data-toggle="tooltip"
+                
+                 
+                  {/* <input type="text" className="form-control" placeholder="" {...register("edcFullypaid")} /> */}
+                  <div>
+                <Form.Label data-toggle="tooltip"
                     data-placement="top"
                     title=" EDC and IDC be fully paid and bank guarantees on account of
-                    IDW are valid."
-                  >
-                    <h2>EDC and IDC be fully paid </h2>
-                  </Form.Label>
-                  <input type="text" className="form-control" placeholder="" {...register("edcFullypaid")} />
-                </Form.Group>
+                    IDW are valid.">
+              <h5 className={classes.formLabel}>EDC and IDC be fully paid &nbsp;</h5>
+            </Form.Label>
+            <span className={classes.required}>*</span> &nbsp;&nbsp;
+          </div>
+            <div className={classes.fieldContainer}>
+            {/* <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control> */}
+                <input type="text" className={classes.formControl} placeholder="" {...register("edcFullypaid")} disabled />
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("EDC and IDC be fully paid and bank guarantees on account of IDW are valid"),
+                  setLabelValue("EDC and IDC be fully paid and bank guarantees on account of IDW are valid"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
+                
               </Col>
               <Col className="col-4">
-                <Form.Group controlId="formGridState">
+                {/* <Form.Group controlId="formGridState">
                   <Form.Label>
                     <h2> Status of complaint if any. </h2>
                   </Form.Label>
                   <input type="text" className="form-control" placeholder="" {...register("statusOfComplaint")} />
-                </Form.Group>
+                </Form.Group> */}
+                <div>
+                <Form.Label >
+              <h5 className={classes.formLabel}>Status of complaint if any. &nbsp;</h5>
+            </Form.Label>
+            <span className={classes.required}>*</span> &nbsp;&nbsp;
+          </div>
+            <div className={classes.fieldContainer}>
+            {/* <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control> */}
+                <input type="text" className={classes.formControl} placeholder="" {...register("statusOfComplaint")} disabled />
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Status of complaint if any"),
+                  setLabelValue("Status of complaint if any"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
               </Col>
               <Col className="col-4">
-                <Form.Group controlId="formGridState">
+                {/* <Form.Group controlId="formGridState">
                   <Form.Label
                     data-toggle="tooltip"
                     data-placement="top"
@@ -111,10 +269,39 @@ function CompletionLic() {
                     <h2> Occupation Certificate </h2>
                   </Form.Label>
                   <input type="text" className="form-control" placeholder="" {...register("occupationCertificate")} />
-                </Form.Group>
+                </Form.Group> */}
+                <div>
+                <Form.Label data-toggle="tooltip"
+                    data-placement="top"
+                    title="Status of total community sites/approval of zoning/building
+                    plans and occupation certificate granted." >
+              <h5 className={classes.formLabel}>Occupation Certificate  &nbsp;</h5>
+            </Form.Label>
+            <span className={classes.required}>*</span> &nbsp;&nbsp;
+          </div>
+            <div className={classes.fieldContainer}>
+            {/* <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control> */}
+                <input type="text" className={classes.formControl} placeholder="" {...register("occupationCertificate")} disabled />
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Status of total community sites/approval of zoning/building plans and occupation certificate granted."),
+                  setLabelValue("Status of total community sites/approval of zoning/building plans and occupation certificate granted."),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
               </Col>
               <Col className="col-4">
-                <Form.Group controlId="formGridState">
+                {/* <Form.Group controlId="formGridState">
                   <Form.Label
                     data-toggle="tooltip"
                     data-placement="top"
@@ -124,18 +311,72 @@ function CompletionLic() {
                     <h2>Status of NPNL plots.</h2>
                   </Form.Label>
                   <input type="text" className="form-control" placeholder="" {...register("statusNpnlPlot")} />
-                </Form.Group>
+                </Form.Group> */}
+                  <div>
+                <Form.Label data-toggle="tooltip"
+                    data-placement="top"
+                    title=" Status of NPNL plots. (detail of NPNL plots and rates approval for NPNL)" >
+              <h5 className={classes.formLabel}>Status of NPNL plots.  &nbsp;</h5>
+            </Form.Label>
+            <span className={classes.required}>*</span> &nbsp;&nbsp;
+          </div>
+            <div className={classes.fieldContainer}>
+            {/* <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control> */}
+                 <input type="text" className={classes.formControl} placeholder="" {...register("statusNpnlPlot")}  disabled/>
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal(" Status of NPNL plots. (detail of NPNL plots and rates approval for NPNL)"),
+                  setLabelValue(" Status of NPNL plots. (detail of NPNL plots and rates approval for NPNL)"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
               </Col>
               <Col className="col-4">
-                <Form.Group controlId="formGridState">
+                {/* <Form.Group controlId="formGridState">
                   <Form.Label data-toggle="tooltip" data-placement="top" title="Status of handing over EWS plots to housing board/allottees">
                     <h2> Housing board/allottees </h2>
                   </Form.Label>
                   <input type="text" className="form-control" placeholder="" {...register("housingBoard")} />
-                </Form.Group>
+                </Form.Group> */}
+                 <div>
+                <Form.Label data-toggle="tooltip" data-placement="top" title="Status of handing over EWS plots to housing board/allottees" >
+              <h5 className={classes.formLabel}>Housing board/allottees  &nbsp;</h5>
+            </Form.Label>
+            <span className={classes.required}>*</span> &nbsp;&nbsp;
+          </div>
+            <div className={classes.fieldContainer}>
+            {/* <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control> */}
+                <input type="text"  className={classes.formControl} placeholder="" {...register("housingBoard")} disabled/>
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Status of handing over EWS plots to housing board/allottees"),
+                  setLabelValue("Status of handing over EWS plots to housing board/allottees"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
               </Col>
               <Col className="col-4">
-                <Form.Group controlId="formGridState">
+                {/* <Form.Group controlId="formGridState">
                   <Form.Label
                     data-toggle="tooltip"
                     data-placement="top"
@@ -145,10 +386,38 @@ function CompletionLic() {
                     <h2> Concerned Authority </h2>
                   </Form.Label>
                   <input type="text" className="form-control" placeholder="" {...register("concernedAuthority")} />
-                </Form.Group>
+                </Form.Group> */}
+                 <div>
+                <Form.Label data-toggle="tooltip"
+                    data-placement="top"
+                    title=" Status regarding handing over of park/internal road/public utility to the concerned authority" >
+              <h5 className={classes.formLabel}>Concerned Authority  &nbsp;</h5>
+            </Form.Label>
+            <span className={classes.required}>*</span> &nbsp;&nbsp;
+          </div>
+            <div className={classes.fieldContainer}>
+            {/* <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control> */}
+                 <input type="text"   className={classes.formControl} placeholder="" {...register("concernedAuthority")}  disabled/>
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal(" Status regarding handing over of park/internal road/public utility to the concerned authority"),
+                  setLabelValue(" Status regarding handing over of park/internal road/public utility to the concerned authority"),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
               </Col>
               <Col className="col-4">
-                <Form.Group controlId="formGridState">
+                {/* <Form.Group controlId="formGridState">
                   <Form.Label
                     data-toggle="tooltip"
                     data-placement="top"
@@ -158,7 +427,36 @@ function CompletionLic() {
                     <h2>Handing over community sites </h2>
                   </Form.Label>
                   <input type="text" className="form-control" placeholder="" {...register("handleCommunitySites")} />
-                </Form.Group>
+                </Form.Group> */}
+                 <div>
+                <Form.Label  data-toggle="tooltip"
+                    data-placement="top"
+                    title="Handing over community sites to the Government agency and constructed by the Government.">
+              <h5 className={classes.formLabel}>Handing over community sites   &nbsp;</h5>
+            </Form.Label>
+            <span className={classes.required}>*</span> &nbsp;&nbsp;
+          </div>
+            <div className={classes.fieldContainer}>
+            {/* <Form.Control
+              className={classes.formControl}
+              placeholder=""
+              disabled
+            ></Form.Control> */}
+            <input type="text" className={classes.formControl} placeholder="" {...register("handleCommunitySites")} disabled />
+                
+                <ReportProblemIcon
+              style={{
+                color:fieldIconColors.developer}}
+              onClick={() => {
+                  setOpennedModal("Handing over community sites to the Government agency and constructed by the Government."),
+                  setLabelValue("Handing over community sites to the Government agency and constructed by the Government."),
+                  setSmShow(true),
+                  console.log("modal open"),
+                  setFieldValue(personalinfo !== null ? personalinfo.authorizedDeveloper : null);
+              }}
+            ></ReportProblemIcon>
+           
+             </div>
               </Col>
             </Row>
             <br>
@@ -170,7 +468,7 @@ function CompletionLic() {
                     <tr>
                        <th class="fw-normal">Sr.No</th>
                        <th class="fw-normal">Field Name</th>
-                       <th class="fw-normal">Upload Documents</th>
+                       <th class="fw-normal">Documents download</th> 
                     </tr>
                   </thead>
                   <tbody>
@@ -180,7 +478,8 @@ function CompletionLic() {
                         <h2> The service plan/estimate copy of approved </h2>
                       </td>
                       <td>
-                        <input type="file" className="form-control" placeholder="" {...register("servicePlanApproved")}></input>
+                        {/* <input type="file" className="form-control" placeholder="" {...register("servicePlanApproved")}></input> */}
+                        <DownloadForOfflineIcon color="primary" className="mx-1" />
                       </td>
                     </tr>
                     <tr>
@@ -332,4 +631,4 @@ function CompletionLic() {
   );
 }
 
-export default CompletionLic;
+export default Completionscrutiny;

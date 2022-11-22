@@ -9,6 +9,7 @@ import { Card } from "react-bootstrap";
 function Beneficial() {
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
+ 
 
   const handleshowhide = (event) => {
     const getuser = event.target.value;
@@ -24,6 +25,7 @@ function Beneficial() {
   } = useForm({});
 
   const beneficialNew = (data) => console.log(data);
+  
 
   return (
     <form onSubmit={handleSubmit(beneficialNew)}>
