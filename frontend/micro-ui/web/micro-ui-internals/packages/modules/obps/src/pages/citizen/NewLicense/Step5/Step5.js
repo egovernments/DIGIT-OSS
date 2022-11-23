@@ -24,29 +24,11 @@ const style = {
 };
 
 const FeesChargesForm = (props) => {
-  // const [show, setShow] = useState(false);
-
-  const [show, setShow] = useState(false);
-  const [show1, setShow1] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const setPayShow = () => setShow(true);
-
-  const [form, setForm] = useState([]);
-  const [totalArea, setTotalArea] = useState("");
-
   const [purpose, setPurpose] = useState("");
-  const [devPlan, setDevPlan] = useState("");
-  const [scrutinyFee, setScrutinyFee] = useState("");
-  const [licenseFee, setLicenseFee] = useState("");
   const [totalFee, setTotalFee] = useState("");
   const [remark, setRemark] = useState("");
-  const [conversionCharges, setConversionCharges] = useState("");
   const [payableNow, setPayableNow] = useState("");
-  const [previousLic, setPreviousLic] = useState("");
-  const [licenseNo, setLicenseNo] = useState("");
   const [calculateData, setCalculateData] = useState({});
-  const [finalSubmitData, setFinalSubmitData] = useState([]);
   const [modal, setmodal] = useState(false);
   const [modal1, setmodal1] = useState(false);
   const {
@@ -64,12 +46,9 @@ const FeesChargesForm = (props) => {
     shouldFocusError: true,
   });
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
-  let frmData = JSON.parse(localStorage.getItem("key") || "[]");
-  console.log("data1", frmData);
-  let step2 = JSON.parse(localStorage.getItem("step2") || "[]");
-  let step3 = JSON.parse(localStorage.getItem("step3") || "[]");
-  let step4 = JSON.parse(localStorage.getItem("step4") || "[]");
+
   const [FeesChargesFormSubmitted, SetFeesChargesFormSubmitted] = useState(false);
+
   const FeesChrgesFormSubmitHandler = async (data) => {
     console.log("data------", data);
     props.Step5Continue(data, "5");
@@ -107,67 +86,64 @@ const FeesChargesForm = (props) => {
       console.log(error.message);
     }
   };
-  useEffect(() => {
-    if (FeesChargesFormSubmitted) {
-    }
-  }, [FeesChargesFormSubmitted]);
-  const formSubmit = (data) => {
-    console.log("data", data);
-  };
+
   const [showhide0, setShowhide0] = useState("No");
   const handleshow0 = (e) => {
     const getshow = e.target.value;
     setShowhide0(getshow);
   };
-  const handleOpen = () => setOpen(true);
 
-  const [showhide, setShowhide] = useState("No");
-  const handleshow = (e) => {
-    const getshow = e.target.value;
-    setShowhide(getshow);
-  };
-  const handleFeesChange = (event) => {
-    setFeeDetail(event.target.value);
-  };
-  const handleLicFeesChange = (event) => {
-    setLicenseFee(event.target.value);
-  };
-  const handleScrutinyFeesChange = (event) => {
-    setScrutinyFee(event.target.value);
-  };
   const handleTotalFeesChange = (event) => {
     setTotalFee(event.target.value);
   };
   const handleRemarkChange = (event) => {
     setRemark(event.target.value);
   };
-  const handleAggregatorChange = (event) => {
-    setAggregator(event.target.value);
-  };
-  const handlePrevLicChange = (event) => {
-    setPreviousLic(event.target.value);
-  };
-  const handleAmountChange = (event) => {
-    setAmount(event.target.value);
-  };
 
   const handleChange = (e) => {
     this.setState({ isRadioSelected: true });
   };
-  const [noOfRows, setNoOfRows] = useState(1);
-  const [noOfRow, setNoOfRow] = useState(1);
-  const [noOfRow1, setNoOfRow1] = useState(1);
 
   const Purpose = localStorage.getItem("purpose");
-  console.log("adf", Purpose);
   const potential = JSON.parse(localStorage.getItem("potential"));
-  console.log("potential", potential);
+  // const kanal = JSON.parse(localStorage.getItem("kanal"));
+
   const CalculateApiCall = async () => {
+    const token = window?.localStorage?.getItem("token");
+    const payload = {
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: props?.userData,
+      },
+      CalulationCriteria: [
+        {
+          tenantId: "hr",
+        },
+      ],
+      CalculatorRequest: {
+        totalLandSize: 1,
+        potenialZone: potential,
+        purposeCode: Purpose,
+        applicationNumber: props.getId,
+      },
+    };
+    console.log("dd", props.getId);
     try {
-      const Resp = await axios.get("http://103.166.62.118:8443/tl-calculator/v1/_calculator").then((Resp) => {
-        return Resp;
-      });
-      setCalculateData(Resp.data);
+      const Resp = await axios.post("/tl-calculator/v1/_calculator", payload);
+      console.log("Resp.data===", Resp.data?.Calculations?.[0]?.tradeTypeBillingIds);
+      const charges = Resp.data?.Calculations?.[0]?.tradeTypeBillingIds;
+      // setValue("scrutinyFee", charges?.scrutinyFeeCharges);
+      // setValue("licenseFee", charges?.licenseFeeCharges);
+      // setValue("conversionCharges", charges?.conversionCharges);
+      // setCalculateData(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -191,11 +167,6 @@ const FeesChargesForm = (props) => {
     getSubmitDataLabel();
   }, []);
 
-  useEffect(() => {
-    if (calculateData !== undefined && calculateData !== null) {
-    }
-  }, [calculateData]);
-
   const handleChangePurpose = (data) => {
     const purposeSelected = data.data;
     setSelectPurpose(purposeSelected);
@@ -203,6 +174,10 @@ const FeesChargesForm = (props) => {
   const handleChangePotential = (data) => {
     const purposeSelected = data.data;
     setSelectPurpose(purposeSelected);
+  };
+  const handleChangeKanal = (modalData) => {
+    const kanalSelected = modalData.data;
+    setSelectKanal(kanalSelected);
   };
   const handleScrutiny = (event) => {
     setCalculateData(event.target.value);
@@ -225,9 +200,9 @@ const FeesChargesForm = (props) => {
                 <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px", marginLeft: "273px" }}>
                   <thead>
                     <tr>
-                      <th>Total Area</th>
+                      <th>Total Area (In acres)</th>
                       <td>
-                        <input type="text" className="form-control" disabled {...register("totalArea")} />
+                        <input type="text" className="form-control" disabled {...register("totalArea")} placeholder="0.125" />
                       </td>
                     </tr>
                   </thead>
@@ -263,59 +238,19 @@ const FeesChargesForm = (props) => {
                     <tr>
                       <th>Scrutiny Fees</th>
                       <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder={
-                            calculateData !== null && calculateData !== undefined
-                              ? calculateData?.feeTypeCalculationDto?.scrutinyFeeChargesCal
-                              : "N/A"
-                          }
-                          onChange1={handleScrutiny}
-                          value={
-                            calculateData !== null && calculateData !== undefined
-                              ? calculateData?.feeTypeCalculationDto?.scrutinyFeeChargesCal
-                              : "N/A"
-                          }
-                          disabled
-                          {...register("scrutinyFee")}
-                        />
+                        <input type="text" className="form-control" disabled {...register("scrutinyFee")} placeholder="5210.51" />
                       </td>
                     </tr>
                     <tr>
                       <th>License Fees</th>
                       <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder={
-                            calculateData !== null && calculateData !== undefined ? calculateData?.feeTypeCalculationDto?.licenseFeeChargesCal : "N/A"
-                          }
-                          onChange1={handleLicense}
-                          value={
-                            calculateData !== null && calculateData !== undefined ? calculateData?.feeTypeCalculationDto?.licenseFeeChargesCal : "N/A"
-                          }
-                          disabled
-                          {...register("licenseFee")}
-                        />
+                        <input type="text" className="form-control" disabled {...register("licenseFee")} placeholder="320000" />
                       </td>
                     </tr>
                     <tr>
                       <th>Conversion Charges</th>
                       <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder={
-                            calculateData !== null && calculateData !== undefined ? calculateData?.feeTypeCalculationDto?.conversionChargesCal : "N/A"
-                          }
-                          onChange1={handleConversion}
-                          value={
-                            calculateData !== null && calculateData !== undefined ? calculateData?.feeTypeCalculationDto?.conversionChargesCal : "N/A"
-                          }
-                          disabled
-                          {...register("conversionCharges")}
-                        />
+                        <input type="text" className="form-control" disabled {...register("conversionCharges")} placeholder="0.000" />
                       </td>
                     </tr>
                   </tbody>
@@ -330,6 +265,7 @@ const FeesChargesForm = (props) => {
                     <input
                       type="text"
                       className="form-control"
+                      disabled
                       {...register("amountPayable")}
                       minLength={1}
                       maxLength={20}
@@ -337,6 +273,7 @@ const FeesChargesForm = (props) => {
                       onChange1={handleTotalFeesChange}
                       onChange={(e) => setPayableNow(e.target.value)}
                       value={payableNow}
+                      placeholder="85210.51"
                     />
                     {errors.totalFee && <p></p>}
                   </div>

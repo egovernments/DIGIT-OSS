@@ -39,7 +39,7 @@ const potentialOptons = [
 
 const releaseStatus = [
   {
-    label: "Yes",
+    label: "yes",
     value: "yes",
   },
   {
@@ -95,19 +95,16 @@ const LandScheduleForm = (props) => {
   } = useForm();
 
   const landScheduleFormSubmitHandler = async (data) => {
-    setLoader(true);
+    const token = window?.localStorage?.getItem("token");
+    // setLoader(true);
     data["potential"] = data?.potential?.value;
     data["approachType"] = data?.approachType?.value;
     data["typeLand"] = data?.typeLand?.value;
     data["purposeParentLic"] = data?.purposeParentLic?.value;
     data["releaseStatus"] = data?.releaseStatus?.value;
-    console.log("data=====", data);
-    props.Step3Continue();
-    const token = window?.localStorage?.getItem("token");
-    // return;
     const postDistrict = {
       pageName: "LandSchedule",
-      ApplicationStatus: "INITIATE",
+      ApplicationStatus: "DRAFT",
       id: props.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
@@ -131,14 +128,11 @@ const LandScheduleForm = (props) => {
       },
     };
     try {
-      const Resp = await axios.post("/tl-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-      });
-      console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
-      setLoader(false);
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+      // setLoader(false);
       props.Step3Continue();
     } catch (error) {
-      setLoader(false);
+      // setLoader(false);
       console.log(error.message);
     }
   };
