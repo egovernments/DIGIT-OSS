@@ -15,6 +15,8 @@ const ApllicantFormStep1 = (props) => {
   // const [getAppliantInfoData, setAppliantInfoData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
 
+  console.log("userInfo===", userInfo);
+
   const {
     register,
     handleSubmit,
@@ -33,6 +35,7 @@ const ApllicantFormStep1 = (props) => {
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "ApplicantInfo",
+      ApplicationStatus: "INITIATE",
       id: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,

@@ -12,7 +12,7 @@ import axios from "axios";
 import Spinner from "../../../../components/Loader";
 
 const AppliedDetailForm = (props) => {
-  console.log("DD", props);
+  // console.log("DD", props);
   const Purpose = localStorage.getItem("purpose");
   const [file, setFile] = useState(null);
   const [loader, setLoader] = useState(false);
@@ -21,10 +21,12 @@ const AppliedDetailForm = (props) => {
     register,
     handleSubmit,
     control,
+    getValues,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      dgps: [
+      dgpsDetails: [
         {
           XLongitude: "",
           YLatitude: "",
@@ -47,23 +49,151 @@ const AppliedDetailForm = (props) => {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "dgps",
+    name: "dgpsDetails",
   });
 
   const AppliedDetailFormSubmitHandler = async (data) => {
-    props.Step4Continue(data,5);
-    console.log("data------", data);
-    props.Step4Continue(data, "5");
-    // return;
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "DetailsofAppliedLand",
+      ApplicationStatus: "INITIATE",
       id: props.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
       LicenseDetails: {
         DetailsofAppliedLand: {
-          ...data,
+          dgpsDetails: data?.dgpsDetails,
+          DetailsAppliedLandPlot: {
+            regularOption: data?.regularOption,
+            resplotno: data?.resplotno,
+            reslengthmtr: data?.reslengthmtr,
+            reswidthmtr: data?.reswidthmtr,
+            resareasq: data?.resareasq,
+            npnlplotno: data?.npnlplotno,
+            npnllengthmtr: data?.npnllengthmtr,
+            npnlwidthmtr: data?.npnlwidthmtr,
+            npnlareasq: data?.npnlareasq,
+            ewsplotno: data?.ewsplotno,
+            ewslengthmtr: data?.ewslengthmtr,
+            ewswidthmtr: data?.ewswidthmtr,
+            ewsareasq: data?.ewsareasq,
+            complotno: data?.complotno,
+            comlengthmtr: data?.comlengthmtr,
+            comwidthmtr: data?.comwidthmtr,
+            comareasq: data?.comareasq,
+            siteplotno: data?.siteplotno,
+            sitelengthmtr: data?.sitelengthmtr,
+            sitewidthmtr: data?.sitewidthmtr,
+            siteareasq: data?.siteareasq,
+
+            parkplotno: data?.parkplotno,
+            parklengthmtr: data?.parklengthmtr,
+            parkwidthmtr: data?.parkwidthmtr,
+            parkareasq: data?.parkareasq,
+            publicplotno: data?.publicplotno,
+            publiclengthmtr: data?.publiclengthmtr,
+            publicwidthmtr: data?.publicwidthmtr,
+            publicareasq: data?.publicareasq,
+
+            etpplotno: data?.etpplotno,
+            etplengthmtr: data?.etplengthmtr,
+            etpwidthmtr: data?.etpwidthmtr,
+            etpareasq: data?.etpareasq,
+            wtpplotno: data?.wtpplotno,
+            wtplengthmtr: data?.wtplengthmtr,
+            wtpwidthmtr: data?.wtpwidthmtr,
+            wtpareasq: data?.wtpareasq,
+            ugtplotno: data?.ugtplotno,
+            ugtlengthmtr: data?.ugtlengthmtr,
+            ugtwidthmtr: data?.ugtwidthmtr,
+            ugtareasq: data?.ugtareasq,
+            milkboothplotno: data?.milkboothplotno,
+            milkboothlengthmtr: data?.milkboothlengthmtr,
+            milkboothwidthmtr: data?.milkboothwidthmtr,
+            milkboothareasq: data?.milkboothareasq,
+            gssplotno: data?.gssplotno,
+            gsslengthmtr: data?.gsslengthmtr,
+            gssWidthmtr: data?.gssWidthmtr,
+            gssareasq: data?.gssareasq,
+            resDimension: data?.resDimension,
+            resEnteredArea: data?.resEnteredArea,
+            comDimension: data?.comDimension,
+            comEnteredArea: data?.comEnteredArea,
+            secPlanPlot: data?.secPlanPlot,
+            secPlanLength: data?.secPlanLength,
+            secPlanDim: data?.secPlanDim,
+            secPlanEntered: data?.secPlanEntered,
+            greenBeltPlot: data?.greenBeltPlot,
+            greenBeltLength: data?.greenBeltLength,
+            greenBeltDim: data?.greenBeltDim,
+            greenBeltEntered: data?.greenBeltEntered,
+            internalPlot: data?.internalPlot,
+            internalLength: data?.internalLength,
+            internalDim: data?.internalDim,
+            internalEntered: data?.internalEntered,
+            otherPlot: data?.otherPlot,
+            otherLength: data?.otherLength,
+            otherDim: data?.otherDim,
+            otherEntered: data?.otherEntered,
+            undeterminedPlot: data?.undeterminedPlot,
+            undeterminedLength: data?.undeterminedLength,
+            undeterminedDim: data?.undeterminedDim,
+            undeterminedEntered: data?.undeterminedEntered,
+          },
+          DetailsAppliedLandDdjay: {
+            frozenNo: data?.frozenNo,
+            frozenArea: data?.frozenArea,
+            organize: data?.organize,
+            organizeArea: data?.organizeArea,
+          },
+          DetailsAppliedLandIndustrial: {
+            colonyfiftyNo: data?.colonyfiftyNo,
+            colonyfiftyArea: data?.colonyfiftyArea,
+            fiftyToTwoNo: data?.fiftyToTwoNo,
+            fiftyToTwoArea: data?.fiftyToTwoArea,
+            twoHundredNo: data?.twoHundredNo,
+            twoHundredArea: data?.twoHundredArea,
+            resiNo: data?.resiNo,
+            resiArea: data?.resiArea,
+            commerNo: data?.commerNo,
+            commerArea: data?.commerArea,
+            labourNo: data?.labourNo,
+            labourArea: data?.labourArea,
+          },
+          DetailsAppliedLandResidential: {
+            npnlNo: data?.npnlNo,
+            npnlArea: data?.npnlArea,
+            ewsNo: data?.ewsNo,
+            ewsArea: data?.ewsArea,
+          },
+          DetailsAppliedLandNILP: {
+            surrenderArea: data?.surrenderArea,
+            pocketAreaEnter: data?.pocketAreaEnter,
+            pocketProposed: data?.pocketProposed,
+            pocketDim: data?.pocketDim,
+            deposit: data?.deposit,
+            depositArea: data?.depositArea,
+            surrendered: data?.surrendered,
+            surrenderedDim: data?.surrenderedDim,
+          },
+          DetailsAppliedLand: {
+            demarcationPlan: data?.demarcationPlan,
+            democraticPlan: data?.democraticPlan,
+            sectoralPlan: data?.sectoralPlan,
+            planCrossSection: data?.planCrossSection,
+            uploadLayoutPlan: data?.uploadLayoutPlan,
+            publicHealthServices: data?.publicHealthServices,
+            designRoad: data?.designRoad,
+            designSewarage: data?.designSewarage,
+            designDisposal: data?.designDisposal,
+            undertakingChange: data?.undertakingChange,
+            hostedLayoutPlan: data?.hostedLayoutPlan,
+            reportObjection: data?.reportObjection,
+            consentRera: data?.consentRera,
+            undertaking: data?.undertaking,
+            detailedElectricSupply: data?.detailedElectricSupply,
+            proposedColony: data?.proposedColony,
+          },
         },
       },
       RequestInfo: {
@@ -80,9 +210,11 @@ const AppliedDetailForm = (props) => {
       },
     };
 
+    console.log("data------", postDistrict);
+    // return;
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
+      // console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
       props.Step4Continue();
     } catch (error) {
       console.log(error.message);
@@ -102,6 +234,25 @@ const AppliedDetailForm = (props) => {
     getSubmitDataLabel();
   }, []);
 
+  const getDocumentData = async (file, fieldName) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      console.log("getval======", getValues());
+      setLoader(false);
+    } catch (error) {
+      setLoader(false);
+      console.log(error.message);
+    }
+  };
+
   return (
     <div>
       {loader && <Spinner />}
@@ -117,30 +268,17 @@ const AppliedDetailForm = (props) => {
                   </h4>
                   <br></br>
                   <div className="px-2">
-                    {/* <div>
-                    (i)Add point 1 &nbsp;
-                    <div className="row ">
-                      <div className="col col-4">
-                        <label>X:Longitude</label>
-                        <input type="number" name="XLongitude" className="form-control" {...register("dgpsLongitude")} />
-                      </div>
-                      <div className="col col-4">
-                        <label>Y:Latitude</label>
-                        <input type="number" name="YLatitude" className="form-control" {...register("dgpsLatitude")} />
-                      </div>
-                    </div>
-                  </div> */}
                     {fields?.map((item, index) => (
                       <div key={item?.id}>
                         <span>Add point {index + 1} &nbsp;</span>
                         <div className="row ">
                           <div className="col col-4">
                             <label>X:Longitude</label>
-                            <input type="number" className="form-control" {...register(`dgps.${index}.XLongitude`)} />
+                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.XLongitude`)} />
                           </div>
                           <div className="col col-4">
                             <label>Y:Latitude</label>
-                            <input type="number" className="form-control" {...register(`dgps.${index}.YLatitude`)} />
+                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.YLatitude`)} />
                           </div>
                         </div>
                         {index > 3 && (
@@ -159,79 +297,6 @@ const AppliedDetailForm = (props) => {
                       Add
                     </button>
                   </div>
-                  {/* <div className="px-2">
-                  <div>
-                    (ii)Add point 2 &nbsp;
-                    <div className="row ">
-                      <div className="col col-4">
-                        <label>X:Longitude</label>
-                        <input type="number" name="XLongitude" className="form-control" {...register("dgLongitude")} />
-                      </div>
-                      <div className="col col-4">
-                        <label>Y:Latitude</label>
-                        <input type="number" name="YLatitude" className="form-control" {...register("dgLatitude")} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                  <div className="px-2">
-                  <div>
-                    (iii)Add point 3 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <div className="row ">
-                      <div className="col col-4">
-                        <label>X:Longitude</label>
-                        <input type="number" name="XLongitude" className="form-control" {...register("dgpLongitude")} />
-                      </div>
-                      <div className="col col-4">
-                        <label>Y:Latitude</label>
-                        <input type="number" name="YLatitude" className="form-control" {...register("dgpLatitude")} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                  <div className="px-2">
-                    <div>
-                      (iv)Add point 4 &nbsp;
-                      <div className="row ">
-                      <div className="col col-4">
-                        <label>X:Longitude</label>
-                        <input type="number" name="XLongitude" className="form-control" {...register("dsLongitude")} />
-                      </div>
-                      <div className="col col-4">
-                        <label>Y:Latitude</label>
-                        <input type="number" name="YLatitude" className="form-control" {...register("dgLatitude")} />
-                      </div>
-                    </div>
-                      <button type="button" style={{ float: "right" }} className="btn btn-primary" onClick={() => setNoOfRows(noOfRows - 1)}>
-                      Delete
-                    </button>
-                    &nbsp;&nbsp;&nbsp;
-                    <button
-                      type="button"
-                      style={{ float: "right", marginRight: 15 }}
-                      className="btn btn-primary"
-                      onClick={() => setNoOfRows(noOfRows + 1)}
-                    >
-                      Add
-                    </button>
-                    </div>
-                    {[...Array(noOfRows)].map((elementInArray, index) => {
-                    return (
-                      <div>
-                        <div>Add point {index + 1} &nbsp;</div>
-                        <div className="row ">
-                          <div className="col col-4">
-                            <label>X:Longiude</label>
-                            <input type="number" name="XLongitude" className="form-control" />
-                          </div>
-                          <div className="col col-4">
-                            <label>Y:Latitude</label>
-                            <input type="number" name="YLatitude" className="form-control" />
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })} */}
 
                   <br></br>
                   <hr />
@@ -239,18 +304,18 @@ const AppliedDetailForm = (props) => {
                   <div>
                     <h5>
                       2.Details of Plots&nbsp;&nbsp;
-                      <label htmlFor="regularOptions">
+                      <label htmlFor="regularOption">
                         &nbsp;&nbsp;
-                        <input {...register("regularOptions")} type="radio" value="regular" id="regularOptions" />
+                        <input {...register("regularOption")} type="radio" value="regular" id="regularOption" />
                         &nbsp;&nbsp; Regular &nbsp;&nbsp;
                       </label>
-                      <label htmlFor="regularOptions">
-                        <input {...register("regularOptions")} type="radio" value="Irregular" id="regularOptions" />
+                      <label htmlFor="regularOption">
+                        <input {...register("regularOption")} type="radio" value="Irregular" id="regularOption" />
                         &nbsp;&nbsp; Irregular &nbsp;&nbsp;
                       </label>
                     </h5>
                   </div>
-                  {watch("regularOptions") === "regular" && (
+                  {watch("regularOption") === "regular" && (
                     <div className="table table-bordered table-responsive">
                       <thead>
                         <tr>
@@ -563,7 +628,7 @@ const AppliedDetailForm = (props) => {
                       </tbody>
                     </div>
                   )}
-                  {watch("regularOptions") === "Irregular" && (
+                  {watch("regularOption") === "Irregular" && (
                     <div>
                       <div className="table table-bordered table-responsive ">
                         <thead>
@@ -735,9 +800,9 @@ const AppliedDetailForm = (props) => {
                       </div>
                     </div>
                   )}
-                  <div>{Purpose === "DDJAY_APHP" && <DDJAYForm />}</div>
-                  <div>{Purpose === "RPL" && <ResidentialPlottedForm />}</div>
-                  <div>{Purpose === "IPL" && <IndustrialPlottedForm />}</div>
+                  <div>{Purpose === "DDJAY_APHP" && <DDJAYForm watch={watch} register={register} />}</div>
+                  <div>{Purpose === "RPL" && <ResidentialPlottedForm register={register} />}</div>
+                  <div>{Purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
                   <h5 className="text-black">NILP </h5>
                   <br></br>
                   <div className="table table-bordered table-responsive">
@@ -870,25 +935,25 @@ const AppliedDetailForm = (props) => {
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Demarcation plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
-                      <input type="file" className="form-control" />
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "demarcationPlan")} />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Democratic Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "democraticPlan")} />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Sectoral Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")} />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Upload Layout Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadLayoutPlan")} />
                     </div>
                   </div>
                   <div className="row">
@@ -901,7 +966,7 @@ const AppliedDetailForm = (props) => {
                       >
                         Plans showing cross sections &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")} />
                     </div>
                     <div className="col col-3">
                       <h6
@@ -914,7 +979,7 @@ const AppliedDetailForm = (props) => {
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")} />
                     </div>
                     <div className="col col-3">
                       <h6
@@ -925,7 +990,7 @@ const AppliedDetailForm = (props) => {
                       >
                         Specifications and designs of road works &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")} />
                     </div>
                     <div className="col col-3">
                       <h6
@@ -937,7 +1002,7 @@ const AppliedDetailForm = (props) => {
                         Designs of sewerage, storm and water supply &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")} />
                     </div>
                   </div>
                   <div className="row">
@@ -952,7 +1017,7 @@ const AppliedDetailForm = (props) => {
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")} />
                     </div>
                     <div className="col col-3">
                       <h6
@@ -964,7 +1029,7 @@ const AppliedDetailForm = (props) => {
                         Undertaking that no change &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")} />
                     </div>
                     <div className="col col-3">
                       <h6
@@ -976,14 +1041,14 @@ const AppliedDetailForm = (props) => {
                         Whether you hosted the existing approved layout plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")} />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Report any objection from any of the allottees &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")} />
                     </div>
                   </div>
                   <div className="row">
@@ -997,7 +1062,7 @@ const AppliedDetailForm = (props) => {
                         Consent of RERA &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")} />
                     </div>
                     <div className="col col-3">
                       <h6
@@ -1009,7 +1074,7 @@ const AppliedDetailForm = (props) => {
                         Undertaking &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")} />
                     </div>
                     <div className="col col-3">
                       <h6
@@ -1021,7 +1086,7 @@ const AppliedDetailForm = (props) => {
                         Detailed specifications and designs for electric supply &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")} />
                     </div>
                     <div className="col col-3">
                       <h6
@@ -1033,7 +1098,7 @@ const AppliedDetailForm = (props) => {
                         Salient feature of the proposed colony &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })}></input>
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")} />
                     </div>
                   </div>
                   <div class="row">
@@ -1043,7 +1108,7 @@ const AppliedDetailForm = (props) => {
                       </div>
                     </div>
                     <div class="col-sm-12 text-right">
-                      <button id="btnSearch" class="btn btn-primary btn-md center-block">
+                      <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
                         Save and Continue
                       </button>
                     </div>

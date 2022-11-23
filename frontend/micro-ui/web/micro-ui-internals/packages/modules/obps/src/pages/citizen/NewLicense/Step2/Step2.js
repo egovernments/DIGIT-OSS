@@ -342,13 +342,10 @@ const ApllicantPuropseForm = (props) => {
   };
 
   const PurposeFormSubmitHandler = async (data) => {
-    props.Step2Continue();
-    // return;
     data["purpose"] = data?.purpose?.value;
     data["potential"] = data?.potential?.value;
     data["district"] = watch("district")?.value;
     data["state"] = "Haryana";
-
     delete data?.tehsil;
     delete data?.revenueEstate;
     delete data?.mustil;
@@ -372,17 +369,15 @@ const ApllicantPuropseForm = (props) => {
     delete data?.khewats;
     delete data?.rowid;
 
-    // console.log("data", data);
-    // return;
-
     const token = window?.localStorage?.getItem("token");
     if (!modalData?.length) alert("Please enter atleast one record");
     else {
       const postDistrict = {
         pageName: "ApplicantPurpose",
+        ApplicationStatus: "INITIATE",
         id: props.getId,
-        createdBy: props?.userInfo?.id,
-        updatedBy: props?.userInfo?.id,
+        createdBy: props?.userData?.id,
+        updatedBy: props?.userData?.id,
         LicenseDetails: {
           ApplicantPurpose: {
             ...data,
@@ -399,7 +394,7 @@ const ApllicantPuropseForm = (props) => {
           msgId: "090909",
           requesterId: "",
           authToken: token,
-          userInfo: props?.userInfo,
+          userInfo: props?.userData,
         },
       };
       setLoader(true);
@@ -433,10 +428,7 @@ const ApllicantPuropseForm = (props) => {
     formData.append("tag", "tag-property");
     setLoader(true);
     try {
-      const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
-        return response;
-      });
-      console.log(Resp?.data?.files?.[0]?.fileStoreId);
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
       setDocId(Resp?.data?.files?.[0]?.fileStoreId);
       setLoader(false);
     } catch (error) {
@@ -813,11 +805,11 @@ const ApllicantPuropseForm = (props) => {
                 </h2>
 
                 <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="N" id="yes" onClick={() => setCollaboration("yes")} />
+                  <input {...register("collaboration")} type="radio" value="N" id="yes" onClick={() => setCollaboration("Y")} />
                   Yes
                 </label>
                 <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="Y" id="no" onClick={() => setCollaboration("no")} />
+                  <input {...register("collaboration")} type="radio" value="Y" id="no" onClick={() => setCollaboration("N")} />
                   No
                 </label>
                 {getCollaboration === "Y" && (
