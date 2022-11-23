@@ -194,6 +194,12 @@ const Personalinfo = (props) => {
             displayPersonal={open2 ? "block" : "none"}
           />
           {/* <DocumentScrutiny /> */}
+          {/* <DocumentScrutiny
+            iconColorState={iconStates}
+            showTable={currentRemarklifo}
+            capacityScrutinyInfo={applicantInfoPersonal?.devDetail?.capacityDevelopAColony ? applicantInfoPersonal?.devDetail?.capacityDevelopAColony : null}
+            displayPersonal={open2 ? "block" : "none"}
+          /> */}
         </div>
       </Collapse>
       {/* </Card> */}

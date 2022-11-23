@@ -39,6 +39,7 @@ import CommonForm from "../citizen/NewLicense/common/index";
 import ScrutinyFormcontainer from "../citizen/NewLicense/ScrutinyContainer/ScrutinyFormContainer";
 import ServiceCard from "./NewLicense/AllService/Service";
 import ZoningPlan from "./NewLicense/AllService/Module/ZoningPlan/ZoningPlan";
+import Loi from "./NewLicense/ScrutinyContainer/Loi";
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
@@ -100,6 +101,8 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} />
         <PrivateRoute path={`${path}/service`} component={ServiceCard} />
         <PrivateRoute path={`${path}/zoningPlan`} component={ZoningPlan} />
+        <PrivateRoute path={`${path}/Loi`} component={Loi} />
+
       </Switch>
     </React.Fragment>
   );
