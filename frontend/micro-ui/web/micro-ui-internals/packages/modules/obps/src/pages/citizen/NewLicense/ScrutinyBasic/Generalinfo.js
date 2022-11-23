@@ -973,3 +973,4 @@ const Genarelinfo = (props) => {
 };
 
 export default Genarelinfo;
+

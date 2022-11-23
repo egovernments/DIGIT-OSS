@@ -201,7 +201,7 @@ const Feeandcharges = (props) => {
                           (i)&nbsp;Amount Payable at the time of Application
                         </h6>
 
-                        <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.payableNow} />
+                        <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.amountPayable} />
                         {errors.totalFee && <p></p>}
                       </div>
 
@@ -224,11 +224,11 @@ const Feeandcharges = (props) => {
                           <div className="row ">
                             <div className="col col-12">
                               <label>Enter License Number/LOI number</label>
-                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.licNo} />
+                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.licNumber} />
                               <label>Amount (previous)</label>
                               <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amount}/>
                               <label>Amount to be paid after adjustment</label>
-                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amountAfterAdjustment} />
+                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amountAdjusted} />
                             </div>
                           </div>
                         )}
