@@ -10,6 +10,7 @@ import WorkingTable from "../../../../components/Table";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
+import { Archive } from "react-bootstrap-icons";
 
 const ApllicantPuropseForm = (props) => {
   console.log("props", props);
@@ -314,6 +315,7 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const ApplicantPurposeModalData = (modalData) => {
+    console.log("data------", modalData);
     modalData["tehsil"] = modalData?.tehsil?.value;
     modalData["revenueEstate"] = modalData?.revenueEstate?.value;
     modalData["mustil"] = modalData?.mustil?.value;
@@ -340,6 +342,9 @@ const ApllicantPuropseForm = (props) => {
     // reset(resetFields);
     setCollaboration("");
   };
+
+  const kanal = "A = kanal*.125";
+  const sqrmtr = "D = A*4047";
 
   const PurposeFormSubmitHandler = async (data) => {
     data["purpose"] = data?.purpose?.value;
@@ -374,7 +379,7 @@ const ApllicantPuropseForm = (props) => {
     else {
       const postDistrict = {
         pageName: "ApplicantPurpose",
-        ApplicationStatus: "INITIATE",
+        ApplicationStatus: "DRAFT",
         id: props.getId,
         createdBy: props?.userData?.id,
         updatedBy: props?.userData?.id,
@@ -409,6 +414,8 @@ const ApllicantPuropseForm = (props) => {
       }
     }
   };
+  const [equation, setEquation] = useState(kanal);
+  const [equation1, setEquation1] = useState(sqrmtr);
 
   const handleChangePurpose = (data) => {
     console.log("data", data);
@@ -420,6 +427,11 @@ const ApllicantPuropseForm = (props) => {
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
 
+  const handleChangeKanal = (modalData) => {
+    const kanalSelected = modalData?.kanal;
+    console.log("kanal", kanalSelected);
+    window?.localStorage.setItem("kanal", JSON.stringify(kanalSelected));
+  };
   const getDocumentData = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
@@ -430,7 +442,6 @@ const ApllicantPuropseForm = (props) => {
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      setLoader(false);
     } catch (error) {
       setLoader(false);
       console.log(error.message);
@@ -685,31 +696,30 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="12">
                 <div>
                   <h2>
-                    Consolidation Type<span style={{ color: "red" }}>*</span>
+                    Consolidation Type<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                    <label htmlFor="consolidated">
+                      <input
+                        {...register("consolidationType")}
+                        type="radio"
+                        value="consolidated"
+                        defaultChecked={true}
+                        defaultValue="consolidated"
+                        id="consolidated"
+                        onClick={() => setConsolidateValue("consolidated")}
+                      />{" "}
+                      &nbsp;&nbsp; Consolidated &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="non-consolidated">
+                      <input
+                        {...register("consolidationType")}
+                        type="radio"
+                        value="non-consolidated"
+                        id="non-consolidated"
+                        onClick={() => setConsolidateValue("non-consolidated")}
+                      />{" "}
+                      &nbsp;&nbsp; Non-Consolidated &nbsp;&nbsp;
+                    </label>
                   </h2>
-
-                  <label htmlFor="consolidated">
-                    <input
-                      {...register("consolidationType")}
-                      type="radio"
-                      value="consolidated"
-                      defaultChecked={true}
-                      defaultValue="consolidated"
-                      id="consolidated"
-                      onClick={() => setConsolidateValue("consolidated")}
-                    />
-                    Consolidated
-                  </label>
-                  <label htmlFor="non-consolidated">
-                    <input
-                      {...register("consolidationType")}
-                      type="radio"
-                      value="non-consolidated"
-                      id="non-consolidated"
-                      onClick={() => setConsolidateValue("non-consolidated")}
-                    />
-                    Non-Consolidated
-                  </label>
                 </div>
 
                 {consolidateValue == "consolidated" && (
@@ -730,7 +740,15 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <Form.Control type="text" className="form-control" placeholder="" {...register("kanal")} />
+                          <Form.Control
+                            type="text"
+                            className="form-control"
+                            placeholder=""
+                            {...register("kanal")}
+                            onValuesChange={(changedValue) => {
+                              setEquation(changedValue.equation);
+                            }}
+                          />
                         </td>
                         <td>
                           <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} />

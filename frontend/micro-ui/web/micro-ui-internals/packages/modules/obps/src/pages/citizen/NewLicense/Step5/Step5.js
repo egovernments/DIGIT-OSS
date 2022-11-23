@@ -64,6 +64,7 @@ const FeesChargesForm = (props) => {
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "FeesAndCharges",
+      ApplicationStatus: "APPLY",
       id: props.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
@@ -114,6 +115,7 @@ const FeesChargesForm = (props) => {
 
   const Purpose = localStorage.getItem("purpose");
   const potential = JSON.parse(localStorage.getItem("potential"));
+  // const kanal = JSON.parse(localStorage.getItem("kanal"));
 
   const CalculateApiCall = async () => {
     const token = window?.localStorage?.getItem("token");
@@ -139,17 +141,17 @@ const FeesChargesForm = (props) => {
         totalLandSize: 1,
         potenialZone: potential,
         purposeCode: Purpose,
-        applicationNumber: "INITIATE",
+        applicationNumber: props.getId,
       },
     };
-
+    console.log("dd", props.getId);
     try {
       const Resp = await axios.post("/tl-calculator/v1/_calculator", payload);
       console.log("Resp.data===", Resp.data?.Calculations?.[0]?.tradeTypeBillingIds);
       const charges = Resp.data?.Calculations?.[0]?.tradeTypeBillingIds;
-      setValue("scrutinyFee", charges?.scrutinyFeeCharges);
-      setValue("licenseFee", charges?.licenseFeeCharges);
-      setValue("conversionCharges", charges?.conversionCharges);
+      // setValue("scrutinyFee", charges?.scrutinyFeeCharges);
+      // setValue("licenseFee", charges?.licenseFeeCharges);
+      // setValue("conversionCharges", charges?.conversionCharges);
       // setCalculateData(Resp.data);
     } catch (error) {
       console.log(error.message);
@@ -182,6 +184,10 @@ const FeesChargesForm = (props) => {
     const purposeSelected = data.data;
     setSelectPurpose(purposeSelected);
   };
+  const handleChangeKanal = (modalData) => {
+    const kanalSelected = modalData.data;
+    setSelectKanal(kanalSelected);
+  };
   const handleScrutiny = (event) => {
     setCalculateData(event.target.value);
   };
@@ -203,9 +209,9 @@ const FeesChargesForm = (props) => {
                 <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))", width: "629px", marginLeft: "273px" }}>
                   <thead>
                     <tr>
-                      <th>Total Area</th>
+                      <th>Total Area (In acres)</th>
                       <td>
-                        <input type="text" className="form-control" disabled {...register("totalArea")} />
+                        <input type="text" className="form-control" disabled {...register("totalArea")} placeholder="0.125" />
                       </td>
                     </tr>
                   </thead>
@@ -241,19 +247,19 @@ const FeesChargesForm = (props) => {
                     <tr>
                       <th>Scrutiny Fees</th>
                       <td>
-                        <input type="text" className="form-control" disabled {...register("scrutinyFee")} />
+                        <input type="text" className="form-control" disabled {...register("scrutinyFee")} placeholder="5210.51" />
                       </td>
                     </tr>
                     <tr>
                       <th>License Fees</th>
                       <td>
-                        <input type="text" className="form-control" disabled {...register("licenseFee")} />
+                        <input type="text" className="form-control" disabled {...register("licenseFee")} placeholder="320000" />
                       </td>
                     </tr>
                     <tr>
                       <th>Conversion Charges</th>
                       <td>
-                        <input type="text" className="form-control" disabled {...register("conversionCharges")} />
+                        <input type="text" className="form-control" disabled {...register("conversionCharges")} placeholder="0.000" />
                       </td>
                     </tr>
                   </tbody>
@@ -268,6 +274,7 @@ const FeesChargesForm = (props) => {
                     <input
                       type="text"
                       className="form-control"
+                      disabled
                       {...register("amountPayable")}
                       minLength={1}
                       maxLength={20}
@@ -275,6 +282,7 @@ const FeesChargesForm = (props) => {
                       onChange1={handleTotalFeesChange}
                       onChange={(e) => setPayableNow(e.target.value)}
                       value={payableNow}
+                      placeholder="85210.51"
                     />
                     {errors.totalFee && <p></p>}
                   </div>

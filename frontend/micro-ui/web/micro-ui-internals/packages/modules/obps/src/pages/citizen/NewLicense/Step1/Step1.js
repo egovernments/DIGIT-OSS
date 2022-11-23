@@ -35,7 +35,7 @@ const ApllicantFormStep1 = (props) => {
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "ApplicantInfo",
-      ApplicationStatus: "INITIATE",
+      ApplicationStatus: "DRAFT",
       id: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,
@@ -124,7 +124,7 @@ const ApllicantFormStep1 = (props) => {
     try {
       const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
       const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
-      console.log("hh", Resp?.data?.newServiceInfoData[0]?.ApplicantInfo);
+      console.log(Resp?.data?.newServiceInfoData[0]?.ApplicantInfo);
       setValue("notSigned", userData?.notSigned);
       setValue("LC", userData?.LC);
     } catch (error) {
