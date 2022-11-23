@@ -521,11 +521,11 @@ const AppliedDetailForm = (props) => {
                 <br></br>
                 <h5>
                   2.Details of Plots&nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} />
+                  <input type="radio"  value="1" onChange={handleChange}  onClick={handleshow18} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
                   <label htmlFor="gen">Regular</label>&nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} />
+                  <input type="radio"  value="2" onChange={handleChange}  onClick={handleshow18} />
                   &nbsp;&nbsp;
                   <label for="Yes"></label>
                   <label htmlFor="npnl">Irregular</label>
@@ -1036,12 +1036,12 @@ const AppliedDetailForm = (props) => {
                         Whether you want to surrender the 10% area of license colony to Govt. the instead of providing 10% under EWS and NPNL plots{" "}
                       </td>
                       <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                        <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow0} />
+                        <input type="radio" value="Yes"  onChange={handleChange}  onClick={handleshow0} />
                         <label style={{ margin: "0" }} for="Yes">
                           Yes
                         </label>
 
-                        <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
+                        <input type="radio" value="No"  onChange={handleChange}  onClick={handleshow0} />
                         <label style={{ margin: "0" }} for="No">
                           No
                         </label>
@@ -1060,12 +1060,12 @@ const AppliedDetailForm = (props) => {
                       <td>2. </td>
                       <td>Whether any pocket proposed to be transferred less than 1 acre </td>
                       <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                        <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow13} />
+                        <input type="radio" value="Yes"  onChange={handleChange}  onClick={handleshow13} />
                         <label style={{ margin: "0" }} for="Yes">
                           Yes
                         </label>
 
-                        <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow13} />
+                        <input type="radio" value="No"  onChange={handleChange}  onClick={handleshow13} />
                         <label style={{ margin: "0" }} for="No">
                           No
                         </label>
@@ -1090,11 +1090,11 @@ const AppliedDetailForm = (props) => {
                       <td>3. </td>
                       <td>Whether you want to deposit an amount @ of 3 times of collector rate instead of the surrender 10% land to Govt. </td>
                       <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                        <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow1} />
+                        <input type="radio" value="Yes"  onChange={handleChange}  onClick={handleshow1} />
                         <label style={{ margin: "0" }} for="Yes">
                           Yes
                         </label>
-                        <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow1} />
+                        <input type="radio" value="No"  onChange={handleChange}  onClick={handleshow1} />
                         <label style={{ margin: "0" }} for="No">
                           No
                         </label>
@@ -1115,12 +1115,12 @@ const AppliedDetailForm = (props) => {
                       <td>4. </td>
                       <td>Whether the surrendered area is having a minimum of 18 mtr independent access </td>
                       <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
-                        <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow14} />
+                        <input type="radio" value="Yes"  onChange={handleChange}  onClick={handleshow14} />
                         <label style={{ margin: "0" }} for="Yes">
                           Yes
                         </label>
 
-                        <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow14} />
+                        <input type="radio" value="No"  onChange={handleChange}  onClick={handleshow14} />
                         <label style={{ margin: "0" }} for="No">
                           No
                         </label>

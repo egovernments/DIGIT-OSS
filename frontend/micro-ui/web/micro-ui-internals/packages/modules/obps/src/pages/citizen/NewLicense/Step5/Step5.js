@@ -361,9 +361,9 @@ const FeesChargesForm = (props) => {
                     <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)">
                       (iii)&nbsp;Adjust Fees &nbsp;&nbsp;
                     </h6>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
+                    <input type="radio" value="Yes"  onChange1={handleChange}  onClick={handleshow0} />
                     <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
+                    <input type="radio" value="No"  onChange={handleChange}  onClick={handleshow0} />
                     <label className="m-0 mx-2" for="No">No</label>
                     {showhide0 === "Yes" && (
                       <div className="row ">

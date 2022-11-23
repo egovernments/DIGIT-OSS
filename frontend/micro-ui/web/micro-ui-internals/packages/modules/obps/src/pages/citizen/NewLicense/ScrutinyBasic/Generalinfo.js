@@ -267,7 +267,7 @@ const Genarelinfo = (props) => {
     fieldIdList.forEach((item) => {
       if (dataIcons !== null && dataIcons !== undefined) {
         console.log("color method called");
-        const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        const fieldPresent = dataIcons?.egScrutiny?.filter(ele => (ele.fieldIdL === item.label));
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
@@ -289,7 +289,7 @@ const Genarelinfo = (props) => {
 
   useEffect(() => {
     if (labelValue) {
-      const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      const fieldPresent = dataIcons?.egScrutiny?.filter(ele => (ele.fieldIdL === labelValue));
       setSelectedFieldData(fieldPresent[0]);
     } else {
       setSelectedFieldData(null);
@@ -890,9 +890,9 @@ const Genarelinfo = (props) => {
                 </thead>
                 <tbody>
                 {
-                    applicantInfoPersonal?.AppliedLandDetails?.map((item,index)=>{
+                    applicantInfoPersonal?.AppliedLandDetails?.map((item,index)=>(
                       
-                  <tr>
+                  <tr key={index}>
                     <td>
                       <input type="text" className="form-control" placeholder={item?.tehsil} disabled />
                     </td>
@@ -953,7 +953,7 @@ const Genarelinfo = (props) => {
 
                     
                   </tr>
-                    })
+                    ))
                   }
                 </tbody>
               </table>

@@ -639,10 +639,10 @@ const handleColonyDevGrp=()=>{
                     <input
                         type="radio"
                         value="Yes"
-                        id="Yes"
+                        
                         className="mx-2 mt-1"
                         onChange={handleChange}
-                        name="Yes"
+                        
                         onClick={handleshow0}
                     />
                     <label className="m-0  mx-2" for="Yes">Yes</label>
@@ -650,10 +650,10 @@ const handleColonyDevGrp=()=>{
                     <input
                         type="radio"
                         value="No"
-                        id="No"
+                        
                         className="mx-2 mt-1"
                         onChange={handleChange}
-                        name="Yes"
+                        
                         onClick={handleshow0}
                     />
                     <label className="m-0 mx-2" for="No">No</label>
@@ -1049,10 +1049,10 @@ const handleColonyDevGrp=()=>{
                     <input
                         type="radio"
                         value="Yes"
-                        id="Yes"
+                        
                         className="mx-2 mt-1"
                         onChange={handleChange}
-                        name="Yes"
+                        
                         onClick={handleshow1}
                     />
                     <label className="m-0  mx-2" for="Yes">Yes</label>
@@ -1060,10 +1060,10 @@ const handleColonyDevGrp=()=>{
                     <input
                         type="radio"
                         value="No"
-                        id="No"
+                        
                         className="mx-2 mt-1"
                         onChange={handleChange}
-                        name="Yes"
+                        
                         onClick={handleshow1}
                     />
                     <label className="m-0 mx-2" for="No">No</label>
@@ -1356,10 +1356,10 @@ const handleColonyDevGrp=()=>{
                     <input
                         type="radio"
                         value="Yes"
-                        id="Yes"
+                        
                         className="mx-2 mt-1"
                         onChange={(e)=>handleChange(e.target.value)}
-                        name="Yes"
+                        
                         onClick={handleshow}
                     />
                     <label className="m-0  mx-2" for="Yes">Yes</label>
@@ -1367,10 +1367,10 @@ const handleColonyDevGrp=()=>{
                     <input
                         type="radio"
                         value="No"
-                        id="No"
+                        
                         className="mx-2 mt-1"
                         onChange={(e)=>handleChange(e.target.value)}
-                        name="Yes"
+                        
                         onClick={handleshow}
                     />
                     <label className="m-0 mx-2" for="No">No</label>
@@ -1436,10 +1436,10 @@ const handleColonyDevGrp=()=>{
                     <input
                         type="radio"
                         value="Yes"
-                        id="Yes"
+                        
                         className="mx-2 mt-1"
                         onChange={handleChange}
-                        name="Yes"
+                        
                         onClick={handleshow6}
                     />
                     <label className="m-0  mx-2" for="Yes">Yes</label>
@@ -1447,10 +1447,10 @@ const handleColonyDevGrp=()=>{
                     <input
                         type="radio"
                         value="No"
-                        id="No"
+                        
                         className="mx-2 mt-1"
                         onChange={handleChange}
-                        name="Yes"
+                        
                         onClick={handleshow6}
                     />
                     <label className="m-0 mx-2" for="No">No</label>

@@ -164,7 +164,7 @@ const LicenseDetailsScrutiny = (props) => {
                   <h5 className={[classes.formLabel, "d-flex flex-row align-items-center"]}>Developer's type <div className="d-flex flex-row align-items-center ml-2">
                     <Form.Control
                       className={classes.formControl}
-                      placeholder={addInfo?.showDevTypeFields === "01" ? "Individual" : addInfo?.showDevTypeFields === "02" ? "Company" : addInfo?.showDevTypeFields === "03" ? "LLP" : addInfo?.showDevTypeFields === "04" ? "Society" : "Purpose"}
+                      placeholder={addInfo?.showDevTypeFields}
                       disabled
                     ></Form.Control>
                     &nbsp;&nbsp;

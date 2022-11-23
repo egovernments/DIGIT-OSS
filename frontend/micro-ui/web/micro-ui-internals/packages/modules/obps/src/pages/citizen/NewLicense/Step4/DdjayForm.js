@@ -164,10 +164,10 @@ const DDJAYForm = (props) => {
                 <h6>
                   {" "}
                   Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan (Yes/No)&nbsp;&nbsp;
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow12} />
+                  <input type="radio" value="Yes"  onChange1={handleChange}  onClick={handleshow12} />
                   &nbsp;&nbsp;
                   <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow12} />
+                  <input type="radio" value="No"  onChange1={handleChange}  onClick={handleshow12} />
                   &nbsp;&nbsp;
                   <label className="m-0 mx-2" for="No">No</label>
                 </h6>

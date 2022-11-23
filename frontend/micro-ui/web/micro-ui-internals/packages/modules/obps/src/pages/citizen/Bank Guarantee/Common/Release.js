@@ -35,12 +35,12 @@ const ReleaseNew = (props) => {
                     </Row>
                     <Row className="ml-auto" style={{ marginBottom: 5 }}>
                     <Col md={4} xxl lg="3">
-                            <input type="radio" value="Full" id="Yes"
-                                onChange={handleChange} name="Yes" onClick={handleshow} />&nbsp;&nbsp;
+                            <input type="radio" value="Full" 
+                                onChange={handleChange}  onClick={handleshow} />&nbsp;&nbsp;
                             <label for="Full"><h6>Full</h6></label>&nbsp;&nbsp;
 
-                            <input type="radio" value="Partial" id="No"
-                                onChange={handleChange} name="Yes" onClick={handleshow} />&nbsp;&nbsp;
+                            <input type="radio" value="Partial" 
+                                onChange={handleChange}  onClick={handleshow} />&nbsp;&nbsp;
                             <label for="Partial"><h6>Partial</h6></label>{
                                         showhide === "Full" && (
                                             <div className="row " >

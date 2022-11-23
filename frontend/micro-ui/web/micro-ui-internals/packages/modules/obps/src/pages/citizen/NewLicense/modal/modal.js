@@ -265,13 +265,13 @@ const ModalForm = (props) => {
                                 <Col md={4} xxl lg="12">
                                     <div>
                                         <label ><h6><b>Consolidation Type</b></h6> </label> &nbsp;&nbsp;
-                                        <input type="radio" id="Yes" value="1"
-                                            onChange={handleChange} name="Yes" onClick={handleshow2} />&nbsp;&nbsp;
+                                        <input type="radio"  value="1"
+                                            onChange={handleChange}  onClick={handleshow2} />&nbsp;&nbsp;
                                         <label for="Yes"></label>
                                         <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
 
-                                        <input type="radio" id="Yes" value="2"
-                                            onChange={handleChange} name="Yes" onClick={handleshow2} />&nbsp;&nbsp;
+                                        <input type="radio"  value="2"
+                                            onChange={handleChange}  onClick={handleshow2} />&nbsp;&nbsp;
                                         <label for="Yes"></label>
                                         <label htmlFor="npnl">Non-Consolidated</label>
                                         {/* </Form.Select> */}
@@ -353,11 +353,11 @@ const ModalForm = (props) => {
                                 <div className="col col-12">
                                     <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)"><b>Collaboration agreement&nbsp;<InfoIcon style={{ color: "blue" }} />&nbsp; </b>&nbsp;&nbsp;
 
-                                        <input type="radio" value="Yes" id="Yes"
-                                            onChange={handleChange} name="Yes" onClick={handleshow1} />&nbsp;&nbsp;
+                                        <input type="radio" value="Yes" 
+                                            onChange={handleChange}  onClick={handleshow1} />&nbsp;&nbsp;
                                         <label for="Yes"><h6><b>Yes</b></h6></label>&nbsp;&nbsp;
-                                        <input type="radio" value="No" id="No"
-                                            onChange={handleChange} name="Yes" onClick={handleshow1} />&nbsp;&nbsp;
+                                        <input type="radio" value="No" 
+                                            onChange={handleChange}  onClick={handleshow1} />&nbsp;&nbsp;
                                         <label for="No"><h6><b>No</b></h6></label></h6>
                                     {
                                         showhide1 === "Yes" && (
@@ -379,11 +379,11 @@ const ModalForm = (props) => {
                                                 <div className="col col-4" style={{ marginTop: 35 }}>
                                                     <label for="parentLicense" className="font-weight-bold"><h6><b>Whether collaboration agreement irrevocable (Yes/No)</b></h6></label><br></br>
                                                     <input type="radio" value="Yes" id="Yes1"
-                                                        onChange={handleChange} name="Yes" />&nbsp;&nbsp;
+                                                        onChange={handleChange}  />&nbsp;&nbsp;
                                                     <label for="Yes"><h6>Yes</h6></label>&nbsp;&nbsp;
 
                                                     <input type="radio" value="No" id="No1"
-                                                        onChange={handleChange} name="Yes" />&nbsp;&nbsp;
+                                                        onChange={handleChange}  />&nbsp;&nbsp;
                                                     <label for="No"><h6>No</h6></label>
                                                 </div>
 
