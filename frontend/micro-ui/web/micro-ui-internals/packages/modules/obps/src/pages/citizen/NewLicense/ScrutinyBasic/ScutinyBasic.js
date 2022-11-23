@@ -328,11 +328,9 @@ const ScrutitnyForms = () => {
           <div>
             <AppliedLandinfo
               appliedInfoRef={appliedInfoRef}
-              purpose={apiResppnse.newServiceInfoData?apiResppnse.newServiceInfoData[0]?.ApplicantInfo?.devDetail?.addInfo?.showDevTypeFields:null}
+              purpose={purpose}
               passUncheckedList={getUncheckedAppliedLandInfo}
               passCheckedList={getCheckedAppliedInfoValue}
-              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].DetailsofAppliedLand
-                : null}
               heightApplied={defaultheightApplied}
               dataForIcons={iconStates}
             ></AppliedLandinfo>
@@ -343,8 +341,6 @@ const ScrutitnyForms = () => {
               feeandchargesInfoRef={feeandchargesInfoRef}
               passUncheckedList={getUncheckedFeeandChargesInfo}
               heightFee={defaultheightFee}
-              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].FeesAndCharges
-                : null}
             ></Feeandcharges>
             {/* </Col> */}
           </div>
