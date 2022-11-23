@@ -163,7 +163,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           "PANFullName": name,
           "FullName": name,
           "DOB": dob,
-          "GENDER": gender.value
+          "GENDER": gender
         },
         "consentArtifact": {
           "consent": {
@@ -234,7 +234,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   //   setEmail(e.target.value);
   // }
   function setGenderName(value) {
-    // console.log("GENDER",value);
+    console.log("GENDER",value);
     setGender(value);
   }
 
@@ -453,7 +453,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           "licenceDetails": {
             name: name,
             mobileNumber: mobileNumber,
-            gender: [{gender}],
+            gender: gender.value,
             email: email,
             dob: dob,
             PanNumber: PanNumber,

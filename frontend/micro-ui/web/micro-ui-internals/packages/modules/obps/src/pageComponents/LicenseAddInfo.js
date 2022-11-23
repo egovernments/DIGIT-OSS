@@ -129,6 +129,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       arrayDevList.push({ code: `${devTypeDetails.code}`, value: `${devTypeDetails.code}` });
     });
     
+
+    const {setValue, getValues, watch} = useForm();
+    const [Documents, setDocumentsData] = useState([]);
+
+    const DevelopersAllData = getValues();
+    console.log("DEVEDATAGEGT",DevelopersAllData);
     
     
     const [modal, setmodal] = useState(false);
@@ -171,7 +177,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const [sharName, setTbName] = useState("");
     const [designition, setDesignition] = useState("");
     const [percentage, setPercetage] = useState("");
-    const [uploadPdf, setUploadPDF] = useState("");
+    const [uploadPdf, setUploadPDF] = useState( DevelopersAllData?.uploadPdf || "");
     const [serialNumber, setSerialNumber] = useState("");
     const [DirectorData,setDirectorData]=useState([]);
     const [modalNAme,setModalNAme]=useState("");
@@ -194,6 +200,10 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const [show, setShow] = useState(false);
     const [showStake, setShowStakeholder] = useState(false);
 
+    
+
+    const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
+    const [urlGetDirectorDoc,setDocDirectorUrl] = useState("")
     const handleShowStakeholder = () => {
       setShowStakeholder(true)
       setModalNAme("");
@@ -250,42 +260,73 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 //   setShowDevTypeFields(value)
 //   console.log(value);
 // }
-    const getDocumentData = async () => {
-      if(file===null){
-         return
+    const getDocumentData = async (file, fieldName) => {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("tenantId", "hr");
+      formData.append("module", "property-upload");
+      formData.append("tag", "tag-property");
+      // setLoader(true);
+      try {
+        const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
+          return response;
+        });
+        console.log(Resp?.data?.files);
+        setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+        // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+        console.log("getValues()=====", getValues());
+        setDocumentsData(getValues())
+      //   setLoader(false);
+      
+      } catch (error) {
+      //   setLoader(false);
+        console.log(error.message);
       }
-         const formData = new FormData();
-         formData.append(
-             "file",file.file      );
-         formData.append(
-             "tenantId",tenantId      );  
-         formData.append(
-             "module","property-upload"      );
-          formData.append(
-              "tag","tag-property"      );
-     
-          console.log("File",formData)
-  
-         try {
-             const Resp = await axios.post("/filestore/v1/files",formData,
-             {headers:{
-                 "content-type":"multipart/form-data"
-             }}).then((response) => {
-                 return response
-             });
-             setDocuploadData(Resp.data)
-             
-         } catch (error) {
-             console.log(error.message);
-         }
-  
-        
-  
-    }
+    };
     useEffect(() => {
       getDocumentData();
     }, [file]);
     
+    const getDocShareholding = async () => {
+      if ((Documents?.uploadPdf !== null || Documents?.uploadPdf !== undefined) && (uploadPdf!==null || uploadPdf!=="")) {
+          
+          try {
+              const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.uploadPdf}`, {
+
+              });
+              const FILDATA = response.data?.fileStoreIds[0]?.url;
+              setDocShareHoldingUrl(FILDATA)
+          } catch (error) {
+              console.log(error.message);
+          }
+      }
+    }
+
+    useEffect(() => {
+      getDocShareholding();
+    }, [Documents?.uploadPdf]);
+    
+    
+    const getDocDirector = async () => {
+      if ((Documents?.uploadPdf !== null || Documents?.uploadPdf !== undefined) && (uploadPdf!==null || uploadPdf!=="")) {
+          
+          try {
+              const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.uploadPdf}`, {
+
+              });
+              const FILDATA = response.data?.fileStoreIds[0]?.url;
+              setDocDirectorUrl(FILDATA)
+          } catch (error) {
+              console.log(error.message);
+          }
+      }
+    }
+
+    useEffect(() => {
+      getDocDirector();
+    }, [Documents?.uploadPdf]);
+
+
     const HandleGetMCNdata=async()=>{
       try{
         if (cin_Number.length===21) {
@@ -320,14 +361,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         console.log(error.message);
   
       }
-  }
+    }
 
-  const clearForm = () => {
-    document.getElementById("myForm").reset(); 
-    // this.setState({
-    //   item: ""
-    // })
-  }
+    
   const handleArrayValues=()=>{
     
     if (modalNAme!=="" && modaldesignition!=="" && modalPercentage!=="") {
@@ -336,11 +372,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         "name":modalNAme,
         "designition":modaldesignition,
         "percentage":modalPercentage,
-        "document": docUpload,
+        "document": Documents?.uploadPdf,
         "serialNumber": null
       }
       setModalValuesArray((prev)=>[...prev,values]);
-      
+      getDocShareholding();
       handleCloseStakeholder();
     }
   }
@@ -356,6 +392,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         "serialNumber": null
       }
       setDirectorData((prev)=>[...prev,values]);
+      getDocDirector();
      handleClose();
     }
   }
@@ -491,7 +528,7 @@ const onSkip = () => onSelect();
                           option={arrayDevList}
                           select={setDevType}
                           value={showDevTypeFields}
-                          optionKey="value"
+                          optionKey="code"
                           name={showDevTypeFields}
                           placeholder={showDevTypeFields}
                           style={{width:"100%"}}
@@ -762,7 +799,7 @@ const onSkip = () => onSelect();
                         value={registeredContactNo}
                         name="registeredContactNo"
                         maxlength={"10"}
-                        onChange={(value) => selectRegisteredMobile({ target: { value } })}
+                        onChange={selectRegisteredMobile}
                         // disable={mobileNumber && !isOpenLinkFlow ? true : false}
                         {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
                       />
@@ -864,8 +901,8 @@ const onSkip = () => onSelect();
                               </td>
                               <td>
                                 <div className="row">
-                                  {(!elementInArray.document == "")?
-                                  <a href="javascript:void(0)" className="btn btn-sm col-md-6">
+                                  {(elementInArray.uploadPdf !== "")?
+                                  <a href={urlGetShareHoldingDoc} target="_blank" className="btn btn-sm col-md-6">
                                     <VisibilityIcon color="info" className="icon" />
                                   </a>:<p></p>
                                   }
@@ -982,8 +1019,9 @@ const onSkip = () => onSelect();
                               type="file"
                               // value={file}
                               placeholder=""
+                              name="uploadPdf"
                               class="employee-card-input"
-                              onChange={(e) => setFile({ file: e.target.files[0] })}
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPdf")}
                               {...(validation = {
                                 isRequired: true,
                                 title: "Please upload document"
@@ -1058,8 +1096,8 @@ const onSkip = () => onSelect();
                               />
                             </td>
                             <td>
-                              {(!elementInArray.document == "")?
-                              <a href="javascript:void(0)" className="btn btn-sm col-md-12 text-center">
+                              {(elementInArray.uploadPdf !== "")?
+                              <a href={urlGetDirectorDoc} target="_blank" className="btn btn-sm col-md-12 text-center">
                                 <VisibilityIcon color="info" className="icon" />
                               </a>:<p></p>
                               }
@@ -1145,10 +1183,9 @@ const onSkip = () => onSelect();
                             <label htmlFor="name" className="text">Upload document</label>
                             <input
                               type="file"
-                              value={uploadPdf}
-                              placeholder=""
+                              name="uploadPdf"
                               class="employee-card-input"
-                              onChange={(e) => setFile({ file: e.target.files[0] })}
+                              onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPdf")}
                               {...(validation = {
                                 isRequired: true,
                                 title: "Please upload document"
