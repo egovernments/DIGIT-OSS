@@ -76,6 +76,7 @@ const FeesChargesForm = (props) => {
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "FeesAndCharges",
+      ApplicationStatus: "APPLY",
       id: props.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
@@ -163,18 +164,9 @@ const FeesChargesForm = (props) => {
   console.log("potential", potential);
   const CalculateApiCall = async () => {
     try {
-      const Resp = await axios
-        .get(
-          "http://103.166.62.118:8443/land-services/_calculate?feeType=scrutinyFeeCharges&purposename=residentialPlottedColony&arce=1" +
-            "&potenialZone=" +
-            potential +
-            "&colonyType=" +
-            Purpose,
-          {}
-        )
-        .then((Resp) => {
-          return Resp;
-        });
+      const Resp = await axios.get("http://103.166.62.118:8443/tl-calculator/v1/_calculator").then((Resp) => {
+        return Resp;
+      });
       setCalculateData(Resp.data);
     } catch (error) {
       console.log(error.message);

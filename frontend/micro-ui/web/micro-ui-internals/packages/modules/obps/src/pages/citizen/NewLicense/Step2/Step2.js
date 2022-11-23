@@ -375,9 +375,10 @@ const ApllicantPuropseForm = (props) => {
     else {
       const postDistrict = {
         pageName: "ApplicantPurpose",
+        ApplicationStatus: "INITIATE",
         id: props.getId,
-        createdBy: props?.userInfo?.id,
-        updatedBy: props?.userInfo?.id,
+        createdBy: props?.userData?.id,
+        updatedBy: props?.userData?.id,
         LicenseDetails: {
           ApplicantPurpose: {
             ...data,
@@ -394,7 +395,7 @@ const ApllicantPuropseForm = (props) => {
           msgId: "090909",
           requesterId: "",
           authToken: token,
-          userInfo: props?.userInfo,
+          userInfo: props?.userData,
         },
       };
       setLoader(true);

@@ -100,14 +100,15 @@ const LandScheduleForm = (props) => {
     data["approachType"] = data?.approachType?.value;
     data["typeLand"] = data?.typeLand?.value;
     data["purposeParentLic"] = data?.purposeParentLic?.value;
+    data["releaseStatus"] = data?.releaseStatus?.value;
     console.log("data=====", data);
     props.Step3Continue();
     const token = window?.localStorage?.getItem("token");
     // return;
     const postDistrict = {
       pageName: "LandSchedule",
+      ApplicationStatus: "INITIATE",
       id: props.getId,
-
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
       LicenseDetails: {
@@ -266,7 +267,7 @@ const LandScheduleForm = (props) => {
                                 Specify Others<span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
-                            <input type="number" {...register("specify")} className="form-control" />
+                            <input type="text" {...register("specify")} className="form-control" />
                           </div>
                           <div className="col col-3">
                             <label>
@@ -705,7 +706,7 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>Remark</h2>{" "}
                             </label>
-                            <input type="number" className="form-control" {...register("compactBlockRemark")} />
+                            <input type="text" className="form-control" {...register("compactBlockRemark")} />
                           </div>
                         </div>
                       )}
