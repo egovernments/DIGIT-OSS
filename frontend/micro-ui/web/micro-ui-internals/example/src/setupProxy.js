@@ -3,27 +3,27 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const createProxy = createProxyMiddleware({
   //target: process.env.REACT_APP_PROXY_API || "https://uat.digit.org",
   // target: process.env.REACT_APP_PROXY_API || "https://qa.digit.org",
-  target: process.env.REACT_APP_PROXY_API || "http://10.1.1.18:8443",
+  target: process.env.REACT_APP_PROXY_API || "http://103.166.62.118:8443",
   changeOrigin: true,
 });
 const assetsProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_ASSETS || "http://10.1.1.18:8443",
+  target: process.env.REACT_APP_PROXY_ASSETS || "http://103.166.62.118:8443",
   changeOrigin: true,
 });
 const apiSetuProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_SETU || "https://qa.digit.org",
+  target: process.env.REACT_APP_PROXY_SETU || "https://apisetu.gov.in",
   changeOrigin: true,
 });
 const LicProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_MDMS || "http://10.1.1.18:8443",
+  target: process.env.REACT_APP_PROXY_MDMS || "http://103.166.62.118:8443",
   changeOrigin: true,
 });
 const docUploadProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_UPLOAD_DOC || "http://10.1.1.18:8443",
+  target: process.env.REACT_APP_PROXY_UPLOAD_DOC || "http://103.166.62.118:8443",
   changeOrigin: true,
 });
 const devRegistration = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_DEV_REG || "http://10.1.1.18:8443",
+  target: process.env.REACT_APP_PROXY_DEV_REG || "http://103.166.62.118:8443",
   changeOrigin: true,
 });
 const LicNewRegistration = createProxyMiddleware({
@@ -31,7 +31,7 @@ const LicNewRegistration = createProxyMiddleware({
   changeOrigin: true,
 });
 const EgScrutinyProxy = createProxyMiddleware({
-  target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://10.1.1.18:8443",
+  target: process.env.REACT_APP_PROXY_SCRUTINY_EG || "http://103.166.62.118:8443",
   changeOrigin: true,
 });
 module.exports = function (app) {
@@ -87,12 +87,18 @@ module.exports = function (app) {
     "/filestore/v1/files",
     "/land-services/_calculate",
     "/user/developer/_getAuthorizedUser",
-    "/land-services/new/licenses/_get",
+    "/land-services/new/licenses/_get"
   ].forEach((location) => app.use(location, createProxy));
   ["/pb-egov-assets"].forEach((location) => app.use(location, assetsProxy));
-  ["/mca/v1/companies", "/mca-directors/v1/companies", "/certificate/v3/pan/pancr"].forEach((location) => app.use(location, apiSetuProxy));
+  [
+    "/mca/v1/companies",
+    "/mca-directors/v1/companies",
+    "/certificate/v3/pan/pancr"
+  ].forEach((location) => app.use(location, apiSetuProxy));
   // ["/egov-mdms-service/v1"].forEach((location) => app.use(location, LicProxy));
-  ["/filestore/v1/files"].forEach((location) => app.use(location, docUploadProxy));
+  // ["/filestore/v1"].forEach((location) => app.use(location, docUploadProxy));
   // ["/user/developer"].forEach((location) => app.use(location, devRegistration));
-  ["/land-services/egscrutiny", "/land-services/new/licenses"].forEach((location) => app.use(location, EgScrutinyProxy));
+  ["/land-services/egscrutiny",
+   "/land-services/new/licenses"
+  ].forEach((location) => app.use(location, EgScrutinyProxy));
 };
