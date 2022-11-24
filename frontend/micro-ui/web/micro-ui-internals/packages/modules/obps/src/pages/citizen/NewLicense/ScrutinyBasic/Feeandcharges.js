@@ -201,7 +201,7 @@ const Feeandcharges = (props) => {
                           (i)&nbsp;Amount Payable at the time of Application
                         </h6>
 
-                        <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.amountPayable} />
+                        <input type="text" className="form-control" minLength={1} maxLength={20} pattern="[0-9]*" disabled placeholder={feeAndChargesData?.payableNow} />
                         {errors.totalFee && <p></p>}
                       </div>
 
@@ -216,19 +216,19 @@ const Feeandcharges = (props) => {
                           (iii)&nbsp;Adjust Fees
                         </h6>
                         <div className="mt-2 ml-1">
-                        <input type="radio" value="Yes" id="Yes" name="Yes" checked={feeAndChargesData?.adjustFee==="Y"?true:false} />
+                        <input type="radio" value="Yes" disabled checked={feeAndChargesData?.adjustFee==="Y"?true:false} />
                         <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                        <input type="radio" value="No" id="No" name="No" checked={feeAndChargesData?.adjustFee==="N"?true:false} />
+                        <input type="radio" value="No" disabled checked={feeAndChargesData?.adjustFee==="N"?true:false} />
                         <label className="m-0 mx-2" for="No">No</label>
                         {feeAndChargesData?.adjustFee==="Y" && (
                           <div className="row ">
                             <div className="col col-12">
                               <label>Enter License Number/LOI number</label>
-                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.licNumber} />
+                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.licNo} />
                               <label>Amount (previous)</label>
                               <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amount}/>
                               <label>Amount to be paid after adjustment</label>
-                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amountAdjusted} />
+                              <input type="text" className="form-control" disabled placeholder={feeAndChargesData?.amountAfterAdjustment} />
                             </div>
                           </div>
                         )}
