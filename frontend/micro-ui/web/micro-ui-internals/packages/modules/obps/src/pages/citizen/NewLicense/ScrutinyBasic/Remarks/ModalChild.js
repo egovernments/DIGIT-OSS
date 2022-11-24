@@ -1,57 +1,79 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { Form, Col, Row } from "react-bootstrap";
 import axios from "axios";
+import { useStyles } from "./styles/modalChild.style";
 
 function ModalChild(props) {
+  const classes = useStyles();
   const smShow = props.displaymodal;
-  const setSmShow = useState(false);
   const [RemarksDeveloper, setDeveloperRemarks] = useState("");
-  const [iscrosschecked, setCrosschecked] = useState("");
-  const [warningorred, setwarningOrred] = useState("#DAA520");
-  const [yesOrNoClicked, setIsYesorNoClicked] = useState(true);
+  const [RemarksEntered, setRemarksEntered] = useState("");
+  const [yesOrNoClicked, setIsYesorNoClicked] = useState();
+  const [status,setStatus] = useState("");
   const inputFieldValue = props.fieldValue;
+  const inputFieldLabel = props.labelValue;
+  const dateTime = new Date();
 
   const handlemodalsubmit = async () => {
-    props.passmodalData({ data: { label: iscrosschecked, Remarks: RemarksDeveloper, color: warningorred } });
-    const postData = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        action: "_create",
-        did: 1,
-        key: "",
-        msgId: "20170310130900|en_IN",
-        ts: 0,
-        ver: ".01",
-        authToken: "80458c19-3b48-4aa8-b86e-e2e195e6753a",
-        userInfo: {
-          uuid: "5fe074f2-c12d-4a27-bd7b-92d15f9ab19c",
-          name: "rahul7",
-          userName: "rahul7",
-          tenantId: "hr",
-          id: 97,
-          mobileNumber: "7895877833",
+    if(status){
+      console.log("log",props.labelmodal)
+      props.passmodalData({ data: { label: props.labelmodal, Remarks: RemarksDeveloper.data, isApproved:status==="approved"?true:false } });
+      const postData = {
+        requestInfo: {
+          api_id: "1",
+          ver: "1",
+          ts: null,
+          action: "create",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          auth_token: null,
         },
-      },
-      EgScrutiny: {
-        id: 97,
-        applicationId: 123,
-        comment: RemarksDeveloper.data,
-        createdOn: 10,
-        fieldValue: "avc",
-        field_d: 12,
-        isApproved: yesOrNoClicked,
-        userid: 12,
-      },
-    };
-
-    const Resp = await axios.post("/land-services/egscrutiny/_create", postData, {}).then((response) => {
-      return response.data;
-    });
-    console.log("response from API", Resp);
+        egScrutiny: {
+          applicationId: "123",
+          comment: RemarksDeveloper.data,
+          fieldValue: inputFieldValue,
+          fieldIdL: props.labelmodal,
+          isApproved: status==="approved"?true:false,
+          userid: "123",
+          serviceId: "123",
+          documentId: null,
+          ts: dateTime.toUTCString(),
+        },
+      };
+  
+      try {
+        const Resp = await axios.post("/land-services/egscrutiny/_create?status=submit", postData, {}).then((response) => {
+          return response.data;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      props.remarksUpdate({ data: RemarksDeveloper.data });
+      console.log("response from API", Resp);
+    } else {
+      props.passmodalData();
+    }
   };
   console.log("smshow", smShow);
+
+  useEffect(()=>{
+    console.log("loggg",props.selectedFieldData)
+    if(props.selectedFieldData){
+      console.log("loggg changing123...",props.selectedFieldData);
+      setStatus(props.selectedFieldData.isApproved?"approved":"disapproved");
+      setDeveloperRemarks({data:props.selectedFieldData.comment?props.selectedFieldData.comment:""});
+      // setDeveloperRemarks({data:props.selectedFieldData.isApproved?"approved":"disapproved"});
+    }else {
+      console.log("loggg setting null...",props.selectedFieldData)
+      setStatus(null);
+      setDeveloperRemarks({data:""})
+    }
+  },[props.selectedFieldData])
+
   return (
     <Modal
       size="lg"
@@ -61,55 +83,77 @@ function ModalChild(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
       style={{ position: "fixed", left: "50%", top: "50%", transform: "translate(-50% , -50%)" }}
-      onHide={() => setSmShow(false)}
+      onHide={props.onClose}
     >
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-sm">
-          {props.labelmodal}
-          <h2 style={{ fontSize: "30" }}>{inputFieldValue}</h2>
+            <div>
+              <h3>{props.labelmodal}</h3>
+              <p className={classes.subHead}>{inputFieldValue}</p>
+            </div>
+
+          {/* <Row>
+            <Col xs={4} md={4}>
+              {" "}
+              {props.labelmodal}
+            </Col>
+            <Col xs={4} md={4}>
+              <h5 style={{ fontSize: "15", borderColor: "#C3C3C3", fontStyle: "none" }}>
+                <i>{inputFieldValue}</i>
+              </h5>
+            </Col>
+          </Row> */}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {" "}
         <Form.Check
-          value={props.labelmodal}
-          onChange={(e) => {
-            props.setColor({ yes: true, no: false });
-            setIsYesorNoClicked(true);
-            setCrosschecked(e.target.value), setwarningOrred({ data: "#09cb3d" }), props.isYesorNoChecked({ data: true });
+          checked={status === "approved"}
+          onChange={() => {
+            setStatus("approved")
           }}
           type="radio"
           id="default-radio"
           // label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-          label="Yes"
+          label="Approved"
           name="group0"
           inline
         ></Form.Check>
         <Form.Check
+         checked={status === "disapproved"}
           onChange={(e) => {
-            props.setColor({ yes: false, no: true });
-            setIsYesorNoClicked(false);
-            setCrosschecked(e.target.value), setwarningOrred({ data: "#ff0000" }), props.isYesorNoChecked({ data: false });
+            setStatus("disapproved")
           }}
-          value={props.labelmodal}
           type="radio"
           id="default-radio"
           // label={<CancelIcon color="error" />}
-          label="No"
+          label="Disapproved"
           name="group0"
           inline
         ></Form.Check>
-        <Col xs={12} md={4}>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Remarks</Form.Label>
-            <Form.Control type="text" placeholder="Enter your Remarks" autoFocus onChange={(e) => setDeveloperRemarks({ data: e.target.value })} />
-          </Form.Group>
-          <div class="col-md-4 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-            <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
-              Submit
-            </Button>
-          </div>
-        </Col>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Col xs={12} md={12}>
+            <Form.Label style={{ margin: 5 }}>Remarks</Form.Label>
+            <textarea
+              class="form-control"
+              id="exampleFormControlTextarea1"
+              placeholder="Enter your Remarks"
+              autoFocus
+              onChange={(e) => {
+                setDeveloperRemarks({ data: e.target.value });
+                // setRemarksEntered(e.target.value);
+              }}
+              rows="3"
+              value={RemarksDeveloper.data}
+            />
+            {/* <Form.Control type="text" /> */}
+          </Col>
+        </Form.Group>
+        <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
+          <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
+            Submit
+          </Button>
+        </div>
         {/* <div class="col-md-4 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
           <Button style={{ textAlign: "right" }} onClick={handlemodalsubmit}>
             Submit

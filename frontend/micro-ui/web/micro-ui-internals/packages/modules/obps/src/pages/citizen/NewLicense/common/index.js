@@ -14,9 +14,12 @@ const CommonForm = () => {
   const [isStep4, setIsStep4] = useState(false);
   const [isStep5, setIsStep5] = useState(false);
   const [step, setStep] = useState(1);
+  const [getId, setId] = useState("");
+  const [userData, setUserData] = useState(null);
 
-  const handleStep1 = (data) => {
-    console.log("true", data);
+  const handleStep1 = (id, userInfo) => {
+    setId(id);
+    setUserData(userInfo);
     setIsStep1(true);
     setIsStep2(false);
     setIsStep3(false);
@@ -24,8 +27,7 @@ const CommonForm = () => {
     setIsStep5(false);
     setStep(2);
   };
-  const handlestep2 = (data) => {
-    console.log("true", data);
+  const handlestep2 = () => {
     setIsStep2(true);
     setIsStep1(false);
     setIsStep3(false);
@@ -33,6 +35,41 @@ const CommonForm = () => {
     setIsStep5(false);
     setStep(3);
   };
+
+  const handleBack = () => {
+    setIsStep1(false);
+    setIsStep2(false);
+    setIsStep3(false);
+    setIsStep4(false);
+    setIsStep5(false);
+    setStep(1);
+  };
+  const handleBack2 = () => {
+    setIsStep1(true);
+    setIsStep2(false);
+    setIsStep3(false);
+    setIsStep4(false);
+    setIsStep5(false);
+    setStep(2);
+  };
+
+  const handleBack3 = () => {
+    setIsStep1(false);
+    setIsStep2(true);
+    setIsStep3(false);
+    setIsStep4(false);
+    setIsStep5(false);
+    setStep(3);
+  };
+  const handleBack4 = () => {
+    setIsStep1(false);
+    setIsStep2(false);
+    setIsStep3(true);
+    setIsStep4(false);
+    setIsStep5(false);
+    setStep(3);
+  };
+
   const handlestep3 = () => {
     setIsStep3(true);
     setIsStep1(false);
@@ -54,20 +91,19 @@ const CommonForm = () => {
     setIsStep3(false);
     setIsStep4(false);
   };
-  console.log("TAB", step);
   return (
     <div>
       <TimelineNewLic currentStep={step} flow="NEWLICENSE" />
       {isStep1 ? (
-        <ApllicantPuropseForm Step2Continue={handlestep2} />
+        <ApllicantPuropseForm userData={userData} getId={getId} Step2Continue={handlestep2} Step2Back={handleBack} />
       ) : isStep2 ? (
-        <LandScheduleForm Step3Continue={handlestep3} />
+        <LandScheduleForm getId={getId} userData={userData} Step3Continue={handlestep3} Step3Back={handleBack2} />
       ) : isStep3 ? (
-        <AppliedDetailForm Step4Continue={handlestep4} />
+        <AppliedDetailForm getId={getId} userData={userData} Step4Continue={handlestep4} step4Back={handleBack3} />
       ) : isStep4 ? (
-        <FeesChargesForm Step5Continue={handlestep5} />
+        <FeesChargesForm getId={getId} userData={userData} Step5Continue={handlestep5} step5Back={handleBack4} />
       ) : (
-        <ApllicantFormStep1 Step1Continue={handleStep1} />
+        <ApllicantFormStep1 getId={getId} userData={userData} Step1Continue={handleStep1} />
       )}
     </div>
   );

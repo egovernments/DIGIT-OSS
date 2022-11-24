@@ -2,197 +2,200 @@ import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
-import InfoIcon from "@mui/icons-material/Info";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
+import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
-
+import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
-
-const tableData = [
-  {
-    key: "1",
-    tehsil: "Mike",
-    revenueEstate: 32,
-    rectangleNo: "10 Downing Street",
-    landOwner: "10 Downing Street",
-    consolidationType: "10 Downing Street",
-    kanal: "10 Downing Street",
-    marla: "10 Downing Street",
-  },
-];
-
-const optionsPurposeList = [
-  {
-    label: "plotted Commercial",
-    value: "P",
-    id: "1",
-  },
-  {
-    label: "Group Housing Commercial",
-    value: "G",
-    id: "2",
-  },
-  {
-    label: "AGH",
-    value: "03",
-    id: "3",
-  },
-  {
-    label: "Commercial Integrated",
-    value: "04",
-    id: "3",
-  },
-  {
-    label: "Commercial Plotted",
-    value: "C",
-    id: "3",
-  },
-  {
-    label: "Industrial Colony Commercial",
-    value: "06",
-    id: "3",
-  },
-  {
-    label: "IT Colony Commercial",
-    value: "I",
-    id: "3",
-  },
-  {
-    label: "DDJAY",
-    value: "D",
-    id: "3",
-  },
-  {
-    label: "NILP",
-    value: "N",
-    id: "3",
-  },
-  {
-    label: "Low Density Ecofriendly",
-    value: "10",
-    id: "3",
-  },
-  {
-    label: "TOD Commercial",
-    value: "TC",
-    id: "3",
-  },
-  {
-    label: "TOD Group housing",
-    value: "TG",
-    id: "3",
-  },
-];
-const optionsPotentialList = [
-  {
-    label: "Hyper",
-    value: "Hyper",
-    id: "1",
-  },
-  {
-    label: "High I",
-    value: "High I",
-    id: "2",
-  },
-  {
-    label: "High II",
-    value: "High II",
-    id: "3",
-  },
-  {
-    label: "Medium",
-    value: "Medium",
-    id: "3",
-  },
-  {
-    label: "Low I",
-    value: "Low I",
-    id: "3",
-  },
-  {
-    label: "Low II",
-    value: "Low II",
-    id: "3",
-  },
-];
-
-const columns = [
-  {
-    key: "tehsil",
-    title: "Tehsil",
-    dataIndex: "tehsil",
-  },
-  {
-    key: "revenueEstate",
-    title: "Revenue Estate",
-    dataIndex: "revenueEstate",
-  },
-  {
-    key: "rectangleNo",
-    title: "Rectangle No.",
-    dataIndex: "rectangleNo",
-  },
-  {
-    key: "landOwner",
-    title: "Land Owner",
-    dataIndex: "landOwner",
-  },
-  {
-    key: "consolidationType",
-    title: "Consolidation Type",
-    dataIndex: "consolidationType",
-  },
-  {
-    key: "kanal",
-    title: "Kanal/Bigha",
-    dataIndex: "kanal",
-  },
-  {
-    key: "marla",
-    title: "Marla/Biswa",
-    dataIndex: "marla",
-  },
-  {
-    // key: "action",
-    title: "Action",
-    dataIndex: "",
-    render: () => (
-      <div>
-       <div className="flex"   style={{ color: "black" }} 
-      onClick={() => Edit(record)} > Edit</div>
-       <div className="flex"   style={{ color: "black" }} 
-      onClick={() => Delete(record)} > Delete</div>
-      <div/>
-      </div>
-    ),
-  },
-];
+import Spinner from "../../../../components/Loader";
+import { Archive } from "react-bootstrap-icons";
 
 const ApllicantPuropseForm = (props) => {
-  const [purposeDd, setSelectPurpose] = useState("");
-  const [potential, setPotentialDev] = useState("");
+  console.log("props", props);
+
+  const resetFields = {
+    tehsil: "",
+    revenueEstate: "",
+    mustil: "",
+    kanal: "",
+    marla: "",
+    sarsai: "",
+    bigha: "",
+    biswa: "",
+    biswansi: "",
+    agreementIrrevocialble: "",
+    agreementValidFrom: "",
+    agreementValidTill: "",
+    authSignature: "",
+    collaboration: "",
+    developerCompany: "",
+    landOwner: "",
+    nameAuthSign: "",
+    registeringAuthority: "",
+  };
+  const datapost = {
+    RequestInfo: {
+      apiId: "Rainmaker",
+      ver: "v1",
+      ts: 0,
+      action: "_search",
+      did: "",
+      key: "",
+      msgId: "090909",
+      requesterId: "",
+      authToken: "",
+    },
+  };
+  const columns = [
+    {
+      key: "tehsil",
+      title: "Tehsil",
+      dataIndex: "tehsil",
+    },
+    {
+      key: "revenueEstate",
+      title: "Revenue Estate",
+      dataIndex: "revenueEstate",
+    },
+    {
+      key: "rectangleNo",
+      title: "Rectangle No.",
+      dataIndex: "rectangleNo",
+    },
+    {
+      key: "landOwner",
+      title: "Land Owner",
+      dataIndex: "landOwner",
+    },
+
+    {
+      key: "consolidationType",
+      title: "Consolidation Type",
+      dataIndex: "consolidationType",
+    },
+    { key: "kanal", title: "Kanal", dataIndex: "kanal" },
+    {
+      key: "kanal",
+      title: "Bigha",
+      dataIndex: "bigha",
+    },
+    {
+      key: "marla",
+      title: "Marla",
+      dataIndex: "marla",
+    },
+    {
+      key: "biswa",
+      title: "Biswa",
+      dataIndex: "biswa",
+    },
+    {
+      key: "sarsai",
+      title: "Sarsai",
+      dataIndex: "sarsai",
+    },
+    {
+      key: "biswansi",
+      title: "Biswansi",
+      dataIndex: "biswansi",
+    },
+    {
+      key: "landOwner",
+      title: "Name of Land Owner",
+      dataIndex: "landOwner",
+    },
+    {
+      key: "agreementIrrevocialble",
+      title: "Whether collaboration agreement irrevocable (Yes/No)",
+      dataIndex: "agreementIrrevocialble",
+    },
+    {
+      key: "agreementValidFrom",
+      title: "Date of registering collaboration agreement",
+      dataIndex: "agreementValidFrom",
+    },
+    {
+      key: "agreementValidTill",
+      title: "Date of validity of collaboration agreement",
+      dataIndex: "agreementValidTill",
+    },
+    {
+      key: "authSignature",
+      title: "Name of authorized signatory on behalf of land owner(s)",
+      dataIndex: "authSignature",
+    },
+    {
+      key: "collaboration",
+      title: "Collaboration agreement Owner",
+      dataIndex: "collaboration",
+    },
+    {
+      key: "developerCompany",
+      title: "Name of the developer company",
+      dataIndex: "developerCompany",
+    },
+    {
+      key: "nameAuthSign",
+      title: " Name of authorized signatory",
+      dataIndex: "nameAuthSign",
+    },
+    {
+      key: "registeringAuthority",
+      title: "Registring Authority",
+      dataIndex: "registeringAuthority",
+    },
+    {
+      // key: "action",
+      title: "Action",
+      dataIndex: "",
+      render: (data) => (
+        <div>
+          <h6
+            onClick={() => {
+              setmodal(true);
+              setSpecificTableData(data);
+            }}
+          >
+            Edit
+          </h6>
+          <h6>Delete</h6>
+        </div>
+      ),
+    },
+  ];
+
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
-  const [districtData, setDistrictData] = useState([]);
-  const [tehsilData, setTehsilData] = useState([]);
-  const [revenueStateData, setRevenuStateData] = useState([]);
-  const [mustilData, setMustilData] = useState([]);
-  const [districtDataLbels, setDistrictDataLabels] = useState([]);
-  const [tehsilDataLabels, setTehsilDataLabels] = useState([]);
-  const [revenueDataLabels, setRevenueDataLabels] = useState([]);
-  const [mustilDataLabels, setMustilDataLabels] = useState([]);
-  const [docUpload, setDocuploadData] = useState([]);
-  const [file, setFile] = useState(null);
+  const [specificTableData, setSpecificTableData] = useState(null);
+  const [districtDataLbels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
+  const [tehsilDataLabels, setTehsilDataLabels] = useState({ data: [], isLoading: true });
+  const [revenueDataLabels, setRevenueDataLabels] = useState({ data: [], isLoading: true });
+  const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
   const [modal, setmodal] = useState(false);
-  const [showhide1, setShowhide1] = useState("No");
-  const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
+  const [consolidateValue, setConsolidateValue] = useState("consolidated");
+  const [getCollaboration, setCollaboration] = useState("");
+  const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
+  const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
+  const [docId, setDocId] = useState(null);
+  const [loader, setLoader] = useState(false);
+
+  useEffect(() => {
+    if (specificTableData) {
+      setValue("tehsil", specificTableData?.tehsil);
+      setValue("revenueEstate", specificTableData?.revenueEstate);
+      setValue("mustil", specificTableData?.mustil);
+      setValue("kanal", specificTableData?.kanal);
+      setValue("marla", specificTableData?.marla);
+      setValue("sarsai", specificTableData?.sarsai);
+      setValue("bigha", specificTableData?.bigha);
+      setValue("biswansi", specificTableData?.biswansi);
+      setValue("biswa", specificTableData?.biswa);
+      setValue("landOwner", specificTableData?.landOwner);
+    }
+  }, [specificTableData]);
 
   const {
     register,
@@ -201,24 +204,191 @@ const ApllicantPuropseForm = (props) => {
     control,
     setValue,
     reset,
+    getValues,
+    watch,
   } = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onBlur",
-    // resolver: yupResolver(VALIDATION_SCHEMA),
+    mode: "onChange",
+    reValidateMode: "onChange",
+    resolver: yupResolver(VALIDATION_SCHEMA),
+    defaultValues: {
+      consolidationType: "consolidated",
+    },
     shouldFocusError: true,
   });
-  const handleshow1 = (e) => {
-    const getshow = e.target.value;
-    setShowhide1(getshow);
-  };
-  const handleshow2 = (e) => {
-    const getshow = e.target.value;
-    setShowhide2(getshow);
-  };
+
+  const stateId = Digit.ULBService.getStateId();
+  const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
+
+  const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
+
+  useEffect(() => {
+    const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
+      return { value: data?.purposeCode, label: data?.name };
+    });
+    setPurposeOptions({ data: purpose, isLoading: false });
+  }, [PurposeType]);
+
+  useEffect(() => {
+    const potential = PotentialType?.["common-masters"]?.PotentialZone?.map(function (data) {
+      return { value: data?.code, label: data?.zone };
+    });
+    setPotentialOptions({ data: potential, isLoading: false });
+  }, [PotentialType]);
 
   const DistrictApiCall = async () => {
     try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_district", datapost);
+      const distData = Resp?.data?.map((el) => {
+        return { label: el?.districtName, id: el?.districtCode, value: el?.districtCode };
+      });
+      setDistrictDataLabels({ data: distData, isLoading: false });
+    } catch (error) {
+      console.log(error?.message);
+    }
+  };
+
+  const getTehslidata = async (data) => {
+    try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {});
+      const tehsilData = Resp?.data?.map((el) => {
+        return { label: el?.name, id: el?.code, value: el?.code };
+      });
+      setTehsilDataLabels({ data: tehsilData, isLoading: false });
+    } catch (error) {
+      console.log(error?.message);
+    }
+  };
+
+  const getRevenuStateData = async (code) => {
+    try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
+      console.log("resp=====", Resp?.data);
+      const revenData = Resp?.data?.map((el) => {
+        return { label: el?.name, id: el?.code, value: el?.code };
+      });
+      setRevenueDataLabels({ data: revenData, isLoading: false });
+    } catch (error) {
+      console.log(error?.message);
+    }
+  };
+  const getMustilData = async (code) => {
+    try {
+      const Resp = await axios.post(
+        "/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code,
+        datapost,
+        {}
+      );
+      const mustData = Resp?.data?.must?.map((el, i) => {
+        return { label: el, id: i, value: el };
+      });
+      setMustilDataLabels({ data: mustData, isLoading: false });
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const getLandOwnerStateData = async (text) => {
+    try {
+      const Resp = await axios.post(
+        "/egov-mdms-service/v1/_owner?" +
+          "dCode=" +
+          district +
+          "&" +
+          "tCode=" +
+          tehsilCode +
+          "&NVCode=" +
+          watch("revenueEstate")?.value +
+          "&khewat=" +
+          text,
+        datapost,
+        {}
+      );
+      // console.log("Resp=====", Resp?.data?.[0]?.name);
+      setValue("landOwner", Resp?.data?.[0]?.name);
+    } catch (error) {
+      console.log(error?.message);
+    }
+  };
+
+  useEffect(() => {
+    DistrictApiCall();
+  }, []);
+
+  const ApplicantPurposeModalData = (modalData) => {
+    console.log("data------", modalData);
+    modalData["tehsil"] = modalData?.tehsil?.value;
+    modalData["revenueEstate"] = modalData?.revenueEstate?.value;
+    modalData["mustil"] = modalData?.mustil?.value;
+    modalData["registeringAuthorityDoc"] = docId;
+    delete modalData?.district;
+    delete modalData?.potential;
+    delete modalData?.purpose;
+    delete modalData?.state;
+
+    if (modalData?.consolidationType === "consolidated") {
+      delete modalData?.bigha;
+      delete modalData?.biswa;
+      delete modalData?.biswansi;
+    }
+    if (modalData?.consolidationType === "non-consolidated") {
+      delete modalData?.marla;
+      delete modalData?.kanal;
+      delete modalData?.sarsai;
+    }
+    modalData["rowid"] = "1";
+
+    setModalData((prev) => [...prev, modalData]);
+    setmodal(false);
+    // reset(resetFields);
+    setCollaboration("");
+  };
+
+  const kanal = "A = kanal*.125";
+  const sqrmtr = "D = A*4047";
+
+  const PurposeFormSubmitHandler = async (data) => {
+    data["purpose"] = data?.purpose?.value;
+    data["potential"] = data?.potential?.value;
+    data["district"] = watch("district")?.value;
+    data["state"] = "Haryana";
+    delete data?.tehsil;
+    delete data?.revenueEstate;
+    delete data?.mustil;
+    delete data?.kanal;
+    delete data?.marla;
+    delete data?.sarsai;
+    delete data?.bigha;
+    delete data?.biswa;
+    delete data?.biswansi;
+    delete data?.agreementIrrevocialble;
+    delete data?.agreementValidFrom;
+    delete data?.agreementValidTill;
+    delete data?.authSignature;
+    delete data?.collaboration;
+    delete data?.developerCompany;
+    delete data?.landOwner;
+    delete data?.nameAuthSign;
+    delete data?.registeringAuthority;
+    delete data?.registeringAuthorityDoc;
+    delete data?.consolidationType;
+    delete data?.khewats;
+    delete data?.rowid;
+
+    const token = window?.localStorage?.getItem("token");
+    if (!modalData?.length) alert("Please enter atleast one record");
+    else {
       const postDistrict = {
+        pageName: "ApplicantPurpose",
+        ApplicationStatus: "DRAFT",
+        id: props.getId,
+        createdBy: props?.userData?.id,
+        updatedBy: props?.userData?.id,
+        LicenseDetails: {
+          ApplicantPurpose: {
+            ...data,
+            AppliedLandDetails: modalData,
+          },
+        },
         RequestInfo: {
           apiId: "Rainmaker",
           ver: "v1",
@@ -228,492 +398,151 @@ const ApllicantPuropseForm = (props) => {
           key: "",
           msgId: "090909",
           requesterId: "",
-          authToken: "",
+          authToken: token,
+          userInfo: props?.userData,
         },
       };
-
-      const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_district", postDistrict).then((Resp) => {
-        return Resp;
-      });
-      setDistrictData(Resp.data);
-      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-        Resp.data.map((el, i) => {
-          setDistrictDataLabels((prev) => [...prev, { label: el.districtName, id: el.districtCode, value: el.districtCode }]);
-        });
+      setLoader(true);
+      try {
+        const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+        console.log(Resp?.data);
+        setLoader(false);
+        props.Step2Continue();
+      } catch (error) {
+        setLoader(false);
+        console.log(error.message);
       }
-    } catch (error) {
-      console.log(error.message);
     }
   };
-  const getTehslidata = async (data) => {
-    const datapost = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: "",
-      },
-    };
-
-    try {
-      const Resp = await axios.post("http://10.1.1.18:8094/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {}).then((response) => {
-        return response;
-      });
-      setTehsilData(Resp.data);
-      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-        Resp.data.map((el, i) => {
-          setTehsilDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.code }]);
-        });
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  const getRevenuStateData = async (code) => {
-    const datatopost = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: "",
-      },
-    };
-
-    try {
-      const Resp = await axios
-        .post("http://10.1.1.18:8094/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datatopost, {})
-        .then((response) => {
-          return response;
-        });
-      setRevenuStateData(Resp.data);
-
-      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-        Resp.data.map((el, i) => {
-          setRevenueDataLabels((prev) => [...prev, { label: el.name, id: el.khewats, value: el.code, khewats: el.khewats, code: el.code }]);
-        });
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  const getMustilData = async (code) => {
-    const datpost = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: "",
-      },
-    };
-
-    try {
-      const Resp = await axios
-        .post(
-          "http://10.1.1.18:8094/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code,
-          datpost,
-          {}
-        )
-        .then((response) => {
-          return response;
-        });
-      setMustilData(Resp.data.must);
-      if (Resp.data.must.length > 0 && Resp.data.must !== undefined && Resp.data.must !== null) {
-        Resp.data.must.map((el, i) => {
-          setMustilDataLabels((prev) => [...prev, { label: el, id: i, value: el }]);
-        });
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  useEffect(() => {
-    DistrictApiCall();
-  }, []);
-
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
-
-  const ApplicantPurposeModalData = (data) => {
-    console.log("data++++++", data);
-    setModalData((prev) => [...prev, data]);
-    setmodal(false);
-    reset();
-    // setModalValuesArray((prev)=>[...prev,values]);
-  };
-  const [visible, setVisible] = useState(false); 
-
-
-  const PurposeFormSubmitHandler = async (data) => {
-    console.log("data===", data);
-    props.Step2Continue({ data });
-    try {
-      const postDistrict = {
-        NewServiceInfo: {
-          newServiceInfoData: [
-            {
-              ApplicantInfo: {
-                authorizedDeveloper: "",
-                authorizedPerson: "sd",
-                authorizedmobile: "sds",
-                alternatemobile: "1e",
-                authorizedEmail: "eeds",
-                authorizedPan: "fsd",
-                authorizedAddress: "",
-                village: "village",
-                authorizedPinCode: "",
-                tehsil: "dsf",
-                district: "sdf",
-                state: "dsf",
-                status: "fgr",
-                LC: LC,
-                address: address,
-                permanentAddress: "fgd",
-                notSigned: "fgver",
-                email: "gfg",
-                authorized: "rgsf",
-              },
-              ApplicantPurpose: {
-                purposeDd: "",
-                potential: "",
-                district: "",
-                state: "",
-                ApplicationPurposeData1: {
-                  tehsil: "tahsil",
-                  revenueEstate: "",
-                  mustil: "",
-                  consolidation: "",
-                  sarsai: "",
-                  kanal: "",
-                  marla: "",
-                  bigha: "",
-                  biswansi: "",
-                  biswa: "",
-                  landOwner: "",
-                  developerCompany: "",
-                  registeringdate: "",
-                  validitydate: "",
-                  colirrevocialble: "",
-                  authSignature: "",
-                  nameAuthSign: "",
-                  registeringAuthority: "",
-                  registeringAuthorityDoc: "",
-                },
-              },
-              LandSchedule: {
-                licenseApplied: "lic",
-                LicNo: "",
-                potential: "",
-                siteLoc: "",
-                approach: "",
-                approachRoadWidth: "",
-                specify: "",
-                typeLand: "",
-                thirdParty: "",
-                migrationLic: "",
-                encumburance: "",
-                litigation: "",
-                court: "",
-                insolvency: "",
-                appliedLand: "",
-                revenuerasta: "",
-                watercourse: "",
-                compactBlock: "",
-                sandwiched: "",
-                acquistion: "",
-                section4: "",
-                section6: "",
-                orderUpload: "",
-                approachable: "",
-                vacant: "",
-                construction: "",
-                ht: "",
-                gas: "",
-                nallah: "",
-                road: "",
-                land: "",
-                utilityLine: "",
-                landSchedule: "",
-                mutation: "",
-                jambandhi: "",
-                LayoutPlan: "",
-                proposedLayoutPlan: "",
-                revisedLansSchedule: "",
-              },
-              DetailsofAppliedLand: {
-                dgps: "dsg",
-                DetailsAppliedLandData1: {
-                  resplotno: "asa",
-                  reslengthmtr: "",
-                  reswidthmtr: "",
-                  resareasq: "",
-                  npnlplotno: "",
-                  npnllengthmtr: "",
-                  npnlwidthmtr: "",
-                  npnlareasq: "",
-                  ewsplotno: "",
-                  ewslengthmtr: "",
-                  ewswidthmtr: "",
-                  ewsareasq: "",
-                  complotno: "",
-                  comlengthmtr: "",
-                  comwidthmtr: "",
-                  comareasq: "",
-                  siteplotno: "",
-                  sitelengthmtr: "",
-                  sitewidthmtr: "",
-                  siteareasq: "",
-                  parkplotno: "",
-                  parklengthmtr: "",
-                  parkwidthmtr: "",
-                  parkareasq: "",
-                  publicplotno: "",
-                  publiclengthmtr: "",
-                  publicwidthmtr: "",
-                  publicareasq: "",
-                  stpplotno: "",
-                  stplengthmtr: "",
-                  stpwidthmtr: "",
-                  stpareasq: "",
-                  etpplotno: "",
-                  etplengthmtr: "",
-                  etpwidthmtr: "",
-                  etpareasq: "",
-                  wtpplotno: "",
-                  wtplengthmtr: "",
-                  wtpwidthmtr: "",
-                  wtpareasq: "",
-                  ugtplotno: "",
-                  ugtlengthmtr: "",
-                  ugtwidthmtr: "",
-                  ugtareasq: "",
-                  milkboothplotno: "",
-                  milkboothlengthmtr: "",
-                  milkboothwidthmtr: "",
-                  milkboothareasq: "",
-                  gssplotno: "",
-                  gsslengthmtr: "",
-                  gssareasq: "",
-                  resDimension: "",
-                  resEnteredArea: "",
-                  comDimension: "",
-                  comEnteredArea: "",
-                  secPlanPlot: "",
-                  secPlanLength: "",
-                  secPlanDim: "",
-                  secPlanEntered: "",
-                  greenBeltPlot: "",
-                  greenBeltLength: "",
-                  greenBeltDim: "",
-                  greenBeltEntered: "",
-                  internalPlot: "",
-                  internalLength: "",
-                  internalDim: "",
-                  internalEntered: "",
-                  otherPlot: "",
-                  otherLength: "",
-                  otherDim: "",
-                  otherEntered: "",
-                  undeterminedPlot: "",
-                  undeterminedLength: "",
-                  undeterminedDim: "",
-                  undeterminedEntered: "",
-                },
-                DetailsAppliedLandDdjay2: {
-                  frozenNo: "qw",
-                  frozenArea: "",
-                  organize: "",
-                },
-                DetailsAppliedLandIndustrial3: {
-                  colonyfiftyNo: "qwq",
-                  colonyfiftyArea: "",
-                  fiftyToTwoNo: "",
-                  fiftyToTwoArea: "",
-                  twoHundredNo: "",
-                  twoHundredArea: "",
-                  resiNo: "",
-                  resiArea: "",
-                  commerNo: "",
-                  commerArea: "",
-                  labourNo: "",
-                  labourArea: "",
-                },
-                DetailsAppliedLandResidential4: {
-                  npnlNo: "wew",
-                  npnlArea: "",
-                  ewsNo: "",
-                  ewsArea: "",
-                },
-                DetailsAppliedLandNpnl5: {
-                  surrender: "sds",
-                  pocketProposed: "",
-                  deposit: "",
-                  surrendered: "",
-                },
-                DetailsAppliedLand6: {
-                  sitePlan: "sdsd",
-                  democraticPlan: "",
-                  sectoralPlan: "",
-                  developmentPlan: "",
-                  uploadLayoutPlan: "",
-                },
-              },
-              FeesAndCharges: {
-                totalArea: "sdsd",
-                purpose: "",
-                devPlan: "",
-                scrutinyFee: "",
-                licenseFee: "",
-                conversionCharges: "",
-                payableNow: "",
-                remark: "",
-                adjustFee: "",
-              },
-            },
-          ],
-        },
-      };
-
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-      });
-      setFinalSubmitData(Resp.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+  const [equation, setEquation] = useState(kanal);
+  const [equation1, setEquation1] = useState(sqrmtr);
 
   const handleChangePurpose = (data) => {
-    const purposeSelected = data?.label;
-    setSelectPurpose(purposeSelected);
-    localStorage.setItem("purpose", JSON.stringify(purposeSelected));
+    console.log("data", data);
+    const purposeSelected = data?.value;
+    window?.localStorage.setItem("purpose", purposeSelected);
   };
   const handleChangePotential = (data) => {
     const potentialSelected = data?.label;
-    setPotentialDev(potentialSelected);
-    localStorage.setItem("potential", JSON.stringify(potentialSelected));
+    window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
 
-  const getDocumentData = async () => {
-    if (file === null) {
-      return;
-    }
+  const handleChangeKanal = (modalData) => {
+    const kanalSelected = modalData?.kanal;
+    console.log("kanal", kanalSelected);
+    window?.localStorage.setItem("kanal", JSON.stringify(kanalSelected));
+  };
+  const getDocumentData = async (file) => {
     const formData = new FormData();
-    formData.append("file", file.file);
+    formData.append("file", file);
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-
+    setLoader(true);
     try {
-      const Resp = await axios
-        .post("http://10.1.1.18:8083/filestore/v1/files", formData, {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          return response;
-        });
-      setDocuploadData(Resp.data);
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setDocId(Resp?.data?.files?.[0]?.fileStoreId);
     } catch (error) {
+      setLoader(false);
       console.log(error.message);
     }
   };
+
+  let delay;
+
   useEffect(() => {
-    getDocumentData();
-  }, [file]);
+    delay = setTimeout(() => {
+      if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
+    }, 1000);
+    return () => clearTimeout(delay);
+  }, [watch("khewats")]);
 
   return (
     <div>
+      {loader && <Spinner />}
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
-        <Card style={{ width: "126%" }}>
-          <h2>New License</h2>
-          <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px" }}>
+        <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
+          <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <b>Puropse Of License</b> <span style={{ color: "red" }}>*</span>
+                      <h2>
+                        Puropse Of License<span style={{ color: "red" }}>*</span>
+                      </h2>
                     </Form.Label>
                   </div>
 
                   <ReactMultiSelect
                     control={control}
-                    name="purposeDd"
+                    name="purpose"
                     onChange={handleChangePurpose}
                     placeholder="Purpose"
-                    data={optionsPurposeList}
+                    data={purposeOptions?.data}
                     labels="Purpose"
+                    loading={purposeOptions?.isLoading}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.purposeDd && errors?.purposeDd?.message}
+                    {errors?.purpose?.value && errors?.purpose?.value?.message}
                   </h3>
                 </Col>
 
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <b>Potential Zone:</b> <span style={{ color: "red" }}>*</span>
+                      <h2>
+                        Potential Zone<span style={{ color: "red" }}>*</span>
+                      </h2>
                     </Form.Label>
                   </div>
                   <ReactMultiSelect
                     control={control}
                     name="potential"
                     placeholder="Potential"
-                    data={optionsPotentialList}
+                    data={potentialOptons?.data}
                     labels="Potential"
                     onChange={handleChangePotential}
+                    loading={potentialOptons?.isLoading}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.potential && errors?.potential?.message}
+                    {errors?.potential?.value && errors?.potential?.value?.message}
                   </h3>
                 </Col>
 
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <b>District</b> <span style={{ color: "red" }}>*</span>
+                      <h2>
+                        District<span style={{ color: "red" }}>*</span>
+                      </h2>
                     </Form.Label>
                   </div>
                   <ReactMultiSelect
                     control={control}
                     name="district"
                     placeholder="District"
-                    data={districtDataLbels}
+                    data={districtDataLbels?.data}
                     labels="District"
+                    loading={districtDataLbels?.isLoading}
                     onChange={(e) => {
+                      console.log("e===", e);
                       getTehslidata(e.value);
                       setDistrict(e.value);
                     }}
                   />
 
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.district && errors?.district?.message}
+                    {errors?.district?.value && errors?.district?.value?.message}
                   </h3>
                 </Col>
                 <Col md={4} xxl lg="3">
                   <div>
                     <Form.Label>
-                      <b>State </b>
-                      <span style={{ color: "red" }}>*</span>
+                      <h2>
+                        State<span style={{ color: "red" }}>*</span>
+                      </h2>
                     </Form.Label>
                   </div>
 
@@ -725,9 +554,9 @@ const ApllicantPuropseForm = (props) => {
               </Row>
 
               <div className="ml-auto" style={{ marginTop: 20 }}>
-                <h2 style={{ fontSize: 24 }}>
-                  <b>2. Details of applied land:</b>
-                </h2>
+                <h5>
+                  <b>Details of applied land</b>
+                </h5>
                 <br></br>
                 <p>
                   Note: The term “Collaboration agreement" shall include all Development agreements/ Joint Venture agreements/ Joint Development
@@ -735,12 +564,19 @@ const ApllicantPuropseForm = (props) => {
                 </p>
                 <br></br>
                 <p>
-                  <b>(i) Khasra-wise information to be provided in the following format:</b>
+                  <h3>(i) Khasra-wise information to be provided in the following format</h3>
                 </p>
                 <br></br>
               </div>
               <div className="ml-auto">
-                <Button type="button" variant="primary" onClick={() => setmodal(true)}>
+                <Button
+                  type="button"
+                  variant="primary"
+                  onClick={() => {
+                    if (!getValues()?.district) alert("Please Select District First To Proceed Further");
+                    else setmodal(true);
+                  }}
+                >
                   Enter Details
                 </Button>
               </div>
@@ -748,45 +584,58 @@ const ApllicantPuropseForm = (props) => {
 
               <div className="applt" style={{ overflow: "auto" }}>
                 <WorkingTable columns={columns} data={modalData} />
-                {/* <Table className="table table-bordered" columns={columns} pagination={false} /> */}
               </div>
             </Form.Group>
+
             <div class="row">
               <div class="col-sm-12 text-left">
-                <button id="btnClear" class="btn btn-primary btn-md center-block" style={{ marginBottom: "-44px" }}>
+                <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => props.Step2Back()}>
                   Back
-                </button>
-              </div>
-              <div class="row">
-                <div class="col-sm-12 text-right">
-                  <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
-                    Continue
-                  </button>
                 </div>
+              </div>
+              <div class="col-sm-12 text-right">
+                <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+                  Save and Continue
+                </button>
               </div>
             </div>
           </Card>
         </Card>
       </form>
 
-      <Modal size="xl" isOpen={modal} toggle={() => setmodal(!modal)}>
-        <ModalHeader toggle={() => setmodal(!modal)}></ModalHeader>
+      <Modal
+        size="xl"
+        isOpen={modal}
+        toggle={() => {
+          // reset(resetFields);
+          setCollaboration("");
+          setmodal(!modal);
+        }}
+      >
+        <ModalHeader
+          toggle={() => {
+            setmodal(!modal);
+            // reset(resetFields);
+            setCollaboration("");
+          }}
+        ></ModalHeader>
         <ModalBody>
           <form onSubmit={handleSubmit(ApplicantPurposeModalData)}>
             <Row className="ml-auto mb-3">
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h6>
-                      <b>Tehsil</b>
-                    </h6>
+                    <h2>
+                      Tehsil <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <ReactMultiSelect
                   control={control}
-                 {...register("tehsil")}
-                  data={tehsilDataLabels}
+                  {...register("tehsil")}
+                  data={tehsilDataLabels?.data}
                   labels="Tehsil"
+                  loading={tehsilDataLabels?.isLoading}
                   onChange={(e) => {
                     getRevenuStateData(e.value);
                     setTehsilCode(e.value);
@@ -799,32 +648,44 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h6>
-                      <b>Name of Revenue estate</b>
-                    </h6>
+                    <h2>
+                      Name of Revenue Estate <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
                 <ReactMultiSelect
                   control={control}
-                  name="revenueEstate"
-                  data={revenueDataLabels}
+                  {...register("revenueEstate")}
+                  data={revenueDataLabels?.data}
                   labels="Revenue Estate"
-                  onChange={(e) => getMustilData(e.code)}
+                  loading={revenueDataLabels?.isLoading}
+                  onChange={(e) => {
+                    console.log("e", e);
+                    getMustilData(e.code);
+                  }}
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.revenueEstate && errors?.revenueEstate?.message}
                 </h3>
               </Col>
+
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
-                    <h6>
-                      <b>Rectangle No./Mustil</b>
-                    </h6>
+                    <h2>
+                      Rectangle No./Mustil <span style={{ color: "red" }}>*</span>
+                    </h2>
                   </Form.Label>
                 </div>
-                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No." />
+                <ReactMultiSelect
+                  control={control}
+                  name="mustil"
+                  data={mustilDataLabels?.data}
+                  loading={mustilDataLabels?.isLoading}
+                  labels="Rectangle No."
+                  {...register("mustil")}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.mustil && errors?.mustil?.message}
                 </h3>
@@ -834,64 +695,83 @@ const ApllicantPuropseForm = (props) => {
             <Row className="ml-auto mb-3">
               <Col md={4} xxl lg="12">
                 <div>
-                  <label>
-                    <h6>
-                      <b>Consolidation Type</b>
-                    </h6>{" "}
-                  </label>{" "}
-                  &nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="Consolidated" onChange={handleChange} name="Yes"{...register("consolidationType")} onClick={handleshow2} />
-                  &nbsp;&nbsp;
-                  <label for="Yes"></label>
-                  <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
-                  <input type="radio" id="Yes" value="Non-Consolidated" onChange={handleChange} name="Yes" {...register("consolidationType")} onClick={handleshow2} />
-                  &nbsp;&nbsp;
-                  <label for="Yes"></label>
-                  <label htmlFor="npnl">Non-Consolidated</label>
-                  {/* </Form.Select> */}
-                </div>{" "}
-                {showhide2 === "Consolidated" && (
+                  <h2>
+                    Consolidation Type<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                    <label htmlFor="consolidated">
+                      <input
+                        {...register("consolidationType")}
+                        type="radio"
+                        value="consolidated"
+                        defaultChecked={true}
+                        defaultValue="consolidated"
+                        id="consolidated"
+                        onClick={() => setConsolidateValue("consolidated")}
+                      />{" "}
+                      &nbsp;&nbsp; Consolidated &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="non-consolidated">
+                      <input
+                        {...register("consolidationType")}
+                        type="radio"
+                        value="non-consolidated"
+                        id="non-consolidated"
+                        onClick={() => setConsolidateValue("non-consolidated")}
+                      />{" "}
+                      &nbsp;&nbsp; Non-Consolidated &nbsp;&nbsp;
+                    </label>
+                  </h2>
+                </div>
+
+                {consolidateValue == "consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
                         <th>
-                          <b>Kanal</b>
+                          <h2>Kanal</h2>
                         </th>
                         <th>
-                          <b>Marla</b>
+                          <h2>Marla</h2>
                         </th>
                         <th>
-                          <b>Sarsai</b>&nbsp;&nbsp;
+                          <h2>Sarsai</h2>&nbsp;&nbsp;
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("kanal")} />
+                          <Form.Control
+                            type="text"
+                            className="form-control"
+                            placeholder=""
+                            {...register("kanal")}
+                            onValuesChange={(changedValue) => {
+                              setEquation(changedValue.equation);
+                            }}
+                          />
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("marla")} />
+                          <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} />
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("sarsai")} />
+                          <Form.Control type="text" className="form-control" placeholder="" {...register("sarsai")} />
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 )}
-                {showhide2 === "Non-Consolidated" && (
+                {consolidateValue == "non-consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
                         <th>
-                          <b>Bigha</b>
+                          <h2>Bigha</h2>
                         </th>
                         <th>
-                          <b>Biswa</b>
+                          <h2>Biswa</h2>
                         </th>
                         <th>
-                          <b>Biswansi</b>&nbsp;&nbsp;
+                          <h2>Biswansi</h2>&nbsp;&nbsp;
                         </th>
                       </tr>
                     </thead>
@@ -912,17 +792,24 @@ const ApllicantPuropseForm = (props) => {
                 )}
               </Col>
             </Row>
-
             <Row className="ml-auto mb-3">
               <Col md={4} xxl lg="6">
                 <div>
                   <label>
-                    <h6>
-                      <b>Name of Land Owner</b>
-                    </h6>
+                    <h2>Enter Khewat</h2>
                   </label>
                 </div>
-                <Form.Control type="text" className="form-control" placeholder="N/A" {...register("landOwner")} />
+                <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
+              </Col>
+              <Col md={4} xxl lg="6">
+                <div>
+                  <label>
+                    <h2>
+                      Name of Land Owner<span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </label>
+                </div>
+                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")} />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
@@ -931,110 +818,98 @@ const ApllicantPuropseForm = (props) => {
             </Row>
             <Row className="ml-auto mb-3">
               <div className="col col-12">
-                <h6 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
-                  <b>
-                    Collaboration agreement&nbsp;
-                    <InfoIcon style={{ color: "blue" }} />
-                    &nbsp;{" "}
-                  </b>
-                  &nbsp;&nbsp;
-                  <input type="radio" value="Yes" id="Yes" onChange={handleChange} name="Yes" onClick={handleshow1} />
-                  &nbsp;&nbsp;
-                  <label for="Yes">
-                    <h6>
-                      <b>Yes</b>
-                    </h6>
-                  </label>
-                  &nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow1} />
-                  &nbsp;&nbsp;
-                  <label for="No">
-                    <h6>
-                      <b>No</b>
-                    </h6>
-                  </label>
-                </h6>
-                {showhide1 === "Yes" && (
+                <h2>
+                  Collaboration agreement Owner<span style={{ color: "red" }}>*</span>
+                </h2>
+
+                <label htmlFor="collaboration">
+                  <input {...register("collaboration")} type="radio" value="N" id="yes" onClick={() => setCollaboration("Y")} />
+                  Yes
+                </label>
+                <label htmlFor="collaboration">
+                  <input {...register("collaboration")} type="radio" value="Y" id="no" onClick={() => setCollaboration("N")} />
+                  No
+                </label>
+                {getCollaboration === "Y" && (
                   <div className="row ">
                     <div className="col col-4">
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered</b>
-                        </h6>
+                      <label>
+                        <h2>
+                          Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered
+                          <span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
-                      <Form.Control type="text" className="form-control" placeholder="N/A" {...register("devCompany")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Date of registering collaboration agreement</b>
-                        </h6>
+                      <label>
+                        <h2>
+                          Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
-                      <Form.Control type="date" className="form-control" placeholder="N/A" {...register("registering")} />
+                      <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidFrom")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Date of validity of collaboration agreement</b>
-                        </h6>
+                      <label>
+                        <h2>
+                          Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
-                      <Form.Control type="date" className="form-control" placeholder="N/A" {...register("dateValidity")} />
+                      <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidTill")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 35 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Whether collaboration agreement irrevocable (Yes/No)</b>
-                        </h6>
+                      <h2>
+                        Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <label htmlFor="agreementIrrevocialble">
+                        <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
+                        Yes
                       </label>
-                      <br></br>
-                      <input type="radio" value="Yes" id="Yes1" onChange={handleChange} name="Yes" />
-                      &nbsp;&nbsp;
-                      <label for="Yes">
-                        <h6>Yes</h6>
-                      </label>
-                      &nbsp;&nbsp;
-                      <input type="radio" value="No" id="No1" onChange={handleChange} name="Yes" />
-                      &nbsp;&nbsp;
-                      <label for="No">
-                        <h6>No</h6>
+                      <label htmlFor="agreementIrrevocialble">
+                        <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
+                        No
                       </label>
                     </div>
 
                     <div className="col col-4" style={{ marginTop: 35 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Name of authorized signatory on behalf of land owner(s)</b>
-                        </h6>
+                      <label>
+                        <h2>
+                          Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
-                      <Form.Control type="text" className="form-control" placeholder="N/A" {...register("authorizedSign")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Name of authorized signatory on behalf of developer to sign Collaboration agreement</b>
-                        </h6>
+                      <label>
+                        <h2>
+                          Name of authorized signatory on behalf of developer to sign Collaboration agreement<span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
-                      <Form.Control type="date" className="form-control" placeholder="N/A" {...register("authorizedDev")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 20 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6>
-                          <b>Registring Authority</b>
-                        </h6>
+                      <label>
+                        <h2>
+                          Registring Authority<span style={{ color: "red" }}>*</span>
+                        </h2>
                       </label>
                       <br></br>
-                      <Form.Control type="text" className="form-control" placeholder="N/A" {...register("registeringAuth")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label for="parentLicense" className="font-weight-bold">
-                        <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                          <b>
-                            Registring Authority document&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                          </b>
-                        </h6>
+                      <label>
+                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
+                          Registring Authority document <span style={{ color: "red" }}>*</span>
+                          <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        </h2>
                       </label>
                       <br></br>
-                      <Form.Control type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} />
+                      <input
+                        type="file"
+                        className="form-control"
+                        {...register("registeringAuthorityDoc")}
+                        onChange={(e) => getDocumentData(e?.target?.files[0])}
+                      />
                     </div>
                   </div>
                 )}

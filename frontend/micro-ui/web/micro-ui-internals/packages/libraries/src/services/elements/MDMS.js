@@ -587,7 +587,6 @@ const getChargeSlabsCategoryCriteria = (tenantId, moduleCode) => ({
   },
 });
 
-
 const getGenderTypeList = (tenantId, moduleCode, type) => ({
   type,
   details: {
@@ -604,7 +603,6 @@ const getGenderTypeList = (tenantId, moduleCode, type) => ({
     ],
   },
 });
-
 
 const getDssDashboardCriteria = (tenantId, moduleCode) => ({
   details: {
@@ -739,14 +737,13 @@ const getDocumentTypesCriteria = (tenantId, moduleCode, type) => ({
         moduleName: moduleCode,
         masterDetails: [
           {
-            name: "DocTypeMapping"
-          }
-        ]
-      }
-    ]
-  }
-})
-
+            name: "DocTypeMapping",
+          },
+        ],
+      },
+    ],
+  },
+});
 
 const getTradeTypeRoleCriteria = (tenantId, moduleCode, type) => ({
   type,
@@ -757,13 +754,13 @@ const getTradeTypeRoleCriteria = (tenantId, moduleCode, type) => ({
         moduleName: moduleCode,
         masterDetails: [
           {
-            name: "TradeTypetoRoleMapping"
-          }
-        ]
-      }
-    ]
-  }
-})
+            name: "TradeTypetoRoleMapping",
+          },
+        ],
+      },
+    ],
+  },
+});
 
 const getFSTPORejectionReasonCriteria = (tenantId, moduleCode, type) => ({
   type,
@@ -782,7 +779,6 @@ const getFSTPORejectionReasonCriteria = (tenantId, moduleCode, type) => ({
     ],
   },
 });
-
 
 const getFSMPaymentTypeCriteria = (tenantId, moduleCode, type) => ({
   type,
@@ -819,7 +815,6 @@ const getFSMTripNumberCriteria = (tenantId, moduleCode, type) => ({
     ],
   },
 });
-
 
 const GetEgovLocations = (MdmsRes) => {
   return MdmsRes["egov-location"].TenantBoundary[0].boundary.children.map((obj) => ({
@@ -869,24 +864,24 @@ const GetSlumLocalityMapping = (MdmsRes, tenantId) =>
   MdmsRes["FSM"].Slum.filter((type) => type.active).reduce((prev, curr) => {
     return prev[curr.locality]
       ? {
-        ...prev,
-        [curr.locality]: [
-          ...prev[curr.locality],
-          {
-            ...curr,
-            i18nKey: `${tenantId.toUpperCase().replace(".", "_")}_${curr.locality}_${curr.code}`,
-          },
-        ],
-      }
+          ...prev,
+          [curr.locality]: [
+            ...prev[curr.locality],
+            {
+              ...curr,
+              i18nKey: `${tenantId.toUpperCase().replace(".", "_")}_${curr.locality}_${curr.code}`,
+            },
+          ],
+        }
       : {
-        ...prev,
-        [curr.locality]: [
-          {
-            ...curr,
-            i18nKey: `${tenantId.toUpperCase().replace(".", "_")}_${curr.locality}_${curr.code}`,
-          },
-        ],
-      };
+          ...prev,
+          [curr.locality]: [
+            {
+              ...curr,
+              i18nKey: `${tenantId.toUpperCase().replace(".", "_")}_${curr.locality}_${curr.code}`,
+            },
+          ],
+        };
   }, {});
 
 const GetPropertyOwnerShipCategory = (MdmsRes) =>
@@ -971,6 +966,14 @@ const getTLStructureType = (MdmsRes) =>
     return {
       ...TLStructureTypeList,
       i18nKey: `COMMON_MASTERS_STRUCTURETYPE_${stringReplaceAll(TLStructureTypeList.code, ".", "_")}`,
+    };
+  });
+const getPurposeType = (MdmsRes) =>
+  MdmsRes["common-masters"].Purpose.filter((Purpose) => Purpose.active).map((TLSPurposeList) => {
+    console.log("kk", TLSPurposeList);
+    return {
+      ...TLSPurposeList,
+      i18nKey: `COMMON_MASTERS_PURPOSE_${stringReplaceAll(TLSPurposeList.code, ".", "_")}`,
     };
   });
 
@@ -1090,41 +1093,37 @@ const getFSMGenderType = (MdmsRes) => {
 };
 
 const GetFSTPORejectionReason = (MdmsRes) => {
-  return MdmsRes["Vehicle"].FSTPORejectionReason.filter((reason) => reason.active)
-    .map((reasonDetails) => {
-      return {
-        ...reasonDetails,
-        i18nKey: `ES_ACTION_REASON_${reasonDetails.code}`,
-      };
-    });
-}
+  return MdmsRes["Vehicle"].FSTPORejectionReason.filter((reason) => reason.active).map((reasonDetails) => {
+    return {
+      ...reasonDetails,
+      i18nKey: `ES_ACTION_REASON_${reasonDetails.code}`,
+    };
+  });
+};
 
 const GetPaymentType = (MdmsRes) => {
-
-  return MdmsRes["FSM"].PaymentType.filter((option) => option.active)
-    .map((reasonDetails) => {
-      return {
-        ...reasonDetails,
-        i18nKey: `ES_ACTION_${reasonDetails.code}`,
-      };
-    });
-}
+  return MdmsRes["FSM"].PaymentType.filter((option) => option.active).map((reasonDetails) => {
+    return {
+      ...reasonDetails,
+      i18nKey: `ES_ACTION_${reasonDetails.code}`,
+    };
+  });
+};
 
 const GetTripNumber = (MdmsRes) => {
-
-  return MdmsRes["FSM"].TripNumber.filter((option) => option.active)
-    .map((reasonDetails) => {
-      return {
-        ...reasonDetails,
-        i18nKey: `ES_ACTION_TRIP_${reasonDetails.code}`,
-      };
-    });
-}
+  return MdmsRes["FSM"].TripNumber.filter((option) => option.active).map((reasonDetails) => {
+    return {
+      ...reasonDetails,
+      i18nKey: `ES_ACTION_TRIP_${reasonDetails.code}`,
+    };
+  });
+};
 
 const getDssDashboard = (MdmsRes) => MdmsRes["dss-dashboard"]["dashboard-config"];
 
 const GetRoleStatusMapping = (MdmsRes) => MdmsRes["DIGIT-UI"].RoleStatusMapping;
-const GetCommonFields = (MdmsRes, moduleCode) => moduleCode.toUpperCase() === "PROPERTYTAX" ? MdmsRes["PropertyTax"].CommonFieldsConfig : MdmsRes["FSM"].CommonFieldsConfig;
+const GetCommonFields = (MdmsRes, moduleCode) =>
+  moduleCode.toUpperCase() === "PROPERTYTAX" ? MdmsRes["PropertyTax"].CommonFieldsConfig : MdmsRes["FSM"].CommonFieldsConfig;
 
 const GetPreFields = (MdmsRes) => MdmsRes["FSM"].PreFieldsConfig;
 
@@ -1178,6 +1177,8 @@ const transformResponse = (type, MdmsRes, moduleCode, tenantId) => {
       return getPTPropertyType(MdmsRes);
     case "StructureType":
       return getTLStructureType(MdmsRes);
+    case "Purpose":
+      return getPurposeType(MdmsRes);
     case "AccessoryCategory":
       return getTLAccessoriesType(MdmsRes);
     case "FinancialYear":
@@ -1479,7 +1480,6 @@ export const MdmsService = {
 
   getGenderType: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getGenderTypeList(tenantId, moduleCode, type), moduleCode);
-
   },
 
   TLGenderType: (tenantId, moduleCode, type) => {
@@ -1516,6 +1516,5 @@ export const MdmsService = {
 
   getFSMTripNumber: (tenantId, moduleCode, type) => {
     return MdmsService.getDataByCriteria(tenantId, getFSMTripNumberCriteria(tenantId, moduleCode, type), moduleCode);
-  }
-
+  },
 };

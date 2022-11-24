@@ -10,6 +10,7 @@ import { Card, Row, Col } from "react-bootstrap";
 
 const DDJAYForm = (props) => {
 
+  const ddjayData = props.data;
   const { register, handleSubmit, formState: { errors } } = useForm([{ XLongitude: '', YLatitude: '' }]);
   const formSubmit = (data) => {
     console.log("data", data);
@@ -139,9 +140,9 @@ const DDJAYForm = (props) => {
                       </b></p>
                     </div>
                   </td>
-                  <td align="right">  <input type="number" className="form-control" /></td>
+                  <td align="right">  <input type="number" className="form-control" disabled placeholder={ddjayData?.frozenPlot?.plotNo}/></td>
                   <td component="th" scope="row">
-                    <input type="number" className="form-control" />
+                    <input type="number" className="form-control" disabled placeholder={ddjayData?.frozenPlot?.area}/>
                   </td>
                 </tr>
               </tbody>
@@ -153,19 +154,17 @@ const DDJAYForm = (props) => {
                 <h6><b> Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan (Yes/No)</b>&nbsp;&nbsp;
 
 
-                  <input type="radio" value="Yes" id="Yes"
-                    onChange1={handleChange} name="Yes" onClick={handleshow12} />&nbsp;&nbsp;
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" value="Yes" id="Yes" name="Yes" checked={ddjayData?.minArea==="Y"?true:false} disabled />&nbsp;&nbsp;
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
 
-                  <input type="radio" value="No" id="No"
-                    onChange1={handleChange} name="Yes" onClick={handleshow12} />&nbsp;&nbsp;
-                  <label for="No">No</label></h6>
+                  <input type="radio" value="No" id="No" name="No" checked={ddjayData?.minArea==="N"?true:false} disabled />&nbsp;&nbsp;
+                  <label className="m-0 mx-2" for="No">No</label></h6>
                 {
-                  showhide12 === "Yes" && (
+                  ddjayData?.minArea==="Y" && (
                     <div className="row " >
                       <div className="col col-6">
                         <label for="parentLicense" className="font-weight-bold">Area of such Pocket (in acres)</label>
-                        <input type="text" className="form-control" />
+                        <input type="text" className="form-control" placeholder={data?.pocketArea}  disabled />
                       </div>
 
                     </div>

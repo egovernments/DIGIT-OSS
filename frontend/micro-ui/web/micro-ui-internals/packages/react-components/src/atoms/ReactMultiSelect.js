@@ -12,6 +12,7 @@ const MultiSelectField = (props) => {
           <Select
             isMulti={props.multiSelect}
             placeholder={props?.placeholder}
+            isLoading={props?.loading}
             options={props?.data}
             isDisabled={props?.isDisabled}
             value={props?.value ? props?.data?.filter((option) => option?.value === props?.value) : value}

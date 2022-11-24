@@ -1,7 +1,7 @@
 // import React from "react";
 import React, { useEffect, useState } from "react";
 import OBPSSearchApplication from "../../components/SearchApplication";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import Search from "../employee/Search";
 import { useTranslation } from "react-i18next";
 import { Switch, useLocation, Route } from "react-router-dom";
@@ -12,10 +12,10 @@ import { PrivateRoute, BackButton } from "@egovernments/digit-ui-react-component
 // import BPACitizenHomeScreen from "./home";
 // import StakeholderRegistration from "./StakeholderRegistration";
 // import Formcontainer from "../citizen/NewLicense/FormContainer/FormContainer";
-import Step1 from"../citizen/NewLicense/Step1/Step1";
-import Step2 from"../citizen/NewLicense/Step2/Step2";
+import Step1 from "../citizen/NewLicense/Step1/Step1";
+import Step2 from "../citizen/NewLicense/Step2/Step2";
 import Step3 from "../citizen/NewLicense/Step3/Step3";
-import Step4 from"../citizen/NewLicense/Step4/Step4";
+import Step4 from "../citizen/NewLicense/Step4/Step4";
 import Step5 from "../citizen/NewLicense/Step5/Step5";
 import AddInfoForm from "../citizen/DeveloperRegistration/AddInfoForm/addInfo";
 import MyApplication from "./MyApplication";
@@ -37,42 +37,73 @@ import Inbox from "./ArchitectInbox";
 import OBPSResponse from "../employee/OBPSResponse";
 import CommonForm from "../citizen/NewLicense/common/index";
 import ScrutinyFormcontainer from "../citizen/NewLicense/ScrutinyContainer/ScrutinyFormContainer";
+import ServiceCard from "../citizen/NewLicense/AllService/Service";
+import ServicePlanService from "./ServicePlan";
+import electricalPlanService from "./ElectricalPlan";
+import renewalClu from "./NewLicense/AllService/Module/Renewal/Renewal";
+import ZoningPlan from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ZoningPlan/ZoningPlan";
+import Beneficial from "../citizen/NewLicense/AllService/Module/BeneficialInterest/Beneficial";
+import CompletionLic from "../citizen/NewLicense/AllService/Module/CompletionLic/CompletionLic";
+// import CompositionClu from "../citizen/NewLicense/AllService/Module/CompositionClu/CompositionClu";
+// import ExtensionClu from "../citizen/NewLicense/AllService/Module/ExtensionClu/ExtensionClu";
+import TransferLic from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/TransferLic/TransferLicense";
+// import LayoutPlan from "./NewLicense/AllService/Module/LayoutPlan/LayoutPlan";
+import SurrenderLic from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/SurrenderLic/SurrenderLic";
+// import ExtensionCom from "./NewLicense/AllService/Module/ExtensionCommunity/ExtensionCom";
+// import Standard from "./NewLicense/AllService/Module/StandardDesign/StandardDesign";
+// import LayoutPlanClu from "./NewLicense/AllService/Module/LayoutPlan/LayoutPlan";
+
+import Beneficialscrutiny from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/BeneficialInterest/Beneficial";
+import Completionscrutiny from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/CompletionLic/CompletionLic";
+import CompositionClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/CompositionClu/CompositionClu";
+import ExtensionClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ExtensionClu/ExtensionClu";
+import ExtensionCom from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ExtensionCommunity/ExtensionCom";
+import LayoutPlanClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/LayoutPlan/LayoutPlan";
+import Standard from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/StandardDesign/StandardDesign";
+import Loi from "./NewLicense/ScrutinyContainer/Loi";
+// import LandScheduleForm from "./NewLicense/Step3/Step3";
+// import AppliedDetailForm from "./NewLicense/Step4/Step4";
+// import FeesChargesForm from "./NewLicense/Step5/Step5";
+
 const App = ({ path }) => {
   const location = useLocation();
   const { t } = useTranslation();
 
-  const BPACitizenHomeScreen = Digit?.ComponentRegistryService?.getComponent('BPACitizenHomeScreen');
-  const CreateEDCR = Digit?.ComponentRegistryService?.getComponent('ObpsCreateEDCR');
-  const CreateOCEDCR = Digit?.ComponentRegistryService?.getComponent('ObpsCreateOCEDCR');
-  const NewBuildingPermit = Digit?.ComponentRegistryService?.getComponent('ObpsNewBuildingPermit');
-  const OCBuildingPermit = Digit?.ComponentRegistryService?.getComponent('ObpsOCBuildingPermit');
-  const StakeholderRegistration = Digit?.ComponentRegistryService?.getComponent('ObpsStakeholderRegistration');
+  const BPACitizenHomeScreen = Digit?.ComponentRegistryService?.getComponent("BPACitizenHomeScreen");
+  const CreateEDCR = Digit?.ComponentRegistryService?.getComponent("ObpsCreateEDCR");
+  const CreateOCEDCR = Digit?.ComponentRegistryService?.getComponent("ObpsCreateOCEDCR");
+  const NewBuildingPermit = Digit?.ComponentRegistryService?.getComponent("ObpsNewBuildingPermit");
+  const OCBuildingPermit = Digit?.ComponentRegistryService?.getComponent("ObpsOCBuildingPermit");
+  const StakeholderRegistration = Digit?.ComponentRegistryService?.getComponent("ObpsStakeholderRegistration");
   // const AddInfoForm = Digit?.ComponentRegistryService?.getComponent('ObpsAddInfoForm');
-  const EdcrInbox = Digit?.ComponentRegistryService?.getComponent('ObpsEdcrInbox');
-  const BpaApplicationDetail = Digit?.ComponentRegistryService?.getComponent('ObpsCitizenBpaApplicationDetail');
-  const BPASendToArchitect = Digit?.ComponentRegistryService?.getComponent('ObpsBPASendToArchitect');
-  const OCSendToArchitect = Digit?.ComponentRegistryService?.getComponent('ObpsOCSendToArchitect');
-  const BPASendBackToCitizen = Digit?.ComponentRegistryService?.getComponent('ObpsBPASendBackToCitizen');
-  const OCSendBackToCitizen = Digit?.ComponentRegistryService?.getComponent('ObpsOCSendBackToCitizen');
-
+  const EdcrInbox = Digit?.ComponentRegistryService?.getComponent("ObpsEdcrInbox");
+  const BpaApplicationDetail = Digit?.ComponentRegistryService?.getComponent("ObpsCitizenBpaApplicationDetail");
+  const BPASendToArchitect = Digit?.ComponentRegistryService?.getComponent("ObpsBPASendToArchitect");
+  const OCSendToArchitect = Digit?.ComponentRegistryService?.getComponent("ObpsOCSendToArchitect");
+  const BPASendBackToCitizen = Digit?.ComponentRegistryService?.getComponent("ObpsBPASendBackToCitizen");
+  const OCSendBackToCitizen = Digit?.ComponentRegistryService?.getComponent("ObpsOCSendBackToCitizen");
 
   return (
     <React.Fragment>
-       {!location.pathname.includes("response") && !location.pathname.includes("openlink/stakeholder") && !location.pathname.includes("/acknowledgement") && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
+      {!location.pathname.includes("response") &&
+        !location.pathname.includes("openlink/stakeholder") &&
+        !location.pathname.includes("/acknowledgement") && <BackButton style={{ border: "none" }}>{t("CS_COMMON_BACK")}</BackButton>}
       <Switch>
         <PrivateRoute path={`${path}/home`} component={BPACitizenHomeScreen} />
         <PrivateRoute path={`${path}/search/application`} component={(props) => <Search {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/edcrscrutiny/apply`} component={CreateEDCR} />
         <PrivateRoute path={`${path}/edcrscrutiny/oc-apply`} component={CreateOCEDCR} />
         <PrivateRoute path={`${path}/bpa/:applicationType/:serviceType`} component={NewBuildingPermit} />
-        <PrivateRoute path={`${path}/ocbpa/:applicationType/:serviceType`} component={OCBuildingPermit}/>
+        <PrivateRoute path={`${path}/ocbpa/:applicationType/:serviceType`} component={OCBuildingPermit} />
         <PrivateRoute path={`${path}/stakeholder/apply`} component={StakeholderRegistration} />
         <Route path={`${path}/openlink/stakeholder/apply`} component={StakeholderRegistration} />
         <PrivateRoute path={`${path}/add-info`} component={AddInfoForm} />
         {/* <PrivateRoute path={`${path}/common`} component={Common} /> */}
         <PrivateRoute path={`${path}/tab`} component={CommonForm} />
         <PrivateRoute path={`${path}/bank`} component={CommonBank} />
-      
+        <PrivateRoute path={`${path}/electricalPlan`} component={electricalPlanService} />
+
+        <PrivateRoute path={`${path}/servicePlan`} component={ServicePlanService} />
         <PrivateRoute path={`${path}/submitNew`} component={SubmitNew} />
         <PrivateRoute path={`${path}/renew`} component={RenewNew} />
         <PrivateRoute path={`${path}/replace`} component={Replace} />
@@ -95,9 +126,32 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/sendbacktocitizen/ocbpa/:tenantId/:applicationNo`} component={OCSendBackToCitizen} />
         <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
         <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} />
+        <PrivateRoute path={`${path}/service`} component={ServiceCard} />
+        <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
+        <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
+        <PrivateRoute path={`${path}/zoningPlan`} component={ZoningPlan} />
+        
+        {/* .............................................................................. */}
+
+
+
+
+
+        <PrivateRoute path={`${path}/Beneficialscrutiny`} component={Beneficialscrutiny} />
+        <PrivateRoute path={`${path}/Completionscrutiny`} component={Completionscrutiny} />
+        <PrivateRoute path={`${path}/CompositionClu`} component={CompositionClu} />
+        <PrivateRoute path={`${path}/ExtensionClu`} component={ExtensionClu} />
+        <PrivateRoute path={`${path}/ExtensionCom`} component={ExtensionCom} />
+        <PrivateRoute path={`${path}/LayoutPlanClu`} component={LayoutPlanClu} />
+        <PrivateRoute path={`${path}/Standard`} component={Standard} />
+        <PrivateRoute path={`${path}/TransferLic`} component={TransferLic} />
+        <PrivateRoute path={`${path}/SurrenderLic`} component={SurrenderLic} />
+        <PrivateRoute path={`${path}/Standard`} component={Standard} />
+        <PrivateRoute path={`${path}/Loi`} component={Loi} />
+
       </Switch>
     </React.Fragment>
-  )
-}
+  );
+};
 
 export default App;
