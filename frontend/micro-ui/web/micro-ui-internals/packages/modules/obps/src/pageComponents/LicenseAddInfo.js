@@ -22,6 +22,7 @@ import ReactMultiSelect from "../../../../react-components/src/atoms/ReactMultiS
 import SearchDropDown from "../../../../react-components/src/atoms/searchDropDown";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import FileUpload from '@mui/icons-material/FileUpload'
 import DeleteIcon from '@mui/icons-material/Delete';
 import Delete from "@mui/icons-material/Delete";
 const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex }) => {
@@ -30,7 +31,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   const devRegId = localStorage.getItem('devRegId');
   const userInfo = Digit.UserService.getUser();
 
-
+  const [developerDataAddinfo,setDeveloperDataAddinfo] = useState([])
   
   let isOpenLinkFlow = window.location.href.includes("openlink");
 
@@ -56,10 +57,11 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
 
       });
       const developerDataGet = getDevDetails?.data; 
-      setDeveloperDataAddinfo((prev)=>[...prev,developerDataGet]);
-      console.log(developerDataAddinfo?.data);
+      const developerDataGetDocs = getDevDetails?.data?.devDetail[0]?.addInfo; 
+      setDeveloperDataAddinfo(developerDataGetDocs);
       
-      console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.registeredContactNo); 
+      
+      // console.log("STAKEHOLDER",getDevDetails?.data?.devDetail[0]?.addInfo?.registeredContactNo); 
       setShowDevTypeFields(developerDataGet?.devDetail[0]?.addInfo?.showDevTypeFields);
       setCinNo(developerDataGet?.devDetail[0]?.addInfo?.cin_Number);
       // setName(developerDataGet?.devDetail[0]?.addInfo?.name);
@@ -97,7 +99,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
   }, [])
   
  
-
+  
   const [name, setName] = useState((!isOpenLinkFlow ? userInfo?.info?.name: "") || formData?.LicneseDetails?.name || formData?.formData?.LicneseDetails?.name || "");
   const [mobileNumberUser, setMobileNumber] = useState((!isOpenLinkFlow ? userInfo?.info?.mobileNumber: "") ||
     formData?.LicneseDetails?.mobileNumberUser || formData?.formData?.LicneseDetails?.mobileNumberUser || ""
@@ -194,13 +196,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     
     const [docUpload,setDocuploadData]=useState([])
     const [file,setFile]=useState(null);
-    const [developerDataAddinfo,setDeveloperDataAddinfo] = useState([])
+    
     const [showDevTypeFieldsValue,setShowDevTypeFieldsValue] = useState("")
 
     const [show, setShow] = useState(false);
     const [showStake, setShowStakeholder] = useState(false);
 
-    
+    console.log("ADINFO",developerDataAddinfo);
 
     const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
     const [urlGetDirectorDoc,setDocDirectorUrl] = useState("")
@@ -520,7 +522,7 @@ const onSkip = () => onSelect();
                   <div className="col-sm-12">
                     <div className="form-group row">
                       <div className="col-sm-4">
-                        <CardLabel>{`${t("BPA_APPLICANT_DEVELOPER_TYPE_LABEL")}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
+                        <CardLabel class="required">{`${t("Select Developer's Type")}`}<span class="text-danger font-weight-bold mx-2">*</span></CardLabel>
                         <Dropdown
                           labels="Select Type"
                           className="form-field"
@@ -657,7 +659,7 @@ const onSkip = () => onSelect();
                         onChange={selectCinNumber}
                         // onChange={(e) => setCinNo(e.target.value)}
                         value={cin_Number}
-                        name="cin_Number"
+                        name={cin_Number}
                         isMendatory={false}
                         placeholder={cin_Number}
                         className="employee-card-input text-uppercase"
@@ -681,6 +683,7 @@ const onSkip = () => onSelect();
                         type="text"
                         value={companyName}
                         placeholder={companyName}
+                        name={companyName}
                         onChange={(e) => setCompanyName(e.target.value)}
                         // disabled="disabled"
                         className="employee-card-input"
@@ -717,6 +720,7 @@ const onSkip = () => onSelect();
                       <DatePicker
                         isMandatory={false}
                         date={incorporationDate}
+                        name={incorporationDate}
                         onChange={(e) => setIncorporation(e)}
                         disable={false}
                         {...(validation = {
@@ -740,6 +744,7 @@ const onSkip = () => onSelect();
                       <label htmlFor="name">Registered Address <span className="text-danger font-weight-bold">*</span></label>
                       <TextInput
                         type="text"
+                        name={registeredAddress}
                         value={registeredAddress}
                         placeholder={registeredAddress}
                         onChange={(e) => setRegistered(e.target.value)}
@@ -797,7 +802,7 @@ const onSkip = () => onSelect();
                       /> */}
                       <MobileNumber
                         value={registeredContactNo}
-                        name="registeredContactNo"
+                        name={registeredContactNo}
                         maxlength={"10"}
                         onChange={selectRegisteredMobile}
                         // disable={mobileNumber && !isOpenLinkFlow ? true : false}
@@ -906,10 +911,15 @@ const onSkip = () => onSelect();
                                     <VisibilityIcon color="info" className="icon" />
                                   </a>:<p></p>
                                   }
-                                  {/* <button className="btn btn-sm col-md-6">
-                                    <FileDownloadIcon color="primary"  />
-                                  </button> */}
-                                
+                                  <div className="btn btn-sm col-md-6">
+                                    <label for="uploadDoc"> <FileUpload color="primary" for="uploadDoc" /></label>
+                                    <input 
+                                      id="uploadDoc"
+                                      type="file" 
+                                      style={{display: "none"}}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPdf")} 
+                                    />
+                                  </div>
                                 </div>
                               </td>
                               <td>
@@ -1096,11 +1106,22 @@ const onSkip = () => onSelect();
                               />
                             </td>
                             <td>
-                              {(elementInArray.uploadPdf !== "")?
-                              <a href={urlGetDirectorDoc} target="_blank" className="btn btn-sm col-md-12 text-center">
-                                <VisibilityIcon color="info" className="icon" />
-                              </a>:<p></p>
-                              }
+                              <div className="row">
+                                {(elementInArray.uploadPdf !== "")?
+                                <a href={urlGetDirectorDoc} target="_blank" className="btn btn-sm col-md-6 text-center">
+                                  <VisibilityIcon color="info" className="icon" />
+                                </a>:<p></p>
+                                }
+                                <div className="btn btn-sm col-md-6">
+                                  <label for="uploadDoc"> <FileUpload color="primary" for="uploadDoc" /></label>
+                                  <input 
+                                    id="uploadDoc"
+                                    type="file" 
+                                    style={{display: "none"}}
+                                    onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPdf")} 
+                                  />
+                                </div>
+                              </div>
                             </td>
                             <td>
                                 <button

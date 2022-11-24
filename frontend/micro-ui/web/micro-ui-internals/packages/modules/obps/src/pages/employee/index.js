@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import Search from "./Search";
 import OBPSResponse from "./OBPSResponse";
 import StakeholderResponse from "./StakeholderResponse";
-
+// import ScrutinyFormcontainer from "../citizen/NewLicense/ScrutinyContainer";
 const OBPSBreadCrumbs = ({ location }) => {
   const { t } = useTranslation();
   const crumbs = [
@@ -79,8 +79,10 @@ const EmployeeApp = ({ path }) => {
         <PrivateRoute path={`${path}/inbox`} component={(props) => <Inbox {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/stakeholder-inbox`} component={(props) => <StakeholderInbox {...props} parentRoute={path} />} />
         <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
+        <PrivateRoute path={`${path}/bpa/:id`} component={BpaApplicationDetail} />
         <PrivateRoute path={`${path}/response`} component={OBPSResponse} />
         <PrivateRoute path={`${path}/stakeholder-response`} component={StakeholderResponse} />
+        {/* <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} /> */}
       </Switch>
     </Fragment>
   )

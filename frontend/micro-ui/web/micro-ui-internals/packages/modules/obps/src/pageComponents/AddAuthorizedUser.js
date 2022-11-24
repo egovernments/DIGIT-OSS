@@ -22,6 +22,7 @@ import {Modal, ModalHeader, ModalFooter, ModalBody } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { convertEpochToDate } from "../utils/index";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import FileUpload from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import axios from "axios";
 const TYPE_REGISTER = { type: "register" };
@@ -581,27 +582,41 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           </td>
                           <td>
                             <div className="row">
-                            {(!elementInArray.uploadAadharPdf == "")?
+                            {(elementInArray.uploadAadharPdf !== "")?
                               <a href={urlGetAdhaarPdf} target="_blank" className="btn btn-sm col-md-6">
                                 <VisibilityIcon color="info" className="icon" />
                               </a>:<p></p>
                             }
-                              {/* <button className="btn btn-sm col-md-6">
-                                <FileDownloadIcon color="primary" />
-                              </button> */}
+                              <div className="btn btn-sm col-md-6">
+                                <label for="uploadAdhaarDoc"> <FileUpload color="primary" /></label>
+                                <input 
+                                  id="uploadAdhaarDoc"
+                                  type="file" 
+                                  access=".pdf"
+                                  style={{display: "none"}}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadAadharPdf")} 
+                                />
+                              </div>
 
                             </div>
                           </td>
                           <td>
                             <div className="row">
-                            {(!elementInArray.uploadDigitalSignaturePdf == "")?
+                            {(elementInArray.uploadDigitalSignaturePdf !== "")?
                               <a href={urlGetDigitalSign} target="_blank" className="btn btn-sm col-md-6">
                                 <VisibilityIcon color="info" className="icon" />
                               </a>:<p></p>
                             }
-                              {/* <button className="btn btn-sm col-md-6">
-                                <FileDownloadIcon color="primary" />
-                              </button> */}
+                             <div className="btn btn-sm col-md-6">
+                                <label for="uploadSignDoc"> <FileUpload color="primary" /></label>
+                                <input 
+                                  id="uploadSignDoc"
+                                  type="file" 
+                                  access=".pdf"
+                                  style={{display: "none"}}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf")} 
+                                />
+                              </div>
 
                             </div>
                           </td>

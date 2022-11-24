@@ -114,7 +114,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
         pageSizeLimit={props.pageSizeLimit}
         onSort={props.onSort}
         disableSort={props.disableSort}
-        onPageSizeChange={props.onPageSizeChange}
+        // onPageSizeChange={props.onPageSizeChange}
         sortParams={props.sortParams}
         totalRecords={props.totalRecords}
       />
@@ -184,6 +184,8 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
         />
         <div className="result" style={{ marginLeft: !props?.isSearch ? "24px" : "", flex: 1 }}>
           {result}
+          {/* <p></p> */}
+          <Link to={"/digit-ui/employee/tl/scrutiny"}>APPLICATION HERE</Link>
         </div>
       </div>
     </div>
