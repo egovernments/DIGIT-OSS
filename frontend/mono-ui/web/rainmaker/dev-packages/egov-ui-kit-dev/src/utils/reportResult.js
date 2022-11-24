@@ -572,6 +572,15 @@ class ShowField extends Component {
       displayStart: displayStart,
       buttons: self.getExportOptions(),
       searching: true,
+      language:{"sLengthMenu" : `${translate("CS_SHOW")} _MENU_ ${translate("CS_ENTRIES")}`,
+                "sSearch" :translate("CS_SEARCH"),
+                "sInfo" : `${translate("CS_SHOWING")} _START ${translate("CS_TO")} _END_ ${translate("CS_OF")} _TOTAL_ ${translate("CS_RECORDS")}`,
+                "oPaginate":{
+                  "sFirst":translate("CS_PAGINATION_FIRST"),
+                  "sLast":translate("CS_PAGINATION_LAST"),
+                  "sNext":translate("CS_PAGINATION_NEXT"),
+                  "sPrevious":translate("CS_PAGINATION_PREVIOUS")
+                }},
       paging: true,
       ordering: true,
       columnDefs: [
