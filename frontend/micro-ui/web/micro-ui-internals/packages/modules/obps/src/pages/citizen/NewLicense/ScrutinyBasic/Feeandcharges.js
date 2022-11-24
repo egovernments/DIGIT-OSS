@@ -216,9 +216,9 @@ const Feeandcharges = (props) => {
                           (iii)&nbsp;Adjust Fees
                         </h6>
                         <div className="mt-2 ml-1">
-                        <input type="radio" value="Yes" id="Yes" name="Yes" checked={feeAndChargesData?.adjustFee==="Y"?true:false} />
+                        <input type="radio" value="Yes" disabled checked={feeAndChargesData?.adjustFee==="Y"?true:false} />
                         <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                        <input type="radio" value="No" id="No" name="No" checked={feeAndChargesData?.adjustFee==="N"?true:false} />
+                        <input type="radio" value="No" disabled checked={feeAndChargesData?.adjustFee==="N"?true:false} />
                         <label className="m-0 mx-2" for="No">No</label>
                         {feeAndChargesData?.adjustFee==="Y" && (
                           <div className="row ">
