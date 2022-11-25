@@ -6,11 +6,14 @@ import { useForm } from "react-hook-form";
 // import DeleteIcon from "@material-ui/icons/Delete";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
-// import CalculateIcon from '@mui/icons-material/Calculate';
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import { useStyles } from "../css/personalInfoChild.style";
+import ModalChild from "../Remarks/ModalChild";
 
 const ResidentialPlottedForm = (props) => {
 
   const residentialData = props.residentialData;
+  const dataIcons = props.dataForIcons;
 
   const { register, handleSubmit, formState: { errors } } = useForm([{ XLongitude: '', YLatitude: '' }]);
   const formSubmit = (data) => {
@@ -21,105 +24,91 @@ const ResidentialPlottedForm = (props) => {
     e.preventDefault();
     SetResidentialPlottedFormSubmitted(true);
   }
-  const [showhide, setShowhide] = useState("No");
-  const [showhide1, setShowhide1] = useState("No");
-  const [showhide0, setShowhide0] = useState("No");
-  const [showhide2, setShowhide2] = useState("No");
-  const [showhide3, setShowhide3] = useState("No");
-  const [showhide4, setShowhide4] = useState("No");
-  const [showhide5, setShowhide5] = useState("No");
-  const [showhide6, setShowhide6] = useState("No");
-  const [showhide7, setShowhide7] = useState("No");
-  const [showhide8, setShowhide8] = useState("No");
-  const [showhide9, setShowhide9] = useState("No");
-  const [showhide10, setShowhide10] = useState("No");
-  const [showhide11, setShowhide11] = useState("No");
-  const [showhide12, setShowhide12] = useState("No");
-  const [showhide13, setShowhide13] = useState("No");
-  const [showhide14, setShowhide14] = useState("No");
-  const [showhide18, setShowhide18] = useState("2");
 
-  const handleshow = e => {
-    const getshow = e.target.value;
-    setShowhide(getshow);
-  }
-  const handleshow0 = e => {
-    const getshow = e.target.value;
-    setShowhide0(getshow);
-  }
-  const handleshow1 = e => {
-    const getshow = e.target.value;
-    setShowhide1(getshow);
-  }
-  const handleshow2 = e => {
-    const getshow = e.target.value;
-    setShowhide2(getshow);
-  }
-  const handleshow3 = e => {
-    const getshow = e.target.value;
-    setShowhide3(getshow);
-  }
-  const handleshow4 = e => {
-    const getshow = e.target.value;
-    setShowhide4(getshow);
-  }
-  const handleshow5 = e => {
-    const getshow = e.target.value;
-    setShowhide5(getshow);
-  }
-  const handleshow6 = e => {
-    const getshow = e.target.value;
-    setShowhide6(getshow);
-  }
-  const handleshow7 = e => {
-    const getshow = e.target.value;
-    setShowhide7(getshow);
-  }
-  const handleshow8 = e => {
-    const getshow = e.target.value;
-    setShowhide8(getshow);
-  }
-  const handleshow9 = e => {
-    const getshow = e.target.value;
-    setShowhide9(getshow);
-  }
-  const handleshow10 = e => {
-    const getshow = e.target.value;
-    setShowhide10(getshow);
-  }
-  const handleshow11 = e => {
-    const getshow = e.target.value;
-    setShowhide11(getshow);
-  }
-  const handleshow12 = e => {
-    const getshow = e.target.value;
-    setShowhide12(getshow);
-  }
-  const handleshow13 = e => {
-    const getshow = e.target.value;
-    setShowhide13(getshow);
-  }
-  const handleshow14 = e => {
-    const getshow = e.target.value;
-    setShowhide14(getshow);
-  }
-  const handleshow18 = e => {
-    const getshow = e.target.value;
-    setShowhide18(getshow);
-  }
+  const classes = useStyles();
 
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-
+  const [smShow, setSmShow] = useState(false);
+  const [labelValue, setLabelValue] = useState("");
+  const Colors = {
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+    info: "#FFB602"
   }
+  const [selectedFieldData, setSelectedFieldData] = useState();
+  const [fieldValue, setFieldValue] = useState("");
+  const [openedModal, setOpennedModal] = useState("")
+  const [fieldIconColors, setFieldIconColors] = useState({
+    npnlNo: Colors.info,
+    npnlArea: Colors.info,
+    ewsNo: Colors.info,
+    ewsArea: Colors.info
+  })
+
+  const fieldIdList = [{ label: "NPNL No", key: "npnlNo" },{ label: "NPNL Area", key: "npnlArea" },{ label: "EWS No", key: "ewsNo" },{ label: "EWS Area", key: "ewsArea" },];
+
+
+  const getColorofFieldIcon = () => {
+    let tempFieldColorState = fieldIconColors;
+    fieldIdList.forEach((item) => {
+      if (dataIcons !== null && dataIcons !== undefined) {
+        console.log("color method called");
+        const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+
+        }
+      }
+    })
+
+    setFieldIconColors(tempFieldColorState);
+
+  };
+
+
   useEffect(() => {
-    if (ResidentialPlottedFormSubmitted) {
-      props.ResidentialPlottedFormSubmit(true);
+    getColorofFieldIcon();
+    console.log("repeating1...",)
+  }, [dataIcons])
+
+  useEffect(() => {
+    if (labelValue) {
+      const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      setSelectedFieldData(fieldPresent[0]);
+    } else {
+      setSelectedFieldData(null);
     }
-  }, [ResidentialPlottedFormSubmitted]);
+  }, [labelValue])
+
+
+
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
+
+  const handlemodaldData = (data) => {
+    // setmodaldData(data.data);
+    setSmShow(false);
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
+    }
+    setOpennedModal("");
+    setLabelValue("");
+  };
 
   return (
     <Form onSubmit={ResidentialPlottedFormSubmitHandler} style={{ display: props.displayResidential }}>
+      <ModalChild
+        labelmodal={labelValue}
+        passmodalData={handlemodaldData}
+        displaymodal={smShow}
+        onClose={() => setSmShow(false)}
+        selectedFieldData={selectedFieldData}
+        fieldValue={fieldValue}
+        remarksUpdate={currentRemarks}
+      ></ModalChild>
       <Form.Group className="justify-content-center" controlId="formBasicEmail">
         <Row className="ml-auto" style={{ marginBottom: 5 }}>
           <Col col-12>
@@ -141,9 +130,39 @@ const ResidentialPlottedForm = (props) => {
                       </b></p>
                     </div>
                   </td>
-                  <td align="right">  <input type="number" className="form-control" disabled placeholder={residentialData?.npnl?.plotNo} /></td>
+                  <td align="right"> 
+                  <div  className="d-flex flex-row align-items-center">
+                  <input type="number" className="form-control" disabled placeholder={residentialData?.npnl?.plotNo} />
+                  <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.npnlNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("NPNL No"),
+                              setOpennedModal("npnlNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(residentialData?.npnl?.plotNo);
+                          }}
+                        ></ReportProblemIcon>
+                    </div> 
+                  </td>
                   <td component="th" scope="row">
+                    <div  className="d-flex flex-row align-items-center">
                     <input type="text" className="form-control" disabled placeholder={residentialData?.npnl?.area}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.npnlArea
+                          }}
+                          onClick={() => {
+                            setLabelValue("NPNL Area"),
+                              setOpennedModal("npnlArea")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(residentialData?.npnl?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                   </td>
                 </tr>
                 <tr>
@@ -154,9 +173,39 @@ const ResidentialPlottedForm = (props) => {
                       </b></p>
                     </div>
                   </td>
-                  <td align="right">  <input type="number" className="form-control" disabled placeholder={residentialData?.ews?.plotNo}/></td>
+                  <td align="right"> 
+                  <div  className="d-flex flex-row align-items-center">
+                  <input type="number" className="form-control" disabled placeholder={residentialData?.ews?.plotNo}/>
+                  <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.ewsNo
+                          }}
+                          onClick={() => {
+                            setLabelValue("EWS No"),
+                              setOpennedModal("ewsNo")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(residentialData?.ews?.plotNo);
+                          }}
+                        ></ReportProblemIcon>
+                    </div> 
+                  </td>
                   <td component="th" scope="row">
+                  <div  className="d-flex flex-row align-items-center">
                     <input type="text" className="form-control" disabled placeholder={residentialData?.ews?.area}/>
+                    <ReportProblemIcon
+                          style={{
+                            color: fieldIconColors.ewsArea
+                          }}
+                          onClick={() => {
+                            setLabelValue("EWS Area"),
+                              setOpennedModal("ewsArea")
+                            setSmShow(true),
+                              console.log("modal open"),
+                              setFieldValue(rresidentialData?.ews?.area);
+                          }}
+                        ></ReportProblemIcon>
+                    </div>
                   </td>
                 </tr>
               </tbody>
