@@ -831,6 +831,7 @@ const onSkip = () => onSelect();
                         onChange={(e) => setGST(e.target.value.toUpperCase())}
                         className="employee-card-input"
                         name="gst_Number"
+                        {...{ required: true, maxlength: "15", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
                       // className={`employee-card-input`}
                       // placeholder=""
                       // {...register("name", {
@@ -933,11 +934,11 @@ const onSkip = () => onSelect();
                                 </div>
                               </td>
                               <td>
-                                <button
+                                <a href="javascript:void(0)"
                                   onClick={()=>(deleteTableRows(-1))}
                                 >
                                   <DeleteIcon color="danger" className="icon" />
-                                </button>
+                                </a>
                               </td>
                             </tr>
                           );
@@ -1134,11 +1135,11 @@ const onSkip = () => onSelect();
                               </div>
                             </td>
                             <td>
-                                <button
+                                <a href="javascript:void(0)"
                                   onClick={()=>(deleteDirectorTableRows(-1))}
                                 >
                                   <DeleteIcon color="danger" className="icon" />
-                                </button>
+                                </a>
                               </td>
                           </tr>
                         );
