@@ -365,11 +365,42 @@ public class SWQueryBuilder {
 		query.append(" ORDER BY sc.appCreatedDate DESC");
 		
 		if (query.toString().contains("WHERE"))
-			 return addPaginationWrapper(query.toString(), preparedStatement, criteria);
+			return addPaginationWrapperForPlainSearch(query.toString(), preparedStatement, criteria);
 		return query.toString();
 	}
 
 	public String getTotalApplicationsCountQueryString(SearchCriteria criteria) {
 		return TOTAL_APPLICATIONS_COUNT_QUERY.replace("{}",criteria.getTenantId());
 	}
+
+	private String addPaginationWrapperForPlainSearch(String query, List<Object> preparedStmtList, SearchCriteria criteria) {
+		Integer limit = config.getDefaultLimit();
+		Integer offset = config.getDefaultOffset();
+		StringBuilder finalQuery = null;
+
+		if (criteria.getLimit() == null && criteria.getOffset() == null)
+			limit = config.getMaxLimit();
+
+		if (criteria.getLimit() != null && criteria.getLimit() <= config.getMaxLimit())
+			limit = criteria.getLimit();
+
+		if (criteria.getLimit() != null && criteria.getLimit() > config.getMaxLimit()) {
+			limit = config.getMaxLimit();
+		}
+
+		if (criteria.getOffset() != null)
+			offset = criteria.getOffset();
+
+		if (limit <= 0) {
+			return finalQuery.toString();
+		} else {
+			finalQuery = new StringBuilder(paginationWrapper.replace("{}", query));
+			preparedStmtList.add(offset);
+			preparedStmtList.add(limit + offset);
+		}
+
+		System.out.println("\nFinal Query ::" + finalQuery);
+		return finalQuery.toString();
+	}
+	
 }

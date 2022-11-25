@@ -376,21 +376,11 @@ public class WsQueryBuilder {
 		String string = addOrderByClauseForPlainSearch(criteria);
 		StringBuilder queryString = new StringBuilder(query);
 		queryString.append(string);
-		String finalQuery = addPaginationWrapper(queryString.toString(), preparedStmtList, criteria);
 
-		/*Integer limit = config.getDefaultLimit();
+		Integer limit = config.getDefaultLimit();
 		Integer offset = config.getDefaultOffset();
-		String finalQuery = null;
-		
-		finalQuery = PAGINATION_WRAPPER.replace("{}", query);
-		
-		finalQuery = finalQuery.replace("{orderby}", string);
-		
-		finalQuery = finalQuery.replace("{holderSelectValues}",
-				"(select nullif(sum(payd.amountpaid),0) from egcl_paymentdetail payd join egcl_bill payspay on (payd.billid = payspay.id) where payd.businessservice = 'WS' and payspay.consumercode = conn.connectionno group by payspay.consumercode) as collectionamount, connectionholder.tenantid as holdertenantid, connectionholder.connectionid as holderapplicationId, userid, connectionholder.status as holderstatus, isprimaryholder, connectionholdertype, holdershippercentage, connectionholder.relationship as holderrelationship, connectionholder.createdby as holdercreatedby, connectionholder.createdtime as holdercreatedtime, connectionholder.lastmodifiedby as holderlastmodifiedby, connectionholder.lastmodifiedtime as holderlastmodifiedtime");
-		
-		finalQuery = finalQuery.replace("{pendingAmountValue}",
-				"(select sum(dd.taxamount) - sum(dd.collectionamount) as pendingamount from egbs_demand_v1 d join egbs_demanddetail_v1 dd on d.id = dd.demandid group by d.consumercode, d.status having d.status = 'ACTIVE' and d.consumercode = conn.connectionno ) as pendingamount");
+		StringBuilder finalQuery = null;
+
 		if (criteria.getLimit() == null && criteria.getOffset() == null)
 			limit = config.getMaxLimit();
 
@@ -404,15 +394,16 @@ public class WsQueryBuilder {
 		if (criteria.getOffset() != null)
 			offset = criteria.getOffset();
 
-		if (limit == -1) {
-			finalQuery = finalQuery.replace("{pagination}", "");
+		if (limit <= 0) {
+			return finalQuery.toString();
 		} else {
-			finalQuery = finalQuery.replace("{pagination}", " offset ?  limit ?  ");
+			finalQuery = new StringBuilder(PAGINATION_WRAPPER.replace("{}", query));
 			preparedStmtList.add(offset);
 			preparedStmtList.add(limit + offset);
-		}*/
+		}
+
 		System.out.println("\nFinal Query ::" + finalQuery);
-		return finalQuery;
+		return finalQuery.toString();
 	}
 	
 	private String addOrderByClauseForPlainSearch(SearchCriteria criteria) {

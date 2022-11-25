@@ -144,9 +144,6 @@ public class WaterServiceImpl implements WaterService {
 		//PlumberInfo unmasked during create call of Disconnect/Modify Applications
 		else
 			waterConnectionRequest.setWaterConnection(encryptionDecryptionUtil.decryptObject(waterConnectionRequest.getWaterConnection(), "WnSConnectionPlumberDecrypDisabled", WaterConnection.class, waterConnectionRequest.getRequestInfo()));
-		List<OwnerInfo> connectionHolders = waterConnectionRequest.getWaterConnection().getConnectionHolders();
-		if (!CollectionUtils.isEmpty(connectionHolders))
-			waterConnectionRequest.getWaterConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(connectionHolders, WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, waterConnectionRequest.getRequestInfo()));
 
 		return Arrays.asList(waterConnectionRequest.getWaterConnection());
 	}
@@ -195,13 +192,9 @@ public class WaterServiceImpl implements WaterService {
 			}
 		}
 		/* encrypt here */
-		if (criteria.getIsInternalCall()) {
-			criteria = encryptionDecryptionUtil.encryptObject(criteria, "WnSConnectionDecrypDisabled", SearchCriteria.class);
-			criteria = encryptionDecryptionUtil.encryptObject(criteria, "WnSConnectionPlumberDecrypDisabled", SearchCriteria.class);
-		} else {
-			criteria = encryptionDecryptionUtil.encryptObject(criteria, WNS_ENCRYPTION_MODEL, SearchCriteria.class);
-			criteria = encryptionDecryptionUtil.encryptObject(criteria, WNS_PLUMBER_ENCRYPTION_MODEL, SearchCriteria.class);
-		}
+		criteria = encryptionDecryptionUtil.encryptObject(criteria, WNS_ENCRYPTION_MODEL, SearchCriteria.class);
+		criteria = encryptionDecryptionUtil.encryptObject(criteria, WNS_PLUMBER_ENCRYPTION_MODEL, SearchCriteria.class);
+
 		waterConnectionList = getWaterConnectionsList(criteria, requestInfo);
 		if (!StringUtils.isEmpty(criteria.getSearchType()) &&
 				criteria.getSearchType().equals(WCConstants.SEARCH_TYPE_CONNECTION)) {
@@ -324,6 +317,7 @@ public class WaterServiceImpl implements WaterService {
 
 		/* encrypt here */
 		waterConnectionRequest.setWaterConnection(encryptConnectionDetails(waterConnectionRequest.getWaterConnection()));
+		waterConnectionRequest.setWaterConnection(encryptConnectionHolderDetails(waterConnectionRequest.getWaterConnection()));
 
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
 		enrichmentService.postForMeterReading(waterConnectionRequest,  WCConstants.UPDATE_APPLICATION);
@@ -384,6 +378,7 @@ public class WaterServiceImpl implements WaterService {
 
 		/* encrypt here */
 		waterConnectionRequest.setWaterConnection(encryptConnectionDetails(waterConnectionRequest.getWaterConnection()));
+		waterConnectionRequest.setWaterConnection(encryptConnectionHolderDetails(waterConnectionRequest.getWaterConnection()));
 
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
 		// setting oldApplication Flag
@@ -462,6 +457,7 @@ public class WaterServiceImpl implements WaterService {
 
 		/* encrypt here */
 		waterConnectionRequest.setWaterConnection(encryptConnectionDetails(waterConnectionRequest.getWaterConnection()));
+		waterConnectionRequest.setWaterConnection(encryptConnectionHolderDetails(waterConnectionRequest.getWaterConnection()));
 
 		waterDao.updateWaterConnection(waterConnectionRequest, isStateUpdatable);
 		// setting oldApplication Flag
@@ -548,6 +544,17 @@ public class WaterServiceImpl implements WaterService {
 		/* encrypt here */
 		waterConnection = encryptionDecryptionUtil.encryptObject(waterConnection, WNS_ENCRYPTION_MODEL, WaterConnection.class);
 		waterConnection = encryptionDecryptionUtil.encryptObject(waterConnection, WNS_PLUMBER_ENCRYPTION_MODEL, WaterConnection.class);
+		return waterConnection;
+	}
+
+	/**
+	 * Encrypts connectionOwner details coming from user service
+	 *
+	 * @param waterConnection contains  waterConnection object
+	 *
+	 */
+	private WaterConnection encryptConnectionHolderDetails(WaterConnection waterConnection) {
+		/* encrypt here */
 		List<OwnerInfo> connectionHolders = waterConnection.getConnectionHolders();
 		if (!CollectionUtils.isEmpty(connectionHolders)) {
 			int k = 0;
@@ -558,6 +565,7 @@ public class WaterServiceImpl implements WaterService {
 		}
 		return waterConnection;
 	}
+
 
 	/**
 	 * Decrypts waterConnection details

@@ -143,9 +143,7 @@ public class SewerageServiceImpl implements SewerageService {
 		//PlumberInfo unmasked during create call of Disconnect/Modify Applications
 		else
 			sewerageConnectionRequest.setSewerageConnection(encryptionDecryptionUtil.decryptObject(sewerageConnectionRequest.getSewerageConnection(), "WnSConnectionPlumberDecrypDisabled", SewerageConnection.class, sewerageConnectionRequest.getRequestInfo()));
-		List<OwnerInfo> connectionHolders = sewerageConnectionRequest.getSewerageConnection().getConnectionHolders();
-		if (!CollectionUtils.isEmpty(connectionHolders))
-			sewerageConnectionRequest.getSewerageConnection().setConnectionHolders(encryptionDecryptionUtil.decryptObject(connectionHolders, WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, sewerageConnectionRequest.getRequestInfo()));
+
 		return Arrays.asList(sewerageConnectionRequest.getSewerageConnection());
 	}
 
@@ -191,13 +189,8 @@ public class SewerageServiceImpl implements SewerageService {
 			}
 		}
 		/* encrypt here */
-		if (criteria.getIsInternalCall()) {
-			criteria = encryptionDecryptionUtil.encryptObject(criteria, "WnSConnectionDecrypDisabled", SearchCriteria.class);
-			criteria = encryptionDecryptionUtil.encryptObject(criteria, "WnSConnectionPlumberDecrypDisabled", SearchCriteria.class);
-		} else {
-			criteria = encryptionDecryptionUtil.encryptObject(criteria, WNS_ENCRYPTION_MODEL, SearchCriteria.class);
-			criteria = encryptionDecryptionUtil.encryptObject(criteria, WNS_PLUMBER_ENCRYPTION_MODEL, SearchCriteria.class);
-		}
+		criteria = encryptionDecryptionUtil.encryptObject(criteria, WNS_ENCRYPTION_MODEL, SearchCriteria.class);
+		criteria = encryptionDecryptionUtil.encryptObject(criteria, WNS_PLUMBER_ENCRYPTION_MODEL, SearchCriteria.class);
 
 		List<SewerageConnection> sewerageConnectionList = getSewerageConnectionsList(criteria, requestInfo);
 		if(!StringUtils.isEmpty(criteria.getSearchType()) &&
@@ -321,6 +314,7 @@ public class SewerageServiceImpl implements SewerageService {
 
 		/* encrypt here */
 		sewerageConnectionRequest.setSewerageConnection(encryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection()));
+		sewerageConnectionRequest.setSewerageConnection(encryptConnectionHolderDetails(sewerageConnectionRequest.getSewerageConnection()));
 
 		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
 				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
@@ -379,6 +373,7 @@ public class SewerageServiceImpl implements SewerageService {
 
 		/* encrypt here */
 		sewerageConnectionRequest.setSewerageConnection(encryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection()));
+		sewerageConnectionRequest.setSewerageConnection(encryptConnectionHolderDetails(sewerageConnectionRequest.getSewerageConnection()));
 
 		sewerageDao.updateSewerageConnection(sewerageConnectionRequest,
 				sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
@@ -472,6 +467,7 @@ public class SewerageServiceImpl implements SewerageService {
 
 		/* encrypt here */
 		sewerageConnectionRequest.setSewerageConnection(encryptConnectionDetails(sewerageConnectionRequest.getSewerageConnection()));
+		sewerageConnectionRequest.setSewerageConnection(encryptConnectionHolderDetails(sewerageConnectionRequest.getSewerageConnection()));
 
 		sewerageDaoImpl.updateSewerageConnection(sewerageConnectionRequest, sewerageServicesUtil.getStatusForUpdate(businessService, previousApplicationStatus));
 		// setting oldApplication Flag
@@ -555,6 +551,18 @@ public class SewerageServiceImpl implements SewerageService {
 		/* encrypt here */
 		sewerageConnection = encryptionDecryptionUtil.encryptObject(sewerageConnection, WNS_ENCRYPTION_MODEL, SewerageConnection.class);
 		sewerageConnection = encryptionDecryptionUtil.encryptObject(sewerageConnection, WNS_PLUMBER_ENCRYPTION_MODEL, SewerageConnection.class);
+
+		return sewerageConnection;
+	}
+
+	/**
+	 * Encrypts connectionOwner details coming from user service
+	 *
+	 * @param sewerageConnection contains  sewerageConnection object
+	 *
+	 */
+	private SewerageConnection encryptConnectionHolderDetails(SewerageConnection sewerageConnection) {
+		/* encrypt here */
 		List<OwnerInfo> connectionHolders = sewerageConnection.getConnectionHolders();
 		if (!CollectionUtils.isEmpty(connectionHolders)) {
 			int k = 0;

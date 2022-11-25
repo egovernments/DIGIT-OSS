@@ -396,14 +396,13 @@ public class EnrichmentService {
 
 		// Encrypting and decrypting the data as per ws-service requirement
 		/* encrypt here */
-		userDetailResponse.setUser((List<OwnerInfo>) encryptionDecryptionUtil.encryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class));
+		if (!criteria.getIsInternalCall()) {
+			userDetailResponse.setUser((List<OwnerInfo>) encryptionDecryptionUtil.encryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class));
 
-		/* decrypt here */
-		if (!criteria.getIsSkipLevelSearch()) {
-			if (criteria.getIsInternalCall())
-				userDetailResponse.setUser(encryptionDecryptionUtil.decryptObject(userDetailResponse.getUser(), "WnSConnectionOwnerDecrypDisabled", OwnerInfo.class, requestInfo));
-			else
+			/* decrypt here */
+			if (!criteria.getIsSkipLevelSearch()) {
 				userDetailResponse.setUser(encryptionDecryptionUtil.decryptObject(userDetailResponse.getUser(), WNS_OWNER_ENCRYPTION_MODEL, OwnerInfo.class, requestInfo));
+			}
 		}
 		enrichConnectionHolderInfo(userDetailResponse, waterConnectionList, requestInfo);
 	}
