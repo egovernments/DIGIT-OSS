@@ -603,7 +603,7 @@ export const convertToResubmitTrade = (data) => {
         financialYear: data?.financialYear,
         validFrom: data?.validFrom,
         validTo: data?.validTo,
-        action: "FORWARD",
+        action: data?.workflowObject?.nextActions?.[0]?.action || "FORWARD",
         wfDocuments: data?.wfDocuments,
         status: data?.status,
         tradeLicenseDetail: {

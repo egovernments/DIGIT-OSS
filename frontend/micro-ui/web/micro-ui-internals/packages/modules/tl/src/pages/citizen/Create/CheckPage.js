@@ -23,9 +23,6 @@ const getPath = (path, params) => {
     });
   return path;
 };
-function routeTo(jumpTo) {
-  location.href = jumpTo;
-}
 
 const CheckPage = (props) => {
   if (localStorage.getItem("TLAppSubmitEnabled") !== "true") {
@@ -52,6 +49,11 @@ const WrapCheckPage = ({ onSubmit, value }) => {
       localStorage.setItem("TLAppSubmitEnabled", "false");
     };
   }, []);
+
+  function routeTo(jumpTo) {
+    history.push(jumpTo);
+    //location.href = jumpTo;
+  }
 
   useEffect(() => {
     if(sessionStorage.getItem("isCreateEnabledEmployee") === "true")

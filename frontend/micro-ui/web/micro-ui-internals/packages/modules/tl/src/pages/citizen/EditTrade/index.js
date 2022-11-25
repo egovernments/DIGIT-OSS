@@ -14,7 +14,7 @@ const getPath = (path, params) => {
   return path;
 };
 
-const getTradeEditDetails = (data,t) => {
+const getTradeEditDetails = (data,t,wfdata) => {
   const gettradeaccessories = (tradeacceserioies,t) => {
     let acc = [];
     tradeacceserioies &&
@@ -166,6 +166,7 @@ const getTradeEditDetails = (data,t) => {
     isSameAsPropertyOwner: data?.tradeLicenseDetail?.additionalDetail?.isSameAsPropertyOwner === "null" ? null : data?.tradeLicenseDetail?.additionalDetail?.isSameAsPropertyOwner,
 
   };
+  data.workflowObject = wfdata;
   return data;
 };
 
@@ -188,6 +189,14 @@ const EditTrade = ({ parentRoute }) => {
   if (licenseNo) filter1.applicationNumber = licenseNo;
   if (tenantId) filter1.tenantId = tenantId;
   const { isLoading, isError, error, data } = Digit.Hooks.tl.useTradeLicenseSearch({ filters: filter1 }, { filters: filter1 });
+  const businessService = data?.Licenses[0]?.businessService;
+  const { isLoading: iswfLoading, data: wfdata } = Digit.Hooks.useWorkflowDetails({
+    tenantId: data?.Licenses[0]?.tenantId,
+    id: data?.Licenses?.[0]?.applicationNumber,
+    moduleCode: businessService,
+  },{
+    enabled:data?.Licenses?.[0] ? true : false
+  });
   const editProperty = window.location.href.includes("edit");
   const tlTrade = JSON.parse(sessionStorage.getItem("tl-trade")) || {};
   let isReneworEditTrade = window.location.href.includes("/renew-trade/") || window.location.href.includes("/edit-application/")
@@ -200,7 +209,7 @@ const EditTrade = ({ parentRoute }) => {
         application.isEditProperty = true;
       }
       sessionStorage.setItem("tradeInitialObject", JSON.stringify({ ...application }));
-      let tradeEditDetails = getTradeEditDetails(application,t);
+      let tradeEditDetails = getTradeEditDetails(application,t,wfdata);
       setParams({ ...params, ...tradeEditDetails });
     }
 

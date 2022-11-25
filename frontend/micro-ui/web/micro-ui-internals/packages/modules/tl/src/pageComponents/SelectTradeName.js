@@ -1,5 +1,5 @@
 import { CardLabel, CitizenInfoLabel, FormStep, Loader, TextInput } from "@egovernments/digit-ui-react-components";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Timeline from "../components/TLTimeline";
 
 const SelectTradeName = ({ t, config, onSelect, value, userType, formData }) => {
@@ -16,6 +16,10 @@ const SelectTradeName = ({ t, config, onSelect, value, userType, formData }) => 
   function setSelectTradeName(e) {
     setTradeName(e.target.value);
   }
+
+  useEffect(() => {
+    localStorage.setItem("TLAppSubmitEnabled", "true");
+  }, []);
 
   const goNext = () => {
     sessionStorage.setItem("CurrentFinancialYear", FY);

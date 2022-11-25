@@ -429,16 +429,16 @@ const EditProperty = ({ parentRoute }) => {
   const ptProperty = JSON.parse(sessionStorage.getItem("pt-property")) || { };
   //const data = { Properties: [ptProperty] };
     const { isLoading: isPTloading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
-    { filters: typeOfProperty ? { propertyIds, isSearchInternal:true  } : { acknowledgementIds, isSearchInternal:true  } },
+    { filters: typeOfProperty ? { acknowledgementIds, isSearchInternal:true  } : { acknowledgementIds, isSearchInternal:true  } },
     {
-      filters: typeOfProperty ? { propertyIds, isSearchInternal:true  } : { acknowledgementIds, isSearchInternal:true  },
+      filters: typeOfProperty ? { acknowledgementIds, isSearchInternal:true  } : { acknowledgementIds, isSearchInternal:true  },
     }
   ); 
   sessionStorage.setItem("isEditApplication", false);
 
   useEffect(() => {
     application = data?.Properties && data.Properties[0] && data.Properties[0];
-    if (data && application) {
+    if (data && application && data?.Properties?.length > 0) {
       application = data?.Properties[0];
       if (updateProperty) {
         application.isUpdateProperty = true;
