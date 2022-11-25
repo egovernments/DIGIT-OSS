@@ -196,7 +196,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     
     const [docUpload,setDocuploadData]=useState([])
     const [file,setFile]=useState(null);
-    
+    const [cinValError, setCINValError] = useState("")
     const [showDevTypeFieldsValue,setShowDevTypeFieldsValue] = useState("")
 
     const [show, setShow] = useState(false);
@@ -360,8 +360,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         }
       }catch(error){
   
-        console.log(error.message);
-  
+        console.log(error?.response?.data?.error_description);
+        setCINValError(error?.response?.data?.error_description)
       }
     }
 
@@ -531,10 +531,11 @@ const onSkip = () => onSelect();
                           select={setDevType}
                           value={showDevTypeFields}
                           optionKey="code"
-                          name={showDevTypeFields}
+                          name="showDevTypeFields"
                           placeholder={showDevTypeFields}
                           style={{width:"100%"}}
                           t={t}
+                          required
                         />
                           
                         {/* <MuiDropdown 
@@ -659,19 +660,22 @@ const onSkip = () => onSelect();
                         onChange={selectCinNumber}
                         // onChange={(e) => setCinNo(e.target.value)}
                         value={cin_Number}
-                        name={cin_Number}
+                        name="cin_Number"
                         isMendatory={false}
+                        required
                         placeholder={cin_Number}
                         className="employee-card-input text-uppercase"
                         max={"21"}
                         {...(validation = {
                           isRequired: true,
-                          pattern: "^[a-zA-Z0-9]*$",
+                          pattern: "^[A-Z0-9]*$",
                           type: "text",
+                          maxlength: "21",
                           title: "Please Enter CIN Number"
                         })}
                       />
                       {cin_Number && cin_Number.length > 0 && !cin_Number.match(Digit.Utils.getPattern('CIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
+                      <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
                     </div>
                   </div>
                   <div className="col col-4">
@@ -683,7 +687,8 @@ const onSkip = () => onSelect();
                         type="text"
                         value={companyName}
                         placeholder={companyName}
-                        name={companyName}
+                        name="companyName"
+                        required
                         onChange={(e) => setCompanyName(e.target.value)}
                         // disabled="disabled"
                         className="employee-card-input"
@@ -719,8 +724,9 @@ const onSkip = () => onSelect();
                       <label htmlFor="name">Date of Incorporation <span className="text-danger font-weight-bold">*</span></label>
                       <DatePicker
                         isMandatory={false}
+                        required
                         date={incorporationDate}
-                        name={incorporationDate}
+                        name="incorporationDate"
                         onChange={(e) => setIncorporation(e)}
                         disable={false}
                         {...(validation = {
@@ -744,16 +750,17 @@ const onSkip = () => onSelect();
                       <label htmlFor="name">Registered Address <span className="text-danger font-weight-bold">*</span></label>
                       <TextInput
                         type="text"
-                        name={registeredAddress}
+                        name="registeredAddress"
                         value={registeredAddress}
                         placeholder={registeredAddress}
                         onChange={(e) => setRegistered(e.target.value)}
                         // disabled="disabled"
                         className="employee-card-input"
                         isMandatory={false}
+                        required
                         {...(validation = {
                           isRequired: true,
-                          required: "Address is required"
+                          error: "Address is required"
                         })}
                       />
                       {registeredAddress && !registeredAddress.length > 0 && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
@@ -769,6 +776,7 @@ const onSkip = () => onSelect();
                         isMandatory={false}
                         optionKey="i18nKey"
                         name="email"
+                        required
                         value={email}
                         placeholder={email}
                         // onChange={setEmail}
@@ -802,8 +810,9 @@ const onSkip = () => onSelect();
                       /> */}
                       <MobileNumber
                         value={registeredContactNo}
-                        name={registeredContactNo}
+                        name="registeredContactNo"
                         maxlength={"10"}
+                        required
                         onChange={selectRegisteredMobile}
                         // disable={mobileNumber && !isOpenLinkFlow ? true : false}
                         {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
@@ -816,11 +825,12 @@ const onSkip = () => onSelect();
                       <label htmlFor="name">GST No. <span className="text-danger font-weight-bold">*</span></label>
                       <TextInput
                         type="text"
+                        required
                         value={gst_Number}
                         placeholder={gst_Number}
                         onChange={(e) => setGST(e.target.value.toUpperCase())}
                         className="employee-card-input"
-                        name={gst_Number}
+                        name="gst_Number"
                       // className={`employee-card-input`}
                       // placeholder=""
                       // {...register("name", {
