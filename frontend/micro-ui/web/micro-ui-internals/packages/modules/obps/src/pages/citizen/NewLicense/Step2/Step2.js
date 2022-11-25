@@ -9,8 +9,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
+import Spinner from "../../../../components/Loader";
+import { Archive } from "react-bootstrap-icons";
 
 const ApllicantPuropseForm = (props) => {
+  console.log("props", props);
+
   const resetFields = {
     tehsil: "",
     revenueEstate: "",
@@ -169,13 +173,14 @@ const ApllicantPuropseForm = (props) => {
   const [tehsilDataLabels, setTehsilDataLabels] = useState({ data: [], isLoading: true });
   const [revenueDataLabels, setRevenueDataLabels] = useState({ data: [], isLoading: true });
   const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
-  const [file, setFile] = useState(null);
   const [modal, setmodal] = useState(false);
   const [tehsilCode, setTehsilCode] = useState(null);
   const [consolidateValue, setConsolidateValue] = useState("consolidated");
   const [getCollaboration, setCollaboration] = useState("");
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
   const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
+  const [docId, setDocId] = useState(null);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     if (specificTableData) {
@@ -200,10 +205,11 @@ const ApllicantPuropseForm = (props) => {
     setValue,
     reset,
     getValues,
+    watch,
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
-    // resolver: yupResolver(VALIDATION_SCHEMA),
+    resolver: yupResolver(VALIDATION_SCHEMA),
     defaultValues: {
       consolidationType: "consolidated",
     },
@@ -256,15 +262,15 @@ const ApllicantPuropseForm = (props) => {
   const getRevenuStateData = async (code) => {
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
+      console.log("resp=====", Resp?.data);
       const revenData = Resp?.data?.map((el) => {
-        return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
+        return { label: el?.name, id: el?.code, value: el?.code };
       });
       setRevenueDataLabels({ data: revenData, isLoading: false });
     } catch (error) {
       console.log(error?.message);
     }
   };
-
   const getMustilData = async (code) => {
     try {
       const Resp = await axios.post(
@@ -281,14 +287,24 @@ const ApllicantPuropseForm = (props) => {
     }
   };
 
-  const getLandOwnerStateData = async (khewats) => {
+  const getLandOwnerStateData = async (text) => {
     try {
       const Resp = await axios.post(
-        "/egov-mdms-service/v1/_owner?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + tehsilCode + "&khewat=" + khewats,
+        "/egov-mdms-service/v1/_owner?" +
+          "dCode=" +
+          district +
+          "&" +
+          "tCode=" +
+          tehsilCode +
+          "&NVCode=" +
+          watch("revenueEstate")?.value +
+          "&khewat=" +
+          text,
         datapost,
         {}
       );
-      console.log("Resp.data", Resp?.data);
+      // console.log("Resp=====", Resp?.data?.[0]?.name);
+      setValue("landOwner", Resp?.data?.[0]?.name);
     } catch (error) {
       console.log(error?.message);
     }
@@ -298,82 +314,227 @@ const ApllicantPuropseForm = (props) => {
     DistrictApiCall();
   }, []);
 
-  const ApplicantPurposeModalData = (data) => {
-    data["tehsil"] = data?.tehsil?.value;
-    data["revenueEstate"] = data?.revenueEstate?.value;
-    data["mustil"] = data?.mustil?.value;
-    delete data?.district;
-    delete data?.potential;
-    delete data?.purpose;
-    delete data?.state;
+  const ApplicantPurposeModalData = (modalData) => {
+    console.log("data------", modalData);
+    modalData["tehsil"] = modalData?.tehsil?.value;
+    modalData["revenueEstate"] = modalData?.revenueEstate?.value;
+    modalData["mustil"] = modalData?.mustil?.value;
+    modalData["registeringAuthorityDoc"] = docId;
+    delete modalData?.district;
+    delete modalData?.potential;
+    delete modalData?.purpose;
+    delete modalData?.state;
 
-    if (data?.consolidationType === "consolidated") {
-      delete data?.bigha;
-      delete data?.biswa;
-      delete data?.biswansi;
+    if (modalData?.consolidationType === "consolidated") {
+      delete modalData?.bigha;
+      delete modalData?.biswa;
+      delete modalData?.biswansi;
     }
-    if (data?.consolidationType === "non-consolidated") {
-      delete data?.marla;
-      delete data?.kanal;
-      delete data?.sarsai;
+    if (modalData?.consolidationType === "non-consolidated") {
+      delete modalData?.marla;
+      delete modalData?.kanal;
+      delete modalData?.sarsai;
     }
-    console.log("data===", data);
+    modalData["rowid"] = "1";
 
-    setModalData((prev) => [...prev, data]);
+    setModalData((prev) => [...prev, modalData]);
     setmodal(false);
-    reset(resetFields);
+    // reset(resetFields);
     setCollaboration("");
   };
 
   const PurposeFormSubmitHandler = async (data) => {
-    props.Step2Continue(data, "9");
-    // return;
+    data["purpose"] = data?.purpose?.value;
+    data["potential"] = data?.potential?.value;
+    data["district"] = watch("district")?.value;
+    data["state"] = "Haryana";
+    delete data?.tehsil;
+    delete data?.revenueEstate;
+    delete data?.mustil;
+    delete data?.kanal;
+    delete data?.marla;
+    delete data?.sarsai;
+    delete data?.bigha;
+    delete data?.biswa;
+    delete data?.biswansi;
+    delete data?.agreementIrrevocialble;
+    delete data?.agreementValidFrom;
+    delete data?.agreementValidTill;
+    delete data?.authSignature;
+    delete data?.collaboration;
+    delete data?.developerCompany;
+    delete data?.landOwner;
+    delete data?.nameAuthSign;
+    delete data?.registeringAuthority;
+    delete data?.registeringAuthorityDoc;
+    delete data?.consolidationType;
+    delete data?.khewats;
+    delete data?.rowid;
+
     const token = window?.localStorage?.getItem("token");
-    const postDistrict = {
-      pageName: "ApplicantPurpose",
-      id: props.getId,
-      createdBy: props?.userInfo?.id,
-      updatedBy: props?.userInfo?.id,
-      LicenseDetails: {
-        ApplicantPurpose: {
-          ...data,
-          AppliedLandDetails: modalData,
+    if (!modalData?.length) alert("Please enter atleast one record");
+    else {
+      const postDistrict = {
+        pageName: "ApplicantPurpose",
+        ApplicationStatus: "DRAFT",
+        id: props.getId,
+        createdBy: props?.userData?.id,
+        updatedBy: props?.userData?.id,
+        LicenseDetails: {
+          ApplicantPurpose: {
+            ...data,
+            AppliedLandDetails: modalData,
+          },
         },
-      },
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: token,
-        userInfo: props?.userInfo,
-      },
-    };
-    console.log("modalData===", postDistrict);
-    try {
-      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      console.log(Resp?.data);
-      props.Step2Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
-    } catch (error) {
-      console.log(error.message);
+        RequestInfo: {
+          apiId: "Rainmaker",
+          ver: "v1",
+          ts: 0,
+          action: "_search",
+          did: "",
+          key: "",
+          msgId: "090909",
+          requesterId: "",
+          authToken: token,
+          userInfo: props?.userData,
+        },
+      };
+      setLoader(true);
+      try {
+        const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+        console.log(Resp?.data);
+        setLoader(false);
+        props.Step2Continue();
+      } catch (error) {
+        setLoader(false);
+        console.log(error.message);
+      }
     }
   };
 
   const handleChangePurpose = (data) => {
-    const purposeSelected = data?.label;
+    console.log("data", data);
+    const purposeSelected = data?.value;
     window?.localStorage.setItem("purpose", purposeSelected);
   };
   const handleChangePotential = (data) => {
-    const potentialSelected = data?.label;
+    const potentialSelected = data?.value;
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
 
+  const getDocumentData = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+    } catch (error) {
+      setLoader(false);
+      console.log(error.message);
+    }
+  };
+
+  let delay;
+
+  useEffect(() => {
+    delay = setTimeout(() => {
+      if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
+    }, 1000);
+    return () => clearTimeout(delay);
+  }, [watch("khewats")]);
+  const [applicantId, setApplicantId] = useState("");
+  const getApplicantPurposeUserData = async (id) => {
+    console.log("here");
+    try {
+      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
+      const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantPurpose;
+      console.log("dd", Resp?.data?.newServiceInfoData[0]?.ApplicantPurpose?.purpose?.label);
+      setValue("purpose", userData?.purpose?.value);
+      setValue("potential", userData?.potential);
+      setValue("district", userData?.district);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+
+    setApplicantId(id?.toString());
+    if (id) getApplicantPurposeUserData(id);
+  }, []);
+
+  //................................Col.............................................//
+  const [values, setValues] = useState({ kanal: "", second: "0.125", sum: "" });
+  const [kanal, setkanal] = useState("");
+  const [second, setSecond] = useState("");
+  const [sum, setSum] = useState([]);
+  const [valuesMarla, setValuesMarla] = useState({ marla: "", secondMarla: "0.00625001", summarla: "" });
+  const [marla, setMarla] = useState("");
+  const [secondMarla, setSecondMarla] = useState("");
+  const [summarla, setSumMarla] = useState([]);
+  const [valuesSarsai, setValuesSarsai] = useState({ sarsai: "", secondSarsai: "0.0006944438305254", sumSarsai: "" });
+  const [sarsai, setSarsai] = useState("");
+  const [secondSarsai, setSecondSarsai] = useState("");
+  const [sumsarsai, setSumSarsai] = useState([]);
+
+  const onChange = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    const newValues = {
+      ...values,
+      ...valuesMarla,
+      ...valuesSarsai,
+      [name]: value,
+    };
+    setValues(newValues);
+    calcSum(newValues);
+    setValuesMarla(newValues);
+    calcSummarla(newValues);
+    setValuesSarsai(newValues);
+    calcSumSarsai(newValues);
+  };
+  const calcSum = (newValues) => {
+    const { kanal, second } = newValues;
+    const newSum = parseInt(kanal, 10) * 0.125;
+    setSum(newSum);
+  };
+
+  const calcSummarla = (newValues) => {
+    const { marla, secondMarla } = newValues;
+    const newSum = parseInt(marla, 10) * 0.00625001;
+    setSumMarla(newSum);
+  };
+  const calcSumSarsai = (newValues) => {
+    const { sarsai, secondSarsai } = newValues;
+    const newSum = parseInt(sarsai, 10) * 0.0006944438305254;
+    setSumSarsai(newSum);
+  };
+
+  const sumTotal = sum + summarla + sumsarsai;
+  console.log("add", sumTotal);
+
+  useEffect(() => {
+    localStorage.setItem("dataKey", JSON.stringify(sum));
+  }, [sum]);
+  useEffect(() => {
+    localStorage.setItem("dataKey2", JSON.stringify(summarla));
+  }, [summarla]);
+  useEffect(() => {
+    localStorage.setItem("dataKey3", JSON.stringify(sumsarsai));
+  }, [sumsarsai]);
+  useEffect(() => {
+    localStorage.setItem("add", JSON.stringify(sumTotal));
+  }, [sumTotal]);
+
   return (
     <div>
+      {loader && <Spinner />}
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
           <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
@@ -441,6 +602,7 @@ const ApllicantPuropseForm = (props) => {
                     labels="District"
                     loading={districtDataLbels?.isLoading}
                     onChange={(e) => {
+                      console.log("e===", e);
                       getTehslidata(e.value);
                       setDistrict(e.value);
                     }}
@@ -520,7 +682,7 @@ const ApllicantPuropseForm = (props) => {
         size="xl"
         isOpen={modal}
         toggle={() => {
-          reset(resetFields);
+          // reset(resetFields);
           setCollaboration("");
           setmodal(!modal);
         }}
@@ -528,7 +690,7 @@ const ApllicantPuropseForm = (props) => {
         <ModalHeader
           toggle={() => {
             setmodal(!modal);
-            reset(resetFields);
+            // reset(resetFields);
             setCollaboration("");
           }}
         ></ModalHeader>
@@ -573,8 +735,8 @@ const ApllicantPuropseForm = (props) => {
                   labels="Revenue Estate"
                   loading={revenueDataLabels?.isLoading}
                   onChange={(e) => {
+                    console.log("e", e);
                     getMustilData(e.code);
-                    getLandOwnerStateData(e.khewats);
                   }}
                 />
 
@@ -582,6 +744,7 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.revenueEstate && errors?.revenueEstate?.message}
                 </h3>
               </Col>
+
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
@@ -608,31 +771,30 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="12">
                 <div>
                   <h2>
-                    Consolidation Type<span style={{ color: "red" }}>*</span>
+                    Consolidation Type<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                    <label htmlFor="consolidated">
+                      <input
+                        {...register("consolidationType")}
+                        type="radio"
+                        value="consolidated"
+                        defaultChecked={true}
+                        defaultValue="consolidated"
+                        id="consolidated"
+                        onClick={() => setConsolidateValue("consolidated")}
+                      />{" "}
+                      &nbsp;&nbsp; Consolidated &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="non-consolidated">
+                      <input
+                        {...register("consolidationType")}
+                        type="radio"
+                        value="non-consolidated"
+                        id="non-consolidated"
+                        onClick={() => setConsolidateValue("non-consolidated")}
+                      />{" "}
+                      &nbsp;&nbsp; Non-Consolidated &nbsp;&nbsp;
+                    </label>
                   </h2>
-
-                  <label htmlFor="consolidated">
-                    <input
-                      {...register("consolidationType")}
-                      type="radio"
-                      value="consolidated"
-                      defaultChecked={true}
-                      defaultValue="consolidated"
-                      id="consolidated"
-                      onClick={() => setConsolidateValue("consolidated")}
-                    />
-                    Consolidated
-                  </label>
-                  <label htmlFor="non-consolidated">
-                    <input
-                      {...register("consolidationType")}
-                      type="radio"
-                      value="non-consolidated"
-                      id="non-consolidated"
-                      onClick={() => setConsolidateValue("non-consolidated")}
-                    />
-                    Non-Consolidated
-                  </label>
                 </div>
 
                 {consolidateValue == "consolidated" && (
@@ -653,13 +815,32 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <Form.Control type="text" className="form-control" placeholder="" {...register("kanal")} />
+                          {/* <label htmlFor="first">First</label>
+                          <input onChange={onChange} defaultValue={first} name="first" id="first" type="number" />
+
+                          <label htmlFor="sum">Total</label>
+                          <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" /> */}
+                          <input onChange={onChange} defaultValue={kanal} name="kanal" id="kanal" type="number" />
+                          <input type="text" className="form-control" {...register("kanal")} onChange={onChange} defaultValue={kanal} id="kanal" />
+
+                          <label htmlFor="sum">Total</label>
+                          <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" />
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} />
+                          <input onChange={onChange} defaultValue={marla} name="marla" id="marla" type="number" />
+                          <input type="text" className="form-control" {...register("marla")} onChange={onChange} defaultValue={marla} id="marla" />
+
+                          <label htmlFor="summarla">Total</label>
+                          <input onChange={onChange} defaultValue={summarla} id="summarla" name="summarla" type="number" />
+                          {/* <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} /> */}
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" placeholder="" {...register("sarsai")} />
+                          <input onChange={onChange} defaultValue={marla} name="sarsai" id="sarsai" type="number" />
+                          <input type="text" className="form-control" {...register("sarsai")} onChange={onChange} defaultValue={sarsai} id="sarsai" />
+
+                          <label htmlFor="sumsarsai">Total</label>
+                          <input onChange={onChange} defaultValue={sumsarsai} id="sumsarsai" name="sumsarsai" type="number" />
+                          {/* <Form.Control type="text" className="form-control" placeholder="" {...register("sarsai")} /> */}
                         </td>
                       </tr>
                     </tbody>
@@ -697,8 +878,15 @@ const ApllicantPuropseForm = (props) => {
                 )}
               </Col>
             </Row>
-
             <Row className="ml-auto mb-3">
+              <Col md={4} xxl lg="6">
+                <div>
+                  <label>
+                    <h2>Enter Khewat</h2>
+                  </label>
+                </div>
+                <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
+              </Col>
               <Col md={4} xxl lg="6">
                 <div>
                   <label>
@@ -721,14 +909,14 @@ const ApllicantPuropseForm = (props) => {
                 </h2>
 
                 <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="no" id="yes" onClick={() => setCollaboration("yes")} />
+                  <input {...register("collaboration")} type="radio" value="N" id="yes" onClick={() => setCollaboration("Y")} />
                   Yes
                 </label>
                 <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="yes" id="no" onClick={() => setCollaboration("no")} />
+                  <input {...register("collaboration")} type="radio" value="Y" id="no" onClick={() => setCollaboration("N")} />
                   No
                 </label>
-                {getCollaboration === "yes" && (
+                {getCollaboration === "Y" && (
                   <div className="row ">
                     <div className="col col-4">
                       <label>
@@ -760,11 +948,11 @@ const ApllicantPuropseForm = (props) => {
                         Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
                       </h2>
                       <label htmlFor="agreementIrrevocialble">
-                        <input {...register("agreementIrrevocialble")} type="radio" value="no" id="agreementIrrevocialble" />
+                        <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
                         Yes
                       </label>
                       <label htmlFor="agreementIrrevocialble">
-                        <input {...register("agreementIrrevocialble")} type="radio" value="yes" id="agreementIrrevocialble" />
+                        <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
                         No
                       </label>
                     </div>
@@ -802,7 +990,12 @@ const ApllicantPuropseForm = (props) => {
                         </h2>
                       </label>
                       <br></br>
-                      <Form.Control type="file" className="form-control" {...register("registeringAuthorityDocId")} />
+                      <input
+                        type="file"
+                        className="form-control"
+                        {...register("registeringAuthorityDoc")}
+                        onChange={(e) => getDocumentData(e?.target?.files[0])}
+                      />
                     </div>
                   </div>
                 )}

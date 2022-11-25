@@ -15,12 +15,12 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   React.useEffect(async () => {
     const uuid = userInfo?.info?.uuid;
     const usersResponse = await Digit.UserService.userSearch(tenantId, { uuid: [uuid] }, {});
-    console.log("USERID",usersResponse?.user[0]?.parentId)
+    // console.log("USERID",usersResponse?.user[0]?.parentId)
     setParentId(usersResponse?.user[0]?.parentId);
     setGenderMF(usersResponse?.user[0]?.gender);
   },[userInfo?.info?.uuid])
   
-  
+  console.log("FORMDATA VAL",formData)
   let validation = {};
   const devRegId = localStorage.getItem('devRegId');
   let isOpenLinkFlow = window.location.href.includes("openlink");
@@ -61,6 +61,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
       setTehsil(licenseDataList?.devDetail[0]?.licenceDetails?.tehsil);
       setState(licenseDataList?.devDetail[0]?.licenceDetails?.state);
       setDistrict(licenseDataList?.devDetail[0]?.licenceDetails?.district);
+      setisAddressSame(licenseDataList?.devDetail[0]?.licenceDetails?.isAddressSame);
       setAddressLineOneCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineOneCorrespondence);
       setAddressLineTwoCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineTwoCorrespondence);
       setAddressLineThreeCorrespondence(licenseDataList?.devDetail[0]?.licenceDetails?.addressLineThreeCorrespondence);
@@ -162,7 +163,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           "PANFullName": name,
           "FullName": name,
           "DOB": dob,
-          "GENDER": gender.value
+          "GENDER": gender
         },
         "consentArtifact": {
           "consent": {
@@ -244,7 +245,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setDOB(e.target.value);
   }
   function selectPanNumber(e) {
-    setPanNumber(e.target.value);
+    setPanNumber(e.target.value.toUpperCase());
     if(e.target.value === 10){
       panVerification();
     }
@@ -283,28 +284,26 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
     setState(e.target.value);
   }
   function selectChecked(e) {
-    // console.log(e.target.value);
-    setSelectedChecked(e.target.value);
     if (isAddressSame == false) {
       setisAddressSame(true);
       // setSelectedChecked(formData?.LicenseDetails?.addressSameAsPermanent ? formData?.LicenseDetails?.addressSameAsPermanent : formData?.LicenseDetails?.addressSameAsPermanent)
       setCorrespondenceaddress(formData?.LicneseDetails?.PermanentAddress ? formData?.LicneseDetails?.PermanentAddress : formData?.formData?.LicneseDetails?.PermanentAddress);
-      setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOneCorrespondence ? formData?.LicneseDetails?.addressLineOneCorrespondence : formData?.LicneseDetails?.addressLineOne);
-      setAddressLineTwoCorrespondence(formData?.LicneseDetails?.addressLineTwoCorrespondence ? formData?.LicneseDetails?.addressLineTwoCorrespondence : formData?.formData?.LicneseDetails?.addressLineTwo);
-      setAddressLineThreeCorrespondence(formData?.LicneseDetails?.addressLineThreeCorrespondence ? formData?.LicneseDetails?.addressLineThreeCorrespondence : formData?.formData?.LicneseDetails?.addressLineThree);
-      setAddressLineFourCorrespondence(formData?.LicneseDetails?.addressLineFourCorrespondence ? formData?.LicneseDetails?.addressLineFourCorrespondence : formData?.formData?.LicneseDetails?.addressLineFour);
-      setCityCorrespondence(formData?.LicneseDetails?.cityCorrespondence ? formData?.LicneseDetails?.cityCorrespondence : formData?.formData?.LicneseDetails?.city);
-      setPincodeCorrespondence(formData?.LicneseDetails?.pincodeCorrespondence ? formData?.LicneseDetails?.pincodeCorrespondence : formData?.formData?.LicneseDetails?.pincode);
-      setVillageCorrespondence(formData?.LicneseDetails?.villageCorrespondence ? formData?.LicneseDetails?.villageCorrespondence : formData?.formData?.LicneseDetails?.village);
-      setTehsilCorrespondence(formData?.LicneseDetails?.tehsilCorrespondence ? formData?.LicneseDetails?.tehsilCorrespondence : formData?.formData?.LicneseDetails?.tehsil);
-      setStateCorrespondence(formData?.LicneseDetails?.stateCorrespondence ? formData?.LicneseDetails?.stateCorrespondence : formData?.formData?.LicneseDetails?.state);
-      setDistrictCorrespondence(formData?.LicneseDetails?.districtCorrespondence ? formData?.LicneseDetails?.districtCorrespondence : formData?.formData?.LicneseDetails?.district);
+      setAddressLineOneCorrespondence(addressLineOne);
+      setAddressLineTwoCorrespondence(addressLineTwo);
+      setAddressLineThreeCorrespondence(addressLineThree);
+      setAddressLineFourCorrespondence(addressLineFour);
+      setCityCorrespondence(city);
+      setPincodeCorrespondence(pincode);
+      setVillageCorrespondence(village);
+      setTehsilCorrespondence(tehsil);
+      setStateCorrespondence(state);
+      setDistrictCorrespondence(district);
     }
     else {
       Array.from(document.querySelectorAll("input")).forEach((input) => (input.value = ""));
       setisAddressSame(false);
       setCorrespondenceaddress("");
-      setAddressLineOneCorrespondence(formData?.LicneseDetails?.addressLineOneCorrespondence || "");
+      setAddressLineOneCorrespondence("");
       setAddressLineTwoCorrespondence("");
       setAddressLineThreeCorrespondence("");
       setAddressLineFourCorrespondence("");
@@ -454,7 +453,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
           "licenceDetails": {
             name: name,
             mobileNumber: mobileNumber,
-            gender: [{gender}],
+            gender: gender.value,
             email: email,
             dob: dob,
             PanNumber: PanNumber,
@@ -468,6 +467,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             tehsil: tehsil,
             state: state,
             district: district,
+            isAddressSame:isAddressSame,
             addressLineOneCorrespondence: addressLineOneCorrespondence,
             addressLineTwoCorrespondence: addressLineTwoCorrespondence,
             addressLineThreeCorrespondence: addressLineThreeCorrespondence,
@@ -511,12 +511,12 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
 
     }
     else {
-      let data = formData?.formData;
-      data.LicneseDetails.name = name;
-      data.LicneseDetails.mobileNumber = mobileNumber;
-      data.LicneseDetails.gender = gender;
-      data.LicneseDetails.email = email;
-      data.LicneseDetails.PanNumber = PanNumber;
+      // let data = formData?.formData;
+      formData.name = name;
+      formData.mobileNumber = mobileNumber;
+      formData.gender = gender;
+      formData.email = email;
+      formData.PanNumber = PanNumber;
       formData.Correspondenceaddress = Correspondenceaddress;
       formData.addressLineOneCorrespondence = addressLineOneCorrespondence;
       formData.addressSameAsPermanent = addressSameAsPermanent;
@@ -571,7 +571,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       style={{ width: "100%" }}
                       className="form-field"
                       selected={gender?.length === 1 ? gender[0] : gender}
-                      // disable={gender?.length === 1 || editScreen}
+                      disable={gender?.length === 1 || editScreen}
                       option={menu}
                       select={setGenderName}
                       value={gender}
@@ -857,6 +857,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     onChange={(e) => selectChecked(e)}
                     value={isAddressSame}
                     checked={isAddressSame}
+                    name={isAddressSame}
                     style={{ paddingBottom: "10px", paddingTop: "10px" }}
                   />
                 </Form.Group>

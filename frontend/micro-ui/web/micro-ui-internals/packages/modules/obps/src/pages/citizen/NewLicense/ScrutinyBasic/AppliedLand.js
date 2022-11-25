@@ -512,8 +512,10 @@ const AppliedLandinfo = (props) => {
                   2.Details of Plots
                   <div className="ml-3 d-flex flex-row align-items-center">
                     <input type="radio" id="Yes" value="1" name="Yes" disabled checked={DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "regular" ? true : false} />
+                    <input type="radio"  value="1"  disabled checked={appliedLandData?.detailsOfPlots === "1" ? true : false} />
                     <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="gen">Regular</label>&nbsp;&nbsp;
                     <input type="radio" id="Yes" value="2" name="Yes" checked={DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "Irregular" ? true : false} disabled />
+                    <input type="radio"  value="2"  checked={appliedLandData?.detailsOfPlots === "2" ? true : false} disabled />
                     <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="npnl">Irregular</label>
                   </div>
                   <div style={{ margin: 5 }}>
@@ -1115,12 +1117,15 @@ const AppliedLandinfo = (props) => {
                 )}
                 <div>
                   <DDJAYForm displayDdjay={Purpose === "08" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay}></DDJAYForm>
+                  <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={appliedLandData?.ddjay} dataForIcons={dataIcons}></DDJAYForm>
                 </div>
                 <div>
                   <ResidentialPlottedForm displayResidential={Purpose === "03" ? "block" : "none"} data={DetailsofAppliedLand?.residential} ></ResidentialPlottedForm>
+                  <ResidentialPlottedForm displayResidential={Purpose !== "Residential Plotted" ? "block" : "none"} data={appliedLandData?.residential} dataForIcons={dataIcons} ></ResidentialPlottedForm>
                 </div>
                 <div>
                   <IndustrialPlottedForm displayIndustrial={Purpose === "06" ? "block" : "none"} data={DetailsofAppliedLand?.industrial}></IndustrialPlottedForm>
+                  <IndustrialPlottedForm displayIndustrial={Purpose !== "Industrial Plotted" ? "block" : "none"} data={appliedLandData?.industrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
                 </div>
                   {/* <div>
                   <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay} dataForIcons={dataIcons}></DDJAYForm>
@@ -1174,7 +1179,7 @@ const AppliedLandinfo = (props) => {
                         <input
                           type="radio"
                           value="Yes"
-                          id="Yes"
+                          
                           disabled
                           checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.surrender === "Y" ? true : false}
                         />
@@ -1183,7 +1188,7 @@ const AppliedLandinfo = (props) => {
                         <input
                           type="radio"
                           value="No"
-                          id="No"
+                          
                           disabled
                           checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.surrender === "N" ? true : false}
                         />
@@ -1216,7 +1221,7 @@ const AppliedLandinfo = (props) => {
                         <input
                           type="radio"
                           value="Yes"
-                          id="Yes"
+                          
                           disabled
                           checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.pocketProposed === "Y" ? true : false}
                         />
@@ -1225,7 +1230,7 @@ const AppliedLandinfo = (props) => {
                         <input
                           type="radio"
                           value="No"
-                          id="No"
+                          
                           disabled
                           checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.pocketProposed === "N" ? true : false}
                         />
@@ -1262,7 +1267,7 @@ const AppliedLandinfo = (props) => {
                         <input
                           type="radio"
                           value="Yes"
-                          id="Yes"
+                          
                           disabled
                           checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.deposit === "Y" ? true : false}
                         />
@@ -1271,7 +1276,7 @@ const AppliedLandinfo = (props) => {
                         <input
                           type="radio"
                           value="No"
-                          id="No"
+                          
                           disabled
                           checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.deposit === "N" ? true : false}
                         />
@@ -1303,7 +1308,7 @@ const AppliedLandinfo = (props) => {
                         <input
                           type="radio"
                           value="Yes"
-                          id="Yes"
+                          
                           disabled
                           checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.surrendered=== "Y" ? true : false}
                         />
@@ -1312,7 +1317,7 @@ const AppliedLandinfo = (props) => {
                         <input
                           type="radio"
                           value="No"
-                          id="No"
+                          
                           disabled
                           checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.surrendered === "N" ? true : false}
                         />
