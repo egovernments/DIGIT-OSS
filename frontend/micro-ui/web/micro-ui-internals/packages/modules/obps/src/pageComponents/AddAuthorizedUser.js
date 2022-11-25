@@ -47,7 +47,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
 
   const DevelopersAllData = getValues();
   console.log("DEVEDATAGEGT",DevelopersAllData);
-
+  const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
   const getDeveloperData = async ()=>{
     try {
       const requestResp = {
@@ -122,7 +122,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   const [aurthorizedDob, setAurthorizedDob] = useState(formData?.LicneseDetails?.aurthorizedDob || formData?.LicneseDetails?.aurthorizedDob || "");
   const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.LicneseDetails?.gender);
   const [aurthorizedPan, setAurthorizedPan] = useState(formData?.LicneseDetails?.aurthorizedPan || formData?.LicneseDetails?.aurthorizedPan || "");
-  const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
+ 
   const [docUpload,setDocuploadData]=useState([]);
   const [uploadAadharPdf,setAdhaarPdf] = useState( DevelopersAllData?.uploadAadharPdf || "");
   const [uploadDigitalSignaturePdf,setDigitalSignPdf] = useState( DevelopersAllData?.uploadDigitalSignaturePdf || "");
@@ -519,7 +519,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
               </thead>
               <tbody>
                 {
-                  (aurthorizedUserInfoArray.length > 0) ?
+                  (aurthorizedUserInfoArray?.length > 0  ) ?
                     aurthorizedUserInfoArray.map((elementInArray, input) => {
                       return (
                         <tr>
