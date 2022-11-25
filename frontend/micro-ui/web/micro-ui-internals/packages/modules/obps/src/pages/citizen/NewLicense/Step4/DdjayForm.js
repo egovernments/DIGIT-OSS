@@ -34,7 +34,6 @@ const DDJAYForm = ({ register, watch }) => {
           </tbody>
         </div>
 
-<<<<<<< HEAD
         <br></br>
         <div className="row">
           <div className="col col-12">
@@ -59,29 +58,6 @@ const DDJAYForm = ({ register, watch }) => {
                   <label>Area of such Pocket (in acres)</label>
                   <input type="text" className="form-control" {...register("organizeArea")} />
                 </div>
-=======
-            <br></br>
-            <div className="row">
-              <div className="col col-12">
-                <h6>
-                  {" "}
-                  Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan (Yes/No)&nbsp;&nbsp;
-                  <input type="radio" value="Yes"  onChange1={handleChange}  onClick={handleshow12} />
-                  &nbsp;&nbsp;
-                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No"  onChange1={handleChange}  onClick={handleshow12} />
-                  &nbsp;&nbsp;
-                  <label className="m-0 mx-2" for="No">No</label>
-                </h6>
-                {showhide12 === "Yes" && (
-                  <div className="row ">
-                    <div className="col col-6">
-                      <label>Area of such Pocket (in acres)</label>
-                      <input type="text" className="form-control" {...register("organizeArea")} />
-                    </div>
-                  </div>
-                )}
->>>>>>> 93da77b04a20c82de027a0bf46eca81ac8893898
               </div>
             )}
           </div>
