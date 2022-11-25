@@ -665,8 +665,8 @@ const Developerinfo = (props) => {
               </Col>
             </Row>
 
-            {
-              landScheduleData?.licenseApplied === "Y" && 
+            {/* {
+              landScheduleData?.licenseApplied === "Y" &&  */}
 
             <div>
               <Row className="ms-auto" style={{ marginBottom: 20 }}>
@@ -680,7 +680,7 @@ const Developerinfo = (props) => {
                     <Form.Control
                       height={30}
                       style={{ maxWidth: 200, marginRight: 5 }}
-                      placeholder={landScheduleData !== null ? landScheduleData?.licenseNumber : null}
+                      placeholder={landScheduleData !== null ? landScheduleData?.licNo : null}
                       disabled
                     ></Form.Control>
                     <ReportProblemIcon
@@ -692,7 +692,7 @@ const Developerinfo = (props) => {
                           setOpennedModal("licenceNo")
                         setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(landScheduleData !== null ? landScheduleData?.licenseNumber : null);
+                          setFieldValue(landScheduleData !== null ? landScheduleData?.licNo : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
@@ -776,7 +776,7 @@ const Developerinfo = (props) => {
                   </label>
 
                   <div className="d-flex flex-row  align-items-center">
-                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachType : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approach : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
                     <ReportProblemIcon
                       style={{
                         color: fieldIconColors.approachType
@@ -786,7 +786,7 @@ const Developerinfo = (props) => {
                           setOpennedModal("approachType")
                         setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(landScheduleData !== null ? landScheduleData?.approachType : null);
+                          setFieldValue(landScheduleData !== null ? landScheduleData?.approach : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
@@ -885,7 +885,7 @@ const Developerinfo = (props) => {
                   </div>
                 </div>
 
-                {landScheduleData?.thirdParty === "Y" && ( 
+                {landScheduleData?.thirdParty === "Y" && (
                   <div className="row ">
                     <div className="col col-4">
                       <label> Remark </label>
@@ -909,7 +909,7 @@ const Developerinfo = (props) => {
                 )}
               </Row>
             </div>
-            }
+            {/* } */}
 
             {/* )} */}
             <Row className="ms-auto">
@@ -2185,7 +2185,7 @@ const Developerinfo = (props) => {
             <h5 className={`text-black ml-2 mb-2 ${classes.formLabel}`}>
               5. Enclose the following documents as Annexures&nbsp;&nbsp;
               <div className="d-flex flex-row align-items-center my-1 ">
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.documentsAsAnnexures}></Form.Control> */}
+                <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.documentsAsAnnexures}></Form.Control>
                 <ReportProblemIcon
                   style={{
                     color: fieldIconColors.documentsAsAnnexures
