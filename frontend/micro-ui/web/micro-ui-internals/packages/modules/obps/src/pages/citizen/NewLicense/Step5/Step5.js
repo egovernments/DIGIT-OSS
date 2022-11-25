@@ -33,6 +33,8 @@ const style = {
 
 const FeesChargesForm = (props) => {
   const [purpose, setPurpose] = useState("");
+  const [scrutinyFee, setScrutinyFee] = useState("");
+  const [licenseFee, setLicenseFee] = useState("");
   const [totalFee, setTotalFee] = useState("");
   const [remark, setRemark] = useState("");
   const [payableNow, setPayableNow] = useState("");
@@ -115,7 +117,7 @@ const FeesChargesForm = (props) => {
 
   const Purpose = localStorage.getItem("purpose");
   const potential = JSON.parse(localStorage.getItem("potential"));
-  // const kanal = JSON.parse(localStorage.getItem("kanal"));
+  const totalAreaAcre = JSON.parse(localStorage.getItem("add"));
 
   const CalculateApiCall = async () => {
     const token = window?.localStorage?.getItem("token");
@@ -138,7 +140,7 @@ const FeesChargesForm = (props) => {
         },
       ],
       CalculatorRequest: {
-        totalLandSize: 1,
+        totalLandSize: totalAreaAcre,
         potenialZone: potential,
         purposeCode: Purpose,
         applicationNumber: props.getId,
@@ -149,10 +151,10 @@ const FeesChargesForm = (props) => {
       const Resp = await axios.post("/tl-calculator/v1/_calculator", payload);
       console.log("Resp.data===", Resp.data?.Calculations?.[0]?.tradeTypeBillingIds);
       const charges = Resp.data?.Calculations?.[0]?.tradeTypeBillingIds;
-      // setValue("scrutinyFee", charges?.scrutinyFeeCharges);
-      // setValue("licenseFee", charges?.licenseFeeCharges);
-      // setValue("conversionCharges", charges?.conversionCharges);
-      // setCalculateData(Resp.data);
+      setValue("scrutinyFee", charges?.scrutinyFeeCharges);
+      setValue("licenseFee", charges?.licenseFeeCharges);
+      setValue("conversionCharges", charges?.conversionCharges);
+      setCalculateData(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -161,19 +163,38 @@ const FeesChargesForm = (props) => {
     CalculateApiCall();
   }, []);
 
-  const getSubmitDataLabel = async () => {
+  console.log("total", scrutinyFee);
+
+  const [applicantId, setApplicantId] = useState("");
+  const getApplicantDetailsUserData = async (id) => {
+    console.log("here");
     try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
-        return response;
-      });
-      console.log("RESP+++", Resp?.data);
-      setSubmitDataLabel(Resp?.data);
+      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
+      const userData = Resp?.data?.newServiceInfoData[0]?.FeesAndCharges;
+      console.log("dd", Resp?.data?.newServiceInfoData[0]?.FeesAndCharges);
+
+      setValue("amountPayable", userData?.amountPayable);
+      setValue("remark", userData?.remark);
+      setValue("adjustFee", userData?.adjustFee);
+      setValue("licNumber", userData?.licNumber);
+      setValue("amount", userData?.amount);
+      setValue("amountAdjusted", userData?.amountAdjusted);
     } catch (error) {
       console.log(error.message);
     }
   };
+
   useEffect(() => {
-    getSubmitDataLabel();
+    localStorage.setItem("total", scrutinyFee);
+  }, [scrutinyFee]);
+
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+
+    setApplicantId(id?.toString());
+    if (id) getApplicantDetailsUserData(id);
   }, []);
 
   const handleChangePurpose = (data) => {
@@ -184,10 +205,10 @@ const FeesChargesForm = (props) => {
     const purposeSelected = data.data;
     setSelectPurpose(purposeSelected);
   };
-  const handleChangeKanal = (modalData) => {
-    const kanalSelected = modalData.data;
-    setSelectKanal(kanalSelected);
-  };
+  // const handleChangeKanal = (modalData) => {
+  //   const kanalSelected = modalData.data;
+  //   setSelectKanal(kanalSelected);
+  // };
   const handleScrutiny = (event) => {
     setCalculateData(event.target.value);
   };
@@ -211,7 +232,7 @@ const FeesChargesForm = (props) => {
                     <tr>
                       <th>Total Area (In acres)</th>
                       <td>
-                        <input type="text" className="form-control" disabled {...register("totalArea")} placeholder="0.125" />
+                        <input type="text" className="form-control" disabled {...register("totalArea")} placeholder={totalAreaAcre} />
                       </td>
                     </tr>
                   </thead>
@@ -247,19 +268,19 @@ const FeesChargesForm = (props) => {
                     <tr>
                       <th>Scrutiny Fees</th>
                       <td>
-                        <input type="text" className="form-control" disabled {...register("scrutinyFee")} placeholder="5210.51" />
+                        <input type="text" className="form-control" disabled {...register("scrutinyFee")} />
                       </td>
                     </tr>
                     <tr>
                       <th>License Fees</th>
                       <td>
-                        <input type="text" className="form-control" disabled {...register("licenseFee")} placeholder="320000" />
+                        <input type="text" className="form-control" disabled {...register("licenseFee")} />
                       </td>
                     </tr>
                     <tr>
                       <th>Conversion Charges</th>
                       <td>
-                        <input type="text" className="form-control" disabled {...register("conversionCharges")} placeholder="0.000" />
+                        <input type="text" className="form-control" disabled {...register("conversionCharges")} />
                       </td>
                     </tr>
                   </tbody>

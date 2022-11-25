@@ -137,18 +137,6 @@ const LandScheduleForm = (props) => {
     }
   };
 
-  const getSubmitDataLabel = async () => {
-    try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`);
-      const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  useEffect(() => {
-    getSubmitDataLabel();
-  }, []);
-
   const getDocumentData = async (file, fieldName) => {
     const formData = new FormData();
     formData.append("file", file);
@@ -166,6 +154,95 @@ const LandScheduleForm = (props) => {
       console.log(error.message);
     }
   };
+
+  const [applicantId, setApplicantId] = useState("");
+  const getApplicantDetailsUserData = async (id) => {
+    console.log("here");
+    try {
+      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
+      const userData = Resp?.data?.newServiceInfoData[0]?.LandSchedule;
+      console.log("dd", Resp?.data?.newServiceInfoData[0]?.LandSchedule);
+      setValue("licenseApplied", userData?.licenseApplied);
+      setValue("licenseNumber", userData?.licenseNumber);
+      setValue("siteLoc", userData?.siteLoc);
+      setValue("approachType", userData?.approachType);
+      setValue("approachRoadWidth", userData?.approachRoadWidth);
+      setValue("specify", userData?.specify);
+      setValue("typeLand", userData?.typeLand);
+      setValue("thirdParty", userData?.thirdParty);
+      setValue("thirdPartyRemark", userData?.thirdPartyRemark);
+      setValue("thirdPartyDoc", userData?.thirdPartyDoc);
+      setValue("migrationLic", userData?.migrationLic);
+      setValue("areaUnderMigration", userData?.areaUnderMigration);
+      setValue("purposeParentLic", userData?.purposeParentLic);
+      setValue("licNo", userData?.licNo);
+      setValue("areaofParentLic", userData?.areaofParentLic);
+      setValue("validityOfParentLic", userData?.validityOfParentLic);
+      setValue("renewalFee", userData?.renewalFee);
+      setValue("freshlyApplied", userData?.freshlyApplied);
+      setValue("encumburance", userData?.encumburance);
+      setValue("encumburanceOther", userData?.encumburanceOther);
+      setValue("litigation", userData?.litigation);
+      setValue("litigationRemark", userData?.litigationRemark);
+      setValue("litigationDoc", userData?.litigationDoc);
+      setValue("court", userData?.court);
+      setValue("courtyCaseNo", userData?.courtyCaseNo);
+      setValue("courtDoc", userData?.courtDoc);
+      setValue("insolvency", userData?.insolvency);
+      setValue("insolvencyRemark", userData?.insolvencyRemark);
+      setValue("insolvencyDoc", userData?.insolvencyDoc);
+      setValue("appliedLand", userData?.appliedLand);
+      setValue("revenueRasta", userData?.revenueRasta);
+      setValue("revenueRastaWidth", userData?.revenueRastaWidth);
+      setValue("waterCourse", userData?.waterCourse);
+      setValue("waterCourseRemark", userData?.waterCourseRemark);
+      setValue("compactBlock", userData?.compactBlock);
+      setValue("compactBlockRemark", userData?.compactBlockRemark);
+      setValue("landSandwiched", userData?.landSandwiched);
+      setValue("landSandwichedRemark", userData?.landSandwichedRemark);
+      setValue("acquistion", userData?.acquistion);
+      setValue("acquistionRemark", userData?.acquistionRemark);
+      setValue("sectionFour", userData?.sectionFour);
+      setValue("sectionSix", userData?.sectionSix);
+      setValue("orderUpload", userData?.orderUpload);
+      setValue("landCompensation", userData?.landCompensation);
+      setValue("releaseStatus", userData?.releaseStatus);
+      setValue("awardDate", userData?.awardDate);
+      setValue("releaseDate", userData?.releaseDate);
+      setValue("siteDetail", userData?.siteDetail);
+      setValue("siteApproachable", userData?.siteApproachable);
+      setValue("vacant", userData?.vacant);
+      setValue("vacantRemark", userData?.vacantRemark);
+      setValue("construction", userData?.construction);
+      setValue("typeOfConstruction", userData?.typeOfConstruction);
+      setValue("constructionRemark", userData?.constructionRemark);
+      setValue("ht", userData?.ht);
+      setValue("htRemark", userData?.htRemark);
+      setValue("gas", userData?.gas);
+      setValue("gasRemark", userData?.gasRemark);
+      setValue("nallah", userData?.nallah);
+      setValue("nallahRemark", userData?.nallahRemark);
+      setValue("road", userData?.road);
+      setValue("roadWidth", userData?.roadWidth);
+      setValue("roadRemark", userData?.roadRemark);
+      setValue("marginalLand", userData?.marginalLand);
+      setValue("marginalLandRemark", userData?.marginalLandRemark);
+      setValue("utilityLine", userData?.utilityLine);
+      setValue("utilityWidth", userData?.utilityWidth);
+      setValue("utilityRemark", userData?.utilityRemark);
+      setValue("landSchedule", userData?.landSchedule);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+
+    setApplicantId(id?.toString());
+    if (id) getApplicantDetailsUserData(id);
+  }, []);
 
   return (
 <<<<<<< HEAD
