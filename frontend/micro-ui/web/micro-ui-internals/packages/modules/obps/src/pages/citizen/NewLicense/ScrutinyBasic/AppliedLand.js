@@ -1112,13 +1112,13 @@ const AppliedLandinfo = (props) => {
                   </div>
                 )}
                 <div>
-                  <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={appliedLandData?.ddjay} dataForIcons={dataIcons}></DDJAYForm>
+                  <DDJAYForm displayDdjay={Purpose === "DDJAY" ? "block" : "none"} data={appliedLandData?.ddjay} dataForIcons={dataIcons}></DDJAYForm>
                 </div>
                 <div>
-                  <ResidentialPlottedForm displayResidential={Purpose !== "Residential Plotted" ? "block" : "none"} data={appliedLandData?.residential} dataForIcons={dataIcons} ></ResidentialPlottedForm>
+                  <ResidentialPlottedForm displayResidential={Purpose === "Residential Plotted" ? "block" : "none"} data={appliedLandData?.residential} dataForIcons={dataIcons} ></ResidentialPlottedForm>
                 </div>
                 <div>
-                  <IndustrialPlottedForm displayIndustrial={Purpose !== "Industrial Plotted" ? "block" : "none"} data={appliedLandData?.industrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
+                  <IndustrialPlottedForm displayIndustrial={Purpose === "Industrial Plotted" ? "block" : "none"} data={appliedLandData?.industrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
                 </div>
 
                 <h5 className="text-black mt-4">
