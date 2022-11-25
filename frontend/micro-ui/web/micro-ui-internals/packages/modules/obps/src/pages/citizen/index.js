@@ -60,6 +60,7 @@ import ExtensionClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/Extensio
 import ExtensionCom from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/ExtensionCommunity/ExtensionCom";
 import LayoutPlanClu from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/LayoutPlan/LayoutPlan";
 import Standard from "./NewLicense/ScrutinyBasic/AllServiceScrutiny/StandardDesign/StandardDesign";
+import Loi from "./NewLicense/ScrutinyContainer/Loi";
 // import LandScheduleForm from "./NewLicense/Step3/Step3";
 // import AppliedDetailForm from "./NewLicense/Step4/Step4";
 // import FeesChargesForm from "./NewLicense/Step5/Step5";
@@ -129,6 +130,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/Beneficial`} component={Beneficial} />
         <PrivateRoute path={`${path}/CompletionLic`} component={CompletionLic} />
         <PrivateRoute path={`${path}/zoningPlan`} component={ZoningPlan} />
+        
         {/* .............................................................................. */}
 
 
@@ -145,6 +147,7 @@ const App = ({ path }) => {
         <PrivateRoute path={`${path}/TransferLic`} component={TransferLic} />
         <PrivateRoute path={`${path}/SurrenderLic`} component={SurrenderLic} />
         <PrivateRoute path={`${path}/Standard`} component={Standard} />
+        <PrivateRoute path={`${path}/Loi`} component={Loi} />
 
       </Switch>
     </React.Fragment>

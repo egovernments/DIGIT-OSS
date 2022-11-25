@@ -56,7 +56,7 @@ const AppliedDetailForm = (props) => {
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "DetailsofAppliedLand",
-      ApplicationStatus: "INITIATE",
+      ApplicationStatus: "DRAFT",
       id: props.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
@@ -221,17 +221,127 @@ const AppliedDetailForm = (props) => {
     }
   };
 
-  const getSubmitDataLabel = async () => {
+  const [applicantId, setApplicantId] = useState("");
+  const getApplicantDetailsUserData = async (id) => {
+    console.log("here");
     try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
-        return response;
-      });
+      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
+      const userData = Resp?.data?.newServiceInfoData[0]?.DetailsofAppliedLand;
+      console.log("dd", Resp?.data?.newServiceInfoData[0]?.DetailsofAppliedLand?.DetailsAppliedLandDdjay.frozenNo);
+      // setValue("dgpsDetails", userData?.dgpsDetails);
+      setValue("regularOption", userData?.DetailsAppliedLandPlot?.regularOption);
+      setValue("resplotno", userData?.DetailsAppliedLandPlot?.resplotno);
+      setValue("reslengthmtr", userData?.DetailsAppliedLandPlot?.reslengthmtr);
+      setValue("reswidthmtr", userData?.DetailsAppliedLandPlot?.reswidthmtr);
+      setValue("resareasq", userData?.DetailsAppliedLandPlot?.resareasq);
+      setValue("npnlplotno", userData?.DetailsAppliedLandPlot?.npnlplotno);
+      setValue("npnllengthmtr", userData?.DetailsAppliedLandPlot?.npnllengthmtr);
+      setValue("npnlwidthmtr", userData?.DetailsAppliedLandPlot?.npnlwidthmtr);
+      setValue("npnlareasq", userData?.DetailsAppliedLandPlot?.npnlareasq);
+      setValue("ewsplotno", userData?.DetailsAppliedLandPlot?.ewsplotno);
+      setValue("ewslengthmtr", userData?.DetailsAppliedLandPlot?.ewslengthmtr);
+      setValue("ewswidthmtr", userData?.DetailsAppliedLandPlot?.ewswidthmtr);
+      setValue("ewsareasq", userData?.DetailsAppliedLandPlot?.ewsareasq);
+      setValue("complotno", userData?.DetailsAppliedLandPlot?.complotno);
+      setValue("comlengthmtr", userData?.DetailsAppliedLandPlot?.comlengthmtr);
+      setValue("comwidthmtr", userData?.DetailsAppliedLandPlot?.comwidthmtr);
+      setValue("comareasq", userData?.DetailsAppliedLandPlot?.comareasq);
+      setValue("siteplotno", userData?.DetailsAppliedLandPlot?.siteplotno);
+      setValue("sitelengthmtr", userData?.DetailsAppliedLandPlot?.sitelengthmtr);
+      setValue("sitewidthmtr", userData?.DetailsAppliedLandPlot?.sitewidthmtr);
+      setValue("siteareasq", userData?.DetailsAppliedLandPlot?.siteareasq);
+      setValue("parkplotno", userData?.DetailsAppliedLandPlot?.parkplotno);
+      setValue("parklengthmtr", userData?.DetailsAppliedLandPlot?.parklengthmtr);
+      setValue("parkwidthmtr", userData?.DetailsAppliedLandPlot?.parkwidthmtr);
+      setValue("parkareasq", userData?.DetailsAppliedLandPlot?.parkareasq);
+      setValue("publicplotno", userData?.DetailsAppliedLandPlot?.publicplotno);
+      setValue("publiclengthmtr", userData?.DetailsAppliedLandPlot?.publiclengthmtr);
+      setValue("publicwidthmtr", userData?.DetailsAppliedLandPlot?.publicwidthmtr);
+      setValue("publicareasq", userData?.DetailsAppliedLandPlot?.publicareasq);
+      setValue("etpplotno", userData?.DetailsAppliedLandPlot?.etpplotno);
+      setValue("etplengthmtr", userData?.DetailsAppliedLandPlot?.etplengthmtr);
+      setValue("etpwidthmtr", userData?.DetailsAppliedLandPlot?.etpwidthmtr);
+      setValue("etpareasq", userData?.DetailsAppliedLandPlot?.etpareasq);
+      setValue("wtpplotno", userData?.DetailsAppliedLandPlot?.wtpplotno);
+      setValue("wtplengthmtr", userData?.DetailsAppliedLandPlot?.wtplengthmtr);
+      setValue("wtpwidthmtr", userData?.DetailsAppliedLandPlot?.wtpwidthmtr);
+      setValue("wtpareasq", userData?.DetailsAppliedLandPlot?.wtpareasq);
+      setValue("ugtplotno", userData?.DetailsAppliedLandPlot?.ugtplotno);
+      setValue("ugtlengthmtr", userData?.DetailsAppliedLandPlot?.ugtlengthmtr);
+      setValue("ugtwidthmtr", userData?.DetailsAppliedLandPlot?.ugtwidthmtr);
+      setValue("ugtareasq", userData?.DetailsAppliedLandPlot?.ugtareasq);
+      setValue("milkboothplotno", userData?.DetailsAppliedLandPlot?.milkboothplotno);
+      setValue("milkboothlengthmtr", userData?.DetailsAppliedLandPlot?.milkboothlengthmtr);
+      setValue("milkboothwidthmtr", userData?.DetailsAppliedLandPlot?.milkboothwidthmtr);
+      setValue("milkboothareasq", userData?.DetailsAppliedLandPlot?.milkboothareasq);
+      setValue("gssplotno", userData?.DetailsAppliedLandPlot?.gssplotno);
+      setValue("gssplotno", userData?.DetailsAppliedLandPlot?.gssplotno);
+      setValue("gssWidthmtr", userData?.DetailsAppliedLandPlot?.gssWidthmtr);
+      setValue("gssareasq", userData?.DetailsAppliedLandPlot?.gssareasq);
+      setValue("resDimension", userData?.DetailsAppliedLandPlot?.resDimension);
+      setValue("resEnteredArea", userData?.DetailsAppliedLandPlot?.resEnteredArea);
+      setValue("comDimension", userData?.DetailsAppliedLandPlot?.comDimension);
+      setValue("comEnteredArea", userData?.DetailsAppliedLandPlot?.comEnteredArea);
+      setValue("secPlanPlot", userData?.DetailsAppliedLandPlot?.secPlanPlot);
+      setValue("secPlanLength", userData?.DetailsAppliedLandPlot?.secPlanLength);
+      setValue("secPlanDim", userData?.DetailsAppliedLandPlot?.secPlanDim);
+      setValue("secPlanEntered", userData?.DetailsAppliedLandPlot?.secPlanEntered);
+      setValue("greenBeltPlot", userData?.DetailsAppliedLandPlot?.greenBeltPlot);
+      setValue("greenBeltLength", userData?.DetailsAppliedLandPlot?.greenBeltLength);
+      setValue("greenBeltDim ", userData?.DetailsAppliedLandPlot?.greenBeltDim);
+      setValue("greenBeltEntered", userData?.DetailsAppliedLandPlot?.greenBeltEntered);
+      setValue("internalPlot ", userData?.DetailsAppliedLandPlot?.internalPlot);
+      setValue("internalLength", userData?.DetailsAppliedLandPlot?.internalLength);
+      setValue("internalDim", userData?.DetailsAppliedLandPlot?.internalDim);
+      setValue("internalEntered", userData?.DetailsAppliedLandPlot?.internalEntered);
+      setValue("otherPlot", userData?.DetailsAppliedLandPlot?.otherPlot);
+      setValue("otherLength", userData?.DetailsAppliedLandPlot?.otherLength);
+      setValue("otherDim", userData?.DetailsAppliedLandPlot?.otherDim);
+      setValue("otherEntered", userData?.DetailsAppliedLandPlot?.otherEntered);
+      setValue("undeterminedPlot", userData?.DetailsAppliedLandPlot?.undeterminedPlot);
+      setValue("undeterminedLength", userData?.DetailsAppliedLandPlot?.undeterminedLength);
+      setValue("undeterminedDim ", userData?.DetailsAppliedLandPlot?.undeterminedDim);
+      setValue("undeterminedEntered", userData?.DetailsAppliedLandPlot?.undeterminedEntered);
+      setValue("frozenNo ", userData?.DetailsAppliedLandDdjay?.frozenNo);
+      setValue("frozenArea ", userData?.DetailsAppliedLandDdjay?.frozenArea);
+      setValue("organize ", userData?.DetailsAppliedLandDdjay?.organize);
+      setValue("organizeArea ", userData?.DetailsAppliedLandDdjay?.organizeArea);
+      setValue("colonyfiftyNo ", userData?.DetailsAppliedLandIndustrial?.colonyfiftyNo);
+      setValue("colonyfiftyArea ", userData?.DetailsAppliedLandIndustrial?.colonyfiftyArea);
+      setValue("fiftyToTwoNo ", userData?.DetailsAppliedLandIndustrial?.fiftyToTwoNo);
+      setValue("fiftyToTwoArea ", userData?.DetailsAppliedLandIndustrial?.fiftyToTwoArea);
+      setValue("twoHundredNo ", userData?.DetailsAppliedLandIndustrial?.twoHundredNo);
+      setValue("twoHundredArea ", userData?.DetailsAppliedLandIndustrial?.twoHundredArea);
+      setValue("resiNo ", userData?.DetailsAppliedLandIndustrial?.resiNo);
+      setValue("resiArea ", userData?.DetailsAppliedLandIndustrial?.resiArea);
+      setValue("commerNo ", userData?.DetailsAppliedLandIndustrial?.commerNo);
+      setValue("commerArea ", userData?.DetailsAppliedLandIndustrial?.commerArea);
+      setValue("labourNo ", userData?.DetailsAppliedLandIndustrial?.labourNo);
+      setValue("labourArea ", userData?.DetailsAppliedLandIndustrial?.labourArea);
+      setValue("npnlNo ", userData?.DetailsAppliedLandResidential?.npnlNo);
+      setValue("npnlArea ", userData?.DetailsAppliedLandResidential?.npnlArea);
+      setValue("ewsNo ", userData?.DetailsAppliedLandResidential?.ewsNo);
+      setValue("ewsArea ", userData?.DetailsAppliedLandResidential?.ewsArea);
+      setValue("surrender ", userData?.DetailsAppliedLandNILP?.surrender);
+      setValue("surrenderArea ", userData?.DetailsAppliedLandNILP?.surrenderArea);
+      setValue("pocketAreaEnter ", userData?.DetailsAppliedLandNILP?.pocketAreaEnter);
+      setValue("pocketProposed ", userData?.DetailsAppliedLandNILP?.pocketProposed);
+      setValue("pocketDim ", userData?.DetailsAppliedLandNILP?.pocketDim);
+      setValue("deposit ", userData?.DetailsAppliedLandNILP?.deposit);
+      setValue("depositArea ", userData?.DetailsAppliedLandNILP?.depositArea);
+      setValue("surrendered ", userData?.DetailsAppliedLandNILP?.surrendered);
+      setValue("surrenderedDim ", userData?.DetailsAppliedLandNILP?.surrenderedDim);
     } catch (error) {
       console.log(error.message);
     }
   };
   useEffect(() => {
-    getSubmitDataLabel();
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+
+    setApplicantId(id?.toString());
+    if (id) getApplicantDetailsUserData(id);
   }, []);
 
   const getDocumentData = async (file, fieldName) => {
@@ -299,7 +409,7 @@ const AppliedDetailForm = (props) => {
                   </div>
 
                   <br></br>
-                  <hr />
+
                   <br></br>
                   <div>
                     <h5>

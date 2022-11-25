@@ -95,14 +95,16 @@ const LandScheduleForm = (props) => {
   } = useForm();
 
   const landScheduleFormSubmitHandler = async (data) => {
-    setLoader(true);
+    const token = window?.localStorage?.getItem("token");
+    // setLoader(true);
     data["potential"] = data?.potential?.value;
     data["approachType"] = data?.approachType?.value;
     data["typeLand"] = data?.typeLand?.value;
     data["purposeParentLic"] = data?.purposeParentLic?.value;
+    data["releaseStatus"] = data?.releaseStatus?.value;
     const postDistrict = {
       pageName: "LandSchedule",
-      ApplicationStatus: "INITIATE",
+      ApplicationStatus: "DRAFT",
       id: props.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
@@ -127,10 +129,10 @@ const LandScheduleForm = (props) => {
     };
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      setLoader(false);
+      // setLoader(false);
       props.Step3Continue();
     } catch (error) {
-      setLoader(false);
+      // setLoader(false);
       console.log(error.message);
     }
   };
@@ -259,7 +261,7 @@ const LandScheduleForm = (props) => {
                                 Specify Others<span style={{ color: "red" }}>*</span>
                               </h2>
                             </label>
-                            <input type="number" {...register("specify")} className="form-control" />
+                            <input type="text" {...register("specify")} className="form-control" />
                           </div>
                           <div className="col col-3">
                             <label>
@@ -698,7 +700,7 @@ const LandScheduleForm = (props) => {
                             <label>
                               <h2>Remark</h2>{" "}
                             </label>
-                            <input type="number" className="form-control" {...register("compactBlockRemark")} />
+                            <input type="text" className="form-control" {...register("compactBlockRemark")} />
                           </div>
                         </div>
                       )}

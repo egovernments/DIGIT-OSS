@@ -30,7 +30,9 @@ import { useStyles } from "./css/personalInfoChild.style";
 const AppliedLandinfo = (props) => {
 
   const dataIcons = props.dataForIcons;
-  const appliedLandData = props.ApiResponseData;
+  const DetailsofAppliedLand = props.ApiResponseData;
+  console.log("personal info applicant data4", DetailsofAppliedLand);
+
 
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   console.log(uncheckedValue);
@@ -431,11 +433,11 @@ const AppliedLandinfo = (props) => {
                     <br></br>
                     <div className="col col-6">
                       <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
-                      <input type="number" name="XLongitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point1?.longitude} />
+                      <input type="number" name="XLongitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgps?.point1?.longitude} />
                     </div>
                     <div className="col col-6">
                       <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                      <input type="number" name="YLatitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point1?.latitude} />
+                      <input type="number" name="YLatitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgps?.point1?.latitude} />
                     </div>
                   </div>
                 </div>
@@ -445,11 +447,11 @@ const AppliedLandinfo = (props) => {
                     <br></br>
                     <div className="col col-6">
                       <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
-                      <input type="number" name="XLongitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point2?.longitude} />
+                      <input type="number" name="XLongitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgps?.point2?.longitude} />
                     </div>
                     <div className="col col-6">
                       <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                      <input type="number" name="YLatitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point2?.latitude} />
+                      <input type="number" name="YLatitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgps?.point2?.latitude} />
                     </div>
                   </div>
                 </div>
@@ -461,11 +463,11 @@ const AppliedLandinfo = (props) => {
                     <div className="row ">
                       <div className="col col-6">
                         <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
-                        <input type="number" name="XLongitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point3?.longitude} />
+                        <input type="number" name="XLongitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgps?.point3?.longitude} />
                       </div>
                       <div className="col col-6">
                         <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                        <input type="number" name="YLatitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point3?.latitude} />
+                        <input type="number" name="YLatitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgps?.point3?.latitude} />
                       </div>
                     </div>
                   </div>
@@ -477,11 +479,11 @@ const AppliedLandinfo = (props) => {
                       <br></br>
                       <div className="col col-6">
                         <label className={classes.formLabel} htmlFor="pitentialZone">X:Longitude</label>
-                        <input type="number" name="XLongitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point4?.longitude} />
+                        <input type="number" name="XLongitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgps?.point4?.longitude} />
                       </div>
                       <div className="col col-6">
                         <label className={classes.formLabel} htmlFor="pitentialZone">Y:Latitude</label>
-                        <input type="number" name="YLatitude" className="form-control" disabled placeholder={appliedLandData?.dgps?.point4?.latitude} />
+                        <input type="number" name="YLatitude" className="form-control" disabled placeholder={DetailsofAppliedLand?.dgps?.point4?.latitude} />
                       </div>
                     </div>
                     &nbsp;&nbsp;&nbsp;
@@ -509,9 +511,11 @@ const AppliedLandinfo = (props) => {
                 <h5 className={`text-black d-flex flex-row align-items-center ${classes.formLabel}`} style={{ marginTop: "3%" }}>
                   2.Details of Plots
                   <div className="ml-3 d-flex flex-row align-items-center">
-                    <input type="radio" id="Yes" value="1" name="Yes" disabled checked={appliedLandData?.detailsOfPlots === "1" ? true : false} />
+                    <input type="radio" id="Yes" value="1" name="Yes" disabled checked={DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "regular" ? true : false} />
+                    <input type="radio"  value="1"  disabled checked={appliedLandData?.detailsOfPlots === "1" ? true : false} />
                     <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="gen">Regular</label>&nbsp;&nbsp;
-                    <input type="radio" id="Yes" value="2" name="Yes" checked={appliedLandData?.detailsOfPlots === "2" ? true : false} disabled />
+                    <input type="radio" id="Yes" value="2" name="Yes" checked={DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "Irregular" ? true : false} disabled />
+                    <input type="radio"  value="2"  checked={appliedLandData?.detailsOfPlots === "2" ? true : false} disabled />
                     <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="npnl">Irregular</label>
                   </div>
                   <div style={{ margin: 5 }}>
@@ -525,13 +529,13 @@ const AppliedLandinfo = (props) => {
                           setOpennedModal("detailsOfPlots")
                         setSmShow(true),
                           console.log("modal open"),
-                          setFieldValue(appliedLandData?.detailsOfPlots === "1" ? "Regular" : appliedLandData?.detailsOfPlots === "2" ? "Irregular" : null);
+                          setFieldValue(DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "regular" ? "Regular" : DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "Irregular" ? "Irregular" : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
                 </h5>
                 <br></br>
-                {appliedLandData?.detailsOfPlots === "1" && (
+                {DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "regular" && (
                   <div className="table table-bordered table-responsive">
                     <thead>
                       <tr>
@@ -552,20 +556,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.residential?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.resplotno} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.reslengthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.reswidthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.resareasq} />
                         </td>
                       </tr>
                       <tr>
@@ -575,20 +579,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.gen?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.gen?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.gen?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.gen?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.gen?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.gen?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.gen?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.gen?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -598,20 +602,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.npnl?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.npnlplotno} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.npnl?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.npnllengthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.npnl?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.npnlwidthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.npnl?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.npnlareasq} />
                         </td>
                       </tr>
                       <tr>
@@ -621,20 +625,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.ews?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.ewsplotno} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.ews?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.ewslengthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.ews?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.ewswidthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.ews?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.ewsareasq} />
                         </td>
                       </tr>
                       <tr>
@@ -649,20 +653,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.commercial?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.complotno} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.commercial?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.comlengthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.commercial?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.comwidthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.commercial?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.comareasq} />
                         </td>
                       </tr>
                       <tr>
@@ -677,20 +681,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.communitySites?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.siteplotno} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.communitySites?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.sitelengthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.communitySites?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.sitewidthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.communitySites?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.siteareasq} />
                         </td>
                       </tr>
                       <tr>
@@ -705,20 +709,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.parks?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.parkplotno} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.parks?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.parklengthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.parks?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.parkwidthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.parks?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.parkareasq} />
                         </td>
                       </tr>
                       <tr>
@@ -733,20 +737,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.publicUtilities?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.publicplotno} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.publicUtilities?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.publiclengthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.publicUtilities?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.publicwidthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.publicUtilities?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.publicareasq} />
                         </td>
                       </tr>
                       <tr>
@@ -756,20 +760,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.stp?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.stp?.plotNo} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.stp?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.stp?.length} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.stp?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.stp?.width} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.stp?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.stp?.area} />
                         </td>
                       </tr>
                       <tr>
@@ -779,20 +783,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.etp?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.etpplotno} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.etp?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.etplengthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.etp?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.etpwidthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.etp?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.etpareasq} />
                         </td>
                       </tr>
                       <tr>
@@ -802,20 +806,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.wtp?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.wtpplotno} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.wtp?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.wtplengthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.wtp?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.wtpwidthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.wtp?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.wtpareasq} />
                         </td>
                       </tr>
                       <tr>
@@ -825,20 +829,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.ugt?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.ugtplotno} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.ugt?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.ugtlengthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.ugt?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.ugtwidthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.ugt?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.ugtareasq} />
                         </td>
                       </tr>
                       <tr>
@@ -848,20 +852,20 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.milkBooth?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.milkboothplotno} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.milkBooth?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.milkboothlengthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.milkBooth?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.milkboothwidthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.milkBooth?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.milkboothareasq} />
                         </td>
                       </tr>
                       <tr>
@@ -871,26 +875,26 @@ const AppliedLandinfo = (props) => {
                           </div>
                         </td>
                         <td component="th" scope="row">
-                          <input type="text" className="form-control" disabled placeholder={appliedLandData?.wss?.plotNo} />
+                          <input type="text" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.wssplotno} />
                         </td>
 
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.wss?.length} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.wsslengthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.wss?.width} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.wsswidthmtr} />
                         </td>
                         <td align="right">
                           {" "}
-                          <input type="number" className="form-control" disabled placeholder={appliedLandData?.wss?.area} />
+                          <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.wssareasq} />
                         </td>
                       </tr>
                     </tbody>
                   </div>
                 )}
-                {appliedLandData?.detailsOfPlots === "2" && (
+                {DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "Irregular" && (
                   <div>
                     <div className="table table-bordered table-responsive ">
                       <thead>
@@ -914,11 +918,11 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.dimensions} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.resDimension} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.enteredArea} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.resEnteredArea} />
                           </td>
                         </tr>
                         <tr>
@@ -934,11 +938,11 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.dimensions} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.comDimension} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.residential?.enteredArea} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.comEnteredArea} />
                           </td>
                         </tr>
                       </tbody>
@@ -985,18 +989,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.seactoralPlanRoad?.detailsOfPlot} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.secPlanPlot} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.seactoralPlanRoad?.plotNo} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.secPlanLength} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.seactoralPlanRoad?.length} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.secPlanDim} />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.seactoralPlanRoad?.dimensions} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.secPlanEntered} />
                           </td>
                         </tr>
                         <tr>
@@ -1012,18 +1016,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.greenBelt?.detailsOfPlot} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.greenBeltPlot} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.greenBelt?.plotNo} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.greenBeltLength} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.greenBelt?.length} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.greenBeltDim} />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.greenBelt?.dimensions} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.greenBeltEntered} />
                           </td>
                         </tr>
                         <tr>
@@ -1039,18 +1043,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.wideInternalCirculationPlan?.detailsOfPlot} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.internalPlot} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.wideInternalCirculationPlan?.plotNo} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.internalLength} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.wideInternalCirculationPlan?.length} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.internalDim} />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.wideInternalCirculationPlan?.dimensions} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.internalEntered} />
                           </td>
                         </tr>
                         <tr>
@@ -1066,18 +1070,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.otherRoads?.detailsOfPlot} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.otherPlot} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.otherRoads?.plotNo} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.otherLength} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.otherRoads?.length} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.otherDim} />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.otherRoads?.dimensions} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.otherEntered} />
                           </td>
                         </tr>
                         <tr>
@@ -1093,18 +1097,18 @@ const AppliedLandinfo = (props) => {
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.undeterminedUse?.detailsOfPlot} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.undeterminedPlot} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.undeterminedUse?.plotNo} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.undeterminedLength} />
                           </td>
                           <td align="right">
                             {" "}
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.undeterminedUse?.length} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.undeterminedDim} />
                           </td>
                           <td component="th" scope="row">
-                            <input type="number" className="form-control" disabled placeholder={appliedLandData?.areaUnder?.undeterminedUse?.dimensions} />
+                            <input type="number" className="form-control" disabled placeholder={DetailsofAppliedLand?.DetailsAppliedLandPlot?.undeterminedEntered} />
                           </td>
                         </tr>
                       </tbody>
@@ -1112,14 +1116,26 @@ const AppliedLandinfo = (props) => {
                   </div>
                 )}
                 <div>
-                  <DDJAYForm displayDdjay={Purpose === "08" ? "block" : "none"} data={appliedLandData?.ddjay}></DDJAYForm>
+                  <DDJAYForm displayDdjay={Purpose === "08" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay}></DDJAYForm>
+                  <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={appliedLandData?.ddjay} dataForIcons={dataIcons}></DDJAYForm>
                 </div>
                 <div>
-                  <ResidentialPlottedForm displayResidential={Purpose === "03" ? "block" : "none"} data={appliedLandData?.residential} ></ResidentialPlottedForm>
+                  <ResidentialPlottedForm displayResidential={Purpose === "03" ? "block" : "none"} data={DetailsofAppliedLand?.residential} ></ResidentialPlottedForm>
+                  <ResidentialPlottedForm displayResidential={Purpose !== "Residential Plotted" ? "block" : "none"} data={appliedLandData?.residential} dataForIcons={dataIcons} ></ResidentialPlottedForm>
                 </div>
                 <div>
-                  <IndustrialPlottedForm displayIndustrial={Purpose === "06" ? "block" : "none"} data={appliedLandData?.industrial}></IndustrialPlottedForm>
+                  <IndustrialPlottedForm displayIndustrial={Purpose === "06" ? "block" : "none"} data={DetailsofAppliedLand?.industrial}></IndustrialPlottedForm>
+                  <IndustrialPlottedForm displayIndustrial={Purpose !== "Industrial Plotted" ? "block" : "none"} data={appliedLandData?.industrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
                 </div>
+                  {/* <div>
+                  <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay} dataForIcons={dataIcons}></DDJAYForm>
+                </div>
+                <div>
+                  <ResidentialPlottedForm displayResidential={Purpose !== "Residential Plotted" ? "block" : "none"} data={DetailsofAppliedLand?.residential} dataForIcons={dataIcons} ></ResidentialPlottedForm>
+                </div>
+                <div>
+                  <IndustrialPlottedForm displayIndustrial={Purpose !== "Industrial Plotted" ? "block" : "none"} data={DetailsofAppliedLand?.industrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
+                </div> */}
 
                 <h5 className="text-black mt-4">
                   <div style={{ display: "flex" }}>
@@ -1163,26 +1179,26 @@ const AppliedLandinfo = (props) => {
                         <input
                           type="radio"
                           value="Yes"
-                          id="Yes"
+                          
                           disabled
-                          checked={appliedLandData?.nilp?.surrenderAreaOfLicenceCol === "Y" ? true : false}
+                          checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.surrender === "Y" ? true : false}
                         />
                         <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
 
                         <input
                           type="radio"
                           value="No"
-                          id="No"
+                          
                           disabled
-                          checked={appliedLandData?.nilp?.surrenderAreaOfLicenceCol === "N" ? true : false}
+                          checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.surrender === "N" ? true : false}
                         />
                         <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
 
-                      {appliedLandData?.nilp?.surrenderAreaOfLicenceCol === "Y" && (
+                      {DetailsofAppliedLand?.DetailsAppliedLandNILP?.surrender === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label className="m-0">Area in Acres</label>
-                            <input type="text" className="form-control" placeholder={appliedLandData?.nilp?.surrenderAreaOfLicenceColArea} />
+                            <input type="text" className="form-control" placeholder={DetailsofAppliedLand?.DetailsAppliedLandNILP?.surrenderArea} />
                           </div>
                         </div>
                       )}
@@ -1205,30 +1221,30 @@ const AppliedLandinfo = (props) => {
                         <input
                           type="radio"
                           value="Yes"
-                          id="Yes"
+                          
                           disabled
-                          checked={appliedLandData?.nilp?.proposedPocket === "Y" ? true : false}
+                          checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.pocketProposed === "Y" ? true : false}
                         />
                         <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
 
                         <input
                           type="radio"
                           value="No"
-                          id="No"
+                          
                           disabled
-                          checked={appliedLandData?.nilp?.proposedPocket === "N" ? true : false}
+                          checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.pocketProposed === "N" ? true : false}
                         />
                         <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
 
-                      {appliedLandData?.nilp?.proposedPocket === "Y" && (
+                      {DetailsofAppliedLand?.DetailsAppliedLandNILP?.proposedPocket === "Y" && (
                         <div className="row ">
                           <div className="col-12">
                             <label className="m-0">Dimension(in mtr)</label>
-                            <input type="text" className="form-control" placeholder={appliedLandData?.nilp?.proposedPocketDimensions} />
+                            <input type="text" className="form-control" placeholder={DetailsofAppliedLand?.DetailsAppliedLandNILP?.pocketDim} />
                           </div>
                           <div className="col-12">
                             <label className="m-0">Area</label>
-                            <input type="text" className="form-control" placeholder={appliedLandData?.nilp?.proposedPocketArea} />
+                            <input type="text" className="form-control" placeholder={DetailsofAppliedLand?.DetailsAppliedLandNILP?.pocketAreaEnter} />
                           </div>
                         </div>
 
@@ -1251,26 +1267,26 @@ const AppliedLandinfo = (props) => {
                         <input
                           type="radio"
                           value="Yes"
-                          id="Yes"
+                          
                           disabled
-                          checked={appliedLandData?.nilp?.depositAnAmount === "Y" ? true : false}
+                          checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.deposit === "Y" ? true : false}
                         />
                         <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
 
                         <input
                           type="radio"
                           value="No"
-                          id="No"
+                          
                           disabled
-                          checked={appliedLandData?.nilp?.depositAnAmount === "N" ? true : false}
+                          checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.deposit === "N" ? true : false}
                         />
                         <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
 
-                      {appliedLandData?.nilp?.depositAnAmount === "Y" && (
+                      {DetailsofAppliedLand?.DetailsAppliedLandNILP?.deposit === "Y" && (
                         <div className="row ">
                           <div className="col col">
                             <label className="m-0">Area in acres</label>
-                            <input type="text" className="form-control" placeholder={appliedLandData?.nilp?.depositAnAmountArea} />
+                            <input type="text" className="form-control" placeholder={DetailsofAppliedLand?.DetailsAppliedLandNILP?.depositArea} />
                           </div>
                         </div>
                       )}
@@ -1292,30 +1308,30 @@ const AppliedLandinfo = (props) => {
                         <input
                           type="radio"
                           value="Yes"
-                          id="Yes"
+                          
                           disabled
-                          checked={appliedLandData?.nilp?.surrenderAreaIndependentAccess === "Y" ? true : false}
+                          checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.surrendered=== "Y" ? true : false}
                         />
                         <label className={`${classes.formLabel}  m-0  mx-2`} for="Yes">Yes</label>
 
                         <input
                           type="radio"
                           value="No"
-                          id="No"
+                          
                           disabled
-                          checked={appliedLandData?.nilp?.surrenderAreaIndependentAccess === "N" ? true : false}
+                          checked={DetailsofAppliedLand?.DetailsAppliedLandNILP?.surrendered === "N" ? true : false}
                         />
                         <label className={`${classes.formLabel}  m-0  mx-2`} for="No">No</label></div>
 
-                      {appliedLandData?.nilp?.surrenderAreaIndependentAccess === "Y" && (
+                      {DetailsofAppliedLand?.DetailsAppliedLandNILP?.surrendered === "Y" && (
                         <div className="row ">
                           <div className="col-12">
                             <label className="m-0">Dimension(in mtr)</label>
-                            <input type="text" className="form-control" placeholder={appliedLandData?.nilp?.surrenderAreaIndependentAccessDimensions} />
+                            <input type="text" className="form-control" placeholder={DetailsofAppliedLand?.DetailsAppliedLandNILP?.surrenderedDim} />
                           </div>
                           <div className="col-12">
                             <label className="m-0">Area</label>
-                            <input type="text" className="form-control" placeholder={appliedLandData?.nilp?.surrenderAreaIndependentAccessArea} />
+                            <input type="text" className="form-control" placeholder={DetailsofAppliedLand?.DetailsAppliedLandNILP?.Area} />
                           </div>
                         </div>
 

@@ -10,6 +10,7 @@ import WorkingTable from "../../../../components/Table";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
+import { Archive } from "react-bootstrap-icons";
 
 const ApllicantPuropseForm = (props) => {
   console.log("props", props);
@@ -314,6 +315,7 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const ApplicantPurposeModalData = (modalData) => {
+    console.log("data------", modalData);
     modalData["tehsil"] = modalData?.tehsil?.value;
     modalData["revenueEstate"] = modalData?.revenueEstate?.value;
     modalData["mustil"] = modalData?.mustil?.value;
@@ -374,7 +376,7 @@ const ApllicantPuropseForm = (props) => {
     else {
       const postDistrict = {
         pageName: "ApplicantPurpose",
-        ApplicationStatus: "INITIATE",
+        ApplicationStatus: "DRAFT",
         id: props.getId,
         createdBy: props?.userData?.id,
         updatedBy: props?.userData?.id,
@@ -416,7 +418,7 @@ const ApllicantPuropseForm = (props) => {
     window?.localStorage.setItem("purpose", purposeSelected);
   };
   const handleChangePotential = (data) => {
-    const potentialSelected = data?.label;
+    const potentialSelected = data?.value;
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
 
@@ -430,7 +432,6 @@ const ApllicantPuropseForm = (props) => {
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setDocId(Resp?.data?.files?.[0]?.fileStoreId);
-      setLoader(false);
     } catch (error) {
       setLoader(false);
       console.log(error.message);
@@ -445,6 +446,91 @@ const ApllicantPuropseForm = (props) => {
     }, 1000);
     return () => clearTimeout(delay);
   }, [watch("khewats")]);
+  const [applicantId, setApplicantId] = useState("");
+  const getApplicantPurposeUserData = async (id) => {
+    console.log("here");
+    try {
+      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
+      const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantPurpose;
+      console.log("dd", Resp?.data?.newServiceInfoData[0]?.ApplicantPurpose?.purpose?.label);
+      setValue("purpose", userData?.purpose?.value);
+      setValue("potential", userData?.potential);
+      setValue("district", userData?.district);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  useEffect(() => {
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+
+    setApplicantId(id?.toString());
+    if (id) getApplicantPurposeUserData(id);
+  }, []);
+
+  //................................Col.............................................//
+  const [values, setValues] = useState({ kanal: "", second: "0.125", sum: "" });
+  const [kanal, setkanal] = useState("");
+  const [second, setSecond] = useState("");
+  const [sum, setSum] = useState([]);
+  const [valuesMarla, setValuesMarla] = useState({ marla: "", secondMarla: "0.00625001", summarla: "" });
+  const [marla, setMarla] = useState("");
+  const [secondMarla, setSecondMarla] = useState("");
+  const [summarla, setSumMarla] = useState([]);
+  const [valuesSarsai, setValuesSarsai] = useState({ sarsai: "", secondSarsai: "0.0006944438305254", sumSarsai: "" });
+  const [sarsai, setSarsai] = useState("");
+  const [secondSarsai, setSecondSarsai] = useState("");
+  const [sumsarsai, setSumSarsai] = useState([]);
+
+  const onChange = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    const newValues = {
+      ...values,
+      ...valuesMarla,
+      ...valuesSarsai,
+      [name]: value,
+    };
+    setValues(newValues);
+    calcSum(newValues);
+    setValuesMarla(newValues);
+    calcSummarla(newValues);
+    setValuesSarsai(newValues);
+    calcSumSarsai(newValues);
+  };
+  const calcSum = (newValues) => {
+    const { kanal, second } = newValues;
+    const newSum = parseInt(kanal, 10) * 0.125;
+    setSum(newSum);
+  };
+
+  const calcSummarla = (newValues) => {
+    const { marla, secondMarla } = newValues;
+    const newSum = parseInt(marla, 10) * 0.00625001;
+    setSumMarla(newSum);
+  };
+  const calcSumSarsai = (newValues) => {
+    const { sarsai, secondSarsai } = newValues;
+    const newSum = parseInt(sarsai, 10) * 0.0006944438305254;
+    setSumSarsai(newSum);
+  };
+
+  const sumTotal = sum + summarla + sumsarsai;
+  console.log("add", sumTotal);
+
+  useEffect(() => {
+    localStorage.setItem("dataKey", JSON.stringify(sum));
+  }, [sum]);
+  useEffect(() => {
+    localStorage.setItem("dataKey2", JSON.stringify(summarla));
+  }, [summarla]);
+  useEffect(() => {
+    localStorage.setItem("dataKey3", JSON.stringify(sumsarsai));
+  }, [sumsarsai]);
+  useEffect(() => {
+    localStorage.setItem("add", JSON.stringify(sumTotal));
+  }, [sumTotal]);
 
   return (
     <div>
@@ -685,31 +771,30 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="12">
                 <div>
                   <h2>
-                    Consolidation Type<span style={{ color: "red" }}>*</span>
+                    Consolidation Type<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                    <label htmlFor="consolidated">
+                      <input
+                        {...register("consolidationType")}
+                        type="radio"
+                        value="consolidated"
+                        defaultChecked={true}
+                        defaultValue="consolidated"
+                        id="consolidated"
+                        onClick={() => setConsolidateValue("consolidated")}
+                      />{" "}
+                      &nbsp;&nbsp; Consolidated &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="non-consolidated">
+                      <input
+                        {...register("consolidationType")}
+                        type="radio"
+                        value="non-consolidated"
+                        id="non-consolidated"
+                        onClick={() => setConsolidateValue("non-consolidated")}
+                      />{" "}
+                      &nbsp;&nbsp; Non-Consolidated &nbsp;&nbsp;
+                    </label>
                   </h2>
-
-                  <label htmlFor="consolidated">
-                    <input
-                      {...register("consolidationType")}
-                      type="radio"
-                      value="consolidated"
-                      defaultChecked={true}
-                      defaultValue="consolidated"
-                      id="consolidated"
-                      onClick={() => setConsolidateValue("consolidated")}
-                    />
-                    Consolidated
-                  </label>
-                  <label htmlFor="non-consolidated">
-                    <input
-                      {...register("consolidationType")}
-                      type="radio"
-                      value="non-consolidated"
-                      id="non-consolidated"
-                      onClick={() => setConsolidateValue("non-consolidated")}
-                    />
-                    Non-Consolidated
-                  </label>
                 </div>
 
                 {consolidateValue == "consolidated" && (
@@ -730,13 +815,32 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <Form.Control type="text" className="form-control" placeholder="" {...register("kanal")} />
+                          {/* <label htmlFor="first">First</label>
+                          <input onChange={onChange} defaultValue={first} name="first" id="first" type="number" />
+
+                          <label htmlFor="sum">Total</label>
+                          <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" /> */}
+                          <input onChange={onChange} defaultValue={kanal} name="kanal" id="kanal" type="number" />
+                          <input type="text" className="form-control" {...register("kanal")} onChange={onChange} defaultValue={kanal} id="kanal" />
+
+                          <label htmlFor="sum">Total</label>
+                          <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" />
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} />
+                          <input onChange={onChange} defaultValue={marla} name="marla" id="marla" type="number" />
+                          <input type="text" className="form-control" {...register("marla")} onChange={onChange} defaultValue={marla} id="marla" />
+
+                          <label htmlFor="summarla">Total</label>
+                          <input onChange={onChange} defaultValue={summarla} id="summarla" name="summarla" type="number" />
+                          {/* <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} /> */}
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" placeholder="" {...register("sarsai")} />
+                          <input onChange={onChange} defaultValue={marla} name="sarsai" id="sarsai" type="number" />
+                          <input type="text" className="form-control" {...register("sarsai")} onChange={onChange} defaultValue={sarsai} id="sarsai" />
+
+                          <label htmlFor="sumsarsai">Total</label>
+                          <input onChange={onChange} defaultValue={sumsarsai} id="sumsarsai" name="sumsarsai" type="number" />
+                          {/* <Form.Control type="text" className="form-control" placeholder="" {...register("sarsai")} /> */}
                         </td>
                       </tr>
                     </tbody>

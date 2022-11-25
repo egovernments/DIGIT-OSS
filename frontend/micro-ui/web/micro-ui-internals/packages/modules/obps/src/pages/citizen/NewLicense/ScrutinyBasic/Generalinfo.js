@@ -267,7 +267,7 @@ const Genarelinfo = (props) => {
     fieldIdList.forEach((item) => {
       if (dataIcons !== null && dataIcons !== undefined) {
         console.log("color method called");
-        const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        const fieldPresent = dataIcons?.egScrutiny?.filter(ele => (ele.fieldIdL === item.label));
         console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
         if (fieldPresent && fieldPresent.length) {
           console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
@@ -289,7 +289,7 @@ const Genarelinfo = (props) => {
 
   useEffect(() => {
     if (labelValue) {
-      const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      const fieldPresent = dataIcons?.egScrutiny?.filter(ele => (ele.fieldIdL === labelValue));
       setSelectedFieldData(fieldPresent[0]);
     } else {
       setSelectedFieldData(null);
@@ -358,17 +358,17 @@ const Genarelinfo = (props) => {
                   </h5>
                 </Form.Label>
 
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control
+                <div className="d-flex flex-row  align-items-center">
+                  <Form.Control
                     type="text"
                     placeholder={applicantInfoPersonal !== null ? applicantInfoPersonal?.purpose : null}
                     // onChange={handleChangesetPurpose}
                     height={30}
                     style={{ maxWidth: 200, marginRight: 5 }}
                     disabled
-                  > */}
-                    <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} readOnly>
-                    <option value="">--Purpose--</option>
+                  >
+                    {/* <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} readOnly> */}
+                    {/* <option value="">--Purpose--</option>
                     <option value="01">Plotted Commercial</option>
                     <option value="02">Group Housing Commercial</option>
                     <option value="03">AGH </option>
@@ -377,9 +377,9 @@ const Genarelinfo = (props) => {
                     <option value="06">Industrial Colony Commercial</option>
                     <option value="07">IT Colony Commercial</option>
                     <option value="08">DDJAY</option>
-                    <option value="12">TOD Group housing</option>
-                    </select>
-                  {/* </Form.Control> */}
+                    <option value="12">TOD Group housing</option> */}
+                    {/* </select> */}
+                  </Form.Control>
                   <ReportProblemIcon
                     style={{
                       color: fieldIconColors.purpose
@@ -890,9 +890,9 @@ const Genarelinfo = (props) => {
                 </thead>
                 <tbody>
                 {
-                    applicantInfoPersonal?.AppliedLandDetails?.map((item,index)=>{
+                    applicantInfoPersonal?.AppliedLandDetails?.map((item,index)=>(
                       
-                  <tr>
+                  <tr key={index}>
                     <td>
                       <input type="text" className="form-control" placeholder={item?.tehsil} disabled />
                     </td>
@@ -953,16 +953,16 @@ const Genarelinfo = (props) => {
 
                     
                   </tr>
-                    })
+                    ))
                   }
                 </tbody>
               </table>
             </div>
             {/* </div>
       </Collapse> */}
-            <div style={{ position: "relative", marginBottom: 40 }}>
+            {/* <div style={{ position: "relative", marginBottom: 40 }}>
               <Button onClick={() => props.passUncheckedList({ data: uncheckedValue, purpose: purpose })}>Submit</Button>
-            </div>
+            </div> */}
           </Form.Group>
           <br></br>
         </div>
