@@ -654,8 +654,9 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     placeholder={PanNumber}
                     onChange={selectPanNumber}
                     className="text-uppercase"
+                    max={10}
                     // onChange={(e) => setPanNumber(e.target.value)}
-                    {...{ required: true, pattern: "[A-Z]{5}[0-9]{4}[A-Z]{1}", title: t("BPA_INVALID_PAN_NO") }}
+                    {...{ required: true,maxlength:"10", title: t("BPA_INVALID_PAN_NO") }}
                   />
                   {PanNumber && PanNumber.length > 0 && !PanNumber.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
                   <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
