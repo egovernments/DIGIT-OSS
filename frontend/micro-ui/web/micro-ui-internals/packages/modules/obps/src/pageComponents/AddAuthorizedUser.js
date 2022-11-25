@@ -22,6 +22,7 @@ import {Modal, ModalHeader, ModalFooter, ModalBody } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import { convertEpochToDate } from "../utils/index";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import FileUpload from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import axios from "axios";
 const TYPE_REGISTER = { type: "register" };
@@ -40,6 +41,13 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   // console.log(userInfo?.info?.id);
+
+  const {setValue, getValues, watch} = useForm();
+  const [Documents, setDocumentsData] = useState([]);
+
+  const DevelopersAllData = getValues();
+  console.log("DEVEDATAGEGT",DevelopersAllData);
+
   const getDeveloperData = async ()=>{
     try {
       const requestResp = {
@@ -61,7 +69,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
       });
       const developerDataGet = getDevDetails?.data; 
       console.log("ADDAUTHUSER",getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
-      // setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
+      setAurthorizedUserInfoArray(getDevDetails?.data?.devDetail[0]?.aurthorizedUserInfoArray);
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +90,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
           "msg_id": "654654",
           "status": "successful",
           "auth_token": ""
-           },
+        },
            "parentid":userInfo?.info?.id,
             "tenantId": tenantId
     }
@@ -115,9 +123,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   const [gender, setGender] = useState(formData?.LicneseDetails?.gender || formData?.LicneseDetails?.gender);
   const [aurthorizedPan, setAurthorizedPan] = useState(formData?.LicneseDetails?.aurthorizedPan || formData?.LicneseDetails?.aurthorizedPan || "");
   const [aurthorizedUserInfoArray, setAurthorizedUserInfoArray] = useState([]);
-  const [docUpload,setDocuploadData]=useState([])
+  const [docUpload,setDocuploadData]=useState([]);
+  const [uploadAadharPdf,setAdhaarPdf] = useState( DevelopersAllData?.uploadAadharPdf || "");
+  const [uploadDigitalSignaturePdf,setDigitalSignPdf] = useState( DevelopersAllData?.uploadDigitalSignaturePdf || "");
   const [file,setFile]=useState(null);
-  
+  const [urlGetAdhaarPdf,setAdhaarPdfUrl] = useState("");
+  const [urlGetDigitalSign,setDigitalSignPdfUrl] = useState("");
   
   const [showAuthuser, setShowAuthuser] = useState(false);
   const handleShowAuthuser = () => {
@@ -270,41 +281,72 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     }
   };
 
-  const getDocumentData = async () => {
-    if(file===null){
-       return
+  const getDocumentData = async (file, fieldName) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("tenantId", "hr");
+    formData.append("module", "property-upload");
+    formData.append("tag", "tag-property");
+    // setLoader(true);
+    try {
+      const Resp = await axios.post("/filestore/v1/files", formData, {}).then((response) => {
+        return response;
+      });
+      console.log(Resp?.data?.files);
+      setValue(fieldName, Resp?.data?.files?.[0]?.fileStoreId);
+      // setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      console.log("getValues()=====", getValues());
+      setDocumentsData(getValues())
+    //   setLoader(false);
+    
+    } catch (error) {
+    //   setLoader(false);
+      console.log(error.message);
     }
-       const formData = new FormData();
-       formData.append(
-           "file",file.file      );
-       formData.append(
-           "tenantId", tenantId      );  
-       formData.append(
-           "module","property-upload"      );
-        formData.append(
-            "tag","tag-property"      );
-   
-        console.log("File",formData)
-
-       try {
-           const Resp = await axios.post("/filestore/v1/files",formData,
-           {headers:{
-               "content-type":"multipart/form-data"
-           }}).then((response) => {
-               return response
-           });
-           setDocuploadData(Resp.data)
-           
-       } catch (error) {
-           console.log(error.message);
-       }
-
-      
-
-  }
+  };
   useEffect(() => {
     getDocumentData();
   }, [file]);
+
+  const getDigitalSignPdf = async () => {
+    if ((Documents?.uploadDigitalSignaturePdf !== null || Documents?.uploadDigitalSignaturePdf !== undefined) && (uploadDigitalSignaturePdf!==null || uploadDigitalSignaturePdf!=="")) {
+        
+        try {
+            const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.uploadDigitalSignaturePdf}`, {
+
+            });
+            const FILDATA = response.data?.fileStoreIds[0]?.url;
+            setDigitalSignPdfUrl(FILDATA)
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+  }
+
+  useEffect(() => {
+    getDigitalSignPdf();
+  }, [Documents?.uploadDigitalSignaturePdf]);
+  
+  
+  const getAdhaarPdf = async () => {
+    if ((Documents?.uploadAadharPdf !== null || Documents?.uploadAadharPdf !== undefined) && (uploadAadharPdf!==null || uploadAadharPdf!=="")) {
+        
+        try {
+            const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${Documents?.uploadAadharPdf}`, {
+
+            });
+            const FILDATA = response.data?.fileStoreIds[0]?.url;
+            setAdhaarPdfUrl(FILDATA)
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+  }
+
+  useEffect(() => {
+    getAdhaarPdf();
+  }, [Documents?.uploadAadharPdf]);
+
   const [noofRows, setNoOfRows] = useState(1);
   const handleSubmitFormdata = () => {
     if(aurthorizedMobileNumber!=="" && aurthorizedUserName!=="" && aurthorizedMobileNumber!=="" && aurthorizedEmail!==""){
@@ -316,8 +358,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
           emailId: aurthorizedEmail,
           dob: aurthorizedDob,
           pan: aurthorizedPan,
-          document: docUpload,
-          "parentId":userInfo?.info?.id,
+          uploadAadharPdf: Documents?.uploadAadharPdf,
+          uploadDigitalSignaturePdf: Documents?.uploadDigitalSignaturePdf,
+          "parentId": userInfo?.info?.id,
           "type": "CITIZEN",
           "password": "Password@123",
           
@@ -370,6 +413,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
     catch(error){
       console.log(error.message);
     }
+    getAdhaarPdf();
+    getDigitalSignPdf();
     handleCloseAuthuser();
   }
 
@@ -537,27 +582,41 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           </td>
                           <td>
                             <div className="row">
-                            {(!elementInArray.document == "")?
-                              <a href="javascript:void(0)" className="btn btn-sm col-md-6">
+                            {(elementInArray.uploadAadharPdf !== "")?
+                              <a href={urlGetAdhaarPdf} target="_blank" className="btn btn-sm col-md-6">
                                 <VisibilityIcon color="info" className="icon" />
                               </a>:<p></p>
                             }
-                              {/* <button className="btn btn-sm col-md-6">
-                                <FileDownloadIcon color="primary" />
-                              </button> */}
+                              <div className="btn btn-sm col-md-6">
+                                <label for="uploadAdhaarDoc"> <FileUpload color="primary" /></label>
+                                <input 
+                                  id="uploadAdhaarDoc"
+                                  type="file" 
+                                  access=".pdf"
+                                  style={{display: "none"}}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadAadharPdf")} 
+                                />
+                              </div>
 
                             </div>
                           </td>
                           <td>
                             <div className="row">
-                            {(!elementInArray.document == "")?
-                              <a href="javascript:void(0)" className="btn btn-sm col-md-6">
+                            {(elementInArray.uploadDigitalSignaturePdf !== "")?
+                              <a href={urlGetDigitalSign} target="_blank" className="btn btn-sm col-md-6">
                                 <VisibilityIcon color="info" className="icon" />
                               </a>:<p></p>
                             }
-                              {/* <button className="btn btn-sm col-md-6">
-                                <FileDownloadIcon color="primary" />
-                              </button> */}
+                             <div className="btn btn-sm col-md-6">
+                                <label for="uploadSignDoc"> <FileUpload color="primary" /></label>
+                                <input 
+                                  id="uploadSignDoc"
+                                  type="file" 
+                                  access=".pdf"
+                                  style={{display: "none"}}
+                                  onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf")} 
+                                />
+                              </div>
 
                             </div>
                           </td>
@@ -722,20 +781,20 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                         <label htmlFor="name" className="text">Upload Aadhar PDF</label>
                         <input
                           type="file"
-                          name="name[]"
+                          name="uploadAadharPdf"
                           placeholder=""
                           class="employee-card-input"
-                          onChange={(e) => setFile({ file: e.target.files[0] })}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "uploadAadharPdf")}
                         />
                       </Col>
                       <Col md={3} xxl lg="3">
                         <label htmlFor="name" className="text">Upload Digital Signature PDF</label>
                         <input
                           type="file"
-                          name="name[]"
+                          name="uploadDigitalSignaturePdf"
                           placeholder=""
                           class="employee-card-input"
-                          onChange={(e) => setFile({ file: e.target.files[0] })}
+                          onChange={(e) => getDocumentData(e?.target?.files[0], "uploadDigitalSignaturePdf")}
                         />
                       </Col>
                     </Row>
