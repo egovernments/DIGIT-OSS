@@ -11,6 +11,7 @@ import { Modal, ModalHeader, ModalFooter, ModalBody } from 'react-bootstrap';
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import FileUpload from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import DeleteIcon from '@mui/icons-material/Delete';
 const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) => {
@@ -950,11 +951,24 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                     />
                                                 </td>
                                                 <td align="center" size="large">
-                                                    {DevelopersAllData?.individualCertificateCA !== "" ? 
-                                                        <a href={urlGetIndividualCertificateCA} target="_blank" className="btn btn-sm col-md-6">
-                                                            <VisibilityIcon color="info" className="icon" />
-                                                        </a>:<p></p>
-                                                    }
+                                                    <div className="row">
+                                                        {DevelopersAllData?.individualCertificateCA !== "" ? 
+                                                            <a href={urlGetIndividualCertificateCA} target="_blank" className="btn btn-sm col-md-6">
+                                                                <VisibilityIcon color="info" className="icon" />
+                                                            </a>:<p></p>
+                                                        }
+                                                        <div className="btn btn-sm col-md-6">
+                                                            <label for="uploadIndCaDoc"> <FileUpload color="primary" /></label>
+                                                            <input 
+                                                            id="uploadIndCaDoc"
+                                                            type="file" 
+                                                            access=".pdf"
+                                                            style={{display: "none"}}
+                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "individualCertificateCA")} 
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -992,11 +1006,24 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
 
                                                 </td>
                                                 <td align="center" size="large">
-                                                    {DevelopersAllData?.companyBalanceSheet !== "" ? 
-                                                        <a href={urlGetCompanyBalanceSheet} target="_blank" className="btn btn-sm col-md-6">
-                                                            <VisibilityIcon color="info" className="icon" />
-                                                        </a>:<p></p>
-                                                    }
+                                                    
+                                                    <div className="row">
+                                                        {DevelopersAllData?.companyBalanceSheet !== "" ? 
+                                                            <a href={urlGetIndividualCertificateCA} target="_blank" className="btn btn-sm col-md-6">
+                                                                <VisibilityIcon color="info" className="icon" />
+                                                            </a>:<p></p>
+                                                        }
+                                                        <div className="btn btn-sm col-md-6">
+                                                            <label for="uploadBalanceDoc"> <FileUpload color="primary" /></label>
+                                                            <input 
+                                                            id="uploadBalanceDoc"
+                                                            type="file" 
+                                                            access=".pdf"
+                                                            style={{display: "none"}}
+                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "companyBalanceSheet")} 
+                                                            />
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1012,11 +1039,24 @@ const DeveloperCapacity = ({ t, config, onSelect, value, userType, formData }) =
                                                     />
                                                 </td>
                                                 <td align="center" size="large">
-                                                    {DevelopersAllData?.paidUpCapital !== "" ? 
-                                                        <a href={urlGetPaidUpCapital} target="_blank" className="btn btn-sm col-md-6">
-                                                            <VisibilityIcon color="info" className="icon" />
-                                                        </a>:<p></p>
-                                                    }
+                                                    <div className="row">
+
+                                                        {DevelopersAllData?.paidUpCapital !== "" ? 
+                                                            <a href={urlGetPaidUpCapital} target="_blank" className="btn btn-sm col-md-6">
+                                                                <VisibilityIcon color="info" className="icon" />
+                                                            </a>:<p></p>
+                                                        }
+                                                        <div className="btn btn-sm col-md-6">
+                                                            <label for="uploadPaidUpDoc"> <FileUpload color="primary" /></label>
+                                                            <input 
+                                                            id="uploadPaidUpDoc"
+                                                            type="file" 
+                                                            access=".pdf"
+                                                            style={{display: "none"}}
+                                                            onChange={(e) => getDocumentData(e?.target?.files[0], "paidUpCapital")} 
+                                                            />
+                                                        </div>
+                                                    </div>
                                                     
                                                 </td>
                                             </tr>
