@@ -109,7 +109,7 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   },[])
   let validation = {};
   let isOpenLinkFlow = window.location.href.includes("openlink");
-  
+  const [PanValError, setPanValError] = useState("");
   
 
 
@@ -163,6 +163,9 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
   }
   function selectPanNumber(e) {
     setAurthorizedPan(e.target.value.toUpperCase());
+    if(e.target.value === 10){
+      panVerification();
+    }
   }
   function selectAurthorizedMobileNumber(value){
     setAurthorizedMobileNumber(value);
@@ -262,7 +265,8 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
       }}) 
       console.log("",panResp.data);
     } catch(errdata){
-      console.error("PANERROR",errdata);
+      console.log(error?.response?.data?.errorDescription);
+      setPanValError(error?.response?.data?.errorDescription)
     }
   }
   
@@ -685,21 +689,17 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                       <Col md={3} xxl lg="3">
                         <label htmlFor="name" className="text">Mobile Number  <span className="text-danger font-weight-bold">*</span></label>
                         <MobileNumber
-                          type="tel"
-                          name="name[]"
-                          placeholder=""
-                          class="employee-card-input"
-                          // value={aurthorizedMobileNumber}
-                          onChange={selectAurthorizedMobileNumber}
+                          value={aurthorizedMobileNumber}
+                          name="registeredContactNo"
                           maxlength={"10"}
-                          isMandatory={false}
-                          pattern={"[6-9]{1}[0-9]{9}"}
-                          required={"required"}
-                          {...(validation = {
-                            isRequired: true,
-                          })}
+                          required
+                          onChange={selectAurthorizedMobileNumber}
+                          // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                          {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
                         />
                         {aurthorizedMobileNumber && aurthorizedMobileNumber.length > 0 && !aurthorizedMobileNumber.match(Digit.Utils.getPattern('MobileNo')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID")}</CardLabelError>}
+                        
+                        
                       </Col>
                       <Col md={3} xxl lg="3">
                         <label htmlFor="name" className="text">Email <span className="text-danger font-weight-bold">*</span></label>
@@ -771,11 +771,12 @@ const AddAuthorizeduser = ({ t, config, onSelect, formData, data, isUserRegister
                           name="aurthorizedPan"
                           // value={aurthorizedPan}
                           placeholder=""
-                          // onChange={(e) => setAurthorizedPan(e.target.value)}
+                          // onChange={(e) => setAurthorizedPan(e.target.value.toUpperCase())}
                           onChange={selectPanNumber}
-                          {...{ required: true, title: t("BPA_INVALID_PAN_NO") }}
+                          {...{ required: true, maxlength: "10", title: t("BPA_INVALID_PAN_NO") }}
                         />
                         {aurthorizedPan && aurthorizedPan.length > 0 && !aurthorizedPan.match(Digit.Utils.getPattern('PAN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px' }}>{t("BPA_INVALID_PAN_NO")}</CardLabelError>}
+                        <h3 className="error-message" style={{ color: "red" }}>{PanValError}</h3>
                       </Col>
                       <Col md={3} xxl lg="3">
                         <label htmlFor="name" className="text">Upload Aadhar PDF</label>
