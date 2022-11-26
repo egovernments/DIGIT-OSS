@@ -247,6 +247,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     function selectCinNumber(e){
       setCinNo(e.target.value.toUpperCase())
     }
+    function selectDinNumber(value){
+      setModalDIN(value)
+    }
     const handleshow0 = (e) => {
       const getshow = e.target.value;
       setShowhide0(getshow);
@@ -441,7 +444,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       }
       onSelect(config.key, addInfo);
       // console.log("DATALICDET",addInfo);
-      localStorage.setItem("addInfo",JSON.stringify(addInfo));
+      // localStorage.setItem("addInfo",JSON.stringify(addInfo));
 
       const developerRegisterData = {
         "id":userInfo?.info?.id,
@@ -511,7 +514,13 @@ const onSkip = () => onSelect();
           config={config}
           onSelect={goNext}
           onSkip={onSkip}
-          isDisabled={showDevTypeFields === "00" || showDevTypeFields==undefined}
+          isDisabled={
+            (showDevTypeFields === "00" || 
+            showDevTypeFields==undefined) ||
+            !cin_Number.match(Digit.Utils.getPattern('CIN')) ||
+            !gst_Number.match(Digit.Utils.getPattern('GSTNo')) ||
+            !registeredContactNo.match(Digit.Utils.getPattern('MobileNo'))
+          }
           t={t}
         >
           <div className="happy">
@@ -661,13 +670,12 @@ const onSkip = () => onSelect();
                         // onChange={(e) => setCinNo(e.target.value)}
                         value={cin_Number}
                         name="cin_Number"
-                        isMendatory={false}
-                        required
+                        // isMendatory={false}
                         placeholder={cin_Number}
                         className="employee-card-input text-uppercase"
                         max={"21"}
                         {...(validation = {
-                          isRequired: true,
+                          // isRequired: true,
                           pattern: "^[A-Z0-9]*$",
                           type: "text",
                           maxlength: "21",
@@ -688,14 +696,15 @@ const onSkip = () => onSelect();
                         value={companyName}
                         placeholder={companyName}
                         name="companyName"
-                        required
+                        
                         onChange={(e) => setCompanyName(e.target.value)}
                         // disabled="disabled"
                         className="employee-card-input"
-                        isMendatory={false}
+                        // isMendatory={false}
                         {...(validation = {
-                          isRequired: true,
+                          // isRequired: true,
                           type: "text",
+                          maxlength: "50",
                           title: "Please Enter Company Name"
                         })}
                       // placeholder=""
@@ -723,14 +732,14 @@ const onSkip = () => onSelect();
                     <div className="form-group">
                       <label htmlFor="name">Date of Incorporation <span className="text-danger font-weight-bold">*</span></label>
                       <DatePicker
-                        isMandatory={false}
-                        required
+                        // isMandatory={false}
+                        
                         date={incorporationDate}
                         name="incorporationDate"
                         onChange={(e) => setIncorporation(e)}
                         disable={false}
                         {...(validation = {
-                          isRequired: true,
+                          // isRequired: true,
                           type: "date",
                           title: "Please Enter Date of Incorporation"
                         })}
@@ -756,8 +765,8 @@ const onSkip = () => onSelect();
                         onChange={(e) => setRegistered(e.target.value)}
                         // disabled="disabled"
                         className="employee-card-input"
-                        isMandatory={false}
-                        required
+                        // isMandatory={false}
+                        
                         {...(validation = {
                           isRequired: true,
                           error: "Address is required"
@@ -773,10 +782,10 @@ const onSkip = () => onSelect();
                       <TextInput
                         t={t}
                         type={"email"}
-                        isMandatory={false}
+                        // isMandatory={false}
                         optionKey="i18nKey"
                         name="email"
-                        required
+                        
                         value={email}
                         placeholder={email}
                         // onChange={setEmail}
@@ -812,7 +821,7 @@ const onSkip = () => onSelect();
                         value={registeredContactNo}
                         name="registeredContactNo"
                         maxlength={"10"}
-                        required
+                        
                         onChange={selectRegisteredMobile}
                         // disable={mobileNumber && !isOpenLinkFlow ? true : false}
                         {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
@@ -825,7 +834,7 @@ const onSkip = () => onSelect();
                       <label htmlFor="name">GST No. <span className="text-danger font-weight-bold">*</span></label>
                       <TextInput
                         type="text"
-                        required
+                        
                         value={gst_Number}
                         placeholder={gst_Number}
                         onChange={(e) => setGST(e.target.value.toUpperCase())}
@@ -880,7 +889,7 @@ const onSkip = () => onSelect();
                     </thead>
                     <tbody>
                       {
-                        ( modalValuesArray.length>0)?
+                        ( modalValuesArray?.length>0)?
                         modalValuesArray.map((elementInArray, input) => {
                           return (
                             <tr>
@@ -1084,7 +1093,7 @@ const onSkip = () => onSelect();
                     </thead>
                     <tbody>
                       {
-                        (DirectorData.length>0)?
+                        (DirectorData?.length>0)?
                       DirectorData.map((elementInArray, input) => {
                         return (
                           <tr key={input}>
@@ -1169,18 +1178,30 @@ const onSkip = () => onSelect();
                         <Row>
                           <Col md={3} xxl lg="4">
                             <label htmlFor="name" className="text">DIN Number</label>
-                            <TextInput
-                              type="number"
+                            <MobileNumber
+                              value={modalDIN}
+                              name="modalDIN"
+                              maxlength={"8"}
+                              hideSpan="true"
+                              // onChange={(e) => setModalDIN(e.target.value)}
+                              onChange={selectDinNumber}
+                              // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                              {...{ required: true, pattern: "[1-9][0-9]{7}", type: "tel", title: t("Enter Valid DIN") }}
+                            />
+                            {/* <MobileNumber
+                              
                               isMandatory={false}
                               onChange={(e) => setModalDIN(e.target.value.toUpperCase())}
                               placeholder=""
-                              max={8}
+                              max= {8}
                               class="employee-card-input"
                               {...(validation = {
                                 isRequired: true,
+                                maxlength: "8",
+                                type: "tel",
                                 title: "Please Enter DIN No."
                               })}
-                            />
+                            /> */}
                             {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('DIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
                           </Col>
                           <Col md={3} xxl lg="4">
