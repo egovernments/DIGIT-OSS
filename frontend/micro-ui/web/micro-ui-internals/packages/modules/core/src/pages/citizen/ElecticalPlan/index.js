@@ -1,228 +1,292 @@
-import React, { useState } from "react";
-import { Row, Col, Form, Button } from "react-bootstrap";
-import { TextInput } from "@egovernments/digit-ui-react-components";
-import { Upload } from "react-bootstrap-icons";
+import React, { useState, useEffect } from "react";
+import { Card, Row, Col, Form, Button } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
-const ElectricalPlan = () => {
-  const [LOCNumber, setLOCNumber] = useState("");
-  const [getData, setData] = useState([
-    { name: "Self-certified drawings from empanelled/certified architects that conform to the standard approved template", image: null },
-    { name: "Environmental Clearance", image: null },
-    { name: "PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website)", image: null },
-    { name: "AutoCAD (DXF) file", image: null },
-    { name: "Environmental Clearance", image: null },
-    { name: "Certified copy of the plan verified by a third party", image: null },
-  ]);
+const electricalPlanService = () => {
+  const { register, handleSubmit } = useForm();
+  const [developerDataLabel, setDeveloperDataLabel] = useState([]);
+  const electricPlan = async (data) => {
+    console.log(data);
+    try {
+      const postDistrict = {
+        requestInfo: {
+          api_id: "1",
+          ver: "1",
+          ts: null,
+          action: "create",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          auth_token: null,
+        },
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("data===", LOCNumber);
+        electricPlanRequest: {
+          electricInfra: "true",
+          electricDistribution: "false",
+          electricalCapacity: "false",
+          switchingStation: "true",
+          landSanction: "false",
+          environmentClearance: "",
+          autoCad: "",
+          verifiedPlan: "",
+        },
+      };
+      const Resp = await axios.post("/land-services/electric/plan/_create", postDistrict);
+      setDeveloperDataLabel(Resp.data);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
   return (
-    <div className="card" style={{ marginTop: 50 }}>
-      <form onSubmit={handleSubmit}>
-        <Row>
-          <Col className="ms-auto" md={4} xxl lg="4">
-            <span className="surveyformfield">
-              <label>LOI Number</label>
-              <TextInput name="LOINumber" onChange={(e) => setLOCNumber(e.target.value)} type="text" value={LOCNumber} />
-            </span>
-          </Col>
-          <Col className="ms-auto" md={4} xxl lg="4">
-            <div>
-              <Form.Label>
-                Electrical infrastructure sufficient to cater for the electrical need of the project area <span style={{ color: "red" }}>*</span>{" "}
-                &nbsp;&nbsp;
-              </Form.Label>
+    <form onSubmit={handleSubmit(electricPlan)}>
+      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Electrical Plan </h4>
+        <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
+          <Row className="ml-auto" style={{ marginBottom: 5 }}>
+            <Col md={4} xxl lg="4">
+              <div>
+                <Form.Label>
+                  <h2>
+                    LOI Number <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </Form.Label>
+              </div>
+              <input type="number" className="form-control" placeholder="" {...register("loiNumber")} />
+            </Col>
+            <Col md={4} xxl lg="4">
+              <div>
+                <Form.Label>
+                  <h2>
+                    Electrical infrastructure sufficient to cater for the electrical need of the project area <span style={{ color: "red" }}>*</span>{" "}
+                    &nbsp;&nbsp;
+                  </h2>
+                </Form.Label>
 
+                <Form.Check
+                  onChange={(e) => console.log(e)}
+                  value="electricalInfrastructure"
+                  type="radio"
+                  id="default-radio"
+                  label="Yes"
+                  name="electricalInfrastructure"
+                  {...register("electricalInfrastructure")}
+                  inline
+                ></Form.Check>
+                <Form.Check
+                  onChange={(e) => console.log(e)}
+                  value="electricalInfrastructure"
+                  type="radio"
+                  id="default-radio"
+                  label="No"
+                  name="electricalInfrastructure"
+                  {...register("electricalInfrastructure")}
+                  inline
+                ></Form.Check>
+              </div>
+            </Col>
+            <Col className="ms-auto" md={4} xxl lg="4">
+              <div>
+                <Form.Label>
+                  Provision of the electricity distribution in the project area by the instructions of the DHBVN{" "}
+                  <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                </Form.Label>
+              </div>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="electricalInfrastructure"
+                value="electricityDistribution"
                 type="radio"
                 id="default-radio"
                 label="Yes"
-                name="electricalInfrastructure"
+                name="electricityDistribution"
+                {...register("electricityDistribution")}
                 inline
               ></Form.Check>
               <Form.Check
                 onChange={(e) => console.log(e)}
-                value="electricalInfrastructure"
+                value="electricityDistribution"
                 type="radio"
                 id="default-radio"
                 label="No"
-                name="electricalInfrastructure"
+                name="electricityDistribution"
+                {...register("electricityDistribution")}
                 inline
               ></Form.Check>
-            </div>
-          </Col>
-          <Col className="ms-auto" md={4} xxl lg="4">
-            <div>
-              <Form.Label>
-                Provision of the electricity distribution in the project area by the instructions of the DHBVN <span style={{ color: "red" }}>*</span>{" "}
-                &nbsp;&nbsp;
-              </Form.Label>
-            </div>
-            <Form.Check
-              onChange={(e) => console.log(e)}
-              value="electricityDistribution"
-              type="radio"
-              id="default-radio"
-              label="Yes"
-              name="electricityDistribution"
-              inline
-            ></Form.Check>
-            <Form.Check
-              onChange={(e) => console.log(e)}
-              value="electricityDistribution"
-              type="radio"
-              id="default-radio"
-              label="No"
-              name="electricityDistribution"
-              inline
-            ></Form.Check>
-          </Col>
-          <Col className="ms-auto" md={4} xxl lg="4">
-            <div>
-              <Form.Label>
-                The capacity of the proposed electrical substation as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </Form.Label>
-            </div>
-            <Form.Check
-              onChange={(e) => console.log(e)}
-              value="proposedElectricalSubstation"
-              type="radio"
-              id="default-radio"
-              label="Yes"
-              name="proposedElectricalSubstation"
-              inline
-            ></Form.Check>
-            <Form.Check
-              onChange={(e) => console.log(e)}
-              value="proposedElectricalSubstation"
-              type="radio"
-              id="default-radio"
-              label="No"
-              name="proposedElectricalSubstation"
-              inline
-            ></Form.Check>
-          </Col>
-          <Col className="ms-auto" md={4} xxl lg="4">
-            <div>
-              <Form.Label>
-                Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </Form.Label>
-            </div>
-            <Form.Check
-              onChange={(e) => console.log(e)}
-              value="switchingStation"
-              type="radio"
-              id="default-radio"
-              label="Yes"
-              name="switchingStation"
-              inline
-            ></Form.Check>
-            <Form.Check
-              onChange={(e) => console.log(e)}
-              value="switchingStation"
-              type="radio"
-              id="default-radio"
-              label="No"
-              name="switchingStation"
-              inline
-            ></Form.Check>
-          </Col>
-          <Col className="ms-auto" md={4} xxl lg="4">
-            <div>
-              <Form.Label>
-                Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </Form.Label>
-            </div>
-            <Form.Check
-              onChange={(e) => console.log(e)}
-              value="LoadSanctionApproval"
-              type="radio"
-              id="default-radio"
-              label="Yes"
-              name="LoadSanctionApproval"
-              inline
-            ></Form.Check>
-            <Form.Check
-              onChange={(e) => console.log(e)}
-              value="LoadSanctionApproval"
-              type="radio"
-              id="default-radio"
-              label="No"
-              name="LoadSanctionApproval"
-              inline
-            ></Form.Check>
-          </Col>
-          <Col className="ms-auto" md={4} xxl lg="4"></Col>
-        </Row>
-        {/* <div>
-           
-            
+            </Col>
+            <Col className="ms-auto" md={4} xxl lg="4">
+              <div>
+                <Form.Label>
+                  The capacity of the proposed electrical substation as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                </Form.Label>
+              </div>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="proposedElectricalSubstation"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="proposedElectricalSubstation"
+                {...register("proposedElectricalSubstation")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="proposedElectricalSubstation"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="proposedElectricalSubstation"
+                {...register("proposedElectricalSubstation")}
+                inline
+              ></Form.Check>
+            </Col>
+            <Col className="ms-auto" md={4} xxl lg="4">
+              <div>
+                <Form.Label>
+                  Provision of 33 Kv switching station for the electrical infrastructure as per the approved layout plan
+                  <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                </Form.Label>
+              </div>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="switchingStation"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="switchingStation"
+                {...register("switchingStation")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="switchingStation"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="switchingStation"
+                {...register("switchingStation")}
+                inline
+              ></Form.Check>
+            </Col>
+            <Col className="ms-auto" md={4} xxl lg="4">
+              <div>
+                <Form.Label>
+                  Load sanction approval as per the requirement <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
+                </Form.Label>
+              </div>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="LoadSanctionApproval"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="LoadSanctionApproval"
+                {...register("LoadSanctionApproval")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                onChange={(e) => console.log(e)}
+                value="LoadSanctionApproval"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="LoadSanctionApproval"
+                {...register("LoadSanctionApproval")}
+                inline
+              ></Form.Check>
+            </Col>
+            <Col className="ms-auto" md={4} xxl lg="4"></Col>
+          </Row>
+
+          <div className="table table-bordered table-responsive">
+            <thead>
+              <tr>
+                <td style={{ textAlign: "center" }}> Sr.No.</td>
+                <td style={{ textAlign: "center" }}>Type Of Map/Plan</td>
+                <td style={{ textAlign: "center" }}>Annexure</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">1.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template.</h2>
+                </td>
+                <td component="th" scope="row">
+                  <input type="file" className="form-control" {...register("selfCenteredDrawings")} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">2.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Environmental Clearance.</h2>
+                </td>
+                <td component="th" scope="row">
+                  <input type="file" className="form-control" {...register("environmentClearance")} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">3.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).</h2>
+                </td>
+                <td component="th" scope="row">
+                  <input type="file" className="form-control" {...register("pdfFormat")} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">4.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>AutoCAD (DXF) file.</h2>
+                </td>
+                <td component="th" scope="row">
+                  <input type="file" className="form-control" {...register("autoCad")} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">5.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Certified copy of the plan verified by a third party.</h2>
+                </td>
+                <td component="th" scope="row">
+                  <input type="file" className="form-control" {...register("certifiedCopy")} />
+                </td>
+              </tr>
+            </tbody>
           </div>
-          <div>
-           
+
+          <div class="row">
+            <div class="col-sm-12 text-right">
+              <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+                Submit
+              </button>
+            </div>
           </div>
-          <div>
-           
-          </div>
-          <div>
-           
-          </div>
-          <div>
-           
-          </div> */}
-        <div>
-          <table>
-            <tr>
-              <th class="fw-normal" style={{ magrin: 5, textAlign: "center" }}>
-                Sr. No.
-              </th>
-              <th class="fw-normal" style={{ magrin: 5, textAlign: "center" }}>
-                Type Of Map/Plan
-              </th>
-              <th class="fw-normal" style={{ magrin: 5, textAlign: "center" }}>
-                Annexure
-              </th>
-            </tr>
-            {getData?.map((item, index) => {
-              return (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{item?.name}</td>
-                  <td style={{ magrin: 5, textAlign: "center" }}>
-                    <div class="mainWrapper">
-                      <div class="btnimg">
-                        <Upload class="text-success" />
-                      </div>
-                      <input
-                        type="file"
-                        name="file"
-                        onChange={(e) => {
-                          setData(
-                            getData?.map((tag, indi) => {
-                              return indi === index ? { ...tag, image: e.target.files[0] } : { ...tag };
-                            })
-                          );
-                        }}
-                      />
-                      {item?.image?.name}
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </table>
-        </div>
-        <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-          <Button style={{ textAlign: "right" }}>Submit</Button>
-        </div>
-      </form>
-    </div>
+        </Card>
+      </Card>
+    </form>
   );
 };
 
-export default ElectricalPlan;
+export default electricalPlanService;

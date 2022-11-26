@@ -3,8 +3,13 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
+import { Card } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+
 
 function SurrenderLic() {
+
+
   const [selects, setSelects] = useState();
   const [showhide, setShowhide] = useState("");
 
@@ -19,12 +24,23 @@ function SurrenderLic() {
     setSelects(getu);
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+    setValue,
+  } = useForm({});
+
+  const SurrenderLic = (data) => console.log(data);
+
   return (
-    <div className="container my-5">
-      <div className=" col-12 m-auto">
+    <form onSubmit={handleSubmit(SurrenderLic)}>
+      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }} className="text-center">Surrender of License</h4>
         <div className="card">
-          <Form>
-            <h4 className="text-center">Surrender of License</h4>
+     
+            
             <br></br>
             <Row className="col-12">
               <Col className="col-4">
@@ -32,164 +48,173 @@ function SurrenderLic() {
                   <Form.Label>
                     Licence No . <span style={{ color: "red" }}>*</span>
                   </Form.Label>
-                  <Form.Control type="number" placeholder="Enter Licence" />
+                 
+                  <input type="number" placeholder="" className="form-control" {...register("LicenseNo")} />
                 </Form.Group>
               </Col>
               <Col className="col-4">
                 <Form.Group as={Col} controlId="formGridState">
                   <Form.Label>
-                    Select Type (Complete or Partial){" "}
-                    <span style={{ color: "red" }}>*</span>
+                    Select Type (Complete or Partial) <span style={{ color: "red" }}>*</span>
                   </Form.Label>
-                  <Form.Select onChange={(e) => handleshowhide(e)}>
+                  
+                  <select className="form-control" {...register("selectType")} onChange={(e) => handleshowhide(e)}>
                     <option value=" ">----Select value-----</option>
                     <option value="1">(a)Complete</option>
                     <option value="2">(b) Partial</option>
-                  </Form.Select>
+                  </select>
                 </Form.Group>
               </Col>
               <Col className="col-4">
-              <Form.Group as={Row} className="mb-12">
-              <Form.Label>
-              Area falling under 24m road /service road or sector dividing road (Yes/no)
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-                                <Row>
-                                  <Col className="col-3">
-                                    <Form.Check
-                                      type="radio"
-                                      label="Yes"
-                                      name="formHorizontalRadios"
-                                      id="formHorizontalRadios1"
-                                      value="8"
-                                      onChange={(e) => handleselects(e)}
-                                    />
-                                  </Col>
-                                  <Col className="col-3">
-                                    <Form.Check
-                                      type="radio"
-                                      label="No"
-                                      name="formHorizontalRadios"
-                                      id="formHorizontalRadios2"
-                                    />
-                                  </Col>
-                                </Row>
-                              </Form.Group>
+                <Form.Group as={Row} className="mb-12">
+                  <Form.Label>
+                    Area falling under 24m road /service road or sector dividing road (Yes/no)
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                  <Row>
+                    <Col className="col-3">
+                      <Form.Check
+                        type="radio"
+                        value="true"
+                        label="Yes"
+                      name="AreaFallingUnder"
+                      id="AreaFallingUnder"
+                     
+                      {...register(" AreaFallingUnder")}
+                        onChange={(e) => handleselects(e)}
+                      />
+                    </Col>
+                    <Col className="col-3">
+                      <Form.Check 
+                      type="radio" 
+                     
+                      value="false"
+                      label="No"
+                    name="AreaFallingUnder"
+                    id="AreaFallingUnder"
+                    {...register(" AreaFallingUnder")}
+                        onChange={(e) => handleselects(e)}
+                        />
+                    </Col>
+                  </Row>
+                </Form.Group>
               </Col>
               <Col className="col-4">
-              <Form.Group as={Row} className="mb-12">
-              <Form.Label>
-              RERA registration of project
-                  <span style={{ color: "red" }}>*</span>
-                </Form.Label>
-                                <Row>
-                                  <Col className="col-3">
-                                    <Form.Check
-                                      type="radio"
-                                      label="Yes"
-                                      name="formHorizontalRadios"
-                                      id="formHorizontalRadios1"
-                                      value="9"
-                                      onChange={(e) => handleselects(e)}
-                                    />
-                                  </Col>
-                                  <Col className="col-3">
-                                    <Form.Check
-                                      type="radio"
-                                      label="No"
-                                      name="formHorizontalRadios"
-                                      id="formHorizontalRadios2"
-                                    />
-                                  </Col>
-                                </Row>
-                              </Form.Group>
+                <Form.Group as={Row} className="mb-12">
+                  <Form.Label>
+                    RERA registration of project
+                    <span style={{ color: "red" }}>*</span>
+                  </Form.Label>
+                  <Row>
+                    <Col className="col-3">
+                      <Form.Check
+                        type="radio"
+                        label="Yes"
+                        name="RERAregistration"
+                        id="RERAregistration"
+                        value="true"
+                   {...register("ReraRegistration")}
+                        onChange={(e) => handleselects(e)}
+                      />
+                    </Col>
+                    <Col className="col-3">
+                      <Form.Check 
+                      type="radio" 
+                      label="No" 
+                      name="RERAregistration"
+                       id="RERAregistration"
+                       value="false"
+                   {...register("ReraRegistration")}
+                        onChange={(e) => handleselects(e)}
+                       />
+                    </Col>
+                  </Row>
+                </Form.Group>
               </Col>
-             
+
               <Col className="col-4">
                 <Form.Group as={Col} controlId="formGridArea">
                   {/* <Form.Label>Password</Form.Label>
           <Form.Control type="password" placeholder="Password" /> */}
                   <div>
                     {showhide === "2" && (
-                      <div className="col-md-12 form-group">
+                      <div className="col-md-12 ">
                         <Form.Label>
                           Area in Acres <span style={{ color: "red" }}>*</span>
                         </Form.Label>
-                        <Form.Control type="number" placeholder="Enter Area" />
+                        {/* <Form.Control type="number" placeholder="Enter Area" /> */}
+                        <input type="number" placeholder="" className="form-control" {...register("AreainAcres")} />
                       </div>
                     )}
                   </div>
                 </Form.Group>
               </Col>
             </Row>
-          </Form>
-        </div>
+      
+       
 
         <Row>
           <div>
             {showhide === "1" && (
-              <div className="card">
-                <div class="bordere">
-                  <div class="table-responsive">
-                    <table class="table">
-                       <thead>
+             
+            //  <div className="card">
+              <div className="table table-bordered table-responsive">
+                    
+                      <thead>
                         <tr>
-                          <th scope="col">Sr.No</th>
-                          <th scope="col">Field Name</th>
-                          <th scope="col">Upload Documents</th>
+                          <th className="fw-normal" style={{ textAlign: "center" }}>Sr.No</th>
+                          <th className="fw-normal" style={{ textAlign: "center" }}>Field Name</th>
+                          <th className="fw-normal" style={{ textAlign: "center" }}>Upload Documents</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <th scope="row">1</th>
+                          <th className="fw-normal">1</th>
                           <td>
                             Declaration of Third-Party Rights
                             <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file"></input>
+                            {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan ")}></input> */}
+                            <input type="file" placeholder="" className="form-control" {...register("Third-PartyRights")}></input>
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">2</th>
+                          <th className="fw-normal">2</th>
                           <td>
                             {" "}
-                            Declaration IDW Works Approved Scanned Copy of
-                            Zoning/Layout Plan{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            Declaration IDW Works Approved Scanned Copy of Zoning/Layout Plan <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file"></input>
+                          <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan ")}></input>
+                            {/* <input type="file" placeholder="" className="form-control" {...register("oning/LayoutPlan ")}></input> */}
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">3</th>
+                          <th className="fw-normal">3</th>
                           <td>
                             {" "}
                             License Copy <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file"></input>
+                            <input type="file" placeholder="" className="form-control" {...register("LicenseCopy ")}></input>
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">4</th>
+                          <th className="fw-normal">4</th>
                           <td>
                             {" "}
-                            EDC availed or not e.g. surrounding roads are
-                            constructed or not{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            EDC availed or not e.g. surrounding roads are constructed or not <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file"></input>
+                            <input type="file" placeholder="" className="form-control" {...register("EDCavailed ")}></input>
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">5</th>
+                          <th className="fw-normal">5</th>
                           <td>
                             {" "}
-                            Area falling under 24m road /service road or sector
-                            dividing road and green belt If yes{" "}
+                            Area falling under 24m road /service road or sector dividing road and green belt If yes{" "}
                             <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
@@ -222,123 +247,118 @@ function SurrenderLic() {
                           </td>
                         </tr>
                       </tbody>
-                    </table>
+                 
 
                     {selects === "4" && (
-                      <table class="table">
+                      // <table class="table">
                         <tbody>
                           <tr>
-                            <th scope="row">6</th>
+                            <th className="fw-normal">6</th>
                             <td>
                               {" "}
                               Gift Deed
                               <span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file"></input>
+                              <input type="file" placeholder="" className="form-control" {...register("GiftDeed")}></input>
                             </td>
                           </tr>
                           <tr>
-                            <th scope="row">7</th>
+                            <th className="fw-normal">7</th>
                             <td>
                               {" "}
                               Mutation
                               <span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file"></input>
+                              <input type="file" placeholder="" className="form-control" {...register("Mutation")}></input>
                             </td>
                           </tr>
                           <tr>
-                            <th scope="row">8</th>
+                            <th className="fw-normal">8</th>
                             <td>
                               {" "}
                               Jamabandhi <span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file"></input>
+                              <input type="file" placeholder="" className="form-control" {...register("Jamabandhi")}></input>
                             </td>
                           </tr>
                         </tbody>
-                      </table>
+                      // </table>
                     )}
                   </div>
-                </div>
-              </div>
+                // </div>
+           
             )}
           </div>
 
           <div>
             {showhide === "2" && (
-              <div className="card">
-                <div class="bordere">
-                  <div class="table-responsive">
-                    <table class="table">
+              // <div className="card">
+                <div className="table table-bordered table-responsive">
                       {/* <caption>List of users</caption> */}
                       <thead>
                         <tr>
-                          <th scope="col">Sr.No</th>
-                          <th scope="col">Field Name</th>
-                          <th scope="col">Upload Documents</th>
+                          <th style={{ textAlign: "center" }}>Sr.No</th>
+                          <th style={{ textAlign: "center" }}>Field Name</th>
+                          <th style={{ textAlign: "center" }}>Upload Documents</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <th scope="row">1</th>
+                          <th className="fw-normal">1</th>
                           <td>
-                          Declaration of Third-Party Rights 
+                            Declaration of Third-Party Rights
                             <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file"></input>
+                            <input type="file" placeholder="" className="form-control" {...register("Third-PartyRights")}></input>
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">2</th>
+                          <th className="fw-normal">2</th>
                           <td>
                             {" "}
-                            Declaration IDW Works{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            Declaration IDW Works <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file"></input>
+                            <input type="file" placeholder="" className="form-control" {...register("DeclarationIDWWorks")}></input>
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">3</th>
+                          <th className="fw-normal">3</th>
                           <td>
                             {" "}
-                            Revised Layout Plan (same format as uploaded at the time of license application
+                            Revised Layout Plan (same format as uploaded at the time of license application)
                             <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file"></input>
+                            <input type="file" placeholder="" className="form-control" {...register("RevisedLayoutPlan")}></input>
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">4</th>
+                          <th className="fw-normal">4</th>
                           <td>
                             {" "}
-                            EDC availed or not e.g. surrounding roads are constructed or not {" "}
-                            <span style={{ color: "red" }}>*</span>
+                            EDC availed or not e.g. surrounding roads are constructed or not <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file"></input>
+                            <input type="file" placeholder="" className="form-control" {...register("EDCavailed")}></input>
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">5</th>
+                          <th className="fw-normal">5</th>
                           <td>
                             {" "}
-                            Area falling under 24m road /service road or sector dividing road{" "}
-                            <span style={{ color: "red" }}>*</span>
+                            Area falling under 24m road /service road or sector dividing road <span style={{ color: "red" }}>*</span>
                           </td>
                           <td>
-                            <input type="file"></input>
+                            <input type="file" placeholder="" className="form-control" {...register("AreaFallingUnder")}></input>
                           </td>
                         </tr>
                         <tr>
-                          <th scope="row">6</th>
+                          <th className="fw-normal">6</th>
                           <td>
                             {" "}
                             Area falling under 24m road /service road or sector dividing road and green belt If yes{" "}
@@ -367,262 +387,80 @@ function SurrenderLic() {
                                       value="10"
                                       onChange={(e) => handleselects(e)}
                                     />
+                                
                                   </Col>
                                 </Row>
                               </Form.Group>
                             </fieldset>
                           </td>
                         </tr>
-                        </tbody>
-                    </table>
+                      </tbody>
+                  
 
                     {selects === "3" && (
-                      <table class="table">
-                        <tbody>
-                        <tr>
-                          <th scope="row">7</th>
-                          <td>
-                            {" "}
-                            Gift Deed 
-                            <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">8</th>
-                          <td>
-                            {" "}
-                            Mutation.
-                            <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">9</th>
-                          <td>
-                            {" "}
-                            Jamabandhi  <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        
-                        
-                      </tbody>
-                    </table>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* <div>
-            {showhide === "3" && (
-              <div className="card">
-                <div class="bordere">
-                  <div class="table-responsive">
-                    <table class="table">
                      
-                      <thead>
-                        <tr>
-                          <th scope="col">Sr.No</th>
-                          <th scope="col">Field Name</th>
-                          <th scope="col">Upload Documents</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th scope="row">1</th>
-                          <td>
-                            No objection certificate from the existing
-                            ‘Developer, filed through its authorized signatory,
-                            specifically designated for the purpose; as well as
-                            from the ‘land owner licensees’, in person (not
-                            through GPA/SPA assignees), to the proposed
-                            change/assignment
-                            <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">2</th>
-                          <td>
-                            {" "}
-                            Justification for such request{" "}
-                            <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">3</th>
-                          <td>
-                            {" "}
-                            The status regarding the creation of third-party
-                            rights in the colony. In case no third-party rights
-                            are claimed to have been created in the colony, an
-                            affidavit to the said effect be also submitted by
-                            the existing developer{" "}
-                            <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">4</th>
-                          <td>
-                            {" "}
-                            Documents about the Technical and Financial Capacity
-                            of the ‘new entity’ proposed to be inducted as a
-                            ‘Developer’ or ‘shareholder(s)’ as per prescribed
-                            policy parameters for grant of license{" "}
-                            <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">5</th>
-                          <td>
-                            {" "}
-                            An undertaking to pay the balance administrative
-                            charges before final approval{" "}
-                            <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">6</th>
-                          <td>
-                            {" "}
-                            Proposed Shareholding Pattern of the developer
-                            company.
-                            <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">7</th>
-                          <td>
-                            {" "}
-                            Status of RERA registration of project of non
-                            registered,then affidavit to this effect.
-                            <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">8</th>
-                          <td>
-                            {" "}
-                            Board resolution of authorised signatory of
-                            “existing developer”{" "}
-                            <span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th scope="row">9</th>
-                          <td>
-                            {" "}
-                            Board resolution of authorised signatory of “new
-                            entity ”<span style={{ color: "red" }}>*</span>
-                          </td>
-                          <td>
-                            <input type="file"></input>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div> */}
-        </Row>
-        {/* <Row>
-            <div>
-                { selects === "4" && (
-                    <div  className="card">
-                  <div class="bordere">
-                    <div class="table-responsive">
-                      <table class="table">
-                    
-                        <thead>
-                          <tr>
-                            <th scope="col">Sr.No</th>
-                            <th scope="col">Field Name</th>
-                            <th scope="col">Upload Documents</th>
-                          </tr>
-                        </thead>
                         <tbody>
                           <tr>
-                            <th scope="row">6</th>
+                            <th className="fw-normal">7</th>
                             <td>
                               {" "}
                               Gift Deed
                               <span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file"></input>
+                             <input type="file" placeholder="" className="form-control" {...register("GiftDeed")}></input>
                             </td>
                           </tr>
                           <tr>
-                            <th scope="row">7</th>
+                            <th className="fw-normal">8</th>
                             <td>
                               {" "}
-                              Mutation
+                              Mutation.
                               <span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file"></input>
+                              <input type="file" placeholder="" className="form-control" {...register("Mutation")}></input>
                             </td>
                           </tr>
                           <tr>
-                            <th scope="row">8</th>
+                            <th className="fw-normal">9</th>
                             <td>
                               {" "}
                               Jamabandhi <span style={{ color: "red" }}>*</span>
                             </td>
                             <td>
-                              <input type="file"></input>
+                              <input type="file" placeholder="" className="form-control" {...register("Jamabandhi")}></input>
                             </td>
                           </tr>
                         </tbody>
-                      </table>
-                    </div>
+                    
+                    )}
                   </div>
-                  </div>
-                )}
-              </div>
-            </Row> */}
+              //   </div>
+              // </div>
+            )}
+          </div>
 
-        <Form>
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
-      </div>
-    </div>
+         
+        </Row>
+      
+        
+<div class="row">
+          <div class="col-sm-12 text-right">
+            <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+              Submit
+            </button>
+          </div>
+          <div class="col-sm-12 text-right">
+            <button id="btnSearch" class="btn btn-primary btn-md center-block" style={{ marginTop: "-58px", marginRight: "97px" }}>
+              Save as Draft
+            </button>
+          </div>
+        </div>
+        
+        </div>
+        </Card>
+        </form>
   );
 }
 

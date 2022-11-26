@@ -2,128 +2,52 @@ import React, { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
-import InfoIcon from "@mui/icons-material/Info";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
+import { yupResolver } from "@hookform/resolvers/yup";
 import WorkingTable from "../../../../components/Table";
-
+import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
-
-const tableData = [
-  {
-    key: "1",
-    tehsil: "Mike",
-    revenueEstate: 32,
-    rectangleNo: "10 Downing Street",
-    landOwner: "10 Downing Street",
-    consolidationType: "10 Downing Street",
-    kanal: "10 Downing Street",
-    marla: "10 Downing Street",
-  },
-];
-
-const optionsPurposeList = [
-  {
-    label: "Plotted Commercial",
-    value: "plotted",
-    id: "1",
-  },
-  {
-    label: "Group Housing Commercial",
-    value: "G",
-    id: "2",
-  },
-  {
-    label: "AGH",
-    value: "03",
-    id: "3",
-  },
-  {
-    label: "Commercial Integrated",
-    value: "04",
-    id: "3",
-  },
-  {
-    label: "Commercial Plotted",
-    value: "C",
-    id: "3",
-  },
-  {
-    label: "Industrial Colony Commercial",
-    value: "06",
-    id: "3",
-  },
-  {
-    label: "IT Colony Commercial",
-    value: "I",
-    id: "3",
-  },
-  {
-    label: "DDJAY",
-    value: "DDJAY",
-    id: "3",
-  },
-  {
-    label: "NILP",
-    value: "N",
-    id: "3",
-  },
-  {
-    label: "Low Density Ecofriendly",
-    value: "10",
-    id: "3",
-  },
-  {
-    label: "TOD Commercial",
-    value: "TC",
-    id: "3",
-  },
-  {
-    label: "TOD Group housing",
-    value: "TG",
-    id: "3",
-  },
-];
-const optionsPotentialList = [
-  {
-    label: "Hyper",
-    value: "Hyper",
-    id: "1",
-  },
-  {
-    label: "High I",
-    value: "High I",
-    id: "2",
-  },
-  {
-    label: "High II",
-    value: "High II",
-    id: "3",
-  },
-  {
-    label: "Medium",
-    value: "Medium",
-    id: "3",
-  },
-  {
-    label: "Low I",
-    value: "Low I",
-    id: "3",
-  },
-  {
-    label: "Low II",
-    value: "Low II",
-    id: "3",
-  },
-];
+import Spinner from "../../../../components/Loader";
+import { Archive } from "react-bootstrap-icons";
 
 const ApllicantPuropseForm = (props) => {
-  console.log("Props", props);
+  console.log("props", props);
+
+  const resetFields = {
+    tehsil: "",
+    revenueEstate: "",
+    mustil: "",
+    kanal: "",
+    marla: "",
+    sarsai: "",
+    bigha: "",
+    biswa: "",
+    biswansi: "",
+    agreementIrrevocialble: "",
+    agreementValidFrom: "",
+    agreementValidTill: "",
+    authSignature: "",
+    collaboration: "",
+    developerCompany: "",
+    landOwner: "",
+    nameAuthSign: "",
+    registeringAuthority: "",
+  };
+  const datapost = {
+    RequestInfo: {
+      apiId: "Rainmaker",
+      ver: "v1",
+      ts: 0,
+      action: "_search",
+      did: "",
+      key: "",
+      msgId: "090909",
+      requesterId: "",
+      authToken: "",
+    },
+  };
   const columns = [
     {
       key: "tehsil",
@@ -140,93 +64,87 @@ const ApllicantPuropseForm = (props) => {
       title: "Rectangle No.",
       dataIndex: "rectangleNo",
     },
-
-    {
-      key: "consolidationType",
-      title: "Consolidation Type",
-      dataIndex: "consolidationType",
-    },
-    {
-      title: "Kanal/Bigha",
-      dataIndex: "",
-      render: (text) => (text?.kanal ? text?.kanal : text?.bigha),
-    },
-    {
-      title: "Marla/Biswa",
-      dataIndex: "",
-      render: (text) => (text?.marla ? text?.marla : text?.biswa),
-    },
-    {
-      title: "Sarsai/Biswansi",
-      dataIndex: "",
-      render: (text) => (text?.sarsai ? text?.sarsai : text?.biswansi),
-    },
-    {
-      // key: "action",
-      title: "Action",
-      dataIndex: "",
-      render: (data) => (
-        <div>
-          <h6
-            onClick={() => {
-              setmodal(true);
-              setSpecificTableData(data);
-              console.log("data", data);
-            }}
-          >
-            Edit
-          </h6>
-          <h6>Delete</h6>
-        </div>
-      ),
-    },
-  ];
-  const consolidatedColumns = [
-    {
-      key: "tehsil",
-      title: "Tehsil",
-      dataIndex: "tehsil",
-    },
-    {
-      key: "revenueEstate",
-      title: "Revenue Estate",
-      dataIndex: "revenueEstate",
-    },
-    {
-      key: "rectangleNo",
-      title: "Rectangle No.",
-      dataIndex: "rectangleNo",
-    },
-    {
-      key: "killa",
-      title: "Killa",
-      dataIndex: "killa",
-    },
     {
       key: "landOwner",
       title: "Land Owner",
       dataIndex: "landOwner",
     },
+
     {
       key: "consolidationType",
       title: "Consolidation Type",
       dataIndex: "consolidationType",
     },
+    { key: "kanal", title: "Kanal", dataIndex: "kanal" },
     {
-      key: "bigha",
-      title: "Kanal/Bigha",
+      key: "kanal",
+      title: "Bigha",
       dataIndex: "bigha",
     },
     {
-      // key: "biswa",
-      title: "Marla/Biswa",
-      dataIndex: "",
-      render: (text) => <div onClick={() => console.log("text", text)}>text</div>,
+      key: "marla",
+      title: "Marla",
+      dataIndex: "marla",
+    },
+    {
+      key: "biswa",
+      title: "Biswa",
+      dataIndex: "biswa",
+    },
+    {
+      key: "sarsai",
+      title: "Sarsai",
+      dataIndex: "sarsai",
     },
     {
       key: "biswansi",
-      title: "Sarsai/Biswansi",
+      title: "Biswansi",
       dataIndex: "biswansi",
+    },
+    {
+      key: "landOwner",
+      title: "Name of Land Owner",
+      dataIndex: "landOwner",
+    },
+    {
+      key: "agreementIrrevocialble",
+      title: "Whether collaboration agreement irrevocable (Yes/No)",
+      dataIndex: "agreementIrrevocialble",
+    },
+    {
+      key: "agreementValidFrom",
+      title: "Date of registering collaboration agreement",
+      dataIndex: "agreementValidFrom",
+    },
+    {
+      key: "agreementValidTill",
+      title: "Date of validity of collaboration agreement",
+      dataIndex: "agreementValidTill",
+    },
+    {
+      key: "authSignature",
+      title: "Name of authorized signatory on behalf of land owner(s)",
+      dataIndex: "authSignature",
+    },
+    {
+      key: "collaboration",
+      title: "Collaboration agreement Owner",
+      dataIndex: "collaboration",
+    },
+    {
+      key: "developerCompany",
+      title: "Name of the developer company",
+      dataIndex: "developerCompany",
+    },
+    {
+      key: "nameAuthSign",
+      title: " Name of authorized signatory",
+      dataIndex: "nameAuthSign",
+    },
+    {
+      key: "registeringAuthority",
+      title: "Registring Authority",
+      dataIndex: "registeringAuthority",
     },
     {
       // key: "action",
@@ -238,7 +156,6 @@ const ApllicantPuropseForm = (props) => {
             onClick={() => {
               setmodal(true);
               setSpecificTableData(data);
-              // console.log("data", data)
             }}
           >
             Edit
@@ -249,38 +166,27 @@ const ApllicantPuropseForm = (props) => {
     },
   ];
 
-  const [purposeDd, setSelectPurpose] = useState("");
-  const [potential, setPotentialDev] = useState("");
-  const [getColumns, setColumns] = useState(columns);
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
-  const [districtData, setDistrictData] = useState([]);
-  const [tehsilData, setTehsilData] = useState([]);
-  const [revenueStateData, setRevenuStateData] = useState([]);
-  const [mustilData, setMustilData] = useState([]);
-  const [potentialDataLabels, setPotentialDataLabels] = useState([]);
-  const [purposeDataLabels, setPurposeDataLabels] = useState([]);
-  const [districtDataLbels, setDistrictDataLabels] = useState([]);
-  const [tehsilDataLabels, setTehsilDataLabels] = useState([]);
-  const [revenueDataLabels, setRevenueDataLabels] = useState([]);
-  const [mustilDataLabels, setMustilDataLabels] = useState([]);
-  const [docUpload, setDocuploadData] = useState([]);
-  const [file, setFile] = useState(null);
+  const [districtDataLbels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
+  const [tehsilDataLabels, setTehsilDataLabels] = useState({ data: [], isLoading: true });
+  const [revenueDataLabels, setRevenueDataLabels] = useState({ data: [], isLoading: true });
+  const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
   const [modal, setmodal] = useState(false);
-  const [showhide1, setShowhide1] = useState("No");
-  const [showhide2, setShowhide2] = useState("No");
   const [tehsilCode, setTehsilCode] = useState(null);
-  const [consolidateValue, setConsolidateValue] = useState(null);
-  const [submitDataLabel, setSubmitDataLabel] = useState([]);
-  const [finalSubmitData, setFinalSubmitData] = useState([]);
-  const ID = props.getId;
-  console.log("ID", ID);
+  const [consolidateValue, setConsolidateValue] = useState("consolidated");
+  const [getCollaboration, setCollaboration] = useState("");
+  const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
+  const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
+  const [docId, setDocId] = useState(null);
+  const [loader, setLoader] = useState(false);
+
   useEffect(() => {
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
       setValue("revenueEstate", specificTableData?.revenueEstate);
-      setValue("rectangleNo", specificTableData?.rectangleNo);
+      setValue("mustil", specificTableData?.mustil);
       setValue("kanal", specificTableData?.kanal);
       setValue("marla", specificTableData?.marla);
       setValue("sarsai", specificTableData?.sarsai);
@@ -289,7 +195,6 @@ const ApllicantPuropseForm = (props) => {
       setValue("biswa", specificTableData?.biswa);
       setValue("landOwner", specificTableData?.landOwner);
     }
-    console.log("specificTableData", specificTableData);
   }, [specificTableData]);
 
   const {
@@ -299,29 +204,188 @@ const ApllicantPuropseForm = (props) => {
     control,
     setValue,
     reset,
+    getValues,
+    watch,
   } = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onBlur",
-    // resolver: yupResolver(VALIDATION_SCHEMA),
+    mode: "onChange",
+    reValidateMode: "onChange",
+    resolver: yupResolver(VALIDATION_SCHEMA),
+    defaultValues: {
+      consolidationType: "consolidated",
+    },
     shouldFocusError: true,
   });
-  const handleshow1 = (e) => {
-    const getshow = e.target.value;
-    setShowhide1(getshow);
-  };
-  const handleshow2 = (e) => {
-    const getshow = e.target.value;
-    if (getshow === "1") {
-      setConsolidateValue("consolidated");
-    } else {
-      setConsolidateValue("non-consolidated");
-    }
-    setShowhide2(getshow);
-  };
+
+  const stateId = Digit.ULBService.getStateId();
+  const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
+
+  const { data: PotentialType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["PotentialZone"]);
+
+  useEffect(() => {
+    const purpose = PurposeType?.["common-masters"]?.Purpose?.map(function (data) {
+      return { value: data?.purposeCode, label: data?.name };
+    });
+    setPurposeOptions({ data: purpose, isLoading: false });
+  }, [PurposeType]);
+
+  useEffect(() => {
+    const potential = PotentialType?.["common-masters"]?.PotentialZone?.map(function (data) {
+      return { value: data?.code, label: data?.zone };
+    });
+    setPotentialOptions({ data: potential, isLoading: false });
+  }, [PotentialType]);
 
   const DistrictApiCall = async () => {
     try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_district", datapost);
+      const distData = Resp?.data?.map((el) => {
+        return { label: el?.districtName, id: el?.districtCode, value: el?.districtCode };
+      });
+      setDistrictDataLabels({ data: distData, isLoading: false });
+    } catch (error) {
+      console.log(error?.message);
+    }
+  };
+
+  const getTehslidata = async (data) => {
+    try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {});
+      const tehsilData = Resp?.data?.map((el) => {
+        return { label: el?.name, id: el?.code, value: el?.code };
+      });
+      setTehsilDataLabels({ data: tehsilData, isLoading: false });
+    } catch (error) {
+      console.log(error?.message);
+    }
+  };
+
+  const getRevenuStateData = async (code) => {
+    try {
+      const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
+      console.log("resp=====", Resp?.data);
+      const revenData = Resp?.data?.map((el) => {
+        return { label: el?.name, id: el?.code, value: el?.code };
+      });
+      setRevenueDataLabels({ data: revenData, isLoading: false });
+    } catch (error) {
+      console.log(error?.message);
+    }
+  };
+  const getMustilData = async (code) => {
+    try {
+      const Resp = await axios.post(
+        "/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code,
+        datapost,
+        {}
+      );
+      const mustData = Resp?.data?.must?.map((el, i) => {
+        return { label: el, id: i, value: el };
+      });
+      setMustilDataLabels({ data: mustData, isLoading: false });
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const getLandOwnerStateData = async (text) => {
+    try {
+      const Resp = await axios.post(
+        "/egov-mdms-service/v1/_owner?" +
+          "dCode=" +
+          district +
+          "&" +
+          "tCode=" +
+          tehsilCode +
+          "&NVCode=" +
+          watch("revenueEstate")?.value +
+          "&khewat=" +
+          text,
+        datapost,
+        {}
+      );
+      // console.log("Resp=====", Resp?.data?.[0]?.name);
+      setValue("landOwner", Resp?.data?.[0]?.name);
+    } catch (error) {
+      console.log(error?.message);
+    }
+  };
+
+  useEffect(() => {
+    DistrictApiCall();
+  }, []);
+
+  const ApplicantPurposeModalData = (modalData) => {
+    console.log("data------", modalData);
+    modalData["tehsil"] = modalData?.tehsil?.value;
+    modalData["revenueEstate"] = modalData?.revenueEstate?.value;
+    modalData["mustil"] = modalData?.mustil?.value;
+    modalData["registeringAuthorityDoc"] = docId;
+    delete modalData?.district;
+    delete modalData?.potential;
+    delete modalData?.purpose;
+    delete modalData?.state;
+
+    if (modalData?.consolidationType === "consolidated") {
+      delete modalData?.bigha;
+      delete modalData?.biswa;
+      delete modalData?.biswansi;
+    }
+    if (modalData?.consolidationType === "non-consolidated") {
+      delete modalData?.marla;
+      delete modalData?.kanal;
+      delete modalData?.sarsai;
+    }
+    modalData["rowid"] = "1";
+
+    setModalData((prev) => [...prev, modalData]);
+    setmodal(false);
+    // reset(resetFields);
+    setCollaboration("");
+  };
+
+  const PurposeFormSubmitHandler = async (data) => {
+    data["purpose"] = data?.purpose?.value;
+    data["potential"] = data?.potential?.value;
+    data["district"] = watch("district")?.value;
+    data["state"] = "Haryana";
+    delete data?.tehsil;
+    delete data?.revenueEstate;
+    delete data?.mustil;
+    delete data?.kanal;
+    delete data?.marla;
+    delete data?.sarsai;
+    delete data?.bigha;
+    delete data?.biswa;
+    delete data?.biswansi;
+    delete data?.agreementIrrevocialble;
+    delete data?.agreementValidFrom;
+    delete data?.agreementValidTill;
+    delete data?.authSignature;
+    delete data?.collaboration;
+    delete data?.developerCompany;
+    delete data?.landOwner;
+    delete data?.nameAuthSign;
+    delete data?.registeringAuthority;
+    delete data?.registeringAuthorityDoc;
+    delete data?.consolidationType;
+    delete data?.khewats;
+    delete data?.rowid;
+
+    const token = window?.localStorage?.getItem("token");
+    if (!modalData?.length) alert("Please enter atleast one record");
+    else {
       const postDistrict = {
+        pageName: "ApplicantPurpose",
+        ApplicationStatus: "DRAFT",
+        id: props.getId,
+        createdBy: props?.userData?.id,
+        updatedBy: props?.userData?.id,
+        LicenseDetails: {
+          ApplicantPurpose: {
+            ...data,
+            AppliedLandDetails: modalData,
+          },
+        },
         RequestInfo: {
           apiId: "Rainmaker",
           ver: "v1",
@@ -331,313 +395,149 @@ const ApllicantPuropseForm = (props) => {
           key: "",
           msgId: "090909",
           requesterId: "",
-          authToken: "",
+          authToken: token,
+          userInfo: props?.userData,
         },
       };
-
-      const Resp = await axios.post("/egov-mdms-service/v1/_district", postDistrict).then((Resp) => {
-        return Resp;
-      });
-      setDistrictData(Resp.data);
-      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-        Resp.data.map((el, i) => {
-          setDistrictDataLabels((prev) => [...prev, { label: el.districtName, id: el.districtCode, value: el.districtCode }]);
-        });
+      setLoader(true);
+      try {
+        const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+        console.log(Resp?.data);
+        setLoader(false);
+        props.Step2Continue();
+      } catch (error) {
+        setLoader(false);
+        console.log(error.message);
       }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  const getTehslidata = async (data) => {
-    const datapost = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: "",
-      },
-    };
-
-    try {
-      const Resp = await axios.post("/egov-mdms-service/v1/_tehsil?dCode=" + data, datapost, {}).then((response) => {
-        return response;
-      });
-      setTehsilData(Resp.data);
-      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-        Resp.data.map((el, i) => {
-          setTehsilDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.code }]);
-        });
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  const getRevenuStateData = async (code) => {
-    const datatopost = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: "",
-      },
-    };
-
-    try {
-      const Resp = await axios
-        .post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datatopost, {})
-        .then((response) => {
-          return response;
-        });
-      setRevenuStateData(Resp.data);
-
-      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-        Resp.data.map((el, i) => {
-          setRevenueDataLabels((prev) => [...prev, { label: el.name, id: el.khewats, value: el.code, khewats: el.khewats, code: el.code }]);
-        });
-      }
-    } catch (error) {
-      console.log(error.message);
     }
   };
 
-  const getMustilData = async (code) => {
-    const datpost = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: "",
-      },
-    };
-
-    try {
-      const Resp = await axios
-        .post("/egov-mdms-service/v1/_must?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + code, datpost, {})
-        .then((response) => {
-          return response;
-        });
-      setMustilData(Resp.data.must);
-      if (Resp.data.must.length > 0 && Resp.data.must !== undefined && Resp.data.must !== null) {
-        Resp.data.must.map((el, i) => {
-          setMustilDataLabels((prev) => [...prev, { label: el, id: i, value: el }]);
-        });
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  const getLandOwnerStateData = async (khewats) => {
-    const datatopos = {
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: "",
-      },
-    };
-    console.log("khewat", khewats);
-    try {
-      const Resp = await axios
-        .post(
-          "/egov-mdms-service/v1/_owner?" + "dCode=" + district + "&" + "tCode=" + tehsilCode + "&NVCode=" + tehsilCode + "&khewat=" + khewats,
-          datatopos,
-          {}
-        )
-        .then((response) => {
-          console.log("Resp", response);
-          return response;
-        });
-      setKhewatData(Resp.data);
-
-      if (Resp.data.length > 0 && Resp.data !== undefined && Resp.data !== null) {
-        Resp.data.map((el, i) => {
-          setKhewatDataLabels((prev) => [...prev, { label: el.name, id: el.code, value: el.khewats }]);
-        });
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  useEffect(() => {
-    DistrictApiCall();
-  }, []);
-
-  useEffect(() => {
-    console.log("Revenue", revenueDataLabels);
-  }, [revenueDataLabels]);
-
-  const ApplicantPurposeModalData = (data) => {
-    console.log("data++++++", data);
-    data["tehsil"] = data?.tehsil?.label;
-    data["revenueEstate"] = data?.revenueEstate?.label;
-    data["rectangleNo"] = data?.rectangleNo;
-    if (showhide2 === "consolidated") {
-      delete data?.bigha;
-      delete data?.biswa;
-      delete data?.biswansi;
-    }
-    if (showhide2 === "Non-Consolidated") {
-      delete data?.marla;
-      delete data?.kanal;
-      delete data?.sarsai;
-    }
-    if (data.consolidationType === "consolidated") {
-      setColumns(columns);
-    } else {
-      setColumns(consolidatedColumns);
-    }
-    setModalData((prev) => [...prev, data]);
-    setmodal(false);
-    reset({
-      tehsil: "",
-      revenueEstate: "",
-      rectangleNo: "",
-      kanal: "",
-      marla: "",
-      sarsai: "",
-      bigha: "",
-      biswa: "",
-      biswansi: "",
-    });
-  };
-
-  const applicantPurposeBack = async () => {
-    props.Step2Back();
-  };
-
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
   const handleChangePurpose = (data) => {
-    const purposeSelected = data?.label;
-    setSelectPurpose(purposeSelected);
-    localStorage.setItem("purpose", purposeSelected);
+    console.log("data", data);
+    const purposeSelected = data?.value;
+    window?.localStorage.setItem("purpose", purposeSelected);
   };
   const handleChangePotential = (data) => {
-    const potentialSelected = data?.label;
-    setPotentialDev(potentialSelected);
-    localStorage.setItem("potential", JSON.stringify(potentialSelected));
+    const potentialSelected = data?.value;
+    window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
 
-  const getDocumentData = async () => {
-    if (file === null) {
-      return;
-    }
+  const getDocumentData = async (file) => {
     const formData = new FormData();
-    formData.append("file", file.file);
+    formData.append("file", file);
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-
+    setLoader(true);
     try {
-      const Resp = await axios
-        .post("http://10.1.1.18:8083/filestore/v1/files", formData, {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          return response;
-        });
-      setDocuploadData(Resp.data);
+      const Resp = await axios.post("/filestore/v1/files", formData, {});
+      setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+    } catch (error) {
+      setLoader(false);
+      console.log(error.message);
+    }
+  };
+
+  let delay;
+
+  useEffect(() => {
+    delay = setTimeout(() => {
+      if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
+    }, 1000);
+    return () => clearTimeout(delay);
+  }, [watch("khewats")]);
+  const [applicantId, setApplicantId] = useState("");
+  const getApplicantPurposeUserData = async (id) => {
+    console.log("here");
+    try {
+      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
+      const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantPurpose;
+      console.log("dd", Resp?.data?.newServiceInfoData[0]?.ApplicantPurpose?.purpose?.label);
+      setValue("purpose", userData?.purpose?.value);
+      setValue("potential", userData?.potential);
+      setValue("district", userData?.district);
     } catch (error) {
       console.log(error.message);
     }
   };
   useEffect(() => {
-    getDocumentData();
-  }, [file]);
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
 
-  const getSubmitDataLabel = async () => {
-    try {
-      const Resp = await axios.get(`http://10.1.1.18:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
-        return response;
-      });
-      console.log("RESP+++", Resp?.data);
-      setSubmitDataLabel(Resp?.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  useEffect(() => {
-    getSubmitDataLabel();
+    setApplicantId(id?.toString());
+    if (id) getApplicantPurposeUserData(id);
   }, []);
 
-  const PurposeFormSubmitHandler = async (data) => {
-    console.log("data===", data);
-    try {
-      const postDistrict = {
-        NewServiceInfo: {
-          pageName: "ApplicantPurpose",
-          id: props.getId,
-          newServiceInfoData: {
-            ApplicantPurpose: {
-              purposeDd: data?.purposeDd?.Label,
-              potential: data?.potential?.label,
-              district: data?.district?.label,
-              state: data.state,
-              applicationPurposeData1: {
-                tehsil: data?.tehsil?.label,
-                revenueEstate: data?.revenueEstate?.label,
-                mustil: data?.rectangleNo,
-                consolidation: data?.consolidationType,
-                sarsai: data?.sarsai,
-                kanal: data?.kanal,
-                marla: data?.marla,
-                bigha: data?.bigha,
-                biswansi: data?.biswansi,
-                biswa: data?.biswa,
-                landOwner: data?.landOwner,
-                developerCompany: data?.devCompany,
-                registeringdate: data?.registering,
-                validitydate: data?.dateValidity,
-                colirrevocialble: "",
-                authSignature: data?.authorizedSign,
-                nameAuthSign: data?.authorizedDev,
-                registeringAuthority: data?.registeringAuth,
-              },
-            },
-          },
-        },
-      };
+  //................................Col.............................................//
+  const [values, setValues] = useState({ kanal: "", second: "0.125", sum: "" });
+  const [kanal, setkanal] = useState("");
+  const [second, setSecond] = useState("");
+  const [sum, setSum] = useState([]);
+  const [valuesMarla, setValuesMarla] = useState({ marla: "", secondMarla: "0.00625001", summarla: "" });
+  const [marla, setMarla] = useState("");
+  const [secondMarla, setSecondMarla] = useState("");
+  const [summarla, setSumMarla] = useState([]);
+  const [valuesSarsai, setValuesSarsai] = useState({ sarsai: "", secondSarsai: "0.0006944438305254", sumSarsai: "" });
+  const [sarsai, setSarsai] = useState("");
+  const [secondSarsai, setSecondSarsai] = useState("");
+  const [sumsarsai, setSumSarsai] = useState([]);
 
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-      });
-      props.Step2Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
-      setFinalSubmitData(Resp.data);
-    } catch (error) {
-      console.log(error.message);
-    }
+  const onChange = (e) => {
+    let name = e.target.name;
+    let value = e.target.value;
+    const newValues = {
+      ...values,
+      ...valuesMarla,
+      ...valuesSarsai,
+      [name]: value,
+    };
+    setValues(newValues);
+    calcSum(newValues);
+    setValuesMarla(newValues);
+    calcSummarla(newValues);
+    setValuesSarsai(newValues);
+    calcSumSarsai(newValues);
   };
+  const calcSum = (newValues) => {
+    const { kanal, second } = newValues;
+    const newSum = parseInt(kanal, 10) * 0.125;
+    setSum(newSum);
+  };
+
+  const calcSummarla = (newValues) => {
+    const { marla, secondMarla } = newValues;
+    const newSum = parseInt(marla, 10) * 0.00625001;
+    setSumMarla(newSum);
+  };
+  const calcSumSarsai = (newValues) => {
+    const { sarsai, secondSarsai } = newValues;
+    const newSum = parseInt(sarsai, 10) * 0.0006944438305254;
+    setSumSarsai(newSum);
+  };
+
+  const sumTotal = sum + summarla + sumsarsai;
+  console.log("add", sumTotal);
+
+  useEffect(() => {
+    localStorage.setItem("dataKey", JSON.stringify(sum));
+  }, [sum]);
+  useEffect(() => {
+    localStorage.setItem("dataKey2", JSON.stringify(summarla));
+  }, [summarla]);
+  useEffect(() => {
+    localStorage.setItem("dataKey3", JSON.stringify(sumsarsai));
+  }, [sumsarsai]);
+  useEffect(() => {
+    localStorage.setItem("add", JSON.stringify(sumTotal));
+  }, [sumTotal]);
 
   return (
     <div>
+      {loader && <Spinner />}
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h1>New License </h1>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -652,14 +552,15 @@ const ApllicantPuropseForm = (props) => {
 
                   <ReactMultiSelect
                     control={control}
-                    name="purposeDd"
+                    name="purpose"
                     onChange={handleChangePurpose}
                     placeholder="Purpose"
-                    data={optionsPurposeList}
+                    data={purposeOptions?.data}
                     labels="Purpose"
+                    loading={purposeOptions?.isLoading}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.purposeDd && errors?.purposeDd?.message}
+                    {errors?.purpose?.value && errors?.purpose?.value?.message}
                   </h3>
                 </Col>
 
@@ -675,12 +576,13 @@ const ApllicantPuropseForm = (props) => {
                     control={control}
                     name="potential"
                     placeholder="Potential"
-                    data={optionsPotentialList}
+                    data={potentialOptons?.data}
                     labels="Potential"
                     onChange={handleChangePotential}
+                    loading={potentialOptons?.isLoading}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.potential && errors?.potential?.message}
+                    {errors?.potential?.value && errors?.potential?.value?.message}
                   </h3>
                 </Col>
 
@@ -696,16 +598,18 @@ const ApllicantPuropseForm = (props) => {
                     control={control}
                     name="district"
                     placeholder="District"
-                    data={districtDataLbels}
+                    data={districtDataLbels?.data}
                     labels="District"
+                    loading={districtDataLbels?.isLoading}
                     onChange={(e) => {
+                      console.log("e===", e);
                       getTehslidata(e.value);
                       setDistrict(e.value);
                     }}
                   />
 
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.district && errors?.district?.message}
+                    {errors?.district?.value && errors?.district?.value?.message}
                   </h3>
                 </Col>
                 <Col md={4} xxl lg="3">
@@ -740,7 +644,14 @@ const ApllicantPuropseForm = (props) => {
                 <br></br>
               </div>
               <div className="ml-auto">
-                <Button type="button" variant="primary" onClick={() => setmodal(true)}>
+                <Button
+                  type="button"
+                  variant="primary"
+                  onClick={() => {
+                    if (!getValues()?.district) alert("Please Select District First To Proceed Further");
+                    else setmodal(true);
+                  }}
+                >
                   Enter Details
                 </Button>
               </div>
@@ -753,7 +664,7 @@ const ApllicantPuropseForm = (props) => {
 
             <div class="row">
               <div class="col-sm-12 text-left">
-                <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => applicantPurposeBack()}>
+                <div id="btnClear" class="btn btn-primary btn-md center-block" onClick={() => props.Step2Back()}>
                   Back
                 </div>
               </div>
@@ -771,34 +682,16 @@ const ApllicantPuropseForm = (props) => {
         size="xl"
         isOpen={modal}
         toggle={() => {
-          reset({
-            tehsil: "",
-            revenueEstate: "",
-            rectangleNo: "",
-            kanal: "",
-            marla: "",
-            sarsai: "",
-            bigha: "",
-            biswa: "",
-            biswansi: "",
-          });
+          // reset(resetFields);
+          setCollaboration("");
           setmodal(!modal);
         }}
       >
         <ModalHeader
           toggle={() => {
             setmodal(!modal);
-            reset({
-              tehsil: "",
-              revenueEstate: "",
-              rectangleNo: "",
-              kanal: "",
-              marla: "",
-              sarsai: "",
-              bigha: "",
-              biswa: "",
-              biswansi: "",
-            });
+            // reset(resetFields);
+            setCollaboration("");
           }}
         ></ModalHeader>
         <ModalBody>
@@ -815,8 +708,9 @@ const ApllicantPuropseForm = (props) => {
                 <ReactMultiSelect
                   control={control}
                   {...register("tehsil")}
-                  data={tehsilDataLabels}
+                  data={tehsilDataLabels?.data}
                   labels="Tehsil"
+                  loading={tehsilDataLabels?.isLoading}
                   onChange={(e) => {
                     getRevenuStateData(e.value);
                     setTehsilCode(e.value);
@@ -837,11 +731,12 @@ const ApllicantPuropseForm = (props) => {
                 <ReactMultiSelect
                   control={control}
                   {...register("revenueEstate")}
-                  data={revenueDataLabels}
+                  data={revenueDataLabels?.data}
                   labels="Revenue Estate"
+                  loading={revenueDataLabels?.isLoading}
                   onChange={(e) => {
+                    console.log("e", e);
                     getMustilData(e.code);
-                    getLandOwnerStateData(e.khewats);
                   }}
                 />
 
@@ -849,6 +744,7 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.revenueEstate && errors?.revenueEstate?.message}
                 </h3>
               </Col>
+
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
@@ -857,7 +753,14 @@ const ApllicantPuropseForm = (props) => {
                     </h2>
                   </Form.Label>
                 </div>
-                <ReactMultiSelect control={control} name="mustil" data={mustilDataLabels} labels="Rectangle No." {...register("rectangleNo")} />
+                <ReactMultiSelect
+                  control={control}
+                  name="mustil"
+                  data={mustilDataLabels?.data}
+                  loading={mustilDataLabels?.isLoading}
+                  labels="Rectangle No."
+                  {...register("mustil")}
+                />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.mustil && errors?.mustil?.message}
                 </h3>
@@ -867,23 +770,34 @@ const ApllicantPuropseForm = (props) => {
             <Row className="ml-auto mb-3">
               <Col md={4} xxl lg="12">
                 <div>
-                  <label>
-                    <h2>
-                      Consolidation Type<span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </label>{" "}
-                  &nbsp;&nbsp;
-                  <input type="radio"  value="Consolidated"  onClick={handleshow2} {...register("consolidationType")} />
-                  &nbsp;&nbsp;
-                  <label for="Yes"></label>
-                  <label htmlFor="gen">Consolidated</label>&nbsp;&nbsp;
-                  <input type="radio"  value="Non-Consolidated"  onClick={handleshow2} {...register("consolidationType")} />
-                  &nbsp;&nbsp;
-                  <label for="Yes"></label>
-                  <label htmlFor="npnl">Non-Consolidated</label>
-                  {/* </Form.Select> */}
-                </div>{" "}
-                {showhide2 === "Consolidated" && (
+                  <h2>
+                    Consolidation Type<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                    <label htmlFor="consolidated">
+                      <input
+                        {...register("consolidationType")}
+                        type="radio"
+                        value="consolidated"
+                        defaultChecked={true}
+                        defaultValue="consolidated"
+                        id="consolidated"
+                        onClick={() => setConsolidateValue("consolidated")}
+                      />{" "}
+                      &nbsp;&nbsp; Consolidated &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="non-consolidated">
+                      <input
+                        {...register("consolidationType")}
+                        type="radio"
+                        value="non-consolidated"
+                        id="non-consolidated"
+                        onClick={() => setConsolidateValue("non-consolidated")}
+                      />{" "}
+                      &nbsp;&nbsp; Non-Consolidated &nbsp;&nbsp;
+                    </label>
+                  </h2>
+                </div>
+
+                {consolidateValue == "consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
@@ -901,19 +815,38 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("kanal")} />
+                          {/* <label htmlFor="first">First</label>
+                          <input onChange={onChange} defaultValue={first} name="first" id="first" type="number" />
+
+                          <label htmlFor="sum">Total</label>
+                          <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" /> */}
+                          <input onChange={onChange} defaultValue={kanal} name="kanal" id="kanal" type="number" />
+                          <input type="text" className="form-control" {...register("kanal")} onChange={onChange} defaultValue={kanal} id="kanal" />
+
+                          <label htmlFor="sum">Total</label>
+                          <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" />
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("marla")} />
+                          <input onChange={onChange} defaultValue={marla} name="marla" id="marla" type="number" />
+                          <input type="text" className="form-control" {...register("marla")} onChange={onChange} defaultValue={marla} id="marla" />
+
+                          <label htmlFor="summarla">Total</label>
+                          <input onChange={onChange} defaultValue={summarla} id="summarla" name="summarla" type="number" />
+                          {/* <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} /> */}
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("sarsai")} />
+                          <input onChange={onChange} defaultValue={marla} name="sarsai" id="sarsai" type="number" />
+                          <input type="text" className="form-control" {...register("sarsai")} onChange={onChange} defaultValue={sarsai} id="sarsai" />
+
+                          <label htmlFor="sumsarsai">Total</label>
+                          <input onChange={onChange} defaultValue={sumsarsai} id="sumsarsai" name="sumsarsai" type="number" />
+                          {/* <Form.Control type="text" className="form-control" placeholder="" {...register("sarsai")} /> */}
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 )}
-                {showhide2 === "Non-Consolidated" && (
+                {consolidateValue == "non-consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
@@ -945,8 +878,15 @@ const ApllicantPuropseForm = (props) => {
                 )}
               </Col>
             </Row>
-
             <Row className="ml-auto mb-3">
+              <Col md={4} xxl lg="6">
+                <div>
+                  <label>
+                    <h2>Enter Khewat</h2>
+                  </label>
+                </div>
+                <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
+              </Col>
               <Col md={4} xxl lg="6">
                 <div>
                   <label>
@@ -964,22 +904,19 @@ const ApllicantPuropseForm = (props) => {
             </Row>
             <Row className="ml-auto mb-3">
               <div className="col col-12">
-                <h2 data-toggle="tooltip" data-placement="top" title="Whether collaboration agreement entered for the Khasra?(yes/no)">
+                <h2>
                   Collaboration agreement Owner<span style={{ color: "red" }}>*</span>
-                  &nbsp;&nbsp;
-                  <input type="radio" value="Yes"   onClick={handleshow1} />
-                  &nbsp;&nbsp;
-                  <label for="Yes">
-                    <h6>Yes</h6>
-                  </label>
-                  &nbsp;&nbsp;
-                  <input type="radio" value="No"   onClick={handleshow1} />
-                  &nbsp;&nbsp;
-                  <label for="No">
-                    <h6>No</h6>
-                  </label>
                 </h2>
-                {showhide1 === "Yes" && (
+
+                <label htmlFor="collaboration">
+                  <input {...register("collaboration")} type="radio" value="N" id="yes" onClick={() => setCollaboration("Y")} />
+                  Yes
+                </label>
+                <label htmlFor="collaboration">
+                  <input {...register("collaboration")} type="radio" value="Y" id="no" onClick={() => setCollaboration("N")} />
+                  No
+                </label>
+                {getCollaboration === "Y" && (
                   <div className="row ">
                     <div className="col col-4">
                       <label>
@@ -988,7 +925,7 @@ const ApllicantPuropseForm = (props) => {
                           <span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="text" className="form-control" placeholder="N/A" {...register("devCompany")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
                       <label>
@@ -996,7 +933,7 @@ const ApllicantPuropseForm = (props) => {
                           Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="date" className="form-control" placeholder="N/A" {...register("registering")} />
+                      <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidFrom")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
                       <label>
@@ -1004,25 +941,19 @@ const ApllicantPuropseForm = (props) => {
                           Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="date" className="form-control" placeholder="N/A" {...register("dateValidity")} />
+                      <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidTill")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 35 }}>
-                      <label>
-                        <h2>
-                          Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
-                        </h2>
+                      <h2>
+                        Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
+                      </h2>
+                      <label htmlFor="agreementIrrevocialble">
+                        <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
+                        Yes
                       </label>
-                      <br></br>
-                      <input type="radio" value="Yes" id="Yes1"  />
-                      &nbsp;&nbsp;
-                      <label for="Yes">
-                        <h6>Yes</h6>
-                      </label>
-                      &nbsp;&nbsp;
-                      <input type="radio" value="No" id="No1" onChange={handleChange}  />
-                      &nbsp;&nbsp;
-                      <label for="No">
-                        <h6>No</h6>
+                      <label htmlFor="agreementIrrevocialble">
+                        <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
+                        No
                       </label>
                     </div>
 
@@ -1032,7 +963,7 @@ const ApllicantPuropseForm = (props) => {
                           Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="text" className="form-control" placeholder="N/A" {...register("authorizedSign")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
                       <label>
@@ -1040,7 +971,7 @@ const ApllicantPuropseForm = (props) => {
                           Name of authorized signatory on behalf of developer to sign Collaboration agreement<span style={{ color: "red" }}>*</span>
                         </h2>
                       </label>
-                      <Form.Control type="date" className="form-control" placeholder="N/A" {...register("authorizedDev")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 20 }}>
                       <label>
@@ -1049,7 +980,7 @@ const ApllicantPuropseForm = (props) => {
                         </h2>
                       </label>
                       <br></br>
-                      <Form.Control type="text" className="form-control" placeholder="N/A" {...register("registeringAuth")} />
+                      <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
                     </div>
                     <div className="col col-4" style={{ marginTop: 15 }}>
                       <label>
@@ -1059,7 +990,12 @@ const ApllicantPuropseForm = (props) => {
                         </h2>
                       </label>
                       <br></br>
-                      <Form.Control type="file" className="form-control" onChange1={(e) => setFile({ file: e.target.files[0] })} />
+                      <input
+                        type="file"
+                        className="form-control"
+                        {...register("registeringAuthorityDoc")}
+                        onChange={(e) => getDocumentData(e?.target?.files[0])}
+                      />
                     </div>
                   </div>
                 )}

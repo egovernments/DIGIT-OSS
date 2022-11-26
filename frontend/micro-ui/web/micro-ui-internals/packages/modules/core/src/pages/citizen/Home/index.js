@@ -54,14 +54,14 @@ const Home = () => {
         // name: t("MODULE_PT"),
         name: "Application for  Electrical Plan",
         Icon: <PTIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/electrical-plan"),
+        onClick: () => history.push("/digit-ui/citizen/obps/electricalPlan"),
         // onClick: () => history.push("/digit-ui/citizen/pt-home"),
       },
       {
         // name: t("MODULE_TL"),
         name: "Application for  Service Plan",
         Icon: <CaseIcon className="fill-path-primary-main" />,
-        onClick: () => history.push("/digit-ui/citizen/service-plan"),
+        onClick: () => history.push("/digit-ui/citizen/obps/servicePlan"),
         // onClick: () => history.push("/digit-ui/citizen/tl-home"),
       },
       {

@@ -5,404 +5,145 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
+import { useHistory, useLocation } from "react-router-dom";
 
 const ApllicantFormStep1 = (props) => {
+  const location = useLocation();
+  const userInfo = Digit.UserService.getUser()?.info || {};
+  const tenant = Digit.ULBService.getCurrentTenantId();
+  const [developerDataLabel, setDeveloperDataLabel] = useState([]);
+  // const [getAppliantInfoData, setAppliantInfoData] = useState(null);
+  const [applicantId, setApplicantId] = useState("");
+
+  console.log("userInfo===", userInfo);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
     setValue,
+    getValues,
   } = useForm({
-    mode: "onSubmit",
-    reValidateMode: "onBlur",
+    mode: "onChange",
+    reValidateMode: "onChange",
     resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
-  const userInfo = Digit.UserService.getUser()?.info || {};
-  const tenant = Digit.ULBService.getCurrentTenantId();
-  const [developerData, setDeveloperData] = useState([]);
-  const [developerDataLabel, setDeveloperDataLabel] = useState([]);
-  const [submitDataLabel, setSubmitDataLabel] = useState([]);
-  const [finalSubmitData, setFinalSubmitData] = useState([]);
-  const [applicationId, setApplicationId] = useState("");
+
   const ApplicantFormSubmitHandlerForm = async (data) => {
-    console.log("data===+++++", data);
-
+    const token = window?.localStorage?.getItem("token");
+    const postDistrict = {
+      pageName: "ApplicantInfo",
+      ApplicationStatus: "DRAFT",
+      id: applicantId,
+      createdBy: userInfo?.id,
+      updatedBy: userInfo?.id,
+      LicenseDetails: {
+        ApplicantInfo: {
+          ...data,
+          devDetail: developerDataLabel,
+        },
+      },
+      RequestInfo: {
+        apiId: "Rainmaker",
+        ver: "v1",
+        ts: 0,
+        action: "_search",
+        did: "",
+        key: "",
+        msgId: "090909",
+        requesterId: "",
+        authToken: token,
+        userInfo: userInfo,
+      },
+    };
     try {
-      const postDistrict = {
-        NewServiceInfo: {
-          pageName: "ApplicantInfo",
-
-          newServiceInfoData: {
-            ApplicantInfo: {
-              authorizedPerson: data.authorizedPerson,
-              authorizedmobile: data.authorizedmobile,
-              alternatemobile: data.altContactNumber,
-              authorizedEmail: data.authorizedEmail,
-              authorizedPan: data.authorizedPan,
-              authorizedAddress: data.permanentAddress,
-              village: data.village,
-              authorizedPinCode: data.authorizedPinCode,
-              tehsil: data.tehsil,
-              district: data.district,
-              state: data.state,
-              status: data.status,
-              permanentAddress: data.permanentAddress,
-              LC: data.LC,
-              notSigned: data.notSigned,
-              email: data.email,
-              authorized: data.authorized,
-            },
-            ApplicantPurpose: {},
-            LandSchedule: {
-              licenseApplied: "yes for fdhf",
-              LicNo: "",
-              potential: "",
-              siteLoc: "",
-              approach: "",
-              approachRoadWidth: "",
-              specify: "",
-              typeLand: "",
-              thirdParty: "",
-              migrationLic: "",
-              encumburance: "",
-              litigation: "",
-              court: "",
-              insolvency: "",
-              appliedLand: "",
-              revenuerasta: "",
-              watercourse: "",
-              compactBlock: "",
-              sandwiched: "",
-              acquistion: "",
-              section4: "",
-              section6: "",
-              orderUpload: "",
-              approachable: "",
-              vacant: "",
-              construction: "",
-              ht: "",
-              gas: "",
-              nallah: "",
-              road: "",
-              land: "",
-              utilityLine: "",
-              landSchedule: "",
-              mutation: "",
-              jambandhi: "",
-              LayoutPlan: "",
-              proposedLayoutPlan: "",
-              revisedLansSchedule: "",
-            },
-            DetailsofAppliedLand: {
-              dgps: "675657",
-              DetailsAppliedLandData1: {
-                resplotno: "asa",
-                reslengthmtr: "",
-                reswidthmtr: "",
-                resareasq: "",
-                npnlplotno: "",
-                npnllengthmtr: "",
-                npnlwidthmtr: "",
-                npnlareasq: "",
-                ewsplotno: "",
-                ewslengthmtr: "",
-                ewswidthmtr: "",
-                ewsareasq: "",
-                complotno: "",
-                comlengthmtr: "",
-                comwidthmtr: "",
-                comareasq: "",
-                siteplotno: "",
-                sitelengthmtr: "",
-                sitewidthmtr: "",
-                siteareasq: "",
-                parkplotno: "",
-                parklengthmtr: "",
-                parkwidthmtr: "",
-                parkareasq: "",
-                publicplotno: "",
-                publiclengthmtr: "",
-                publicwidthmtr: "",
-                publicareasq: "",
-                stpplotno: "",
-                stplengthmtr: "",
-                stpwidthmtr: "",
-                stpareasq: "",
-                etpplotno: "",
-                etplengthmtr: "",
-                etpwidthmtr: "",
-                etpareasq: "",
-                wtpplotno: "",
-                wtplengthmtr: "",
-                wtpwidthmtr: "",
-                wtpareasq: "",
-                ugtplotno: "",
-                ugtlengthmtr: "",
-                ugtwidthmtr: "",
-                ugtareasq: "",
-                milkboothplotno: "",
-                milkboothlengthmtr: "",
-                milkboothwidthmtr: "",
-                milkboothareasq: "",
-                gssplotno: "",
-                gsslengthmtr: "",
-                gssareasq: "",
-                resDimension: "",
-                resEnteredArea: "",
-                comDimension: "",
-                comEnteredArea: "",
-                secPlanPlot: "",
-                secPlanLength: "",
-                secPlanDim: "",
-                secPlanEntered: "",
-                greenBeltPlot: "",
-                greenBeltLength: "",
-                greenBeltDim: "",
-                greenBeltEntered: "",
-                internalPlot: "",
-                internalLength: "",
-                internalDim: "",
-                internalEntered: "",
-                otherPlot: "",
-                otherLength: "",
-                otherDim: "",
-                otherEntered: "",
-                undeterminedPlot: "",
-                undeterminedLength: "",
-                undeterminedDim: "",
-                undeterminedEntered: "",
-              },
-              DetailsAppliedLandDdjay2: {
-                frozenNo: "qw",
-                frozenArea: "",
-                organize: "",
-              },
-              DetailsAppliedLandIndustrial3: {
-                colonyfiftyNo: "qwq",
-                colonyfiftyArea: "",
-                fiftyToTwoNo: "",
-                fiftyToTwoArea: "",
-                twoHundredNo: "",
-                twoHundredArea: "",
-                resiNo: "",
-                resiArea: "",
-                commerNo: "",
-                commerArea: "",
-                labourNo: "",
-                labourArea: "",
-              },
-              DetailsAppliedLandResidential4: {
-                npnlNo: "wew",
-                npnlArea: "",
-                ewsNo: "",
-                ewsArea: "",
-              },
-              DetailsAppliedLandNpnl5: {
-                surrender: "sds",
-                pocketProposed: "",
-                deposit: "",
-                surrendered: "",
-              },
-              DetailsAppliedLand6: {
-                sitePlan: "sdsd",
-                democraticPlan: "",
-                sectoralPlan: "",
-                developmentPlan: "",
-                uploadLayoutPlan: "",
-              },
-            },
-            FeesAndCharges: {
-              totalArea: "125.569",
-              purpose: "",
-              devPlan: "",
-              scrutinyFee: "",
-              licenseFee: "",
-              conversionCharges: "",
-              payableNow: "",
-              remark: "",
-              adjustFee: "",
-            },
-          },
-        },
-        RequestInfo: {
-          apiId: "Rainmaker",
-          ver: "v1",
-          ts: 0,
-          action: "_search",
-          did: "",
-          key: "",
-          msgId: "090909",
-          requesterId: "",
-          authToken: "",
-        },
-      };
-      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
-        return Resp;
-      });
-      console.log("Resp", Resp?.data?.NewServiceInfo?.[0]?.id);
-      props.Step1Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
-      setFinalSubmitData(Resp.data);
+      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
+      props.Step1Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.id?.toString(), userInfo);
     } catch (error) {
       console.log(error.message);
     }
   };
-
-  const getDeveloperData = async () => {
-    try {
-      const Resp = await axios.get("http://10.1.1.18:8443/user/developer/_getAuthorizedUser?mobileNumber=1111111111").then((response) => {
-        return response;
-      });
-      setDeveloperData(Resp.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  useEffect(() => {
-    getDeveloperData();
-  }, []);
 
   const getUserInfo = async () => {
     const uuid = userInfo?.uuid;
     if (uuid) {
-      const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
-      setValue("alternatemobile", usersResponse?.user?.[0]?.altContactNumber);
-      setValue("authorizedAddress", usersResponse?.user?.[0]?.permanentAddress);
+      try {
+        const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
+        const userData = usersResponse?.user[0];
+        console.log(usersResponse, "usersResponse?.user");
+        setValue("authorized", userData?.name);
+        getDeveloperDataLabel(userData?.parentId);
+      } catch (error) {
+        return error;
+      }
     }
   };
+
+  const getDeveloperDataLabel = async (id) => {
+    try {
+      const Resp = await axios.get(`http://103.166.62.118:8443/user/developer/_getDeveloperById?id=${id}&isAllData=false`);
+      console.log("Resp.data", Resp?.data);
+      setDeveloperDataLabel(Resp?.data?.devDetail?.[0]);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   useEffect(() => {
     getUserInfo();
   }, []);
 
   useEffect(() => {
-    if (developerData !== undefined && developerData !== null) {
-      setValue(
-        "authorizedDeveloper",
-        developerData !== null && developerData !== undefined
-          ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addInfo?.companyName
-          : "N/A"
-      ),
-        setValue(
-          "authorizedPerson",
-          developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].userName
-            : "N/A"
-        ),
-        setValue(
-          "authorizedmobile",
-          developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].mobileNumber
-            : "N/A"
-        ),
-        setValue(
-          "authorizedEmail",
-          developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].emailId
-            : "N/A"
-        ),
-        setValue(
-          "authorizedPan",
-          developerData !== null && developerData !== undefined
-            ? developerData?.developerRegistration?.developerDetail[0].devDetail?.addRemoveAuthoizedUsers[0].pan
-            : "N/A"
-        );
-    }
-  }, [developerData]);
-
-  const getDeveloperDataLabel = async () => {
-    try {
-      const Resp = await axios.get("http://10.1.1.18:8443/user/developer/_getDeveloperById?id=36&isAllData=true").then((response) => {
-        return response;
-      });
-      setDeveloperDataLabel(Resp.data);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  useEffect(() => {
-    getDeveloperDataLabel();
-  }, []);
-
-  useEffect(() => {
-    if (developerDataLabel !== undefined && developerDataLabel !== null) {
-      setValue(
-        "village",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.city : "N/A"
-      );
-      setValue(
-        "tehsil",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.tehsil
-          : "N/A"
-      );
-      setValue(
-        "district",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.district
-          : "N/A"
-      );
-      setValue(
-        "state",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.state : "N/A"
-      );
-      setValue(
-        "status",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.showDevTypeFields
-          : "N/A"
-      );
-      setValue(
-        "address",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.registeredAddress
-          : "N/A"
-      );
-      setValue(
-        "authorizedAddress",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.addressLineOne
-          : "N/A"
-      );
-      setValue(
-        "authorizedPinCode",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.licenceDetails?.pincode
-          : "N/A"
-      );
-
-      setValue(
-        "email",
-        developerDataLabel !== null && developerDataLabel !== undefined ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.email : "N/A"
-      );
+    if (developerDataLabel) {
+      setValue("authorizedDeveloper", developerDataLabel?.licenceDetails?.name);
+      setValue("authorizedPerson", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.name);
+      setValue("authorizedmobile", developerDataLabel?.aurthorizedUserInfoArray?.[0]?.mobileNumber);
+      setValue("alternatemobile", developerDataLabel?.licenceDetails?.mobileNumber);
+      setValue("authorizedEmail", developerDataLabel?.licenceDetails?.email);
+      setValue("authorizedPan", developerDataLabel?.licenceDetails?.panNumber);
+      setValue("authorizedAddress", developerDataLabel?.licenceDetails?.addressLineOne);
+      setValue("village", developerDataLabel?.licenceDetails?.village);
+      setValue("authorizedPinCode", developerDataLabel?.licenceDetails?.pincode);
+      setValue("tehsil", developerDataLabel?.licenceDetails?.tehsil);
+      setValue("district", developerDataLabel?.licenceDetails?.district);
+      setValue("state", developerDataLabel?.licenceDetails?.state);
+      setValue("status", developerDataLabel?.addInfo?.showDevTypeFields);
+      setValue("address", developerDataLabel?.addInfo?.registeredAddress);
       setValue(
         "permanentAddress",
-        developerDataLabel !== null && developerDataLabel !== undefined
-          ? developerDataLabel?.devDetail?.[0]?.devDetail?.addInfo?.registeredAddress
-          : "N/A"
+        `${developerDataLabel?.licenceDetails?.addressLineOne} ${developerDataLabel?.licenceDetails?.addressLineTwo} ${developerDataLabel?.licenceDetails?.addressLineThree}`
       );
+      setValue("email", developerDataLabel?.addInfo?.email);
     }
   }, [developerDataLabel]);
 
-  const getSubmitDataLabel = async () => {
+  const getApplicantUserData = async (id) => {
+    console.log("here");
     try {
-      const Resp = await axios.get("http://10.1.1.18:8443/land-services/new/licenses/_get?id=1099696").then((response) => {
-        return response;
-      });
-      console.log("RESP+++", Resp);
-      setSubmitDataLabel(Resp?.data);
+      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
+      const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
+      console.log(Resp?.data?.newServiceInfoData[0]?.ApplicantInfo);
+      setValue("notSigned", userData?.notSigned);
+      setValue("LC", userData?.LC);
     } catch (error) {
       console.log(error.message);
     }
   };
   useEffect(() => {
-    getSubmitDataLabel();
+    const search = location?.search;
+    const params = new URLSearchParams(search);
+    const id = params.get("id");
+
+    setApplicantId(id?.toString());
+    if (id) getApplicantUserData(id);
   }, []);
 
   return (
     <form onSubmit={handleSubmit(ApplicantFormSubmitHandlerForm)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4>New License </h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>License </h4>
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
           <Form.Group className="justify-content-center" controlId="formBasicEmail">
             <Row className="ml-auto" style={{ marginBottom: 5 }}>

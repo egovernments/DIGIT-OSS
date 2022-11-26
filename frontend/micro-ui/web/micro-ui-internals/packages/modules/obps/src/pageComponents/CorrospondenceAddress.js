@@ -1,91 +1,15 @@
 import { BackButton, CardLabel, CheckBox, FormStep, TextArea, Toast } from "@egovernments/digit-ui-react-components";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Timeline from "../components/Timeline";
-import { useForm } from "react-hook-form";
-import { Button, Form, FormLabel } from "react-bootstrap";
-import { Card, Row, Col } from "react-bootstrap";
-import Table from "react-bootstrap/Table";
-import { Modal,ModalHeader,ModalBody,ModalFooter} from "reactstrap";
-import axios from "axios";
-import { useLocation } from "react-router-dom";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
 const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData }) => {
-    const { pathname: url } = useLocation();
-    let validation = {};
-    const onSkip = () => onSelect();
-    const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.Correspondenceaddress || formData?.formData?.Correspondenceaddress || "");
-    const [isAddressSame, setisAddressSame] = useState(formData?.isAddressSame || formData?.formData?.isAddressSame || false);
-    const [error, setError] = useState(null);
-    const [showToast, setShowToast] = useState(null);
-    const [isDisableForNext, setIsDisableForNext] = useState(false);
-    const [isDevType, setIsDevType] = useState(false)
-    const [isDevTypeComp, setIsDevTypeComp] = useState(false)
-    const [modal, setmodal] = useState(false);
-    const [modalColony, setmodalColony] = useState(false);
-    const [capacityDevelopColonyHdruAct, setModalCapacityDevelopColonyHdruAct] = useState(formData?.DeveloperCapacity?.capacityDevelopColonyHdruAct || []);
-    // const [modalColonyDevGrpValuesArray, setModalColonyDevGrpValuesArray] = useState([]);
-    const [capacityDevelopColonyLawAct, setCapacityDevelopColonyLawAct] = useState(formData?.DeveloperCapacity?.capacityDevelopColonyLawAct || []);
-    const [capacityDevelopAColony, setcapacityDevelopAColony] = useState([]);
-  
-    const [licenceNumber, setModalLcNo] = useState(formData?.DeveloperCapacity?.licenceNumber || "");
-    const [nameOfDeveloper, setModalDevName] = useState(formData?.DeveloperCapacity?.nameOfDeveloper || "");
-    const [purposeOfColony, setModalPurposeCol] = useState(formData?.DeveloperCapacity?.purposeOfColony || "");
-    const [sectorAndDevelopmentPlan, setModalDevPlan] = useState(formData?.DeveloperCapacity?.sectorAndDevelopmentPlan || "");
-    const [validatingLicence, setModalDevValidity] = useState(formData?.DeveloperCapacity?.validatingLicence || "");
-  
-    
-    const [coloniesDeveloped,setColonyDev] = useState(formData?.DeveloperCapacity?.coloniesDeveloped || "");
-    const [area,setColonyArea] = useState(formData?.DeveloperCapacity?.area || "");
-    const [purpose,setColonyPurpose] = useState(formData?.DeveloperCapacity?.purpose || "");
-    const [statusOfDevelopment,setColonyStatusDev] = useState(formData?.DeveloperCapacity?.statusOfDevelopment || "");
-    const [outstandingDues,setColonyoutstandingDue] = useState(formData?.DeveloperCapacity?.outstandingDues || "");
-  
-    const [engineerName,setEngineerName] = useState(formData?.DeveloperCapacity?.engineerName || "")
-    const [engineerQualification,setEngineerQualification] = useState(formData?.DeveloperCapacity?.engineerQualification || "")
-    const [engineerSign,setEngineerSign] = useState(formData?.DeveloperCapacity?.engineerSign || "")
-    const [engineerDegree,setEngineerDegree] = useState(formData?.DeveloperCapacity?.engineerDegree || "")
-    const [architectName,setArchitectName] = useState(formData?.DeveloperCapacity?.architectName || "")
-    const [architectQualification,setArchitectQualification] = useState(formData?.DeveloperCapacity?.architectQualification || "")
-    const [architectSign,setArchitectSign] = useState(formData?.DeveloperCapacity?.architectSign || "")
-    const [architectDegree,setArchitectDegree] = useState(formData?.DeveloperCapacity?.architectDegree || "")
-    const [townPlannerName,setTownPlannerName] = useState(formData?.DeveloperCapacity?.townPlannerName || "")
-    const [townPlannerQualification,setTownPlannerQualification] = useState(formData?.DeveloperCapacity?.townPlannerQualification || "")
-    const [townPlannerSign,setTownPlannerSign] = useState(formData?.DeveloperCapacity?.townPlannerSign || "")
-    const [townPlannerDegree,setTownPlannerDegree] = useState(formData?.DeveloperCapacity?.townPlannerDegree || "")
-    const [existingDeveloperAgreement,setExistingDev] = useState(formData?.DeveloperCapacity?.existingDeveloperAgreement || "")
-    const [existingDeveloperAgreementDoc,setExistingDevDoc] = useState(formData?.DeveloperCapacity?.existingDeveloperAgreementDoc || "")
-    const [technicalCapacity,setTechnicalCapacity] = useState(formData?.DeveloperCapacity?.technicalCapacity || "")
-    const [technicalCapacityDoc,setTechnicalCapacityDoc] = useState(formData?.DeveloperCapacity?.technicalCapacityDoc || "")
-    const [engineerNameN,setengineerNameN] = useState(formData?.DeveloperCapacity?.engineerNameN || "")
-    const [engineerDocN,setEngineerDocN] = useState(formData?.DeveloperCapacity?.engineerDocN || "")
-    const [architectNameN,setArchitectNameN] = useState(formData?.DeveloperCapacity?.architectNameN || "")
-    const [architectDocN,setArchitectDocN] = useState(formData?.DeveloperCapacity?.architectDocN || "")
-    const [uplaodSpaBoard,setUplaodSpaBoard] = useState(formData?.DeveloperCapacity?.uplaodSpaBoard || "")
-    const [uplaodSpaBoardDoc,setUplaodSpaBoardDoc] = useState(formData?.DeveloperCapacity?.uplaodSpaBoardDoc || "")
-    const [agreementDoc,setAgreementDoc] = useState(formData?.DeveloperCapacity?.agreementDoc || "")
-    const [boardDoc,setBoardDoc] = useState(formData?.DeveloperCapacity?.boardDoc || "")
-    const [registeredDoc,setRegisteredDoc] = useState(formData?.DeveloperCapacity?.registeredDoc || "")
-    const [boardDocY,setBoardDocY] = useState(formData?.DeveloperCapacity?.boardDocY || "")
-    const [earlierDocY,setEarlierDocY] = useState(formData?.DeveloperCapacity?.earlierDocY || "")
-    const [boardDocN,setBoardDocN] = useState(formData?.DeveloperCapacity?.boardDocN || "")
-    const [earlierDocN,setEarlierDocN] = useState(formData?.DeveloperCapacity?.earlierDocN || "")
-    const [technicalAssistanceAgreementDoc,setTechnicalAssistanceAgreementDoc] = useState(formData?.DeveloperCapacity?.technicalAssistanceAgreementDoc || "")
-    const [docUpload,setDocuploadData]=useState([])
-    const [file,setFile]=useState(null);
-    const [individualCertificateCA,setIndividualCertificateCA] = useState("");
-    const [companyBalanceSheet,setCompanyBalanceSheet] = useState("");
-    const [paidUpCapital,setPaidUpCapital] = useState("");
-    const [networthPartners,setNetworthPartners] = useState("");
-    const [networthFirm,setNetworthFirm] = useState("");
-  const [showhide, setShowhide] = useState("No");
-  const [showhide1, setShowhide1] = useState("no");
-  const [showhide0, setShowhide0] = useState("No");
-  // const [showhide2, setShowhide2] = useState("No");
-  // const [showhide3, setShowhide3] = useState("No");
-  // const [showhide4, setShowhide4] = useState("No");
-  // const [showhide5, setShowhide5] = useState("No");
-  const [showhide6, setShowhide6] = useState("no");
+  let validation = {};
+  const onSkip = () => onSelect();
+  const [Correspondenceaddress, setCorrespondenceaddress] = useState(formData?.Correspondenceaddress || formData?.formData?.Correspondenceaddress || "");
+  const [isAddressSame, setisAddressSame] = useState(formData?.isAddressSame || formData?.formData?.isAddressSame || false);
+  const [error, setError] = useState(null);
+  const [showToast, setShowToast] = useState(null);
+  const [isDisableForNext, setIsDisableForNext] = useState(false);
   const tenantId = Digit.ULBService.getCurrentTenantId();
   const stateId = Digit.ULBService.getStateId();
   let isopenlink = window.location.href.includes("/openlink/");
@@ -110,124 +34,7 @@ const CorrospondenceAddress = ({ t, config, onSelect, value, userType, formData 
   function selectCorrespondenceaddress(e) {
     setCorrespondenceaddress(e.target.value);
   }
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm([{ XLongitude: "", YLatitude: "" }]);
-  const formSubmit = (data) => {
-    console.log("data", data);
-  };
-  const [AppliedDetailFormSubmitted, SetAppliedDetailFormSubmitted] =
-    useState(false);
-  // const AppliedDetailFormSubmitHandler = (e) => {
-  //   e.preventDefault();
-  //   SetAppliedDetailFormSubmitted(true);
-  // };
-  // useEffect(() => {
-  //   if (AppliedDetailFormSubmitted) {
-  //     props.AppliedDetailsFormSubmit(true);
-  //   }
-  // }, [AppliedDetailFormSubmitted]);
-  
 
-  const handleshow = (e) => {
-    const getshow = e.target.value;
-    setShowhide(getshow);
-  };
-  const handleshow0 = (e) => {
-    const getshow = e.target.value;
-    setShowhide0(getshow);
-  };
-  const handleshow1 = (e) => {
-    const getshow = e.target.value;
-    setShowhide1(getshow);
-  };
-  const handleshow6 = (e) => {
-    const getshow = e.target.value;
-    setShowhide6(getshow);
-  };
-
-  const handleChange = (e) => {
-    this.setState({ isRadioSelected: true });
-  };
-  
-  const devTypeFlagVal = localStorage.getItem('devTypeValueFlag');
-  const getDocumentData = async () => {
-    if(file===null){
-       return
-    }
-       const formData = new FormData();
-       formData.append(
-           "file",file.file      );
-       formData.append(
-           "tenantId","hr"      );  
-       formData.append(
-           "module","property-upload"      );
-        formData.append(
-            "tag","tag-property"      );
-   
-        console.log("File",formData)
-
-       try {
-           const Resp = await axios.post("/filestore/v1/files",formData,
-           {headers:{
-               "content-type":"multipart/form-data"
-           }}).then((response) => {
-               return response
-           });
-           setDocuploadData(Resp.data)
-           
-       } catch (error) {
-           console.log(error.message);
-       }
-
-      
-
-  }
-  useEffect(() => {
-    getDocumentData();
-  }, [file]);
-
-
-const handleArrayValues = () => {
-
-  if (licenceNumber !== "" && nameOfDeveloper !== "" && purposeOfColony !== "") {
-
-    const values = {
-      
-        licenceNumber: licenceNumber,
-        nameOfDeveloper: nameOfDeveloper,
-        purposeOfColony: purposeOfColony,
-        sectorAndDevelopmentPlan: sectorAndDevelopmentPlan,
-        validatingLicence: validatingLicence
-      
-    }
-    setModalCapacityDevelopColonyHdruAct((prev) => [...prev, values]);
-    setmodal(!modal)
-  }
-  console.log("DevCapacityFirst", capacityDevelopColonyHdruAct);
-  localStorage.setItem("DevCapacityDetails", JSON.stringify(capacityDevelopColonyHdruAct))
-}
-
-
-
-
-const handleColonyDevGrp=()=>{
-  const colonyDevValues = {
-    
-      coloniesDeveloped:coloniesDeveloped,
-      area:area,
-      purpose:purpose,
-      statusOfDevelopment:statusOfDevelopment,
-      outstandingDues:outstandingDues
-    
-    
-  }
-  setCapacityDevelopColonyLawAct((prev) => [...prev, colonyDevValues]);
-  setmodalColony(!modalColony)
-  console.log("DevCapacityColony", capacityDevelopColonyLawAct);
-}
   const goNext = () => {
 
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
@@ -243,7 +50,7 @@ const handleColonyDevGrp=()=>{
                   "name": formData?.LicneseDetails?.name,
                   "dob": null,
                   "emailId": formData?.LicneseDetails?.email,
-                  "permanentAddress": "dfdjsfdsf",
+                  "permanentAddress": formData?.LicneseDetails?.PermanentAddress,
                   "correspondenceAddress": Correspondenceaddress,
                   "pan":formData?.LicneseDetails?.PanNumber,
                   // "permanentPinCode": "143001"
@@ -310,7 +117,7 @@ const handleColonyDevGrp=()=>{
           t={t}
           isDisabled={isDisableForNext}
         >
-          {/* <CheckBox
+          <CheckBox
             label={t("BPA_SAME_AS_PERMANENT_ADDRESS")}
             onChange={(e) => selectChecked(e)}
             //value={field.isPrimaryOwner}
@@ -327,7 +134,7 @@ const handleColonyDevGrp=()=>{
             onChange={selectCorrespondenceaddress}
             value={Correspondenceaddress}
             disable={isAddressSame}
-          /> */}
+          />
           {devTypeFlagVal === "01" &&(
                 <div className="card-body">
                     <div className="form-group row mb-12">

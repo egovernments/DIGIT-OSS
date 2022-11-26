@@ -13,6 +13,7 @@ const WorkingTable = ({ columns, data }) => {
   return (
     <div>
       <Table
+        className="table table-bordered"
         rowSelection={{
           type: "checkbox",
           ...rowSelection,

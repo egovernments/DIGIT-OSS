@@ -1,142 +1,239 @@
-import React, { useState } from "react";
-import { Row, Col, Form, Button } from "react-bootstrap";
-import { TextInput } from "@egovernments/digit-ui-react-components";
-import { Upload } from "react-bootstrap-icons";
+import React, { useState, useEffect } from "react";
+import { Card, Row, Col, Form, Button } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
-// const data = [];
+const ServicePlanService = () => {
+  const { register, handleSubmit } = useForm();
 
-const ServicePlan = () => {
   const [LOCNumber, setLOCNumber] = useState("");
-  const [getData, setData] = useState([
-    { name: "Self-certified drawings from empanelled/certified architects that conform to the standard approved template", image: null },
-    { name: "Environmental Clearance", image: null },
-    { name: "PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website)", image: null },
-    { name: "AutoCAD (DXF) file", image: null },
-    { name: "Environmental Clearance", image: null },
-    { name: "Certified copy of the plan verified by a third party", image: null },
-  ]);
+  const [submitDataLabel, setSubmitDataLabel] = useState([]);
+  const [developerDataLabel, setDeveloperDataLabel] = useState([]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("data===", LOCNumber);
+  const servicePlan = async (data) => {
+    console.log(data);
+    try {
+      const postDistrict = {
+        requestInfo: {
+          api_id: "1",
+          ver: "1",
+          ts: null,
+          action: "create",
+          did: "",
+          key: "",
+          msg_id: "",
+          requester_id: "",
+          auth_token: null,
+        },
+
+        servicePlanRequest: {
+          loiNumber: "",
+          undertaking: "false",
+          selfCertifiedDrawingsFromCharetedEng: "false",
+          selfCertifiedDrawingFromEmpaneledDoc: "",
+          environmentalClearance: "",
+          shapeFileAsPerTemplate: "",
+          autoCadFile: "",
+          certifieadCopyOfThePlan: "",
+        },
+      };
+      const Resp = await axios.post("/land-services/serviceplan/_create", postDistrict);
+      setDeveloperDataLabel(Resp.data);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
-  return (
-    <div className="card" style={{ marginTop: 50 }}>
-      <form onSubmit={handleSubmit}>
-        <Row>
-          <Col className="ms-auto" md={4} xxl lg="4">
-            <div>
-              <span className="surveyformfield">
-                <label>LOI Number</label>
-                <TextInput name="LOINumber" onChange={(e) => setLOCNumber(e.target.value)} type="text" value={LOCNumber} />
-              </span>
-            </div>
-          </Col>
-          <Col className="ms-auto" md={4} xxl lg="4">
-            <div>
-              <div>
-                <Form.Label>
-                  Is the uploaded Service Plan in accordance to the Standard designs? <span style={{ color: "red" }}>*</span>{" "}
-                </Form.Label>
-                {/* &nbsp;&nbsp; */}
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="standarDesigns"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="standarDesigns"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="standarDesigns"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="standarDesigns"
-                inline
-              ></Form.Check>
-            </div>
-          </Col>
-          <Col className="ms-auto" md={4} xxl lg="4">
-            <div>
-              <div>
-                <Form.Label>Undertaking</Form.Label>
-                <span style={{ color: "red" }}>*</span> &nbsp;&nbsp;
-              </div>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="undertaking"
-                type="radio"
-                id="default-radio"
-                label="Yes"
-                name="undertaking"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => console.log(e)}
-                value="undertaking"
-                type="radio"
-                id="default-radio"
-                label="No"
-                name="undertaking"
-                inline
-              ></Form.Check>
-            </div>
-          </Col>
-        </Row>
 
-        <div style={{ magrin: 7 }}>
-          <table>
-            <tr>
-              <th class="fw-normal" style={{ magrin: 5, textAlign: "center" }}>
-                Sr. No.
-              </th>
-              <th class="fw-normal" style={{ magrin: 5, textAlign: "center" }}>
-                Type Of Map/Plan
-              </th>
-              <th class="fw-normal" style={{ magrin: 5, textAlign: "center" }}>
-                Annexure
-              </th>
-            </tr>
-            {getData?.map((item, index) => {
-              return (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{item?.name}</td>
-                  <td style={{ magrin: 5, textAlign: "center" }}>
-                    <div class="mainWrapper">
-                      <div class="btnimg">
-                        <Upload class="text-success" />
-                      </div>
-                      <input
-                        type="file"
-                        name="file"
-                        onChange={(e) => {
-                          setData(
-                            getData?.map((tag, indi) => {
-                              return indi === index ? { ...tag, image: e.target.files[0] } : { ...tag };
-                            })
-                          );
-                        }}
-                      />
-                      {item?.image?.name}
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </table>
-        </div>
-        {/* <input type="file" /> */}
-        <div class="col-md-12 bg-light text-right" style={{ position: "relative", marginBottom: 30 }}>
-          <Button style={{ textAlign: "right" }}>Submit</Button>
-        </div>
-      </form>
-    </div>
+  // const getSubmitDataLabel = async () => {
+  //   try {
+  //     const postDistrict = {
+  //       requestInfo: {
+  //         api_id: "1",
+  //         ver: "1",
+  //         ts: null,
+  //         action: "create",
+  //         did: "",
+  //         key: "",
+  //         msg_id: "",
+  //         requester_id: "",
+  //         auth_token: null,
+  //       },
+  //     };
+
+  //     const Resp = await axios.post(`http://10.1.1.18:8443/land-services/serviceplan/_get?loiNumber=123`, postDistrict);
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // };
+  // useEffect(() => {
+  //   getSubmitDataLabel();
+  // }, []);
+
+  return (
+    <form onSubmit={handleSubmit(servicePlan)}>
+      <Card style={{ width: "126%", border: "5px solid #1266af" }}>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>Service Plan </h4>
+        <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
+          <Row>
+            <Col className="col-4">
+              <div>
+                <label>
+                  {" "}
+                  <h2>
+                    LOI Number <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </label>{" "}
+              </div>
+              <input
+                type="number"
+                className="form-control"
+                {...register("loiNumber")}
+                onChange={(e) => setLOCNumber(e.target.value)}
+                value={LOCNumber}
+              />
+            </Col>
+            <Col className="col-4">
+              <div>
+                <label>
+                  <h2 data-toggle="tooltip" data-placement="top" title=" Is the uploaded Service Plan in accordance to the Standard designs?">
+                    Uploaded Service Plan <span style={{ color: "red" }}>*</span>
+                  </h2>
+                </label>
+              </div>
+              <Form.Check
+                value="uploadedServicePlan"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="uploadedServicePlan"
+                {...register("uploadedServicePlan")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                value="uploadedServicePlan"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="uploadedServicePlan"
+                {...register("uploadedServicePlan")}
+                inline
+              ></Form.Check>
+            </Col>
+            <Col className="col-4">
+              <div>
+                <label>
+                  <h2>Undertaking</h2>
+                </label>
+              </div>
+              <Form.Check
+                value="Undertaking"
+                type="radio"
+                id="default-radio"
+                label="Yes"
+                name="Undertaking"
+                {...register("Undertaking")}
+                inline
+              ></Form.Check>
+              <Form.Check
+                value="Undertaking"
+                type="radio"
+                id="default-radio"
+                label="No"
+                name="Undertaking"
+                {...register("Undertaking")}
+                inline
+              ></Form.Check>
+            </Col>
+          </Row>
+          <br></br>
+          <div className="table table-bordered table-responsive">
+            <thead>
+              <tr>
+                <td style={{ textAlign: "center" }}> Sr.No.</td>
+                <td style={{ textAlign: "center" }}>Type Of Map/Plan</td>
+                <td style={{ textAlign: "center" }}>Annexure</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">1.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Self-certified drawings from empanelled/certified architects that conform to the standard approved template.</h2>
+                </td>
+                <td component="th" scope="row">
+                  <input type="file" className="form-control" {...register("selfCertified")} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">2.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Environmental Clearance.</h2>
+                </td>
+                <td component="th" scope="row">
+                  <input type="file" className="form-control" {...register("environmental")} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">3.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>PDF (OCR Compatible) + GIS format (shapefile as per the template uploaded on the department website).</h2>
+                </td>
+                <td component="th" scope="row">
+                  <input type="file" className="form-control" {...register("pDF")} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">4.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>AutoCAD (DXF) file.</h2>
+                </td>
+                <td component="th" scope="row">
+                  <input type="file" className="form-control" {...register("autoCad")} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="px-2">
+                    <p className="mb-2">5.</p>
+                  </div>
+                </td>
+                <td component="th" scope="row">
+                  <h2>Certified copy of the plan verified by a third party.</h2>
+                </td>
+                <td component="th" scope="row">
+                  <input type="file" className="form-control" {...register("certifiedCopy")} />
+                </td>
+              </tr>
+            </tbody>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12 text-right">
+              <button type="submit" id="btnSearch" class="btn btn-primary btn-md center-block">
+                Submit
+              </button>
+            </div>
+          </div>
+        </Card>
+      </Card>
+    </form>
   );
 };
 
-export default ServicePlan;
+export default ServicePlanService;

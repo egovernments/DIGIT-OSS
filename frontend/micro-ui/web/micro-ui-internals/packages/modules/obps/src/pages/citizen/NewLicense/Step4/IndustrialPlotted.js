@@ -1,215 +1,110 @@
-import React, { useState,useEffect } from "react";
-import 'bootstrap/dist/css/bootstrap.css';
-import { useForm } from "react-hook-form";
-// import { tr, thead, TableContainer, td, tbody, Table, Paper } from '@material-ui/core';
-// import AddIcon from "@material-ui/icons/Add";
-// import DeleteIcon from "@material-ui/icons/Delete";
-import { Button, Form } from "react-bootstrap";
-import { Card, Row, Col} from "react-bootstrap";
-// import CalculateIcon from '@mui/icons-material/Calculate';
+import React from "react";
+import "bootstrap/dist/css/bootstrap.css";
+import { Row, Col } from "react-bootstrap";
 
-const IndustrialPlottedForm =(props)=> {
-    
-    const { register, handleSubmit, formState: { errors } } = useForm([{XLongitude:'',YLatitude:''}]);
-    const formSubmit = (data) => {
-        console.log("data", data);
-    };
-    const [IndustrialPlottedFormSubmitted,SetIndustrialPlottedFormSubmitted] = useState(false);
-    const IndustrialPlottedFormSubmitHandler=(e)=>{
-        e.preventDefault();
-        SetIndustrialPlottedFormSubmitted(true);
-    }
-    const [showhide,setShowhide]=useState("No");
-    const [showhide1,setShowhide1]=useState("No");
-    const [showhide0,setShowhide0]=useState("No");
-    const [showhide2,setShowhide2]=useState("No");
-    const [showhide3,setShowhide3]=useState("No");
-    const [showhide4,setShowhide4]=useState("No");
-    const [showhide5,setShowhide5]=useState("No");
-    const [showhide6,setShowhide6]=useState("No");
-    const [showhide7,setShowhide7]=useState("No");
-    const [showhide8,setShowhide8]=useState("No");
-    const [showhide9,setShowhide9]=useState("No");
-    const [showhide10,setShowhide10]=useState("No");
-    const [showhide11,setShowhide11]=useState("No");
-    const [showhide12,setShowhide12]=useState("No");
-    const [showhide13,setShowhide13]=useState("No");
-    const [showhide14,setShowhide14]=useState("No");
-    const [showhide18,setShowhide18]=useState("2");
+const IndustrialPlottedForm = ({ register }) => {
+  return (
+    <Row className="ml-auto" style={{ marginBottom: 5 }}>
+      <Col col-12>
+        <h5 className="text-black">Industrial Plotted:-</h5>
 
-    const handleshow=e=>{
-        const getshow=e.target.value;
-        setShowhide(getshow);
-    }
-    const handleshow0=e=>{
-      const getshow=e.target.value;
-      setShowhide0(getshow);
-  }
-  const handleshow1=e=>{
-    const getshow=e.target.value;
-    setShowhide1(getshow);
-}
-const handleshow2=e=>{
-  const getshow=e.target.value;
-  setShowhide2(getshow);
-}
-const handleshow3=e=>{
-  const getshow=e.target.value;
-  setShowhide3(getshow);
-}
-const handleshow4=e=>{
-  const getshow=e.target.value;
-  setShowhide4(getshow);
-}
-const handleshow5=e=>{
-  const getshow=e.target.value;
-  setShowhide5(getshow);
-}
-const handleshow6=e=>{
-  const getshow=e.target.value;
-  setShowhide6(getshow);
-}
-const handleshow7=e=>{
-  const getshow=e.target.value;
-  setShowhide7(getshow);
-}
-const handleshow8=e=>{
-  const getshow=e.target.value;
-  setShowhide8(getshow);
-}
-const handleshow9=e=>{
-  const getshow=e.target.value;
-  setShowhide9(getshow);
-}
-const handleshow10=e=>{
-  const getshow=e.target.value;
-  setShowhide10(getshow);
-}
-const handleshow11=e=>{
-  const getshow=e.target.value;
-  setShowhide11(getshow);
-}
-const handleshow12=e=>{
-  const getshow=e.target.value;
-  setShowhide12(getshow);
-}
-const handleshow13=e=>{
-  const getshow=e.target.value;
-  setShowhide13(getshow);
-}
-const handleshow14=e=>{
-  const getshow=e.target.value;
-  setShowhide14(getshow);
-}
-const handleshow18=e=>{
-  const getshow=e.target.value;
-  setShowhide18(getshow);
-}
- 
-const handleChange=(e)=>{
-    this.setState({ isRadioSelected: true });
-   
- }
-    useEffect(()=>{
-        if (IndustrialPlottedFormSubmitted) {
-            props.IndustrialPlottedFormSubmit(true);
-        }
-    },[IndustrialPlottedFormSubmitted]);
- 
-    return (
-        <Form onSubmit={IndustrialPlottedFormSubmitHandler} style={{display:props.displayIndustrial}}>
-         <Form.Group className="justify-content-center" controlId="formBasicEmail">
-                <Row className="ml-auto" style={{marginBottom:5}}>
-                <Col col-12>
-                <h5 className="text-black">Industrial Plotted:-</h5>
-              
-      <div className="table table-bordered table-responsive">
-        <thead>
-          <tr>
-            <td>Detail of plots</td>
-            <td >No.</td>
-            <td >Area in Acres</td>
-          </tr>
-        </thead>
-        <tbody>
+        <div className="table table-bordered table-responsive">
+          <thead>
             <tr>
-                <td >
-                                                        <div className="px-2">
-                                                            <p className="mb-2">Area of the colony, Up to 50 acres
-                                                            </p>
-                                                        </div>
-                </td>
-                <td align="right">  <input type="number" className="form-control"/></td>
+              <td>Detail of plots</td>
+              <td>No.</td>
+              <td>Area in Acres</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div className="px-2">
+                  <p className="mb-2">Area of the colony, Up to 50 acres</p>
+                </div>
+              </td>
+              <td align="right">
+                {" "}
+                <input type="number" className="form-control" {...register("colonyfiftyNo")} />
+              </td>
               <td component="th" scope="row">
-                <input type="number" className="form-control"/>
+                <input type="number" className="form-control" {...register("colonyfiftyArea")} />
               </td>
             </tr>
             <tr>
-                <td >
-                                                        <div className="px-2">
-                                                            <p className="mb-2">More than 50 to 200 acres </p>
-                                                           
-                                                        </div>
-                </td>
-                <td align="right">  <input type="number" className="form-control"/></td>
+              <td>
+                <div className="px-2">
+                  <p className="mb-2">More than 50 to 200 acres </p>
+                </div>
+              </td>
+              <td align="right">
+                {" "}
+                <input type="number" className="form-control" {...register("fiftyToTwoNo")} />
+              </td>
               <td component="th" scope="row">
-                <input type="number" className="form-control"/>
+                <input type="number" className="form-control" {...register("fiftyToTwoArea")} />
               </td>
             </tr>
             <tr>
-                <td >
-                                                        <div className="px-2">
-                                                            <p className="mb-2" >More than 200 acres </p>
-                                                           
-                                                        </div>
-                </td>
-                <td align="right">  <input type="number" className="form-control"/></td>
+              <td>
+                <div className="px-2">
+                  <p className="mb-2">More than 200 acres </p>
+                </div>
+              </td>
+              <td align="right">
+                {" "}
+                <input type="number" className="form-control" {...register("twoHundredNo")} />
+              </td>
               <td component="th" scope="row">
-                <input type="number" className="form-control"/>
+                <input type="number" className="form-control" {...register("twoHundredArea")} />
               </td>
             </tr>
             <tr>
-                <td >
-                                                        <div className="px-2">
-                                                            <p className="mb-2">Proposed plots under residential component DDJAY  </p>
-                                                           
-                                                        </div>
-                </td>
-                <td align="right">  <input type="number" className="form-control"/></td>
+              <td>
+                <div className="px-2">
+                  <p className="mb-2">Proposed plots under residential component DDJAY </p>
+                </div>
+              </td>
+              <td align="right">
+                {" "}
+                <input type="number" className="form-control" {...register("resiNo")} />
+              </td>
               <td component="th" scope="row">
-                <input type="number" className="form-control"/>
+                <input type="number" className="form-control" {...register("resiArea")} />
               </td>
             </tr>
             <tr>
-                <td >
-                                                        <div className="px-2">
-                                                            <p className="mb-2">Proposed plots under community facilities in DDJAY Area  </p>
-                                                           
-                                                        </div>
-                </td>
-                <td align="right">  <input type="number" className="form-control"/></td>
+              <td>
+                <div className="px-2">
+                  <p className="mb-2">Proposed plots under community facilities in DDJAY Area </p>
+                </div>
+              </td>
+              <td align="right">
+                {" "}
+                <input type="number" className="form-control" {...register("commerNo")} />
+              </td>
               <td component="th" scope="row">
-                <input type="number" className="form-control"/>
+                <input type="number" className="form-control" {...register("commerArea")} />
               </td>
             </tr>
             <tr>
-                <td >
-                                                        <div className="px-2">
-                                                            <p className="mb-2" >Details of plots for Labour dormitories from affordable Industries Housing component  </p>
-                                                           
-                                                        </div>
-                </td>
-                <td align="right">  <input type="number" className="form-control"/></td>
+              <td>
+                <div className="px-2">
+                  <p className="mb-2">Details of plots for Labour dormitories from affordable Industries Housing component </p>
+                </div>
+              </td>
+              <td align="right">
+                {" "}
+                <input type="number" className="form-control" {...register("labourNo")} />
+              </td>
               <td component="th" scope="row">
-                <input type="number" className="form-control"/>
+                <input type="number" className="form-control" {...register("labourArea")} />
               </td>
             </tr>
-        </tbody>
-      </div>
-                                    
-                                     </Col>
-                                     </Row>
-                                     </Form.Group>
-                                     </Form>)
+          </tbody>
+        </div>
+      </Col>
+    </Row>
+  );
 };
 export default IndustrialPlottedForm;

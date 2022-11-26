@@ -24,7 +24,7 @@ const CreateEDCR = ({ parentRoute }) => {
   function handleSelect(key, data, skipStep, index) {
     setIsSubmitBtnDisable(true);
     const loggedInuserInfo = Digit.UserService.getUser();
-    const userInfo = { id: loggedInuserInfo?.info?.uuid, tenantId: loggedInuserInfo?.info?.tenantId };
+    const userInfo = { uuid: loggedInuserInfo?.info?.uuid, tenantId: loggedInuserInfo?.info?.tenantId };
     let edcrRequest = {
       transactionNumber: "",
       edcrNumber: "",

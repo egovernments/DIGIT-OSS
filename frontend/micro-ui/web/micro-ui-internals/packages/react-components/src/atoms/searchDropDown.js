@@ -5,7 +5,7 @@ import {Autocomplete,TextField} from '@mui/material';
 
 
 const SearchDropDown = (props) => {
- const ApiList=props.listOfData
+ const ApiList=props.listOfData;
   return (
     <div className="app-input-text">
         {/* <Select
