@@ -356,10 +356,10 @@ const getPropertyEditDetails = (data = { }) => {
 
       data.units = data?.units.map(ob => {
         return{...ob, unitType:{
-          code: ob?.usageCategory?.split(".")[3],
-          i18nKey: `PROPERTYTAX_BILLING_SLAB_${ob?.usageCategory?.split(".")[3]}`,
-          usageCategoryMinor: ob?.usageCategory?.split(".")[1],
-          usageCategorySubMinor: ob?.usageCategory?.split(".")[2],
+          code: ob?.usageCategory === "RESIDENTIAL" ? ob?.usageCategory : ob?.usageCategory?.split(".")[3],
+          i18nKey: ob?.usageCategory === "RESIDENTIAL" ? `PROPERTYTAX_BILLING_SLAB_${ob?.usageCategory}` : `PROPERTYTAX_BILLING_SLAB_${ob?.usageCategory?.split(".")[3]}`,
+          usageCategoryMinor: ob?.usageCategory === "RESIDENTIAL" ? "" : ob?.usageCategory?.split(".")[1],
+          usageCategorySubMinor: ob?.usageCategory === "RESIDENTIAL" ? "" : ob?.usageCategory?.split(".")[2],
         }
       }});
       //data.units = data?.units.concat(extraunits);

@@ -717,6 +717,9 @@ export const convertToUpdateProperty = (data = {}) => {
   let noOfFloors = data?.noOfFloors;
   let noOofBasements = data?.noOofBasements;
   let unit = data?.units;
+  data.units = data?.units?.map((ob) => {return({
+    ...ob, unitType : ob?.unitType?.code
+  })})
   let basement1 = Array.isArray(data?.units) && data?.units["-1"] ? data?.units["-1"] : null;
   let basement2 = Array.isArray(data?.units) && data?.units["-2"] ? data?.units["-2"] : null;
   data = setAddressDetails(data);

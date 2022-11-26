@@ -163,6 +163,10 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
     let units = formData?.units || [];
 
     let unitsdata = fields.map((field) => {
+      if(typeof field?.unitType?.code === "object" && field?.unitType?.code?.code)
+      {
+        field["unitType"].code = field?.unitType?.code?.code;
+      }
       let unit = {};
       Object.keys(field)
         .filter((key) => field[key])
@@ -175,7 +179,7 @@ const SelectPTUnits = React.memo(({ t, config, onSelect, userType, formData }) =
             unit["usageCategory"] = mdmsData?.usageDetails.find(
               (e) =>
                 e.code.includes(field[key]?.code) &&
-                e.code.includes(typeof field["unitType"] == "object" ? field["unitType"]?.code : field["unitType"])
+                e.code.includes(typeof field["unitType"] === "object" ? field["unitType"]?.code : field["unitType"])
             )?.code;
           } else if (key === "builtUpArea") {
             unit["constructionDetail"] = { builtUpArea: field[key] };
