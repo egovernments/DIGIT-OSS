@@ -15,8 +15,14 @@ import Collapse from "react-bootstrap/Collapse";
 import AddIcon from "@mui/icons-material/Add";
 import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { useStyles } from "./css/personalInfoChild.style";
 
 const Developerinfo = (props) => {
+
+  const dataIcons = props.dataForIcons;
+  const landScheduleData = props.ApiResponseData;
+
   const [vacant, setVacant] = useState("");
   const [construction, setConstruction] = useState("");
   const [typeCons, setTypeCons] = useState("");
@@ -36,6 +42,8 @@ const Developerinfo = (props) => {
     this.setState({ isRadioSelected: true });
   };
 
+  // const [fieldValue, setFieldValue] = useState("");
+
   const [showhide1, setShowhide1] = useState("No");
   const [showhide2, setShowhide2] = useState("No");
   const [showhide3, setShowhide3] = useState("No");
@@ -50,6 +58,7 @@ const Developerinfo = (props) => {
   const [showhide18, setShowhide18] = useState("No");
   const [showhide16, setShowhide16] = useState("No");
   const [showhide17, setShowhide17] = useState("No");
+
   const [open2, setOpen2] = useState(false);
   const handleshow = (e) => {
     const getshow = e.target.value;
@@ -113,56 +122,13 @@ const Developerinfo = (props) => {
   };
   const [uncheckedValue, setUncheckedVlue] = useState([]);
   console.log(uncheckedValue);
-  // const [labelValue, setLabelValue] = useState("");
-  const [smShow, setSmShow] = useState(false);
   const [color, setColor] = useState({ yes: false, no: false });
-  // const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
-  // const [isyesOrNochecked, setYesorNochecked] = useState(true);
 
-  // const handlemodaldData = (data) => {
-  //   setmodaldData(data.data);
-  //   setSmShow(false);
-  // };
-
-  // const handleYesOrNochecked = (data) => {
-  //   setYesorNochecked(data.data);
-  // };
-  // const handlemodalsubmit = () => {
-  //   console.log("here");
-  //   const filteredObj = uncheckedValue.filter((obj) => {
-  //     return obj.label == modaldData.label;
-  //   });
-
-  //   if (isyesOrNochecked === false) {
-  //     if (modaldData.label !== "" || modaldData.Remarks !== "") {
-  //       if (filteredObj.length === 0) {
-  //         setUncheckedVlue((prev) => [...prev, modaldData]);
-  //       }
-  //     }
-  //   }
-  // };
-  // useEffect(() => {
-  //   console.log("called");
-  //   handlemodalsubmit();
-  // }, [modaldData.Remarks]);
-  // useEffect(() => {
-  //   props.passUncheckedList({ data: uncheckedValue });
-  // }, [uncheckedValue]);
-  // console.log("unchecked values", uncheckedValue);
-
-  // console.log(uncheckedValue.indexOf("developer"));
-  //////////////////////////////////////////////////////////////
   const [smShow2, setSmShow2] = useState(false);
   const [smShow3, setSmShow3] = useState(false);
-  const [labelValue, setLabelValue] = useState("");
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
   const [checkValue, setCheckedVAlue] = useState([]);
-
-  const handlemodaldData = (data) => {
-    setmodaldData(data.data);
-    setSmShow(false);
-  };
 
   const handleYesOrNochecked = (data) => {
     setYesorNochecked(data.data);
@@ -404,34 +370,34 @@ const Developerinfo = (props) => {
     return obj.label === "(b)Construction: (Yes/No)";
   });
   const developerInputFiledColor30 = uncheckedValue.filter((obj) => {
-    return obj.label === "(c)HT line:(Yes/No)";
+    return obj.label === "(c)HT line";
   });
   const developerInputCheckedFiledColor30 = checkValue.filter((obj) => {
-    return obj.label === "(c)HT line:(Yes/No)";
+    return obj.label === "(c)HT line";
   });
   const developerInputFiledColor31 = uncheckedValue.filter((obj) => {
-    return obj.label === "(d) IOC Gas Pipeline:(Yes/No)";
+    return obj.label === "(d) IOC Gas Pipeline";
   });
   const developerInputCheckedFiledColor31 = checkValue.filter((obj) => {
-    return obj.label === "(d) IOC Gas Pipeline:(Yes/No)";
+    return obj.label === "(d) IOC Gas Pipeline";
   });
   const developerInputFiledColor32 = uncheckedValue.filter((obj) => {
-    return obj.label === "(e)Nallah:(Yes/No)";
+    return obj.label === "(e)Nallah";
   });
   const developerInputCheckedFiledColor32 = checkValue.filter((obj) => {
-    return obj.label === "(e)Nallah:(Yes/No)";
+    return obj.label === "(e)Nallah";
   });
   const developerInputFiledColor33 = uncheckedValue.filter((obj) => {
-    return obj.label === "(f)Any revenue rasta/road:(Yes/No)";
+    return obj.label === "(f)Any revenue rasta/road";
   });
   const developerInputCheckedFiledColor33 = checkValue.filter((obj) => {
-    return obj.label === "(f)Any revenue rasta/road:(Yes/No)";
+    return obj.label === "(f)Any revenue rasta/road";
   });
   const developerInputFiledColor34 = uncheckedValue.filter((obj) => {
-    return obj.label === "(g)Any marginal land:(Yes/No)";
+    return obj.label === "(g)Any marginal land";
   });
   const developerInputCheckedFiledColor34 = checkValue.filter((obj) => {
-    return obj.label === "(g)Any marginal land:(Yes/No)";
+    return obj.label === "(g)Any marginal land";
   });
   const developerInputFiledColor35 = uncheckedValue.filter((obj) => {
     return obj.label === "Utility Line";
@@ -487,657 +453,723 @@ const Developerinfo = (props) => {
   const developerInputCheckedFiledColor43 = checkValue.filter((obj) => {
     return obj.label === "Revised Land Schedule";
   });
+
+
+
+  const classes = useStyles();
+
+  const [smShow, setSmShow] = useState(false);
+  const [labelValue, setLabelValue] = useState("");
+  const Colors = {
+    approved: "#09cb3d",
+    disapproved: "#ff0000",
+    info: "#FFB602"
+  }
+  const [selectedFieldData, setSelectedFieldData] = useState();
+  const [fieldValue, setFieldValue] = useState("");
+  const [openedModal, setOpennedModal] = useState("")
+  const [fieldIconColors, setFieldIconColors] = useState({
+    licenceApplied: Colors.info,
+    licenceNo: Colors.info,
+    potentialZone: Colors.info,
+    siteLocationPurpose: Colors.info,
+    approachType: Colors.info,
+    approachRoadWidth: Colors.info,
+    specifyOthers: Colors.info,
+    typeOfLand: Colors.info,
+    thirdPartyRightCreated: Colors.info,
+    migrationPolicy: Colors.info,
+    encumbrance: Colors.info,
+    existinglitigation: Colors.info,
+    courtOrders: Colors.info,
+    anyInsolvency: Colors.info,
+    asPerAppliedLand: Colors.info,
+    revenueRasta: Colors.info,
+    waterCourseRunning: Colors.info,
+    whetherInCompactBlock: Colors.info,
+    landSandwiche: Colors.info,
+    acquisitionStatus: Colors.info,
+    dateOfSection4Notification: Colors.info,
+    dateOfSection6Notification: Colors.info,
+    ordersUpload: Colors.info,
+    internalSectoralPlan: Colors.info,
+    vacant: Colors.info,
+    construction: Colors.info,
+    htLine: Colors.info,
+    iocGasPipeline: Colors.info,
+    nallah: Colors.info,
+    anyRevenueRasta: Colors.info,
+    anyMarginalLand: Colors.info,
+    utilityLine: Colors.info,
+    documentsAsAnnexures: Colors.info,
+    landSchedule: Colors.info,
+    copyOfMutation: Colors.info,
+    copyOfJamabandi: Colors.info,
+    detailsOfLease: Colors.info,
+    salesDeed: Colors.info,
+    resolutionCopy: Colors.info,
+    revisedLandSchedule: Colors.info,
+    shajraPlanCopy: Colors.info,
+    areaAppliedUnderMigration: Colors.info,
+    purposeOfParentLicence: Colors.info,
+    licenceNo: Colors.info,
+    areaOfParentLicence: Colors.info,
+    validityOfParentLicence: Colors.info,
+    approvedLayoutOfPlan: Colors.info,
+    proposedLayoutOfPlan: Colors.info,
+    downloadPreviouslyApprovedLayoutPlan: Colors.info,
+    landCompensationReceived: Colors.info,
+    statusOfRelease: Colors.info,
+    dateOfAward: Colors.info,
+    dateOfRelease: Colors.info,
+    siteDetails: Colors.info
+  })
+
+  const fieldIdList = [{ label: "Whether licence applied for additional area", key: "licenceApplied" }, { label: "License No. of Parent License", key: "licenceNo" }, { label: "Potential Zone", key: "potentialZone" }, { label: "Site Location Purpose", key: "siteLocationPurpose" }, { label: "Approach Type (Type of Policy)", key: "approachType" }, { label: "Approach Road Width", key: "approachRoadWidth" }, { label: "Specify Others", key: "specifyOthers" }, { label: "Type of land", key: "typeOfLand" }, { label: "Third-party right created ", key: "thirdPartyRightCreated" }, { label: "Whether licence applied under Migration policy", key: "migrationPolicy" }, { label: "Any encumbrance with respect to following", key: "encumbrance" }, { label: "Existing litigation, if any, concerning applied land including co-sharers and collaborator", key: "existinglitigation" }, { label: "Court orders, if any, affecting applied land", key: "courtOrders" }, { label: "Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed", key: "anyInsolvency" }, { label: "As per applied land", key: "asPerAppliedLand" }, { label: "Revenue rasta", key: "revenueRasta" }, { label: "Watercourse running", key: "waterCourseRunning" }, { label: "Whether in Compact Block", key: "whetherInCompactBlock" }, { label: "Land Sandwiched", key: "landSandwiche" }, { label: "Acquisition status", key: "acquisitionStatus" }, { label: "Date of section 4 notification", key: "dateOfSection4Notification" }, { label: "Date of section 6 notification", key: "dateOfSection6Notification" }, { label: "Orders Upload", key: "ordersUpload" }, { label: "whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road", key: "internalSectoralPlan" }, { label: "vacant", key: "vacant" }, { label: "Construction", key: "construction" }, { label: "HT line", key: "htLine" }, { label: "IOC Gas Pipeline", key: "iocGasPipeline" }, { label: "Nallah", key: "nallah" }, { label: "Any revenue rasta/road", key: "anyRevenueRasta" }, { label: "Any marginal land", key: "anyMarginalLand" }, { label: "Utility Line", key: "utilityLine" }, { label: "Enclose the following documents as Annexures", key: "documentsAsAnnexures" }, { label: "Land schedule", key: "landSchedule" }, { label: "Copy of Mutation", key: "copyOfMutation" }, { label: "Copy of Jamabandi", key: "copyOfJamabandi" }, { label: "Details of lease / patta, if any", key: "detailsOfLease" }, { label: "Add Sales/deed/exchange", key: "salesDeed" }, { label: "Copy of spa/GPA/board resolution", key: "resolutionCopy" }, { label: "Revised Land Schedule", key: "revisedLandSchedule" }, { label: "Copy of Shajra Plan", key: "shajraPlanCopy" }, { label: "Area Applied under Migration", key: "areaAppliedUnderMigration" }, { label: "Purpose of Parent Licence", key: "purposeOfParentLicence" }, { label: "Licence No.", key: "licenceNo" }, { label: "Area of Parent Licence", key: "areaOfParentLicence" }, { label: "Proposed Layout of Plan /site plan for area applied for migration.", key: "proposedLayoutOfPlan" }, { label: "Download Previously approved Layout Plan", key: "downloadPreviouslyApprovedLayoutPlan" }, { label: "Validity of Parent Licence", key: "validityOfParentLicence" }, { label: "Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration", key: "approvedLayoutOfPlan" }, { label: "Whether land compensation received", key: "landCompensationReceived" }, { label: "Status of release", key: "statusOfRelease" }, { label: "Date of Award", key: "dateOfAward" }, { label: "Date of Release", key: "dateOfRelease" }, { label: "Site Details", key: "siteDetails" },];
+
+
+  const getColorofFieldIcon = () => {
+    let tempFieldColorState = fieldIconColors;
+    fieldIdList.forEach((item) => {
+      if (dataIcons !== null && dataIcons !== undefined) {
+        console.log("color method called");
+        const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === item.label));
+        console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+        if (fieldPresent && fieldPresent.length) {
+          console.log("filteration value111", fieldPresent, fieldPresent[0]?.isApproved);
+          tempFieldColorState = { ...tempFieldColorState, [item.key]: fieldPresent[0].isApproved ? Colors.approved : Colors.disapproved }
+
+        }
+      }
+    })
+
+    setFieldIconColors(tempFieldColorState);
+
+  };
+
+
+  useEffect(() => {
+    getColorofFieldIcon();
+    console.log("repeating1...",)
+  }, [dataIcons])
+
+  useEffect(() => {
+    if (labelValue) {
+      const fieldPresent = dataIcons.egScrutiny.filter(ele => (ele.fieldIdL === labelValue));
+      setSelectedFieldData(fieldPresent[0]);
+    } else {
+      setSelectedFieldData(null);
+    }
+  }, [labelValue])
+
+
+
+  const currentRemarks = (data) => {
+    props.showTable({ data: data.data });
+  };
+
+  const handlemodaldData = (data) => {
+    // setmodaldData(data.data);
+    setSmShow(false);
+    console.log("here", openedModal, data);
+    if (openedModal && data) {
+      setFieldIconColors({ ...fieldIconColors, [openedModal]: data.data.isApproved ? Colors.approved : Colors.disapproved })
+    }
+    setOpennedModal("");
+    setLabelValue("");
+  };
+
+
   return (
     <Form
       ref={props.developerInfoRef}
-      // style={{
-      //   width: "100%",
-      //   height: props.heightDevelper,
-      //   overflow: "hidden",
-      //   marginBottom: 20,
-      //   borderColor: "#C3C3C3",
-      //   borderStyle: "solid",
-      //   borderWidth: 2,
-      //   padding: 2,
-      // }}
+    // style={{
+    //   width: "100%",
+    //   height: props.heightDevelper,
+    //   overflow: "hidden",
+    //   marginBottom: 20,
+    //   borderColor: "#C3C3C3",
+    //   borderStyle: "solid",
+    //   borderWidth: 2,
+    //   padding: 2,
+    // }}
     >
-      {/* <Card
+      <ModalChild
+        labelmodal={labelValue}
+        passmodalData={handlemodaldData}
+        displaymodal={smShow}
+        onClose={() => setSmShow(false)}
+        selectedFieldData={selectedFieldData}
+        fieldValue={fieldValue}
+        remarksUpdate={currentRemarks}
+      ></ModalChild>
+
+      <div
+        className="collapse-header"
+        onClick={() => setOpen(!open)}
+        aria-controls="example-collapse-text"
+        aria-expanded={open}
         style={{
-          width: "100%",
-          height: props.heightDevelper,
-          overflow: "hidden",
-          marginBottom: 20,
-          borderColor: "#C3C3C3",
-          borderStyle: "solid",
-          borderWidth: 2,
-          padding: 2,
+          background: "#f1f1f1",
+          padding: "0.25rem 1.25rem",
+          borderRadius: "0.25rem",
+          fontWeight: "600",
+          display: "flex",
+          cursor: "pointer",
+          color: "#817f7f",
+          justifyContent: "space-between",
+          alignContent: "center",
         }}
-      > */}
-      <div>
-        <Col class="col-12">
-          <Button
-            style={{
-              margin: 2,
-              width: "inherit",
-              textAlign: "inherit",
-              padding: "0.25rem 1rem",
-              fontWeight: "Bold",
-              backgroundColor: "#c2c4c7",
-              border: "none",
-              color: "unset",
-            }}
-            onClick={() => setOpen2(!open2)}
-            aria-controls="example-collapse-text"
-            aria-expanded={open2}
-          >
-            Details of Applied Land
-            <AddIcon style={{ width: "61.5em" }}></AddIcon>
-          </Button>
-        </Col>
+      >
+        <span style={{ color: "#817f7f" }} className="">
+          Land Schedule
+        </span>
+        {open ? <RemoveIcon></RemoveIcon> : <AddIcon></AddIcon>}
       </div>
-      <Collapse in={open2}>
+      <Collapse in={open}>
         <div id="example-collapse-text">
-          <Form.Group style={{ display: props.displayGeneral }} className="justify-content-center">
+          <Form.Group
+            style={{ display: props.displayGeneral, border: "2px solid #e9ecef", margin: 10, padding: 10 }}
+            className={`justify-content-center ${classes.formLabel}`}
+          >
             <Row className="ms-auto" style={{ marginBottom: 20 }}>
               <Col className="ms-auto" md={4} xxl lg="12">
-                <Form.Label>
-                  <b>(i)Whether licence applied for additional area ?</b>
-                </Form.Label>
-                {/* &nbsp;&nbsp;
-                
-                <br></br> */}
+                <Form.Label
+                // placeholder={personalinfo !== null ? personalinfo.authorizedDeveloper : null}
+                >
+                  (i)Whether licence applied for additional area ?
 
-                <div style={{ display: "flex" }}>
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow} readOnly />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow} readOnly />
-                  <label for="No">No</label>
-                  {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} readOnly></Form.Control> */}
-                  <ReportProblemIcon
-                    style={{
-                      color:
-                        developerInputFiledColor.length > 0
-                          ? developerInputFiledColor[0].color.data
-                          : developerInputCheckedFiledColor.length > 0
-                          ? developerInputCheckedFiledColor[0].color.data
-                          : "#FFB602",
-                    }}
-                    onClick={() => {
-                      setLabelValue("Whether licence applied for additional area ?"), setSmShow(true), console.log("modal open");
-                    }}
-                  ></ReportProblemIcon>
-                  <ModalChild
-                    labelmodal={labelValue}
-                    passmodalData={handlemodaldData}
-                    isYesorNoChecked={handleYesOrNochecked}
-                    displaymodal={smShow}
-                    setColor={setColor}
-                  ></ModalChild>
-                </div>
+                  <div className="d-flex flex-row">
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.licenseApplied === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>
+                    <input type="radio" disabled value="No" checked={landScheduleData?.licenseApplied === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
+                    {/* <Form.Control height={30} style={{ maxWidth: 120, marginRight: 5 }} disabled></Form.Control> */}
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.licenceApplied
+                      }}
+                      onClick={() => {
+                        setLabelValue("Whether licence applied for additional area"),
+                          setOpennedModal("licenceApplied")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.licenseApplied === "Y" ? "Yes" : landScheduleData?.licenseApplied === "N" ? "No" : null);
+                      }}
+                    ></ReportProblemIcon>
+
+                  </div>
+
+                </Form.Label>
+
               </Col>
             </Row>
-            {showhide1 === "Yes" && (
-              <div>
-                {/* <div className="col col-4"> */}
 
-                <Row className="ms-auto" style={{ marginBottom: 20 }}>
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <label for="parentLicense" className="font-weight-bold">
-                      <h6>
-                        <b>License No. of Parent License</b>
-                      </h6>{" "}
-                    </label>
-                    {/* <Form.Check
-                        value="Yes"
-                        type="radio"
-                        onChange1={handleChange}
-                        onClick={handleshow}
-                        id="default-radio"
-                        label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                        name="group41"
-                        inline
-                      ></Form.Check>
-                      <Form.Check
-                        onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                        value="No"
-                        type="radio"
-                        id="default-radio"
-                        onChange1={handleChange}
-                        onClick={handleshow}
-                        label={<CancelIcon color="error" />}
-                        name="group41"
-                        inline
-                      ></Form.Check> */}
-                    <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor1.length > 0
-                              ? developerInputFiledColor1[0].color.data
-                              : developerInputCheckedFiledColor1.length > 0
-                              ? developerInputCheckedFiledColor1[0].color.data
-                              : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("License No. of Parent License"), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-                    {/* <input type="number" className="form-control" /> */}
-                  </Col>
+            {/* {
+              landScheduleData?.licenseApplied === "Y" &&  */}
 
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <label htmlFor="potential">
-                      <h6>
-                        <b>Potential Zone:</b>
-                      </h6>
-                    </label>
-                    {/* <Form.Check
-                        value="Potential Zone"
-                        type="radio"
-                        id="default-radio"
-                        label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                        name="group43"
-                        inline
-                      ></Form.Check>
-                      <Form.Check
-                        onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                        value="Potential Zone"
-                        type="radio"
-                        id="default-radio"
-                        label={<CancelIcon color="error" />}
-                        name="group43"
-                        inline
-                      ></Form.Check> */}
-                    <div style={{ display: "flex" }}>
-                      {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                      {/* <Form.Select height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly>
-                          
-                        </Form.Select> */}
-                      <Form.Select
-                        type="text"
-                        placeholder="Puropse"
-                        // onChange={handleChangesetPurpose}
-                        height={30}
-                        style={{ maxWidth: 200, marginRight: 5 }}
-                        disabled
-                      >
-                        {/* <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} readOnly> */}
-                        <option value="">--Potential Zone--</option>
-                        <option value="K.Mishra">Hyper</option>
-                        <option value="potential 1">High I</option>
-                        <option value="potential 2">High II</option>
-                        <option value="potential 2">Medium</option>
-                        <option value="potential 2">Low I</option>
-                        <option value="potential 2">Low II</option>
-                        {/* </select> */}
-                      </Form.Select>
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor2.length > 0
-                              ? developerInputFiledColor2[0].color.data
-                              : developerInputCheckedFiledColor2.length > 0
-                              ? developerInputCheckedFiledColor2[0].color.data
-                              : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("Potential Zone:"), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-                  </Col>
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <label for="parentLicense" className="font-weight-bold">
-                      <h6>
-                        <b>Site Location Purpose</b>
-                      </h6>{" "}
-                    </label>
-                    <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor3.length > 0
-                              ? developerInputFiledColor3[0].color.data
-                              : developerInputCheckedFiledColor3.length > 0
-                              ? developerInputCheckedFiledColor3[0].color.data
-                              : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("Site Location Purpose"), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-                    {/* <Form.Check
-                          value="Site Location Purpose"
-                          type="radio"
-                          id="default-radio"
-                          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                          name="group44"
-                          inline
-                        ></Form.Check>
-                        <Form.Check
-                          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                          value="Site Location Purpose"
-                          type="radio"
-                          id="default-radio"
-                          label={<CancelIcon color="error" />}
-                          name="group44"
-                          inline
-                        ></Form.Check> */}
-                    {/* <input type="text" className="form-control" disabled="disabled" /> */}
-                  </Col>
-                </Row>
-                <Row className="ms-auto" style={{ marginBottom: 20 }}>
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <div className="form-group">
-                      <label htmlFor="approach">
-                        <h6>
-                          <b>Approach Type (Type of Policy)</b>
-                        </h6>
-                      </label>
-                      {/* <Form.Check
-                            value="Approach Type "
-                            type="radio"
-                            id="default-radio"
-                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                            name="group45"
-                            inline
-                          ></Form.Check>
-                          <Form.Check
-                            onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                            value="Approach Type "
-                            type="radio"
-                            id="default-radio"
-                            label={<CancelIcon color="error" />}
-                            name="group45"
-                            inline
-                          ></Form.Check> */}
-                      <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            color:
-                              developerInputFiledColor4.length > 0
-                                ? developerInputFiledColor4[0].color.data
-                                : developerInputCheckedFiledColor4.length > 0
-                                ? developerInputCheckedFiledColor4[0].color.data
-                                : "#FFB602",
-                          }}
-                          onClick={() => {
-                            setLabelValue("Approach Type (Type of Policy)"), setSmShow(true), console.log("modal open");
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                      <select className="form-control" id="approach" name="approach">
-                        <option value=""></option>
-                        <option value="K.Mishra"></option>
-                        <option value="potential 1"></option>
-                        <option value="potential 2"></option>
-                      </select>
-                    </div>
-                  </Col>
+            <div>
+              <Row className="ms-auto" style={{ marginBottom: 20 }}>
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label>
+                    {/* License No. of Parent License */}
+                    <h5>License No. of Parent License &nbsp;</h5>
+                  </label>
 
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <div className="form-group ">
-                      <label htmlFor="roadwidth">
-                        <h6>
-                          <b>Approach Road Width</b>&nbsp;&nbsp;
-                        </h6>{" "}
-                      </label>
-                      <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            color:
-                              developerInputFiledColor5.length > 0
-                                ? developerInputFiledColor5[0].color.data
-                                : developerInputCheckedFiledColor5.length > 0
-                                ? developerInputCheckedFiledColor5[0].color.data
-                                : "#FFB602",
-                          }}
-                          onClick={() => {
-                            setLabelValue("Approach Road Width"), setSmShow(true), console.log("modal open");
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                      {/* <Form.Check
-                            value="Approach Road Width "
-                            type="radio"
-                            id="default-radio"
-                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                            name="group46"
-                            inline
-                          ></Form.Check>
-                          <Form.Check
-                            onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                            value="Approach Road Width"
-                            type="radio"
-                            id="default-radio"
-                            label={<CancelIcon color="error" />}
-                            name="group46"
-                            inline
-                          ></Form.Check> */}
-                      {/* <input type="number" name="roadwidth" className="form-control" readOnly></input> */}
-                    </div>
-                  </Col>
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <div className="form-group ">
-                      <label htmlFor="specify">
-                        <h6>
-                          <b>Specify Others</b>
-                        </h6>
-                      </label>
-                      <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            color:
-                              developerInputFiledColor6.length > 0
-                                ? developerInputFiledColor6[0].color.data
-                                : developerInputCheckedFiledColor6.length > 0
-                                ? developerInputCheckedFiledColor6[0].color.data
-                                : "#FFB602",
-                          }}
-                          onClick={() => {
-                            setLabelValue("Specify Other"), setSmShow(true), console.log("modal open");
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                      {/* <Form.Check
-                            value="Specify Others"
-                            type="radio"
-                            id="default-radio"
-                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                            name="group47"
-                            inline
-                          ></Form.Check>
-                          <Form.Check
-                            onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                            value="Specify Others"
-                            type="radio"
-                            id="default-radio"
-                            label={<CancelIcon color="error" />}
-                            name="group47"
-                            inline
-                          ></Form.Check> */}
-                      {/* <input type="number" name="specify" className="form-control " /> */}
-                    </div>
-                  </Col>
-                </Row>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    <Form.Control
+                      height={30}
+                      style={{ maxWidth: 200, marginRight: 5 }}
+                      placeholder={landScheduleData !== null ? landScheduleData?.licNo : null}
+                      disabled
+                    ></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.licenceNo
+                      }}
+                      onClick={() => {
+                        setLabelValue("License No. of Parent License"),
+                          setOpennedModal("licenceNo")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData !== null ? landScheduleData?.licNo : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <input type="number" className="form-control" /> */}
+                </Col>
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label htmlFor="potential">
+                    <h6>
+                      {/* Potential Zone: */}
+                      <h5>Potential Zone: &nbsp;</h5>
+                    </h6>
+                  </label>
 
-                <Row className="ms-auto" style={{ marginBottom: 20 }}>
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <div className="form-group ">
-                      <label htmlFor="typeland">
-                        <h6>
-                          <b>Type of land</b>
-                        </h6>{" "}
-                      </label>
-                      {/* <Form.Check
-                            value="Type of land"
-                            type="radio"
-                            id="default-radio"
-                            label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                            name="group49"
-                            inline
-                          ></Form.Check>
-                          <Form.Check
-                            onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                            value="Type of land"
-                            type="radio"
-                            id="default-radio"
-                            label={<CancelIcon color="error" />}
-                            name="group49"
-                            inline
-                          ></Form.Check> */}
-                      <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            color:
-                              developerInputFiledColor7.length > 0
-                                ? developerInputFiledColor7[0].color.data
-                                : developerInputCheckedFiledColor7.length > 0
-                                ? developerInputCheckedFiledColor7[0].color.data
-                                : "#FFB602",
-                          }}
-                          onClick={() => {
-                            setLabelValue("Type of land"), setSmShow(true), console.log("modal open");
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
-                      <select className="form-control" id="typeland" name="typeland">
-                        <option value="">--Type of Land--</option>
-                        <option value="">chahi/nehri</option>
-                        <option>Gair Mumkins</option>
-                        <option>others</option>
-                        <option></option>
-                      </select>
-                    </div>
-                  </Col>
+                  <div className="d-flex flex-row  align-items-center">
+                    <Form.Control
+                      height={30}
+                      style={{ maxWidth: 200, marginRight: 5 }}
+                      placeholder={landScheduleData !== null ? landScheduleData?.potential : null}
+                      disabled
+                    ></Form.Control>
 
-                  <Col className="ms-auto" md={4} xxl lg="4">
-                    <label htmlFor="typeland">
-                      <h6>
-                        <b>Third-party right created</b>{" "}
-                      </h6>
-                    </label>
-                    <br></br>
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow13} />
+                    {/* <Form.Select
+                      type="text"
+                      placeholder={landScheduleData !== null ? landScheduleData?.potential : null}
+                      // onChange={handleChangesetPurpose}
+                      height={30}
+                      style={{ maxWidth: 200, marginRight: 5 }}
+                      disabled
+                    > */}
+                    {/* <select className="form-control" id="Puropse" name="potential" placeholder="Puropse" onChange={handleChangesetPurpose} disabled> */}
+                    {/* <option value="">--Potential Zone--</option>
+                      <option value="K.Mishra">Hyper</option>
+                      <option value="potential 1">High I</option>
+                      <option value="potential 2">High II</option>
+                      <option value="potential 2">Medium</option>
+                      <option value="potential 2">Low I</option>
+                      <option value="potential 2">Low II</option> */}
+                    {/* </select> */}
+                    {/* </Form.Select> */}
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.potentialZone
+                      }}
+                      onClick={() => {
+                        setLabelValue("Potential Zone"),
+                          setOpennedModal("potentialZone")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData !== null ? landScheduleData?.potential : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                </Col>
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label>
+                    {/* Site Location Purpose */}
+                    <h5>Site Location Purpose: &nbsp;</h5>
+                  </label>
+                  <div className="d-flex flex-row  align-items-center">
+                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.siteLoc : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.siteLocationPurpose
+                      }}
+                      onClick={() => {
+                        setLabelValue("Site Location Purpose"),
+                          setOpennedModal("siteLocationPurpose")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData !== null ? landScheduleData?.siteLoc : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                </Col>
+                {/* </Row>
+              <Row className="ms-auto" style={{ marginBottom: 20 }}> */}
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label>
+                    {/* Approach Type (Type of Policy) */}
+                    <h5>Approach Type (Type of Policy) &nbsp;</h5>
+                  </label>
+
+                  <div className="d-flex flex-row  align-items-center">
+                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approach : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.approachType
+                      }}
+                      onClick={() => {
+                        setLabelValue("Approach Type (Type of Policy)"),
+                          setOpennedModal("approachType")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData !== null ? landScheduleData?.approach : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                </Col>
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label>
+                    <h6>Approach Road Width&nbsp;&nbsp;</h6>{" "}
+                  </label>
+                  <div className="d-flex flex-row  align-items-center">
+                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.approachRoadWidth : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.approachRoadWidth
+                      }}
+                      onClick={() => {
+                        setLabelValue("Approach Road Width"),
+                          setOpennedModal("approachRoadWidth")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData !== null ? landScheduleData?.approachRoadWidth : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                </Col>
+                <Col className="ms-auto" md={4} xxl lg="4">
+                  <label>
+                    <h6>Specify Others</h6>
+                  </label>
+                  <div className="d-flex flex-row  align-items-center">
+                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.specify : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.specifyOthers
+                      }}
+                      onClick={() => {
+                        setLabelValue("Specify Others"),
+                          setOpennedModal("specifyOthers")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData !== null ? landScheduleData?.specify : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                </Col>
+              </Row>
+              <Row className="ms-auto" style={{ marginBottom: 20 }}>
+                <div className="col col-4">
+                  <h6>Type of land</h6>{" "}
+                  <div className="d-flex flex-row  align-items-center">
+                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.typeLand : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.typeOfLand
+                      }}
+                      onClick={() => {
+                        setLabelValue("Type of land"),
+                          setOpennedModal("typeOfLand")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData !== null ? landScheduleData?.typeLand : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                </div>
+
+                <div className="col col-4">
+                  <h6>Third-party right created&nbsp;
+
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.thirdPartyRightCreated
+                      }}
+                      onClick={() => {
+                        setLabelValue("Third-party right created"),
+                          setOpennedModal("thirdPartyRightCreated")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.thirdParty === "Y" ? "Yes" : "No");
+                      }}
+                    ></ReportProblemIcon>
+                  </h6>
+
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.thirdParty === "Y" ? true : false} />
                     &nbsp;&nbsp;
-                    <label for="Yes">
-                      <h6>Yes</h6>
+                    <label className="m-0 mx-2" for="Yes">
+                      Yes
                     </label>
                     &nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow13} />
+                    <input type="radio" disabled value="No" checked={landScheduleData?.thirdParty === "N" ? true : false} />
                     &nbsp;&nbsp;
-                    <label for="No">
-                      <h6>No</h6>
+                    <label className="m-0 mx-2" for="No">
+                      No
                     </label>
-                    {/* <Form.Check
-                          value="Third-party right created"
-                          type="radio"
-                          id="default-radio"
-                          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                          name="group50"
-                          inline
-                        ></Form.Check>
-                        <Form.Check
-                          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                          value="Third-party right created"
-                          type="radio"
-                          id="default-radio"
-                          label={<CancelIcon color="error" />}
-                          name="group50"
-                          inline
-                        ></Form.Check> */}
-                    <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor8.length > 0
-                              ? developerInputFiledColor8[0].color.data
-                              : developerInputCheckedFiledColor8.length > 0
-                              ? developerInputCheckedFiledColor8[0].color.data
-                              : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("Third-party right created"), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
+                    <DownloadForOfflineIcon color="primary" />
+                  </div>
+                </div>
+
+                {landScheduleData?.thirdParty === "Y" && (
+                  <div className="row ">
+                    <div className="col col-4">
+                      <label> Remark </label>
+                      <input type="text" className="form-control" disabled placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null} />
                     </div>
-                    {showhide13 === "Yes" && (
-                      <div className="row ">
-                        <div className="col col-12">
-                          <label for="parentLicense" className="font-weight-bold">
-                            {" "}
-                            Remark{" "}
-                          </label>
-                          <input type="text" className="form-control" />
-                        </div>
-                        <div className="col col-12">
-                          <label for="parentLicense" className="font-weight-bold">
-                            {" "}
-                            Document Upload{" "}
-                          </label>
-                          <input type="file" className="form-control" />
-                        </div>
-                      </div>
-                    )}
-                    {showhide13 === "No" && (
-                      <div className="row ">
-                        <div className="col col">
-                          <label for="parentLicense" className="font-weight-bold">
-                            {" "}
-                            Document Upload{" "}
-                          </label>
-                          <input type="file" className="form-control" />
-                        </div>
-                      </div>
-                    )}
-                  </Col>
-                </Row>
-              </div>
-            )}
+                    <div className="col col-4">
+                      <label> Document Download </label>
+                      <button>
+                        <DownloadForOfflineIcon color="primary" className="ml-1" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+                {landScheduleData?.thirdParty === "N" && (
+                  <div className="row ">
+                    <div className="col col-4">
+                      <label> Document Download </label>
+                      <DownloadForOfflineIcon color="primary" />
+                    </div>
+                  </div>
+                )}
+              </Row>
+            </div>
+            {/* } */}
+
+            {/* )} */}
             <Row className="ms-auto">
               <Col md={4} xxl lg="12">
-                <Form.Label>
-                  <b>(ii)Whether licence applied under Migration policy?</b>
-                </Form.Label>
+                <Form.Label>(ii)Whether licence applied under Migration policy?</Form.Label>
                 &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="Whether licence applied under Migration policy"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group42"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="Whether licence applied under Migration policy"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group42"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow17} readOnly />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow17} readOnly />
-                  <label for="No">No</label>
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.migrationLic === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.migrationLic === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor9.length > 0
-                          ? developerInputFiledColor9[0].color.data
-                          : developerInputCheckedFiledColor9.length > 0
-                          ? developerInputCheckedFiledColor9[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.migrationPolicy
                     }}
                     onClick={() => {
-                      setLabelValue("(ii)Whether licence applied under Migration policy?"), setSmShow(true), console.log("modal open");
+                      setLabelValue("Whether licence applied under Migration policy"),
+                        setOpennedModal("migrationPolicy")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.migrationLic === "Y" ? "Yes" : "No");
                     }}
                   ></ReportProblemIcon>
                 </div>
                 <br></br>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow17} readOnly />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow17} readOnly />
-                <label for="No">No</label> */}
-                {showhide17 === "Yes" && (
-                  <div className="col col-6 ">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                      <b>
-                        Another Copy of Shahjra Plan&nbsp;&nbsp;
-                        <DownloadForOfflineIcon color="primary" />
-                      </b>{" "}
-                    </h6>
-                    <input type="file" className="form-control" />
+                {
+                  landScheduleData?.migrationLic === "Y" &&
+
+                  <div>
+                    <Row className="ms-auto" style={{ marginBottom: 20 }}>
+                      <Col className="ms-auto" md={4} xxl lg="4">
+                        <label>
+                          {/* License No. of Parent License */}
+                          <h5>Area Applied under Migration</h5>
+                        </label>
+
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          <Form.Control
+                            height={30}
+                            style={{ maxWidth: 200, marginRight: 5 }}
+                            placeholder={landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null}
+                            disabled
+                          ></Form.Control>
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.areaAppliedUnderMigration
+                            }}
+                            onClick={() => {
+                              setLabelValue("Area Applied under Migration"),
+                                setOpennedModal("areaAppliedUnderMigration")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData !== null ? landScheduleData?.areaAppliedUnderMigration : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                        {/* <input type="number" className="form-control" /> */}
+                      </Col>
+                      <Col className="ms-auto" md={4} xxl lg="4">
+                        <label htmlFor="potential">
+                          <h6>
+                            {/* Potential Zone: */}
+                            <h5>Purpose of Parent Licence</h5>
+                          </h6>
+                        </label>
+
+                        <div className="d-flex flex-row  align-items-center">
+                          <Form.Control
+                            height={30}
+                            style={{ maxWidth: 200, marginRight: 5 }}
+                            placeholder={landScheduleData !== null ? landScheduleData?.parentLicPurpose : null}
+                            disabled
+                          ></Form.Control>
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.purposeOfParentLicence
+                            }}
+                            onClick={() => {
+                              setLabelValue("Purpose of Parent Licence"),
+                                setOpennedModal("purposeOfParentLicence")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData !== null ? landScheduleData?.parentLicPurpose : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col className="ms-auto" md={4} xxl lg="4">
+                        <label>
+                          {/* Site Location Purpose */}
+                          <h5>Licence No.</h5>
+                        </label>
+                        <div className="d-flex flex-row  align-items-center">
+                          <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.licNo : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.licenceNo
+                            }}
+                            onClick={() => {
+                              setLabelValue("Licence No."),
+                                setOpennedModal("licenceNo")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData !== null ? landScheduleData?.licNo : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      {/* </Row>
+              <Row className="ms-auto" style={{ marginBottom: 20 }}> */}
+                      <Col className="ms-auto" md={4} xxl lg="4">
+                        <label>
+                          {/* Approach Type (Type of Policy) */}
+                          <h5>Area of Parent Licence</h5>
+                        </label>
+
+                        <div className="d-flex flex-row  align-items-center">
+                          <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.parentLicArea : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.areaOfParentLicence
+                            }}
+                            onClick={() => {
+                              setLabelValue("Area of Parent Licence"),
+                                setOpennedModal("areaOfParentLicence")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData !== null ? landScheduleData?.parentLicArea : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col className="ms-auto" md={4} xxl lg="4">
+                        <label>
+                          <h6>Validity of Parent Licence</h6>
+                        </label>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.validityOfParentLic === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.validityOfParentLic === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.validityOfParentLicence
+                            }}
+                            onClick={() => {
+                              setLabelValue("Validity of Parent Licence")
+                              setOpennedModal("validityOfParentLicence")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.validityOfParentLic === "Y" ? "Yes" : landScheduleData?.validityOfParentLic === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                      <Col className="ms-auto" md={4} xxl lg="4">
+                        <h6>Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration</h6>
+                        {/* &nbsp;&nbsp; */}
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          {<DownloadForOfflineIcon color="primary" />}
+
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.approvedLayoutOfPlan
+                            }}
+                            onClick={() => {
+                              setLabelValue("Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration"),
+                                setOpennedModal("approvedLayoutOfPlan")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue("");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="ms-auto" style={{ marginBottom: 20 }}>
+                      <div className="col col-4">
+                        <h6>Proposed Layout of Plan /site plan for area applied for migration.</h6>
+                        {/* <br/> */}
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          {<DownloadForOfflineIcon color="primary" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.proposedLayoutOfPlan
+                            }}
+                            onClick={() => {
+                              setLabelValue("Proposed Layout of Plan /site plan for area applied for migration."),
+                                setOpennedModal("proposedLayoutOfPlan")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue("");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </div>
+
+                      <div className="col col-4">
+                        <h6>Download Previously approved Layout Plan</h6>
+                        {/* <br/> */}
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          {<DownloadForOfflineIcon color="primary" />}
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.downloadPreviouslyApprovedLayoutPlan
+                            }}
+                            onClick={() => {
+                              setLabelValue("Download Previously approved Layout Plan"),
+                                setOpennedModal("downloadPreviouslyApprovedLayoutPlan")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue("");
+                            }}
+                          ></ReportProblemIcon>
+                        </div>
+                      </div>
+                    </Row>
                   </div>
-                )}
+                }
               </Col>
             </Row>
-            <hr></hr>
-            <h5 className="text-black">
-              <b>2. Any encumbrance with respect to following :</b>&nbsp;&nbsp;
-              {/* <Form.Check
-                value="Rehan"
-                type="radio"
-                id="default-radio"
-                label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                name="group43"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                value="Rehan"
-                type="radio"
-                id="default-radio"
-                label={<CancelIcon color="error" />}
-                name="group43"
-                inline
-              ></Form.Check> */}
-              <div style={{ display: "flex" }}>
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                <label htmlFor="gen">Rehan / Mortgage</label>&nbsp;&nbsp;
-                <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} />
-                &nbsp;&nbsp;
-                <label for="Yes"></label>&nbsp;&nbsp;&nbsp;&nbsp;
-                <label htmlFor="npnl">Patta/Lease</label>&nbsp;&nbsp;
-                <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} />
-                &nbsp;&nbsp;
-                <label for="Yes"></label>&nbsp;&nbsp;&nbsp;&nbsp;
-                <label htmlFor="npnl">Gair/Marusi</label>&nbsp;&nbsp;
-                <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} />
-                &nbsp;&nbsp;
+            <hr className="mb-3"></hr>
+            <h5 className={`text-black ml-2 ${classes.formLabel}`}>
+              2. Any encumbrance with respect to following :&nbsp;&nbsp;
+              <div className="d-flex mt-2 align-items-center">
+                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                <label className="m-0 mx-2" htmlFor="gen">Rehan / Mortgage</label>
+                <input type="radio" disabled value="1" name="mortage" checked={landScheduleData?.encumburance === "rehan/mortage" ? true : false} />
+                <label className="m-0 mx-2" htmlFor="npnl">Patta/Lease</label>
+                <input type="radio" disabled value="2" name="lease" checked={landScheduleData?.encumburance === "patta/lease" ? true : false} />
+                <label className="m-0 mx-2" htmlFor="npnl">Gair/Marusi</label>
+                <input type="radio" disabled value="3" name="marusi" checked={landScheduleData?.encumburance === "gair/marusi" ? true : false} />
                 <ReportProblemIcon
+                  className="m-0 mx-2"
                   style={{
-                    color:
-                      developerInputFiledColor10.length > 0
-                        ? developerInputFiledColor10[0].color.data
-                        : developerInputCheckedFiledColor10.length > 0
-                        ? developerInputCheckedFiledColor10[0].color.data
-                        : "#FFB602",
+                    color: fieldIconColors.encumbrance
                   }}
                   onClick={() => {
-                    setLabelValue("2. Any encumbrance with respect to following"), setSmShow(true), console.log("modal open");
+                    setLabelValue("Any encumbrance with respect to following"),
+                      setOpennedModal("encumbrance")
+                    setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(landScheduleData !== null ? landScheduleData?.encumburance : null);
                   }}
                 ></ReportProblemIcon>
               </div>
             </h5>
-            <br></br>
-            {/* <label htmlFor="gen">Rehan / Mortgage</label>&nbsp;&nbsp;
-            <input type="radio" id="Yes" value="1" onChange={handleChange} name="Yes" onClick={handleshow18} />
-            &nbsp;&nbsp;
-            <label for="Yes"></label>&nbsp;&nbsp;&nbsp;&nbsp;
-            <label htmlFor="npnl">Patta/Lease</label>&nbsp;&nbsp;
-            <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} />
-            &nbsp;&nbsp;
-            <label for="Yes"></label>&nbsp;&nbsp;&nbsp;&nbsp;
-            <label htmlFor="npnl">Gair/Marusi</label>&nbsp;&nbsp;
-            <input type="radio" id="Yes" value="2" onChange={handleChange} name="Yes" onClick={handleshow18} />
-            &nbsp;&nbsp; */}
-            <label for="Yes"></label>
-            <div className="row">
-              <div className="col col-4">
+            <div className="row ml-3 mb-3">
+              <div className="col col-4 m-0 p-0">
                 <label htmlFor="npnl">
-                  <h6>
-                    <b>Any other, please specify</b>
-                  </h6>
+                  <h6>Any other, please specify</h6>
                 </label>
-                <input type="text" className="form-control" readOnly />
+                <input type="text" className="form-control" disabled placeholder={landScheduleData !== null ? landScheduleData?.anyOther : null} />
               </div>
             </div>
             <hr />
-            <h6>
-              <b>(ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator</b>&nbsp;&nbsp;
+            <h6 className="mx-3 mt-3">
+              (ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator&nbsp;&nbsp;
               {/* <Form.Check
                 value=" Existing litigation"
                 type="radio"
@@ -1155,36 +1187,57 @@ const Developerinfo = (props) => {
                 name="group47"
                 inline
               ></Form.Check> */}
-              <div style={{ display: "flex" }}>
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label>
+              <div className="d-flex mt-2">
+                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                <input type="radio" disabled value="Yes" checked={landScheduleData?.litigation === "Y" ? true : false} />
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                <input type="radio" disabled value="No" checked={landScheduleData?.litigation === "N" ? true : false} />
+                <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
-                    color:
-                      developerInputFiledColor11.length > 0
-                        ? developerInputFiledColor11[0].color.data
-                        : developerInputCheckedFiledColor11.length > 0
-                        ? developerInputCheckedFiledColor11[0].color.data
-                        : "#FFB602",
+                    color: fieldIconColors.existinglitigation
                   }}
                   onClick={() => {
-                    setLabelValue("(ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator"),
-                      setSmShow(true),
-                      console.log("modal open");
+                    setLabelValue("Existing litigation, if any, concerning applied land including co-sharers and collaborator"),
+                      setOpennedModal("existinglitigation")
+                    setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(landScheduleData?.litigation === "Y" ? "Yes" : landScheduleData?.litigation === "N" ? "No" : null);
                   }}
                 ></ReportProblemIcon>
               </div>
             </h6>
-            {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-            <label for="Yes">Yes</label>&nbsp;&nbsp;
-            <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-            <label for="No">No</label> */}
+
+            {
+              landScheduleData?.litigation === "Y" &&
+              <div className="d-flex ml-3 mb-2">
+                <div className="px-2">
+                  <label>
+                    {/* Site Location Purpose */}
+                    <h5>Remark</h5>
+                  </label>
+                  <div className="d-flex flex-row  align-items-center">
+                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.litigationRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                  </div>
+                </div>
+                <div className="px-2" >
+                  <h6>Download Document</h6>
+                  {/* &nbsp;&nbsp; */}
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    {<DownloadForOfflineIcon color="primary" />}
+                  </div>
+                </div>
+              </div>
+
+            }
+
+            {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  />
+            <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+            <input type="radio" disabled value="No"  onChange1={handleChange}  />
+            <label className="m-0 mx-2" for="No">No</label> */}
             <hr />
-            <h6>
-              <b>(iii) Court orders, if any, affecting applied land</b>&nbsp;&nbsp;
+            <h6 className="mx-3 mt-3">
+              (iii) Court orders, if any, affecting applied land&nbsp;&nbsp;
               {/* <Form.Check
                 value=" Court orders"
                 type="radio"
@@ -1202,34 +1255,56 @@ const Developerinfo = (props) => {
                 name="group48"
                 inline
               ></Form.Check> */}
-              <div style={{ display: "flex" }}>
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label>
+              <div className="d-flex mt-2">
+                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                <input type="radio" disabled value="Yes" checked={landScheduleData?.court === "Y" ? true : false} />
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                <input type="radio" disabled value="No" checked={landScheduleData?.court === "N" ? true : false} />
+                <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
-                    color:
-                      developerInputFiledColor12.length > 0
-                        ? developerInputFiledColor12[0].color.data
-                        : developerInputCheckedFiledColor12.length > 0
-                        ? developerInputCheckedFiledColor12[0].color.data
-                        : "#FFB602",
+                    color: fieldIconColors.courtOrders
                   }}
                   onClick={() => {
-                    setLabelValue("(iii) Court orders, if any, affecting applied land"), setSmShow(true), console.log("modal open");
+                    setLabelValue("Court orders, if any, affecting applied land"),
+                      setOpennedModal("courtOrders")
+                    setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(landScheduleData?.court === "Y" ? "Yes" : landScheduleData?.court === "N" ? "No" : null);
                   }}
                 ></ReportProblemIcon>
               </div>
             </h6>
-            {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-            <label for="Yes">Yes</label>&nbsp;&nbsp;
-            <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-            <label for="No">No</label> */}
+
+            {
+              landScheduleData?.court === "Y" &&
+              <div className="d-flex ml-3 mb-2">
+                <div className="px-2">
+                  <label>
+                    {/* Site Location Purpose */}
+                    <h5>Remark</h5>
+                  </label>
+                  <div className="d-flex flex-row  align-items-center">
+                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.courtRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                  </div>
+                </div>
+                <div className="px-2" >
+                  <h6>Download Document</h6>
+                  {/* &nbsp;&nbsp; */}
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    {<DownloadForOfflineIcon color="primary" />}
+                  </div>
+                </div>
+              </div>
+
+            }
+            {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  />
+            <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+            <input type="radio" disabled value="No"  onChange1={handleChange}  />
+            <label className="m-0 mx-2" for="No">No</label> */}
             <hr />
-            <h6>
-              <b>(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed :</b>&nbsp;&nbsp;
+            <h6 className="mx-3 mt-3">
+              (iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed :&nbsp;&nbsp;
               {/* <Form.Check
                 value=" Any insolvency"
                 type="radio"
@@ -1247,41 +1322,59 @@ const Developerinfo = (props) => {
                 name="group49"
                 inline
               ></Form.Check> */}
-              <div style={{ display: "flex" }}>
-                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label>
+              <div className="d-flex mt-2">
+                {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                <input type="radio" disabled value="Yes" checked={landScheduleData?.insolvency === "Y" ? true : false} />
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                <input type="radio" disabled value="No" checked={landScheduleData?.insolvency === "N" ? true : false} />
+                <label className="m-0 mx-2" for="No">No</label>
                 <ReportProblemIcon
                   style={{
-                    color:
-                      developerInputFiledColor13.length > 0
-                        ? developerInputFiledColor13[0].color.data
-                        : developerInputCheckedFiledColor13.length > 0
-                        ? developerInputCheckedFiledColor13[0].color.data
-                        : "#FFB602",
+                    color: fieldIconColors.anyInsolvency
                   }}
                   onClick={() => {
-                    setLabelValue("(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed "),
-                      setSmShow(true),
-                      console.log("modal open");
+                    setLabelValue("Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed"),
+                      setOpennedModal("anyInsolvency")
+                    setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(landScheduleData !== null ? landScheduleData?.typeLand : null);
                   }}
                 ></ReportProblemIcon>
               </div>
             </h6>
-            {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-            <label for="Yes">Yes</label>&nbsp;&nbsp;
-            <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-            <label for="No">No</label> */}
-            <hr />
-            <h5 className="text-black">
-              <b>3.Shajra Plan</b>
-            </h5>
-            <div className="row">
-              <div className="col col-3 ">
+
+            {
+              landScheduleData?.insolvency === "Y" &&
+              <div className="d-flex ml-3 mb-2">
+                <div className="px-2">
+                  <label>
+                    {/* Site Location Purpose */}
+                    <h5>Remark</h5>
+                  </label>
+                  <div className="d-flex flex-row  align-items-center">
+                    <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.courtRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                  </div>
+                </div>
+                <div className="px-2" >
+                  <h6>Download Document</h6>
+                  {/* &nbsp;&nbsp; */}
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    {<DownloadForOfflineIcon color="primary" />}
+                  </div>
+                </div>
+              </div>
+
+            }
+            {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  />
+            <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+            <input type="radio" disabled value="No"  onChange1={handleChange}  />
+            <label className="m-0 mx-2" for="No">No</label> */}
+            <hr className="mb-3" />
+            <h5 className="text-black ml-2 mb-2">3.Shajra Plan</h5>
+            <div className="row mx-1">
+              <div className="col col-3 p-1">
                 <h6>
-                  <b>(a)As per applied land (Yes/No)</b> &nbsp;&nbsp;
+                  (a)&nbsp;As per applied land&nbsp;
                   {/* <Form.Check
                     value=" As per applied land "
                     type="radio"
@@ -1299,39 +1392,50 @@ const Developerinfo = (props) => {
                     name="group50"
                     inline
                   ></Form.Check> */}
-                  <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                    <label for="No">No</label>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.appliedLand === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.appliedLand === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
-                        color:
-                          developerInputFiledColor14.length > 0
-                            ? developerInputFiledColor14[0].color.data
-                            : developerInputCheckedFiledColor14.length > 0
-                            ? developerInputCheckedFiledColor14[0].color.data
-                            : "#FFB602",
+                        color: fieldIconColors.asPerAppliedLand
                       }}
                       onClick={() => {
-                        setLabelValue("(a)As per applied land (Yes/No)"), setSmShow(true), console.log("modal open");
+                        setLabelValue("As per applied land"),
+                          setOpennedModal("asPerAppliedLand")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.appliedLand === "Y" ? "Yes" : landScheduleData?.appliedLand === "N" ? "NO" : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
                 </h6>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label> */}
+
+                {
+                  landScheduleData?.appliedLand === "Y" &&
+                  <div className="row ml-1 mr-2">
+                    <div className="col  p-1" >
+                      <h6>Download Document</h6>
+                      {/* &nbsp;&nbsp; */}
+                      <div className="d-flex flex-row align-items-center my-1 ">
+                        {<DownloadForOfflineIcon color="primary" />}
+                      </div>
+                    </div>
+                  </div>
+
+                }
+                {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  />
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                <input type="radio" disabled value="No"  onChange1={handleChange}  />
+                <label className="m-0 mx-2" for="No">No</label> */}
               </div>
 
-              <div className="col col-3 ">
+              <div className="col col-3 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="If any revenue rasta abuts to the applied site ?">
-                  <b>
-                    (b)&nbsp;Revenue rasta&nbsp;
-                    {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  </b>
+                  (b)&nbsp;Revenue rasta&nbsp;
+                  {/* <InfoIcon style={{color:"blue"}}/>  */}
                   &nbsp;&nbsp;
                   {/* <Form.Check
                     value=" revenue rasta "
@@ -1350,50 +1454,44 @@ const Developerinfo = (props) => {
                     name="group51"
                     inline
                   ></Form.Check> */}
-                  <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow1} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow1} />
-                    <label for="No">No</label>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.revenueRasta === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.revenueRasta === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
-                        color:
-                          developerInputFiledColor15.length > 0
-                            ? developerInputFiledColor15[0].color.data
-                            : developerInputCheckedFiledColor15.length > 0
-                            ? developerInputCheckedFiledColor15[0].color.data
-                            : "#FFB602",
+                        color: fieldIconColors.revenueRasta
                       }}
                       onClick={() => {
-                        setLabelValue("Revenue rasta"), setSmShow(true), console.log("modal open");
+                        setLabelValue("Revenue rasta"),
+                          setOpennedModal("revenueRasta")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.revenueRasta === "Y" ? "Yes" : landScheduleData?.revenueRasta === "N" ? "No" : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
                 </h6>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow1} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow1} />
-                <label for="No">No</label> */}
-                {showhide2 === "Yes" && (
-                  <div className="row ">
-                    <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        {" "}
-                        Width of revenue rasta{" "}
-                      </label>
-                      <input type="number" className="form-control" readOnly />
+                {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  onClick={handleshow1} />
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                <input type="radio" disabled value="No"  onChange1={handleChange}  onClick={handleshow1} />
+                <label className="m-0 mx-2" for="No">No</label> */}
+                {landScheduleData?.revenueRasta === "Y" && (
+                  <div className="row ml-1 mr-2">
+                    <div className="col col p-1">
+                      <label> Width of revenue rasta </label>
+                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.revenueRastaWidth} />
                     </div>
                   </div>
                 )}
               </div>
 
-              <div className="col col-3 ">
+              <div className="col col-3 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="Watercourse running along boundary through the applied site ?">
-                  <b>
-                    (c)&nbsp;Watercourse running&nbsp;
-                    {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  </b>
+                  (c)&nbsp;Watercourse running&nbsp;
+                  {/* <InfoIcon style={{color:"blue"}}/>  */}
                   &nbsp;&nbsp;
                   {/* <Form.Check
                     value=" Yes"
@@ -1416,46 +1514,42 @@ const Developerinfo = (props) => {
                     name="group53"
                     inline
                   ></Form.Check> */}
-                  <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow2} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow2} />
-                    <label for="No">No</label>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.waterCourse === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.waterCourse === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
-                        color:
-                          developerInputFiledColor16.length > 0
-                            ? developerInputFiledColor16[0].color.data
-                            : developerInputCheckedFiledColor16.length > 0
-                            ? developerInputCheckedFiledColor16[0].color.data
-                            : "#FFB602",
+                        color: fieldIconColors.waterCourseRunning
                       }}
                       onClick={() => {
-                        setLabelValue("Watercourse running"), setSmShow(true), console.log("modal open");
+                        setLabelValue("Watercourse running"),
+                          setOpennedModal("waterCourseRunning")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.waterCourse === "Y" ? "Yes" : landScheduleData?.waterCourse === "N" ? "No" : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
                 </h6>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow2} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow2} />
-                <label for="No">No</label> */}
-                {showhide3 === "Yes" && (
-                  <div className="row ">
-                    <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        {" "}
-                        Rev. rasta width{" "}
-                      </label>
-                      <input type="number" className="form-control" />
+                {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  onClick={handleshow2} />
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                <input type="radio" disabled value="No"  onChange1={handleChange}  onClick={handleshow2} />
+                <label className="m-0 mx-2" for="No">No</label> */}
+                {landScheduleData?.waterCourse === "Y" && (
+                  <div className="row ml-1 mr-2">
+                    <div className="col col p-1">
+                      <label> Remark </label>
+                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.waterCourseRemark} />
                     </div>
                   </div>
                 )}
               </div>
-              <div className="col col-3 ">
+              <div className="col col-3 p-1">
                 <h6>
-                  <b>(d)Whether in Compact Block (Yes/No)</b> &nbsp;&nbsp;
+                  (d)&nbsp;Whether in Compact Block
                   {/* <Form.Check
                     value=" Compact Block"
                     type="radio"
@@ -1477,505 +1571,304 @@ const Developerinfo = (props) => {
                     name="group55"
                     inline
                   ></Form.Check> */}
-                  <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                    <label for="No">No</label>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.compactBlock === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.compactBlock === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
-                        color:
-                          developerInputFiledColor17.length > 0
-                            ? developerInputFiledColor17[0].color.data
-                            : developerInputCheckedFiledColor17.length > 0
-                            ? developerInputCheckedFiledColor17[0].color.data
-                            : "#FFB602",
+                        color: fieldIconColors.whetherInCompactBlock
                       }}
                       onClick={() => {
-                        setLabelValue("(d)Whether in Compact Block (Yes/No)"), setSmShow(true), console.log("modal open");
+                        setLabelValue("Whether in Compact Block"),
+                          setOpennedModal("whetherInCompactBlock")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.compactBlock === "Y" ? "Yes" : landScheduleData?.compactBlock === "N" ? "No" : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
                 </h6>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label> */}
+
+                {landScheduleData?.compactBlock === "Y" && (
+                  <div className="row ml-1 mr-2">
+                    <div className="col col p-1">
+                      <label> Remark </label>
+                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.compactBlockRemark} />
+                    </div>
+                  </div>
+                )}
+
+                {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  />
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                <input type="radio" disabled value="No"  onChange1={handleChange}  />
+                <label className="m-0 mx-2" for="No">No</label> */}
               </div>
+
               <br></br>
-              <div className="row">
-                <div className="col col-3 ">
-                  <h6 data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land.">
-                    <b>
-                      (e)&nbsp;Land Sandwiched&nbsp;
-                      {/* <InfoIcon style={{color:"blue"}}/>  */}
-                    </b>
-                    &nbsp;&nbsp;
-                    {/* <Form.Check
-                      value=" sandwiched"
-                      type="radio"
-                      id="default-radio"
-                      onChange1={handleChange}
-                      onClick={handleshow2}
-                      label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                      name="group56"
-                      inline
-                    ></Form.Check>
-                    <Form.Check
-                      onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                      value="sandwiched "
-                      type="radio"
-                      id="default-radio"
-                      onChange1={handleChange}
-                      onClick={handleshow2}
-                      label={<CancelIcon color="error" />}
-                      name="group56"
-                      inline
-                    ></Form.Check> */}
-                    <div style={{ display: "flex" }}>
-                      {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                      <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                      <label for="Yes">Yes</label>&nbsp;&nbsp;
-                      <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                      <label for="No">No</label>
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor18.length > 0
-                              ? developerInputFiledColor18[0].color.data
-                              : developerInputCheckedFiledColor18.length > 0
-                              ? developerInputCheckedFiledColor18[0].color.data
-                              : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("Land Sandwiched"), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-                  </h6>
-                  {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                  <label for="No">No</label> */}
-                </div>
-                <div className="col col-3 ">
-                  <h6>
-                    <b>(f)Acquisition status (Yes/No)</b> &nbsp;&nbsp;
-                    {/* <Form.Check
-                      value=" Yes"
-                      type="radio"
-                      id="default-radio"
-                      onChange1={handleChange}
-                      onClick={handleshow2}
-                      label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                      name="group57"
-                      inline
-                    ></Form.Check>
-                    <Form.Check
-                      onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                      value="No"
-                      type="radio"
-                      id="default-radio"
-                      onChange1={handleChange}
-                      onClick={handleshow2}
-                      label={<CancelIcon color="error" />}
-                      name="group57"
-                      inline
-                    ></Form.Check> */}
-                    <div style={{ display: "flex" }}>
-                      {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                      <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow3} />
-                      <label for="Yes">Yes</label>&nbsp;&nbsp;
-                      <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow3} />
-                      <label for="No">No</label>
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor19.length > 0
-                              ? developerInputFiledColor19[0].color.data
-                              : developerInputCheckedFiledColor19.length > 0
-                              ? developerInputCheckedFiledColor19[0].color.data
-                              : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("(f)Acquisition status (Yes/No)"), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-                  </h6>
-                  {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow3} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow3} />
-                  <label for="No">No</label> */}
-                  {showhide4 === "Yes" && (
-                    <div className="row ">
-                      <div className="col col">
-                        <label for="parentLicense" className="font-weight-bold">
-                          Remark
-                        </label>
-                        <input type="text" className="form-control" />
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div className="col col-3">
-                  <div className="form-group ">
-                    <label>
-                      <b>Date of section 4 notification</b>{" "}
-                    </label>
-                    &nbsp;&nbsp;
-                    {/* <Form.Check
-                      value=" Date of section 4 notification"
-                      type="radio"
-                      id="default-radio"
-                      label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                      name="group61"
-                      inline
-                    ></Form.Check>
-                    <Form.Check
-                      onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                      value="Date of section 4 notification"
-                      type="radio"
-                      id="default-radio"
-                      label={<CancelIcon color="error" />}
-                      name="group61"
-                      inline
-                    ></Form.Check> */}
-                    <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor8.length > 0
-                              ? developerInputFiledColor8[0].color.data
-                              : developerInputCheckedFiledColor8.length > 0
-                              ? developerInputCheckedFiledColor8[0].color.data
-                              : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("Third-party right created"), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
-                    </div>
-                    {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} readOnly></Form.Control> */}
+
+              <div className="col col-3 p-1">
+                <h6 data-toggle="tooltip" data-placement="top" title="If any other owners' land is sandwiched within applied land.">
+                  (e)&nbsp;Land Sandwiched&nbsp;
+                  {/* <InfoIcon style={{color:"blue"}}/>  */}
+                  &nbsp;&nbsp;
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.landSandwiched === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.landSandwiched === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.landSandwiche
+                      }}
+                      onClick={() => {
+                        setLabelValue("Land Sandwiched"),
+                          setOpennedModal("landSandwiche")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.landSandwiched === "Y" ? "Yes" : landScheduleData?.landSandwiched === "N" ? "No" : null);
+                      }}
+                    ></ReportProblemIcon>
                   </div>
-                </div>
-                <div className="col col-3">
-                  <div className="form-group ">
-                    <label>
-                      <b>Date of section 6 notification</b>
-                    </label>
-                    &nbsp;&nbsp;
-                    {/* <Form.Check
-                      value=" Date of section 6 notification"
-                      type="radio"
-                      id="default-radio"
-                      label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                      name="group62"
-                      inline
-                    ></Form.Check>
-                    <Form.Check
-                      onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                      value="Date of section 6 notification"
-                      type="radio"
-                      id="default-radio"
-                      label={<CancelIcon color="error" />}
-                      name="group62"
-                      inline
-                    ></Form.Check> */}
-                    <div style={{ display: "flex" }}>
-                      <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
-                      <ReportProblemIcon
-                        style={{
-                          color:
-                            developerInputFiledColor20.length > 0
-                              ? developerInputFiledColor20[0].color.data
-                              : developerInputCheckedFiledColor20.length > 0
-                              ? developerInputCheckedFiledColor20[0].color.data
-                              : "#FFB602",
-                        }}
-                        onClick={() => {
-                          setLabelValue("Date of section 6 notification"), setSmShow(true), console.log("modal open");
-                        }}
-                      ></ReportProblemIcon>
+                </h6>
+                {landScheduleData?.landSandwiched === "Y" && (
+                  <div className="row ml-1 mr-2">
+                    <div className="col col p-1">
+                      <label> Remark </label>
+                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.landSandwichedRemark} />
                     </div>
-                    {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} readOnly></Form.Control> */}
                   </div>
+                )}
+
+              </div>
+              <div className="col col-3 p-1">
+                <h6>
+                  (f)&nbsp;Acquisition status&nbsp;
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.acquistion === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.acquistion === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.acquisitionStatus
+                      }}
+                      onClick={() => {
+                        setLabelValue("Acquisition status"),
+                          setOpennedModal("acquisitionStatus")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.acquistion === "Y" ? "Yes" : landScheduleData?.acquistion === "N" ? "No" : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                </h6>
+
+                {landScheduleData?.acquistion === "Y" && (
+                  <div className="row ml-1 mr-2">
+                    <div className="col col p-1">
+                      <label> Remark </label>
+                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.acquistionRemark} />
+                    </div>
+                  </div>
+                )}
+
+              </div>
+              <div className="col col-3 p-1">
+                <div>
+                  <label className="m-0">Date of section 4 notification </label>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.section4} ></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.dateOfSection4Notification
+                      }}
+                      onClick={() => {
+                        setLabelValue("Date of section 4 notification"),
+                          setOpennedModal("dateOfSection4Notification")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData !== null ? landScheduleData?.section4 : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
+                </div>
+              </div>
+              <div className="col col-3 p-1">
+                <div>
+                  <label className="m-0">Date of section 6 notification</label>
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.section6} ></Form.Control>
+                    <ReportProblemIcon
+                      style={{
+                        color: fieldIconColors.dateOfSection6Notification
+                      }}
+                      onClick={() => {
+                        setLabelValue("Date of section 6 notification"),
+                          setOpennedModal("dateOfSection6Notification")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData !== null ? landScheduleData?.section6 : null);
+                      }}
+                    ></ReportProblemIcon>
+                  </div>
+                  {/* <Form.Control style={{ maxWidth: 200, marginTop: 10 }} disabled></Form.Control> */}
                 </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col col-12 ">
+
+            <div className="row mx-1">
+              <div className="col col-12 p-1">
                 <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
-                  <b>
-                    (g)&nbsp;Orders Upload &nbsp;
-                    {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  </b>
-                  &nbsp;&nbsp;
-                  {/* <Form.Check
-                    value=" release/exclusion"
-                    type="radio"
-                    id="default-radio"
-                    label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                    name="group59"
-                    inline
-                  ></Form.Check>
-                  <Form.Check
-                    onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                    value="release/exclusion"
-                    type="radio"
-                    id="default-radio"
-                    label={<CancelIcon color="error" />}
-                    name="group59"
-                    inline
-                  ></Form.Check> */}
-                  <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow16} />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow16} />
-                    <label for="No">No</label>
+                  (g)&nbsp;Orders Upload
+                  {/* <InfoIcon style={{color:"blue"}}/>  */}
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.orderUpload === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.orderUpload === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
-                        color:
-                          developerInputFiledColor21.length > 0
-                            ? developerInputFiledColor21[0].color.data
-                            : developerInputCheckedFiledColor21.length > 0
-                            ? developerInputCheckedFiledColor21[0].color.data
-                            : "#FFB602",
+                        color: fieldIconColors.ordersUpload
                       }}
                       onClick={() => {
-                        setLabelValue("Orders Upload"), setSmShow(true), console.log("modal open");
+                        setLabelValue("Orders Upload"),
+                          setOpennedModal("ordersUpload")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.orderUpload === "Y" ? "Yes" : landScheduleData?.orderUpload === "N" ? "No" : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
                 </h6>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow16} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow16} />
-                <label for="No">No</label> */}
-                {showhide16 === "Yes" && (
-                  <div className="row ">
-                    <div className="col col-3 ">
-                      <h6>
-                        <b>(h) Whether land compensation received</b>&nbsp;&nbsp;
-                        <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                        &nbsp;&nbsp;
-                        <label for="Yes">Yes</label>&nbsp;&nbsp;
-                        <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                        &nbsp;&nbsp;
-                        <label for="No">No</label>
+                {/* comment by me */}
+                {landScheduleData?.orderUpload === "Y" && (
+                  <div className="row m-0 mt-2">
+                    <div className="col col-3 p-1">
+                      <h6 data-toggle="tooltip" data-placement="top" title="Whether details/orders of release/exclusion of land uploaded.">
+                        (h) Whether land compensation received
+                        {/* <InfoIcon style={{color:"blue"}}/>  */}
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                          <input type="radio" disabled value="Yes" checked={landScheduleData?.compensationReceived === "Y" ? true : false} />
+                          <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                          <input type="radio" disabled value="No" checked={landScheduleData?.compensationReceived === "N" ? true : false} />
+                          <label className="m-0 mx-2" for="No">No</label>
+
+                          <ReportProblemIcon
+                            style={{
+                              color: fieldIconColors.landCompensationReceived
+                            }}
+                            onClick={() => {
+                              setLabelValue("Whether land compensation received"),
+                                setOpennedModal("landCompensationReceived")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.compensationReceived === "Y" ? "Yes" : landScheduleData?.compensationReceived === "N" ? "No" : null);
+                            }}
+                          ></ReportProblemIcon>
+
+                        </div>
                       </h6>
-                      {/* <Form.Check
-                        value=" land compensation"
-                        type="radio"
-                        id="default-radio"
-                        label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                        name="group60"
-                        inline
-                      ></Form.Check>
-                      <Form.Check
-                        onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                        value="land compensation"
-                        type="radio"
-                        id="default-radio"
-                        label={<CancelIcon color="error" />}
-                        name="group60"
-                        inline
-                      ></Form.Check> */}
-                      <div style={{ display: "flex" }}>
-                        <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
-                        <ReportProblemIcon
-                          style={{
-                            color:
-                              developerInputFiledColor22.length > 0
-                                ? developerInputFiledColor22[0].color.data
-                                : developerInputCheckedFiledColor22.length > 0
-                                ? developerInputCheckedFiledColor22[0].color.data
-                                : "#FFB602",
-                          }}
-                          onClick={() => {
-                            setLabelValue("(h) Whether land compensation received"), setSmShow(true), console.log("modal open");
-                          }}
-                        ></ReportProblemIcon>
-                      </div>
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-3 p-1">
                       <div className="form-group">
                         <label htmlFor="releasestatus">
-                          <h6>
-                            <b>Status of release</b>
-                          </h6>
+                          <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Status of release">Status of release</h6>
                         </label>
-                        {/* <Form.Check
-                          value="Status of release"
-                          type="radio"
-                          id="default-radio"
-                          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                          name="group63"
-                          inline
-                        ></Form.Check>
-                        <Form.Check
-                          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                          value="Status of release"
-                          type="radio"
-                          id="default-radio"
-                          label={<CancelIcon color="error" />}
-                          name="group63"
-                          inline
-                        ></Form.Check> */}
-                        <div style={{ display: "flex" }}>
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.statusOfRelease}></Form.Control>
+
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor23.length > 0
-                                  ? developerInputFiledColor23[0].color.data
-                                  : developerInputCheckedFiledColor23.length > 0
-                                  ? developerInputCheckedFiledColor23[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.statusOfRelease
                             }}
                             onClick={() => {
-                              setLabelValue("Status of release"), setSmShow(true), console.log("modal open");
+                              setLabelValue("Status of release"),
+                                setOpennedModal("statusOfRelease")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.statusOfRelease);
                             }}
                           ></ReportProblemIcon>
+
                         </div>
-                        <select className="form-control" id="releasestatus" name="releasestatus">
-                          <option value=""></option>
-                          <option></option>
-                          <option></option>
-                          <option></option>
-                        </select>
                       </div>
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-3 p-1">
                       <div className="form-group ">
                         <label htmlFor="awarddate">
-                          <h6>
-                            <b>Date of Award</b>
-                          </h6>
+                          <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Date of Award">Date of Award</h6>
                         </label>
-                        {/* <Form.Check
-                          value="Date of Award"
-                          type="radio"
-                          id="default-radio"
-                          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                          name="group64"
-                          inline
-                        ></Form.Check>
-                        <Form.Check
-                          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                          value="Date of Award"
-                          type="radio"
-                          id="default-radio"
-                          label={<CancelIcon color="error" />}
-                          name="group64"
-                          inline
-                        ></Form.Check> */}
-                        <div style={{ display: "flex" }}>
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.dateOfAward}></Form.Control>
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor24.length > 0
-                                  ? developerInputFiledColor24[0].color.data
-                                  : developerInputCheckedFiledColor24.length > 0
-                                  ? developerInputCheckedFiledColor24[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.dateOfAward
                             }}
                             onClick={() => {
-                              setLabelValue("Date of Award"), setSmShow(true), console.log("modal open");
+                              setLabelValue("Date of Award"),
+                                setOpennedModal("dateOfAward")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.dateOfAward);
                             }}
                           ></ReportProblemIcon>
                         </div>
-                        {/* <input type="date" name="awarddate" className="form-control"></input> */}
+                        {/* comment by me */}
                       </div>
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-3 p-1">
                       <div className="form-group ">
                         <label htmlFor="releasedate">
-                          <h6>
-                            <b>Date of Release</b>
-                          </h6>{" "}
+                          <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Date of Release">Date of Release</h6>{" "}
                         </label>
-                        {/* <Form.Check
-                          value="Date of Release"
-                          type="radio"
-                          id="default-radio"
-                          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                          name="group65"
-                          inline
-                        ></Form.Check>
-                        <Form.Check
-                          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                          value="Date of Release"
-                          type="radio"
-                          id="default-radio"
-                          label={<CancelIcon color="error" />}
-                          name="group65"
-                          inline
-                        ></Form.Check> */}
-                        <div style={{ display: "flex" }}>
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.dateOfRelease}></Form.Control>
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor25.length > 0
-                                  ? developerInputFiledColor25[0].color.data
-                                  : developerInputCheckedFiledColor25.length > 0
-                                  ? developerInputCheckedFiledColor25[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.dateOfRelease
                             }}
                             onClick={() => {
-                              setLabelValue("Date of Release"), setSmShow(true), console.log("modal open");
+                              setLabelValue("Date of Release"),
+                                setOpennedModal("dateOfRelease")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.dateOfRelease);
                             }}
                           ></ReportProblemIcon>
                         </div>
-                        <input type="date" name="releasedate" className="form-control"></input>
                       </div>
                     </div>
-                    <div className="col col-3">
+                    <div className="col col-3 p-1">
                       <div className="form-group ">
                         <label htmlFor="sitedetails">
-                          <h6>
-                            <b>Site Details</b>
-                          </h6>
+                          <h6 style={{ fontWeight: "initial" }} data-toggle="tooltip" data-placement="top" title="Site Details">Site Details</h6>
                         </label>
-                        {/* <Form.Check
-                          value="Site Details"
-                          type="radio"
-                          id="default-radio"
-                          label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                          name="group66"
-                          inline
-                        ></Form.Check>
-                        <Form.Check
-                          onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                          value="Site Details"
-                          type="radio"
-                          id="default-radio"
-                          label={<CancelIcon color="error" />}
-                          name="group66"
-                          inline
-                        ></Form.Check> */}
-                        <div style={{ display: "flex" }}>
-                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+                        <div className="d-flex flex-row align-items-center my-1 ">
+                          <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.siteDetails}></Form.Control>
                           <ReportProblemIcon
                             style={{
-                              color:
-                                developerInputFiledColor26.length > 0
-                                  ? developerInputFiledColor26[0].color.data
-                                  : developerInputCheckedFiledColor26.length > 0
-                                  ? developerInputCheckedFiledColor26[0].color.data
-                                  : "#FFB602",
+                              color: fieldIconColors.siteDetails
                             }}
                             onClick={() => {
-                              setLabelValue("Site Details"), setSmShow(true), console.log("modal open");
+                              setLabelValue("Site Details"),
+                                setOpennedModal("siteDetails")
+                              setSmShow(true),
+                                console.log("modal open"),
+                                setFieldValue(landScheduleData?.siteDetails);
                             }}
                           ></ReportProblemIcon>
                         </div>
-                        {/* <input type="number" name="sitedetails" className="form-control " /> */}
+
+
+                        {/* comment by me */}
                       </div>
                     </div>
                   </div>
@@ -1983,867 +1876,489 @@ const Developerinfo = (props) => {
               </div>
             </div>
             <br></br>
-            <div className="row">
-              <div className="col col-12 ">
-                <h6>
-                  <b>whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)</b>
-                  &nbsp;&nbsp;
-                  {/* <Form.Check
-                    value="approachable"
-                    type="radio"
-                    id="default-radio"
-                    label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                    name="group67"
-                    inline
-                  ></Form.Check>
-                  <Form.Check
-                    onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                    value="approachable"
-                    type="radio"
-                    id="default-radio"
-                    label={<CancelIcon color="error" />}
-                    name="group67"
-                    inline
-                  ></Form.Check> */}
-                  <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                    <label for="No">No</label>
+            <div className="row mx-1">
+              <div className="col col-12 p-1">
+                <h6 style={{ fontWeight: "initial" }} >
+                  whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road.
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.approachable === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.approachable === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
-                        color:
-                          developerInputFiledColor27.length > 0
-                            ? developerInputFiledColor27[0].color.data
-                            : developerInputCheckedFiledColor27.length > 0
-                            ? developerInputCheckedFiledColor27[0].color.data
-                            : "#FFB602",
+                        color: fieldIconColors.internalSectoralPlan
                       }}
                       onClick={() => {
-                        setLabelValue(
-                          "whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road. (yes/no)"
-                        ),
-                          setSmShow(true),
-                          console.log("modal open");
+                        setLabelValue("whether the applied site is approachable from the proposed 18/24 m internal sectoral plan road/sector dividing road"),
+                          setOpennedModal("internalSectoralPlan")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.approachable === "Y" ? "Yes" : landScheduleData?.approachable === "N" ? "No" : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
                 </h6>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label> */}
+                {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  />
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                <input type="radio" disabled value="No"  onChange1={handleChange}  />
+                <label className="m-0 mx-2" for="No">No</label> */}
               </div>
             </div>
-            <hr />
-            <h5 className="text-black">
-              <b>4.Site condition</b>
-            </h5>
-            <div className="row">
-              <div className="col col-3">
+            <hr className="my-3" />
+            <h5 className="text-black ml-2 mb-2">4. Site condition</h5>
+            <div className="row mx-1">
+              <div className="col col-3 p-1">
                 <h6>
-                  <b>(a)vacant: (Yes/No)</b>{" "}
-                  {/* <Form.Check
-                    value="vacant"
-                    type="radio"
-                    id="default-radio"
-                    label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                    name="group68"
-                    inline
-                  ></Form.Check>
-                  <Form.Check
-                    onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                    value="vacant"
-                    type="radio"
-                    id="default-radio"
-                    label={<CancelIcon color="error" />}
-                    name="group68"
-                    inline
-                  ></Form.Check> */}
-                  <div style={{ display: "flex" }}>
-                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                    <label for="Yes">Yes</label>&nbsp;&nbsp;
-                    <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                    <label for="No">No</label>
+                  (a) vacant: (Yes/No){" "}
+                  <div className="d-flex flex-row align-items-center my-1 ">
+                    {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                    <input type="radio" disabled value="Yes" checked={landScheduleData?.vacant === "Y" ? true : false} />
+                    <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" disabled value="No" checked={landScheduleData?.vacant === "N" ? true : false} />
+                    <label className="m-0 mx-2" for="No">No</label>
                     <ReportProblemIcon
                       style={{
-                        color:
-                          developerInputFiledColor28.length > 0
-                            ? developerInputFiledColor28[0].color.data
-                            : developerInputCheckedFiledColor28.length > 0
-                            ? developerInputCheckedFiledColor28[0].color.data
-                            : "#FFB602",
+                        color: fieldIconColors.vacant
                       }}
                       onClick={() => {
-                        setLabelValue("(a)vacant: (Yes/No)"), setSmShow(true), console.log("modal open");
+                        setLabelValue("vacant"),
+                          setOpennedModal("vacant")
+                        setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(landScheduleData?.vacant === "Y" ? "Yes" : landScheduleData?.vacant === "N" ? "No" : null);
                       }}
                     ></ReportProblemIcon>
                   </div>
                 </h6>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" />
-                <label for="No">No</label> */}
+                {landScheduleData?.vacant === "Y" && (
+                  <div className="row ml-1 mr-2">
+                    <div className="col col p-1">
+                      <label> Vacant Remark </label>
+                      <input type="number" className="form-control" disabled placeholder={landScheduleData?.vacantRemark} />
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6 onChange={(e) => setConstruction(e.target.value)} value={construction}>
-                  <b>(b)Construction: (Yes/No)</b>
+                  (b) Construction: (Yes/No)
                 </h6>
-                {/* <Form.Check
-                  value="Construction"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group69"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="Construction"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group69"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                  <label for="No">No</label>
+
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.construction === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.construction === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor29.length > 0
-                          ? developerInputFiledColor29[0].color.data
-                          : developerInputCheckedFiledColor29.length > 0
-                          ? developerInputCheckedFiledColor29[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.construction
                     }}
                     onClick={() => {
-                      setLabelValue("(b)Construction: (Yes/No)"), setSmShow(true), console.log("modal open");
+                      setLabelValue("Construction"),
+                        setOpennedModal("construction")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.construction === "Y" ? "Yes" : landScheduleData?.construction === "N" ? "No" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow4} />
-                <label for="No">No</label> */}
-                {showhide4 === "Yes" && (
+
+                {landScheduleData?.construction === "Y" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        Type of Construction
-                      </label>
-                      <input type="text" className="form-control" />
+                      <label>Type of Construction</label>
+                      <input type="text" className="form-control" placeholder={landScheduleData?.typeOfConstruction} />
                     </div>
                   </div>
                 )}
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6 onChange={(e) => setHt(e.target.value)} value={ht}>
-                  <b>(c)HT line:(Yes/No)</b>
+                  (c) HT line
                 </h6>
-                {/* <Form.Check
-                  value="HT"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group70"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="HT"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group70"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                  <label for="No">No</label>
+
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control> */}
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.ht === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.ht === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor30.length > 0
-                          ? developerInputFiledColor30[0].color.data
-                          : developerInputCheckedFiledColor30.length > 0
-                          ? developerInputCheckedFiledColor30[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.htLine
                     }}
                     onClick={() => {
-                      setLabelValue("(c)HT line:(Yes/No)"), setSmShow(true), console.log("modal open");
+                      setLabelValue("HT line"),
+                        setOpennedModal("htLine")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.ht === "Y" ? "Yes" : landScheduleData?.ht === "N" ? "No" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow5} />
-                <label for="No">No</label> */}
-                {showhide5 === "Yes" && (
+
+                {landScheduleData?.ht === "Y" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        HT Remarks
-                      </label>
-                      <input type="text" className="form-control" />
+                      <label>HT Remarks</label>
+                      <input type="text" className="form-control" placeholder={landScheduleData?.htRemark} />
                     </div>
                   </div>
                 )}
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6 onChange={(e) => setGas(e.target.value)} value={gas}>
-                  <b>(d) IOC Gas Pipeline:(Yes/No)</b>
+                  (d) IOC Gas Pipeline
                 </h6>
-                {/* <Form.Check
-                  value=" IOC"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group71"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value=" IOC"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group71"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                  <label for="No">No</label>
+
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.gas === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.gas === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor31.length > 0
-                          ? developerInputFiledColor31[0].color.data
-                          : developerInputCheckedFiledColor31.length > 0
-                          ? developerInputCheckedFiledColor31[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.iocGasPipeline
                     }}
                     onClick={() => {
-                      setLabelValue("(d) IOC Gas Pipeline:(Yes/No)"), setSmShow(true), console.log("modal open");
+                      setLabelValue("IOC Gas Pipeline"),
+                        setOpennedModal("iocGasPipeline")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.gas === "Y" ? "Yes" : landScheduleData?.gas === "N" ? "No" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow6} />
-                <label for="No">No</label> */}
-                {showhide6 === "Yes" && (
+                {/* <input type="radio" disabled value="Yes"  onChange1={handleChange}  onClick={handleshow6} />
+                <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                <input type="radio" disabled value="No"  onChange1={handleChange}  onClick={handleshow6} />
+                <label className="m-0 mx-2" for="No">No</label> */}
+                {landScheduleData?.gas === "Y" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        IOC Remarks
-                      </label>
-                      <input type="text" className="form-control" />
+                      <label>IOC Remarks</label>
+                      <input type="text" className="form-control" placeholder={landScheduleData?.gasRemarks} />
                     </div>
                   </div>
                 )}
               </div>
             </div>
-            <br></br>
-            <div className="row ">
-              <div className="col col-3">
+            {/* <br></br> */}
+            <div className="row mx-1">
+              <div className="col col-3 p-1">
                 <h6 onChange={(e) => setNallah(e.target.value)} value={nallah}>
-                  <b>(e)Nallah:(Yes/No)</b>{" "}
+                  (e) Nallah{" "}
                 </h6>
-                {/* <Form.Check
-                  value="Nallah"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group72"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="Nallah"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group72"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                  <label for="No">No</label>
+
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.nallah === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" onChange1={handleChange} checked={landScheduleData?.nallah === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor32.length > 0
-                          ? developerInputFiledColor32[0].color.data
-                          : developerInputCheckedFiledColor32.length > 0
-                          ? developerInputCheckedFiledColor32[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.nallah
                     }}
                     onClick={() => {
-                      setLabelValue("(e)Nallah:(Yes/No)"), setSmShow(true), console.log("modal open");
+                      setLabelValue("Nallah"),
+                        setOpennedModal("nallah")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.gas === "Y" ? "Yes" : landScheduleData?.gas === "N" ? "No" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow7} />
-                <label for="No">No</label> */}
-                {showhide7 === "Yes" && (
+
+                {landScheduleData?.gas === "Y" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        Nallah Remarks
-                      </label>
-                      <input type="text" className="form-control" />
+                      <label>Nallah Remarks</label>
+                      <input type="text" className="form-control" placeholder={landScheduleData?.nallahRemarks} />
                     </div>
                   </div>
                 )}
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6 onChange={(e) => setRoad(e.target.value)} value={road}>
-                  <b>(f)Any revenue rasta/road:(Yes/No)</b>
+                  (f) Any revenue rasta/road
                 </h6>{" "}
-                {/* <Form.Check
-                  value="revenue"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group73"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="revenue"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group73"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                  <label for="No">No</label>
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.road === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.road === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor33.length > 0
-                          ? developerInputFiledColor33[0].color.data
-                          : developerInputCheckedFiledColor33.length > 0
-                          ? developerInputCheckedFiledColor33[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.anyRevenueRasta
                     }}
                     onClick={() => {
-                      setLabelValue("(f)Any revenue rasta/road:(Yes/No)"), setSmShow(true), console.log("modal open");
+                      setLabelValue("Any revenue rasta/road"),
+                        setOpennedModal("anyRevenueRasta")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.road === "Y" ? "Yes" : landScheduleData?.road === "N" ? "No" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow8} />
-                <label for="No">No</label> */}
-                {showhide8 === "Yes" && (
+                {landScheduleData?.road === "Y" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        Width
-                      </label>
-                      <input type="text" className="form-control" />
+                      <label>Width</label>
+                      <input type="text" className="form-control" placeholder={landScheduleData?.roadWidth} />
                     </div>
                   </div>
                 )}
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6 onChange={(e) => setLand(e.target.value)} value={land}>
-                  <b>(g)Any marginal land:(Yes/No)</b>
+                  (g) Any marginal land
                 </h6>{" "}
-                {/* <Form.Check
-                  value="marginal"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group74"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="marginal"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group74"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                  <label for="No">No</label>
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.land === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.land === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor34.length > 0
-                          ? developerInputFiledColor34[0].color.data
-                          : developerInputCheckedFiledColor34.length > 0
-                          ? developerInputCheckedFiledColor34[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.anyMarginalLand
                     }}
                     onClick={() => {
-                      setLabelValue("(g)Any marginal land:(Yes/No)"), setSmShow(true), console.log("modal open");
+                      setLabelValue("Any marginal land"),
+                        setOpennedModal("anyMarginalLand")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.land === "Y" ? "Yes" : landScheduleData?.land === "N" ? "No" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow9} />
-                <label for="No">No</label> */}
-                {showhide9 === "Yes" && (
+                {landScheduleData?.land === "Y" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        Remark
-                      </label>
-                      <input type="text" className="form-control" />
+                      <label>Remark</label>
+                      <input type="text" className="form-control" placeholder={landScheduleData?.landRemark} />
                     </div>
                   </div>
                 )}
               </div>
-              <div className="col col-3">
+              <div className="col col-3 p-1">
                 <h6
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)
-"
+                  title="Whether any utility line passing through the site is incorporated/adjusted in the layout plan (Yes/No)"
                 >
-                  <b>
-                    (h)&nbsp;Utility Line &nbsp;
-                    {/* <InfoIcon style={{color:"blue"}}/>  */}
-                  </b>
+                  (h)&nbsp;Utility Line &nbsp;
                 </h6>
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                  <label for="Yes">Yes</label>&nbsp;&nbsp;
-                  <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                  <label for="No">No</label>
+
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  <input type="radio" disabled value="Yes" checked={landScheduleData?.utilityLine === "Y" ? true : false} />
+                  <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
+                  <input type="radio" disabled value="No" checked={landScheduleData?.utilityLine === "N" ? true : false} />
+                  <label className="m-0 mx-2" for="No">No</label>
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor35.length > 0
-                          ? developerInputFiledColor35[0].color.data
-                          : developerInputCheckedFiledColor35.length > 0
-                          ? developerInputCheckedFiledColor35[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.utilityLine
                     }}
                     onClick={() => {
-                      setLabelValue("Utility Line"), setSmShow(true), console.log("modal open");
+                      setLabelValue("Utility Line"),
+                        setOpennedModal("utilityLine")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData?.utilityLine === "Y" ? "Yes" : landScheduleData?.utilityLine === "N" ? "No" : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                <label for="Yes">Yes</label>&nbsp;&nbsp;
-                <input type="radio" value="No" id="No" onChange1={handleChange} name="Yes" onClick={handleshow0} />
-                <label for="No">No</label> */}
-                {showhide0 === "Yes" && (
+
+                {landScheduleData?.utilityLine === "Y" && (
                   <div className="row ">
                     <div className="col col">
-                      <label for="parentLicense" className="font-weight-bold">
-                        Width of row
-                      </label>
-                      <input type="text" className="form-control" />
+                      <label>Width of row</label>
+                      <input type="text" className="form-control" placeholder={landScheduleData?.utilityLine} />
                     </div>
                   </div>
                 )}
               </div>
             </div>
-            <hr />
-            <h5 className="text-black">
-              <b>5. Enclose the following documents as Annexures</b>&nbsp;&nbsp;
-              {/* <Form.Check
-                value="utility"
-                type="radio"
-                id="default-radio"
-                label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                name="group76"
-                inline
-              ></Form.Check>
-              <Form.Check
-                onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                value="utility"
-                type="radio"
-                id="default-radio"
-                label={<CancelIcon color="error" />}
-                name="group76"
-                inline
-              ></Form.Check> */}
-              <div style={{ display: "flex" }}>
-                <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control>
+            <hr className="my-3" />
+            <h5 className={`text-black ml-2 mb-2 ${classes.formLabel}`}>
+              5. Enclose the following documents as Annexures&nbsp;&nbsp;
+              <div className="d-flex flex-row align-items-center my-1 ">
+                <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled placeholder={landScheduleData?.documentsAsAnnexures}></Form.Control>
                 <ReportProblemIcon
                   style={{
-                    color:
-                      developerInputFiledColor36.length > 0
-                        ? developerInputFiledColor36[0].color.data
-                        : developerInputCheckedFiledColor36.length > 0
-                        ? developerInputCheckedFiledColor36[0].color.data
-                        : "#FFB602",
+                    color: fieldIconColors.documentsAsAnnexures
                   }}
                   onClick={() => {
-                    setLabelValue("5. Enclose the following documents as Annexures"), setSmShow(true), console.log("modal open");
+                    setLabelValue("Enclose the following documents as Annexures"),
+                      setOpennedModal("documentsAsAnnexures")
+                    setSmShow(true),
+                      console.log("modal open"),
+                      setFieldValue(landScheduleData !== null ? landScheduleData?.documentsAsAnnexures : null);
                   }}
                 ></ReportProblemIcon>
               </div>
             </h5>
-            <div className="row">
-              <div className="col col-3">
-                <h6>
-                  <b>Land schedule</b>
-                </h6>
-                &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="file" className="form-control" readOnly />
+            <div className="row mx-1">
+              <div className="col col-3 p-1">
+                <h6>Land schedule</h6>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor37.length > 0
-                          ? developerInputFiledColor37[0].color.data
-                          : developerInputCheckedFiledColor37.length > 0
-                          ? developerInputCheckedFiledColor37[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.landSchedule
                     }}
                     onClick={() => {
-                      setLabelValue("Land schedule"), setSmShow(true), console.log("modal open");
+                      setLabelValue("Land schedule"),
+                        setOpennedModal("landSchedule")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData !== null ? landScheduleData?.landSchedule : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
-              <div className="col col-3">
-                <h6>
-                  <b>Copy of Mutation</b>
-                </h6>
-                &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="file" className="form-control" readOnly />
+              <div className="col col-3 p-1">
+                <h6>Copy of Mutation</h6>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor38.length > 0
-                          ? developerInputFiledColor38[0].color.data
-                          : developerInputCheckedFiledColor38.length > 0
-                          ? developerInputCheckedFiledColor38[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.copyOfMutation
                     }}
                     onClick={() => {
-                      setLabelValue("Copy of Mutation"), setSmShow(true), console.log("modal open");
+                      setLabelValue("Copy of Mutation"),
+                        setOpennedModal("copyOfMutation")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData !== null ? landScheduleData?.mutation : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
-              <div className="col col-3">
-                <h6>
-                  <b>Copy of Jamabandi</b>
-                </h6>
-                &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="file" className="form-control" readOnly />
+              <div className="col col-3 p-1">
+                <h6>Copy of Jamabandi</h6>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor39.length > 0
-                          ? developerInputFiledColor39[0].color.data
-                          : developerInputCheckedFiledColor39.length > 0
-                          ? developerInputCheckedFiledColor39[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.copyOfJamabandi
                     }}
                     onClick={() => {
-                      setLabelValue("Copy of Jamabandi"), setSmShow(true), console.log("modal open");
+                      setLabelValue("Copy of Jamabandi"),
+                        setOpennedModal("copyOfJamabandi")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData !== null ? landScheduleData?.jambandhi : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
-              <div className="col col-3">
-                <h6>
-                  <b>Details of lease / patta, if any</b>
-                </h6>
-                &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="file" className="form-control" readOnly />
+              <div className="col col-3 p-1">
+                <h6>Details of lease / patta, if any</h6>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor40.length > 0
-                          ? developerInputFiledColor40[0].color.data
-                          : developerInputCheckedFiledColor40.length > 0
-                          ? developerInputCheckedFiledColor40[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.detailsOfLease
                     }}
                     onClick={() => {
-                      setLabelValue("Details of lease / patta, if any"), setSmShow(true), console.log("modal open");
+                      setLabelValue("Details of lease / patta, if any"),
+                        setOpennedModal("detailsOfLease")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData !== null ? landScheduleData?.detailsOfLease : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
             </div>
             <br></br>
-            <div className="row">
-              <div className="col col-3">
-                &nbsp;&nbsp;
-                <h6>
-                  <b>Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration </b>
-                </h6>
-                &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  <input type="file" className="form-control" readOnly />
+            <div className="row mx-1">
+              <div className="col col-3 p-1">
+                {/* &nbsp;&nbsp; */}
+                <h6>Add Sales/deed/exchange</h6>
+                {/* &nbsp;&nbsp; */}
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
+
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor41.length > 0
-                          ? developerInputFiledColor41[0].color.data
-                          : developerInputCheckedFiledColor41.length > 0
-                          ? developerInputCheckedFiledColor41[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.salesDeed
                     }}
                     onClick={() => {
-                      setLabelValue("Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration"),
-                        setSmShow(true),
-                        console.log("modal open");
+                      setLabelValue("Add Sales/deed/exchange"),
+                        setOpennedModal("salesDeed")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData !== null ? landScheduleData?.salesDeed : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
-              <div className="col col-3">
-                <h6>
-                  <b>Proposed Layout of Plan /site plan for area applied for migration.</b>
-                </h6>
-                &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="file" className="form-control" readOnly />
+              <div className="col col-3 p-1">
+                <h6>Copy of spa/GPA/board resolution</h6>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor42.length > 0
-                          ? developerInputFiledColor42[0].color.data
-                          : developerInputCheckedFiledColor42.length > 0
-                          ? developerInputCheckedFiledColor42[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.resolutionCopy
                     }}
                     onClick={() => {
-                      setLabelValue("Proposed Layout of Plan /site plan for area applied for migration."), setSmShow(true), console.log("modal open");
+                      setLabelValue("Copy of spa/GPA/board resolution"),
+                        setOpennedModal("resolutionCopy")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData !== null ? landScheduleData?.resolutionCopy : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
-              <div className="col col-3">
-                <h6>
-                  <b>Revised Land Schedule</b>
-                </h6>
-                &nbsp;&nbsp;
-                {/* <Form.Check
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CheckCircleIcon color="success"></CheckCircleIcon>}
-                  name="group75"
-                  inline
-                ></Form.Check>
-                <Form.Check
-                  onChange={(e) => setUncheckedVlue((prev) => [...prev, e.target.value])}
-                  value="utility"
-                  type="radio"
-                  id="default-radio"
-                  label={<CancelIcon color="error" />}
-                  name="group75"
-                  inline
-                ></Form.Check> */}
-                <div style={{ display: "flex" }}>
-                  {/* <Form.Control height={30} style={{ maxWidth: 200, marginRight: 5 }} readOnly></Form.Control> */}
-                  <input type="file" className="form-control" readOnly />
+              <div className="col col-3 p-1">
+                <h6>Revised Land Schedule</h6>
+                <div className="d-flex flex-row align-items-center my-1 ">
                   {<DownloadForOfflineIcon color="primary" />}
                   <ReportProblemIcon
                     style={{
-                      color:
-                        developerInputFiledColor43.length > 0
-                          ? developerInputFiledColor43[0].color.data
-                          : developerInputCheckedFiledColor43.length > 0
-                          ? developerInputCheckedFiledColor43[0].color.data
-                          : "#FFB602",
+                      color: fieldIconColors.revisedLandSchedule
                     }}
                     onClick={() => {
-                      setLabelValue("Revised Land Schedule"), setSmShow(true), console.log("modal open");
+                      setLabelValue("Revised Land Schedule"),
+                        setOpennedModal("revisedLandSchedule")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData !== null ? landScheduleData?.typeLand : null);
                     }}
                   ></ReportProblemIcon>
                 </div>
-                {/* <input type="file" className="form-control" readOnly />
-                {<DownloadForOfflineIcon color="primary" />} */}
               </div>
+
+              <div className="col col-3 p-1">
+                <h6>Copy of Shajra Plan</h6>
+                <div className="d-flex flex-row align-items-center my-1 ">
+                  {<DownloadForOfflineIcon color="primary" />}
+                  <ReportProblemIcon
+                    style={{
+                      color: fieldIconColors.shajraPlanCopy
+                    }}
+                    onClick={() => {
+                      setLabelValue("Copy of Shajra Plan"),
+                        setOpennedModal("shajraPlanCopy")
+                      setSmShow(true),
+                        console.log("modal open"),
+                        setFieldValue(landScheduleData !== null ? landScheduleData?.shajraPlanCopy : null);
+                    }}
+                  ></ReportProblemIcon>
+                </div>
+              </div>
+
             </div>
             <br></br>
+            {/* <div style={{ position: "relative", marginBottom: 40 }}>
+              <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
+            </div> */}
           </Form.Group>
-          <div style={{ position: "relative", marginBottom: 40 }}>
-            <Button onClick={() => props.passUncheckedList({ data: uncheckedValue })}>Submit</Button>
-          </div>
-          <hr></hr>
-          {/* </Card> */}
         </div>
       </Collapse>
     </Form>

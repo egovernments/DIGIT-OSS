@@ -5,11 +5,11 @@ import Developerinfo from "./Developerinfo";
 import AppliedLandinfo from "./AppliedLand";
 import Feeandcharges from "./Feeandcharges";
 // import JeLandinfo from "./Scrutiny LOI/JE/JE";
-import DisApprovalList from "./DisApprovalList";
+// import DisApprovalList from "./DisApprovalList";
 // import HistoryList from "./History";
 import ScrutinyDevelopment from "./ScrutinyDevelopment/ScrutinyDevelopment";
 import { Button, Row, Col } from "react-bootstrap";
-import LicenseDetailsScrutiny from "../ScrutinyBasic/Developer/LicenseDetailsScrutiny";
+// import LicenseDetailsScrutiny from "../ScrutinyBasic/Developer/LicenseDetailsScrutiny";
 import { useForkRef } from "@mui/material";
 import axios from "axios";
 // import AddIcon from "@mui/icons-material/Add";
@@ -20,7 +20,7 @@ const ScrutitnyForms = () => {
   const developerInfoRef = useRef();
   const appliedInfoRef = useRef();
   const feeandchargesInfoRef = useRef();
-  const licenseDetailsInfoRef = useRef();
+  // const licenseDetailsInfoRef = useRef();
   const [purpose, setPurpose] = useState("");
   const jeLandInfoRef = useRef();
 
@@ -33,8 +33,8 @@ const ScrutitnyForms = () => {
   const [displayGeneral, setDisplayGeneralInfo] = useState([]);
   const [displayAppliedLand, setDisplayAppliedLandInfo] = useState([]);
   const [displayFeeandCharges, setDisplayFeeandChargesInfo] = useState([]);
-  const [displayLicenseDetails, setDisplayLicenseDetailsInfo] = useState([]);
-  const [displayLicenseDetailsCheckedlist, setDisplayCheckedLicenseDetailsList] = useState([]);
+  // const [displayLicenseDetails, setDisplayLicenseDetailsInfo] = useState([]);
+  // const [displayLicenseDetailsCheckedlist, setDisplayCheckedLicenseDetailsList] = useState([]);
   const [displayJeLand, setDisplayJeLand] = useState([]);
   const [ActiveKey, setActiveKey] = useState(1);
   const [defaultHeightPersonal, setDefaultHeightPersonal] = useState(0);
@@ -45,7 +45,13 @@ const ScrutitnyForms = () => {
   const [open, setOpen] = useState(false);
   const [apiResppnse, setApiResponse] = useState({});
   const [remarksResponse, setRemarksResponse] = useState({});
+  const [sumrol, setSumrol] = useState({});
   const [uncheckedValue, setUncheckedVlue] = useState([]);
+  const [remarksChanges, setRemarksChanges] = useState("");
+  const [disapprovalData, setDisapprovalData] = useState({});
+  const [applictaionNo, setApplicationNO] = useState(null);
+  const [iconStates,setIconState]= useState(null)
+  const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
 
   const getUncheckedPersonalinfos = (data) => {
     setDisplayPersonalInfo(data.data);
@@ -56,14 +62,14 @@ const ScrutitnyForms = () => {
     console.log("checked parent personal info data", data);
   };
 
-  const getUncheckedLicenseDetailsInfo = (data) => {
-    setDisplayLicenseDetailsInfo(data.data);
-    console.log("data parent label", data);
-  };
-  const getCheckedLicenseDetailsInfoValue = (data) => {
-    setDisplayCheckedLicenseDetailsList(data.data);
-    console.log("checked parent personal info data", data);
-  };
+  // const getUncheckedLicenseDetailsInfo = (data) => {
+  //   setDisplayLicenseDetailsInfo(data.data);
+  //   console.log("data parent label", data);
+  // };
+  // const getCheckedLicenseDetailsInfoValue = (data) => {
+  //   setDisplayCheckedLicenseDetailsList(data.data);
+  //   console.log("checked parent personal info data", data);
+  // };
 
   const getUncheckedGeneralinfos = (data) => {
     setPurpose(data.purpose);
@@ -99,12 +105,65 @@ const ScrutitnyForms = () => {
   };
   const handleGetInputFieldsValues = async () => {
     try {
-      const Resp = await axios.get("/land-services/new/licenses/_get?id=1099696").then((response) => {
+      const Resp = await axios.get("/tl-services/new/licenses/_get?id=225").then((response) => {
         return response.data;
       });
 
       console.log("Response From API", Resp);
       setApiResponse(Resp);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const handleGetFiledsStatesById=async()=>{
+      const dataToPass={
+        "requestInfo": {
+            "api_id": "1",
+            "ver": "1",
+            "ts": null,
+            "action": "create",
+            "did": "",
+            "key": "",
+            "msg_id": "",
+            "requester_id": "",
+            "auth_token": null
+        }
+    };
+    try {
+      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=123&userId=0", dataToPass).then((response) => {
+        return response.data;
+      });
+
+      console.log("Response From API", Resp);
+      setIconState(Resp);
+      // setApiResponse(Resp);
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+  const handleGetDisapprovalList = async () => {
+    const dataToPass = {
+      requestInfo: {
+        api_id: "1",
+        ver: "1",
+        ts: null,
+        action: "create",
+        did: "",
+        key: "",
+        msg_id: "",
+        requester_id: "",
+        auth_token: null,
+      },
+    };
+    try {
+      const Resp = await axios.post("/land-services/egscrutiny/_searchbylogin?applicationId=123&userid=123", dataToPass).then((response) => {
+        return response.data;
+      });
+
+      console.log("Response From API", Resp);
+      setDisapprovalData(Resp);
+      // setApiResponse(Resp);
     } catch (error) {
       console.log(error);
     }
@@ -131,7 +190,7 @@ const ScrutitnyForms = () => {
       },
     };
     try {
-      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=123", dataToSend).then((response) => {
+      const Resp = await axios.post("/land-services/egscrutiny/_search?applicationNumber=123&userId=0", dataToSend).then((response) => {
         return response.data;
       });
 
@@ -143,12 +202,24 @@ const ScrutitnyForms = () => {
   };
 
   useEffect(() => {
+    handleGetDisapprovalList();
+  }, [remarksChanges]);
+
+  useEffect(() => {
     handleGetInputFieldsValues();
   }, []);
   useEffect(() => {
     handleGetRemarkssValues();
   }, []);
 
+  useEffect(()=>{
+    handleGetFiledsStatesById();
+  },[]);
+
+  const curentDataPersonal = (data) => {
+    setRemarksChanges(data.data);
+  };
+  
   console.log(uncheckedValue);
   console.log("React", purpose);
 
@@ -208,194 +279,87 @@ const ScrutitnyForms = () => {
     }
   };
   console.log("scrutiny form api get", apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantInfo : apiResppnse);
+  console.log(
+    "scrutiny form api get1",
+    apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantPurpose : apiResppnse
+  );
+  // console.log("scrutiny form api get2", apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].LandSchedule : apiResppnse);
   console.log("remarks api", remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null);
+
+  console.log("remakes data parsnalinfo", remarksChanges);
+
+
+
+
+
   return (
     <div>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
-        {/* <div style={{ position: "relative", minWidth: "10%", height: 380, padding: 10, display: "inline-grid" }}>
-          <Button onClick={handleScrolltoPersonal} style={{ height: 50, marginBottom: 10 }}>
-            Step 1
-          </Button>
-          <Button onClick={handleScrolltOGeneral} style={{ height: 50, marginBottom: 10 }}>
-            Step 2
-          </Button>
-          <Button onClick={handleScrolltoDeveloper} style={{ height: 50, marginBottom: 10 }}>
-            Step 3
-          </Button>
-          <Button onClick={handleScrolltoAppliedLandInfo} style={{ height: 50, marginBottom: 10 }}>
-            Step 4
-          </Button>
-          <Button onClick={handleScrolltoFeeandChargesInfo} style={{ height: 50, marginBottom: 10 }}>
-            Step 5
-          </Button>
-        </div> */}
-
-        {/* {ActiveKey == 1 ? (
-          <Personalinfo personalInfoRef={ApllicantFormHandler}></Personalinfo>
-        ) : ActiveKey == 2 ? (
-          <Genarelinfo generalInfoRef={PuposeformHandler}></Genarelinfo>
-        ) : ActiveKey == 3 ? (
-          <Developerinfo developerInfoRef={LandFormHandler}></Developerinfo>
-        ) : ActiveKey == 4 ? (
-          <AppliedLandinfo appliedLandInfoRef={AppliedDetailFormHandler}></AppliedLandinfo>
-        ) : (
-          <div></div>
-        )} */}
-        <div
-        // style={{
-        //   position: "relative",
-        //   width: "100%",
-        //   padding: 5,
-        //   height: "100%",
-        //   overflowY: "auto",
-        //   borderStyle: "solid",
-        //   borderWidth: 1,
-        //   borderColor: "black",
-        // }}
-        >
+        <div>
           <div>
-            {/* <Col class="col-12">
-              <Button
-                className="d-block"
-                onClick={handleScrolltoPersonal}
-                style={{
-                  background: "#007bff",
-                  width: "100%",
-                  textAlign: "left",
-                  padding: "0.35rem 0.5rem",
-                  borderRadius: "0.2rem",
-                  color: "#fff",
-                }}
-              >
-                Applicant info
-                <AddIcon style={{ textAlign: "rightend", width: "70em" }}></AddIcon>
-              </Button>
-            </Col> */}
-
             <Personalinfo
               personalInfoRef={personalInfoRef}
               passUncheckedList={getUncheckedPersonalinfos}
               passCheckedList={getCheckedPersonalInfoValue}
-              // heightPersonal={defaultHeightPersonal}
               onClick={() => setOpen(!open)}
               ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantInfo : null}
+              showTable={curentDataPersonal}
+              dataForIcons={iconStates}
             ></Personalinfo>
           </div>
           <div>
-            {/* <Col class="col-12">
-              <Button
-                onClick={handleScrolltOGeneral}
-                style={{
-                  background: "#007bff",
-                  width: "100%",
-                  textAlign: "left",
-                  padding: "0.35rem 0.5rem",
-                  borderRadius: "0.2rem",
-                  color: "#fff",
-                }}
-              >
-                Applicant Puropse
-                <AddIcon style={{ textAlign: "rightend", width: "68em" }}></AddIcon>
-              </Button> */}
             <Genarelinfo
               generalInfoRef={generalInfoRef}
               passUncheckedList={getUncheckedGeneralinfos}
               passCheckedList={getCheckedGeneralInfoValue}
-              // heightGen={defaultHeightGen}
               onClick={() => setOpen(!open)}
+              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantPurpose : null}
+              dataForIcons={iconStates}
             ></Genarelinfo>
             {/* </Col> */}
           </div>
 
           <div>
-            {/* <Col class="col-12">
-              <Button
-                onClick={handleScrolltoDeveloper}
-                style={{
-                  background: "#007bff",
-                  width: "100%",
-                  textAlign: "left",
-                  padding: "0.35rem 0.5rem",
-                  borderRadius: "0.2rem",
-                  color: "#fff",
-                }}
-              >
-                Details of Applied Land
-                <AddIcon style={{ textAlign: "rightend", width: "66em" }}></AddIcon>
-              </Button> */}
             <Developerinfo
               developerInfoRef={developerInfoRef}
               passUncheckedList={getUncheckedPurposeinfos}
-              // heightDevelper={defaultheightDevelper}
               passCheckedList={getCheckedPurposeInfoValue}
               onClick={() => setOpen(!open)}
+              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].LandSchedule
+                : null}
+              dataForIcons={iconStates}
             ></Developerinfo>
             {/* </Col> */}
           </div>
           <div>
-            {/* <Col class="col-12">
-              <Button
-                onClick={handleScrolltoAppliedLandInfo}
-                style={{
-                  background: "#007bff",
-                  width: "100%",
-                  textAlign: "left",
-                  padding: "0.35rem 0.5rem",
-                  borderRadius: "0.2rem",
-                  color: "#fff",
-                }}
-              >
-                Geographical Specifications
-                <AddIcon style={{ textAlign: "rightend", width: "64em" }}></AddIcon>
-              </Button> */}
             <AppliedLandinfo
               appliedInfoRef={appliedInfoRef}
-              purpose={purpose}
+              purpose={apiResppnse.newServiceInfoData?apiResppnse.newServiceInfoData[0]?.ApplicantPurpose?.purpose:null}
               passUncheckedList={getUncheckedAppliedLandInfo}
               passCheckedList={getCheckedAppliedInfoValue}
+              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].DetailsofAppliedLand
+                : null}
               heightApplied={defaultheightApplied}
+              dataForIcons={iconStates}
             ></AppliedLandinfo>
             {/* </Col> */}
           </div>
           <div>
-            {/* <Col class="col-12">
-              <Button
-                onClick={handleScrolltoFeeandChargesInfo}
-                style={{
-                  background: "#007bff",
-                  width: "100%",
-                  textAlign: "left",
-                  padding: "0.35rem 0.5rem",
-                  borderRadius: "0.2rem",
-                  color: "#fff",
-                }}
-              >
-                Fee and charges
-                <AddIcon style={{ textAlign: "rightend", width: "70em" }}></AddIcon>
-              </Button> */}
             <Feeandcharges
               feeandchargesInfoRef={feeandchargesInfoRef}
               passUncheckedList={getUncheckedFeeandChargesInfo}
               heightFee={defaultheightFee}
+              ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].FeesAndCharges
+                : null}
             ></Feeandcharges>
             {/* </Col> */}
-          </div>
-          <div>
-            <LicenseDetailsScrutiny
-              licenseDetailsInfoRef={licenseDetailsInfoRef}
-              purpose={purpose}
-              passUncheckedList={getUncheckedLicenseDetailsInfo}
-              passCheckedList={getCheckedLicenseDetailsInfoValue}
-              // heightApplied={defaultheightApplied}
-              onClick={() => setOpen(!open)}
-            ></LicenseDetailsScrutiny>
           </div>
 
           {/* <JeLandinfo jeLandInfoRef={jeLandInfoRef} passUncheckedList={getUncheckedJeLandInfo}></JeLandinfo> */}
         </div>
       </div>
       <div style={{ position: "relative", width: "100%", display: "flex", marginBottom: 2 }}>
-        <DisApprovalList
+        {/* <DisApprovalList
           disapprovallistDeveloper={displayPurpose}
           disapprovallistGeneral={displayGeneral}
           disapprovallistAppliedLand={displayAppliedLand}
@@ -405,11 +369,16 @@ const ScrutitnyForms = () => {
           disapprovalCheckedGeneral={displayGeneralCHeckedList}
           disapprovalCheckedPurpose={displayPurposeCHeckedList}
           DisApprovalListFeeandCharges={displayFeeandCharges}
-        ></DisApprovalList>
+          dataList={disapprovalData}
+        ></DisApprovalList> */}
         {/* <HistoryList></HistoryList> */}
       </div>
-      <div style={{ position: "relative", width: "100%", height: "50%", display: "flex" }}>
-        <ScrutinyDevelopment remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}></ScrutinyDevelopment>
+
+      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex" }}>
+        <ScrutinyDevelopment
+          remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}
+          // remarksum={sumrol.egScrutiny !== undefined ? sumrol.egScrutiny : null}
+        ></ScrutinyDevelopment>
       </div>
     </div>
   );

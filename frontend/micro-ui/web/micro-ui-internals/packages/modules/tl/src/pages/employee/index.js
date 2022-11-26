@@ -9,6 +9,7 @@ import Inbox from "./Inbox";
 import ApplicationDetails from "./ApplicationDetails";
 //import ReNewApplication from "./ReNewApplication";
 import ScrutinyFormcontainer from "../employee/ScrutinyContainer/ScrutinyFormContainer";
+import Loi from "../employee/ScrutinyContainer/Loi";
 const TLBreadCrumb = ({ location }) => {
   const { t } = useTranslation();
   const isSearch = location?.pathname?.includes("search");
@@ -195,6 +196,7 @@ const EmployeeApp = ({ path, url, userType }) => {
           <PrivateRoute path={`${path}/response`} component={(props) => <Response {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/search/:variant`} component={(props) => <Search {...props} parentRoute={path} />} />
           <PrivateRoute path={`${path}/scrutiny`} component={ScrutinyFormcontainer} />
+          <PrivateRoute path={`${path}/Loi`} component={Loi} />
         </div>
       </React.Fragment>
     </Switch>
