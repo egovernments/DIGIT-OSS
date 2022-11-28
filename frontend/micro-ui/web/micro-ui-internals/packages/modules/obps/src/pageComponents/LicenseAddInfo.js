@@ -997,7 +997,7 @@ const onSkip = () => onSelect();
                       <form className="text1" id="myForm">
                         <Row>
                           <Col md={3} xxl lg="4">
-                            <label htmlFor="name" className="text">Name *</label>
+                            <label htmlFor="name" className="text">Name <span className="text-danger font-weight-bold">*</span></label>
                             <TextInput
                               type="text"
                               isMandatory={false}
@@ -1014,7 +1014,7 @@ const onSkip = () => onSelect();
                             />
                           </Col>
                           <Col md={3} xxl lg="4">
-                            <label htmlFor="name" className="text">	Designition *</label>
+                            <label htmlFor="name" className="text">	Designition <span className="text-danger font-weight-bold">*</span></label>
                             <TextInput
                               type="text"
                               isMandatory={false}
@@ -1023,7 +1023,7 @@ const onSkip = () => onSelect();
                               class="employee-card-input"
                               {...(validation = {
                                 isRequired: true,
-                                pattern: "^[a-zA-Z]*$",
+                                pattern: "^[a-z A-Z]*$",
                                 type: "text",
                                 title: "Please Enter Designition"
                               })}
@@ -1031,7 +1031,7 @@ const onSkip = () => onSelect();
                           </Col>
 
                           <Col md={3} xxl lg="4">
-                            <label htmlFor="name" className="text">Percentage *</label>
+                            <label htmlFor="name" className="text">Percentage "%" <span className="text-danger font-weight-bold">*</span></label>
                             <TextInput
                               type="flot"
                               isMandatory={false}
@@ -1040,8 +1040,6 @@ const onSkip = () => onSelect();
                               class="employee-card-input"
                               {...(validation = {
                                 isRequired: true,
-                                pattern: "^[0-9]*$",
-                                type: "text",
                                 title: "Please Enter Percentage"
                               })}
                             />
@@ -1070,7 +1068,7 @@ const onSkip = () => onSelect();
                       <Button variant="secondary" onClick={handleCloseStakeholder}>
                         Close
                       </Button>
-                      <Button variant="primary" onClick={handleArrayValues}>
+                      <Button variant="primary" disabled={!modalPercentage?.match(Digit.Utils.getPattern('Percentage'))} onClick={handleArrayValues}>
                         Save Changes
                       </Button>
                     </Modal.Footer>
