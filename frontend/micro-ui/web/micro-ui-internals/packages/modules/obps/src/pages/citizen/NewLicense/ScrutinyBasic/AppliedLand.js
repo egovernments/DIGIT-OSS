@@ -61,6 +61,7 @@ const AppliedLandinfo = (props) => {
   const [modaldData, setmodaldData] = useState({ label: "", Remarks: "" });
   const [isyesOrNochecked, setYesorNochecked] = useState(true);
 
+  const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
 
 
   const handleYesOrNochecked = (data) => {
@@ -332,6 +333,26 @@ const AppliedLandinfo = (props) => {
   };
 
 
+  
+  const getDocShareholding = async () => {
+    // if ((Documents?.uploadPdf !== null || Documents?.uploadPdf !== undefined) && (uploadPdf!==null || uploadPdf!=="")) {
+        
+        try {
+            const response = await axios.get(`/filestore/v1/files/url?tenantId=hr&fileStoreIds=${DetailsofAppliedLand?.DetailsAppliedLand?.democraticPlan}`, {
+
+            });
+            const FILDATA = response.data?.fileStoreIds[0]?.url;
+            setDocShareHoldingUrl(FILDATA)
+        } catch (error) {
+            console.log(error.message);
+        }
+    // }
+  }
+
+  useEffect(() => {
+    getDocShareholding();
+  }, [DetailsofAppliedLand?.DetailsAppliedLand?.democraticPlan]);
+  
 
   return (
     <Form
@@ -512,10 +533,10 @@ const AppliedLandinfo = (props) => {
                   2.Details of Plots
                   <div className="ml-3 d-flex flex-row align-items-center">
                     <input type="radio" id="Yes" value="1" name="Yes" disabled checked={DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "regular" ? true : false} />
-                    <input type="radio"  value="1"  disabled checked={appliedLandData?.detailsOfPlots === "1" ? true : false} />
+                    <input type="radio"  value="1"  disabled checked={DetailsofAppliedLand?.detailsOfPlots === "1" ? true : false} />
                     <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="gen">Regular</label>&nbsp;&nbsp;
                     <input type="radio" id="Yes" value="2" name="Yes" checked={DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "Irregular" ? true : false} disabled />
-                    <input type="radio"  value="2"  checked={appliedLandData?.detailsOfPlots === "2" ? true : false} disabled />
+                    <input type="radio"  value="2"  checked={DetailsofAppliedLand?.detailsOfPlots === "2" ? true : false} disabled />
                     <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="npnl">Irregular</label>
                   </div>
                   <div style={{ margin: 5 }}>
@@ -1115,18 +1136,28 @@ const AppliedLandinfo = (props) => {
                     </div>
                   </div>
                 )}
+                	 <div>
+                  <DDJAYForm displayDdjay={Purpose === "DDJAY" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandDdjay} dataForIcons={dataIcons}></DDJAYForm>
+                </div>
                 <div>
+                  <ResidentialPlottedForm displayResidential={Purpose === "Residential Plotted" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandResidential} dataForIcons={dataIcons} ></ResidentialPlottedForm>
+                </div>
+                <div>
+                  <IndustrialPlottedForm displayIndustrial={Purpose === "Industrial Plotted" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandIndustrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
+                </div>
+                
+                {/* <div>
                   <DDJAYForm displayDdjay={Purpose === "08" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay}></DDJAYForm>
-                  <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={appliedLandData?.ddjay} dataForIcons={dataIcons}></DDJAYForm>
+                  <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay} dataForIcons={dataIcons}></DDJAYForm>
                 </div>
                 <div>
                   <ResidentialPlottedForm displayResidential={Purpose === "03" ? "block" : "none"} data={DetailsofAppliedLand?.residential} ></ResidentialPlottedForm>
-                  <ResidentialPlottedForm displayResidential={Purpose !== "Residential Plotted" ? "block" : "none"} data={appliedLandData?.residential} dataForIcons={dataIcons} ></ResidentialPlottedForm>
+                  <ResidentialPlottedForm displayResidential={Purpose !== "Residential Plotted" ? "block" : "none"} data={DetailsofAppliedLand?.residential} dataForIcons={dataIcons} ></ResidentialPlottedForm>
                 </div>
                 <div>
                   <IndustrialPlottedForm displayIndustrial={Purpose === "06" ? "block" : "none"} data={DetailsofAppliedLand?.industrial}></IndustrialPlottedForm>
-                  <IndustrialPlottedForm displayIndustrial={Purpose !== "Industrial Plotted" ? "block" : "none"} data={appliedLandData?.industrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
-                </div>
+                  <IndustrialPlottedForm displayIndustrial={Purpose !== "Industrial Plotted" ? "block" : "none"} data={DetailsofAppliedLand?.industrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
+                </div> */}
                   {/* <div>
                   <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay} dataForIcons={dataIcons}></DDJAYForm>
                 </div>
