@@ -6,6 +6,7 @@ import ApplicationTable from "./ApplicationTable";
 import SearchApplication from "./search";
 import { Link } from "react-router-dom";
 import { convertEpochToDateDMY } from "../../utils";
+import Records from "../../pages/employee/ApplicationRecord/Record";
 // import { getActionButton } from "../../utils";
 
 const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSearchFieldsBackToOriginalState, setSetSearchFieldsBackToOriginalState, ...props }) => {
@@ -186,6 +187,7 @@ const DesktopInbox = ({ tableConfig, filterComponent,columns, isLoading, setSear
           {result}
           {/* <p></p> */}
           <Link to={"/digit-ui/employee/tl/scrutiny"}>APPLICATION HERE</Link>
+          <Records></Records>
         </div>
       </div>
     </div>

@@ -239,7 +239,9 @@ const Genarelinfo = (props) => {
     state: Colors.info,
     tehsil: Colors.info,
     revenue: Colors.info,
+    rectangle: Colors.info,
     rectangleNo: Colors.info,
+    rectaNo: Colors.info,
     killa: Colors.info,
     landOwner: Colors.info,
     consolidationType: Colors.info,
@@ -546,7 +548,14 @@ const Genarelinfo = (props) => {
                       Revenue estate    
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
+                      Hadbast Number  
+                    </th>
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Rectangle No.  
+                    </th>
+                    
+                    <th class="fw-normal pb-0 border-bottom-0 align-top">
+                       Enter Khewat
                     </th>
                     <th class="fw-normal pb-0 border-bottom-0 align-top">
                       Land owner 
@@ -639,6 +648,20 @@ const Genarelinfo = (props) => {
                     <th class="fw-normal py-0 border-top-0">
                       <ReportProblemIcon
                         style={{
+                          color: fieldIconColors.rectangle
+                        }}
+                        onClick={() => {
+                          setLabelValue("Rectangle No."),
+                          setOpennedModal("rectangeNo")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.rectangle : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
                           color: fieldIconColors.rectangleNo
                         }}
                         onClick={() => {
@@ -647,6 +670,20 @@ const Genarelinfo = (props) => {
                           setSmShow(true),
                           console.log("modal open"),
                           setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.rectangleNo : null);
+                        }}
+                      ></ReportProblemIcon>
+                    </th>
+                    <th class="fw-normal py-0 border-top-0">
+                      <ReportProblemIcon
+                        style={{
+                          color: fieldIconColors.rectaNo
+                        }}
+                        onClick={() => {
+                          setLabelValue("Rectangle No."),
+                          setOpennedModal("rectangeNo")
+                          setSmShow(true),
+                          console.log("modal open"),
+                          setFieldValue(applicantInfoPersonal?.AppliedLandDetails[0] !== null ? applicantInfoPersonal?.AppliedLandDetails[0]?.rectaNo : null);
                         }}
                       ></ReportProblemIcon>
                     </th>
@@ -900,7 +937,13 @@ const Genarelinfo = (props) => {
                       <input type="text" className="form-control" placeholder={item?.revenueEstate} disabled />
                     </td>
                     <td>
+                      <input type="text" className="form-control" placeholder={item?.rectangle} disabled />
+                    </td>
+                    <td>
                       <input type="text" className="form-control" placeholder={item?.rectangleNo} disabled />
+                    </td>
+                    <td>
+                      <input type="text" className="form-control" placeholder={item?.rectaNo} disabled />
                     </td>
                     <td class="text-center">
                       <input type="text" className="form-control" placeholder={item?.landOwner} disabled />
