@@ -15,8 +15,6 @@ const ApllicantFormStep1 = (props) => {
   // const [getAppliantInfoData, setAppliantInfoData] = useState(null);
   const [applicantId, setApplicantId] = useState("");
 
-  console.log("userInfo===", userInfo);
-
   const {
     register,
     handleSubmit,
@@ -24,6 +22,7 @@ const ApllicantFormStep1 = (props) => {
     control,
     setValue,
     getValues,
+    trigger,
   } = useForm({
     mode: "onChange",
     reValidateMode: "onChange",
@@ -35,7 +34,7 @@ const ApllicantFormStep1 = (props) => {
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "ApplicantInfo",
-      ApplicationStatus: "INITIATE",
+      ApplicationStatus: "DRAFT",
       id: applicantId,
       createdBy: userInfo?.id,
       updatedBy: userInfo?.id,
@@ -60,11 +59,20 @@ const ApllicantFormStep1 = (props) => {
     };
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      props.Step1Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.id?.toString(), userInfo);
+      const licData = Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0];
+      props.Step1Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.id?.toString(), userInfo, licData);
     } catch (error) {
-      console.log(error.message);
+      return error;
     }
   };
+
+  useEffect(() => {
+    console.log("props?.getLicData?.ApplicantInfo", props?.getLicData?.ApplicantInfo);
+    if (props?.getLicData?.ApplicantInfo) {
+      setValue("notSigned", props?.getLicData?.ApplicantInfo?.notSigned);
+      setValue("LC", props?.getLicData?.ApplicantInfo?.LC);
+    }
+  }, [props?.getLicData]);
 
   const getUserInfo = async () => {
     const uuid = userInfo?.uuid;
@@ -72,7 +80,6 @@ const ApllicantFormStep1 = (props) => {
       try {
         const usersResponse = await Digit.UserService.userSearch(tenant, { uuid: [uuid] }, {});
         const userData = usersResponse?.user[0];
-        console.log(usersResponse, "usersResponse?.user");
         setValue("authorized", userData?.name);
         getDeveloperDataLabel(userData?.parentId);
       } catch (error) {
@@ -84,10 +91,9 @@ const ApllicantFormStep1 = (props) => {
   const getDeveloperDataLabel = async (id) => {
     try {
       const Resp = await axios.get(`http://103.166.62.118:8443/user/developer/_getDeveloperById?id=${id}&isAllData=false`);
-      console.log("Resp.data", Resp?.data);
       setDeveloperDataLabel(Resp?.data?.devDetail?.[0]);
     } catch (error) {
-      console.log(error.message);
+      return error;
     }
   };
 
@@ -120,15 +126,13 @@ const ApllicantFormStep1 = (props) => {
   }, [developerDataLabel]);
 
   const getApplicantUserData = async (id) => {
-    console.log("here");
     try {
       const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
       const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantInfo;
-      console.log(Resp?.data?.newServiceInfoData[0]?.ApplicantInfo);
       setValue("notSigned", userData?.notSigned);
       setValue("LC", userData?.LC);
     } catch (error) {
-      console.log(error.message);
+      return error;
     }
   };
   useEffect(() => {

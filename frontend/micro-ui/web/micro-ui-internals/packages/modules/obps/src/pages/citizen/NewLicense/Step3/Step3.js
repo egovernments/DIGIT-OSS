@@ -103,7 +103,7 @@ const LandScheduleForm = (props) => {
 
     const postDistrict = {
       pageName: "LandSchedule",
-      ApplicationStatus: "INITIATE",
+      ApplicationStatus: "DRAFT",
       id: props.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,

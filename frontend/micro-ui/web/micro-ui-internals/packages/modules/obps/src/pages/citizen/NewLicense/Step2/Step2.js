@@ -12,8 +12,6 @@ import ReactMultiSelect from "../../../../../../../react-components/src/atoms/Re
 import Spinner from "../../../../components/Loader";
 
 const ApllicantPuropseForm = (props) => {
-  console.log("props", props);
-
   const resetFields = {
     tehsil: "",
     revenueEstate: "",
@@ -99,6 +97,7 @@ const ApllicantPuropseForm = (props) => {
       key: "landOwner",
       title: "Name of Land Owner",
       dataIndex: "landOwner",
+      render: (data) => data?.split(" ")?.slice(0, 2)?.join(" "),
     },
     {
       key: "agreementIrrevocialble",
@@ -163,7 +162,7 @@ const ApllicantPuropseForm = (props) => {
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
-  const [districtDataLbels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
+  const [districtDataLabels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
   const [tehsilDataLabels, setTehsilDataLabels] = useState({ data: [], isLoading: true });
   const [revenueDataLabels, setRevenueDataLabels] = useState({ data: [], isLoading: true });
   const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
@@ -237,7 +236,7 @@ const ApllicantPuropseForm = (props) => {
       });
       setDistrictDataLabels({ data: distData, isLoading: false });
     } catch (error) {
-      console.log(error?.message);
+      return error;
     }
   };
 
@@ -249,20 +248,19 @@ const ApllicantPuropseForm = (props) => {
       });
       setTehsilDataLabels({ data: tehsilData, isLoading: false });
     } catch (error) {
-      console.log(error?.message);
+      return error;
     }
   };
 
   const getRevenuStateData = async (code) => {
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
-      console.log("resp=====", Resp?.data);
       const revenData = Resp?.data?.map((el) => {
         return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
       });
       setRevenueDataLabels({ data: revenData, isLoading: false });
     } catch (error) {
-      console.log(error?.message);
+      return error;
     }
   };
 
@@ -298,10 +296,9 @@ const ApllicantPuropseForm = (props) => {
         datapost,
         {}
       );
-      // console.log("Resp=====", Resp?.data?.[0]?.name);
       setValue("landOwner", Resp?.data?.[0]?.name);
     } catch (error) {
-      console.log(error?.message);
+      return error;
     }
   };
 
@@ -370,7 +367,7 @@ const ApllicantPuropseForm = (props) => {
     else {
       const postDistrict = {
         pageName: "ApplicantPurpose",
-        ApplicationStatus: "INITIATE",
+        ApplicationStatus: "DRAFT",
         id: props.getId,
         createdBy: props?.userData?.id,
         updatedBy: props?.userData?.id,
@@ -396,21 +393,33 @@ const ApllicantPuropseForm = (props) => {
       setLoader(true);
       try {
         const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-        console.log(Resp?.data);
         setLoader(false);
-        props.Step2Continue();
+        props.Step2Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
       } catch (error) {
         setLoader(false);
-        console.log(error.message);
+        return error;
       }
     }
   };
 
+  useEffect(() => {
+    console.log("props?.getLicData?.ApplicantInfo", props?.getLicData?.ApplicantPurpose);
+    if (props?.getLicData?.ApplicantPurpose) {
+      const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
+      const potientialData = potentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
+      const districtData = districtDataLabels?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.district);
+      setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
+      setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+      setValue("district", { label: districtData?.[0]?.label, value: districtData?.[0]?.value });
+      // setValue("LC", props?.getLicData?.ApplicantInfo?.LC);
+    }
+  }, [props?.getLicData, purposeOptions, potentialOptons, districtDataLabels]);
+
   const handleChangePurpose = (data) => {
-    console.log("data", data);
     const purposeSelected = data?.value;
     window?.localStorage.setItem("purpose", purposeSelected);
   };
+
   const handleChangePotential = (data) => {
     const potentialSelected = data?.label;
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
@@ -429,7 +438,7 @@ const ApllicantPuropseForm = (props) => {
       setLoader(false);
     } catch (error) {
       setLoader(false);
-      console.log(error.message);
+      return error;
     }
   };
 
@@ -508,11 +517,10 @@ const ApllicantPuropseForm = (props) => {
                     control={control}
                     name="district"
                     placeholder="District"
-                    data={districtDataLbels?.data}
+                    data={districtDataLabels?.data}
                     labels="District"
-                    loading={districtDataLbels?.isLoading}
+                    loading={districtDataLabels?.isLoading}
                     onChange={(e) => {
-                      console.log("e===", e);
                       getTehslidata(e.value);
                       setDistrict(e.value);
                     }}
@@ -568,7 +576,10 @@ const ApllicantPuropseForm = (props) => {
               <br></br>
 
               <div className="applt" style={{ overflow: "auto" }}>
-                <WorkingTable columns={columns} data={modalData} />
+                <WorkingTable
+                  columns={columns}
+                  data={props?.getLicData?.ApplicantPurpose?.AppliedLandDetails ? props?.getLicData?.ApplicantPurpose?.AppliedLandDetails : modalData}
+                />
               </div>
             </Form.Group>
 
@@ -644,10 +655,7 @@ const ApllicantPuropseForm = (props) => {
                   data={revenueDataLabels?.data}
                   labels="Revenue Estate"
                   loading={revenueDataLabels?.isLoading}
-                  onChange={(e) => {
-                    console.log("e", e);
-                    getMustilData(e.code);
-                  }}
+                  onChange={(e) => getMustilData(e.code)}
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
