@@ -268,8 +268,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   function selectCity(e) {
     setCity(e.target.value);
   }
-  function selectPincode(e) {
-    setPincode(e.target.value);
+  function selectPincode(value) {
+    setPincode(value);
   }
   function selectVillage(e) {
     setVillage(e.target.value);
@@ -333,8 +333,8 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
   function selectCityCorrespondence(e) {
     setCityCorrespondence(e.target.value);
   }
-  function selectPincodeCorrespondence(e) {
-    setPincodeCorrespondence(e.target.value);
+  function selectPincodeCorrespondence(value) {
+    setPincodeCorrespondence(value);
   }
   function selectVillageCorrespondence(e) {
     setVillageCorrespondence(e.target.value);
@@ -540,7 +540,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
             onSelect={goNext}
             onSkip={onSkip}
             t={t}
-            isDisabled={!name || !mobileNumber || !gender || !dob || !email || !PanNumber}
+            isDisabled={!name || !mobileNumber || !gender || !dob || !email || !PanNumber || !pincode?.match(Digit.Utils.getPattern('Pincode'))}
           >
             <Card className="mb-3">
               {/* <h4></h4> */}
@@ -575,6 +575,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       option={menu}
                       select={setGenderName}
                       value={gender}
+                      placeholder={gender}
                       optionKey="code"
                       t={t}
                       name="gender"
@@ -757,7 +758,17 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 </Form.Group>
                 <Form.Group className="col-md-4">
                   <CardLabel>{`${"Pincode"}*`}</CardLabel>
-                  <TextInput
+                  <MobileNumber
+                      value={pincode}
+                      name="pincode"
+                      maxlength={"6"}
+                      hideSpan="true"
+                      // onChange={(e) => setModalDIN(e.target.value)}
+                      onChange={selectPincode}
+                      // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                      {...{ required: true, pattern: "[1-9][0-9]{5}", type: "tel"}}
+                    />
+                  {/* <TextInput
                     t={t}
                     type={"text"}
                     isMandatory={false}
@@ -772,7 +783,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                       type: "text",
                       title: ("Please Enter Pincode"),
                     })}
-                  />
+                  /> */}
                   {pincode && pincode.length > 0 && !pincode.match(Digit.Utils.getPattern('Pincode')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("Please enter valid Pincode")}</CardLabelError>}
                 </Form.Group>
                 <Form.Group className="col-md-4">
@@ -947,7 +958,18 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                 </Form.Group>
                 <Form.Group className="col-md-4">
                   <CardLabel>{`${"Pincode"}*`}</CardLabel>
-                  <TextInput
+                  <MobileNumber
+                      value={pincodeCorrespondence}
+                      name="pincodeCorrespondence"
+                      maxlength={"6"}
+                      hideSpan="true"
+                      disable={isAddressSame}
+                      // onChange={(e) => setModalDIN(e.target.value)}
+                      onChange={selectPincodeCorrespondence}
+                      // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                      {...{ required: true, pattern: "[1-9][0-9]{5}", type: "tel"}}
+                    />
+                  {/* <TextInput
                     t={t}
                     type={"text"}
                     isMandatory={true}
@@ -957,7 +979,7 @@ const LicenseDetails = ({ t, config, onSelect, userType, formData, ownerIndex })
                     placeholder={pincodeCorrespondence}
                     onChange={selectPincodeCorrespondence}
                     disable={isAddressSame}
-                  />
+                  /> */}
                 </Form.Group>
                 <Form.Group className="col-md-4">
                   <CardLabel>{`${"Village"}`}</CardLabel>
