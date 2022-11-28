@@ -129,7 +129,7 @@ const DDJAYForm = (props) => {
                   </td>
                   <td align="right">
                   <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={ddjayData?.frozenPlot?.plotNo}/>
+                    <input type="number" className="form-control" disabled placeholder={ddjayData?.frozenNo}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotNo
@@ -146,7 +146,7 @@ const DDJAYForm = (props) => {
                     </td>
                   <td component="th" scope="row">
                     <div className="d-flex flex-row align-items-center">
-                    <input type="number" className="form-control" disabled placeholder={ddjayData?.frozenPlot?.area}/>
+                    <input type="number" className="form-control" disabled placeholder={ddjayData?.frozenArea}/>
                     <ReportProblemIcon
                           style={{
                             color: fieldIconColors.frozenPlotArea
@@ -172,10 +172,10 @@ const DDJAYForm = (props) => {
                 <h6><h5> Whether one organizes open space/pocket of min area 0.3 acre proposed in the layout plan (Yes/No)</h5>&nbsp;&nbsp;
 
 
-                  <input type="radio" value="Yes"   checked={ddjayData?.minArea==="Y"?true:false} disabled />&nbsp;&nbsp;
+                  <input type="radio" value="Yes"   checked={ddjayData?.organize==="Y"?true:false} disabled />&nbsp;&nbsp;
                   <label className="m-0  mx-2" for="Yes">Yes</label>&nbsp;&nbsp;
 
-                  <input type="radio" value="No"   checked={ddjayData?.minArea==="N"?true:false} disabled />&nbsp;&nbsp;
+                  <input type="radio" value="No"   checked={ddjayData?.organize==="N"?true:false} disabled />&nbsp;&nbsp;
                   <label className="m-0 mx-2" for="No">No</label>
                           
                   <ReportProblemIcon
@@ -187,19 +187,19 @@ const DDJAYForm = (props) => {
                               setOpennedModal("layoutPlan")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.minArea==="N"?"No":null);
+                              setFieldValue(ddjayData?.minArea==="Y"?"Yes":ddjayData?.organize==="N"?"No":null);
                           }}
                         ></ReportProblemIcon>
 
 
                   </h6>
                 {
-                  ddjayData?.minArea==="Y" && (
+                  ddjayData?.organize==="Y" && (
                     <div className="row " >
                       <div className="col col-6">
                         <label for="parentLicense" className="font-weight-bold">Area of such Pocket (in acres)</label>
                         <div>
-                        <input type="text" className="form-control" placeholder={data?.pocketArea}  disabled />
+                        <input type="text" className="form-control" placeholder={data?.organizeArea}  disabled />
                         <ReportProblemIcon
                           style={{
                             color: fieldIconColors.areaOfPocket
@@ -209,7 +209,7 @@ const DDJAYForm = (props) => {
                               setOpennedModal("areaOfPocket")
                             setSmShow(true),
                               console.log("modal open"),
-                              setFieldValue(data?.pocketArea);
+                              setFieldValue(data?.organizeArea);
                           }}
                         ></ReportProblemIcon>
                         </div>

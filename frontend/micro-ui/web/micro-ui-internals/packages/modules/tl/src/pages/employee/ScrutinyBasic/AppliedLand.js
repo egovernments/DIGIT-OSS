@@ -26,6 +26,8 @@ import ModalChild from "./Remarks/ModalChild";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useStyles } from "./css/personalInfoChild.style";
+import { IconButton } from "@mui/material";
+import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
 
 const AppliedLandinfo = (props) => {
 
@@ -264,21 +266,21 @@ const AppliedLandinfo = (props) => {
     democraticPlan: Colors.info,
     sectoralPlan: Colors.info,
     uploadLayoutPlan: Colors.info,
-    crossSectionPlans: Colors.info,
-    publicHealthServicePositionPlan: Colors.info,
-    designsOfRoadWorks: Colors.info,
-    designOfStormAndWaterSupply: Colors.info,
-    designForDisposal: Colors.info,
-    undertakingThatNoChange: Colors.info,
-    existingApprovedLayoutPlan: Colors.info,
-    anyObjection: Colors.info,
-    consentOfRERA: Colors.info,
+    planCrossSection: Colors.info,
+    publicHealthServices: Colors.info,
+    designRoad: Colors.info,
+    designSewarage: Colors.info,
+    designDisposal: Colors.info,
+    undertakingChange: Colors.info,
+    hostedLayoutPlan: Colors.info,
+    reportObjection: Colors.info,
+    consentRera: Colors.info,
     undertaking: Colors.info,
     designForElectricSupply: Colors.info,
-    salientFeatureColony: Colors.info
+    proposedColony: Colors.info
   })
 
-  const fieldIdList = [{ label: "DGPS Point", key: "dgpsPoint" }, { label: "Details of Plots", key: "detailsOfPlots" }, { label: "Area Under", key: "areaUnder" }, { label: "NILP", key: "nilp" }, { label: "Demarcation plan", key: "demarcationPlan" }, { label: "Democratic Plan", key: "democraticPlan" }, { label: "Sectoral Plan/Layout Plan", key: "sectoralPlan" }, { label: "Upload Layout Plan", key: "uploadLayoutPlan" }, { label: "Plan showing cross sections", key: "crossSectionPlans" }, { label: "Plan indicating positions of public health services", key: "publicHealthServicePositionPlan" }, { label: "Specifications and designs of road works", key: "designsOfRoadWorks" }, { label: "Designs and Sewerage, storm and water supply", key: "designOfStormAndWaterSupply" }, { label: "Designs of disposal and treatment of storm", key: "designForDisposal" }, { label: "Upload Layout Undertaking that no change", key: "undertakingThatNoChange" }, { label: "Whether you hosted the existing approved layout plan", key: "existingApprovedLayoutPlan" }, { label: "Report any objection from any of the alottees", key: "anyObjection" }, { label: "Consent of RERA", key: "consentOfRERA" }, { label: "Undertaking", key: "undertaking" }, { label: "Detailed specification and design for electric supply", key: "designForElectricSupply" }, { label: "Salient feature of the proposed colony", key: "salientFeatureColony" }];
+  const fieldIdList = [{ label: "DGPS Point", key: "dgpsPoint" }, { label: "Details of Plots", key: "detailsOfPlots" }, { label: "Area Under", key: "areaUnder" }, { label: "NILP", key: "nilp" }, { label: "Demarcation plan", key: "demarcationPlan" }, { label: "Democratic Plan", key: "democraticPlan" }, { label: "Sectoral Plan/Layout Plan", key: "sectoralPlan" }, { label: "Upload Layout Plan", key: "uploadLayoutPlan" }, { label: "Plan showing cross sections", key: "planCrossSection" }, { label: "Plan indicating positions of public health services", key: "publicHealthServices" }, { label: "Specifications and designs of road works", key: "designRoad" }, { label: "Designs and Sewerage, storm and water supply", key: "designSewarage" }, { label: "Designs of disposal and treatment of storm", key: "designDisposal" }, { label: "Upload Layout Undertaking that no change", key: "undertakingChange" }, { label: "Whether you hosted the existing approved layout plan", key: "hostedLayoutPlan" }, { label: "Report any objection from any of the alottees", key: "reportObjection" }, { label: "Consent of RERA", key: "consentRera" }, { label: "Undertaking", key: "undertaking" }, { label: "Detailed specification and design for electric supply", key: "designForElectricSupply" }, { label: "Salient feature of the proposed colony", key: "proposedColony" }];
 
 
   const getColorofFieldIcon = () => {
@@ -334,24 +336,24 @@ const AppliedLandinfo = (props) => {
 
 
   
-  const getDocShareholding = async () => {
-    // if ((Documents?.uploadPdf !== null || Documents?.uploadPdf !== undefined) && (uploadPdf!==null || uploadPdf!=="")) {
+  // const getDocShareholding = async () => {
+  //   if ((Documents?.uploadPdf !== null || Documents?.uploadPdf !== undefined) && (uploadPdf!==null || uploadPdf!=="")) {
         
-        try {
-            const response = await axios.get(`/filestore/v1/files/url?tenantId=hr&fileStoreIds=${DetailsofAppliedLand?.DetailsAppliedLand?.democraticPlan}`, {
+  //       try {
+  //           const response = await axios.get(`/filestore/v1/files/url?tenantId=hr&fileStoreIds=${DetailsofAppliedLand?.DetailsAppliedLand?.democraticPlan}`, {
 
-            });
-            const FILDATA = response.data?.fileStoreIds[0]?.url;
-            setDocShareHoldingUrl(FILDATA)
-        } catch (error) {
-            console.log(error.message);
-        }
-    // }
-  }
+  //           });
+  //           const FILDATA = response.data?.fileStoreIds[0]?.url;
+  //           setDocShareHoldingUrl(FILDATA)
+  //       } catch (error) {
+  //           console.log(error.message);
+  //       }
+   
+  // }
 
-  useEffect(() => {
-    getDocShareholding();
-  }, [DetailsofAppliedLand?.DetailsAppliedLand?.democraticPlan]);
+  // useEffect(() => {
+  //   getDocShareholding();
+  // }, [DetailsofAppliedLand?.DetailsAppliedLand?.democraticPlan]);
   
 
   return (
@@ -1385,7 +1387,10 @@ const AppliedLandinfo = (props) => {
                       Demarcation Plan
                       <div style={{ display: "flex" }}>
                         {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                        {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                        {/* {DetailsofAppliedLand?.DetailsAppliedLand?.demarcationPlan} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.demarcationPlan)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                         <ReportProblemIcon
                           style={{
                             color: fieldIconColors.demarcationPlan
@@ -1409,7 +1414,10 @@ const AppliedLandinfo = (props) => {
                         {/* Site plan. */}
 
                         {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                        {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                        {/* {DetailsofAppliedLand?.DetailsAppliedLand?.democraticPlan} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.democraticPlan)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                         <ReportProblemIcon
                           style={{
                             color: fieldIconColors.democraticPlan
@@ -1432,7 +1440,10 @@ const AppliedLandinfo = (props) => {
 
                       <div style={{ display: "flex" }}>
                         {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                        {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                        {/* {DetailsofAppliedLand?.DetailsAppliedLand?.sectoralPlan} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.sectoralPlan)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                         <ReportProblemIcon
                           style={{
                             color: fieldIconColors.sectoralPlan
@@ -1459,7 +1470,10 @@ const AppliedLandinfo = (props) => {
                           <div style={{ display: "flex" }}>
                             {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
                             {/* <Form.Control  disabled></Form.Control> */}
-                            {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                            {/* {DetailsofAppliedLand?.DetailsAppliedLand?.uploadLayoutPlan} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.uploadLayoutPlan)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                             <ReportProblemIcon
                               style={{
                                 color: fieldIconColors.uploadLayoutPlan
@@ -1486,14 +1500,17 @@ const AppliedLandinfo = (props) => {
                         {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
                           {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.planCrossSection} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.planCrossSection)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.crossSectionPlans
+                              color: fieldIconColors.planCrossSection
                             }}
                             onClick={() => {
                               setLabelValue("Plan showing cross sections"),
-                                setOpennedModal("crossSectionPlans")
+                                setOpennedModal("planCrossSection")
                               setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue();
@@ -1510,14 +1527,17 @@ const AppliedLandinfo = (props) => {
                         {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
                           {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.publicHealthServices} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.publicHealthServices)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.publicHealthServicePositionPlan
+                              color: fieldIconColors.publicHealthServices
                             }}
                             onClick={() => {
                               setLabelValue("Plan indicating positions of public health services"),
-                                setOpennedModal("publicHealthServicePositionPlan")
+                                setOpennedModal("publicHealthServices")
                               setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue();
@@ -1533,14 +1553,17 @@ const AppliedLandinfo = (props) => {
                         {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
                           {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.designRoad} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designRoad)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.designsOfRoadWorks
+                              color: fieldIconColors.designRoad
                             }}
                             onClick={() => {
                               setLabelValue("Specifications and designs of road works"),
-                                setOpennedModal("designsOfRoadWorks")
+                                setOpennedModal("designRoad")
                               setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue();
@@ -1556,14 +1579,17 @@ const AppliedLandinfo = (props) => {
                         {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
                           {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.designSewarage} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designSewarage)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.designOfStormAndWaterSupply
+                              color: fieldIconColors.designSewarage
                             }}
                             onClick={() => {
                               setLabelValue("Designs and Sewerage, storm and water supply"),
-                                setOpennedModal("designOfStormAndWaterSupply")
+                                setOpennedModal("designSewarage")
                               setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue();
@@ -1583,14 +1609,17 @@ const AppliedLandinfo = (props) => {
                         {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
                           {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.designDisposal} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.designDisposal)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.designForDisposal
+                              color: fieldIconColors.designDisposal
                             }}
                             onClick={() => {
                               setLabelValue("Designs of disposal and treatment of storm"),
-                                setOpennedModal("designForDisposal")
+                                setOpennedModal("designDisposal")
                               setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue();
@@ -1607,14 +1636,17 @@ const AppliedLandinfo = (props) => {
                         {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
                           {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.undertakingChange} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.undertakingChange)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.undertakingThatNoChange
+                              color: fieldIconColors.undertakingChange
                             }}
                             onClick={() => {
                               setLabelValue("Upload Layout Undertaking that no change"),
-                                setOpennedModal("undertakingThatNoChange")
+                                setOpennedModal("undertakingChange")
                               setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue();
@@ -1630,14 +1662,17 @@ const AppliedLandinfo = (props) => {
                         {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
                           {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.hostedLayoutPlan} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.hostedLayoutPlan)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.existingApprovedLayoutPlan
+                              color: fieldIconColors.hostedLayoutPlan
                             }}
                             onClick={() => {
                               setLabelValue("Whether you hosted the existing approved layout plan"),
-                                setOpennedModal("existingApprovedLayoutPlan")
+                                setOpennedModal("hostedLayoutPlan")
                               setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue();
@@ -1654,14 +1689,17 @@ const AppliedLandinfo = (props) => {
                         {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
                           {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.reportObjection} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.reportObjection)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.anyObjection
+                              color: fieldIconColors.reportObjection
                             }}
                             onClick={() => {
                               setLabelValue("Report any objection from any of the alottees"),
-                                setOpennedModal("anyObjection")
+                                setOpennedModal("reportObjection")
                               setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue();
@@ -1681,14 +1719,17 @@ const AppliedLandinfo = (props) => {
                         {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
                           {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.consentRera} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.consentRera)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.consentOfRERA
+                              color: fieldIconColors.consentRera
                             }}
                             onClick={() => {
                               setLabelValue("Consent of RERA"),
-                                setOpennedModal("consentOfRERA")
+                                setOpennedModal("consentRera")
                               setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue();
@@ -1705,7 +1746,10 @@ const AppliedLandinfo = (props) => {
                         {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
                           {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.undertaking} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.undertaking)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                           <ReportProblemIcon
                             style={{
                               color: fieldIconColors.undertaking
@@ -1729,7 +1773,10 @@ const AppliedLandinfo = (props) => {
                         {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
                           {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.detailedElectricSupply} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.detailedElectricSupply)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                           <ReportProblemIcon
                             style={{
                               color: fieldIconColors.designForElectricSupply
@@ -1753,14 +1800,17 @@ const AppliedLandinfo = (props) => {
                         {/* {<DownloadForOfflineIcon color="primary" />} */}
                         <div style={{ display: "flex" }}>
                           {/* <input type="file" height={30} style={{ maxWidth: 200, marginRight: 5 }} className="form-control" disabled /> */}
-                          {<DownloadForOfflineIcon color="primary" className="mx-1" />}
+                          {/* {DetailsofAppliedLand?.DetailsAppliedLand?.proposedColony} */}
+                        <IconButton onClick={()=>getDocShareholding(DetailsofAppliedLand?.DetailsAppliedLand?.proposedColony)}>
+                          <DownloadForOfflineIcon color="primary" className="mx-1"  />
+                        </IconButton>
                           <ReportProblemIcon
                             style={{
-                              color: fieldIconColors.salientFeatureColony
+                              color: fieldIconColors.proposedColony
                             }}
                             onClick={() => {
                               setLabelValue("Salient feature of the proposed colony"),
-                                setOpennedModal("salientFeatureColony")
+                                setOpennedModal("proposedColony")
                               setSmShow(true),
                                 console.log("modal open"),
                                 setFieldValue();
