@@ -8,6 +8,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
 
 // import InfoIcon from '@mui/icons-material/Info';
 // import TextField from '@mui/material/TextField';
@@ -44,7 +46,7 @@ const FeesChargesForm = (props) => {
   } = useForm({
     mode: "onSubmit",
     reValidateMode: "onBlur",
-    // resolver: yupResolver(VALIDATION_SCHEMA),
+    resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
@@ -175,6 +177,59 @@ const FeesChargesForm = (props) => {
     }
   };
 
+  // const PaymentApiCall = async () => {
+  //   const token = window?.localStorage?.getItem("token");
+  //   const payload = {
+  //     RequestInfo: {
+  //       apiId: "Rainmaker",
+  //       action: "_create",
+  //       did: 1,
+  //       key: "",
+  //       msgId: "20170310130900|en_IN",
+  //       ts: 0,
+  //       ver: ".01",
+  //       authToken: token,
+  //       userInfo: props?.userData,
+  //     },
+  //     Transaction: {
+  //       tenantId: "hr",
+  //       txnAmount: 100,
+  //       module: "PT",
+  //       moduleId: "prop12-assess1",
+  //       consumerCode: "01",
+  //       billId: "9876",
+  //       productInfo: "Property Tax Payment",
+  //       gateway: "NIC",
+  //       callbackUrl: "http://egrashry.nic.in/pg-service/transaction/v1/_update",
+  //       user: {
+  //         uuid: "a5e51f81-6a0b-4b6d-b120-1985c7f2d2b4",
+  //         name: "ad",
+  //         userName: "8888888888",
+  //         tenantId: "hr",
+  //         id: 4,
+  //         mobileNumber: "8888888888",
+  //       },
+  //       taxAndPayments: [
+  //         {
+  //           taxAmount: "100",
+  //           billId: "1967",
+  //           amountPaid: "100",
+  //         },
+  //       ],
+  //     },
+  //   };
+  //   console.log("dd", props.getId);
+  //   try {
+  //     const Resp = await axios.post("/pg-service/transaction/v1/_create", payload);
+  //     console.log("Resp.data===", Resp);
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // };
+  // useEffect(() => {
+  //   PaymentApiCall();
+  // }, []);
+
   useEffect(() => {
     localStorage.setItem("total", scrutinyFee);
   }, [scrutinyFee]);
@@ -213,7 +268,7 @@ const FeesChargesForm = (props) => {
   return (
     <form onSubmit={handleSubmit(FeesChrgesFormSubmitHandler)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
           <Form.Group className="justify-content-center" controlId="formBasicEmail">
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -260,10 +315,13 @@ const FeesChargesForm = (props) => {
                       <th>Scrutiny Fees</th>
                       <td>
                         <input type="text" className="form-control" disabled {...register("scrutinyFee")} />
+                        <h3 className="error-message" style={{ color: "red" }}>
+                          {errors?.LC && errors?.scrutinyFee?.message}
+                        </h3>
                       </td>
                     </tr>
                     <tr>
-                      <th>License Fees</th>
+                      <th>Licence Fees</th>
                       <td>
                         <input type="text" className="form-control" disabled {...register("licenseFee")} />
                       </td>
@@ -313,7 +371,7 @@ const FeesChargesForm = (props) => {
                   </div>
 
                   <div className="col col-4">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous licence (Yes/No)">
                       (iii)&nbsp;Adjust Fees &nbsp;&nbsp;
                     </h6>
                     <label htmlFor="adjustFee">
@@ -327,7 +385,7 @@ const FeesChargesForm = (props) => {
                     {watch("adjustFee") === "Y" && (
                       <div className="row ">
                         <div className="col col-12">
-                          <label>Enter License Number/LOI number</label>
+                          <label>Enter Licence Number/LOI number</label>
                           <input type="text" className="form-control" {...register("licNumber")} />
                           <label>Amount (previous)</label>
                           <input type="text" className="form-control" disabled {...register("amount")} />

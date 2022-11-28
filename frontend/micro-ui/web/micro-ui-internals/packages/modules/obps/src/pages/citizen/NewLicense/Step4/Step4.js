@@ -4,6 +4,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import DDJAYForm from "../Step4/DdjayForm";
 import ResidentialPlottedForm from "./ResidentialPlotted";
 import IndustrialPlottedForm from "./IndustrialPlotted";
+import CommercialPlottedForm from "./CommercialPlotted";
 import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import CalculateIcon from "@mui/icons-material/Calculate";
@@ -368,7 +369,7 @@ const AppliedDetailForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(AppliedDetailFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -913,6 +914,7 @@ const AppliedDetailForm = (props) => {
                   <div>{Purpose === "DDJAY_APHP" && <DDJAYForm watch={watch} register={register} />}</div>
                   <div>{Purpose === "RPL" && <ResidentialPlottedForm register={register} />}</div>
                   <div>{Purpose === "IPL" && <IndustrialPlottedForm register={register} />}</div>
+                  <div>{Purpose === "CPL" && <CommercialPlottedForm watch={watch} register={register} />}</div>
                   <h5 className="text-black">NILP </h5>
                   <br></br>
                   <div className="table table-bordered table-responsive">
@@ -928,7 +930,7 @@ const AppliedDetailForm = (props) => {
                         <td>1. </td>
                         <td>
                           {" "}
-                          Whether you want to surrender the 10% area of license colony to Govt. the instead of providing 10% under EWS and NPNL plots{" "}
+                          Whether you want to surrender the 10% area of licence colony to Govt. the instead of providing 10% under EWS and NPNL plots{" "}
                         </td>
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="surrender">

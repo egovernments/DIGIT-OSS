@@ -11,6 +11,7 @@ import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
 import { Archive } from "react-bootstrap-icons";
+import { min } from "lodash";
 
 const ApllicantPuropseForm = (props) => {
   console.log("props", props);
@@ -18,6 +19,7 @@ const ApllicantPuropseForm = (props) => {
   const resetFields = {
     tehsil: "",
     revenueEstate: "",
+    hadbastno: "",
     mustil: "",
     kanal: "",
     marla: "",
@@ -58,6 +60,11 @@ const ApllicantPuropseForm = (props) => {
       key: "revenueEstate",
       title: "Revenue Estate",
       dataIndex: "revenueEstate",
+    },
+    {
+      key: "hadbastNo",
+      title: "Hadbast No.",
+      dataIndex: "hadbastNo",
     },
     {
       key: "rectangleNo",
@@ -181,6 +188,7 @@ const ApllicantPuropseForm = (props) => {
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
       setValue("revenueEstate", specificTableData?.revenueEstate);
+      setValue("hadbastNo", specificTableData?.hadbastNo);
       setValue("mustil", specificTableData?.mustil);
       setValue("kanal", specificTableData?.kanal);
       setValue("marla", specificTableData?.marla);
@@ -313,6 +321,7 @@ const ApllicantPuropseForm = (props) => {
     console.log("data------", modalData);
     modalData["tehsil"] = modalData?.tehsil?.value;
     modalData["revenueEstate"] = modalData?.revenueEstate?.value;
+    modalData["hadbastNo"] = modalData?.hadbastNo?.value;
     modalData["mustil"] = modalData?.mustil?.value;
     modalData["registeringAuthorityDoc"] = docId;
     delete modalData?.district;
@@ -345,6 +354,7 @@ const ApllicantPuropseForm = (props) => {
     data["state"] = "Haryana";
     delete data?.tehsil;
     delete data?.revenueEstate;
+    delete data?.hadbastNo;
     delete data?.mustil;
     delete data?.kanal;
     delete data?.marla;
@@ -423,7 +433,7 @@ const ApllicantPuropseForm = (props) => {
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-    setLoader(true);
+    // setLoader(true);
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setDocId(Resp?.data?.files?.[0]?.fileStoreId);
@@ -469,14 +479,26 @@ const ApllicantPuropseForm = (props) => {
   const [kanal, setkanal] = useState("");
   const [second, setSecond] = useState("");
   const [sum, setSum] = useState([]);
-  const [valuesMarla, setValuesMarla] = useState({ marla: "", secondMarla: "0.00625001", summarla: "" });
+  const [valuesMarla, setValuesMarla] = useState({ marla: "", secondMarla: "0.0062", summarla: "" });
   const [marla, setMarla] = useState("");
   const [secondMarla, setSecondMarla] = useState("");
   const [summarla, setSumMarla] = useState([]);
-  const [valuesSarsai, setValuesSarsai] = useState({ sarsai: "", secondSarsai: "0.0006944438305254", sumSarsai: "" });
+  const [valuesSarsai, setValuesSarsai] = useState({ sarsai: "", secondSarsai: "0.00069", sumSarsai: "" });
   const [sarsai, setSarsai] = useState("");
   const [secondSarsai, setSecondSarsai] = useState("");
   const [sumsarsai, setSumSarsai] = useState([]);
+  const [valuesBigha, setValuesBigha] = useState({ bigha: "", secondBigha: "0.33", sumBigha: "" });
+  const [bigha, setBigha] = useState("");
+  const [secondBigha, setSecondBigha] = useState("");
+  const [sumBigha, setSumBigha] = useState([]);
+  const [valuesBiswa, setValuesBiswa] = useState({ biswa: "", secondBiswa: "0.0309 ", sumBiswa: "" });
+  const [biswa, setBiswa] = useState("");
+  const [secondBiswa, setSecondBiswa] = useState("");
+  const [sumBiswa, setSumBiswa] = useState([]);
+  const [valuesBiswansi, setValuesBiswansi] = useState({ biswansi: "", secondBiswansi: "0.619", sumBiswansi: "" });
+  const [biswansi, setBiswansi] = useState("");
+  const [secondBiswansi, setSecondBiswansi] = useState("");
+  const [sumBiswansi, setSumBiswansi] = useState([]);
 
   const onChange = (e) => {
     let name = e.target.name;
@@ -485,6 +507,9 @@ const ApllicantPuropseForm = (props) => {
       ...values,
       ...valuesMarla,
       ...valuesSarsai,
+      ...valuesBigha,
+      ...valuesBiswa,
+      ...valuesBiswansi,
       [name]: value,
     };
     setValues(newValues);
@@ -493,6 +518,12 @@ const ApllicantPuropseForm = (props) => {
     calcSummarla(newValues);
     setValuesSarsai(newValues);
     calcSumSarsai(newValues);
+    setValuesBigha(newValues);
+    calcSumBigha(newValues);
+    setValuesBiswa(newValues);
+    calcSumBiswa(newValues);
+    setValuesBiswansi(newValues);
+    calcSumBiswansi(newValues);
   };
   const calcSum = (newValues) => {
     const { kanal, second } = newValues;
@@ -502,16 +533,31 @@ const ApllicantPuropseForm = (props) => {
 
   const calcSummarla = (newValues) => {
     const { marla, secondMarla } = newValues;
-    const newSum = parseInt(marla, 10) * 0.00625001;
+    const newSum = parseInt(marla, 10) * 0.0062;
     setSumMarla(newSum);
   };
   const calcSumSarsai = (newValues) => {
     const { sarsai, secondSarsai } = newValues;
-    const newSum = parseInt(sarsai, 10) * 0.0006944438305254;
+    const newSum = parseInt(sarsai, 10) * 0.00069;
     setSumSarsai(newSum);
   };
+  const calcSumBigha = (newValues) => {
+    const { bigha, secondBigha } = newValues;
+    const newSum = parseInt(bigha, 10) * 0.33;
+    setSumBigha(newSum);
+  };
+  const calcSumBiswa = (newValues) => {
+    const { biswa, secondBiswa } = newValues;
+    const newSum = parseInt(biswa, 10) * 0.0309;
+    setSumBiswa(newSum);
+  };
+  const calcSumBiswansi = (newValues) => {
+    const { biswansi, secondBiswansi } = newValues;
+    const newSum = parseInt(biswansi, 10) * 0.619;
+    setSumBiswansi(newSum);
+  };
 
-  const sumTotal = sum + summarla + sumsarsai;
+  const sumTotal = sum + summarla + sumsarsai + sumBigha + sumBiswa + sumBiswansi;
   console.log("add", sumTotal);
 
   useEffect(() => {
@@ -524,6 +570,15 @@ const ApllicantPuropseForm = (props) => {
     localStorage.setItem("dataKey3", JSON.stringify(sumsarsai));
   }, [sumsarsai]);
   useEffect(() => {
+    localStorage.setItem("dataKey4", JSON.stringify(sumBigha));
+  }, [sumBigha]);
+  useEffect(() => {
+    localStorage.setItem("dataKey5", JSON.stringify(sumBiswa));
+  }, [sumBiswa]);
+  useEffect(() => {
+    localStorage.setItem("dataKey6", JSON.stringify(sumBiswansi));
+  }, [sumBiswansi]);
+  useEffect(() => {
     localStorage.setItem("add", JSON.stringify(sumTotal));
   }, [sumTotal]);
 
@@ -532,7 +587,7 @@ const ApllicantPuropseForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -540,7 +595,7 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Puropse Of License<span style={{ color: "red" }}>*</span>
+                        Puropse Of Licence<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
@@ -728,6 +783,7 @@ const ApllicantPuropseForm = (props) => {
                   {...register("revenueEstate")}
                   data={revenueDataLabels?.data}
                   labels="Revenue Estate"
+                  // value={this.state.editableUserName}
                   loading={revenueDataLabels?.isLoading}
                   onChange={(e) => {
                     console.log("e", e);
@@ -739,7 +795,22 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.revenueEstate && errors?.revenueEstate?.message}
                 </h3>
               </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <h2>
+                      Hadbast No. <span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+                <input type="number" className="form-control" placeholder="" {...register("hadbastNo")} />
+                {/* <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.revenueEstate && errors?.revenueEstate?.message}
+                </h3> */}
+              </Col>
+            </Row>
 
+            <Row className="ml-auto mb-3">
               <Col md={4} xxl lg="4">
                 <div>
                   <Form.Label>
@@ -758,6 +829,27 @@ const ApllicantPuropseForm = (props) => {
                 />
                 <h3 className="error-message" style={{ color: "red" }}>
                   {errors?.mustil && errors?.mustil?.message}
+                </h3>
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <label>
+                    <h2>Enter Khewat</h2>
+                  </label>
+                </div>
+                <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <label>
+                    <h2>
+                      Name of Land Owner<span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </label>
+                </div>
+                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")} />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.landOwner && errors?.landOwner?.message}
                 </h3>
               </Col>
             </Row>
@@ -803,7 +895,7 @@ const ApllicantPuropseForm = (props) => {
                           <h2>Marla</h2>
                         </th>
                         <th>
-                          <h2>Sarsai</h2>&nbsp;&nbsp;
+                          <h2>Sarsai</h2>
                         </th>
                       </tr>
                     </thead>
@@ -817,23 +909,20 @@ const ApllicantPuropseForm = (props) => {
                           <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" /> */}
                           <input onChange={onChange} defaultValue={kanal} name="kanal" id="kanal" type="number" />
                           <input type="text" className="form-control" {...register("kanal")} onChange={onChange} defaultValue={kanal} id="kanal" />
-
-                          <label htmlFor="sum">Total</label>
+                          <label htmlFor="sum">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" />
                         </td>
                         <td>
                           <input onChange={onChange} defaultValue={marla} name="marla" id="marla" type="number" />
                           <input type="text" className="form-control" {...register("marla")} onChange={onChange} defaultValue={marla} id="marla" />
-
-                          <label htmlFor="summarla">Total</label>
+                          <label htmlFor="summarla">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={summarla} id="summarla" name="summarla" type="number" />
                           {/* <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} /> */}
                         </td>
                         <td>
                           <input onChange={onChange} defaultValue={marla} name="sarsai" id="sarsai" type="number" />
                           <input type="text" className="form-control" {...register("sarsai")} onChange={onChange} defaultValue={sarsai} id="sarsai" />
-
-                          <label htmlFor="sumsarsai">Total</label>
+                          <label htmlFor="sumsarsai">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={sumsarsai} id="sumsarsai" name="sumsarsai" type="number" />
                           {/* <Form.Control type="text" className="form-control" placeholder="" {...register("sarsai")} /> */}
                         </td>
@@ -852,20 +941,39 @@ const ApllicantPuropseForm = (props) => {
                           <h2>Biswa</h2>
                         </th>
                         <th>
-                          <h2>Biswansi</h2>&nbsp;&nbsp;
+                          <h2>Biswansi</h2>
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("bigha")} />
+                          <input onChange={onChange} defaultValue={bigha} name="bigha" id="bigha" type="number" />
+                          <input type="text" className="form-control" {...register("bigha")} onChange={onChange} defaultValue={bigha} id="bigha" />
+                          <label htmlFor="sumBigha">Total</label>&nbsp;&nbsp;
+                          <input onChange={onChange} defaultValue={sumBigha} id="sumBigha" name="sumBigha" type="number" />
+                          {/* <Form.Control type="text" className="form-control" {...register("bigha")} /> */}
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("biswa")} />
+                          <input onChange={onChange} defaultValue={biswa} name="biswa" id="biswa" type="number" />
+                          <input type="text" className="form-control" {...register("biswa")} onChange={onChange} defaultValue={biswa} id="biswa" />
+                          <label htmlFor="sumBiswa">Total</label>&nbsp;&nbsp;
+                          <input onChange={onChange} defaultValue={sumBiswa} id="sumBiswa" name="sumBiswa" type="number" />
+                          {/* <Form.Control type="text" className="form-control" {...register("biswa")} /> */}
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("biswansi")} />
+                          <input onChange={onChange} defaultValue={biswansi} name="biswansi" id="biswansi" type="number" />
+                          <input
+                            type="text"
+                            className="form-control"
+                            {...register("biswansi")}
+                            onChange={onChange}
+                            defaultValue={biswansi}
+                            id="biswansi"
+                          />
+                          <label htmlFor="sumBiswansi">Total</label>&nbsp;&nbsp;
+                          <input onChange={onChange} defaultValue={sumBiswansi} id="sumBiswansi" name="sumBiswansi" type="number" />
+                          {/* <Form.Control type="text" className="form-control" {...register("biswansi")} /> */}
                         </td>
                       </tr>
                     </tbody>
@@ -874,130 +982,120 @@ const ApllicantPuropseForm = (props) => {
               </Col>
             </Row>
             <Row className="ml-auto mb-3">
-              <Col md={4} xxl lg="6">
-                <div>
-                  <label>
-                    <h2>Enter Khewat</h2>
-                  </label>
-                </div>
-                <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
-              </Col>
-              <Col md={4} xxl lg="6">
-                <div>
-                  <label>
-                    <h2>
-                      Name of Land Owner<span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </label>
-                </div>
-                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")} />
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.landOwner && errors?.landOwner?.message}
-                </h3>
-              </Col>
-              <Col md={4} xxl lg="6"></Col>
-            </Row>
-            <Row className="ml-auto mb-3">
               <div className="col col-12">
                 <h2>
-                  Collaboration agreement Owner<span style={{ color: "red" }}>*</span>
+                  Collaboration agreement Owner<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                  <label htmlFor="collaboration">
+                    <input {...register("collaboration")} type="radio" value="N" id="yes" onClick={() => setCollaboration("Y")} />
+                    &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                  </label>
+                  <label htmlFor="collaboration">
+                    <input {...register("collaboration")} type="radio" value="Y" id="no" onClick={() => setCollaboration("N")} />
+                    &nbsp;&nbsp; No &nbsp;&nbsp;
+                  </label>
                 </h2>
-
-                <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="N" id="yes" onClick={() => setCollaboration("Y")} />
-                  Yes
-                </label>
-                <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="Y" id="no" onClick={() => setCollaboration("N")} />
-                  No
-                </label>
                 {getCollaboration === "Y" && (
-                  <div className="row ">
-                    <div className="col col-4">
-                      <label>
+                  <div>
+                    <div className="row ">
+                      <div className="col col-4">
+                        <label>
+                          <h2
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title=" Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered."
+                          >
+                            Name of the developer company .<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} />
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2>
+                            Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidFrom")} />
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2>
+                            Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidTill")} />
+                      </div>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <div className="row ">
+                      <div className="col col-4">
                         <h2>
-                          Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered
-                          <span style={{ color: "red" }}>*</span>
+                          Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
                         </h2>
-                      </label>
-                      <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} />
+                        <label htmlFor="agreementIrrevocialble">
+                          <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
+                          &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="agreementIrrevocialble">
+                          <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
+                          &nbsp;&nbsp; No &nbsp;&nbsp;
+                        </label>
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2>
+                            Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="  Name of authorized signatory on behalf of developer to sign Collaboration agreement."
+                          >
+                            Name of authorized signatory on behalf of developer.<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
+                      </div>
                     </div>
-                    <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label>
-                        <h2>
-                          Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidFrom")} />
-                    </div>
-                    <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label>
-                        <h2>
-                          Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidTill")} />
-                    </div>
-                    <div className="col col-4" style={{ marginTop: 35 }}>
-                      <h2>
-                        Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
-                      </h2>
-                      <label htmlFor="agreementIrrevocialble">
-                        <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
-                        Yes
-                      </label>
-                      <label htmlFor="agreementIrrevocialble">
-                        <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
-                        No
-                      </label>
-                    </div>
-
-                    <div className="col col-4" style={{ marginTop: 35 }}>
-                      <label>
-                        <h2>
-                          Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
-                    </div>
-                    <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label>
-                        <h2>
-                          Name of authorized signatory on behalf of developer to sign Collaboration agreement<span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
-                    </div>
-                    <div className="col col-4" style={{ marginTop: 20 }}>
-                      <label>
-                        <h2>
-                          Registring Authority<span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <br></br>
-                      <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
-                    </div>
-                    <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label>
-                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                          Registring Authority document <span style={{ color: "red" }}>*</span>
-                          <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        </h2>
-                      </label>
-                      <br></br>
-                      <input
-                        type="file"
-                        className="form-control"
-                        {...register("registeringAuthorityDoc")}
-                        onChange={(e) => getDocumentData(e?.target?.files[0])}
-                      />
+                    <br></br>
+                    <br></br>
+                    <div className="row ">
+                      <div className="col col-4">
+                        <label>
+                          <h2>
+                            Registring Authority<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
+                            Registring Authority document <span style={{ color: "red" }}>*</span>
+                            <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                          </h2>
+                        </label>
+                        <br></br>
+                        <input
+                          type="file"
+                          style={{ marginTop: "-6px" }}
+                          className="form-control"
+                          {...register("registeringAuthorityDoc")}
+                          onChange={(e) => getDocumentData(e?.target?.files[0])}
+                        />
+                      </div>
                     </div>
                   </div>
                 )}
               </div>
             </Row>
-
-            <button type="submit" style={{ float: "right" }} className="btn btn-priary">
+            <button type="submit" style={{ float: "right" }} class="btn btn-primary btn-md center-block">
               Submit
             </button>
           </form>

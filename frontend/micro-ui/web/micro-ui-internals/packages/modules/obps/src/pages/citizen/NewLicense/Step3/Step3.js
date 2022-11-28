@@ -249,7 +249,7 @@ const LandScheduleForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(landScheduleFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -259,159 +259,169 @@ const LandScheduleForm = (props) => {
                       <div>
                         <h2>
                           1.&nbsp;(i)Whether licence applied for additional area ?<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                          <label htmlFor="licenseApplied">
+                            <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
+                            &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                          </label>
+                          <label htmlFor="licenseApplied">
+                            <input {...register("licenseApplied")} type="radio" value="N" id="licenseApplied" />
+                            &nbsp;&nbsp; No &nbsp;&nbsp;
+                          </label>
                         </h2>
-
-                        <label htmlFor="licenseApplied">
-                          <input {...register("licenseApplied")} type="radio" value="Y" id="licenseApplied" />
-                          Yes
-                        </label>
-                        <label htmlFor="licenseApplied">
-                          <input {...register("licenseApplied")} type="radio" value="N" id="licenseApplied" />
-                          No
-                        </label>
                       </div>
 
                       {watch("licenseApplied") === "Y" && (
-                        <div className="row">
-                          <div className="col col-3">
-                            <label>
-                              <h2>
-                                License No. of Parent License <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <input type="number" className="form-control" {...register("licenseNumber")} />
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>
-                                Potential Zone <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <ReactMultiSelect
-                              control={control}
-                              name="potential"
-                              placeholder="Potential Zone"
-                              data={getPotentialOptons?.data}
-                              labels="Potential"
-                              loading={getPotentialOptons?.isLoading}
-                            />
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>
-                                Site Location Purpose <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("siteLoc")} />
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>
-                                Approach Type (Type of Policy) <span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <ReactMultiSelect
-                              control={control}
-                              name="approachType"
-                              placeholder="Approach"
-                              data={potentialOptons}
-                              labels="Potential"
-                            />
-                            {/* <select className="form-control" id="approachType" {...register("approachType")}>
+                        <div>
+                          <div className="row">
+                            <div className="col col-3">
+                              <label>
+                                <h2>
+                                  Licence No. of Parent Licence <span style={{ color: "red" }}>*</span>
+                                </h2>
+                              </label>
+                              <input type="number" className="form-control" {...register("licenseNumber")} />
+                            </div>
+                            <div className="col col-3">
+                              <label>
+                                <h2>
+                                  Potential Zone <span style={{ color: "red" }}>*</span>
+                                </h2>
+                              </label>
+                              <ReactMultiSelect
+                                control={control}
+                                name="potential"
+                                placeholder="Potential Zone"
+                                data={getPotentialOptons?.data}
+                                labels="Potential"
+                                loading={getPotentialOptons?.isLoading}
+                              />
+                            </div>
+                            <div className="col col-3">
+                              <label>
+                                <h2>
+                                  Site Location Purpose <span style={{ color: "red" }}>*</span>
+                                </h2>
+                              </label>
+                              <input type="text" className="form-control" {...register("siteLoc")} />
+                            </div>
+                            <div className="col col-3">
+                              <label>
+                                <h2>
+                                  Approach Type (Type of Policy) <span style={{ color: "red" }}>*</span>
+                                </h2>
+                              </label>
+                              <ReactMultiSelect
+                                control={control}
+                                name="approachType"
+                                placeholder="Approach"
+                                data={potentialOptons}
+                                labels="Potential"
+                              />
+                              {/* <select className="form-control" id="approachType" {...register("approachType")}>
                             <option value="K.Mishra"></option>
                             <option value="potential 1"></option>
                             <option value="potential 2"></option>
                           </select> */}
+                            </div>
                           </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>
-                                Approach Road Width <span style={{ color: "red" }}>*</span>
-                                <CalculateIcon color="primary" />
-                              </h2>{" "}
-                            </label>
-                            <input type="number" className="form-control" {...register("approachRoadWidth")}></input>
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>
-                                Specify Others<span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <input type="text" {...register("specify")} className="form-control" />
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>
-                                Type of land<span style={{ color: "red" }}>*</span>
-                              </h2>
-                            </label>
-                            <ReactMultiSelect control={control} name="typeLand" placeholder="Type of Land" data={potentialOptons} labels="typeLand" />
+                          <br></br>
+                          <div className="row">
+                            <div className="col col-3">
+                              <label>
+                                <h2>
+                                  Approach Road Width <span style={{ color: "red" }}>*</span>
+                                  <CalculateIcon color="primary" />
+                                </h2>{" "}
+                              </label>
+                              <input type="number" className="form-control" {...register("approachRoadWidth")}></input>
+                            </div>
+                            <div className="col col-3">
+                              <label>
+                                <h2>
+                                  Specify Others<span style={{ color: "red" }}>*</span>
+                                </h2>
+                              </label>
+                              <input type="text" {...register("specify")} className="form-control" />
+                            </div>
+                            <div className="col col-3">
+                              <label>
+                                <h2>
+                                  Type of land<span style={{ color: "red" }}>*</span>
+                                </h2>
+                              </label>
+                              <ReactMultiSelect
+                                control={control}
+                                name="typeLand"
+                                placeholder="Type of Land"
+                                data={potentialOptons}
+                                labels="typeLand"
+                              />
 
-                            {/* <select className="form-control" id="typeLand" {...register("typeLand")}>
+                              {/* <select className="form-control" id="typeLand" {...register("typeLand")}>
                             <option value="">Type of Land</option>
                             <option value="">Chahi/nehri</option>
                             <option>Gair Mumkins</option>
                             <option>Others</option>
                           </select> */}
-                          </div>
-                          <div className="col col-3 ">
-                            <h2>
-                              Third-party right created<span style={{ color: "red" }}>*</span>
-                            </h2>
+                            </div>
+                            <div className="col col-3 ">
+                              <h2>
+                                Third-party right created<span style={{ color: "red" }}>*</span>
+                              </h2>
 
-                            <label htmlFor="thirdParty">
-                              <input {...register("thirdParty")} type="radio" value="Y" id="thirdParty" />
-                              Yes
-                            </label>
-                            <label htmlFor="thirdParty">
-                              <input {...register("thirdParty")} type="radio" value="N" id="thirdParty" />
-                              No
-                            </label>
-                            {watch("thirdParty") === "Y" && (
-                              <div className="row ">
-                                <div className="col col-12">
-                                  <label>
-                                    {" "}
-                                    <h2>
-                                      Remark<span style={{ color: "red" }}>*</span>
-                                    </h2>{" "}
-                                  </label>
-                                  <input type="text" className="form-control" {...register("thirdPartyRemark")} />
+                              <label htmlFor="thirdParty">
+                                <input {...register("thirdParty")} type="radio" value="Y" id="thirdParty" />
+                                &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                              </label>
+                              <label htmlFor="thirdParty">
+                                <input {...register("thirdParty")} type="radio" value="N" id="thirdParty" />
+                                &nbsp;&nbsp; No &nbsp;&nbsp;
+                              </label>
+                              {watch("thirdParty") === "Y" && (
+                                <div className="row ">
+                                  <div className="col col-12">
+                                    <label>
+                                      {" "}
+                                      <h2>
+                                        Remark<span style={{ color: "red" }}>*</span>
+                                      </h2>{" "}
+                                    </label>
+                                    <input type="text" className="form-control" {...register("thirdPartyRemark")} />
+                                  </div>
+                                  <div className="col col-12">
+                                    <label>
+                                      {" "}
+                                      <h2>
+                                        Document Upload <span style={{ color: "red" }}>*</span>
+                                      </h2>
+                                    </label>
+                                    <input
+                                      type="file"
+                                      className="form-control"
+                                      // {...register("thirdPartyDoc")}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
+                                    />
+                                  </div>
                                 </div>
-                                <div className="col col-12">
-                                  <label>
-                                    {" "}
-                                    <h2>
-                                      Document Upload <span style={{ color: "red" }}>*</span>
-                                    </h2>
-                                  </label>
-                                  <input
-                                    type="file"
-                                    className="form-control"
-                                    // {...register("thirdPartyDoc")}
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
-                                  />
+                              )}
+                              {watch("thirdParty") === "N" && (
+                                <div className="row ">
+                                  <div className="col col">
+                                    <label>
+                                      <h2>
+                                        Document Upload <span style={{ color: "red" }}>*</span>
+                                      </h2>
+                                    </label>
+                                    <input
+                                      type="file"
+                                      className="form-control"
+                                      // {...register("thirdPartyDoc")}
+                                      onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
+                                    />
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                            {watch("thirdParty") === "N" && (
-                              <div className="row ">
-                                <div className="col col">
-                                  <label>
-                                    <h2>
-                                      Document Upload <span style={{ color: "red" }}>*</span>
-                                    </h2>
-                                  </label>
-                                  <input
-                                    type="file"
-                                    className="form-control"
-                                    // {...register("thirdPartyDoc")}
-                                    onChange={(e) => getDocumentData(e?.target?.files[0], "thirdPartyDoc")}
-                                  />
-                                </div>
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
                         </div>
                       )}
@@ -425,130 +435,146 @@ const LandScheduleForm = (props) => {
                           &nbsp;&nbsp;(ii)Whether licence applied under Migration Policy ?&nbsp;&nbsp;
                           <label htmlFor="migrationLic">
                             <input {...register("migrationLic")} type="radio" value="Y" id="migrationLic" />
-                            Yes
+                            &nbsp;&nbsp; Yes &nbsp;&nbsp;
                           </label>
                           <label htmlFor="migrationLic">
                             <input {...register("migrationLic")} type="radio" value="N" id="migrationLic" />
-                            No
+                            &nbsp;&nbsp; No &nbsp;&nbsp;
                           </label>
                         </h2>
                       </div>
                       {watch("migrationLic") === "Y" && (
-                        <div className="row">
-                          <div className="col col-3">
-                            <label>
-                              <h2>Area Applied under Migration</h2>{" "}
-                            </label>
-                            <input type="text" className="form-control" {...register("areaUnderMigration")} />
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>Purpose of Parent License</h2>
-                            </label>
-                            <ReactMultiSelect
-                              control={control}
-                              name="purposeParentLic"
-                              placeholder="Purpose"
-                              data={purposeOptions?.data}
-                              loading={purposeOptions?.isLoading}
-                              labels="purposeParentLic"
-                            />
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>License No.</h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("licNo")} />
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>Area of Parent License</h2>
-                            </label>
-                            <input type="text" className="form-control" {...register("areaofParentLic")} />
-                          </div>
-                          <div className="col col-3">
-                            <label>
-                              <h2>Validity of Parent License </h2>{" "}
-                            </label>
-                            <label htmlFor="validityOfParentLic">
-                              <input {...register("validityOfParentLic")} type="radio" value="Y" id="validityOfParentLic" />
-                              Yes
-                            </label>
-                            <label htmlFor="validityOfParentLic">
-                              <input {...register("validityOfParentLic")} type="radio" value="N" id="validityOfParentLic" />
-                              No
-                            </label>
-                          </div>
-                          {watch("validityOfParentLic") === "Y" && (
-                            <div className="row ">
-                              <div className="col col-6">
-                                <label>
-                                  <h2>Number of Renewal Fees to be deposited </h2>
-                                </label>
-                                <input type="text" className="form-control" {...register("renewalFee")} />
-                              </div>
-                              <div className="col col-6">
-                                <label>
-                                  <h2>Freshly applied area,other than migration</h2>{" "}
-                                </label>
-                                <input type="text" className="form-control" {...register("freshlyApplied")} />
-                              </div>
+                        <div>
+                          <div className="row">
+                            <div className="col col-3">
+                              <label>
+                                <h2>Area Applied under Migration</h2>{" "}
+                              </label>
+                              <input type="text" className="form-control" {...register("areaUnderMigration")} />
                             </div>
-                          )}
-                          <div className="col col-3">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                              Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration &nbsp;&nbsp;
-                              <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                            </h2>
-                            <input
-                              type="file"
-                              className="form-control"
-                              // {...register("approvedLayoutPlan")}
-                              onChange={(e) => getDocumentData(e?.target?.files[0], "approvedLayoutPlan")}
-                            />
+                            <div className="col col-3">
+                              <label>
+                                <h2>Purpose of Parent Licence</h2>
+                              </label>
+                              <ReactMultiSelect
+                                control={control}
+                                name="purposeParentLic"
+                                placeholder="Purpose"
+                                data={purposeOptions?.data}
+                                loading={purposeOptions?.isLoading}
+                                labels="purposeParentLic"
+                              />
+                            </div>
+                            <div className="col col-3">
+                              <label>
+                                <h2>Licence No.</h2>
+                              </label>
+                              <input type="text" className="form-control" {...register("licNo")} />
+                            </div>
+                            <div className="col col-3">
+                              <label>
+                                <h2>Area of Parent Licence</h2>
+                              </label>
+                              <input type="text" className="form-control" {...register("areaofParentLic")} />
+                            </div>
                           </div>
-                          <div className="col col-3">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                              Proposed Layout of Plan /site plan for area applied for migration. &nbsp;&nbsp;
-                              <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                            </h2>
-                            <input
-                              type="file"
-                              className="form-control"
-                              // {...register("proposedLayoutPlan")}
-                              onChange={(e) => getDocumentData(e?.target?.files[0], "proposedLayoutPlan")}
-                            />
-                          </div>
-                          <div className="col col-3">
-                            <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                              Upload Previously approved Layout Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                            </h2>
-                            <input
-                              type="file"
-                              className="form-control"
-                              // {...register("uploadPreviouslyLayoutPlan")}
-                              onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPreviouslyLayoutPlan")}
-                            />
+                          <br></br>
+                          <div className="row">
+                            <div className="col col-3">
+                              <label>
+                                <h2>Validity of Parent Licence </h2>{" "}
+                              </label>
+                              &nbsp;&nbsp;<br></br>
+                              <label htmlFor="validityOfParentLic">
+                                <input {...register("validityOfParentLic")} type="radio" value="Y" id="validityOfParentLic" />
+                                &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                              </label>
+                              <label htmlFor="validityOfParentLic">
+                                <input {...register("validityOfParentLic")} type="radio" value="N" id="validityOfParentLic" />
+                                &nbsp;&nbsp; No &nbsp;&nbsp;
+                              </label>
+                            </div>
+                            {watch("validityOfParentLic") === "Y" && (
+                              <div className="row ">
+                                <div className="col col-6">
+                                  <label>
+                                    <h2>Number of Renewal Fees to be deposited </h2>
+                                  </label>
+                                  <input type="text" className="form-control" {...register("renewalFee")} />
+                                </div>
+                                <div className="col col-6">
+                                  <label>
+                                    <h2>Freshly applied area,other than migration</h2>{" "}
+                                  </label>
+                                  <input type="text" className="form-control" {...register("freshlyApplied")} />
+                                </div>
+                              </div>
+                            )}
+                            <br></br>
+                            <div className="col col-3">
+                              <h2
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title=" Approved Layout of Plan/ Site plan for(GH)Showing Area(s)/Proposed migration."
+                              >
+                                Approved Layout of Plan. &nbsp;&nbsp;
+                                <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                              </h2>
+                              <input
+                                type="file"
+                                className="form-control"
+                                // {...register("approvedLayoutPlan")}
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "approvedLayoutPlan")}
+                              />
+                            </div>
+                            <div className="col col-3">
+                              <h2
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Proposed Layout of Plan /site plan for area applied for migration."
+                              >
+                                Proposed Layout of Plan. &nbsp;&nbsp;
+                                <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                              </h2>
+                              <input
+                                type="file"
+                                className="form-control"
+                                // {...register("proposedLayoutPlan")}
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "proposedLayoutPlan")}
+                              />
+                            </div>
+                            <div className="col col-3">
+                              <h2 data-toggle="tooltip" data-placement="top" title="Upload Previously approved Layout Plan.">
+                                Upload Previously approved. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                              </h2>
+                              <input
+                                type="file"
+                                className="form-control"
+                                // {...register("uploadPreviouslyLayoutPlan")}
+                                onChange={(e) => getDocumentData(e?.target?.files[0], "uploadPreviouslyLayoutPlan")}
+                              />
+                            </div>
                           </div>
                         </div>
                       )}
                     </div>
                   </div>
+                  <br></br>
                   <hr></hr>
                   <br></br>
                   <div>
                     <h4>2. Any encumbrance with respect to following </h4>
                     <label htmlFor="encumburance">
                       <input {...register("encumburance")} type="radio" value="rehan/mortgage" id="encumburance" />
-                      Rehan / Mortgage
+                      &nbsp;&nbsp; Rehan / Mortgage &nbsp;&nbsp;
                     </label>
                     <label htmlFor="encumburance">
                       <input {...register("encumburance")} type="radio" value="patta/lease" id="encumburance" />
-                      Patta/Lease
+                      &nbsp;&nbsp; Patta/Lease &nbsp;&nbsp;
                     </label>
                     <label htmlFor="encumburance">
                       <input {...register("encumburance")} type="radio" value="gair/marusi" id="encumburance" />
-                      Gair/Marusi
+                      &nbsp;&nbsp; Gair/Marusi &nbsp;&nbsp;
                     </label>
                   </div>
                   <div className="row">
@@ -563,15 +589,17 @@ const LandScheduleForm = (props) => {
                   <hr />
                   <br></br>
                   <div>
-                    <h6>(ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator. </h6>
-                    <label htmlFor="litigation">
-                      <input {...register("litigation")} type="radio" value="Y" id="litigation" />
-                      Yes
-                    </label>
-                    <label htmlFor="litigation">
-                      <input {...register("litigation")} type="radio" value="N" id="litigation" />
-                      No
-                    </label>
+                    <h6>
+                      (ii) Existing litigation, if any, concerning applied land including co-sharers and collaborator. &nbsp;&nbsp;
+                      <label htmlFor="litigation">
+                        <input {...register("litigation")} type="radio" value="Y" id="litigation" />
+                        &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="litigation">
+                        <input {...register("litigation")} type="radio" value="N" id="litigation" />
+                        &nbsp;&nbsp; No &nbsp;&nbsp;
+                      </label>
+                    </h6>
                   </div>
                   <div className="row">
                     <div className="col col-12 ">
@@ -602,15 +630,17 @@ const LandScheduleForm = (props) => {
                   <hr />
                   <br></br>
                   <div>
-                    <h6>(iii) Court orders, if any, affecting applied land. &nbsp;&nbsp;</h6>
-                    <label htmlFor="court">
-                      <input {...register("court")} type="radio" value="Y" id="court" />
-                      Yes
-                    </label>
-                    <label htmlFor="court">
-                      <input {...register("court")} type="radio" value="N" id="court" />
-                      No
-                    </label>
+                    <h6>
+                      (iii) Court orders, if any, affecting applied land. &nbsp;&nbsp;
+                      <label htmlFor="court">
+                        <input {...register("court")} type="radio" value="Y" id="court" />
+                        &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="court">
+                        <input {...register("court")} type="radio" value="N" id="court" />
+                        &nbsp;&nbsp; No &nbsp;&nbsp;
+                      </label>
+                    </h6>
                   </div>
                   <div className="row">
                     <div className="col col-12 ">
@@ -641,15 +671,17 @@ const LandScheduleForm = (props) => {
                   <hr />
                   <br></br>
                   <div>
-                    <h6>(iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed.&nbsp;&nbsp;</h6>
-                    <label htmlFor="insolvency">
-                      <input {...register("insolvency")} type="radio" value="Y" id="insolvency" />
-                      Yes
-                    </label>
-                    <label htmlFor="insolvency">
-                      <input {...register("insolvency")} type="radio" value="N" id="insolvency" />
-                      No
-                    </label>
+                    <h6>
+                      (iv) Any insolvency/liquidation proceedings against the land owner(s)/ collaborating developed.&nbsp;&nbsp;
+                      <label htmlFor="insolvency">
+                        <input {...register("insolvency")} type="radio" value="Y" id="insolvency" />
+                        &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                      </label>
+                      <label htmlFor="insolvency">
+                        <input {...register("insolvency")} type="radio" value="N" id="insolvency" />
+                        &nbsp;&nbsp; No &nbsp;&nbsp;
+                      </label>
+                    </h6>
                   </div>
                   <div className="row">
                     <div className="col col-12 ">
@@ -677,6 +709,7 @@ const LandScheduleForm = (props) => {
                       )}
                     </div>
                   </div>
+                  <br></br>
                   <hr />
                   <br></br>
                   <h5>3.Shajra Plan</h5>
@@ -686,11 +719,11 @@ const LandScheduleForm = (props) => {
                       <h2>(a)&nbsp;As per applied land (Yes/No)</h2>
                       <label htmlFor="appliedLand">
                         <input {...register("appliedLand")} type="radio" value="Y" id="appliedLand" />
-                        Yes
+                        &nbsp; Yes &nbsp;&nbsp;
                       </label>
                       <label htmlFor="appliedLand">
                         <input {...register("appliedLand")} type="radio" value="N" id="appliedLand" />
-                        No
+                        &nbsp; No &nbsp;&nbsp;
                       </label>
                       {watch("appliedLand") === "Y" && (
                         <div className="row ">
@@ -715,11 +748,11 @@ const LandScheduleForm = (props) => {
                       </h2>
                       <label htmlFor="revenueRasta">
                         <input {...register("revenueRasta")} type="radio" value="Y" id="revenueRasta" />
-                        Yes
+                        &nbsp;&nbsp; Yes &nbsp;&nbsp;
                       </label>
                       <label htmlFor="revenueRasta">
                         <input {...register("revenueRasta")} type="radio" value="N" id="revenueRasta" />
-                        No
+                        &nbsp;&nbsp; No &nbsp;&nbsp;
                       </label>
                       {watch("revenueRasta") === "Y" && (
                         <div className="row ">
@@ -742,11 +775,11 @@ const LandScheduleForm = (props) => {
                       </h2>
                       <label htmlFor="waterCourse">
                         <input {...register("waterCourse")} type="radio" value="Y" id="waterCourse" />
-                        Yes
+                        &nbsp;&nbsp; Yes &nbsp;&nbsp;
                       </label>
                       <label htmlFor="waterCourse">
                         <input {...register("waterCourse")} type="radio" value="N" id="waterCourse" />
-                        No
+                        &nbsp;&nbsp; No &nbsp;&nbsp;
                       </label>
                       {watch("waterCourse") === "Y" && (
                         <div className="row ">
@@ -1301,7 +1334,7 @@ const LandScheduleForm = (props) => {
                         type="file"
                         className="form-control"
                         // {...register("revisedLansSchedule")}
-                        onChange={(e) => getDocumentData(e?.target?.files[0], "revisedLansSchedule")}
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "revisedLanSchedule")}
                       />
                     </div>
                     <div className="col col-3">
