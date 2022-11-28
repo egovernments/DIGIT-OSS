@@ -136,7 +136,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const [Documents, setDocumentsData] = useState([]);
 
     const DevelopersAllData = getValues();
-    console.log("DEVEDATAGEGT",DevelopersAllData);
+    // console.log("DEVEDATAGEGT",DevelopersAllData);
     
     
     const [modal, setmodal] = useState(false);
@@ -202,7 +202,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const [show, setShow] = useState(false);
     const [showStake, setShowStakeholder] = useState(false);
 
-    console.log("ADINFO",developerDataAddinfo);
+    // console.log("ADINFO",developerDataAddinfo);
 
     const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
     const [urlGetDirectorDoc,setDocDirectorUrl] = useState("")
@@ -425,7 +425,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     
   // if (isLoading) return <Loader />;
   const goNext = async (e) => {
-
+    // const cin_match = cin_Number.match(Digit.Utils.getPattern('CIN'));
+    // if(!cin_match) {
+    //   alert("NOT Matched");
+    // } else {
+    //   alert("Matched");
+    // }
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
       let addInfo = {
         showDevTypeFields:showDevTypeFields,
@@ -515,11 +520,10 @@ const onSkip = () => onSelect();
           onSelect={goNext}
           onSkip={onSkip}
           isDisabled={
-            (showDevTypeFields === "00" || 
-            showDevTypeFields==undefined) ||
-            !cin_Number.match(Digit.Utils.getPattern('CIN')) ||
-            !gst_Number.match(Digit.Utils.getPattern('GSTNo')) ||
-            !registeredContactNo.match(Digit.Utils.getPattern('MobileNo'))
+            (showDevTypeFields === "00" || showDevTypeFields==undefined) ||
+            !cin_Number?.match(Digit.Utils.getPattern('CIN')) || 
+            !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) ||
+            !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) 
           }
           t={t}
         >
