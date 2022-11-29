@@ -110,7 +110,7 @@ export const BillDetailsKeyNoteConfig = () => ({
     heading: "COMMON_PAY_SCREEN_HEADER",
     details: [
       {
-        keyValue: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
+        keyValue: "WS_COMMON_TABLE_APP_NO_LABEL",
         keyPath: ["consumerCode"],
         fallback: "",
       },
@@ -120,7 +120,7 @@ export const BillDetailsKeyNoteConfig = () => ({
     heading: "COMMON_PAY_SCREEN_HEADER",
     details: [
       {
-        keyValue: "WS_COMMON_TABLE_COL_CONSUMER_NO_LABEL",
+        keyValue: "WS_COMMON_TABLE_APP_NO_LABEL",
         keyPath: ["consumerCode"],
         fallback: "",
       },

@@ -17,7 +17,7 @@ const getBillingPeriod = (fromPeriod, toPeriod) => {
 const getAddress = (address, t) => {
     return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
       address?.landmark ? `${address?.landmark}, ` : ""
-    }${ address.locality.code ?  t(`TENANTS_MOHALLA_${address?.locality.code}`) : ""}${ address.city.code ?  `, ${t(address?.city.code)}` : ""}${address?.pincode ? `, ${address.pincode}` : " "}`
+    }${ address?.locality?.code ?  t(`TENANTS_MOHALLA_${address?.locality?.code}`) : ""}${ address?.city?.code ?  `, ${t(address?.city?.code)}` : ""}${address?.pincode ? `, ${address.pincode}` : " "}`
 } 
   
 const combineResponse = (SewerageConnections, properties, billData, t) => {
@@ -25,7 +25,7 @@ const combineResponse = (SewerageConnections, properties, billData, t) => {
     return SewerageConnections.map((app) => ({
       ConsumerNumber : app ? app?.connectionNo : "",
       ConsumerName : app ? (app?.connectionHolders ? app?.connectionHolders.map((owner) => owner?.name).join(",") : properties.filter((prop) => prop.propertyId === app?.propertyId)[0]?.owners?.map((ow) => ow.name).join(",")) : "",
-      Address: getAddress((properties.filter((prop) => prop.propertyId === app?.propertyId)[0]).address, t),
+      Address: getAddress((properties.filter((prop) => prop.propertyId === app?.propertyId)?.[0])?.address, t),
       AmountDue : billData ? (billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.totalAmount ? billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.totalAmount : "0")  : "0",
       DueDate : billData ? getDate(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.expiryDate) : "NA",
       BillingPeriod : billData ?  getBillingPeriod(billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.fromPeriod , billData?.filter((bill) => bill?.consumerCode === app?.connectionNo)[0]?.billDetails?.[0]?.toPeriod) : "NA",
