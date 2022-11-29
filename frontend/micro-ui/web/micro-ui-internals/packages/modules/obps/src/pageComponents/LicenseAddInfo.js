@@ -136,7 +136,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     const [Documents, setDocumentsData] = useState([]);
 
     const DevelopersAllData = getValues();
-    console.log("DEVEDATAGEGT",DevelopersAllData);
+    // console.log("DEVEDATAGEGT",DevelopersAllData);
     
     
     const [modal, setmodal] = useState(false);
@@ -196,13 +196,13 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     
     const [docUpload,setDocuploadData]=useState([])
     const [file,setFile]=useState(null);
-    
+    const [cinValError, setCINValError] = useState("")
     const [showDevTypeFieldsValue,setShowDevTypeFieldsValue] = useState("")
 
     const [show, setShow] = useState(false);
     const [showStake, setShowStakeholder] = useState(false);
 
-    console.log("ADINFO",developerDataAddinfo);
+    // console.log("ADINFO",developerDataAddinfo);
 
     const [urlGetShareHoldingDoc,setDocShareHoldingUrl] = useState("")
     const [urlGetDirectorDoc,setDocDirectorUrl] = useState("")
@@ -246,6 +246,9 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     }
     function selectCinNumber(e){
       setCinNo(e.target.value.toUpperCase())
+    }
+    function selectDinNumber(value){
+      setModalDIN(value)
     }
     const handleshow0 = (e) => {
       const getshow = e.target.value;
@@ -360,8 +363,8 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
         }
       }catch(error){
   
-        console.log(error.message);
-  
+        console.log(error?.response?.data?.error_description);
+        setCINValError(error?.response?.data?.error_description)
       }
     }
 
@@ -422,7 +425,12 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
     
   // if (isLoading) return <Loader />;
   const goNext = async (e) => {
-
+    // const cin_match = cin_Number.match(Digit.Utils.getPattern('CIN'));
+    // if(!cin_match) {
+    //   alert("NOT Matched");
+    // } else {
+    //   alert("Matched");
+    // }
     if (!(formData?.result && formData?.result?.Licenses[0]?.id)) {
       let addInfo = {
         showDevTypeFields:showDevTypeFields,
@@ -441,7 +449,7 @@ const LicenseAddInfo = ({ t, config, onSelect, userType, formData, ownerIndex })
       }
       onSelect(config.key, addInfo);
       // console.log("DATALICDET",addInfo);
-      localStorage.setItem("addInfo",JSON.stringify(addInfo));
+      // localStorage.setItem("addInfo",JSON.stringify(addInfo));
 
       const developerRegisterData = {
         "id":userInfo?.info?.id,
@@ -511,7 +519,12 @@ const onSkip = () => onSelect();
           config={config}
           onSelect={goNext}
           onSkip={onSkip}
-          isDisabled={showDevTypeFields === "00" || showDevTypeFields==undefined}
+          isDisabled={
+            (showDevTypeFields === "00" || showDevTypeFields==undefined) ||
+            !cin_Number?.match(Digit.Utils.getPattern('CIN')) || 
+            !registeredContactNo?.match(Digit.Utils.getPattern('MobileNo')) ||
+            !gst_Number?.match(Digit.Utils.getPattern('GSTNo')) 
+          }
           t={t}
         >
           <div className="happy">
@@ -531,10 +544,11 @@ const onSkip = () => onSelect();
                           select={setDevType}
                           value={showDevTypeFields}
                           optionKey="code"
-                          name={showDevTypeFields}
+                          name="showDevTypeFields"
                           placeholder={showDevTypeFields}
                           style={{width:"100%"}}
                           t={t}
+                          required
                         />
                           
                         {/* <MuiDropdown 
@@ -659,19 +673,21 @@ const onSkip = () => onSelect();
                         onChange={selectCinNumber}
                         // onChange={(e) => setCinNo(e.target.value)}
                         value={cin_Number}
-                        name={cin_Number}
-                        isMendatory={false}
+                        name="cin_Number"
+                        // isMendatory={false}
                         placeholder={cin_Number}
                         className="employee-card-input text-uppercase"
                         max={"21"}
                         {...(validation = {
-                          isRequired: true,
-                          pattern: "^[a-zA-Z0-9]*$",
+                          // isRequired: true,
+                          pattern: "^[A-Z0-9]*$",
                           type: "text",
+                          maxlength: "21",
                           title: "Please Enter CIN Number"
                         })}
                       />
                       {cin_Number && cin_Number.length > 0 && !cin_Number.match(Digit.Utils.getPattern('CIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
+                      <h3 className="error-message" style={{ color: "red" }}>{cinValError}</h3>
                     </div>
                   </div>
                   <div className="col col-4">
@@ -683,14 +699,16 @@ const onSkip = () => onSelect();
                         type="text"
                         value={companyName}
                         placeholder={companyName}
-                        name={companyName}
+                        name="companyName"
+                        
                         onChange={(e) => setCompanyName(e.target.value)}
                         // disabled="disabled"
                         className="employee-card-input"
-                        isMendatory={false}
+                        // isMendatory={false}
                         {...(validation = {
-                          isRequired: true,
+                          // isRequired: true,
                           type: "text",
+                          maxlength: "50",
                           title: "Please Enter Company Name"
                         })}
                       // placeholder=""
@@ -718,13 +736,14 @@ const onSkip = () => onSelect();
                     <div className="form-group">
                       <label htmlFor="name">Date of Incorporation <span className="text-danger font-weight-bold">*</span></label>
                       <DatePicker
-                        isMandatory={false}
+                        // isMandatory={false}
+                        
                         date={incorporationDate}
-                        name={incorporationDate}
+                        name="incorporationDate"
                         onChange={(e) => setIncorporation(e)}
                         disable={false}
                         {...(validation = {
-                          isRequired: true,
+                          // isRequired: true,
                           type: "date",
                           title: "Please Enter Date of Incorporation"
                         })}
@@ -744,16 +763,17 @@ const onSkip = () => onSelect();
                       <label htmlFor="name">Registered Address <span className="text-danger font-weight-bold">*</span></label>
                       <TextInput
                         type="text"
-                        name={registeredAddress}
+                        name="registeredAddress"
                         value={registeredAddress}
                         placeholder={registeredAddress}
                         onChange={(e) => setRegistered(e.target.value)}
                         // disabled="disabled"
                         className="employee-card-input"
-                        isMandatory={false}
+                        // isMandatory={false}
+                        
                         {...(validation = {
                           isRequired: true,
-                          required: "Address is required"
+                          error: "Address is required"
                         })}
                       />
                       {registeredAddress && !registeredAddress.length > 0 && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_CIN_NO")}</CardLabelError>}
@@ -766,9 +786,10 @@ const onSkip = () => onSelect();
                       <TextInput
                         t={t}
                         type={"email"}
-                        isMandatory={false}
+                        // isMandatory={false}
                         optionKey="i18nKey"
                         name="email"
+                        
                         value={email}
                         placeholder={email}
                         // onChange={setEmail}
@@ -802,8 +823,9 @@ const onSkip = () => onSelect();
                       /> */}
                       <MobileNumber
                         value={registeredContactNo}
-                        name={registeredContactNo}
+                        name="registeredContactNo"
                         maxlength={"10"}
+                        
                         onChange={selectRegisteredMobile}
                         // disable={mobileNumber && !isOpenLinkFlow ? true : false}
                         {...{ required: true, pattern: "[6-9]{1}[0-9]{9}", type: "tel", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
@@ -816,11 +838,13 @@ const onSkip = () => onSelect();
                       <label htmlFor="name">GST No. <span className="text-danger font-weight-bold">*</span></label>
                       <TextInput
                         type="text"
+                        
                         value={gst_Number}
                         placeholder={gst_Number}
                         onChange={(e) => setGST(e.target.value.toUpperCase())}
                         className="employee-card-input"
-                        name={gst_Number}
+                        name="gst_Number"
+                        {...{ required: true, maxlength: "15", title: t("CORE_COMMON_APPLICANT_MOBILE_NUMBER_INVALID") }}
                       // className={`employee-card-input`}
                       // placeholder=""
                       // {...register("name", {
@@ -869,7 +893,7 @@ const onSkip = () => onSelect();
                     </thead>
                     <tbody>
                       {
-                        ( modalValuesArray.length>0)?
+                        ( modalValuesArray?.length>0)?
                         modalValuesArray.map((elementInArray, input) => {
                           return (
                             <tr>
@@ -923,11 +947,11 @@ const onSkip = () => onSelect();
                                 </div>
                               </td>
                               <td>
-                                <button
+                                <a href="javascript:void(0)"
                                   onClick={()=>(deleteTableRows(-1))}
                                 >
                                   <DeleteIcon color="danger" className="icon" />
-                                </button>
+                                </a>
                               </td>
                             </tr>
                           );
@@ -973,7 +997,7 @@ const onSkip = () => onSelect();
                       <form className="text1" id="myForm">
                         <Row>
                           <Col md={3} xxl lg="4">
-                            <label htmlFor="name" className="text">Name *</label>
+                            <label htmlFor="name" className="text">Name <span className="text-danger font-weight-bold">*</span></label>
                             <TextInput
                               type="text"
                               isMandatory={false}
@@ -990,7 +1014,7 @@ const onSkip = () => onSelect();
                             />
                           </Col>
                           <Col md={3} xxl lg="4">
-                            <label htmlFor="name" className="text">	Designition *</label>
+                            <label htmlFor="name" className="text">	Designition <span className="text-danger font-weight-bold">*</span></label>
                             <TextInput
                               type="text"
                               isMandatory={false}
@@ -999,7 +1023,7 @@ const onSkip = () => onSelect();
                               class="employee-card-input"
                               {...(validation = {
                                 isRequired: true,
-                                pattern: "^[a-zA-Z]*$",
+                                pattern: "^[a-z A-Z]*$",
                                 type: "text",
                                 title: "Please Enter Designition"
                               })}
@@ -1007,7 +1031,7 @@ const onSkip = () => onSelect();
                           </Col>
 
                           <Col md={3} xxl lg="4">
-                            <label htmlFor="name" className="text">Percentage *</label>
+                            <label htmlFor="name" className="text">Percentage "%" <span className="text-danger font-weight-bold">*</span></label>
                             <TextInput
                               type="flot"
                               isMandatory={false}
@@ -1016,8 +1040,6 @@ const onSkip = () => onSelect();
                               class="employee-card-input"
                               {...(validation = {
                                 isRequired: true,
-                                pattern: "^[0-9]*$",
-                                type: "text",
                                 title: "Please Enter Percentage"
                               })}
                             />
@@ -1046,7 +1068,7 @@ const onSkip = () => onSelect();
                       <Button variant="secondary" onClick={handleCloseStakeholder}>
                         Close
                       </Button>
-                      <Button variant="primary" onClick={handleArrayValues}>
+                      <Button variant="primary" disabled={!modalPercentage?.match(Digit.Utils.getPattern('Percentage'))} onClick={handleArrayValues}>
                         Save Changes
                       </Button>
                     </Modal.Footer>
@@ -1073,7 +1095,7 @@ const onSkip = () => onSelect();
                     </thead>
                     <tbody>
                       {
-                        (DirectorData.length>0)?
+                        (DirectorData?.length>0)?
                       DirectorData.map((elementInArray, input) => {
                         return (
                           <tr key={input}>
@@ -1124,11 +1146,11 @@ const onSkip = () => onSelect();
                               </div>
                             </td>
                             <td>
-                                <button
+                                <a href="javascript:void(0)"
                                   onClick={()=>(deleteDirectorTableRows(-1))}
                                 >
                                   <DeleteIcon color="danger" className="icon" />
-                                </button>
+                                </a>
                               </td>
                           </tr>
                         );
@@ -1158,18 +1180,30 @@ const onSkip = () => onSelect();
                         <Row>
                           <Col md={3} xxl lg="4">
                             <label htmlFor="name" className="text">DIN Number</label>
-                            <TextInput
-                              type="number"
+                            <MobileNumber
+                              value={modalDIN}
+                              name="modalDIN"
+                              maxlength={"8"}
+                              hideSpan="true"
+                              // onChange={(e) => setModalDIN(e.target.value)}
+                              onChange={selectDinNumber}
+                              // disable={mobileNumber && !isOpenLinkFlow ? true : false}
+                              {...{ required: true, pattern: "[1-9][0-9]{7}", type: "tel", title: t("Enter Valid DIN") }}
+                            />
+                            {/* <MobileNumber
+                              
                               isMandatory={false}
                               onChange={(e) => setModalDIN(e.target.value.toUpperCase())}
                               placeholder=""
-                              max={8}
+                              max= {8}
                               class="employee-card-input"
                               {...(validation = {
                                 isRequired: true,
+                                maxlength: "8",
+                                type: "tel",
                                 title: "Please Enter DIN No."
                               })}
-                            />
+                            /> */}
                             {modalDIN && modalDIN.length > 0 && !modalDIN.match(Digit.Utils.getPattern('DIN')) && <CardLabelError style={{ width: "100%", marginTop: '-15px', fontSize: '16px', marginBottom: '12px', color: 'red' }}>{t("BPA_INVALID_DIN_NO")}</CardLabelError>}
                           </Col>
                           <Col md={3} xxl lg="4">
