@@ -429,9 +429,9 @@ const EditProperty = ({ parentRoute }) => {
   const ptProperty = JSON.parse(sessionStorage.getItem("pt-property")) || { };
   //const data = { Properties: [ptProperty] };
     const { isLoading: isPTloading, isError, error, data } = Digit.Hooks.pt.usePropertySearch(
-    { filters: typeOfProperty ? { acknowledgementIds, isSearchInternal:true  } : { acknowledgementIds, isSearchInternal:true  } },
+    { filters: updateProperty ? { propertyIds, isSearchInternal:true  } : { acknowledgementIds, isSearchInternal:true  } },
     {
-      filters: typeOfProperty ? { acknowledgementIds, isSearchInternal:true  } : { acknowledgementIds, isSearchInternal:true  },
+      filters: updateProperty ? { propertyIds, isSearchInternal:true  } : { acknowledgementIds, isSearchInternal:true  },
     }
   ); 
   sessionStorage.setItem("isEditApplication", false);

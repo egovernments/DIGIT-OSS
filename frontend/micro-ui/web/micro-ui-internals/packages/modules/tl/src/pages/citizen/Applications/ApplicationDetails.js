@@ -22,7 +22,7 @@ import TLDocument from "../../../pageComponents/TLDocumets";
 const getAddress = (address, t) => {
   return `${address?.doorNo ? `${address?.doorNo}, ` : ""} ${address?.street ? `${address?.street}, ` : ""}${
     address?.landmark ? `${address?.landmark}, ` : ""
-  }${t(address?.locality.code)}, ${t(address?.city.code)},${t(address?.pincode) ? `${address.pincode}` : " "}`;
+  }${t(address?.locality?.code)}, ${t(address?.city?.code)},${t(address?.pincode) ? `${address?.pincode}` : " "}`;
 };
 
 const TLApplicationDetails = () => {
