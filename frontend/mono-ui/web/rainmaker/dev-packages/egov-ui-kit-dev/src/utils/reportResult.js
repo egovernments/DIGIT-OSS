@@ -572,14 +572,14 @@ class ShowField extends Component {
       displayStart: displayStart,
       buttons: self.getExportOptions(),
       searching: true,
-      language:{"sLengthMenu" : `${translate("CS_SHOW")} _MENU_ ${translate("CS_ENTRIES")}`,
-                "sSearch" :translate("CS_SEARCH"),
-                "sInfo" : `${translate("CS_SHOWING")} _START ${translate("CS_TO")} _END_ ${translate("CS_OF")} _TOTAL_ ${translate("CS_RECORDS")}`,
+      language:{"sLengthMenu" : `${getLocaleLabels("CS_SHOW","CS_SHOW")} _MENU_ ${getLocaleLabels("CS_ENTRIES","CS_ENTRIES")}`,
+                "sSearch" :getLocaleLabels("CS_SEARCH","CS_SEARCH"),
+                "sInfo" : `${getLocaleLabels("CS_SHOWING","CS_SHOWING")} _START ${getLocaleLabels("CS_TO","CS_TO")} _END_ ${getLocaleLabels("CS_OF","CS_OF")} _TOTAL_ ${getLocaleLabels("CS_RECORDS","CS_RECORDS")}`,
                 "oPaginate":{
-                  "sFirst":translate("CS_PAGINATION_FIRST"),
-                  "sLast":translate("CS_PAGINATION_LAST"),
-                  "sNext":translate("CS_PAGINATION_NEXT"),
-                  "sPrevious":translate("CS_PAGINATION_PREVIOUS")
+                  "sFirst":getLocaleLabels("CS_PAGINATION_FIRST","CS_PAGINATION_FIRST"),
+                  "sLast":getLocaleLabels("CS_PAGINATION_LAST","CS_PAGINATION_LAST"),
+                  "sNext":getLocaleLabels("CS_PAGINATION_NEXT","CS_PAGINATION_NEXT"),
+                  "sPrevious":getLocaleLabels("CS_PAGINATION_PREVIOUS","CS_PAGINATION_PREVIOUS")
                 }},
       paging: true,
       ordering: true,
