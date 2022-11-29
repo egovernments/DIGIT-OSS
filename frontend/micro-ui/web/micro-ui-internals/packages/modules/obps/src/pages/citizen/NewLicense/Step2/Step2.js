@@ -3,6 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
+// import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,16 +11,11 @@ import WorkingTable from "../../../../components/Table";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
-import { Archive } from "react-bootstrap-icons";
-import { min } from "lodash";
 
 const ApllicantPuropseForm = (props) => {
-  console.log("props", props);
-
   const resetFields = {
     tehsil: "",
     revenueEstate: "",
-    hadbastno: "",
     mustil: "",
     kanal: "",
     marla: "",
@@ -107,6 +103,7 @@ const ApllicantPuropseForm = (props) => {
       key: "landOwner",
       title: "Name of Land Owner",
       dataIndex: "landOwner",
+      render: (data) => data?.split(" ")?.slice(0, 2)?.join(" "),
     },
     {
       key: "agreementIrrevocialble",
@@ -171,7 +168,7 @@ const ApllicantPuropseForm = (props) => {
   const [district, setDistrict] = useState("");
   const [modalData, setModalData] = useState([]);
   const [specificTableData, setSpecificTableData] = useState(null);
-  const [districtDataLbels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
+  const [districtDataLabels, setDistrictDataLabels] = useState({ data: [], isLoading: true });
   const [tehsilDataLabels, setTehsilDataLabels] = useState({ data: [], isLoading: true });
   const [revenueDataLabels, setRevenueDataLabels] = useState({ data: [], isLoading: true });
   const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
@@ -188,7 +185,6 @@ const ApllicantPuropseForm = (props) => {
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
       setValue("revenueEstate", specificTableData?.revenueEstate);
-      setValue("hadbastNo", specificTableData?.hadbastNo);
       setValue("mustil", specificTableData?.mustil);
       setValue("kanal", specificTableData?.kanal);
       setValue("marla", specificTableData?.marla);
@@ -199,7 +195,7 @@ const ApllicantPuropseForm = (props) => {
       setValue("landOwner", specificTableData?.landOwner);
     }
   }, [specificTableData]);
-
+  // const [urlGetShareHoldingDoc, setDocShareHoldingUrl] = useState("");
   const {
     register,
     handleSubmit,
@@ -246,7 +242,7 @@ const ApllicantPuropseForm = (props) => {
       });
       setDistrictDataLabels({ data: distData, isLoading: false });
     } catch (error) {
-      console.log(error?.message);
+      return error;
     }
   };
 
@@ -258,22 +254,22 @@ const ApllicantPuropseForm = (props) => {
       });
       setTehsilDataLabels({ data: tehsilData, isLoading: false });
     } catch (error) {
-      console.log(error?.message);
+      return error;
     }
   };
 
   const getRevenuStateData = async (code) => {
     try {
       const Resp = await axios.post("/egov-mdms-service/v1/_village?" + "dCode=" + district + "&" + "tCode=" + code, datapost, {});
-      console.log("resp=====", Resp?.data);
       const revenData = Resp?.data?.map((el) => {
-        return { label: el?.name, id: el?.code, value: el?.code };
+        return { label: el?.name, id: el?.khewats, value: el?.code, khewats: el?.khewats, code: el?.code };
       });
       setRevenueDataLabels({ data: revenData, isLoading: false });
     } catch (error) {
-      console.log(error?.message);
+      return error;
     }
   };
+
   const getMustilData = async (code) => {
     try {
       const Resp = await axios.post(
@@ -291,6 +287,7 @@ const ApllicantPuropseForm = (props) => {
   };
 
   const getLandOwnerStateData = async (text) => {
+    setLoader(true);
     try {
       const Resp = await axios.post(
         "/egov-mdms-service/v1/_owner?" +
@@ -306,10 +303,11 @@ const ApllicantPuropseForm = (props) => {
         datapost,
         {}
       );
-      // console.log("Resp=====", Resp?.data?.[0]?.name);
+      setLoader(false);
       setValue("landOwner", Resp?.data?.[0]?.name);
     } catch (error) {
-      console.log(error?.message);
+      setLoader(false);
+      return error;
     }
   };
 
@@ -318,10 +316,8 @@ const ApllicantPuropseForm = (props) => {
   }, []);
 
   const ApplicantPurposeModalData = (modalData) => {
-    console.log("data------", modalData);
     modalData["tehsil"] = modalData?.tehsil?.value;
     modalData["revenueEstate"] = modalData?.revenueEstate?.value;
-    modalData["hadbastNo"] = modalData?.hadbastNo?.value;
     modalData["mustil"] = modalData?.mustil?.value;
     modalData["registeringAuthorityDoc"] = docId;
     delete modalData?.district;
@@ -344,7 +340,6 @@ const ApllicantPuropseForm = (props) => {
     setModalData((prev) => [...prev, modalData]);
     setmodal(false);
     // reset(resetFields);
-    setCollaboration("");
   };
 
   const PurposeFormSubmitHandler = async (data) => {
@@ -354,7 +349,6 @@ const ApllicantPuropseForm = (props) => {
     data["state"] = "Haryana";
     delete data?.tehsil;
     delete data?.revenueEstate;
-    delete data?.hadbastNo;
     delete data?.mustil;
     delete data?.kanal;
     delete data?.marla;
@@ -407,15 +401,26 @@ const ApllicantPuropseForm = (props) => {
       setLoader(true);
       try {
         const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-        console.log(Resp?.data);
         setLoader(false);
-        props.Step2Continue();
+        props.Step2Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
       } catch (error) {
         setLoader(false);
-        console.log(error.message);
+        return error;
       }
     }
   };
+
+  useEffect(() => {
+    if (props?.getLicData?.ApplicantPurpose) {
+      const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
+      const potientialData = potentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
+      const districtData = districtDataLabels?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.district);
+      setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
+      setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+      setValue("district", { label: districtData?.[0]?.label, value: districtData?.[0]?.value });
+      // setValue("LC", props?.getLicData?.ApplicantInfo?.LC);
+    }
+  }, [props?.getLicData, purposeOptions, potentialOptons, districtDataLabels]);
 
   const handleChangePurpose = (data) => {
     console.log("data", data);
@@ -427,19 +432,36 @@ const ApllicantPuropseForm = (props) => {
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
 
+  // const getDocShareholding = async (data) => {
+  //   if ((data?.registeringAuthorityDoc !== null || data?.registeringAuthorityDoc !== undefined) && (uploadPdf !== null || uploadPdf !== "")) {
+  //     try {
+  //       const response = await axios.get(`/filestore/v1/files/url?tenantId=${tenantId}&fileStoreIds=${data?.registeringAuthorityDoc}`, {});
+  //       const FILDATA = response.data?.fileStoreIds[0]?.url;
+  //       setDocShareHoldingUrl(FILDATA);
+  //     } catch (error) {
+  //       console.log(error.message);
+  //     }
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   getDocShareholding();
+  // }, [data?.registeringAuthorityDoc]);
+
   const getDocumentData = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tenantId", "hr");
     formData.append("module", "property-upload");
     formData.append("tag", "tag-property");
-    // setLoader(true);
+    setLoader(true);
     try {
       const Resp = await axios.post("/filestore/v1/files", formData, {});
       setDocId(Resp?.data?.files?.[0]?.fileStoreId);
+      setLoader(false);
     } catch (error) {
       setLoader(false);
-      console.log(error.message);
+      return error;
     }
   };
 
@@ -448,33 +470,10 @@ const ApllicantPuropseForm = (props) => {
   useEffect(() => {
     delay = setTimeout(() => {
       if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
-    }, 1000);
+    }, 500);
     return () => clearTimeout(delay);
   }, [watch("khewats")]);
-  const [applicantId, setApplicantId] = useState("");
-  const getApplicantPurposeUserData = async (id) => {
-    console.log("here");
-    try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
-      const userData = Resp?.data?.newServiceInfoData[0]?.ApplicantPurpose;
-      console.log("dd", Resp?.data?.newServiceInfoData[0]?.ApplicantPurpose?.purpose?.label);
-      setValue("purpose", userData?.purpose?.value);
-      setValue("potential", userData?.potential);
-      setValue("district", userData?.district);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  useEffect(() => {
-    const search = location?.search;
-    const params = new URLSearchParams(search);
-    const id = params.get("id");
 
-    setApplicantId(id?.toString());
-    if (id) getApplicantPurposeUserData(id);
-  }, []);
-
-  //................................Col.............................................//
   const [values, setValues] = useState({ kanal: "", second: "0.125", sum: "" });
   const [kanal, setkanal] = useState("");
   const [second, setSecond] = useState("");
@@ -557,7 +556,7 @@ const ApllicantPuropseForm = (props) => {
     setSumBiswansi(newSum);
   };
 
-  const sumTotal = sum + summarla + sumsarsai + sumBigha + sumBiswa + sumBiswansi;
+  const sumTotal = sum + summarla + sumsarsai + 0 + 0 + 0;
   console.log("add", sumTotal);
 
   useEffect(() => {
@@ -587,7 +586,7 @@ const ApllicantPuropseForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -595,7 +594,7 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Puropse Of Licence<span style={{ color: "red" }}>*</span>
+                        Puropse Of License<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
@@ -648,11 +647,10 @@ const ApllicantPuropseForm = (props) => {
                     control={control}
                     name="district"
                     placeholder="District"
-                    data={districtDataLbels?.data}
+                    data={districtDataLabels?.data}
                     labels="District"
-                    loading={districtDataLbels?.isLoading}
+                    loading={districtDataLabels?.isLoading}
                     onChange={(e) => {
-                      console.log("e===", e);
                       getTehslidata(e.value);
                       setDistrict(e.value);
                     }}
@@ -708,7 +706,10 @@ const ApllicantPuropseForm = (props) => {
               <br></br>
 
               <div className="applt" style={{ overflow: "auto" }}>
-                <WorkingTable columns={columns} data={modalData} />
+                <WorkingTable
+                  columns={columns}
+                  data={props?.getLicData?.ApplicantPurpose?.AppliedLandDetails ? props?.getLicData?.ApplicantPurpose?.AppliedLandDetails : modalData}
+                />
               </div>
             </Form.Group>
 
@@ -733,7 +734,6 @@ const ApllicantPuropseForm = (props) => {
         isOpen={modal}
         toggle={() => {
           // reset(resetFields);
-          setCollaboration("");
           setmodal(!modal);
         }}
       >
@@ -741,7 +741,6 @@ const ApllicantPuropseForm = (props) => {
           toggle={() => {
             setmodal(!modal);
             // reset(resetFields);
-            setCollaboration("");
           }}
         ></ModalHeader>
         <ModalBody>
@@ -783,12 +782,8 @@ const ApllicantPuropseForm = (props) => {
                   {...register("revenueEstate")}
                   data={revenueDataLabels?.data}
                   labels="Revenue Estate"
-                  // value={this.state.editableUserName}
                   loading={revenueDataLabels?.isLoading}
-                  onChange={(e) => {
-                    console.log("e", e);
-                    getMustilData(e.code);
-                  }}
+                  onChange={(e) => getMustilData(e.code)}
                 />
 
                 <h3 className="error-message" style={{ color: "red" }}>
@@ -831,6 +826,7 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.mustil && errors?.mustil?.message}
                 </h3>
               </Col>
+
               <Col md={4} xxl lg="4">
                 <div>
                   <label>
@@ -858,7 +854,7 @@ const ApllicantPuropseForm = (props) => {
               <Col md={4} xxl lg="12">
                 <div>
                   <h2>
-                    Consolidation Type<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                    Consolidation Type<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;
                     <label htmlFor="consolidated">
                       <input
                         {...register("consolidationType")}
@@ -867,9 +863,9 @@ const ApllicantPuropseForm = (props) => {
                         defaultChecked={true}
                         defaultValue="consolidated"
                         id="consolidated"
-                        onClick={() => setConsolidateValue("consolidated")}
-                      />{" "}
-                      &nbsp;&nbsp; Consolidated &nbsp;&nbsp;
+                        // onClick={() => setConsolidateValue("consolidated")}
+                      />
+                      &nbsp; Consolidated &nbsp;&nbsp;
                     </label>
                     <label htmlFor="non-consolidated">
                       <input
@@ -877,14 +873,14 @@ const ApllicantPuropseForm = (props) => {
                         type="radio"
                         value="non-consolidated"
                         id="non-consolidated"
-                        onClick={() => setConsolidateValue("non-consolidated")}
-                      />{" "}
-                      &nbsp;&nbsp; Non-Consolidated &nbsp;&nbsp;
+                        // onClick={() => setConsolidateValue("non-consolidated")}
+                      />
+                      &nbsp; Non-Consolidated &nbsp;&nbsp;
                     </label>
                   </h2>
                 </div>
 
-                {consolidateValue == "consolidated" && (
+                {watch("consolidationType") == "consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
@@ -895,7 +891,7 @@ const ApllicantPuropseForm = (props) => {
                           <h2>Marla</h2>
                         </th>
                         <th>
-                          <h2>Sarsai</h2>
+                          <h2>Sarsai</h2>&nbsp;&nbsp;
                         </th>
                       </tr>
                     </thead>
@@ -907,20 +903,17 @@ const ApllicantPuropseForm = (props) => {
 
                           <label htmlFor="sum">Total</label>
                           <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" /> */}
-                          <input onChange={onChange} defaultValue={kanal} name="kanal" id="kanal" type="number" />
                           <input type="text" className="form-control" {...register("kanal")} onChange={onChange} defaultValue={kanal} id="kanal" />
                           <label htmlFor="sum">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" />
                         </td>
                         <td>
-                          <input onChange={onChange} defaultValue={marla} name="marla" id="marla" type="number" />
                           <input type="text" className="form-control" {...register("marla")} onChange={onChange} defaultValue={marla} id="marla" />
                           <label htmlFor="summarla">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={summarla} id="summarla" name="summarla" type="number" />
                           {/* <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} /> */}
                         </td>
                         <td>
-                          <input onChange={onChange} defaultValue={marla} name="sarsai" id="sarsai" type="number" />
                           <input type="text" className="form-control" {...register("sarsai")} onChange={onChange} defaultValue={sarsai} id="sarsai" />
                           <label htmlFor="sumsarsai">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={sumsarsai} id="sumsarsai" name="sumsarsai" type="number" />
@@ -930,7 +923,7 @@ const ApllicantPuropseForm = (props) => {
                     </tbody>
                   </table>
                 )}
-                {consolidateValue == "non-consolidated" && (
+                {watch("consolidationType") == "non-consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
@@ -941,28 +934,25 @@ const ApllicantPuropseForm = (props) => {
                           <h2>Biswa</h2>
                         </th>
                         <th>
-                          <h2>Biswansi</h2>
+                          <h2>Biswansi</h2>&nbsp;&nbsp;
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>
-                          <input onChange={onChange} defaultValue={bigha} name="bigha" id="bigha" type="number" />
                           <input type="text" className="form-control" {...register("bigha")} onChange={onChange} defaultValue={bigha} id="bigha" />
                           <label htmlFor="sumBigha">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={sumBigha} id="sumBigha" name="sumBigha" type="number" />
                           {/* <Form.Control type="text" className="form-control" {...register("bigha")} /> */}
                         </td>
                         <td>
-                          <input onChange={onChange} defaultValue={biswa} name="biswa" id="biswa" type="number" />
                           <input type="text" className="form-control" {...register("biswa")} onChange={onChange} defaultValue={biswa} id="biswa" />
                           <label htmlFor="sumBiswa">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={sumBiswa} id="sumBiswa" name="sumBiswa" type="number" />
                           {/* <Form.Control type="text" className="form-control" {...register("biswa")} /> */}
                         </td>
                         <td>
-                          <input onChange={onChange} defaultValue={biswansi} name="biswansi" id="biswansi" type="number" />
                           <input
                             type="text"
                             className="form-control"
@@ -1079,6 +1069,9 @@ const ApllicantPuropseForm = (props) => {
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
                             Registring Authority document <span style={{ color: "red" }}>*</span>
                             <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                            {/* <a href={urlGetShareHoldingDoc} target="_blank" className="btn btn-sm col-md-6">
+                              <VisibilityIcon color="info" className="icon" />
+                            </a> */}
                           </h2>
                         </label>
                         <br></br>

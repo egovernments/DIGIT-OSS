@@ -54,7 +54,6 @@ const LandScheduleForm = (props) => {
   const [getPotentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [typeOfLand, setYypeOfLand] = useState({ data: [], isLoading: true });
   const [loader, setLoader] = useState(false);
-  const Purpose = localStorage.getItem("purpose");
 
   const stateId = Digit.ULBService.getStateId();
   const { data: PurposeType } = Digit.Hooks.obps.useMDMS(stateId, "common-masters", ["Purpose"]);
@@ -91,14 +90,14 @@ const LandScheduleForm = (props) => {
     formState: { errors },
     control,
     setValue,
-    reset,
-    getValues,
     watch,
   } = useForm();
 
+  const Purpose = localStorage.getItem("purpose");
+
   const landScheduleFormSubmitHandler = async (data) => {
     const token = window?.localStorage?.getItem("token");
-    // setLoader(true);
+    setLoader(true);
     data["potential"] = data?.potential?.value;
     data["approachType"] = data?.approachType?.value;
     data["typeLand"] = data?.typeLand?.value;
@@ -107,7 +106,7 @@ const LandScheduleForm = (props) => {
     const postDistrict = {
       pageName: "LandSchedule",
       ApplicationStatus: "DRAFT",
-      id: props.getId,
+      id: props?.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
       LicenseDetails: {
@@ -115,7 +114,6 @@ const LandScheduleForm = (props) => {
           ...data,
         },
       },
-
       RequestInfo: {
         apiId: "Rainmaker",
         ver: "v1",
@@ -131,13 +129,37 @@ const LandScheduleForm = (props) => {
     };
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      // setLoader(false);
-      props.Step3Continue();
+      setLoader(false);
+      props.Step3Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
     } catch (error) {
-      // setLoader(false);
-      console.log(error.message);
+      setLoader(false);
+      return error.message;
     }
   };
+
+  useEffect(() => {
+    console.log("props?.getLicData?.ApplicantInfo", props?.getLicData?.LandSchedule);
+    const valueData = props?.getLicData?.LandSchedule;
+    if (props?.getLicData?.LandSchedule) {
+      Object?.keys(valueData)?.map((item) => setValue(item, valueData[item]));
+      const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
+      const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
+      setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
+      setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+    }
+  }, [props?.getLicData]);
+
+  const getSubmitDataLabel = async () => {
+    try {
+      const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`);
+      const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
+    } catch (error) {
+      return error.message;
+    }
+  };
+  useEffect(() => {
+    getSubmitDataLabel();
+  }, []);
 
   const getDocumentData = async (file, fieldName) => {
     const formData = new FormData();
@@ -153,105 +175,8 @@ const LandScheduleForm = (props) => {
       setLoader(false);
     } catch (error) {
       setLoader(false);
-      console.log(error.message);
+      return error.message;
     }
-  };
-
-  const [applicantId, setApplicantId] = useState("");
-  const getApplicantDetailsUserData = async (id) => {
-    console.log("here");
-    try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
-      const userData = Resp?.data?.newServiceInfoData[0]?.LandSchedule;
-      console.log("dd", Resp?.data?.newServiceInfoData[0]?.LandSchedule);
-      setValue("licenseApplied", userData?.licenseApplied);
-      setValue("licenseNumber", userData?.licenseNumber);
-      setValue("siteLoc", userData?.siteLoc);
-      setValue("approachType", userData?.approachType);
-      setValue("approachRoadWidth", userData?.approachRoadWidth);
-      setValue("specify", userData?.specify);
-      setValue("typeLand", userData?.typeLand);
-      setValue("thirdParty", userData?.thirdParty);
-      setValue("thirdPartyRemark", userData?.thirdPartyRemark);
-      setValue("thirdPartyDoc", userData?.thirdPartyDoc);
-      setValue("migrationLic", userData?.migrationLic);
-      setValue("areaUnderMigration", userData?.areaUnderMigration);
-      setValue("purposeParentLic", userData?.purposeParentLic);
-      setValue("licNo", userData?.licNo);
-      setValue("areaofParentLic", userData?.areaofParentLic);
-      setValue("validityOfParentLic", userData?.validityOfParentLic);
-      setValue("renewalFee", userData?.renewalFee);
-      setValue("freshlyApplied", userData?.freshlyApplied);
-      setValue("encumburance", userData?.encumburance);
-      setValue("encumburanceOther", userData?.encumburanceOther);
-      setValue("litigation", userData?.litigation);
-      setValue("litigationRemark", userData?.litigationRemark);
-      setValue("litigationDoc", userData?.litigationDoc);
-      setValue("court", userData?.court);
-      setValue("courtyCaseNo", userData?.courtyCaseNo);
-      setValue("courtDoc", userData?.courtDoc);
-      setValue("insolvency", userData?.insolvency);
-      setValue("insolvencyRemark", userData?.insolvencyRemark);
-      setValue("insolvencyDoc", userData?.insolvencyDoc);
-      setValue("appliedLand", userData?.appliedLand);
-      setValue("revenueRasta", userData?.revenueRasta);
-      setValue("revenueRastaWidth", userData?.revenueRastaWidth);
-      setValue("waterCourse", userData?.waterCourse);
-      setValue("waterCourseRemark", userData?.waterCourseRemark);
-      setValue("compactBlock", userData?.compactBlock);
-      setValue("compactBlockRemark", userData?.compactBlockRemark);
-      setValue("landSandwiched", userData?.landSandwiched);
-      setValue("landSandwichedRemark", userData?.landSandwichedRemark);
-      setValue("acquistion", userData?.acquistion);
-      setValue("acquistionRemark", userData?.acquistionRemark);
-      setValue("sectionFour", userData?.sectionFour);
-      setValue("sectionSix", userData?.sectionSix);
-      setValue("orderUpload", userData?.orderUpload);
-      setValue("landCompensation", userData?.landCompensation);
-      setValue("releaseStatus", userData?.releaseStatus);
-      setValue("awardDate", userData?.awardDate);
-      setValue("releaseDate", userData?.releaseDate);
-      setValue("siteDetail", userData?.siteDetail);
-      setValue("siteApproachable", userData?.siteApproachable);
-      setValue("vacant", userData?.vacant);
-      setValue("vacantRemark", userData?.vacantRemark);
-      setValue("construction", userData?.construction);
-      setValue("typeOfConstruction", userData?.typeOfConstruction);
-      setValue("constructionRemark", userData?.constructionRemark);
-      setValue("ht", userData?.ht);
-      setValue("htRemark", userData?.htRemark);
-      setValue("gas", userData?.gas);
-      setValue("gasRemark", userData?.gasRemark);
-      setValue("nallah", userData?.nallah);
-      setValue("nallahRemark", userData?.nallahRemark);
-      setValue("road", userData?.road);
-      setValue("roadWidth", userData?.roadWidth);
-      setValue("roadRemark", userData?.roadRemark);
-      setValue("marginalLand", userData?.marginalLand);
-      setValue("marginalLandRemark", userData?.marginalLandRemark);
-      setValue("utilityLine", userData?.utilityLine);
-      setValue("utilityWidth", userData?.utilityWidth);
-      setValue("utilityRemark", userData?.utilityRemark);
-      setValue("landSchedule", userData?.landSchedule);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  useEffect(() => {
-    const search = location?.search;
-    const params = new URLSearchParams(search);
-    const id = params.get("id");
-
-    setApplicantId(id?.toString());
-    if (id) getApplicantDetailsUserData(id);
-  }, []);
-
-  const [showhide, setShowhide] = useState("");
-
-  const handleshowhide = (event) => {
-    const getuser = event.target.value;
-
-    setShowhide(getuser);
   };
 
   return (
@@ -259,7 +184,7 @@ const LandScheduleForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(landScheduleFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -286,7 +211,7 @@ const LandScheduleForm = (props) => {
                             <div className="col col-4">
                               <label>
                                 <h2>
-                                  Licence No. of Parent Licence <span style={{ color: "red" }}>*</span>
+                                  License No. of Parent License <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
                               <input type="number" className="form-control" {...register("licenseNumber")} />
@@ -314,9 +239,6 @@ const LandScheduleForm = (props) => {
                               </label>
                               <input type="text" className="form-control" {...register("siteLoc")} />
                             </div>
-                          </div>
-                          <br></br>
-                          <div className="row">
                             <div className="col col-12">
                               <label>
                                 <h2>
@@ -324,12 +246,12 @@ const LandScheduleForm = (props) => {
                                 </h2>
                               </label>
                               {/* <ReactMultiSelect
-                                control={control}
-                                name="approachType"
-                                placeholder="Approach"
-                                data={potentialOptons}
-                                labels="Potential"
-                              /> */}
+                              control={control}
+                              name="approachType"
+                              placeholder="Approach"
+                              data={potentialOptons}
+                              labels="Potential"
+                            /> */}
                               <select className="form-control" id="approachType" {...register("approachType")}>
                                 <option>{Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}</option>
                                 {/* <option value="potential 2">(a) Existing ser-vice road along with sector di-viding road.</option> */}
@@ -354,7 +276,7 @@ const LandScheduleForm = (props) => {
                                   Specify Others<span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
-                              <input type="text" {...register("specify")} className="form-control" />
+                              <input type="number" {...register("specify")} className="form-control" />
                             </div>
                             <div className="col col-3">
                               <label>
@@ -384,11 +306,11 @@ const LandScheduleForm = (props) => {
 
                               <label htmlFor="thirdParty">
                                 <input {...register("thirdParty")} type="radio" value="Y" id="thirdParty" />
-                                &nbsp; Yes &nbsp;&nbsp;
+                                Yes
                               </label>
                               <label htmlFor="thirdParty">
                                 <input {...register("thirdParty")} type="radio" value="N" id="thirdParty" />
-                                &nbsp; No &nbsp;&nbsp;
+                                No
                               </label>
                               {watch("thirdParty") === "Y" && (
                                 <div className="row ">

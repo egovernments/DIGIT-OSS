@@ -7,7 +7,7 @@ const DDJAYForm = ({ register, watch }) => {
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
         <h5 className="text-black">
-          <b>xDeen Dayal Jan Awas Yojna (DDJAY)</b>
+          <b>Deen Dayal Jan Awas Yojna (DDJAY)</b>
         </h5>
 
         <div className="table table-bordered table-responsive">

@@ -8,8 +8,6 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { VALIDATION_SCHEMA } from "../../../../utils/schema/step1";
 
 // import InfoIcon from '@mui/icons-material/Info';
 // import TextField from '@mui/material/TextField';
@@ -27,8 +25,6 @@ const style = {
 
 const FeesChargesForm = (props) => {
   const [purpose, setPurpose] = useState("");
-  const [scrutinyFee, setScrutinyFee] = useState("");
-  const [licenseFee, setLicenseFee] = useState("");
   const [totalFee, setTotalFee] = useState("");
   const [remark, setRemark] = useState("");
   const [payableNow, setPayableNow] = useState("");
@@ -41,12 +37,11 @@ const FeesChargesForm = (props) => {
     formState: { errors },
     control,
     setValue,
-    watch,
     reset,
   } = useForm({
     mode: "onSubmit",
     reValidateMode: "onBlur",
-    resolver: yupResolver(VALIDATION_SCHEMA),
+    // resolver: yupResolver(VALIDATION_SCHEMA),
     shouldFocusError: true,
   });
   const [submitDataLabel, setSubmitDataLabel] = useState([]);
@@ -54,40 +49,34 @@ const FeesChargesForm = (props) => {
   const [FeesChargesFormSubmitted, SetFeesChargesFormSubmitted] = useState(false);
 
   const FeesChrgesFormSubmitHandler = async (data) => {
-    console.log("data------", data);
-    props.Step5Continue(data, "5");
-    const token = window?.localStorage?.getItem("token");
-    const postDistrict = {
-      pageName: "FeesAndCharges",
-      ApplicationStatus: "APPLY",
-      id: props.getId,
-      createdBy: props?.userData?.id,
-      updatedBy: props?.userData?.id,
-      LicenseDetails: {
-        FeesAndCharges: {
-          ...data,
-        },
-      },
-      RequestInfo: {
-        apiId: "Rainmaker",
-        ver: "v1",
-        ts: 0,
-        action: "_search",
-        did: "",
-        key: "",
-        msgId: "090909",
-        requesterId: "",
-        authToken: token,
-        userInfo: props?.userData,
-      },
-    };
-
     try {
-      const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
-      props.Step5Continue();
+      const postDistrict = {
+        NewServiceInfo: {
+          pageName: "FeesAndCharges",
+          id: props.getId,
+          newServiceInfoData: {
+            FeesAndCharges: {
+              totalArea: data.totalArea,
+              purpose: data.purpose,
+              devPlan: data.potential,
+              scrutinyFee: data.scrutinyFee,
+              licenseFee: data.licenseFee,
+              conversionCharges: data.conversionCharges,
+              remark: data.remark,
+              adjustFee: data.licNumber,
+            },
+          },
+        },
+      };
+
+      const Resp = await axios.post("/land-services/new/_create", postDistrict).then((Resp) => {
+        return Resp;
+      });
+
+      props.Step5Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
+      SetFeesChargesFormSubmitted(Resp.data);
     } catch (error) {
-      console.log(error.message);
+      return error?.message;
     }
   };
 
@@ -133,21 +122,20 @@ const FeesChargesForm = (props) => {
         },
       ],
       CalculatorRequest: {
-        totalLandSize: totalAreaAcre,
+        totalLandSize: 1,
         potenialZone: potential,
         purposeCode: Purpose,
-        applicationNumber: props.getId,
+        applicationNumber: "INITIATE",
       },
     };
-    console.log("dd", props.getId);
+
     try {
       const Resp = await axios.post("/tl-calculator/v1/_calculator", payload);
-      console.log("Resp.data===", Resp.data?.Calculations?.[0]?.tradeTypeBillingIds);
       const charges = Resp.data?.Calculations?.[0]?.tradeTypeBillingIds;
       setValue("scrutinyFee", charges?.scrutinyFeeCharges);
       setValue("licenseFee", charges?.licenseFeeCharges);
       setValue("conversionCharges", charges?.conversionCharges);
-      setCalculateData(Resp.data);
+      // setCalculateData(Resp.data);
     } catch (error) {
       console.log(error.message);
     }
@@ -156,91 +144,19 @@ const FeesChargesForm = (props) => {
     CalculateApiCall();
   }, []);
 
-  console.log("total", scrutinyFee);
-
-  const [applicantId, setApplicantId] = useState("");
-  const getApplicantDetailsUserData = async (id) => {
-    console.log("here");
+  const getSubmitDataLabel = async () => {
     try {
-      const Resp = await axios.get(`http://103.166.62.118:8443/tl-services/new/licenses/_get?id=${id}`);
-      const userData = Resp?.data?.newServiceInfoData[0]?.FeesAndCharges;
-      console.log("dd", Resp?.data?.newServiceInfoData[0]?.FeesAndCharges);
-
-      setValue("amountPayable", userData?.amountPayable);
-      setValue("remark", userData?.remark);
-      setValue("adjustFee", userData?.adjustFee);
-      setValue("licNumber", userData?.licNumber);
-      setValue("amount", userData?.amount);
-      setValue("amountAdjusted", userData?.amountAdjusted);
+      const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`).then((response) => {
+        return response;
+      });
+      console.log("RESP+++", Resp?.data);
+      setSubmitDataLabel(Resp?.data);
     } catch (error) {
       console.log(error.message);
     }
   };
-
-  // const PaymentApiCall = async () => {
-  //   const token = window?.localStorage?.getItem("token");
-  //   const payload = {
-  //     RequestInfo: {
-  //       apiId: "Rainmaker",
-  //       action: "_create",
-  //       did: 1,
-  //       key: "",
-  //       msgId: "20170310130900|en_IN",
-  //       ts: 0,
-  //       ver: ".01",
-  //       authToken: token,
-  //       userInfo: props?.userData,
-  //     },
-  //     Transaction: {
-  //       tenantId: "hr",
-  //       txnAmount: 100,
-  //       module: "PT",
-  //       moduleId: "prop12-assess1",
-  //       consumerCode: "01",
-  //       billId: "9876",
-  //       productInfo: "Property Tax Payment",
-  //       gateway: "NIC",
-  //       callbackUrl: "http://egrashry.nic.in/pg-service/transaction/v1/_update",
-  //       user: {
-  //         uuid: "a5e51f81-6a0b-4b6d-b120-1985c7f2d2b4",
-  //         name: "ad",
-  //         userName: "8888888888",
-  //         tenantId: "hr",
-  //         id: 4,
-  //         mobileNumber: "8888888888",
-  //       },
-  //       taxAndPayments: [
-  //         {
-  //           taxAmount: "100",
-  //           billId: "1967",
-  //           amountPaid: "100",
-  //         },
-  //       ],
-  //     },
-  //   };
-  //   console.log("dd", props.getId);
-  //   try {
-  //     const Resp = await axios.post("/pg-service/transaction/v1/_create", payload);
-  //     console.log("Resp.data===", Resp);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
-  // useEffect(() => {
-  //   PaymentApiCall();
-  // }, []);
-
   useEffect(() => {
-    localStorage.setItem("total", scrutinyFee);
-  }, [scrutinyFee]);
-
-  useEffect(() => {
-    const search = location?.search;
-    const params = new URLSearchParams(search);
-    const id = params.get("id");
-
-    setApplicantId(id?.toString());
-    if (id) getApplicantDetailsUserData(id);
+    getSubmitDataLabel();
   }, []);
 
   const handleChangePurpose = (data) => {
@@ -251,10 +167,6 @@ const FeesChargesForm = (props) => {
     const purposeSelected = data.data;
     setSelectPurpose(purposeSelected);
   };
-  // const handleChangeKanal = (modalData) => {
-  //   const kanalSelected = modalData.data;
-  //   setSelectKanal(kanalSelected);
-  // };
   const handleScrutiny = (event) => {
     setCalculateData(event.target.value);
   };
@@ -268,7 +180,7 @@ const FeesChargesForm = (props) => {
   return (
     <form onSubmit={handleSubmit(FeesChrgesFormSubmitHandler)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
           <Form.Group className="justify-content-center" controlId="formBasicEmail">
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -315,13 +227,10 @@ const FeesChargesForm = (props) => {
                       <th>Scrutiny Fees</th>
                       <td>
                         <input type="text" className="form-control" disabled {...register("scrutinyFee")} />
-                        <h3 className="error-message" style={{ color: "red" }}>
-                          {errors?.LC && errors?.scrutinyFee?.message}
-                        </h3>
                       </td>
                     </tr>
                     <tr>
-                      <th>Licence Fees</th>
+                      <th>License Fees</th>
                       <td>
                         <input type="text" className="form-control" disabled {...register("licenseFee")} />
                       </td>
@@ -344,15 +253,12 @@ const FeesChargesForm = (props) => {
                     <input
                       type="text"
                       className="form-control"
-                      disabled
-                      {...register("amountPayable")}
                       minLength={1}
                       maxLength={20}
                       pattern="[0-9]*"
                       onChange1={handleTotalFeesChange}
                       onChange={(e) => setPayableNow(e.target.value)}
                       value={payableNow}
-                      placeholder="85210.51"
                     />
                     {errors.totalFee && <p></p>}
                   </div>
@@ -371,21 +277,17 @@ const FeesChargesForm = (props) => {
                   </div>
 
                   <div className="col col-4">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous licence (Yes/No)">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)">
                       (iii)&nbsp;Adjust Fees &nbsp;&nbsp;
                     </h6>
-                    <label htmlFor="adjustFee">
-                      <input {...register("adjustFee")} type="radio" value="Y" id="adjustFee" />
-                      Yes
-                    </label>
-                    <label htmlFor="adjustFee">
-                      <input {...register("adjustFee")} type="radio" value="N" id="adjustFee" />
-                      No
-                    </label>
-                    {watch("adjustFee") === "Y" && (
+                    <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
+                    <label for="Yes">Yes</label>&nbsp;&nbsp;
+                    <input type="radio" value="No" id="No" onChange={handleChange} name="Yes" onClick={handleshow0} />
+                    <label for="No">No</label>
+                    {showhide0 === "Yes" && (
                       <div className="row ">
                         <div className="col col-12">
-                          <label>Enter Licence Number/LOI number</label>
+                          <label>Enter License Number/LOI number</label>
                           <input type="text" className="form-control" {...register("licNumber")} />
                           <label>Amount (previous)</label>
                           <input type="text" className="form-control" disabled {...register("amount")} />
