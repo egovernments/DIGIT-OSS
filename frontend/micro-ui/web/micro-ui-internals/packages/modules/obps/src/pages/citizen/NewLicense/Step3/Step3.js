@@ -89,12 +89,11 @@ const LandScheduleForm = (props) => {
     formState: { errors },
     control,
     setValue,
-    reset,
-    getValues,
     watch,
   } = useForm();
 
   const landScheduleFormSubmitHandler = async (data) => {
+    const token = window?.localStorage?.getItem("token");
     setLoader(true);
     data["potential"] = data?.potential?.value;
     data["approachType"] = data?.approachType?.value;
@@ -104,7 +103,7 @@ const LandScheduleForm = (props) => {
     const postDistrict = {
       pageName: "LandSchedule",
       ApplicationStatus: "DRAFT",
-      id: props.getId,
+      id: props?.getId,
       createdBy: props?.userData?.id,
       updatedBy: props?.userData?.id,
       LicenseDetails: {
@@ -128,19 +127,31 @@ const LandScheduleForm = (props) => {
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
       setLoader(false);
-      props.Step3Continue();
+      props.Step3Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
     } catch (error) {
       setLoader(false);
-      console.log(error.message);
+      return error.message;
     }
   };
+
+  useEffect(() => {
+    console.log("props?.getLicData?.ApplicantInfo", props?.getLicData?.LandSchedule);
+    const valueData = props?.getLicData?.LandSchedule;
+    if (props?.getLicData?.LandSchedule) {
+      Object?.keys(valueData)?.map((item) => setValue(item, valueData[item]));
+      const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
+      const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
+      setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
+      setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+    }
+  }, [props?.getLicData]);
 
   const getSubmitDataLabel = async () => {
     try {
       const Resp = await axios.get(`http://103.166.62.118:8443/land-services/new/licenses/_get?id=${props.getId}`);
       const userData = Resp?.data?.newServiceInfoData?.[0]?.LandSchedule;
     } catch (error) {
-      console.log(error.message);
+      return error.message;
     }
   };
   useEffect(() => {
@@ -161,7 +172,7 @@ const LandScheduleForm = (props) => {
       setLoader(false);
     } catch (error) {
       setLoader(false);
-      console.log(error.message);
+      return error.message;
     }
   };
 

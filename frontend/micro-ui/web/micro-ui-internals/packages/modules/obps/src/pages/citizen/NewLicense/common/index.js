@@ -20,6 +20,15 @@ const CommonForm = () => {
   const [getLicData, setLicData] = useState(null);
   const [stepActive, setStepActive] = useState({ step1: false, step2: false, step3: false, step4: false, step5: false });
 
+  const handleStep = () => {
+    setIsStep1(false);
+    setIsStep2(false);
+    setIsStep3(false);
+    setIsStep4(false);
+    setIsStep5(false);
+    setStep(1);
+  };
+
   const handleStep1 = (id, userInfo, licData) => {
     setId(id);
     setLicData(licData);
@@ -32,15 +41,6 @@ const CommonForm = () => {
     setStep(2);
   };
 
-  const handleStep = () => {
-    setIsStep1(false);
-    setIsStep2(false);
-    setIsStep3(false);
-    setIsStep4(false);
-    setIsStep5(false);
-    setStep(1);
-  };
-
   const handlestep2 = (licData) => {
     setLicData(licData);
     setIsStep2(true);
@@ -49,6 +49,32 @@ const CommonForm = () => {
     setIsStep4(false);
     setIsStep5(false);
     setStep(3);
+  };
+
+  const handlestep3 = (licData) => {
+    setLicData(licData);
+    setIsStep3(true);
+    setIsStep1(false);
+    setIsStep2(false);
+    setIsStep4(false);
+    setStep(4);
+  };
+
+  const handlestep4 = (licData) => {
+    setLicData(licData);
+    setIsStep4(true);
+    setIsStep1(false);
+    setIsStep2(false);
+    setIsStep3(false);
+    setStep(5);
+  };
+
+  const handlestep5 = () => {
+    setIsStep5(true);
+    setIsStep1(false);
+    setIsStep2(false);
+    setIsStep3(false);
+    setIsStep4(false);
   };
 
   const handleBack = () => {
@@ -87,41 +113,16 @@ const CommonForm = () => {
     setStep(3);
   };
 
-  const handlestep3 = () => {
-    setIsStep3(true);
-    setIsStep1(false);
-    setIsStep2(false);
-    setIsStep4(false);
-    setStep(4);
-  };
-
-  const handlestep4 = () => {
-    setIsStep4(true);
-    setIsStep1(false);
-    setIsStep2(false);
-    setIsStep3(false);
-    setStep(5);
-  };
-
-  const handlestep5 = () => {
-    setIsStep5(true);
-    setIsStep1(false);
-    setIsStep2(false);
-    setIsStep3(false);
-    setIsStep4(false);
-  };
-
   useEffect(() => {
-    console.log(!_.isEmpty(getLicData?.ApplicantPurpose));
     if (_.isEmpty(getLicData)) setStepActive({ step1: true, step2: false, step3: false, step4: false, step5: false });
     if (!_.isEmpty(getLicData?.ApplicantInfo)) setStepActive({ step1: true, step2: true, step3: false, step4: false, step5: false });
     if (!_.isEmpty(getLicData?.ApplicantPurpose)) setStepActive({ step1: true, step2: true, step3: true, step4: false, step5: false });
-    if (!_.isEmpty(getLicData?.DetailsofAppliedLand)) setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: false });
-    console.log("userData====", getLicData);
+    if (!_.isEmpty(getLicData?.LandSchedule)) setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: false });
+    if (!_.isEmpty(getLicData?.DetailsofAppliedLand)) setStepActive({ step1: true, step2: true, step3: true, step4: true, step5: true });
     if (getCheck == 2 && stepActive.step2) handleStep1(getId, userData, getLicData);
     else if (getCheck == 3 && stepActive.step3) handlestep2(getLicData);
-    else if (getCheck == 4 && stepActive.step4) handlestep3();
-    else if (getCheck == 5 && stepActive.step5) handlestep4();
+    else if (getCheck == 4 && stepActive.step4) handlestep3(getLicData);
+    else if (getCheck == 5 && stepActive.step5) handlestep4(getLicData);
     else if (getCheck == 1) handleStep();
   }, [getCheck, getLicData]);
 
@@ -131,9 +132,9 @@ const CommonForm = () => {
       {isStep1 ? (
         <ApllicantPuropseForm getLicData={getLicData} userData={userData} getId={getId} Step2Continue={handlestep2} Step2Back={handleBack} />
       ) : isStep2 ? (
-        <LandScheduleForm getId={getId} userData={userData} Step3Continue={handlestep3} Step3Back={handleBack2} />
+        <LandScheduleForm getLicData={getLicData} getId={getId} userData={userData} Step3Continue={handlestep3} Step3Back={handleBack2} />
       ) : isStep3 ? (
-        <AppliedDetailForm getId={getId} userData={userData} Step4Continue={handlestep4} step4Back={handleBack3} />
+        <AppliedDetailForm getLicData={getLicData} getId={getId} userData={userData} Step4Continue={handlestep4} step4Back={handleBack3} />
       ) : isStep4 ? (
         <FeesChargesForm getId={getId} userData={userData} Step5Continue={handlestep5} step5Back={handleBack4} />
       ) : (

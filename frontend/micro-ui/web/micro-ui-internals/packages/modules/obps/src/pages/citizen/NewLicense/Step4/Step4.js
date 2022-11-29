@@ -53,6 +53,7 @@ const AppliedDetailForm = (props) => {
   });
 
   const AppliedDetailFormSubmitHandler = async (data) => {
+    setLoader(true);
     const token = window?.localStorage?.getItem("token");
     const postDistrict = {
       pageName: "DetailsofAppliedLand",
@@ -209,17 +210,27 @@ const AppliedDetailForm = (props) => {
         userInfo: props?.userData,
       },
     };
-
-    console.log("data------", postDistrict);
-    // return;
     try {
       const Resp = await axios.post("/tl-services/new/_create", postDistrict);
-      // console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
-      props.Step4Continue();
+      setLoader(false);
+      props.Step4Continue(Resp?.data?.LicenseServiceResponseInfo?.[0]?.newServiceInfoData?.[0]);
     } catch (error) {
-      console.log(error.message);
+      setLoader(false);
+      return error?.message;
     }
   };
+
+  useEffect(() => {
+    console.log("props?.getLicData?.ApplicantInfo", props?.getLicData);
+    // const valueData = props?.getLicData;
+    // if (props?.getLicData?.LandSchedule) {
+    //   Object?.keys(valueData)?.map((item) => setValue(item, valueData[item]));
+    //   const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
+    //   const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
+    //   setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
+    //   setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+    // }
+  }, [props?.getLicData]);
 
   const getSubmitDataLabel = async () => {
     try {

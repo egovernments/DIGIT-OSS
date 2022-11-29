@@ -169,7 +169,6 @@ const ApllicantPuropseForm = (props) => {
   const [modal, setmodal] = useState(false);
   const [tehsilCode, setTehsilCode] = useState(null);
   const [consolidateValue, setConsolidateValue] = useState("consolidated");
-  const [getCollaboration, setCollaboration] = useState("");
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
   const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [docId, setDocId] = useState(null);
@@ -281,6 +280,7 @@ const ApllicantPuropseForm = (props) => {
   };
 
   const getLandOwnerStateData = async (text) => {
+    setLoader(true);
     try {
       const Resp = await axios.post(
         "/egov-mdms-service/v1/_owner?" +
@@ -296,8 +296,10 @@ const ApllicantPuropseForm = (props) => {
         datapost,
         {}
       );
+      setLoader(false);
       setValue("landOwner", Resp?.data?.[0]?.name);
     } catch (error) {
+      setLoader(false);
       return error;
     }
   };
@@ -331,7 +333,6 @@ const ApllicantPuropseForm = (props) => {
     setModalData((prev) => [...prev, modalData]);
     setmodal(false);
     // reset(resetFields);
-    setCollaboration("");
   };
 
   const PurposeFormSubmitHandler = async (data) => {
@@ -403,7 +404,6 @@ const ApllicantPuropseForm = (props) => {
   };
 
   useEffect(() => {
-    console.log("props?.getLicData?.ApplicantInfo", props?.getLicData?.ApplicantPurpose);
     if (props?.getLicData?.ApplicantPurpose) {
       const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
       const potientialData = potentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
@@ -447,7 +447,7 @@ const ApllicantPuropseForm = (props) => {
   useEffect(() => {
     delay = setTimeout(() => {
       if (watch("khewats")) getLandOwnerStateData(watch("khewats"));
-    }, 1000);
+    }, 500);
     return () => clearTimeout(delay);
   }, [watch("khewats")]);
 
@@ -604,7 +604,6 @@ const ApllicantPuropseForm = (props) => {
         isOpen={modal}
         toggle={() => {
           // reset(resetFields);
-          setCollaboration("");
           setmodal(!modal);
         }}
       >
@@ -612,7 +611,6 @@ const ApllicantPuropseForm = (props) => {
           toggle={() => {
             setmodal(!modal);
             // reset(resetFields);
-            setCollaboration("");
           }}
         ></ModalHeader>
         <ModalBody>
@@ -699,7 +697,7 @@ const ApllicantPuropseForm = (props) => {
                       defaultChecked={true}
                       defaultValue="consolidated"
                       id="consolidated"
-                      onClick={() => setConsolidateValue("consolidated")}
+                      // onClick={() => setConsolidateValue("consolidated")}
                     />
                     Consolidated
                   </label>
@@ -709,13 +707,13 @@ const ApllicantPuropseForm = (props) => {
                       type="radio"
                       value="non-consolidated"
                       id="non-consolidated"
-                      onClick={() => setConsolidateValue("non-consolidated")}
+                      // onClick={() => setConsolidateValue("non-consolidated")}
                     />
                     Non-Consolidated
                   </label>
                 </div>
 
-                {consolidateValue == "consolidated" && (
+                {watch("consolidationType") == "consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
@@ -745,7 +743,7 @@ const ApllicantPuropseForm = (props) => {
                     </tbody>
                   </table>
                 )}
-                {consolidateValue == "non-consolidated" && (
+                {watch("consolidationType") == "non-consolidated" && (
                   <table className="table table-bordered" style={{ backgroundColor: "rgb(251 251 253))" }}>
                     <thead>
                       <tr>
@@ -780,7 +778,6 @@ const ApllicantPuropseForm = (props) => {
 
             <div>
               <label>Enter Khewat</label>
-
               <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
             </div>
 
@@ -807,14 +804,14 @@ const ApllicantPuropseForm = (props) => {
                 </h2>
 
                 <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="N" id="yes" onClick={() => setCollaboration("Y")} />
+                  <input {...register("collaboration")} type="radio" value="Y" id="yes" />
                   Yes
                 </label>
                 <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="Y" id="no" onClick={() => setCollaboration("N")} />
+                  <input {...register("collaboration")} type="radio" value="N" id="no" />
                   No
                 </label>
-                {getCollaboration === "Y" && (
+                {watch("collaboration") === "Y" && (
                   <div className="row ">
                     <div className="col col-4">
                       <label>
@@ -846,11 +843,11 @@ const ApllicantPuropseForm = (props) => {
                         Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
                       </h2>
                       <label htmlFor="agreementIrrevocialble">
-                        <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
+                        <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
                         Yes
                       </label>
                       <label htmlFor="agreementIrrevocialble">
-                        <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
+                        <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
                         No
                       </label>
                     </div>

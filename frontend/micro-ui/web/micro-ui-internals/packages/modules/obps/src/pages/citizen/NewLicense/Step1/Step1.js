@@ -67,7 +67,6 @@ const ApllicantFormStep1 = (props) => {
   };
 
   useEffect(() => {
-    console.log("props?.getLicData?.ApplicantInfo", props?.getLicData?.ApplicantInfo);
     if (props?.getLicData?.ApplicantInfo) {
       setValue("notSigned", props?.getLicData?.ApplicantInfo?.notSigned);
       setValue("LC", props?.getLicData?.ApplicantInfo?.LC);

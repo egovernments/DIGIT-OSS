@@ -49,7 +49,6 @@ const FeesChargesForm = (props) => {
   const [FeesChargesFormSubmitted, SetFeesChargesFormSubmitted] = useState(false);
 
   const FeesChrgesFormSubmitHandler = async (data) => {
-    console.log("data------", data);
     try {
       const postDistrict = {
         NewServiceInfo: {
@@ -74,11 +73,10 @@ const FeesChargesForm = (props) => {
         return Resp;
       });
 
-      console.log("MMM", Resp?.data?.NewServiceInfo?.[0]?.id);
       props.Step5Continue(data, Resp?.data?.NewServiceInfo?.[0]?.id);
       SetFeesChargesFormSubmitted(Resp.data);
     } catch (error) {
-      console.log(error.message);
+      return error?.message;
     }
   };
 
@@ -132,7 +130,6 @@ const FeesChargesForm = (props) => {
 
     try {
       const Resp = await axios.post("/tl-calculator/v1/_calculator", payload);
-      console.log("Resp.data===", Resp.data?.Calculations?.[0]?.tradeTypeBillingIds);
       const charges = Resp.data?.Calculations?.[0]?.tradeTypeBillingIds;
       setValue("scrutinyFee", charges?.scrutinyFeeCharges);
       setValue("licenseFee", charges?.licenseFeeCharges);
