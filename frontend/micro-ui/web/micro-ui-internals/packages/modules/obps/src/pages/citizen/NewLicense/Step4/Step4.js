@@ -935,11 +935,11 @@ const AppliedDetailForm = (props) => {
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="surrender">
                             <input {...register("surrender")} type="radio" value="Y" id="surrender" />
-                            Yes
+                            &nbsp; Yes &nbsp;&nbsp;
                           </label>
                           <label htmlFor="surrender">
                             <input {...register("surrender")} type="radio" value="N" id="surrender" />
-                            No
+                            &nbsp; No &nbsp;&nbsp;
                           </label>
                           {watch("surrender") === "Y" && (
                             <div className="row ">
@@ -958,11 +958,11 @@ const AppliedDetailForm = (props) => {
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="pocketProposed">
                             <input {...register("pocketProposed")} type="radio" value="Y" id="pocketProposed" />
-                            Yes
+                            &nbsp; Yes &nbsp;&nbsp;
                           </label>
                           <label htmlFor="pocketProposed">
                             <input {...register("pocketProposed")} type="radio" value="N" id="pocketProposed" />
-                            No
+                            &nbsp; No &nbsp;&nbsp;
                           </label>
                           {watch("pocketProposed") === "Y" && (
                             <div className="row ">
@@ -987,11 +987,11 @@ const AppliedDetailForm = (props) => {
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="deposit">
                             <input {...register("deposit")} type="radio" value="Y" id="deposit" />
-                            Yes
+                            &nbsp; Yes &nbsp;&nbsp;
                           </label>
                           <label htmlFor="deposit">
                             <input {...register("deposit")} type="radio" value="N" id="deposit" />
-                            No
+                            &nbsp; No &nbsp;&nbsp;
                           </label>
                           {watch("deposit") === "Y" && (
                             <div className="row ">
@@ -1012,11 +1012,11 @@ const AppliedDetailForm = (props) => {
                         <td style={{ display: "flex", gap: "8px" }} component="th" scope="row">
                           <label htmlFor="surrendered">
                             <input {...register("surrendered")} type="radio" value="Y" id="surrendered" />
-                            Yes
+                            &nbsp; Yes &nbsp;&nbsp;
                           </label>
                           <label htmlFor="surrendered">
                             <input {...register("surrendered")} type="radio" value="N" id="surrendered" />
-                            No
+                            &nbsp; No &nbsp;&nbsp;
                           </label>
                           {watch("surrendered") === "Y" && (
                             <div className="row ">
@@ -1057,17 +1057,18 @@ const AppliedDetailForm = (props) => {
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Sectoral Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Sectoral Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")} />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Upload Layout Plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Upload Layout Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadLayoutPlan")} />
                     </div>
                   </div>
+                  <br></br>
                   <div className="row">
                     <div className="col col-3">
                       <h6
@@ -1076,7 +1077,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of plans showing cross sections of proposed roads indicating, in particular, the width of proposed carriage ways cycle tracks and footpaths etc"
                       >
-                        Plans showing cross sections &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Plans showing cross sections. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")} />
                     </div>
@@ -1087,11 +1088,16 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of plans indicating, in addition, the position of sewers, stormwater channels, water supply and any other public health services."
                       >
-                        Plans indicating position of public health services. &nbsp;&nbsp;
+                        Plans indicating position of public. &nbsp;&nbsp;
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")} />
+                      <input
+                        type="file"
+                        className="form-control"
+                        onChange={(e) => getDocumentData(e?.target?.files[0], "publicHealthServices")}
+                        style={{ marginTop: "-12px" }}
+                      />
                     </div>
                     <div className="col col-3">
                       <h6
@@ -1100,7 +1106,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs of road works and estimated costs thereof"
                       >
-                        Specifications and designs of road works &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Specifications and designs. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")} />
                     </div>
@@ -1111,12 +1117,13 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs of sewerage, storm, water and water supply works and estimated costs thereof"
                       >
-                        Designs of sewerage, storm and water supply &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Designs of sewerage and storm. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")} />
                     </div>
                   </div>
+                  <br></br>
                   <div className="row">
                     <div className="col col-3">
                       <h6
@@ -1125,7 +1132,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs for disposal and treatment of storm and sullage water and estimated costs of works."
                       >
-                        Designs for disposal and treatment of storm &nbsp;&nbsp;
+                        Disposal and storm treatment. &nbsp;&nbsp;
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
@@ -1138,7 +1145,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Whether intimated each of the allottees through registered post regarding the proposed changes in the layout plan: - If yes selected upload"
                       >
-                        Undertaking that no change &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Undertaking that no change. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")} />
@@ -1150,19 +1157,20 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
                       >
-                        Whether you hosted the existing approved layout plan &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Hosted approved layout plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")} />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Report any objection from any of the allottees &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Report any objection. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")} />
                     </div>
                   </div>
+                  <br></br>
                   <div className="row">
                     <div className="col col-3">
                       <h6
@@ -1171,7 +1179,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Consent of RERA if there is any change in the phasing ."
                       >
-                        Consent of RERA &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Consent of RERA. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")} />
@@ -1183,7 +1191,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Undertaking that no change has been made in the phasing "
                       >
-                        Undertaking &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Undertaking. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")} />
@@ -1195,7 +1203,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Copy of detailed specifications and designs for electric supply including street lighting"
                       >
-                        Detailed specifications and designs for electric supply &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Designs for electric supply.&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")} />
@@ -1207,7 +1215,7 @@ const AppliedDetailForm = (props) => {
                         data-placement="top"
                         title="Explanatory note regarding the salient feature of the proposed colony."
                       >
-                        Salient feature of the proposed colony &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Salient feature of the colony. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")} />
