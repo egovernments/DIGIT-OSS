@@ -177,17 +177,22 @@ const SelectTradeUnits = ({ t, config, onSelect, userType, formData }) => {
     units[i].uom = e.target.value;
     setError(null);
     
-    let selectedtradesubType = billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === units[i]?.tradesubtype?.code && ob?.structureType === formData?.TradeDetails?.BuildingType?.code )
+    let selectedtradesubType = billingSlabTradeTypeData?.filter((ob) => ob?.tradeType === units[i]?.tradesubtype?.code && (ob?.structureType === formData?.TradeDetails?.BuildingType?.code || ob?.structureType === formData?.TradeDetails?.VehicleType?.code))
+    if(!(e.target.value && parseFloat(e.target.value) > 0)){
+      setError("TL_UOM_VALUE_GREATER_O")
+    }
+    else{
     if(Number.isInteger(selectedtradesubType?.[0]?.fromUom)){
      if(!(e.target.value && parseInt(e.target.value) >= selectedtradesubType?.[0]?.fromUom)){
-     setError("TL_FILL_CORRECT_UOM_VALUE");
+     setError(`${t("TL_FILL_CORRECT_UOM_VALUE")} ${selectedtradesubType?.[0]?.fromUom} - ${selectedtradesubType?.[0]?.toUom}`);
      }
     }
     if(Number.isInteger(selectedtradesubType?.[0]?.toUom)){
     if(!(e.target.value && parseInt(e.target.value) <= selectedtradesubType?.[0]?.toUom)){
-      setError("TL_FILL_CORRECT_UOM_VALUE");
+      setError(`${t("TL_FILL_CORRECT_UOM_VALUE")} ${selectedtradesubType?.[0]?.fromUom} - ${selectedtradesubType?.[0]?.toUom}`);
       }
     }
+  }
       setUomValue(e.target.value);
       setFeilds(units);
 }

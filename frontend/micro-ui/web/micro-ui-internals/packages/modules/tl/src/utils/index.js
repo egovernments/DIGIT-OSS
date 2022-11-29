@@ -206,9 +206,13 @@ export const gettradeupdateunits = (data) => {
     data.TradeDetails.units.map((newunit) => {
       if(oldunit.id === newunit.id)
       {
-        if (oldunit.tradeType !== newunit.tradesubtype.code)
+        if (oldunit.tradeType !== newunit.tradesubtype.code || oldunit.uomValue !== newunit.uom)
         {
-          oldunit.tradeType = newunit.tradesubtype.code;
+          if(oldunit.tradeType !== newunit.tradesubtype.code)
+            oldunit.tradeType = newunit.tradesubtype.code;
+          else if(oldunit.uomValue !== newunit.uom)
+            oldunit.uomValue = newunit.uom;
+
           TLunits.push(oldunit);
         }
         else

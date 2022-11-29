@@ -259,12 +259,12 @@ const AccessoriersForm = (_props) => {
 
     function checkRangeForUomValue(e, fromUom, toUom){
         if(Number.isInteger(fromUom)){
-            if(!(e && parseInt(e) >= fromUom)){
+            if(!(e && parseFloat(e) >= fromUom)){
             return false;
             }
            }
         if(Number.isInteger(toUom)){
-           if(!(e && parseInt(e) <= toUom)){
+           if(!(e && parseFloat(e) <= toUom)){
              return false
              }
            }
@@ -348,7 +348,7 @@ const AccessoriersForm = (_props) => {
                                 control={control}
                                 name={"uomValue"}
                                 defaultValue={accessor?.uomValue}
-                                rules={accessor?.accessoryCategory?.uom && { required: t("REQUIRED_FIELD"), validate: (e) => ((e && getPattern("UOMValue").test(e)) || !e ? (checkRangeForUomValue(e,accessor?.accessoryCategory?.fromUom,accessor?.accessoryCategory?.toUom) ? true :  t("ERR_WRONG_UOM_VALUE")) : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
+                                rules={accessor?.accessoryCategory?.uom && { required: t("REQUIRED_FIELD"), validate: (e) => (/*(e && getPattern("UOMValue").test(e))*/ e > 0 && e < 99999 ? (checkRangeForUomValue(e,accessor?.accessoryCategory?.fromUom,accessor?.accessoryCategory?.toUom) ? true : `${t("ERR_WRONG_UOM_VALUE")} ${accessor?.accessoryCategory?.fromUom} - ${accessor?.accessoryCategory?.toUom}`) : t("ERR_DEFAULT_INPUT_FIELD_MSG")) }}
                                 render={(props) => (
                                     <TextInput
                                         value={getValues("uomValue")}

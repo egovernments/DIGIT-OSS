@@ -233,12 +233,12 @@ const TradeUnitForm = (_props) => {
 
 function checkRangeForUomValue(e, fromUom, toUom){
     if(Number.isInteger(fromUom)){
-        if(!(e && parseInt(e) >= fromUom)){
+        if(!(e && parseFloat(e) >= fromUom)){
         return false;
         }
        }
     if(Number.isInteger(toUom)){
-       if(!(e && parseInt(e) <= toUom)){
+       if(!(e && parseFloat(e) <= toUom)){
          return false
          }
        }
@@ -415,7 +415,7 @@ function checkRangeForUomValue(e, fromUom, toUom){
                                 control={control}
                                 name={"uomValue"}
                                 defaultValue={unit?.uomValue}
-                                rules={unit?.tradeSubType?.uom && { required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/^(0)*[1-9][0-9]{0,5}$/.test(val) ?(checkRangeForUomValue(val,unit?.tradeSubType?.fromUom,unit?.tradeSubType?.toUom) ? true :  t("ERR_WRONG_UOM_VALUE")) : t("ERR_DEFAULT_INPUT_FIELD_MSG")) } } }
+                                rules={unit?.tradeSubType?.uom && { required: t("REQUIRED_FIELD"), validate: { pattern: (val) => (/*/^(0)*[1-9][0-9]{0,5}$/.test(val)*/ val > 0 && val < 99999 ?(checkRangeForUomValue(val,unit?.tradeSubType?.fromUom,unit?.tradeSubType?.toUom) ? true : `${t("ERR_WRONG_UOM_VALUE")} ${unit?.tradeSubType?.fromUom} - ${unit?.tradeSubType?.toUom}`) : t("ERR_DEFAULT_INPUT_FIELD_MSG")) } } }
                                 render={(props) => (
                                     <TextInput
                                         value={getValues("uomValue")}
