@@ -895,11 +895,11 @@ const Developerinfo = (props) => {
                     </div>
                     <div className="col col-4">
                       <label> Document Download </label>
-                      <button>
+                    
                       <IconButton onClick={()=>getDocShareholding(landScheduleData?.thirdPartyDoc)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
-                      </button>
+                     
                     </div>
                   </div>
                 )}

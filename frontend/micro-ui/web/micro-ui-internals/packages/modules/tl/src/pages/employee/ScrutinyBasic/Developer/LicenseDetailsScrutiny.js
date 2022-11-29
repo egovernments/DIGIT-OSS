@@ -14,6 +14,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { useStyles } from "../css/personalInfoChild.style";
 import Visibility from "@mui/icons-material/Visibility";
 import FileDownload from "@mui/icons-material/FileDownload";
+import { IconButton } from "@mui/material";
+import { getDocShareholding } from "../ScrutinyDevelopment/docview.helper";
 
 const LicenseDetailsScrutiny = (props) => {
   const [uncheckedValue, setUncheckedVlue] = useState([]);
@@ -549,12 +551,16 @@ const LicenseDetailsScrutiny = (props) => {
                                 </td>
                                 <td>
                                   <div className="row">
-                                    <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
-                                      <Visibility color="info" className="icon" />
-                                    </button>
-                                    <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
-                                      <FileDownload color="primary" />
-                                    </button>
+                                    {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)} > */}
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                      <Visibility color="info" className="icon" /></IconButton>
+                                    {/* </button> */}
+                                    {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                      <FileDownload color="primary" /> */}
+                                      <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
+                                    {/* </button> */}
                                   </div>
                                 </td>
                               </tr>
@@ -597,12 +603,17 @@ const LicenseDetailsScrutiny = (props) => {
                               </td>
                               <td>
                                 <div className="row">
-                                  <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                  {/* <button className="btn btn-sm col-md-6" onClick={()=>getDocShareholding(item?.uploadPdf)}>
                                     <Visibility color="info" className="icon" />
-                                  </button>
-                                  <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
+                                  </button> */}
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                      <Visibility color="info" className="icon" /></IconButton>
+                                  {/* <button className="btn btn-sm col-md-6" onClick={() => window.open(item?.uploadPdf)} >
                                     <FileDownload color="primary" />
-                                  </button>
+                                  </button> */}
+                                    <IconButton onClick={()=>getDocShareholding(item?.uploadPdf)}>
+                                <FileDownload color="primary" className="mx-1" />
+                        </IconButton>
                                 </div>
                               </td>
                             </tr>

@@ -110,6 +110,8 @@
 
 import React from "react";
 import { Row, Col, Card, Container, Form, Button } from "react-bootstrap";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
 
 const windowHeight = window !== undefined ? window.innerHeight : null;
 const Records = (props) => {
@@ -119,15 +121,16 @@ const Records = (props) => {
       style={{
         // top: windowHeight * 0.3,
         // minWidth: "90%",
-        // maxWidth: "100%",
+        maxWidth: "100%",
+        height: 340 ,
+        // maxHeight: "100%",
+        padding:0 ,
       }}
     >
-      <Row>
+      {/* <Row> */}
         <Card>
-          <Card.Header>
-            <Card.Title style={{ fontFamily: "Roboto", fontSize: 30, fontWeight: "bold" }}></Card.Title>
-          </Card.Header>
-          <Card.Body style={{ overflowY: "auto", height: "100%", maxWidth: "100%", backgroundColor: "#C6C6C6" }}>
+          
+          <Card.Body style={{ overflowY: "auto", height: 320 , maxWidth: "60%", backgroundColor: "#C6C6C6" ,   padding:0 }}>
             <Form>
             <div >
         <table id="datatables-basics" class="table table-striped table-bordered table-responsive" >
@@ -157,8 +160,10 @@ const Records = (props) => {
                     <td>TCP-OFA/2510/2020</td>
                     <td></td>
                     <td>New Licence Application For Area 4046.86 SqMtrs, Purpose: Commercial, Activity: Dhaba </td>
-                    <td class="text-center"><button class="btn btn-info" ><i class="fa fa-eye"></i></button></td>
-                    <td class="text-center"><button class="btn btn-info" ><i class="fa fa-eye"></i></button></td>
+                    <td class="text-center"><button class="btn btn-info" >
+                                
+                            <i class="fa fa-eye"><VisibilityIcon color="info" className="icon" /></i></button></td>
+                    <td class="text-center"><button class="btn btn-info" ><i class="fa fa-eye"><VisibilityIcon color="info" className="icon" /></i></button></td>
                     <td>28/08/2020</td>
                     <td>22</td>
                     <td>22</td>
@@ -173,8 +178,8 @@ const Records = (props) => {
                     <td>TCP-OFA/2520/2020</td>
                     <td></td>
                     <td>New Licence Application For Area 3234.67 SqMtrs, Purpose: Commercial, Activity: Automobile </td>
-                    <td class="text-center"><button class="btn btn-info" ><i class="fa fa-eye"></i></button></td>
-                    <td class="text-center"><button class="btn btn-info" ><i class="fa fa-eye"></i></button></td>
+                    <td class="text-center"><button class="btn btn-info" ><VisibilityIcon color="info" className="icon" /><i class="fa fa-eye"></i></button></td>
+                    <td class="text-center"><button class="btn btn-info" ><VisibilityIcon color="info" className="icon" /><i class="fa fa-eye"></i></button></td>
                     <td>17/08/2020</td>
                     <td>1</td>
                     <td>1</td>
@@ -188,13 +193,9 @@ const Records = (props) => {
     </div>
             </Form>
           </Card.Body>
-          <Card.Footer>
-            <div style={{ position: "relative", float: "right" }}>
-              <Button>Submit</Button>
-            </div>
-          </Card.Footer>
+       
         </Card>
-      </Row>
+      {/* </Row> */}
     </Container>
   );
 };
