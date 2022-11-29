@@ -57,6 +57,11 @@ const ApllicantPuropseForm = (props) => {
       dataIndex: "revenueEstate",
     },
     {
+      key: "hadbastNo",
+      title: "Hadbast No.",
+      dataIndex: "hadbastNo",
+    },
+    {
       key: "rectangleNo",
       title: "Rectangle No.",
       dataIndex: "rectangleNo",
@@ -664,6 +669,22 @@ const ApllicantPuropseForm = (props) => {
                 <div>
                   <Form.Label>
                     <h2>
+                      Hadbast No. <span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </Form.Label>
+                </div>
+                <input type="number" className="form-control" placeholder="" {...register("hadbastNo")} />
+                {/* <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.revenueEstate && errors?.revenueEstate?.message}
+                </h3> */}
+              </Col>
+            </Row>
+
+            <Row className="ml-auto mb-3">
+              <Col md={4} xxl lg="4">
+                <div>
+                  <Form.Label>
+                    <h2>
                       Rectangle No./Mustil <span style={{ color: "red" }}>*</span>
                     </h2>
                   </Form.Label>
@@ -680,37 +701,58 @@ const ApllicantPuropseForm = (props) => {
                   {errors?.mustil && errors?.mustil?.message}
                 </h3>
               </Col>
+
+              <Col md={4} xxl lg="4">
+                <div>
+                  <label>
+                    <h2>Enter Khewat</h2>
+                  </label>
+                </div>
+                <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
+              </Col>
+              <Col md={4} xxl lg="4">
+                <div>
+                  <label>
+                    <h2>
+                      Name of Land Owner<span style={{ color: "red" }}>*</span>
+                    </h2>
+                  </label>
+                </div>
+                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")} />
+                <h3 className="error-message" style={{ color: "red" }}>
+                  {errors?.landOwner && errors?.landOwner?.message}
+                </h3>
+              </Col>
             </Row>
             <br></br>
             <Row className="ml-auto mb-3">
               <Col md={4} xxl lg="12">
                 <div>
                   <h2>
-                    Consolidation Type<span style={{ color: "red" }}>*</span>
+                    Consolidation Type<span style={{ color: "red" }}>*</span> &nbsp;&nbsp;&nbsp;&nbsp;
+                    <label htmlFor="consolidated">
+                      <input
+                        {...register("consolidationType")}
+                        type="radio"
+                        value="consolidated"
+                        defaultChecked={true}
+                        defaultValue="consolidated"
+                        id="consolidated"
+                        // onClick={() => setConsolidateValue("consolidated")}
+                      />
+                      &nbsp; Consolidated &nbsp;&nbsp;
+                    </label>
+                    <label htmlFor="non-consolidated">
+                      <input
+                        {...register("consolidationType")}
+                        type="radio"
+                        value="non-consolidated"
+                        id="non-consolidated"
+                        // onClick={() => setConsolidateValue("non-consolidated")}
+                      />
+                      &nbsp; Non-Consolidated &nbsp;&nbsp;
+                    </label>
                   </h2>
-
-                  <label htmlFor="consolidated">
-                    <input
-                      {...register("consolidationType")}
-                      type="radio"
-                      value="consolidated"
-                      defaultChecked={true}
-                      defaultValue="consolidated"
-                      id="consolidated"
-                      // onClick={() => setConsolidateValue("consolidated")}
-                    />
-                    Consolidated
-                  </label>
-                  <label htmlFor="non-consolidated">
-                    <input
-                      {...register("consolidationType")}
-                      type="radio"
-                      value="non-consolidated"
-                      id="non-consolidated"
-                      // onClick={() => setConsolidateValue("non-consolidated")}
-                    />
-                    Non-Consolidated
-                  </label>
                 </div>
 
                 {watch("consolidationType") == "consolidated" && (
@@ -731,13 +773,29 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <Form.Control type="text" className="form-control" placeholder="" {...register("kanal")} />
+                          {/* <label htmlFor="first">First</label>
+                          <input onChange={onChange} defaultValue={first} name="first" id="first" type="number" />
+
+                          <label htmlFor="sum">Total</label>
+                          <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" /> */}
+                          <input onChange={onChange} defaultValue={kanal} name="kanal" id="kanal" type="number" />
+                          <input type="text" className="form-control" {...register("kanal")} onChange={onChange} defaultValue={kanal} id="kanal" />
+                          <label htmlFor="sum">Total</label>&nbsp;&nbsp;
+                          <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" />
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} />
+                          <input onChange={onChange} defaultValue={marla} name="marla" id="marla" type="number" />
+                          <input type="text" className="form-control" {...register("marla")} onChange={onChange} defaultValue={marla} id="marla" />
+                          <label htmlFor="summarla">Total</label>&nbsp;&nbsp;
+                          <input onChange={onChange} defaultValue={summarla} id="summarla" name="summarla" type="number" />
+                          {/* <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} /> */}
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" placeholder="" {...register("sarsai")} />
+                          <input onChange={onChange} defaultValue={marla} name="sarsai" id="sarsai" type="number" />
+                          <input type="text" className="form-control" {...register("sarsai")} onChange={onChange} defaultValue={sarsai} id="sarsai" />
+                          <label htmlFor="sumsarsai">Total</label>&nbsp;&nbsp;
+                          <input onChange={onChange} defaultValue={sumsarsai} id="sumsarsai" name="sumsarsai" type="number" />
+                          {/* <Form.Control type="text" className="form-control" placeholder="" {...register("sarsai")} /> */}
                         </td>
                       </tr>
                     </tbody>
@@ -761,13 +819,32 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("bigha")} />
+                          <input onChange={onChange} defaultValue={bigha} name="bigha" id="bigha" type="number" />
+                          <input type="text" className="form-control" {...register("bigha")} onChange={onChange} defaultValue={bigha} id="bigha" />
+                          <label htmlFor="sumBigha">Total</label>&nbsp;&nbsp;
+                          <input onChange={onChange} defaultValue={sumBigha} id="sumBigha" name="sumBigha" type="number" />
+                          {/* <Form.Control type="text" className="form-control" {...register("bigha")} /> */}
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("biswa")} />
+                          <input onChange={onChange} defaultValue={biswa} name="biswa" id="biswa" type="number" />
+                          <input type="text" className="form-control" {...register("biswa")} onChange={onChange} defaultValue={biswa} id="biswa" />
+                          <label htmlFor="sumBiswa">Total</label>&nbsp;&nbsp;
+                          <input onChange={onChange} defaultValue={sumBiswa} id="sumBiswa" name="sumBiswa" type="number" />
+                          {/* <Form.Control type="text" className="form-control" {...register("biswa")} /> */}
                         </td>
                         <td>
-                          <Form.Control type="text" className="form-control" {...register("biswansi")} />
+                          <input onChange={onChange} defaultValue={biswansi} name="biswansi" id="biswansi" type="number" />
+                          <input
+                            type="text"
+                            className="form-control"
+                            {...register("biswansi")}
+                            onChange={onChange}
+                            defaultValue={biswansi}
+                            id="biswansi"
+                          />
+                          <label htmlFor="sumBiswansi">Total</label>&nbsp;&nbsp;
+                          <input onChange={onChange} defaultValue={sumBiswansi} id="sumBiswansi" name="sumBiswansi" type="number" />
+                          {/* <Form.Control type="text" className="form-control" {...register("biswansi")} /> */}
                         </td>
                       </tr>
                     </tbody>
@@ -775,122 +852,115 @@ const ApllicantPuropseForm = (props) => {
                 )}
               </Col>
             </Row>
-
-            <div>
-              <label>Enter Khewat</label>
-              <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
-            </div>
-
-            <Row className="ml-auto mb-3">
-              <Col md={4} xxl lg="6">
-                <div>
-                  <label>
-                    <h2>
-                      Name of Land Owner<span style={{ color: "red" }}>*</span>
-                    </h2>
-                  </label>
-                </div>
-                <Form.Control type="text" className="form-control" placeholder="" {...register("landOwner")} />
-                <h3 className="error-message" style={{ color: "red" }}>
-                  {errors?.landOwner && errors?.landOwner?.message}
-                </h3>
-              </Col>
-              <Col md={4} xxl lg="6"></Col>
-            </Row>
             <Row className="ml-auto mb-3">
               <div className="col col-12">
                 <h2>
-                  Collaboration agreement Owner<span style={{ color: "red" }}>*</span>
+                  Collaboration agreement Owner<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
+                  <label htmlFor="collaboration">
+                    <input {...register("collaboration")} type="radio" value="N" id="yes" onClick={() => setCollaboration("Y")} />
+                    &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                  </label>
+                  <label htmlFor="collaboration">
+                    <input {...register("collaboration")} type="radio" value="Y" id="no" onClick={() => setCollaboration("N")} />
+                    &nbsp;&nbsp; No &nbsp;&nbsp;
+                  </label>
                 </h2>
-
-                <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="Y" id="yes" />
-                  Yes
-                </label>
-                <label htmlFor="collaboration">
-                  <input {...register("collaboration")} type="radio" value="N" id="no" />
-                  No
-                </label>
-                {watch("collaboration") === "Y" && (
-                  <div className="row ">
-                    <div className="col col-4">
-                      <label>
+                {getCollaboration === "Y" && (
+                  <div>
+                    <div className="row ">
+                      <div className="col col-4">
+                        <label>
+                          <h2
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title=" Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered."
+                          >
+                            Name of the developer company .<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} />
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2>
+                            Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidFrom")} />
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2>
+                            Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidTill")} />
+                      </div>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <div className="row ">
+                      <div className="col col-4">
                         <h2>
-                          Name of the developer company / Firm/ LLP etc. with whom collaboration agreement entered
-                          <span style={{ color: "red" }}>*</span>
+                          Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
                         </h2>
-                      </label>
-                      <Form.Control type="text" className="form-control" placeholder="" {...register("developerCompany")} />
+                        <label htmlFor="agreementIrrevocialble">
+                          <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
+                          &nbsp;&nbsp; Yes &nbsp;&nbsp;
+                        </label>
+                        <label htmlFor="agreementIrrevocialble">
+                          <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
+                          &nbsp;&nbsp; No &nbsp;&nbsp;
+                        </label>
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2>
+                            Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="  Name of authorized signatory on behalf of developer to sign Collaboration agreement."
+                          >
+                            Name of authorized signatory on behalf of developer.<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
+                      </div>
                     </div>
-                    <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label>
-                        <h2>
-                          Date of registering collaboration agreement<span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidFrom")} />
-                    </div>
-                    <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label>
-                        <h2>
-                          Date of validity of collaboration agreement<span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <Form.Control type="date" className="form-control" placeholder="" {...register("agreementValidTill")} />
-                    </div>
-                    <div className="col col-4" style={{ marginTop: 35 }}>
-                      <h2>
-                        Whether collaboration agreement irrevocable (Yes/No)<span style={{ color: "red" }}>*</span>
-                      </h2>
-                      <label htmlFor="agreementIrrevocialble">
-                        <input {...register("agreementIrrevocialble")} type="radio" value="Y" id="agreementIrrevocialble" />
-                        Yes
-                      </label>
-                      <label htmlFor="agreementIrrevocialble">
-                        <input {...register("agreementIrrevocialble")} type="radio" value="N" id="agreementIrrevocialble" />
-                        No
-                      </label>
-                    </div>
-
-                    <div className="col col-4" style={{ marginTop: 35 }}>
-                      <label>
-                        <h2>
-                          Name of authorized signatory on behalf of land owner(s)<span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <Form.Control type="text" className="form-control" placeholder="" {...register("authSignature")} />
-                    </div>
-                    <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label>
-                        <h2>
-                          Name of authorized signatory on behalf of developer to sign Collaboration agreement<span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <Form.Control type="text" className="form-control" placeholder="" {...register("nameAuthSign")} />
-                    </div>
-                    <div className="col col-4" style={{ marginTop: 20 }}>
-                      <label>
-                        <h2>
-                          Registring Authority<span style={{ color: "red" }}>*</span>
-                        </h2>
-                      </label>
-                      <br></br>
-                      <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
-                    </div>
-                    <div className="col col-4" style={{ marginTop: 15 }}>
-                      <label>
-                        <h2 data-toggle="tooltip" data-placement="top" title="Upload Document">
-                          Registring Authority document <span style={{ color: "red" }}>*</span>
-                          <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                        </h2>
-                      </label>
-                      <br></br>
-                      <input
-                        type="file"
-                        className="form-control"
-                        {...register("registeringAuthorityDoc")}
-                        onChange={(e) => getDocumentData(e?.target?.files[0])}
-                      />
+                    <br></br>
+                    <br></br>
+                    <div className="row ">
+                      <div className="col col-4">
+                        <label>
+                          <h2>
+                            Registring Authority<span style={{ color: "red" }}>*</span>
+                          </h2>
+                        </label>
+                        <Form.Control type="text" className="form-control" placeholder="" {...register("registeringAuthority")} />
+                      </div>
+                      <div className="col col-4">
+                        <label>
+                          <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
+                            Registring Authority document <span style={{ color: "red" }}>*</span>
+                            <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                          </h2>
+                        </label>
+                        <br></br>
+                        <input
+                          type="file"
+                          style={{ marginTop: "-6px" }}
+                          className="form-control"
+                          {...register("registeringAuthorityDoc")}
+                          onChange={(e) => getDocumentData(e?.target?.files[0])}
+                        />
+                      </div>
                     </div>
                   </div>
                 )}
