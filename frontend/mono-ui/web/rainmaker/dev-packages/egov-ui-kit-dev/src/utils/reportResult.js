@@ -574,7 +574,7 @@ class ShowField extends Component {
       searching: true,
       language:{"sLengthMenu" : `${getLocaleLabels("CS_SHOW","CS_SHOW")} _MENU_ ${getLocaleLabels("CS_ENTRIES","CS_ENTRIES")}`,
                 "sSearch" :getLocaleLabels("CS_SEARCH","CS_SEARCH"),
-                "sInfo" : `${getLocaleLabels("CS_SHOWING","CS_SHOWING")} _START ${getLocaleLabels("CS_TO","CS_TO")} _END_ ${getLocaleLabels("CS_OF","CS_OF")} _TOTAL_ ${getLocaleLabels("CS_RECORDS","CS_RECORDS")}`,
+                "sInfo" : `${getLocaleLabels("CS_SHOWING","CS_SHOWING")} _START_ ${getLocaleLabels("CS_TO","CS_TO")} _END_ ${getLocaleLabels("CS_OF","CS_OF")} _TOTAL_ ${getLocaleLabels("CS_RECORDS","CS_RECORDS")}`,
                 "oPaginate":{
                   "sFirst":getLocaleLabels("CS_PAGINATION_FIRST","CS_PAGINATION_FIRST"),
                   "sLast":getLocaleLabels("CS_PAGINATION_LAST","CS_PAGINATION_LAST"),
