@@ -253,6 +253,7 @@ const FeesChargesForm = (props) => {
                     <input
                       type="text"
                       className="form-control"
+                      disabled
                       minLength={1}
                       maxLength={20}
                       pattern="[0-9]*"

@@ -310,7 +310,7 @@ const AppliedDetailForm = (props) => {
                   </div>
 
                   <br></br>
-                  <hr />
+
                   <br></br>
                   <div>
                     <h5>

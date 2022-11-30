@@ -175,11 +175,11 @@ const ApllicantPuropseForm = (props) => {
   const [modal, setmodal] = useState(false);
   const [tehsilCode, setTehsilCode] = useState(null);
   const [consolidateValue, setConsolidateValue] = useState("consolidated");
+  const [getCollaboration, setCollaboration] = useState("");
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
   const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [docId, setDocId] = useState(null);
   const [loader, setLoader] = useState(false);
-
   useEffect(() => {
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
@@ -622,15 +622,15 @@ const ApllicantPuropseForm = (props) => {
                   </div>
                   <ReactMultiSelect
                     control={control}
-                    name="purpose"
-                    onChange={handleChangePurpose}
-                    placeholder="Purpose"
-                    data={purposeOptions?.data}
-                    labels="Purpose"
-                    loading={purposeOptions?.isLoading}
+                    name="potential"
+                    placeholder="Potential"
+                    data={potentialOptons?.data}
+                    labels="Potential"
+                    onChange={handleChangePotential}
+                    loading={potentialOptons?.isLoading}
                   />
                   <h3 className="error-message" style={{ color: "red" }}>
-                    {errors?.purpose?.value && errors?.purpose?.value?.message}
+                    {errors?.potential?.value && errors?.potential?.value?.message}
                   </h3>
                 </Col>
 
@@ -638,18 +638,22 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Potential Zone<span style={{ color: "red" }}>*</span>
+                        District<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
                   <ReactMultiSelect
                     control={control}
-                    name="potential"
-                    placeholder="Potential"
-                    data={potentialOptons?.data}
-                    labels="Potential"
-                    onChange={handleChangePotential}
-                    loading={potentialOptons?.isLoading}
+                    name="district"
+                    placeholder="District"
+                    data={districtDataLabels?.data}
+                    labels="District"
+                    loading={districtDataLabels?.isLoading}
+                    onChange={(e) => {
+                      console.log("e===", e);
+                      getTehslidata(e.value);
+                      setDistrict(e.value);
+                    }}
                   />
 
                   <h3 className="error-message" style={{ color: "red" }}>
@@ -829,7 +833,7 @@ const ApllicantPuropseForm = (props) => {
                     <h2>Enter Khewat</h2>
                   </label>
                 </div>
-                <input type="text" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
+                <input type="number" className="form-control" placeholder="Enter Khewat" {...register("khewats")} />
               </Col>
               <Col md={4} xxl lg="4">
                 <div>
@@ -900,20 +904,27 @@ const ApllicantPuropseForm = (props) => {
                           <label htmlFor="sum">Total</label>
                           <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" /> */}
                           <input onChange={onChange} defaultValue={kanal} name="kanal" id="kanal" type="number" />
-                          <input type="text" className="form-control" {...register("kanal")} onChange={onChange} defaultValue={kanal} id="kanal" />
+                          <input type="number" className="form-control" {...register("kanal")} onChange={onChange} defaultValue={kanal} id="kanal" />
                           <label htmlFor="sum">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" />
                         </td>
                         <td>
                           <input onChange={onChange} defaultValue={marla} name="marla" id="marla" type="number" />
-                          <input type="text" className="form-control" {...register("marla")} onChange={onChange} defaultValue={marla} id="marla" />
+                          <input type="number" className="form-control" {...register("marla")} onChange={onChange} defaultValue={marla} id="marla" />
                           <label htmlFor="summarla">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={summarla} id="summarla" name="summarla" type="number" />
                           {/* <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} /> */}
                         </td>
                         <td>
                           <input onChange={onChange} defaultValue={marla} name="sarsai" id="sarsai" type="number" />
-                          <input type="text" className="form-control" {...register("sarsai")} onChange={onChange} defaultValue={sarsai} id="sarsai" />
+                          <input
+                            type="number"
+                            className="form-control"
+                            {...register("sarsai")}
+                            onChange={onChange}
+                            defaultValue={sarsai}
+                            id="sarsai"
+                          />
                           <label htmlFor="sumsarsai">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={sumsarsai} id="sumsarsai" name="sumsarsai" type="number" />
                           {/* <Form.Control type="text" className="form-control" placeholder="" {...register("sarsai")} /> */}
@@ -941,14 +952,14 @@ const ApllicantPuropseForm = (props) => {
                       <tr>
                         <td>
                           <input onChange={onChange} defaultValue={bigha} name="bigha" id="bigha" type="number" />
-                          <input type="text" className="form-control" {...register("bigha")} onChange={onChange} defaultValue={bigha} id="bigha" />
+                          <input type="number" className="form-control" {...register("bigha")} onChange={onChange} defaultValue={bigha} id="bigha" />
                           <label htmlFor="sumBigha">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={sumBigha} id="sumBigha" name="sumBigha" type="number" />
                           {/* <Form.Control type="text" className="form-control" {...register("bigha")} /> */}
                         </td>
                         <td>
                           <input onChange={onChange} defaultValue={biswa} name="biswa" id="biswa" type="number" />
-                          <input type="text" className="form-control" {...register("biswa")} onChange={onChange} defaultValue={biswa} id="biswa" />
+                          <input type="number" className="form-control" {...register("biswa")} onChange={onChange} defaultValue={biswa} id="biswa" />
                           <label htmlFor="sumBiswa">Total</label>&nbsp;&nbsp;
                           <input onChange={onChange} defaultValue={sumBiswa} id="sumBiswa" name="sumBiswa" type="number" />
                           {/* <Form.Control type="text" className="form-control" {...register("biswa")} /> */}
@@ -956,7 +967,7 @@ const ApllicantPuropseForm = (props) => {
                         <td>
                           <input onChange={onChange} defaultValue={biswansi} name="biswansi" id="biswansi" type="number" />
                           <input
-                            type="text"
+                            type="number"
                             className="form-control"
                             {...register("biswansi")}
                             onChange={onChange}
