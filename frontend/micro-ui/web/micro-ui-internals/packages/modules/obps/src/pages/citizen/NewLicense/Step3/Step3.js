@@ -184,7 +184,7 @@ const LandScheduleForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(landScheduleFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group className="justify-content-center" controlId="formBasicEmail">
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -211,7 +211,7 @@ const LandScheduleForm = (props) => {
                             <div className="col col-4">
                               <label>
                                 <h2>
-                                  License No. of Parent License <span style={{ color: "red" }}>*</span>
+                                  Licence No. of Parent Licence <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
                               <input type="number" className="form-control" {...register("licenseNumber")} />
@@ -253,7 +253,7 @@ const LandScheduleForm = (props) => {
                               labels="Potential"
                             /> */}
                               <select className="form-control" id="approachType" {...register("approachType")}>
-                                {/* <option>{Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}</option> */}
+                                <option>{Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}</option>
                                 {/* <option value="potential 2">(a) Existing ser-vice road along with sector di-viding road.</option> */}
                                 {/* <option value="potential 2">(c) Constructed sector road or internal circula-tion road of min. 18m/24m (licenced) part of the approved sectoral plan and further leadup up to at least 4 karam wide public ras-ta.</option> */}
                               </select>

@@ -180,7 +180,7 @@ const FeesChargesForm = (props) => {
   return (
     <form onSubmit={handleSubmit(FeesChrgesFormSubmitHandler)}>
       <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
+        <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
         <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
           <Form.Group className="justify-content-center" controlId="formBasicEmail">
             <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -278,7 +278,7 @@ const FeesChargesForm = (props) => {
                   </div>
 
                   <div className="col col-4">
-                    <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous license (Yes/No)">
+                    <h6 data-toggle="tooltip" data-placement="top" title="Do you want to adjust the fee from any previous licence (Yes/No)">
                       (iii)&nbsp;Adjust Fees &nbsp;&nbsp;
                     </h6>
                     <input type="radio" value="Yes" id="Yes" onChange1={handleChange} name="Yes" onClick={handleshow0} />
@@ -288,7 +288,7 @@ const FeesChargesForm = (props) => {
                     {showhide0 === "Yes" && (
                       <div className="row ">
                         <div className="col col-12">
-                          <label>Enter License Number/LOI number</label>
+                          <label>Enter Licence Number/LOI number</label>
                           <input type="text" className="form-control" {...register("licNumber")} />
                           <label>Amount (previous)</label>
                           <input type="text" className="form-control" disabled {...register("amount")} />

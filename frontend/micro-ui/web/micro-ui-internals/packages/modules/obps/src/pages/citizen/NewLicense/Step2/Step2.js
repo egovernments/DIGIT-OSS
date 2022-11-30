@@ -585,7 +585,7 @@ const ApllicantPuropseForm = (props) => {
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -593,7 +593,7 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Puropse Of License<span style={{ color: "red" }}>*</span>
+                        Puropse Of Licence<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
