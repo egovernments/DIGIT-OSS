@@ -356,7 +356,7 @@ const Genarelinfo = (props) => {
                 <Form.Label>
                   {/* <b></b>  */}
                   <h5 className={classes.formLabel}>
-                    Purpose Of License  <span style={{ color: "red" }}>*</span>
+                    Purpose Of Licence  <span style={{ color: "red" }}>*</span>
                   </h5>
                 </Form.Label>
 

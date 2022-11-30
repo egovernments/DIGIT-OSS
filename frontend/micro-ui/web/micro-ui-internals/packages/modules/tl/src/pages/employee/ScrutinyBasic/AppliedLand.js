@@ -17,6 +17,7 @@ import MigrationAppliedTrue from "./MigrationAplliedTrue";
 import DDJAYForm from "../ScrutinyBasic/Puropse/DdjayForm";
 import ResidentialPlottedForm from "../ScrutinyBasic/Puropse/ResidentialPlotted";
 import IndustrialPlottedForm from "../ScrutinyBasic/Puropse/IndustrialPlotted";
+import DDJAY from "./Puropse/CommercialPlottedForm";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
@@ -535,10 +536,10 @@ const AppliedLandinfo = (props) => {
                   2.Details of Plots
                   <div className="ml-3 d-flex flex-row align-items-center">
                     <input type="radio" id="Yes" value="1" name="Yes" disabled checked={DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "regular" ? true : false} />
-                    <input type="radio"  value="1"  disabled checked={DetailsofAppliedLand?.detailsOfPlots === "1" ? true : false} />
+                    {/* <input type="radio"  value="1"  disabled checked={DetailsofAppliedLand?.detailsOfPlots === "1" ? true : false} /> */}
                     <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="gen">Regular</label>&nbsp;&nbsp;
                     <input type="radio" id="Yes" value="2" name="Yes" checked={DetailsofAppliedLand?.DetailsAppliedLandPlot?.regularOption === "Irregular" ? true : false} disabled />
-                    <input type="radio"  value="2"  checked={DetailsofAppliedLand?.detailsOfPlots === "2" ? true : false} disabled />
+                    {/* <input type="radio"  value="2"  checked={DetailsofAppliedLand?.detailsOfPlots === "2" ? true : false} disabled /> */}
                     <label className={`${classes.formLabel}  m-0  mx-1`} htmlFor="npnl">Irregular</label>
                   </div>
                   <div style={{ margin: 5 }}>
@@ -1142,11 +1143,14 @@ const AppliedLandinfo = (props) => {
                   <DDJAYForm displayDdjay={Purpose === "DDJAY_APHP" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandDdjay} dataForIcons={dataIcons}></DDJAYForm>
                 </div>
                 <div>
-                  <ResidentialPlottedForm displayResidential={Purpose === "Residential Plotted" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandResidential} dataForIcons={dataIcons} ></ResidentialPlottedForm>
+                  <ResidentialPlottedForm displayResidential={Purpose === "RPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandResidential} dataForIcons={dataIcons} ></ResidentialPlottedForm>
                 </div>
                 <div>
-                  <IndustrialPlottedForm displayIndustrial={Purpose === "Industrial Plotted" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandIndustrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
+                  <IndustrialPlottedForm displayIndustrial={Purpose === "IPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandIndustrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
                 </div>
+                {/* <div>
+                  <DDJAY displayDd={Purpose === "CPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandIndustrial} dataForIcons={dataIcons} ></DDJAY>
+                </div> */}
                 
                 {/* <div>
                   <DDJAYForm displayDdjay={Purpose === "08" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay}></DDJAYForm>

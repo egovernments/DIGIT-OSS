@@ -675,7 +675,7 @@ const Developerinfo = (props) => {
                 <Col className="ms-auto" md={4} xxl lg="4">
                   <label>
                     {/* License No. of Parent License */}
-                    <h5>License No. of Parent License &nbsp;</h5>
+                    <h5>Licence No. of Parent Licence &nbsp;</h5>
                   </label>
 
                   <div className="d-flex flex-row align-items-center my-1 ">
@@ -895,11 +895,11 @@ const Developerinfo = (props) => {
                     </div>
                     <div className="col col-4">
                       <label> Document Download </label>
-                      <button>
+                    
                       <IconButton onClick={()=>getDocShareholding(landScheduleData?.thirdPartyDoc)}>
                           <DownloadForOfflineIcon color="primary" className="mx-1"  />
                         </IconButton>
-                      </button>
+                     
                     </div>
                   </div>
                 )}
