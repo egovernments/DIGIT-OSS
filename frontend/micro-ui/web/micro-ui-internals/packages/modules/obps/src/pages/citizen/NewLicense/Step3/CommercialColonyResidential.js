@@ -2,12 +2,12 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Row, Col } from "react-bootstrap";
 
-const DDJAYForm = ({ register, watch }) => {
+const CommercialColonyInResidential = ({ register, watch }) => {
   return (
     <Row className="ml-auto" style={{ marginBottom: 5 }}>
       <Col col-12>
         <h5 className="text-black">
-          <b>Deen Dayal Jan Awas Yojna (DDJAY)</b>
+          <b>xDeen Dayal Jan Awas Yojna (DDJAY)</b>
         </h5>
 
         <div className="table table-bordered table-responsive">
@@ -68,4 +68,4 @@ const DDJAYForm = ({ register, watch }) => {
     </Row>
   );
 };
-export default DDJAYForm;
+export default CommercialColonyInResidential;
