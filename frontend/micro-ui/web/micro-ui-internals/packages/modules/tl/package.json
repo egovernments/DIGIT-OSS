@@ -29,7 +29,7 @@
     "@mui/icons-material": "^5.10.15",
     "@mui/material": "^5.10.15",
     "@mui/styled-engine-sc": "^5.10.14",
-    "@mui/utils": "^5.10.15",
+    "@mui/utils": "^5.10.16",
     "lodash.merge": "^4.6.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
