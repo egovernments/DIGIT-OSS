@@ -253,7 +253,7 @@ const LandScheduleForm = (props) => {
                               labels="Potential"
                             /> */}
                               <select className="form-control" id="approachType" {...register("approachType")}>
-                                <option>{Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}</option>
+                                {/* <option>{Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}</option> */}
                                 {/* <option value="potential 2">(a) Existing ser-vice road along with sector di-viding road.</option> */}
                                 {/* <option value="potential 2">(c) Constructed sector road or internal circula-tion road of min. 18m/24m (licenced) part of the approved sectoral plan and further leadup up to at least 4 karam wide public ras-ta.</option> */}
                               </select>

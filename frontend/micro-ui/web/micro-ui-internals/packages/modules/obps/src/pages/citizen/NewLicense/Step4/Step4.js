@@ -28,20 +28,20 @@ const AppliedDetailForm = (props) => {
     defaultValues: {
       dgpsDetails: [
         {
-          XLongitude: "",
-          YLatitude: "",
+          longitude: "",
+          latitude: "",
         },
         {
-          XLongitude: "",
-          YLatitude: "",
+          longitude: "",
+          latitude: "",
         },
         {
-          XLongitude: "",
-          YLatitude: "",
+          longitude: "",
+          latitude: "",
         },
         {
-          XLongitude: "",
-          YLatitude: "",
+          longitude: "",
+          latitude: "",
         },
       ],
     },
@@ -285,11 +285,11 @@ const AppliedDetailForm = (props) => {
                         <div className="row ">
                           <div className="col col-4">
                             <label>X:Longitude</label>
-                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.XLongitude`)} />
+                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.longitudtue`)} />
                           </div>
                           <div className="col col-4">
                             <label>Y:Latitude</label>
-                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.YLatitude`)} />
+                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.latitude`)} />
                           </div>
                         </div>
                         {index > 3 && (
@@ -303,7 +303,7 @@ const AppliedDetailForm = (props) => {
                       type="button"
                       style={{ float: "right", marginRight: 15 }}
                       className="btn btn-primary"
-                      onClick={() => append({ XLongitude: "", YLatitude: "" })}
+                      onClick={() => append({ longitude: "", latitude: "" })}
                     >
                       Add
                     </button>
