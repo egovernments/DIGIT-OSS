@@ -184,6 +184,7 @@ const ApllicantPuropseForm = (props) => {
     if (specificTableData) {
       setValue("tehsil", specificTableData?.tehsil);
       setValue("revenueEstate", specificTableData?.revenueEstate);
+      setValue("hadbastNo", specificTableData?.hadbastNo);
       setValue("mustil", specificTableData?.mustil);
       setValue("kanal", specificTableData?.kanal);
       setValue("marla", specificTableData?.marla);
@@ -348,6 +349,7 @@ const ApllicantPuropseForm = (props) => {
     data["state"] = "Haryana";
     delete data?.tehsil;
     delete data?.revenueEstate;
+    delete data?.hadbastNo;
     delete data?.mustil;
     delete data?.kanal;
     delete data?.marla;

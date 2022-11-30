@@ -10,6 +10,10 @@ import axios from "axios";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
 import CommercialColonyInResidential from "./CommercialColonyResidential";
+import CommercialLicense from "./CommercialLicense";
+import LowDensityEco from "./LowDensityEco";
+import CyberPark from "./CyberPark";
+import RetirementHousing from "./RetirementHousing";
 
 const potentialOptons = [
   {
@@ -79,7 +83,7 @@ const LandScheduleForm = (props) => {
   useEffect(() => {
     const landType = LandData?.["common-masters"]?.LandType?.map(function (data) {
       console.log("data===", data);
-      return { value: data?.code, label: data?.zone };
+      return { value: data?.landId, label: data?.land };
     });
     setYypeOfLand({ data: landType, isLoading: false });
   }, [LandData]);
@@ -99,7 +103,6 @@ const LandScheduleForm = (props) => {
     const token = window?.localStorage?.getItem("token");
     setLoader(true);
     data["potential"] = data?.potential?.value;
-    data["approachType"] = data?.approachType?.value;
     data["typeLand"] = data?.typeLand?.value;
     data["purposeParentLic"] = data?.purposeParentLic?.value;
     data["releaseStatus"] = data?.releaseStatus?.value;
@@ -144,10 +147,12 @@ const LandScheduleForm = (props) => {
       Object?.keys(valueData)?.map((item) => setValue(item, valueData[item]));
       const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
       const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
+      const typeLandData = typeOfLand?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.typeLand);
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+      setValue("typeLand", { label: typeLandData?.[0]?.label, value: typeLandData?.[0]?.value });
     }
-  }, [props?.getLicData]);
+  }, [props?.getLicData, purposeOptions, getPotentialOptons, typeOfLand]);
 
   const getSubmitDataLabel = async () => {
     try {
@@ -245,6 +250,17 @@ const LandScheduleForm = (props) => {
                                   Approach Type (Type of Policy) <span style={{ color: "red" }}>*</span>
                                 </h2>
                               </label>
+                              {Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}
+                              {Purpose === "RPL" && <CommercialColonyInResidential watch={watch} register={register} />}
+                              {Purpose === "NILPC" && <CommercialColonyInResidential watch={watch} register={register} />}
+                              {Purpose === "AHP" && <CommercialColonyInResidential watch={watch} register={register} />}
+                              {Purpose === "CIC" && <CommercialLicense watch={watch} register={register} />}
+                              {Purpose === "LDEF" && <LowDensityEco watch={watch} register={register} />}
+                              {Purpose === "IPL" && <CyberPark watch={watch} register={register} />}
+                              {Purpose === "ITP" && <CyberPark watch={watch} register={register} />}
+                              {Purpose === "ITC" && <CyberPark watch={watch} register={register} />}
+                              {Purpose === "RHP" && <RetirementHousing watch={watch} register={register} />}
+
                               {/* <ReactMultiSelect
                               control={control}
                               name="approachType"
@@ -252,11 +268,11 @@ const LandScheduleForm = (props) => {
                               data={potentialOptons}
                               labels="Potential"
                             /> */}
-                              <select className="form-control" id="approachType" {...register("approachType")}>
-                                <option>{Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}</option>
-                                {/* <option value="potential 2">(a) Existing ser-vice road along with sector di-viding road.</option> */}
-                                {/* <option value="potential 2">(c) Constructed sector road or internal circula-tion road of min. 18m/24m (licenced) part of the approved sectoral plan and further leadup up to at least 4 karam wide public ras-ta.</option> */}
-                              </select>
+                              {/* <select className="form-control" id="approachType" {...register("approachType")}>
+                                <option>{Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}</option> */}
+                              {/* <option value="potential 2">(a) Existing ser-vice road along with sector di-viding road.</option> */}
+                              {/* <option value="potential 2">(c) Constructed sector road or internal circula-tion road of min. 18m/24m (licenced) part of the approved sectoral plan and further leadup up to at least 4 karam wide public ras-ta.</option> */}
+                              {/* </select> */}
                             </div>
                           </div>
                           <br></br>
@@ -288,8 +304,8 @@ const LandScheduleForm = (props) => {
                                 control={control}
                                 name="typeLand"
                                 placeholder="Type of Land"
-                                data={potentialOptons}
-                                labels="typeLand"
+                                data={typeOfLand?.data}
+                                labels="typeland"
                               />
 
                               {/* <select className="form-control" id="typeLand" {...register("typeLand")}>

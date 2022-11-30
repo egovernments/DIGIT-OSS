@@ -4,6 +4,8 @@ import { useForm, useFieldArray } from "react-hook-form";
 import DDJAYForm from "../Step4/DdjayForm";
 import ResidentialPlottedForm from "./ResidentialPlotted";
 import IndustrialPlottedForm from "./IndustrialPlotted";
+import LayoutPlan from "./LayoutPlan";
+import DemarcationPlan from "./DemarcationPlan";
 import { Form } from "react-bootstrap";
 import { Card, Row, Col } from "react-bootstrap";
 import CalculateIcon from "@mui/icons-material/Calculate";
@@ -285,7 +287,7 @@ const AppliedDetailForm = (props) => {
                         <div className="row ">
                           <div className="col col-4">
                             <label>X:Longitude</label>
-                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.longitudtue`)} />
+                            <input type="number" className="form-control" {...register(`dgpsDetails.${index}.longitude`)} />
                           </div>
                           <div className="col col-4">
                             <label>Y:Latitude</label>
@@ -943,16 +945,29 @@ const AppliedDetailForm = (props) => {
                   <br></br>
                   <div className="row">
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Demarcation plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                      <h6
+                        style={{ display: "flex" }}
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
+                      >
+                        Hosted approved layout plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "demarcationPlan")} />
+
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")} />
                     </div>
+
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Democratic Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                      <h6
+                        style={{ display: "flex" }}
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Consent of RERA if there is any change in the phasing ."
+                      >
+                        Consent of RERA. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "democraticPlan")} />
+
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")} />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
@@ -961,10 +976,16 @@ const AppliedDetailForm = (props) => {
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")} />
                     </div>
                     <div className="col col-3">
-                      <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
-                        Upload Layout Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                      <h6
+                        style={{ display: "flex" }}
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="Copy of detailed specifications and designs for electric supply including street lighting"
+                      >
+                        Designs for electric supply.&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "uploadLayoutPlan")} />
+
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")} />
                     </div>
                   </div>
                   <br></br>
@@ -1054,12 +1075,12 @@ const AppliedDetailForm = (props) => {
                         style={{ display: "flex" }}
                         data-toggle="tooltip"
                         data-placement="top"
-                        title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
+                        title="Explanatory note regarding the salient feature of the proposed colony."
                       >
-                        Hosted approved layout plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        Salient feature of the colony. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
                       </h6>
 
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")} />
+                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")} />
                     </div>
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
@@ -1076,18 +1097,6 @@ const AppliedDetailForm = (props) => {
                         style={{ display: "flex" }}
                         data-toggle="tooltip"
                         data-placement="top"
-                        title="Consent of RERA if there is any change in the phasing ."
-                      >
-                        Consent of RERA. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                      </h6>
-
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")} />
-                    </div>
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
                         title="Undertaking that no change has been made in the phasing "
                       >
                         Undertaking. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
@@ -1096,28 +1105,31 @@ const AppliedDetailForm = (props) => {
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")} />
                     </div>
                     <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Copy of detailed specifications and designs for electric supply including street lighting"
-                      >
-                        Designs for electric supply.&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                      </h6>
-
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")} />
-                    </div>
-                    <div className="col col-3">
-                      <h6
-                        style={{ display: "flex" }}
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="Explanatory note regarding the salient feature of the proposed colony."
-                      >
-                        Salient feature of the colony. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
-                      </h6>
-
-                      <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")} />
+                      {Purpose === "RPL" && <LayoutPlan watch={watch} register={register} />}
+                      {Purpose === "IPL" && <LayoutPlan watch={watch} register={register} />}
+                      {Purpose === "IPA" && <LayoutPlan watch={watch} register={register} />}
+                      {Purpose === "CPL" && <LayoutPlan watch={watch} register={register} />}
+                      {Purpose === "CIC" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "ITP" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "ITC" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "CIR" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "RGP" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "AHP" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "SGC" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "CIS" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "DDJAY_APHP" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "MLU-CZ" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "MLU-RZ" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "NILP" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "LDEF" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "NILPC" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "TODGH" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "TODCOMM" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "TODIT" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "TODMUD" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "SPRPRGH" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "DRH" && <DemarcationPlan watch={watch} register={register} />}
+                      {Purpose === "RHP" && <DemarcationPlan watch={watch} register={register} />}
                     </div>
                   </div>
                   <div class="row">

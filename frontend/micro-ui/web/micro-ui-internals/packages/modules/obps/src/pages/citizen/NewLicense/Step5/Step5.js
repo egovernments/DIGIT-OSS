@@ -230,7 +230,7 @@ const FeesChargesForm = (props) => {
                       </td>
                     </tr>
                     <tr>
-                      <th>License Fees</th>
+                      <th>Licence Fees</th>
                       <td>
                         <input type="text" className="form-control" disabled {...register("licenseFee")} />
                       </td>
