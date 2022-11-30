@@ -238,7 +238,7 @@ const SearchConnection = ({ config: propsConfig, formData }) => {
           onChange={selectconsumerNumber}
           {...(validation = {
             isRequired: false,
-            pattern: "[A-Za-z]{2}\/[0-9]{3}\/[0-9]{4}\-[0-9]{2}\/[0-9]{6}",
+            pattern: "[A-Za-z]{2}\/[0-9]{3,4}\/[0-9]{4}\-[0-9]{2}\/[0-9]{6}",
             type: "text",
             title: t("ERR_INVALID_CONSUMER_NO"),
           })}

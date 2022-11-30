@@ -53,12 +53,27 @@ const NewApplication = () => {
     clearSuccessData();
   }, []);
 
+  function checkforownerPresent(formData){
+    if(formData?.owners){
+      formData?.owners?.map((ob) => {
+        if(!ob?.name || !ob.mobileNumber || !ob?.fatherOrHusbandName || !ob?.relationship?.code || ob?.gender?.code)
+        {
+          return true;
+        }
+      })
+      return false;
+    }
+  }
+
   const onFormValueChange = (setValue, formData, formState) => {
     if (!_.isEqual(sessionFormData, formData)) {
       setSessionFormData({ ...sessionFormData, ...formData });
     }
-
-    if (
+    if(checkforownerPresent(formData))
+    {
+      setSubmitValve(false);
+    }
+    else if (
       Object.keys(formState.errors).length > 0 &&
       Object.keys(formState.errors).length == 1 &&
       formState.errors["owners"] &&
