@@ -886,14 +886,15 @@ const Developerinfo = (props) => {
                     
                   </div>
                 </div>
-
+                <div className="col col-4">
                 {landScheduleData?.thirdParty === "Y" && (
                   <div className="row ">
-                    <div className="col col-4">
+                    <div className="col col-8">
                       <label> Remark </label>
-                      <input type="text" className="form-control" disabled placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null} />
+                      <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                      {/* <input type="text" className="form-control" disabled placeholder={landScheduleData !== null ? landScheduleData?.thirdPartyRemark : null} /> */}
                     </div>
-                    <div className="col col-4">
+                    <div className="col col-12">
                       <label> Document Download </label>
                     
                       <IconButton onClick={()=>getDocShareholding(landScheduleData?.thirdPartyDoc)}>
@@ -903,6 +904,8 @@ const Developerinfo = (props) => {
                     </div>
                   </div>
                 )}
+                </div>
+                <div className="col col-4">
                 {landScheduleData?.thirdParty === "N" && (
                   <div className="row ">
                     <div className="col col-4">
@@ -913,6 +916,7 @@ const Developerinfo = (props) => {
                     </div>
                   </div>
                 )}
+                </div>
               </Row>
             </div>
             {/* } */}
@@ -1180,7 +1184,8 @@ const Developerinfo = (props) => {
                 <label htmlFor="npnl">
                   <h6>Any other, please specify</h6>
                 </label>
-                <input type="text" className="form-control" disabled placeholder={landScheduleData !== null ? landScheduleData?.anyOther : null} />
+                <Form.Control placeholder={landScheduleData !== null ? landScheduleData?.anyOther : null} height={30} style={{ maxWidth: 200, marginRight: 5 }} disabled></Form.Control>
+                {/* <input type="text" className="form-control" disabled placeholder={landScheduleData !== null ? landScheduleData?.anyOther : null} /> */}
               </div>
             </div>
             <hr />

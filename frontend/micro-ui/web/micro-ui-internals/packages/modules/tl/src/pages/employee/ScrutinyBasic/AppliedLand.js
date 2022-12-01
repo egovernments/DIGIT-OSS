@@ -29,6 +29,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { useStyles } from "./css/personalInfoChild.style";
 import { IconButton } from "@mui/material";
 import { getDocShareholding } from "./ScrutinyDevelopment/docview.helper";
+import CommercialPlottedForm from "../ScrutinyBasic/Puropse/CommercialPlottedForm";
 
 const AppliedLandinfo = (props) => {
 
@@ -1148,10 +1149,11 @@ const AppliedLandinfo = (props) => {
                 <div>
                   <IndustrialPlottedForm displayIndustrial={Purpose === "IPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandIndustrial} dataForIcons={dataIcons} ></IndustrialPlottedForm>
                 </div>
-                {/* <div>
-                  <DDJAY displayDd={Purpose === "CPL" ? "block" : "none"} data={DetailsofAppliedLand?.DetailsAppliedLandIndustrial} dataForIcons={dataIcons} ></DDJAY>
-                </div> */}
-                
+                <div>
+                  <CommercialPlottedForm displayCommercialPlottedData={Purpose === "CPL" ? "block" : "none"} data={DetailsofAppliedLand?.CommercialPlotted} dataForIcons={dataIcons} ></CommercialPlottedForm>
+                </div>
+
+                {/* <CommercialPlottedForm></CommercialPlottedForm> */}
                 {/* <div>
                   <DDJAYForm displayDdjay={Purpose === "08" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay}></DDJAYForm>
                   <DDJAYForm displayDdjay={Purpose !== "DDJAY" ? "block" : "none"} data={DetailsofAppliedLand?.ddjay} dataForIcons={dataIcons}></DDJAYForm>
