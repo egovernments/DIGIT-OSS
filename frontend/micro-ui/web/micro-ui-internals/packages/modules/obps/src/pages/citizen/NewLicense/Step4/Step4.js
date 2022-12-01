@@ -30,20 +30,36 @@ const AppliedDetailForm = (props) => {
     defaultValues: {
       dgpsDetails: [
         {
-          longitude: "",
-          latitude: "",
+          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.longitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.longitude
+            : "",
+          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.latitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[0]?.latitude
+            : "",
         },
         {
-          longitude: "",
-          latitude: "",
+          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.longitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.longitude
+            : "",
+          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.latitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[1]?.latitude
+            : "",
         },
         {
-          longitude: "",
-          latitude: "",
+          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.longitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.longitude
+            : "",
+          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.latitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[2]?.latitude
+            : "",
         },
         {
-          longitude: "",
-          latitude: "",
+          longitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.longitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.longitude
+            : "",
+          latitude: props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.latitude
+            ? props?.getLicData?.DetailsofAppliedLand?.dgpsDetails[3]?.latitude
+            : "",
         },
       ],
     },
@@ -224,14 +240,15 @@ const AppliedDetailForm = (props) => {
 
   useEffect(() => {
     console.log("props?.getLicData?.ApplicantInfo", props?.getLicData);
-    // const valueData = props?.getLicData;
-    // if (props?.getLicData?.LandSchedule) {
-    //   Object?.keys(valueData)?.map((item) => setValue(item, valueData[item]));
-    //   const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
-    //   const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
-    //   setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
-    //   setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
-    // }
+    const valueData = props?.getLicData?.DetailsofAppliedLand;
+    if (valueData) {
+      Object?.keys(valueData?.DetailsAppliedLandPlot)?.map((item) => setValue(item, valueData?.DetailsAppliedLandPlot[item]));
+      Object?.keys(valueData?.DetailsAppliedLandNILP)?.map((item) => setValue(item, valueData?.DetailsAppliedLandNILP[item]));
+      // const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
+      // const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
+      // setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
+      // setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
+    }
   }, [props?.getLicData]);
 
   const getSubmitDataLabel = async () => {

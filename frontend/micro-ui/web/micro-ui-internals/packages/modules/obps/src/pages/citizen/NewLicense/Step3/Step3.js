@@ -143,8 +143,11 @@ const LandScheduleForm = (props) => {
   useEffect(() => {
     console.log("props?.getLicData?.ApplicantInfo", props?.getLicData?.LandSchedule);
     const valueData = props?.getLicData?.LandSchedule;
-    if (props?.getLicData?.LandSchedule) {
-      Object?.keys(valueData)?.map((item) => setValue(item, valueData[item]));
+    if (valueData) {
+      Object?.keys(valueData)?.map((item) => {
+        if (item === "purpose" || item === "potential") return null;
+        else setValue(item, valueData[item]);
+      });
       const data = purposeOptions?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.purpose);
       const potientialData = getPotentialOptons?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.potential);
       const typeLandData = typeOfLand?.data?.filter((item) => item?.value === props?.getLicData?.ApplicantPurpose?.typeLand);
