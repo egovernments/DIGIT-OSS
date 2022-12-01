@@ -355,6 +355,16 @@ const callBackForPay = async (state, dispatch) => {
     "instrument.transactionDateInput"
   ]);
 
+  set(
+    finalReceiptData,
+    "Bill[0].billDetails[0].additionalDetails.comment",
+    get(
+      state.screenConfiguration,
+      "preparedFinalObject.Challan.description",
+      ""
+    )
+  );
+
   // if (get(finalReceiptData, "Bill[0].billDetails[0].manualReceiptDate")) {
   //   convertDateFieldToEpoch(
   //     finalReceiptData,
@@ -418,7 +428,8 @@ const callBackForPay = async (state, dispatch) => {
 
   ReceiptBodyNew.Payment["tenantId"] = finalReceiptData.tenantId;
   ReceiptBodyNew.Payment["totalDue"] = totalAmount;
-
+  ReceiptBodyNew.Payment["additionalDetails"] =
+    finalReceiptData.Bill[0].billDetails[0].additionalDetails.comment;
   ReceiptBodyNew.Payment["paymentMode"] =
     finalReceiptData.instrument.instrumentType.name;
   ReceiptBodyNew.Payment["paidBy"] = finalReceiptData.Bill[0].payer;
@@ -462,7 +473,7 @@ const callBackForPay = async (state, dispatch) => {
     billId: finalReceiptData.Bill[0].id,
     totalDue: totalAmount,
     totalAmountPaid: amtPaid
-  });
+    });
   ReceiptBodyNew.Payment["totalAmountPaid"] = amtPaid;
 
   //---------------- Create Receipt ------------------//
