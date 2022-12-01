@@ -32,7 +32,7 @@ const BannerPicker = (props) => {
   );
 };
 
-const TLAcknowledgement = ({ data, onSuccess }) => {
+const TLAcknowledgement = ({ data, onSuccess, onUpdateSuccess }) => {
   const { t } = useTranslation();
   const [mutationHappened, setMutationHappened, clear] = Digit.Hooks.useSessionStorage("CITIZEN_TL_MUTATION_HAPPENED", false);
   const resubmit = window.location.href.includes("edit-application");
@@ -78,13 +78,13 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
           if((fydata["egf-master"] && fydata["egf-master"].FinancialYear.length > 0 && isDirectRenewal))
           {
             mutation2.mutate(formdata, {
-              onSuccess,
+              onUpdateSuccess,
             })
           }
           else
           {
             mutation1.mutate(formdata, {
-              onSuccess,
+              onUpdateSuccess,
             })
           }
         }
@@ -113,7 +113,7 @@ const TLAcknowledgement = ({ data, onSuccess }) => {
       try {
         let Licenses = !isEdit ? convertToUpdateTrade(mutation.data, data) : convertToUpdateTrade(mutation1.data, data);
         mutation2.mutate(Licenses, {
-          onSuccess,
+          onSuccess : onUpdateSuccess,
         });
       }
       catch (er) {

@@ -115,6 +115,12 @@ const CreateTradeLicence = ({ parentRoute }) => {
     sessionStorage.removeItem("CurrentFinancialYear");
     queryClient.invalidateQueries("TL_CREATE_TRADE");
   };
+
+  const onUpdateSuccess = () => {
+    sessionStorage.removeItem("CurrentFinancialYear");
+    clearParams();
+    queryClient.invalidateQueries("TL_CREATE_TRADE");
+  }
   newConfig = newConfig ? newConfig : newConfigTL;
   newConfig?.forEach((obj) => {
     config = config.concat(obj.body.filter((a) => !a.hideInCitizen));
@@ -149,7 +155,7 @@ const CreateTradeLicence = ({ parentRoute }) => {
         <CheckPage onSubmit={createProperty} value={params} />
       </Route>
       <Route path={`${match.path}/acknowledgement`}>
-        <TLAcknowledgement data={params} onSuccess={onSuccess} />
+        <TLAcknowledgement data={params} onSuccess={onSuccess} onUpdateSuccess={onUpdateSuccess} />
       </Route>
       <Route>
         <Redirect to={`${match.path}/${config.indexRoute}`} />

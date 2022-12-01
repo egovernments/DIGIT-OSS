@@ -71,7 +71,7 @@ const useSewarageSearch = ({tenantId, filters = {}, BusinessService="WS", t}, co
   , config)
   const billData = useQuery(['BILL_SEARCH', tenantId, consumercodes,BusinessService,config ], async () => await Digit.PaymentService.fetchBill(tenantId, {
     businessService: BusinessService,
-    consumerCode: consumercodes.substring(0, consumercodes.length-2),
+    consumerCode: consumercodes.substring(0, consumercodes.length-1),
   })
   , config)
   return {isLoading:response?.isLoading || properties?.isLoading || billData?.isLoading, data : combineResponse(response?.data?.SewerageConnections,properties?.data?.Properties,billData?.data?.Bill, t)};
