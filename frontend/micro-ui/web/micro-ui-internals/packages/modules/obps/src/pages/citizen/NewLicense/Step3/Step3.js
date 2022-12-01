@@ -245,11 +245,6 @@ const LandScheduleForm = (props) => {
                               <input type="text" className="form-control" {...register("siteLoc")} />
                             </div>
                             <div className="col col-12">
-                              <label>
-                                <h2>
-                                  Approach Type (Type of Policy) <span style={{ color: "red" }}>*</span>
-                                </h2>
-                              </label>
                               {Purpose === "DDJAY_APHP" && <CommercialColonyInResidential watch={watch} register={register} />}
                               {Purpose === "RPL" && <CommercialColonyInResidential watch={watch} register={register} />}
                               {Purpose === "NILPC" && <CommercialColonyInResidential watch={watch} register={register} />}

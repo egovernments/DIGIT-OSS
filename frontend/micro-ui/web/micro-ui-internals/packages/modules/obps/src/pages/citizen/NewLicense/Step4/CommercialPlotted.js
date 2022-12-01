@@ -246,10 +246,10 @@ const CommercialPlottedForm = ({ register }) => {
                   </div>
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("scoDim")} />
+                  <input type="number" className="form-control" {...register("etcDim")} />
                 </td>
                 <td component="th" scope="row">
-                  <input type="number" className="form-control" {...register("scoArea")} />
+                  <input type="number" className="form-control" {...register("etcArea")} />
                 </td>
               </tr>
             </tbody>
