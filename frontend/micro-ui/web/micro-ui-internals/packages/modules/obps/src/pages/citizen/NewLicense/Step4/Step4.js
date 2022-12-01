@@ -12,6 +12,8 @@ import CalculateIcon from "@mui/icons-material/Calculate";
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import axios from "axios";
 import Spinner from "../../../../components/Loader";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { getDocShareholding } from "../docView/docView.help";
 
 const AppliedDetailForm = (props) => {
   // console.log("DD", props);
@@ -969,6 +971,9 @@ const AppliedDetailForm = (props) => {
                         title="Whether you hosted the existing approved layout plan & in-principle approved layout on the website of your company/organization Yes/No if yes upload"
                       >
                         Hosted approved layout plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "hostedLayoutPlan")} />
@@ -982,6 +987,9 @@ const AppliedDetailForm = (props) => {
                         title="Consent of RERA if there is any change in the phasing ."
                       >
                         Consent of RERA. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "consentRera")} />
@@ -989,6 +997,9 @@ const AppliedDetailForm = (props) => {
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Sectoral Plan. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "sectoralPlan")} />
                     </div>
@@ -1000,6 +1011,9 @@ const AppliedDetailForm = (props) => {
                         title="Copy of detailed specifications and designs for electric supply including street lighting"
                       >
                         Designs for electric supply.&nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "detailedElectricSupply")} />
@@ -1015,6 +1029,9 @@ const AppliedDetailForm = (props) => {
                         title="Copy of plans showing cross sections of proposed roads indicating, in particular, the width of proposed carriage ways cycle tracks and footpaths etc"
                       >
                         Plans showing cross sections. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "planCrossSection")} />
                     </div>
@@ -1027,6 +1044,9 @@ const AppliedDetailForm = (props) => {
                       >
                         Plans indicating position of public. &nbsp;&nbsp;
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input
@@ -1044,6 +1064,9 @@ const AppliedDetailForm = (props) => {
                         title="Copy of detailed specifications and designs of road works and estimated costs thereof"
                       >
                         Specifications and designs. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designRoad")} />
                     </div>
@@ -1055,6 +1078,9 @@ const AppliedDetailForm = (props) => {
                         title="Copy of detailed specifications and designs of sewerage, storm, water and water supply works and estimated costs thereof"
                       >
                         Designs of sewerage and storm. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designSewarage")} />
@@ -1071,6 +1097,9 @@ const AppliedDetailForm = (props) => {
                       >
                         Disposal and storm treatment. &nbsp;&nbsp;
                         <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "designDisposal")} />
@@ -1083,6 +1112,9 @@ const AppliedDetailForm = (props) => {
                         title="Whether intimated each of the allottees through registered post regarding the proposed changes in the layout plan: - If yes selected upload"
                       >
                         Undertaking that no change. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertakingChange")} />
@@ -1095,6 +1127,9 @@ const AppliedDetailForm = (props) => {
                         title="Explanatory note regarding the salient feature of the proposed colony."
                       >
                         Salient feature of the colony. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "proposedColony")} />
@@ -1102,6 +1137,9 @@ const AppliedDetailForm = (props) => {
                     <div className="col col-3">
                       <h6 style={{ display: "flex" }} data-toggle="tooltip" data-placement="top" title="Upload Document">
                         Report any objection. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "reportObjection")} />
@@ -1117,6 +1155,9 @@ const AppliedDetailForm = (props) => {
                         title="Undertaking that no change has been made in the phasing "
                       >
                         Undertaking. &nbsp;&nbsp;<ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                        <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                          {" "}
+                        </VisibilityIcon>
                       </h6>
 
                       <input type="file" className="form-control" onChange={(e) => getDocumentData(e?.target?.files[0], "undertaking")} />

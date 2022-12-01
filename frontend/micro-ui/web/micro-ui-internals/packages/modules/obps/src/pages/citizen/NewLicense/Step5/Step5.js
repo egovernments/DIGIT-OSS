@@ -99,7 +99,6 @@ const FeesChargesForm = (props) => {
 
   const Purpose = localStorage.getItem("purpose");
   const potential = JSON.parse(localStorage.getItem("potential"));
-  const totalAreaAcre = JSON.parse(localStorage.getItem("add"));
 
   const CalculateApiCall = async () => {
     const token = window?.localStorage?.getItem("token");
@@ -176,6 +175,28 @@ const FeesChargesForm = (props) => {
   const handleConversion = (event) => {
     setCalculateData(event.target.value);
   };
+  const dataArea = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal;
+  const dataAreaMarla = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.marla;
+  const dataAreaSarai = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.sarsai;
+  const dataAreaBigha = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.bigha;
+  const dataAreaBiswa = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswa;
+  const dataAreaBiswansi = props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.biswansi;
+  const totalAreaAcre =
+    dataArea * 0.125 + dataAreaMarla * 0.0062 + dataAreaSarai * 0.00069 + dataAreaBigha * 0.33 + dataAreaBiswa * 0.0309 + dataAreaBiswansi * 0.619;
+  console.log("abc", totalAreaAcre);
+
+  useEffect(() => {
+    console.log("dd", props?.getLicData?.ApplicantPurpose?.AppliedLandDetails?.[0]?.kanal);
+  }, [props?.getLicData]);
+
+  const dataScrutiny = props?.getLicData?.FeesAndCharges?.scrutinyFee;
+  const dataLicence = props?.getLicData?.FeesAndCharges?.licenseFee;
+  const data = dataLicence + (25 % dataScrutiny);
+  console.log("lic", data);
+
+  useEffect(() => {
+    console.log("ddtt", props?.getLicData?.FeesAndCharges);
+  }, [props?.getLicData]);
 
   return (
     <form onSubmit={handleSubmit(FeesChrgesFormSubmitHandler)}>

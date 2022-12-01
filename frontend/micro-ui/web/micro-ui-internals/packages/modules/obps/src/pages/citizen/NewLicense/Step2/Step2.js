@@ -11,6 +11,7 @@ import WorkingTable from "../../../../components/Table";
 import { VALIDATION_SCHEMA } from "../../../../utils/schema/step2";
 import ReactMultiSelect from "../../../../../../../react-components/src/atoms/ReactMultiSelect";
 import Spinner from "../../../../components/Loader";
+import { getDocShareholding } from "../docView/docView.help";
 
 const ApllicantPuropseForm = (props) => {
   const resetFields = {
@@ -420,12 +421,12 @@ const ApllicantPuropseForm = (props) => {
   }, [props?.getLicData, purposeOptions, potentialOptons, districtDataLabels]);
 
   const handleChangePurpose = (data) => {
+    console.log("data", data);
     const purposeSelected = data?.value;
     window?.localStorage.setItem("purpose", purposeSelected);
   };
-
   const handleChangePotential = (data) => {
-    const potentialSelected = data?.label;
+    const potentialSelected = data?.value;
     window?.localStorage.setItem("potential", JSON.stringify(potentialSelected));
   };
 
@@ -455,15 +456,12 @@ const ApllicantPuropseForm = (props) => {
     return () => clearTimeout(delay);
   }, [watch("khewats")]);
 
-  // const sumTotal = (("kanal") * 0.125 + ("marla") * 0.0062 + ("sarsai") * 0.00069);
-  // console.log("add", sumTotal);
-
   return (
     <div>
       {loader && <Spinner />}
       <form onSubmit={handleSubmit(PurposeFormSubmitHandler)}>
         <Card style={{ width: "126%", border: "5px solid #1266af" }}>
-          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New License </h4>
+          <h4 style={{ fontSize: "25px", marginLeft: "21px" }}>New Licence </h4>
           <Card style={{ width: "126%", marginLeft: "-2px", paddingRight: "10px", marginTop: "40px", marginBottom: "52px" }}>
             <Form.Group>
               <Row className="ml-auto" style={{ marginBottom: 5 }}>
@@ -471,7 +469,7 @@ const ApllicantPuropseForm = (props) => {
                   <div>
                     <Form.Label>
                       <h2>
-                        Puropse Of License<span style={{ color: "red" }}>*</span>
+                        Puropse Of Licence<span style={{ color: "red" }}>*</span>
                       </h2>
                     </Form.Label>
                   </div>
@@ -802,15 +800,15 @@ const ApllicantPuropseForm = (props) => {
                       <tr>
                         <td>
                           <input type="text" className="form-control" {...register("bigha")} id="bigha" />
-                          <label htmlFor="sumBigha">Total: {watch("marla") * 0.33}</label>&nbsp;&nbsp;
+                          <label htmlFor="sumBigha">Total: {watch("bigha") * 0.33}</label>&nbsp;&nbsp;
                         </td>
                         <td>
                           <input type="text" className="form-control" {...register("biswa")} id="biswa" />
-                          <label htmlFor="sumBiswa">Total: {watch("marla") * 0.0309}</label>&nbsp;&nbsp;
+                          <label htmlFor="sumBiswa">Total: {watch("biswa") * 0.0309}</label>&nbsp;&nbsp;
                         </td>
                         <td>
                           <input type="text" className="form-control" {...register("biswansi")} id="biswansi" />
-                          <label htmlFor="sumBiswansi">Total: {watch("marla") * 0.619}</label>&nbsp;&nbsp;
+                          <label htmlFor="sumBiswansi">Total: {watch("biswansi") * 0.619}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
@@ -915,8 +913,10 @@ const ApllicantPuropseForm = (props) => {
                         <label>
                           <h2 data-toggle="tooltip" data-placement="top" title="Upload Document" style={{ marginTop: "-4px" }}>
                             Registring Authority document <span style={{ color: "red" }}>*</span>
-                            <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>&nbsp;&nbsp;
-                            <VisibilityIcon color="info" className="icon" />
+                            <ArrowCircleUpIcon color="primary"></ArrowCircleUpIcon>
+                            <VisibilityIcon color="primary" onClick={() => getDocShareholding(modalData?.registeringAuthorityDoc)}>
+                              {" "}
+                            </VisibilityIcon>
                           </h2>
                         </label>
                         <br></br>
