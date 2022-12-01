@@ -75,11 +75,11 @@ const ApplicationDetailsBillAmendment = () => {
   const dowloadOptions =
     applicationDetails?.amendment?.status === "CONSUMED"
       ? [
-          {
-            order: 2,
-            label: t("WS_DOWNLOAD_COUPON_PDF"),
-            onClick: () => getCouponPDF({ tenantId, Amendments: applicationDetails?.amendment }),
-          },
+          // {
+          //   order: 2,
+          //   label: t("WS_DOWNLOAD_COUPON_PDF"),
+          //   onClick: () => getCouponPDF({ tenantId, Amendments: applicationDetails?.amendment }),
+          // },
           {
           order: 1,
           label: t("WS_ACK_PDF"),
