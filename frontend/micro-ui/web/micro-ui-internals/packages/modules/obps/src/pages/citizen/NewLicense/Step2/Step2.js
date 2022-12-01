@@ -173,7 +173,6 @@ const ApllicantPuropseForm = (props) => {
   const [mustilDataLabels, setMustilDataLabels] = useState({ data: [], isLoading: true });
   const [modal, setmodal] = useState(false);
   const [tehsilCode, setTehsilCode] = useState(null);
-  const [consolidateValue, setConsolidateValue] = useState("consolidated");
   const [purposeOptions, setPurposeOptions] = useState({ data: [], isLoading: true });
   const [potentialOptons, setPotentialOptions] = useState({ data: [], isLoading: true });
   const [docId, setDocId] = useState(null);
@@ -416,7 +415,6 @@ const ApllicantPuropseForm = (props) => {
       setValue("purpose", { label: data?.[0]?.label, value: data?.[0]?.value });
       setValue("potential", { label: potientialData?.[0]?.label, value: potientialData?.[0]?.value });
       setValue("district", { label: districtData?.[0]?.label, value: districtData?.[0]?.value });
-      // setValue("LC", props?.getLicData?.ApplicantInfo?.LC);
     }
   }, [props?.getLicData, purposeOptions, potentialOptons, districtDataLabels]);
 
@@ -738,18 +736,11 @@ const ApllicantPuropseForm = (props) => {
                         defaultChecked={true}
                         defaultValue="consolidated"
                         id="consolidated"
-                        // onClick={() => setConsolidateValue("consolidated")}
                       />
                       &nbsp; Consolidated &nbsp;&nbsp;
                     </label>
                     <label htmlFor="non-consolidated">
-                      <input
-                        {...register("consolidationType")}
-                        type="radio"
-                        value="non-consolidated"
-                        id="non-consolidated"
-                        // onClick={() => setConsolidateValue("non-consolidated")}
-                      />
+                      <input {...register("consolidationType")} type="radio" value="non-consolidated" id="non-consolidated" />
                       &nbsp; Non-Consolidated &nbsp;&nbsp;
                     </label>
                   </h2>
@@ -773,29 +764,16 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          {/* <label htmlFor="first">First</label>
-                          <input onChange={onChange} defaultValue={first} name="first" id="first" type="number" />
-
-                          <label htmlFor="sum">Total</label>
-                          <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" /> */}
-                          <input onChange={onChange} defaultValue={kanal} name="kanal" id="kanal" type="number" />
-                          <input type="text" className="form-control" {...register("kanal")} onChange={onChange} defaultValue={kanal} id="kanal" />
-                          <label htmlFor="sum">Total</label>&nbsp;&nbsp;
-                          <input onChange={onChange} defaultValue={sum} id="sum" name="sum" type="number" />
+                          <input type="text" className="form-control" {...register("kanal")} id="kanal" />
+                          <label htmlFor="sum">Total: {watch("kanal") * 0.125}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input onChange={onChange} defaultValue={marla} name="marla" id="marla" type="number" />
-                          <input type="text" className="form-control" {...register("marla")} onChange={onChange} defaultValue={marla} id="marla" />
-                          <label htmlFor="summarla">Total</label>&nbsp;&nbsp;
-                          <input onChange={onChange} defaultValue={summarla} id="summarla" name="summarla" type="number" />
-                          {/* <Form.Control type="text" className="form-control" placeholder="" {...register("marla")} /> */}
+                          <input type="text" className="form-control" {...register("marla")} id="marla" />
+                          <label htmlFor="summarla">Total: {watch("marla") * 0.0062}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input onChange={onChange} defaultValue={marla} name="sarsai" id="sarsai" type="number" />
-                          <input type="text" className="form-control" {...register("sarsai")} onChange={onChange} defaultValue={sarsai} id="sarsai" />
-                          <label htmlFor="sumsarsai">Total</label>&nbsp;&nbsp;
-                          <input onChange={onChange} defaultValue={sumsarsai} id="sumsarsai" name="sumsarsai" type="number" />
-                          {/* <Form.Control type="text" className="form-control" placeholder="" {...register("sarsai")} /> */}
+                          <input type="text" className="form-control" {...register("sarsai")} id="sarsai" />
+                          <label htmlFor="sumsarsai">Total: {watch("sarsai") * 0.00069}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
@@ -819,32 +797,16 @@ const ApllicantPuropseForm = (props) => {
                     <tbody>
                       <tr>
                         <td>
-                          <input onChange={onChange} defaultValue={bigha} name="bigha" id="bigha" type="number" />
-                          <input type="text" className="form-control" {...register("bigha")} onChange={onChange} defaultValue={bigha} id="bigha" />
-                          <label htmlFor="sumBigha">Total</label>&nbsp;&nbsp;
-                          <input onChange={onChange} defaultValue={sumBigha} id="sumBigha" name="sumBigha" type="number" />
-                          {/* <Form.Control type="text" className="form-control" {...register("bigha")} /> */}
+                          <input type="text" className="form-control" {...register("bigha")} id="bigha" />
+                          <label htmlFor="sumBigha">Total: {watch("marla") * 0.33}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input onChange={onChange} defaultValue={biswa} name="biswa" id="biswa" type="number" />
-                          <input type="text" className="form-control" {...register("biswa")} onChange={onChange} defaultValue={biswa} id="biswa" />
-                          <label htmlFor="sumBiswa">Total</label>&nbsp;&nbsp;
-                          <input onChange={onChange} defaultValue={sumBiswa} id="sumBiswa" name="sumBiswa" type="number" />
-                          {/* <Form.Control type="text" className="form-control" {...register("biswa")} /> */}
+                          <input type="text" className="form-control" {...register("biswa")} id="biswa" />
+                          <label htmlFor="sumBiswa">Total: {watch("marla") * 0.0309}</label>&nbsp;&nbsp;
                         </td>
                         <td>
-                          <input onChange={onChange} defaultValue={biswansi} name="biswansi" id="biswansi" type="number" />
-                          <input
-                            type="text"
-                            className="form-control"
-                            {...register("biswansi")}
-                            onChange={onChange}
-                            defaultValue={biswansi}
-                            id="biswansi"
-                          />
-                          <label htmlFor="sumBiswansi">Total</label>&nbsp;&nbsp;
-                          <input onChange={onChange} defaultValue={sumBiswansi} id="sumBiswansi" name="sumBiswansi" type="number" />
-                          {/* <Form.Control type="text" className="form-control" {...register("biswansi")} /> */}
+                          <input type="text" className="form-control" {...register("biswansi")} id="biswansi" />
+                          <label htmlFor="sumBiswansi">Total: {watch("marla") * 0.619}</label>&nbsp;&nbsp;
                         </td>
                       </tr>
                     </tbody>
@@ -857,15 +819,15 @@ const ApllicantPuropseForm = (props) => {
                 <h2>
                   Collaboration agreement Owner<span style={{ color: "red" }}>*</span>&nbsp;&nbsp;
                   <label htmlFor="collaboration">
-                    <input {...register("collaboration")} type="radio" value="N" id="yes" onClick={() => setCollaboration("Y")} />
+                    <input {...register("collaboration")} type="radio" value="Y" id="yes" />
                     &nbsp;&nbsp; Yes &nbsp;&nbsp;
                   </label>
                   <label htmlFor="collaboration">
-                    <input {...register("collaboration")} type="radio" value="Y" id="no" onClick={() => setCollaboration("N")} />
+                    <input {...register("collaboration")} type="radio" value="N" id="no" />
                     &nbsp;&nbsp; No &nbsp;&nbsp;
                   </label>
                 </h2>
-                {getCollaboration === "Y" && (
+                {watch("collaboration") === "Y" && (
                   <div>
                     <div className="row ">
                       <div className="col col-4">
