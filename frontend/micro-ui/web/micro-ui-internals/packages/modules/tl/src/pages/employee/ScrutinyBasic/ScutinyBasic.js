@@ -105,7 +105,7 @@ const ScrutitnyForms = () => {
   };
   const handleGetInputFieldsValues = async () => {
     try {
-      const Resp = await axios.get("/tl-services/new/licenses/_get?id=405").then((response) => {
+      const Resp = await axios.get("/tl-services/new/licenses/_get?id=225").then((response) => {
         return response.data;
       });
 
@@ -199,6 +199,7 @@ const ScrutitnyForms = () => {
     } catch (error) {
       console.log(error);
     }
+    // console.log("MdMS123",remarksResponse)
   };
 
   useEffect(() => {
@@ -295,7 +296,14 @@ const ScrutitnyForms = () => {
   return (
     <div>
       <div style={{ position: "relative", maxWidth: "100%", padding: 2 }}>
+          {/* <b>Application : {remarksResponse?.egScrutiny?.[0]?.applicationId} </b> */}
+          <Row style={{ top: 25, padding: 5 }}>
+        <div className="ml-auto">
+          <h2>Application : {remarksResponse?.egScrutiny?.[0]?.applicationId}</h2>
+        </div>
+      </Row>
         <div>
+        
           <div>
             <Personalinfo
               personalInfoRef={personalInfoRef}
@@ -303,6 +311,7 @@ const ScrutitnyForms = () => {
               passCheckedList={getCheckedPersonalInfoValue}
               onClick={() => setOpen(!open)}
               ApiResponseData={apiResppnse.newServiceInfoData !== undefined ? apiResppnse.newServiceInfoData[0].ApplicantInfo : null}
+              // remarkData={remarksResponse.egScrutiny !== undefined ? remarksResponse.egScrutiny : null}
               showTable={curentDataPersonal}
               dataForIcons={iconStates}
             ></Personalinfo>

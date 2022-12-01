@@ -38,6 +38,7 @@ import Surveys from "./pages/employee/CitizenSurveys";
 import FillSurvey from './pages/citizen/CitizenSurvey/FillSurvey'
 import CitizenSurveyForm from './components/Surveys/CitizenSurveyForm';
 import ShowSurvey from './pages/citizen/CitizenSurvey/ShowSurvey'
+// import ScrutinyFormcontainer from "../../tl/src/pages/employee/ScrutinyContainer/ScrutinyFormContainer";
  
 import SurveyResults from "./pages/employee/CitizenSurveys/SurveyResults";
 const EventsBreadCrumb = ({ location }) => {
@@ -178,6 +179,11 @@ const EventsBreadCrumb = ({ location }) => {
       content: t("ES_EVENT_NEW_EVENT_RESPONSE"),
       show: location.pathname.includes("/engagement/survey/create-response") ? true : false,
     },
+    // {
+    //   path: "/digit-ui/employee/tl/scrutiny",
+    //   content: t("ES_scrutiny"),
+    //   show: location.pathname.includes("/engagement/scrutiny/create-response") ? true : false,
+    // },
   ];
 
   return <BreadCrumb crumbs={crumbs} />;
@@ -220,6 +226,7 @@ const EmployeeApp = ({ path, url, userType, tenants }) => {
         <Route path={`${path}/surveys`} component={(props)=><Surveys {...props} tenants={tenants} parentRoute={path} />} />
         {/* documents/update-response */}
         {/* <Redirect to={`${path}/docs`} /> */}
+        {/* <Route path={`${path}/scrutiny`} component={(props)=><ScrutinyFormcontainer {...props} tenants={tenants} parentRoute={path} />} /> */}
       </Switch>
       </>
     // </div>
